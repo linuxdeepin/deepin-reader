@@ -29,7 +29,7 @@ class DocSheet : public Dtk::Widget::DSplitter
 public:
     explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
-    virtual ~DocSheet() override;
+    virtual ~DocSheet();
 
     virtual void initOperationData(const DocOperation &opera);
 
@@ -169,8 +169,6 @@ public:
     virtual void showNoteWidget(int page, const QString &uuid, const int &type = NOTE_HIGHLIGHT);
 
     virtual bool isDoubleShow();
-
-    virtual void saveOper();
 
     virtual void exitSliderShow();
 

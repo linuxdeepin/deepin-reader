@@ -392,11 +392,6 @@ bool DocSheet::fileChanged()
     return false;
 }
 
-void DocSheet::saveOper()
-{
-    qDebug() << "unrealized";
-}
-
 bool DocSheet::saveData()
 {
     qDebug() << "unrealized";

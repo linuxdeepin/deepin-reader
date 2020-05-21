@@ -221,8 +221,6 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    sheet->saveOper();
-
     if (sheet->fileChanged() && 2 == SaveDialog().showDialog()) {
         sheet->saveData();
     }
@@ -335,8 +333,6 @@ bool CentralDocPage::saveAll()
     auto sheets = this->findChildren<DocSheet *>();
 
     foreach (auto sheet, sheets) {
-        sheet->saveOper();
-
         if (sheet->fileChanged())
             changedList.append(sheet);
     }
@@ -376,8 +372,6 @@ bool CentralDocPage::saveCurrent()
         showTips(tr("Save failed"));
         return false;
     }
-
-    sheet->saveOper();
 
     sigCurSheetChanged(sheet);
 

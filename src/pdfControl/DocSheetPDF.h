@@ -67,8 +67,6 @@ public:
 
     bool saveAsData(QString filePath)override;
 
-    void saveOper()override;
-
     void exitSliderShow()override;
 
     void handleSearch()override;

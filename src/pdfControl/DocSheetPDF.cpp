@@ -91,7 +91,8 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
 
 DocSheetPDF::~DocSheetPDF()
 {
-
+    if (m_browser)
+        m_browser->saveOper();
 }
 
 void DocSheetPDF::openFile()
@@ -346,11 +347,6 @@ QString DocSheetPDF::filter()
 bool DocSheetPDF::fileChanged()
 {
     return m_browser->getFileChange();
-}
-
-void DocSheetPDF::saveOper()
-{
-    m_browser->saveOper();
 }
 
 bool DocSheetPDF::saveData()

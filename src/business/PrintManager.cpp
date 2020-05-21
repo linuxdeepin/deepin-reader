@@ -61,7 +61,6 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                 }
             } else {
                 if (m_sheet->getImage(iIndex, image, rect.width(), rect.height())) {
-                    qDebug() << image;
                     painter.drawImage(rect, image);
                 }
             }
