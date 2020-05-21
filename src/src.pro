@@ -12,9 +12,6 @@ TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-#CONFIG += precompile_header
-#PRECOMPILED_HEADER = stable.h
-
 include (app/app.pri)
 include (business/business.pri)
 include (CustomControl/CustomControl.pri)

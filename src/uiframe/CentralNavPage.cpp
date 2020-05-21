@@ -31,7 +31,7 @@ void CentralNavPage::initWidget()
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
-    auto chooseBtn = new DSuggestButton(tr("Select File"));
+    auto chooseBtn = new DSuggestButton(tr("Select File"), this);
     int tW = 302;
     int tH = 36;
     dApp->adaptScreenView(tW, tH);
