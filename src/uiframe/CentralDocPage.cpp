@@ -156,7 +156,11 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pTabBar->insertSheet(sheet);
 
-        onOpened(sheet, true);
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
+
+        this->activateWindow();
 
     } else {
         showTips(tr("The format is not supported"), 1);

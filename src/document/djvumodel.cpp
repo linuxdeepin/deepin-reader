@@ -532,8 +532,8 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
-        renderrect.x = boundingRect.x();
-        renderrect.y = boundingRect.y();
+        renderrect.x = boundingRect.x() < 0 ? 0 : boundingRect.x() ;
+        renderrect.y = boundingRect.y() < 0 ? 0 : boundingRect.y() ;
         renderrect.w = boundingRect.width();
         renderrect.h = boundingRect.height();
     }

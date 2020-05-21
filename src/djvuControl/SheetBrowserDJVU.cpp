@@ -8,6 +8,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QApplication>
+#include <QBitmap>
 
 SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 {
@@ -17,10 +18,16 @@ SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
+    m_bitmap = new QBitmap(234, 234);
+    QPainter painter(m_bitmap);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QBrush(Qt::black));
+    painter.drawEllipse(17, 17, 200, 200);
 }
 
 SheetBrowserDJVU::~SheetBrowserDJVU()
 {
+    delete m_bitmap;
     qDeleteAll(m_items);
 
     if (nullptr != m_document)
@@ -62,6 +69,10 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation)
 
 void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
 {
+    if (m_magnifierLabel) {
+        closeMagnifier();
+    }
+
     if (Dr::MouseShapeHand == operation.mouseShape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
     } else if (Dr::MouseShapeNormal == operation.mouseShape) {
@@ -183,10 +194,38 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_magnifierLabel) {
         QImage image;
-        getImagePoint(event->pos(), m_lastScaleFactor + 2, image);
 
-        m_magnifierLabel->setPixmap(QPixmap::fromImage(image));
-        m_magnifierLabel->move(QPoint(event->pos().x() - 50, event->pos().y() - 50));
+        if (getImagePoint(event->pos(), m_lastScaleFactor + 2, image) && !image.isNull()) {
+            QPixmap pix = QPixmap::fromImage(image);
+
+            pix.setMask(*m_bitmap);
+
+            QPainter painter(&pix);
+
+            painter.drawPixmap(0, 0, 234, 234, QPixmap(":/custom/maganifier.svg"));
+
+            m_magnifierLabel->setPixmap(pix);
+
+        } else {
+            QPixmap pix = QPixmap::fromImage(m_bitmap->toImage());
+
+            pix.setMask(*m_bitmap);
+
+            QPainter painter(&pix);
+
+            painter.setPen(Qt::NoPen);
+
+            painter.setBrush(QBrush(Qt::white));
+
+            painter.drawEllipse(17, 17, 200, 200);
+
+            painter.drawPixmap(0, 0, 234, 234, QPixmap(":/custom/maganifier.svg"));
+
+            m_magnifierLabel->setPixmap(pix);
+
+        }
+
+        m_magnifierLabel->move(QPoint(event->pos().x() - 117, event->pos().y() - 117));
     }
 
     QGraphicsView::mouseMoveEvent(event);
@@ -232,6 +271,7 @@ void SheetBrowserDJVU::setCurrentPage(int page)
 bool SheetBrowserDJVU::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image)
 {
     SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
+
     if (nullptr == item)
         return false;
 
@@ -262,9 +302,11 @@ void SheetBrowserDJVU::openMagnifier()
         m_magnifierLabel = new QLabel(this);
         m_magnifierLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
         m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
-        m_magnifierLabel->resize(100, 100);
+        m_magnifierLabel->resize(234, 234);
     }
     m_magnifierLabel->show();
+
+    setDragMode(QGraphicsView::NoDrag);
     setMouseTracking(true);
     setCursor(QCursor(Qt::BlankCursor));
 }
