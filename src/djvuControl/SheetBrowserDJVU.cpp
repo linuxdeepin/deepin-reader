@@ -284,19 +284,18 @@ int SheetBrowserDJVU::allPages()
 
 int SheetBrowserDJVU::currentPage()
 {
-    SheetBrowserDJVUItem *item = nullptr;
+    int value = verticalScrollBar()->value();
 
-    for (int i = 20 ; i < 100; i = i + 5) {
-        item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(i, i)));
+    int index = 0;
 
-        if (nullptr != item)
+    for (int i = 0; i < m_items.count(); ++i) {
+        if (m_items[i]->pos().y() + m_items[i]->boundingRect().height() >= value) {
+            index = i;
             break;
+        }
     }
 
-    if (nullptr == item)
-        return 1;
-
-    return m_items.indexOf(item) + 1;
+    return index + 1;
 }
 
 int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)

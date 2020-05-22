@@ -16,6 +16,7 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL);
 
     m_browser = new SheetBrowserDJVU(this);
+
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigSizeChanged()), this, SLOT(onBrowserSizeChanged()));
     connect(m_browser, SIGNAL(sigWheelUp()), this, SLOT(onBrowserWheelUp()));
