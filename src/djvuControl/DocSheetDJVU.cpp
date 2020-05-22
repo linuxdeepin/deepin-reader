@@ -161,9 +161,8 @@ void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
 void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 {
     if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
-        quitMagnifer();
+        closeMagnifier();
         m_operation.mouseShape = shape;
-
         m_browser->loadMouseShape(m_operation);
         emit sigFileChanged(this);
     }
@@ -174,15 +173,8 @@ void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
     if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
         m_operation.scaleMode = mode;
         m_browser->deform(m_operation);
+        emit sigFileChanged(this);
     }
-}
-
-bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode)
-{
-    if (m_browser)
-        return m_browser->getImage(index, image, width, height);
-
-    return false;
 }
 
 void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
@@ -191,6 +183,14 @@ void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
     m_operation.scaleFactor = scaleFactor;
     m_browser->deform(m_operation);
     emit sigFileChanged(this);
+}
+
+bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode)
+{
+    if (m_browser)
+        return m_browser->getImage(index, image, width, height);
+
+    return false;
 }
 
 bool DocSheetDJVU::getImageMax(int index, QImage &image, double max)

@@ -538,13 +538,6 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (getCurrentState() == Magnifer_State) {
-        if (s == KeyStr::g_esc) {
-            quitMagnifer();
-        }
-        return;
-    }
-
     if (s == KeyStr::g_ctrl_s) {
         saveCurrent();
     } else if (s == KeyStr::g_ctrl_shift_s) {
@@ -612,6 +605,8 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_right) {
         if (getCurSheet())
             getCurSheet()->jumpToNextPage();
+    } else if (s == KeyStr::g_esc) {
+        quitMagnifer();
     }
 }
 
@@ -622,20 +617,13 @@ void CentralDocPage::showTips(const QString &tips, int iconIndex)
 
 bool CentralDocPage::openMagnifer()
 {
-    int nState = getCurrentState();
+    setCurrentState(Magnifer_State);
 
-    if (nState != Magnifer_State) {
+    m_magniferSheet = getCurSheet();
 
-        setCurrentState(Magnifer_State);
+    m_magniferSheet->openMagnifier();
 
-        m_magniferSheet = getCurSheet();
-
-        m_magniferSheet->openMagnifier();
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 //  取消放大镜
@@ -646,9 +634,9 @@ void CentralDocPage::quitMagnifer()
     if (nState == Magnifer_State) {
         setCurrentState(Default_State);
 
-        if (m_magniferSheet.isNull())
-            return;
-
-        m_magniferSheet->closeMagnifier();
+        if (!m_magniferSheet.isNull()) {
+            m_magniferSheet->closeMagnifier();
+            m_magniferSheet = nullptr;
+        }
     }
 }

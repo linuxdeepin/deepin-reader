@@ -109,6 +109,8 @@ public:
 
     bool isDoubleShow();
 
+    void quitMagnifer();
+
 private slots:
     void onFileOpenResult(const QString &, const bool &);
 

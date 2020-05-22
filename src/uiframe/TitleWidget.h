@@ -65,10 +65,6 @@ private:
 
     void SetBtnDisable(const bool &bAble);
 
-    void OnShortCut_Alt1();
-
-    void OnShortCut_Alt2();
-
 private:
     QStringList shortKeyList;
 

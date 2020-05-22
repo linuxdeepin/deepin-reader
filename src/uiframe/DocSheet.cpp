@@ -415,15 +415,6 @@ bool DocSheet::existFileChanged()
     return false;
 }
 
-void DocSheet::quitMagnifer()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->quitMagnifer();
-}
-
 DocOperation DocSheet::operation()
 {
     return m_operation;

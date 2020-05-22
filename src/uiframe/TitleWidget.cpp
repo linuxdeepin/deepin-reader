@@ -56,26 +56,6 @@ void TitleWidget::SetBtnDisable(const bool &bAble)
     m_pSw->setDisabled(bAble);
 }
 
-void TitleWidget::OnShortCut_Alt1()
-{
-    if (m_curSheet.isNull())
-        return;
-
-    m_curSheet->quitMagnifer();
-
-    setDefaultShape();
-}
-
-void TitleWidget::OnShortCut_Alt2()
-{
-    if (m_curSheet.isNull())
-        return;
-
-    m_curSheet->quitMagnifer();
-
-    setHandleShape();
-}
-
 void TitleWidget::initWidget()
 {
     initBtns();

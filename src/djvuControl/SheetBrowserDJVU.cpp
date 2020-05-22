@@ -78,6 +78,7 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation)
 void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
 {
     if (Dr::MouseShapeHand == operation.mouseShape) {
+        operation.mouseShape = Dr::MouseShapeHand;
         setDragMode(QGraphicsView::ScrollHandDrag);
     } else if (Dr::MouseShapeNormal == operation.mouseShape) {
         operation.mouseShape = Dr::MouseShapeNormal;
@@ -99,6 +100,8 @@ void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
 
 void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 {
+    closeMagnifier();
+
     SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(point)));
     if (nullptr == item)
         return;
@@ -357,22 +360,28 @@ void SheetBrowserDJVU::openMagnifier()
         m_magnifierLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
         m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
         m_magnifierLabel->resize(234, 234);
+        m_magnifierLabel->show();
+        setDragMode(QGraphicsView::NoDrag);
+        setMouseTracking(true);
+        setCursor(QCursor(Qt::BlankCursor));
     }
-
-    m_magnifierLabel->show();
-    setDragMode(QGraphicsView::NoDrag);
-    setMouseTracking(true);
-    setCursor(QCursor(Qt::BlankCursor));
 }
 
 void SheetBrowserDJVU::closeMagnifier()
 {
     if (nullptr != m_magnifierLabel) {
+        m_magnifierLabel->hide();
         m_magnifierLabel->deleteLater();
         m_magnifierLabel = nullptr;
+
+        setMouseTracking(false);
+        setCursor(QCursor(Qt::ArrowCursor));
+        if (Dr::MouseShapeHand == m_sheet->operation().mouseShape) {
+            setDragMode(QGraphicsView::ScrollHandDrag);
+        } else if (Dr::MouseShapeNormal == m_sheet->operation().mouseShape) {
+            setDragMode(QGraphicsView::NoDrag);
+        }
     }
-    setMouseTracking(false);
-    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 int SheetBrowserDJVU::maxWidth()

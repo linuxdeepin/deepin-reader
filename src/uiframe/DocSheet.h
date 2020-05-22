@@ -132,8 +132,6 @@ public:
 
     int  currentState();
 
-    void quitMagnifer();
-
     void openSlideWidget();
 
     void closeSlideWidget();

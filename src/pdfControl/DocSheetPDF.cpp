@@ -264,6 +264,15 @@ bool DocSheetPDF::isDoubleShow()
     return m_browser->isDoubleShow();
 }
 
+void DocSheetPDF::quitMagnifer()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->quitMagnifer();
+}
+
 void DocSheetPDF::onFileOpenResult(const QString &s, const bool &res)
 {
     if (res) {
