@@ -214,7 +214,8 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     }
     //    qDebug() << "startC:" << startC << " endC:" << endC;
     QPoint temp;
-    if (startC.x() > endC.x()) {
+    //增加判断条件 （startC.y() > endC.y()）  add by dxh   2020-5-22
+    if (startC.y() > endC.y() && startC.x() > endC.x()) {
         temp = startC;
         startC = endC;
         endC = temp;
