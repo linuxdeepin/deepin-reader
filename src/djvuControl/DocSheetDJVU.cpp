@@ -13,7 +13,7 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
 
     m_initBookmarks = m_bookmarks;
 
-    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL);
+    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
 
     m_browser = new SheetBrowserDJVU(this);
 
@@ -185,10 +185,10 @@ void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
     emit sigFileChanged(this);
 }
 
-bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode)
+bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     if (m_browser)
-        return m_browser->getImage(index, image, width, height);
+        return m_browser->getImage(index, image, width, height, mode);
 
     return false;
 }

@@ -363,12 +363,12 @@ DjVuPage::~DjVuPage()
 {
 }
 
-QSizeF DjVuPage::size() const
+QSize DjVuPage::size() const
 {
-    return 72.0 / m_resolution * m_size;
+    return m_size;
 }
 
-QImage DjVuPage::renderFit(qreal horizontalResolution, qreal verticalResolution, int width, int height)const
+QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
 {
     LOCK_PAGE
 
@@ -396,6 +396,7 @@ QImage DjVuPage::renderFit(qreal horizontalResolution, qreal verticalResolution,
         return QImage();
     }
 
+    QSizeF size = m_size.scaled(width, height, mode);
 
     ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
 
@@ -403,8 +404,8 @@ QImage DjVuPage::renderFit(qreal horizontalResolution, qreal verticalResolution,
 
     pagerect.x = 0;
     pagerect.y = 0;
-    pagerect.w = qRound(horizontalResolution / m_resolution * width);
-    pagerect.h = qRound(verticalResolution / m_resolution * height);
+    pagerect.w = qRound(size.width());
+    pagerect.h = qRound(size.height());
 
     ddjvu_rect_t renderrect;
 
@@ -426,7 +427,7 @@ QImage DjVuPage::renderFit(qreal horizontalResolution, qreal verticalResolution,
     return image;
 }
 
-QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
+QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
 {
     LOCK_PAGE
 
@@ -479,13 +480,13 @@ QImage DjVuPage::render(qreal horizontalResolution, qreal verticalResolution, Dr
     default:
     case Dr::RotateBy0:
     case Dr::RotateBy180:
-        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.width());
-        pagerect.h = qRound(verticalResolution / m_resolution * m_size.height());
+        pagerect.w = m_size.width();
+        pagerect.h = m_size.height();
         break;
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        pagerect.w = qRound(horizontalResolution / m_resolution * m_size.height());
-        pagerect.h = qRound(verticalResolution / m_resolution * m_size.width());
+        pagerect.w = m_size.height();
+        pagerect.h = m_size.width();
         break;
     }
 

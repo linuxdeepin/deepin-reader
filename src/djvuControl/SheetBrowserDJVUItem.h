@@ -30,7 +30,7 @@ public:
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation);
 
-    QImage getImageFit(int width, int height);  //按宽高缩放
+    QImage getImage(int width, int height, Qt::AspectRatioMode mode); //按宽高缩放
 
     QImage getImageMax(double max); //获取以最大max边的缩略图
 

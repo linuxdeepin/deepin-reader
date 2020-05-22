@@ -101,30 +101,30 @@ void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, boo
 
 QImage SheetBrowserDJVUItem::getImage(double scaleFactor, Dr::Rotation rotation)
 {
-    return m_page->render(72, 72, rotation, scaleFactor);
+    return m_page->render(rotation, scaleFactor);
 }
 
-QImage SheetBrowserDJVUItem::getImageFit(int width, int height)
+QImage SheetBrowserDJVUItem::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
-    return m_page->renderFit(72, 72, width, height);
+    return m_page->render(width, height, mode);
 }
 
 QImage SheetBrowserDJVUItem::getImageMax(double max)
 {
     qreal scaleFactor = max / qMax(m_page->size().height(), m_page->size().width());
-    return m_page->render(72, 72, m_rotation, scaleFactor);
+    return m_page->render(m_rotation, scaleFactor);
 }
 
 QImage SheetBrowserDJVUItem::getImageRect(double scaleFactor, QRect rect)
 {
-    return m_page->render(72, 72, m_rotation, scaleFactor, rect);
+    return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 QImage SheetBrowserDJVUItem::getImagePoint(double scaleFactor, QPoint point)
 {
     QRect rect = QRect(point.x() * scaleFactor / m_scaleFactor - 117, point .y() * scaleFactor / m_scaleFactor  - 117, 234, 234);
 
-    return m_page->render(72, 72, m_rotation, scaleFactor, rect);
+    return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image)

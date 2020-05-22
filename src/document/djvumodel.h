@@ -20,11 +20,11 @@ class DjVuPage : public Page
 public:
     ~DjVuPage();
 
-    QSizeF size() const;
+    QSize size() const;
 
-    QImage renderFit(qreal horizontalResolution, qreal verticalResolution, int width, int height)const;
+    QImage render(int width, int height, Qt::AspectRatioMode mode)const;     //按大小获取
 
-    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, const double scaleFactor = 1, const QRect &boundingRect = QRect()) const;
+    QImage render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect = QRect()) const;//按缩放比例获取; boundingRect:取其中某一区域图片
 
     QList< Link * > links() const;
 
@@ -41,7 +41,7 @@ private:
 
     int m_index;
 
-    QSizeF m_size;
+    QSize m_size;
 
     int m_resolution;
 

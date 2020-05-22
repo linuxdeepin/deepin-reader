@@ -316,12 +316,13 @@ void SheetBrowserDJVU::setCurrentPage(int page)
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
 }
 
-bool SheetBrowserDJVU::getImage(int index, QImage &image, double width, double height)
+bool SheetBrowserDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImageFit(width, height);
+    image = m_items.at(index)->getImage(width, height, mode);
+
     return true;
 }
 
