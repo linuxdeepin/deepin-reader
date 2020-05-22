@@ -4,6 +4,7 @@
 #include <QList>
 #include <QString>
 #include <QDateTime>
+#include <QRectF>
 
 #include <QMetaType>
 
