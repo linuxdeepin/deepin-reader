@@ -185,33 +185,13 @@ void DocSheetPDF::setBookMark(int page, int state)
 {
     if (state)
         m_bookmarks.insert(page);
-    else
+    else {
         m_bookmarks.remove(page);
-
-    if (state) {
-        const QString &sPath = this->filePath();
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
-        if (pageList.contains(page)) {
-            return;
-        }
-
-        pageList.append(page);
-        dApp->m_pDBService->setBookMarkList(sPath, pageList);
-        this->setFileChanged(true);
-    } else {
-        QList<int> pageList = dApp->m_pDBService->getBookMarkList(this->filePath());
-        if (!pageList.contains(page)) {
-            return;
-        }
-
-        pageList.removeAll(page);
-        dApp->m_pDBService->setBookMarkList(this->filePath(), pageList);
-        this->setFileChanged(true);
-
         this->showTips(tr("The bookmark has been removed"));
     }
     m_sidebar->setBookMark(page, state);
     m_browser->setBookMark(page, state);
+    this->setFileChanged(true);
 }
 
 void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)

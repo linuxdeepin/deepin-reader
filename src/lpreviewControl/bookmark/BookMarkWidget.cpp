@@ -93,7 +93,7 @@ void BookMarkWidget::nextPage()
 
 void BookMarkWidget::handleOpenSuccess()
 {
-    const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
+    const QSet<int> &pageList = m_sheet->getBookMarkList();
     if (pageList.contains(m_sheet->currentIndex()))
         m_pAddBookMarkBtn->setEnabled(false);
     m_pImageListView->handleOpenSuccess();

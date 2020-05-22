@@ -45,8 +45,15 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
 {
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
-    Database::instance()->readOperation(this);
-    Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+
+    if (type == Dr::PDF) {
+        dApp->m_pDBService->qSelectData(m_filePath, DB_BOOKMARK);
+        dApp->m_pDBService->qSelectData(m_filePath, DB_HISTROY);
+        m_bookmarks = dApp->m_pDBService->getBookMarkList(m_filePath).toSet();
+    } else {
+        Database::instance()->readOperation(this);
+        Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+    }
 }
 
 DocSheet::~DocSheet()
@@ -440,4 +447,9 @@ void DocSheet::handleSlideKeyPressEvent(const QString &sKey)
     if (m_slideWidget) {
         m_slideWidget->handleKeyPressEvent(sKey);
     }
+}
+
+QSet<int> DocSheet::getBookMarkList() const
+{
+    return m_bookmarks;
 }

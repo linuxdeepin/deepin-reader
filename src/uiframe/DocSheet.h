@@ -108,6 +108,8 @@ public:
 
     virtual QString filter();
 
+    virtual QSet<int> getBookMarkList() const;
+
     void print();
 
     DocOperation operation();

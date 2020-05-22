@@ -46,11 +46,13 @@ void ProxyFileDataModel::saveOper()
 void ProxyFileDataModel::saveData()
 {
     QString sPath = _fvwParent->m_pProxyData->getPath();
+    dApp->m_pDBService->setBookMarkList(sPath, _fvwParent->m_sheet->getBookMarkList().values());
     dApp->m_pDBService->qSaveData(sPath, DB_BOOKMARK);
 }
 
 void ProxyFileDataModel::saveAsData(const QString &originPath, const QString &targetPath)
 {
+    dApp->m_pDBService->setBookMarkList(originPath, _fvwParent->m_sheet->getBookMarkList().values());
     dApp->m_pDBService->saveAsData(originPath, targetPath, DB_BOOKMARK);
 }
 

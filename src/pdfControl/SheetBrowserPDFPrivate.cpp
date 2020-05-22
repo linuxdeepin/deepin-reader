@@ -441,11 +441,10 @@ void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
     m_hasOpened = openresult;
 
     if (openresult) {
-        dApp->m_pDBService->qSelectData(m_pProxyData->getPath(), DB_BOOKMARK);
         m_pProxyData->setFirstShow(false);
         m_pProxyData->setIsFileOpenOk(true);
 
-        const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_sheet->filePath());
+        const QSet<int> &pageList = m_sheet->getBookMarkList();
         for (int page  : pageList) {
             q->setBookMark(page, true);
         }
@@ -468,9 +467,6 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
         connect(m_pProxy, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), SLOT(onPageBookMarkButtonClicked(int, bool)));
         connect(m_pProxy, SIGNAL(signal_searchRes(stSearchRes)), q, SIGNAL(sigFindContantComming(const stSearchRes &)));
         connect(m_pProxy, SIGNAL(signal_searchover()), q, SIGNAL(sigFindFinished()));
-
-        //从数据库中获取文件的字号信息
-        dApp->m_pDBService->qSelectData(sPath, DB_HISTROY);
 
         FileDataModel fdm = dApp->m_pDBService->getHistroyData(sPath);
 

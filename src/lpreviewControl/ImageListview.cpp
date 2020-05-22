@@ -66,7 +66,7 @@ void ImageListView::setListType(int type)
 void ImageListView::handleOpenSuccess()
 {
     if (m_listType == DR_SPACE::E_THUMBAIL_WIDGET) {
-        const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
+        const QSet<int> &pageList = m_docSheet->getBookMarkList();
         for (int pageIndex : pageList) {
             m_imageModel->setBookMarkVisible(pageIndex, true, false);
         }
@@ -77,11 +77,10 @@ void ImageListView::handleOpenSuccess()
             pageSrclst << index;
         m_imageModel->initModelLst(pageSrclst);
     } else if (m_listType == DR_SPACE::E_BOOKMARK_WIDGET) {
-        const QList<int> &pageList = dApp->m_pDBService->getBookMarkList(m_docSheet->filePath());
+        const QSet<int> &pageList = m_docSheet->getBookMarkList();
         QList<ImagePageInfo_t> pageSrclst;
-        int pagesNum = pageList.size();
-        for (int index = 0; index < pagesNum; index++)
-            pageSrclst << pageList.at(index);
+        for (int pageIndex : pageList)
+            pageSrclst << pageIndex;
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
         QList<stHighlightContent> noteLst;

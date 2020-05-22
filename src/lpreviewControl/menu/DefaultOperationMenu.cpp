@@ -43,7 +43,7 @@ void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint,
 
     QString sCurPath = m_sheet->filePath();
 
-    QList<int> pageList = dApp->m_pDBService->getBookMarkList(sCurPath);
+    QSet<int> pageList = m_sheet->getBookMarkList();
 
     bool bBookState = pageList.contains(m_nRightPageNumber);
 

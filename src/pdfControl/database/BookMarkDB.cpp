@@ -59,8 +59,6 @@ void BookMarkDB::saveAsData(QString originFilePath, QString targetFilePath)
 {
     QList<int> dataList = m_pBookMarkMap[originFilePath];
 
-    qDebug() << dataList;
-
     if (dataList.size() == 0) {
         deleteData(originFilePath);
         deleteData(targetFilePath);
