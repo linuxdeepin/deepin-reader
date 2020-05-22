@@ -137,3 +137,8 @@ void SlidePlayWidget::playStatusChanged()
     }
     emit signalPlayBtnClicked();
 }
+
+void SlidePlayWidget::mousePressEvent(QMouseEvent *event)
+{
+    //Nottodo
+}

@@ -52,8 +52,9 @@ private slots:
     void onExitClicked();
 
 protected:
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     bool m_autoPlay = true;;

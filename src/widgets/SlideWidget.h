@@ -34,6 +34,7 @@ public:
 public slots:
     void setWidgetState(bool full);
     void handleKeyPressEvent(const QString &sKey);
+    void onImageAniFinished();
 
 private:
     void initControl();

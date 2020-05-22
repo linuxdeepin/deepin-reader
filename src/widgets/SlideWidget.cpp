@@ -78,14 +78,25 @@ void SlideWidget::initImageControl()
 
     m_imageAnimation = new QPropertyAnimation(this, "");
     m_imageAnimation->setEasingCurve(QEasingCurve::Linear);
-    m_imageAnimation->setDuration(1000);
-    connect(m_imageAnimation, SIGNAL(valueChanged(const QVariant &)), this, SLOT(onImagevalueChanged(const QVariant &)));
+    m_imageAnimation->setDuration(500);
+    connect(m_imageAnimation, &QPropertyAnimation::valueChanged, this, &SlideWidget::onImagevalueChanged);
+    connect(m_imageAnimation, &QPropertyAnimation::finished, this, &SlideWidget::onImageAniFinished);
 }
 
 void SlideWidget::onImagevalueChanged(const QVariant &variant)
 {
     m_offset = variant.toInt();
     update();
+}
+
+void SlideWidget::onImageAniFinished()
+{
+    bool autoplay = m_slidePlayWidget->getPlayStatus();
+    if (autoplay) {
+        m_imageTimer->start();
+    } else {
+        m_imageTimer->stop();
+    }
 }
 
 void SlideWidget::onParentDestroyed()
@@ -175,7 +186,7 @@ void SlideWidget::onExitBtnClicked()
 void SlideWidget::playImage()
 {
     QImage limage, rimage;
-
+    m_imageAnimation->stop();
     if (m_preIndex < m_curPageIndex) {
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
@@ -195,6 +206,7 @@ void SlideWidget::playImage()
     m_lpixmap = drawImage(limage);
     m_rpixmap = drawImage(rimage);
     m_imageAnimation->start();
+    m_imageTimer->stop();
 }
 
 void SlideWidget::onImageShowTimeOut()
