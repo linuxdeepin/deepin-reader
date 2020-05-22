@@ -98,7 +98,7 @@ public:
 
     virtual void addSelectedTextHightlightAnnotation();       //对选中文字添加高亮注释
 
-    virtual bool getImage(int index, QImage &image, double width, double height);
+    virtual bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
     virtual bool getImageMax(int index, QImage &image, double max);
 
@@ -131,7 +131,10 @@ public:
     void quitMagnifer();
 
     void openSlideWidget();
+
     void closeSlideWidget();
+
+    void handleSlideKeyPressEvent(const QString &sKey);
 
 protected:
     DocOperation  m_operation;

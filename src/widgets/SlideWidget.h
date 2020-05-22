@@ -33,6 +33,7 @@ public:
 
 public slots:
     void setWidgetState(bool full);
+    void handleKeyPressEvent(const QString &sKey);
 
 private:
     void initControl();

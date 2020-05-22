@@ -161,7 +161,7 @@ void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
     }
 }
 
-bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height)
+bool DocSheetDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode)
 {
     if (m_browser)
         return m_browser->getImage(index, image, width, height);

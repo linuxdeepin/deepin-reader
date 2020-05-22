@@ -209,7 +209,7 @@ int DocSheet::currentIndex()
     return -1;
 }
 
-bool DocSheet::getImage(int, QImage &, double, double)
+bool DocSheet::getImage(int, QImage &, double, double, Qt::AspectRatioMode mode)
 {
     qDebug() << "unrealized";
     return false;
@@ -435,5 +435,12 @@ void DocSheet::closeSlideWidget()
     if (m_slideWidget) {
         m_slideWidget->close();
         m_slideWidget = nullptr;
+    }
+}
+
+void DocSheet::handleSlideKeyPressEvent(const QString &sKey)
+{
+    if (m_slideWidget) {
+        m_slideWidget->handleKeyPressEvent(sKey);
     }
 }

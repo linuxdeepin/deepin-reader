@@ -391,11 +391,11 @@ int DocSheetPDF::currentIndex()
     return -1;
 }
 
-bool DocSheetPDF::getImage(int index, QImage &image, double width, double height)
+bool DocSheetPDF::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
     if (docProxy) {
-        return docProxy->getImage(index, image, width, height);
+        return docProxy->getImage(index, image, width, height, mode);
     }
     return false;
 }

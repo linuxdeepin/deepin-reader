@@ -534,9 +534,7 @@ void CentralDocPage::showFileAttr()
 void CentralDocPage::handleShortcut(const QString &s)
 {
     if (getCurrentState() == SLIDER_SHOW) {
-        if (s == KeyStr::g_esc) {
-            getCurSheet()->closeSlideWidget();
-        }
+        getCurSheet()->handleSlideKeyPressEvent(s);
         return;
     }
 

@@ -63,9 +63,8 @@ void SlideWidget::initControl()
     m_slidePlayWidget->move((DApplication::desktop()->screenGeometry().width() - 270) / 2, DApplication::desktop()->screenGeometry().height() - 100);
 
     QImage limage, rimage;
-    int maxPix = qMin(this->width(), this->height() - 20);
-    m_docSheet->getImageMax(m_preIndex, limage, maxPix);
-    m_docSheet->getImageMax(m_curPageIndex, rimage, maxPix);
+    m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
+    m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
     m_lpixmap = drawImage(limage);
     m_rpixmap = drawImage(rimage);
 }
@@ -176,23 +175,22 @@ void SlideWidget::onExitBtnClicked()
 void SlideWidget::playImage()
 {
     QImage limage, rimage;
-    int maxPix = qMin(this->width(), this->height() - 20);
 
     if (m_preIndex < m_curPageIndex) {
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
 
-        m_docSheet->getImageMax(m_preIndex, limage, maxPix);
-        m_docSheet->getImageMax(m_curPageIndex, rimage, maxPix);
+        m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
+        m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
 
     } else {
         m_blefttoright = true;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(width());
 
-        m_docSheet->getImageMax(m_preIndex, limage, maxPix);
-        m_docSheet->getImageMax(m_curPageIndex, rimage, maxPix);
+        m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
+        m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
     }
     m_lpixmap = drawImage(limage);
     m_rpixmap = drawImage(rimage);
@@ -232,5 +230,19 @@ void SlideWidget::mousePressEvent(QMouseEvent *event)
     DWidget::mousePressEvent(event);
     if (event->button() == Qt::RightButton) {
         onExitBtnClicked();
+    }
+}
+
+void SlideWidget::handleKeyPressEvent(const QString &sKey)
+{
+    if (sKey == KeyStr::g_esc) {
+        m_docSheet->closeSlideWidget();
+    } else if (sKey == KeyStr::g_space) {
+        bool autoplay = m_slidePlayWidget->getPlayStatus();
+        m_slidePlayWidget->setPlayStatus(!autoplay);
+    } else if (sKey == KeyStr::g_left) {
+        onPreBtnClicked();
+    } else if (sKey == KeyStr::g_right) {
+        onNextBtnClicked();
     }
 }

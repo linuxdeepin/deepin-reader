@@ -95,14 +95,14 @@ QPoint DocummentProxy::global2RelativePoint(QPoint globalpoint)
     return m_documment->global2RelativePoint(globalpoint);
 }
 
-bool DocummentProxy::getImage(int index, QImage &image, double width, double height)
+bool DocummentProxy::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     bool bre = false;
     QMutexLocker locker(&mutexlockgetimage);
     if (!m_documment || bcloseing) {
         return bre;
     }
-    bre = m_documment->getImage(index, image, width, height);
+    bre = m_documment->getImage(index, image, width, height, mode);
     return bre;
 }
 

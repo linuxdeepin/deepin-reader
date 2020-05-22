@@ -1499,14 +1499,15 @@ bool DocummentBase::setBookMarkState(int page, bool state)
     return d->m_pages.at(page)->setBookMarkState(state);
 }
 
-bool DocummentBase::getImage(int index, QImage &image, double width, double height)
+bool DocummentBase::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     Q_D(DocummentBase);
     if (index < 0 || index >= d->m_pages.size()) {
         return false;
     }
     qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
-    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
+    const QSizeF &iSize = QSizeF(d->m_pages.at(index)->getOriginalImageWidth(), d->m_pages.at(index)->getOriginalImageHeight()).scaled(width * pixelratiof, height * pixelratiof, mode);
+    if (!d->m_pages.at(index)->getImage(image, iSize.width(), iSize.height())) {
         return false;
     }
     image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
