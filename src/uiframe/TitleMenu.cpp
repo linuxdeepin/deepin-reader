@@ -37,26 +37,10 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (sheet->type() == Dr::DjVu && a->text() == tr("Slide show")) {
-            a->setDisabled(true);
-            continue;
-        }
-//        if (sheet->type() == Dr::DjVu && a->text() == tr("Magnifer")) {
-//            a->setDisabled(true);
-//            continue;
-//        }
         if (sheet->type() == Dr::DjVu && a->text() == tr("Save")) {
             a->setDisabled(true);
             continue;
         }
-//        if (sheet->type() == Dr::DjVu && a->text() == tr("Document info")) {
-//            a->setDisabled(true);
-//            continue;
-//        }
-//        if (sheet->type() == Dr::DjVu && a->text() == tr("Print")) {
-//            a->setDisabled(true);
-//            continue;
-//        }
 
         a->setDisabled(false);
 
