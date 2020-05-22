@@ -565,7 +565,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_1) {
         if (getCurSheet()) {
             getCurSheet()->setScaleMode(Dr::ScaleFactorMode);
-            getCurSheet()->setScaleFactor(100);
+            getCurSheet()->setScaleFactor(1);
         }
     } else if (s == KeyStr::g_ctrl_m) {
         if (getCurSheet())

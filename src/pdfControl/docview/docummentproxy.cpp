@@ -267,11 +267,11 @@ int DocummentProxy::currentPageNo()
     return m_documment->getCurrentPageNo();
 }
 
-bool DocummentProxy::pageJump(int pagenum)
+bool DocummentProxy::pageJump(int index)
 {
     if (!m_documment || bcloseing)
         return false;
-    emit signal_pageJump(pagenum);
+    emit signal_pageJump(index);
     return true;
 }
 

@@ -10,6 +10,7 @@ namespace deepin_reader {
 class Page;
 }
 
+class BookMarkButton;
 class SheetBrowserDJVUItem : public QGraphicsItem
 {
 public:
@@ -18,6 +19,10 @@ public:
     ~SheetBrowserDJVUItem();
 
     QRectF boundingRect()const;
+
+    QRectF bookmarkRect();
+
+    void setBookmark(int hasBookmark);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 
@@ -37,14 +42,20 @@ public:
 
     static bool existInstance(SheetBrowserDJVUItem *item);
 
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
 private:
     deepin_reader::Page *m_page = nullptr;
     QImage m_image;
     QImage m_leftImage;
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;
+    bool m_bookmark = false;
+    int m_bookmarkState = 0;   //1为on 2为pressed 3为show
     Dr::Rotation m_rotation = Dr::RotateBy0;
-
     static QSet<SheetBrowserDJVUItem *> items;
 };
 

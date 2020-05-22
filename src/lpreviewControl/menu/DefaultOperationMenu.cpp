@@ -75,7 +75,7 @@ void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint,
         currentPage = m_sheet->currentIndex();
         isSinglePage = static_cast<bool>(pageSum % 2);
 
-        if (currentPage == 0/*(!m_sheet->isDoubleShow()) ? (currentPage == 0) : (currentPage <= 1)*/) { //  首页
+        if (currentPage == 0) { //  首页
             m_pFirstPage->setEnabled(false);
             m_pPrevPage->setEnabled(false);
         } else {

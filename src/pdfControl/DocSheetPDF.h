@@ -43,7 +43,7 @@ public:
 
     void rotateRight()override;
 
-    void setBookMark(int page, int state)override;
+    void setBookMark(int index, int state)override;
 
     void setLayoutMode(Dr::LayoutMode mode)override;
 
@@ -110,7 +110,7 @@ public:
     bool isDoubleShow();
 
 private slots:
-    void SlotFileOpenResult(const QString &, const bool &);
+    void onFileOpenResult(const QString &, const bool &);
 
     void onShowTips(const QString &tips, int);
 

@@ -1,6 +1,7 @@
 #include "DocSheetDJVU.h"
 #include "lpreviewControl/SheetSidebar.h"
 #include "SheetBrowserDJVU.h"
+#include "database.h"
 
 #include <QDebug>
 #include <QFileInfo>
@@ -10,6 +11,8 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
+    m_initBookmarks = m_bookmarks;
+
     m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL);
 
     m_browser = new SheetBrowserDJVU(this);
@@ -17,6 +20,10 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     connect(m_browser, SIGNAL(sigSizeChanged()), this, SLOT(onBrowserSizeChanged()));
     connect(m_browser, SIGNAL(sigWheelUp()), this, SLOT(onBrowserWheelUp()));
     connect(m_browser, SIGNAL(sigWheelDown()), this, SLOT(onBrowserWheelDown()));
+    connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
+    connect(m_browser, SIGNAL(sigNeedPageNext()), this, SLOT(onBrowserPageNext()));
+    connect(m_browser, SIGNAL(sigNeedPageFirst()), this, SLOT(onBrowserPageFirst()));
+    connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
 }
 
 DocSheetDJVU::~DocSheetDJVU()
@@ -104,9 +111,17 @@ bool DocSheetDJVU::openFileExec()
     return false;
 }
 
-bool DocSheetDJVU::saveAsData(QString filePath)
+void DocSheetDJVU::setBookMark(int index, int state)
 {
-    return QFile::copy(this->filePath(), filePath);
+    if (state)
+        m_bookmarks.insert(index);
+    else
+        m_bookmarks.remove(index);
+
+    m_sidebar->setBookMark(index, state);
+    m_browser->setBookMark(index, state);
+
+    emit sigFileChanged(this);
 }
 
 int DocSheetDJVU::pagesNumber()
@@ -187,7 +202,18 @@ bool DocSheetDJVU::getImageMax(int index, QImage &image, double max)
 
 bool DocSheetDJVU::fileChanged()
 {
-    return false;
+    return !(m_initBookmarks == m_bookmarks);
+}
+
+bool DocSheetDJVU::saveData()
+{
+    return Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+}
+
+bool DocSheetDJVU::saveAsData(QString filePath)
+{
+    Database::instance()->saveBookmarks(filePath, m_bookmarks);
+    return QFile::copy(this->filePath(), filePath);
 }
 
 void DocSheetDJVU::openMagnifier()
@@ -257,4 +283,24 @@ void DocSheetDJVU::onBrowserWheelUp()
 void DocSheetDJVU::onBrowserWheelDown()
 {
     zoomout();
+}
+
+void DocSheetDJVU::onBrowserPageFirst()
+{
+    jumpToFirstPage();
+}
+
+void DocSheetDJVU::onBrowserPagePrev()
+{
+    jumpToPrevPage();
+}
+
+void DocSheetDJVU::onBrowserPageNext()
+{
+    jumpToNextPage();
+}
+
+void DocSheetDJVU::onBrowserPageLast()
+{
+    jumpToLastPage();
 }

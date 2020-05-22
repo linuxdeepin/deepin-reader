@@ -131,6 +131,62 @@ bool Database::saveOperation(DocSheet *sheet)
     return true;
 }
 
+bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
+{
+    if (m_database.isOpen()) {
+        QSqlQuery query(m_database);
+
+        query.prepare(" select * from bookmark where filePath = :filePath");
+        query.bindValue(":filePath", filePath);
+
+        if (!query.exec()) {
+            qDebug() << query.lastError().text();
+            return false;
+        }
+
+        if (query.next()) {
+            bookmarks.insert(query.value("bookmarkIndex").toInt());
+        }
+    }
+
+    return true;
+}
+
+bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
+{
+    if (m_database.isOpen()) {
+        QSqlQuery query(m_database);
+
+        m_database.transaction();
+
+        query.prepare("delete from bookmark where filePath = :filePath");
+        query.bindValue(":filePath", filePath);
+        if (!query.exec()) {
+            qDebug() << query.lastError().text();
+            m_database.rollback();
+            return false;
+        }
+
+        foreach (int index, bookmarks) {
+            query.prepare(" insert into "
+                          " bookmark(filePath,bookmarkIndex)"
+                          " VALUES(:filePath,:bookmarkIndex)");
+
+            query.bindValue(":filePath", filePath);
+            query.bindValue(":int", index);
+
+            if (!query.exec()) {
+                qDebug() << query.lastError().text();
+                m_database.rollback();
+                return false;
+            }
+        }
+    }
+
+    m_database.commit();
+    return true;
+}
+
 Database::Database(QObject *parent) : QObject(parent)
 {
     const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
@@ -155,25 +211,20 @@ Database::Database(QObject *parent) : QObject(parent)
             prepareOperation();
         }
 
-        if (!tables.contains("bookmarks")) {
-            prepareBookmarks();
+        if (!tables.contains("bookmark")) {
+            prepareBookmark();
         }
     } else {
         qDebug() << m_database.lastError();
     }
 }
 
-bool Database::prepareBookmarks()
+bool Database::prepareBookmark()
 {
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
-    query.exec("CREATE TABLE bookmarks "
-               "(filePath TEXT"
-               ",page INTEGER"
-               ",label TEXT"
-               ",comment TEXT"
-               ",modified DATETIME)");
+    query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)");
 
     if (!query.isActive()) {
         qDebug() << query.lastError();

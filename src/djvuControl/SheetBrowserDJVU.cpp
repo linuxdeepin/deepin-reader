@@ -1,7 +1,7 @@
 #include "SheetBrowserDJVU.h"
 #include "document/djvumodel.h"
 #include "SheetBrowserDJVUItem.h"
-#include "DocSheet.h"
+#include "DocSheetDJVU.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -9,14 +9,19 @@
 #include <QTimer>
 #include <QApplication>
 #include <QBitmap>
+#include <DMenu>
 
-SheetBrowserDJVU::SheetBrowserDJVU(QWidget *parent) : QGraphicsView(parent)
+SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : QGraphicsView(parent), m_sheet(parent)
 {
     setScene(new QGraphicsScene());
 
     setFrameShape(QFrame::NoFrame);
 
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
 
     m_bitmap = new QBitmap(234, 234);
     QPainter painter(m_bitmap);
@@ -80,9 +85,50 @@ void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
     }
 }
 
+void SheetBrowserDJVU::setBookMark(int index, int state)
+{
+    if (m_items.count() > index) {
+        m_items.at(index)->setBookmark(state);
+    }
+}
+
 void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
 {
     emit sigPageChanged(currentPage());
+}
+
+void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
+{
+    SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(point)));
+    if (nullptr == item)
+        return;
+
+    int index = m_items.indexOf(item);
+
+    QMenu menu(this);
+    if (m_sheet->hasBookMark(index))
+        menu.addAction(tr("Remove bookmark"), [this, index]() {
+        m_sheet->setBookMark(index, false);
+    });
+    else
+        menu.addAction(tr("Add bookmark"), [this, index]() {
+        m_sheet->setBookMark(index, true);
+    });
+
+    menu.addAction(tr("First page"), [this]() {
+        this->emit sigNeedPageFirst();
+    });
+    menu.addAction(tr("Previous page"), [this]() {
+        this->emit sigNeedPagePrev();
+    });
+    menu.addAction(tr("Next page"), [this]() {
+        this->emit sigNeedPageNext();
+    });
+    menu.addAction(tr("Last page"), [this]() {
+        this->emit sigNeedPageLast();
+    });
+    menu.move(mapToGlobal(point));
+    menu.exec();
 }
 
 void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
@@ -253,11 +299,11 @@ int SheetBrowserDJVU::currentPage()
     return m_items.indexOf(item) + 1;
 }
 
-int SheetBrowserDJVU::viewPointInPage(QPoint viewPoint)
+int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
 {
     SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
 
-    return m_items.indexOf(item) + 1;
+    return m_items.indexOf(item);
 }
 
 void SheetBrowserDJVU::setCurrentPage(int page)

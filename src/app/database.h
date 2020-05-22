@@ -20,6 +20,10 @@ public:
 
     bool saveOperation(DocSheet *sheet);
 
+    bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
+
+    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
+
 private:
     Q_DISABLE_COPY(Database)
 
@@ -29,7 +33,7 @@ private:
 
     bool prepareOperation();
 
-    bool prepareBookmarks();
+    bool prepareBookmark();
 
     QSqlDatabase m_database;
 

@@ -42,7 +42,7 @@ public:
     void search(const QString &strtext, const QColor &color = Qt::red);
     void clearsearch();
     int currentPageNo();
-    bool pageJump(int pagenum);
+    bool pageJump(int index);
     void docBasicInfo(stFileInfo &info);
     QString removeAnnotation(const QPoint &startpos, AnnoteType_Em type = Annote_Highlight);
     void removeAnnotation(const QString &struuid, int ipage = -1);

@@ -46,6 +46,7 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
     Database::instance()->readOperation(this);
+    Database::instance()->readBookmarks(m_filePath, m_bookmarks);
 }
 
 DocSheet::~DocSheet()
@@ -154,6 +155,11 @@ void DocSheet::setScaleMode(Dr::ScaleMode mode)
 void DocSheet::setBookMark(int page, int state)
 {
     qDebug() << "unrealized";
+}
+
+bool DocSheet::hasBookMark(int index)
+{
+    return m_bookmarks.contains(index);
 }
 
 void DocSheet::handleOpenSuccess()

@@ -33,6 +33,7 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
+#include "database.h"
 
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     : DocSheet(Dr::PDF, filePath, parent)
@@ -49,7 +50,7 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
 
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_browser, SIGNAL(sigPageChanged(int)), m_sidebar, SLOT(onPageChanged(int)));
-    connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(SlotFileOpenResult(const QString &, const bool &)));
+    connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(onFileOpenResult(const QString &, const bool &)));
     connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
     connect(m_browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
     connect(m_browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
@@ -105,20 +106,20 @@ void DocSheetPDF::jumpToPage(int page)
     jumpToIndex(page - 1);
 }
 
-void DocSheetPDF::jumpToIndex(int page)
+void DocSheetPDF::jumpToIndex(int index)
 {
     if (!m_browser->GetDocProxy())
         return;
 
     DocummentProxy *_proxy =  m_browser->GetDocProxy();
     int nPageSize = _proxy->getPageSNum();      //  总页数
-    if (page < 0 || page == nPageSize) {
+    if (index < 0 || index == nPageSize) {
         return;
     }
 
     int nCurPage = _proxy->currentPageNo();
-    if (nCurPage != page) {
-        _proxy->pageJump(page);
+    if (nCurPage != index) {
+        _proxy->pageJump(index);
     }
 }
 
@@ -182,6 +183,11 @@ void DocSheetPDF::setFileChanged(bool hasChanged)
 
 void DocSheetPDF::setBookMark(int page, int state)
 {
+    if (state)
+        m_bookmarks.insert(page);
+    else
+        m_bookmarks.remove(page);
+
     if (state) {
         const QString &sPath = this->filePath();
         QList<int> pageList = dApp->m_pDBService->getBookMarkList(sPath);
@@ -248,6 +254,7 @@ void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 
 void DocSheetPDF::setScaleFactor(qreal scaleFactor)
 {
+    m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->setScale(scaleFactor * 100);
 }
@@ -257,7 +264,7 @@ bool DocSheetPDF::isDoubleShow()
     return m_browser->isDoubleShow();
 }
 
-void DocSheetPDF::SlotFileOpenResult(const QString &s, const bool &res)
+void DocSheetPDF::onFileOpenResult(const QString &s, const bool &res)
 {
     if (res) {
         if (m_pRightWidget && m_pSpinnerWidget) {
@@ -271,7 +278,6 @@ void DocSheetPDF::SlotFileOpenResult(const QString &s, const bool &res)
     }
 
     emit sigOpened(this, res);
-    emit sigOpenFileResult(s, res);
 }
 
 void DocSheetPDF::onShowTips(const QString &tips, int index)
@@ -351,11 +357,13 @@ bool DocSheetPDF::fileChanged()
 
 bool DocSheetPDF::saveData()
 {
+    Database::instance()->saveBookmarks(filePath(), m_bookmarks);
     return m_browser->saveData();
 }
 
 bool DocSheetPDF::saveAsData(QString filePath)
 {
+    Database::instance()->saveBookmarks(filePath, m_bookmarks);
     return m_browser->saveAsData(filePath);
 }
 

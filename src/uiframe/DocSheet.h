@@ -68,6 +68,10 @@ public:
 
     virtual void rotateRight();
 
+    virtual void setBookMark(int index, int state);
+
+    bool hasBookMark(int index);
+
     virtual void setLayoutMode(Dr::LayoutMode mode);
 
     virtual void setScaleMode(Dr::ScaleMode mode);
@@ -138,6 +142,8 @@ public:
 
 protected:
     DocOperation  m_operation;
+    QSet<int>     m_bookmarks;
+
     SlideWidget  *m_slideWidget = nullptr;
     SheetSidebar *m_sidebar = nullptr;
 
@@ -165,8 +171,6 @@ public:
     //===========以上是改版后的,优先使用(pdf看情况，如果未实现则不用) ,以下则逐步替换和删除
 
 public:
-    virtual void setBookMark(int page, int state);
-
     virtual int label2pagenum(QString label);
 
     virtual bool haslabel();
@@ -182,8 +186,6 @@ public:
     virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
 
 signals:
-    void sigOpenFileResult(const QString &, const bool &);
-
     void sigFindOperation(const int &);
 
 };

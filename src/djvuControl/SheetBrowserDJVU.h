@@ -8,11 +8,12 @@
 
 class DocOperation;
 class SheetBrowserDJVUItem;
+class DocSheetDJVU;
 class SheetBrowserDJVU : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit SheetBrowserDJVU(QWidget *parent = nullptr);
+    explicit SheetBrowserDJVU(DocSheetDJVU *parent = nullptr);
 
     ~SheetBrowserDJVU();
 
@@ -22,6 +23,8 @@ public:
 
     void loadMouseShape(DocOperation &operation);
 
+    void setBookMark(int index, int state);
+
     void deform(DocOperation &operation);      //根据当前参数进行变换
 
     bool hasLoaded();
@@ -30,7 +33,7 @@ public:
 
     int currentPage();
 
-    int  viewPointInPage(QPoint viewPoint);
+    int  viewPointInIndex(QPoint viewPoint);
 
     void setCurrentPage(int page);
 
@@ -55,6 +58,14 @@ signals:
 
     void sigSizeChanged();
 
+    void sigNeedPageFirst();
+
+    void sigNeedPagePrev();
+
+    void sigNeedPageNext();
+
+    void sigNeedPageLast();
+
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -71,6 +82,8 @@ protected:
 private slots:
     void onVerticalScrollBarValueChanged(int value);
 
+    void onCustomContextMenuRequested(const QPoint &);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserDJVUItem *> m_items;
@@ -81,6 +94,7 @@ private:
     bool m_hasLoaded = false;   //是否已经加载过每页的信息
     int m_initPage = 1;         //用于刚显示跳转的页数
     QLabel *m_magnifierLabel = nullptr;
+    DocSheetDJVU *m_sheet = nullptr;
 };
 
 #endif // SHEETBROWSERDJVU_H

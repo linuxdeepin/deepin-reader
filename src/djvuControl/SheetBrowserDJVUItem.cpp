@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
+#include <QGraphicsSceneMouseEvent>
 
 QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
 SheetBrowserDJVUItem::SheetBrowserDJVUItem(deepin_reader::Page *page) : QGraphicsItem()
@@ -35,6 +36,18 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
     return QRectF(0, 0, (double)m_page->size().width() * m_scaleFactor, (double)m_page->size().height() * m_scaleFactor);
 }
 
+QRectF SheetBrowserDJVUItem::bookmarkRect()
+{
+    return QRectF(boundingRect().width() - 40, 0, 40, 40);
+}
+
+void SheetBrowserDJVUItem::setBookmark(int hasBookmark)
+{
+    m_bookmark = hasBookmark;
+    m_bookmarkState = 3;
+    update();
+}
+
 void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
@@ -45,6 +58,13 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawImage(option->rect, m_leftImage);
     else
         painter->drawImage(option->rect.x(), option->rect.y(), m_image);
+
+    if (1 == m_bookmarkState)
+        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark_hover.svg"));
+    if (2 == m_bookmarkState)
+        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark_pressed.svg"));
+    if (3 == m_bookmarkState)
+        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark.svg"));
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
@@ -116,4 +136,27 @@ void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation
 bool SheetBrowserDJVUItem::existInstance(SheetBrowserDJVUItem *item)
 {
     return items.contains(item);
+}
+
+void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (bookmarkRect().contains(event->pos())) {
+        m_bookmarkState = 2;
+        update();
+    }
+
+    QGraphicsItem::mousePressEvent(event);
+}
+
+void SheetBrowserDJVUItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (!m_bookmark && bookmarkRect().contains(event->pos())) {
+        m_bookmarkState = 1;
+        update();
+    } else if (m_bookmark)
+        m_bookmarkState = 3;
+
+    update();
+
+    QGraphicsItem::mouseMoveEvent(event);
 }

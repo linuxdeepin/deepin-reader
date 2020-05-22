@@ -16,6 +16,12 @@ public:
 
     bool openFileExec()override;
 
+    void setBookMark(int index, int state);
+
+    bool fileChanged()override;
+
+    bool saveData()override;
+
     bool saveAsData(QString filePath)override;
 
     int pagesNumber()override;
@@ -52,8 +58,6 @@ public:
 
     bool getImageMax(int index, QImage &image, double max)override;
 
-    bool fileChanged()override;
-
     void openMagnifier()override;
 
     bool closeMagnifier()override;
@@ -71,8 +75,17 @@ private slots:
 
     void onBrowserWheelDown();
 
+    void onBrowserPageFirst();
+
+    void onBrowserPagePrev();
+
+    void onBrowserPageNext();
+
+    void onBrowserPageLast();
+
 private:
     SheetBrowserDJVU *m_browser = nullptr;
+    QSet<int> m_initBookmarks;
 };
 
 #endif // DOCSHEETDJVU_H
