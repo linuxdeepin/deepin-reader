@@ -400,23 +400,32 @@ QPointF PagePdf::globalPoint2Iner(const QPoint point)
     switch (d->m_rotate) {
     case RotateType_90: {
         //ok
-        QPoint tmpP(point.y(), this->width() - point.x());
-        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(tmpP.y() - y() - (this->width() - curheight))) / static_cast<double>(curheight));
+//        QPoint tmpP(point.y(), this->width() - point.x());
+//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
+//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight))) / static_cast<double>(curheight));
+        QPoint tmpP(point.y() - y() - (this->height() - curwidth) / 2, point.x() - x() - (this->width() - curheight) / 2);
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x()/* - x()*/)) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(curheight - tmpP.y()/* - y()*/)) / static_cast<double>(curheight));
         break;
     }
     case RotateType_180: {
-        //err
-        QPoint tmpP(this->width() - point.x(), this->height() - point.y());
-        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(tmpP.y() - y() - (this->height() - curheight))) / static_cast<double>(curheight));
+        //ok
+//        QPoint tmpP(this->width() - point.x(), this->height() - point.y());
+//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / static_cast<double>(curwidth),
+//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->height() - curheight))) / static_cast<double>(curheight));
+        QPoint tmpP(point.x() - x() - (this->width() - curwidth) / 2, point.y() - y() - (this->height() - curheight) / 2);
+        tpoint = QPointF(abs(static_cast<double>(abs(curwidth - tmpP.x()))) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(curheight - tmpP.y())) / static_cast<double>(curheight));
         break;
     }
     case RotateType_270: {
         //ok
-        QPoint tmpP(this->height() - point.y(), point.x());
-        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(tmpP.y() - y() - (this->width() - curheight))) / static_cast<double>(curheight));
+//        QPoint tmpP(this->height() - point.y(), point.x());
+//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
+//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight)) / 2.0) / static_cast<double>(curheight));
+        QPoint tmpP(point.y() - y() - (this->height() - curwidth) / 2, point.x() - x() - (this->width() - curheight) / 2);
+        tpoint = QPointF(abs(static_cast<double>(abs(curwidth - tmpP.x()))) / static_cast<double>(curwidth),
+                         static_cast<double>(abs(tmpP.y())) / static_cast<double>(curheight));
         break;
     }
     default:
@@ -513,12 +522,12 @@ void PagePdf::removeAnnotation(const QString &struuid)
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(PagePdf);
-    double curwidth = d->m_scale * d->m_imagewidth;
-    double curheight = d->m_scale * d->m_imageheight;
+//    double curwidth = d->m_scale * d->m_imagewidth;
+//    double curheight = d->m_scale * d->m_imageheight;
 
     int ret = false;
-    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
-//    QPointF tpos = globalPoint2Iner(pos);
+//    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
+    QPointF tpos = globalPoint2Iner(pos);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
@@ -529,7 +538,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
                 rectbound.setTopRight(quad.points[1]);
                 rectbound.setBottomLeft(quad.points[3]);
                 rectbound.setBottomRight(quad.points[2]);
-                if (rectbound.contains(ptf)) {
+                if (rectbound.contains(tpos)) {
                     struuid = annote->uniqueName();
                     strtext = annote->contents();
                     ret = true;
@@ -553,7 +562,7 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AText) { //必须判断
-            if (annote->boundary().contains(/*ptf*/tpos)) {
+            if (annote->boundary().contains(tpos)) {
                 strtext = annote->contents();
                 struuid = annote->uniqueName();
                 bclicked = true;
