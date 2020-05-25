@@ -25,6 +25,8 @@ public:
 
     static void appendTask(SheetBrowserDJVUItem *item, double scaleFactor, Dr::Rotation rotation);
 
+    static void destroy();
+
     void run();
 
 private slots:

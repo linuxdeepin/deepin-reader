@@ -9,9 +9,9 @@ RenderThreadDJVU::RenderThreadDJVU(QObject *parent) : QThread(parent)
 
 RenderThreadDJVU::~RenderThreadDJVU()
 {
+    instance = nullptr;
     m_quit = true;
     wait();
-    instance = nullptr;
 }
 
 void RenderThreadDJVU::appendTask(SheetBrowserDJVUItem *item, double scaleFactor, Dr::Rotation rotation)
@@ -51,7 +51,7 @@ void RenderThreadDJVU::run()
 
     while (!m_quit) {
         if (m_tasks.count() <= 0) {
-            sleep(1);
+            msleep(10);
             break;
         }
 
@@ -67,6 +67,11 @@ void RenderThreadDJVU::run()
         if (!image.isNull())
             emit sigTaskFinished(task.item, image, task.scaleFactor, task.rotation);
     }
+}
+
+void RenderThreadDJVU::destroy()
+{
+    delete instance;
 }
 
 void RenderThreadDJVU::onTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation)

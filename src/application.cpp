@@ -26,6 +26,7 @@
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 #include "MainWindow.h"
+#include "djvuControl/RenderThreadDJVU.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -64,6 +65,8 @@ void Application::adaptScreenView(int &w, int &h)
 
 void Application::handleQuitAction()
 {
+    //线程退出
+    RenderThreadDJVU::destroy();
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
 }
