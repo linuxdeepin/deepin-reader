@@ -385,7 +385,7 @@ QPointF PageBase::globalPoint2Iner(const QPoint)
 bool PageBase::ifMouseMoveOverText(const QPoint point)
 {
     Q_D(PageBase);
-    QPointF qp = point;
+    QPointF qp(point);
     getImagePoint(qp);
     for (int i = 0; i < d->m_words.size(); i++) {
         if (qp.x() > d->m_words.at(i).rect.x() &&
@@ -403,6 +403,7 @@ void PageBase::getImagePoint(QPointF &point)
     Q_D(PageBase);
     const double scaleX = d->m_scale ;
     const double scaleY = d->m_scale ;
+
     QPointF qp = QPointF((point.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2) / scaleY);
     switch (d->m_rotate) {
     case RotateType_90:
@@ -413,7 +414,8 @@ void PageBase::getImagePoint(QPointF &point)
         qp = QPointF(d->m_imagewidth - qp.x(),  d->m_imageheight - qp.y());
         break;
     case RotateType_270:
-        qp = QPointF((point.x() - x() - (width() - d->m_imageheight) / 2) / scaleX, (point.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2) / scaleY);
+        qp = QPointF((static_cast<double>(point.x() - x()) - static_cast<double>(width() - d->m_scale * d->m_imageheight) / 2.0) / scaleX,
+                     (static_cast<double>(point.y() - y()) - static_cast<double>(height() - d->m_scale * d->m_imagewidth) / 2.0) / scaleY);
         qp = QPointF(d->m_imagewidth - qp.y(), qp.x());
         break;
     default:
