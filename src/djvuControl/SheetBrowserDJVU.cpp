@@ -159,10 +159,13 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
 void SheetBrowserDJVU::deform(DocOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
-    //int page = currentPage();
 
-    double valueo = (double)verticalScrollBar()->value();
-    double maxo = (double)verticalScrollBar()->maximum();
+    int page = currentPage();
+
+    int diff = 0;
+
+    if (page > 0 && page <= m_items.count())
+        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
 
     int width = 0;
     int height = 0;
@@ -229,9 +232,8 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
 
     setSceneRect(0, 0, width, height);
 
-    //setCurrentPage(page);
-
-    verticalScrollBar()->setValue(valueo / maxo * verticalScrollBar()->maximum());
+    if (page > 0 && page <= m_items.count())
+        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + diff);
 }
 
 bool SheetBrowserDJVU::hasLoaded()
