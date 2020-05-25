@@ -559,6 +559,33 @@
     </message>
 </context>
 <context>
+    <name>SheetBrowserDJVU</name>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="unfinished">Remove bookmark</translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished">Add bookmark</translation>
+    </message>
+    <message>
+        <source>First page</source>
+        <translation type="unfinished">First page</translation>
+    </message>
+    <message>
+        <source>Previous page</source>
+        <translation type="unfinished">Previous page</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Next page</translation>
+    </message>
+    <message>
+        <source>Last page</source>
+        <translation type="unfinished">Last page</translation>
+    </message>
+</context>
+<context>
     <name>SheetBrowserPDFPrivate</name>
     <message>
         <source>Please select the text</source>
@@ -737,6 +764,10 @@
     <message>
         <source>Display shortcuts</source>
         <translation>Display shortcuts</translation>
+    </message>
+    <message>
+        <source>1:1 size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

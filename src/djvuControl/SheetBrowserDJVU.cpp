@@ -120,6 +120,8 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         m_sheet->setBookMark(index, true);
     });
 
+    menu.addSeparator();
+
     menu.addAction(tr("First page"), [this]() {
         this->emit sigNeedPageFirst();
     });
@@ -157,7 +159,11 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
 void SheetBrowserDJVU::deform(DocOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
-    int page = currentPage();
+    //int page = currentPage();
+
+    double valueo = (double)verticalScrollBar()->value();
+    double maxo = (double)verticalScrollBar()->maximum();
+
     int width = 0;
     int height = 0;
 
@@ -194,7 +200,6 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
             if (m_items.at(i)->boundingRect().width() > width)
                 width = m_items.at(i)->boundingRect().width();
         }
-        setCurrentPage(page);
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
@@ -219,12 +224,14 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
                 if (m_items.at(i)->boundingRect().width() > width)
                     width = m_items.at(i)->boundingRect().width();
             }
-
         }
-        setCurrentPage(page);
     }
 
     setSceneRect(0, 0, width, height);
+
+    //setCurrentPage(page);
+
+    verticalScrollBar()->setValue(valueo / maxo * verticalScrollBar()->maximum());
 }
 
 bool SheetBrowserDJVU::hasLoaded()

@@ -559,6 +559,33 @@
     </message>
 </context>
 <context>
+    <name>SheetBrowserDJVU</name>
+    <message>
+        <source>Remove bookmark</source>
+        <translation>删除书签</translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation>添加书签</translation>
+    </message>
+    <message>
+        <source>First page</source>
+        <translation>第一页</translation>
+    </message>
+    <message>
+        <source>Previous page</source>
+        <translation>前一页</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation>后一页</translation>
+    </message>
+    <message>
+        <source>Last page</source>
+        <translation>最后一页</translation>
+    </message>
+</context>
+<context>
     <name>SheetBrowserPDFPrivate</name>
     <message>
         <source>Please select the text</source>
@@ -737,6 +764,10 @@
     <message>
         <source>Display shortcuts</source>
         <translation>显示快捷键</translation>
+    </message>
+    <message>
+        <source>1:1 size</source>
+        <translation>默认大小</translation>
     </message>
 </context>
 <context>
