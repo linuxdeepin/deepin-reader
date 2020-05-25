@@ -78,15 +78,11 @@ public:
 
     virtual void setScaleFactor(qreal scaleFactor);     //base is 1 ;设置后自动取消自适应
 
-    virtual void setRotation(Dr::Rotation rotation);
-
     virtual void setMouseShape(Dr::MouseShape shape);
 
     virtual void openMagnifier();
 
     virtual bool closeMagnifier();
-
-    virtual void setCurrentPage(int page);
 
     virtual bool fileChanged();
 

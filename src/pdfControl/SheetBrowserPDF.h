@@ -41,9 +41,9 @@ public:
 
     ~SheetBrowserPDF() override;
 
-    void rotateLeft();
+    int rotateLeft();
 
-    void rotateRight();
+    int rotateRight();
 
     void setFileChanged(bool hasChanged);
 

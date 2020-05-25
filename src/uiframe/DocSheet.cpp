@@ -121,19 +121,11 @@ void DocSheet::rotateRight()
 void DocSheet::setLayoutMode(Dr::LayoutMode mode)
 {
     qDebug() << "unrealized";
-    m_operation.layoutMode = mode;
 }
 
 void DocSheet::setMouseShape(Dr::MouseShape shape)
 {
     qDebug() << "unrealized";
-    m_operation.mouseShape = shape;
-}
-
-void DocSheet::setCurrentPage(int page)
-{
-    qDebug() << "unrealized";
-    m_operation.currentPage = page;
 }
 
 void DocSheet::openMagnifier()
@@ -144,43 +136,16 @@ void DocSheet::openMagnifier()
 void DocSheet::setScaleFactor(qreal scaleFactor)
 {
     qDebug() << "unrealized";
-    m_operation.scaleFactor = scaleFactor;
-}
-
-void DocSheet::setRotation(Dr::Rotation rotation)
-{
-    qDebug() << "unrealized";
-    m_operation.rotation = rotation;
 }
 
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     qDebug() << "unrealized";
-    m_operation.scaleMode = mode;
 }
 
 void DocSheet::setBookMark(int page, int state)
 {
     qDebug() << "unrealized";
-}
-
-bool DocSheet::hasBookMark(int index)
-{
-    return m_bookmarks.contains(index);
-}
-
-void DocSheet::handleOpenSuccess()
-{
-    if (m_sidebar)
-        m_sidebar->handleOpenSuccess();
-}
-
-void DocSheet::setSidebarVisible(bool isVisible)
-{
-    m_operation.sidebarVisible = isVisible;
-    if (m_sidebar)
-        m_sidebar->setVisible(isVisible);
-    emit sigFileChanged(this);
 }
 
 void DocSheet::copySelectedText()
@@ -196,12 +161,6 @@ void DocSheet::highlightSelectedText()
 void DocSheet::addSelectedTextHightlightAnnotation()
 {
     qDebug() << "unrealized";
-}
-
-void DocSheet::print()
-{
-    PrintManager p(this);
-    p.showPrintDialog(this);
 }
 
 int DocSheet::pagesNumber()
@@ -302,6 +261,35 @@ bool DocSheet::closeMagnifier()
     return false;
 }
 
+QString DocSheet::filter()
+{
+    qDebug() << "unrealized";
+    return "";
+}
+
+bool DocSheet::fileChanged()
+{
+    qDebug() << "unrealized";
+    return false;
+}
+
+bool DocSheet::saveData()
+{
+    qDebug() << "unrealized";
+    return false;
+}
+
+bool DocSheet::saveAsData(QString filePath)
+{
+    qDebug() << "unrealized";
+    return false;
+}
+
+void DocSheet::handleSearch()
+{
+    qDebug() << "unrealized";
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -313,6 +301,31 @@ DocSheet *DocSheet::getSheet(QString uuid)
         return g_map[uuid];
 
     return nullptr;
+}
+
+bool DocSheet::hasBookMark(int index)
+{
+    return m_bookmarks.contains(index);
+}
+
+void DocSheet::handleOpenSuccess()
+{
+    if (m_sidebar)
+        m_sidebar->handleOpenSuccess();
+}
+
+void DocSheet::setSidebarVisible(bool isVisible)
+{
+    m_operation.sidebarVisible = isVisible;
+    if (m_sidebar)
+        m_sidebar->setVisible(isVisible);
+    emit sigFileChanged(this);
+}
+
+void DocSheet::print()
+{
+    PrintManager p(this);
+    p.showPrintDialog(this);
 }
 
 QString DocSheet::filePath()
@@ -349,35 +362,6 @@ void DocSheet::zoomout()
             return;
         }
     }
-}
-
-QString DocSheet::filter()
-{
-    qDebug() << "unrealized";
-    return "";
-}
-
-bool DocSheet::fileChanged()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-bool DocSheet::saveData()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-bool DocSheet::saveAsData(QString filePath)
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
-void DocSheet::handleSearch()
-{
-    qDebug() << "unrealized";
 }
 
 Dr::FileType DocSheet::type()

@@ -168,12 +168,12 @@ void DocSheetPDF::jumpToPrevPage()
 
 void DocSheetPDF::rotateLeft()
 {
-    m_browser->rotateLeft();
+    m_operation.rotation = (Dr::Rotation)m_browser->rotateLeft();
 }
 
 void DocSheetPDF::rotateRight()
 {
-    m_browser->rotateRight();
+    m_operation.rotation = (Dr::Rotation)m_browser->rotateRight();
 }
 
 void DocSheetPDF::setFileChanged(bool hasChanged)

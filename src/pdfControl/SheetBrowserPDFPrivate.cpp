@@ -425,7 +425,7 @@ void SheetBrowserPDFPrivate::onPageBookMarkButtonClicked(int page, bool state)
 void SheetBrowserPDFPrivate::onPageChanged(int index)
 {
     Q_Q(SheetBrowserPDF);
-    m_sheet->setCurrentPage(index + 1);
+    m_sheet->jumpToIndex(index);
     emit q->sigPageChanged(index);
 }
 

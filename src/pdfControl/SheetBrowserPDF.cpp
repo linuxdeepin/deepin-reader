@@ -39,20 +39,20 @@ void SheetBrowserPDF::setDoubleShow(bool isShow)
     emit setFileChanged(getFileChange());
 }
 
-void SheetBrowserPDF::rotateLeft()
+int SheetBrowserPDF::rotateLeft()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateLeft();
-    d->m_sheet->setRotation((Dr::Rotation)rotate);
     emit sigRotateChanged(rotate);
+    return rotate;
 }
 
-void SheetBrowserPDF::rotateRight()
+int SheetBrowserPDF::rotateRight()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateRight();
-    d->m_sheet->setRotation((Dr::Rotation)rotate);
     emit sigRotateChanged(rotate);
+    return rotate;
 }
 
 SheetBrowserPDF::SheetBrowserPDF(DocSheetPDF *sheet, DWidget *parent)
