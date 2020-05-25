@@ -17,13 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CustomWidget.h"
-#include "CustomWidgetPrivate.h"
 #include "ModuleHeader.h"
 
 #include <DWidgetUtil>
 
 CustomWidget::CustomWidget(DWidget *parent)
-    : DWidget(parent), d_ptr(new CustomWidgetPrivate(this))
+    : DWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
@@ -32,12 +31,6 @@ CustomWidget::CustomWidget(DWidget *parent)
 }
 
 CustomWidget::~CustomWidget()
-{
-    delete d_ptr;
-}
-
-CustomWidget::CustomWidget(CustomWidgetPrivate &cwp, DWidget *parent)
-    : DWidget(parent), d_ptr(&cwp)
 {
 
 }
@@ -59,7 +52,7 @@ void CustomWidget::updateWidgetTheme()
  * 缩略图列表自适应视窗大小
  * @param scale  缩放因子 大于0的数
  */
-void CustomWidget::adaptWindowSize(const double &scale)
+void CustomWidget::adaptWindowSize(const double &)
 {
 
 }
@@ -69,7 +62,7 @@ void CustomWidget::adaptWindowSize(const double &scale)
  * 高亮操作之后要跟换相应的缩略图
  * @param index 页码数，从0开始
  */
-void CustomWidget::updateThumbnail(const int &index)
+void CustomWidget::updateThumbnail(const int &)
 {
 
 }

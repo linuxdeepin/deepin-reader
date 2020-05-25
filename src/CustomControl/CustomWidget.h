@@ -51,13 +51,10 @@ const int LEFTMINWIDTH = 266;//226  >>  266
 const int LEFTMAXWIDTH = 380;
 const int LEFTNORMALWIDTH = 266;//226  >>  266
 
-class CustomWidgetPrivate;
-
 class CustomWidget : public DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CustomWidget)
-    Q_DECLARE_PRIVATE(CustomWidget)
 
 public:
     CustomWidget(DWidget *parent = nullptr);
@@ -65,18 +62,11 @@ public:
 
 public:
     virtual void adaptWindowSize(const double &);
-
     virtual void updateThumbnail(const int &);
 
 protected:
-    CustomWidget(CustomWidgetPrivate &, DWidget *parent = nullptr);
-
     virtual void initWidget();
-
     void updateWidgetTheme();
-
-protected:
-    CustomWidgetPrivate    *d_ptr = nullptr;
 };
 
 #endif  // CUSTOMWIDGET_H
