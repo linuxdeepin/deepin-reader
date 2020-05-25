@@ -35,6 +35,11 @@ struct Word {
     QRect rect;
 };
 
+struct SearchResult {
+    unsigned int page = 0;
+    QList<Word> words;
+};
+
 class Annotation : public QObject
 {
     Q_OBJECT

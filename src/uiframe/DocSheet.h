@@ -84,12 +84,6 @@ public:
 
     virtual bool magnifierOpened();
 
-    virtual void openSlide();
-
-    virtual void closeSlide();
-
-    virtual bool slideOpened();
-
     virtual bool fileChanged();
 
     virtual bool saveData();
@@ -110,7 +104,7 @@ public:
 
     virtual QString filter();
 
-    virtual QSet<int> getBookMarkList() const;
+    QSet<int> getBookMarkList() const;
 
     void print();
 
@@ -133,6 +127,12 @@ public:
     void handleOpenSuccess();
 
     void showTips(const QString &tips, int iconIndex = 0);
+
+    void openSlide();
+
+    void closeSlide();
+
+    bool slideOpened();
 
     void handleSlideKeyPressEvent(const QString &sKey);
 
