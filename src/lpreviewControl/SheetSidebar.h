@@ -66,8 +66,6 @@ public :
     void handleRotate(int);
     void handleUpdateThumbnail(const int &index);
     void handleAnntationMsg(const int &, const QString &);
-public slots:
-    void onPageChanged(int index);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

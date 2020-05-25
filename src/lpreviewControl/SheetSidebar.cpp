@@ -217,13 +217,6 @@ void SheetSidebar::handleAnntationMsg(const int &msg, const QString &text)
     if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, text);
 }
 
-void SheetSidebar::onPageChanged(int index)
-{
-    if (m_thumbnailWidget) m_thumbnailWidget->handlePage(index);
-    if (m_bookmarkWidget) m_bookmarkWidget->handlePage(index);
-    if (m_catalogWidget) m_catalogWidget->handlePage(index);
-}
-
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)
 {
     int tW = 36;

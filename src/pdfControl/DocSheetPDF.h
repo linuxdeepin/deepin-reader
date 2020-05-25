@@ -138,6 +138,8 @@ private slots:
 
     void onAnntationMsg(const int &, const QString &);
 
+    void onPageChanged(int index);
+
 private:
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;

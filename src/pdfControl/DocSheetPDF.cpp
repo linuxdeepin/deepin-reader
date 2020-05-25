@@ -49,7 +49,7 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     m_sidebar = new SheetSidebar(this);
 
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
-    connect(m_browser, SIGNAL(sigPageChanged(int)), m_sidebar, SLOT(onPageChanged(int)));
+    connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onPageChanged(int)));
     connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(onFileOpenResult(const QString &, const bool &)));
     connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
     connect(m_browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
@@ -538,3 +538,9 @@ int DocSheetPDF::label2pagenum(QString label)
     return -1;
 }
 
+void DocSheetPDF::onPageChanged(int index)
+{
+    int page = index + 1;
+    m_operation.currentPage = page;
+    m_sidebar->setCurrentPage(page);
+}
