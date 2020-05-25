@@ -37,7 +37,7 @@ public:
 
     ~CatalogTreeView() override;
 
-    void setPage(int index);
+    void setIndex(int index, const QString &title = "");
 
     void setRightControl(bool hasControl);
 
@@ -68,6 +68,7 @@ private slots:
 
 private:
     int m_index;
+    QString m_title;
     bool rightnotifypagechanged = false;
     DocSheet *m_sheet;
 };

@@ -114,6 +114,6 @@ void CatalogWidget::handleOpenSuccess()
 
 void CatalogWidget::handlePage(int index)
 {
-    m_pTree->setPage(index);
+    m_pTree->setIndex(index);
     m_pTree->setRightControl(true);
 }
