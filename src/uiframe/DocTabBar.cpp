@@ -45,9 +45,9 @@ DocTabBar::DocTabBar(QWidget *parent)
     this->setDragable(true);
     this->setFocusPolicy(Qt::NoFocus);
 
-    connect(this, SIGNAL(tabCloseRequested(int)), SLOT(SlotTabCloseRequested(int)));
+    connect(this, SIGNAL(tabCloseRequested(int)), SLOT(onTabCloseRequested(int)));
 
-    connect(this, SIGNAL(tabAddRequested()), SLOT(SlotTabAddRequested()));
+    connect(this, SIGNAL(tabAddRequested()), SLOT(onTabAddRequested()));
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(onTabChanged(int)));
 
@@ -55,7 +55,7 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     connect(this, &DTabBar::tabDroped, this, &DocTabBar::onTabDroped);
 
-    connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::handleDragActionChanged);
+    connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::onDragActionChanged);
 }
 
 DocTabBar::~DocTabBar()
@@ -164,7 +164,7 @@ bool DocTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
     return source->hasFormat("deepin_reader/tabbar");
 }
 
-void DocTabBar::handleDragActionChanged(Qt::DropAction action)
+void DocTabBar::onDragActionChanged(Qt::DropAction action)
 {
     if (count() <= 1) {
         QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
@@ -268,13 +268,13 @@ void DocTabBar::onDroped()
 }
 
 //  新增
-void DocTabBar::SlotTabAddRequested()
+void DocTabBar::onTabAddRequested()
 {
     emit sigNeedOpenFilesExec();
 }
 
 //  关闭
-void DocTabBar::SlotTabCloseRequested(int index)
+void DocTabBar::onTabCloseRequested(int index)
 {
     DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
 
@@ -284,23 +284,3 @@ void DocTabBar::SlotTabCloseRequested(int index)
     emit sigTabClosed(sheet);
 }
 
-void DocTabBar::SlotRemoveFileTab(const QString &sPath)
-{
-    if (sPath != "") {
-        int nCount = this->count();
-        for (int i = 0; i < nCount; i++) {
-            if (sPath == this->tabData(i).toString()) {
-                this->removeTab(i);
-                break;
-            }
-        }
-    }
-}
-
-//  打开成功了， 将标志位 置  111
-void DocTabBar::SlotOpenFileResult(const QString &filePath, const bool &res)
-{
-    if (!res) {
-        SlotRemoveFileTab(filePath);
-    }
-}

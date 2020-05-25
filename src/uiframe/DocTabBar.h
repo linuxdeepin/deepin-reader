@@ -1,21 +1,3 @@
-/*
- * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
- *
- * Author:     wangzhxiaun
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #ifndef MAINTABBAR_H
 #define MAINTABBAR_H
 
@@ -64,11 +46,11 @@ protected:
 
     bool canInsertFromMimeData(int index, const QMimeData *source) const override;
 
-    void handleDragActionChanged(Qt::DropAction action);
-
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
+    void onDragActionChanged(Qt::DropAction action);
+
     void onTabReleased(int index);                                  //方法测试结果为当tab从bar移除释放
 
     void onTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
@@ -98,13 +80,9 @@ private:
 private slots:
     void onTabChanged(int);
 
-    void SlotTabAddRequested();
+    void onTabAddRequested();
 
-    void SlotTabCloseRequested(int index);
-
-    void SlotRemoveFileTab(const QString &);
-
-    void SlotOpenFileResult(const QString &, const bool &);
+    void onTabCloseRequested(int index);
 };
 
 #endif // MAINTABWIDGET_H
