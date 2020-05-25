@@ -116,8 +116,10 @@ void DocSheetDJVU::setBookMark(int index, int state)
 {
     if (state)
         m_bookmarks.insert(index);
-    else
+    else {
+        showTips(tr("The bookmark has been removed"));
         m_bookmarks.remove(index);
+    }
 
     m_sidebar->setBookMark(index, state);
     m_browser->setBookMark(index, state);

@@ -250,6 +250,13 @@
     </message>
 </context>
 <context>
+    <name>DocSheetDJVU</name>
+    <message>
+        <source>The bookmark has been removed</source>
+        <translation type="unfinished">The bookmark has been removed</translation>
+    </message>
+</context>
+<context>
     <name>DocSheetPDF</name>
     <message>
         <source>The bookmark has been removed</source>

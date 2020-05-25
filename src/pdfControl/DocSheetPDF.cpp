@@ -187,7 +187,7 @@ void DocSheetPDF::setBookMark(int page, int state)
         m_bookmarks.insert(page);
     else {
         m_bookmarks.remove(page);
-        this->showTips(tr("The bookmark has been removed"));
+        showTips(tr("The bookmark has been removed"));
     }
     m_sidebar->setBookMark(page, state);
     m_browser->setBookMark(page, state);
