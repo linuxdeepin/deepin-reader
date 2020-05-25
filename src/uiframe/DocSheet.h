@@ -70,8 +70,6 @@ public:
 
     virtual void setBookMark(int index, int state);
 
-    bool hasBookMark(int index);
-
     virtual void setLayoutMode(Dr::LayoutMode mode);
 
     virtual void setScaleMode(Dr::ScaleMode mode);
@@ -82,7 +80,15 @@ public:
 
     virtual void openMagnifier();
 
-    virtual bool closeMagnifier();
+    virtual void closeMagnifier();
+
+    virtual bool magnifierOpened();
+
+    virtual void openSlide();
+
+    virtual void closeSlide();
+
+    virtual bool slideOpened();
 
     virtual bool fileChanged();
 
@@ -114,6 +120,8 @@ public:
 
     QString filePath();
 
+    bool hasBookMark(int index);
+
     QList<qreal> scaleFactorList();
 
     void zoomin();  //放大一级
@@ -125,14 +133,6 @@ public:
     void handleOpenSuccess();
 
     void showTips(const QString &tips, int iconIndex = 0);
-
-    void setCurrentState(int state);
-
-    int  currentState();
-
-    void openSlideWidget();
-
-    void closeSlideWidget();
 
     void handleSlideKeyPressEvent(const QString &sKey);
 

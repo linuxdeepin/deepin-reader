@@ -385,6 +385,11 @@ void SheetBrowserDJVU::closeMagnifier()
     }
 }
 
+bool SheetBrowserDJVU::magnifierOpened()
+{
+    return (nullptr != m_magnifierLabel) ;
+}
+
 int SheetBrowserDJVU::maxWidth()
 {
     return m_maxWidth;

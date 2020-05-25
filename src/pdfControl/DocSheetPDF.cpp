@@ -239,6 +239,27 @@ void DocSheetPDF::setScaleFactor(qreal scaleFactor)
     m_browser->setScale(scaleFactor * 100);
 }
 
+void DocSheetPDF::openMagnifier()
+{
+    m_currentState = Magnifer_State;
+}
+
+void DocSheetPDF::closeMagnifier()
+{
+    m_currentState = Default_State;
+
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        docProxy->closeMagnifier();
+    }
+
+}
+
+bool DocSheetPDF::magnifierOpened()
+{
+    return m_currentState == Magnifer_State;;
+}
+
 bool DocSheetPDF::isDoubleShow()
 {
     return m_browser->isDoubleShow();
@@ -251,6 +272,16 @@ void DocSheetPDF::quitMagnifer()
         return;
 
     doc->quitMagnifer();
+}
+
+void DocSheetPDF::setCurrentState(int state)
+{
+    m_currentState = state;
+}
+
+int DocSheetPDF::currentState()
+{
+    return m_currentState;
 }
 
 void DocSheetPDF::onFileOpenResult(const QString &s, const bool &res)
@@ -507,11 +538,3 @@ int DocSheetPDF::label2pagenum(QString label)
     return -1;
 }
 
-bool DocSheetPDF::closeMagnifier()
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->closeMagnifier();
-    }
-    return false;
-}

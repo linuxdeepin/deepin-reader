@@ -187,10 +187,9 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Print") {
         m_docPage->handleShortcut(KeyStr::g_ctrl_p);
     } else if (action == "Slide show") { //  开启幻灯片
-        m_docPage->getCurSheet()->openSlideWidget();
+        m_docPage->openSlide();
     } else if (action == "Magnifer") {   //  开启放大镜
-        if (m_docPage->openMagnifer())
-            m_widget->setMagnifierState();
+        m_docPage->openMagnifer();
     } else if (action == "Document info") {
         m_docPage->showFileAttr();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示

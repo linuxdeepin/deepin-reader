@@ -22,6 +22,7 @@
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
 #include "notesdelegate.h"
+#include "pdfControl/DocSheetPDF.h"
 
 #include "DocSheet.h"
 #include "MsgHeader.h"
@@ -171,7 +172,10 @@ void NotesWidget::onListItemClicked(int row)
 
 void NotesWidget::onAddAnnotation()
 {
-    m_sheet->setCurrentState(NOTE_ADD_State);
+    DocSheetPDF *sheet = static_cast<DocSheetPDF *>(m_sheet.data());
+    if (nullptr == sheet)
+        return;
+    sheet->setCurrentState(NOTE_ADD_State);
 }
 
 void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)

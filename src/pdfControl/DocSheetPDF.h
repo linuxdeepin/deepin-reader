@@ -53,6 +53,12 @@ public:
 
     void setScaleFactor(qreal scaleFactor) override;
 
+    void openMagnifier()override;
+
+    void closeMagnifier()override;
+
+    bool magnifierOpened()override;
+
     QString filter()override;
 
     bool fileChanged()override;
@@ -80,8 +86,6 @@ public:
     bool isOpen() override;
 
     bool haslabel() override;
-
-    bool closeMagnifier() override;
 
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) override;
 
@@ -111,6 +115,10 @@ public:
 
     void quitMagnifer();
 
+    void setCurrentState(int state);
+
+    int  currentState();
+
 private slots:
     void onFileOpenResult(const QString &, const bool &);
 
@@ -136,6 +144,7 @@ private:
     SpinnerWidget  *m_pSpinnerWidget = nullptr;
     FindWidget     *m_pFindWidget = nullptr;
     bool            m_bOldState = false;
+    int m_currentState = Default_State;
 };
 
 #endif // DOCSHEETPDF_H

@@ -133,6 +133,16 @@ void DocSheet::openMagnifier()
     qDebug() << "unrealized";
 }
 
+void DocSheet::closeMagnifier()
+{
+    qDebug() << "unrealized";
+}
+
+bool DocSheet::magnifierOpened()
+{
+    qDebug() << "unrealized";
+}
+
 void DocSheet::setScaleFactor(qreal scaleFactor)
 {
     qDebug() << "unrealized";
@@ -255,12 +265,6 @@ int DocSheet::label2pagenum(QString label)
     return -1;
 }
 
-bool DocSheet::closeMagnifier()
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
 QString DocSheet::filter()
 {
     qDebug() << "unrealized";
@@ -378,24 +382,6 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
-void DocSheet::setCurrentState(int state)
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    return doc->setCurrentState(state);
-}
-
-int DocSheet::currentState()
-{
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return Default_State;
-
-    return doc->getCurrentState();
-}
-
 bool DocSheet::existFileChanged()
 {
     foreach (DocSheet *sheet, g_map.values()) {
@@ -411,19 +397,24 @@ DocOperation DocSheet::operation()
     return m_operation;
 }
 
-void DocSheet::openSlideWidget()
+void DocSheet::openSlide()
 {
     if (m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(this);
     }
 }
 
-void DocSheet::closeSlideWidget()
+void DocSheet::closeSlide()
 {
     if (m_slideWidget) {
         m_slideWidget->close();
         m_slideWidget = nullptr;
     }
+}
+
+bool DocSheet::slideOpened()
+{
+    return m_slideWidget != nullptr;
 }
 
 void DocSheet::handleSlideKeyPressEvent(const QString &sKey)

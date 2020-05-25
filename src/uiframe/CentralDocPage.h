@@ -60,8 +60,6 @@ public:
 
     bool saveAsCurrent();
 
-    void clearState();
-
     void handleShortcut(const QString &);
 
     DocSheet *getCurSheet();
@@ -72,19 +70,19 @@ public:
 
     void showTips(const QString &tips, int iconIndex = 0);
 
-    bool openMagnifer();
+    void openMagnifer();
 
     void quitMagnifer();
+
+    void openSlide();
+
+    void quitSlide();
 
     void openCurFileFolder();
 
     void BlockShutdown();
 
     void UnBlockShutdown();
-
-    int getCurrentState();
-
-    void setCurrentState(const int &currentState);
 
 public slots:
     void onOpened(DocSheet *, bool);
@@ -133,7 +131,7 @@ private:
     bool m_bBlockShutdown = false;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
-    int m_currentState = Default_State;
+    QPointer<DocSheet>  m_slideSheet = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

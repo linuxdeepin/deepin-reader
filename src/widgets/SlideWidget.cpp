@@ -38,7 +38,6 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
 
 SlideWidget::~SlideWidget()
 {
-    m_docSheet->setCurrentState(Default_State);
     setWidgetState(false);
 }
 
@@ -49,7 +48,6 @@ void SlideWidget::initControl()
 
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
-    m_docSheet->setCurrentState(SLIDER_SHOW);
     setWidgetState(true);
     parentWidget()->stackUnder(this);
     this->setGeometry(0, 0, DApplication::desktop()->screenGeometry().width(), DApplication::desktop()->screenGeometry().height());
@@ -180,7 +178,7 @@ void SlideWidget::onNextBtnClicked()
 
 void SlideWidget::onExitBtnClicked()
 {
-    m_docSheet->closeSlideWidget();
+    m_docSheet->closeSlide();
 }
 
 void SlideWidget::playImage()
@@ -247,9 +245,7 @@ void SlideWidget::mousePressEvent(QMouseEvent *event)
 
 void SlideWidget::handleKeyPressEvent(const QString &sKey)
 {
-    if (sKey == KeyStr::g_esc) {
-        m_docSheet->closeSlideWidget();
-    } else if (sKey == KeyStr::g_space) {
+    if (sKey == KeyStr::g_space) {
         bool autoplay = m_slidePlayWidget->getPlayStatus();
         m_slidePlayWidget->setPlayStatus(!autoplay);
     } else if (sKey == KeyStr::g_left) {

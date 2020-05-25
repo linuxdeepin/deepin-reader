@@ -45,6 +45,8 @@ public:
 
     void closeMagnifier();
 
+    bool magnifierOpened();
+
     int maxWidth();
 
     int maxHeight();

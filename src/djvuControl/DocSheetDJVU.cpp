@@ -223,10 +223,17 @@ void DocSheetDJVU::openMagnifier()
         m_browser->openMagnifier();
 }
 
-bool DocSheetDJVU::closeMagnifier()
+void DocSheetDJVU::closeMagnifier()
 {
     if (m_browser)
         m_browser->closeMagnifier();
+}
+
+bool DocSheetDJVU::magnifierOpened()
+{
+    if (m_browser)
+        return m_browser->magnifierOpened();
+    return false;
 }
 
 void DocSheetDJVU::docBasicInfo(stFileInfo &info)
