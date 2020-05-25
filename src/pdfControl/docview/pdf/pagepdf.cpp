@@ -403,9 +403,10 @@ QPointF PagePdf::globalPoint2Iner(const QPoint point)
 //        QPoint tmpP(point.y(), this->width() - point.x());
 //        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
 //                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight))) / static_cast<double>(curheight));
-        QPoint tmpP(point.y() - y() - (this->height() - curwidth) / 2, point.x() - x() - (this->width() - curheight) / 2);
-        tpoint = QPointF(abs(static_cast<double>(tmpP.x()/* - x()*/)) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(curheight - tmpP.y()/* - y()*/)) / static_cast<double>(curheight));
+        QPointF tmpP(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curwidth) / 2.0,
+                     static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curheight) / 2.0);
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x()/* - x()*/)) / curwidth,
+                         abs(curheight - tmpP.y()/* - y()*/) / curheight);
         break;
     }
     case RotateType_180: {
@@ -413,9 +414,9 @@ QPointF PagePdf::globalPoint2Iner(const QPoint point)
 //        QPoint tmpP(this->width() - point.x(), this->height() - point.y());
 //        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / static_cast<double>(curwidth),
 //                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->height() - curheight))) / static_cast<double>(curheight));
-        QPoint tmpP(point.x() - x() - (this->width() - curwidth) / 2, point.y() - y() - (this->height() - curheight) / 2);
-        tpoint = QPointF(abs(static_cast<double>(abs(curwidth - tmpP.x()))) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(curheight - tmpP.y())) / static_cast<double>(curheight));
+        QPointF tmpP(static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0,
+                     static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight) / 2.0);
+        tpoint = QPointF((abs(curwidth - tmpP.x())) / curwidth, abs(curheight - tmpP.y()) / curheight);
         break;
     }
     case RotateType_270: {
@@ -423,15 +424,15 @@ QPointF PagePdf::globalPoint2Iner(const QPoint point)
 //        QPoint tmpP(this->height() - point.y(), point.x());
 //        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
 //                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight)) / 2.0) / static_cast<double>(curheight));
-        QPoint tmpP(point.y() - y() - (this->height() - curwidth) / 2, point.x() - x() - (this->width() - curheight) / 2);
-        tpoint = QPointF(abs(static_cast<double>(abs(curwidth - tmpP.x()))) / static_cast<double>(curwidth),
-                         static_cast<double>(abs(tmpP.y())) / static_cast<double>(curheight));
+        QPointF tmpP(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curwidth) / 2.0,
+                     static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curheight) / 2.0);
+        tpoint = QPointF(abs(curwidth - tmpP.x()) / curwidth, tmpP.y() / curheight);
         break;
     }
     default:
         //ok
-        tpoint = QPointF((static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / curwidth,
-                         (static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight)) / static_cast<double>(curheight));
+        tpoint = QPointF(abs(static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / curwidth,
+                         abs(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight)) / static_cast<double>(curheight));
         break;
     }
 
