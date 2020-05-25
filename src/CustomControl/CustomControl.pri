@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/CustomWidget.h \
     $$PWD/CustomClickLabel.h \
-    $$PWD/ImageLabel.h \
     $$PWD/DFMGlobal.h \
     $$PWD/RoundColorWidget.h \
     $$PWD/CustomMenu.h \
@@ -12,7 +11,6 @@ HEADERS += \
 SOURCES += \
     $$PWD/CustomWidget.cpp \
     $$PWD/CustomClickLabel.cpp \
-    $$PWD/ImageLabel.cpp \
     $$PWD/DFMGlobal.cpp \
     $$PWD/RoundColorWidget.cpp \
     $$PWD/CustomMenu.cpp \

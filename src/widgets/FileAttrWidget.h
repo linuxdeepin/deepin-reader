@@ -3,9 +3,10 @@
 
 #include <DAbstractDialog>
 #include <DWidget>
+#include <DLabel>
+
 DWIDGET_USE_NAMESPACE
 class DocSheet;
-class ImageLabel;
 class QVBoxLayout;
 class FileAttrWidget : public DAbstractDialog
 {
@@ -32,7 +33,7 @@ private:
 
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    ImageLabel  *frameImage = nullptr;
+    DLabel  *frameImage = nullptr;
 };
 
 #endif  // FILEATTRWIDGET_H

@@ -647,16 +647,16 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
     if (img_in.isNull()) {
         return QPixmap();
     }
-    QSize size(img_in.size());
-    QBitmap mask(size);
-    QPainter painter(&mask);
+    const QSize &imgSize = img_in.size();
+    QPixmap pixmap(imgSize);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.fillRect(mask.rect(), Qt::white);
-    painter.setBrush(Qt::black);
-    painter.drawRoundedRect(mask.rect(), radius, radius);
-    QPixmap image = img_in;// .scaled(size);
-    image.setMask(mask);
-    return image;
+    QPainterPath clippath;
+    clippath.addRoundedRect(0, 0, imgSize.width(), imgSize.height(), radius, radius);
+    painter.setClipPath(clippath);
+    painter.drawPixmap(0, 0, img_in);
+    return pixmap;
 }
 
 //  复制文字

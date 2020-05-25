@@ -10,13 +10,13 @@
 
 #include "AttrScrollWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "CustomControl/ImageLabel.h"
 #include "CustomControl/wordwraplabel.h"
 
 #include "ModuleHeader.h"
 #include "application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
+#include "utils/utils.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
@@ -42,8 +42,8 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     bool rl = sheet->getImage(0, image, 94, 113);
     if (rl) {
         if (frameImage) {
-            QPixmap pixmap = QPixmap::fromImage(image);
-            frameImage->setBackgroundPix(pixmap);
+            const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);
+            frameImage->setPixmap(pix);
         }
     }
 
@@ -122,14 +122,13 @@ void FileAttrWidget::initCloseBtn()
 
 void FileAttrWidget::initImageLabel()
 {
-    frameImage = new ImageLabel(this);
+    frameImage = new DLabel(this);
     frameImage->setFixedSize(98, 117);
 
     auto vlayout = new QVBoxLayout;
     vlayout->setAlignment(Qt::AlignCenter);
     vlayout->setContentsMargins(0, 0, 0, 0);
-    //    vlayout->setSpacing(10);
-    vlayout->addWidget(/*labelImage*/ frameImage);
+    vlayout->addWidget(frameImage);
 
     m_pVBoxLayout->addItem(vlayout);
 }
