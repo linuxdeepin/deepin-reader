@@ -18,6 +18,7 @@
 #include "DocSheet.h"
 
 #include <QDebug>
+#include <QUuid>
 
 const int maxThreadCnt = 5;
 const int maxTaskList = 5;
@@ -36,8 +37,7 @@ void ReadImageTask::run()
 {
     QImage image;
     DocSheet *sheet = m_docParam.sheet;
-    Q_ASSERT(sheet);
-    if (sheet) {
+    if (!DocSheet::getUuid(sheet).isNull()) {
         int totalPage = sheet->pagesNumber();
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
         bool bl = sheet->getImageMax(m_docParam.pageIndex, image, m_docParam.maxPixel);
