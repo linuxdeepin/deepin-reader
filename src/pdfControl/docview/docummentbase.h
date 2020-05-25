@@ -115,7 +115,7 @@ class DocummentBase: public DScrollArea
     Q_OBJECT
 public:
     DocummentBase(DocummentBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
-    virtual ~DocummentBase();
+    virtual ~DocummentBase() override;
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
