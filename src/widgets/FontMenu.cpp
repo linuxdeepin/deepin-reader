@@ -71,33 +71,18 @@ void FontMenu::slotTwoPage()
     else
         m_sheet->setLayoutMode(Dr::SinglePageMode);
 
-    if (Dr::PDF == m_sheet->type()) {
-        if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (m_bDoubPage && m_sheet->operation().sidebarVisible) {                //从单页切双页，如果缩略图开着,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (qFuzzyCompare(m_sheet->operation().scaleFactor, 100.00)) {             //如果没有人为调整过，则适应
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (m_bDoubPage && m_sheet->operation().scaleFactor > 100.01) {            //从单页切双页，原来比例大于100,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (Dr::FitToPageWidthMode == m_sheet->operation().scaleMode) {          //从单页切双页，原来比例大于100,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else
-            m_sheet->setScaleMode(Dr::ScaleFactorMode);
-    } else {
-        if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (m_bDoubPage && m_sheet->operation().sidebarVisible) {                //从单页切双页，如果缩略图开着,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (qFuzzyCompare(m_sheet->operation().scaleFactor, 1.00)) {             //如果没有人为调整过，则适应
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (m_bDoubPage && m_sheet->operation().scaleFactor > 1.01) {            //从单页切双页，原来比例大于100,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else if (Dr::FitToPageWidthMode == m_sheet->operation().scaleMode) {          //从单页切双页，原来比例大于100,则适应宽度
-            m_sheet->setScaleMode(Dr::FitToPageWidthMode);
-        } else
-            m_sheet->setScaleMode(Dr::ScaleFactorMode);
-    }
+    if (!m_bDoubPage) {//如果切成单页，需要自适应宽度
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    } else if (m_bDoubPage && m_sheet->operation().sidebarVisible) {                //从单页切双页，如果缩略图开着,则适应宽度
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    } else if (qFuzzyCompare(m_sheet->operation().scaleFactor, 1.00)) {             //如果没有人为调整过，则适应
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    } else if (m_bDoubPage && m_sheet->operation().scaleFactor > 1.01) {            //从单页切双页，原来比例大于100,则适应宽度
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    } else if (Dr::FitToPageWidthMode == m_sheet->operation().scaleMode) {          //从单页切双页，原来比例大于100,则适应宽度
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    } else
+        m_sheet->setScaleMode(Dr::ScaleFactorMode);
 }
 
 /**

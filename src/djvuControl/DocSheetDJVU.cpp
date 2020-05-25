@@ -103,7 +103,7 @@ void DocSheetDJVU::rotateRight()
 bool DocSheetDJVU::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
-        m_browser->loadPages(m_operation);
+        m_browser->loadPages(m_operation, m_bookmarks);
         handleOpenSuccess();
         emit sigFileChanged(this);
         return true;
@@ -135,18 +135,18 @@ int DocSheetDJVU::pagesNumber()
 
 int DocSheetDJVU::currentPage()
 {
-    if (m_browser)
-        return m_browser->currentPage();
+    if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
+        return 1;
 
-    return 1;
+    return m_operation.currentPage;
 }
 
 int DocSheetDJVU::currentIndex()
 {
-    if (m_browser)
-        return m_browser->currentPage() - 1;
+    if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
+        return 0;
 
-    return 0;
+    return m_operation.currentPage - 1;
 }
 
 void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)

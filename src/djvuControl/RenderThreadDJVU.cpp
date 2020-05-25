@@ -71,7 +71,8 @@ void RenderThreadDJVU::run()
 
 void RenderThreadDJVU::destroy()
 {
-    delete instance;
+    if (nullptr != instance)
+        delete instance;
 }
 
 void RenderThreadDJVU::onTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation)

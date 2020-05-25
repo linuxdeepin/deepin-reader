@@ -41,10 +41,13 @@ QRectF SheetBrowserDJVUItem::bookmarkRect()
     return QRectF(boundingRect().width() - 40, 0, 40, 40);
 }
 
-void SheetBrowserDJVUItem::setBookmark(int hasBookmark)
+void SheetBrowserDJVUItem::setBookmark(bool hasBookmark)
 {
     m_bookmark = hasBookmark;
-    m_bookmarkState = 3;
+    if (hasBookmark)
+        m_bookmarkState = 3;
+    else
+        m_bookmarkState = 0;
     update();
 }
 

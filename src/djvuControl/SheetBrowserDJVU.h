@@ -19,7 +19,7 @@ public:
 
     bool openFilePath(const QString &);
 
-    void loadPages(DocOperation &operation);
+    void loadPages(DocOperation &operation, const QSet<int> &bookmarks);
 
     void loadMouseShape(DocOperation &operation);
 

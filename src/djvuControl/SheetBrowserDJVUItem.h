@@ -22,7 +22,7 @@ public:
 
     QRectF bookmarkRect();
 
-    void setBookmark(int hasBookmark);
+    void setBookmark(bool hasBookmark);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 

@@ -49,7 +49,7 @@ bool SheetBrowserDJVU::openFilePath(const QString &filePath)
     return true;
 }
 
-void SheetBrowserDJVU::loadPages(DocOperation &operation)
+void SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
         return;
@@ -62,6 +62,8 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation)
             m_maxHeight = page->size().height();
 
         SheetBrowserDJVUItem *item = new SheetBrowserDJVUItem(page);
+        if (bookmarks.contains(i))
+            item->setBookmark(true);
         m_items.append(item);
         scene()->addItem(item);
     }

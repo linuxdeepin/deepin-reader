@@ -144,7 +144,7 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
             return false;
         }
 
-        if (query.next()) {
+        while (query.next()) {
             bookmarks.insert(query.value("bookmarkIndex").toInt());
         }
     }
@@ -173,7 +173,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
                           " VALUES(:filePath,:bookmarkIndex)");
 
             query.bindValue(":filePath", filePath);
-            query.bindValue(":int", index);
+            query.bindValue(":bookmarkIndex", index);
 
             if (!query.exec()) {
                 qDebug() << query.lastError().text();
@@ -194,7 +194,7 @@ Database::Database(QObject *parent) : QObject(parent)
     QDir().mkpath(path);
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
-    m_database.setDatabaseName(QDir(path).filePath("database"));
+    m_database.setDatabaseName(QDir(path).filePath("user.db"));
     qDebug() << QDir(path);
     m_database.open();
 

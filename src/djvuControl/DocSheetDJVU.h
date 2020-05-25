@@ -12,7 +12,7 @@ class DocSheetDJVU : public DocSheet
 public:
     explicit DocSheetDJVU(QString filePath, QWidget *parent = nullptr);
 
-    ~DocSheetDJVU()override;
+    virtual ~DocSheetDJVU()override;
 
     bool openFileExec()override;
 
