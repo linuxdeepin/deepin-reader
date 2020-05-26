@@ -29,8 +29,6 @@ public:
     void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
     void scaleRotateAndShow(double scale, RotateType_EM rotate);
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
-    bool getImage(int index, QImage &image, double width);
-    bool getImageMax(int index, QImage &image, double max);
     int  getPageSNum();
     bool setViewModeAndShow(ViewMode_EM viewmode);
     bool showMagnifier(QPoint point);

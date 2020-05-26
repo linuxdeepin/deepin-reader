@@ -119,8 +119,6 @@ public:
     virtual bool loadDocumment(QString filepath) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
-    virtual bool getImage(int pagenum, QImage &image, double width);        //等比例获取 最高宽高比不低于0.5
-    virtual bool getImageMax(int pagenum, QImage &image, double max);       //等比例获取 最长边不超过max
     virtual bool save(const QString &);
     virtual bool saveas(const QString &, bool)
     {

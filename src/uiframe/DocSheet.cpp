@@ -213,12 +213,6 @@ void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
     qDebug() << "unrealized";
 }
 
-bool DocSheet::getImageMax(int, QImage &, double)
-{
-    qDebug() << "unrealized";
-    return false;
-}
-
 Outline DocSheet::outline()
 {
     qDebug() << "unrealized";

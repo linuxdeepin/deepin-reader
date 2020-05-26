@@ -89,8 +89,6 @@ public:
 
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) override;
 
-    bool getImageMax(int index, QImage &image, double max) override;
-
     void jumpToHighLight(const QString &uuid, int ipage) override;
 
     void docBasicInfo(stFileInfo &info) override;

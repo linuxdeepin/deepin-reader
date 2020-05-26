@@ -39,8 +39,6 @@ public:
 
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
-    bool getImageMax(int index, QImage &image, double max);
-
     void openMagnifier();
 
     void closeMagnifier();

@@ -453,15 +453,6 @@ void DocSheetPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     }
 }
 
-bool DocSheetPDF::getImageMax(int index, QImage &image, double max)
-{
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        return docProxy->getImageMax(index, image, max);
-    }
-    return false;
-}
-
 Outline DocSheetPDF::outline()
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();

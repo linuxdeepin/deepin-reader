@@ -195,14 +195,6 @@ bool DocSheetDJVU::getImage(int index, QImage &image, double width, double heigh
     return false;
 }
 
-bool DocSheetDJVU::getImageMax(int index, QImage &image, double max)
-{
-    if (m_browser)
-        return m_browser->getImageMax(index, image, max);
-
-    return false;
-}
-
 bool DocSheetDJVU::fileChanged()
 {
     return !(m_initBookmarks == m_bookmarks);

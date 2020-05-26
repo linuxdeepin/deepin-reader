@@ -106,28 +106,6 @@ bool DocummentProxy::getImage(int index, QImage &image, double width, double hei
     return bre;
 }
 
-bool DocummentProxy::getImage(int pagenum, QImage &image, double width)
-{
-    bool bre = false;
-    QMutexLocker locker(&mutexlockgetimage);
-    if (!m_documment || bcloseing) {
-        return bre;
-    }
-    bre = m_documment->getImage(pagenum, image, width);
-    return bre;
-}
-
-bool DocummentProxy::getImageMax(int pagenum, QImage &image, double max)
-{
-    bool bre = false;
-    QMutexLocker locker(&mutexlockgetimage);
-    if (!m_documment || bcloseing) {
-        return bre;
-    }
-    bre = m_documment->getImageMax(pagenum, image, max);
-    return bre;
-}
-
 int DocummentProxy::getPageSNum()
 {
     if (!m_documment || bcloseing)

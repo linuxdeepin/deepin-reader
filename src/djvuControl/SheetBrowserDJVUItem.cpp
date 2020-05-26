@@ -112,12 +112,6 @@ QImage SheetBrowserDJVUItem::getImage(int width, int height, Qt::AspectRatioMode
     return m_page->render(width, height, mode);
 }
 
-QImage SheetBrowserDJVUItem::getImageMax(double max)
-{
-    qreal scaleFactor = max / qMax(m_page->size().height(), m_page->size().width());
-    return m_page->render(m_rotation, scaleFactor);
-}
-
 QImage SheetBrowserDJVUItem::getImageRect(double scaleFactor, QRect rect)
 {
     return m_page->render(m_rotation, scaleFactor, rect);

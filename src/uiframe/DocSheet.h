@@ -100,8 +100,6 @@ public:
 
     virtual bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
 
-    virtual bool getImageMax(int index, QImage &image, double max);
-
     virtual QString filter();
 
     QSet<int> getBookMarkList() const;

@@ -356,15 +356,6 @@ bool SheetBrowserDJVU::getImagePoint(QPoint viewPoint, double scaleFactor, QImag
     return true;
 }
 
-bool SheetBrowserDJVU::getImageMax(int index, QImage &image, double max)
-{
-    if (m_items.count() <= index)
-        return false;
-
-    image = m_items.at(index)->getImageMax(max);
-    return true;
-}
-
 void SheetBrowserDJVU::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {

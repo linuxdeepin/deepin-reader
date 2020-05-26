@@ -1514,65 +1514,6 @@ bool DocummentBase::getImage(int index, QImage &image, double width, double heig
     return true;
 }
 
-bool DocummentBase::getImage(int index, QImage &image, double width)
-{
-    Q_D(DocummentBase);
-    if (index < 0 || index >= d->m_pages.size()) {
-        return false;
-    }
-
-    double height = d->m_pages.at(index)->getOriginalImageHeight() / d->m_pages.at(index)->getOriginalImageWidth() * width;
-
-    if (height > width * 2)
-        height = 2 * width;
-
-    qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
-
-    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
-        return false;
-    }
-    image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
-    return true;
-}
-
-bool DocummentBase::getImageMax(int index, QImage &image, double max)
-{
-    Q_D(DocummentBase);
-    if (index < 0 || index >= d->m_pages.size()) {
-        return false;
-    }
-
-    double height = 0;
-    double width  = 0;
-
-    double oriHeight = d->m_pages.at(index)->getOriginalImageHeight();
-    double oriWidth  = d->m_pages.at(index)->getOriginalImageWidth();
-
-    if (oriHeight > oriWidth) {
-        height = max;
-        double ratio = d->m_pages.at(index)->getOriginalImageWidth() / d->m_pages.at(index)->getOriginalImageHeight();
-        if (ratio < 0.5)
-            ratio = 0.5;
-        width  =  ratio * height;
-    } else {
-        width  = max;
-        double ratio = d->m_pages.at(index)->getOriginalImageHeight() / d->m_pages.at(index)->getOriginalImageWidth();
-        if (ratio < 0.5)
-            ratio = 0.5;
-        height = ratio * width;
-    }
-
-    qreal pixelratiof = d->m_pages.at(index)->devicePixelRatioF();
-
-    if (!d->m_pages.at(index)->getImage(image, width * pixelratiof, height * pixelratiof)) {
-        return false;
-    }
-
-    image.setDevicePixelRatio(d->m_pages.at(index)->devicePixelRatioF());
-
-    return true;
-}
-
 bool DocummentBase::save(const QString &)
 {
     return false;
