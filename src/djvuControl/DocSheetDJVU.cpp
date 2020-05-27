@@ -202,7 +202,11 @@ bool DocSheetDJVU::fileChanged()
 
 bool DocSheetDJVU::saveData()
 {
-    return Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+    if (Database::instance()->saveBookmarks(filePath(), m_bookmarks)) {
+        m_initBookmarks = m_bookmarks;
+        return true;
+    }
+    return false;
 }
 
 bool DocSheetDJVU::saveAsData(QString filePath)

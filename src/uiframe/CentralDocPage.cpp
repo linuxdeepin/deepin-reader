@@ -218,7 +218,14 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    if (sheet->fileChanged() && 2 == SaveDialog().showDialog()) {
+    SaveDialog dialog;
+
+    int ret = dialog.showDialog();
+
+    if (ret < 1)
+        return;
+
+    if (sheet->fileChanged() && 2 == ret) {
         sheet->saveData();
     }
 
