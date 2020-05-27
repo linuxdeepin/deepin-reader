@@ -7,7 +7,6 @@ HEADERS += \
     $$PWD/controller/ProxyData.h \
     $$PWD/controller/ProxyFileDataModel.h \
     $$PWD/controller/ProxyMouseMove.h \
-    $$PWD/controller/ProxyNotifyMsg.h \
     $$PWD/controller/ProxyViewDisplay.h \
     $$PWD/SheetBrowserPDF.h \
     $$PWD/SheetBrowserPDFPrivate.h \
@@ -34,7 +33,6 @@ SOURCES += \
     $$PWD/controller/ProxyData.cpp \
     $$PWD/controller/ProxyFileDataModel.cpp \
     $$PWD/controller/ProxyMouseMove.cpp \
-    $$PWD/controller/ProxyNotifyMsg.cpp \
     $$PWD/controller/ProxyViewDisplay.cpp \
     $$PWD/SheetBrowserPDF.cpp \
     $$PWD/SheetBrowserPDFPrivate.cpp \

@@ -145,10 +145,16 @@ void ImageViewModel::updatePageIndex(int index)
 void ImageViewModel::insertPageIndex(int pageIndex)
 {
     if (!m_pagelst.contains(pageIndex)) {
-        beginResetModel();
-        m_pagelst << pageIndex;
-        qSort(m_pagelst.begin(), m_pagelst.end());
-        endResetModel();
+        int iterIndex = 0;
+        int rowCount = m_pagelst.size();
+        for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
+            if (pageIndex < m_pagelst.at(iterIndex).pageIndex)
+                break;
+        }
+        ImagePageInfo_t tImageinfo = pageIndex;
+        m_pagelst.insert(iterIndex, tImageinfo);
+        beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
+        endInsertRows();
     }
 }
 
@@ -156,10 +162,15 @@ void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
     int index = findItemForuuid(tImagePageInfo.struuid);
     if (index == -1) {
-        beginResetModel();
-        m_pagelst << tImagePageInfo;
-        qSort(m_pagelst.begin(), m_pagelst.end());
-        endResetModel();
+        int iterIndex = 0;
+        int rowCount = m_pagelst.size();
+        for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
+            if (tImagePageInfo.pageIndex < m_pagelst.at(iterIndex).pageIndex)
+                break;
+        }
+        m_pagelst.insert(iterIndex, tImagePageInfo);
+        beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
+        endInsertRows();
     } else {
         m_pagelst[index].strcontents = tImagePageInfo.strcontents;
         emit dataChanged(this->index(index), this->index(index));

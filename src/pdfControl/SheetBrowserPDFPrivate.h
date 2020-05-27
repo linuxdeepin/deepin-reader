@@ -14,7 +14,6 @@
 class Annotation;
 class DocummentProxy;
 class ProxyViewDisplay;
-class ProxyNotifyMsg;
 class ProxyMouseMove;
 class ProxyFileDataModel;
 class TipsWidget;
@@ -96,7 +95,6 @@ private:
     ProxyData               *m_pProxyData = nullptr;            //  唯一 数据区
     ProxyFileDataModel      *m_pProxyFileDataModel = nullptr;
     ProxyMouseMove          *m_pProxyMouseMove = nullptr;       //  移动操作
-    ProxyNotifyMsg          *m_pProxyNotifyMsg = nullptr;       //  通知消息
     ProxyViewDisplay        *m_pDocViewProxy = nullptr;         //  文档操作 旋转\单双页\自适应
     Annotation              *m_pAnnotation = nullptr;           //  高亮 注释操作
     DocummentProxy          *m_pProxy = nullptr;                //  文档代理类
@@ -106,7 +104,6 @@ private:
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;
-    friend class ProxyNotifyMsg;
     friend class ProxyFileDataModel;
 
 private:

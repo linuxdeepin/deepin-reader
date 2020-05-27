@@ -1,6 +1,5 @@
 #include "SheetBrowserPDFPrivate.h"
 #include "controller/Annotation.h"
-#include "controller/ProxyNotifyMsg.h"
 #include "controller/ProxyViewDisplay.h"
 #include "controller/ProxyMouseMove.h"
 #include "controller/ProxyData.h"
@@ -32,7 +31,6 @@ SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheetPDF *sheet, SheetBrowserP
 
     m_pAnnotation = new Annotation(this);
     m_pDocViewProxy = new ProxyViewDisplay(this);
-    m_pProxyNotifyMsg = new ProxyNotifyMsg(this);
     m_pProxyMouseMove = new ProxyMouseMove(this);
     m_pProxyFileDataModel = new ProxyFileDataModel(this);
 }

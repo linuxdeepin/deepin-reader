@@ -99,7 +99,7 @@ void ImageListView::handleOpenSuccess()
                 pageSrclst << tImagePageInfo;
             }
         }
-        m_imageModel->initModelLst(pageSrclst, true);
+        m_imageModel->initModelLst(pageSrclst);
     }
 }
 
