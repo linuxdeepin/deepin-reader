@@ -138,6 +138,8 @@ private slots:
 
     void onPageChanged(int index);
 
+    void onBrowserSizeChanged(double scaleFactor);
+
 private:
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;

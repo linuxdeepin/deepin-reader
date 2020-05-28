@@ -126,7 +126,7 @@ void SheetBrowserPDF::setFit(int fit)
 
     double scale = d->m_pDocViewProxy->setFit(fit);
     if (-1 != scale && d->m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
-        d->m_sheet->setScaleFactor(scale / 100.0);
+        setScale(scale);
     }
     emit sigFileChanged();
 }
@@ -177,11 +177,7 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 
     if (d->hasOpened()) {
         double scale = d->handleResize(event->size());
-
-        if (d->m_sheet->operation().scaleMode != Dr::ScaleMode::ScaleFactorMode) {
-            d->m_sheet->setScaleFactor(scale);
-            emit setFileChanged(getFileChange());
-        }
+        emit sigSizeChanged(scale / 100.00);
     }
 
     CustomWidget::resizeEvent(event);

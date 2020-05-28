@@ -49,6 +49,7 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     m_sidebar = new SheetSidebar(this);
 
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
+    connect(m_browser, SIGNAL(sigSizeChanged(double)), this, SLOT(onBrowserSizeChanged(double)));
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onPageChanged(int)));
     connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(onFileOpenResult(const QString &, const bool &)));
     connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
@@ -534,4 +535,11 @@ void DocSheetPDF::onPageChanged(int index)
     int page = index + 1;
     m_operation.currentPage = page;
     m_sidebar->setCurrentPage(page);
+}
+
+void DocSheetPDF::onBrowserSizeChanged(double scaleFactor)
+{
+    if (m_operation.scaleMode != Dr::ScaleFactorMode) {
+        m_browser->setScale(scaleFactor * 100);
+    }
 }

@@ -86,6 +86,8 @@ signals:
 
     void sigFindFinished();                             //搜索完成
 
+    void sigSizeChanged(double scaleFactor);
+
 public:
     void OpenFilePath(const QString &);
 
