@@ -497,13 +497,13 @@ void PagePdf::removeAnnotation(const QString &struuid)
     try {
         foreach (Poppler::Annotation *annote, listannote) {
             if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
-                if (annote->subType() == Poppler::Annotation::AText) {
-                    Poppler::TextAnnotation *textAnnot = dynamic_cast<Poppler::TextAnnotation *>(annote);
-                    if (textAnnot) {
-                        qInfo() << "    annote  text type:" << textAnnot->textType() << "       flag:" << textAnnot->flags();
-                    }
-                }
-                qInfo() << "    annote  sub type:" << annote->subType() << "       flag:" << annote->flags() << "   annote  UUID:" << annote->uniqueName();
+//                if (annote->subType() == Poppler::Annotation::AText) {
+//                    Poppler::TextAnnotation *textAnnot = dynamic_cast<Poppler::TextAnnotation *>(annote);
+//                    if (textAnnot) {
+//                        qInfo() << "    annote  text type:" << textAnnot->textType() << "       flag:" << textAnnot->flags();
+//                    }
+//                }
+//                qInfo() << "    annote  sub type:" << annote->subType() << "       flag:" << annote->flags() << "   annote  UUID:" << annote->uniqueName();
                 d->m_page->removeAnnotation(annote);
                 listannote.removeAt(index);
                 QImage image;
