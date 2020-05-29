@@ -1,6 +1,7 @@
 #include "SheetBrowserDJVUItem.h"
 #include "document/model.h"
 #include "RenderThreadDJVU.h"
+#include "djvuControl/SheetBrowserDJVU.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -8,9 +9,8 @@
 #include <QGraphicsSceneMouseEvent>
 
 QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
-SheetBrowserDJVUItem::SheetBrowserDJVUItem(deepin_reader::Page *page) : QGraphicsItem()
+SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
 {
-    m_page = page;
     items.insert(this);
 }
 
@@ -135,10 +135,22 @@ bool SheetBrowserDJVUItem::existInstance(SheetBrowserDJVUItem *item)
     return items.contains(item);
 }
 
+void SheetBrowserDJVUItem::setItemIndex(int itemIndex)
+{
+    m_index = itemIndex;
+}
+
+int SheetBrowserDJVUItem::itemIndex()
+{
+    return m_index;
+}
+
 void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (bookmarkRect().contains(event->pos())) {
         m_bookmarkState = 2;
+        if (nullptr != m_parent)
+            m_parent->needBookmark(m_index, !m_bookmark);
         update();
     }
 
@@ -147,10 +159,11 @@ void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void SheetBrowserDJVUItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!m_bookmark && bookmarkRect().contains(event->pos())) {
+    qDebug() << 1;
+
+    if (!m_bookmark && bookmarkRect().contains(event->pos()))
         m_bookmarkState = 1;
-        update();
-    } else if (m_bookmark)
+    else if (m_bookmark)
         m_bookmarkState = 3;
 
     update();

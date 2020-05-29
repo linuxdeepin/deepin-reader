@@ -83,6 +83,8 @@ private slots:
 
     void onBrowserPageLast();
 
+    void onBrowserBookmark(int index, bool state);
+
 private:
     SheetBrowserDJVU *m_browser = nullptr;
     QSet<int> m_initBookmarks;

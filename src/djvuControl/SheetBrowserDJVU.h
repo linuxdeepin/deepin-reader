@@ -49,6 +49,8 @@ public:
 
     int maxHeight();
 
+    void needBookmark(int index, bool state);
+
 signals:
     void sigPageChanged(int page);
 
@@ -65,6 +67,8 @@ signals:
     void sigNeedPageNext();
 
     void sigNeedPageLast();
+
+    void sigNeedBookMark(int index, bool state);
 
 protected:
     void showEvent(QShowEvent *event) override;

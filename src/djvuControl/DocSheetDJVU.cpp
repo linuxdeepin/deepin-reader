@@ -25,6 +25,7 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     connect(m_browser, SIGNAL(sigNeedPageNext()), this, SLOT(onBrowserPageNext()));
     connect(m_browser, SIGNAL(sigNeedPageFirst()), this, SLOT(onBrowserPageFirst()));
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
+    connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
 }
 
 DocSheetDJVU::~DocSheetDJVU()
@@ -309,4 +310,9 @@ void DocSheetDJVU::onBrowserPageNext()
 void DocSheetDJVU::onBrowserPageLast()
 {
     jumpToLastPage();
+}
+
+void DocSheetDJVU::onBrowserBookmark(int index, bool state)
+{
+    setBookMark(index, state);
 }

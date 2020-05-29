@@ -61,15 +61,15 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
         if (page->size().height() > m_maxHeight)
             m_maxHeight = page->size().height();
 
-        SheetBrowserDJVUItem *item = new SheetBrowserDJVUItem(page);
+        SheetBrowserDJVUItem *item = new SheetBrowserDJVUItem(this, page);
+        item->setItemIndex(i);
+
         if (bookmarks.contains(i))
             item->setBookmark(true);
+
         m_items.append(item);
         scene()->addItem(item);
     }
-//    QStandardItemModel *model = new QStandardItemModel(this);
-//    m_document->loadProperties(model);
-//    m_document->loadOutline(model);
 
     loadMouseShape(operation);
     deform(operation);
@@ -400,6 +400,11 @@ int SheetBrowserDJVU::maxWidth()
 int SheetBrowserDJVU::maxHeight()
 {
     return m_maxHeight;
+}
+
+void SheetBrowserDJVU::needBookmark(int index, bool state)
+{
+    emit sigNeedBookMark(index, state);
 }
 
 void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)
