@@ -13,6 +13,7 @@ QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
 SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
 {
     items.insert(this);
+    setAcceptHoverEvents(true);
 }
 
 SheetBrowserDJVUItem::~SheetBrowserDJVUItem()
@@ -39,7 +40,7 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
 
 QRectF SheetBrowserDJVUItem::bookmarkRect()
 {
-    return QRectF(boundingRect().width() - 40, 0, 40, 40);
+    return QRectF(boundingRect().width() - 45, 5, 40, 40);
 }
 
 void SheetBrowserDJVUItem::setBookmark(bool hasBookmark)
@@ -150,24 +151,19 @@ void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (bookmarkRect().contains(event->pos())) {
         m_bookmarkState = 2;
-        if (nullptr != m_parent)
+        if (nullptr != m_parent) {
             m_parent->needBookmark(m_index, !m_bookmark);
+            if (!m_bookmark && bookmarkRect().contains(event->pos()))
+                m_bookmarkState = 1;
+            else if (m_bookmark)
+                m_bookmarkState = 3;
+            else
+                m_bookmarkState = 0;
+        }
         update();
     }
 
     QGraphicsItem::mousePressEvent(event);
-}
-
-void SheetBrowserDJVUItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (!m_bookmark && bookmarkRect().contains(event->pos()))
-        m_bookmarkState = 1;
-    else if (m_bookmark)
-        m_bookmarkState = 3;
-
-    update();
-
-    QGraphicsItem::mouseMoveEvent(event);
 }
 
 bool SheetBrowserDJVUItem::sceneEvent(QEvent *event)
@@ -178,6 +174,8 @@ bool SheetBrowserDJVUItem::sceneEvent(QEvent *event)
             m_bookmarkState = 1;
         else if (m_bookmark)
             m_bookmarkState = 3;
+        else
+            m_bookmarkState = 0;
 
         update();
     }

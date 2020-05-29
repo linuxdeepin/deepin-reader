@@ -48,8 +48,6 @@ public:
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-
     bool sceneEvent(QEvent *event) override;
 
 signals:
