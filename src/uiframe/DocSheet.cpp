@@ -36,6 +36,7 @@
 #include "djvuControl/SheetBrowserDJVU.h"
 #include "business/PrintManager.h"
 #include "widgets/SlideWidget.h"
+#include "ControllerManager.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -369,11 +370,7 @@ Dr::FileType DocSheet::type()
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
 {
-    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
-        return;
-
-    doc->showTips(tips, iconIndex);
+    emit ControllerManager::getInstance()->signalShowTips(tips, iconIndex);
 }
 
 bool DocSheet::existFileChanged()

@@ -1,4 +1,5 @@
 HEADERS += \
+    $$PWD/ControllerManager.h \
     $$PWD/json.h \
     $$PWD/ProcessController.h \
     $$PWD/MsgHeader.h \
@@ -8,6 +9,7 @@ HEADERS += \
     $$PWD/database.h
 
 SOURCES += \
+    $$PWD/ControllerManager.cpp \
     $$PWD/json.cpp \
     $$PWD/ProcessController.cpp \
     $$PWD/global.cpp \

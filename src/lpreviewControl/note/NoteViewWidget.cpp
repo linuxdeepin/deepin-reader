@@ -106,7 +106,6 @@ void NoteViewWidget::initWidget()
     m_pHLayoutContant->addStretch(0);
 
     m_pTextEdit = new TransparentTextEdit(this);
-    connect(m_pTextEdit, SIGNAL(sigNeedShowTips(const QString &, int)), this, SIGNAL(sigNeedShowTips(const QString &, int)));
 
     m_pHLayoutContant->addWidget(m_pTextEdit);
 

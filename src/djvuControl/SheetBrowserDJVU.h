@@ -91,7 +91,6 @@ private slots:
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserDJVUItem *> m_items;
-    QBitmap *m_bitmap = nullptr;
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;         //最大一页的宽度
     int m_maxHeight = 0;        //最大一页的高度

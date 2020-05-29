@@ -33,6 +33,7 @@
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "MainWindow.h"
+#include "ControllerManager.h"
 
 Central::Central(QWidget *parent)
     : CustomWidget(parent)
@@ -45,7 +46,6 @@ Central::Central(QWidget *parent)
     m_widget  = new TitleWidget(this);
 
     m_docPage = new CentralDocPage(this);
-    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
     connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
     connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
@@ -64,6 +64,8 @@ Central::Central(QWidget *parent)
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(slotFindOperation(const int &)));
+
+    connect(ControllerManager::getInstance(), &ControllerManager::signalShowTips, this, &Central::onShowTips);
 }
 
 Central::~Central()

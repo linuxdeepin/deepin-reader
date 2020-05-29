@@ -22,17 +22,10 @@ SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : QGraphicsView(parent)
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
-
-    m_bitmap = new QBitmap(234, 234);
-    QPainter painter(m_bitmap);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QBrush(Qt::black));
-    painter.drawEllipse(17, 17, 200, 200);
 }
 
 SheetBrowserDJVU::~SheetBrowserDJVU()
 {
-    delete m_bitmap;
     qDeleteAll(m_items);
 
     if (nullptr != m_document)
@@ -256,31 +249,26 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
         QImage image;
 
         if (getImagePoint(event->pos(), m_lastScaleFactor + 2, image) && !image.isNull()) {
-            QPixmap pix = QPixmap::fromImage(image);
 
-            pix.setMask(*m_bitmap);
-
+            QPixmap pix(234, 234);
+            pix.fill(Qt::transparent);
             QPainter painter(&pix);
-
+            QPainterPath clippath;
+            clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
+            painter.setClipPath(clippath);
+            painter.drawImage(0, 0, image);
             painter.drawPixmap(0, 0, 234, 234, QPixmap(":/custom/maganifier.svg"));
-
             m_magnifierLabel->setPixmap(pix);
 
         } else {
-            QPixmap pix = QPixmap::fromImage(m_bitmap->toImage());
-
-            pix.setMask(*m_bitmap);
-
+            QPixmap pix(234, 234);
+            pix.fill(Qt::transparent);
             QPainter painter(&pix);
-
-            painter.setPen(Qt::NoPen);
-
-            painter.setBrush(QBrush(Qt::white));
-
-            painter.drawEllipse(17, 17, 200, 200);
-
+            QPainterPath clippath;
+            clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
+            painter.setClipPath(clippath);
+            painter.fillRect(0, 0, 234, 234, Qt::white);
             painter.drawPixmap(0, 0, 234, 234, QPixmap(":/custom/maganifier.svg"));
-
             m_magnifierLabel->setPixmap(pix);
 
         }

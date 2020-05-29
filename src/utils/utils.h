@@ -68,7 +68,6 @@ public:
     static QString getInputDataSize(const qint64 &);
 
     static bool runApp(const QString &args);
-    static QImage roundImage(const QPixmap &img_in, int radius);
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
 
     static void copyText(const QString &sText);

@@ -48,6 +48,7 @@
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
+#include "ControllerManager.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -162,7 +163,7 @@ void CentralDocPage::openFile(QString &filePath)
         this->activateWindow();
 
     } else {
-        showTips(tr("The format is not supported"), 1);
+        emit ControllerManager::getInstance()->signalShowTips(tr("The format is not supported"), 1);
     }
 }
 
@@ -373,13 +374,13 @@ bool CentralDocPage::saveCurrent()
     }
 
     if (!sheet->saveData()) {
-        showTips(tr("Save failed"));
+        sheet->showTips(tr("Save failed"));
         return false;
     }
 
     sigCurSheetChanged(sheet);
 
-    showTips(tr("Saved successfully"));
+    sheet->showTips(tr("Saved successfully"));
 
     return true;
 }
@@ -598,11 +599,6 @@ void CentralDocPage::handleShortcut(const QString &s)
         if (getCurSheet())
             getCurSheet()->jumpToNextPage();
     }
-}
-
-void CentralDocPage::showTips(const QString &tips, int iconIndex)
-{
-    emit sigNeedShowTips(tips, iconIndex);
 }
 
 void CentralDocPage::openMagnifer()

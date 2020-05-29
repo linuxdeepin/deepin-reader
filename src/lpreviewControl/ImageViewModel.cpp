@@ -186,13 +186,6 @@ void ImageViewModel::removePageIndex(int pageIndex)
     }
 }
 
-void ImageViewModel::removeModelIndex(int modelIndex)
-{
-    if (modelIndex >= 0 && modelIndex < m_pagelst.size()) {
-        m_pagelst.removeAt(modelIndex);
-    }
-}
-
 void ImageViewModel::removeItemForuuid(const QString &uuid)
 {
     int index = findItemForuuid(uuid);

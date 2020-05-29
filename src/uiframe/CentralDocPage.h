@@ -68,8 +68,6 @@ public:
 
     void showFileAttr();
 
-    void showTips(const QString &tips, int iconIndex = 0);
-
     void openMagnifer();
 
     void quitMagnifer();
@@ -114,8 +112,6 @@ signals:
     void sigRemoveFileTab(const QString &);
 
     void sigTabBarIndexChange(const QString &);
-
-    void sigNeedShowTips(const QString &msg, int);
 
     void sigNeedClose();
 

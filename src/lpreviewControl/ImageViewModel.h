@@ -88,7 +88,6 @@ public:
     void insertPageIndex(int pageIndex);
     void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
-    void removeModelIndex(int modelIndex);
     void removeItemForuuid(const QString &uuid);
 
     QList<QModelIndex> getModelIndexForPageIndex(int pageIndex);

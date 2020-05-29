@@ -301,11 +301,6 @@ void DocSheetPDF::onFileOpenResult(const QString &s, const bool &res)
     emit sigOpened(this, res);
 }
 
-void DocSheetPDF::onShowTips(const QString &tips, int index)
-{
-    showTips(tips, index);
-}
-
 void DocSheetPDF::onFileChanged()
 {
     emit sigFileChanged(this);
