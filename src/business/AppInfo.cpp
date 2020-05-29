@@ -193,6 +193,6 @@ void AppInfo::adaptScreenView(int &width, int &height)
 //    if (m_dHeightScale > 1.0000)
 //    height = static_cast<int>(m_dHeightScale * static_cast<double>(height));
 
-    width = static_cast<int>(width * dApp->devicePixelRatio());
-    height = static_cast<int>(height * dApp->devicePixelRatio());
+//    width = static_cast<int>(width * dApp->devicePixelRatio());
+//    height = static_cast<int>(height * dApp->devicePixelRatio());
 }
