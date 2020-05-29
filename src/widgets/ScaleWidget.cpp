@@ -143,7 +143,7 @@ void ScaleWidget::SlotReturnPressed()
             QString sShowText = QString::number(dValue) + "%";
             SlotCurrentTextChanged(sShowText);
 
-            int curindex = dataList.indexOf(/*static_cast<int>(dValue)*/dValue);
+            int curindex = dataList.indexOf(dValue);
             if (curindex < 0)
                 m_scaleComboBox->setCurrentIndex(curindex);
 
@@ -169,60 +169,21 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
     m_scaleComboBox->blockSignals(true);
 
-    if (Dr::DjVu == m_sheet->type()) {
-        m_scaleComboBox->clear();
+    m_scaleComboBox->clear();
 
-        for (int i = 0; i < m_sheet->scaleFactorList().count(); ++i) {
-            m_scaleComboBox->addItem(QString::number(m_sheet->scaleFactorList().at(i) * 100) + "%");
-        }
-
-        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-
-        m_scaleComboBox->setCurrentText(sCurText);
-
-        m_scaleComboBox->lineEdit()->setCursorPosition(0);
-
-    } else if (Dr::PDF == m_sheet->type()) {
-        double dMax = m_sheet->getMaxZoomratio();
-
-        int nTempMax = static_cast<int>(dMax) * 100;
-
-        if (nTempMax != m_nMaxScale) {  //  判断当前最大显示 是否 和之前一样, 不一样, 清楚item, 重新添加
-            m_scaleComboBox->clear();
-            m_nMaxScale = nTempMax;
-
-            foreach (double iData, dataList) {
-                if (static_cast<int>(iData) <= m_nMaxScale) {
-                    m_scaleComboBox->addItem(QString::number(iData) + "%");
-                }
-            }
-        }
-
-        double nScale = m_sheet->operation().scaleFactor;
-
-        if (static_cast<int>(nScale) <= 0) {
-            nScale = 100;
-        }
-
-        int index = -1;
-        for (int i = 0; i < dataList.size(); i++) {
-            if (qAbs(dataList.at(i) - nScale) < 0.001) {
-                index = i;
-                break;
-            }
-        }
-
-        int curindex = dataList.indexOf(/*static_cast<int>(nScale)*/nScale);
-        if (curindex < 0)
-            m_scaleComboBox->setCurrentIndex(curindex);
-
-        QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-
-        m_scaleComboBox->setCurrentText(sCurText);
-
-        m_scaleComboBox->lineEdit()->setCursorPosition(0);
-
+    for (int i = 0; i < m_sheet->scaleFactorList().count(); ++i) {
+        m_scaleComboBox->addItem(QString::number(m_sheet->scaleFactorList().at(i) * 100) + "%");
     }
+
+    int index = m_sheet->scaleFactorList().indexOf(m_sheet->operation().scaleFactor);
+
+    m_scaleComboBox->setCurrentIndex(index);
+
+    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+
+    m_scaleComboBox->setCurrentText(sCurText);
+
+    m_scaleComboBox->lineEdit()->setCursorPosition(0);
 
     m_scaleComboBox->blockSignals(false);
 }

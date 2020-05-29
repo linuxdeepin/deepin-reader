@@ -12,6 +12,7 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(parent)
 {
+    setFocusPolicy(Qt::NoFocus);
     initWidget();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &TitleWidget::slotUpdateTheme);
@@ -202,10 +203,13 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setObjectName("thumbnails");
+    m_pThumbnailBtn->setFocusPolicy(Qt::NoFocus);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(on_thumbnailBtn_clicked()));
 
     m_pSearchBtn = new DIconButton(DStyle::SP_IndicatorSearch);
+    m_pSearchBtn->setFocusPolicy(Qt::NoFocus);
     m_pSearchBtn->setDisabled(true);
+
     int tW = 36;
     int tH = 36;
 
@@ -220,7 +224,9 @@ void TitleWidget::initBtns()
 void TitleWidget::__InitHandel()
 {
     m_pHandleMenu = new HandleMenu(this);
+    m_pHandleMenu->setFocusPolicy(Qt::NoFocus);
     connect(m_pHandleMenu, SIGNAL(sigClickAction(const int &)), SLOT(SlotSetCurrentTool(const int &)));
+
 
     m_pHandleShapeBtn = createBtn(tr("Select Text"));
     m_pHandleShapeBtn->setObjectName("defaultshape");
@@ -235,6 +241,7 @@ void TitleWidget::__InitSelectTool()
 {
     //字号调整菜单
     m_pFontMenu = new FontMenu(this);
+    m_pFontMenu->setFocusPolicy(Qt::NoFocus);
     m_pSettingBtn = createBtn(tr("Page Display"));
     m_pSettingBtn->setObjectName("viewchange");
     connect(m_pSettingBtn, SIGNAL(clicked()), SLOT(on_settingBtn_clicked()));

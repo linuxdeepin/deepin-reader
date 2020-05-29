@@ -103,6 +103,7 @@ void MainWindow::initUI()
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
+    titlebar()->setFocusPolicy(Qt::NoFocus);
 }
 
 //  显示快捷键

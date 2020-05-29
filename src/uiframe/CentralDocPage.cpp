@@ -85,7 +85,7 @@ void CentralDocPage::openCurFileFolder()
         return;
 
     QString filePath = sheet->filePath();
-    bool result = QProcess::startDetached(QString("dde-file-manager %1 --show-item").arg(filePath));
+    bool result = QProcess::startDetached(QString("dde-file-manager \"%1\" --show-item").arg(filePath));
     if (!result) {
         QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
     }
