@@ -46,9 +46,11 @@ public:
     int itemIndex();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
+    bool sceneEvent(QEvent *event) override;
 
 signals:
     void bookmarkPressed(int, bool bookmark);

@@ -7,6 +7,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneHoverEvent>
 
 QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
 SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
@@ -159,8 +160,6 @@ void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void SheetBrowserDJVUItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << 1;
-
     if (!m_bookmark && bookmarkRect().contains(event->pos()))
         m_bookmarkState = 1;
     else if (m_bookmark)
@@ -169,4 +168,18 @@ void SheetBrowserDJVUItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     update();
 
     QGraphicsItem::mouseMoveEvent(event);
+}
+
+bool SheetBrowserDJVUItem::sceneEvent(QEvent *event)
+{
+    if (event->type() == QEvent::GraphicsSceneHoverMove) {
+        QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
+        if (!m_bookmark && bookmarkRect().contains(moveevent->pos()))
+            m_bookmarkState = 1;
+        else if (m_bookmark)
+            m_bookmarkState = 3;
+
+        update();
+    }
+    return QGraphicsItem::sceneEvent(event);
 }
