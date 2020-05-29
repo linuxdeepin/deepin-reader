@@ -120,6 +120,8 @@ public:
 private slots:
     void onFileOpenResult(const QString &, const bool &);
 
+    void onShowTips(const QString &tips, int);
+
     void onFileChanged();
 
     void onSplitterMoved(int, int);

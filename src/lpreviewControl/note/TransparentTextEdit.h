@@ -30,6 +30,9 @@ class TransparentTextEdit : public QTextEdit
 public:
     explicit TransparentTextEdit(DWidget *parent = nullptr);
 
+signals:
+    void sigNeedShowTips(const QString &tips, int);
+
 private:
     void init();
 

@@ -23,7 +23,6 @@
 #include "application.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
-#include "ControllerManager.h"
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
@@ -84,6 +83,6 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         this->setText(textContent);
         textCursor.setPosition(position - (length - m_nMaxContantLen));
         this->setTextCursor(textCursor);
-        emit ControllerManager::getInstance()->signalShowTips(tr("Input limit reached"), 1);
+        sigNeedShowTips(tr("Input limit reached"), 1);
     }
 }
