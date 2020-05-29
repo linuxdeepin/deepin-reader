@@ -40,7 +40,7 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
 
 QRectF SheetBrowserDJVUItem::bookmarkRect()
 {
-    return QRectF(boundingRect().width() - 45, 5, 40, 40);
+    return QRectF(boundingRect().width() - 40, 0, 28, 28);
 }
 
 void SheetBrowserDJVUItem::setBookmark(bool hasBookmark)
@@ -65,11 +65,11 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawImage(option->rect.x(), option->rect.y(), m_image);
 
     if (1 == m_bookmarkState)
-        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark_hover.svg"));
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/custom/bookmark_hover.svg"));
     if (2 == m_bookmarkState)
-        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark_pressed.svg"));
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/custom/bookmark_pressed.svg"));
     if (3 == m_bookmarkState)
-        painter->drawPixmap(QRect(bookmarkRect().x(), bookmarkRect().y(), bookmarkRect().width(), bookmarkRect().height()), QPixmap(":/custom/bookmark.svg"));
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/custom/bookmark.svg"));
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)

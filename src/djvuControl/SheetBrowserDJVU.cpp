@@ -362,6 +362,8 @@ void SheetBrowserDJVU::openMagnifier()
         m_magnifierLabel = new QLabel(this);
         m_magnifierLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
         m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
+        m_magnifierLabel->setAutoFillBackground(false);
+        m_magnifierLabel->setAttribute(Qt::WA_TranslucentBackground);
         m_magnifierLabel->resize(234, 234);
         m_magnifierLabel->show();
         setDragMode(QGraphicsView::NoDrag);
