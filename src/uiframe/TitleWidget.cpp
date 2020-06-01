@@ -6,7 +6,7 @@
 #include "widgets/FontMenu.h"
 #include "widgets/HandleMenu.h"
 #include "TitleMenu.h"
-#include "utils/PublicFunction.h"
+//#include "utils/PublicFunction.h"
 #include "DocSheet.h"
 
 TitleWidget::TitleWidget(DWidget *parent)
@@ -274,7 +274,7 @@ void TitleWidget::setHandleShape()
 
     m_pHandleShapeBtn->setToolTip(tr("Hand Tool"));
 
-    QIcon icon = PF::getIcon(Pri::g_module + btnName);
+    QIcon icon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + btnName);
 
     m_pHandleShapeBtn->setIcon(icon);
 

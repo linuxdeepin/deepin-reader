@@ -24,7 +24,7 @@
 #include "TransparentTextEdit.h"
 
 #include "CustomControl/CustomClickLabel.h"
-#include "utils/PublicFunction.h"
+//#include "utils/PublicFunction.h"
 #include "DocSheet.h"
 
 NoteViewWidget::NoteViewWidget(DWidget *parent)
