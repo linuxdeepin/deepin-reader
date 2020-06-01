@@ -2,8 +2,6 @@
     <qresource prefix="/icons/deepin">
         <file>builtin/dark/actions/dr_defaultshape_small_16px.svg</file>
         <file>builtin/dark/actions/dr_handleshape_small_16px.svg</file>
-        <file>builtin/dark/actions/exit_fullscreen.svg</file>
-        <file>builtin/dark/actions/import_photo.svg</file>
         <file>builtin/dark/icons/close.svg</file>
         <file>builtin/dark/icons/dr_a_big_14px.svg</file>
         <file>builtin/dark/icons/dr_a_small_14px.svg</file>
@@ -24,8 +22,6 @@
         <file>builtin/dark/texts/dr_viewchange_36px.svg</file>
         <file>builtin/light/actions/dr_defaultshape_small_16px.svg</file>
         <file>builtin/light/actions/dr_handleshape_small_16px.svg</file>
-        <file>builtin/light/actions/exit_fullscreen.svg</file>
-        <file>builtin/light/actions/import_photo.svg</file>
         <file>builtin/light/icons/dr_a_big_14px.svg</file>
         <file>builtin/light/icons/close.svg</file>
         <file>builtin/light/icons/dr_a_small_14px.svg</file>
@@ -53,5 +49,9 @@
         <file>builtin/ok.svg</file>
         <file>builtin/select.svg</file>
         <file>builtin/warning.svg</file>
+        <file>builtin/light/icons/dr_close_24px.svg</file>
+        <file>builtin/dark/icons/dr_close_24px.svg</file>
+        <file>builtin/light/actions/dr_import_photo_128px.svg</file>
+        <file>builtin/dark/actions/dr_import_photo_128px.svg</file>
     </qresource>
 </RCC>

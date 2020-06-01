@@ -181,11 +181,12 @@ void NoteViewWidget::__PageNoteHideEvent()
 //  主题变了
 void NoteViewWidget::slotUpdateTheme()
 {
-    QString sClose = PF::getImagePath("close", Pri::g_icons);
+//    QString sClose = PF::getImagePath("close", Pri::g_icons);
+    QIcon closeIcon = PF::getIcon(Pri::g_module + "close");
     int tW = 24;
     int tH = 24;
     dApp->adaptScreenView(tW, tH);
-    m_pCloseLab->setPixmap(Utils::renderSVG(sClose, QSize(tW, tH)));
+    m_pCloseLab->setPixmap(closeIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sClose, QSize(tW, tH)));
 }
 
 void NoteViewWidget::setNotePage(const QString &pNotePage)

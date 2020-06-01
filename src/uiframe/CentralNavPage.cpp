@@ -74,11 +74,12 @@ void CentralNavPage::slotUpdateTheme()
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window/*Base*/));
         iconSvg->setPalette(plt);
-        QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
+//        QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
+        QIcon importIcon = PF::getIcon(Pri::g_module + "import_photo");
         int tW = 128;
         int tH = 128;
         dApp->adaptScreenView(tW, tH);
-        iconSvg->setPixmap(Utils::renderSVG(sPixmap, QSize(tW, tH)));
+        iconSvg->setPixmap(importIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sPixmap, QSize(tW, tH)));
     }
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();
