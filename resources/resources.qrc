@@ -45,16 +45,13 @@
         <file>builtin/light/texts/dr_thumbnail_36px.svg</file>
         <file>builtin/light/texts/dr_thumbnails_36px.svg</file>
         <file>builtin/light/texts/dr_viewchange_36px.svg</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>custom/deepin-reader.svg</file>
-        <file>custom/exception-logo.svg</file>
-        <file>custom/maganifier.svg</file>
-        <file>custom/ok.svg</file>
-        <file>custom/select.svg</file>
-        <file>custom/warning.svg</file>
-        <file>custom/bookmark_hover.svg</file>
-        <file>custom/bookmark_pressed.svg</file>
-        <file>custom/bookmark.svg</file>
+        <file>builtin/bookmark_pressed.svg</file>
+        <file>builtin/bookmark.svg</file>
+        <file>builtin/deepin-reader.svg</file>
+        <file>builtin/exception-logo.svg</file>
+        <file>builtin/maganifier.svg</file>
+        <file>builtin/ok.svg</file>
+        <file>builtin/select.svg</file>
+        <file>builtin/warning.svg</file>
     </qresource>
 </RCC>

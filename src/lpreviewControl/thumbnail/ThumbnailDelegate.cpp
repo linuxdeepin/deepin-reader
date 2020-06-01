@@ -82,7 +82,7 @@ QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
 {
     if (visible) {
-        QString iconPath = ":/custom/bookmark.svg";
+        QString iconPath = ":/icons/deepin/builtin/bookmark.svg";
         QPixmap pixmap(Utils::renderSVG(iconPath, QSize(36, 36)));
         painter->drawPixmap(rect.right() - 42, rect.y(), pixmap);
     }

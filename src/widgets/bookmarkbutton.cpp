@@ -35,13 +35,13 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
 
     QString iconPath;
     if (isclicked) {
-        iconPath += ":/custom/bookmark.svg";
+        iconPath += ":/icons/deepin/builtin/bookmark.svg";
     } else {
         if (ispressed) {
-            iconPath += ":/custom/bookmark_pressed.svg";
+            iconPath += ":/icons/deepin/builtin/bookmark_pressed.svg";
         } else {
             if (ishovered) {
-                iconPath += ":/custom/bookmark_hover.svg";
+                iconPath += ":/icons/deepin/builtin/bookmark_hover.svg";
             }
         }
     }
