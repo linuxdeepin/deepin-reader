@@ -30,9 +30,7 @@ void BookMarkButton::setClickState(bool state)
 
 void BookMarkButton::paintEvent(QPaintEvent *e)
 {
-    QPainter painter;
-    painter.begin(this);
-
+    QPainter painter(this);
     QString iconPath;
     if (isclicked) {
         iconPath += ":/icons/deepin/builtin/bookmark.svg";
@@ -45,10 +43,9 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
             }
         }
     }
-    QPixmap pixmap(Utils::renderSVG(iconPath, QSize(36, 36)));
-    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+    QPixmap pixmap(iconPath);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
-    painter.end();
 }
 
 void BookMarkButton::enterEvent(QEvent *e)
