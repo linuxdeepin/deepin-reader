@@ -1,6 +1,5 @@
 HEADERS += \
-    $$PWD/utils.h \
-    $$PWD/PublicFunction.h
+    $$PWD/utils.h
 
 SOURCES += \
     $$PWD/utils.cpp

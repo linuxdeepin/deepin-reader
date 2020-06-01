@@ -31,7 +31,7 @@ void TitleWidget::slotUpdateTheme()
         if (btn) {
             QString objName = btn->objectName();
             if (objName != "") {
-                QIcon icon = PF::getIcon(Pri::g_module + objName);
+                QIcon icon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + objName);
                 btn->setIcon(icon);
             }
         }
@@ -41,7 +41,7 @@ void TitleWidget::slotUpdateTheme()
     foreach (auto a, actionList) {
         QString objName = a->objectName();
         if (objName != "") {
-            QIcon icon = PF::getIcon(Pri::g_module + objName + "_small");
+            QIcon icon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + objName + "_small");
             a->setIcon(icon);
         }
     }
@@ -256,7 +256,7 @@ void TitleWidget::setDefaultShape()
 
     m_pHandleShapeBtn->setToolTip(tr("Select Text"));
 
-    QIcon icon = PF::getIcon(Pri::g_module + btnName);
+    QIcon icon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + btnName);
 
     m_pHandleShapeBtn->setIcon(icon);
 
@@ -318,7 +318,7 @@ void TitleWidget::setMagnifierState()
             }
         }
 
-        QIcon icon = PF::getIcon(Pri::g_module + "defaultshape");
+        QIcon icon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "defaultshape");
         m_pHandleShapeBtn->setIcon(icon);
     }
 }

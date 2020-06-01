@@ -183,7 +183,7 @@ void NoteViewWidget::__PageNoteHideEvent()
 void NoteViewWidget::slotUpdateTheme()
 {
 //    QString sClose = PF::getImagePath("close", Pri::g_icons);
-    QIcon closeIcon = PF::getIcon(Pri::g_module + "close");
+    QIcon closeIcon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "close");
     int tW = 24;
     int tH = 24;
 

@@ -73,7 +73,7 @@ void CentralNavPage::slotUpdateTheme()
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window/*Base*/));
         iconSvg->setPalette(plt);
 //        QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
-        QIcon importIcon = PF::getIcon(Pri::g_module + "import_photo");
+        QIcon importIcon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "import_photo");
         int tW = 128;
         int tH = 128;
 

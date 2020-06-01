@@ -303,7 +303,7 @@ void SheetSidebar::onUpdateWidgetTheme()
     const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
     for (QAbstractButton *btn : btns) {
         const QString &objName = btn->objectName();
-        const QIcon &icon = PF::getIcon(Pri::g_module + objName);
+        const QIcon &icon = QIcon::fromTheme(Pri::g_module + objName);//PF::getIcon(Pri::g_module + objName);
         btn->setIcon(icon);
     }
 }

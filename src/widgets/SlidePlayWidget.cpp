@@ -91,7 +91,7 @@ DIconButton *SlidePlayWidget::createBtn(const QString &strname)
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(strname);
     btn->setFixedSize(50, 50);
-    btn->setIcon(PF::getIcon(Pri::g_module + strname));
+    btn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + strname));
     btn->setIconSize(QSize(36, 36));
     return  btn;
 }
@@ -131,9 +131,9 @@ void SlidePlayWidget::onExitClicked()
 void SlidePlayWidget::playStatusChanged()
 {
     if (m_autoPlay) {
-        m_playBtn->setIcon(PF::getIcon(Pri::g_module + "suspend_normal"));
+        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "suspend_normal"));
     } else {
-        m_playBtn->setIcon(PF::getIcon(Pri::g_module + "play_normal"));
+        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "play_normal"));
     }
     emit signalPlayBtnClicked();
 }
