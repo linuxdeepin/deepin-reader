@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -9,7 +7,11 @@
     </message>
     <message>
         <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
-        <translation>文档查看器一款为了方便查看PDF格式文档的阅读工具。</translation>
+        <translation type="vanished">文档查看器一款为了方便查看PDF格式文档的阅读工具。</translation>
+    </message>
+    <message>
+        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
+        <translation>文档查看器是一款支持PDF，DJVU等多种格式的文档阅读工具。</translation>
     </message>
 </context>
 <context>
@@ -162,11 +164,19 @@
     <name>CentralNavPage</name>
     <message>
         <source>Drag PDF files here</source>
-        <translation>拖拽PDF文件到此</translation>
+        <translation type="vanished">拖拽PDF文件到此</translation>
     </message>
     <message>
         <source>Select File</source>
         <translation>选择文件</translation>
+    </message>
+    <message>
+        <source>Drag documents here</source>
+        <translation>拖拽文件到此</translation>
+    </message>
+    <message>
+        <source>Format supported: %1</source>
+        <translation>支持格式：%1 </translation>
     </message>
 </context>
 <context>
@@ -253,7 +263,7 @@
     <name>DocSheetDJVU</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished">已删除书签</translation>
+        <translation>已删除书签</translation>
     </message>
 </context>
 <context>

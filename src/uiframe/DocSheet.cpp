@@ -265,6 +265,11 @@ QString DocSheet::filter()
     return "";
 }
 
+void DocSheet::defaultFocus()
+{
+    m_sidebar->setFocus();
+}
+
 bool DocSheet::fileChanged()
 {
     qDebug() << "unrealized";

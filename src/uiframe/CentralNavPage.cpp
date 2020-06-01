@@ -25,10 +25,15 @@ CentralNavPage::~CentralNavPage()
 
 void CentralNavPage::initWidget()
 {
-    auto tipsLabel = new CustomClickLabel(tr("Drag PDF files here"), this);
+    auto tipsLabel = new CustomClickLabel(tr("Drag documents here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
+
+    auto formatLabel = new CustomClickLabel(tr("Format supported: %1").arg("PDF,DJVU"), this);
+    formatLabel->setAlignment(Qt::AlignHCenter);
+    formatLabel->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"), this);
     int tW = 302;
@@ -51,6 +56,7 @@ void CentralNavPage::initWidget()
     layout->addWidget(iconSvg, 0, Qt::AlignHCenter);
     layout->addSpacing(10);
     layout->addWidget(tipsLabel);
+    layout->addWidget(formatLabel);
     layout->addSpacing(14);
     layout->addWidget(chooseBtn, 1, Qt::AlignHCenter);
     layout->addStretch();

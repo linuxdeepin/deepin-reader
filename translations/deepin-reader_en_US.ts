@@ -9,7 +9,11 @@
     </message>
     <message>
         <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
-        <translation>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</translation>
+        <translation type="vanished">Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</translation>
+    </message>
+    <message>
+        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -162,11 +166,19 @@
     <name>CentralNavPage</name>
     <message>
         <source>Drag PDF files here</source>
-        <translation>Drag PDF files here</translation>
+        <translation type="vanished">Drag PDF files here</translation>
     </message>
     <message>
         <source>Select File</source>
         <translation>Select File</translation>
+    </message>
+    <message>
+        <source>Drag documents here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format supported: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

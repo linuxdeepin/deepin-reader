@@ -133,6 +133,8 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pStackedLayout->setCurrentWidget(sheet);
 
+        sheet->defaultFocus();
+
         m_pTabBar->insertSheet(sheet);
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
@@ -151,6 +153,8 @@ void CentralDocPage::openFile(QString &filePath)
         m_pStackedLayout->addWidget(sheet);
 
         m_pStackedLayout->setCurrentWidget(sheet);
+
+        sheet->defaultFocus();
 
         m_pTabBar->insertSheet(sheet);
 
@@ -192,8 +196,10 @@ void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
     emit sigCurSheetChanged(sheet);
 
-    if (nullptr != sheet)
+    if (nullptr != sheet) {
         m_pStackedLayout->setCurrentWidget(sheet);
+        sheet->defaultFocus();
+    }
 }
 
 void CentralDocPage::onTabMoveIn(DocSheet *sheet)
@@ -206,6 +212,8 @@ void CentralDocPage::onTabMoveIn(DocSheet *sheet)
     m_pStackedLayout->addWidget(sheet);
 
     m_pStackedLayout->setCurrentWidget(sheet);
+
+    sheet->defaultFocus();
 
     emit sigSheetCountChanged(m_pStackedLayout->count());
 

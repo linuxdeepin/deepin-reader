@@ -102,6 +102,8 @@ public:
 
     virtual QString filter();
 
+    virtual void defaultFocus();
+
     QSet<int> getBookMarkList() const;
 
     void print();

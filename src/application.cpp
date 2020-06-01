@@ -42,7 +42,7 @@ Application::Application(int &argc, char **argv)
     setApplicationVersion(DApplication::buildVersion("1.0"));
     setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
     setApplicationDisplayName(tr("Document Viewer"));
-    setApplicationDescription(tr("Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations."));
+    setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
 
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
