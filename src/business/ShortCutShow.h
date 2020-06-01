@@ -27,17 +27,22 @@
  * @brief   显示快捷键预览
  */
 
+class DocSheet;
 class ShortCutShow : public QObject
 {
     Q_OBJECT
 public:
     explicit ShortCutShow(QObject *parent = nullptr);
 
+    void setSheet(DocSheet *sheet);
+
 public:
     void show();
 
 private:
-    void initData();
+    void initPDF();
+
+    void initDJVU();
 
 private:
     QStringList Settingsnames, Filesnames, Displaynames, Toolsnames, Editnames,  shortcutnames, windowKeymaps;

@@ -218,15 +218,17 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    SaveDialog dialog;
+    if (sheet->fileChanged()) {
+        SaveDialog dialog;
 
-    int ret = dialog.showDialog();
+        int ret = dialog.showDialog();
 
-    if (ret < 1)
-        return;
+        if (ret < 1)
+            return;
 
-    if (sheet->fileChanged() && 2 == ret) {
-        sheet->saveData();
+        if (2 == ret) {
+            sheet->saveData();
+        }
     }
 
     m_pStackedLayout->removeWidget(sheet);

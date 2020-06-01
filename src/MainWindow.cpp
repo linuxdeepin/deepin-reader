@@ -5,7 +5,6 @@
 #include <QSignalMapper>
 #include <DGuiApplicationHelper>
 
-#include "business/ShortCutShow.h"
 #include "business/AppInfo.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
@@ -106,21 +105,10 @@ void MainWindow::initUI()
     titlebar()->setFocusPolicy(Qt::NoFocus);
 }
 
-//  显示快捷键
-void MainWindow::displayShortcuts()
-{
-    ShortCutShow show;
-    show.show();
-}
-
 //  快捷键 实现
 void MainWindow::onShortCut(const QString &key)
 {
-    if (key == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
-        displayShortcuts();
-    } else {
-        m_central->handleShortcut(key);
-    }
+    m_central->handleShortcut(key);
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)

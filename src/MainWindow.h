@@ -35,8 +35,6 @@ protected:
 private:
     void initUI();
 
-    void displayShortcuts();
-
     void showDefaultSize();
 
     void initShortCut();
