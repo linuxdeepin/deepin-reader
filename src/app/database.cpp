@@ -189,7 +189,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
 
 Database::Database(QObject *parent) : QObject(parent)
 {
-    const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    const QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     QDir().mkpath(path);
 
