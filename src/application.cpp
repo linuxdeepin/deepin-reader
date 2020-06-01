@@ -56,12 +56,13 @@ void Application::setSreenRect(const QRect &rect)
     }
 }
 
-void Application::adaptScreenView(int &w, int &h)
-{
-    if (m_pAppInfo) {
-        m_pAppInfo->adaptScreenView(w, h);
-    }
-}
+//弃用
+//void Application::adaptScreenView(int &w, int &h)
+//{
+//    if (m_pAppInfo) {
+//        m_pAppInfo->adaptScreenView(w, h);
+//    }
+//}
 
 void Application::handleQuitAction()
 {

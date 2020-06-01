@@ -75,7 +75,7 @@ public:
     void setAppKeyValue(const int &, const QString &);
     QString getAppKeyValue(const int &) const;
 
-    void adaptScreenView(int &width, int &height);
+//    void adaptScreenView(int &width, int &height);
 private:
     QList<QKeySequence>     m_pKeyList;                 //  快捷键对应
     QList<QColor>           m_listColor;                //  color list

@@ -29,8 +29,6 @@ MainWindow::MainWindow(DMainWindow *parent)
     int tWidth = 752;
     int tHeight = 360;
 
-    dApp->adaptScreenView(tWidth, tHeight);
-
     setMinimumSize(tWidth, tHeight);
 
     showDefaultSize();
@@ -143,7 +141,6 @@ void MainWindow::showDefaultSize()
         int tHeight = 680;
         QString str = "";
 
-        dApp->adaptScreenView(tWidth, tHeight);
         resize(tWidth, tHeight);
 
         str = QString::number(tWidth);
@@ -151,7 +148,6 @@ void MainWindow::showDefaultSize()
         str = QString::number(tHeight);
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, str);
     } else {
-        dApp->adaptScreenView(nWidth, nHeight);
         resize(nWidth, nHeight);
     }
 }

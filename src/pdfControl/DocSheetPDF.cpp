@@ -63,7 +63,7 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
 
     int tW = 36;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
+
     m_pSpinnerWidget->setSpinnerSize(QSize(tW, tH));
     m_pSpinnerWidget->startSpinner();
 
@@ -75,18 +75,13 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
 
     QList<int> list_src;
     tW = LEFTNORMALWIDTH;
-    dApp->adaptScreenView(tW, tH);
+
     list_src.append(tW);
     tW = 1000 - LEFTNORMALWIDTH;
-    dApp->adaptScreenView(tW, tH);
+
     list_src.append(tW);
 
     setSizes(list_src);
-
-//    //文档刚打开时，模拟鼠标点击文档区域事件
-//    QPoint pos(m_pRightWidget->geometry().x() + 10, m_pRightWidget->geometry().y() + 10);
-//    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    //    QApplication::sendEvent(m_pRightWidget, &event0);
 
     connect(this, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 }

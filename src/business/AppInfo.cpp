@@ -181,13 +181,13 @@ QString AppInfo::getAppKeyValue(const int &iKey) const
 }
 
 /**
- * @brief AppInfo::adaptScreenView
+ * @brief AppInfo::adaptScreenView     弃用
  * 用于适配各种分辨率  add by dxh   2020-3-24
  * @param width
  * @param height
  */
-void AppInfo::adaptScreenView(int &width, int &height)
-{
+//void AppInfo::adaptScreenView(int &width, int &height)
+//{
 //    if (m_dWidthScale > 1.0000)
 //    width = static_cast<int>(m_dWidthScale * static_cast<double>(width));
 //    if (m_dHeightScale > 1.0000)
@@ -195,4 +195,4 @@ void AppInfo::adaptScreenView(int &width, int &height)
 
 //    width = static_cast<int>(width * dApp->devicePixelRatio());
 //    height = static_cast<int>(height * dApp->devicePixelRatio());
-}
+//}

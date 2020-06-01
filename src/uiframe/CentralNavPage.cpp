@@ -34,7 +34,6 @@ void CentralNavPage::initWidget()
     auto chooseBtn = new DSuggestButton(tr("Select File"), this);
     int tW = 302;
     int tH = 36;
-    dApp->adaptScreenView(tW, tH);
     chooseBtn->setFixedSize(QSize(tW, tH));
     connect(chooseBtn, &DPushButton::clicked, this, &CentralNavPage::slotChooseBtnClicked);
 
@@ -47,7 +46,6 @@ void CentralNavPage::initWidget()
     auto iconSvg = new DLabel(this);
     tW = 128;
     tH = 128;
-    dApp->adaptScreenView(tW, tH);
     iconSvg->setFixedSize(QSize(tW, tW));
     iconSvg->setObjectName("iconSvg");
 
@@ -78,7 +76,7 @@ void CentralNavPage::slotUpdateTheme()
         QIcon importIcon = PF::getIcon(Pri::g_module + "import_photo");
         int tW = 128;
         int tH = 128;
-        dApp->adaptScreenView(tW, tH);
+
         iconSvg->setPixmap(importIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sPixmap, QSize(tW, tH)));
     }
 

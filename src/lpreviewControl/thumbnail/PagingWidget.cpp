@@ -49,7 +49,7 @@ void PagingWidget::initWidget()
 
     int tW = 36;
     int tH = 36;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setFixedSize(QSize(tW, tH));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
@@ -61,7 +61,7 @@ void PagingWidget::initWidget()
     m_pJumpPageLineEdit = new DLineEdit();
     tW = 60;
     tH = 36;
-//    dApp->adaptScreenView(tW, tH);
+
     m_pJumpPageLineEdit->setFixedSize(tW, tH);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));

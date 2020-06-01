@@ -29,7 +29,7 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
 {
     int tW = 205;
     int tH = 257;
-    dApp->adaptScreenView(tW, tH);
+
     setFixedSize(tW, tH);
     init();
 }

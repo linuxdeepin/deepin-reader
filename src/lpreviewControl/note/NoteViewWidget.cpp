@@ -36,7 +36,7 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     setWindowFlag(Qt::Popup);
     int tW = 250;
     int tH = 320;
-    dApp->adaptScreenView(tW, tH);
+
     setFixedSize(QSize(tW, tH));
     DPlatformWindowHandle handle(this);
     int radius = 18;
@@ -91,8 +91,9 @@ void NoteViewWidget::initWidget()
 
     m_pCloseLab = new CustomClickLabel("");
     int tW = 24;
-    int tH = 24; m_nWidgetType = NOTE_HIGHLIGHT;
-    dApp->adaptScreenView(tW, tH);
+    int tH = 24;
+    m_nWidgetType = NOTE_HIGHLIGHT;
+
     m_pCloseLab->setFixedSize(QSize(tW, tH));
     connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -185,7 +186,7 @@ void NoteViewWidget::slotUpdateTheme()
     QIcon closeIcon = PF::getIcon(Pri::g_module + "close");
     int tW = 24;
     int tH = 24;
-    dApp->adaptScreenView(tW, tH);
+
     m_pCloseLab->setPixmap(closeIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sClose, QSize(tW, tH)));
 }
 

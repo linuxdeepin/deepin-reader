@@ -54,16 +54,12 @@ void SheetSidebar::initWidget()
     m_searchWidget    = nullptr;
 
     int tW = LEFTMINWIDTH;
-    int tH = LEFTMINWIDTH;
-    dApp->adaptScreenView(tW, tH);
     setMinimumWidth(tW);
 
     tW = LEFTMAXWIDTH;
-    dApp->adaptScreenView(tW, tH);
     setMaximumWidth(tW);
 
     tW = LEFTNORMALWIDTH;
-    dApp->adaptScreenView(tW, tH);
     resize(tW, this->height());
 
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
