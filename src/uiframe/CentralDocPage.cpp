@@ -47,6 +47,7 @@
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
+#include "business/PrintManager.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -418,7 +419,6 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.pdf")) {
                 DDialog dlg("", tr("Invalid file name"));
-//                QIcon icon(":/icons/deepin/builtin/exception-logo");
                 dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
@@ -438,7 +438,6 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.djvu")) {
                 DDialog dlg("", tr("Invalid file name"));
-//                QIcon icon(":/icons/deepin/builtin/exception-logo");
                 dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
@@ -451,6 +450,16 @@ bool CentralDocPage::saveAsCurrent()
     }
 
     return false;
+}
+
+void CentralDocPage::printCurrent()
+{
+    DocSheet *sheet = getCurSheet();
+    if (nullptr == sheet)
+        return;
+
+    PrintManager p(sheet);
+    p.showPrintDialog(sheet);
 }
 
 DocSheet *CentralDocPage::getCurSheet()
@@ -554,8 +563,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_alt_z) {
         openMagnifer();
     } else if (s == KeyStr::g_ctrl_p) {
-        if (getCurSheet())
-            getCurSheet()->print();
+        printCurrent();
     } else if (s == KeyStr::g_alt_1) {
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeNormal);

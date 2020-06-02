@@ -34,7 +34,6 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
-#include "business/PrintManager.h"
 #include "widgets/SlideWidget.h"
 
 DWIDGET_USE_NAMESPACE
@@ -323,12 +322,6 @@ void DocSheet::setSidebarVisible(bool isVisible)
     if (m_sidebar)
         m_sidebar->setVisible(isVisible);
     emit sigFileChanged(this);
-}
-
-void DocSheet::print()
-{
-    PrintManager p(this);
-    p.showPrintDialog(this);
 }
 
 QString DocSheet::filePath()

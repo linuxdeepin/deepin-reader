@@ -106,8 +106,6 @@ public:
 
     QSet<int> getBookMarkList() const;
 
-    void print();
-
     DocOperation operation();
 
     Dr::FileType type();

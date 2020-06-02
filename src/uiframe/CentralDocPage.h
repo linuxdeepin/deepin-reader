@@ -60,6 +60,8 @@ public:
 
     bool saveAsCurrent();
 
+    void printCurrent();
+
     void handleShortcut(const QString &);
 
     DocSheet *getCurSheet();

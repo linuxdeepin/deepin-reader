@@ -46,7 +46,10 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
     m_browser = new SheetBrowserPDF(this, this);
+    m_browser->setMinimumWidth(481);
+
     m_sidebar = new SheetSidebar(this);
+    m_sidebar->setMinimumWidth(266);
 
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_browser, SIGNAL(sigSizeChanged(double)), this, SLOT(onBrowserSizeChanged(double)));

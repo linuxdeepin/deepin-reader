@@ -14,8 +14,10 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     m_initBookmarks = m_bookmarks;
 
     m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
+    m_sidebar->setMinimumWidth(266);
 
     m_browser = new SheetBrowserDJVU(this);
+    m_browser->setMinimumWidth(481);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigSizeChanged()), this, SLOT(onBrowserSizeChanged()));

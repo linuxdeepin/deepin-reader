@@ -190,7 +190,7 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Save as") {
         m_docPage->saveAsCurrent();
     } else if (action == "Print") {
-        m_docPage->handleShortcut(KeyStr::g_ctrl_p);
+        m_docPage->printCurrent();
     } else if (action == "Slide show") { //  开启幻灯片
         m_docPage->openSlide();
     } else if (action == "Magnifer") {   //  开启放大镜
