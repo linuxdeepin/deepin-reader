@@ -65,11 +65,11 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawImage(option->rect.x(), option->rect.y(), m_image);
 
     if (1 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39))/*QPixmap(":/icons/deepin/builtin/bookmark_hover.svg")*/);
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/icons/deepin/builtin/bookmark_hover.svg"));
     if (2 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39))/*QPixmap(":/icons/deepin/builtin/bookmark_pressed.svg")*/);
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/icons/deepin/builtin/bookmark_pressed.svg"));
     if (3 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark").pixmap(QSize(39, 39))/*QPixmap(":/icons/deepin/builtin/bookmark.svg")*/);
+        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QPixmap(":/icons/deepin/builtin/bookmark.svg"));
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
