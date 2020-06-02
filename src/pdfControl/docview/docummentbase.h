@@ -47,8 +47,6 @@ public:
         m_lastmagnifierpagenum = -1;
         m_bsearchfirst = true;
         m_findcurpage = -1;
-        m_imagewidth = 0.1;
-        m_imageheight = 0.1;
         m_cursearch = 1;
         bcloseing = false;
         m_searchTask = nullptr;
@@ -90,8 +88,6 @@ public:
     QMap<int, int> m_pagecountsearch; //搜索结果页对应当前页个数
     int m_cursearch;
     bool m_bsearchfirst;
-    double m_imagewidth;
-    double m_imageheight;
     bool bcloseing;
     bool bfindnext;//上一次搜索结果是向前翻还是向后翻
     bool m_bScanningcopy;//当前打开的是否为扫描件
@@ -200,7 +196,7 @@ public:
     QString pagenum2label(int index);
     int label2pagenum(QString label);
     bool haslabel();
-    QPoint transformPoint(const QPoint &pt, RotateType_EM type, double scale);
+    QPoint transformPoint(const QPoint &pt, int pageIndex, RotateType_EM type, double scale);
     void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
 
 signals:

@@ -457,9 +457,8 @@ bool DocummentBase::showMagnifier(QPoint point)
         QPixmap pixmap;
         d->m_magnifierpage = pagenum;
 
-        double curwidth = d->m_scale * d->m_imagewidth;
-        double curheight = d->m_scale * d->m_imageheight;
-        double topspace = (d->m_widgets.at(pagenum)->height() - curheight) / 2.0;
+        double curwidth = d->m_scale * ppage->getOriginalImageWidth();
+
         double left = 0.0;
         int imaginfierradius = d->m_magnifierwidget->getMagnifierRadius();
         if (d->m_viewmode == ViewMode_SinglePage) {
@@ -920,9 +919,9 @@ bool DocummentBase::getSelectTextString(QString &st, int &page)
 void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool bsearch, QRectF rectsource)
 {
     Q_D(DocummentBase);
-    double curwidth = d->m_scale * d->m_imagewidth;
-    double curheight = d->m_scale * d->m_imageheight;
     PageBase *pagebase = d->m_pages.at(curpage);
+    double curwidth = d->m_scale * pagebase->getOriginalImageWidth();
+    double curheight = d->m_scale * pagebase->getOriginalImageHeight();
     QRectF rectorg;
     if (bsearch) {
         pagebase->setCurSearchShow(true);
@@ -1070,9 +1069,9 @@ bool DocummentBase::loadPages()
     int curheight = 1;
 
     if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180 || d->m_rotate == RotateType_Normal) {
-        curheight = d->m_scale * d->m_imageheight;
+        curheight = d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageHeight();
     } else {
-        curheight = d->m_scale * d->m_imagewidth;
+        curheight = d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageWidth();
     }
 
     int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
@@ -1585,9 +1584,9 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
     }
     int xvalue, yvalue;
     xvalue = yvalue = 0;
-    double curwidth = d->m_scale * d->m_imagewidth;
-    double curheight = d->m_scale * d->m_imageheight;
     if (ipage < d->m_pages.size()) {
+        double curwidth = d->m_scale * d->m_pages.at(ipage)->getOriginalImageWidth();
+        double curheight = d->m_scale * d->m_pages.at(ipage)->getOriginalImageHeight();
         if (d->m_viewmode == ViewMode_SinglePage) {
             switch (d->m_rotate) {
             case RotateType_Normal:
@@ -1661,7 +1660,7 @@ bool DocummentBase::haslabel()
     return d->m_label2pagenum.size() > 0 ? true : false;
 }
 
-QPoint DocummentBase::transformPoint(const QPoint &pt, RotateType_EM type, double scale)
+QPoint DocummentBase::transformPoint(const QPoint &pt, int pageIndex, RotateType_EM type, double scale)
 {
     Q_D(DocummentBase);
     QPoint pos;
@@ -1669,29 +1668,29 @@ QPoint DocummentBase::transformPoint(const QPoint &pt, RotateType_EM type, doubl
     switch (type) {
     case RotateType_0:
     case RotateType_Normal: {
-        curwidth = d->m_imagewidth * scale;
-        curheight = d->m_imageheight * scale;
+        curwidth = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
+        curheight = d->m_pages.at(pageIndex)->getOriginalImageHeight() * scale;
         pos.setX(pt.x());
         pos.setY(pt.y());
     }
     break;
     case RotateType_90: {
-        curwidth = d->m_imageheight  * scale;
-        curheight = d->m_imagewidth * scale;
+        curwidth = d->m_pages.at(pageIndex)->getOriginalImageHeight()  * scale;
+        curheight = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
         pos.setX(pt.y());
         pos.setY(curwidth - pt.x());
     }
     break;
     case RotateType_180: {
-        curwidth = d->m_imagewidth * scale;
-        curheight = d->m_imageheight * scale;
+        curwidth = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
+        curheight = d->m_pages.at(pageIndex)->getOriginalImageHeight() * scale;
         pos.setX(curwidth - pt.x());
         pos.setY(curheight - pt.y());
     }
     break;
     case RotateType_270: {
-        curwidth = d->m_imageheight  * scale;
-        curheight = d->m_imagewidth * scale;
+        curwidth = d->m_pages.at(pageIndex)->getOriginalImageHeight()  * scale;
+        curheight = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
         pos.setX((curheight - pt.y()));
         pos.setY(pt.x());
     }

@@ -87,9 +87,9 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
         m_pagenum2label.clear();
     }
     if (m_pages.size() > 0) {
-        m_imagewidth = m_pages.at(0)->getOriginalImageWidth();
-        m_imageheight = m_pages.at(0)->getOriginalImageHeight();
-        double sz = m_imageheight > m_imagewidth ? m_imageheight : m_imagewidth;
+        qreal imagewidth = m_pages.at(0)->getOriginalImageWidth();
+        qreal imageheight = m_pages.at(0)->getOriginalImageHeight();
+        double sz = imageheight > imagewidth ? imageheight : imagewidth;
         m_maxzoomratio = MAXPAGEHEIGHT / (sz * qApp->devicePixelRatio());
         m_maxzoomratio = m_maxzoomratio > 5.0 ? 5.0 : m_maxzoomratio;
         m_scale = m_scale > m_maxzoomratio ? m_maxzoomratio : m_scale;
@@ -160,10 +160,10 @@ void DocummentPDF::jumpToHighLight(const QString &uuid, int ipageIndex)
                     rectbound.setBottomLeft(listquad.at(0).points[3]);
                     rectbound.setBottomRight(listquad.at(0).points[2]);
                     int xvalue = 0, yvalue = 0;
-                    rectbound.setX(rectbound.x()*d->m_imagewidth);
-                    rectbound.setY(rectbound.y()*d->m_imageheight);
-                    rectbound.setWidth(rectbound.width()*d->m_imagewidth);
-                    rectbound.setHeight(rectbound.height()*d->m_imageheight);
+                    rectbound.setX(rectbound.x()*d->m_pages.at(ipageIndex)->getOriginalImageWidth());
+                    rectbound.setY(rectbound.y()*d->m_pages.at(ipageIndex)->getOriginalImageHeight());
+                    rectbound.setWidth(rectbound.width()*d->m_pages.at(ipageIndex)->getOriginalImageWidth());
+                    rectbound.setHeight(rectbound.height()*d->m_pages.at(ipageIndex)->getOriginalImageHeight());
                     cacularValueXY(xvalue, yvalue, ipageIndex, false, rectbound);
                     QScrollBar *scrollBar_Y = verticalScrollBar();
                     if (scrollBar_Y)
@@ -632,14 +632,14 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
         switch (d->m_rotate) {
         case RotateType_0:
         case RotateType_180: {
-            curwidth = d->m_imagewidth * d->m_scale;
-            curheight = d->m_imageheight * d->m_scale;
+            curwidth = d->m_pages.at(ipage)->getOriginalImageWidth() * d->m_scale;
+            curheight = d->m_pages.at(ipage)->getOriginalImageHeight() * d->m_scale;
         }
         break;
         case RotateType_90:
         case RotateType_270: {
-            curwidth = d->m_imageheight * d->m_scale;
-            curheight = d->m_imagewidth * d->m_scale;
+            curwidth = d->m_pages.at(ipage)->getOriginalImageHeight() * d->m_scale;
+            curheight = d->m_pages.at(ipage)->getOriginalImageWidth() * d->m_scale;
         }
         break;
         }
@@ -661,7 +661,7 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
             y = (pt.y() < space / 2) ? space / 2 : pt.y();
         }
         pt.setY(y);
-        pt = transformPoint(pt, d->m_rotate, d->m_scale);
+        pt = transformPoint(pt, ipage, d->m_rotate, d->m_scale);
         uuid = static_cast<PagePdf *>(d->m_pages.at(ipage))->addTextAnnotation(pt, color, type);
     }
     return  uuid;
