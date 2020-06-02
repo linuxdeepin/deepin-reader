@@ -6,7 +6,6 @@
 #include "widgets/FontMenu.h"
 #include "widgets/HandleMenu.h"
 #include "TitleMenu.h"
-//#include "utils/PublicFunction.h"
 #include "DocSheet.h"
 
 TitleWidget::TitleWidget(DWidget *parent)

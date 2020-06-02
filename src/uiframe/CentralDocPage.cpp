@@ -42,7 +42,6 @@
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
-//#include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "CentralDocPage.h"
 #include "global.h"

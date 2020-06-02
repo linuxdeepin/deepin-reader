@@ -24,7 +24,6 @@
 #include "bookmark/BookMarkWidget.h"
 #include "note/NotesWidget.h"
 #include "search/SearchResWidget.h"
-//#include "utils/PublicFunction.h"
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
