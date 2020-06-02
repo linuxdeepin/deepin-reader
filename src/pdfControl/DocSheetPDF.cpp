@@ -51,9 +51,9 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_browser, SIGNAL(sigSizeChanged(double)), this, SLOT(onBrowserSizeChanged(double)));
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onPageChanged(int)));
+    connect(m_browser, SIGNAL(sigDataChanged()), this, SLOT(onDataChanged()));
     connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(onFileOpenResult(const QString &, const bool &)));
     connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
-    connect(m_browser, SIGNAL(sigFileChanged()), this, SLOT(onFileChanged()));
     connect(m_browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
     connect(m_browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
     connect(m_browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
@@ -224,7 +224,8 @@ void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
         m_operation.scaleMode = mode;
-        m_browser->setFit(mode);
+        m_operation.scaleFactor = m_browser->setFit(mode) / 100.00;
+        emit sigFileChanged(this);
     }
 }
 
@@ -233,6 +234,7 @@ void DocSheetPDF::setScaleFactor(qreal scaleFactor)
     m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->setScale(scaleFactor * 100);
+    emit sigFileChanged(this);
 }
 
 void DocSheetPDF::openMagnifier()
@@ -301,7 +303,7 @@ void DocSheetPDF::onShowTips(const QString &tips, int index)
     showTips(tips, index);
 }
 
-void DocSheetPDF::onFileChanged()
+void DocSheetPDF::onDataChanged()
 {
     emit sigFileChanged(this);
 }

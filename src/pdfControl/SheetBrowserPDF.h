@@ -76,7 +76,7 @@ signals:
 
     void sigUpdateThumbnail(const int &);
 
-    void sigFileChanged();
+    void sigDataChanged();
 
     void sigRotateChanged(int rotate);
 
@@ -118,7 +118,7 @@ protected:
 
 private:
     void initConnections();
-    void setFit(int fit);
+    double setFit(int fit);
     void setScale(double scale);
     void setDoubleShow(bool isShow);
 

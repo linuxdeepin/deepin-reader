@@ -34,8 +34,8 @@ void SheetBrowserPDF::setDoubleShow(bool isShow)
     d->m_pDocViewProxy->setDoubleShow(isShow);
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
 
-    double scale = d->handleResize(size());
-    d->m_sheet->setScaleFactor(scale);
+    double scaleFactor = d->handleResize(size());
+    d->m_sheet->setScaleFactor(scaleFactor);
     emit setFileChanged(getFileChange());
 }
 
@@ -85,8 +85,6 @@ void SheetBrowserPDF::setMouseDefault()
     d->m_pProxy->mouseSelectTextClear();
 
     d->__SetCursor(Qt::ArrowCursor);
-
-    emit sigFileChanged();
 }
 
 void SheetBrowserPDF::setMouseHand()
@@ -100,8 +98,6 @@ void SheetBrowserPDF::setMouseHand()
     d->m_pProxy->mouseSelectTextClear();
 
     d->__SetCursor(Qt::OpenHandCursor);
-
-    emit sigFileChanged();
 }
 
 bool SheetBrowserPDF::isDoubleShow()
@@ -117,18 +113,19 @@ void SheetBrowserPDF::setScale(double scale)
 
     d->m_pDocViewProxy->setScale(scale);
     d->m_pDocViewProxy->setScaleRotateViewModeAndShow();
-    emit sigFileChanged();
 }
 
-void SheetBrowserPDF::setFit(int fit)
+double SheetBrowserPDF::setFit(int fit)
 {
     Q_D(SheetBrowserPDF);
 
     double scale = d->m_pDocViewProxy->setFit(fit);
+
     if (-1 != scale && d->m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         setScale(scale);
     }
-    emit sigFileChanged();
+
+    return scale;
 }
 
 void SheetBrowserPDF::setBookMark(int page, int state)
@@ -176,8 +173,8 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
     Q_D(SheetBrowserPDF);
 
     if (d->hasOpened()) {
-        double scale = d->handleResize(event->size());
-        emit sigSizeChanged(scale / 100.00);
+        double scaleFactor = d->handleResize(event->size());
+        emit sigSizeChanged(scaleFactor);
     }
 
     CustomWidget::resizeEvent(event);

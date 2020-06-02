@@ -122,7 +122,7 @@ private slots:
 
     void onShowTips(const QString &tips, int);
 
-    void onFileChanged();
+    void onDataChanged();
 
     void onSplitterMoved(int, int);
 
