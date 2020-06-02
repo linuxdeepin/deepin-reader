@@ -25,7 +25,6 @@
         <file>builtin/light/icons/dr_a_big_14px.svg</file>
         <file>builtin/light/icons/close.svg</file>
         <file>builtin/light/icons/dr_a_small_14px.svg</file>
-        <file>builtin/light/icons/dr_exception-logo_36px.svg</file>
         <file>builtin/light/icons/dr_exit_slider_36px.svg</file>
         <file>builtin/light/texts/dr_catalog_36px.svg</file>
         <file>builtin/light/texts/dr_annotation_36px.svg</file>
@@ -44,14 +43,19 @@
         <file>builtin/bookmark_pressed.svg</file>
         <file>builtin/bookmark.svg</file>
         <file>builtin/deepin-reader.svg</file>
-        <file>builtin/exception-logo.svg</file>
-        <file>builtin/maganifier.svg</file>
-        <file>builtin/ok.svg</file>
-        <file>builtin/select.svg</file>
-        <file>builtin/warning.svg</file>
         <file>builtin/light/icons/dr_close_24px.svg</file>
         <file>builtin/dark/icons/dr_close_24px.svg</file>
         <file>builtin/light/actions/dr_import_photo_128px.svg</file>
         <file>builtin/dark/actions/dr_import_photo_128px.svg</file>
+        <file>builtin/light/icons/dr_ok_26px.svg</file>
+        <file>builtin/light/icons/dr_select_26px.svg</file>
+        <file>builtin/light/icons/dr_warning_26px.svg</file>
+        <file>builtin/dark/icons/dr_ok_26px.svg</file>
+        <file>builtin/dark/icons/dr_select_26px.svg</file>
+        <file>builtin/dark/icons/dr_warning_26px.svg</file>
+        <file>builtin/light/icons/dr_maganifier_244px.svg</file>
+        <file>builtin/dark/icons/dr_maganifier_244px.svg</file>
+        <file>builtin/light/icons/dr_exception-logo_32px.svg</file>
+        <file>builtin/dark/icons/dr_exception-logo_32px.svg</file>
     </qresource>
 </RCC>

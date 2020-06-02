@@ -13,10 +13,9 @@ BookMarkButton::BookMarkButton(DWidget *parent)
       ispressed(false),
       isclicked(false)
 {
-    setFixedSize(QSize(36, 36));
+    setFixedSize(QSize(39, 39));
     setMouseTracking(true);
 }
-
 
 bool BookMarkButton::clickState()
 {
@@ -32,14 +31,18 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     QString iconPath;
+//    QPixmap pixmap;
     if (isclicked) {
         iconPath += ":/icons/deepin/builtin/bookmark.svg";
+//        pixmap = QIcon::fromTheme("dr_bookmark").pixmap(QSize(39, 39));
     } else {
         if (ispressed) {
             iconPath += ":/icons/deepin/builtin/bookmark_pressed.svg";
+//            pixmap = QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39));
         } else {
             if (ishovered) {
                 iconPath += ":/icons/deepin/builtin/bookmark_hover.svg";
+//                pixmap = QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39));
             }
         }
     }
@@ -49,14 +52,12 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
 }
 
 void BookMarkButton::enterEvent(QEvent *e)
-
 {
     ishovered = true;
     repaint();
 }
 
 void BookMarkButton::leaveEvent(QEvent *e)
-
 {
     ishovered = false;
     repaint();

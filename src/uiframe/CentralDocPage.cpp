@@ -42,7 +42,7 @@
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "utils/PublicFunction.h"
+//#include "utils/PublicFunction.h"
 #include "utils/utils.h"
 #include "CentralDocPage.h"
 #include "global.h"
@@ -405,8 +405,8 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.pdf")) {
                 DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(":/icons/deepin/builtin/exception-logo");
-                dlg.setIcon(icon);
+//                QIcon icon(":/icons/deepin/builtin/exception-logo");
+                dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);
@@ -425,8 +425,8 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.djvu")) {
                 DDialog dlg("", tr("Invalid file name"));
-                QIcon icon(":/icons/deepin/builtin/exception-logo");
-                dlg.setIcon(icon);
+//                QIcon icon(":/icons/deepin/builtin/exception-logo");
+                dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);

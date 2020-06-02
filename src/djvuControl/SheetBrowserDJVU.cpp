@@ -257,7 +257,7 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
             painter.setClipPath(clippath);
             painter.drawImage(0, 0, image);
-            painter.drawPixmap(0, 0, 234, 234, QPixmap(":/icons/deepin/builtin/maganifier.svg"));
+            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244))/*QPixmap(":/icons/deepin/builtin/maganifier.svg")*/);
             m_magnifierLabel->setPixmap(pix);
 
         } else {
@@ -268,9 +268,8 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
             painter.setClipPath(clippath);
             painter.fillRect(0, 0, 234, 234, Qt::white);
-            painter.drawPixmap(0, 0, 234, 234, QPixmap(":/icons/deepin/builtin/maganifier.svg"));
+            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244))/*QPixmap(":/icons/deepin/builtin/maganifier.svg")*/);
             m_magnifierLabel->setPixmap(pix);
-
         }
 
         m_magnifierLabel->move(QPoint(event->pos().x() - 117, event->pos().y() - 117));
