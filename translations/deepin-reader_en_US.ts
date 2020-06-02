@@ -161,6 +161,10 @@
         <source>The format is not supported</source>
         <translation>The format is not supported</translation>
     </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="unfinished">Please check if the file is damaged</translation>
+    </message>
 </context>
 <context>
     <name>CentralNavPage</name>
@@ -612,7 +616,7 @@
     </message>
     <message>
         <source>Please check if the file is damaged</source>
-        <translation>Please check if the file is damaged</translation>
+        <translation type="vanished">Please check if the file is damaged</translation>
     </message>
 </context>
 <context>

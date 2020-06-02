@@ -36,6 +36,7 @@ void CentralNavPage::initWidget()
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"), this);
+    chooseBtn->setFocusPolicy(Qt::StrongFocus);
     int tW = 302;
     int tH = 36;
     chooseBtn->setFixedSize(QSize(tW, tH));

@@ -165,12 +165,12 @@ void Central::handleShortcut(QString shortcut)
 
 void Central::onSheetCountChanged(int count)
 {
-    auto pLayout = this->findChild<QStackedLayout *>();
-    if (pLayout) {
+    if (m_layout) {
         if (count > 0) {
-            pLayout->setCurrentIndex(1);
+            m_layout->setCurrentIndex(1);
         } else if (count == 0) {
-            pLayout->setCurrentIndex(0);
+            m_layout->setCurrentIndex(0);
+            m_navPage->setFocus();
             if (m_widget) {
                 m_widget->setControlEnabled(false);
             }
@@ -219,13 +219,12 @@ void Central::onShowTips(const QString &text, int iconIndex)
             DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
         else
             DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
-        return;
+    } else {
+        if (0 == iconIndex)
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
+        else
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
     }
-
-    if (0 == iconIndex)
-        DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
-    else
-        DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
 }
 
 void Central::dragEnterEvent(QDragEnterEvent *event)

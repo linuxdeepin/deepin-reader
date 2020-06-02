@@ -446,9 +446,6 @@ void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
         for (int page  : pageList) {
             q->setBookMark(page, true);
         }
-    } else {
-        m_sheet->showTips(tr("Please check if the file is damaged"), 1);
-
     }
 
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);

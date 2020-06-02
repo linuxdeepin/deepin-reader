@@ -147,8 +147,10 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-        if (!sheet->openFileExec())
+        if (!sheet->openFileExec()) {
+            sheet->deleteLater();
             return;
+        }
 
         m_pStackedLayout->addWidget(sheet);
 
@@ -188,6 +190,10 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
+        if (nullptr != sheet)
+            sheet->deleteLater();
+
+        showTips(tr("Please check if the file is damaged"), 1);
     }
 
 }
@@ -382,7 +388,7 @@ bool CentralDocPage::saveCurrent()
     }
 
     if (!sheet->saveData()) {
-        showTips(tr("Save failed"));
+        showTips(tr("Save failed"), 1);
         return false;
     }
 
