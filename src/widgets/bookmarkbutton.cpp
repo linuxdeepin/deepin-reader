@@ -31,23 +31,19 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     QString iconPath;
-//    QPixmap pixmap;
+    QPixmap pixmap;
     if (isclicked) {
-        iconPath += ":/icons/deepin/builtin/bookmark.svg";
-//        pixmap = QIcon::fromTheme("dr_bookmark").pixmap(QSize(39, 39));
+        pixmap = QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39));
     } else {
         if (ispressed) {
-            iconPath += ":/icons/deepin/builtin/bookmark_pressed.svg";
-//            pixmap = QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39));
+            pixmap = QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39));
         } else {
             if (ishovered) {
-                iconPath += ":/icons/deepin/builtin/bookmark_hover.svg";
-//                pixmap = QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39));
+                pixmap = QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39));
             }
         }
     }
 
-    QPixmap pixmap(iconPath);
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
 }
 
