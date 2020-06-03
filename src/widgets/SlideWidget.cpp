@@ -18,6 +18,7 @@
 #include "MainWindow.h"
 #include "DocSheet.h"
 #include "SlidePlayWidget.h"
+#include "application.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -227,11 +228,13 @@ void SlideWidget::onImageShowTimeOut()
 
 QPixmap SlideWidget::drawImage(const QImage &srcImage)
 {
-    QPixmap pixmap(this->width(), this->height());
+    QPixmap pixmap(this->width() * dApp->devicePixelRatio(), this->height() * dApp->devicePixelRatio());
+    pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
-    painter.drawImage((pixmap.width() - srcImage.width()) / 2.0, (pixmap.height() - srcImage.height()) / 2.0, srcImage);
+    painter.drawImage((pixmap.width() - srcImage.width()) * 0.5 / dApp->devicePixelRatio(), (pixmap.height() - srcImage.height()) * 0.5 / dApp->devicePixelRatio(), srcImage);
+
     return pixmap;
 }
 
