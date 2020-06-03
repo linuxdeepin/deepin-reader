@@ -85,6 +85,7 @@ void DocSheetDJVU::rotateLeft()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
+    m_sidebar->handleRotate(m_operation.rotation);
     emit sigFileChanged(this);
 }
 
@@ -100,6 +101,7 @@ void DocSheetDJVU::rotateRight()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
+    m_sidebar->handleRotate(m_operation.rotation);
     emit sigFileChanged(this);
 }
 

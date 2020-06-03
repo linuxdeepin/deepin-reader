@@ -78,8 +78,6 @@ signals:
 
     void sigDataChanged();
 
-    void sigRotateChanged(int rotate);
-
     void sigPageChanged(int index);
 
     void sigFindContantComming(const stSearchRes &);    //搜索到新的词

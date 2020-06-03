@@ -132,8 +132,6 @@ private slots:
 
     void onFindFinished();
 
-    void onRotate(int rotate);
-
     void onAnntationMsg(const int &, const QString &);
 
     void onPageChanged(int index);

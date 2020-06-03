@@ -43,7 +43,6 @@ int SheetBrowserPDF::rotateLeft()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateLeft();
-    emit sigRotateChanged(rotate);
     return rotate;
 }
 
@@ -51,7 +50,6 @@ int SheetBrowserPDF::rotateRight()
 {
     Q_D(SheetBrowserPDF);
     int rotate = d->m_pDocViewProxy->setViewRotateRight();
-    emit sigRotateChanged(rotate);
     return rotate;
 }
 

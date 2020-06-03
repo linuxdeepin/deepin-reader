@@ -168,11 +168,13 @@ void DocSheetPDF::jumpToPrevPage()
 void DocSheetPDF::rotateLeft()
 {
     m_operation.rotation = (Dr::Rotation)m_browser->rotateLeft();
+    m_sidebar->handleRotate(m_operation.rotation);
 }
 
 void DocSheetPDF::rotateRight()
 {
     m_operation.rotation = (Dr::Rotation)m_browser->rotateRight();
+    m_sidebar->handleRotate(m_operation.rotation);
 }
 
 void DocSheetPDF::setFileChanged(bool hasChanged)
@@ -348,11 +350,6 @@ void DocSheetPDF::onFindFinished()
 {
     int count = m_sidebar->handleFindFinished();
     m_pFindWidget->setEditAlert(count == 0);
-}
-
-void DocSheetPDF::onRotate(int rotate)
-{
-    m_sidebar->handleRotate(rotate);
 }
 
 void DocSheetPDF::onAnntationMsg(const int &msg, const QString &text)
