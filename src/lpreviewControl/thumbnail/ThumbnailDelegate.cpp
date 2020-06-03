@@ -39,13 +39,12 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
         QMatrix matrix;
         matrix.rotate(rotate);
-        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
+        QPixmap pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
 
         if (!pixmap.isNull()) {
             const int borderRadius = 6;
-
             const QPixmap &scalePix = pixmap.scaled(pixmap.width() * pixscale, pixmap.height() * pixscale, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            const QSize &scalePixSize = scalePix.size();
+            const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
             const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
             //clipPath pixmap

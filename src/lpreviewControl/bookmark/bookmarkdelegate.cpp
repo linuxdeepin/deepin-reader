@@ -37,7 +37,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         if (!pixmap.isNull()) {
             const int borderRadius = 6;
             const QPixmap &scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            const QSize &scalePixSize = scalePix.size();
+            const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
             const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
             //clipPath pixmap
