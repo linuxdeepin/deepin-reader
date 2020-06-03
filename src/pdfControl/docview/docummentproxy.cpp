@@ -213,7 +213,8 @@ bool DocummentProxy::save(const QString &filepath)
     if (!m_documment->save(filepath)) {
         return false;
     }
-    return true;//m_documment->freshFile(filepath);
+
+    return m_documment->freshFile(filepath);        //需要内部重新打开,不然第二次保存会失败
 }
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)

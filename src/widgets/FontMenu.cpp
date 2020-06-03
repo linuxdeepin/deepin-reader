@@ -168,7 +168,6 @@ QAction *FontMenu::createAction(const QString &objName, const char *member, bool
         connect(action, SIGNAL(triggered()), this, member);
 
         this->addAction(action);
-//        this->addSeparator();
 
         return action;
     }
