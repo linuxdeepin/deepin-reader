@@ -44,7 +44,9 @@ PagingWidget::~PagingWidget()
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"));
-    DFontSizeManager::instance()->bind(m_pTotalPagesLab, DFontSizeManager::T6);
+    QFont font = m_pTotalPagesLab->font();
+    font.setPointSize(12);
+    m_pTotalPagesLab->setFont(font);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
     int tW = 36;
@@ -66,11 +68,15 @@ void PagingWidget::initWidget()
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
-    DFontSizeManager::instance()->bind(m_pJumpPageLineEdit, DFontSizeManager::T6);
+    font = m_pJumpPageLineEdit->font();
+    font.setPointSize(12);
+    m_pJumpPageLineEdit->setFont(font);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pCurrantPageLab = new CustomClickLabel("");
-    DFontSizeManager::instance()->bind(m_pCurrantPageLab, DFontSizeManager::T6);
+    font = m_pCurrantPageLab->font();
+    font.setPointSize(12);
+    m_pCurrantPageLab->setFont(font);
     m_pCurrantPageLab->setForegroundRole(DPalette::Text);
 
     auto hLayout = new QHBoxLayout;
