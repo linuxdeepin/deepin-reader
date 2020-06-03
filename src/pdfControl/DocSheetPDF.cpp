@@ -57,7 +57,6 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     connect(m_browser, SIGNAL(sigDataChanged()), this, SLOT(onDataChanged()));
     connect(m_browser, SIGNAL(sigFileOpenResult(const QString &, const bool &)), this, SLOT(onFileOpenResult(const QString &, const bool &)));
     connect(m_browser, SIGNAL(sigAnntationMsg(const int &, const QString &)), this, SLOT(onAnntationMsg(int, QString)));
-    connect(m_browser, SIGNAL(sigRotateChanged(int)), this, SLOT(onRotate(int)));
     connect(m_browser, SIGNAL(sigFindContantComming(const stSearchRes &)), this, SLOT(onFindContentComming(const stSearchRes &)));
     connect(m_browser, SIGNAL(sigFindFinished()), this, SLOT(onFindFinished()));
     connect(m_browser, &SheetBrowserPDF::sigUpdateThumbnail, this, [ = ](const int &page) {
