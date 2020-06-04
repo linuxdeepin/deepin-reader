@@ -204,7 +204,7 @@ void ShortCutShow::initDJVU()
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
     Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames << tr("Thumbnails") << tr("Fit page") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
+    Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
                  << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search") << tr("Slide show");
@@ -247,7 +247,7 @@ void ShortCutShow::initPDF()
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
     Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames << tr("Thumbnails") << tr("Fit page") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
+    Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
                  << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search") << tr("Slide show");

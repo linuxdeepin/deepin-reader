@@ -714,7 +714,7 @@
     </message>
     <message>
         <source>Fit page</source>
-        <translation>适应页面</translation>
+        <translation type="vanished">适应页面</translation>
     </message>
     <message>
         <source>Fit height</source>

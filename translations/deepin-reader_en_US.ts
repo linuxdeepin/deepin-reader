@@ -714,7 +714,7 @@
     </message>
     <message>
         <source>Fit page</source>
-        <translation>Fit page</translation>
+        <translation type="vanished">Fit page</translation>
     </message>
     <message>
         <source>Fit height</source>
