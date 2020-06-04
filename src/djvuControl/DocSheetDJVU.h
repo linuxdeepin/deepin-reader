@@ -60,6 +60,8 @@ public:
 
     void closeMagnifier()override;
 
+    void defaultFocus()override;
+
     bool magnifierOpened()override;
 
     void docBasicInfo(stFileInfo &info)override;

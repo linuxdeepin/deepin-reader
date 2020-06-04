@@ -482,6 +482,12 @@ QString DocSheetPDF::addIconAnnotation(const QPoint &pos, const QColor &color, T
     return "";
 }
 
+void DocSheetPDF::defaultFocus()
+{
+    if (m_browser)
+        m_browser->defaultFocus();
+}
+
 int  DocSheetPDF::pointInWhichPage(QPoint pos)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();

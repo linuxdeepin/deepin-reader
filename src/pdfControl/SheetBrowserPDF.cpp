@@ -322,6 +322,12 @@ void SheetBrowserPDF::addSelectedTextHightlightAnnotation()
     d->DocFile_ctrl_i();
 }
 
+void SheetBrowserPDF::defaultFocus()
+{
+    Q_D(SheetBrowserPDF);
+    d->m_pProxy->setFocus();
+}
+
 //  信号槽　初始化
 void SheetBrowserPDF::initConnections()
 {

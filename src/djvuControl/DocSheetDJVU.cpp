@@ -232,6 +232,12 @@ void DocSheetDJVU::closeMagnifier()
         m_browser->closeMagnifier();
 }
 
+void DocSheetDJVU::defaultFocus()
+{
+    if (m_browser)
+        m_browser->setFocus();
+}
+
 bool DocSheetDJVU::magnifierOpened()
 {
     if (m_browser)

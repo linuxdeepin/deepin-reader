@@ -78,6 +78,7 @@ public:
     int label2pagenum(QString label);
     bool haslabel();
 
+    void setFocus();
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

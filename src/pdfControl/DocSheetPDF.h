@@ -103,6 +103,8 @@ public:
 
     QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
 
+    void defaultFocus()override;
+
     int pointInWhichPage(QPoint pos);
 
     void setFileChanged(bool hasChanged);

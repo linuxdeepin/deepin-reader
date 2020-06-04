@@ -67,6 +67,8 @@ public:
 
     void addSelectedTextHightlightAnnotation();
 
+    void defaultFocus();
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
 

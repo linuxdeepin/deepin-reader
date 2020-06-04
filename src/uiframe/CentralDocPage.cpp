@@ -157,15 +157,14 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pStackedLayout->setCurrentWidget(sheet);
 
-        sheet->defaultFocus();
-
         m_pTabBar->insertSheet(sheet);
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
         emit sigSheetCountChanged(m_pStackedLayout->count());
 
-        this->activateWindow();
+        onOpened(sheet, true);
+
 
     } else {
         showTips(tr("The format is not supported"), 1);
@@ -197,6 +196,7 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
         showTips(tr("Please check if the file is damaged"), 1);
     }
 
+    sheet->defaultFocus();
 }
 
 void CentralDocPage::onTabChanged(DocSheet *sheet)

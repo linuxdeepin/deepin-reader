@@ -205,6 +205,13 @@ bool DocummentProxy::haslabel()
     return m_documment->haslabel();
 }
 
+void DocummentProxy::setFocus()
+{
+    if (!m_documment)
+        return;
+    m_documment->setFocus();
+}
+
 bool DocummentProxy::save(const QString &filepath)
 {
     if (!m_documment || bcloseing)
