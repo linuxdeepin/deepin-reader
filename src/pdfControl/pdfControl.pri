@@ -26,7 +26,10 @@ HEADERS += \
     $$PWD/database/dbservice_global.h \
     $$PWD/database/DBService.h \
     $$PWD/database/FileDataModel.h \
-    $$PWD/database/HistroyDB.h
+    $$PWD/database/HistroyDB.h \
+    $$PWD/menu/ColorWidgetAction.h \
+    $$PWD/menu/DefaultOperationMenu.h \
+    $$PWD/menu/TextOperationMenu.h
 
 SOURCES += \
     $$PWD/controller/Annotation.cpp \
@@ -50,4 +53,7 @@ SOURCES += \
     $$PWD/database/DBFactory.cpp \
     $$PWD/database/DBService.cpp \
     $$PWD/database/FileDataModel.cpp \
-    $$PWD/database/HistroyDB.cpp
+    $$PWD/database/HistroyDB.cpp \
+    $$PWD/menu/ColorWidgetAction.cpp \
+    $$PWD/menu/DefaultOperationMenu.cpp \
+    $$PWD/menu/TextOperationMenu.cpp

@@ -6,11 +6,6 @@ HEADERS += \
     $$PWD/bookmark/bookmarkdelegate.h \
     $$PWD/catalog/CatalogTreeView.h \
     $$PWD/catalog/CatalogWidget.h \
-    $$PWD/menu/BookMarkMenu.h \
-    $$PWD/menu/ColorWidgetAction.h \
-    $$PWD/menu/DefaultOperationMenu.h \
-    $$PWD/menu/NoteMenu.h \
-    $$PWD/menu/TextOperationMenu.h \
     $$PWD/note/NoteViewWidget.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/TransparentTextEdit.h \
@@ -20,7 +15,9 @@ HEADERS += \
     $$PWD/threadmanager/readerimagethreadpoolmanager.h \
     $$PWD/thumbnail/PagingWidget.h \
     $$PWD/thumbnail/ThumbnailDelegate.h \
-    $$PWD/thumbnail/ThumbnailWidget.h
+    $$PWD/thumbnail/ThumbnailWidget.h \
+    $$PWD/menu/BookMarkMenu.h \
+    $$PWD/menu/NoteMenu.h
 
 SOURCES += \
     $$PWD/ImageListview.cpp \
@@ -30,11 +27,6 @@ SOURCES += \
     $$PWD/bookmark/bookmarkdelegate.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
     $$PWD/catalog/CatalogWidget.cpp \
-    $$PWD/menu/BookMarkMenu.cpp \
-    $$PWD/menu/ColorWidgetAction.cpp \
-    $$PWD/menu/DefaultOperationMenu.cpp \
-    $$PWD/menu/NoteMenu.cpp \
-    $$PWD/menu/TextOperationMenu.cpp \
     $$PWD/note/NoteViewWidget.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/TransparentTextEdit.cpp \
@@ -44,4 +36,6 @@ SOURCES += \
     $$PWD/threadmanager/readerimagethreadpoolmanager.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
     $$PWD/thumbnail/ThumbnailDelegate.cpp \
-    $$PWD/thumbnail/ThumbnailWidget.cpp
+    $$PWD/thumbnail/ThumbnailWidget.cpp \
+    $$PWD/menu/NoteMenu.cpp \
+    $$PWD/menu/BookMarkMenu.cpp
