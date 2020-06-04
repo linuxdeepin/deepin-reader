@@ -48,8 +48,7 @@ void ShortCutShow::setSheet(DocSheet *sheet)
 void ShortCutShow::show()
 {
     QRect rect = qApp->desktop()->geometry();
-    QPoint pos(rect.x() + rect.width() / 2,
-               rect.y() + rect.height() / 2);
+    QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
@@ -227,7 +226,7 @@ void ShortCutShow::initPDF()
     Toolsnames.clear();
     Editnames.clear();
 
-    windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
+    windowKeymaps << KeyStr::g_esc  << KeyStr::g_f1
                   << KeyStr::g_ctrl_f << "PageUp" << "PageDown" << KeyStr::g_ctrl_o << KeyStr::g_ctrl_larger
                   << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
@@ -236,7 +235,7 @@ void ShortCutShow::initPDF()
                   << KeyStr::g_ctrl_h
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << "Ctrl+Shift+?";
 
-    shortcutnames << /*tr("Fullscreen") << */tr("Exit") << tr("Help")
+    shortcutnames << tr("Exit") << tr("Help")
                   << tr("Search") << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")
                   << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
                   << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
@@ -246,12 +245,12 @@ void ShortCutShow::initPDF()
                   << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
-    Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                 << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
-    Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-               << tr("Magnifier") << tr("Search") << tr("Slide show");
-    Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+    Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
+    Displaynames  << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
+                  << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
+    Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
+                  << tr("Magnifier") << tr("Search") << tr("Slide show");
+    Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
     int index = 0;
     foreach (QString strname, shortcutnames) {
