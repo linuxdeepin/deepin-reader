@@ -310,22 +310,40 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
             mousePos.setY(122);
         }
+<<<<<<< HEAD
 
         if (mousePos.x() < 122) {
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
             mousePos.setX(122);
         }
 
+=======
+
+        if (mousePos.x() < 122) {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
+            mousePos.setX(122);
+        }
+
+>>>>>>> chore: djvu放大镜改为同pdf支持滚动
         if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
             verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
             mousePos.setY(this->size().height() - 122);
         }
+<<<<<<< HEAD
 
         if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
             mousePos.setX(this->size().width() - 122);
         }
 
+=======
+
+        if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
+            mousePos.setX(this->size().width() - 122);
+        }
+
+>>>>>>> chore: djvu放大镜改为同pdf支持滚动
         QImage image;
         QPixmap pix(244, 244);
         pix.fill(Qt::transparent);
@@ -336,17 +354,22 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             painter.setClipPath(clippath);
             painter.drawImage(0, 0, image);
 <<<<<<< HEAD
+<<<<<<< HEAD
             painter.end();
 =======
             painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
             m_magnifierLabel->setPixmap(pix);
 
 >>>>>>> chore: 删除无用代码
+=======
+            painter.end();
+>>>>>>> chore: djvu放大镜改为同pdf支持滚动
         } else {
             QPainter painter(&pix);
             QPainterPath clippath;
             clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
             painter.setClipPath(clippath);
+<<<<<<< HEAD
 <<<<<<< HEAD
             painter.fillRect(0, 0, 244, 244, Qt::white);
             painter.end();
@@ -355,6 +378,10 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
             m_magnifierLabel->setPixmap(pix);
 >>>>>>> chore: 删除无用代码
+=======
+            painter.fillRect(0, 0, 244, 244, Qt::white);
+            painter.end();
+>>>>>>> chore: djvu放大镜改为同pdf支持滚动
         }
 
         QPainter painter(&pix);
