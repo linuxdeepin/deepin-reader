@@ -205,10 +205,14 @@ void ShortCutShow::initDJVU()
     Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
     Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
 <<<<<<< HEAD
+<<<<<<< HEAD
                  << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
 =======
                  << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
 >>>>>>> fix:  修复ctrl_1快捷键丢失的问题/更新翻译
+=======
+                 << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
+>>>>>>> fix: 修复ctrl+1的快捷键显示问题
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search") << tr("Slide show");
     Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
@@ -259,7 +263,7 @@ void ShortCutShow::initPDF()
 =======
     Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
     Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                 << tr("Zoom in") << tr("Zoom out") /*<< tr("Zoom in/Zoom out") */ << tr("Page up") << tr("Page down") /*<< tr("Fullscreen")*/ << tr("Exit") ;
+                 << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
     Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                << tr("Magnifier") << tr("Search") << tr("Slide show");
     Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
