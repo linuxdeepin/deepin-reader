@@ -627,6 +627,7 @@ QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextA
     annotation->setStyle(style);
     annotation->setPopup(popup);
     annotation->setUniqueName(uuid);
+    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
     d->m_page->addAnnotation(annotation);
 
     delete annotation;
