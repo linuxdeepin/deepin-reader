@@ -121,7 +121,7 @@ QImage SheetBrowserDJVUItem::getImageRect(double scaleFactor, QRect rect)
 
 QImage SheetBrowserDJVUItem::getImagePoint(double scaleFactor, QPoint point)
 {
-    QRect rect = QRect(point.x() * scaleFactor / m_scaleFactor - 117, point .y() * scaleFactor / m_scaleFactor  - 117, 234, 234);
+    QRect rect = QRect(point.x() * scaleFactor / m_scaleFactor - 122, point .y() * scaleFactor / m_scaleFactor  - 122, 244, 244);
 
     return m_page->render(m_rotation, scaleFactor, rect);
 }

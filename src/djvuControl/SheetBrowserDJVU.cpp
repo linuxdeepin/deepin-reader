@@ -246,33 +246,52 @@ void SheetBrowserDJVU::resizeEvent(QResizeEvent *event)
 void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_magnifierLabel) {
-        QImage image;
+        QPoint mousePos = event->pos();
 
-        if (getImagePoint(event->pos(), m_lastScaleFactor + 2, image) && !image.isNull()) {
-
-            QPixmap pix(234, 234);
-            pix.fill(Qt::transparent);
-            QPainter painter(&pix);
-            QPainterPath clippath;
-            clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
-            painter.setClipPath(clippath);
-            painter.drawImage(0, 0, image);
-            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244))/*QPixmap(":/icons/deepin/builtin/maganifier.svg")*/);
-            m_magnifierLabel->setPixmap(pix);
-
-        } else {
-            QPixmap pix(234, 234);
-            pix.fill(Qt::transparent);
-            QPainter painter(&pix);
-            QPainterPath clippath;
-            clippath.addRoundedRect(14, 14, 206, 206, 103, 103);
-            painter.setClipPath(clippath);
-            painter.fillRect(0, 0, 234, 234, Qt::white);
-            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244))/*QPixmap(":/icons/deepin/builtin/maganifier.svg")*/);
-            m_magnifierLabel->setPixmap(pix);
+        if (mousePos.y() < 122) {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
+            mousePos.setY(122);
         }
 
-        m_magnifierLabel->move(QPoint(event->pos().x() - 117, event->pos().y() - 117));
+        if (mousePos.x() < 122) {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
+            mousePos.setX(122);
+        }
+
+        if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
+            mousePos.setY(this->size().height() - 122);
+        }
+
+        if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
+            mousePos.setX(this->size().width() - 122);
+        }
+
+        QImage image;
+        QPixmap pix(244, 244);
+        pix.fill(Qt::transparent);
+        if (getImagePoint(mousePos, m_lastScaleFactor + 2, image) && !image.isNull()) {
+            QPainter painter(&pix);
+            QPainterPath clippath;
+            clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
+            painter.setClipPath(clippath);
+            painter.drawImage(0, 0, image);
+            painter.end();
+        } else {
+            QPainter painter(&pix);
+            QPainterPath clippath;
+            clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
+            painter.setClipPath(clippath);
+            painter.fillRect(0, 0, 244, 244, Qt::white);
+            painter.end();
+        }
+
+        QPainter painter(&pix);
+        painter.drawPixmap(0, 0, 244, 244, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
+        m_magnifierLabel->setPixmap(pix);
+        m_magnifierLabel->move(QPoint(mousePos.x() - 122, mousePos.y() - 122));
+
     }
 
     QGraphicsView::mouseMoveEvent(event);
@@ -351,7 +370,7 @@ void SheetBrowserDJVU::openMagnifier()
         m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
         m_magnifierLabel->setAutoFillBackground(false);
         m_magnifierLabel->setAttribute(Qt::WA_TranslucentBackground);
-        m_magnifierLabel->resize(234, 234);
+        m_magnifierLabel->resize(244, 244);
         m_magnifierLabel->show();
         setDragMode(QGraphicsView::NoDrag);
         setMouseTracking(true);
