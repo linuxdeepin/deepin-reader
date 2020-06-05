@@ -1,4 +1,5 @@
 #include "djvumodel.h"
+#include "application.h"
 
 #include <cstdio>
 #include <QDebug>
@@ -396,7 +397,7 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
         return QImage();
     }
 
-    QSizeF size = m_size.scaled(width, height, mode);
+    QSizeF size = m_size.scaled(width * dApp->devicePixelRatio(), height * dApp->devicePixelRatio(), mode);
 
     ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
 
@@ -423,7 +424,7 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
     clearMessageQueue(m_parent->m_context, false);
 
     ddjvu_page_release(page);
-
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
     return image;
 }
 

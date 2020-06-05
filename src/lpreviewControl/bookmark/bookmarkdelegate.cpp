@@ -16,6 +16,7 @@
 */
 #include "bookmarkdelegate.h"
 #include "lpreviewControl/ImageViewModel.h"
+#include "application.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -36,7 +37,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
         if (!pixmap.isNull()) {
             const int borderRadius = 6;
-            const QPixmap &scalePix = pixmap.scaled(62, 62, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QPixmap &scalePix = pixmap.scaled(62 * dApp->devicePixelRatio(), 62 * dApp->devicePixelRatio(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
             const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
