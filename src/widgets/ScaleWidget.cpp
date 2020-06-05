@@ -36,6 +36,7 @@ void ScaleWidget::initWidget()
 
     m_scaleComboBox->setFixedWidth(tW);
     m_scaleComboBox->setEditable(true);
+    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onReturnPressed()));
 
     QLineEdit *edit = m_scaleComboBox->lineEdit();
     connect(edit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
@@ -94,9 +95,9 @@ void ScaleWidget::onReturnPressed()
 
 void ScaleWidget::onEditFinished()
 {
-    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+    QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
 
-    m_scaleComboBox->setCurrentText(sCurText);
+    m_scaleComboBox->setCurrentText(text);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)
@@ -118,9 +119,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
     m_scaleComboBox->setCurrentIndex(index);
 
-    QString sCurText = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+    QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
 
-    m_scaleComboBox->setCurrentText(sCurText);
+    m_scaleComboBox->setCurrentText(text);
 
     m_scaleComboBox->lineEdit()->setCursorPosition(0);
 
