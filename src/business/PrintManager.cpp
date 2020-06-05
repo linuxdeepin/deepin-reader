@@ -23,6 +23,7 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintPreviewDialog>
+#include <QPrintDialog>
 
 PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
     : QObject(parent), m_sheet(sheet)
@@ -36,7 +37,9 @@ void PrintManager::showPrintDialog(DWidget *widget)
     QPrinter printer;
 
     QPrintPreviewDialog preview(&printer, widget);
+
     connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(slotPrintPreview(QPrinter *)));
+
     preview.exec();
 }
 
@@ -46,14 +49,19 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         return;
 
     printer->setDocName(m_strPrintName);
+
     QPainter painter(printer);
+
     QRect rect = painter.viewport();
+
     painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+
     int nPageSize = m_sheet->pagesNumber();
 
     if (printer->fromPage() == 0 && printer->toPage() == 0) {
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
+
             if (nPageSize > 100 && rect.width() > 800) {
                 //当页数过多时，处理一下
                 if (m_sheet->getImage(iIndex, image, 200, 200.0 * (double)rect.height() / (double)rect.width())) {
@@ -64,6 +72,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                     painter.drawImage(rect, image);
                 }
             }
+
             if (iIndex < nPageSize - 1)
                 printer->newPage();
         }
@@ -72,6 +81,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
             if (iIndex >= nPageSize)
                 break;
+
             QImage image;
             if (m_sheet->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
                 painter.drawImage(rect, image);
