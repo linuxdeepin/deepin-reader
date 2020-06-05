@@ -6,14 +6,14 @@ HEADERS += \
     $$PWD/ModuleHeader.h \
     $$PWD/WidgetHeader.h \
     $$PWD/global.h \
-    $$PWD/database.h
+    $$PWD/Database.h
 
 SOURCES += \
     $$PWD/ControllerManager.cpp \
     $$PWD/json.cpp \
     $$PWD/ProcessController.cpp \
     $$PWD/global.cpp \
-    $$PWD/database.cpp
+    $$PWD/Database.cpp
 
 INCLUDEPATH += $$PWD
 
