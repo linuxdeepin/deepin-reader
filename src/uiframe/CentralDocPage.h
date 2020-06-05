@@ -48,25 +48,29 @@ public:
 public:
     void openFile(QString &filePath);
 
-    void addSheet(DocSheet *);      //直接添加sheet
-
-    bool hasSheet(DocSheet *sheet);
-
-    void showSheet(DocSheet *sheet);
-
     bool saveAll();
 
     bool saveCurrent();
 
     bool saveAsCurrent();
 
-    void printCurrent();
+    void addSheet(DocSheet *);        //直接添加sheet
 
-    void handleShortcut(const QString &);
+    void enterSheet(DocSheet *);      //直接添加sheet (tabbar需要自行判断)
+
+    void leaveSheet(DocSheet *);      //直接删除sheet (tabbar需要自行判断)
+
+    bool hasSheet(DocSheet *sheet);   //是否含有sheet
+
+    void showSheet(DocSheet *sheet);  //显示sheet和对应标签
 
     DocSheet *getCurSheet();
 
     DocSheet *getSheet(const QString &filePath);
+
+    void printCurrent();
+
+    void handleShortcut(const QString &);
 
     void showFileAttr();
 

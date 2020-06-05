@@ -110,11 +110,8 @@ void CentralDocPage::openFile(QString &filePath)
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_pTabBar) {
         int index = m_pTabBar->indexOfFilePath(filePath);
-
         if (index >= 0 && index < m_pTabBar->count()) {
-
             m_pTabBar->setCurrentIndex(index);
-
             return;
         }
     }
@@ -171,6 +168,13 @@ void CentralDocPage::openFile(QString &filePath)
     }
 }
 
+void CentralDocPage::addSheet(DocSheet *sheet)
+{
+    m_pTabBar->insertSheet(sheet);
+
+    enterSheet(sheet);
+}
+
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 {
     if (!ret) {
@@ -216,17 +220,7 @@ void CentralDocPage::onTabMoveIn(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    sheet->setParent(this);
-
-    m_pStackedLayout->addWidget(sheet);
-
-    m_pStackedLayout->setCurrentWidget(sheet);
-
-    sheet->defaultFocus();
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    enterSheet(sheet);
 }
 
 void CentralDocPage::onTabClosed(DocSheet *sheet)
@@ -265,29 +259,17 @@ void CentralDocPage::onTabMoveOut(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    m_pStackedLayout->removeWidget(sheet);
+    leaveSheet(sheet);
 
     if (m_pStackedLayout->count() <= 0) {
         emit sigNeedClose();
         return;
     }
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 }
 
 void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 {
-    m_pStackedLayout->removeWidget(sheet);
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
-    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+    leaveSheet(sheet);
 
     MainWindow *window = MainWindow::createWindow();
 
@@ -303,7 +285,7 @@ void CentralDocPage::onCentralMoveIn(DocSheet *sheet)
     addSheet(sheet);
 }
 
-void CentralDocPage::addSheet(DocSheet *sheet)
+void CentralDocPage::enterSheet(DocSheet *sheet)
 {
     if (nullptr == sheet)
         return;
@@ -314,11 +296,27 @@ void CentralDocPage::addSheet(DocSheet *sheet)
     connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-    m_pTabBar->insertSheet(sheet);
-
     m_pStackedLayout->addWidget(sheet);
 
     m_pStackedLayout->setCurrentWidget(sheet);
+
+    sheet->defaultFocus();
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+}
+
+void CentralDocPage::leaveSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    m_pStackedLayout->removeWidget(sheet);
+
+    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
