@@ -49,7 +49,8 @@ void ScaleWidget::initWidget()
 
     m_scaleComboBox = new DComboBox();
     QFont font = m_scaleComboBox->font();
-    font.setPointSize(12);
+    font.setPixelSize(14);
+
     m_scaleComboBox->setFont(font);
     m_scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
