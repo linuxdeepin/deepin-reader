@@ -72,40 +72,38 @@ bool ProcessController::openIfAppExist(const QStringList &filePathList)
 
 void ProcessController::handleFiles(QStringList filePathList)
 {
-    QTimer::singleShot(1, this, [&filePathList]() {
-        QList<DocSheet *> sheets = DocSheet::g_map.values();
+    QList<DocSheet *> sheets = DocSheet::g_map.values();
 
-        if (filePathList.count() <= 0) {
-            MainWindow::createWindow()->show();
-            return;
-        }
+    if (filePathList.count() <= 0) {
+        MainWindow::createWindow()->show();
+        return;
+    }
 
-        foreach (QString filePath, filePathList) {
-            //如果存在则活跃该窗口
-            bool hasFind = false;
-            foreach (DocSheet *sheet, sheets) {
-                if (sheet->filePath() == filePath) {
-                    MainWindow *window = MainWindow::windowContainSheet(sheet);
-                    if (nullptr != window) {
-                        window->activateSheet(sheet);
-                        hasFind = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!hasFind) {
-                //如果不存在则打开
-                if (MainWindow::m_list.count() > 0) {
-                    MainWindow::m_list[0]->activateWindow();
-                    MainWindow::m_list[0]->doOpenFile(filePath);
-                    continue;
-                } else {
-                    MainWindow::createWindow()->doOpenFile(filePath);
+    foreach (QString filePath, filePathList) {
+        //如果存在则活跃该窗口
+        bool hasFind = false;
+        foreach (DocSheet *sheet, sheets) {
+            if (sheet->filePath() == filePath) {
+                MainWindow *window = MainWindow::windowContainSheet(sheet);
+                if (nullptr != window) {
+                    window->activateSheet(sheet);
+                    hasFind = true;
+                    break;
                 }
             }
         }
-    });
+
+        if (!hasFind) {
+            //如果不存在则打开
+            if (MainWindow::m_list.count() > 0) {
+                MainWindow::m_list[0]->activateWindow();
+                MainWindow::m_list[0]->doOpenFile(filePath);
+                continue;
+            } else {
+                MainWindow::createWindow()->doOpenFile(filePath);
+            }
+        }
+    }
 }
 
 bool ProcessController::existFilePath(const QString &filePath)
