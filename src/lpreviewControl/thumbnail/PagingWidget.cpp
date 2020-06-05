@@ -45,7 +45,7 @@ void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"));
     QFont font = m_pTotalPagesLab->font();
-    font.setPointSize(12);
+    font.setPixelSize(12);
     m_pTotalPagesLab->setFont(font);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
@@ -69,13 +69,13 @@ void PagingWidget::initWidget()
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     font = m_pJumpPageLineEdit->font();
-    font.setPointSize(12);
+    font.setPixelSize(12);
     m_pJumpPageLineEdit->setFont(font);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pCurrantPageLab = new CustomClickLabel("");
     font = m_pCurrantPageLab->font();
-    font.setPointSize(12);
+    font.setPixelSize(12);
     m_pCurrantPageLab->setFont(font);
     m_pCurrantPageLab->setForegroundRole(DPalette::Text);
 
