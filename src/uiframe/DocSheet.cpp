@@ -248,7 +248,6 @@ QString DocSheet::pagenum2label(int)
 
 bool DocSheet::haslabel()
 {
-    qDebug() << "unrealized";
     return false;
 }
 

@@ -211,7 +211,6 @@ Database::Database(QObject *parent) : QObject(parent)
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     m_database.setDatabaseName(QDir(path).filePath("user.db"));
-    qDebug() << QDir(path);
     m_database.open();
 
     if (m_database.isOpen()) {
