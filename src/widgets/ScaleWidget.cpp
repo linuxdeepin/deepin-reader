@@ -1,38 +1,15 @@
-/*
- * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
- *
- * Author:     wangzhxiaun
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #include "ScaleWidget.h"
+#include "DocSheet.h"
 
 #include <QHBoxLayout>
 #include <QLineEdit>
-
 #include <DIconButton>
 #include <DComboBox>
-
-#include "pdfControl/docview/docummentproxy.h"
-#include "DocSheet.h"
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
     initWidget();
-
-    dataList = {10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500};
 }
 
 ScaleWidget::~ScaleWidget()
@@ -61,7 +38,7 @@ void ScaleWidget::initWidget()
     m_scaleComboBox->setEditable(true);
 
     QLineEdit *edit = m_scaleComboBox->lineEdit();
-    connect(edit, SIGNAL(returnPressed()), SLOT(SlotReturnPressed()));
+    connect(edit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
     connect(edit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
 
     tW = 24;
@@ -79,8 +56,6 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_scaleComboBox);
     m_layout->addWidget(pNextBtn);
-
-    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(SlotCurrentTextChanged(const QString &)));
 }
 
 void ScaleWidget::slotPrevScale()
@@ -99,62 +74,22 @@ void ScaleWidget::slotNextScale()
     m_sheet->zoomin();
 }
 
-void ScaleWidget::SlotCurrentTextChanged(const QString &sText)
+void ScaleWidget::onReturnPressed()
 {
     if (m_sheet.isNull())
         return;
 
-    int nIndex = sText.lastIndexOf("%");
-    if (nIndex == -1) {
-        QString sssTemp = sText + "%";
-        m_scaleComboBox->setCurrentText(sssTemp);
-        nIndex = sssTemp.lastIndexOf("%");
-    }
+    QString text = m_scaleComboBox->currentText();
 
-    QString sTempText = m_scaleComboBox->currentText();
-    bool bOk = false;
-    QString sTempData = sTempText.mid(0, nIndex);
-    double dValue = sTempData.toDouble(&bOk);
+    double value = text.replace("%", "").toDouble() / 100.00;
 
-    if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
-        m_sheet->setScaleMode(Dr::ScaleFactorMode);
-        m_sheet->setScaleFactor(dValue / (double)100);
-    }
-}
+    if (value <= 0.1)
+        value = 0.1;
 
-//  combobox 敲了回车
-void ScaleWidget::SlotReturnPressed()
-{
-    if (m_sheet.isNull())
-        return;
+    if (value > 12)
+        value = 12;
 
-    QString sTempText = m_scaleComboBox->currentText();
-
-    int nIndex = m_scaleComboBox->findText(sTempText, Qt::MatchExactly);
-    if (nIndex == -1) {     //  列表中没有输入的选项
-
-        nIndex = sTempText.lastIndexOf("%");
-        if (nIndex != -1) {
-            sTempText = sTempText.mid(0, nIndex);
-        }
-
-        bool bOk = false;
-        double dValue = sTempText.toDouble(&bOk);
-        if (bOk && dValue >= 10.0 && dValue <= m_nMaxScale) {
-            QString sEndValue = QString::number(dValue, 'f', 2);        //  保留2位小数点
-            dValue = sEndValue.toDouble();
-
-            QString sShowText = QString::number(dValue) + "%";
-            SlotCurrentTextChanged(sShowText);
-
-            int curindex = dataList.indexOf(dValue);
-            if (curindex < 0)
-                m_scaleComboBox->setCurrentIndex(curindex);
-
-            m_scaleComboBox->setCurrentText(sShowText);
-            m_scaleComboBox->lineEdit()->setCursorPosition(0);
-        }
-    }
+    m_sheet->setScaleFactor(value);
 }
 
 void ScaleWidget::onEditFinished()
@@ -192,7 +127,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     m_scaleComboBox->blockSignals(false);
 }
 
-void ScaleWidget::clearComboBox()
+void ScaleWidget::clear()
 {
     if (m_scaleComboBox) {
         m_scaleComboBox->lineEdit()->clear();

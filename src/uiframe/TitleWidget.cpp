@@ -346,6 +346,6 @@ void TitleWidget::setControlEnabled(const bool &enable)
         m_pSearchBtn->setEnabled(enable);
     }
     if (m_pSw) {
-        m_pSw->clearComboBox();
+        m_pSw->clear();
     }
 }
