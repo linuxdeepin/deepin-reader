@@ -96,6 +96,7 @@ public:
     ThreadLoadData threadloaddata;
     QMap<QString, int> m_label2pagenum;
     QMap<int, QString> m_pagenum2label;
+    double m_dCurPageViewPrecent = 0.0;//当前页面视图位置占比
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
@@ -207,6 +208,7 @@ signals:
     void sigPageBookMarkButtonClicked(int page, bool state);
     void signal_openResult(bool);
     void signal_autoplaytoend();
+//    void signal_scaleChanded();
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
@@ -224,6 +226,8 @@ protected:
     void showSinglePage();
     void showFacingPage();
     void initConnect();
+    void calcCurPageViewPrecent();
+    void showCurPageViewAfterScaleChanged();
     void wheelEvent(QWheelEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
 
