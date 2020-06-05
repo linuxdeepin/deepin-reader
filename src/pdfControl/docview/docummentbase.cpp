@@ -68,6 +68,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         default:
             break;
         }
+        showCurPageViewAfterScaleChanged();
         d->donotneedreloaddoc = false;
     });
     connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
@@ -752,6 +753,8 @@ int DocummentBase::currentPageNo()
         for (int i = 0; i < d->m_widgets.size(); i++) {
             if (y_offset < d->m_widgetrects.at(i).y() + d->m_widgetrects.at(i).height()) {
                 pagenum = i;
+                d->m_dCurPageViewPrecent = static_cast<double>(abs(static_cast<double>(y_offset - d->m_widgetrects.at(i).y()) /
+                                                                   static_cast<double>(d->m_widgetrects.at(i).height())));
                 break;
             }
         }
@@ -857,6 +860,7 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
 {
     Q_D(DocummentBase);
     if (!d->donotneedreloaddoc) {
+        calcCurPageViewPrecent();
         int pageno = currentPageNo();
         if (d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
@@ -1046,15 +1050,16 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     }
 
-    d->m_vboxLayout->update();
-
     pageJump(currpageno);
 
+//    showCurPageViewAfterScaleChanged();
     loadPages();
+
+    d->m_vboxLayout->update();
 
     d->donotneedreloaddoc = false;
 
-    return true;;
+    return true;
 }
 
 bool DocummentBase::loadPages()
@@ -1333,6 +1338,39 @@ void DocummentBase::initConnect()
         });
         connect(d->m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
         QApplication::processEvents();
+    }
+}
+
+/**
+ * @brief DocummentBase::calcCurPageViewPrecent
+ * 计算当前页视图占比
+ */
+void DocummentBase::calcCurPageViewPrecent()
+{
+    Q_D(DocummentBase);
+
+    QScrollBar *scrollBar_Y = this->verticalScrollBar();
+    if (nullptr == scrollBar_Y)
+        return;
+
+    int y_offset = scrollBar_Y->value();
+    int curPage  = d->m_currentpageno = currentPageNo();
+    if (curPage >= 0 && curPage < d->m_widgetrects.size()) {
+        d->m_dCurPageViewPrecent = static_cast<double>(abs(static_cast<double>(y_offset - d->m_widgetrects.at(curPage).y()) /
+                                                           static_cast<double>(d->m_widgetrects.at(curPage).height())));
+    }
+}
+
+/**
+ * @brief DocummentBase::showCurPageViewAfterScaleChanged
+ * 缩放之后重新显示文档到当前视图中
+ */
+void DocummentBase::showCurPageViewAfterScaleChanged()
+{
+    Q_D(DocummentBase);
+    if (d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
+        this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
+                                            static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
     }
 }
 
@@ -1630,7 +1668,6 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
             }
         }
     }
-
     QScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
         scrollBar_X->setValue(xvalue);
