@@ -108,7 +108,8 @@ void DocSheetDJVU::rotateRight()
 bool DocSheetDJVU::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
-        m_browser->loadPages(m_operation, m_bookmarks);
+        if (!m_browser->loadPages(m_operation, m_bookmarks))
+            return false;
         handleOpenSuccess();
         emit sigFileChanged(this);
         return true;
