@@ -150,6 +150,7 @@ void CentralDocPage::openFile(QString &filePath)
 
         if (!sheet->openFileExec()) {
             sheet->deleteLater();
+            showTips(tr("Please check if the file is damaged"), 1);
             return;
         }
 
@@ -165,7 +166,6 @@ void CentralDocPage::openFile(QString &filePath)
 
         onOpened(sheet, true);
 
-
     } else {
         showTips(tr("The format is not supported"), 1);
     }
@@ -173,14 +173,6 @@ void CentralDocPage::openFile(QString &filePath)
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 {
-    this->activateWindow();
-    //文档刚打开时，模拟鼠标点击文档区域事件
-    QPoint pos(this->geometry().x(), this->geometry().y());
-
-    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-    QApplication::sendEvent(this, &event0);
-
     if (!ret) {
         m_pStackedLayout->removeWidget(sheet);
 
@@ -194,7 +186,17 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
             sheet->deleteLater();
 
         showTips(tr("Please check if the file is damaged"), 1);
+
+        return;
     }
+
+    this->activateWindow();
+    //文档刚打开时，模拟鼠标点击文档区域事件
+    QPoint pos(this->geometry().x(), this->geometry().y());
+
+    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    QApplication::sendEvent(this, &event0);
 
     sheet->defaultFocus();
 }

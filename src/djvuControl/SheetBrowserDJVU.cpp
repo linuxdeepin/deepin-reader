@@ -42,13 +42,17 @@ bool SheetBrowserDJVU::openFilePath(const QString &filePath)
     return true;
 }
 
-void SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookmarks)
+bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
-        return;
+        return false;
 
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         deepin_reader::Page *page = m_document->page(i);
+
+        if (page == nullptr)
+            return false;
+
         if (page->size().width() > m_maxWidth)
             m_maxWidth = page->size().width();
         if (page->size().height() > m_maxHeight)
@@ -68,6 +72,8 @@ void SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
     deform(operation);
     m_initPage = operation.currentPage;
     m_hasLoaded = true;
+
+    return true;
 }
 
 void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
