@@ -23,6 +23,8 @@ public:
 
     QRectF bookmarkRect();
 
+    QRectF bookmarkMouseRect();
+
     void setBookmark(bool hasBookmark);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
