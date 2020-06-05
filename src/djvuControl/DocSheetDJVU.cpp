@@ -11,8 +11,6 @@ DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjV
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    m_initBookmarks = m_bookmarks;
-
     m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
     m_sidebar->setMinimumWidth(266);
 
@@ -130,6 +128,7 @@ void DocSheetDJVU::setBookMark(int index, int state)
     m_sidebar->setBookMark(index, state);
     m_browser->setBookMark(index, state);
 
+    m_fileChanged = true;
     emit sigFileChanged(this);
 }
 
@@ -203,13 +202,13 @@ bool DocSheetDJVU::getImage(int index, QImage &image, double width, double heigh
 
 bool DocSheetDJVU::fileChanged()
 {
-    return !(m_initBookmarks == m_bookmarks);
+    return m_fileChanged;
 }
 
 bool DocSheetDJVU::saveData()
 {
     if (Database::instance()->saveBookmarks(filePath(), m_bookmarks)) {
-        m_initBookmarks = m_bookmarks;
+        m_fileChanged = false;
         return true;
     }
     return false;

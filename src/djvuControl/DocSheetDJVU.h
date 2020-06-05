@@ -89,7 +89,7 @@ private slots:
 
 private:
     SheetBrowserDJVU *m_browser = nullptr;
-    QSet<int> m_initBookmarks;
+    bool m_fileChanged = false;
 };
 
 #endif // DOCSHEETDJVU_H

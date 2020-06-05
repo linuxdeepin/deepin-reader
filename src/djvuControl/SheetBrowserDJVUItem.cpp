@@ -40,7 +40,12 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
 
 QRectF SheetBrowserDJVUItem::bookmarkRect()
 {
-    return QRectF(boundingRect().width() - 40, 0, 28, 28);
+    return QRectF(boundingRect().width() - 40, 1, 39, 39);
+}
+
+QRectF SheetBrowserDJVUItem::bookmarkMouseRect()
+{
+    return QRectF(boundingRect().width() - 40, 10, 29, 29);
 }
 
 void SheetBrowserDJVUItem::setBookmark(bool hasBookmark)
@@ -149,11 +154,11 @@ int SheetBrowserDJVUItem::itemIndex()
 
 void SheetBrowserDJVUItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (bookmarkRect().contains(event->pos())) {
+    if (bookmarkMouseRect().contains(event->pos())) {
         m_bookmarkState = 2;
         if (nullptr != m_parent) {
             m_parent->needBookmark(m_index, !m_bookmark);
-            if (!m_bookmark && bookmarkRect().contains(event->pos()))
+            if (!m_bookmark && bookmarkMouseRect().contains(event->pos()))
                 m_bookmarkState = 1;
             else if (m_bookmark)
                 m_bookmarkState = 3;
@@ -170,7 +175,7 @@ bool SheetBrowserDJVUItem::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
-        if (!m_bookmark && bookmarkRect().contains(moveevent->pos()))
+        if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))
             m_bookmarkState = 1;
         else if (m_bookmark)
             m_bookmarkState = 3;
