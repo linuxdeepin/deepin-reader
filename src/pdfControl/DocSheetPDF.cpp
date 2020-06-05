@@ -33,7 +33,7 @@
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
-#include "database.h"
+#include "Database.h"
 
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     : DocSheet(Dr::PDF, filePath, parent)

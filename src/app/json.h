@@ -1,7 +1,9 @@
 #ifndef JSON_H
 #define JSON_H
+
 #include <QJsonObject>
 #include <QJsonDocument>
+
 struct JsonPrivate;
 class Json
 {

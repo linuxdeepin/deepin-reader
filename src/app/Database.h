@@ -5,6 +5,14 @@
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
+* Central(NaviPage ViewPage)
+*
+* CentralNavPage(openfile)
+*
+* CentralDocPage(DocTabbar DocSheets)
+*
+* DocSheet(SheetSidebar SheetBrowser document)
+*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
@@ -18,32 +26,45 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef CentralNavPage_H
-#define CentralNavPage_H
+#ifndef DATABASE_H
+#define DATABASE_H
 
-#include "CustomControl/CustomWidget.h"
+#include <QObject>
+#include <QSqlDatabase>
 
-class CentralNavPage : public CustomWidget
+class DocSheet;
+class QDateTime;
+class DocumentView;
+class Database : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(CentralNavPage)
 
 public:
-    explicit CentralNavPage(DWidget *parent = nullptr);
+    static Database *instance();
 
-    ~CentralNavPage() override;
+    ~Database();
 
-signals:
-    void sigNeedOpenFilesExec();
+    bool readOperation(DocSheet *sheet);
 
-protected:
-    void initWidget() override;
+    bool saveOperation(DocSheet *sheet);
 
-private slots:
-    void slotChooseBtnClicked();
+    bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
 
-    void slotUpdateTheme();
+    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
+
+private:
+    Q_DISABLE_COPY(Database)
+
+    static Database *s_instance;
+
+    Database(QObject *parent = 0);
+
+    bool prepareOperation();
+
+    bool prepareBookmark();
+
+    QSqlDatabase m_database;
 
 };
 
-#endif // OPENFILEWIDGET_H
+#endif // DATABASE_H
