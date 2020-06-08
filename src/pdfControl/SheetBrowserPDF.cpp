@@ -119,7 +119,7 @@ double SheetBrowserPDF::setFit(int fit)
 
     double scale = d->m_pDocViewProxy->setFit(fit);
 
-    if (-1 != scale && d->m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
+    if (-1 != static_cast<int>(scale) && d->m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         setScale(scale);
     }
 

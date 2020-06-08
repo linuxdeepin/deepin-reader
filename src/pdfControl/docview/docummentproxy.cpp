@@ -16,7 +16,7 @@ DocummentProxy::DocummentProxy(DocSheet *sheet, QObject *parent)
     , m_documment(nullptr)
     , bcloseing(false)
 {
-    pwgt = (DWidget *)parent;
+    pwgt = static_cast<DWidget *>(parent);
 }
 
 bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
@@ -161,7 +161,7 @@ QString DocummentProxy::addIconAnnotation(const QPoint &pos, const QColor &color
     return strres;
 }
 
-void DocummentProxy::moveIconAnnotation(const QString &uuid, const QPoint &pos)
+void DocummentProxy::moveIconAnnotation(const QString &, const QPoint &)
 {
     if (!m_documment || bcloseing)
         return ;
@@ -400,7 +400,7 @@ void DocummentProxy::jumpToHighLight(const QString &uuid, int index)
 void DocummentProxy::jumpToOutline(const qreal &realleft, const qreal &realtop, unsigned int ipage)
 {
     if (m_documment)
-        m_documment->jumpToOutline(realleft, realtop, ipage);
+        m_documment->jumpToOutline(realleft, realtop, static_cast<int>(ipage));
 }
 
 bool DocummentProxy::closeFile()
