@@ -38,12 +38,17 @@
 #include "DocTabBar.h"
 #include "MainWindow.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "business/AppInfo.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
 =======
+=======
+
+>>>>>>> chore: 调整目录结构
 #include "pdfControl/AppConfig.h"
-#include "business/SaveDialog.h"
+#include "widgets/SaveDialog.h"
+#include "widgets/PrintManager.h"
 
 >>>>>>> chore: 将应用配置模块移到pdf模块中
 #include "pdfControl/docview/docummentproxy.h"
