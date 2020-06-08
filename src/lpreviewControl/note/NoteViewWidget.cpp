@@ -17,35 +17,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NoteViewWidget.h"
+#include "DocSheet.h"
+#include "MsgHeader.h"
+#include "ModuleHeader.h"
+#include "TransparentTextEdit.h"
 
 #include <QHBoxLayout>
 #include <DPlatformWindowHandle>
+#include <QPainter>
+#include <QGraphicsDropShadowEffect>
+#include <QLinearGradient>
 
-#include "TransparentTextEdit.h"
+NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
+    : DWidget(parent)
+{
+    setWindowFlag(Qt::Popup);
+    setAttribute(Qt::WA_TranslucentBackground);
+    initWidget();
+}
 
-#include "CustomControl/CustomClickLabel.h"
-#include "DocSheet.h"
+void NoteShadowViewWidget::initWidget()
+{
+    setFixedSize(QSize(278, 344));
+
+    QHBoxLayout *pHLayoutContant = new QHBoxLayout;
+    pHLayoutContant->setMargin(12);
+
+    m_noteViewWidget = new NoteViewWidget(this);
+
+    pHLayoutContant->addWidget(m_noteViewWidget);
+    this->setLayout(pHLayoutContant);
+
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(m_noteViewWidget);
+    shadowEffect->setOffset(4, 4);
+    shadowEffect->setColor(QColor(0, 0, 0, 100));
+    shadowEffect->setBlurRadius(16);
+    m_noteViewWidget->setGraphicsEffect(shadowEffect);
+}
+
+NoteViewWidget *NoteShadowViewWidget::getNoteViewWidget()
+{
+    return m_noteViewWidget;
+}
+
+void NoteShadowViewWidget::showWidget(const QPoint &point)
+{
+    move(point - QPoint(12, 12));
+    raise();
+    show();
+}
+
 
 NoteViewWidget::NoteViewWidget(DWidget *parent)
     : CustomWidget(parent)
 {
-
-    m_nWidgetType = NOTE_HIGHLIGHT;
-
-    setWindowFlag(Qt::Popup);
-    int tW = 250;
-    int tH = 320;
-
-    setFixedSize(QSize(tW, tH));
-    DPlatformWindowHandle handle(this);
-    int radius = 18;
-    handle.setWindowRadius(radius);
-
+    setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
-    initConnections();
-    slotUpdateTheme();
-
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NoteViewWidget::slotUpdateTheme);
 }
 
 NoteViewWidget::~NoteViewWidget()
@@ -62,69 +89,34 @@ void NoteViewWidget::setEditText(const QString &note)
     }
 }
 
-void NoteViewWidget::showWidget(const QPoint &point)
-{
-    move(point);
-    show();
-    raise();
-}
-
 void NoteViewWidget::hideEvent(QHideEvent *event)
 {
     //  原来是有注释的, 被删除了
     if (m_nWidgetType == NOTE_HIGHLIGHT) {
-        __FileNoteHideEvent();
+        fileNoteHideEvent();
     } else {
-        __PageNoteHideEvent();
+        pageNoteHideEvent();
     }
-
     CustomWidget::hideEvent(event);
 }
 
-// 初始化界面
 void NoteViewWidget::initWidget()
 {
-    QPalette plt = this->palette();
-    plt.setColor(QPalette::Background, QColor(QString("#FFFBE1")));
-    this->setPalette(plt);
-
-    m_pCloseLab = new CustomClickLabel("");
-    int tW = 24;
-    int tH = 24;
     m_nWidgetType = NOTE_HIGHLIGHT;
+    setFixedSize(QSize(254, 320));
 
-    m_pCloseLab->setFixedSize(QSize(tW, tH));
-    connect(m_pCloseLab, SIGNAL(clicked()), this, SLOT(close()));
-
-    auto m_pHLayoutClose = new QHBoxLayout;
-    m_pHLayoutClose->setContentsMargins(224, 4, 6, 4);
-    m_pHLayoutClose->addStretch(0);
-    m_pHLayoutClose->addWidget(m_pCloseLab);
-
-    auto m_pHLayoutContant = new QHBoxLayout;
-    m_pHLayoutContant->setContentsMargins(25, 0, 24, 29);
-    m_pHLayoutContant->addStretch(0);
+    QHBoxLayout *pHLayoutContant = new QHBoxLayout;
+    pHLayoutContant->setContentsMargins(20, 22, 6, 22);
 
     m_pTextEdit = new TransparentTextEdit(this);
     connect(m_pTextEdit, SIGNAL(sigNeedShowTips(const QString &, int)), this, SIGNAL(sigNeedShowTips(const QString &, int)));
 
-    m_pHLayoutContant->addWidget(m_pTextEdit);
-
-    auto m_pVLayout = new QVBoxLayout;
-    m_pVLayout->setContentsMargins(0, 0, 0, 0);
-    m_pVLayout->setSpacing(0);
-    m_pVLayout->addItem(m_pHLayoutClose);
-    m_pVLayout->addItem(m_pHLayoutContant);
-
-    this->setLayout(m_pVLayout);
-}
-
-void NoteViewWidget::initConnections()
-{
+    pHLayoutContant->addWidget(m_pTextEdit);
+    this->setLayout(pHLayoutContant);
 }
 
 //  高亮注释 处理
-void NoteViewWidget::__FileNoteHideEvent()
+void NoteViewWidget::fileNoteHideEvent()
 {
     QString sText = m_pTextEdit->toPlainText().trimmed();
     if (m_pNoteUuid == "") {
@@ -148,9 +140,8 @@ void NoteViewWidget::__FileNoteHideEvent()
     }
 }
 
-
 //  页面注释处理
-void NoteViewWidget::__PageNoteHideEvent()
+void NoteViewWidget::pageNoteHideEvent()
 {
     if (m_pNoteUuid != "") {
         QString sText = m_pTextEdit->toPlainText().trimmed();
@@ -178,17 +169,6 @@ void NoteViewWidget::__PageNoteHideEvent()
     }
 }
 
-//  主题变了
-void NoteViewWidget::slotUpdateTheme()
-{
-//    QString sClose = PF::getImagePath("close", Pri::g_icons);
-    QIcon closeIcon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "close");
-    int tW = 24;
-    int tH = 24;
-
-    m_pCloseLab->setPixmap(closeIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sClose, QSize(tW, tH)));
-}
-
 void NoteViewWidget::setNotePage(const QString &pNotePage)
 {
     m_pNotePage = pNotePage;
@@ -202,4 +182,40 @@ void NoteViewWidget::setWidgetType(const int &nWidgetType)
 void NoteViewWidget::setNoteUuid(const QString &pNoteUuid)
 {
     m_pNoteUuid = pNoteUuid;
+}
+
+void NoteViewWidget::paintEvent(QPaintEvent *event)
+{
+    CustomWidget::paintEvent(event);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    QPainterPath clippath;
+    clippath.setFillRule(Qt::WindingFill);
+    int minRadius = 16;
+    int maxRadius = 32;
+    clippath.moveTo(minRadius, 0);
+    clippath.lineTo(this->width() - minRadius, 0);
+    clippath.arcTo(this->width() - minRadius * 2, 0, minRadius * 2, minRadius * 2, 90, -90);
+    clippath.lineTo(this->width(), this->height() - minRadius * 2);
+    clippath.arcTo(this->width() - maxRadius * 2, this->height() - maxRadius * 2, maxRadius * 2, maxRadius * 2, 0, -90);
+    clippath.lineTo(minRadius, this->height());
+    clippath.arcTo(0, this->height() - minRadius * 2, minRadius * 2, minRadius * 2, 270, -90);
+    clippath.lineTo(0, minRadius);
+    clippath.arcTo(0, 0, minRadius * 2, minRadius * 2, 180, -90);
+    clippath.closeSubpath();
+    painter.setClipPath(clippath);
+
+    QLinearGradient linearGrad(QPointF(0, 0), QPointF(this->width(), this->height()));
+    linearGrad.setColorAt(0, QColor(255, 244, 196));
+    linearGrad.setColorAt(0.48, QColor(255, 238, 189));
+    linearGrad.setColorAt(0.90, QColor(255, 229, 161));
+    linearGrad.setColorAt(0.96, QColor(255, 251, 225));
+    linearGrad.setColorAt(1, QColor(255, 251, 225));
+    painter.setBrush(linearGrad);
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(this->rect());
+
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(QColor(0, 0, 0, 51));
+    painter.drawPath(clippath);
 }

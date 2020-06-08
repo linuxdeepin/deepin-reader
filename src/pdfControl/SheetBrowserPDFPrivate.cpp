@@ -205,24 +205,20 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
     Q_Q(SheetBrowserPDF);
 
     if (m_pNoteViewWidget == nullptr) {
-        m_pNoteViewWidget = new NoteViewWidget(q);
-        connect(m_pNoteViewWidget, SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
-        connect(m_pNoteViewWidget, SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(onShowTips(const QString &, int)));
-        connect(m_pNoteViewWidget, SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(AddHighLightAnnotation(QString)));
+        m_pNoteViewWidget = new NoteShadowViewWidget(q);
+        connect(m_pNoteViewWidget->getNoteViewWidget(), SIGNAL(sigNoteViewMsg(const int &, const QString &)), SLOT(SlotNoteViewMsg(const int &, const QString &)));
+        connect(m_pNoteViewWidget->getNoteViewWidget(), SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(onShowTips(const QString &, int)));
+        connect(m_pNoteViewWidget->getNoteViewWidget(), SIGNAL(sigNeedAddHighLightAnnotation(QString)), SLOT(AddHighLightAnnotation(QString)));
     }
-    m_pNoteViewWidget->setEditText(sText);
-    m_pNoteViewWidget->setNoteUuid(t_strUUid);
-    m_pNoteViewWidget->setNotePage(sPage);
-    m_pNoteViewWidget->setWidgetType(nType);
+    m_pNoteViewWidget->getNoteViewWidget()->setEditText(sText);
+    m_pNoteViewWidget->getNoteViewWidget()->setNoteUuid(t_strUUid);
+    m_pNoteViewWidget->getNoteViewWidget()->setNotePage(sPage);
+    m_pNoteViewWidget->getNoteViewWidget()->setWidgetType(nType);
 
     QPoint point;
-
     bool t_bHigh = false;
-
-    dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
-
+    dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->getNoteViewWidget()->size());
     dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
-
     m_pNoteViewWidget->showWidget(point);
 }
 

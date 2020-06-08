@@ -20,16 +20,8 @@
 #define NOTEVIEWWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "MsgHeader.h"
-#include "ModuleHeader.h"
 
-class CustomClickLabel;
 class TransparentTextEdit;
-
-/**
- *@brief The NoteViewWidget class
- *@brief 添加注释子界面
- */
 class NoteViewWidget : public CustomWidget
 {
     Q_OBJECT
@@ -47,8 +39,6 @@ signals:
     void sigNeedShowTips(const QString &tips, int index);
 
 public:
-    void showWidget(const QPoint &);
-
     void setEditText(const QString &note);
 
     void setPointAndPage(const QString &);
@@ -60,28 +50,37 @@ public:
     void setWidgetType(const int &nWidgetType);
 
 protected:
-    void hideEvent(QHideEvent *event) override;
-
     void initWidget() override;
+    void hideEvent(QHideEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
-    void initConnections();
-
-    void __FileNoteHideEvent();
-
-    void __PageNoteHideEvent();
-
-private slots:
-    void slotUpdateTheme();
+    void fileNoteHideEvent();
+    void pageNoteHideEvent();
 
 private:
     QString m_pNoteUuid = "";
     QString m_pNotePage = "";
 
+    DWidget *widget;
     TransparentTextEdit *m_pTextEdit = nullptr;    // 注释
-    CustomClickLabel    *m_pCloseLab = nullptr;  // 关闭
     QString m_strNote = "";                   // 注释内容
     int     m_nWidgetType;         //  高亮注释\页面注释
+};
+
+class NoteShadowViewWidget : public DWidget
+{
+public:
+    NoteShadowViewWidget(QWidget *parent);
+    NoteViewWidget *getNoteViewWidget();
+
+    void showWidget(const QPoint &);
+
+private:
+    void initWidget();
+
+private:
+    NoteViewWidget *m_noteViewWidget;
 };
 
 #endif  // NOTEVIEWWIDGET_H

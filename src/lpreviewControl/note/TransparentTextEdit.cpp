@@ -17,59 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TransparentTextEdit.h"
-
-#include <DFontSizeManager>
-
 #include "application.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 
+#include <DFontSizeManager>
+#include <QPainter>
+#include <QDebug>
+#include <QScrollBar>
+#include <QTextBlock>
+#include <QMimeData>
+
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
 {
-    int tW = 205;
-    int tH = 257;
-
-    setFixedSize(tW, tH);
     init();
 }
 
 void TransparentTextEdit::init()
 {
+    this->setAcceptRichText(false);
+    this->setWordWrapMode(QTextOption::WrapAnywhere);
+    this->setViewportMargins(0, 0, 10, 0);
     // background color
     QPalette pText = this->palette();
-    pText.setColor(QPalette::Base, QColor(255, 251, 225));
+    pText.setColor(QPalette::Base, QColor(255, 251, 225, 0));
+    pText.setColor(QPalette::Text, QColor(0, 0, 0));
     this->setPalette(pText);
 
-    // font
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
-
-    // text corlor
-    this->setTextColor(QColor(QString("#452B0A")));
-
-    // widgets style
     this->setFrameStyle(QFrame::NoFrame);
 
     // text under line
-    QTextCursor cursor(this->textCursor());
-    QTextCharFormat format = cursor.charFormat();
-    QTextBlockFormat textBlockFormat;
-    // line height
-    textBlockFormat.setLineHeight(19, QTextBlockFormat::FixedHeight);
-    // line margin
-    textBlockFormat.setBottomMargin(0);
-    cursor.mergeCharFormat(format);
-    cursor.setBlockFormat(textBlockFormat);
-    this->setTextCursor(cursor);
+
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
 }
 
-/**
- * @brief CustemTextEdit::slotTextEditMaxContantNum
- * TextEdit输入允许输入最长字符串的长度
- */
 void TransparentTextEdit::slotTextEditMaxContantNum()
 {
     QString textContent = this->toPlainText();
@@ -85,4 +70,40 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         this->setTextCursor(textCursor);
         sigNeedShowTips(tr("Input limit reached"), 1);
     }
+}
+
+void TransparentTextEdit::paintEvent(QPaintEvent *event)
+{
+    QTextEdit::paintEvent(event);
+    QPainter painter(this->viewport());
+    painter.setRenderHints(QPainter::Antialiasing);
+    int maxLineHeight = 2;
+    int totalheight = this->viewport()->height()/* + this->verticalScrollBar()->maximum()*/;
+    const QFontMetricsF &fontmetricsf = QFontMetricsF(this->document()->defaultFont());
+    qreal lineheight = fontmetricsf.height();
+    painter.setBrush(Qt::NoBrush);
+    QPen pen(QColor(219, 189, 119), maxLineHeight);
+    painter.setPen(pen);
+    int startLine = this->document()->documentMargin() - this->verticalScrollBar()->value();
+    painter.drawLine(2, startLine, this->viewport()->width() - 4, startLine);
+    pen.setWidth(1);
+    painter.setPen(pen);
+    qreal curh;
+    for (curh = startLine + lineheight; curh <= totalheight; curh += lineheight) {
+        painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
+    }
+
+    if (this->verticalScrollBar()->maximum() - this->verticalScrollBar()->value() < maxLineHeight) {
+        pen.setWidth(maxLineHeight);
+        painter.setPen(pen);
+        curh -= lineheight;
+        painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
+    }
+
+}
+
+void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
+{
+    if (!source->text().isEmpty())
+        this->insertPlainText(source->text());
 }

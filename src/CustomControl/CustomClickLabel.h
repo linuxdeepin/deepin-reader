@@ -32,10 +32,7 @@ class CustomClickLabel : public DLabel
     Q_DISABLE_COPY(CustomClickLabel)
 
 public:
-    CustomClickLabel(const QString &text, DWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-
-public:
-    void setThemePalette();
+    CustomClickLabel(const QString &text = "", DWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
 signals:
     void clicked();

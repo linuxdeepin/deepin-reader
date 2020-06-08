@@ -17,7 +17,7 @@ class ProxyViewDisplay;
 class ProxyMouseMove;
 class ProxyFileDataModel;
 class TipsWidget;
-class NoteViewWidget;
+class NoteShadowViewWidget;
 class TextOperationMenu;
 class DefaultOperationMenu;
 class ProxyData;
@@ -88,7 +88,7 @@ private:
     void clearSelect();
 private:
     bool m_hasOpened = false;
-    NoteViewWidget          *m_pNoteViewWidget = nullptr;       //  注释内容显示框
+    NoteShadowViewWidget    *m_pNoteViewWidget = nullptr;       //  注释内容显示框
     TipsWidget              *m_pTipWidget = nullptr;            //  注释提示框
     TextOperationMenu       *m_operatemenu = nullptr;
     DefaultOperationMenu    *m_pDefaultMenu = nullptr;

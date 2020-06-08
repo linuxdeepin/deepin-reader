@@ -39,6 +39,10 @@ private:
 private slots:
     void slotTextEditMaxContantNum();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void insertFromMimeData(const QMimeData *source) override;
+
 private:
     int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
 };
