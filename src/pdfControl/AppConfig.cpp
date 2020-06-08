@@ -9,6 +9,9 @@ AppConfig::AppConfig(QObject *parent)
     : QObject(parent)
 {
     m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath(ConstantMsg::g_cfg_name), QSettings::IniFormat, parent);
+
+    InitColor();
+    InitKeyList();
 }
 
 void AppConfig::InitColor()
