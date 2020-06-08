@@ -8,7 +8,7 @@
 #include "menu/DefaultOperationMenu.h"
 #include "widgets/FindWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "business/AppInfo.h"
+#include "pdfControl/AppConfig.h"
 #include "SheetBrowserPDF.h"
 #include "lpreviewControl/note/NoteViewWidget.h"
 #include "DocSheetPDF.h"
@@ -219,9 +219,9 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
 
     bool t_bHigh = false;
 
-    dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+    dApp->m_pAppCfg->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
 
-    dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
+    dApp->m_pAppCfg->mousePressLocal(t_bHigh, point);
 
     m_pNoteViewWidget->showWidget(point);
 }
@@ -358,7 +358,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setClickPage(textPage);
 
-        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
 
         bool bremoveenable = false;
 
@@ -387,7 +387,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setClickPage(clickPage);
 
-        dApp->m_pAppInfo->setMousePressLocal(bIsHighLight, tempPoint);
+        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
 
         if (bicon) {
             m_operatemenu->setType(NOTE_ICON);
@@ -403,7 +403,7 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         clearSelect();
     } else {  //  否则弹出 文档操作菜单
-        dApp->m_pAppInfo->setMousePressLocal(false, tempPoint);
+        dApp->m_pAppCfg->setMousePressLocal(false, tempPoint);
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
 

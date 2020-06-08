@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesWidget.h"
-#include "business/AppInfo.h"
+#include "pdfControl/AppConfig.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
