@@ -78,7 +78,7 @@ void DocummentPDFPrivate::loadDocumment(QString filepath)
                 countlabelnotmatch ++;
             }
         }
-        m_pages.append((PageBase *)page);
+        m_pages.append(static_cast<PageBase *>(page));
     }
 
     if (countlabelnotmatch <= 0) {
@@ -118,9 +118,9 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
         m_fileinfo->strProducter = document->producer();
         m_fileinfo->strCreater = document->creator();
         m_fileinfo->bsafe = document->isEncrypted();
-        m_fileinfo->iWidth = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width();
-        m_fileinfo->iHeight = static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height();
-        m_fileinfo->iNumpages = document->numPages();
+        m_fileinfo->iWidth = static_cast<unsigned int>(static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().width());
+        m_fileinfo->iHeight = static_cast<unsigned int>(static_cast<PagePdf *>(m_pages.at(0))->GetPage()->pageSize().height());
+        m_fileinfo->iNumpages = static_cast<unsigned int>(document->numPages());
     }
 }
 
@@ -200,7 +200,7 @@ void DocummentPDF::removeAllAnnotation()
     scaleAndShow(d->m_scale, d->m_rotate);
 }
 
-QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em type)
+QString DocummentPDF::removeAnnotation(const QPoint &startpos, AnnoteType_Em)
 {
     Q_D(DocummentPDF);
     QPoint pt = startpos;
@@ -307,7 +307,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
                     annote->setUniqueName(struuid);
                 }
                 QString strcontents = annote->contents();
-                stres.ipage = i;
+                stres.ipage = static_cast<unsigned int>(i);
                 stres.strcontents = strcontents;
                 stres.struuid = struuid;
                 listres.push_back(stres);
@@ -317,7 +317,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     }
 }
 
-void DocummentPDF::search(const QString &strtext, QColor color)
+void DocummentPDF::search(const QString &strtext, QColor)
 {
     Q_D(DocummentPDF);
     clearSearch();
@@ -511,7 +511,7 @@ bool DocummentPDF::freshFile(QString file)
 {
     Q_D(DocummentPDF);
     for (int i = 0; i < d->m_pages.size(); i++) {
-        ((PagePdf *)d->m_pages.at(i))->deletePage();
+        static_cast<PagePdf *>(d->m_pages.at(i))->deletePage();
     }
     if (nullptr != d->document) {
         delete d->document;
@@ -527,7 +527,7 @@ bool DocummentPDF::freshFile(QString file)
     d->document->setRenderHint(Poppler::Document::ThinLineSolid, true);
     d->document->setRenderHint(Poppler::Document::ThinLineShape, true);
     for (int i = 0; i < d->m_pages.size(); i++) {
-        ((PagePdf *)d->m_pages.at(i))->freshPage(d->document->page(i));
+        (static_cast<PagePdf *>(d->m_pages.at(i)))->freshPage(d->document->page(i));
     }
     return true;
 }
@@ -639,19 +639,19 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
         break;
         }
 
-        pt.setX(pt.x() - d->m_pages.at(ipage)->x() - (d->m_pages.at(ipage)->width() - curwidth));
-        pt.setY(pt.y() - d->m_pages.at(ipage)->y() - (d->m_pages.at(ipage)->height() - curheight));
+        pt.setX(static_cast<int>(pt.x() - d->m_pages.at(ipage)->x() - (d->m_pages.at(ipage)->width() - curwidth)));
+        pt.setY(static_cast<int>(pt.y() - d->m_pages.at(ipage)->y() - (d->m_pages.at(ipage)->height() - curheight)));
 
         int x, y;
-        int space = ICONANNOTE_WIDTH * d->m_scale;
+        int space = static_cast<int>(ICONANNOTE_WIDTH * d->m_scale);
         if (pt.x() > ICONANNOTE_WIDTH / 2) {
-            x = (pt.x() + space / 2) > curwidth ? curwidth - space / 2 : pt.x();
+            x = (pt.x() + space / 2) > curwidth ? static_cast<int>(curwidth - space / 2) : pt.x();
         } else {
             x = (pt.x() < space / 2) ? space / 2 : pt.x();
         }
         pt.setX(x);
         if (pt.y() > space / 2) {
-            y = (pt.y() + space / 2) > curheight ? curheight - space / 2 : pt.y();
+            y = (pt.y() + space / 2) > curheight ? static_cast<int>(curheight - space / 2) : pt.y();
         } else {
             y = (pt.y() < space / 2) ? space / 2 : pt.y();
         }

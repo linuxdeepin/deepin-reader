@@ -100,7 +100,7 @@ public:
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
-    virtual void loadDocumment(QString filepath) {}
+    virtual void loadDocumment(QString) {}
 protected:
     DocummentBase *q_ptr;
     Q_DECLARE_PUBLIC(DocummentBase)
@@ -125,40 +125,40 @@ public:
     {
         return QString();
     }
-    virtual void removeAnnotation(const QString &struuid, int ipage = -1) {}
-    virtual QString addAnnotation(const QPoint &, const QPoint &, QColor color = Qt::yellow)
+    virtual void removeAnnotation(const QString &, int) {}
+    virtual QString addAnnotation(const QPoint &, const QPoint &, QColor)
     {
         return QString();
     }
-    virtual void search(const QString &strtext, QColor color = Qt::yellow) {}
-    virtual void getAllAnnotation(QList<stHighlightContent> &listres) {}
+    virtual void search(const QString &, QColor) {}
+    virtual void getAllAnnotation(QList<stHighlightContent> &) {}
     virtual void clearSearch() {}
     virtual void docBasicInfo(stFileInfo &info);
-    virtual void title(QString &title) {}
-    virtual void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) {}
-    virtual void getAnnotationText(const QString &struuid, QString &strtext, int ipage) {}
-    virtual bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
+    virtual void title(QString &) {}
+    virtual void setAnnotationText(int, const QString &, const QString &) {}
+    virtual void getAnnotationText(const QString &, QString &, int) {}
+    virtual bool annotationClicked(const QPoint &, QString &, QString &)
     {
         return false;
     }
-    virtual bool freshFile(QString file)
+    virtual bool freshFile(QString)
     {
         return false;
     }
-    virtual void jumpToHighLight(const QString &uuid, int ipage) {}
+    virtual void jumpToHighLight(const QString &, int) {}
     virtual void changeAnnotationColor(int, const QString, const QColor &) {}
     virtual Outline outline()
     {
         return Outline();
     }
-    virtual QString addTextAnnotation(const QPoint &, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note)
+    virtual QString addTextAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)
     {
         return  QString();
     }
     virtual bool iconAnnotationClicked(const QPoint &, QString &, QString &)
     {
         return false;
-    };
+    }
     void stopLoadPageThread();
     void waitThreadquit();
     bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);

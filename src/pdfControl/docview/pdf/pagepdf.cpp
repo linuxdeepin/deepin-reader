@@ -141,8 +141,8 @@ private:
                     s = c;
                     addChar = true;
                 }
-                if (m_bquit)
-                    int a = 0;
+//                if (m_bquit)
+//                    int a = 0;
                 if (addChar) {
                     QRectF charBBox = word->charBoundingBox(textBoxChar);
                     stWord sword;
@@ -167,8 +167,8 @@ private:
                 m_words.append(sword);
             }
         }
-        if (m_bquit)
-            int a = 0;
+//        if (m_bquit)
+//            int a = 0;
         return true;
     }
 };
@@ -187,7 +187,7 @@ stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords
     Q_D(PagePdf);
     d->m_highlights.clear();
     stSearchRes stres;
-    stres.ipage = d_ptr->m_pageno;
+    stres.ipage = static_cast<unsigned int>(d->m_pageno);
     stres.listtext.clear();
     const Poppler::Page::SearchFlags flags((matchCase ? 0 : Poppler::Page::IgnoreCase) | (wholeWords ? Poppler::Page::WholeWords : 0));
     d->m_highlights = d->m_page->search(text, flags);
@@ -642,7 +642,10 @@ bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, do
     int xres = 72.0, yres = 72.0;
     if (!d->m_page)
         return false;
-    image = d->m_page->renderToImage(xres * scalebase, yres * scalebase, ptimage.x() - destwidth / 2, ptimage.y() - destwidth / 2, destwidth, destwidth);
+    image = d->m_page->renderToImage(xres * scalebase, yres * scalebase,
+                                     static_cast<int>(ptimage.x() - destwidth / 2),
+                                     static_cast<int>(ptimage.y() - destwidth / 2),
+                                     static_cast<int>(destwidth), static_cast<int>(destwidth));
     return true;
 }
 

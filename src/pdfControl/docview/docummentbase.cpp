@@ -49,7 +49,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
 
     d->m_searchTask = new SearchTask(this);
 
-    connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
+    connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int, int) {
         Q_D(DocummentBase);
         DScrollBar *scrollBar_Y = verticalScrollBar();
         if (d->m_currentpageno < 0 || d->m_widgetrects.size() <= 0) {
@@ -71,7 +71,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         showCurPageViewAfterScaleChanged();
         d->donotneedreloaddoc = false;
     });
-    connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int min, int max) {
+    connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int, int) {
         Q_D(DocummentBase);
         DScrollBar *scrollBar_X = horizontalScrollBar();
         if (d->m_currentpageno < 0) {
@@ -147,7 +147,7 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
 //    if (stop.y() < start.y()) {
 //        mousedirectiondown = false;
 //    }
-    // qDebug() << "startpoint:" << start << " stoppoint:" << stop;
+
     int startpagenum = -1, endpagenum = -1;
 
     for (int i = 0; i < d->m_widgets.size(); i++) {
@@ -223,7 +223,6 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
         }
     }
 
-    //    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
     if (-1 == startpagenum || -1 == endpagenum)
         return false;
     if (startpagenum > endpagenum) {
@@ -234,10 +233,8 @@ bool DocummentBase::mouseSelectText(QPoint start, QPoint stop)
         qstart = qstop;
         qstop = mp;
     }
-    //    qDebug() << "startpagenum:" << startpagenum << " endpagenum:" << endpagenum;
     bool re = false;
     for (int i = startpagenum; i < endpagenum + 1; i++) {
-        //        PagePdf *ppdf = (PagePdf *)m_pages.at(i);
         QPoint pfirst = QPoint(d->m_pages.at(i)->x(), d->m_pages.at(i)->y());
         QPoint plast = QPoint(d->m_pages.at(i)->width() + d->m_pages.at(i)->x(),
                               d->m_pages.at(i)->height() + d->m_pages.at(i)->y());
@@ -317,10 +314,8 @@ int DocummentBase::pointInWhichPage(QPoint &qpoint)
             switch (d->m_viewmode) {
             case ViewMode_SinglePage:
                 pagenum = i;
-                //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
                 break;
             case ViewMode_FacingPage:
-                //                qpoint = QPoint(qpoint.x() - m_widgets.at(i)->x(), qpoint.y() - m_widgets.at(i)->y());
                 if (2 * i >= d->m_pages.size()) {
                     return pagenum;
                 }
@@ -359,13 +354,13 @@ void DocummentBase::slot_searchValueAdd(stSearchRes res)
     Q_D(DocummentBase);
     if (d->m_bsearchfirst) {
         d->m_bsearchfirst = false;
-        d->m_findcurpage = res.ipage;
+        d->m_findcurpage = static_cast<int>(res.ipage);
         d->m_cursearch = 1;
-        d->m_pagecountsearch.insert(res.ipage, res.listtext.size());
+        d->m_pagecountsearch.insert(static_cast<int>(res.ipage), res.listtext.size());
         emit signal_searchRes(res);
         findNext();
     } else {
-        d->m_pagecountsearch.insert(res.ipage, res.listtext.size());
+        d->m_pagecountsearch.insert(static_cast<int>(res.ipage), res.listtext.size());
         emit signal_searchRes(res);
     }
 }
@@ -477,8 +472,8 @@ bool DocummentBase::showMagnifier(QPoint point)
                 if (ppage ->getMagnifierPixmap(pixmap, qpoint, d->m_magnifierwidget->getMagnifierRadius(), ppage->width()*d->m_magnifierwidget->getMagnifierScale(), ppage->height()*d->m_magnifierwidget->getMagnifierScale())) {
                     if (pixmap.size().width() < d->m_magnifierwidget->getMagnifierRadius() * 2) {
                         left = (d->m_widgets.at(pagenum)->width() - curwidth) / 2.0;
-                        int ileft = qpoint.x() - left;
-                        int iright = left + curwidth - qpoint.x();
+                        int ileft = static_cast<int>(qpoint.x() - left);
+                        int iright = static_cast<int>(left + curwidth - qpoint.x());
                         int iwidth = d->m_magnifierwidget->getMagnifierRadius() * 2;
                         QPixmap pixres(QSize(iwidth, iwidth));
                         pixres.fill(Qt::transparent);
@@ -488,16 +483,15 @@ bool DocummentBase::showMagnifier(QPoint point)
                             //在右边
                             if (iright < 0 || ileft > iright) {
                                 if (iright < 0) {
-                                    pixmap = pixmap.copy(qpoint.x() - curwidth - left, 0, imaginfierradius - (qpoint.x() - curwidth - left), imaginfierradius * 2);
+                                    pixmap = pixmap.copy(static_cast<int>(qpoint.x() - curwidth - left), 0,
+                                                         static_cast<int>(imaginfierradius - (qpoint.x() - curwidth - left)), imaginfierradius * 2);
                                 }
                                 painter.drawPixmap(pixmap.rect(), pixmap);
 
                             } else {
                                 if (qpoint.x() - left < imaginfierradius && ileft < 0) {
-                                    pixmap = pixmap.copy(/*left - qpoint.x()*/0, 0, imaginfierradius - (left - qpoint.x()), imaginfierradius * 2);
-                                } /*else if (qpoint.x() - left > 0 && qpoint.x() - left < 2 * imaginfierradius) {
-                                    pixmap = pixmap.copy(0, 0, imaginfierradius - (left - qpoint.x()), imaginfierradius * 2);
-                                }*/
+                                    pixmap = pixmap.copy(0, 0, static_cast<int>(imaginfierradius - (left - qpoint.x())), imaginfierradius * 2);
+                                }
                                 int iorgwidth = pixmap.rect().width();
                                 int iorgheight = pixmap.rect().height();
                                 QRect rect(iwidth - iorgwidth, iwidth - iorgheight, iorgwidth, iorgheight);
@@ -507,7 +501,7 @@ bool DocummentBase::showMagnifier(QPoint point)
 
                         pixmap = pixres;
                     }
-                    qDebug() << __FUNCTION__ << "############" << pixmap.size() << d->m_magnifierwidget->getMagnifierRadius();
+
                     d->m_magnifierwidget->setPixmap(pixmap);
                     d->m_magnifierwidget->setPoint(gpoint);
                     d->m_magnifierwidget->setShowState(true);
@@ -856,7 +850,7 @@ Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
     return nullptr;
 }
 
-void DocummentBase::slot_vScrollBarValueChanged(int value)
+void DocummentBase::slot_vScrollBarValueChanged(int)
 {
     Q_D(DocummentBase);
     if (!d->donotneedreloaddoc) {
@@ -870,7 +864,7 @@ void DocummentBase::slot_vScrollBarValueChanged(int value)
     }
 }
 
-void DocummentBase::slot_hScrollBarValueChanged(int value)
+void DocummentBase::slot_hScrollBarValueChanged(int)
 {
     Q_D(DocummentBase);
     if (!d->donotneedreloaddoc) {
@@ -942,10 +936,10 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
             double topspace = (d->m_widgets.at(curpage)->height() - curheight) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curwidth) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = static_cast<int>(d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2);
             //横向有缩放
             if (frameRect().width() < curwidth) {
-                int iwidth = rectorg.x() + leftspace;
+                int iwidth = static_cast<int>(rectorg.x() + leftspace);
                 if (iwidth > (frameRect().width() / 2)) {
                     xvalue = iwidth - frameRect().width() / 2;
                 } else {
@@ -959,10 +953,10 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
             double topspace = (d->m_widgets.at(curpage)->height() - curwidth) / 2;
             double leftspace = (d->m_widgets.at(curpage)->width() - curheight) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = static_cast<int>(d->m_widgets.at(curpage)->y() + topspace + rectorg.y() - widgetheight / 2);
             //横向有缩放
             if (frameRect().width() < curheight) {
-                int iwidth = rectorg.x() + leftspace;
+                int iwidth = static_cast<int>(rectorg.x() + leftspace);
                 if (iwidth > (frameRect().width() / 2)) {
                     xvalue = iwidth - frameRect().width() / 2;
                 } else {
@@ -980,21 +974,21 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         case RotateType_180: {
             double topspace = (d->m_widgets.at(index)->height() - curheight) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = static_cast<int>(d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2);
 
             if (0 == curpage % 2) {
                 //左侧
                 double leftspace = (d->m_widgets.at(index)->width() - ispace) / 2 - curwidth;
                 //横向有缩放
                 if (frameRect().width() < 2 * curwidth) {
-                    int iwidth = rectorg.x() + leftspace;
+                    int iwidth = static_cast<int>(rectorg.x() + leftspace);
                     xvalue = iwidth - frameRect().width() / 2;
                 }
             } else {
                 //右侧
                 double leftspace = d->m_widgets.at(index)->width() / 2 + ispace / 2;
                 if (frameRect().width() < 2 * curwidth) {
-                    int iwidth = rectorg.x() + leftspace;
+                    int iwidth = static_cast<int>(rectorg.x() + leftspace);
                     xvalue = iwidth - frameRect().width() / 2;
                 }
             }
@@ -1004,20 +998,20 @@ void DocummentBase::cacularValueXY(int &xvalue, int &yvalue, int curpage, bool b
         case RotateType_270: {
             double topspace = (d->m_widgets.at(index)->height() - curwidth) / 2;
             int widgetheight = frameRect().height();
-            yvalue = d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2;
+            yvalue = static_cast<int>(d->m_widgets.at(index)->y() + topspace + rectorg.y() - widgetheight / 2);
             if (0 == curpage % 2) {
                 //左侧
                 double leftspace = (d->m_widgets.at(index)->width() - ispace) / 2 - curheight;
                 //横向有缩放
                 if (frameRect().width() < 2 * curheight) {
-                    int iwidth = rectorg.x() + leftspace;
+                    int iwidth = static_cast<int>(rectorg.x() + leftspace);
                     xvalue = iwidth - frameRect().width() / 2;
                 }
             } else {
                 //右侧
                 double leftspace = d->m_widgets.at(index)->width() / 2 + ispace / 2;
                 if (frameRect().width() < 2 * curheight) {
-                    int iwidth = rectorg.x() + leftspace;
+                    int iwidth = static_cast<int>(rectorg.x() + leftspace);
                     xvalue = iwidth - frameRect().width() / 2;
                 }
             }
@@ -1047,12 +1041,10 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
         break;
     default:
         return false;
-        break;
     }
 
     pageJump(currpageno);
 
-//    showCurPageViewAfterScaleChanged();
     loadPages();
 
     d->m_vboxLayout->update();
@@ -1074,9 +1066,9 @@ bool DocummentBase::loadPages()
     int curheight = 1;
 
     if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180 || d->m_rotate == RotateType_Normal) {
-        curheight = d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageHeight();
+        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageHeight());
     } else {
-        curheight = d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageWidth();
+        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageWidth());
     }
 
     int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
@@ -1320,9 +1312,9 @@ void DocummentBase::findPrev()
                     scrollBar_X->setValue(xvalue);
             }
             d->m_cursearch--;
-        } else {
+        } /*else {
             qDebug() << __FUNCTION__ << "first page";
-        }
+        }*/
     }
     d->bfindnext = false;
     d->m_pages.at(d->m_findcurpage)->update();
@@ -1385,7 +1377,6 @@ void DocummentBase::wheelEvent(QWheelEvent *e)
 
 void DocummentBase::slot_dataLoaded(bool result)
 {
-    Q_D(DocummentBase);
     emit signal_openResult(result);
 }
 
@@ -1467,10 +1458,10 @@ void DocummentBase::pageMove(double mvx, double mvy)
 {
     DScrollBar *scrollBar_X = horizontalScrollBar();
     if (scrollBar_X)
-        scrollBar_X->setValue(scrollBar_X->value() + mvx);
+        scrollBar_X->setValue(static_cast<int>(scrollBar_X->value() + mvx));
     DScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
-        scrollBar_Y->setValue(scrollBar_Y->value() + mvy);
+        scrollBar_Y->setValue(static_cast<int>(scrollBar_Y->value() + mvy));
 }
 
 bool DocummentBase::setMagnifierStyle(int magnifierradius, int magnifierringwidth, double magnifierscale)
@@ -1519,7 +1510,7 @@ bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM
     d->m_scale = scale;
     d->m_rotate = rotatetype;
     d->m_viewmode = viewmode;
-    d->m_currentpageno = ipage;
+    d->m_currentpageno = static_cast<int>(ipage);
     d->donotneedreloaddoc = true;
 
     if (!loadDocumment(filepath))
@@ -1634,12 +1625,12 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
                 double leftspace = (d->m_widgets.at(ipage)->width() - curwidth) / 2;
                 double leftposition = curwidth * realleft + leftspace;
                 double topposition = curheight * realtop + topspace;
-                yvalue = d->m_widgets.at(ipage)->y() + topposition;
+                yvalue = static_cast<int>(d->m_widgets.at(ipage)->y() + topposition);
 
                 //横向有缩放
                 if (frameRect().width() < curwidth) {
                     if (leftposition > frameRect().width()) {
-                        xvalue = leftposition - frameRect().width();
+                        xvalue = static_cast<int>(leftposition - frameRect().width());
                     } else {
                         xvalue = 0;
                     }
@@ -1659,12 +1650,12 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
 
             double leftposition = curwidth * realleft + leftspace ;
             double topposition = curheight * realtop + topspace;
-            yvalue = d->m_widgets.at(ipage / 2)->y() + topposition;
+            yvalue = static_cast<int>(d->m_widgets.at(ipage / 2)->y() + topposition);
             //横向有缩放
             if (frameRect().width() < curwidgetwidth && ipage % 2 == 1) {
-                xvalue = leftposition;
+                xvalue = static_cast<int>(leftposition);
             } else {
-                xvalue = leftspace;
+                xvalue = static_cast<int>(leftspace);
             }
         }
     }
@@ -1715,20 +1706,20 @@ QPoint DocummentBase::transformPoint(const QPoint &pt, int pageIndex, RotateType
         curwidth = d->m_pages.at(pageIndex)->getOriginalImageHeight()  * scale;
         curheight = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
         pos.setX(pt.y());
-        pos.setY(curwidth - pt.x());
+        pos.setY(static_cast<int>(curwidth - pt.x()));
     }
     break;
     case RotateType_180: {
         curwidth = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
         curheight = d->m_pages.at(pageIndex)->getOriginalImageHeight() * scale;
-        pos.setX(curwidth - pt.x());
-        pos.setY(curheight - pt.y());
+        pos.setX(static_cast<int>(curwidth - pt.x()));
+        pos.setY(static_cast<int>(curheight - pt.y()));
     }
     break;
     case RotateType_270: {
         curwidth = d->m_pages.at(pageIndex)->getOriginalImageHeight()  * scale;
         curheight = d->m_pages.at(pageIndex)->getOriginalImageWidth() * scale;
-        pos.setX((curheight - pt.y()));
+        pos.setX(static_cast<int>(curheight - pt.y()));
         pos.setY(pt.x());
     }
     break;

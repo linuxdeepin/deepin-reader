@@ -485,7 +485,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         int curIndex = fdm.getOper(CurIndex).toInt();
 
-        bool rl = m_pProxy->openFile(Dr::PDF, sPath, curIndex, rotatetype, scaleRatio, viewmode);
+        bool rl = m_pProxy->openFile(Dr::PDF, sPath, static_cast<unsigned int>(curIndex), rotatetype, scaleRatio, viewmode);
 
         if (rl) {
             m_pProxy->setViewFocus();
