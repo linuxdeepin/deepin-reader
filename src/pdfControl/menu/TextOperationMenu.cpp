@@ -42,8 +42,6 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
             removeAction(m_pSeparator);
             m_bSeparator = true;
         }
-//        delete m_pSeparator;
-//        m_pSeparator = nullptr;
     } else if (m_nType == NOTE_HIGHLIGHT) {
         m_pRemoveHighLight->setText(tr("Remove highlight"));
         insertAction(m_pRemoveHighLight, m_pColorWidgetAction);
@@ -56,7 +54,6 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
 
             m_bSeparator = false;
         }
-        //  m_pColorWidgetAction->setVisible(true);
     }
 
     m_strNoteUuid = sUuid;
@@ -82,10 +79,8 @@ void TextOperationMenu::initActions()
     m_pColorWidgetAction = new ColorWidgetAction(this);
     connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
     this->addAction(m_pColorWidgetAction);
-//    this->addSeparator();
 
     m_pRemoveHighLight = createAction(tr("Remove highlight"), SLOT(slotRemoveHighLightClicked()));
-//    m_pSeparator = this->addSeparator();
     m_pAddNote = createAction(tr("Add annotation"), SLOT(slotAddNoteClicked()));
     m_pAddBookMark = createAction(tr("Add bookmark"), SLOT(slotAddBookMarkClicked()));
     m_pSeparator = this->insertSeparator(m_pAddNote);
@@ -96,7 +91,6 @@ QAction *TextOperationMenu::createAction(const QString &text, const char *member
     auto action = new  QAction(text, this);
     connect(action, SIGNAL(triggered()), member);
     this->addAction(action);
-//    this->addSeparator();
     return action;
 }
 
@@ -136,8 +130,6 @@ void TextOperationMenu::slotCopyClicked()
 void TextOperationMenu::slotRemoveHighLightClicked()
 {
     QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-//    QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y());
-//    emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);
     if (m_strNoteUuid != "") {
         QString sContent = QString::number(m_pClickPoint.x()) + Constant::sQStringSep +  QString::number(m_pClickPoint.y()) + Constant::sQStringSep +  m_strNoteUuid;
         emit sigActionTrigger(MSG_NOTE_REMOVE_HIGHLIGHT, sContent);

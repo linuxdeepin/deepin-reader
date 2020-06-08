@@ -110,7 +110,6 @@ int DocummentProxy::getPageSNum()
 {
     if (!m_documment || bcloseing)
         return false;
-    // qDebug() << "getPageSNum";
     return m_documment->getPageSNum();
 }
 
@@ -166,7 +165,6 @@ void DocummentProxy::moveIconAnnotation(const QString &uuid, const QPoint &pos)
 {
     if (!m_documment || bcloseing)
         return ;
-    // m_documment->moveIconAnnotation(uuid, pos);
 }
 
 bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
@@ -394,7 +392,6 @@ int DocummentProxy::pointInWhichPage(QPoint pos)
 
 void DocummentProxy::jumpToHighLight(const QString &uuid, int index)
 {
-//    qDebug() << "DocummentProxy::jumpToHighLight";
     if (m_documment) {
         m_documment->jumpToHighLight(uuid, index);
     }

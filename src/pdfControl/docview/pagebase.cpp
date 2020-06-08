@@ -7,7 +7,6 @@
 
 ThreadRenderImage::ThreadRenderImage()
 {
-    //    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     m_page = nullptr;
     restart = false;
     m_width = 0;
@@ -24,7 +23,6 @@ void ThreadRenderImage::setRestart()
 
 void ThreadRenderImage::setPage(PageInterface *page, double width, double height)
 {
-//    qDebug() << "ThreadRenderImage::setPage" << width << height;
     m_page = page;
     m_width = width;
     m_height = height;
@@ -69,10 +67,7 @@ void ThreadRenderImage::run()
                 }
                 if (restart)
                     continue;
-                // qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " emit render!";
                 emit signal_RenderFinish(image);
-            } else {
-                // qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get fail!";
             }
         }
     }
@@ -125,7 +120,6 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     Q_D(PageBase);
     setMouseTracking(true);
     d->pixelratiof = devicePixelRatioF();
-    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->bookmarkbtn = new BookMarkButton(this);
     d->bookmarkbtn->raise();
     d->m_spinner = new DSpinner(this);
@@ -187,11 +181,10 @@ void PageBase::clearPageTextSelections()
 bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
 {
     Q_D(PageBase);
-    // qDebug() << "pageTextSelections start:" << start << " end:" << end;
-    //    qDebug() << "pageTextSelections x():" << x() << " y()" << y();
+
     QPoint startC = QPoint(start.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2, start.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2);
     QPoint endC = QPoint(end.x() - x() - (width() - d->m_scale * d->m_imagewidth) / 2, end.y() - y() - (height() - d->m_scale * d->m_imageheight) / 2);
-    //    qDebug() << "startC1:" << startC << " endC1:" << endC;
+
     switch (d->m_rotate) {
     case RotateType_90:
         startC = QPoint((start.x() - x() - (width() - d->m_scale * d->m_imageheight) / 2), (start.y() - y() - (height() - d->m_scale * d->m_imagewidth) / 2));
@@ -212,7 +205,6 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     default:
         break;
     }
-    //    qDebug() << "startC:" << startC << " endC:" << endC;
     QPoint temp;
     //增加判断条件 （startC.y() > endC.y()）  add by dxh   2020-5-22
     if (startC.y() > endC.y() && startC.x() > endC.x()) {
@@ -229,12 +221,9 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
     QPoint endD = QPoint(start_end.x() + start_end.width(), start_end.y() + start_end.height());
     QRectF tmp;
     int startword = -1, stopword = -1;
-    //    qDebug() << "page width:" << width() << " height:" << height() << " m_imagewidth:" << m_imagewidth << " m_imageheight:" << m_imageheight;
     const double scaleX = d->m_scale ;
     const double scaleY = d->m_scale ;
-    // qDebug() << "m_words size:" << d->m_words.size();
     for (int i = 0; i < d->m_words.size(); i++) {
-        //        qDebug() << "m_words i:" << i << " rect:" << m_words.at(i).rect;
         tmp = d->m_words.at(i).rect;
         if (startD.x() > (tmp.x() * d->m_scale) &&
                 startD.x() < (tmp.x() * scaleX + tmp.width() * scaleX) &&
@@ -249,7 +238,6 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             stopword = i;
         }
     }
-    // qDebug() << " startword:" << startword << " stopword:" << stopword;
     if (-1 == startword && stopword == -1) {
         int i;
         for (i = 0; i < d->m_words.size(); i++) {
@@ -257,7 +245,6 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
             if (start_end.intersects(QRect(tmp.x() * scaleX,
                                            tmp.y() * scaleY, tmp.width() * scaleX,
                                            tmp.height() * scaleY))) {
-                //                qDebug() << "break i:" << i;
                 break;
             }
         }
@@ -299,7 +286,6 @@ bool PageBase::pageTextSelections(const QPoint start, const QPoint end)
         startword = stopword;
         stopword = im;
     }
-//    d->paintrects.clear();
     d->m_selecttextstartword = startword;
     d->m_selecttextendword = stopword;
     setSelectTextRects();
@@ -473,7 +459,6 @@ bool PageBase::getMagnifierPixmap(QPixmap &pixmap, QPointF point, int radius, do
         qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius, radius * 2);
     } else if (relx - radius > 0 && relx - radius < radius) {
         qpixmap1 = qpixmap.copy(relx - radius, rely - radius, relx, radius * 2);
-        // qDebug() << __FUNCTION__ << "&&&&&&&&&&&&" << qpixmap1.size();
     } else {
         qpixmap1 = qpixmap.copy(relx - radius, rely - radius, radius * 2, radius * 2);
     }
@@ -579,7 +564,6 @@ void PageBase::setScaleAndRotate(double scale, RotateType_EM rotate)
         setFixedSize(QSize(d->m_imagewidth * scale, d->m_imageheight * scale));
         break;
     }
-    //  emit signal_update();
 }
 
 Page::Link *PageBase::ifMouseMoveOverLink(const QPoint point)
@@ -633,7 +617,6 @@ void PageBase::selectAllText()
 
 QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 {
-    Q_D(PageBase);
     //旋转角度逆时针增加
     QRectF newrect;
     switch (rotate) {
@@ -674,7 +657,6 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
 
 QPointF PageBase::translatepoint(QPointF pt, double scale, RotateType_EM rotate)
 {
-    Q_D(PageBase);
     QPointF respt;
     switch (rotate) {
     case RotateType_Normal:
@@ -712,11 +694,9 @@ bool PageBase::showImage(double scale, RotateType_EM rotate)
     }
     d->m_scale = scale;
     d->m_rotate = rotate;
-    // qDebug() << "PageBase::showImage*****" << d->m_pageno;
     d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
     connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
     if (!d->threadreander.isRunning()) {
-//        d->threadreander.start();
         d->threadreander.setRunningTrue();
         QThreadPool::globalInstance()->start(&d->threadreander);
     } else {
