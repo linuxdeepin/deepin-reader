@@ -38,8 +38,8 @@
 #include "DocTabBar.h"
 #include "MainWindow.h"
 #include "business/AppInfo.h"
-#include "business/SaveDialog.h"
-
+#include "widgets/SaveDialog.h"
+#include "widgets/PrintManager.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"
@@ -49,7 +49,6 @@
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
-#include "business/PrintManager.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)

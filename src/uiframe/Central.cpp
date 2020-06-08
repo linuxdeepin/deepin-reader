@@ -34,7 +34,7 @@
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "MainWindow.h"
-#include "business/ShortCutShow.h"
+#include "widgets/ShortCutShow.h"
 
 #include <QFileInfo>
 #include <QMimeData>

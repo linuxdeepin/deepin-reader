@@ -9,7 +9,10 @@ HEADERS += \
     $$PWD/FontMenu.h \
     $$PWD/HandleMenu.h \
     $$PWD/ScaleWidget.h \
-    $$PWD/bookmarkbutton.h
+    $$PWD/bookmarkbutton.h \
+    $$PWD/SaveDialog.h \
+    $$PWD/PrintManager.h \
+    $$PWD/ShortCutShow.h
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
@@ -21,4 +24,7 @@ SOURCES += \
     $$PWD/FontMenu.cpp \
     $$PWD/HandleMenu.cpp \
     $$PWD/ScaleWidget.cpp \
-    $$PWD/bookmarkbutton.cpp
+    $$PWD/bookmarkbutton.cpp \
+    $$PWD/SaveDialog.cpp \
+    $$PWD/PrintManager.cpp \
+    $$PWD/ShortCutShow.cpp
