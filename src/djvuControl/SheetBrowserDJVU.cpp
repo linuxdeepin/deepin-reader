@@ -335,14 +335,26 @@ void SheetBrowserDJVU::mouseMoveEvent(QMouseEvent *event)
             clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
             painter.setClipPath(clippath);
             painter.drawImage(0, 0, image);
+<<<<<<< HEAD
             painter.end();
+=======
+            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
+            m_magnifierLabel->setPixmap(pix);
+
+>>>>>>> chore: 删除无用代码
         } else {
             QPainter painter(&pix);
             QPainterPath clippath;
             clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
             painter.setClipPath(clippath);
+<<<<<<< HEAD
             painter.fillRect(0, 0, 244, 244, Qt::white);
             painter.end();
+=======
+            painter.fillRect(0, 0, 234, 234, Qt::white);
+            painter.drawPixmap(0, 0, 234, 234, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
+            m_magnifierLabel->setPixmap(pix);
+>>>>>>> chore: 删除无用代码
         }
 
         QPainter painter(&pix);

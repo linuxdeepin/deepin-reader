@@ -2,7 +2,6 @@
 #include "pagepdf.h"
 #include "../searchtask.h"
 #include "pdfControl/docview/publicfunc.h"
-//#include "../docummentbase.cpp"
 #include <DScrollBar>
 #include <QImage>
 #include <QTemporaryFile>
@@ -300,7 +299,7 @@ void DocummentPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     for (int i = 0; i < d->m_pages.size(); ++i) {
         QList<Poppler::Annotation *> listannote = static_cast<PagePdf *>(d->m_pages.at(i))->GetPage()->annotations();
         foreach (Poppler::Annotation *annote, listannote) {
-            if (annote->subType() == Poppler::Annotation::AHighlight || (annote->subType() == Poppler::Annotation::AText /*&& annote->flags() == static_cast<Poppler::Annotation::Flag>(6)*/)) {
+            if (annote->subType() == Poppler::Annotation::AHighlight || (annote->subType() == Poppler::Annotation::AText)) {
                 stHighlightContent stres;
                 QString struuid = annote->uniqueName();
                 if (struuid.isEmpty()) {
@@ -361,8 +360,6 @@ bool DocummentPDF::save(const QString &filePath)
 
 bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 {
-    Q_D(DocummentPDF);
-
     return pdfsave(filePath, withChanges);
 
 //    QString strsource = d->m_fileinfo->strFilepath;
@@ -479,7 +476,6 @@ void DocummentPDF::title(QString &title)
 }
 void DocummentPDF::setAnnotationText(int ipage, const QString &struuid, const QString &strtext)
 {
-    Q_D(DocummentPDF);
     if (ipage >= 0 && ipage < d_ptr->m_pages.size()) {
         Poppler::Page *page = static_cast<PagePdf *>(d_ptr->m_pages.at(ipage))->GetPage();
         QList<Poppler::Annotation *> plistannote = page->annotations();
@@ -590,7 +586,7 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
                 left = left >= 0.0 ? left : 0.0;
                 left = left <= 1.0 ? left : 1.0;
             }
-            // qDebug() << "======" << destination->top() << destination->left() << destination->bottom() << destination->right() << element.attribute("");
+
             //if (destination->isChangeTop())
             {
                 top = destination->top();
@@ -605,7 +601,6 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
             link.top = top;
 
             const QString fileName = element.attribute("ExternalFileName");
-            // qDebug() << fileName << node.nodeName() << element.tagName();
             if (!fileName.isEmpty()) {
                 link.urlOrFileName = fileName;
             }

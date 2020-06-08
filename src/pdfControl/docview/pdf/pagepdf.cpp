@@ -71,7 +71,6 @@ private:
                 break;
             }
             const QRectF boundary = link->linkArea().normalized();
-            //        qDebug() << "boundary:" << boundary;
 
             if (link->linkType() == Poppler::Link::Goto) {
                 const Poppler::LinkGoto *linkGoto = static_cast< const Poppler::LinkGoto * >(link);
@@ -97,10 +96,8 @@ private:
                 }
 
                 if (linkGoto->isExternal()) {
-                    //                qDebug() << "isExternal filename:" << linkGoto->fileName() << " page:" << page;
                     m_links.append(new Page::Link(boundary, linkGoto->fileName(), page));
                 } else {
-                    //                qDebug() << "unExternal left:" << left << " top:" << top << " page:" << page;
                     m_links.append(new Page::Link(boundary, page, left, top));
                 }
             } else if (link->linkType() == Poppler::Link::Browse) {
@@ -130,7 +127,7 @@ private:
             }
             const int qstringCharCount = word->text().length();
             next = word->nextWord();
-            // if(next)
+
             int textBoxChar = 0;
             for (int j = 0; j < qstringCharCount && !m_bquit; j++) {
                 const QChar c = word->text().at(j);
@@ -148,7 +145,6 @@ private:
                     int a = 0;
                 if (addChar) {
                     QRectF charBBox = word->charBoundingBox(textBoxChar);
-                    //                qDebug() << "addChar s:" << s << " charBBox:" << charBBox;
                     stWord sword;
                     sword.s = s;
                     sword.rect = charBBox;
@@ -160,7 +156,6 @@ private:
             if (word->hasSpaceAfter() && next) {
                 QRectF wordBBox = word->boundingBox();
                 QRectF nextWordBBox = next->boundingBox();
-                //            qDebug() << "hasSpaceAfter wordBBox:" << wordBBox << " nextWordBBox:" << nextWordBBox;
                 stWord sword;
                 sword.s = QStringLiteral(" ");
                 QRectF qrect;
@@ -399,38 +394,25 @@ QPointF PagePdf::globalPoint2Iner(const QPoint point)
     QPointF tpoint(0, 0);
     switch (d->m_rotate) {
     case RotateType_90: {
-        //ok
-//        QPoint tmpP(point.y(), this->width() - point.x());
-//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
-//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight))) / static_cast<double>(curheight));
         QPointF tmpP(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curwidth) / 2.0,
                      static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curheight) / 2.0);
-        tpoint = QPointF(abs(static_cast<double>(tmpP.x()/* - x()*/)) / curwidth,
-                         abs(curheight - tmpP.y()/* - y()*/) / curheight);
+        tpoint = QPointF(abs(static_cast<double>(tmpP.x())) / curwidth,
+                         abs(curheight - tmpP.y()) / curheight);
         break;
     }
     case RotateType_180: {
-        //ok
-//        QPoint tmpP(this->width() - point.x(), this->height() - point.y());
-//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / static_cast<double>(curwidth),
-//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->height() - curheight))) / static_cast<double>(curheight));
         QPointF tmpP(static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0,
                      static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight) / 2.0);
         tpoint = QPointF((abs(curwidth - tmpP.x())) / curwidth, abs(curheight - tmpP.y()) / curheight);
         break;
     }
     case RotateType_270: {
-        //ok
-//        QPoint tmpP(this->height() - point.y(), point.x());
-//        tpoint = QPointF(abs(static_cast<double>(tmpP.x() - x()) - static_cast<double>(this->height() - curwidth) / 2.0) / static_cast<double>(curwidth),
-//                         static_cast<double>(abs(tmpP.y() - y() - static_cast<double>(this->width() - curheight)) / 2.0) / static_cast<double>(curheight));
         QPointF tmpP(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curwidth) / 2.0,
                      static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curheight) / 2.0);
         tpoint = QPointF(abs(curwidth - tmpP.x()) / curwidth, tmpP.y() / curheight);
         break;
     }
     default:
-        //ok
         tpoint = QPointF(abs(static_cast<double>(point.x() - x()) - static_cast<double>(this->width() - curwidth) / 2.0) / curwidth,
                          abs(static_cast<double>(point.y() - y()) - static_cast<double>(this->height() - curheight)) / static_cast<double>(curheight));
         break;
@@ -448,8 +430,7 @@ QString PagePdf::removeAnnotation(const QPoint &pos)
     QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
-        if (annote->subType() == Poppler::Annotation::AHighlight /*&&*/
-                /* type != Annote_Text*/) { //必须判断
+        if (annote->subType() == Poppler::Annotation::AHighlight) { //必须判断
             QRectF rectbound;
             QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
             foreach (Poppler::HighlightAnnotation::Quad quad, listquad) {
@@ -497,13 +478,6 @@ void PagePdf::removeAnnotation(const QString &struuid)
     try {
         foreach (Poppler::Annotation *annote, listannote) {
             if (!struuid.isEmpty() && annote->uniqueName().indexOf(struuid) >= 0) { //必须判断
-//                if (annote->subType() == Poppler::Annotation::AText) {
-//                    Poppler::TextAnnotation *textAnnot = dynamic_cast<Poppler::TextAnnotation *>(annote);
-//                    if (textAnnot) {
-//                        qInfo() << "    annote  text type:" << textAnnot->textType() << "       flag:" << textAnnot->flags();
-//                    }
-//                }
-//                qInfo() << "    annote  sub type:" << annote->subType() << "       flag:" << annote->flags() << "   annote  UUID:" << annote->uniqueName();
                 d->m_page->removeAnnotation(annote);
                 listannote.removeAt(index);
                 QImage image;
@@ -523,11 +497,8 @@ void PagePdf::removeAnnotation(const QString &struuid)
 bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     Q_D(PagePdf);
-//    double curwidth = d->m_scale * d->m_imagewidth;
-//    double curheight = d->m_scale * d->m_imageheight;
 
     int ret = false;
-//    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QPointF tpos = globalPoint2Iner(pos);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
@@ -556,10 +527,6 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     Q_D(PagePdf);
     bool bclicked = false;
     QPointF tpos = globalPoint2Iner(pos);
-//    qInfo() <<    "         icon text pos:" << tpos;
-//    double curwidth = d->m_scale * d->m_imagewidth;
-//    double curheight = d->m_scale * d->m_imageheight;
-//    QPointF ptf((pos.x() - x() - (width() - curwidth) / 2) / curwidth, (pos.y() - y() - (height() - curheight)) / curheight);
     QList<Poppler::Annotation *> listannote = d->m_page->annotations();
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AText) { //必须判断
@@ -668,7 +635,6 @@ void PagePdf::freshPage(Poppler::Page *page)
 bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, double magnifierscale, QPoint &pt)
 {
     Q_D(PagePdf);
-    //  QTime tm; tm.start();
     QPointF ptimage = pt;
     getImagePoint(ptimage);
     ptimage.setX(ptimage.x()*magnifierscale * d->m_scale * devicePixelRatioF());
@@ -677,7 +643,6 @@ bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, do
     if (!d->m_page)
         return false;
     image = d->m_page->renderToImage(xres * scalebase, yres * scalebase, ptimage.x() - destwidth / 2, ptimage.y() - destwidth / 2, destwidth, destwidth);
-    // qDebug() << pt << ptimage << ptimage.x() - destwidth / 2 << destwidth << "cost time:" << tm.elapsed();
     return true;
 }
 

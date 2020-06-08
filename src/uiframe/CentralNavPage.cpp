@@ -96,14 +96,13 @@ void CentralNavPage::slotUpdateTheme()
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window/*Base*/));
+        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window));
         iconSvg->setPalette(plt);
-//        QString sPixmap = PF::getImagePath("import_photo", Pri::g_actions);
-        QIcon importIcon = /*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "import_photo");
+        QIcon importIcon = QIcon::fromTheme(Pri::g_module + "import_photo");
         int tW = 128;
         int tH = 128;
 
-        iconSvg->setPixmap(importIcon.pixmap(QSize(tW, tH)));//Utils::renderSVG(sPixmap, QSize(tW, tH)));
+        iconSvg->setPixmap(importIcon.pixmap(QSize(tW, tH)));
     }
 
     auto customClickLabelList = this->findChildren<CustomClickLabel *>();

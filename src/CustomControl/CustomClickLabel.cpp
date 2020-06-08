@@ -21,7 +21,16 @@
 CustomClickLabel::CustomClickLabel(const QString &text, DWidget *parent, Qt::WindowFlags f)
     : DLabel(text, parent)
 {
+<<<<<<< HEAD
 
+=======
+}
+
+//  设置 主题颜色
+void CustomClickLabel::setThemePalette()
+{
+    setForegroundRole(DPalette::BrightText);
+>>>>>>> chore: 删除无用代码
 }
 
 void CustomClickLabel::mousePressEvent(QMouseEvent *event)

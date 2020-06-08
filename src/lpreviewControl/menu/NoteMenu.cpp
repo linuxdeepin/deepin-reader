@@ -28,7 +28,6 @@ void NoteMenu::initActions()
 {
     QAction *copyAction = this->addAction(tr("Copy"));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(slotCopy()));
-//    this->addSeparator();
 
     QAction *delAction = this->addAction(tr("Remove annotation"));
     connect(delAction, SIGNAL(triggered()), this, SLOT(slotDelete()));
