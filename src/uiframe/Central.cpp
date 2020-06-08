@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Central.h"
-#include "business/AppInfo.h"
+#include "pdfControl/AppConfig.h"
 #include "utils/utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"

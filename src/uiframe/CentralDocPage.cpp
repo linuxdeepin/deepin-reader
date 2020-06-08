@@ -37,9 +37,15 @@
 #include "DocSheet.h"
 #include "DocTabBar.h"
 #include "MainWindow.h"
+<<<<<<< HEAD
 #include "business/AppInfo.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
+=======
+#include "pdfControl/AppConfig.h"
+#include "business/SaveDialog.h"
+
+>>>>>>> chore: 将应用配置模块移到pdf模块中
 #include "pdfControl/docview/docummentproxy.h"
 #include "widgets/FindWidget.h"
 #include "widgets/FileAttrWidget.h"

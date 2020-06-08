@@ -1,7 +1,7 @@
 #include "TextOperationMenu.h"
 
 #include "ColorWidgetAction.h"
-#include "business/AppInfo.h"
+#include "pdfControl/AppConfig.h"
 #include "MsgHeader.h"
 #include "utils/utils.h"
 #include "DocSheet.h"
