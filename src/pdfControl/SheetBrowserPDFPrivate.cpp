@@ -8,7 +8,7 @@
 #include "menu/DefaultOperationMenu.h"
 #include "widgets/FindWidget.h"
 #include "pdfControl/docview/docummentproxy.h"
-#include "pdfControl/AppConfig.h"
+#include "business/AppInfo.h"
 #include "SheetBrowserPDF.h"
 #include "lpreviewControl/note/NoteViewWidget.h"
 #include "DocSheetPDF.h"
@@ -52,6 +52,52 @@ void SheetBrowserPDFPrivate::hidetipwidget()
 bool SheetBrowserPDFPrivate::hasOpened()
 {
     return m_hasOpened;
+}
+
+void SheetBrowserPDFPrivate::mousePressLocal(bool &highLight, QPoint &point)
+{
+    highLight = m_bIsHighLight;
+    point = m_point;
+}
+
+void SheetBrowserPDFPrivate::setMousePressLocal(const bool &highLight, const QPoint &point)
+{
+    m_bIsHighLight = highLight;
+
+    QPoint t_point;
+    int t_w = point.x();
+    int t_h = point.y();
+
+    QRect rect = dApp->m_pAppInfo->screenRect();
+
+    int screenW =  rect.width();
+    int screenH =  rect.height();
+
+    int noteWidgetW = m_smallNoteSize.width();
+    int noteWidgetH = m_smallNoteSize.height();
+
+    if (t_h + noteWidgetH > screenH) {
+        t_h = screenH - noteWidgetH;
+    }
+
+    if (t_w + noteWidgetW > screenW) {
+        t_w -= noteWidgetW;
+    }
+
+    t_point.setX(t_w);
+    t_point.setY(t_h);
+
+    m_point = t_point;
+}
+
+QColor SheetBrowserPDFPrivate::selectColor() const
+{
+    return m_selectColor;
+}
+
+void SheetBrowserPDFPrivate::setSelectColor(const QColor &color)
+{
+    m_selectColor = color;
 }
 
 void SheetBrowserPDFPrivate::slotDealWithMenu(const int &msgType, const QString &msgContent)
@@ -219,9 +265,11 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
 
     bool t_bHigh = false;
 
-    dApp->m_pAppCfg->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+//    dApp->m_pAppCfg->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
+    this->setSmallNoteWidgetSize(m_pNoteViewWidget->size());
 
-    dApp->m_pAppCfg->mousePressLocal(t_bHigh, point);
+//    dApp->m_pAppCfg->mousePressLocal(t_bHigh, point);
+    this->mousePressLocal(t_bHigh, point);
 
     m_pNoteViewWidget->showWidget(point);
 }
@@ -254,6 +302,11 @@ double SheetBrowserPDFPrivate::handleResize(const QSize &size)
     }
 
     return scaleFactor;
+}
+
+void SheetBrowserPDFPrivate::setSmallNoteWidgetSize(const QSize &size)
+{
+    m_smallNoteSize = size;
 }
 
 void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)
@@ -358,7 +411,8 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setClickPage(textPage);
 
-        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
+//        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
+        this->setMousePressLocal(bIsHighLight, tempPoint);
 
         bool bremoveenable = false;
 
@@ -387,7 +441,8 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         m_operatemenu->setClickPage(clickPage);
 
-        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
+//        dApp->m_pAppCfg->setMousePressLocal(bIsHighLight, tempPoint);
+        this->setMousePressLocal(bIsHighLight, tempPoint);
 
         if (bicon) {
             m_operatemenu->setType(NOTE_ICON);
@@ -403,7 +458,8 @@ void SheetBrowserPDFPrivate::slotCustomContextMenuRequested(const QPoint &point)
 
         clearSelect();
     } else {  //  否则弹出 文档操作菜单
-        dApp->m_pAppCfg->setMousePressLocal(false, tempPoint);
+//        dApp->m_pAppCfg->setMousePressLocal(false, tempPoint);
+        this->setMousePressLocal(false, tempPoint);
 
         m_pDefaultMenu->setClickpoint(pRightClickPoint);
 

@@ -32,8 +32,7 @@
 #include <DWidgetUtil>
 #include <QSignalMapper>
 #include <DGuiApplicationHelper>
-
-#include "pdfControl/AppConfig.h"
+#include "business/AppInfo.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
@@ -99,16 +98,16 @@ void MainWindow::doOpenFile(const QString &filePath)
 void MainWindow::setSreenRect(const QRect &rect)
 {
 //    dApp->m_pAppInfo->setScreenRect(rect);
-    dApp->m_pAppCfg->setScreenRect(rect);
+    dApp->m_pAppInfo->setScreenRect(rect);
 }
 
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_central->saveAll()) {
-        dApp->m_pAppCfg->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
 
-        dApp->m_pAppCfg->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
 
         event->accept();
 
@@ -162,8 +161,8 @@ MainWindow *MainWindow::createWindow()
 //  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {
-    int nWidth = dApp->m_pAppCfg->getAppKeyValue(KEY_APP_WIDTH).toInt();
-    int nHeight = dApp->m_pAppCfg->getAppKeyValue(KEY_APP_HEIGHT).toInt();
+    int nWidth = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_WIDTH).toInt();
+    int nHeight = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_HEIGHT).toInt();
 
     if (nWidth == 0 || nHeight == 0) {
         int tWidth = 1000;
@@ -173,9 +172,9 @@ void MainWindow::showDefaultSize()
         resize(tWidth, tHeight);
 
         str = QString::number(tWidth);
-        dApp->m_pAppCfg->setAppKeyValue(KEY_APP_WIDTH, str);
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, str);
         str = QString::number(tHeight);
-        dApp->m_pAppCfg->setAppKeyValue(KEY_APP_HEIGHT, str);
+        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, str);
     } else {
         resize(nWidth, nHeight);
     }
@@ -188,7 +187,7 @@ void MainWindow::initShortCut()
 
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
 
-    auto keyList = dApp->m_pAppCfg->getKeyList();
+    auto keyList = dApp->m_pAppInfo->getKeyList();
 
     foreach (auto key, keyList) {
         auto action = new QAction(this);

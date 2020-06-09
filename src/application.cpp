@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QDir>
 
-#include "pdfControl/AppConfig.h"
+#include "business/AppInfo.h"
 #include "utils/utils.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
@@ -35,12 +35,12 @@ Application::Application(int &argc, char **argv)
 
 void Application::setSreenRect(const QRect &rect)
 {
-//    if (m_pAppInfo) {
-//        m_pAppInfo->setScreenRect(rect);
-//    }
-    if (m_pAppCfg) {
-        m_pAppCfg->setScreenRect(rect);
+    if (m_pAppInfo) {
+        m_pAppInfo->setScreenRect(rect);
     }
+//    if (m_pAppCfg) {
+//        m_pAppCfg->setScreenRect(rect);
+//    }
 }
 
 //弃用
@@ -74,10 +74,10 @@ void Application::initCfgPath()
 void Application::initChildren()
 {
     m_pDBService = new DBService(this);
-//    m_pAppInfo = new AppInfo(this);
-    if (m_pAppCfg == nullptr) {
-        m_pAppCfg = new AppConfig(this);
-    }
+    m_pAppInfo = new AppInfo(this);
+//    if (m_pAppCfg == nullptr) {
+//        m_pAppCfg = new AppConfig(this);
+//    }
 }
 
 void Application::initI18n()

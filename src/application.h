@@ -5,7 +5,7 @@
 #include "pdfControl/database/DBService.h"
 
 class AppInfo;
-class AppConfig;
+//class AppConfig;
 
 #if defined(dApp)
 #undef dApp
@@ -28,8 +28,8 @@ protected:
 
 public:
     DBService *m_pDBService = nullptr;
-//    AppInfo   *m_pAppInfo = nullptr;
-    AppConfig *m_pAppCfg = nullptr;
+    AppInfo   *m_pAppInfo = nullptr;
+//    AppConfig *m_pAppCfg = nullptr;
 
 private:
     void initCfgPath();

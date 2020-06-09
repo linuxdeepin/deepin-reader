@@ -19,7 +19,7 @@
 #include "ProxyMouseMove.h"
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "ProxyData.h"
-#include "pdfControl/AppConfig.h"
+#include "business/AppInfo.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "CustomControl/CustomWidget.h"
@@ -204,8 +204,8 @@ void ProxyMouseMove::__AddIconAnnotation(const QPoint &globalPos)
 
         if (sUuid != "") {
 
-            dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
-
+//            dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
+            _fvwParent->setMousePressLocal(false, globalPos);
             _fvwParent->m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
 
         }
@@ -294,13 +294,15 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
     if (m_bSelectOrMove && !bicon) {
         //判断鼠标左键松开的位置有没有高亮
 
-        dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
+//        dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
+        _fvwParent->setMousePressLocal(false, globalPos);
         //添加其实结束point是否为同一个，不是同一个说明不是点击可能是选择文字
         if (nBtn == Qt::LeftButton && docGlobalPos == _fvwParent->m_pProxyData->getStartPoint()) {
             // 判断鼠标点击的地方是否有高亮
             bool bIsHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
 
-            dApp->m_pAppCfg->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
+//            dApp->m_pAppCfg->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
+            _fvwParent->setMousePressLocal(bIsHighLightReleasePoint, globalPos);
             if (bIsHighLightReleasePoint) {
 
                 _fvwParent->__CloseFileNoteWidget();
@@ -312,7 +314,8 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
         }
     } else if (bicon) {
 
-        dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
+//        dApp->m_pAppCfg->setMousePressLocal(false, globalPos);
+        _fvwParent->setMousePressLocal(false, globalPos);
 
         _fvwParent->__CloseFileNoteWidget();
 
