@@ -13,7 +13,6 @@ TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
 include (app/app.pri)
-include (business/business.pri)
 include (CustomControl/CustomControl.pri)
 include (pdfControl/pdfControl.pri)
 include (utils/utils.pri)

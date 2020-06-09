@@ -219,6 +219,7 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
     bool t_bHigh = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     dApp->m_pAppInfo->setSmallNoteWidgetSize(m_pNoteViewWidget->getNoteViewWidget()->size());
     dApp->m_pAppInfo->mousePressLocal(t_bHigh, point);
 =======
@@ -230,6 +231,9 @@ void SheetBrowserPDFPrivate::showNoteViewWidget(const QString &sPage, const QStr
 >>>>>>> chore: 将应用配置模块移到pdf模块中
 =======
     dApp->m_pAppCfg->setSmallNoteWidgetSize(m_pNoteViewWidget->getNoteViewWidget->size());
+=======
+    dApp->m_pAppCfg->setSmallNoteWidgetSize(m_pNoteViewWidget->getNoteViewWidget()->size());
+>>>>>>> chore: 修改部分目录
     dApp->m_pAppCfg->mousePressLocal(t_bHigh, point);
 >>>>>>> feat: 图标注释编辑框界面调整
     m_pNoteViewWidget->showWidget(point);
