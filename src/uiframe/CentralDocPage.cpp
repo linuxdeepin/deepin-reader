@@ -79,6 +79,19 @@ CentralDocPage::~CentralDocPage()
 
 }
 
+bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
+{
+    int fileType = Dr::fileType(filePath);
+    if (Dr::DjVu == fileType) {
+        QImage image = DocSheetDJVU::firstThumbnail(filePath);
+        if (image.isNull())
+            return false;
+        return image.save(thumbnailPath, "PNG");
+    }
+
+    return false;
+}
+
 void CentralDocPage::openCurFileFolder()
 {
     DocSheet *sheet = getCurSheet();

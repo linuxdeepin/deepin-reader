@@ -104,6 +104,30 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
     return true;
 }
 
+QImage SheetBrowserDJVU::firstThumbnail(const QString &filePath)
+{
+    deepin_reader::Document *document = deepin_reader::DjVuDocument::loadDocument(filePath);
+
+    if (nullptr == document)
+        return QImage();
+
+    if (document->numberOfPages() <= 0)
+        return QImage();
+
+    deepin_reader::Page *page = document->page(0);
+
+    if (page == nullptr)
+        return QImage();
+
+    QImage image = page->render(Dr::RotateBy0);
+
+    delete page;
+
+    delete document;
+
+    return image;
+}
+
 void SheetBrowserDJVU::loadMouseShape(DocOperation &operation)
 {
     if (Dr::MouseShapeHand == operation.mouseShape) {

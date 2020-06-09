@@ -44,6 +44,8 @@ public:
 
     bool openFileExec()override;
 
+    static QImage firstThumbnail(const QString &filePath);
+
     void setBookMark(int index, int state);
 
     bool fileChanged()override;

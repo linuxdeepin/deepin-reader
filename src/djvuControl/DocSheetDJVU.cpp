@@ -144,6 +144,11 @@ bool DocSheetDJVU::openFileExec()
     return false;
 }
 
+QImage DocSheetDJVU::firstThumbnail(const QString &filePath)
+{
+    return SheetBrowserDJVU::firstThumbnail(filePath);
+}
+
 void DocSheetDJVU::setBookMark(int index, int state)
 {
     if (state)

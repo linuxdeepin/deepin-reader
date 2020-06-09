@@ -5,6 +5,7 @@
 #include <QDesktopWidget>
 #include "app/ProcessController.h"
 #include "app/json.h"
+#include "CentralDocPage.h"
 #include <QLockFile>
 #include <QDebug>
 #include <QDBusConnection>
@@ -21,7 +22,35 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
 
+    parser.addOptions({
+        {
+            {"f", "filePath"},
+            QCoreApplication::translate("main", "Document File Path."),
+            QCoreApplication::translate("main", "FilePath")
+        },
+        {   {"t", "thumbnailPath"},
+            QCoreApplication::translate("main", "ThumbnailPath Path."),
+            QCoreApplication::translate("main", "FilePath")
+        },
+        {
+            "thumbnail",
+            QCoreApplication::translate("main", "Generate thumbnail.")
+        }
+    });
+
     parser.process(a);
+
+    if (parser.isSet("thumbnail") && parser.isSet("filePath") && parser.isSet("thumbnailPath")) {
+        QString filePath = parser.value("filePath");
+        QString thumbnailPath = parser.value("thumbnailPath");
+        if (filePath.isEmpty() || thumbnailPath.isEmpty())
+            return -1;
+
+        if (!CentralDocPage::firstThumbnail(filePath, thumbnailPath))
+            return -1;
+
+        return 0;
+    }
 
     QStringList arguments = parser.positionalArguments();
 

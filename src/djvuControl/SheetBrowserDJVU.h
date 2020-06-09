@@ -49,6 +49,8 @@ public:
 
     bool loadPages(DocOperation &operation, const QSet<int> &bookmarks);
 
+    static QImage firstThumbnail(const QString &filePath);
+
     void loadMouseShape(DocOperation &operation);
 
     void setBookMark(int index, int state);

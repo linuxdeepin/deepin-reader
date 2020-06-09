@@ -48,6 +48,8 @@ public:
     friend class DocTabBar;
 
 public:
+    static bool firstThumbnail(QString filePath, QString thumbnailPath);     //生成第一页的缩略图
+
     void openFile(QString &filePath);
 
     bool saveAll();
