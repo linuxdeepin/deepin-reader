@@ -59,10 +59,10 @@ void ProxyFileDataModel::saveAsData(const QString &originPath, const QString &ta
 void ProxyFileDataModel::setModel(FileDataModel model)
 {
     DocOperation opera;
-    opera.layoutMode = (Dr::LayoutMode)model.getOper(DoubleShow).toInt();
-    opera.mouseShape = (Dr::MouseShape)model.getOper(HandShape).toInt();
-    opera.scaleMode = (Dr::ScaleMode)model.getOper(Fit).toInt();
-    opera.rotation = (Dr::Rotation)model.getOper(Rotate).toInt();
+    opera.layoutMode = static_cast<Dr::LayoutMode>(model.getOper(DoubleShow).toInt());
+    opera.mouseShape = static_cast<Dr::MouseShape>(model.getOper(HandShape).toInt());
+    opera.scaleMode = static_cast<Dr::ScaleMode>(model.getOper(Fit).toInt());
+    opera.rotation = static_cast<Dr::Rotation>(model.getOper(Rotate).toInt());
     opera.scaleFactor = model.getOper(Scale).toDouble() / 100.0;
     opera.sidebarVisible = model.getOper(Thumbnail).toBool();
     opera.sidebarIndex = model.getOper(LeftIndex).toInt();

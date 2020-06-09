@@ -18,7 +18,7 @@ class DefaultOperationMenu : public CustomMenu
 public:
     explicit DefaultOperationMenu(DWidget *parent = nullptr);
 
-    ~DefaultOperationMenu();
+    ~DefaultOperationMenu() override;
 
 public:
     void execMenu(DocSheetPDF *sheet, const QPoint &, const int &);

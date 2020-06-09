@@ -29,7 +29,7 @@ class SlideWidget : public DWidget
     Q_OBJECT
 public:
     SlideWidget(DocSheet *docsheet);
-    ~SlideWidget();
+    ~SlideWidget() override;
 
 public slots:
     void setWidgetState(bool full);

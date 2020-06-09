@@ -10,7 +10,7 @@ class SearchTask : public QThread
 {
     Q_OBJECT
 public:
-    explicit SearchTask(QObject *parent = 0);
+    explicit SearchTask(QObject *parent = nullptr);
 
     bool wasCanceled() const { return loadCancellation() != NotCanceled; }
 

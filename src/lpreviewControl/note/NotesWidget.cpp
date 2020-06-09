@@ -71,7 +71,7 @@ void NotesWidget::initWidget()
     pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     pVLayout->addItem(pHBoxLayout);
 
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT/* * 1.0*/));
 }
 
 void NotesWidget::prevPage()
@@ -203,7 +203,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
 {
     const QModelIndex &curModelIndex = m_pImageListView->currentIndex();
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
+    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), LEFTMINHEIGHT));
     m_pImageListView->reset();
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }

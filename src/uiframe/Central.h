@@ -45,7 +45,7 @@ class Central : public CustomWidget
 public:
     explicit Central(QWidget *parent = nullptr);
 
-    ~Central();
+    ~Central() override;
 
     TitleMenu *titleMenu();
 

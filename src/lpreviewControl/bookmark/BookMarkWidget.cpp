@@ -69,7 +69,7 @@ void BookMarkWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH/* * 1.0*/, LEFTMINHEIGHT/* * 1.0*/));
 }
 
 
@@ -136,7 +136,7 @@ void BookMarkWidget::onAddBookMarkClicked()
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
+    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), LEFTMINHEIGHT));
     m_pImageListView->reset();
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }

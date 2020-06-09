@@ -28,7 +28,7 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
 
-    QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(256 * qApp->devicePixelRatio(), 256 * qApp->devicePixelRatio()));
+    QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(static_cast<int>(256 * qApp->devicePixelRatio()), static_cast<int>(256 * qApp->devicePixelRatio())));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
 }
@@ -38,18 +38,7 @@ void Application::setSreenRect(const QRect &rect)
     if (m_pAppInfo) {
         m_pAppInfo->setScreenRect(rect);
     }
-//    if (m_pAppCfg) {
-//        m_pAppCfg->setScreenRect(rect);
-//    }
 }
-
-//弃用
-//void Application::adaptScreenView(int &w, int &h)
-//{
-//    if (m_pAppInfo) {
-//        m_pAppInfo->adaptScreenView(w, h);
-//    }
-//}
 
 void Application::handleQuitAction()
 {

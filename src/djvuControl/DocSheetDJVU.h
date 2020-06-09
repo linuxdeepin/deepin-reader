@@ -44,7 +44,7 @@ public:
 
     bool openFileExec()override;
 
-    void setBookMark(int index, int state);
+    void setBookMark(int index, int state) override;
 
     bool fileChanged()override;
 

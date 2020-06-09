@@ -45,9 +45,9 @@ class SheetBrowserDJVUItem : public QGraphicsItem
 public:
     explicit SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page);
 
-    ~SheetBrowserDJVUItem();
+    ~SheetBrowserDJVUItem() override;
 
-    QRectF boundingRect()const;
+    QRectF boundingRect()const override;
 
     QRectF bookmarkRect();
 
@@ -55,7 +55,7 @@ public:
 
     void setBookmark(bool hasBookmark);
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     void render(double scale, Dr::Rotation rotation, bool readerLater = false);
 

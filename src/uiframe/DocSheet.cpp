@@ -191,7 +191,7 @@ int DocSheet::currentIndex()
     return -1;
 }
 
-bool DocSheet::getImage(int, QImage &, double, double, Qt::AspectRatioMode mode)
+bool DocSheet::getImage(int, QImage &, double, double, Qt::AspectRatioMode)
 {
     qDebug() << "unrealized";
     return false;

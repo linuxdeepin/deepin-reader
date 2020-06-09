@@ -59,7 +59,7 @@ void SearchResWidget::initWidget()
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     m_stackLayout->addWidget(tipLab);
     m_stackLayout->setCurrentIndex(SEARCH_INDEX);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT /** 1.0*/));
 }
 
 void SearchResWidget::handFindContentComming(const stSearchRes &search)
@@ -69,7 +69,7 @@ void SearchResWidget::handFindContentComming(const stSearchRes &search)
         strText += s.trimmed();
         strText += QString("    ");
     }
-    addSearchsItem(search.ipage, strText, search.listtext.size());
+    addSearchsItem(static_cast<int>(search.ipage), strText, search.listtext.size());
 }
 
 int  SearchResWidget::handleFindFinished()
@@ -102,7 +102,7 @@ void SearchResWidget::adaptWindowSize(const double &scale)
 {
     const QModelIndex &curModelIndex = m_pImageListView->currentIndex();
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, LEFTMINHEIGHT));
+    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), LEFTMINHEIGHT));
     m_pImageListView->reset();
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }

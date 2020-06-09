@@ -90,7 +90,7 @@ void ImageListView::handleOpenSuccess()
         for (int index = 0; index < pagesNum; index++) {
             const stHighlightContent &stH = noteLst.at(index);
             if (!stH.strcontents.isEmpty()) {
-                int pageIndex = stH.ipage;
+                int pageIndex = static_cast<int>(stH.ipage);
                 ImagePageInfo_t tImagePageInfo;
                 tImagePageInfo.pageIndex = pageIndex;
                 tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;

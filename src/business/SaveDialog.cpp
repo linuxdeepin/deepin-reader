@@ -40,7 +40,7 @@ int SaveDialog::showDialog()
 
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
 
-    QMargins mar(0, 0, 0, 0/*30*/);
+    QMargins mar(0, 0, 0, 0);
 
     dlg.setContentLayoutContentsMargins(mar);
 

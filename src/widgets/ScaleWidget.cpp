@@ -135,7 +135,7 @@ void ScaleWidget::clear()
     }
 }
 
-void ScaleWidget::paintEvent(QPaintEvent *event)
+void ScaleWidget::paintEvent(QPaintEvent *)
 {
     return;
 }
