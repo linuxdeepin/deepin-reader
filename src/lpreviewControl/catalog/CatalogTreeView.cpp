@@ -184,6 +184,7 @@ void CatalogTreeView::handleOpenSuccess()
         }
         setIndex(m_index);
     }
+    resizeCoulumnWidth();
 }
 
 //  折叠 节点处理
@@ -244,12 +245,7 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
     DTreeView::resizeEvent(event);
-    if (m_sheet) {
-        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 32;
-        this->setColumnWidth(0, this->width() - maxPageColumnWid);
-        this->setColumnWidth(1, maxPageColumnWid);
-    }
-
+    resizeCoulumnWidth();
 }
 
 void CatalogTreeView::mousePressEvent(QMouseEvent *event)
@@ -294,5 +290,14 @@ void CatalogTreeView::setIndex(int index, const QString &title)
                 break;
             }
         }
+    }
+}
+
+void CatalogTreeView::resizeCoulumnWidth()
+{
+    if (m_sheet) {
+        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 32;
+        this->setColumnWidth(0, this->width() - maxPageColumnWid);
+        this->setColumnWidth(1, maxPageColumnWid);
     }
 }

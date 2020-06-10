@@ -58,7 +58,7 @@ protected slots:
 
 private:
     void parseCatalogData(const Section &, QStandardItem *);
-
+    void resizeCoulumnWidth();
     QList<QStandardItem *> getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 
 private slots:
