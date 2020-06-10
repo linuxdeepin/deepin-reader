@@ -1,20 +1,18 @@
-#include "AppConfig.h"
+#include "AppInfo.h"
 
 #include "utils/utils.h"
 #include "ModuleHeader.h"
-#include <QDebug>
 #include <QDir>
 
-AppConfig::AppConfig(QObject *parent)
+AppInfo::AppInfo(QObject *parent)
     : QObject(parent)
 {
     m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath(ConstantMsg::g_cfg_name), QSettings::IniFormat, parent);
-
     InitColor();
     InitKeyList();
 }
 
-void AppConfig::InitColor()
+void AppInfo::InitColor()
 {
     m_listColor.append(QColor("#FFA503"));
     m_listColor.append(QColor("#FF1C49"));
@@ -24,11 +22,9 @@ void AppConfig::InitColor()
     m_listColor.append(QColor("#05EA6B"));
     m_listColor.append(QColor("#FEF144"));
     m_listColor.append(QColor("#D5D5D1"));
-
-    m_selectColor = m_listColor.at(0);
 }
 
-void AppConfig::InitKeyList()
+void AppInfo::InitKeyList()
 {
     //    m_pKeyList.append(QKeySequence::HelpContents);            //  dtk 已实现
     //    m_pKeyList.append(QKeySequence::Delete);                  //  2020.2.12  delete 不能作快捷键使用
@@ -41,7 +37,6 @@ void AppConfig::InitKeyList()
     //    m_pKeyList.append(QKeySequence(Qt::Key_Space));
     //    m_pKeyList.append(QKeySequence(Qt::Key_F11));             //  全屏暂时取消  2020.1.6    wzx
     m_pKeyList.append(QKeySequence(Qt::Key_Escape));
-
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
@@ -58,83 +53,38 @@ void AppConfig::InitKeyList()
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));      //  ctrl+-
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));      //  ctrl+=
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));       //  ctrl++
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
 
     m_pKeyList.append(QKeySequence(Qt::Key_Left));
     m_pKeyList.append(QKeySequence(Qt::Key_Right));
     m_pKeyList.append(QKeySequence(Qt::Key_Space));
 
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));       //  ctrl++
-
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
 }
 
-QColor AppConfig::selectColor() const
-{
-    return m_selectColor;
-}
-
-void AppConfig::setSelectColor(const QColor &color)
-{
-    m_selectColor = color;
-}
-
-QList<QColor> AppConfig::getLightColorList()
+QList<QColor> AppInfo::getLightColorList()
 {
     return m_listColor;
 }
 
-QList<QKeySequence> AppConfig::getKeyList() const
+QList<QKeySequence> AppInfo::getKeyList() const
 {
     return m_pKeyList;
 }
 
-void AppConfig::mousePressLocal(bool &highLight, QPoint &point)
+QRect AppInfo::screenRect() const
 {
-    highLight = m_bIsHighLight;
-    point = m_point;
+    return  m_screenRect;
 }
 
-void AppConfig::setMousePressLocal(const bool &highLight, const QPoint &point)
-{
-    m_bIsHighLight = highLight;
-
-    QPoint t_point;
-    int t_w = point.x();
-    int t_h = point.y();
-
-    int screenW =  m_screenRect.width();
-    int screenH =  m_screenRect.height();
-
-    int noteWidgetW = m_smallNoteSize.width();
-    int noteWidgetH = m_smallNoteSize.height();
-
-    if (t_h + noteWidgetH > screenH) {
-        t_h = screenH - noteWidgetH;
-    }
-
-    if (t_w + noteWidgetW > screenW) {
-        t_w -= noteWidgetW;
-    }
-
-    t_point.setX(t_w);
-    t_point.setY(t_h);
-
-    m_point = t_point;
-}
-
-void AppConfig::setScreenRect(const QRect &rect)
+void AppInfo::setScreenRect(const QRect &rect)
 {
     m_screenRect = rect;
 }
 
-void AppConfig::setSmallNoteWidgetSize(const QSize &size)
-{
-    m_smallNoteSize = size;
-}
-
-void AppConfig::setAppKeyValue(const int &iKey, const QString &sValue)
+void AppInfo::setAppKeyValue(const int &iKey, const QString &sValue)
 {
     // initalize the configuration file.
     QString sKey = QString("%1").arg(iKey);
@@ -148,7 +98,7 @@ void AppConfig::setAppKeyValue(const int &iKey, const QString &sValue)
     }
 }
 
-QString AppConfig::getAppKeyValue(const int &iKey) const
+QString AppInfo::getAppKeyValue(const int &iKey) const
 {
     // initalize the configuration file.
     QString sKey = QString("%1").arg(iKey);

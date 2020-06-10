@@ -43,7 +43,7 @@ class SheetBrowserDJVU : public QGraphicsView
 public:
     explicit SheetBrowserDJVU(DocSheetDJVU *parent = nullptr);
 
-    ~SheetBrowserDJVU();
+    ~SheetBrowserDJVU() override;
 
     bool openFilePath(const QString &);
 

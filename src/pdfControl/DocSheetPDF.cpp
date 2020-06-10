@@ -166,13 +166,13 @@ void DocSheetPDF::jumpToPrevPage()
 
 void DocSheetPDF::rotateLeft()
 {
-    m_operation.rotation = (Dr::Rotation)m_browser->rotateLeft();
+    m_operation.rotation = static_cast<Dr::Rotation>(m_browser->rotateLeft());
     m_sidebar->handleRotate(m_operation.rotation);
 }
 
 void DocSheetPDF::rotateRight()
 {
-    m_operation.rotation = (Dr::Rotation)m_browser->rotateRight();
+    m_operation.rotation = static_cast<Dr::Rotation>(m_browser->rotateRight());
     m_sidebar->handleRotate(m_operation.rotation);
 }
 
@@ -201,7 +201,7 @@ void DocSheetPDF::showNoteWidget(int page, const QString &uuid, const int &type)
 
 void DocSheetPDF::setLayoutMode(Dr::LayoutMode mode)
 {
-    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
+    if (mode >= Dr::SinglePageMode && mode < Dr::NumberOfLayoutModes) {
         m_operation.layoutMode = mode;
         if (Dr::SinglePageMode == mode)
             m_browser->setDoubleShow(false);
@@ -212,7 +212,7 @@ void DocSheetPDF::setLayoutMode(Dr::LayoutMode mode)
 
 void DocSheetPDF::setMouseShape(Dr::MouseShape shape)
 {
-    if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
+    if (shape >= Dr::MouseShapeNormal && shape < Dr::NumberOfMouseShapes) {
         quitMagnifer();
         m_operation.mouseShape = shape;
 
@@ -226,7 +226,7 @@ void DocSheetPDF::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 {
-    if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
+    if (mode >= Dr::ScaleFactorMode && mode < Dr::NumberOfScaleModes) {
         m_operation.scaleMode = mode;
         m_operation.scaleFactor = m_browser->setFit(mode) / 100.00;
         emit sigFileChanged(this);
@@ -286,7 +286,7 @@ int DocSheetPDF::currentState()
     return m_currentState;
 }
 
-void DocSheetPDF::onFileOpenResult(const QString &s, const bool &res)
+void DocSheetPDF::onFileOpenResult(const QString &, const bool &res)
 {
     if (res) {
         if (m_pRightWidget && m_pSpinnerWidget) {
@@ -312,7 +312,7 @@ void DocSheetPDF::onDataChanged()
     emit sigFileChanged(this);
 }
 
-void DocSheetPDF::onSplitterMoved(int a, int b)
+void DocSheetPDF::onSplitterMoved(int, int)
 {
     setScaleMode(Dr::ScaleFactorMode);
 }

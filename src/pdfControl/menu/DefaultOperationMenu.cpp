@@ -1,5 +1,5 @@
 #include "DefaultOperationMenu.h"
-#include "pdfControl/AppConfig.h"
+#include "app/AppInfo.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "ModuleHeader.h"

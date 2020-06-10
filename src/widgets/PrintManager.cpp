@@ -64,7 +64,7 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
             if (nPageSize > 100 && rect.width() > 800) {
                 //当页数过多时，处理一下
-                if (m_sheet->getImage(iIndex, image, 200, 200.0 * (double)rect.height() / (double)rect.width())) {
+                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(rect.height()) / static_cast<double>(rect.width()))) {
                     painter.drawImage(rect, image);
                 }
             } else {

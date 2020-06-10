@@ -29,8 +29,7 @@ HEADERS += \
     $$PWD/database/HistroyDB.h \
     $$PWD/menu/ColorWidgetAction.h \
     $$PWD/menu/DefaultOperationMenu.h \
-    $$PWD/menu/TextOperationMenu.h \
-    $$PWD/AppConfig.h
+    $$PWD/menu/TextOperationMenu.h
 
 SOURCES += \
     $$PWD/controller/Annotation.cpp \
@@ -57,5 +56,4 @@ SOURCES += \
     $$PWD/database/HistroyDB.cpp \
     $$PWD/menu/ColorWidgetAction.cpp \
     $$PWD/menu/DefaultOperationMenu.cpp \
-    $$PWD/menu/TextOperationMenu.cpp \
-    $$PWD/AppConfig.cpp
+    $$PWD/menu/TextOperationMenu.cpp

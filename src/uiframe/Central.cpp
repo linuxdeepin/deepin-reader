@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Central.h"
-#include "pdfControl/AppConfig.h"
+#include "app/AppInfo.h"
 #include "utils/utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
@@ -35,7 +35,6 @@
 #include "TitleWidget.h"
 #include "MainWindow.h"
 #include "widgets/ShortCutShow.h"
-
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>

@@ -37,7 +37,7 @@
 #include "DocSheet.h"
 #include "DocTabBar.h"
 #include "MainWindow.h"
-#include "pdfControl/AppConfig.h"
+#include "app/AppInfo.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
 #include "pdfControl/docview/docummentproxy.h"

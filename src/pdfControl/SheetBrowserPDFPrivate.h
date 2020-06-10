@@ -37,6 +37,14 @@ public:
 
     bool hasOpened();
 
+    void mousePressLocal(bool &highLight, QPoint &point);
+
+    void setMousePressLocal(const bool &highLight, const QPoint &point);
+
+    QColor selectColor() const;
+
+    void setSelectColor(const QColor &color);
+
 private slots:
     void slotDealWithMenu(const int &, const QString &);
 
@@ -77,6 +85,7 @@ private:
 
     double handleResize(const QSize &size);
 
+    void setSmallNoteWidgetSize(const QSize &size);
 private:
     void showNoteViewWidget(const QString &, const QString &t_strUUid = "", const QString &sText = "", const int &nType = NOTE_HIGHLIGHT);
     void onOpenNoteWidget(const QString &msgContent);
@@ -101,6 +110,12 @@ private:
     QPoint                  m_popwidgetshowpoint;
     DocSheetPDF             *m_sheet;
     QPointer<FindWidget>    m_findWidget = nullptr;
+    //start         add   by     dxh    2020-6-9
+    QColor                  m_selectColor{"#FFA503"};           // 高亮颜色(默认)
+    bool                    m_bIsHighLight = false;             // 鼠标左键点击位置有没有高亮
+    QPoint                  m_point;                            // 鼠标左键点击位置
+    QSize m_smallNoteSize;                                      // 注释小窗体的大小
+    //end
     friend class Annotation;
     friend class ProxyViewDisplay;
     friend class ProxyMouseMove;

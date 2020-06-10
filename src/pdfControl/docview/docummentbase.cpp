@@ -1346,7 +1346,9 @@ void DocummentBase::calcCurPageViewPrecent()
         return;
 
     int y_offset = scrollBar_Y->value();
-    int curPage  = d->m_currentpageno = currentPageNo();
+
+    int curPage  = currentPageNo();
+
     if (curPage >= 0 && curPage < d->m_widgetrects.size()) {
         d->m_dCurPageViewPrecent = static_cast<double>(abs(static_cast<double>(y_offset - d->m_widgetrects.at(curPage).y()) /
                                                            static_cast<double>(d->m_widgetrects.at(curPage).height())));

@@ -228,12 +228,14 @@ void SlideWidget::onImageShowTimeOut()
 
 QPixmap SlideWidget::drawImage(const QImage &srcImage)
 {
-    QPixmap pixmap(this->width() * dApp->devicePixelRatio(), this->height() * dApp->devicePixelRatio());
+    QPixmap pixmap(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
-    painter.drawImage((pixmap.width() - srcImage.width()) * 0.5 / dApp->devicePixelRatio(), (pixmap.height() - srcImage.height()) * 0.5 / dApp->devicePixelRatio(), srcImage);
+    painter.drawImage(static_cast<int>((pixmap.width() - srcImage.width()) * 0.5 / dApp->devicePixelRatio()),
+                      static_cast<int>((pixmap.height() - srcImage.height()) * 0.5 / dApp->devicePixelRatio()),
+                      srcImage);
 
     return pixmap;
 }

@@ -46,7 +46,7 @@ public:
 
     static QImage firstThumbnail(const QString &filePath);
 
-    void setBookMark(int index, int state);
+    void setBookMark(int index, int state) override;
 
     bool fileChanged()override;
 

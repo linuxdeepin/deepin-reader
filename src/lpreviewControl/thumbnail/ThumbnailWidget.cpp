@@ -56,7 +56,7 @@ void ThumbnailWidget::initWidget()
     vBoxLayout->addWidget(new DHorizontalLine(this));
     vBoxLayout->addWidget(m_pPageWidget);
     this->setLayout(vBoxLayout);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * 1.0, LEFTMINHEIGHT * 1.0));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH/* * 1.0*/, LEFTMINHEIGHT/* * 1.0*/));
 }
 
 void ThumbnailWidget::handleOpenSuccess()

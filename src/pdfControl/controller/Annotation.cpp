@@ -26,7 +26,8 @@
 #include "ModuleHeader.h"
 #include "ProxyData.h"
 
-#include "pdfControl/AppConfig.h"
+//#include "pdfControl/AppConfig.h"
+#include "app/AppInfo.h"
 #include "pdfControl/docview/docummentproxy.h"
 
 #include "pdfControl/SheetBrowserPDF.h"
@@ -115,13 +116,14 @@ void Annotation::AddHighLight(const QString &msgContent)
             nEy = sList.at(3);
             int iIndex = sList.at(4).toInt();
 
-            QColor color = dApp->m_pAppCfg->getLightColorList().at(iIndex);
-            dApp->m_pAppCfg->setSelectColor(color);
+            QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
+            fvmPrivate->setSelectColor(color);
         }
 
         QPoint pStartPoint(nSx.toInt(), nSy.toInt());
         QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-        QColor color = dApp->m_pAppCfg->selectColor();
+
+        QColor color = fvmPrivate->selectColor();
 
         fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
         fvmPrivate->m_pProxyData->setFileChanged(true);
@@ -145,7 +147,9 @@ void Annotation::AddHighLightAnnotation(const QString &msgContent)
         if (fvmPrivate->m_pProxy) {
             QPoint pStartPoint(nSx.toInt(), nSy.toInt());
             QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-            QColor color = dApp->m_pAppCfg->selectColor();
+
+            QColor color = fvmPrivate->selectColor();
+
             QString strUuid = fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
 
             if (strUuid != "") {
@@ -214,9 +218,11 @@ void Annotation::ChangeAnnotationColor(const QString &msgContent)
 
             int iIndex = sIndex.toInt();
 
-            QColor color = dApp->m_pAppCfg->getLightColorList().at(iIndex);
+            QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
             fvmPrivate->m_pProxy->changeAnnotationColor(sPage.toInt(), sUuid, color);     //  更新高亮顏色,  是对文档进行了操作
-            dApp->m_pAppCfg->setSelectColor(color);
+
+            fvmPrivate->setSelectColor(color);
+
             fvmPrivate->m_pProxyData->setFileChanged(true);
             emit fvmPrivate->q_func()->sigUpdateThumbnail(sPage.toInt());
         }

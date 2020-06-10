@@ -39,7 +39,7 @@ public:
     // DBFactory interface
 public:
     void saveData(const QString &newPath) override;
-    void saveAsData(QString originFilePath, QString targetFilePath);
+    void saveAsData(QString originFilePath, QString targetFilePath) override;
     void qSelectData(const QString &) override;
 
     QList<int> getBookMarkList(const QString &) const;

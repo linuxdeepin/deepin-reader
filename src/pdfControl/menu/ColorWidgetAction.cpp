@@ -7,8 +7,7 @@
 #include <QDebug>
 
 #include "application.h"
-
-#include "pdfControl/AppConfig.h"
+#include "app/AppInfo.h"
 #include "CustomControl/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
@@ -97,7 +96,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto sigMap = new QSignalMapper(this);
 
-    auto colorList = dApp->m_pAppCfg->getLightColorList();
+    auto colorList = dApp->m_pAppInfo->getLightColorList();
     int tW = 25;
     int tH = 25;
 

@@ -18,7 +18,7 @@ public:
 
     void clear();
 
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 protected:
     void initWidget();

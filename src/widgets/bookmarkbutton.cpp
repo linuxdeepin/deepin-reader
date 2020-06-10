@@ -27,7 +27,7 @@ void BookMarkButton::setClickState(bool state)
     update();
 }
 
-void BookMarkButton::paintEvent(QPaintEvent *e)
+void BookMarkButton::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QString iconPath;
@@ -47,26 +47,26 @@ void BookMarkButton::paintEvent(QPaintEvent *e)
     painter.drawPixmap(0, 0, this->width(), this->height(), pixmap);
 }
 
-void BookMarkButton::enterEvent(QEvent *e)
+void BookMarkButton::enterEvent(QEvent *)
 {
     ishovered = true;
     repaint();
 }
 
-void BookMarkButton::leaveEvent(QEvent *e)
+void BookMarkButton::leaveEvent(QEvent *)
 {
     ishovered = false;
     repaint();
 }
 
 
-void BookMarkButton::mousePressEvent(QMouseEvent *e)
+void BookMarkButton::mousePressEvent(QMouseEvent *)
 {
     ispressed = true;
     repaint();
 }
 
-void BookMarkButton::mouseReleaseEvent(QMouseEvent *e)
+void BookMarkButton::mouseReleaseEvent(QMouseEvent *)
 {
     ispressed = false;
 

@@ -46,7 +46,7 @@ void clearMessageQueue(ddjvu_context_t *context, bool wait)
     }
 
     while (true) {
-        if (ddjvu_message_peek(context) != 0) {
+        if (ddjvu_message_peek(context) != nullptr) {
             ddjvu_message_pop(context);
         } else {
             break;
@@ -61,7 +61,7 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
     while (true) {
         ddjvu_message_t *message = ddjvu_message_peek(context);
 
-        if (message != 0) {
+        if (message != nullptr) {
             if (message->m_any.tag == tag) {
                 break;
             }
@@ -83,7 +83,7 @@ QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const 
         QPoint p(miniexp_to_int(miniexp_car(boundaryExp)), miniexp_to_int(miniexp_cadr(boundaryExp)));
         QSize s(miniexp_to_int(miniexp_caddr(boundaryExp)), miniexp_to_int(miniexp_cadddr(boundaryExp)));
 
-        p.setY(size.height() - s.height() - p.y());
+        p.setY(static_cast<int>(size.height() - s.height() - p.y()));
 
         const QRectF r(p, s);
 
@@ -98,7 +98,7 @@ QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const 
         for (int index = 0; index < count; index += 2) {
             QPoint p(miniexp_to_int(miniexp_nth(index, boundaryExp)), miniexp_to_int(miniexp_nth(index + 1, boundaryExp)));
 
-            p.setY(size.height() - p.y());
+            p.setY(static_cast<int>(size.height() - p.y()));
 
             polygon << p;
         }
@@ -120,7 +120,7 @@ Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int inde
     }
 
     if (target.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     if (target.at(0) == QLatin1Char('#')) {
@@ -133,7 +133,7 @@ Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int inde
             if (indexByName.contains(target)) {
                 targetPage = indexByName[target] + 1;
             } else {
-                return 0;
+                return nullptr;
             }
         } else {
             if (target.at(0) == QLatin1Char('+') || target.at(0) == QLatin1Char('-')) {
@@ -173,7 +173,7 @@ QList< Link * > loadLinks(miniexp_t linkExp, const QSizeF &size, int index, cons
             if (!boundary.isEmpty()) {
                 Link *link = loadLinkTarget(boundary, targetExp, index, indexByName);
 
-                if (link != 0) {
+                if (link != nullptr) {
                     links.append(link);
                 }
             }
@@ -194,7 +194,7 @@ QString loadText(miniexp_t textExp, const QSizeF &size, const QRectF &rect)
     const int xmax = miniexp_to_int(miniexp_cadddr(textExp));
     const int ymax = miniexp_to_int(miniexp_caddddr(textExp));
 
-    if (rect.intersects(QRect(xmin, size.height() - ymax, xmax - xmin, ymax - ymin))) {
+    if (rect.intersects(QRect(xmin, static_cast<int>(size.height() - ymax), xmax - xmin, ymax - ymin))) {
         const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(textExp)));
 
         if (type == QLatin1String("word")) {
@@ -375,7 +375,7 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
 
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
 
-    if (page == 0) {
+    if (page == nullptr) {
         return QImage();
     }
 
@@ -397,7 +397,7 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
         return QImage();
     }
 
-    QSizeF size = m_size.scaled(width * dApp->devicePixelRatio(), height * dApp->devicePixelRatio(), mode);
+    QSizeF size = m_size.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
 
     ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
 
@@ -405,8 +405,8 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
 
     pagerect.x = 0;
     pagerect.y = 0;
-    pagerect.w = qRound(size.width());
-    pagerect.h = qRound(size.height());
+    pagerect.w = static_cast<unsigned int>(qRound(size.width()));
+    pagerect.h = static_cast<unsigned int>(qRound(size.height()));
 
     ddjvu_rect_t renderrect;
 
@@ -415,9 +415,9 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
     renderrect.w = pagerect.w;
     renderrect.h = pagerect.h;
 
-    QImage image(renderrect.w, renderrect.h, QImage::Format_RGB32);
+    QImage image(static_cast<int>(renderrect.w), static_cast<int>(renderrect.h), QImage::Format_RGB32);
 
-    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, image.bytesPerLine(), reinterpret_cast< char * >(image.bits()))) {
+    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
         image = QImage();
     }
 
@@ -434,7 +434,7 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
 
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
 
-    if (page == 0) {
+    if (page == nullptr) {
         return QImage();
     }
 
@@ -481,18 +481,18 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
     default:
     case Dr::RotateBy0:
     case Dr::RotateBy180:
-        pagerect.w = m_size.width();
-        pagerect.h = m_size.height();
+        pagerect.w = static_cast<unsigned int>(m_size.width());
+        pagerect.h = static_cast<unsigned int>(m_size.height());
         break;
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        pagerect.w = m_size.height();
-        pagerect.h = m_size.width();
+        pagerect.w = static_cast<unsigned int>(m_size.height());
+        pagerect.h = static_cast<unsigned int>(m_size.width());
         break;
     }
 
-    pagerect.w = (double)pagerect.w * scaleFactor ;
-    pagerect.h = (double)pagerect.h * scaleFactor ;
+    pagerect.w = static_cast<unsigned int>(pagerect.w * scaleFactor);
+    pagerect.h = static_cast<unsigned int>(pagerect.h * scaleFactor);
 
     ddjvu_rect_t renderrect;
 
@@ -698,11 +698,11 @@ bool DjVuDocument::save(const QString &filePath, bool withChanges) const
 
 #endif // _MSC_VER
 
-    if (file == 0) {
+    if (file == nullptr) {
         return false;
     }
 
-    ddjvu_job_t *job = ddjvu_document_save(m_document, file, 0, 0);
+    ddjvu_job_t *job = ddjvu_document_save(m_document, file, 0, nullptr);
 
     while (!ddjvu_job_done(job)) {
         clearMessageQueue(m_context, true);
@@ -783,8 +783,8 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
 {
     ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
 
-    if (context == 0) {
-        return 0;
+    if (context == nullptr) {
+        return nullptr;
     }
 
 #if DDJVUAPI_VERSION >= 19
@@ -797,10 +797,10 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
 
 #endif // DDJVUAPI_VERSION
 
-    if (document == 0) {
+    if (document == nullptr) {
         ddjvu_context_release(context);
 
-        return 0;
+        return nullptr;
     }
 
     waitForMessageTag(context, DDJVU_DOCINFO);
@@ -809,7 +809,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 
-        return 0;
+        return nullptr;
     }
 
     return new deepin_reader::DjVuDocument(context, document);

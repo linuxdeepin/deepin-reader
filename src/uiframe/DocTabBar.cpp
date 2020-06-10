@@ -95,7 +95,7 @@ void DocTabBar::showSheet(DocSheet *sheet)
     }
 }
 
-QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
+QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &) const
 {
     const QString tabName = tabText(index);
 
@@ -140,7 +140,7 @@ void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
     }
 }
 
-bool DocTabBar::canInsertFromMimeData(int index, const QMimeData *source) const
+bool DocTabBar::canInsertFromMimeData(int, const QMimeData *source) const
 {
     return source->hasFormat("deepin_reader/tabbar");
 }
@@ -176,7 +176,7 @@ QString DocTabBar::getFileName(const QString &strFilePath)
     return strFilePath.mid(nLastPos);
 }
 
-void DocTabBar::updateTabWidth(int line)
+void DocTabBar::updateTabWidth(int)
 {
     int tabWidth = 100;
     if (count() != 0) {
