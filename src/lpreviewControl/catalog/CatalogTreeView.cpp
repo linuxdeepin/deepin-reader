@@ -65,6 +65,29 @@ public:
     }
 };
 
+class CatalogModel: public QStandardItemModel
+{
+public:
+    CatalogModel(QAbstractItemView *parent): QStandardItemModel(parent)
+    {
+        m_parent = parent;
+    };
+
+protected:
+    QVariant data(const QModelIndex &index, int role) const
+    {
+        if (role == Qt::SizeHintRole) {
+            QSize size = QStandardItemModel::data(index, role).toSize();
+            size.setHeight(m_parent->fontMetrics().height());
+            return size;
+        }
+        return QStandardItemModel::data(index, role);
+    }
+
+private:
+    QAbstractItemView *m_parent;
+};
+
 CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     : DTreeView(parent), m_sheet(sheet)
 {
@@ -75,6 +98,10 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    CatalogModel *pModel = new CatalogModel(this);
+    this->setModel(pModel);
+    pModel->setColumnCount(2);
 
     this->header()->setHidden(true);
     this->viewport()->setAutoFillBackground(false);
@@ -211,10 +238,9 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
 //  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
-    setColumnWidth(0, this->width() - 60);
-    setColumnWidth(1, 50);
-
     DTreeView::resizeEvent(event);
+    this->setColumnWidth(0, this->width() - 60);
+    this->setColumnWidth(1, 50);
 }
 
 void CatalogTreeView::mousePressEvent(QMouseEvent *event)
