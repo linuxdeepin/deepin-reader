@@ -21,7 +21,6 @@
 #include <QVBoxLayout>
 
 #include "CatalogTreeView.h"
-
 #include "CustomControl/CustomClickLabel.h"
 #include "pdfControl/docview/docummentproxy.h"
 #include "DocSheet.h"
@@ -61,15 +60,7 @@ void CatalogWidget::initWidget()
     mainLayout->addItem(titleLayout);
 
     m_pTree = new CatalogTreeView(m_sheet, this);
-
-    auto pModel = new QStandardItemModel(this);
-
-    m_pTree->setModel(pModel);
-
-    pModel->setColumnCount(2);
-
     mainLayout->addWidget(m_pTree);
-
     this->setLayout(mainLayout);
 }
 
