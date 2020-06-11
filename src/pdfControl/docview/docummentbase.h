@@ -27,10 +27,11 @@ class DocummentBasePrivate: public QObject
 {
     Q_OBJECT
 public:
-    DocummentBasePrivate(DocummentBase *parent): q_ptr(parent),
+    DocummentBasePrivate(DocummentBase *parent):
         m_pages(),
         m_widgets(),
-        m_pagecountsearch()
+        m_pagecountsearch(),
+        q_ptr(parent)
     {
         m_widget = nullptr;
         m_vboxLayout = nullptr;

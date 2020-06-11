@@ -106,90 +106,90 @@ void Utils::applyQss(QWidget *widget, const QString &qssName)
     file.close();
 }
 
-static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
-{
-    qreal hep_count = 0;
-    int non_base_latin_count = 0;
-    qreal unidentification_count = 0;
-    int replacement_count = 0;
+//static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+//{
+//    qreal hep_count = 0;
+//    int non_base_latin_count = 0;
+//    qreal unidentification_count = 0;
+//    int replacement_count = 0;
 
-    QTextDecoder decoder(codec);
-    const QString &unicode_data = decoder.toUnicode(data);
+//    QTextDecoder decoder(codec);
+//    const QString &unicode_data = decoder.toUnicode(data);
 
-    for (int i = 0; i < unicode_data.size(); ++i) {
-        const QChar &ch = unicode_data.at(i);
+//    for (int i = 0; i < unicode_data.size(); ++i) {
+//        const QChar &ch = unicode_data.at(i);
 
-        if (ch.unicode() > 0x7f)
-            ++non_base_latin_count;
+//        if (ch.unicode() > 0x7f)
+//            ++non_base_latin_count;
 
-        switch (ch.script()) {
-        case QChar::Script_Hiragana:
-        case QChar::Script_Katakana:
-            hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
-            break;
-        case QChar::Script_Han:
-            hep_count += (country == QLocale::China) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::China) ? 0 : 0.3;
-            break;
-        case QChar::Script_Hangul:
-            hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
-            break;
-        case QChar::Script_Cyrillic:
-            hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
-            break;
-        case QChar::Script_Devanagari:
-            hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
-            break;
-        default:
-            // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
-            if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
-                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
-                    || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
-                    || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
-                    || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
-                    || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
-                    || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
-                ++hep_count;
-            } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
-                ++i;
+//        switch (ch.script()) {
+//        case QChar::Script_Hiragana:
+//        case QChar::Script_Katakana:
+//            hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
+//            unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
+//            break;
+//        case QChar::Script_Han:
+//            hep_count += (country == QLocale::China) ? 1.2 : 0.5;
+//            unidentification_count += (country == QLocale::China) ? 0 : 0.3;
+//            break;
+//        case QChar::Script_Hangul:
+//            hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
+//            unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
+//            break;
+//        case QChar::Script_Cyrillic:
+//            hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
+//            unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
+//            break;
+//        case QChar::Script_Devanagari:
+//            hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
+//            unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
+//            break;
+//        default:
+//            // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
+//            if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
+//                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
+//                    || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
+//                    || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
+//                    || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
+//                    || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
+//                    || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
+//                ++hep_count;
+//            } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
+//                ++i;
 
-                if (i < unicode_data.size()) {
-                    const QChar &next_ch = unicode_data.at(i);
+//                if (i < unicode_data.size()) {
+//                    const QChar &next_ch = unicode_data.at(i);
 
-                    if (!next_ch.isLowSurrogate()) {
-                        --i;
-                        break;
-                    }
+//                    if (!next_ch.isLowSurrogate()) {
+//                        --i;
+//                        break;
+//                    }
 
-                    uint unicode = QChar::surrogateToUcs4(ch, next_ch);
+//                    uint unicode = QChar::surrogateToUcs4(ch, next_ch);
 
-                    // emoji
-                    if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
-                        hep_count += 2;
-                    }
-                }
-            } else if (ch.unicode() == QChar::ReplacementCharacter) {
-                ++replacement_count;
-            } else if (ch.unicode() > 0x7f) {
-                // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
-                if (codec->name() != "UTF-8")
-                    ++unidentification_count;
-            }
-            break;
-        }
-    }
+//                    // emoji
+//                    if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
+//                        hep_count += 2;
+//                    }
+//                }
+//            } else if (ch.unicode() == QChar::ReplacementCharacter) {
+//                ++replacement_count;
+//            } else if (ch.unicode() > 0x7f) {
+//                // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
+//                if (codec->name() != "UTF-8")
+//                    ++unidentification_count;
+//            }
+//            break;
+//        }
+//    }
 
-    float c = qreal(hep_count) / non_base_latin_count / 1.2;
+//    float c = qreal(hep_count) / non_base_latin_count / 1.2;
 
-    c -= qreal(replacement_count) / non_base_latin_count;
-    c -= qreal(unidentification_count) / non_base_latin_count;
+//    c -= qreal(replacement_count) / non_base_latin_count;
+//    c -= qreal(unidentification_count) / non_base_latin_count;
 
-    return qMax(0.0f, c);
-}
+//    return qMax(0.0f, c);
+//}
 
 QByteArray Utils::detectEncode(const QByteArray &, const QString &)
 {
@@ -432,7 +432,7 @@ QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &col
 
     QPainter pa(&shadow);
     pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
+    pa.drawPixmap(static_cast<int>(radius - offset.x()), static_cast<int>(radius - offset.y()), source);
     pa.end();
 
     return QPixmap::fromImage(shadow);
@@ -444,12 +444,12 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
         return QImage();
     }
 
-    QImage tmp(px.size() * px.devicePixelRatio() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
+    QImage tmp(px.size() * px.devicePixelRatio() + QSize(static_cast<int>(radius * 2), static_cast<int>(radius * 2)), QImage::Format_ARGB32_Premultiplied);
     tmp.setDevicePixelRatio(px.devicePixelRatio());
     tmp.fill(0);
     QPainter tmpPainter(&tmp);
     tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
-    tmpPainter.drawPixmap(QPoint(radius, radius), px);
+    tmpPainter.drawPixmap(QPoint(static_cast<int>(radius), static_cast<int>(radius)), px);
     tmpPainter.end();
 
     // Blur the alpha channel.
@@ -658,7 +658,7 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
     QString tmptext;
     for (int index = 0; index < textLength; index++) {
         const QString &ltext = text.left(index + 1);
-        if (fontMetrics.boundingRect(0, 0, size.width(), size.height(), alignment | Qt::TextWrapAnywhere, ltext + QString("...")).height() > size.height()) {
+        if (fontMetrics.boundingRect(0, 0, size.width(), size.height(), static_cast<int>(alignment | Qt::TextWrapAnywhere), ltext + QString("...")).height() > size.height()) {
             break;
         }
         tmptext = ltext;

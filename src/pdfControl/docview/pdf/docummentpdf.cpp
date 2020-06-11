@@ -624,19 +624,13 @@ QString DocummentPDF::addTextAnnotation(const QPoint &pos, const QColor &color, 
     if (ipage < d->m_pages.size() && ipage >= 0) {
         double curwidth, curheight, leftspace, topspace;
         curwidth = curheight = leftspace = topspace = 0.0;
-        switch (d->m_rotate) {
-        case RotateType_0:
-        case RotateType_180: {
+
+        if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180) {
             curwidth = d->m_pages.at(ipage)->getOriginalImageWidth() * d->m_scale;
             curheight = d->m_pages.at(ipage)->getOriginalImageHeight() * d->m_scale;
-        }
-        break;
-        case RotateType_90:
-        case RotateType_270: {
+        } else if (d->m_rotate == RotateType_90 || d->m_rotate == RotateType_270) {
             curwidth = d->m_pages.at(ipage)->getOriginalImageHeight() * d->m_scale;
             curheight = d->m_pages.at(ipage)->getOriginalImageWidth() * d->m_scale;
-        }
-        break;
         }
 
         pt.setX(static_cast<int>(pt.x() - d->m_pages.at(ipage)->x() - (d->m_pages.at(ipage)->width() - curwidth)));
