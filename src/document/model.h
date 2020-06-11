@@ -66,9 +66,11 @@ signals:
     void wasModified();
 };
 
-class Page
+class Page: public QObject
 {
+    Q_OBJECT
 public:
+    Page() : QObject() {}
     virtual ~Page() {}
 //    virtual QSizeF size() const = 0;
 //    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const QRect &boundingRect = QRect()) const = 0;
@@ -82,15 +84,17 @@ public:
     virtual QList< QRectF > search(const QString &text, bool matchCase) const { Q_UNUSED(text); Q_UNUSED(matchCase); return QList< QRectF >(); }
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
-    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
-    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
+    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return nullptr; }
+    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return nullptr; }
     virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation); }
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
 };
 
-class Document
+class Document: public QObject
 {
+    Q_OBJECT
 public:
+    Document() : QObject() {}
     virtual ~Document() {}
     virtual int numberOfPages() const = 0;
     virtual Page *page(int index) const = 0;

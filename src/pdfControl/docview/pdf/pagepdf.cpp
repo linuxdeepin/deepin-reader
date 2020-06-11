@@ -13,13 +13,8 @@ public:
         m_page = nullptr;
     }
 
-    ~PagePdfPrivate() override
-    {
-        if (m_page) {
-            delete m_page;
-            m_page = nullptr;
-        }
-    }
+    ~PagePdfPrivate() override;
+
     bool getImage(QImage &image, double width, double height) override
     {
         int xres = 72.0, yres = 72.0;
@@ -167,11 +162,17 @@ private:
                 m_words.append(sword);
             }
         }
-//        if (m_bquit)
-//            int a = 0;
         return true;
     }
 };
+
+PagePdfPrivate::~PagePdfPrivate()
+{
+    if (m_page) {
+        delete m_page;
+        m_page = nullptr;
+    }
+}
 
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)

@@ -3,7 +3,7 @@
 
 #include <QString>
 
-namespace  {
+//namespace  {
 
 enum E_RETURN_MSG {
     MSG_OK = 0,
@@ -24,7 +24,7 @@ enum Note_Type {
     NOTE_ICON,              //  页面注释
 };
 
-}
+//}
 
 namespace Constant {
 const QString sAcknowledgementLink = "https://www.deepin.org/acknowledgments/deepin_reader";

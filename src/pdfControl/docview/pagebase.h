@@ -63,12 +63,16 @@ private:
     double m_width;
     double m_height;
 };
-class PageInterface
+class PageInterface: public QObject
 {
+    Q_OBJECT
 public:
+    PageInterface() : QObject() {}
+    virtual ~PageInterface() {}
     virtual bool getImage(QImage &image, double width, double height) = 0;
     virtual bool loadData() = 0;
 };
+
 class PageBasePrivate: public QObject
 {
     Q_OBJECT
