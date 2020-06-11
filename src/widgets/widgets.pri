@@ -1,5 +1,4 @@
 HEADERS += \
-    $$PWD/FileViewWidget.h \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
