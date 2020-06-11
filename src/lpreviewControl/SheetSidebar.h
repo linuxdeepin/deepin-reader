@@ -50,7 +50,6 @@ class SheetSidebar : public CustomWidget
     Q_DISABLE_COPY(SheetSidebar)
 
 signals:
-    void sigDeleteAnntation(const int &, const QString &);
     void sigAdaptWindowSize(const double &scale);
 
 public :

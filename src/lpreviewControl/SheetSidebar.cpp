@@ -101,7 +101,6 @@ void SheetSidebar::initWidget()
 
     if (m_widgetsFlag.testFlag(PREVIEW_NOTE)) {
         m_notesWidget = new NotesWidget(m_sheet, this);
-        connect(m_notesWidget, SIGNAL(sigDeleteContent(const int &, const QString &)), this, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
         int index = m_stackLayout->addWidget(m_notesWidget);
         DToolButton *btn = createBtn(tr("Annotations"), "annotation");
         m_btnGroup->addButton(btn, index);

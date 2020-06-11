@@ -36,6 +36,7 @@ protected:
 private slots:
     void slotCopy();
     void slotDelete();
+    void slotAllDelete();
 };
 
 #endif // NOTEMENU_H

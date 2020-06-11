@@ -51,7 +51,6 @@ DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     m_sidebar = new SheetSidebar(this);
     m_sidebar->setMinimumWidth(266);
 
-    connect(m_sidebar, SIGNAL(sigDeleteAnntation(const int &, const QString &)), m_browser, SIGNAL(sigDeleteAnntation(const int &, const QString &)));
     connect(m_browser, SIGNAL(sigSizeChanged(double)), this, SLOT(onBrowserSizeChanged(double)));
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onPageChanged(int)));
     connect(m_browser, SIGNAL(sigDataChanged()), this, SLOT(onDataChanged()));
@@ -181,16 +180,33 @@ void DocSheetPDF::setFileChanged(bool hasChanged)
     m_browser->setFileChanged(hasChanged);
 }
 
-void DocSheetPDF::setBookMark(int page, int state)
+void DocSheetPDF::setBookMark(int index, int state)
 {
     if (state)
-        m_bookmarks.insert(page);
+        m_bookmarks.insert(index);
     else {
-        m_bookmarks.remove(page);
+        m_bookmarks.remove(index);
         showTips(tr("The bookmark has been removed"));
     }
-    m_sidebar->setBookMark(page, state);
-    m_browser->setBookMark(page, state);
+    m_sidebar->setBookMark(index, state);
+    m_browser->setBookMark(index, state);
+    this->setFileChanged(true);
+}
+
+void DocSheetPDF::setBookMarks(const QList<BookMarkStatus_t> &bookmarks)
+{
+    bool bShowtips = false;
+    for (const BookMarkStatus_t &bookmark : bookmarks) {
+        if (bookmark.nStatus)
+            m_bookmarks.insert(bookmark.nIndex);
+        else {
+            bShowtips = true;
+            m_bookmarks.remove(bookmark.nIndex);
+        }
+        m_sidebar->setBookMark(bookmark.nIndex, bookmark.nStatus);
+        m_browser->setBookMark(bookmark.nIndex, bookmark.nStatus);
+    }
+    if (bShowtips) showTips(tr("The bookmark has been removed"));
     this->setFileChanged(true);
 }
 
@@ -448,6 +464,20 @@ void DocSheetPDF::getAllAnnotation(QList<stHighlightContent> &listres)
     if (docProxy) {
         docProxy->getAllAnnotation(listres);
     }
+}
+
+void DocSheetPDF::deleteAnnotation(const int &type, const QString &content)
+{
+    m_browser->deleteAnntation(type, content);
+    this->showTips(tr("The annotation has been removed"));
+}
+
+void DocSheetPDF::deleteAnnotations(const QList<AnnotationInfo_t> &tAnnotationInfos)
+{
+    for (const AnnotationInfo_t &tAnnoInfo : tAnnotationInfos) {
+        m_browser->deleteAnntation(tAnnoInfo.type, tAnnoInfo.content);
+    }
+    this->showTips(tr("The annotation has been removed"));
 }
 
 Outline DocSheetPDF::outline()

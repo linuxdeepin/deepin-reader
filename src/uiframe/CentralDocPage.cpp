@@ -243,9 +243,8 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         return;
 
     if (sheet->fileChanged()) {
-        SaveDialog dialog;
 
-        int ret = dialog.showDialog();
+        int ret = SaveDialog::showExitDialog();
 
         if (ret < 1)
             return;
@@ -373,9 +372,7 @@ bool CentralDocPage::saveAll()
 
     if (changedList.size() > 0) {   //需要提示保存
 
-        SaveDialog sd;
-
-        int nRes = sd.showDialog();
+        int nRes = SaveDialog::showExitDialog();
 
         if (nRes <= 0) {
             return false;

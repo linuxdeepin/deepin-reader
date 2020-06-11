@@ -31,6 +31,9 @@ void NoteMenu::initActions()
 
     QAction *delAction = this->addAction(tr("Remove annotation"));
     connect(delAction, SIGNAL(triggered()), this, SLOT(slotDelete()));
+
+    QAction *delAllAction = this->addAction(tr("Remove All annotation"));
+    connect(delAllAction, SIGNAL(triggered()), this, SLOT(slotAllDelete()));
 }
 
 void NoteMenu::slotCopy()
@@ -41,4 +44,9 @@ void NoteMenu::slotCopy()
 void NoteMenu::slotDelete()
 {
     emit sigClickAction(E_NOTE_DELETE);
+}
+
+void NoteMenu::slotAllDelete()
+{
+    emit sigClickAction(E_NOTE_DELETE_ALL);
 }

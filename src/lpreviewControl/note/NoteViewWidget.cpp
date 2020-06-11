@@ -82,11 +82,9 @@ NoteViewWidget::~NoteViewWidget()
 
 void NoteViewWidget::setEditText(const QString &note)
 {
-    if (m_pTextEdit) {
-        m_pTextEdit->clear();
-        m_pTextEdit->setPlainText(note);
-        m_strNote = note;
-    }
+    m_pTextEdit->clear();
+    m_pTextEdit->setPlainText(note);
+    m_strNote = note;
 }
 
 void NoteViewWidget::hideEvent(QHideEvent *event)

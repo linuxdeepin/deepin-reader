@@ -23,6 +23,7 @@
 #include "lpreviewControl/ImageViewModel.h"
 #include "notesdelegate.h"
 #include "pdfControl/DocSheetPDF.h"
+#include "widgets/SaveDialog.h"
 
 #include "DocSheet.h"
 #include "MsgHeader.h"
@@ -109,12 +110,35 @@ void NotesWidget::DeleteItemByKey()
         QString uuid = tImagePageInfo.struuid;
         QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
         if (nType == NOTE_HIGHLIGHT) {
-            emit sigDeleteContent(MSG_NOTE_DELETE_CONTENT, sContent);
+            m_sheet->deleteAnnotation(MSG_NOTE_DELETE_CONTENT, sContent);
         } else {
             sContent += Constant::sQStringSep + "0";
-            emit sigDeleteContent(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+            m_sheet->deleteAnnotation(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
         }
     }
+}
+
+void NotesWidget::deleteAllItem()
+{
+    QList<AnnotationInfo_t> tAnnolst;
+    int itemsize = m_pImageListView->model()->rowCount();
+    for (int i = 0; i < itemsize; i++) {
+        ImagePageInfo_t tImagePageInfo;
+        m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
+        if (tImagePageInfo.pageIndex >= 0) {
+            int nType = tImagePageInfo.iType;
+            int pageIndex = tImagePageInfo.pageIndex;
+            QString uuid = tImagePageInfo.struuid;
+            QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
+            if (nType == NOTE_HIGHLIGHT) {
+                tAnnolst << AnnotationInfo_t(MSG_NOTE_DELETE_CONTENT, sContent);
+            } else {
+                sContent += Constant::sQStringSep + "0";
+                tAnnolst << AnnotationInfo_t(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+            }
+        }
+    }
+    m_sheet->deleteAnnotations(tAnnolst);
 }
 
 void NotesWidget::addNoteItem(const QString &text, const int &iType)
@@ -137,7 +161,6 @@ void NotesWidget::addNoteItem(const QString &text, const int &iType)
 void NotesWidget::deleteNoteItem(const QString &sUuid)
 {
     m_pImageListView->getImageModel()->removeItemForuuid(sUuid);
-    m_sheet->showTips(tr("The annotation has been removed"));
 }
 
 void NotesWidget::updateNoteItem(const QString &msgContent)
@@ -156,6 +179,11 @@ void NotesWidget::onListMenuClick(const int &iAction)
         copyNoteContent();
     } else if (iAction == E_NOTE_DELETE) {
         DeleteItemByKey();
+    } else if (iAction == E_NOTE_DELETE_ALL) {
+        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all notes?"));
+        if (result) {
+            deleteAllItem();
+        }
     }
 }
 

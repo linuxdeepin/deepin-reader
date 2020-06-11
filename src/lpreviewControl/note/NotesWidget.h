@@ -31,7 +31,6 @@ class NotesWidget : public CustomWidget
     Q_DISABLE_COPY(NotesWidget)
 
 signals:
-    void sigDeleteContent(const int &, const QString &);
     void sigUpdateThumbnail(const int &page);
 
 public:
@@ -61,6 +60,7 @@ private:
     void addNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);
     void deleteNoteItem(const QString &);
     void updateNoteItem(const QString &);
+    void deleteAllItem();
 
 private:
     QPointer<DocSheet> m_sheet;

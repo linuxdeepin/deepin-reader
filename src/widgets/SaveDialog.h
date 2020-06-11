@@ -29,7 +29,8 @@ class SaveDialog : public QObject
 public:
     explicit SaveDialog(QObject *parent = nullptr);
 
-    int showDialog();
+    static int showExitDialog();
+    static int showTipDialog(const QString &content);
 };
 
 #endif // SAVEDIALOG_H

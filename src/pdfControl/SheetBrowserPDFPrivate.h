@@ -45,14 +45,14 @@ public:
 
     void setSelectColor(const QColor &color);
 
+    void deleteAnntation(const int &type, const QString &content);
+
 private slots:
     void slotDealWithMenu(const int &, const QString &);
 
     void SlotNoteViewMsg(const int &, const QString &);
 
     void onAddHighLightAnnotation(const QString &msgContent);
-
-    void SlotDeleteAnntation(const int &, const QString &);
 
     void onFileOpenResult(bool);
 

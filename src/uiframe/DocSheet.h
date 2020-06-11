@@ -90,6 +90,8 @@ public:
 
     virtual void setBookMark(int index, int state);
 
+    virtual void setBookMarks(const QList<BookMarkStatus_t> &);
+
     virtual void setLayoutMode(Dr::LayoutMode mode);
 
     virtual void setScaleMode(Dr::ScaleMode mode);
@@ -123,6 +125,10 @@ public:
     virtual QString filter();
 
     virtual void defaultFocus();
+
+    virtual void deleteAnnotation(const int &msgType, const QString &msgContent);
+
+    virtual void deleteAnnotations(const QList<AnnotationInfo_t> &);
 
     QSet<int> getBookMarkList() const;
 

@@ -130,7 +130,7 @@ void SheetBrowserPDFPrivate::onAddHighLightAnnotation(const QString &msgContent)
 }
 
 //  按 delete 键 删除
-void SheetBrowserPDFPrivate::SlotDeleteAnntation(const int &msgType, const QString &msgContent)
+void SheetBrowserPDFPrivate::deleteAnntation(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_DELETE_CONTENT || msgType == MSG_NOTE_PAGE_DELETE_CONTENT) {
         m_pAnnotation->handleNote(msgType, msgContent);

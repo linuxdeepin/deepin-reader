@@ -35,7 +35,7 @@ protected:
 
 private slots:
     void slotDelete();
-
+    void slotDeleteAll();
 };
 
 #endif // BOOKMARKMENU_H

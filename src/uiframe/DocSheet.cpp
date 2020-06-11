@@ -159,6 +159,11 @@ void DocSheet::setBookMark(int, int)
     qDebug() << "unrealized";
 }
 
+void DocSheet::setBookMarks(const QList<BookMarkStatus_t> &)
+{
+    qDebug() << "unrealized";
+}
+
 void DocSheet::copySelectedText()
 {
     qDebug() << "unrealized";
@@ -235,6 +240,16 @@ QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteTy
 {
     qDebug() << "unrealized";
     return "";
+}
+
+void DocSheet::deleteAnnotation(const int &, const QString &)
+{
+    qDebug() << "unrealized";
+}
+
+void DocSheet::deleteAnnotations(const QList<AnnotationInfo_t> &)
+{
+    qDebug() << "unrealized";
 }
 
 void DocSheet::jumpToHighLight(const QString &, int)

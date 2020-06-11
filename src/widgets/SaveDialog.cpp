@@ -30,21 +30,26 @@ SaveDialog::SaveDialog(QObject *parent)
 
 }
 
-int SaveDialog::showDialog()
+int SaveDialog::showExitDialog()
 {
     DDialog dlg(tr("Do you want to save the changes?"), "");
-
     dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
-
     dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
-
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
-
     QMargins mar(0, 0, 0, 0);
-
     dlg.setContentLayoutContentsMargins(mar);
-
     int nRes = dlg.exec();
+    return nRes;
+}
 
+int SaveDialog::showTipDialog(const QString &content)
+{
+    DDialog dlg(content, "");
+    dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    dlg.addButtons(QStringList() <<  tr("Cancel"));
+    dlg.addButton(tr("Ensure"), true, DDialog::ButtonRecommend);
+    QMargins mar(0, 0, 0, 0);
+    dlg.setContentLayoutContentsMargins(mar);
+    int nRes = dlg.exec();
     return nRes;
 }

@@ -53,6 +53,9 @@ private slots:
     void onListMenuClick(const int &iType);
 
 private:
+    void deleteAllItem();
+
+private:
     QPointer<DocSheet>   m_sheet;
     DPushButton         *m_pAddBookMarkBtn;
     ImageListView       *m_pImageListView;

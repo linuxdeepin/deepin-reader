@@ -20,7 +20,7 @@
 #include <QDebug>
 
 BookMarkMenu::BookMarkMenu(DWidget *parent)
-    : CustomMenu( parent)
+    : CustomMenu(parent)
 {
     initActions();
 }
@@ -29,9 +29,17 @@ void BookMarkMenu::initActions()
 {
     QAction *dltBookMarkAction = this->addAction(tr("Remove bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), SLOT(slotDelete()));
+
+    QAction *dltAllBookMarkAction = this->addAction(tr("Remove All bookmark"));
+    connect(dltAllBookMarkAction, SIGNAL(triggered()), SLOT(slotDeleteAll()));
 }
 
 void BookMarkMenu::slotDelete()
 {
     emit sigClickAction(E_BOOKMARK_DELETE);
+}
+
+void BookMarkMenu::slotDeleteAll()
+{
+    emit sigClickAction(E_BOOKMARK_DELETE_ALL);
 }

@@ -140,4 +140,26 @@ struct Section {
     Page::Link link;
     Outline children;
 };
+
+typedef struct BookMarkStatus_t {
+    int nIndex;
+    int nStatus;
+
+    BookMarkStatus_t(int nIndex, int nStatus)
+    {
+        this->nIndex = nIndex;
+        this->nStatus = nStatus;
+    }
+} BookMarkStatus;
+
+typedef struct AnnotationInfo_t {
+    int type;
+    QString content;
+
+    AnnotationInfo_t(int type, const QString &content)
+    {
+        this->type = type;
+        this->content = content;
+    };
+} AnnotationInfo_t;
 #endif // COMMONSTRUCT_H

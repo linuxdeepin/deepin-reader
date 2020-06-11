@@ -35,9 +35,6 @@ class Annotation : public QObject
 public:
     explicit Annotation(QObject *parent = nullptr);
 
-private:
-    void handleNote(const int &, const QString &);
-
 public:
     void AddHighLight(const QString &);
     void AddHighLightAnnotation(const QString &);
@@ -50,6 +47,7 @@ public:
     void AddPageIconAnnotation(const QString &);
     void DeletePageIconAnnotation(const QString &);
     void UpdatePageIconAnnotation(const QString &);
+    void handleNote(const int &, const QString &);
 
 private:
     SheetBrowserPDFPrivate      *fvmPrivate = nullptr;

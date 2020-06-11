@@ -69,12 +69,12 @@ public:
 
     void defaultFocus();
 
+    void deleteAnntation(const int &, const QString &);
+
 signals:
     void sigFileOpenResult(const QString &, const bool &);
 
     void sigAnntationMsg(const int &, const QString &);
-
-    void sigDeleteAnntation(const int &, const QString &);
 
     void sigUpdateThumbnail(const int &);
 

@@ -45,6 +45,8 @@ public:
 
     void setBookMark(int index, int state)override;
 
+    void setBookMarks(const QList<BookMarkStatus_t> &)override;
+
     void setLayoutMode(Dr::LayoutMode mode)override;
 
     void setMouseShape(Dr::MouseShape shape) override;
@@ -94,6 +96,10 @@ public:
     void docBasicInfo(stFileInfo &info) override;
 
     void getAllAnnotation(QList<stHighlightContent> &listres) override;
+
+    void deleteAnnotation(const int &, const QString &) override;
+
+    void deleteAnnotations(const QList<AnnotationInfo_t> &) override;
 
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
 

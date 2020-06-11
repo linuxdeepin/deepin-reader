@@ -48,8 +48,6 @@ void TransparentTextEdit::init()
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
     this->setFrameStyle(QFrame::NoFrame);
 
-    // text under line
-
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
@@ -60,7 +58,6 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
     QString textContent = this->toPlainText();
 
     int length = textContent.count();
-
     if (length > m_nMaxContantLen) {
         int position = this->textCursor().position();
         QTextCursor textCursor = this->textCursor();

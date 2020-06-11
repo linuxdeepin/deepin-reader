@@ -23,6 +23,7 @@
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
 #include "bookmarkdelegate.h"
+#include "widgets/SaveDialog.h"
 
 #include <DHorizontalLine>
 
@@ -121,9 +122,22 @@ void BookMarkWidget::handleBookMark(int index, int state)
 
 void BookMarkWidget::DeleteItemByKey()
 {
-    int curPage = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
-    if (curPage >= 0)
-        m_sheet->setBookMark(curPage, false);
+    int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
+    if (curIndex >= 0)
+        m_sheet->setBookMark(curIndex, false);
+}
+
+void BookMarkWidget::deleteAllItem()
+{
+    QList<BookMarkStatus_t> bookmarks;
+    int itemsize = m_pImageListView->model()->rowCount();
+    for (int i = 0; i < itemsize; i++) {
+        int curIndex = m_pImageListView->getPageIndexForModelIndex(i);
+        if (curIndex >= 0) {
+            bookmarks << BookMarkStatus_t(curIndex, false);
+        }
+    }
+    m_sheet->setBookMarks(bookmarks);
 }
 
 void BookMarkWidget::onAddBookMarkClicked()
@@ -158,5 +172,10 @@ void BookMarkWidget::onListMenuClick(const int &iType)
 {
     if (iType == E_BOOKMARK_DELETE) {
         DeleteItemByKey();
+    } else if (iType == E_BOOKMARK_DELETE_ALL) {
+        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?"));
+        if (result) {
+            deleteAllItem();
+        }
     }
 }

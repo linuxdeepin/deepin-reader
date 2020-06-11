@@ -57,7 +57,7 @@ void CatalogWidget::initWidget()
 
     auto mainLayout = new QVBoxLayout;
 
-    mainLayout->addItem(titleLayout);
+    mainLayout->addLayout(titleLayout);
 
     m_pTree = new CatalogTreeView(m_sheet, this);
     mainLayout->addWidget(m_pTree);

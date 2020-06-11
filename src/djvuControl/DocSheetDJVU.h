@@ -48,6 +48,8 @@ public:
 
     void setBookMark(int index, int state) override;
 
+    void setBookMarks(const QList<BookMarkStatus_t> &bookmarks) override;
+
     bool fileChanged()override;
 
     bool saveData()override;

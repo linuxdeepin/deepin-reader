@@ -333,7 +333,6 @@ void SheetBrowserPDF::initConnections()
 {
     Q_D(SheetBrowserPDF);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), d, SLOT(slotCustomContextMenuRequested(const QPoint &)));
-    connect(this, SIGNAL(sigDeleteAnntation(const int &, const QString &)), d, SLOT(SlotDeleteAnntation(const int &, const QString &)));
 }
 
 bool SheetBrowserPDF::getFileChange()
@@ -346,4 +345,10 @@ DocummentProxy *SheetBrowserPDF::GetDocProxy()
 {
     Q_D(SheetBrowserPDF);
     return d->m_pProxy;
+}
+
+void SheetBrowserPDF::deleteAnntation(const int &type, const QString &content)
+{
+    Q_D(SheetBrowserPDF);
+    d->deleteAnntation(type, content);
 }

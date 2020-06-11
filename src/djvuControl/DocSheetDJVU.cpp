@@ -165,6 +165,26 @@ void DocSheetDJVU::setBookMark(int index, int state)
     emit sigFileChanged(this);
 }
 
+void DocSheetDJVU::setBookMarks(const QList<BookMarkStatus_t> &bookmarks)
+{
+    bool bShowtips = false;
+    for (const BookMarkStatus_t &bookmark : bookmarks) {
+        if (bookmark.nStatus)
+            m_bookmarks.insert(bookmark.nIndex);
+        else {
+            bShowtips = true;
+            m_bookmarks.remove(bookmark.nIndex);
+        }
+
+        m_sidebar->setBookMark(bookmark.nIndex, bookmark.nStatus);
+        m_browser->setBookMark(bookmark.nIndex, bookmark.nStatus);
+    }
+
+    if (bShowtips) showTips(tr("The bookmark has been removed"));
+    m_fileChanged = true;
+    emit sigFileChanged(this);
+}
+
 int DocSheetDJVU::pagesNumber()
 {
     if (m_browser)
