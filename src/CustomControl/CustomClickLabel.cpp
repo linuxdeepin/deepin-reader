@@ -18,7 +18,7 @@
  */
 #include "CustomClickLabel.h"
 
-CustomClickLabel::CustomClickLabel(const QString &text, DWidget *parent, Qt::WindowFlags f)
+CustomClickLabel::CustomClickLabel(const QString &text, DWidget *parent, Qt::WindowFlags)
     : DLabel(text, parent)
 {
 

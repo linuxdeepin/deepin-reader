@@ -191,7 +191,7 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     return qMax(0.0f, c);
 }
 
-QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
+QByteArray Utils::detectEncode(const QByteArray &, const QString &)
 {
     // Return local encoding if nothing in file.
 //    if (data.isEmpty()) {

@@ -38,7 +38,7 @@
 #include <QGraphicsSceneHoverEvent>
 
 QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
-SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
+SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
 {
     items.insert(this);
     setAcceptHoverEvents(true);
@@ -59,11 +59,11 @@ QRectF SheetBrowserDJVUItem::boundingRect() const
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, (double)m_page->size().height() * m_scaleFactor, (double)m_page->size().width() * m_scaleFactor);
+        return QRectF(0, 0, static_cast<double>(m_page->size().height() * m_scaleFactor), static_cast<double>(m_page->size().width() * m_scaleFactor));
     default: break;
     }
 
-    return QRectF(0, 0, (double)m_page->size().width() * m_scaleFactor, (double)m_page->size().height() * m_scaleFactor);
+    return QRectF(0, 0, static_cast<double>(m_page->size().width() * m_scaleFactor), static_cast<double>(m_page->size().height() * m_scaleFactor));
 }
 
 QRectF SheetBrowserDJVUItem::bookmarkRect()
@@ -86,7 +86,7 @@ void SheetBrowserDJVUItem::setBookmark(bool hasBookmark)
     update();
 }
 
-void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
         render(m_scaleFactor, m_rotation, false);
@@ -98,11 +98,11 @@ void SheetBrowserDJVUItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawImage(option->rect.x(), option->rect.y(), m_image);
 
     if (1 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
+        painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
     if (2 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39)));
+        painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39)));
     if (3 == m_bookmarkState)
-        painter->drawPixmap(bookmarkRect().x(), bookmarkRect().y(), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
+        painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
 }
 
 void SheetBrowserDJVUItem::render(double scaleFactor, Dr::Rotation rotation, bool readerLater)
@@ -154,12 +154,13 @@ QImage SheetBrowserDJVUItem::getImageRect(double scaleFactor, QRect rect)
 
 QImage SheetBrowserDJVUItem::getImagePoint(double scaleFactor, QPoint point)
 {
-    QRect rect = QRect(point.x() * scaleFactor / m_scaleFactor - 122, point .y() * scaleFactor / m_scaleFactor  - 122, 244, 244);
+    QRect rect = QRect(static_cast<int>(point.x() * scaleFactor / m_scaleFactor - 122),
+                       static_cast<int>(point .y() * scaleFactor / m_scaleFactor  - 122), 244, 244);
 
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
-void SheetBrowserDJVUItem::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image)
+void SheetBrowserDJVUItem::handleRenderFinished(double, Dr::Rotation, QImage image)
 {
     m_image = image;
     update();

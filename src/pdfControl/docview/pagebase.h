@@ -73,11 +73,12 @@ class PageBasePrivate: public QObject
 {
     Q_OBJECT
 public:
-    PageBasePrivate(PageBase *parent): q_ptr(parent),
+    PageBasePrivate(PageBase *parent):
         paintrects(),
         m_links(),
         m_words(),
-        m_highlights()
+        m_highlights(),
+        q_ptr(parent)
     {
         m_imagewidth = 0.01;
         m_imageheight = 0.01;

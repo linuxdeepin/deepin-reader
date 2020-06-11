@@ -30,7 +30,7 @@ DBFactory::DBFactory(QObject *parent)
 
 }
 
-void DBFactory::saveAsData(QString originFilePath, QString targetFilePath)
+void DBFactory::saveAsData(QString, QString)
 {
 
 }

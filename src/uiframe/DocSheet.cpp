@@ -41,7 +41,7 @@ DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
-    : DSplitter(parent), m_type(type), m_filePath(filePath)
+    : DSplitter(parent), m_filePath(filePath), m_type(type)
 {
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
@@ -78,12 +78,12 @@ bool DocSheet::openFileExec()
     return false;
 }
 
-void DocSheet::jumpToIndex(int index)
+void DocSheet::jumpToIndex(int)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToPage(int page)
+void DocSheet::jumpToPage(int)
 {
     qDebug() << "unrealized";
 }
@@ -118,12 +118,12 @@ void DocSheet::rotateRight()
     qDebug() << "unrealized";
 }
 
-void DocSheet::setLayoutMode(Dr::LayoutMode mode)
+void DocSheet::setLayoutMode(Dr::LayoutMode)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setMouseShape(Dr::MouseShape shape)
+void DocSheet::setMouseShape(Dr::MouseShape)
 {
     qDebug() << "unrealized";
 }
@@ -141,19 +141,20 @@ void DocSheet::closeMagnifier()
 bool DocSheet::magnifierOpened()
 {
     qDebug() << "unrealized";
+    return  false;
 }
 
-void DocSheet::setScaleFactor(qreal scaleFactor)
+void DocSheet::setScaleFactor(qreal)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setScaleMode(Dr::ScaleMode mode)
+void DocSheet::setScaleMode(Dr::ScaleMode)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setBookMark(int page, int state)
+void DocSheet::setBookMark(int, int)
 {
     qDebug() << "unrealized";
 }
@@ -252,7 +253,7 @@ bool DocSheet::haslabel()
     return false;
 }
 
-int DocSheet::label2pagenum(QString label)
+int DocSheet::label2pagenum(QString)
 {
     qDebug() << "unrealized";
     return -1;
@@ -281,7 +282,7 @@ bool DocSheet::saveData()
     return false;
 }
 
-bool DocSheet::saveAsData(QString filePath)
+bool DocSheet::saveAsData(QString)
 {
     qDebug() << "unrealized";
     return false;

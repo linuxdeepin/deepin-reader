@@ -63,7 +63,6 @@ void ThreadRenderImage::run()
             timecost.start();
             if (m_page->getImage(image, m_width, m_height)) {
                 if (QThread::currentThread()->isInterruptionRequested() || m_bquit) {
-//                    qDebug() << "ThreadRenderImage getImage ID:" << QThread::currentThreadId() << " get suc!" << timecost.elapsed() << m_bquit;
                     b_running = false;
                     return;
                 }
@@ -673,8 +672,6 @@ QRectF PageBase::translateRect(QRectF &rect, double scale, RotateType_EM rotate)
         newrect.setHeight(rect.width()*scale);
         break;
     }
-    default:
-        break;
     }
     return  newrect;
 }
@@ -703,8 +700,6 @@ QPointF PageBase::translatepoint(QPointF pt, double, RotateType_EM rotate)
         respt.setY(1 - pt.x());
         break;
     }
-    default:
-        break;
     }
     return  respt;
 }
@@ -767,9 +762,3 @@ bool PageBase::setBookMarkState(bool state)
     d->bookmarkbtn->setClickState(state);
     return true;
 }
-
-
-
-
-
-

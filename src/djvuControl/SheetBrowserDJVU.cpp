@@ -146,7 +146,7 @@ void SheetBrowserDJVU::setBookMark(int index, int state)
     }
 }
 
-void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
+void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int)
 {
     emit sigPageChanged(currentPage());
 }
