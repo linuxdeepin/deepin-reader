@@ -593,19 +593,19 @@
     </message>
     <message>
         <source>First page</source>
-        <translation type="unfinished">First page</translation>
+        <translation type="obsolete">First page</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation type="unfinished">Previous page</translation>
+        <translation type="obsolete">Previous page</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation type="unfinished">Next page</translation>
+        <translation type="obsolete">Next page</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation type="unfinished">Last page</translation>
+        <translation type="obsolete">Last page</translation>
     </message>
 </context>
 <context>

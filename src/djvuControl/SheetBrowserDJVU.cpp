@@ -149,18 +149,42 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    menu.addAction(tr("First page"), [this]() {
+    QAction *firstPageAction = new QAction("First Page", &menu);
+    connect(firstPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageFirst();
     });
-    menu.addAction(tr("Previous page"), [this]() {
+    menu.addAction(firstPageAction);
+    if (index == 0) {
+        firstPageAction->setDisabled(true);
+    }
+
+    QAction *previousPageAction = new QAction("Previous Page", &menu);
+    connect(previousPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPagePrev();
     });
-    menu.addAction(tr("Next page"), [this]() {
+    menu.addAction(previousPageAction);
+    if (index == 0) {
+        previousPageAction->setDisabled(true);
+    }
+
+    QAction *nextPageAction = new QAction("Next Page", &menu);
+    connect(nextPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageNext();
     });
-    menu.addAction(tr("Last page"), [this]() {
+    menu.addAction(nextPageAction);
+    if (index == m_items.count() - 1) {
+        nextPageAction->setDisabled(true);
+    }
+
+    QAction *lastPageAction = new QAction("Last Page", &menu);
+    connect(lastPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageLast();
     });
+    menu.addAction(lastPageAction);
+    if (index == m_items.count() - 1) {
+        lastPageAction->setDisabled(true);
+    }
+
     menu.move(mapToGlobal(point));
     menu.exec();
 }
