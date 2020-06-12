@@ -43,6 +43,7 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QClipboard>
+#include <DApplication>
 #include "ModuleHeader.h"
 //#include <KEncodingProber>
 
@@ -632,11 +633,12 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
     }
     const QSize &imgSize = img_in.size();
     QPixmap pixmap(imgSize);
+    pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     QPainterPath clippath;
-    clippath.addRoundedRect(0, 0, imgSize.width(), imgSize.height(), radius, radius);
+    clippath.addRoundedRect(0, 0, imgSize.width() / dApp->devicePixelRatio(), imgSize.height() / dApp->devicePixelRatio(), radius, radius);
     painter.setClipPath(clippath);
     painter.drawPixmap(0, 0, img_in);
     return pixmap;
