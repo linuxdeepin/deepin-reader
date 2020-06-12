@@ -242,7 +242,7 @@ void DocSheetPDF::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 {
-    if (mode >= Dr::ScaleFactorMode && mode < Dr::NumberOfScaleModes) {
+    if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
         m_operation.scaleFactor = m_browser->setFit(mode) / 100.00;
         emit sigFileChanged(this);

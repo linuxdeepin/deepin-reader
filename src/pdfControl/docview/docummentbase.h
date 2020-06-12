@@ -177,6 +177,7 @@ public:
     bool loadPages();
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
+    double adaptPageAndShow(double width, double height);
     void findNext();
     void findPrev();
     bool loadData();

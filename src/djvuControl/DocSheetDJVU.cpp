@@ -230,7 +230,7 @@ void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
-    if (mode >= 0 && mode < Dr::NumberOfScaleModes) {
+    if (mode >= 0 && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
         m_browser->deform(m_operation);
         emit sigFileChanged(this);

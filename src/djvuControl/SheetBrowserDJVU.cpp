@@ -228,8 +228,15 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
         if (Dr::FitToPageWidthMode == operation.scaleMode)
             operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = (double)this->height() / (double) m_maxHeight ;
-        else
+            operation.scaleFactor = (double)this->height() / (double) m_maxHeight;
+        else if (Dr::FitToPageInfactMode == operation.scaleMode)
+            operation.scaleFactor = 1.0 ;
+        else if (Dr::FitToPageWorHMode == operation.scaleMode) {
+            qreal scaleFactor = ((double)this->width() - 25.0) / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            if (scaleFactor * m_maxHeight > this->height())
+                scaleFactor = (double)this->height() / (double) m_maxHeight;
+            operation.scaleFactor = scaleFactor;
+        } else
             operation.scaleMode = Dr::ScaleFactorMode;
         break;
     case Dr::RotateBy90:
@@ -237,8 +244,15 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
         if (Dr::FitToPageWidthMode == operation.scaleMode)
             operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = (double)this->height() / (double) m_maxWidth ;
-        else
+            operation.scaleFactor = (double)this->height() / (double) m_maxWidth;
+        else if (Dr::FitToPageInfactMode == operation.scaleMode)
+            operation.scaleFactor = 1.0 ;
+        else if (Dr::FitToPageWorHMode == operation.scaleMode) {
+            qreal scaleFactor = ((double)this->width() - 25.0) / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            if (scaleFactor * m_maxWidth > this->height())
+                scaleFactor = (double)this->height() / (double) m_maxWidth;
+            operation.scaleFactor = scaleFactor;
+        } else
             operation.scaleMode = Dr::ScaleFactorMode;
         break;
     }

@@ -1163,6 +1163,61 @@ double DocummentBase::adaptHeightAndShow(double height)
     return scale;
 }
 
+double DocummentBase::adaptPageAndShow(double width, double height)
+{
+    Q_D(DocummentBase);
+
+    if (!bDocummentExist() && d->m_pages.size() > 0)
+        return -1;
+
+    if (width < EPSINON) {
+        return -1;
+    }
+
+    double imageoriginalheight = 0.0;
+    double imageoriginalwidth = 0.0;
+
+    double imageInfactOriH = 0.0;
+    foreach (PageBase *base, d->m_pages) {
+        if (base->getOriginalImageWidth() > imageoriginalwidth)
+            imageoriginalwidth = base->getOriginalImageWidth();
+        if (base->getOriginalImageHeight() > imageoriginalheight)
+            imageoriginalheight = base->getOriginalImageHeight();
+    }
+    imageInfactOriH = imageoriginalheight;
+
+    RotateType_EM docrotatetype = d->m_rotate;
+    ViewMode_EM docviewmode = d->m_viewmode;
+    width = width - d->m_vboxLayout->margin() * 2 - d->m_widgets.at(0)->layout()->margin() * 2 - d->m_pages.at(0)->margin() * 2 - 50;
+    double scale = 1;
+
+    if (ViewMode_FacingPage == docviewmode) {
+        width -= d->m_widgets.at(0)->layout()->spacing();
+        scale = width / 2 / imageoriginalwidth;
+        if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype) {
+            scale = width / 2 / imageoriginalheight;
+            imageInfactOriH = imageoriginalwidth;
+        }
+    } else {
+        scale = width / imageoriginalwidth;
+        if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype) {
+            scale = width / imageoriginalheight;
+            imageInfactOriH = imageoriginalwidth;
+        }
+    }
+
+    height = height - d->m_vboxLayout->margin() - d->m_widgets.at(0)->layout()->margin() - d->m_widgets.at(0)->layout()->spacing() - d->m_pages.at(0)->margin();
+    if (scale * imageInfactOriH > height) {
+        scale = height / imageoriginalheight;
+        if (RotateType_90 == docrotatetype || RotateType_270 == docrotatetype)
+            scale = height / imageoriginalwidth;
+    }
+
+    scaleAndShow(scale, RotateType_Normal);
+    return scale;
+}
+
+
 void DocummentBase::findNext()
 {
     Q_D(DocummentBase);

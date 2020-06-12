@@ -38,3 +38,13 @@ int CustomMenu::dealWithData(const int &, const QString &)
 {
     return MSG_NO_OK;
 }
+
+QAction *CustomMenu::createAction(const QString &objName, const char *member, bool checkable)
+{
+    QAction *action = new QAction(objName, this);
+    action->setObjectName(objName);
+    action->setCheckable(checkable);
+    connect(action, SIGNAL(triggered()), this, member);
+    this->addAction(action);
+    return action;
+}

@@ -75,7 +75,9 @@ enum ScaleMode {
     ScaleFactorMode     = 0,
     FitToPageWidthMode  = 1,
     FitToPageHeightMode = 2,
-    NumberOfScaleModes  = 3
+    NumberOfScaleModes  = 3,
+    FitToPageInfactMode = 4,
+    FitToPageWorHMode   = 5
 };
 
 }

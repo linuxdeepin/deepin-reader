@@ -71,7 +71,7 @@ Central::Central(QWidget *parent)
 
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(slotFindOperation(const int &)));
+    connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
 }
 
 Central::~Central()

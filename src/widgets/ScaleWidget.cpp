@@ -1,5 +1,27 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "ScaleWidget.h"
 #include "DocSheet.h"
+#include "ScaleMenu.h"
 
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -19,47 +41,43 @@ ScaleWidget::~ScaleWidget()
 
 void ScaleWidget::initWidget()
 {
-    auto m_layout = new QHBoxLayout();
+    QHBoxLayout *m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(10);
     setLayout(m_layout);
 
-    m_scaleComboBox = new DComboBox();
-    QFont font = m_scaleComboBox->font();
+    m_lineEdit = new DLineEdit(this);
+    QFont font = m_lineEdit->font();
     font.setPixelSize(14);
+    m_lineEdit->setFont(font);
+    m_lineEdit->setFixedSize(120, 36);
 
-    m_scaleComboBox->setFont(font);
-    m_scaleComboBox->setInsertPolicy(QComboBox::NoInsert);
-    m_scaleComboBox->setDuplicatesEnabled(false); //  重复项 不允许添加
-    int tW = 120;
-    int tH = 0;
+    DIconButton *arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
+    arrowBtn->setFixedSize(32, 32);
+    arrowBtn->move(m_lineEdit->width() - arrowBtn->width() - 2, 2);
+    m_lineEdit->lineEdit()->setTextMargins(0, 0, arrowBtn->width(), 0);
+    m_lineEdit->setClearButtonEnabled(false);
 
-    m_scaleComboBox->setFixedWidth(tW);
-    m_scaleComboBox->setEditable(true);
-    connect(m_scaleComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onReturnPressed()));
+    connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
+    connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
+    connect(arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
 
-    QLineEdit *edit = m_scaleComboBox->lineEdit();
-    connect(edit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
-    connect(edit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
-
-    tW = 24;
-    tH = 24;
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
     DStyle::setFrameRadius(pPreBtn, 12);
-    pPreBtn->setFixedSize(QSize(tW, tH));
-    connect(pPreBtn, SIGNAL(clicked()), SLOT(slotPrevScale()));
+    pPreBtn->setFixedSize(24, 24);
+    connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
 
     DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
     DStyle::setFrameRadius(pNextBtn, 12);
-    pNextBtn->setFixedSize(QSize(tW, tH));
-    connect(pNextBtn, SIGNAL(clicked()), SLOT(slotNextScale()));
+    pNextBtn->setFixedSize(24, 24);
+    connect(pNextBtn, SIGNAL(clicked()), SLOT(onNextScale()));
 
     m_layout->addWidget(pPreBtn);
-    m_layout->addWidget(m_scaleComboBox);
+    m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(pNextBtn);
 }
 
-void ScaleWidget::slotPrevScale()
+void ScaleWidget::onPrevScale()
 {
     if (m_sheet.isNull())
         return;
@@ -67,7 +85,7 @@ void ScaleWidget::slotPrevScale()
     m_sheet->zoomout();
 }
 
-void ScaleWidget::slotNextScale()
+void ScaleWidget::onNextScale()
 {
     if (m_sheet.isNull())
         return;
@@ -80,62 +98,36 @@ void ScaleWidget::onReturnPressed()
     if (m_sheet.isNull())
         return;
 
-    QString text = m_scaleComboBox->currentText();
-
-    double value = text.replace("%", "").toDouble() / 100.00;
-
-    if (value <= 0.1)
-        value = 0.1;
-
-    if (value > 12)
-        value = 12;
-
+    qreal value = m_lineEdit->text().replace("%", "").toDouble() / 100.00;
+    value = qBound(0.1, value, 5.0);
     m_sheet->setScaleFactor(value);
 }
 
 void ScaleWidget::onEditFinished()
 {
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+    m_lineEdit->setText(text);
+}
 
-    m_scaleComboBox->setCurrentText(text);
+void ScaleWidget::onArrowBtnlicked()
+{
+    m_lineEdit->lineEdit()->setFocus(Qt::MouseFocusReason);
+    if (m_ScaleMenu == nullptr) {
+        m_ScaleMenu = new ScaleMenu(this);
+    }
+    QPoint point = m_lineEdit->mapToGlobal(QPoint(0, m_lineEdit->height() + 2));
+    m_ScaleMenu->readCurDocParam(m_sheet.data());
+    m_ScaleMenu->exec(point);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)
 {
     m_sheet = sheet;
-
     if (nullptr == sheet)
         return;
 
-    m_scaleComboBox->blockSignals(true);
-
-    m_scaleComboBox->clear();
-
-    for (int i = 0; i < m_sheet->scaleFactorList().count(); ++i) {
-        m_scaleComboBox->addItem(QString::number(m_sheet->scaleFactorList().at(i) * 100) + "%");
-    }
-
-    int index = m_sheet->scaleFactorList().indexOf(m_sheet->operation().scaleFactor);
-
-    m_scaleComboBox->setCurrentIndex(index);
-
+    m_lineEdit->clear();
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-
-    m_scaleComboBox->setCurrentText(text);
-
-    m_scaleComboBox->lineEdit()->setCursorPosition(0);
-
-    m_scaleComboBox->blockSignals(false);
-}
-
-void ScaleWidget::clear()
-{
-    if (m_scaleComboBox) {
-        m_scaleComboBox->lineEdit()->clear();
-    }
-}
-
-void ScaleWidget::paintEvent(QPaintEvent *)
-{
-    return;
+    m_lineEdit->setText(text);
+    m_lineEdit->lineEdit()->setCursorPosition(0);
 }

@@ -1,9 +1,9 @@
 ﻿/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     wangzhixuan<wangzhixuan@uniontech.com>
+* Author:     leiyu <leiyu@uniontech.com>
 *
-* Maintainer: zhangsong<zhangsong@uniontech.com>
+* Maintainer: leiyu <leiyu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,6 @@
 #include "CustomControl/CustomWidget.h"
 #include "pdfControl/docview/commonstruct.h"
 
-//class ScaleMenu;
-class FontMenu;
-class HandleMenu;
 class ScaleWidget;
 class DocSheet;
 class TitleWidget : public CustomWidget
@@ -41,12 +38,9 @@ class TitleWidget : public CustomWidget
 
 public:
     explicit TitleWidget(DWidget *parent = nullptr);
-
     ~TitleWidget() override;
 
 public:
-    void setMagnifierState();
-
     void setControlEnabled(const bool &enable);
 
 protected:
@@ -56,48 +50,19 @@ public slots:
     void onCurSheetChanged(DocSheet *);
 
 private slots:
-    void slotUpdateTheme();
-
-    void SlotSetCurrentTool(const int &);
-
-    void slotFindOperation(const int &);
-
-    void on_thumbnailBtn_clicked();
-
-    void on_settingBtn_clicked();
-
-    void on_handleShapeBtn_clicked();
-
-    void on_searchBtn_clicked();
+    void onFindOperation(const int &);
+    void onThumbnailBtnClicked();
 
 private:
     void initBtns();
-
-    void __InitHandel();
-
-    void __InitSelectTool();
-
-    void setDefaultShape();
-
-    void setHandleShape();
-
+    void setBtnDisable(const bool &bAble);
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
-
-    void SetBtnDisable(const bool &bAble);
 
 private:
     QStringList shortKeyList;
 
-    HandleMenu *m_pHandleMenu = nullptr;
-    FontMenu *m_pFontMenu = nullptr;
-
+    ScaleWidget *m_pSw = nullptr;
     DPushButton *m_pThumbnailBtn = nullptr;
-    DPushButton *m_pSettingBtn = nullptr;
-    DPushButton *m_pHandleShapeBtn = nullptr;
-
-    ScaleWidget     *m_pSw = nullptr;
-    DIconButton     *m_pSearchBtn = nullptr;
-
     QPointer<DocSheet> m_curSheet = nullptr;
 };
 

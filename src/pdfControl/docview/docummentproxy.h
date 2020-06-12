@@ -56,6 +56,7 @@ public:
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage);
     double adaptWidthAndShow(double width);
     double adaptHeightAndShow(double height);
+    double adaptPageAndShow(double width, double height);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     void getAllAnnotation(QList<stHighlightContent> &listres);
     int  pointInWhichPage(QPoint pos);

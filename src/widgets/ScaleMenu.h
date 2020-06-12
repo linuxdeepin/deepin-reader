@@ -18,40 +18,41 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef SCALEMENU_H
+#define SCALEMENU_H
 
-#ifndef SCALEWIDGET_H
-#define SCALEWIDGET_H
-
-#include "CustomControl/CustomWidget.h"
-#include <QPointer>
-#include <DLineEdit>
+#include "CustomControl/CustomMenu.h"
 
 class DocSheet;
-class ScaleMenu;
-class ScaleWidget : public DWidget
+class ScaleMenu : public CustomMenu
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ScaleWidget)
-public:
-    explicit ScaleWidget(DWidget *parent = nullptr);
-    ~ScaleWidget();
 
-    void setSheet(DocSheet *sheet);
+public:
+    explicit ScaleMenu(QWidget *parent = nullptr);
+    void readCurDocParam(DocSheet *docSheet);
 
 private:
-    void initWidget();
+    void initActions();
+    void clearAllChecked();
 
 private slots:
-    void onPrevScale();
-    void onNextScale();
-    void onReturnPressed();
-    void onEditFinished();
-    void onArrowBtnlicked();
+    void onTwoPage();
+    void onFiteH();
+    void onFiteW();
+    void onInfacePage();
+    void onFitPage();
+    void onScaleFactor();
 
 private:
-    QPointer<DocSheet> m_sheet;
-    DLineEdit *m_lineEdit;
-    ScaleMenu *m_ScaleMenu = nullptr;
+    QAction *m_pTwoPageAction;
+    QAction *m_pFitInfactAction;
+    QAction *m_pFitWorHAction;
+    QAction *m_pFiteHAction;
+    QAction *m_pFiteWAction;
+
+    DocSheet *m_sheet;
+    QList<QAction *> m_actionGroup;
 };
 
-#endif // SCALEWIDGET_H
+#endif // SCALEMENU_H

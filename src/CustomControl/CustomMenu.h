@@ -53,6 +53,7 @@ signals:
 
 public:
     virtual int dealWithData(const int &, const QString &);
+    QAction *createAction(const QString &objName, const char *member, bool checkable);
 
 protected:
     virtual void initActions() = 0;

@@ -367,6 +367,14 @@ double DocummentProxy::adaptHeightAndShow(double height)
     return m_documment->adaptHeightAndShow(height);
 }
 
+double DocummentProxy::adaptPageAndShow(double width, double height)
+{
+    if (!m_documment || bcloseing)
+        return -1;
+
+    return m_documment->adaptPageAndShow(width, height);
+}
+
 bool DocummentProxy::annotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     if (m_documment) {

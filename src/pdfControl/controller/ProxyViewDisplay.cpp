@@ -63,12 +63,19 @@ double ProxyViewDisplay::onSetWidgetAdapt()
     if (m_nAdapteState != Dr::ScaleFactorMode) {
         if (!fvmPrivate->m_pProxy)
             return m_nScale;
-        double dScale = 0.0;
+        double dScale = 1.0;
         if (m_nAdapteState == Dr::FitToPageWidthMode) {
             dScale = fvmPrivate->m_pProxy->adaptWidthAndShow(m_nWidth);
             return dScale * 100;
         } else if (m_nAdapteState == Dr::FitToPageHeightMode) {
             dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
+            return dScale * 100;
+        } else if (m_nAdapteState == Dr::FitToPageInfactMode) {
+            ViewMode_EM em = m_nDoubleShow ? ViewMode_FacingPage : ViewMode_SinglePage;
+            fvmPrivate->m_pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
+            return 1.0 * 100;
+        } else if (m_nAdapteState == Dr::FitToPageWorHMode) {
+            dScale = fvmPrivate->m_pProxy->adaptPageAndShow(m_nWidth, m_nHeight);
             return dScale * 100;
         }
     }
