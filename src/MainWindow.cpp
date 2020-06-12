@@ -123,6 +123,7 @@ void MainWindow::initUI()
 
     setCentralWidget(m_central);
 
+    titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());

@@ -549,12 +549,15 @@ void CentralDocPage::showFileAttr()
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    if (!m_slideSheet.isNull() && m_slideSheet->slideOpened() && s == KeyStr::g_esc) {
+    if (s == KeyStr::g_esc && quitFullScreen())
+        return;
+
+    if (s == KeyStr::g_esc && !m_slideSheet.isNull() && m_slideSheet->slideOpened()) {
         quitSlide();
         return;
     }
 
-    if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened() && s == KeyStr::g_esc) {
+    if (s == KeyStr::g_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
         return;
     }
@@ -630,6 +633,8 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_right) {
         if (getCurSheet())
             getCurSheet()->jumpToNextPage();
+    } else if (s == KeyStr::g_f11) {
+        openFullScreen();
     }
 }
 
@@ -674,4 +679,28 @@ void CentralDocPage::quitSlide()
         m_slideSheet->closeSlide();
         m_slideSheet = nullptr;
     }
+}
+
+void CentralDocPage::openFullScreen()
+{
+    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+
+    if (nullptr == mainWindow)
+        return;
+
+    if (!mainWindow->isFullScreen())
+        mainWindow->showFullScreen();
+}
+bool CentralDocPage::quitFullScreen()
+{
+    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+    if (nullptr == mainWindow)
+        return false;
+
+    if (mainWindow->isFullScreen()) {
+        mainWindow->showNormal();
+        return true;
+    }
+
+    return false;
 }

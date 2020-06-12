@@ -88,6 +88,10 @@ public:
 
     void quitSlide();
 
+    void openFullScreen();
+
+    bool quitFullScreen();
+
     void openCurFileFolder();
 
     void BlockShutdown();

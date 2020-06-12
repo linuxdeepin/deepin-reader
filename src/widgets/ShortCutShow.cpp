@@ -189,7 +189,7 @@ void ShortCutShow::initDJVU()
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
                   << KeyStr::g_ctrl_b << "Delete" << KeyStr::g_alt_z
-                  << KeyStr::g_ctrl_h
+                  << KeyStr::g_ctrl_h << KeyStr::g_f11
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << "Ctrl+Shift+?";
 
     shortcutnames << tr("Exit") << tr("Help")
@@ -197,17 +197,16 @@ void ShortCutShow::initDJVU()
                   << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
                   << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
                   << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
-                  << tr("Hand tool") << tr("Add bookmark") << tr("Delete") << tr("Magnifier")
-                  << tr("Slide show")
+                  << tr("Hand tool") << tr("Add bookmark") << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen")
                   << tr("Copy") << tr("Cut") << tr("Paste") << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
-    Filesnames << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                 << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
-    Toolsnames << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-               << tr("Magnifier") << tr("Search") << tr("Slide show");
-    Editnames << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+    Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
+    Displaynames  << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
+                  << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
+    Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
+                  << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen") ;
+    Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
     int index = 0;
     foreach (QString strname, shortcutnames) {
@@ -232,7 +231,7 @@ void ShortCutShow::initPDF()
                   << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
                   << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
                   << KeyStr::g_ctrl_b << KeyStr::g_ctrl_i << KeyStr::g_ctrl_l << "Delete" << KeyStr::g_alt_z
-                  << KeyStr::g_ctrl_h
+                  << KeyStr::g_ctrl_h << KeyStr::g_f11
                   << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << "Ctrl+Shift+?";
 
     shortcutnames << tr("Exit") << tr("Help")
@@ -241,16 +240,15 @@ void ShortCutShow::initPDF()
                   << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
                   << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
                   << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight")
-                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Copy") << tr("Cut") << tr("Paste")
+                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen") << tr("Copy") << tr("Cut") << tr("Paste")
                   << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
-
     Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
     Displaynames  << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
                   << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
     Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-                  << tr("Magnifier") << tr("Search") << tr("Slide show");
+                  << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen")  ;
     Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
     int index = 0;
