@@ -1,16 +1,13 @@
-QT += core gui svg sql printsupport
-QT += dtkwidget
-QT += xml
-#QT += KCodecs
+QT += core gui gui-private svg sql printsupport dtkwidget
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-#private
-QT       += gui-private
 
 TARGET = deepin-reader
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
+
+PKGCONFIG += x11 poppler-qt5 ddjvuapi libspectre
+LIBS+= -luuid -ltiff
 
 include (app/app.pri)
 include (CustomControl/CustomControl.pri)
@@ -19,7 +16,7 @@ include (utils/utils.pri)
 include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
 include (document/document.pri)
-include (lpreviewControl//lpreviewControl.pri)
+include (lpreviewControl/lpreviewControl.pri)
 
 INCLUDEPATH += $$PWD/uiframe
 

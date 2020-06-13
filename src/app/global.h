@@ -31,15 +31,16 @@
 
 #include <QString>
 
-//deepin-reader
-
 namespace Dr {
 
 enum FileType {
     Unknown = 0,
     PDF = 1,
     PS = 2,
-    DjVu = 3
+    DjVu = 3,
+    DOC = 4,
+    PPT_XLS = 5
+
 };
 FileType fileType(const QString &filePath);
 

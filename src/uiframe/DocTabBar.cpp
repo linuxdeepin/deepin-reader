@@ -3,7 +3,6 @@
 #include <DPlatformWindowHandle>
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QProcess>
 #include <QDir>
 #include <QTimer>
 #include <QUuid>

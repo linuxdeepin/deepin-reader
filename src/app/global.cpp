@@ -19,6 +19,10 @@ FileType fileType(const QString &filePath)
         fileType = DjVu;
     } else if (mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
         fileType = DjVu;
+    } else if (mimeType.name() == QLatin1String("application/msword")) {
+        fileType = DOC;
+    } else if (mimeType.name() == QLatin1String("application/x-ole-storage")) {
+        fileType = PPT_XLS;
     }
 
     return fileType;

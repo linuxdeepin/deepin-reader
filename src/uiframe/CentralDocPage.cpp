@@ -49,6 +49,7 @@
 #include "global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
+#include <QUuid>
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -177,7 +178,37 @@ void CentralDocPage::openFile(QString &filePath)
 
         onOpened(sheet, true);
 
-    } else {
+    } /*else if (Dr::DOC == fileType) {
+        QProcess p(0);
+
+        QString outputName = QUuid::createUuid().toString();
+        QString dirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + outputName;
+
+        p.startDetached(QString("unoconv -f pdf -o %1 %2").arg(dirPath).arg(filePath));
+        p.waitForStarted();
+        p.waitForFinished();
+
+        DocSheet *sheet = new DocSheetPDF(dirPath, this);
+
+        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+        sheet->openFile();
+
+        m_pStackedLayout->addWidget(sheet);
+
+        m_pStackedLayout->setCurrentWidget(sheet);
+
+        sheet->defaultFocus();
+
+        m_pTabBar->insertSheet(sheet);
+
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    }*/ else {
         showTips(tr("The format is not supported"), 1);
     }
 }

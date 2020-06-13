@@ -1,7 +1,3 @@
-PKGCONFIG += x11 poppler-qt5 ddjvuapi libspectre
-INCLUDEPATH+=/usr/include/KF5/KArchive
-LIBS+=-lKF5Archive -luuid -ltiff
-
 HEADERS += \
     $$PWD/controller/Annotation.h \
     $$PWD/controller/ProxyData.h \
