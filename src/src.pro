@@ -8,7 +8,7 @@ TEMPLATE = app
 
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += x11 poppler-qt5 ddjvuapi dtkwidget
+PKGCONFIG += poppler-qt5 ddjvuapi dtkwidget
 
 LIBS+= -luuid
 
@@ -53,17 +53,9 @@ TRANSLATIONS += \
     ../translations/deepin-reader_en_US.ts\
     ../translations/deepin-reader_zh_CN.ts
 
-APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
-
-isEmpty(BINDIR):BINDIR=/usr/bin
-isEmpty(APPDIR):APPDIR=/usr/share/applications
-isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-reader
-
-target.path = $$INSTROOT$$BINDIR
-
-desktop.path = $$INSTROOT$$APPDIR
+target.path   = /usr/bin
+desktop.path  = /usr/share/applications
 desktop.files = $$PWD/deepin-reader.desktop
-
 INSTALLS += target desktop
 
 CONFIG(release, debug|release) {
