@@ -18,7 +18,6 @@ DocTabBar::DocTabBar(QWidget *parent)
     this->setEnabledEmbedStyle(true);//设置直角样式
     this->setExpanding(true);//设置平铺窗口模式
 #endif
-
     this->setTabsClosable(true);
     this->setMovable(true);
     this->setElideMode(Qt::ElideMiddle);
@@ -65,6 +64,8 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
         index = addTab(fileName);
     else
         index = insertTab(index, fileName);
+
+    this->setTabToolTip(index, fileName);
 
     this->setTabMinimumSize(index, QSize(140, 36));
 
@@ -118,6 +119,8 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
     emit sigNeedActivateWindow();
 
     insertTab(index, tabName);
+
+    this->setTabToolTip(index, tabName);
 
     setTabMinimumSize(index, QSize(140, 36));
 
