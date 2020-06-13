@@ -29,7 +29,7 @@
 #ifndef SHEETBROWSERDJVU_H
 #define SHEETBROWSERDJVU_H
 
-#include <QGraphicsView>
+#include <DGraphicsView>
 #include "document/model.h"
 #include "global.h"
 #include <QLabel>
@@ -37,7 +37,7 @@
 class DocOperation;
 class SheetBrowserDJVUItem;
 class DocSheetDJVU;
-class SheetBrowserDJVU : public QGraphicsView
+class SheetBrowserDJVU : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:

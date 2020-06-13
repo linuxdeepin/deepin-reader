@@ -38,12 +38,19 @@
 #include <QApplication>
 #include <QBitmap>
 #include <DMenu>
+#include <DGuiApplicationHelper>
 
-SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : QGraphicsView(parent), m_sheet(parent)
+DWIDGET_USE_NAMESPACE
+
+SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setScene(new QGraphicsScene());
 
     setFrameShape(QFrame::NoFrame);
+
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setStyleSheet("QGraphicsView{background-color:white}");     //由于DTK bug不响应WA_TranslucentBackground参数写死了颜色，这里加样式表让dtk style失效
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 
