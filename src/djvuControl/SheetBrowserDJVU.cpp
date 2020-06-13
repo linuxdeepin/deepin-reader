@@ -38,12 +38,19 @@
 #include <QApplication>
 #include <QBitmap>
 #include <DMenu>
+#include <DGuiApplicationHelper>
 
-SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : QGraphicsView(parent), m_sheet(parent)
+DWIDGET_USE_NAMESPACE
+
+SheetBrowserDJVU::SheetBrowserDJVU(DocSheetDJVU *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setScene(new QGraphicsScene());
 
     setFrameShape(QFrame::NoFrame);
+
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setStyleSheet("QGraphicsView{background-color:white}");     //由于DTK bug不响应WA_TranslucentBackground参数写死了颜色，这里加样式表让dtk style失效
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -173,18 +180,42 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    menu.addAction(tr("First page"), [this]() {
+    QAction *firstPageAction = new QAction("First Page", &menu);
+    connect(firstPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageFirst();
     });
-    menu.addAction(tr("Previous page"), [this]() {
+    menu.addAction(firstPageAction);
+    if (index == 0) {
+        firstPageAction->setDisabled(true);
+    }
+
+    QAction *previousPageAction = new QAction("Previous Page", &menu);
+    connect(previousPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPagePrev();
     });
-    menu.addAction(tr("Next page"), [this]() {
+    menu.addAction(previousPageAction);
+    if (index == 0) {
+        previousPageAction->setDisabled(true);
+    }
+
+    QAction *nextPageAction = new QAction("Next Page", &menu);
+    connect(nextPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageNext();
     });
-    menu.addAction(tr("Last page"), [this]() {
+    menu.addAction(nextPageAction);
+    if (index == m_items.count() - 1) {
+        nextPageAction->setDisabled(true);
+    }
+
+    QAction *lastPageAction = new QAction("Last Page", &menu);
+    connect(lastPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageLast();
     });
+    menu.addAction(lastPageAction);
+    if (index == m_items.count() - 1) {
+        lastPageAction->setDisabled(true);
+    }
+
     menu.move(mapToGlobal(point));
     menu.exec();
 }

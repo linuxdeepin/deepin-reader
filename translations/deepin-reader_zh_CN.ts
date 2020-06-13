@@ -593,19 +593,19 @@
     </message>
     <message>
         <source>First page</source>
-        <translation>第一页</translation>
+        <translation type="vanished">第一页</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation>前一页</translation>
+        <translation type="vanished">前一页</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation>后一页</translation>
+        <translation type="vanished">后一页</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation>最后一页</translation>
+        <translation type="vanished">最后一页</translation>
     </message>
 </context>
 <context>

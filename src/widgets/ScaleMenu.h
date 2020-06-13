@@ -50,7 +50,6 @@ private:
     QAction *m_pFitWorHAction;
     QAction *m_pFiteHAction;
     QAction *m_pFiteWAction;
-
     DocSheet *m_sheet;
     QList<QAction *> m_actionGroup;
 };

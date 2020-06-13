@@ -103,12 +103,6 @@ void ScaleWidget::onReturnPressed()
     m_sheet->setScaleFactor(value);
 }
 
-void ScaleWidget::onEditFinished()
-{
-    QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-    m_lineEdit->setText(text);
-}
-
 void ScaleWidget::onArrowBtnlicked()
 {
     m_lineEdit->lineEdit()->setFocus(Qt::MouseFocusReason);
@@ -118,6 +112,12 @@ void ScaleWidget::onArrowBtnlicked()
     QPoint point = m_lineEdit->mapToGlobal(QPoint(0, m_lineEdit->height() + 2));
     m_ScaleMenu->readCurDocParam(m_sheet.data());
     m_ScaleMenu->exec(point);
+}
+
+void ScaleWidget::onEditFinished()
+{
+    QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
+    m_lineEdit->setText(text);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)

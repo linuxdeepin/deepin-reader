@@ -211,6 +211,9 @@ int DocSheetDJVU::currentIndex()
 
 void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
 {
+    if (mode == m_operation.layoutMode)
+        return;
+
     if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
         m_operation.layoutMode = mode;
         m_browser->deform(m_operation);
@@ -239,6 +242,9 @@ void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 
 void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
 {
+    if (Dr::ScaleFactorMode == m_operation.scaleMode && scaleFactor == m_operation.scaleFactor)
+        return;
+
     m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->deform(m_operation);

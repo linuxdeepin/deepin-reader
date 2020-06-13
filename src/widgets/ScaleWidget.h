@@ -22,18 +22,18 @@
 #ifndef SCALEWIDGET_H
 #define SCALEWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include <DWidget>
 #include <QPointer>
 #include <DLineEdit>
 
 class DocSheet;
 class ScaleMenu;
-class ScaleWidget : public DWidget
+class ScaleWidget : public Dtk::Widget::DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ScaleWidget)
 public:
-    explicit ScaleWidget(DWidget *parent = nullptr);
+    explicit ScaleWidget(Dtk::Widget::DWidget *parent = nullptr);
     ~ScaleWidget();
 
     void setSheet(DocSheet *sheet);
@@ -50,7 +50,7 @@ private slots:
 
 private:
     QPointer<DocSheet> m_sheet;
-    DLineEdit *m_lineEdit;
+    Dtk::Widget::DLineEdit *m_lineEdit;
     ScaleMenu *m_ScaleMenu = nullptr;
 };
 

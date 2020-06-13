@@ -104,6 +104,11 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     pModel->setColumnCount(2);
 
     this->header()->setHidden(true);
+    this->header()->setDefaultSectionSize(18);
+    this->header()->setMinimumSectionSize(18);
+    this->header()->setStretchLastSection(false);
+    this->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    this->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     this->viewport()->setAutoFillBackground(false);
     this->setContentsMargins(0, 0, 0, 0);
 
@@ -179,6 +184,7 @@ void CatalogTreeView::handleOpenSuccess()
         }
         setIndex(m_index);
     }
+    resizeCoulumnWidth();
 }
 
 //  折叠 节点处理
@@ -239,8 +245,7 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
     DTreeView::resizeEvent(event);
-    this->setColumnWidth(0, this->width() - 60);
-    this->setColumnWidth(1, 50);
+    resizeCoulumnWidth();
 }
 
 void CatalogTreeView::mousePressEvent(QMouseEvent *event)
@@ -285,5 +290,14 @@ void CatalogTreeView::setIndex(int index, const QString &title)
                 break;
             }
         }
+    }
+}
+
+void CatalogTreeView::resizeCoulumnWidth()
+{
+    if (m_sheet) {
+        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 32;
+        this->setColumnWidth(0, this->width() - maxPageColumnWid);
+        this->setColumnWidth(1, maxPageColumnWid);
     }
 }
