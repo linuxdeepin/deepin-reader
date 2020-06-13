@@ -3,8 +3,10 @@
 
 #include "CustomControl/CustomWidget.h"
 #include <QPointer>
+#include <DLineEdit>
 
 class DocSheet;
+class ScaleMenu;
 class ScaleWidget : public DWidget
 {
     Q_OBJECT
@@ -32,8 +34,11 @@ private slots:
 
     void onEditFinished();
 
+    void onArrowBtnlicked();
+
 private:
-    DComboBox  *m_scaleComboBox = nullptr;
+    DLineEdit *m_lineEdit;
+    ScaleMenu *m_ScaleMenu = nullptr;
     QPointer<DocSheet> m_sheet;
 };
 

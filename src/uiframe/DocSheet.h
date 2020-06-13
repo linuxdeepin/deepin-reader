@@ -134,8 +134,6 @@ public:
 
     bool hasBookMark(int index);
 
-    QList<qreal> scaleFactorList();
-
     void zoomin();  //放大一级
 
     void zoomout();
@@ -153,6 +151,9 @@ public:
     bool slideOpened();
 
     void handleSlideKeyPressEvent(const QString &sKey);
+
+public:
+    static QList<qreal> scaleFactorList();
 
 protected:
     DocOperation  m_operation;
