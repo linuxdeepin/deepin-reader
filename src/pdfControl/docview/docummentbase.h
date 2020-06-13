@@ -10,7 +10,6 @@
 #include <QList>
 #include <QVBoxLayout>
 #include <QColor>
-#include <QVideoWidget>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QTimer>

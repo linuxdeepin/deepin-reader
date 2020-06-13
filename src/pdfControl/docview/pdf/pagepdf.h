@@ -3,7 +3,6 @@
 #include "../pagebase.h"
 #include <QImage>
 #include <QDebug>
-#include <QtConcurrent>
 #include <QThread>
 #include <QPaintDevice>
 #include <poppler-qt5.h>

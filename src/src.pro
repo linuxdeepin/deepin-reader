@@ -1,13 +1,18 @@
-QT += core gui gui-private svg sql printsupport dtkwidget
+QT += core gui sql printsupport dbus network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = deepin-reader
+
 TEMPLATE = app
+
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += x11 poppler-qt5 ddjvuapi libspectre
-LIBS+= -luuid -ltiff
+PKGCONFIG += x11 poppler-qt5 ddjvuapi dtkwidget
+
+LIBS+= -luuid
+
+INCLUDEPATH += $$PWD/uiframe
 
 include (app/app.pri)
 include (CustomControl/CustomControl.pri)
@@ -17,8 +22,6 @@ include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
 include (document/document.pri)
 include (lpreviewControl/lpreviewControl.pri)
-
-INCLUDEPATH += $$PWD/uiframe
 
 SOURCES += \
         main.cpp \
@@ -32,9 +35,6 @@ SOURCES += \
     uiframe/DocTabBar.cpp \
     uiframe/DocSheet.cpp
 
-RESOURCES +=         \
-    ../resources/resources.qrc
-
 HEADERS +=\
     application.h \
     MainWindow.h \
@@ -45,6 +45,13 @@ HEADERS +=\
     uiframe/CentralDocPage.h \
     uiframe/DocTabBar.h \
     uiframe/DocSheet.h
+
+RESOURCES +=         \
+    ../resources/resources.qrc
+
+TRANSLATIONS += \
+    ../translations/deepin-reader_en_US.ts\
+    ../translations/deepin-reader_zh_CN.ts
 
 APPICONDIR = $$PREFIX/share/icons/deepin/apps/scalable
 
@@ -58,10 +65,6 @@ desktop.path = $$INSTROOT$$APPDIR
 desktop.files = $$PWD/deepin-reader.desktop
 
 INSTALLS += target desktop
-
-TRANSLATIONS += \
-    ../translations/deepin-reader_en_US.ts\
-    ../translations/deepin-reader_zh_CN.ts
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

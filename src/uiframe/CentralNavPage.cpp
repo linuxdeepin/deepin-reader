@@ -28,7 +28,6 @@
 #include <DPushButton>
 #include <DSuggestButton>
 #include <QVBoxLayout>
-#include <QSvgWidget>
 
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)

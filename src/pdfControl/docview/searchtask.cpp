@@ -1,6 +1,4 @@
 #include "searchtask.h"
-#include <QtConcurrent>
-
 
 struct Search {
     Search(const QString &text, const bool matchCase, const bool wholeWords) :
