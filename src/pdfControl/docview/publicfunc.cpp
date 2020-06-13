@@ -1,7 +1,6 @@
 #include "publicfunc.h"
 #include <QFile>
-#include <uuid/uuid.h>
-
+#include <QUuid>
 
 bool PublicFunc::copyFile(QFile &source, QFile &destination)
 {
@@ -10,30 +9,23 @@ bool PublicFunc::copyFile(QFile &source, QFile &destination)
 
     QScopedArrayPointer< char > buffer(new char[maxSize]);
 
-    do
-    {
-        if((size = source.read(buffer.data(), maxSize)) < 0)
-        {
+    do {
+        if ((size = source.read(buffer.data(), maxSize)) < 0) {
             return false;
         }
 
-        if(destination.write(buffer.data(), size) < 0)
-        {
+        if (destination.write(buffer.data(), size) < 0) {
             return false;
         }
-    }
-    while(size > 0);
+    } while (size > 0);
 
     return true;
 }
 
 QString PublicFunc::getUuid()
 {
-    uuid_t uuid;
-    char str[36];
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    return  QString(str);
+    const QString &uuid = QUuid::createUuid().toString();
+    return  uuid.mid(1, uuid.length() - 2);
 }
 
 PublicFunc::PublicFunc()

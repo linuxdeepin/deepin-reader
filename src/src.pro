@@ -10,8 +10,6 @@ CONFIG += c++11 link_pkgconfig
 
 PKGCONFIG += poppler-qt5 ddjvuapi dtkwidget
 
-LIBS+= -luuid
-
 INCLUDEPATH += $$PWD/uiframe
 
 include (app/app.pri)
