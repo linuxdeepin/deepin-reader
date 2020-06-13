@@ -246,6 +246,7 @@ void PagePdf::paintEvent(QPaintEvent *event)
             qpainter.drawRect(translateRect(d_ptr->m_highlights[i], d_ptr->m_scale, d_ptr->m_rotate));
         }
     }
+//    paintIconMoveRect(qpainter);
 }
 
 void PagePdf::setPage(Poppler::Page *page, int pageno)
@@ -385,6 +386,26 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
     annotation->setPopup(popup);
     d->m_page->addAnnotation(annotation);
     return  uniqueName;
+}
+
+/**
+ * @brief PagePdf::paintIconMoveRect
+ * 绘制注释图标移动框
+ */
+void PagePdf::paintIconMoveRect(QPainter &painter)
+{
+    Q_D(PagePdf);
+    if (d->m_drawMoveRect) {
+        painter.save();
+        QPen rectPen;
+        rectPen.setStyle(Qt::PenStyle(1));
+        rectPen.setWidth(1);
+        rectPen.setColor(Qt::red);
+        painter.setPen(rectPen);
+        QRectF rect(d->m_mouseMovePoint.x(), d->m_mouseMovePoint.y(), ICONANNOTE_WIDTH, ICONANNOTE_WIDTH);
+        painter.drawRect(translateRect(rect, d_ptr->m_scale, d_ptr->m_rotate));
+        painter.restore();
+    }
 }
 
 QPointF PagePdf::globalPoint2Iner(const QPoint point)
@@ -532,8 +553,8 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     foreach (Poppler::Annotation *annote, listannote) {
         if (annote->subType() == Poppler::Annotation::AText) { //必须判断
             if (annote->boundary().contains(tpos)) {
-                strtext = annote->contents();
-                struuid = annote->uniqueName();
+                d->m_curAnnotContents = strtext = annote->contents();
+                d->m_curAnnotUuid = struuid = annote->uniqueName();
                 bclicked = true;
                 break;
             }
@@ -541,6 +562,53 @@ bool PagePdf::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString
     }
     qDeleteAll(listannote);
     return  bclicked;
+}
+
+void PagePdf::moveIconAnnot()
+{
+    Q_D(PagePdf);
+
+    if (d->m_curAnnotUuid == "")
+        return;
+
+    QPoint pos = d->m_mouseMovePoint;
+
+    QString strContents = d->m_curAnnotContents;
+    QString uuid = d->m_curAnnotUuid;
+    Poppler::Annotation::Style style;
+    style.setColor(Qt::yellow);
+
+    removeAnnotation(uuid);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
+
+    double x1 = pos.x() / (d->m_imagewidth * d->m_scale);
+    double y1 = pos.y() / (d->m_imageheight * d->m_scale);
+    double width = ICONANNOTE_WIDTH / d->m_imagewidth;
+    double height = ICONANNOTE_WIDTH / d->m_imageheight;
+    QRectF boundary;
+    boundary.setX(x1 - width / 2.0);
+    boundary.setY(y1 - height / 2.0);
+    boundary.setWidth(width);
+    boundary.setHeight(height);
+
+//    uuid = PublicFunc::getUuid();
+    annotation->setBoundary(boundary);
+    annotation->setTextIcon(QString("Note"));
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    annotation->setContents(strContents);
+    annotation->setUniqueName(uuid);
+    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
+    d->m_page->addAnnotation(annotation);
+
+    delete annotation;
+
+    QImage image;
+    getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    slot_RenderFinish(image);
 }
 
 QString PagePdf::addTextAnnotation(const QPoint &pos, const QColor &color, TextAnnoteType_Em type)
@@ -654,4 +722,32 @@ QImage PagePdf::thumbnail()
 {
     Q_D(PagePdf);
     return d->m_page->thumbnail();
+}
+
+/**
+ * @brief PagePdf::setDrawPoint
+ * 鼠标移动的位置
+ * @param point
+ */
+void PagePdf::setDrawPoint(const QPoint &point)
+{
+    Q_D(PagePdf);
+    d->m_mouseMovePoint = QPoint(point.x() - x(), point.y() - y());
+    update();
+}
+
+/**
+ * @brief PagePdf::setDrawRect
+ * 是否绘制移动框
+ * @param draw
+ */
+void PagePdf::setDrawRect(const bool &draw)
+{
+    Q_D(PagePdf);
+    d->m_drawMoveRect = draw;
+    if (!draw) {
+//        moveIconAnnot();
+        d->m_mouseMovePoint = QPoint(-200, -200);
+    }
+    update();
 }

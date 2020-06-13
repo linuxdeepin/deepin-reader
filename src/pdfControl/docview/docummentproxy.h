@@ -80,6 +80,9 @@ public:
     bool haslabel();
 
     void setFocus();
+
+    void setDrawPoint(const QPoint &);
+    void setDrawRect(const QPoint &point, const bool &draw = false);
 signals:
     void signal_pageChange(int);
     bool signal_pageJump(int);

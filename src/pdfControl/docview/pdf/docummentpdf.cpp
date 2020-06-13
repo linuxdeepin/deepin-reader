@@ -667,5 +667,27 @@ bool DocummentPDF::iconAnnotationClicked(const QPoint &pos, QString &strtext, QS
     return bclicked;
 }
 
+void DocummentPDF::setDrawPoint(const QPoint &point)
+{
+    Q_D(DocummentPDF);
+
+    QPoint pt(point);
+    int ipage = pointInWhichPage(pt);
+
+    if (ipage >= 0 && ipage < d->m_pages.size())
+        (static_cast<PagePdf *>(d->m_pages.at(ipage)))->setDrawPoint(pt);
+}
+
+void DocummentPDF::setDrawRect(const QPoint &point, const bool &draw)
+{
+    Q_D(DocummentPDF);
+
+    QPoint pt(point);
+    int ipage = pointInWhichPage(pt);
+
+    if (ipage >= 0 && ipage < d->m_pages.size())
+        (static_cast<PagePdf *>(d->m_pages.at(ipage)))->setDrawRect(draw);
+}
+
 
 

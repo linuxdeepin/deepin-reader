@@ -210,6 +210,20 @@ void DocummentProxy::setFocus()
     m_documment->setFocus();
 }
 
+void DocummentProxy::setDrawPoint(const QPoint &point)
+{
+    if (!m_documment)
+        return;
+    m_documment->setDrawPoint(point);
+}
+
+void DocummentProxy::setDrawRect(const QPoint &point, const bool &draw)
+{
+    if (!m_documment)
+        return;
+    m_documment->setDrawRect(point, draw);
+}
+
 bool DocummentProxy::save(const QString &filepath)
 {
     if (!m_documment || bcloseing)

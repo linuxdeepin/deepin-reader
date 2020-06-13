@@ -160,6 +160,8 @@ public:
     {
         return false;
     }
+    virtual void setDrawPoint(const QPoint &) = 0;
+    virtual void setDrawRect(const QPoint &point, const bool &draw = false) = 0;
     void stopLoadPageThread();
     void waitThreadquit();
     bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);

@@ -159,7 +159,11 @@ public:
 //    QMutex m_mutexlockgetimage;
     QPixmap m_pixmapshow;//当前页文档图片
     bool m_bquit;
+    QPoint m_mouseMovePoint{0, 0};
+    bool m_drawMoveRect{false};
     PageBase *q_ptr;
+    QString m_curAnnotUuid{""};
+    QString m_curAnnotContents{""};
     Q_DECLARE_PUBLIC(PageBase)
 signals:
     void signal_loadMagnifierPixmapCache(QImage image, double width, double height);

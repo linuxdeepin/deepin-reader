@@ -30,6 +30,7 @@ public:
     void removeAnnotation(const QString &struuid);
     bool annotationClicked(const QPoint &pos, QString &strtext, QString &struuid);
     bool iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid);      //查看当前点击处是否有icon
+    void moveIconAnnot();
 
     Poppler::Page *GetPage();
     stSearchRes search(const QString &text, bool matchCase, bool wholeWords) override;
@@ -39,11 +40,13 @@ public:
     bool getrectimage(QImage &image, double width, double scalebase, double magnifierscale, QPoint &pt) override;
 
     QImage thumbnail();
+    void setDrawPoint(const QPoint &);
+    void setDrawRect(const bool &draw);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
     QString addHighlightAnnotation(const QColor &color);
-
+    void paintIconMoveRect(QPainter &painter);
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
 

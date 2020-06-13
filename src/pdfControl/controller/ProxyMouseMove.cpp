@@ -37,6 +37,14 @@ ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
 void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint globalPos = event->globalPos();
+
+    if (m_bIconAnnot) {
+        _fvwParent->__SetCursor(QCursor(Qt::PointingHandCursor));
+        QPoint docGlobalPos = _fvwParent->m_pProxy->global2RelativePoint(globalPos);
+        _fvwParent->m_pProxy->setDrawPoint(docGlobalPos);
+//        qInfo() << __FUNCTION__ << "      " << __LINE__ <<  "     mouseMove      globalPos:"  <<    globalPos;
+        return;
+    }
     //  处于幻灯片模式下
     int nState = _fvwParent->m_sheet->currentState();
 
@@ -55,6 +63,7 @@ void ProxyMouseMove::mouseMoveEvent(QMouseEvent *event)
             __OtherMouseMove(globalPos);
         }
     }
+
 }
 
 //  显示放大镜 数据
@@ -176,6 +185,15 @@ void ProxyMouseMove::mousePressEvent(QMouseEvent *event)
             __HandlClicked(globalPos);
         } else {
             __OtherMousePress(globalPos);
+            QPoint docGlobalPos = _fvwParent->m_pProxy->global2RelativePoint(globalPos);
+            QString strText, strUuid;
+            bool iconAnnot = _fvwParent->m_pProxy->iconAnnotationClicked(docGlobalPos, strText, strUuid);
+            if (iconAnnot) {
+                _fvwParent->__SetCursor(QCursor(Qt::PointingHandCursor));
+                m_bIconAnnot = true;
+                _fvwParent->m_pProxy->setDrawRect(docGlobalPos, m_bIconAnnot);
+//                qInfo() << __FUNCTION__ << "      " << __LINE__ <<  "          globalPos:"  <<    globalPos;
+            }
         }
     }
 }
@@ -274,6 +292,8 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
     if (nState == SLIDER_SHOW)
         return;
 
+    m_bIconAnnot = false;
+
     Qt::MouseButton nBtn = event->button();
 
     QPoint globalPos = event->globalPos();
@@ -321,6 +341,11 @@ void ProxyMouseMove::mouseReleaseEvent(QMouseEvent *event)
         if (sContent != "") {
             _fvwParent->m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
         }
+    }
+
+    //清除图标选中框
+    if (!bicon && nBtn == Qt::LeftButton) {
+        _fvwParent->m_pProxy->setDrawRect(docGlobalPos, m_bIconAnnot);
     }
     // 判断鼠标点击的地方是否有高亮
     bool isHighLightReleasePoint = _fvwParent->m_pProxy->annotationClicked(docGlobalPos, selectText, t_strUUid);
