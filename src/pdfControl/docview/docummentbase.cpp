@@ -1363,6 +1363,8 @@ void DocummentBase::showCurPageViewAfterScaleChanged()
     if (d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
         this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
                                             static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
+        if (d->m_currentpageno < d->m_pages.count())
+            d->m_pages[d->m_currentpageno]->update();
     }
 }
 
