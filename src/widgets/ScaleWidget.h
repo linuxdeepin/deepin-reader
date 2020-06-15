@@ -6,7 +6,6 @@
 #include <DLineEdit>
 
 class DocSheet;
-class ScaleMenu;
 class ScaleWidget : public DWidget
 {
     Q_OBJECT
@@ -38,7 +37,6 @@ private slots:
 
 private:
     DLineEdit *m_lineEdit;
-    ScaleMenu *m_ScaleMenu = nullptr;
     QPointer<DocSheet> m_sheet;
 };
 

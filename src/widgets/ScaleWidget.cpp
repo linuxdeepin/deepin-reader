@@ -77,19 +77,18 @@ void ScaleWidget::onReturnPressed()
         return;
 
     qreal value = m_lineEdit->text().replace("%", "").toDouble() / 100.00;
-    value = qBound(0.1, value, 5.0);
+    value = qBound(0.1, value, m_sheet->scaleFactorList().last());
     m_sheet->setScaleFactor(value);
 }
 
 void ScaleWidget::onArrowBtnlicked()
 {
     m_lineEdit->lineEdit()->setFocus(Qt::MouseFocusReason);
-    if (m_ScaleMenu == nullptr) {
-        m_ScaleMenu = new ScaleMenu(this);
-    }
+
+    ScaleMenu scaleMenu;
     QPoint point = m_lineEdit->mapToGlobal(QPoint(0, m_lineEdit->height() + 2));
-    m_ScaleMenu->readCurDocParam(m_sheet.data());
-    m_ScaleMenu->exec(point);
+    scaleMenu.readCurDocParam(m_sheet.data());
+    scaleMenu.exec(point);
 }
 
 void ScaleWidget::onEditFinished()
