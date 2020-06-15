@@ -29,11 +29,11 @@ ScaleMenu::ScaleMenu(QWidget *parent) : CustomMenu(parent)
 void ScaleMenu::initActions()
 {
     addSeparator();
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
-    for (int i = 0; i < scaleFactorlst.size(); ++i) {
-        QAction *scaleFAction = createAction(QString::number(scaleFactorlst.at(i) * 100) + "%", SLOT(onScaleFactor()), true);
-        m_actionGroup << scaleFAction;
-    }
+//    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+//    for (int i = 0; i < scaleFactorlst.size(); ++i) {
+//        QAction *scaleFAction = createAction(QString::number(scaleFactorlst.at(i) * 100) + "%", SLOT(onScaleFactor()), true);
+//        m_actionGroup << scaleFAction;
+//    }
 }
 
 void ScaleMenu::clearAllChecked()
@@ -46,14 +46,18 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
     m_sheet = docSheet;
     clearAllChecked();
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+    const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
     int index = scaleFactorlst.indexOf(docSheet->operation().scaleFactor);
-    if (index >= 0) m_actionGroup[index]->setChecked(true);
+    if (index >= 0)
+        m_actionGroup[index]->setChecked(true);
 }
 
 void ScaleMenu::onScaleFactor()
 {
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+    if (m_sheet == nullptr)
+        return;
+
+    const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
     int index = m_actionGroup.indexOf(dynamic_cast<QAction *>(sender()));
     if (index >= 0 && index < scaleFactorlst.size()) {
         m_sheet->setScaleMode(Dr::ScaleFactorMode);

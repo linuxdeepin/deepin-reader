@@ -5,7 +5,6 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <DIconButton>
-#include <DComboBox>
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)

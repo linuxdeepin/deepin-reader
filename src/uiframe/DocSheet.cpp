@@ -202,12 +202,6 @@ void DocSheet::docBasicInfo(stFileInfo &)
     qDebug() << "unrealized";
 }
 
-double DocSheet::getMaxZoomratio()
-{
-    qDebug() << "unrealized";
-    return 0;
-}
-
 void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
 {
     qDebug() << "unrealized";

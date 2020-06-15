@@ -116,13 +116,12 @@ void Annotation::AddHighLight(const QString &msgContent)
             int iIndex = sList.at(4).toInt();
 
             QColor color = dApp->m_pAppInfo->getLightColorList().at(iIndex);
-//            dApp->m_pAppCfg->setSelectColor(color);
             fvmPrivate->setSelectColor(color);
         }
 
         QPoint pStartPoint(nSx.toInt(), nSy.toInt());
         QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-        QColor color = fvmPrivate->selectColor();//dApp->m_pAppCfg->selectColor();
+        QColor color = fvmPrivate->selectColor();
 
         fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
         fvmPrivate->m_pProxyData->setFileChanged(true);
@@ -146,7 +145,7 @@ void Annotation::AddHighLightAnnotation(const QString &msgContent)
         if (fvmPrivate->m_pProxy) {
             QPoint pStartPoint(nSx.toInt(), nSy.toInt());
             QPoint pEndPoint(nEx.toInt(), nEy.toInt());
-            QColor color = fvmPrivate->selectColor();//dApp->m_pAppCfg->selectColor();
+            QColor color = fvmPrivate->selectColor();
             QString strUuid = fvmPrivate->m_pProxy->addAnnotation(pStartPoint, pEndPoint, color);
 
             if (strUuid != "") {

@@ -153,7 +153,7 @@ public:
     void handleSlideKeyPressEvent(const QString &sKey);
 
 public:
-    static QList<qreal> scaleFactorList();
+    virtual QList<qreal> scaleFactorList();
 
 protected:
     DocOperation  m_operation;
@@ -193,8 +193,6 @@ public:
     virtual void docBasicInfo(stFileInfo &info);
 
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);
-
-    virtual double getMaxZoomratio();
 
     virtual QString pagenum2label(int index);
 

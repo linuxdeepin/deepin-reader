@@ -308,6 +308,24 @@ void DocSheetDJVU::docBasicInfo(stFileInfo &info)
 
 }
 
+QList<qreal> DocSheetDJVU::scaleFactorList()
+{
+    QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
+    QList<qreal> factorList;
+
+    qreal maxZoom = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
+
+    if (maxZoom < 0.1)
+        maxZoom = 0.1;
+
+    foreach (qreal factor, dataList) {
+        if (maxZoom - factor > 0.001)
+            factorList.append(factor);
+    }
+
+    return  factorList;
+}
+
 QString DocSheetDJVU::filter()
 {
     return "Djvu File (*.djvu)";

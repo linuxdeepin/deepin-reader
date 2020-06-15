@@ -40,7 +40,7 @@ private slots:
     void onScaleFactor();
 
 private:
-    DocSheet *m_sheet;
+    DocSheet *m_sheet = nullptr;
     QList<QAction *> m_actionGroup;
 };
 
