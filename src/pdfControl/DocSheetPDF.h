@@ -107,6 +107,8 @@ public:
 
     QList<qreal> scaleFactorList()override;
 
+    qreal maxScaleFactor()override;
+
     int pointInWhichPage(QPoint pos);
 
     void setFileChanged(bool hasChanged);

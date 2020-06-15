@@ -235,6 +235,9 @@ void DocSheetPDF::setScaleMode(Dr::ScaleMode mode)
 
 void DocSheetPDF::setScaleFactor(qreal scaleFactor)
 {
+    if (scaleFactor > maxScaleFactor())
+        scaleFactor = maxScaleFactor();
+
     m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->setScale(scaleFactor * 100);
@@ -489,11 +492,7 @@ QList<qreal> DocSheetPDF::scaleFactorList()
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
     QList<qreal> factorList;
 
-    qreal maxZoom = 0;
-    DocummentProxy *docProxy = m_browser->GetDocProxy();
-    if (docProxy) {
-        maxZoom = docProxy->getMaxZoomratio();
-    }
+    qreal maxZoom = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
         if (maxZoom - factor > 0.001)
@@ -501,6 +500,16 @@ QList<qreal> DocSheetPDF::scaleFactorList()
     }
 
     return  factorList;
+}
+
+qreal DocSheetPDF::maxScaleFactor()
+{
+    DocummentProxy *docProxy = m_browser->GetDocProxy();
+    if (docProxy) {
+        return docProxy->getMaxZoomratio();
+    }
+
+    return 1;
 }
 
 int  DocSheetPDF::pointInWhichPage(QPoint pos)

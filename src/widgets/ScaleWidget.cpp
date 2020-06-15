@@ -77,7 +77,7 @@ void ScaleWidget::onReturnPressed()
         return;
 
     qreal value = m_lineEdit->text().replace("%", "").toDouble() / 100.00;
-    value = qBound(0.1, value, m_sheet->scaleFactorList().last());
+    value = qBound(0.1, value, m_sheet->maxScaleFactor());
     m_sheet->setScaleFactor(value);
 }
 

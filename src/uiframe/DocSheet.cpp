@@ -330,6 +330,12 @@ QList<qreal> DocSheet::scaleFactorList()
     return  dataList;
 }
 
+qreal DocSheet::maxScaleFactor()
+{
+    qDebug() << "unrealized";
+    return 1;
+}
+
 void DocSheet::zoomin()
 {
     QList<qreal> dataList = scaleFactorList();

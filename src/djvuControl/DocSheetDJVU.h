@@ -96,6 +96,8 @@ public:
 
     QList<qreal> scaleFactorList()override;
 
+    qreal maxScaleFactor()override;
+
     QString filter()override;
 
 private slots:

@@ -124,6 +124,10 @@ public:
 
     virtual void defaultFocus();
 
+    virtual QList<qreal> scaleFactorList();
+
+    virtual qreal maxScaleFactor();
+
     QSet<int> getBookMarkList() const;
 
     DocOperation operation();
@@ -151,9 +155,6 @@ public:
     bool slideOpened();
 
     void handleSlideKeyPressEvent(const QString &sKey);
-
-public:
-    virtual QList<qreal> scaleFactorList();
 
 protected:
     DocOperation  m_operation;

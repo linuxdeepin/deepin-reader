@@ -223,6 +223,9 @@ void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
     if (Dr::ScaleFactorMode == m_operation.scaleMode && scaleFactor == m_operation.scaleFactor)
         return;
 
+    if (scaleFactor > maxScaleFactor())
+        scaleFactor = maxScaleFactor();
+
     m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->deform(m_operation);
@@ -313,17 +316,24 @@ QList<qreal> DocSheetDJVU::scaleFactorList()
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
     QList<qreal> factorList;
 
-    qreal maxZoom = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
-
-    if (maxZoom < 0.1)
-        maxZoom = 0.1;
+    qreal maxFactor = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
-        if (maxZoom - factor > 0.001)
+        if (maxFactor - factor > 0.001)
             factorList.append(factor);
     }
 
     return  factorList;
+}
+
+qreal DocSheetDJVU::maxScaleFactor()
+{
+    qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
+
+    if (maxScaleFactor < 0.1)
+        maxScaleFactor = 0.1;
+
+    return maxScaleFactor;
 }
 
 QString DocSheetDJVU::filter()
