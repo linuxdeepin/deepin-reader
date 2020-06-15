@@ -27,8 +27,8 @@
 #include <DFloatingWidget>
 #include <DSearchEdit>
 
-#include "application.h"
-#include "pdfControl/docview/commonstruct.h"
+#include "Application.h"
+#include "pdfControl/docview/CommonStruct.h"
 
 DWIDGET_USE_NAMESPACE
 

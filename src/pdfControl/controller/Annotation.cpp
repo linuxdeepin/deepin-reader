@@ -21,14 +21,14 @@
 
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 
-#include "application.h"
+#include "Application.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
 #include "ProxyData.h"
 
 //#include "pdfControl/AppConfig.h"
 #include "app/AppInfo.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 
 #include "pdfControl/SheetBrowserPDF.h"
 

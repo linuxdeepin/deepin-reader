@@ -6,7 +6,7 @@
 #include <QSignalMapper>
 #include <QDebug>
 
-#include "application.h"
+#include "Application.h"
 #include "app/AppInfo.h"
 #include "CustomControl/RoundColorWidget.h"
 

@@ -28,7 +28,7 @@
 */
 #include "Database.h"
 #include "DocSheet.h"
-#include "global.h"
+#include "Global.h"
 
 #include <QApplication>
 #include <QCryptographicHash>

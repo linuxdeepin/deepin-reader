@@ -25,7 +25,7 @@
 #include <QStackedLayout>
 
 #include "CustomControl/CustomWidget.h"
-#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/CommonStruct.h"
 
 enum PreviewWidgesFlag {
     PREVIEW_THUMBNAIL = 0x0001,

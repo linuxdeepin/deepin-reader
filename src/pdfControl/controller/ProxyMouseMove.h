@@ -23,7 +23,7 @@
 
 #include <QMouseEvent>
 
-#include "pdfControl/docview/pagebase.h"
+#include "pdfControl/docview/PageBase.h"
 
 class SheetBrowserPDFPrivate;
 

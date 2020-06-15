@@ -5,9 +5,9 @@
 #include <QMouseEvent>
 #include <QPointer>
 
-#include "application.h"
+#include "Application.h"
 #include "MsgHeader.h"
-#include "pdfControl/docview/pagebase.h"
+#include "pdfControl/docview/PageBase.h"
 #include "ModuleHeader.h"
 #include "widgets/FindWidget.h"
 

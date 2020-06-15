@@ -4,11 +4,11 @@
 #include <DFontSizeManager>
 #include <DTextBrowser>
 
-#include "pdfControl/docview/commonstruct.h"
-#include "pdfControl/docview/docummentproxy.h"
-#include "utils/utils.h"
+#include "pdfControl/docview/CommonStruct.h"
+#include "pdfControl/docview/DocummentProxy.h"
+#include "utils/Utils.h"
 #include "DocSheet.h"
-#include "CustomControl/wordwraplabel.h"
+#include "CustomControl/WordWrapLabel.h"
 
 #define LAEBL_TEXT_WIDTH   165
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)

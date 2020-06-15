@@ -22,7 +22,7 @@
 #include <DTreeView>
 #include <QStandardItemModel>
 
-#include "pdfControl/docview/pagebase.h"
+#include "pdfControl/docview/PageBase.h"
 
 DWIDGET_USE_NAMESPACE
 

@@ -16,7 +16,7 @@
 */
 #include "ThumbnailDelegate.h"
 #include "lpreviewControl/ImageViewModel.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 
 #include <QPainter>
 #include <QDebug>

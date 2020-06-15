@@ -34,7 +34,7 @@
 #include <QStack>
 #include <QImage>
 
-#include "global.h"
+#include "Global.h"
 
 class SheetBrowserDJVUItem;
 struct RenderTaskDJVU {

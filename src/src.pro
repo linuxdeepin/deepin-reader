@@ -15,15 +15,15 @@ INCLUDEPATH += $$PWD/uiframe
 include (app/app.pri)
 include (CustomControl/CustomControl.pri)
 include (pdfControl/pdfControl.pri)
-include (utils/utils.pri)
+include (utils/Utils.pri)
 include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
 include (document/document.pri)
 include (lpreviewControl/lpreviewControl.pri)
 
 SOURCES += \
+    Application.cpp \
         main.cpp \
-    application.cpp\
     MainWindow.cpp \
     uiframe/TitleMenu.cpp \
     uiframe/TitleWidget.cpp \
@@ -34,7 +34,7 @@ SOURCES += \
     uiframe/DocSheet.cpp
 
 HEADERS +=\
-    application.h \
+    Application.h \
     MainWindow.h \
     uiframe/TitleWidget.h \
     uiframe/TitleMenu.h \

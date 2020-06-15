@@ -22,10 +22,10 @@
 #include <DFontSizeManager>
 #include <QDebug>
 
-#include "application.h"
+#include "Application.h"
 
-#include "pdfControl/docview/docummentproxy.h"
-#include "utils/utils.h"
+#include "pdfControl/docview/DocummentProxy.h"
+#include "utils/Utils.h"
 #include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"

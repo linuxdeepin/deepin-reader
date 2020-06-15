@@ -18,7 +18,7 @@
  */
 #include "ShortCutShow.h"
 #include "ModuleHeader.h"
-#include "global.h"
+#include "Global.h"
 #include "DocSheet.h"
 
 #include <QProcess>
@@ -27,7 +27,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "application.h"
+#include "Application.h"
 
 ShortCutShow::ShortCutShow(QObject *parent)
     : QObject(parent)

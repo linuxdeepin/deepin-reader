@@ -1,8 +1,9 @@
 #include "AppInfo.h"
 
-#include "utils/utils.h"
+#include "utils/Utils.h"
 #include "ModuleHeader.h"
 #include <QDir>
+#include <QSettings>
 
 AppInfo::AppInfo(QObject *parent)
     : QObject(parent)

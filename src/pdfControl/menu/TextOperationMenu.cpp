@@ -3,7 +3,7 @@
 #include "ColorWidgetAction.h"
 #include "app/AppInfo.h"
 #include "MsgHeader.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 #include "DocSheet.h"
 #include <QDebug>
 

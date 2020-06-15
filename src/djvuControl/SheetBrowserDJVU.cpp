@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SheetBrowserDJVU.h"
-#include "document/djvumodel.h"
+#include "document/DjvuModel.h"
 #include "SheetBrowserDJVUItem.h"
 #include "DocSheetDJVU.h"
 

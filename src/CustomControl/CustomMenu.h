@@ -24,7 +24,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "application.h"
+#include "Application.h"
 
 DWIDGET_USE_NAMESPACE
 

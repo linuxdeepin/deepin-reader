@@ -18,10 +18,10 @@
  */
 #include "NotesWidget.h"
 #include "app/AppInfo.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
-#include "notesdelegate.h"
+#include "NotesDelegate.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "widgets/SaveDialog.h"
 

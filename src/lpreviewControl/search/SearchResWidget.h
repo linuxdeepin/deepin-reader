@@ -20,7 +20,7 @@
 #define SEARCHRESWIDGET_H
 
 #include "CustomControl/CustomWidget.h"
-#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/CommonStruct.h"
 
 class DocSheet;
 class ImageListView;

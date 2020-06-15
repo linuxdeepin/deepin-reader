@@ -1,10 +1,10 @@
 #include "MainWindow.h"
-#include "application.h"
+#include "Application.h"
 #include <DLog>
 #include <DApplicationSettings>
 #include <QDesktopWidget>
 #include "app/ProcessController.h"
-#include "app/json.h"
+#include "app/Json.h"
 #include "CentralDocPage.h"
 #include <QLockFile>
 #include <QDebug>

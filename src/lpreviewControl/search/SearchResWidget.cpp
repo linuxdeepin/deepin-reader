@@ -18,11 +18,11 @@
  */
 #include "SearchResWidget.h"
 #include "DocSheet.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
 #include "WidgetHeader.h"
-#include "searchresdelegate.h"
+#include "SearchResDelegate.h"
 
 #include <QStackedLayout>
 

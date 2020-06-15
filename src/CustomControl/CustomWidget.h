@@ -28,10 +28,10 @@
 #include <DPalette>
 #include <DWidget>
 
-#include "application.h"
+#include "Application.h"
 
 #include "CustomMenu.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 

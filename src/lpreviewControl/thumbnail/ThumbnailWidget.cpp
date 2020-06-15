@@ -18,10 +18,10 @@
  */
 #include "ThumbnailWidget.h"
 #include "DocSheet.h"
-#include "application.h"
+#include "Application.h"
 #include "PagingWidget.h"
 #include "lpreviewControl/ImageListview.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "lpreviewControl/thumbnail/ThumbnailDelegate.h"
 #include "lpreviewControl/ImageViewModel.h"
 

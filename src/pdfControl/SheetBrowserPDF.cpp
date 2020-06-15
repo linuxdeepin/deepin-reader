@@ -24,7 +24,7 @@
 #include "controller/ProxyData.h"
 #include "controller/ProxyFileDataModel.h"
 #include "controller/ProxyViewDisplay.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "pdfControl/DocSheetPDF.h"
 
 void SheetBrowserPDF::setDoubleShow(bool isShow)

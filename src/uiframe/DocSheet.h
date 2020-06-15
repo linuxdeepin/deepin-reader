@@ -24,8 +24,8 @@
 #include <DSplitter>
 #include <QMap>
 
-#include "global.h"
-#include "pdfControl/docview/commonstruct.h"
+#include "Global.h"
+#include "pdfControl/docview/CommonStruct.h"
 #include "ModuleHeader.h"
 
 class SheetSidebar;

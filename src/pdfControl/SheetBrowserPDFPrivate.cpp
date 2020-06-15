@@ -7,7 +7,7 @@
 #include "menu/TextOperationMenu.h"
 #include "menu/DefaultOperationMenu.h"
 #include "widgets/FindWidget.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "app/AppInfo.h"
 #include "SheetBrowserPDF.h"
 #include "lpreviewControl/note/NoteViewWidget.h"

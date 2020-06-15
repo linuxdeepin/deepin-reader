@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DocSheetPDF.h"
-#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/CommonStruct.h"
 #include "lpreviewControl/SheetSidebar.h"
 
 #include <QJsonDocument>
@@ -30,7 +30,7 @@
 #include "pdfControl/SheetBrowserPDF.h"
 #include "CentralDocPage.h"
 #include "app/ProcessController.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
 #include "Database.h"

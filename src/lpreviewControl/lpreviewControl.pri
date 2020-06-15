@@ -2,17 +2,17 @@ HEADERS += \
     $$PWD/ImageListview.h \
     $$PWD/ImageViewModel.h \
     $$PWD/SheetSidebar.h \
+    $$PWD/bookmark/BookMarkDelegate.h \
     $$PWD/bookmark/BookMarkWidget.h \
-    $$PWD/bookmark/bookmarkdelegate.h \
     $$PWD/catalog/CatalogTreeView.h \
     $$PWD/catalog/CatalogWidget.h \
     $$PWD/note/NoteViewWidget.h \
+    $$PWD/note/NotesDelegate.h \
     $$PWD/note/NotesWidget.h \
     $$PWD/note/TransparentTextEdit.h \
-    $$PWD/note/notesdelegate.h \
+    $$PWD/search/SearchResDelegate.h \
     $$PWD/search/SearchResWidget.h \
-    $$PWD/search/searchresdelegate.h \
-    $$PWD/threadmanager/readerimagethreadpoolmanager.h \
+    $$PWD/threadmanager/ReaderImageThreadPoolManager.h \
     $$PWD/thumbnail/PagingWidget.h \
     $$PWD/thumbnail/ThumbnailDelegate.h \
     $$PWD/thumbnail/ThumbnailWidget.h \
@@ -23,17 +23,17 @@ SOURCES += \
     $$PWD/ImageListview.cpp \
     $$PWD/ImageViewModel.cpp \
     $$PWD/SheetSidebar.cpp \
+    $$PWD/bookmark/BookMarkDelegate.cpp \
     $$PWD/bookmark/BookMarkWidget.cpp \
-    $$PWD/bookmark/bookmarkdelegate.cpp \
     $$PWD/catalog/CatalogTreeView.cpp \
     $$PWD/catalog/CatalogWidget.cpp \
     $$PWD/note/NoteViewWidget.cpp \
+    $$PWD/note/NotesDelegate.cpp \
     $$PWD/note/NotesWidget.cpp \
     $$PWD/note/TransparentTextEdit.cpp \
-    $$PWD/note/notesdelegate.cpp \
+    $$PWD/search/SearchResDelegate.cpp \
     $$PWD/search/SearchResWidget.cpp \
-    $$PWD/search/searchresdelegate.cpp \
-    $$PWD/threadmanager/readerimagethreadpoolmanager.cpp \
+    $$PWD/threadmanager/ReaderImageThreadPoolManager.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
     $$PWD/thumbnail/ThumbnailDelegate.cpp \
     $$PWD/thumbnail/ThumbnailWidget.cpp \

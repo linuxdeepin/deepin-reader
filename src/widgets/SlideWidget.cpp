@@ -18,7 +18,7 @@
 #include "MainWindow.h"
 #include "DocSheet.h"
 #include "SlidePlayWidget.h"
-#include "application.h"
+#include "Application.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>

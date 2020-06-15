@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TransparentTextEdit.h"
-#include "application.h"
+#include "Application.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 

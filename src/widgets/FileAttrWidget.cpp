@@ -9,14 +9,14 @@
 #include <QVBoxLayout>
 
 #include "AttrScrollWidget.h"
-#include "pdfControl/docview/docummentproxy.h"
-#include "CustomControl/wordwraplabel.h"
+#include "pdfControl/docview/DocummentProxy.h"
+#include "CustomControl/WordWrapLabel.h"
 
 #include "ModuleHeader.h"
-#include "application.h"
+#include "Application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)

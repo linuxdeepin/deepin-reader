@@ -4,7 +4,7 @@
 #include <DSplitter>
 #include <QMap>
 
-#include "pdfControl/docview/commonstruct.h"
+#include "pdfControl/docview/CommonStruct.h"
 #include "ModuleHeader.h"
 #include "DocSheet.h"
 

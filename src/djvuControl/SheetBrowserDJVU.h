@@ -30,8 +30,8 @@
 #define SHEETBROWSERDJVU_H
 
 #include <DGraphicsView>
-#include "document/model.h"
-#include "global.h"
+#include "document/Model.h"
+#include "Global.h"
 #include <QLabel>
 
 class DocOperation;

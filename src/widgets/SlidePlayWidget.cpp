@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SlidePlayWidget.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 #include "ModuleHeader.h"
 
 #include <DPlatformWindowHandle>

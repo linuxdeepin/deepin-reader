@@ -32,7 +32,7 @@
 #include <QGraphicsItem>
 #include <QSet>
 
-#include "global.h"
+#include "Global.h"
 
 namespace deepin_reader {
 class Page;

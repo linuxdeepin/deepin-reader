@@ -8,7 +8,7 @@
 #include <QUuid>
 
 #include "DocSheet.h"
-#include "application.h"
+#include "Application.h"
 
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)

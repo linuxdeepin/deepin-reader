@@ -1,6 +1,6 @@
 HEADERS += \
-    $$PWD/djvumodel.h \
-    $$PWD/model.h
+    $$PWD/DjvuModel.h \
+    $$PWD/Model.h
 
 SOURCES += \
-    $$PWD/djvumodel.cpp
+    $$PWD/DjvuModel.cpp

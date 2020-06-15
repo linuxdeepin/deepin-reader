@@ -16,9 +16,9 @@
 */
 #include "ImageListview.h"
 #include "DocSheet.h"
-#include "pdfControl/docview/docummentproxy.h"
+#include "pdfControl/docview/DocummentProxy.h"
 #include "ImageViewModel.h"
-#include "application.h"
+#include "Application.h"
 #include "WidgetHeader.h"
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"

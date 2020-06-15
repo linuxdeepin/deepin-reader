@@ -18,7 +18,7 @@
  */
 #include "ProxyFileDataModel.h"
 
-#include "application.h"
+#include "Application.h"
 #include "pdfControl/SheetBrowserPDFPrivate.h"
 #include "MsgHeader.h"
 #include "ProxyData.h"

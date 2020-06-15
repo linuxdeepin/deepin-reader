@@ -7,16 +7,15 @@ HEADERS += \
     $$PWD/SheetBrowserPDF.h \
     $$PWD/SheetBrowserPDFPrivate.h \
     $$PWD/DocSheetPDF.h \
-    $$PWD/docview/commonstruct.h \
-    $$PWD/docview/docummentbase.h \
-    $$PWD/docview/docummentfactory.h \
-    $$PWD/docview/docummentproxy.h \
-    $$PWD/docview/generatorclass.h \
-    $$PWD/docview/pagebase.h \
-    $$PWD/docview/publicfunc.h \
-    $$PWD/docview/searchtask.h \
-    $$PWD/docview/pdf/pagepdf.h \
-    $$PWD/docview/pdf/docummentpdf.h \
+    $$PWD/docview/CommonStruct.h \
+    $$PWD/docview/DocummentBase.h \
+    $$PWD/docview/DocummentFactory.h \
+    $$PWD/docview/DocummentProxy.h \
+    $$PWD/docview/GeneratorClass.h \
+    $$PWD/docview/PageBase.h \
+    $$PWD/docview/SearchTask.h \
+    $$PWD/docview/pdf/DocummentPdf.h \
+    $$PWD/docview/pdf/PagePdf.h \
     $$PWD/database/BookMarkDB.h \
     $$PWD/database/DBFactory.h \
     $$PWD/database/dbservice_global.h \
@@ -36,15 +35,14 @@ SOURCES += \
     $$PWD/SheetBrowserPDF.cpp \
     $$PWD/SheetBrowserPDFPrivate.cpp \
     $$PWD/DocSheetPDF.cpp \
-    $$PWD/docview/docummentbase.cpp \
-    $$PWD/docview/docummentfactory.cpp \
-    $$PWD/docview/docummentproxy.cpp \
-    $$PWD/docview/generatorclass.cpp \
-    $$PWD/docview/pagebase.cpp \
-    $$PWD/docview/publicfunc.cpp \
-    $$PWD/docview/searchtask.cpp \
-    $$PWD/docview/pdf/pagepdf.cpp \
-    $$PWD/docview/pdf/docummentpdf.cpp \
+    $$PWD/docview/DocummentBase.cpp \
+    $$PWD/docview/DocummentFactory.cpp \
+    $$PWD/docview/DocummentProxy.cpp \
+    $$PWD/docview/GeneratorClass.cpp \
+    $$PWD/docview/PageBase.cpp \
+    $$PWD/docview/SearchTask.cpp \
+    $$PWD/docview/pdf/DocummentPdf.cpp \
+    $$PWD/docview/pdf/PagePdf.cpp \
     $$PWD/database/BookMarkDB.cpp \
     $$PWD/database/DBFactory.cpp \
     $$PWD/database/DBService.cpp \

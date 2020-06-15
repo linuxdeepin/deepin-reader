@@ -28,7 +28,7 @@
 */
 #include "Central.h"
 #include "app/AppInfo.h"
-#include "utils/utils.h"
+#include "utils/Utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
 #include "TitleMenu.h"
