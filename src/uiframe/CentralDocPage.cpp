@@ -501,7 +501,7 @@ void CentralDocPage::BlockShutdown()
 
     m_arg << QString("shutdown")             // what
           << qApp->applicationDisplayName()           // who
-          << QObject::tr("File not saved") // why
+          << QObject::tr("Document not saved") // why
           << QString("block");                        // mode
 
     int fd = -1;
