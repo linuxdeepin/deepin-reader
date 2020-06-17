@@ -130,6 +130,10 @@ public:
 
     virtual void deleteAnnotations(const QList<AnnotationInfo_t> &);
 
+    virtual QList<qreal> scaleFactorList();
+
+    virtual qreal maxScaleFactor();
+
     QSet<int> getBookMarkList() const;
 
     DocOperation operation();
@@ -157,9 +161,6 @@ public:
     bool slideOpened();
 
     void handleSlideKeyPressEvent(const QString &sKey);
-
-public:
-    static QList<qreal> scaleFactorList();
 
 protected:
     DocOperation  m_operation;
@@ -199,8 +200,6 @@ public:
     virtual void docBasicInfo(stFileInfo &info);
 
     virtual void getAllAnnotation(QList<stHighlightContent> &listres);
-
-    virtual double getMaxZoomratio();
 
     virtual QString pagenum2label(int index);
 

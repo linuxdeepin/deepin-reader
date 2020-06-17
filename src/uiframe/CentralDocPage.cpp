@@ -541,7 +541,7 @@ void CentralDocPage::BlockShutdown()
 
     m_arg << QString("shutdown")             // what
           << qApp->applicationDisplayName()           // who
-          << QObject::tr("File not saved") // why
+          << QObject::tr("Document not saved") // why
           << QString("block");                        // mode
 
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);

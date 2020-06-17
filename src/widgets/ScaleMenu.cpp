@@ -23,11 +23,12 @@
 
 ScaleMenu::ScaleMenu(QWidget *parent) : CustomMenu(parent)
 {
-    initActions();
+
 }
 
 void ScaleMenu::initActions()
 {
+    <<< <<< < HEAD
     m_pTwoPageAction   = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
     m_pFitInfactAction = createAction(tr("Fit InFact"), SLOT(onInfacePage()), true);
     m_pFitWorHAction   = createAction(tr("Fit Page"), SLOT(onFitPage()), true);
@@ -46,6 +47,9 @@ void ScaleMenu::initActions()
     m_actionGroup << m_pFitWorHAction;
     m_actionGroup << m_pFiteHAction;
     m_actionGroup << m_pFiteWAction;
+    == == == =
+
+        >>> >>> > release / sp2
 }
 
 void ScaleMenu::clearAllChecked()
@@ -57,6 +61,7 @@ void ScaleMenu::clearAllChecked()
 void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
     m_sheet = docSheet;
+    <<< <<< < HEAD
     clearAllChecked();
     m_pTwoPageAction->setChecked(docSheet->operation().layoutMode == Dr::TwoPagesMode);
     m_pFitInfactAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageInfactMode);
@@ -65,8 +70,17 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
     m_pFiteHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageHeightMode);
 
     const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+    == == == =
+        const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
+    for (int i = 0; i < scaleFactorlst.size(); ++i) {
+        QAction *scaleFAction = createAction(QString::number(scaleFactorlst.at(i) * 100) + "%", SLOT(onScaleFactor()), true);
+        m_actionGroup << scaleFAction;
+    }
+
+    >>> >>> > release / sp2
     int index = scaleFactorlst.indexOf(docSheet->operation().scaleFactor);
-    if (index >= 0) m_actionGroup[index]->setChecked(true);
+    if (index >= 0)
+        m_actionGroup[index]->setChecked(true);
 }
 
 void ScaleMenu::onTwoPage()
@@ -100,7 +114,10 @@ void ScaleMenu::onFitPage()
 
 void ScaleMenu::onScaleFactor()
 {
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+    if (m_sheet == nullptr)
+        return;
+
+    const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
     int index = m_actionGroup.indexOf(dynamic_cast<QAction *>(sender()));
     if (index >= 0 && index < scaleFactorlst.size()) {
         m_sheet->setScaleMode(Dr::ScaleFactorMode);

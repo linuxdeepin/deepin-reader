@@ -208,12 +208,6 @@ void DocSheet::docBasicInfo(stFileInfo &)
     qDebug() << "unrealized";
 }
 
-double DocSheet::getMaxZoomratio()
-{
-    qDebug() << "unrealized";
-    return 0;
-}
-
 void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
 {
     qDebug() << "unrealized";
@@ -350,6 +344,12 @@ QList<qreal> DocSheet::scaleFactorList()
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
 
     return  dataList;
+}
+
+qreal DocSheet::maxScaleFactor()
+{
+    qDebug() << "unrealized";
+    return 1;
 }
 
 void DocSheet::zoomin()

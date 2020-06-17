@@ -98,6 +98,10 @@ public:
 
     void docBasicInfo(stFileInfo &info)override;
 
+    QList<qreal> scaleFactorList()override;
+
+    qreal maxScaleFactor()override;
+
     QString filter()override;
 
 private slots:

@@ -103,13 +103,17 @@ public:
 
     void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0) override;
 
-    double getMaxZoomratio() override;
+    double getMaxZoomratio();
 
     QString pagenum2label(int index) override;
 
     QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note) override;
 
     void defaultFocus()override;
+
+    QList<qreal> scaleFactorList()override;
+
+    qreal maxScaleFactor()override;
 
     int pointInWhichPage(QPoint pos);
 
