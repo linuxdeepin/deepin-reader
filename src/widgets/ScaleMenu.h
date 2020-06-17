@@ -32,21 +32,17 @@ public:
     explicit ScaleMenu(QWidget *parent = nullptr);
     void readCurDocParam(DocSheet *docSheet);
 
-private:
-    void initActions();
-    void clearAllChecked();
-
 private slots:
     void onTwoPage();
     void onFiteH();
     void onFiteW();
-    void onInfacePage();
+    void onDefaultPage();
     void onFitPage();
     void onScaleFactor();
 
 private:
     QAction *m_pTwoPageAction;
-    QAction *m_pFitInfactAction;
+    QAction *m_pFitDefaultAction;
     QAction *m_pFitWorHAction;
     QAction *m_pFiteHAction;
     QAction *m_pFiteWAction;

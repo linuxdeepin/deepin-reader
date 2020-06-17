@@ -26,61 +26,37 @@ ScaleMenu::ScaleMenu(QWidget *parent) : CustomMenu(parent)
 
 }
 
-void ScaleMenu::initActions()
+void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
-    <<< <<< < HEAD
-    m_pTwoPageAction   = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
-    m_pFitInfactAction = createAction(tr("Fit InFact"), SLOT(onInfacePage()), true);
-    m_pFitWorHAction   = createAction(tr("Fit Page"), SLOT(onFitPage()), true);
-    m_pFiteHAction     = createAction(tr("Fit Height"), SLOT(onFiteH()), true);
-    m_pFiteWAction     = createAction(tr("Fit Width"), SLOT(onFiteW()), true);
+    m_sheet = docSheet;
+    m_pTwoPageAction    = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
+    m_pFitDefaultAction = createAction(tr("Fit Default"), SLOT(onDefaultPage()), true);
+    m_pFitWorHAction    = createAction(tr("Fit Page"), SLOT(onFitPage()), true);
+    m_pFiteHAction      = createAction(tr("Fit Height"), SLOT(onFiteH()), true);
+    m_pFiteWAction      = createAction(tr("Fit Width"), SLOT(onFiteW()), true);
 
     addSeparator();
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
+    const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
     for (int i = 0; i < scaleFactorlst.size(); ++i) {
         QAction *scaleFAction = createAction(QString::number(scaleFactorlst.at(i) * 100) + "%", SLOT(onScaleFactor()), true);
         m_actionGroup << scaleFAction;
     }
 
     m_actionGroup << m_pTwoPageAction;
-    m_actionGroup << m_pFitInfactAction;
+    m_actionGroup << m_pFitDefaultAction;
     m_actionGroup << m_pFitWorHAction;
     m_actionGroup << m_pFiteHAction;
     m_actionGroup << m_pFiteWAction;
-    == == == =
 
-        >>> >>> > release / sp2
-}
-
-void ScaleMenu::clearAllChecked()
-{
-    for (QAction *action : m_actionGroup)
-        action->setChecked(false);
-}
-
-void ScaleMenu::readCurDocParam(DocSheet *docSheet)
-{
-    m_sheet = docSheet;
-    <<< <<< < HEAD
-    clearAllChecked();
-    m_pTwoPageAction->setChecked(docSheet->operation().layoutMode == Dr::TwoPagesMode);
-    m_pFitInfactAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageInfactMode);
-    m_pFitWorHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWorHMode);
-    m_pFiteWAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWidthMode);
-    m_pFiteHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageHeightMode);
-
-    const QList<qreal> &scaleFactorlst = DocSheet::scaleFactorList();
-    == == == =
-        const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();
-    for (int i = 0; i < scaleFactorlst.size(); ++i) {
-        QAction *scaleFAction = createAction(QString::number(scaleFactorlst.at(i) * 100) + "%", SLOT(onScaleFactor()), true);
-        m_actionGroup << scaleFAction;
-    }
-
-    >>> >>> > release / sp2
     int index = scaleFactorlst.indexOf(docSheet->operation().scaleFactor);
     if (index >= 0)
         m_actionGroup[index]->setChecked(true);
+
+    m_pTwoPageAction->setChecked(docSheet->operation().layoutMode == Dr::TwoPagesMode);
+    m_pFitDefaultAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageDefaultMode);
+    m_pFitWorHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWorHMode);
+    m_pFiteWAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWidthMode);
+    m_pFiteHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageHeightMode);
 }
 
 void ScaleMenu::onTwoPage()
@@ -102,9 +78,9 @@ void ScaleMenu::onFiteW()
     m_sheet->setScaleMode(Dr::FitToPageWidthMode);
 }
 
-void ScaleMenu::onInfacePage()
+void ScaleMenu::onDefaultPage()
 {
-    m_sheet->setScaleMode(Dr::FitToPageInfactMode);
+    m_sheet->setScaleMode(Dr::FitToPageDefaultMode);
 }
 
 void ScaleMenu::onFitPage()

@@ -452,11 +452,6 @@ void DocSheetPDF::docBasicInfo(stFileInfo &info)
     }
 }
 
-double DocSheetPDF::getMaxZoomratio()
-{
-
-}
-
 void DocSheetPDF::getAllAnnotation(QList<stHighlightContent> &listres)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();
@@ -539,7 +534,7 @@ qreal DocSheetPDF::maxScaleFactor()
         return docProxy->getMaxZoomratio();
     }
 
-    return 1;
+    return 1.0;
 }
 
 int  DocSheetPDF::pointInWhichPage(QPoint pos)

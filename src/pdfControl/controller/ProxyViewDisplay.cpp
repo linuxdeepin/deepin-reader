@@ -70,7 +70,7 @@ double ProxyViewDisplay::onSetWidgetAdapt()
         } else if (m_nAdapteState == Dr::FitToPageHeightMode) {
             dScale = fvmPrivate->m_pProxy->adaptHeightAndShow(m_nHeight);
             return dScale * 100;
-        } else if (m_nAdapteState == Dr::FitToPageInfactMode) {
+        } else if (m_nAdapteState == Dr::FitToPageDefaultMode) {
             ViewMode_EM em = m_nDoubleShow ? ViewMode_FacingPage : ViewMode_SinglePage;
             fvmPrivate->m_pProxy->setScaleRotateViewModeAndShow(dScale, static_cast<RotateType_EM>(m_rotateType), em);
             return 1.0 * 100;

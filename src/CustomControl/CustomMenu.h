@@ -21,14 +21,9 @@
 
 #include <DMenu>
 
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include "Application.h"
-
 DWIDGET_USE_NAMESPACE
 
-enum E_MENU_ACTION {
+typedef enum E_MENU_ACTION {
     E_HANDLE_SELECT_TEXT,
     E_HANDLE_HANDLE_TOOL,
     E_BOOKMARK_DELETE,
@@ -36,7 +31,17 @@ enum E_MENU_ACTION {
     E_NOTE_COPY,
     E_NOTE_DELETE,
     E_NOTE_DELETE_ALL
-};
+} E_MENU_ACTION;
+
+typedef struct MenuItem_t {
+    QString rootItem;
+    QList<MenuItem_t> childItems;
+
+    MenuItem_t(const QString &rootitem)
+    {
+        this->rootItem = rootitem;
+    }
+} MenuItem_t;
 
 class CustomMenu : public DMenu
 {
@@ -52,11 +57,10 @@ signals:
     void sigActionTrigger(const int &, const QString &);
 
 public:
-    virtual int dealWithData(const int &, const QString &);
     QAction *createAction(const QString &objName, const char *member, bool checkable);
 
 protected:
-    virtual void initActions() = 0;
+    virtual void initActions() {};
 };
 
 

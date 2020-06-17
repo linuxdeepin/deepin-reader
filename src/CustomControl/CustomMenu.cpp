@@ -18,9 +18,6 @@
  */
 
 #include "CustomMenu.h"
-#include "Application.h"
-#include "MsgHeader.h"
-#include "ModuleHeader.h"
 
 #include <DFontSizeManager>
 
@@ -32,11 +29,6 @@ CustomMenu::CustomMenu(DWidget *parent)
 
 CustomMenu::~CustomMenu()
 {
-}
-
-int CustomMenu::dealWithData(const int &, const QString &)
-{
-    return MSG_NO_OK;
 }
 
 QAction *CustomMenu::createAction(const QString &objName, const char *member, bool checkable)
