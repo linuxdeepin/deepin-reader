@@ -487,6 +487,7 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::BlockShutdown()
 {
+
     if (m_bBlockShutdown)
         return;
 
@@ -494,21 +495,25 @@ void CentralDocPage::BlockShutdown()
         return;
     }
 
-    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
-                                         "/org/freedesktop/login1",
-                                         "org.freedesktop.login1.Manager",
-                                         QDBusConnection::systemBus());
+    if (m_pLoginManager == nullptr)
+        m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
+                                             "/org/freedesktop/login1",
+                                             "org.freedesktop.login1.Manager",
+                                             QDBusConnection::systemBus());
 
-    m_arg << QString("shutdown")             // what
-          << qApp->applicationDisplayName()           // who
-          << QObject::tr("Document not saved") // why
-          << QString("block");                        // mode
+    QList<QVariant> args;
+    args << QString("shutdown")             // what
+         << qApp->applicationDisplayName()           // who
+         << QObject::tr("Document not saved") // why
+         << QString("block");                        // mode
 
     int fd = -1;
-    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", args);
     if (m_reply.isValid()) {
         fd = m_reply.value().fileDescriptor();
         m_bBlockShutdown = true;
+    } else {
+        qDebug() << m_reply.error();
     }
 }
 

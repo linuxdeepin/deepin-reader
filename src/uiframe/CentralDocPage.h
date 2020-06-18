@@ -135,7 +135,6 @@ private:
     QDBusInterface      *m_pLoginManager = nullptr;
 
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
-    QList<QVariant> m_arg;
     bool m_bBlockShutdown = false;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
