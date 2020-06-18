@@ -1,7 +1,7 @@
 #ifndef TEXTOPERATIONMENU_H
 #define TEXTOPERATIONMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 #include "ModuleHeader.h"
 #include <QPointer>
 

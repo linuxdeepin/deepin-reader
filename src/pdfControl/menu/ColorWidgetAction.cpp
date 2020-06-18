@@ -8,7 +8,7 @@
 
 #include "Application.h"
 #include "app/AppInfo.h"
-#include "CustomControl/RoundColorWidget.h"
+#include "widgets/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)

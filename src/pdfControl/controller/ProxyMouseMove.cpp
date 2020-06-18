@@ -22,7 +22,7 @@
 #include "app/AppInfo.h"
 #include "pdfControl/docview/DocummentProxy.h"
 #include "pdfControl/DocSheetPDF.h"
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include "app/ModuleHeader.h"
 
 #include <QDesktopServices>

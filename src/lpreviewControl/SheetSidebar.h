@@ -24,7 +24,7 @@
 #include <DToolButton>
 #include <QStackedLayout>
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include "pdfControl/docview/CommonStruct.h"
 
 enum PreviewWidgesFlag {

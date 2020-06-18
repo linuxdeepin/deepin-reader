@@ -21,7 +21,7 @@
 #ifndef TITLEMENU_H
 #define TITLEMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 
 class QSignalMapper;
 class DocSheet;

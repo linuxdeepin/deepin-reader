@@ -12,7 +12,7 @@
 #include "SheetBrowserPDF.h"
 #include "lpreviewControl/note/NoteViewWidget.h"
 #include "DocSheetPDF.h"
-#include "CustomControl/TipsWidget.h"
+#include "widgets/TipsWidget.h"
 
 #include <QDesktopServices>
 #include <QFileInfo>

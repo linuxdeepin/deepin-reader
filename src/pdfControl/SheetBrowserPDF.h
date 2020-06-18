@@ -19,7 +19,7 @@
 #ifndef FILEVIEWWIDGET_H
 #define FILEVIEWWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include "pdfControl/docview/CommonStruct.h"
 
 class DocummentProxy;

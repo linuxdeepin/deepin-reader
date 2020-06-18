@@ -19,7 +19,7 @@
 #ifndef SEARCHRESWIDGET_H
 #define SEARCHRESWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include "pdfControl/docview/CommonStruct.h"
 
 class DocSheet;

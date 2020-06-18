@@ -19,7 +19,7 @@
 #ifndef NOTEVIEWWIDGET_H
 #define NOTEVIEWWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 
 class TransparentTextEdit;
 class NoteViewWidget : public CustomWidget

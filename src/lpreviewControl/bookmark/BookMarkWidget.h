@@ -21,7 +21,7 @@
 
 #include <QPointer>
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 
 class DocSheet;
 class ImageListView;

@@ -10,7 +10,7 @@
 
 #include "AttrScrollWidget.h"
 #include "pdfControl/docview/DocummentProxy.h"
-#include "CustomControl/WordWrapLabel.h"
+#include "widgets/WordWrapLabel.h"
 
 #include "ModuleHeader.h"
 #include "Application.h"

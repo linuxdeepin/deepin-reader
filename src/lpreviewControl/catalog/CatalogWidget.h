@@ -19,7 +19,7 @@
 #ifndef PDFCONTROL_CATALOGWIDGET_H
 #define PDFCONTROL_CATALOGWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 
 #include <DLabel>
 

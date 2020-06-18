@@ -13,7 +13,6 @@ PKGCONFIG += poppler-qt5 ddjvuapi dtkwidget
 INCLUDEPATH += $$PWD/uiframe
 
 include (app/app.pri)
-include (CustomControl/CustomControl.pri)
 include (pdfControl/pdfControl.pri)
 include (utils/Utils.pri)
 include (widgets/widgets.pri)

@@ -19,7 +19,7 @@
 #ifndef BOOKMARKMENU_H
 #define BOOKMARKMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 
 class BookMarkMenu : public CustomMenu
 {

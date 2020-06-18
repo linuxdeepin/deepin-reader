@@ -1,4 +1,4 @@
-#include "DjvuModel.h"
+#include "DjVuModel.h"
 #include "Application.h"
 
 #include <cstdio>

@@ -21,7 +21,7 @@
 #ifndef SCALEMENU_H
 #define SCALEMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 
 class DocSheet;
 class ScaleMenu : public CustomMenu

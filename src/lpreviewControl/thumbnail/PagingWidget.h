@@ -22,8 +22,8 @@
 #include <DIconButton>
 #include <DLineEdit>
 
-#include "CustomControl/CustomWidget.h"
-#include "CustomControl/CustomClickLabel.h"
+#include "widgets/CustomWidget.h"
+#include "widgets/CustomClickLabel.h"
 
 /**
  * @brief The ThumbnailItemWidget class

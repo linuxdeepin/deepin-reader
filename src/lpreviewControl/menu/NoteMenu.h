@@ -19,7 +19,7 @@
 #ifndef NOTEMENU_H
 #define NOTEMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 
 class NoteMenu : public CustomMenu
 {

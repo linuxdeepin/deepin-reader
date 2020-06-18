@@ -29,7 +29,7 @@
 #ifndef CENTRAL_H
 #define CENTRAL_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 
 class CentralDocPage;
 class CentralNavPage;

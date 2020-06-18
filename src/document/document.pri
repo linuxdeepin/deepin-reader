@@ -1,11 +1,11 @@
 HEADERS += \
-    $$PWD/DjvuModel.h \
     $$PWD/Model.h \
-    $$PWD/PDFModel.h
+    $$PWD/PDFModel.h \
+    $$PWD/DjVuModel.h
 
 SOURCES += \
-    $$PWD/DjvuModel.cpp \
-    $$PWD/PDFModel.cpp
+    $$PWD/PDFModel.cpp \
+    $$PWD/DjVuModel.cpp
 
 
 !without_pkgconfig {

@@ -20,7 +20,7 @@
 */
 #include "CentralNavPage.h"
 #include "MainWindow.h"
-#include "CustomControl/CustomClickLabel.h"
+#include "widgets/CustomClickLabel.h"
 #include "app/ProcessController.h"
 
 #include <DFileDialog>

@@ -3,7 +3,7 @@
 
 #include <DWidget>
 #include <QWidgetAction>
-#include "CustomControl/CustomClickLabel.h"
+#include "widgets/CustomClickLabel.h"
 
 DWIDGET_USE_NAMESPACE
 

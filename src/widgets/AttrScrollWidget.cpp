@@ -8,7 +8,7 @@
 #include "pdfControl/docview/DocummentProxy.h"
 #include "utils/Utils.h"
 #include "DocSheet.h"
-#include "CustomControl/WordWrapLabel.h"
+#include "widgets/WordWrapLabel.h"
 
 #define LAEBL_TEXT_WIDTH   165
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)

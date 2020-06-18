@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 
 #include "CatalogTreeView.h"
-#include "CustomControl/CustomClickLabel.h"
+#include "widgets/CustomClickLabel.h"
 #include "pdfControl/docview/DocummentProxy.h"
 #include "DocSheet.h"
 

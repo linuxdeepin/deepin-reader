@@ -21,7 +21,7 @@
 #ifndef MAINTABWIDGETEX_H
 #define MAINTABWIDGETEX_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include "app/ModuleHeader.h"
 #include "DocSheet.h"
 

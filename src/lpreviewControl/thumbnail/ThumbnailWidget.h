@@ -19,7 +19,7 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include <QPointer>
 
 class DocSheet;

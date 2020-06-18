@@ -21,7 +21,7 @@
 #ifndef CentralNavPage_H
 #define CentralNavPage_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 
 class CentralNavPage : public CustomWidget
 {

@@ -1,7 +1,7 @@
 #ifndef DEFAULTOPERATIONMENU_H
 #define DEFAULTOPERATIONMENU_H
 
-#include "CustomControl/CustomMenu.h"
+#include "widgets/CustomMenu.h"
 #include <QPointer>
 
 /**

@@ -19,7 +19,7 @@
 #ifndef NOTESFORM_H
 #define NOTESFORM_H
 
-#include "CustomControl/CustomWidget.h"
+#include "widgets/CustomWidget.h"
 #include <QPointer>
 
 class DocSheet;
