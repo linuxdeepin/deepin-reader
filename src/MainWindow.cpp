@@ -27,20 +27,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "MainWindow.h"
-
-#include <DTitlebar>
-#include <DWidgetUtil>
-#include <QSignalMapper>
-#include <DGuiApplicationHelper>
 #include "app/AppInfo.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
 
+#include <DTitlebar>
+#include <DWidgetUtil>
+#include <QSignalMapper>
+#include <DGuiApplicationHelper>
+
 DWIDGET_USE_NAMESPACE
 
 QList<MainWindow *> MainWindow::m_list;
-
 MainWindow::MainWindow(DMainWindow *parent)
     : DMainWindow(parent)
 {
@@ -52,15 +51,10 @@ MainWindow::MainWindow(DMainWindow *parent)
 
     initShortCut();
 
-    //暂定752*360，后期根据最合适效果设定
-    int tWidth = 752;
-    int tHeight = 360;
-
-    setMinimumSize(tWidth, tHeight);
+    setMinimumSize(752, 360);
 
     showDefaultSize();
 
-    //  在屏幕中心显示
     Dtk::Widget::moveToCenter(this);
 }
 

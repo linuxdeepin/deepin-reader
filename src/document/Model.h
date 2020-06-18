@@ -30,6 +30,18 @@ struct Link {
     Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(), page(page), left(0.0), top(0.0), urlOrFileName(fileName) { boundary.addRect(boundingRect); }
 };
 
+struct Section;
+
+typedef QVector< Section > Outline;
+
+typedef QVector< QPair< QString, QString > > Properties;
+
+struct Section {
+    QString title;
+    Link link;
+    Outline children;
+};
+
 struct Word {
     QString text;
     QRect rect;
@@ -48,7 +60,7 @@ public:
     virtual ~Annotation() {}
     virtual QRectF boundary() const = 0;
     virtual QString contents() const = 0;
-    virtual QWidget *createWidget() = 0;
+    //virtual QWidget *createWidget() = 0;
 signals:
     void wasModified();
 };
@@ -81,11 +93,12 @@ public:
     virtual QString label() const { return QString(); }
     virtual QList< Link * > links() const { return QList< Link * >(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect); return QString(); }
-    virtual QList< QRectF > search(const QString &text, bool matchCase) const { Q_UNUSED(text); Q_UNUSED(matchCase); return QList< QRectF >(); }
+    virtual QString cachedText(const QRectF &rect) const { return text(rect); }
+    virtual QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text); Q_UNUSED(matchCase); Q_UNUSED(wholeWords); return QList< QRectF >(); }
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
-    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return nullptr; }
-    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return nullptr; }
+    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
+    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
     virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation); }
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
 };
@@ -105,9 +118,9 @@ public:
     virtual bool save(const QString &filePath, bool withChanges) const { Q_UNUSED(filePath); Q_UNUSED(withChanges); return false; }
     virtual bool canBePrintedUsingCUPS() const { return false; }
     virtual void setPaperColor(const QColor &paperColor) { Q_UNUSED(paperColor); }
-    virtual void loadOutline(QStandardItemModel *outlineModel) const { outlineModel->clear(); }
-    virtual void loadProperties(QStandardItemModel *propertiesModel) const { propertiesModel->clear(); }
-    virtual void loadFonts(QStandardItemModel *fontsModel) const { fontsModel->clear(); }
+    virtual Outline outline() const { return Outline(); }
+    virtual Properties properties() const { return Properties(); }
+    virtual QAbstractItemModel *fonts() const { return 0; }
     virtual bool wantsContinuousMode() const { return false; }
     virtual bool wantsSinglePageMode() const { return false; }
     virtual bool wantsTwoPagesMode() const { return false; }

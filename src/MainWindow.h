@@ -31,7 +31,6 @@
 
 #include <DMainWindow>
 
-class QSignalMapper;
 class Central;
 class DocSheet;
 class MainWindow : public Dtk::Widget::DMainWindow
@@ -71,7 +70,7 @@ private slots:
     void onShortCut(const QString &);
 
 private:
-    Central            *m_central = nullptr;
+    Central *m_central = nullptr;
 
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);

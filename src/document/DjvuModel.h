@@ -26,11 +26,13 @@ public:
 
     QImage render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect = QRect()) const;//按缩放比例获取; boundingRect:取其中某一区域图片
 
+    QString label() const;
+
     QList< Link * > links() const;
 
     QString text(const QRectF &rect) const;
 
-    QList< QRectF > search(const QString &text, bool matchCase) const;
+    QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const;
 
 private:
     Q_DISABLE_COPY(DjVuPage)
@@ -40,9 +42,7 @@ private:
     const class DjVuDocument *m_parent;
 
     int m_index;
-
     QSize m_size;
-
     int m_resolution;
 
 };
@@ -50,7 +50,6 @@ private:
 class DjVuDocument : public Document
 {
     friend class DjVuPage;
-
 public:
     ~DjVuDocument();
 
@@ -64,9 +63,9 @@ public:
 
     bool save(const QString &filePath, bool withChanges) const;
 
-    void loadOutline(QStandardItemModel *outlineModel) const;
+    Outline outline() const;
 
-    void loadProperties(QStandardItemModel *propertiesModel) const;
+    Properties properties() const;
 
     static deepin_reader::DjVuDocument *loadDocument(const QString &filePath);
 
@@ -76,19 +75,18 @@ private:
     DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document);
 
     mutable QMutex m_mutex;
+    mutable QMutex *m_globalMutex;
 
     ddjvu_context_t *m_context;
-
     ddjvu_document_t *m_document;
-
     ddjvu_format_t *m_format;
 
-    QHash< QString, int > m_indexByName;
+    QHash< QString, int > m_pageByName;
+    QHash< int, QString > m_titleByIndex;
 
-    void prepareIndexByName();
+    void prepareFileInfo();
 
 };
-
 } // deepin_reader
 
 #endif // DJVUMODEL_H

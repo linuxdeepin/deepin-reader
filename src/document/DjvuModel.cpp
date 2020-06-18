@@ -2,10 +2,15 @@
 #include "Application.h"
 
 #include <cstdio>
-#include <QDebug>
 #include <QFile>
 #include <qmath.h>
-#include <QMutexLocker>
+
+#if defined(Q_OS_WIN) && defined(DJVU_STATIC)
+
+#define DDJVUAPI /**/
+#define MINILISPAPI /**/
+
+#endif // Q_OS_WIN DJVU_STATIC
 
 #include <libdjvu/ddjvuapi.h>
 #include <libdjvu/miniexp.h>
@@ -13,8 +18,17 @@
 #define LOCK_PAGE QMutexLocker mutexLocker(&m_parent->m_mutex);
 #define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
 
+#if DDJVUAPI_VERSION < 23
+
+#define LOCK_PAGE_GLOBAL QMutexLocker globalMutexLocker(m_parent->m_globalMutex);
+#define LOCK_DOCUMENT_GLOBAL QMutexLocker globalMutexLocker(m_globalMutex);
+
+#else
+
 #define LOCK_PAGE_GLOBAL
 #define LOCK_DOCUMENT_GLOBAL
+
+#endif // DDJVUAPI_VERSION
 
 namespace {
 
@@ -46,7 +60,7 @@ void clearMessageQueue(ddjvu_context_t *context, bool wait)
     }
 
     while (true) {
-        if (ddjvu_message_peek(context) != nullptr) {
+        if (ddjvu_message_peek(context) != 0) {
             ddjvu_message_pop(context);
         } else {
             break;
@@ -61,7 +75,7 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
     while (true) {
         ddjvu_message_t *message = ddjvu_message_peek(context);
 
-        if (message != nullptr) {
+        if (message != 0) {
             if (message->m_any.tag == tag) {
                 break;
             }
@@ -73,7 +87,7 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
     }
 }
 
-QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const QSizeF &size)
+QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, QSizeF size)
 {
     QPainterPath boundary;
 
@@ -83,7 +97,7 @@ QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const 
         QPoint p(miniexp_to_int(miniexp_car(boundaryExp)), miniexp_to_int(miniexp_cadr(boundaryExp)));
         QSize s(miniexp_to_int(miniexp_caddr(boundaryExp)), miniexp_to_int(miniexp_cadddr(boundaryExp)));
 
-        p.setY(static_cast<int>(size.height() - s.height() - p.y()));
+        p.setY(size.height() - s.height() - p.y());
 
         const QRectF r(p, s);
 
@@ -98,7 +112,7 @@ QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const 
         for (int index = 0; index < count; index += 2) {
             QPoint p(miniexp_to_int(miniexp_nth(index, boundaryExp)), miniexp_to_int(miniexp_nth(index + 1, boundaryExp)));
 
-            p.setY(static_cast<int>(size.height() - p.y()));
+            p.setY(size.height() - p.y());
 
             polygon << p;
         }
@@ -109,7 +123,7 @@ QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, const 
     return QTransform::fromScale(1.0 / size.width(), 1.0 / size.height()).map(boundary);
 }
 
-Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int index, const QHash< QString, int > &indexByName)
+Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int index, const QHash< QString, int > &pageByName)
 {
     QString target;
 
@@ -120,7 +134,7 @@ Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int inde
     }
 
     if (target.isEmpty()) {
-        return nullptr;
+        return 0;
     }
 
     if (target.at(0) == QLatin1Char('#')) {
@@ -130,10 +144,12 @@ Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int inde
         int targetPage = target.toInt(&ok);
 
         if (!ok) {
-            if (indexByName.contains(target)) {
-                targetPage = indexByName[target] + 1;
+            const int page = pageByName.value(target);
+
+            if (page != 0) {
+                targetPage = page;
             } else {
-                return nullptr;
+                return 0;
             }
         } else {
             if (target.at(0) == QLatin1Char('+') || target.at(0) == QLatin1Char('-')) {
@@ -147,7 +163,7 @@ Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int inde
     }
 }
 
-QList< Link * > loadLinks(miniexp_t linkExp, const QSizeF &size, int index, const QHash< QString, int > &indexByName)
+QList< Link * > loadLinks(miniexp_t linkExp, QSizeF size, int index, const QHash< QString, int > &pageByName)
 {
     QList< Link * > links;
 
@@ -171,9 +187,9 @@ QList< Link * > loadLinks(miniexp_t linkExp, const QSizeF &size, int index, cons
             QPainterPath boundary = loadLinkBoundary(type, miniexp_cdr(boundaryExp), size);
 
             if (!boundary.isEmpty()) {
-                Link *link = loadLinkTarget(boundary, targetExp, index, indexByName);
+                Link *link = loadLinkTarget(boundary, targetExp, index, pageByName);
 
-                if (link != nullptr) {
+                if (link != 0) {
                     links.append(link);
                 }
             }
@@ -183,7 +199,7 @@ QList< Link * > loadLinks(miniexp_t linkExp, const QSizeF &size, int index, cons
     return links;
 }
 
-QString loadText(miniexp_t textExp, const QSizeF &size, const QRectF &rect)
+QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
 {
     if (miniexp_length(textExp) < 6 && !miniexp_symbolp(miniexp_car(textExp))) {
         return QString();
@@ -194,7 +210,7 @@ QString loadText(miniexp_t textExp, const QSizeF &size, const QRectF &rect)
     const int xmax = miniexp_to_int(miniexp_cadddr(textExp));
     const int ymax = miniexp_to_int(miniexp_caddddr(textExp));
 
-    if (rect.intersects(QRect(xmin, static_cast<int>(size.height() - ymax), xmax - xmin, ymax - ymin))) {
+    if (rect.intersects(QRect(xmin, size.height() - ymax, xmax - xmin, ymax - ymin))) {
         const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(textExp)));
 
         if (type == QLatin1String("word")) {
@@ -217,18 +233,24 @@ QString loadText(miniexp_t textExp, const QSizeF &size, const QRectF &rect)
     return QString();
 }
 
-QList< QRectF > findText(miniexp_t pageTextExp, const QSizeF &size, const QTransform &transform, const QString &text, bool matchCase)
+QList< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform &transform, const QStringList &words, bool matchCase, bool wholeWords)
 {
-    QList< miniexp_t > words;
+    if (words.isEmpty()) {
+        return QList< QRectF >();
+    }
+
+    const Qt::CaseSensitivity caseSensitivity = matchCase ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+    QRectF result;
+    int wordIndex = 0;
+
+    QList< miniexp_t > texts;
     QList< QRectF > results;
 
-    int index = 0;
-    QRectF rect;
+    texts.append(pageTextExp);
 
-    words.append(pageTextExp);
-
-    while (!words.isEmpty()) {
-        miniexp_t textExp = words.takeFirst();
+    while (!texts.isEmpty()) {
+        miniexp_t textExp = texts.takeFirst();
 
         if (miniexp_length(textExp) < 6 || !miniexp_symbolp(miniexp_car(textExp))) {
             continue;
@@ -237,28 +259,47 @@ QList< QRectF > findText(miniexp_t pageTextExp, const QSizeF &size, const QTrans
         const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(textExp)));
 
         if (type == QLatin1String("word")) {
-            const QString word = QString::fromUtf8(miniexp_to_str(miniexp_nth(5, textExp)));
+            const QString text = QString::fromUtf8(miniexp_to_str(miniexp_nth(5, textExp)));
 
-            index = word.indexOf(text, index, matchCase ? Qt::CaseSensitive : Qt::CaseInsensitive);
+            int index = 0;
 
-            if (index != -1) {
-                const int xmin = miniexp_to_int(miniexp_cadr(textExp));
-                const int ymin = miniexp_to_int(miniexp_caddr(textExp));
-                const int xmax = miniexp_to_int(miniexp_cadddr(textExp));
-                const int ymax = miniexp_to_int(miniexp_caddddr(textExp));
+            while ((index = text.indexOf(words.at(wordIndex), index, caseSensitivity)) != -1) {
+                const int nextIndex = index + words.at(wordIndex).length();
 
-                index += text.length();
-                rect = rect.united(QRectF(xmin, size.height() - ymax, xmax - xmin, ymax - ymin));
+                const bool wordBegins = index == 0 || !text.at(index - 1).isLetterOrNumber();
+                const bool wordEnds = nextIndex == text.length() || !text.at(nextIndex).isLetterOrNumber();
 
-                if (index == word.length() || !word.at(index).isLetter()) {
-                    results.append(transform.mapRect(rect));
+                if (!wholeWords || (wordBegins && wordEnds)) {
+                    const int xmin = miniexp_to_int(miniexp_cadr(textExp));
+                    const int ymin = miniexp_to_int(miniexp_caddr(textExp));
+                    const int xmax = miniexp_to_int(miniexp_cadddr(textExp));
+                    const int ymax = miniexp_to_int(miniexp_caddddr(textExp));
 
-                    index = 0;
-                    rect = QRectF();
+                    result = result.united(QRectF(xmin, size.height() - ymax, xmax - xmin, ymax - ymin));
+
+                    // Advance after partial match
+                    if (++wordIndex == words.size()) {
+                        results.append(transform.mapRect(result));
+
+                        // Reset after full match
+                        result = QRectF();
+                        wordIndex = 0;
+                    }
+                } else {
+                    // Reset after malformed match
+                    result = QRectF();
+                    wordIndex = 0;
                 }
-            } else {
-                index = 0;
-                rect = QRectF();
+
+                if ((index = nextIndex) >= text.length()) {
+                    break;
+                }
+            }
+
+            if (index < 0) {
+                // Reset after empty match
+                result = QRectF();
+                wordIndex = 0;
             }
         } else {
             textExp = skip(textExp, 5);
@@ -266,7 +307,7 @@ QList< QRectF > findText(miniexp_t pageTextExp, const QSizeF &size, const QTrans
             for (miniexp_t textItem = miniexp_nil; miniexp_consp(textExp); textExp = miniexp_cdr(textExp)) {
                 textItem = miniexp_car(textExp);
 
-                words.append(textItem);
+                texts.append(textItem);
             }
         }
     }
@@ -274,8 +315,10 @@ QList< QRectF > findText(miniexp_t pageTextExp, const QSizeF &size, const QTrans
     return results;
 }
 
-void loadOutline(miniexp_t outlineExp, QStandardItem *parent, const QHash< QString, int > &indexByName)
+Outline loadOutline(miniexp_t outlineExp, const QHash< QString, int > &pageByName)
 {
+    Outline outline;
+
     for (miniexp_t outlineItem = miniexp_nil; miniexp_consp(outlineExp); outlineExp = miniexp_cdr(outlineExp)) {
         outlineItem = miniexp_car(outlineExp);
 
@@ -284,44 +327,49 @@ void loadOutline(miniexp_t outlineExp, QStandardItem *parent, const QHash< QStri
         }
 
         const QString title = QString::fromUtf8(miniexp_to_str(miniexp_car(outlineItem)));
+
+        if (title.isEmpty()) {
+            continue;
+        }
+
+        outline.push_back(Section());
+        Section &section = outline.back();
+        section.title = title;
+
         QString destination = QString::fromUtf8(miniexp_to_str(miniexp_cadr(outlineItem)));
 
-        if (!title.isEmpty() && !destination.isEmpty()) {
-            if (destination.at(0) == QLatin1Char('#')) {
-                destination.remove(0, 1);
+        if (!destination.isEmpty() && destination.at(0) == QLatin1Char('#')) {
+            destination.remove(0, 1);
 
-                bool ok = false;
-                int destinationPage = destination.toInt(&ok);
+            bool ok = false;
+            int page = destination.toInt(&ok);
 
-                if (!ok) {
-                    if (indexByName.contains(destination)) {
-                        destinationPage = indexByName[destination] + 1;
-                    } else {
-                        continue;
-                    }
-                }
+            if (!ok) {
+                const int destinationPage = pageByName.value(destination);
 
-                QStandardItem *item = new QStandardItem(title);
-                item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-
-                item->setData(destinationPage, Qt::UserRole + 1);
-
-                QStandardItem *pageItem = item->clone();
-                pageItem->setText(QString::number(destinationPage));
-                pageItem->setTextAlignment(Qt::AlignRight);
-
-                parent->appendRow(QList< QStandardItem * >() << item << pageItem);
-
-                if (miniexp_length(outlineItem) > 2) {
-                    loadOutline(skip(outlineItem, 2), item, indexByName);
+                if (destinationPage != 0) {
+                    ok = true;
+                    page = destinationPage;
                 }
             }
+
+            if (ok) {
+                section.link.page = page;
+            }
+        }
+
+        if (miniexp_length(outlineItem) > 2) {
+            section.children = loadOutline(skip(outlineItem, 2), pageByName);
         }
     }
+
+    return outline;
 }
 
-void loadProperties(miniexp_t annoExp, QStandardItemModel *model)
+Properties loadProperties(miniexp_t annoExp)
 {
+    Properties properties;
+
     for (miniexp_t annoItem = miniexp_nil; miniexp_consp(annoExp); annoExp = miniexp_cdr(annoExp)) {
         annoItem = miniexp_car(annoExp);
 
@@ -342,13 +390,15 @@ void loadProperties(miniexp_t annoExp, QStandardItemModel *model)
             const QString value = QString::fromUtf8(miniexp_to_str(miniexp_cadr(keyValueItem)));
 
             if (!key.isEmpty() && !value.isEmpty()) {
-                model->appendRow(QList< QStandardItem * >() << new QStandardItem(key) << new QStandardItem(value));
+                properties.push_back(qMakePair(key, value));
             }
         }
     }
+
+    return properties;
 }
 
-}
+} // anonymous
 
 namespace deepin_reader {
 
@@ -363,6 +413,7 @@ DjVuPage::DjVuPage(const DjVuDocument *parent, int index, const ddjvu_pageinfo_t
 DjVuPage::~DjVuPage()
 {
 }
+
 
 QSize DjVuPage::size() const
 {
@@ -424,7 +475,9 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
     clearMessageQueue(m_parent->m_context, false);
 
     ddjvu_page_release(page);
+
     image.setDevicePixelRatio(dApp->devicePixelRatio());
+
     return image;
 }
 
@@ -521,6 +574,47 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
     return image;
 }
 
+deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
+{
+    ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
+
+    if (context == 0) {
+        return 0;
+    }
+
+#if DDJVUAPI_VERSION >= 19
+
+    ddjvu_document_t *document = ddjvu_document_create_by_filename_utf8(context, filePath.toUtf8(), FALSE);
+
+#else
+
+    ddjvu_document_t *document = ddjvu_document_create_by_filename(context, QFile::encodeName(filePath), FALSE);
+
+#endif // DDJVUAPI_VERSION
+
+    if (document == 0) {
+        ddjvu_context_release(context);
+
+        return 0;
+    }
+
+    waitForMessageTag(context, DDJVU_DOCINFO);
+
+    if (ddjvu_document_decoding_error(document)) {
+        ddjvu_document_release(document);
+        ddjvu_context_release(context);
+
+        return 0;
+    }
+
+    return new DjVuDocument(context, document);
+}
+
+QString DjVuPage::label() const
+{
+    return m_parent->m_titleByIndex.value(m_index);
+}
+
 QList< Link * > DjVuPage::links() const
 {
     LOCK_PAGE
@@ -541,7 +635,7 @@ QList< Link * > DjVuPage::links() const
         }
     }
 
-    const QList< Link * > links = loadLinks(pageAnnoExp, m_size, m_index, m_parent->m_indexByName);
+    const QList< Link * > links = loadLinks(pageAnnoExp, m_size, m_index, m_parent->m_pageByName);
 
     {
         LOCK_PAGE_GLOBAL
@@ -582,10 +676,10 @@ QString DjVuPage::text(const QRectF &rect) const
         ddjvu_miniexp_release(m_parent->m_document, pageTextExp);
     }
 
-    return text;
+    return text.simplified();
 }
 
-QList< QRectF > DjVuPage::search(const QString &text, bool matchCase) const
+QList< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
     LOCK_PAGE
 
@@ -606,8 +700,9 @@ QList< QRectF > DjVuPage::search(const QString &text, bool matchCase) const
     }
 
     const QTransform transform = QTransform::fromScale(72.0 / m_resolution, 72.0 / m_resolution);
+    const QStringList words = text.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
 
-    const QList< QRectF > results = findText(pageTextExp, m_size, transform, text, matchCase);
+    const QList< QRectF > results = findText(pageTextExp, m_size, transform, words, matchCase, wholeWords);
 
     {
         LOCK_PAGE_GLOBAL
@@ -623,7 +718,8 @@ DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document)
     m_context(context),
     m_document(document),
     m_format(0),
-    m_indexByName()
+    m_pageByName(),
+    m_titleByIndex()
 {
     unsigned int mask[] = {0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
 
@@ -631,7 +727,7 @@ DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document)
     ddjvu_format_set_row_order(m_format, 1);
     ddjvu_format_set_y_direction(m_format, 1);
 
-    prepareIndexByName();
+    prepareFileInfo();
 }
 
 DjVuDocument::~DjVuDocument()
@@ -643,7 +739,7 @@ DjVuDocument::~DjVuDocument()
 
 int DjVuDocument::numberOfPages() const
 {
-    QMutexLocker mutexLocker(&m_mutex);
+    LOCK_DOCUMENT
 
     return ddjvu_document_get_pagenum(m_document);
 }
@@ -698,11 +794,11 @@ bool DjVuDocument::save(const QString &filePath, bool withChanges) const
 
 #endif // _MSC_VER
 
-    if (file == nullptr) {
+    if (file == 0) {
         return false;
     }
 
-    ddjvu_job_t *job = ddjvu_document_save(m_document, file, 0, nullptr);
+    ddjvu_job_t *job = ddjvu_document_save(m_document, file, 0, 0);
 
     while (!ddjvu_job_done(job)) {
         clearMessageQueue(m_context, true);
@@ -713,9 +809,9 @@ bool DjVuDocument::save(const QString &filePath, bool withChanges) const
     return !ddjvu_job_error(job);
 }
 
-void DjVuDocument::loadOutline(QStandardItemModel *outlineModel) const
+Outline DjVuDocument::outline() const
 {
-    Document::loadOutline(outlineModel);
+    Outline outline;
 
     LOCK_DOCUMENT
 
@@ -735,22 +831,22 @@ void DjVuDocument::loadOutline(QStandardItemModel *outlineModel) const
         }
     }
 
-    if (miniexp_length(outlineExp) < 2 || qstrcmp(miniexp_to_name(miniexp_car(outlineExp)), "bookmarks") != 0) {
-        return;
+    if (miniexp_length(outlineExp) > 1 && qstrcmp(miniexp_to_name(miniexp_car(outlineExp)), "bookmarks") == 0) {
+        outline = loadOutline(skip(outlineExp, 1), m_pageByName);
     }
-
-    ::loadOutline(skip(outlineExp, 1), outlineModel->invisibleRootItem(), m_indexByName);
 
     {
         LOCK_DOCUMENT_GLOBAL
 
         ddjvu_miniexp_release(m_document, outlineExp);
     }
+
+    return outline;
 }
 
-void DjVuDocument::loadProperties(QStandardItemModel *propertiesModel) const
+Properties DjVuDocument::properties() const
 {
-    Document::loadProperties(propertiesModel);
+    Properties properties;
 
     LOCK_DOCUMENT
 
@@ -770,52 +866,18 @@ void DjVuDocument::loadProperties(QStandardItemModel *propertiesModel) const
         }
     }
 
-    ::loadProperties(annoExp, propertiesModel);
+    properties = loadProperties(annoExp);
 
     {
         LOCK_DOCUMENT_GLOBAL
 
         ddjvu_miniexp_release(m_document, annoExp);
     }
+
+    return properties;
 }
 
-deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
-{
-    ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
-
-    if (context == nullptr) {
-        return nullptr;
-    }
-
-#if DDJVUAPI_VERSION >= 19
-
-    ddjvu_document_t *document = ddjvu_document_create_by_filename_utf8(context, filePath.toUtf8(), FALSE);
-
-#else
-
-    ddjvu_document_t *document = ddjvu_document_create_by_filename(context, QFile::encodeName(filePath), FALSE);
-
-#endif // DDJVUAPI_VERSION
-
-    if (document == nullptr) {
-        ddjvu_context_release(context);
-
-        return nullptr;
-    }
-
-    waitForMessageTag(context, DDJVU_DOCINFO);
-
-    if (ddjvu_document_decoding_error(document)) {
-        ddjvu_document_release(document);
-        ddjvu_context_release(context);
-
-        return nullptr;
-    }
-
-    return new deepin_reader::DjVuDocument(context, document);
-}
-
-void DjVuDocument::prepareIndexByName()
+void DjVuDocument::prepareFileInfo()
 {
     for (int index = 0, count = ddjvu_document_get_filenum(m_document); index < count; ++index) {
         ddjvu_fileinfo_t fileinfo;
@@ -824,9 +886,23 @@ void DjVuDocument::prepareIndexByName()
             continue;
         }
 
-        m_indexByName[QString::fromUtf8(fileinfo.id)] = m_indexByName[QString::fromUtf8(fileinfo.name)] = m_indexByName[QString::fromUtf8(fileinfo.title)] = fileinfo.pageno;
+        const QString id = QString::fromUtf8(fileinfo.id);
+        const QString name = QString::fromUtf8(fileinfo.name);
+        const QString title = QString::fromUtf8(fileinfo.title);
+
+        m_pageByName[id] = m_pageByName[name] = m_pageByName[title] = fileinfo.pageno + 1;
+
+        if (!title.endsWith(".djvu", Qt::CaseInsensitive) && !title.endsWith(".djv", Qt::CaseInsensitive)) {
+            m_titleByIndex[fileinfo.pageno] = title;
+        }
     }
+
+    m_pageByName.squeeze();
+    m_titleByIndex.squeeze();
 }
 
-}// Model
+}
+
+
+
 
