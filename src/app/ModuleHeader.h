@@ -56,7 +56,7 @@ const QString g_ctrl_f = "Ctrl+F";          //  搜索
 const QString g_pgup = "PgUp";            //  上一页
 const QString g_pgdown = "PgDown";        //  下一页
 const QString g_ctrl_o = "Ctrl+O";        //  打开
-const QString g_ctrl_larger = "Ctrl++";   //  放大
+const QString g_alt_harger = "Ctrl++";   //  放大
 const QString g_ctrl_equal = "Ctrl+=";   //  放大
 const QString g_ctrl_smaller = "Ctrl+-";  //  缩小
 
@@ -78,11 +78,11 @@ const QString g_ctrl_shift_r = "Ctrl+Shift+R";  //  右旋转
 const QString g_alt_1 = "Alt+1";  //    选择工具
 const QString g_alt_2 = "Alt+2";  //    手型工具
 
-const QString g_ctrl_b = "Ctrl+B";  //    添加书签
-const QString g_ctrl_h = "Ctrl+H";  //    播放幻灯片     2020-01-13  wzx
-const QString g_ctrl_i = "Ctrl+I";  //    添加注释
-const QString g_ctrl_l = "Ctrl+L";  //    添加高亮
-const QString g_del = "Del";        //  删除书签\注释\高亮
+const QString g_ctrl_d  = "Ctrl+D";  //    添加书签
+const QString g_f5      = "F5";      //    播放幻灯片     2020-01-13  wzx
+const QString g_alt_a   = "Alt+A";   //    添加注释
+const QString g_alt_h   = "Alt+H";   //    添加高亮
+const QString g_del     = "Del";     //  删除书签\注释\高亮
 
 const QString g_alt_z = "Alt+Z";  //  放大镜
 const QString g_up = "Up";

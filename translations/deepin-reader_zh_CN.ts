@@ -544,7 +544,7 @@
     <name>QObject</name>
     <message>
         <source>Document not saved</source>
-        <translation type="vanished">文档未保存</translation>
+        <translation>文档未保存</translation>
     </message>
 </context>
 <context>

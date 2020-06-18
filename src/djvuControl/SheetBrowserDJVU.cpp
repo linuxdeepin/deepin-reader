@@ -138,11 +138,10 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 {
     closeMagnifier();
 
-    SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(point)));
-    if (nullptr == item)
-        return;
+    int index = currentPage() - 1;
 
-    int index = m_items.indexOf(item);
+    if (index < 0 || index > allPages() - 1)
+        return;
 
     QMenu menu(this);
     if (m_sheet->hasBookMark(index))
@@ -360,6 +359,9 @@ int SheetBrowserDJVU::currentPage()
             break;
         }
     }
+
+    if (value == verticalScrollBar()->maximum())
+        index = m_items.count() - 1;
 
     return index + 1;
 }

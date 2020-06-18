@@ -565,7 +565,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         saveCurrent();
     } else if (s == KeyStr::g_ctrl_shift_s) {
         saveAsCurrent();
-    } else if (s == KeyStr::g_ctrl_h) {
+    } else if (s == KeyStr::g_f5) {
         openSlide();
     } else if (s == KeyStr::g_alt_z) {
         openMagnifer();
@@ -597,7 +597,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_shift_r) {
         if (getCurSheet())
             getCurSheet()->rotateRight();
-    }  else if (s == KeyStr::g_ctrl_larger) {
+    }  else if (s == KeyStr::g_alt_harger) {
         if (getCurSheet())
             getCurSheet()->zoomin();
     } else if (s == KeyStr::g_ctrl_equal) {
@@ -606,7 +606,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_smaller) {
         if (getCurSheet())
             getCurSheet()->zoomout();
-    } else if (s == KeyStr::g_ctrl_b) {
+    } else if (s == KeyStr::g_ctrl_d) {
         if (getCurSheet())
             getCurSheet()->setBookMark(getCurSheet()->currentIndex(), true);
     } else if (s == KeyStr::g_ctrl_f) {
@@ -615,10 +615,10 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_c) {
         if (getCurSheet())
             getCurSheet()->copySelectedText();
-    } else if (s == KeyStr::g_ctrl_l) {
+    } else if (s == KeyStr::g_alt_h) {
         if (getCurSheet())
             getCurSheet()->highlightSelectedText();
-    } else if (s == KeyStr::g_ctrl_i) {
+    } else if (s == KeyStr::g_alt_a) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
     } else if (s == KeyStr::g_left) {
