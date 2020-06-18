@@ -718,6 +718,8 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     }
 
     setViewModeAndShow(d->m_viewmode);
+
+    showCurPageViewAfterScaleChanged();
 }
 
 int DocummentBase::getCurrentPageNo()
@@ -1363,8 +1365,8 @@ void DocummentBase::showCurPageViewAfterScaleChanged()
     if (d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
         this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
                                             static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
-        if (d->m_currentpageno < d->m_pages.count())
-            d->m_pages[d->m_currentpageno]->update();
+//        if (d->m_currentpageno < d->m_pages.count())
+//            d->m_pages[d->m_currentpageno]->update();
     }
 }
 
@@ -1421,6 +1423,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
     }
 
     initConnect();
+
     scaleAndShow(0, d->m_rotate);
 }
 
