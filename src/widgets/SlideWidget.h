@@ -18,6 +18,7 @@
 #define SLIDEWIDGET_H
 
 #include <DWidget>
+#include <DSpinner>
 
 DWIDGET_USE_NAMESPACE
 class DocSheet;
@@ -41,7 +42,7 @@ private:
     void initImageControl();
 
     void playImage();
-    QPixmap drawImage(const QImage &srcImage);
+    QPixmap drawImage(const QPixmap &srcImage, bool small = false);
 
 private slots:
     void onParentDestroyed();
@@ -52,6 +53,9 @@ private slots:
 
     void onImagevalueChanged(const QVariant &variant);
     void onImageShowTimeOut();
+
+    void onFetchImage(int index);
+    void onUpdatePageImage(int pageIndex);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -68,6 +72,7 @@ private:
     Qt::WindowStates m_nOldState = Qt::WindowNoState;
     DocSheet *m_docSheet;
     SlidePlayWidget *m_slidePlayWidget;
+    DSpinner *m_loadSpinner;
 
     int m_offset = 0;
     int m_preIndex = 0;

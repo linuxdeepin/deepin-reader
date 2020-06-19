@@ -19,6 +19,7 @@
 #include "DocSheet.h"
 #include "SlidePlayWidget.h"
 #include "application.h"
+#include "lpreviewControl/threadmanager/readerimagethreadpoolmanager.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -44,6 +45,7 @@ SlideWidget::~SlideWidget()
 
 void SlideWidget::initControl()
 {
+    m_offset = 0;
     m_curPageIndex = m_docSheet->currentIndex();
     m_preIndex = m_curPageIndex;
 
@@ -54,6 +56,11 @@ void SlideWidget::initControl()
     this->setGeometry(0, 0, DApplication::desktop()->screenGeometry().width(), DApplication::desktop()->screenGeometry().height());
     connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
 
+    m_loadSpinner = new DSpinner(this);
+    m_loadSpinner->setFixedSize(40, 40);
+    m_loadSpinner->stop();
+    m_loadSpinner->hide();
+
     m_slidePlayWidget = new SlidePlayWidget(this);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalPreBtnClicked,  this, &SlideWidget::onPreBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalPlayBtnClicked, this, &SlideWidget::onPlayBtnClicked);
@@ -61,11 +68,8 @@ void SlideWidget::initControl()
     connect(m_slidePlayWidget, &SlidePlayWidget::signalExitBtnClicked, this, &SlideWidget::onExitBtnClicked);
     m_slidePlayWidget->move((DApplication::desktop()->screenGeometry().width() - 270) / 2, DApplication::desktop()->screenGeometry().height() - 100);
 
-    QImage limage, rimage;
-    m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
-    m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
-    m_lpixmap = drawImage(limage);
-    m_rpixmap = drawImage(rimage);
+    onFetchImage(m_curPageIndex);
+    onFetchImage(m_preIndex);
 }
 
 void SlideWidget::initImageControl()
@@ -110,12 +114,25 @@ void SlideWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     painter.fillRect(this->rect(), Qt::black);
 
+    int roffset = 0;
     if (m_blefttoright) {
+        roffset = m_offset - width();
         painter.drawPixmap(m_offset, 0, m_lpixmap);
-        painter.drawPixmap(m_offset - width(), 0, m_rpixmap);
+        painter.drawPixmap(roffset, 0, m_rpixmap);
     } else {
+        roffset = m_offset + width();
         painter.drawPixmap(m_offset, 0, m_lpixmap);
-        painter.drawPixmap(m_offset + width(), 0, m_rpixmap);
+        painter.drawPixmap(roffset, 0, m_rpixmap);
+    }
+
+    if (m_rpixmap.isNull()) {
+        if (m_curPageIndex == m_preIndex) roffset = 0;
+        m_loadSpinner->move(roffset + (this->width() - m_loadSpinner->width()) / 2, (this->height() - m_loadSpinner->height()) / 2);
+        m_loadSpinner->start();
+        m_loadSpinner->show();
+    } else {
+        m_loadSpinner->hide();
+        m_loadSpinner->stop();
     }
 }
 
@@ -184,26 +201,21 @@ void SlideWidget::onExitBtnClicked()
 
 void SlideWidget::playImage()
 {
-    QImage limage, rimage;
     m_imageAnimation->stop();
     if (m_preIndex < m_curPageIndex) {
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
-
-        m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
-        m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
-
     } else {
         m_blefttoright = true;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(width());
-
-        m_docSheet->getImage(m_preIndex, limage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
-        m_docSheet->getImage(m_curPageIndex, rimage, this->width() - 40, this->height() - 20, Qt::KeepAspectRatio);
     }
-    m_lpixmap = drawImage(limage);
-    m_rpixmap = drawImage(rimage);
+
+    m_lpixmap = m_rpixmap;
+    m_rpixmap = QPixmap();
+
+    onFetchImage(m_curPageIndex);
     m_imageAnimation->start();
     m_imageTimer->stop();
 }
@@ -226,17 +238,19 @@ void SlideWidget::onImageShowTimeOut()
     playImage();
 }
 
-QPixmap SlideWidget::drawImage(const QImage &srcImage)
+QPixmap SlideWidget::drawImage(const QPixmap &srcImage, bool small)
 {
+    qreal scale = small ? 10.0 : 1.0;
     QPixmap pixmap(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
-    painter.drawImage(static_cast<int>((pixmap.width() - srcImage.width()) * 0.5 / dApp->devicePixelRatio()),
-                      static_cast<int>((pixmap.height() - srcImage.height()) * 0.5 / dApp->devicePixelRatio()),
-                      srcImage);
-
+    qreal iwidth = srcImage.width() * scale;
+    qreal iheight = srcImage.height() * scale;
+    painter.drawPixmap(QRect((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio(),
+                             (pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio(),
+                             iwidth, iheight), srcImage);
     return pixmap;
 }
 
@@ -257,5 +271,37 @@ void SlideWidget::handleKeyPressEvent(const QString &sKey)
         onPreBtnClicked();
     } else if (sKey == KeyStr::g_right) {
         onNextBtnClicked();
+    }
+}
+
+void SlideWidget::onFetchImage(int index)
+{
+    const QPixmap &pix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, index);
+    if (!pix.isNull() && qMax(pix.width(), pix.height()) == qMin(this->width() - 40, this->height() - 20)) {
+        onUpdatePageImage(index);
+        return;
+    }
+
+    ReaderImageParam_t tParam;
+    tParam.pageIndex = index;
+    tParam.sheet = m_docSheet;
+    tParam.receiver = this;
+    tParam.maxPixel = qMin(this->width() - 40, this->height() - 20);
+    tParam.slotFun = "onUpdatePageImage";
+    ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
+}
+
+void SlideWidget::onUpdatePageImage(int pageIndex)
+{
+    if (pageIndex == m_preIndex) {
+        const QPixmap &lPix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, pageIndex);
+        m_lpixmap = drawImage(lPix);
+        update();
+    }
+
+    if (pageIndex == m_curPageIndex) {
+        const QPixmap &rPix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, pageIndex);
+        m_rpixmap = drawImage(rPix);
+        update();
     }
 }
