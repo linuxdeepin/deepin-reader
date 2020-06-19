@@ -573,22 +573,20 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
 
         if (destination) {
             int pageIndex = destination->pageNumber();
-            qreal left = qQNaN();
-            qreal top = qQNaN();
+            qreal left = 0.0;
+            qreal top = 0.0;
 
             pageIndex = pageIndex >= 1 ? pageIndex : 1;
             pageIndex = pageIndex <= document->numPages() ? pageIndex : document->numPages();
 
-            //if (destination->isChangeLeft())
-            {
+            if (destination->isChangeLeft()) {
                 left = destination->left();
 
                 left = left >= 0.0 ? left : 0.0;
                 left = left <= 1.0 ? left : 1.0;
             }
 
-            //if (destination->isChangeTop())
-            {
+            if (destination->isChangeTop()) {
                 top = destination->top();
 
                 top = top >= 0.0 ? top : 0.0;
