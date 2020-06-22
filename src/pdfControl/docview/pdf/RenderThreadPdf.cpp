@@ -15,6 +15,11 @@ RenderThreadPdf::~RenderThreadPdf()
     wait();
 }
 
+RenderThreadPdf *RenderThreadPdf::getIns()
+{
+    return _ins;
+}
+
 void RenderThreadPdf::appendTask(PageBase *item, double scaleFactor, RotateType_EM rotation)
 {
     if (nullptr == _ins) {

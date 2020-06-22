@@ -11,6 +11,7 @@
 #include <QFile>
 #include "RenderThreadPdf.h"
 //#include "RenderThreadPoolManagerPdf.h"
+#include "RenderThreadPdf.h"
 
 class DocummentPDFPrivate: public DocummentBasePrivate
 {
@@ -23,6 +24,11 @@ public:
 
     ~DocummentPDFPrivate() override
     {
+        this->threadloaddata.wait();
+        if (RenderThreadPdf::getIns()) {
+            RenderThreadPdf::destroyRenderPdfThread();
+        }
+
         qDeleteAll(m_pages);
         m_pages.clear();
         if (nullptr != document) {

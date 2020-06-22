@@ -25,6 +25,8 @@ public:
     explicit RenderThreadPdf(QObject *object = nullptr);
     ~RenderThreadPdf() override;
 
+    static RenderThreadPdf *getIns();
+
     static void appendTask(PageBase *item, double scaleFactor, RotateType_EM rotation);
 
     static void destroyRenderPdfThread();

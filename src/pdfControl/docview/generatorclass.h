@@ -81,12 +81,13 @@ class ThreadLoadData : public QThread
     Q_OBJECT
 public:
     ThreadLoadData();
+    ~ThreadLoadData() override;
     void setDoc(DocummentBase *doc);
     void setRestart();
 signals:
     void signal_dataLoaded(bool);
 protected:
-    virtual void run();
+    virtual void run() override;
 
 private:
     DocummentBase *m_doc;

@@ -190,6 +190,13 @@ ThreadLoadData::ThreadLoadData()
     restart = false;
 }
 
+ThreadLoadData::~ThreadLoadData()
+{
+    restart = false;
+//    quit();
+    wait();
+}
+
 void ThreadLoadData::setDoc(DocummentBase *doc)
 {
     m_doc = doc;

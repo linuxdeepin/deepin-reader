@@ -108,6 +108,7 @@ public:
 
     virtual ~PageBasePrivate()
     {
+        m_bClosed = true;
 //        qDebug() << "~PageBasePrivate";
         qDeleteAll(m_links);
         m_links.clear();
@@ -156,6 +157,7 @@ public:
     bool m_bquit;
     bool m_bActive{true};
     PageBase *q_ptr;
+    bool  m_bClosed{false};
     Q_DECLARE_PUBLIC(PageBase)
 signals:
     void signal_loadMagnifierPixmapCache(QImage image, double width, double height);

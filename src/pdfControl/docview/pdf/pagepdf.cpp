@@ -15,6 +15,7 @@ public:
 
     ~PagePdfPrivate() override
     {
+        m_bClosed = true;
         if (m_page) {
             delete m_page;
             m_page = nullptr;
@@ -32,6 +33,9 @@ public:
     }
     bool loadData() override
     {
+        if (m_bClosed) {
+            return false;
+        }
         loadWords();
         loadLinks();
         return true;
