@@ -146,6 +146,9 @@ void NotesWidget::updateNoteItem(const QString &msgContent)
 
 void NotesWidget::handleOpenSuccess()
 {
+    if (bIshandOpenSuccess)
+        return;
+    bIshandOpenSuccess = true;
     m_pImageListView->handleOpenSuccess();
 }
 

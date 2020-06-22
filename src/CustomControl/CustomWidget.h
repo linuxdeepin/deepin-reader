@@ -67,6 +67,9 @@ public:
 protected:
     virtual void initWidget();
     void updateWidgetTheme();
+
+protected:
+    bool bIshandOpenSuccess = false;
 };
 
 #endif  // CUSTOMWIDGET_H

@@ -93,6 +93,9 @@ void BookMarkWidget::nextPage()
 
 void BookMarkWidget::handleOpenSuccess()
 {
+    if (bIshandOpenSuccess)
+        return;
+    bIshandOpenSuccess = true;
     const QSet<int> &pageList = m_sheet->getBookMarkList();
     if (pageList.contains(m_sheet->currentIndex()))
         m_pAddBookMarkBtn->setEnabled(false);

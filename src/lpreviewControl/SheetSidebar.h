@@ -86,11 +86,13 @@ private:
     void onJumpToPrevPage();
     void onJumpToNextPage();
     void deleteItemByKey();
+    void handWidgetDocOpenSuccess();
 
 private:
     qreal m_scale;
     int  m_searchId;
     bool m_bOldVisible;
+    bool m_bOpenDocOpenSuccess;
 
     DocSheet *m_sheet;
     QStackedLayout *m_stackLayout;

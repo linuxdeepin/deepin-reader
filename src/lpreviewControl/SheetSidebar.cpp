@@ -46,6 +46,7 @@ void SheetSidebar::initWidget()
 {
     m_scale           = 1.0;
     m_bOldVisible     = false;
+    m_bOpenDocOpenSuccess = false;
     m_thumbnailWidget = nullptr;
     m_catalogWidget   = nullptr;
     m_bookmarkWidget  = nullptr;
@@ -136,6 +137,7 @@ void SheetSidebar::onBtnClicked(int index)
     if (m_stackLayout->currentWidget() != m_searchWidget) {
         m_sheet->m_operation.sidebarIndex = index;
     }
+    handWidgetDocOpenSuccess();
 }
 
 void SheetSidebar::setBookMark(int index, int state)
@@ -153,15 +155,28 @@ void SheetSidebar::setCurrentPage(int page)
 
 void SheetSidebar::handleOpenSuccess()
 {
+    m_bOpenDocOpenSuccess = true;
     this->setVisible(m_sheet->operation().sidebarVisible);
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
     QAbstractButton *btn = m_btnGroup->button(nId);
     if (btn) m_btnGroup->buttonClicked(nId);
+    handWidgetDocOpenSuccess();
+}
 
-    if (m_thumbnailWidget) m_thumbnailWidget->handleOpenSuccess();
-    if (m_catalogWidget) m_catalogWidget->handleOpenSuccess();
-    if (m_bookmarkWidget) m_bookmarkWidget->handleOpenSuccess();
-    if (m_notesWidget) m_notesWidget->handleOpenSuccess();
+void SheetSidebar::handWidgetDocOpenSuccess()
+{
+    if (m_bOpenDocOpenSuccess) {
+        QWidget *curWidget = m_stackLayout->currentWidget();
+        if (curWidget == m_thumbnailWidget) {
+            m_thumbnailWidget->handleOpenSuccess();
+        } else if (curWidget == m_catalogWidget) {
+            m_catalogWidget->handleOpenSuccess();
+        } else if (curWidget == m_bookmarkWidget) {
+            m_bookmarkWidget->handleOpenSuccess();
+        } else if (curWidget == m_notesWidget) {
+            m_notesWidget->handleOpenSuccess();
+        }
+    }
 }
 
 void SheetSidebar::handleFindOperation(int type)
