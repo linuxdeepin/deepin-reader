@@ -29,6 +29,9 @@
 #include "RenderThreadDJVU.h"
 #include "SheetBrowserDJVUItem.h"
 
+#include <QTime>
+#include <QDebug>
+
 RenderThreadDJVU *RenderThreadDJVU::instance = nullptr;
 RenderThreadDJVU::RenderThreadDJVU(QObject *parent) : QThread(parent)
 {
@@ -46,6 +49,9 @@ void RenderThreadDJVU::appendTask(SheetBrowserDJVUItem *item, double scaleFactor
 {
     if (nullptr == instance)
         instance = new RenderThreadDJVU;
+
+    if (instance->m_curTask.item == item && instance->m_curTask.scaleFactor == scaleFactor && instance->m_curTask.rotation == rotation)
+        return;
 
     instance->m_mutex.lock();
 
@@ -84,16 +90,21 @@ void RenderThreadDJVU::run()
         }
 
         m_mutex.lock();
-        RenderTaskDJVU task = m_tasks.pop();
+        m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
-        if (!SheetBrowserDJVUItem::existInstance(task.item))
+        if (!SheetBrowserDJVUItem::existInstance(m_curTask.item))
             continue;
 
-        QImage image = task.item->getImage(task.scaleFactor, task.rotation);
+        QTime time;
+        time.start();
+
+        QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation);
+
+        qDebug() << time.elapsed() / 1000.0 << "s";
 
         if (!image.isNull())
-            emit sigTaskFinished(task.item, image, task.scaleFactor, task.rotation);
+            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation);
     }
 }
 

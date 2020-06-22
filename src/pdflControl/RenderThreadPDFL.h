@@ -26,8 +26,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef RenderThreadDJVU_H
-#define RenderThreadDJVU_H
+#ifndef RenderThreadPDFL_H
+#define RenderThreadPDFL_H
 
 #include <QThread>
 #include <QMutex>
@@ -36,40 +36,42 @@
 
 #include "Global.h"
 
-class SheetBrowserDJVUItem;
-struct RenderTaskDJVU {
-    SheetBrowserDJVUItem *item = nullptr;
+class SheetBrowserPDFLItem;
+struct RenderTaskPDFL {
+    SheetBrowserPDFLItem *item = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
 };
 
-class RenderThreadDJVU : public QThread
+class RenderThreadPDFL : public QThread
 {
     Q_OBJECT
 public:
-    explicit RenderThreadDJVU(QObject *parent = nullptr);
+    explicit RenderThreadPDFL(QObject *parent = nullptr);
 
-    ~RenderThreadDJVU();
+    ~RenderThreadPDFL();
 
-    static void appendTask(SheetBrowserDJVUItem *item, double scaleFactor, Dr::Rotation rotation);
+    static void clearTask(SheetBrowserPDFLItem *item);
+
+    static void appendTask(SheetBrowserPDFLItem *item, double scaleFactor, Dr::Rotation rotation);
 
     static void destroy();
 
     void run();
 
-private slots:
-    void onTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation);
-
 signals:
-    void sigTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation);
+    void sigTaskFinished(SheetBrowserPDFLItem *item, QImage image, double scaleFactor, int rotation, QRect rect);
+
+private slots:
+    void onTaskFinished(SheetBrowserPDFLItem *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
 private:
-    RenderTaskDJVU m_curTask;
-    QStack<RenderTaskDJVU> m_tasks;
+    RenderTaskPDFL m_curTask;
+    QStack<RenderTaskPDFL> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
-
-    static RenderThreadDJVU *instance;
+    bool m_quitRender = false;
+    static RenderThreadPDFL *instance;
 };
 
-#endif // RenderThreadDJVU_H
+#endif // RenderThreadPDFL_H

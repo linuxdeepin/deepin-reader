@@ -32,6 +32,7 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QProcess>
+#include <QUuid>
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
@@ -49,6 +50,7 @@
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
 #include "widgets/SlideWidget.h"
+#include "pdflControl/DocSheetPDFL.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -133,25 +135,49 @@ void CentralDocPage::openFile(QString &filePath)
     int fileType = Dr::fileType(filePath);
 
     if (Dr::PDF == fileType) {
-        DocSheet *sheet = new DocSheetPDF(filePath, this);
+
+        DocSheet *sheet = new DocSheetPDFL(filePath, this);
 
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-        sheet->openFile();
+        if (!sheet->openFileExec()) {
+            sheet->deleteLater();
+            showTips(tr("Please check if the file is damaged"), 1);
+            return;
+        }
 
         m_pStackedLayout->addWidget(sheet);
 
         m_pStackedLayout->setCurrentWidget(sheet);
-
-        sheet->defaultFocus();
 
         m_pTabBar->insertSheet(sheet);
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
         emit sigSheetCountChanged(m_pStackedLayout->count());
+
+        onOpened(sheet, true);
+
+//        DocSheet *sheet = new DocSheetPDF(filePath, this);
+
+//        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+//        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+//        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+//        sheet->openFile();
+
+//        m_pStackedLayout->addWidget(sheet);
+
+//        m_pStackedLayout->setCurrentWidget(sheet);
+
+//        sheet->defaultFocus();
+
+//        m_pTabBar->insertSheet(sheet);
+
+//        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+//        emit sigSheetCountChanged(m_pStackedLayout->count());
 
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(filePath, this);

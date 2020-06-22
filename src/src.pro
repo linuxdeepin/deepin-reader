@@ -20,6 +20,7 @@ LIBS += -L"$$PWD/../3rdparty/lib" -ldpoppler-qt -ldpoppler
 
 include (app/app.pri)
 include (pdfControl/pdfControl.pri)
+include (pdflControl/pdflControl.pri)
 include (utils/Utils.pri)
 include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
