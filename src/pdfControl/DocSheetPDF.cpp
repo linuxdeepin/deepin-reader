@@ -495,7 +495,7 @@ QList<qreal> DocSheetPDF::scaleFactorList()
     qreal maxZoom = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
-        if (maxZoom - factor > 0.001)
+        if (maxZoom - factor > -0.0001)
             factorList.append(factor);
     }
 
