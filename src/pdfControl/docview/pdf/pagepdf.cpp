@@ -173,13 +173,17 @@ private:
     }
 };
 
+QSet<PageBase *> PagePdf::m_pageItems{nullptr};
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
 {
+    m_pageItems.insert(this);
+    connect(this, SIGNAL(sigRenderFinish(QImage)), this, SLOT(slotRenderFinish(QImage)));
 }
 
 PagePdf::~PagePdf()
 {
+    m_pageItems.remove(this);
 }
 
 stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords)
@@ -649,8 +653,31 @@ bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, do
     return true;
 }
 
+bool PagePdf::renderImage(double scale, RotateType_EM rotate)
+{
+    Q_D(PagePdf);
+    d->m_scale = scale;
+    d->m_rotate = rotate;
+    QImage image;
+
+    if (!d->m_bActive)
+        return false;
+
+    if (d->getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof)) {
+        emit sigRenderFinish(image);
+        return true;
+    }
+    //d->m_page->getImage(d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    return false;
+}
+
 QImage PagePdf::thumbnail()
 {
     Q_D(PagePdf);
     return d->m_page->thumbnail();
+}
+
+bool PagePdf::existIns(PageBase *item)
+{
+    return m_pageItems.contains(item);
 }

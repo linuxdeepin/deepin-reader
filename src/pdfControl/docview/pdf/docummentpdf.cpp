@@ -9,7 +9,8 @@
 #include <QParallelAnimationGroup>
 #include <QDebug>
 #include <QFile>
-
+#include "RenderThreadPdf.h"
+//#include "RenderThreadPoolManagerPdf.h"
 
 class DocummentPDFPrivate: public DocummentBasePrivate
 {
@@ -446,8 +447,10 @@ void DocummentPDF::refreshOnePage(int ipage)
     Q_D(DocummentPDF);
     if (!d->document)
         return ;
-    if (d->m_pages.count() > ipage)
-        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+    if (d->m_pages.count() > ipage) {
+        RenderThreadPdf::appendTask(d->m_pages.at(ipage), d->m_scale, d->m_rotate);
+//        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+    }
 }
 
 bool DocummentPDF::bDocummentExist()

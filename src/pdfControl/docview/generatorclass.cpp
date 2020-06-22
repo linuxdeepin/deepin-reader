@@ -208,6 +208,7 @@ void ThreadLoadData::run()
     }
     restart = true;
     while (restart) {
+        msleep(1);
         restart = false;
         m_doc->loadData();
     }

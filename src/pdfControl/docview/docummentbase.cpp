@@ -12,6 +12,9 @@
 #include <QParallelAnimationGroup>
 #include <poppler-qt5.h>
 #include <qglobal.h>
+#include "pdf/RenderThreadPdf.h"
+//#include "pdf/RenderThreadPoolManagerPdf.h"
+
 static QMutex mutexlockloaddata;
 
 DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrollArea(parent),
@@ -694,6 +697,15 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
     scaleAndShow(dscale, rotate);
 }
 
+void DocummentBase::setActive(const bool &active)
+{
+    Q_D(DocummentBase);
+
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        setActive(active);
+    }
+}
+
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
@@ -1102,8 +1114,10 @@ bool DocummentBase::loadPages()
     }
 
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
-        if (i >= 0 && i < d->m_pages.size())
-            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
+        if (i >= 0 && i < d->m_pages.size()) {
+            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+            //d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+        }
     }
 
     for (int i = 0; i < d->m_pages.size(); i++) {
@@ -1574,7 +1588,10 @@ bool DocummentBase::loadData()
             bfirst = false;
             emit signal_openResult(true);
         }
+//        QTime timedebuge;
+//        timedebuge.start();
         d->m_pages.at(i)->getInterFace()->loadData();
+//        qInfo() << "    load one page time is  " << timedebuge.elapsed() / 1000.0 << "s"; //输出计时
     }
     return true;
 }

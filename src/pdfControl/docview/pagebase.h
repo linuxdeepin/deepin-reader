@@ -103,7 +103,7 @@ public:
         m_spinner = nullptr;
         m_bquit = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
-        connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
+//        connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
 
     virtual ~PageBasePrivate()
@@ -120,7 +120,7 @@ public:
 //            threadreander.quit();
 //            threadreander.wait();
 //        }
-        threadreander.setAutoDelete(true);
+//        threadreander.setAutoDelete(true);
     }
 
     QColor m_paintercolor;
@@ -137,7 +137,7 @@ public:
     RotateType_EM m_rotate;
     double m_scale;
     ThreadLoadMagnifierCache loadmagnifiercachethread;
-    ThreadRenderImage threadreander;
+//    ThreadRenderImage threadreander;
     double m_magnifierwidth;
     double m_magnifierheight;
     int m_pageno;
@@ -154,6 +154,7 @@ public:
 //    QMutex m_mutexlockgetimage;
     QPixmap m_pixmapshow;//当前页文档图片
     bool m_bquit;
+    bool m_bActive{true};
     PageBase *q_ptr;
     Q_DECLARE_PUBLIC(PageBase)
 signals:
@@ -219,6 +220,7 @@ public:
         Q_D(PageBase);
         d->m_bcursearchshow = bshow;
     }
+    virtual bool renderImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) {return false;}
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void stopThread();
     void quitThread();
@@ -226,14 +228,22 @@ public:
     void clearImage();
     bool setBookMarkState(bool state);
     virtual bool getrectimage(QImage &, double, double, double, QPoint &) {return  false;}
-
+    inline void setActive(const bool &active)
+    {
+        Q_D(PageBase);
+        d->m_bActive = active;
+    }
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
     void sigBookMarkButtonClicked(int page, bool state);
     void signal_update();
+    void sigRenderFinish(QImage);
+
 protected slots:
     void slot_loadMagnifierPixmapCache(QImage image, double width, double height);
     void slot_RenderFinish(QImage);
+    void slotRenderFinish(QImage);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 protected:

@@ -11,6 +11,7 @@
 #include "MsgHeader.h"
 #include "MainWindow.h"
 #include "djvuControl/RenderThreadDJVU.h"
+#include "pdfControl/docview/pdf/RenderThreadPdf.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -44,6 +45,7 @@ void Application::handleQuitAction()
 {
     //线程退出
     RenderThreadDJVU::destroy();
+    RenderThreadPdf::destroyRenderPdfThread();
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
 }

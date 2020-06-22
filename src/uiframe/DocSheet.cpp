@@ -336,6 +336,11 @@ qreal DocSheet::maxScaleFactor()
     return 1;
 }
 
+void DocSheet::setActive(const bool &)
+{
+
+}
+
 void DocSheet::zoomin()
 {
     QList<qreal> dataList = scaleFactorList();

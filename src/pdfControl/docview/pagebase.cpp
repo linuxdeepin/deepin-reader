@@ -136,6 +136,8 @@ PageBase::PageBase(PageBasePrivate *ptr, DWidget *parent)
     connect(d->bookmarkbtn, &BookMarkButton::sigClicked, this, [ = ](bool state) {
         emit sigBookMarkButtonClicked(d->m_pageno, state);
     });
+
+//    connect(this, SIGNAL(sigRenderFinish(QImage &)), this, SLOT(slotRenderFinish(QImage &)));
 }
 
 PageBase::~PageBase()
@@ -544,6 +546,34 @@ void PageBase::slot_RenderFinish(QImage image)
     setSelectTextRects();
 }
 
+void PageBase::slotRenderFinish(QImage image)
+{
+    Q_D(PageBase);
+    d->m_spinner->stop();
+    d->m_spinner->hide();
+    d->havereander = true;
+    QMatrix leftmatrix;
+    switch (d->m_rotate) {
+    case RotateType_90:
+        leftmatrix.rotate(90);
+        break;
+    case RotateType_180:
+        leftmatrix.rotate(180);
+        break;
+    case RotateType_270:
+        leftmatrix.rotate(270);
+        break;
+    default:
+        leftmatrix.rotate(0);
+        break;
+    }
+    QPixmap map = QPixmap::fromImage(image);
+    map = map.transformed(leftmatrix, Qt::SmoothTransformation);
+    map.setDevicePixelRatio(devicePixelRatioF());
+    setPixmap(map);
+    setSelectTextRects();
+}
+
 void PageBase::clearImage()
 {
     Q_D(PageBase);
@@ -709,25 +739,48 @@ QPointF PageBase::translatepoint(QPointF pt, double, RotateType_EM rotate)
     return  respt;
 }
 
+//bool PageBase::renderImage(double scale, RotateType_EM rotate)
+//{
+//    Q_D(PageBase);
+//    if (getInterFace() && ((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate) {
+//        return false;
+//    }
+
+//    d->m_scale = scale;
+//    d->m_rotate = rotate;
+//    int imageW = d->m_imagewidth * scale * d->pixelratiof;
+//    int imageH = d->m_imageheight * scale * d->pixelratiof;
+
+//    if (imageW > 0 && imageH > 0) {
+//        QImage image;
+//        if (getInterFace()->getImage(image, imageW, imageH)) {
+//            emit sigRenderFinish(image);
+//            return true;
+//        }
+//    }
+
+//    return false;
+//}
+
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
-    Q_D(PageBase);
-    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
-        return false;
-    }
-    d->m_scale = scale;
-    d->m_rotate = rotate;
-    d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
-    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
-    if (!d->threadreander.isRunning()) {
-        d->threadreander.setRunningTrue();
-        QThreadPool::globalInstance()->start(&d->threadreander);
-    } else {
-        d->threadreander.setRestart();
-    }
-    d->havereander = true;
-    d->m_spinner->show();
-    d->m_spinner->start();
+//    Q_D(PageBase);
+//    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
+//        return false;
+//    }
+//    d->m_scale = scale;
+//    d->m_rotate = rotate;
+//    d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+//    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
+//    if (!d->threadreander.isRunning()) {
+//        d->threadreander.setRunningTrue();
+//        QThreadPool::globalInstance()->start(&d->threadreander);
+//    } else {
+//        d->threadreander.setRestart();
+//    }
+//    d->havereander = true;
+//    d->m_spinner->show();
+//    d->m_spinner->start();
     return true;
 }
 
@@ -745,8 +798,8 @@ void PageBase::quitThread()
     if (d->loadmagnifiercachethread.isRunning()) {
         d->loadmagnifiercachethread.quit();
     }
-    if (d->threadreander.isRunning())
-        d->threadreander.setQuit();
+//    if (d->threadreander.isRunning())
+//        d->threadreander.setQuit();
     d->m_bquit = true;
 }
 
