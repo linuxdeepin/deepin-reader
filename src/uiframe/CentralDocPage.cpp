@@ -42,14 +42,13 @@
 #include "widgets/PrintManager.h"
 #include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/FindWidget.h"
-#include "widgets/FileAttrWidget.h"
 #include "pdfControl/docview/DocummentProxy.h"
 #include "utils/Utils.h"
 #include "CentralDocPage.h"
 #include "Global.h"
 #include "pdfControl/DocSheetPDF.h"
 #include "djvuControl/DocSheetDJVU.h"
-#include <QUuid>
+#include "widgets/SlideWidget.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -566,24 +565,12 @@ void CentralDocPage::UnBlockShutdown()
     }
 }
 
-void CentralDocPage::showFileAttr()
-{
-    auto pFileAttrWidget = new FileAttrWidget;
-
-    pFileAttrWidget->setFileAttr(getCurSheet());
-
-    pFileAttrWidget->setAttribute(Qt::WA_DeleteOnClose);
-
-    pFileAttrWidget->showScreenCenter();
-
-}
-
 void CentralDocPage::handleShortcut(const QString &s)
 {
     if (s == KeyStr::g_esc && quitFullScreen())
         return;
 
-    if (s == KeyStr::g_esc && !m_slideSheet.isNull() && m_slideSheet->slideOpened()) {
+    if (s == KeyStr::g_esc && m_slideWidget) {
         quitSlide();
         return;
     }
@@ -593,8 +580,8 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (!m_slideSheet.isNull() && m_slideSheet->slideOpened()) {
-        m_slideSheet->handleSlideKeyPressEvent(s);
+    if (m_slideWidget) {
+        m_slideWidget->handleKeyPressEvent(s);
         return;
     }
 
@@ -696,19 +683,16 @@ void CentralDocPage::quitMagnifer()
 
 void CentralDocPage::openSlide()
 {
-    quitSlide();
-
-    m_slideSheet = getCurSheet();
-
-    if (!m_slideSheet.isNull())
-        m_slideSheet->openSlide();
+    if (m_slideWidget == nullptr) {
+        m_slideWidget = new SlideWidget(getCurSheet());
+    }
 }
 
 void CentralDocPage::quitSlide()
 {
-    if (!m_slideSheet.isNull() && m_slideSheet->slideOpened()) {
-        m_slideSheet->closeSlide();
-        m_slideSheet = nullptr;
+    if (m_slideWidget) {
+        m_slideWidget->close();
+        m_slideWidget = nullptr;
     }
 }
 

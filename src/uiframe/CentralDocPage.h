@@ -35,6 +35,7 @@ class FileDataModel;
 class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
+class SlideWidget;
 class CentralDocPage : public CustomWidget
 {
     Q_OBJECT
@@ -75,8 +76,6 @@ public:
     void printCurrent();
 
     void handleShortcut(const QString &);
-
-    void showFileAttr();
 
     void showTips(const QString &tips, int iconIndex = 0);
 
@@ -147,7 +146,8 @@ private:
     bool m_bBlockShutdown = false;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
-    QPointer<DocSheet>  m_slideSheet = nullptr;
+
+    SlideWidget  *m_slideWidget = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

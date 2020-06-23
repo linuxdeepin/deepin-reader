@@ -4,6 +4,8 @@
 #include "pdfControl/DocSheetPDF.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+#include "widgets/PrintManager.h"
+#include "widgets/FileAttrWidget.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(parent)
@@ -13,37 +15,46 @@ DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
 
 DefaultOperationMenu::~DefaultOperationMenu()
 {
-    if (nullptr != m_pSearch)
-        delete m_pSearch;
-    if (nullptr != m_pBookMark)
-        delete m_pBookMark;
-    if (nullptr != m_pAddIconNote)
-        delete m_pAddIconNote;
-    if (nullptr != m_pFirstPage)
-        delete m_pFirstPage;
-    if (nullptr != m_pPrevPage)
-        delete m_pPrevPage;
-    if (nullptr != m_pNextPage)
-        delete m_pNextPage;
-    if (nullptr != m_pEndPage)
-        delete m_pEndPage;
+
+}
+
+void DefaultOperationMenu::initActions()
+{
+    m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
+    this->addSeparator();
+
+    m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
+    m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
+    this->addSeparator();
+
+    createAction(tr("Fullscreen"), SLOT(slotFullScreenClicked()));
+    createAction(tr("Slide show"), SLOT(slotSlideShowClicked()));
+    this->addSeparator();
+
+    m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
+    m_pPrevPage = createAction(tr("Previous page"), SLOT(slotPrevPageClicked()));
+    m_pNextPage = createAction(tr("Next page"), SLOT(slotNextPageClicked()));
+    m_pEndPage = createAction(tr("Last page"), SLOT(slotEndPageClicked()));
+    this->addSeparator();
+
+    createAction(tr("Rotate left"), SLOT(slotRotateLeftClicked()));
+    createAction(tr("Rotate right"), SLOT(slotRotateRightClicked()));
+    this->addSeparator();
+
+    createAction(tr("Print"), SLOT(slotPrintClicked()));
+    createAction(tr("Document info"), SLOT(slotDocInfoClicked()));
 }
 
 void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint, const int &nClickPage)
 {
     m_sheet = sheet;
-
     if (m_sheet.isNull())
         return;
 
     m_showPoint = showPoint;
-
     m_nRightPageNumber = nClickPage;
-
     QString sCurPath = m_sheet->filePath();
-
     QSet<int> pageList = m_sheet->getBookMarkList();
-
     bool bBookState = pageList.contains(m_nRightPageNumber);
 
     if (bBookState) {
@@ -92,42 +103,21 @@ void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint,
         }
 
         m_pSearch->setVisible(true);
-
         m_pAddIconNote->setVisible(true);
-
         this->exec(showPoint);
     }
 }
 
-void DefaultOperationMenu::initActions()
+void DefaultOperationMenu::setClickpoint(const QPoint &pt)
 {
-    m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
-
-    this->addSeparator();
-
-    m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
-
-    m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
-
-    this->addSeparator();
-
-    m_pFirstPage = createAction(tr("First page"), SLOT(slotFirstPageClicked()));
-
-    m_pPrevPage = createAction(tr("Previous page"), SLOT(slotPrevPageClicked()));
-
-    m_pNextPage = createAction(tr("Next page"), SLOT(slotNextPageClicked()));
-
-    m_pEndPage = createAction(tr("Last page"), SLOT(slotEndPageClicked()));
+    m_pointclicked = pt;
 }
 
 QAction *DefaultOperationMenu::createAction(const QString &name, const char *member)
 {
-    auto action = new QAction(name);
-
+    QAction *action = new QAction(name, this);
     connect(action, SIGNAL(triggered()), member);
-
     this->addAction(action);
-
     return action;
 }
 
@@ -170,11 +160,42 @@ void DefaultOperationMenu::slotAddIconNote()
 {
     if (m_sheet.isNull())
         return;
-
     QString sUuid = m_sheet->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
         int page = m_sheet->pointInWhichPage(m_pointclicked);
         m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
-
     }
+}
+
+void DefaultOperationMenu::slotFullScreenClicked()
+{
+
+}
+
+void DefaultOperationMenu::slotSlideShowClicked()
+{
+    m_sheet->openSlide();
+}
+
+void DefaultOperationMenu::slotRotateLeftClicked()
+{
+    m_sheet->rotateLeft();
+}
+
+void DefaultOperationMenu::slotRotateRightClicked()
+{
+    m_sheet->rotateRight();
+}
+
+void DefaultOperationMenu::slotPrintClicked()
+{
+    PrintManager p(m_sheet);
+    p.showPrintDialog(m_sheet);
+}
+
+void DefaultOperationMenu::slotDocInfoClicked()
+{
+    FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
+    pFileAttrWidget->setFileAttr(m_sheet);
+    pFileAttrWidget->showScreenCenter();
 }

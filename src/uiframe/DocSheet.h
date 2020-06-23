@@ -158,15 +158,10 @@ public:
 
     void closeSlide();
 
-    bool slideOpened();
-
-    void handleSlideKeyPressEvent(const QString &sKey);
-
 protected:
     DocOperation  m_operation;
     QSet<int>     m_bookmarks;
 
-    SlideWidget  *m_slideWidget = nullptr;
     SheetSidebar *m_sidebar = nullptr;
 
 signals:

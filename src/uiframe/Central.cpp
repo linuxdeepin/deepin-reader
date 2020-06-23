@@ -196,14 +196,8 @@ void Central::onMenuTriggered(const QString &action)
         m_docPage->saveCurrent();
     } else if (action == "Save as") {
         m_docPage->saveAsCurrent();
-    } else if (action == "Print") {
-        m_docPage->printCurrent();
-    } else if (action == "Slide show") { //  开启幻灯片
-        m_docPage->openSlide();
     } else if (action == "Magnifer") {   //  开启放大镜
         m_docPage->openMagnifer();
-    } else if (action == "Document info") {
-        m_docPage->showFileAttr();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
         m_docPage->openCurFileFolder();
     } else if (action == "Search") {

@@ -29,7 +29,6 @@
 #include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
-#include "widgets/SlideWidget.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -407,29 +406,12 @@ DocOperation DocSheet::operation()
 
 void DocSheet::openSlide()
 {
-    if (m_slideWidget == nullptr) {
-        m_slideWidget = new SlideWidget(this);
-    }
+
 }
 
 void DocSheet::closeSlide()
 {
-    if (m_slideWidget) {
-        m_slideWidget->close();
-        m_slideWidget = nullptr;
-    }
-}
 
-bool DocSheet::slideOpened()
-{
-    return m_slideWidget != nullptr;
-}
-
-void DocSheet::handleSlideKeyPressEvent(const QString &sKey)
-{
-    if (m_slideWidget) {
-        m_slideWidget->handleKeyPressEvent(sKey);
-    }
 }
 
 QSet<int> DocSheet::getBookMarkList() const

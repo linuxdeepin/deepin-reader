@@ -47,6 +47,7 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
                 a->setVisible(false);
             continue;
         }
+        a->setVisible(true);
         a->setDisabled(false);
     }
     m_handleMenu->setDisabled(false);
