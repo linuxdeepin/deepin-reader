@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -593,19 +591,35 @@
     </message>
     <message>
         <source>First page</source>
-        <translation type="vanished">第一页</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Previous page</source>
-        <translation type="vanished">前一页</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Next page</source>
-        <translation type="vanished">后一页</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Last page</source>
-        <translation type="vanished">最后一页</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>First Page</source>
+        <translation>第一页</translation>
+    </message>
+    <message>
+        <source>Previous Page</source>
+        <translation>前一页</translation>
+    </message>
+    <message>
+        <source>Next Page</source>
+        <translation>后一页</translation>
+    </message>
+    <message>
+        <source>Last Page</source>
+        <translation>最后一页</translation>
     </message>
 </context>
 <context>

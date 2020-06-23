@@ -155,7 +155,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    QAction *firstPageAction = new QAction("First Page", &menu);
+    QAction *firstPageAction = new QAction(tr("First Page"), &menu);
     connect(firstPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageFirst();
     });
@@ -164,7 +164,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         firstPageAction->setDisabled(true);
     }
 
-    QAction *previousPageAction = new QAction("Previous Page", &menu);
+    QAction *previousPageAction = new QAction(tr("Previous Page"), &menu);
     connect(previousPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPagePrev();
     });
@@ -173,7 +173,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         previousPageAction->setDisabled(true);
     }
 
-    QAction *nextPageAction = new QAction("Next Page", &menu);
+    QAction *nextPageAction = new QAction(tr("Next Page"), &menu);
     connect(nextPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageNext();
     });
@@ -182,7 +182,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         nextPageAction->setDisabled(true);
     }
 
-    QAction *lastPageAction = new QAction("Last Page", &menu);
+    QAction *lastPageAction = new QAction(tr("Last Page"), &menu);
     connect(lastPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageLast();
     });

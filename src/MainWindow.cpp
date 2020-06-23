@@ -97,7 +97,6 @@ void MainWindow::doOpenFile(const QString &filePath)
 
 void MainWindow::setSreenRect(const QRect &rect)
 {
-//    dApp->m_pAppInfo->setScreenRect(rect);
     dApp->m_pAppInfo->setScreenRect(rect);
 }
 

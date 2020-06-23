@@ -12,6 +12,8 @@
 #include "MainWindow.h"
 #include "djvuControl/RenderThreadDJVU.h"
 #include "pdfControl/docview/pdf/RenderThreadPdf.h"
+#include "DocSheet.h"
+#include "business/SaveDialog.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -43,9 +45,33 @@ void Application::setSreenRect(const QRect &rect)
 
 void Application::handleQuitAction()
 {
+    QList<DocSheet *> changedList;
+
+    foreach (auto sheet, DocSheet::g_map.values()) {
+        if (sheet->fileChanged())
+            changedList.append(sheet);
+    }
+
+    if (changedList.size() > 0) {   //需要提示保存
+        SaveDialog sd;
+
+        int nRes = sd.showDialog();
+
+        if (nRes <= 0) {
+            return;
+        }
+
+        if (nRes == 2) {
+            foreach (auto sheet, changedList) {
+                sheet->saveData();
+            }
+        }
+    }
+
     //线程退出
     RenderThreadDJVU::destroy();
     RenderThreadPdf::destroyRenderPdfThread();
+
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
 }
@@ -66,13 +92,9 @@ void Application::initChildren()
 {
     m_pDBService = new DBService(this);
     m_pAppInfo = new AppInfo(this);
-//    if (m_pAppCfg == nullptr) {
-//        m_pAppCfg = new AppConfig(this);
-//    }
 }
 
 void Application::initI18n()
 {
-    // install translators
     loadTranslator();
 }
