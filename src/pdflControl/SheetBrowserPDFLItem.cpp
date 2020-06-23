@@ -30,6 +30,7 @@
 #include "document/Model.h"
 #include "RenderThreadPDFL.h"
 #include "SheetBrowserPDFL.h"
+#include "SheetBrowserPDFLWord.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -105,7 +106,7 @@ void SheetBrowserPDFLItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
 }
 
-void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, bool renderLater)
+void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, int beginRenderY)
 {
     if (nullptr == m_page)
         return;
@@ -124,13 +125,57 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
     }
 
     if (!renderLater) {
-//        if (m_leftImage.isNull())
-//            m_leftImage = getImage(0.1, rotation);
-
         //之后替换为线程reader
         RenderThreadPDFL::clearTask(this);
-        RenderThreadPDFL::appendTask(this, m_scaleFactor, m_rotation);
+
+        QList<RenderTaskPDFL> tasks;
+
+        QRectF rect = boundingRect();
+
+        if (rect.height() > 2000) {
+
+            for (int i = 0 ; i * 400 < rect.height(); ++i) {
+                int height = 400;
+
+                if (rect.height() < i * 400)
+                    height = rect.height() - 400 * i;
+
+                QRect renderRect = QRect(0, 400 * i, boundingRect().width(), height);
+
+                RenderTaskPDFL task;
+                task.item = this;
+                task.scaleFactor = m_scaleFactor;
+                task.rotation = m_rotation;
+                task.renderRect = renderRect;
+                tasks.append(task);
+            }
+        } else {
+            QRect renderRect = QRect(boundingRect().x(), boundingRect().y(), boundingRect().width(), boundingRect().height());
+            RenderTaskPDFL task;
+            task.item = this;
+            task.scaleFactor = m_scaleFactor;
+            task.rotation = m_rotation;
+            task.renderRect = renderRect;
+            tasks.append(task);
+        }
+
+        RenderThreadPDFL::appendTasks(tasks);
         m_imageScaleFactor = m_scaleFactor;
+
+        //loadword
+        if (m_wordRotation != m_rotation) {
+            qDeleteAll(m_words);
+            m_words.clear();
+            QList<deepin_reader::Word> words = m_page->words(m_rotation);
+            for (int i = 0; i < words.count(); ++i) {
+                SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
+                m_words.append(word);
+            }
+            m_wordRotation = m_rotation;
+        }
+
+        foreach (SheetBrowserPDFLWord *word, m_words)
+            word->setScaleFactor(m_scaleFactor);
     }
 
     m_image = QImage();

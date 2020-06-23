@@ -39,7 +39,7 @@ class Page;
 }
 
 class SheetBrowserPDFL;
-class BookMarkButton;
+class SheetBrowserPDFLWord;
 class SheetBrowserPDFLItem : public QGraphicsItem
 {
 public:
@@ -57,7 +57,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    void render(double scale, Dr::Rotation rotation, bool renderLater = false);
+    void render(double scale, Dr::Rotation rotation, bool renderLater = false, int beginRenderY = 0);
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
@@ -95,6 +95,9 @@ private:
     Dr::Rotation m_rotation = Dr::RotateBy0;
     static QSet<SheetBrowserPDFLItem *> items;
     SheetBrowserPDFL *m_parent = nullptr;
+
+    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
+    QList<SheetBrowserPDFLWord *> m_words;
 };
 
 #endif // SHEETBROWSERPDFLITEM_H

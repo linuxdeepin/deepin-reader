@@ -41,6 +41,7 @@ struct RenderTaskPDFL {
     SheetBrowserPDFLItem *item = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
+    QRect renderRect;
 };
 
 class RenderThreadPDFL : public QThread
@@ -53,7 +54,9 @@ public:
 
     static void clearTask(SheetBrowserPDFLItem *item);
 
-    static void appendTask(SheetBrowserPDFLItem *item, double scaleFactor, Dr::Rotation rotation);
+    static void appendTasks(QList<RenderTaskPDFL> list);
+
+    static void appendTask(SheetBrowserPDFLItem *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
     static void destroy();
 
@@ -70,7 +73,6 @@ private:
     QStack<RenderTaskPDFL> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
-    bool m_quitRender = false;
     static RenderThreadPDFL *instance;
 };
 

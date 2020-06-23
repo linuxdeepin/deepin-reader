@@ -67,17 +67,26 @@ void RenderThreadPDFL::clearTask(SheetBrowserPDFLItem *item)
     instance->m_mutex.unlock();
 }
 
-void RenderThreadPDFL::appendTask(SheetBrowserPDFLItem *item, double scaleFactor, Dr::Rotation rotation)
+void RenderThreadPDFL::appendTasks(QList<RenderTaskPDFL> list)
 {
     if (nullptr == instance)
         instance = new RenderThreadPDFL;
 
-    if (instance->m_curTask.item == item && instance->m_curTask.scaleFactor == scaleFactor && instance->m_curTask.rotation == rotation)
-        return;
+    instance->m_mutex.lock();
 
-    if (instance->m_curTask.item == item && (instance->m_curTask.scaleFactor != scaleFactor || instance->m_curTask.rotation != rotation)) {
-        instance->m_quitRender = true;
-    }
+    for (int i = list.count() - 1; i >= 0; i--)
+        instance->m_tasks.append(list[i]);
+
+    instance->m_mutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
+void RenderThreadPDFL::appendTask(SheetBrowserPDFLItem *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
+{
+    if (nullptr == instance)
+        instance = new RenderThreadPDFL;
 
     instance->m_mutex.lock();
 
@@ -85,6 +94,7 @@ void RenderThreadPDFL::appendTask(SheetBrowserPDFLItem *item, double scaleFactor
     task.item = item;
     task.scaleFactor = scaleFactor;
     task.rotation = rotation;
+    task.renderRect = renderRect;
     instance->m_tasks.append(task);
 
     instance->m_mutex.unlock();
@@ -116,38 +126,10 @@ void RenderThreadPDFL::run()
 
         time.start();
 
-        QRectF rect = m_curTask.item->boundingRect();
-        if (rect.height() > 10000) {
-            int y = 0;
-            for (int i = 0 ; i * 400 < rect.height(); ++i) {
-                if (m_quitRender) {
-                    m_quitRender = false;
-                    break;
-                }
+        QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
-                int height = 400;
-                if (rect.height() < i * 400)
-                    height = rect.height() - 400 * i;
-
-                QRect renderRect = QRect(0, y, m_curTask.item->boundingRect().width(), height);
-
-                QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, renderRect);
-
-                y += height;
-
-                if (!image.isNull())
-                    emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, renderRect);
-            }
-        } else {
-            QRect renderRect(m_curTask.item->boundingRect().x(), m_curTask.item->boundingRect().y(), (int)m_curTask.item->boundingRect().width(), (int)m_curTask.item->boundingRect().height());
-
-            QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, renderRect);
-
-            qDebug() << time.elapsed() / 1000.0 << "s";
-
-            if (!image.isNull())
-                emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, image.rect());
-        }
+        if (!image.isNull())
+            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         m_curTask = RenderTaskPDFL();
     }
@@ -161,6 +143,7 @@ void RenderThreadPDFL::destroy()
 
 void RenderThreadPDFL::onTaskFinished(SheetBrowserPDFLItem *item, QImage image, double scaleFactor, int rotation, QRect rect)
 {
+    qDebug() << rect;
     if (SheetBrowserPDFLItem::existInstance(item))
         item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image, rect);
 }

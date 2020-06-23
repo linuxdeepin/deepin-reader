@@ -1,22 +1,19 @@
 #include "Application.h"
 
 #include <QIcon>
-#include <QTranslator>
 #include <QDebug>
 #include <QDir>
 
-//#include "pdfControl/AppConfig.h"
+#include "ModuleHeader.h"
 #include "app/AppInfo.h"
 #include "utils/Utils.h"
-#include "ModuleHeader.h"
-#include "MsgHeader.h"
 #include "MainWindow.h"
 #include "djvuControl/RenderThreadDJVU.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    initI18n();
+    loadTranslator();
     initCfgPath();
     initChildren();
 
@@ -67,8 +64,3 @@ void Application::initChildren()
     m_pAppInfo = new AppInfo(this);
 }
 
-void Application::initI18n()
-{
-    // install translators
-    loadTranslator();
-}

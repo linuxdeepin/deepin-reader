@@ -19,6 +19,7 @@ class Application : public DApplication
 
 public:
     Application(int &argc, char **argv);
+
     void setSreenRect(const QRect &rect);
 
 protected:
@@ -26,13 +27,13 @@ protected:
 
 public:
     DBService *m_pDBService = nullptr;
+
     AppInfo   *m_pAppInfo = nullptr;
-//    AppConfig *m_pAppCfg = nullptr;
 
 private:
     void initCfgPath();
+
     void initChildren();
-    void initI18n();
 };
 
 #endif  // APPLICATION_H_

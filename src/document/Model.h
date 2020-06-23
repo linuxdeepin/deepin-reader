@@ -44,7 +44,7 @@ struct Section {
 
 struct Word {
     QString text;
-    QRect rect;
+    QRectF boundingBox;
 };
 
 struct SearchResult {
@@ -101,6 +101,8 @@ public:
     virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
     virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation); }
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
+
+    virtual QList<Word> words(Dr::Rotation rotation)const {return QList<Word>();}
 };
 
 class Document: public QObject

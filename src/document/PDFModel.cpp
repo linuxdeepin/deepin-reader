@@ -454,13 +454,11 @@ QString PDFPage::text(const QRectF &rect) const
 {
     LOCK_PAGE
 
-    qDebug() << "text:" << rect;
     return m_page->text(rect).simplified();
 }
 
 QString PDFPage::cachedText(const QRectF &rect) const
 {
-    qDebug() << "cachedText:" << rect;
     TextBoxList textBoxes;
 
     if (!textCache()->object(this, textBoxes)) {
@@ -496,6 +494,48 @@ QString PDFPage::cachedText(const QRectF &rect) const
     }
 
     return text.simplified();
+}
+
+QList<Word> PDFPage::words(Dr::Rotation rotation) const
+{
+    Poppler::Page::Rotation rotate;
+
+    switch (rotation) {
+    default:
+    case Dr::RotateBy0:
+        rotate = Poppler::Page::Rotate0;
+        break;
+    case Dr::RotateBy90:
+        rotate = Poppler::Page::Rotate90;
+        break;
+    case Dr::RotateBy180:
+        rotate = Poppler::Page::Rotate180;
+        break;
+    case Dr::RotateBy270:
+        rotate = Poppler::Page::Rotate270;
+        break;
+    }
+
+//    TextBoxList textBoxes;
+
+//    foreach (Poppler::TextBox *textBox, m_page->textList()) {
+//        textBoxes.append(TextBox(textBox));
+//    }
+
+    QList<Word> words;
+    QList<Poppler::TextBox *> textBoxList = m_page->textList(rotate);
+    for (int i = 0; i < textBoxList.count(); ++i) {
+        Poppler::TextBox *box = textBoxList[i];
+        if (nullptr == box)
+            continue;
+
+        Word word;
+        word.text = box->text();
+        word.boundingBox = box->boundingBox();
+        words.append(word);
+    }
+
+    return words;
 }
 
 QList< QRectF > PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
@@ -947,6 +987,11 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath)
     if (Poppler::Document *document = Poppler::Document::load(filePath)) {
         document->setRenderHint(Poppler::Document::Antialiasing, true);
         document->setRenderHint(Poppler::Document::TextAntialiasing, true);
+//        document->setRenderHint(Poppler::Document::TextSlightHinting, true);
+//        document->setRenderHint(Poppler::Document::IgnorePaperColor, false);
+//        document->setRenderHint(Poppler::Document::OverprintPreview, true);
+//        document->setRenderHint(Poppler::Document::ThinLineSolid, true);
+//        document->setRenderHint(Poppler::Document::ThinLineShape, true);
 
 #if defined(HAS_POPPLER_18)
 

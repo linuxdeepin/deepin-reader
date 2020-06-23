@@ -64,6 +64,8 @@ public:
 
     QString cachedText(const QRectF &rect) const;
 
+    QList<Word> words(Dr::Rotation rotation)const;
+
     QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const;
 
     QList< Annotation * > annotations() const;
