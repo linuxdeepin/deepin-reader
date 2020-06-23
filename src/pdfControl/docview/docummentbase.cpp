@@ -13,7 +13,6 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 #include "pdf/RenderThreadPdf.h"
-//#include "pdf/RenderThreadPoolManagerPdf.h"
 
 static QMutex mutexlockloaddata;
 
@@ -713,6 +712,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (d->m_pages.size() < 1) {
         return;
     }
+    d->m_bMouseHandleVScroll = false;
 
     if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
@@ -868,13 +868,17 @@ void DocummentBase::slot_vScrollBarValueChanged(int)
 {
     Q_D(DocummentBase);
     if (!d->donotneedreloaddoc) {
-        calcCurPageViewPrecent();
         int pageno = currentPageNo();
-        if (d->m_currentpageno != pageno) {
+
+        if (d->m_bMouseHandleVScroll == true && d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
             emit signal_pageChange(d->m_currentpageno);
+            calcCurPageViewPrecent();
         }
+
         loadPages();
+
+        d->m_bMouseHandleVScroll = true;
     }
 }
 
@@ -1328,9 +1332,7 @@ void DocummentBase::findPrev()
                     scrollBar_X->setValue(xvalue);
             }
             d->m_cursearch--;
-        } /*else {
-            qDebug() << __FUNCTION__ << "first page";
-        }*/
+        }
     }
     d->bfindnext = false;
     d->m_pages.at(d->m_findcurpage)->update();
@@ -1376,11 +1378,9 @@ void DocummentBase::calcCurPageViewPrecent()
 void DocummentBase::showCurPageViewAfterScaleChanged()
 {
     Q_D(DocummentBase);
-    if (d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
+    if (d->m_viewmode == ViewMode_EM::ViewMode_SinglePage && d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
         this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
                                             static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
-//        if (d->m_currentpageno < d->m_pages.count())
-//            d->m_pages[d->m_currentpageno]->update();
     }
 }
 
@@ -1588,10 +1588,7 @@ bool DocummentBase::loadData()
             bfirst = false;
             emit signal_openResult(true);
         }
-//        QTime timedebuge;
-//        timedebuge.start();
         d->m_pages.at(i)->getInterFace()->loadData();
-//        qInfo() << "    load one page time is  " << timedebuge.elapsed() / 1000.0 << "s"; //输出计时
     }
     return true;
 }
