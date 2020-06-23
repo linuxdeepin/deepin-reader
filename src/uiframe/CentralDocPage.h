@@ -98,6 +98,8 @@ public:
 
     void UnBlockShutdown();
 
+    void handleSearch();
+
 public slots:
     void onOpened(DocSheet *, bool);
 

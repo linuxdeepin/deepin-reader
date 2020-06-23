@@ -712,6 +712,12 @@ void CentralDocPage::quitSlide()
     }
 }
 
+void CentralDocPage::handleSearch()
+{
+    DocSheet *docSheet = getCurSheet();
+    if (docSheet) docSheet->handleSearch();
+}
+
 void CentralDocPage::openFullScreen()
 {
     DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());

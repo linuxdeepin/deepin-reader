@@ -3,6 +3,7 @@ HEADERS += \
     $$PWD/BookMarkButton.h \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
+    $$PWD/HandleMenu.h \
     $$PWD/ScaleMenu.h \
     $$PWD/SlidePlayWidget.h \
     $$PWD/SlideWidget.h \
@@ -23,6 +24,7 @@ SOURCES += \
     $$PWD/BookMarkButton.cpp \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
+    $$PWD/HandleMenu.cpp \
     $$PWD/ScaleMenu.cpp \
     $$PWD/SlidePlayWidget.cpp \
     $$PWD/SlideWidget.cpp \

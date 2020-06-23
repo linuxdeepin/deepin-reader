@@ -25,6 +25,7 @@
 
 class QSignalMapper;
 class DocSheet;
+class HandleMenu;
 class TitleMenu : public CustomMenu
 {
     Q_OBJECT
@@ -38,7 +39,6 @@ signals:
 
 public slots:
     void onCurSheetChanged(DocSheet *);
-
     void onCurSheetSaved(DocSheet *);
 
 public:
@@ -51,10 +51,11 @@ protected:
     void initActions() override;
 
 private:
-    void __CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
+    void createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
+    QAction *createAction(const QString &actionName, const QString &);
 
-    QAction *__CreateAction(const QString &actionName, const QString &);
-
+private:
+    HandleMenu *m_handleMenu;
 };
 
 

@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "TitleMenu.h"
+#include "widgets/HandleMenu.h"
 
 #include <QSignalMapper>
 #include "DocSheet.h"
@@ -37,17 +38,19 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
         return;
     }
 
-    auto actions = this->findChildren<QAction *>();
+    const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (sheet->type() == Dr::DjVu && a->text() == tr("Save")) {
-            a->setDisabled(true);
+        if (sheet->type() == Dr::DjVu) {
+            if (a->objectName() == "Save")
+                a->setDisabled(true);
+            else if (a->objectName() == "Search")
+                a->setVisible(false);
             continue;
         }
-
         a->setDisabled(false);
-
     }
-
+    m_handleMenu->setDisabled(false);
+    m_handleMenu->readCurDocParam(sheet);
     disableSaveButton(!sheet->fileChanged());
 }
 
@@ -58,7 +61,7 @@ void TitleMenu::onCurSheetSaved(DocSheet *sheet)
         return;
     }
 
-    auto actions = this->findChildren<QAction *>();
+    const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         a->setDisabled(false);
     }
@@ -69,17 +72,18 @@ void TitleMenu::onCurSheetSaved(DocSheet *sheet)
 void TitleMenu::disableAllAction()
 {
     QStringList actiontextlist;
-    actiontextlist << "Save" << "Save as" << "Print" << "Slide show" << "Magnifer" << "Document info" << "Display in file manager";
-    auto actions = this->findChildren<QAction *>();
+    actiontextlist << "Save" << "Save as" << "Display in file manager" << "Magnifer" << "Search";
+    const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (actiontextlist.indexOf(a->objectName()) != -1)
             a->setDisabled(true);
     }
+    m_handleMenu->setDisabled(true);
 }
 
 void TitleMenu::disableSaveButton(bool disable)
 {
-    auto actions = this->findChildren<QAction *>();
+    const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (a->text() == tr("Save")) {
             a->setDisabled(disable);
@@ -95,42 +99,52 @@ void TitleMenu::initActions()
 
     QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
     QStringList firstActionObjList = QStringList() << "New window" << "New tab";
-    __CreateActionMap(pSigManager, firstActionList, firstActionObjList);
+    createActionMap(pSigManager, firstActionList, firstActionObjList);
+    this->addSeparator();
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         a->setDisabled(false);
     }
 
-    QStringList secondActionList = QStringList() << tr("Save") << tr("Save as") << tr("Print") << tr("Slide show");
-    QStringList secondActionObjList = QStringList() << "Save" << "Save as" << "Print" << "Slide show";
-    __CreateActionMap(pSigManager, secondActionList, secondActionObjList);
+    QStringList secondActionList = QStringList() << tr("Save") << tr("Save as");
+    QStringList secondActionObjList = QStringList() << "Save" << "Save as";
+    createActionMap(pSigManager, secondActionList, secondActionObjList);
+    this->addSeparator();
 
-    QStringList thirdActionList = QStringList() << tr("Magnifer") << tr("Document info") << tr("Display in file manager");
-    QStringList thirdActionObjList = QStringList() << "Magnifer" << "Document info" << "Display in file manager";
-    __CreateActionMap(pSigManager, thirdActionList, thirdActionObjList);
+    QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
+    QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
+    createActionMap(pSigManager, thirdActionList, thirdActionObjList);
+
+    m_handleMenu = new HandleMenu(this);
+    m_handleMenu->setDisabled(true);
+    m_handleMenu->setTitle(tr("Select Tool"));
+    this->addMenu(m_handleMenu);
+
+    QStringList fourActionList = QStringList() << tr("Search");
+    QStringList fourActionObjList = QStringList() << "Search";
+    createActionMap(pSigManager, fourActionList, fourActionObjList);
+    this->addSeparator();
 }
 
-void TitleMenu::__CreateActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList)
+void TitleMenu::createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList)
 {
     int nFirstSize = actionList.size();
     for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
         QString sActionName = actionList.at(iLoop);
         QString sObjName = actionObjList.at(iLoop);
 
-        QAction *_action = __CreateAction(sActionName, sObjName);
+        QAction *_action = createAction(sActionName, sObjName);
         connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
         pSigManager->setMapping(_action, sObjName);
     }
-    this->addSeparator();
 }
 
-QAction *TitleMenu::__CreateAction(const QString &actionName, const QString &objName)
+QAction *TitleMenu::createAction(const QString &actionName, const QString &objName)
 {
     QAction *action = new QAction(actionName, this);
     action->setObjectName(objName);
     action->setDisabled(true);
     this->addAction(action);
-
     return action;
 }

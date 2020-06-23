@@ -206,6 +206,8 @@ void Central::onMenuTriggered(const QString &action)
         m_docPage->showFileAttr();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
         m_docPage->openCurFileFolder();
+    } else if (action == "Search") {
+        m_docPage->handleSearch();
     }
 }
 
