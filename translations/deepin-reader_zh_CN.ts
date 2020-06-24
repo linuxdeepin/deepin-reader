@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -588,22 +590,6 @@
     <message>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
-    </message>
-    <message>
-        <source>First page</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous page</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Last page</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>First Page</source>
