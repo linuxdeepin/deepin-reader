@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
+#include <QTime>
 
 QSet<SheetBrowserPDFLItem *> SheetBrowserPDFLItem::items;
 SheetBrowserPDFLItem::SheetBrowserPDFLItem(SheetBrowserPDFL *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -166,7 +167,9 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
         if (m_wordRotation != m_rotation) {
             qDeleteAll(m_words);
             m_words.clear();
+
             QList<deepin_reader::Word> words = m_page->words(m_rotation);
+
             for (int i = 0; i < words.count(); ++i) {
                 SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
                 m_words.append(word);

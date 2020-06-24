@@ -414,6 +414,15 @@ void DocSheet::closeSlide()
 
 }
 
+void DocSheet::openFullScreen()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->openFullScreen();
+}
+
 QSet<int> DocSheet::getBookMarkList() const
 {
     return m_bookmarks;

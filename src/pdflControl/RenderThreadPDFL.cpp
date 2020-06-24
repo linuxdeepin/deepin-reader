@@ -122,10 +122,6 @@ void RenderThreadPDFL::run()
         if (!SheetBrowserPDFLItem::existInstance(m_curTask.item))
             continue;
 
-        QTime time;
-
-        time.start();
-
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         if (!image.isNull())

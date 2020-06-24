@@ -516,12 +516,6 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
         break;
     }
 
-//    TextBoxList textBoxes;
-
-//    foreach (Poppler::TextBox *textBox, m_page->textList()) {
-//        textBoxes.append(TextBox(textBox));
-//    }
-
     QList<Word> words;
     QList<Poppler::TextBox *> textBoxList = m_page->textList(rotate);
     for (int i = 0; i < textBoxList.count(); ++i) {
@@ -529,10 +523,12 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
         if (nullptr == box)
             continue;
 
-        Word word;
-        word.text = box->text();
-        word.boundingBox = box->boundingBox();
-        words.append(word);
+        for (int i = 0; i < box->text().count(); ++i) {
+            Word word;
+            word.text = box->text().at(i);
+            word.boundingBox = box->charBoundingBox(i);
+            words.append(word);
+        }
     }
 
     return words;

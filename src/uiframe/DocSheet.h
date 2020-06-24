@@ -158,6 +158,12 @@ public:
 
     void closeSlide();
 
+    bool slideOpened();
+
+    void openFullScreen();
+
+    void handleSlideKeyPressEvent(const QString &sKey);
+
 protected:
     DocOperation  m_operation;
     QSet<int>     m_bookmarks;
