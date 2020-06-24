@@ -8,9 +8,15 @@ TEMPLATE = app
 
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += poppler-qt5 ddjvuapi dtkwidget
+PKGCONFIG += ddjvuapi dtkwidget
 
 INCLUDEPATH += $$PWD/uiframe
+INCLUDEPATH += $$PWD/../3rdparty/include
+
+LIBS += -L"$$PWD/../3rdparty/lib" -ldpoppler-qt -ldpoppler
+!system(cd $$PWD/../3rdparty/output && cmake $$PWD/../3rdparty/poppler-0.89.0 && make){
+    error("Build dpoppler library failed.")
+}
 
 include (app/app.pri)
 include (pdfControl/pdfControl.pri)
@@ -67,3 +73,10 @@ CONFIG(release, debug|release) {
     dtk_translations.files = $$PWD/../translations/*.qm
     INSTALLS += dtk_translations
 }
+
+unix{
+    d_poppler.path = /usr/lib
+    d_poppler.files = $$PWD/../3rdparty/lib/*.so*
+    INSTALLS += d_poppler
+}
+
