@@ -79,6 +79,8 @@ public:
 
     void needBookmark(int index, bool state);
 
+    void popMenu(const QPoint &);
+
 signals:
     void sigPageChanged(int page);
 
@@ -103,7 +105,11 @@ protected:
 
     void resizeEvent(QResizeEvent *event) override;
 
+    void mousePressEvent(QMouseEvent *event);
+
     void mouseMoveEvent(QMouseEvent *event);
+
+    void mouseReleaseEvent(QMouseEvent *event);
 
     void dragEnterEvent(QDragEnterEvent *event);
 
@@ -114,7 +120,7 @@ protected:
 private slots:
     void onVerticalScrollBarValueChanged(int value);
 
-    void onCustomContextMenuRequested(const QPoint &);
+
 
 private:
     deepin_reader::Document *m_document = nullptr;
@@ -126,6 +132,7 @@ private:
     int m_initPage = 1;         //用于刚显示跳转的页数
     QLabel *m_magnifierLabel = nullptr;
     DocSheetPDFL *m_sheet = nullptr;
+    QPointF m_selectPressedPos;        //scene
 };
 
 #endif // SHEETBROWSERPDFL_H

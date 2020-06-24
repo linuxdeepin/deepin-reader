@@ -18,6 +18,10 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
+//    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+
+//    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 private:
     deepin_reader::Word m_word;
 

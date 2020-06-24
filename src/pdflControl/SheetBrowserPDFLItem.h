@@ -76,8 +76,6 @@ public:
     int itemIndex();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
     bool sceneEvent(QEvent *event) override;
 
 signals:
@@ -98,6 +96,7 @@ private:
 
     Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
     QList<SheetBrowserPDFLWord *> m_words;
+    QPointF m_posPressed;
 };
 
 #endif // SHEETBROWSERPDFLITEM_H

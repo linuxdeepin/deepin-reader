@@ -30,6 +30,7 @@
 #include "document/PDFModel.h"
 #include "SheetBrowserPDFLItem.h"
 #include "DocSheetPDFL.h"
+#include "SheetBrowserPDFLWord.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -55,8 +56,6 @@ SheetBrowserPDFL::SheetBrowserPDFL(DocSheetPDFL *parent) : DGraphicsView(parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
-
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
 }
 
 SheetBrowserPDFL::~SheetBrowserPDFL()
@@ -118,7 +117,7 @@ void SheetBrowserPDFL::loadMouseShape(DocOperation &operation)
         setDragMode(QGraphicsView::ScrollHandDrag);
     } else if (Dr::MouseShapeNormal == operation.mouseShape) {
         operation.mouseShape = Dr::MouseShapeNormal;
-        setDragMode(QGraphicsView::NoDrag);
+        setDragMode(QGraphicsView::RubberBandDrag);
     }
 }
 
@@ -134,7 +133,7 @@ void SheetBrowserPDFL::onVerticalScrollBarValueChanged(int)
     emit sigPageChanged(currentPage());
 }
 
-void SheetBrowserPDFL::onCustomContextMenuRequested(const QPoint &point)
+void SheetBrowserPDFL::popMenu(const QPoint &point)
 {
     closeMagnifier();
 
@@ -322,6 +321,20 @@ void SheetBrowserPDFL::resizeEvent(QResizeEvent *event)
     QGraphicsView::resizeEvent(event);
 }
 
+void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
+{
+    Qt::MouseButton btn = event->button();
+    if (btn == Qt::LeftButton) {
+        scene()->setSelectionArea(QPainterPath());
+        m_selectPressedPos = mapToScene(event->pos());
+    } else if (btn == Qt::RightButton) {
+        popMenu(event->pos());
+        m_selectPressedPos = QPointF();
+    }
+
+    DGraphicsView::mousePressEvent(event);
+}
+
 void SheetBrowserPDFL::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_magnifierLabel) {
@@ -371,10 +384,92 @@ void SheetBrowserPDFL::mouseMoveEvent(QMouseEvent *event)
         m_magnifierLabel->setPixmap(pix);
         m_magnifierLabel->move(QPoint(mousePos.x() - 122, mousePos.y() - 122));
 
+    } else {
+        if (m_selectPressedPos.isNull()) {
+            QGraphicsItem *item = itemAt(event->pos());
+            if (item != nullptr) {
+                if (!item->isPanel())
+                    setCursor(QCursor(Qt::IBeamCursor));
+                else
+                    setCursor(QCursor(Qt::ArrowCursor));
+            }
+        } else {
+            QPointF beginPos = m_selectPressedPos;
+            QPointF endPos = mapToScene(event->pos());
+
+            //开始的word
+            QList<QGraphicsItem *> beginItemList = scene()->items(beginPos);
+            SheetBrowserPDFLWord *beginWord = nullptr;
+            foreach (QGraphicsItem *item, beginItemList) {
+                if (!item->isPanel()) {
+                    beginWord = qgraphicsitem_cast<SheetBrowserPDFLWord *>(item);
+                    break;
+                }
+            }
+
+            //结束的word
+            QList<QGraphicsItem *> endItemList = scene()->items(endPos);
+            SheetBrowserPDFLWord *endWord = nullptr;
+            foreach (QGraphicsItem *item, endItemList) {
+                if (!item->isPanel()) {
+                    endWord = qgraphicsitem_cast<SheetBrowserPDFLWord *>(item);
+                    break;
+                }
+            }
+
+            QList<QGraphicsItem *> words;               //应该只存这几页的words 暂时等于所有的
+            words = scene()->items(sceneRect());        //倒序
+
+            if (endWord == nullptr) {
+                if (endPos.y() > beginPos.y()) {
+                    for (int i = 0; i < words.size(); ++i) {//从后向前检索
+                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() < endPos.y()) {
+                            endWord = qgraphicsitem_cast<SheetBrowserPDFLWord *>(words[i]);
+                            break;
+                        }
+                    }
+                } else {
+                    for (int i = words.size() - 1; i >= 0; i--) {
+                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() > endPos.y()) {
+                            endWord = qgraphicsitem_cast<SheetBrowserPDFLWord *>(words[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //先考虑字到字的
+            if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
+                scene()->setSelectionArea(QPainterPath());
+                bool between = false;
+                for (int i = words.size() - 1; i >= 0; i--) {
+                    if (words[i]->isPanel())
+                        continue;
+
+                    if (qgraphicsitem_cast<SheetBrowserPDFLWord *>(words[i]) == beginWord || qgraphicsitem_cast<SheetBrowserPDFLWord *>(words[i]) == endWord) {
+                        if (between) {
+                            words[i]->setSelected(true);
+                            break;
+                        } else
+                            between = true;
+                    }
+
+                    if (between)
+                        words[i]->setSelected(true);
+                }
+            }
+        }
     }
 
     QGraphicsView::mouseMoveEvent(event);
+}
 
+void SheetBrowserPDFL::mouseReleaseEvent(QMouseEvent *event)
+{
+    Qt::MouseButton btn = event->button();
+    if (btn == Qt::LeftButton) {
+        m_selectPressedPos = QPointF();
+    }
 }
 
 int SheetBrowserPDFL::allPages()
@@ -452,7 +547,7 @@ void SheetBrowserPDFL::openMagnifier()
         m_magnifierLabel->setAttribute(Qt::WA_TranslucentBackground);
         m_magnifierLabel->resize(244, 244);
         m_magnifierLabel->show();
-        setDragMode(QGraphicsView::NoDrag);
+        setDragMode(QGraphicsView::RubberBandDrag);
         setMouseTracking(true);
         setCursor(QCursor(Qt::BlankCursor));
     }
@@ -470,7 +565,7 @@ void SheetBrowserPDFL::closeMagnifier()
         if (Dr::MouseShapeHand == m_sheet->operation().mouseShape) {
             setDragMode(QGraphicsView::ScrollHandDrag);
         } else if (Dr::MouseShapeNormal == m_sheet->operation().mouseShape) {
-            setDragMode(QGraphicsView::NoDrag);
+            setDragMode(QGraphicsView::RubberBandDrag);
         }
     }
 }

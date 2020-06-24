@@ -44,6 +44,7 @@ SheetBrowserPDFLItem::SheetBrowserPDFLItem(SheetBrowserPDFL *parent, deepin_read
 {
     items.insert(this);
     setAcceptHoverEvents(true);
+    setFlag(QGraphicsItem::ItemIsPanel);
 }
 
 SheetBrowserPDFLItem::~SheetBrowserPDFLItem()
@@ -240,25 +241,6 @@ int SheetBrowserPDFLItem::itemIndex()
     return m_index;
 }
 
-void SheetBrowserPDFLItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    if (bookmarkMouseRect().contains(event->pos())) {
-        m_bookmarkState = 2;
-        if (nullptr != m_parent) {
-            m_parent->needBookmark(m_index, !m_bookmark);
-            if (!m_bookmark && bookmarkMouseRect().contains(event->pos()))
-                m_bookmarkState = 1;
-            else if (m_bookmark)
-                m_bookmarkState = 3;
-            else
-                m_bookmarkState = 0;
-        }
-        update();
-    }
-
-    QGraphicsItem::mousePressEvent(event);
-}
-
 bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
@@ -269,8 +251,28 @@ bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)
             m_bookmarkState = 3;
         else
             m_bookmarkState = 0;
-
         update();
+    } else if (event->type() == QEvent::GraphicsSceneMousePress) {
+        QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent *>(event);
+        m_posPressed = QPoint();
+        if (bookmarkMouseRect().contains(event->pos())) {
+            m_bookmarkState = 2;
+            if (nullptr != m_parent) {
+                m_parent->needBookmark(m_index, !m_bookmark);
+                if (!m_bookmark && bookmarkMouseRect().contains(event->pos()))
+                    m_bookmarkState = 1;
+                else if (m_bookmark)
+                    m_bookmarkState = 3;
+                else
+                    m_bookmarkState = 0;
+            }
+            update();
+        } else {
+            m_posPressed = event->pos();
+        }
+    } else if (event->type() == QEvent::GraphicsSceneMouseRelease) {
+        m_posPressed = QPoint();
     }
+
     return QGraphicsItem::sceneEvent(event);
 }
