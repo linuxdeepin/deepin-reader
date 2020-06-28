@@ -103,6 +103,10 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
 
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
+
+    //35159 【sp2】【文档查看器】【5.6.11】文档中滚动条右侧和底部被截断一部分 理论上应该由dtk改,目前先这用此方法改
+    verticalScrollBar()->setStyleSheet("margin-bottom:4px;");
+    horizontalScrollBar()->setStyleSheet("margin-right:4px;");
 }
 
 DocummentBase::~DocummentBase()
