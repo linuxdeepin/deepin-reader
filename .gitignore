@@ -19,6 +19,9 @@
 
 *.dylib
 
+3rdparty/output/*
+
+3rdparty/lib/*
 
 
 # Qt-es
