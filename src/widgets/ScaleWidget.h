@@ -21,6 +21,8 @@ public:
 
     void paintEvent(QPaintEvent *event) override;
 
+    void setSizeScale(double &);
+
 protected:
     void initWidget();
 

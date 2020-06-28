@@ -126,6 +126,8 @@ public:
     int  currentState();
 
     void stopSearch() override;
+signals:
+    void sigScaleChanged(double);
 
 private slots:
     void onFileOpenResult(const QString &, const bool &);

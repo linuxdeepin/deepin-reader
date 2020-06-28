@@ -586,5 +586,6 @@ void DocSheetPDF::onBrowserSizeChanged(double scaleFactor)
 {
     if (m_operation.scaleMode != Dr::ScaleFactorMode) {
         m_browser->setScale(scaleFactor * 100);
+        emit sigScaleChanged(scaleFactor * 100);
     }
 }

@@ -49,6 +49,8 @@ public:
 
     void setControlEnabled(const bool &enable);
 
+    void setSizeScale(double &);
+
 protected:
     void initWidget() override;
 

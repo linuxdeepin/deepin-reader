@@ -118,6 +118,7 @@ signals:
 
     void sigFindOperation(const int &);
 
+    void sigScaleChanged(double);
 signals:
     void sigRemoveFileTab(const QString &);
 
