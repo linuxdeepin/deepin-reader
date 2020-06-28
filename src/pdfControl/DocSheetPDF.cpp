@@ -289,6 +289,13 @@ int DocSheetPDF::currentState()
     return m_currentState;
 }
 
+void DocSheetPDF::stopSearch()
+{
+    if (!m_pFindWidget)
+        return;
+    m_pFindWidget->stopSearch();
+}
+
 void DocSheetPDF::onFileOpenResult(const QString &, const bool &res)
 {
     if (res) {
@@ -383,6 +390,7 @@ bool DocSheetPDF::saveData()
 
 bool DocSheetPDF::saveAsData(QString filePath)
 {
+    stopSearch();
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
     return m_browser->saveAsData(filePath);
 }

@@ -66,6 +66,11 @@ void FindWidget::setSearchEditFocus()
     m_pSearchEdit->lineEdit()->setFocus();
 }
 
+void FindWidget::stopSearch()
+{
+    findCancel();
+}
+
 void FindWidget::findCancel()
 {
     m_pSearchEdit->setText("");

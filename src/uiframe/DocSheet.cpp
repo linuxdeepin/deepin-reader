@@ -286,6 +286,11 @@ void DocSheet::handleSearch()
     qDebug() << "unrealized";
 }
 
+void DocSheet::stopSearch()
+{
+
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);

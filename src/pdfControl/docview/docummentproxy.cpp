@@ -231,6 +231,8 @@ bool DocummentProxy::save(const QString &filepath)
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
+    clearsearch();
+
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
         return m_documment->freshFile(filepath);
     }

@@ -125,6 +125,8 @@ public:
 
     int  currentState();
 
+    void stopSearch() override;
+
 private slots:
     void onFileOpenResult(const QString &, const bool &);
 

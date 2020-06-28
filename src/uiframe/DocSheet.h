@@ -112,6 +112,8 @@ public:
 
     virtual void handleSearch();
 
+    virtual void stopSearch();
+
     virtual void copySelectedText();                    //复制选中文字
 
     virtual void highlightSelectedText();                   //高亮选中文字

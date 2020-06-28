@@ -48,6 +48,7 @@ signals:
 public:
     void showPosition(const int &);
     void setSearchEditFocus();
+    void stopSearch();
 
 private slots:
     void findCancel();
