@@ -384,6 +384,7 @@ bool DocSheetPDF::fileChanged()
 
 bool DocSheetPDF::saveData()
 {
+    stopSearch();
     Database::instance()->saveBookmarks(filePath(), m_bookmarks);
     return m_browser->saveData();
 }
