@@ -33,6 +33,8 @@
 #include "SheetBrowserPDFLWord.h"
 #include "SheetBrowserPDFLAnnotation.h"
 #include "widgets/TipsWidget.h"
+#include "pdfControl/menu/DefaultOperationMenu.h"
+#include "pdfControl/menu/TextOperationMenu.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -379,11 +381,13 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
             m_selectPressedPos = mapToScene(event->pos());
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
-            if (!selectedWords().isEmpty()) {
+            const QString &selectWords = selectedWords();
+            if (!selectWords.isEmpty()) {
                 //选择文字
-                //...
-
-
+                TextOperationMenu textOperaMenu;
+                textOperaMenu.setClickPoint(event->pos());
+                textOperaMenu.setType(NOTE_HIGHLIGHT);
+                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
             } else {
                 QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
 
@@ -406,17 +410,18 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
 
                 if (nullptr != annotation) {
                     //注释
-                    //...
+                    TextOperationMenu textOperaMenu;
+                    textOperaMenu.setClickPoint(event->pos());
+                    textOperaMenu.setType(NOTE_ICON);
+                    textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
 
                 } else if (nullptr != item) {
                     //默认
-                    //...
-
                     int index = item->itemIndex();
-                    popMenu(event->pos());
+                    DefaultOperationMenu defaultMenu;
+                    defaultMenu.setClickpoint(event->pos());
+                    defaultMenu.execMenu(m_sheet, mapToGlobal(event->pos()), index);
                 }
-
-
             }
         }
     } else if (QGraphicsView::ScrollHandDrag == dragMode()) {

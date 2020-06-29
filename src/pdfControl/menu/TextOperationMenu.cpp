@@ -46,9 +46,7 @@ void TextOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const
         m_pRemoveHighLight->setText(tr("Remove highlight"));
         insertAction(m_pRemoveHighLight, m_pColorWidgetAction);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(slotSetHighLight(const int &)));
-        if (m_pRemoveHighLight) {
-            m_pRemoveHighLight->setEnabled(bHigh);
-        }
+        m_pRemoveHighLight->setEnabled(bHigh);
         if (m_bSeparator) {
             m_pSeparator = this->insertSeparator(m_pAddNote);
 

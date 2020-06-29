@@ -4,7 +4,7 @@
 #include "widgets/CustomMenu.h"
 #include <QPointer>
 
-class DocSheetPDF;
+class DocSheet;
 class DefaultOperationMenu : public CustomMenu
 {
     Q_OBJECT
@@ -15,7 +15,7 @@ public:
     ~DefaultOperationMenu() override;
 
 public:
-    void execMenu(DocSheetPDF *sheet, const QPoint &, const int &);
+    void execMenu(DocSheet *sheet, const QPoint &, const int &);
     void setClickpoint(const QPoint &pt);
 
 protected:
@@ -56,9 +56,8 @@ private:
     QAction *m_pEndPage     = nullptr;
 
     QPoint m_pointclicked;
-    QPoint m_showPoint;
 
-    QPointer<DocSheetPDF> m_sheet;
+    QPointer<DocSheet> m_sheet;
 };
 
 #endif // DEFAULTOPERATIONMENU_H

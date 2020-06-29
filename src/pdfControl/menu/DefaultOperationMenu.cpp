@@ -45,14 +45,13 @@ void DefaultOperationMenu::initActions()
     createAction(tr("Document info"), SLOT(slotDocInfoClicked()));
 }
 
-void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint, const int &nClickPage)
+void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, const int &clickIndex)
 {
     m_sheet = sheet;
     if (m_sheet.isNull())
         return;
 
-    m_showPoint = showPoint;
-    m_nRightPageNumber = nClickPage;
+    m_nRightPageNumber = clickIndex;
     QString sCurPath = m_sheet->filePath();
     QSet<int> pageList = m_sheet->getBookMarkList();
     bool bBookState = pageList.contains(m_nRightPageNumber);
@@ -90,7 +89,7 @@ void DefaultOperationMenu::execMenu(DocSheetPDF *sheet, const QPoint &showPoint,
             m_pPrevPage->setEnabled(false);
         } else {
             pageSum--;
-            if ((!m_sheet->isDoubleShow()) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
+            if ((m_sheet->operation().layoutMode == Dr::LayoutMode::SinglePageMode) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
                 m_pNextPage->setEnabled(false);
                 m_pEndPage->setEnabled(false);
             }
@@ -162,8 +161,8 @@ void DefaultOperationMenu::slotAddIconNote()
         return;
     QString sUuid = m_sheet->addIconAnnotation(m_pointclicked);        //  添加注释图标成功
     if (sUuid != "") {
-        int page = m_sheet->pointInWhichPage(m_pointclicked);
-        m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
+        //int page = m_sheet->pointInWhichPage(m_pointclicked);
+        //m_sheet->showNoteWidget(page, sUuid, NOTE_ICON);
     }
 }
 
