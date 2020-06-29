@@ -5,14 +5,6 @@
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
-* Central(NaviPage ViewPage)
-*
-* CentralNavPage(openfile)
-*
-* CentralDocPage(DocTabbar DocSheets)
-*
-* DocSheet(SheetSidebar SheetBrowser document)
-*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
@@ -52,7 +44,13 @@ public:
 
     ~RenderThreadPDFL();
 
+    static void clearVipTask(SheetBrowserPDFLItem *item);
+
     static void clearTask(SheetBrowserPDFLItem *item);
+
+    static void appendVipTask(RenderTaskPDFL task);
+
+    static void appendTask(RenderTaskPDFL task);
 
     static void appendTasks(QList<RenderTaskPDFL> list);
 
@@ -71,6 +69,7 @@ private slots:
 private:
     RenderTaskPDFL m_curTask;
     QStack<RenderTaskPDFL> m_tasks;
+    QStack<RenderTaskPDFL> m_vipTasks;
     QMutex m_mutex;
     bool m_quit = false;
     static RenderThreadPDFL *instance;

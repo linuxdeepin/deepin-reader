@@ -541,6 +541,7 @@ bool PagePdf::annotationClicked(const QPoint &pos, QString &strtext, QString &st
             }
         }
     }
+
     qDeleteAll(listannote);
     return  ret;
 }

@@ -31,6 +31,7 @@
 #include "RenderThreadPDFL.h"
 #include "SheetBrowserPDFL.h"
 #include "SheetBrowserPDFLWord.h"
+#include "SheetBrowserPDFLAnnotation.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -62,11 +63,11 @@ QRectF SheetBrowserPDFLItem::boundingRect() const
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, static_cast<double>(m_page->size().height() * m_scaleFactor), static_cast<double>(m_page->size().width() * m_scaleFactor));
+        return QRectF(0, 0, static_cast<double>(m_page->sizeF().height() * m_scaleFactor), static_cast<double>(m_page->sizeF().width() * m_scaleFactor));
     default: break;
     }
 
-    return QRectF(0, 0, static_cast<double>(m_page->size().width() * m_scaleFactor), static_cast<double>(m_page->size().height() * m_scaleFactor));
+    return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
 }
 
 QRectF SheetBrowserPDFLItem::bookmarkRect()
@@ -93,6 +94,7 @@ void SheetBrowserPDFLItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
 {
     if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
         render(m_scaleFactor, m_rotation, false);
+        renderViewPort();
     }
 
     if (m_image.isNull())
@@ -108,7 +110,35 @@ void SheetBrowserPDFLItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
 }
 
-void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, int beginRenderY)
+void SheetBrowserPDFLItem::renderViewPort()
+{
+    if (nullptr == m_parent)
+        return;
+
+    QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
+
+    QRectF visibleSceneRect = m_parent->mapToScene(viewPortRect).boundingRect();
+
+    QRectF viewRenderRectF = mapFromScene(visibleSceneRect).boundingRect();
+
+    QRect viewRenderRect = QRect(viewRenderRectF.x(), viewRenderRectF.y(), viewRenderRectF.width(), viewRenderRectF.height());
+
+    RenderTaskPDFL task;
+
+    task.item = this;
+
+    task.scaleFactor = m_scaleFactor;
+
+    task.rotation = m_rotation;
+
+    task.renderRect = viewRenderRect;
+
+    RenderThreadPDFL::clearVipTask(this);
+
+    RenderThreadPDFL::appendVipTask(task);
+}
+
+void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, bool renderLater)
 {
     if (nullptr == m_page)
         return;
@@ -135,7 +165,6 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
         QRectF rect = boundingRect();
 
         if (rect.height() > 2000) {
-
             for (int i = 0 ; i * 400 < rect.height(); ++i) {
                 int height = 400;
 
@@ -164,22 +193,24 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
         RenderThreadPDFL::appendTasks(tasks);
         m_imageScaleFactor = m_scaleFactor;
 
-        //loadword
+        //load word
         if (m_wordRotation != m_rotation) {
-            qDeleteAll(m_words);
-            m_words.clear();
-
-            QList<deepin_reader::Word> words = m_page->words(m_rotation);
-
-            for (int i = 0; i < words.count(); ++i) {
-                SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
-                m_words.append(word);
-            }
             m_wordRotation = m_rotation;
+            reloadWords();
         }
 
         foreach (SheetBrowserPDFLWord *word, m_words)
             word->setScaleFactor(m_scaleFactor);
+
+        //load annotation
+        if (m_annotationRotation != m_rotation || !qFuzzyCompare(m_annotationScaleFactor, m_scaleFactor)) {
+            m_annotationScaleFactor = m_scaleFactor;
+            m_annotationRotation = m_rotation;
+            reloadAnnotations();
+        }
+
+        foreach (SheetBrowserPDFLAnnotation *annotationItem, m_annotationItems)
+            annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 
     m_image = QImage();
@@ -218,8 +249,10 @@ void SheetBrowserPDFLItem::handleRenderFinished(double scaleFactor, Dr::Rotation
     if (rect.isNull()) {
         m_image = image;
     } else {
-        if (m_image.isNull())
+        if (m_image.isNull()) {
             m_image = QImage(boundingRect().width(), boundingRect().height(), QImage::Format_RGB32);
+            m_image.fill(QColor(Qt::white));
+        }
         QPainter painter(&m_image);
         painter.drawImage(rect, image);
     }
@@ -239,6 +272,74 @@ void SheetBrowserPDFLItem::setItemIndex(int itemIndex)
 int SheetBrowserPDFLItem::itemIndex()
 {
     return m_index;
+}
+
+QString SheetBrowserPDFLItem::selectedWords()
+{
+    QString text;
+    foreach (SheetBrowserPDFLWord *word, m_words) {
+        if (word->isSelected())
+            text += word->text();
+    }
+
+    return text;
+}
+
+void SheetBrowserPDFLItem::setWordSelectable(bool selectable)
+{
+    m_wordSelectable = selectable;
+    foreach (SheetBrowserPDFLWord *word, m_words) {
+        word->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+    }
+}
+
+void SheetBrowserPDFLItem::reloadWords()
+{
+    qDeleteAll(m_words);
+    m_words.clear();
+
+    QList<deepin_reader::Word> words = m_page->words(m_rotation);
+
+    for (int i = 0; i < words.count(); ++i) {
+        SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
+        word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+        m_words.append(word);
+    }
+}
+
+void SheetBrowserPDFLItem::reloadAnnotations()
+{
+    qDeleteAll(m_annotations);
+    m_annotations.clear();
+    qDeleteAll(m_annotationItems);
+    m_annotationItems.clear();
+
+    m_annotations = m_page->annotations();
+    for (int i = 0; i < m_annotations.count(); ++i) {
+        foreach (QRectF rect, m_annotations[i]->boundary()) {
+            SheetBrowserPDFLAnnotation *annotationItem = new SheetBrowserPDFLAnnotation(this, rect, m_annotations[i]);
+            m_annotationItems.append(annotationItem);
+        }
+    }
+}
+
+QList<deepin_reader::Annotation *> SheetBrowserPDFLItem::annotations()
+{
+    return m_page->annotations();
+}
+
+void SheetBrowserPDFLItem::reload()
+{
+    double scaleFactor = m_scaleFactor;
+    Dr::Rotation rotation = m_rotation;
+
+    m_scaleFactor = -1;
+    m_rotation = Dr::NumberOfRotations;
+    m_wordRotation = Dr::NumberOfRotations;
+    m_annotationRotation = Dr::NumberOfRotations;
+    m_annotationScaleFactor = -1;
+
+    render(scaleFactor, rotation);
 }
 
 bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)

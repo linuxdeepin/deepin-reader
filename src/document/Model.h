@@ -58,8 +58,10 @@ class Annotation : public QObject
 public:
     Annotation() : QObject() {}
     virtual ~Annotation() {}
-    virtual QRectF boundary() const = 0;
+    virtual QList<QRectF> boundary() const = 0;
     virtual QString contents() const = 0;
+    virtual int type() = 0;
+
     //virtual QWidget *createWidget() = 0;
 signals:
     void wasModified();
@@ -88,21 +90,21 @@ public:
 //    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const QRect &boundingRect = QRect()) const = 0;
 //    virtual QImage render(qreal horizontalResolution = 72.0, qreal verticalResolution = 72.0, Dr::Rotation rotation = Dr::RotateBy0, const double scale = 100.0) const = 0;
     virtual QSize size() const = 0;
+    virtual QSizeF sizeF() const = 0;
     virtual QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const = 0;
     virtual QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
     virtual QString label() const { return QString(); }
     virtual QList< Link * > links() const { return QList< Link * >(); }
-    virtual QString text(const QRectF &rect) const { Q_UNUSED(rect); return QString(); }
+    virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
-    virtual QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text); Q_UNUSED(matchCase); Q_UNUSED(wholeWords); return QList< QRectF >(); }
+    virtual QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text) Q_UNUSED(matchCase) Q_UNUSED(wholeWords) return QList< QRectF >(); }
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
-    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
-    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary); Q_UNUSED(color); return 0; }
-    virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation); }
+    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
+    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
+    virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation)}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
-
-    virtual QList<Word> words(Dr::Rotation rotation)const {return QList<Word>();}
+    virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
 };
 
 class Document: public QObject

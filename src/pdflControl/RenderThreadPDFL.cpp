@@ -45,6 +45,28 @@ RenderThreadPDFL::~RenderThreadPDFL()
     wait();
 }
 
+void RenderThreadPDFL::clearVipTask(SheetBrowserPDFLItem *item)
+{
+    if (nullptr == instance)
+        instance = new RenderThreadPDFL;
+
+    instance->m_mutex.lock();
+
+    bool exist = true;
+    while (exist) {
+        exist = false;
+        for (int i = 0; i < instance->m_vipTasks.count(); ++i) {
+            if (instance->m_vipTasks[i].item == item) {
+                instance->m_vipTasks.remove(i);
+                exist = true;
+                break;
+            }
+        }
+    }
+
+    instance->m_mutex.unlock();
+}
+
 void RenderThreadPDFL::clearTask(SheetBrowserPDFLItem *item)
 {
     if (nullptr == instance)
@@ -63,6 +85,30 @@ void RenderThreadPDFL::clearTask(SheetBrowserPDFLItem *item)
             }
         }
     }
+
+    instance->m_mutex.unlock();
+}
+
+void RenderThreadPDFL::appendVipTask(RenderTaskPDFL task)
+{
+    if (nullptr == instance)
+        instance = new RenderThreadPDFL;
+
+    instance->m_mutex.lock();
+
+    instance->m_vipTasks.append(task);
+
+    instance->m_mutex.unlock();
+}
+
+void RenderThreadPDFL::appendTask(RenderTaskPDFL task)
+{
+    if (nullptr == instance)
+        instance = new RenderThreadPDFL;
+
+    instance->m_mutex.lock();
+
+    instance->m_tasks.append(task);
 
     instance->m_mutex.unlock();
 }
@@ -115,7 +161,12 @@ void RenderThreadPDFL::run()
 
         m_mutex.lock();
 
-        m_curTask = m_tasks.pop();
+        if (m_vipTasks.isEmpty())
+            m_curTask = m_tasks.pop();
+        else {
+            m_curTask = m_vipTasks.pop();
+            m_vipTasks.clear();
+        }
 
         m_mutex.unlock();
 
@@ -139,7 +190,6 @@ void RenderThreadPDFL::destroy()
 
 void RenderThreadPDFL::onTaskFinished(SheetBrowserPDFLItem *item, QImage image, double scaleFactor, int rotation, QRect rect)
 {
-    qDebug() << rect;
     if (SheetBrowserPDFLItem::existInstance(item))
         item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image, rect);
 }

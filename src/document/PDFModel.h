@@ -24,9 +24,11 @@ class PDFAnnotation : public Annotation
 public:
     ~PDFAnnotation();
 
-    QRectF boundary() const;
+    QList<QRectF> boundary() const;
 
     QString contents() const;
+
+    int type();
 
 private:
     Q_DISABLE_COPY(PDFAnnotation)
@@ -49,6 +51,8 @@ public:
     ~PDFPage();
 
     QSize size() const;
+
+    QSizeF sizeF() const;
 
     QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const;
 

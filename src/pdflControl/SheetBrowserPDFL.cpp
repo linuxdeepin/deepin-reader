@@ -31,6 +31,8 @@
 #include "SheetBrowserPDFLItem.h"
 #include "DocSheetPDFL.h"
 #include "SheetBrowserPDFLWord.h"
+#include "SheetBrowserPDFLAnnotation.h"
+#include "widgets/TipsWidget.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -56,6 +58,10 @@ SheetBrowserPDFL::SheetBrowserPDFL(DocSheetPDFL *parent) : DGraphicsView(parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
+
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
+
+    m_tipsWidget = new TipsWidget(this);
 }
 
 SheetBrowserPDFL::~SheetBrowserPDFL()
@@ -102,7 +108,7 @@ bool SheetBrowserPDFL::loadPages(DocOperation &operation, const QSet<int> &bookm
         scene()->addItem(item);
     }
 
-    loadMouseShape(operation);
+    setMouseShape(operation.mouseShape);
     deform(operation);
     m_initPage = operation.currentPage;
     m_hasLoaded = true;
@@ -110,14 +116,17 @@ bool SheetBrowserPDFL::loadPages(DocOperation &operation, const QSet<int> &bookm
     return true;
 }
 
-void SheetBrowserPDFL::loadMouseShape(DocOperation &operation)
+void SheetBrowserPDFL::setMouseShape(const Dr::MouseShape &shape)
 {
-    if (Dr::MouseShapeHand == operation.mouseShape) {
-        operation.mouseShape = Dr::MouseShapeHand;
+    if (Dr::MouseShapeHand == shape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
-    } else if (Dr::MouseShapeNormal == operation.mouseShape) {
-        operation.mouseShape = Dr::MouseShapeNormal;
+        foreach (SheetBrowserPDFLItem *item, m_items) {
+            item->setWordSelectable(false);
+        }
+    } else if (Dr::MouseShapeNormal == shape) {
         setDragMode(QGraphicsView::RubberBandDrag);
+        foreach (SheetBrowserPDFLItem *item, m_items)
+            item->setWordSelectable(true);
     }
 }
 
@@ -130,7 +139,38 @@ void SheetBrowserPDFL::setBookMark(int index, int state)
 
 void SheetBrowserPDFL::onVerticalScrollBarValueChanged(int)
 {
+    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
+
+    foreach (QGraphicsItem *item, items) {
+        SheetBrowserPDFLItem *pdfItem = static_cast<SheetBrowserPDFLItem *>(item);
+
+        if (!m_items.contains(pdfItem))
+            continue;
+
+        if (nullptr == pdfItem)
+            continue;
+
+        pdfItem->renderViewPort();
+    }
+
     emit sigPageChanged(currentPage());
+}
+
+void SheetBrowserPDFL::onHorizontalScrollBarValueChanged(int value)
+{
+    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
+
+    foreach (QGraphicsItem *item, items) {
+        SheetBrowserPDFLItem *pdfItem = static_cast<SheetBrowserPDFLItem *>(item);
+
+        if (!m_items.contains(pdfItem))
+            continue;
+
+        if (nullptr == pdfItem)
+            continue;
+
+        pdfItem->renderViewPort();
+    }
 }
 
 void SheetBrowserPDFL::popMenu(const QPoint &point)
@@ -193,6 +233,15 @@ void SheetBrowserPDFL::popMenu(const QPoint &point)
 
     menu.move(mapToGlobal(point));
     menu.exec();
+}
+
+QString SheetBrowserPDFL::selectedWords()
+{
+    QString text;
+    foreach (SheetBrowserPDFLItem *item, m_items)
+        text += item->selectedWords();
+
+    return text;
 }
 
 void SheetBrowserPDFL::wheelEvent(QWheelEvent *event)
@@ -323,13 +372,58 @@ void SheetBrowserPDFL::resizeEvent(QResizeEvent *event)
 
 void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
 {
-    Qt::MouseButton btn = event->button();
-    if (btn == Qt::LeftButton) {
-        scene()->setSelectionArea(QPainterPath());
-        m_selectPressedPos = mapToScene(event->pos());
-    } else if (btn == Qt::RightButton) {
-        popMenu(event->pos());
-        m_selectPressedPos = QPointF();
+    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
+        Qt::MouseButton btn = event->button();
+        if (btn == Qt::LeftButton) {
+            scene()->setSelectionArea(QPainterPath());
+            m_selectPressedPos = mapToScene(event->pos());
+        } else if (btn == Qt::RightButton) {
+            m_selectPressedPos = QPointF();
+            if (!selectedWords().isEmpty()) {
+                //选择文字
+                //...
+
+
+            } else {
+                QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
+
+                qDebug() << list.count();
+
+                SheetBrowserPDFLItem *item = nullptr;
+                SheetBrowserPDFLAnnotation *annotation = nullptr;
+
+                foreach (QGraphicsItem *baseItem, list) {
+                    if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem)) {
+                        item = qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem);
+                        continue;
+                    }
+
+                    if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem)) {
+                        annotation = qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem);
+                        continue;
+                    }
+                }
+
+                if (nullptr != annotation) {
+                    //注释
+                    //...
+
+                } else if (nullptr != item) {
+                    //默认
+                    //...
+
+                    int index = item->itemIndex();
+                    popMenu(event->pos());
+                }
+
+
+            }
+        }
+    } else if (QGraphicsView::ScrollHandDrag == dragMode()) {
+        Qt::MouseButton btn = event->button();
+        if (btn == Qt::RightButton) {
+            popMenu(event->pos());
+        }
     }
 
     DGraphicsView::mousePressEvent(event);
@@ -388,12 +482,26 @@ void SheetBrowserPDFL::mouseMoveEvent(QMouseEvent *event)
         if (m_selectPressedPos.isNull()) {
             QGraphicsItem *item = itemAt(event->pos());
             if (item != nullptr) {
-                if (!item->isPanel())
-                    setCursor(QCursor(Qt::IBeamCursor));
-                else
+                if (!item->isPanel()) {
+                    SheetBrowserPDFLAnnotation *annotation  = dynamic_cast<SheetBrowserPDFLAnnotation *>(item);
+                    if (annotation != nullptr) {
+                        m_tipsWidget->setText(annotation->text());
+                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                        m_tipsWidget->move(showRealPos);
+                        m_tipsWidget->show();
+                        setCursor(QCursor(Qt::PointingHandCursor));
+                    } else {
+                        m_tipsWidget->hide();
+                        setCursor(QCursor(Qt::IBeamCursor));
+                    }
+                } else {
+                    m_tipsWidget->hide();
                     setCursor(QCursor(Qt::ArrowCursor));
+                }
             }
         } else {
+            m_tipsWidget->hide();
+
             QPointF beginPos = m_selectPressedPos;
             QPointF endPos = mapToScene(event->pos());
 
@@ -470,6 +578,8 @@ void SheetBrowserPDFL::mouseReleaseEvent(QMouseEvent *event)
     if (btn == Qt::LeftButton) {
         m_selectPressedPos = QPointF();
     }
+
+    QGraphicsView::mouseReleaseEvent(event);
 }
 
 int SheetBrowserPDFL::allPages()

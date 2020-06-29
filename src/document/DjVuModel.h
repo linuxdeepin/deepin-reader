@@ -22,6 +22,8 @@ public:
 
     QSize size() const;
 
+    QSizeF sizeF() const;
+
     QImage render(int width, int height, Qt::AspectRatioMode mode)const;     //按大小获取
 
     QImage render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect = QRect()) const;//按缩放比例获取; boundingRect:取其中某一区域图片

@@ -5,14 +5,6 @@
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
-* Central(NaviPage ViewPage)
-*
-* CentralNavPage(openfile)
-*
-* CentralDocPage(DocTabbar DocSheets)
-*
-* DocSheet(SheetSidebar SheetBrowser document)
-*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
@@ -37,6 +29,7 @@
 class DocOperation;
 class SheetBrowserPDFLItem;
 class DocSheetPDFL;
+class TipsWidget;
 class SheetBrowserPDFL : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -49,7 +42,7 @@ public:
 
     bool loadPages(DocOperation &operation, const QSet<int> &bookmarks);
 
-    void loadMouseShape(DocOperation &operation);
+    void setMouseShape(const Dr::MouseShape &shape);
 
     void setBookMark(int index, int state);
 
@@ -80,6 +73,8 @@ public:
     void needBookmark(int index, bool state);
 
     void popMenu(const QPoint &);
+
+    QString selectedWords();
 
 signals:
     void sigPageChanged(int page);
@@ -120,7 +115,7 @@ protected:
 private slots:
     void onVerticalScrollBarValueChanged(int value);
 
-
+    void onHorizontalScrollBarValueChanged(int value);
 
 private:
     deepin_reader::Document *m_document = nullptr;
@@ -133,6 +128,7 @@ private:
     QLabel *m_magnifierLabel = nullptr;
     DocSheetPDFL *m_sheet = nullptr;
     QPointF m_selectPressedPos;        //scene
+    TipsWidget *m_tipsWidget = nullptr;
 };
 
 #endif // SHEETBROWSERPDFL_H

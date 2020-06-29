@@ -300,11 +300,27 @@ PDFAnnotation::~PDFAnnotation()
     delete m_annotation;
 }
 
-QRectF PDFAnnotation::boundary() const
+QList<QRectF> PDFAnnotation::boundary() const
 {
     LOCK_ANNOTATION
 
-    return m_annotation->boundary().normalized();
+    QList<QRectF> rectFList;
+
+    if (m_annotation->subType() == Poppler::Annotation::AText) {
+        rectFList.append(m_annotation->boundary().normalized());
+    } else if (m_annotation->subType() == Poppler::Annotation::AHighlight) {
+        QList<Poppler::HighlightAnnotation::Quad> quads = static_cast<Poppler::HighlightAnnotation *>(m_annotation)->highlightQuads();
+        foreach (Poppler::HighlightAnnotation::Quad quad, quads) {
+            QRectF rectbound;
+            rectbound.setTopLeft(quad.points[0]);
+            rectbound.setTopRight(quad.points[1]);
+            rectbound.setBottomLeft(quad.points[3]);
+            rectbound.setBottomRight(quad.points[2]);
+            rectFList.append(rectbound);
+        }
+    }
+
+    return rectFList;
 }
 
 QString PDFAnnotation::contents() const
@@ -312,6 +328,12 @@ QString PDFAnnotation::contents() const
     LOCK_ANNOTATION
 
     return m_annotation->contents();
+}
+
+int PDFAnnotation::type()
+{
+    m_annotation->subType();
+
 }
 
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
@@ -332,6 +354,13 @@ QSize PDFPage::size() const
     LOCK_PAGE
 
     return m_page->pageSize();
+}
+
+QSizeF PDFPage::sizeF() const
+{
+    LOCK_PAGE
+
+    return m_page->pageSizeF();
 }
 
 QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const

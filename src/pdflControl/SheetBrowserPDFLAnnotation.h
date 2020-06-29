@@ -18,19 +18,19 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef SHEETBROWSERPDFLWORD_H
-#define SHEETBROWSERPDFLWORD_H
+#ifndef SHEETBROWSERPDFLANNOTATION_H
+#define SHEETBROWSERPDFLANNOTATION_H
 
 #include <QGraphicsItem>
 #include "document/Model.h"
 
 class SheetBrowserItem;
-class SheetBrowserPDFLWord : public QGraphicsItem
+class SheetBrowserPDFLAnnotation : public QGraphicsItem
 {
 public:
-    explicit SheetBrowserPDFLWord(QGraphicsItem *parent, deepin_reader::Word word);
+    explicit SheetBrowserPDFLAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation);
 
-    void setScaleFactor(qreal scaleFactor);
+    void setScaleFactorAndRotation(Dr::Rotation rotation);
 
     QString text();
 
@@ -38,10 +38,19 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-private:
-    deepin_reader::Word m_word;
+    deepin_reader::Annotation *annotation();
 
-    qreal m_scaleFactor = 1;
+private:
+    deepin_reader::Annotation *m_annotation;
+
+    Dr::Rotation m_rotation = Dr::RotateBy0;
+
+    QRectF m_rect;
+
+    QString m_text;
+
+    QGraphicsItem *m_parent = nullptr;
+
 };
 
-#endif // SHEETBROWSERPDFLWORD_H
+#endif // SHEETBROWSERPDFLANNOTATION_H

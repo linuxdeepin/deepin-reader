@@ -5,14 +5,6 @@
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
-* Central(NaviPage ViewPage)
-*
-* CentralNavPage(openfile)
-*
-* CentralDocPage(DocTabbar DocSheets)
-*
-* DocSheet(SheetSidebar SheetBrowser document)
-*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
@@ -35,11 +27,13 @@
 #include "Global.h"
 
 namespace deepin_reader {
+class Annotation;
 class Page;
 }
 
 class SheetBrowserPDFL;
 class SheetBrowserPDFLWord;
+class SheetBrowserPDFLAnnotation;
 class SheetBrowserPDFLItem : public QGraphicsItem
 {
 public:
@@ -57,7 +51,9 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    void render(double scale, Dr::Rotation rotation, bool renderLater = false, int beginRenderY = 0);
+    void renderViewPort();      //优先显示当前窗口
+
+    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false);
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
@@ -75,6 +71,18 @@ public:
 
     int itemIndex();
 
+    QString selectedWords();
+
+    void setWordSelectable(bool selectable);
+
+    void reloadWords();
+
+    void reloadAnnotations();
+
+    void reload();
+
+    QList< deepin_reader::Annotation * > annotations();
+
 protected:
     bool sceneEvent(QEvent *event) override;
 
@@ -83,6 +91,7 @@ signals:
 
 private:
     deepin_reader::Page *m_page = nullptr;
+
     QImage m_image;
     QImage m_leftImage;
     double m_imageScaleFactor   = 1;
@@ -96,7 +105,14 @@ private:
 
     Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
     QList<SheetBrowserPDFLWord *> m_words;
+
+    Dr::Rotation m_annotationRotation = Dr::NumberOfRotations;
+    double m_annotationScaleFactor = -1;
+    QList<SheetBrowserPDFLAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
+    QList<deepin_reader::Annotation *> m_annotations;
+
     QPointF m_posPressed;
+    bool m_wordSelectable = false;
 };
 
 #endif // SHEETBROWSERPDFLITEM_H

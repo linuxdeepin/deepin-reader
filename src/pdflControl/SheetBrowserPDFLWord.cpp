@@ -8,8 +8,7 @@
 
 SheetBrowserPDFLWord::SheetBrowserPDFLWord(QGraphicsItem *parent, deepin_reader::Word word) : QGraphicsItem(parent), m_word(word)
 {
-    setAcceptHoverEvents(true);
-    setFlag(QGraphicsItem::ItemIsSelectable);
+
 }
 
 void SheetBrowserPDFLWord::setScaleFactor(qreal scaleFactor)
@@ -32,17 +31,8 @@ void SheetBrowserPDFLWord::paint(QPainter *painter, const QStyleOptionGraphicsIt
 {
     if (isSelected()) {
         painter->setBrush(QBrush(Qt::red));
+        painter->setPen(Qt::NoPen);
         painter->setOpacity(0.1);
         painter->drawRect(option->rect.x() + 1, option->rect.y() + 1, option->rect.width() - 2, option->rect.height() - 2);
     }
 }
-
-//void SheetBrowserPDFLWord::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-//{
-//    setCursor(QCursor(Qt::IBeamCursor));
-//}
-
-//void SheetBrowserPDFLWord::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-//{
-//    setCursor(QCursor(Qt::ArrowCursor));
-//}

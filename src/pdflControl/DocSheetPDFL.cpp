@@ -221,7 +221,7 @@ void DocSheetPDFL::setMouseShape(Dr::MouseShape shape)
     if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
         closeMagnifier();
         m_operation.mouseShape = shape;
-        m_browser->loadMouseShape(m_operation);
+        m_browser->setMouseShape(m_operation.mouseShape);
         emit sigFileChanged(this);
     }
 }
