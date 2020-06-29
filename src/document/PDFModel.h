@@ -76,11 +76,13 @@ public:
 
     bool canAddAndRemoveAnnotations() const;
 
-    Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color);
+    Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color);                 //跳转注释
 
-    Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color);
+    Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color);            //高亮
 
-    void removeAnnotation(Annotation *annotation);
+    Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color);
+
+    bool removeAnnotation(Annotation *annotation);
 
     QList< FormField * > formFields() const;
 

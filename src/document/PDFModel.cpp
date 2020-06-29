@@ -333,7 +333,6 @@ QString PDFAnnotation::contents() const
 int PDFAnnotation::type()
 {
     m_annotation->subType();
-
 }
 
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
@@ -714,13 +713,62 @@ Annotation *PDFPage::addHighlightAnnotation(const QRectF &boundary, const QColor
 
 }
 
-void PDFPage::removeAnnotation(Annotation *annotation)
+Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
+{
+    LOCK_PAGE
+
+#ifdef HAS_POPPLER_20
+
+    Poppler::Annotation::Style style;
+    style.setColor(color);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::HighlightAnnotation *annotation = new Poppler::HighlightAnnotation();
+
+    QList< Poppler::HighlightAnnotation::Quad > quadList;
+
+    foreach (QRectF boundary, boundarys) {
+        Poppler::HighlightAnnotation::Quad quad;
+        quad.points[0] = boundary.topLeft();
+        quad.points[1] = boundary.topRight();
+        quad.points[2] = boundary.bottomRight();
+        quad.points[3] = boundary.bottomLeft();
+        quadList.append(quad);
+    }
+
+    annotation->setHighlightQuads(quadList);
+
+    annotation->setBoundary(boundarys.value(0));
+    annotation->setStyle(style);
+    annotation->setContents(text);
+    annotation->setPopup(popup);
+
+    m_page->addAnnotation(annotation);
+
+    return new PDFAnnotation(m_mutex, annotation);
+
+#else
+
+    Q_UNUSED(boundary);
+    Q_UNUSED(color);
+
+    return 0;
+
+#endif // HAS_POPPLER_20
+}
+
+bool PDFPage::removeAnnotation(Annotation *annotation)
 {
     LOCK_PAGE
 
 #ifdef HAS_POPPLER_20
 
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
+
+    if (PDFAnnotation == nullptr)
+        return false;
 
     m_page->removeAnnotation(PDFAnnotation->m_annotation);
 
@@ -731,6 +779,8 @@ void PDFPage::removeAnnotation(Annotation *annotation)
     Q_UNUSED(annotation);
 
 #endif // HAS_POPPLER_20
+
+    return true;
 }
 
 QList< FormField * > PDFPage::formFields() const

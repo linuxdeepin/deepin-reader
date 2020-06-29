@@ -27,6 +27,11 @@ QRectF SheetBrowserPDFLWord::boundingRect() const
     return QRectF(m_word.boundingBox.x() * m_scaleFactor - 1, m_word.boundingBox.y() * m_scaleFactor - 1, m_word.boundingBox.width() * m_scaleFactor + 2, m_word.boundingBox.height() * m_scaleFactor + 2);
 }
 
+QRectF SheetBrowserPDFLWord::boundingBox() const
+{
+    return m_word.boundingBox;
+}
+
 void SheetBrowserPDFLWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if (isSelected()) {

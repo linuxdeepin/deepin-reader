@@ -30,6 +30,7 @@ class DocOperation;
 class SheetBrowserPDFLItem;
 class DocSheetPDFL;
 class TipsWidget;
+class SheetBrowserPDFLAnnotation;
 class SheetBrowserPDFL : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -74,7 +75,11 @@ public:
 
     void popMenu(const QPoint &);
 
-    QString selectedWords();
+    QString selectedWordsText();
+
+    void addHighlightAnnotation(QString text, QColor color);
+
+    void removeAnnotation(SheetBrowserPDFLAnnotation *annotation);
 
 signals:
     void sigPageChanged(int page);

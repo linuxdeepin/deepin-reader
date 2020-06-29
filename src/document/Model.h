@@ -57,12 +57,33 @@ class Annotation : public QObject
     Q_OBJECT
 public:
     Annotation() : QObject() {}
+
     virtual ~Annotation() {}
+
     virtual QList<QRectF> boundary() const = 0;
+
     virtual QString contents() const = 0;
+
+    //数值同poppler类型
+    enum AnnotationType {
+        AnnotationText = 1,            ///< TextAnnotation
+        AnnotationLine = 2,            ///< LineAnnotation
+        AnnotationGeom = 3,            ///< GeomAnnotation
+        AnnotationHighlight = 4,       ///< HighlightAnnotation
+        AnnotationStamp = 5,           ///< StampAnnotation
+        AnnotationInk = 6,             ///< InkAnnotation
+        AnnotationLink = 7,            ///< LinkAnnotation
+        AnnotationCaret = 8,           ///< CaretAnnotation
+        AnnotationFileAttachment = 9,  ///< FileAttachmentAnnotation
+        AnnotationSound = 10,          ///< SoundAnnotation
+        AnnotationMovie = 11,          ///< MovieAnnotation
+        AnnotationScreen = 12,         ///< ScreenAnnotation \since 0.20
+        AnnotationWidget = 13,         ///< WidgetAnnotation \since 0.22
+        AnnotationRichMedia = 14,      ///< RichMediaAnnotation \since 0.36
+        Annotation_BASE = 0
+    };
     virtual int type() = 0;
 
-    //virtual QWidget *createWidget() = 0;
 signals:
     void wasModified();
 };
@@ -102,7 +123,8 @@ public:
     virtual bool canAddAndRemoveAnnotations() const { return false; }
     virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
     virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
-    virtual void removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation)}
+    virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return 0; }
+    virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation)}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
     virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
 };

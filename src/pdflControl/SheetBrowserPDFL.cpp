@@ -237,13 +237,24 @@ void SheetBrowserPDFL::popMenu(const QPoint &point)
     menu.exec();
 }
 
-QString SheetBrowserPDFL::selectedWords()
+QString SheetBrowserPDFL::selectedWordsText()
 {
     QString text;
     foreach (SheetBrowserPDFLItem *item, m_items)
         text += item->selectedWords();
 
     return text;
+}
+
+void SheetBrowserPDFL::addHighlightAnnotation(QString text, QColor color)
+{
+    foreach (SheetBrowserPDFLItem *item, m_items)
+        item->addHighlightAnnotation(text, color);
+}
+
+void SheetBrowserPDFL::removeAnnotation(SheetBrowserPDFLAnnotation *annotation)
+{
+
 }
 
 void SheetBrowserPDFL::wheelEvent(QWheelEvent *event)
@@ -381,7 +392,7 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
             m_selectPressedPos = mapToScene(event->pos());
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
-            const QString &selectWords = selectedWords();
+            const QString &selectWords = selectedWordsText();
             if (!selectWords.isEmpty()) {
                 //选择文字
                 TextOperationMenu textOperaMenu;
@@ -391,9 +402,8 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
             } else {
                 QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
 
-                qDebug() << list.count();
-
                 SheetBrowserPDFLItem *item = nullptr;
+
                 SheetBrowserPDFLAnnotation *annotation = nullptr;
 
                 foreach (QGraphicsItem *baseItem, list) {

@@ -1,4 +1,5 @@
 #include "SheetBrowserPDFLAnnotation.h"
+#include "SheetBrowserPDFLItem.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -14,6 +15,11 @@ void SheetBrowserPDFLAnnotation::setScaleFactorAndRotation(Dr::Rotation rotation
 {
     m_rotation = rotation;
     update();
+}
+
+int SheetBrowserPDFLAnnotation::type()
+{
+    return m_annotation->type();
 }
 
 QString SheetBrowserPDFLAnnotation::text()
@@ -40,4 +46,13 @@ void SheetBrowserPDFLAnnotation::paint(QPainter *painter, const QStyleOptionGrap
 deepin_reader::Annotation *SheetBrowserPDFLAnnotation::annotation()
 {
     return m_annotation;
+}
+
+void SheetBrowserPDFLAnnotation::deleteMe()
+{
+    SheetBrowserPDFLItem *item = static_cast<SheetBrowserPDFLItem *>(m_parent);
+    if (nullptr == item)
+        return;
+
+    item->removeAnnotation(m_annotation);
 }

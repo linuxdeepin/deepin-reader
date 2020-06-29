@@ -32,6 +32,8 @@ public:
 
     void setScaleFactorAndRotation(Dr::Rotation rotation);
 
+    int type();
+
     QString text();
 
     QRectF boundingRect()const override;
@@ -39,6 +41,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     deepin_reader::Annotation *annotation();
+
+    void deleteMe();
 
 private:
     deepin_reader::Annotation *m_annotation;

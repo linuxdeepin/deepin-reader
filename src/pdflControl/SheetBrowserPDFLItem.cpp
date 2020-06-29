@@ -328,6 +328,36 @@ QList<deepin_reader::Annotation *> SheetBrowserPDFLItem::annotations()
     return m_page->annotations();
 }
 
+void SheetBrowserPDFLItem::addHighlightAnnotation(QString text, QColor color)
+{
+    QList<QRectF> boundarys;
+    foreach (SheetBrowserPDFLWord *word, m_words) {
+        if (word->isSelected())
+            boundarys.append(word->boundingBox());
+    }
+
+    if (boundarys.isEmpty())
+        return;
+
+    m_page->addHighlightAnnotation(boundarys, text, color);
+
+    reloadAnnotations();
+
+    renderViewPort();
+}
+
+bool SheetBrowserPDFLItem::removeAnnotation(deepin_reader::Annotation *annotation)
+{
+    if (!m_page->removeAnnotation(annotation))
+        return false;
+
+    reloadAnnotations();        // 必须要reload 因为可能多个item共享同一个annotation
+
+    renderViewPort();
+
+    return true;
+}
+
 void SheetBrowserPDFLItem::reload()
 {
     double scaleFactor = m_scaleFactor;

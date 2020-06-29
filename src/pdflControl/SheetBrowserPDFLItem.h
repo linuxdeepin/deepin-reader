@@ -83,6 +83,10 @@ public:
 
     QList< deepin_reader::Annotation * > annotations();
 
+    void addHighlightAnnotation(QString text, QColor color);
+
+    bool removeAnnotation(deepin_reader::Annotation *annotation);
+
 protected:
     bool sceneEvent(QEvent *event) override;
 
