@@ -69,42 +69,34 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
     m_pNextPage->setEnabled(true);
     m_pEndPage->setEnabled(true);
 
-    if (!m_sheet->isOpen()) {
+    int currentPage = 0;
+    int pageSum = 0;
+    bool isSinglePage = false;//文档总页数是否是单页
+
+    pageSum = m_sheet->pagesNumber();
+    currentPage = m_sheet->currentIndex();
+    isSinglePage = static_cast<bool>(pageSum % 2);
+
+    if (currentPage == 0) { //  首页
+        m_pFirstPage->setEnabled(false);
+        m_pPrevPage->setEnabled(false);
+    } else {
+        pageSum--;
+        if ((m_sheet->operation().layoutMode == Dr::LayoutMode::SinglePageMode) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
+            m_pNextPage->setEnabled(false);
+            m_pEndPage->setEnabled(false);
+        }
+    }
+    if (m_sheet->pagesNumber() == 1) {
         m_pFirstPage->setEnabled(false);
         m_pPrevPage->setEnabled(false);
         m_pNextPage->setEnabled(false);
         m_pEndPage->setEnabled(false);
-        return;
-    } else {
-        int currentPage = 0;
-        int pageSum = 0;
-        bool isSinglePage = false;//文档总页数是否是单页
-
-        pageSum = m_sheet->pagesNumber();
-        currentPage = m_sheet->currentIndex();
-        isSinglePage = static_cast<bool>(pageSum % 2);
-
-        if (currentPage == 0) { //  首页
-            m_pFirstPage->setEnabled(false);
-            m_pPrevPage->setEnabled(false);
-        } else {
-            pageSum--;
-            if ((m_sheet->operation().layoutMode == Dr::LayoutMode::SinglePageMode) ? (currentPage == pageSum) : (isSinglePage ? (currentPage >= pageSum) : (currentPage >= (--pageSum)))) { //  最后一页
-                m_pNextPage->setEnabled(false);
-                m_pEndPage->setEnabled(false);
-            }
-        }
-        if (m_sheet->pagesNumber() == 1) {
-            m_pFirstPage->setEnabled(false);
-            m_pPrevPage->setEnabled(false);
-            m_pNextPage->setEnabled(false);
-            m_pEndPage->setEnabled(false);
-        }
-
-        m_pSearch->setVisible(true);
-        m_pAddIconNote->setVisible(true);
-        this->exec(showPoint);
     }
+
+    m_pSearch->setVisible(true);
+    m_pAddIconNote->setVisible(true);
+    this->exec(showPoint);
 }
 
 void DefaultOperationMenu::setClickpoint(const QPoint &pt)
