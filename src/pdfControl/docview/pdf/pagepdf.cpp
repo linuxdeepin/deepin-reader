@@ -15,6 +15,7 @@ public:
 
     ~PagePdfPrivate() override
     {
+        QMutexLocker mutext(&m_imageMutex);
         m_bClosed = true;
         if (m_page) {
             delete m_page;
@@ -23,6 +24,7 @@ public:
     }
     bool getImage(QImage &image, double width, double height) override
     {
+        QMutexLocker mutext(&m_imageMutex);
         int xres = 72.0, yres = 72.0;
         double scalex = width / m_imagewidth;
         double scaley = height / m_imageheight;
@@ -51,6 +53,7 @@ public:
     }
 
     Poppler::Page *m_page;
+    QMutex m_imageMutex;
 private:
     bool loadWords()
     {
