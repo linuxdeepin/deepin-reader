@@ -389,49 +389,58 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
         Qt::MouseButton btn = event->button();
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
+
             m_selectPressedPos = mapToScene(event->pos());
+
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
+
+            SheetBrowserPDFLItem *item = nullptr;
+
+            SheetBrowserPDFLAnnotation *annotation = nullptr;
+
+            QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
+
             const QString &selectWords = selectedWordsText();
-            if (!selectWords.isEmpty()) {
+
+            foreach (QGraphicsItem *baseItem, list) {
+                if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem)) {
+                    item = qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem);
+                    continue;
+                }
+
+                if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem)) {
+                    annotation = qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem);
+                    continue;
+                }
+            }
+
+            if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
+                //文字注释(图标)
+                TextOperationMenu textOperaMenu;
+                textOperaMenu.setClickPoint(event->pos());
+                textOperaMenu.setType(NOTE_ICON);
+                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
+
+            } else if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationHighlight) {
+                //文字高亮注释
+                TextOperationMenu textOperaMenu;
+                textOperaMenu.setClickPoint(event->pos());
+                textOperaMenu.setType(NOTE_ICON);
+                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
+
+            }  else if (!selectWords.isEmpty()) {
                 //选择文字
                 TextOperationMenu textOperaMenu;
                 textOperaMenu.setClickPoint(event->pos());
                 textOperaMenu.setType(NOTE_HIGHLIGHT);
                 textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
-            } else {
-                QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
-
-                SheetBrowserPDFLItem *item = nullptr;
-
-                SheetBrowserPDFLAnnotation *annotation = nullptr;
-
-                foreach (QGraphicsItem *baseItem, list) {
-                    if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem)) {
-                        item = qgraphicsitem_cast<SheetBrowserPDFLItem *>(baseItem);
-                        continue;
-                    }
-
-                    if (nullptr != qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem)) {
-                        annotation = qgraphicsitem_cast<SheetBrowserPDFLAnnotation *>(baseItem);
-                        continue;
-                    }
-                }
-
-                if (nullptr != annotation) {
-                    //注释
-                    TextOperationMenu textOperaMenu;
-                    textOperaMenu.setClickPoint(event->pos());
-                    textOperaMenu.setType(NOTE_ICON);
-                    textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
-
-                } else if (nullptr != item) {
-                    //默认
-                    int index = item->itemIndex();
-                    DefaultOperationMenu defaultMenu;
-                    defaultMenu.setClickpoint(event->pos());
-                    defaultMenu.execMenu(m_sheet, mapToGlobal(event->pos()), index);
-                }
+            } else if (nullptr != item) {
+                //默认
+                int index = item->itemIndex();
+                DefaultOperationMenu defaultMenu;
+                defaultMenu.setClickpoint(event->pos());
+                defaultMenu.execMenu(m_sheet, mapToGlobal(event->pos()), index);
             }
         }
     } else if (QGraphicsView::ScrollHandDrag == dragMode()) {
