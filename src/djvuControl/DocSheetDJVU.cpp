@@ -329,6 +329,7 @@ QList<qreal> DocSheetDJVU::scaleFactorList()
 qreal DocSheetDJVU::maxScaleFactor()
 {
     qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
+    maxScaleFactor = maxScaleFactor > 5.0 ? 5.0 : maxScaleFactor;
 
     if (maxScaleFactor < 0.1)
         maxScaleFactor = 0.1;

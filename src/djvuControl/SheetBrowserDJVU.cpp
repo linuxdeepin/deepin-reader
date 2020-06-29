@@ -131,7 +131,7 @@ void SheetBrowserDJVU::setBookMark(int index, int state)
 
 void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int value)
 {
-    emit sigPageChanged(currentPage());
+    pageChanged(visibleCurrentPage());
 }
 
 void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
@@ -347,7 +347,7 @@ int SheetBrowserDJVU::allPages()
     return m_items.count();
 }
 
-int SheetBrowserDJVU::currentPage()
+int SheetBrowserDJVU::visibleCurrentPage()
 {
     int value = verticalScrollBar()->value();
 
@@ -366,11 +366,27 @@ int SheetBrowserDJVU::currentPage()
     return index + 1;
 }
 
+int SheetBrowserDJVU::currentPage()
+{
+    if (m_curPageNo > 0)
+        return m_curPageNo;
+
+    visibleCurrentPage();
+}
+
 int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
 {
     SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(viewPoint));
 
     return m_items.indexOf(item);
+}
+
+void SheetBrowserDJVU::pageChanged(int page)
+{
+    if (page != m_curPageNo) {
+        m_curPageNo = page;
+        emit sigPageChanged(m_curPageNo);
+    }
 }
 
 void SheetBrowserDJVU::setCurrentPage(int page)
@@ -379,6 +395,7 @@ void SheetBrowserDJVU::setCurrentPage(int page)
         return;
 
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
+    pageChanged(page);
 }
 
 bool SheetBrowserDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
