@@ -46,6 +46,8 @@ protected:
 
     bool canInsertFromMimeData(int index, const QMimeData *source) const override;
 
+    void dragEnterEvent(QDragEnterEvent *event) override;
+
 private slots:
     void onDragActionChanged(Qt::DropAction action);
 

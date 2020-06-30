@@ -165,14 +165,32 @@ bool DocTabBar::canInsertFromMimeData(int, const QMimeData *source) const
     return source->hasFormat("deepin_reader/tabbar");
 }
 
+void DocTabBar::dragEnterEvent(QDragEnterEvent *event)
+{
+    DTabBar::dragEnterEvent(event);
+    if (event->mimeData()->hasFormat("deepin_reader/tabbar")) {
+        QTimer::singleShot(1, [this]() {
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+            QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+        });
+    }
+}
+
 void DocTabBar::onDragActionChanged(Qt::DropAction action)
 {
-    if (count() <= 1) {
-        QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
-    } else if (action == Qt::TargetMoveAction) {
-        QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
+    if (action == Qt::TargetMoveAction) {
+//        QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
     } else if (action == Qt::IgnoreAction) {
-        QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        if (count() <= 1)
+            QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
+        else
+            QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+    } else if (action == Qt::CopyAction) {
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
     } else if (dragIconWindow()) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
