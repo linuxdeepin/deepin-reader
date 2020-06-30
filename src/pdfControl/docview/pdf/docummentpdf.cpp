@@ -9,10 +9,13 @@
 #include <QParallelAnimationGroup>
 #include <QDebug>
 #include <QFile>
+#include <QSemaphore>
+
 #include "RenderThreadPdf.h"
 //#include "RenderThreadPoolManagerPdf.h"
 #include "RenderThreadPdf.h"
 
+const int MAXIMAGESEMAPHORE = 10240;
 class DocummentPDFPrivate: public DocummentBasePrivate
 {
 //    Q_OBJECT
@@ -38,7 +41,6 @@ public:
     }
 
     Poppler::Document *document;
-
     Q_DECLARE_PUBLIC(DocummentPDF)
 
 protected slots:
@@ -134,13 +136,14 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
 DocummentPDF::DocummentPDF(DWidget *parent):
     DocummentBase(new DocummentPDFPrivate(this), parent)
 {
-
+    imageSemapphore = new QSemaphore(MAXIMAGESEMAPHORE);
 }
 
 DocummentPDF::~DocummentPDF()
 {
     Q_D(DocummentPDF);
     delete d;
+    delete imageSemapphore;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
@@ -402,8 +405,9 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 {
-    Q_D(DocummentPDF);
 
+    Q_D(DocummentPDF);
+    imageSemapphore->tryAcquire(MAXIMAGESEMAPHORE, 60000);
     QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter());
 
     pdfConverter->setOutputFileName(filePath);
@@ -422,7 +426,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
         qDebug() << __FUNCTION__ << pdfConverter->lastError();
 
     }
-
+    imageSemapphore->release(MAXIMAGESEMAPHORE);
     return bres;
 }
 

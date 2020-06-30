@@ -1,5 +1,7 @@
 #include "pagepdf.h"
 #include "pdfControl/docview/publicfunc.h"
+#include "docummentpdf.h"
+
 #include <QDebug>
 #include <QPainter>
 
@@ -8,6 +10,7 @@
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
 public:
+    Q_DECLARE_PUBLIC(PagePdf);
     PagePdfPrivate(PagePdf *parent): PageBasePrivate(parent)
     {
         m_page = nullptr;
@@ -16,6 +19,7 @@ public:
     ~PagePdfPrivate() override
     {
         QMutexLocker mutext(&m_imageMutex);
+        m_documentpdf = nullptr;
         m_bClosed = true;
         if (m_page) {
             delete m_page;
@@ -25,12 +29,17 @@ public:
     bool getImage(QImage &image, double width, double height) override
     {
         QMutexLocker mutext(&m_imageMutex);
+        if (m_documentpdf) m_documentpdf->imageSemapphore->acquire();
         int xres = 72.0, yres = 72.0;
         double scalex = width / m_imagewidth;
         double scaley = height / m_imageheight;
-        if (!m_page)
+        if (!m_page) {
+            if (m_documentpdf) m_documentpdf->imageSemapphore->release();
             return false;
+        }
+
         image = m_page->renderToImage(xres * scalex, yres * scaley);
+        if (m_documentpdf) m_documentpdf->imageSemapphore->release();
         return true;
     }
     bool loadData() override
@@ -45,6 +54,9 @@ public:
 
     void setPage(Poppler::Page *page, int pageno)
     {
+        Q_Q(PagePdf);
+        if (m_documentpdf == nullptr)
+            m_documentpdf = dynamic_cast<DocummentPDF *>(q->parent());
         m_page = page;
         m_pageno = pageno;
         QSizeF qsize = m_page->pageSizeF();
@@ -52,6 +64,7 @@ public:
         m_imageheight = qsize.height();
     }
 
+    DocummentPDF *m_documentpdf = nullptr;
     Poppler::Page *m_page;
     QMutex m_imageMutex;
 private:
