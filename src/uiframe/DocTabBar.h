@@ -58,8 +58,6 @@ private slots:
     void onDroped();
 
 signals:
-    void sigTabBarIndexChange(const QString &);
-
     void sigAddTab(const QString &);
 
     void sigCloseTab(const QString &);

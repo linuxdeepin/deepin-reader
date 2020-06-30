@@ -90,6 +90,7 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
 
         if (page->size().width() > m_maxWidth)
             m_maxWidth = page->size().width();
+
         if (page->size().height() > m_maxHeight)
             m_maxHeight = page->size().height();
 
@@ -103,9 +104,18 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
         scene()->addItem(item);
     }
 
-    loadMouseShape(operation);
-    deform(operation);
     m_initPage = operation.currentPage;
+
+    if (m_initPage < 1)
+        m_initPage = 1;
+
+    if (m_initPage > m_document->numberOfPages())
+        m_initPage = m_document->numberOfPages();
+
+    loadMouseShape(operation);
+
+    deform(operation);
+
     m_hasLoaded = true;
 
     return true;
