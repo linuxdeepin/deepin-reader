@@ -119,6 +119,7 @@ signals:
     void sigFindOperation(const int &);
 
     void sigScaleChanged(double);
+
 signals:
     void sigRemoveFileTab(const QString &);
 
@@ -140,7 +141,7 @@ private:
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     QPointer<DocSheet>  m_slideSheet = nullptr;
-    QPointer<DocSheet>  m_curSheet{nullptr};
+    QPointer<DocSheet>  m_curSheet = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

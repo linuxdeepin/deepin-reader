@@ -71,9 +71,9 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
 
     this->setTabData(index, DocSheet::getUuid(sheet));
 
-    updateTabWidth(92);
+    m_delayIndex = index;
 
-    this->setCurrentIndex(index);
+    QTimer::singleShot(1, this, SLOT(onSetCurrentIndex()));
 }
 
 void DocTabBar::removeSheet(DocSheet *sheet)
@@ -123,9 +123,6 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
     this->setTabToolTip(index, tabName);
 
     setTabMinimumSize(index, QSize(140, 36));
-
-    updateTabWidth(143);
-
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -164,38 +161,11 @@ void DocTabBar::onDragActionChanged(Qt::DropAction action)
     }
 }
 
-void DocTabBar::resizeEvent(QResizeEvent *event)
-{
-    DTabBar::resizeEvent(event);
-    updateTabWidth(187);
-    this->resize(this->width(), 36);
-    this->update();
-}
-
 QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
     nLastPos++;
     return strFilePath.mid(nLastPos);
-}
-
-void DocTabBar::updateTabWidth(int)
-{
-    int tabWidth = 100;
-    if (count() != 0) {
-        tabWidth = (this->width() - 40) / count();
-        for (int i = 0; i < count(); i++) {
-            if (tabWidth <= 140) {
-                setUsesScrollButtons(true);
-                // 此处设置最小高度为36是为了能够在resize的时候进行重绘
-                setTabMinimumSize(i, QSize(140, 37));
-            } else {
-                setUsesScrollButtons(false);
-                setTabMinimumSize(i, QSize(tabWidth, 37));
-            }
-        }
-    }
-
 }
 
 void DocTabBar::onTabChanged(int index)
@@ -249,6 +219,11 @@ void DocTabBar::onDroped()
     if (count() <= 0) {
         emit sigLastTabMoved();
     }
+}
+
+void DocTabBar::onSetCurrentIndex()
+{
+    setCurrentIndex(m_delayIndex);
 }
 
 //  新增

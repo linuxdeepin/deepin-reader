@@ -46,8 +46,6 @@ protected:
 
     bool canInsertFromMimeData(int index, const QMimeData *source) const override;
 
-    void resizeEvent(QResizeEvent *event) override;
-
 private slots:
     void onDragActionChanged(Qt::DropAction action);
 
@@ -56,6 +54,8 @@ private slots:
     void onTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
 
     void onDroped();
+
+    void onSetCurrentIndex();
 
 signals:
     void sigAddTab(const QString &);
@@ -73,14 +73,15 @@ signals:
 private:
     QString getFileName(const QString &strFilePath);
 
-    void updateTabWidth(int line);
-
 private slots:
     void onTabChanged(int);
 
     void onTabAddRequested();
 
     void onTabCloseRequested(int index);
+
+private:
+    int m_delayIndex = -1;
 };
 
 #endif // MAINTABWIDGET_H
