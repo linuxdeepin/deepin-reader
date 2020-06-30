@@ -16,8 +16,6 @@ class DocTabBar : public DTabBar
 public:
     explicit DocTabBar(QWidget *parent);
 
-    ~DocTabBar() override;
-
     int indexOfFilePath(const QString &filePath);
 
     void insertSheet(DocSheet *sheet, int index = -1);
@@ -25,6 +23,8 @@ public:
     void removeSheet(DocSheet *sheet);
 
     void showSheet(DocSheet *sheet);
+
+    void updateTabWidth();
 
 signals:
     void sigTabMoveIn(DocSheet *);

@@ -16,13 +16,20 @@ DocTabBar::DocTabBar(QWidget *parent)
 {
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 2 ))
     this->setEnabledEmbedStyle(true);//设置直角样式
+
     this->setExpanding(true);//设置平铺窗口模式
+
 #endif
     this->setTabsClosable(true);
+
     this->setMovable(true);
+
     this->setElideMode(Qt::ElideMiddle);
+
     this->setVisibleAddButton(true);
+
     this->setDragable(true);
+
     this->setFocusPolicy(Qt::NoFocus);
 
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(onTabCloseRequested(int)));
@@ -36,11 +43,6 @@ DocTabBar::DocTabBar(QWidget *parent)
     connect(this, &DTabBar::tabDroped, this, &DocTabBar::onTabDroped);
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::onDragActionChanged);
-}
-
-DocTabBar::~DocTabBar()
-{
-
 }
 
 int DocTabBar::indexOfFilePath(const QString &filePath)
@@ -67,9 +69,9 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
 
     this->setTabToolTip(index, fileName);
 
-    this->setTabMinimumSize(index, QSize(140, 36));
-
     this->setTabData(index, DocSheet::getUuid(sheet));
+
+    updateTabWidth();
 
     m_delayIndex = index;
 
@@ -81,6 +83,7 @@ void DocTabBar::removeSheet(DocSheet *sheet)
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             removeTab(i);
+            updateTabWidth();
             return;
         }
     }
@@ -92,6 +95,23 @@ void DocTabBar::showSheet(DocSheet *sheet)
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             this->setCurrentIndex(i);
             return;
+        }
+    }
+}
+
+void DocTabBar::updateTabWidth()
+{
+    int tabWidth = 100;
+    if (count() != 0) {
+        tabWidth = (this->width() - 40) / count();
+        for (int i = 0; i < count(); i++) {
+            if (tabWidth <= 140) {
+                setUsesScrollButtons(true);
+                setTabMinimumSize(i, QSize(140, 37));
+            } else {
+                setUsesScrollButtons(false);
+                setTabMinimumSize(i, QSize(tabWidth, 37));
+            }
         }
     }
 }
@@ -122,7 +142,7 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     this->setTabToolTip(index, tabName);
 
-    setTabMinimumSize(index, QSize(140, 36));
+    updateTabWidth();
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -164,8 +184,8 @@ void DocTabBar::onDragActionChanged(Qt::DropAction action)
 QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
-    nLastPos++;
-    return strFilePath.mid(nLastPos);
+
+    return strFilePath.mid(++nLastPos);
 }
 
 void DocTabBar::onTabChanged(int index)
