@@ -264,7 +264,9 @@ bool DocummentProxy::pageJump(int index)
 {
     if (!m_documment || bcloseing)
         return false;
+
     emit signal_pageJump(index);
+
     return true;
 }
 

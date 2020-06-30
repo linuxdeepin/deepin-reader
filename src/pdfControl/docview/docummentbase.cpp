@@ -658,6 +658,12 @@ bool DocummentBase::pageJump(int pagenum)
 
     DScrollBar *scrollBar_X = horizontalScrollBar();
     DScrollBar *scrollBar_Y = verticalScrollBar();
+
+    if (d->m_currentpageno != pagenum) {
+        d->m_currentpageno = pagenum;
+        emit signal_pageChange(d->m_currentpageno);
+    }
+
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         if (scrollBar_X)
@@ -675,10 +681,6 @@ bool DocummentBase::pageJump(int pagenum)
         break;
     }
 
-    if (d->m_currentpageno != pagenum) {
-        d->m_currentpageno = pagenum;
-        emit signal_pageChange(d->m_currentpageno);
-    }
     return true;
 }
 

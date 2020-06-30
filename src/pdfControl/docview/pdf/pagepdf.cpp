@@ -674,7 +674,7 @@ bool PagePdf::renderImage(double scale, RotateType_EM rotate)
         emit sigRenderFinish(image);
         return true;
     }
-    //d->m_page->getImage(d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+
     return false;
 }
 
