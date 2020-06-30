@@ -659,28 +659,34 @@ bool DocummentBase::pageJump(int pagenum)
     DScrollBar *scrollBar_X = horizontalScrollBar();
     DScrollBar *scrollBar_Y = verticalScrollBar();
 
-    if (d->m_currentpageno != pagenum) {
-        d->m_currentpageno = pagenum;
-        emit signal_pageChange(d->m_currentpageno);
-    }
-
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         if (scrollBar_X)
             scrollBar_X->setValue(d->m_widgetrects.at(pagenum).x());
-        if (scrollBar_Y)
+        if (scrollBar_Y) {
+            d->m_bMouseHandleVScroll = false;
             scrollBar_Y->setValue(d->m_widgetrects.at(pagenum).y());
+        }
         break;
     case ViewMode_FacingPage:
         if (scrollBar_X)
             scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
-        if (scrollBar_Y)
+        if (scrollBar_Y) {
+            d->m_bMouseHandleVScroll = false;
             scrollBar_Y->setValue(d->m_widgetrects.at(pagenum / 2).y());
+        }
         break;
     default:
         break;
     }
 
+    if (d->m_currentpageno != pagenum) {
+        d->m_currentpageno = pagenum;
+        emit signal_pageChange(d->m_currentpageno);
+        loadPages();
+    }
+
+    d->m_bMouseHandleVScroll = true;
     return true;
 }
 
@@ -714,7 +720,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (d->m_pages.size() < 1) {
         return;
     }
-    d->m_bMouseHandleVScroll = false;
+//    d->m_bMouseHandleVScroll = false;
 
     if (scale - d->m_scale < EPSINON && scale - d->m_scale > -EPSINON && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
@@ -876,9 +882,8 @@ void DocummentBase::slot_vScrollBarValueChanged(int)
             d->m_currentpageno = pageno;
             emit signal_pageChange(d->m_currentpageno);
             calcCurPageViewPrecent();
+            loadPages();
         }
-
-        loadPages();
 
         d->m_bMouseHandleVScroll = true;
     }
