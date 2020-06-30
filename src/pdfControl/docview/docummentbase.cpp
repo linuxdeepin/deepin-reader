@@ -1685,6 +1685,11 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
     QScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         scrollBar_Y->setValue(yvalue);
+
+    if (d->m_currentpageno != ipage) {
+        d->m_currentpageno = ipage;
+        emit signal_pageChange(d->m_currentpageno);
+    }
 }
 
 QString DocummentBase::pagenum2label(int index)

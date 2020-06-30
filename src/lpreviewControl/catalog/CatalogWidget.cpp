@@ -91,7 +91,7 @@ void CatalogWidget::setTitleTheme()
 
 void CatalogWidget::handleOpenSuccess()
 {
-    if (nullptr == m_sheet && bIshandOpenSuccess)
+    if (nullptr == m_sheet || bIshandOpenSuccess)
         return;
 
     bIshandOpenSuccess = true;
