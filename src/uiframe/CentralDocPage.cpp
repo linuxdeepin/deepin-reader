@@ -100,9 +100,9 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
     sigCurSheetChanged(sheet);
 
     if (DocSheet::existFileChanged()) {
-        BlockShutdown();
+        DocSheet::blockShutdown();
     } else {
-        UnBlockShutdown();
+        DocSheet::unBlockShutdown();
     }
 }
 
@@ -495,53 +495,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     }
 
     return nullptr;
-}
-
-void CentralDocPage::BlockShutdown()
-{
-
-    if (m_bBlockShutdown)
-        return;
-
-    if (m_reply.value().isValid()) {
-        return;
-    }
-
-    if (m_pLoginManager == nullptr)
-        m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
-                                             "/org/freedesktop/login1",
-                                             "org.freedesktop.login1.Manager",
-                                             QDBusConnection::systemBus());
-
-    QList<QVariant> args;
-    args << QString("shutdown")             // what
-         << qApp->applicationDisplayName()           // who
-         << QObject::tr("Document not saved") // why
-         << QString("block");                        // mode
-
-    int fd = -1;
-    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", args);
-    if (m_reply.isValid()) {
-        fd = m_reply.value().fileDescriptor();
-        m_bBlockShutdown = true;
-    } else {
-        qDebug() << m_reply.error();
-    }
-}
-
-void CentralDocPage::UnBlockShutdown()
-{
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto mainsplit, splitterList) {
-        if (mainsplit->fileChanged())
-            return;
-    }
-
-    if (m_reply.isValid()) {
-        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
-        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        m_bBlockShutdown = false;
-    }
 }
 
 void CentralDocPage::showFileAttr()

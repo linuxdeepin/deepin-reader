@@ -120,14 +120,18 @@ void MainWindow::initUI()
 {
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
-
     setCentralWidget(m_central);
 
     titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
+
+    //移除焦点抢占和避免出现焦点样式
     titlebar()->setFocusPolicy(Qt::NoFocus);
+    QList<QWidget *> list = titlebar()->findChildren<QWidget *>();
+    foreach (QWidget *w, list)
+        w->setFocusPolicy(Qt::NoFocus);
 }
 
 //  快捷键 实现

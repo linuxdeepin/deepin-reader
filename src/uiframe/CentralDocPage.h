@@ -25,9 +25,6 @@
 #include "app/ModuleHeader.h"
 #include "DocSheet.h"
 
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QDBusUnixFileDescriptor>
 #include <QMap>
 #include <QPointer>
 
@@ -88,10 +85,6 @@ public:
 
     void openCurFileFolder();
 
-    void BlockShutdown();
-
-    void UnBlockShutdown();
-
 public slots:
     void onOpened(DocSheet *, bool);
 
@@ -134,10 +127,6 @@ signals:
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
-    QDBusInterface      *m_pLoginManager = nullptr;
-
-    QDBusReply<QDBusUnixFileDescriptor> m_reply;
-    bool m_bBlockShutdown = false;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     QPointer<DocSheet>  m_slideSheet = nullptr;

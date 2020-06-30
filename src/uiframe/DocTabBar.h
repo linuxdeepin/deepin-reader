@@ -48,6 +48,8 @@ protected:
 
     void dragEnterEvent(QDragEnterEvent *event) override;
 
+    void resizeEvent(QResizeEvent *e);
+
 private slots:
     void onDragActionChanged(Qt::DropAction action);
 

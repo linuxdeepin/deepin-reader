@@ -108,9 +108,11 @@ void DocTabBar::updateTabWidth()
             if (tabWidth <= 140) {
                 setUsesScrollButtons(true);
                 setTabMinimumSize(i, QSize(140, 37));
+                setTabMaximumSize(i, QSize(140, 37));
             } else {
                 setUsesScrollButtons(false);
                 setTabMinimumSize(i, QSize(tabWidth, 37));
+                setTabMaximumSize(i, QSize(tabWidth, 37));
             }
         }
     }
@@ -177,11 +179,15 @@ void DocTabBar::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
+void DocTabBar::resizeEvent(QResizeEvent *e)
+{
+    DTabBar::resizeEvent(e);
+    updateTabWidth();
+}
+
 void DocTabBar::onDragActionChanged(Qt::DropAction action)
 {
-    if (action == Qt::TargetMoveAction) {
-//        QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
-    } else if (action == Qt::IgnoreAction) {
+    if (action == Qt::IgnoreAction) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
         if (count() <= 1)
             QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
