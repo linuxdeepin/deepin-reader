@@ -644,6 +644,7 @@ PageInterface *PagePdf::getInterFace()
 void PagePdf::deletePage()
 {
     Q_D(PagePdf);
+    QMutexLocker mutext(&d->m_imageMutex);
     if (nullptr != d->m_page) {
         delete d->m_page;
         d->m_page = nullptr;
