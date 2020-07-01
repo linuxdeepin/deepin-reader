@@ -130,8 +130,10 @@ void MainWindow::initUI()
     //移除焦点抢占和避免出现焦点样式
     titlebar()->setFocusPolicy(Qt::NoFocus);
     QList<QWidget *> list = titlebar()->findChildren<QWidget *>();
-    foreach (QWidget *w, list)
-        w->setFocusPolicy(Qt::NoFocus);
+    foreach (QWidget *w, list) {
+        if (!w->objectName().isEmpty())
+            w->setFocusPolicy(Qt::NoFocus);
+    }
 }
 
 //  快捷键 实现

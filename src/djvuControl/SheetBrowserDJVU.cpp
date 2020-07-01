@@ -106,8 +106,11 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
 
     m_initPage = operation.currentPage;
 
-    if (m_initPage < 1)
+    if (m_initPage <= 1)
         m_initPage = 1;
+
+    if (m_document->numberOfPages() < 1)
+        m_initPage = 0;
 
     if (m_initPage > m_document->numberOfPages())
         m_initPage = m_document->numberOfPages();
@@ -378,10 +381,10 @@ int SheetBrowserDJVU::visibleCurrentPage()
 
 int SheetBrowserDJVU::currentPage()
 {
-    if (m_curPageNo > 0)
-        return m_curPageNo;
+    if (m_curPage > 0)
+        return m_curPage;
 
-    visibleCurrentPage();
+    return visibleCurrentPage();
 }
 
 int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
@@ -393,9 +396,10 @@ int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
 
 void SheetBrowserDJVU::pageChanged(int page)
 {
-    if (page != m_curPageNo) {
-        m_curPageNo = page;
-        emit sigPageChanged(m_curPageNo);
+    if (page != m_curPage) {
+        m_curPage = page;
+
+        emit sigPageChanged(m_curPage);
     }
 }
 
@@ -405,6 +409,7 @@ void SheetBrowserDJVU::setCurrentPage(int page)
         return;
 
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
+
     pageChanged(page);
 }
 
@@ -497,9 +502,9 @@ void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)
 
 void SheetBrowserDJVU::showEvent(QShowEvent *event)
 {
-    if (1 != m_initPage) {
+    if (0 != m_initPage) {
         setCurrentPage(m_initPage);
-        m_initPage = 1;
+        m_initPage = 0;
     }
 
     QGraphicsView::showEvent(event);
