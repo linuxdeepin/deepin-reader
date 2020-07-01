@@ -368,10 +368,3 @@ void TitleWidget::setControlEnabled(const bool &enable)
         m_pSw->clear();
     }
 }
-
-void TitleWidget::setSizeScale(double &scale)
-{
-    if (m_pSw) {
-        m_pSw->setSizeScale(scale);
-    }
-}

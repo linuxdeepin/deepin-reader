@@ -59,7 +59,6 @@ Central::Central(QWidget *parent)
     connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
     connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
     connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
-    connect(m_docPage, SIGNAL(sigScaleChanged(double)), this, SLOT(slotScaleChanged(double)));
 
     m_navPage = new CentralNavPage(this);
     connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
@@ -233,13 +232,6 @@ void Central::onShowTips(const QString &text, int iconIndex)
             DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
         else
             DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
-    }
-}
-
-void Central::slotScaleChanged(double scale)
-{
-    if (m_widget) {
-        m_widget->setSizeScale(scale);
     }
 }
 

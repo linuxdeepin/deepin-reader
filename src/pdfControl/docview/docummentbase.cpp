@@ -1131,6 +1131,8 @@ bool DocummentBase::loadPages()
         }
     }
 
+//    qInfo() << __LINE__ << "      firstpagenum:" << firstpagenum << "         lastpagenum:" << lastpagenum <<    "       d->m_currentpageno" << d->m_currentpageno;
+
     for (int i = 0; i < d->m_pages.size(); i++) {
         bool bshow = false;
         for (int j = firstpagenum ; j <= lastpagenum; j++) {

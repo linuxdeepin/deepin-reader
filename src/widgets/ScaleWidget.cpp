@@ -120,12 +120,3 @@ void ScaleWidget::paintEvent(QPaintEvent *)
 {
     return;
 }
-
-void ScaleWidget::setSizeScale(double &scale)
-{
-    m_lineEdit->clear();
-    QString text = QString::number(QString::number(scale, 'f', 2).toDouble()) + "%";
-    m_lineEdit->setText(text);
-    m_lineEdit->lineEdit()->setCursorPosition(0);
-
-}

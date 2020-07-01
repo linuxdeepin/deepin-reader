@@ -125,7 +125,7 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-        connect(sheet, SIGNAL(sigScaleChanged(double)), this, SIGNAL(sigScaleChanged(double)));
+//        connect(sheet, SIGNAL(sigScaleChanged(double)), this, SIGNAL(sigScaleChanged(double)));
 
         sheet->openFile();
 

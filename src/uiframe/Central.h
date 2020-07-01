@@ -88,8 +88,6 @@ public slots:
 
     void onShowTips(const QString &text, int iconIndex = 0);
 
-    void slotScaleChanged(double);
-
 private:
     QStackedLayout      *m_layout = nullptr;
     CentralDocPage      *m_docPage = nullptr;
