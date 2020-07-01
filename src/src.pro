@@ -61,7 +61,10 @@ target.path = $$INSTROOT$$BINDIR
 desktop.path = $$INSTROOT$$APPDIR
 desktop.files = $$PWD/deepin-reader.desktop
 
-INSTALLS += target desktop
+icon_files.path = /usr/share/icons/hicolor/scalable/apps
+icon_files.files = $$PWD/deepin-reader.svg
+
+INSTALLS += target desktop icon_files
 
 TRANSLATIONS += \
     ../translations/deepin-reader_en_US.ts\
