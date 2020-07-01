@@ -1671,7 +1671,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
             }
         } else if (d->m_viewmode == ViewMode_FacingPage) {
             double curwidgetwidth = d->m_widgets.at(ipage / 2)->width();
-            double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+            double topspace = (d->m_widgets.at(ipage / 2)->height() - curheight) / 2;
             double leftspace = d->m_pages.at(ipage)->x();
 
             double leftposition = curwidth * realleft + leftspace ;
