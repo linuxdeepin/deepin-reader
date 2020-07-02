@@ -221,6 +221,7 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
         } else {
             emit sigWheelDown();
         }
+        return;
     }
 
     QGraphicsView::wheelEvent(event);
@@ -232,10 +233,12 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
 
     int page = currentPage();
 
-    int diff = 0;
+    qreal pageDiffFactor = 0;
 
-    if (page > 0 && page <= m_items.count())
-        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+    if (page > 0 && page <= m_items.count()) {
+        qreal diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+        pageDiffFactor = diff / m_items.at(page - 1)->boundingRect().height();
+    }
 
     int width = 0;
     int height = 0;
@@ -302,8 +305,9 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
 
     setSceneRect(0, 0, width, height);
 
-    if (page > 0 && page <= m_items.count())
-        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + diff);
+    if (page > 0 && page <= m_items.count()) {
+        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + m_items[page - 1]->boundingRect().height()*pageDiffFactor);
+    }
 }
 
 bool SheetBrowserDJVU::hasLoaded()
