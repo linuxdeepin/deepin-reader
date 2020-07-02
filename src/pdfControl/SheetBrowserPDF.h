@@ -116,6 +116,9 @@ protected:
 
     void leaveEvent(QEvent *)override;
 
+private slots:
+    void onHandleResize();
+
 private:
     void initConnections();
     double setFit(int fit);
@@ -126,6 +129,7 @@ private:
     friend class DocSheetPDF;
     SheetBrowserPDFPrivate *const d_ptr = nullptr;
     Q_DECLARE_PRIVATE(SheetBrowserPDF)
+    QTimer *m_timer = nullptr;
 };
 
 
