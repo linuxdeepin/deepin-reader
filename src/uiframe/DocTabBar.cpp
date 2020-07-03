@@ -225,12 +225,14 @@ void DocTabBar::onTabReleased(int index)
     if (count() <= 1)
         return;
 
-    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+    int dropIndex = currentIndex();     //使用dropIndex替代index ,因为index是记录刚drag的index，当拖拽的时候几个item被移动了就会出错
+
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(dropIndex).toString());
 
     if (nullptr == sheet)
         return;
 
-    removeTab(index);
+    removeTab(dropIndex);
 
     emit sigTabNewWindow(sheet);
 }
@@ -239,7 +241,9 @@ void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
-    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+    int dropIndex = currentIndex();     //使用dropIndex替代index ,因为index是记录刚drag的index，当拖拽的时候几个item被移动了就会出错
+
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(dropIndex).toString());
 
     if (nullptr == sheet)
         return;
@@ -249,19 +253,12 @@ void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
         if (count() <= 1) {//如果是最后一个，不允许
             return;
         }
-        removeTab(index);
+        removeTab(dropIndex);
         emit sigTabNewWindow(sheet);
     } else if (Qt::MoveAction == da) {
         //如果是移动
-        removeTab(index);
+        removeTab(dropIndex);
         emit sigTabMoveOut(sheet);
-    }
-}
-
-void DocTabBar::onDroped()
-{
-    if (count() <= 0) {
-        emit sigLastTabMoved();
     }
 }
 

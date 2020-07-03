@@ -57,8 +57,6 @@ private slots:
 
     void onTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
 
-    void onDroped();
-
     void onSetCurrentIndex();
 
 signals:
@@ -86,6 +84,7 @@ private slots:
 
 private:
     int m_delayIndex = -1;
+    QString draguuid;
 };
 
 #endif // MAINTABWIDGET_H

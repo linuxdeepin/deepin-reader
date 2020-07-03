@@ -125,7 +125,6 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-//        connect(sheet, SIGNAL(sigScaleChanged(double)), this, SIGNAL(sigScaleChanged(double)));
 
         sheet->openFile();
 
@@ -270,6 +269,8 @@ void CentralDocPage::onTabMoveOut(DocSheet *sheet)
     leaveSheet(sheet);
 
     if (m_pStackedLayout->count() <= 0) {
+        qDebug() << m_pStackedLayout->count();
+        qDebug() << m_pTabBar->count();
         emit sigNeedClose();
         return;
     }
@@ -291,6 +292,22 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 void CentralDocPage::onCentralMoveIn(DocSheet *sheet)
 {
     addSheet(sheet);
+}
+
+void CentralDocPage::leaveSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    m_pStackedLayout->removeWidget(sheet);
+
+    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 }
 
 void CentralDocPage::enterSheet(DocSheet *sheet)
@@ -319,22 +336,6 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
         m_curSheet = sheet;
         m_curSheet->setActive(true);
     }
-}
-
-void CentralDocPage::leaveSheet(DocSheet *sheet)
-{
-    if (nullptr == sheet)
-        return;
-
-    m_pStackedLayout->removeWidget(sheet);
-
-    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
-    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 }
 
 bool CentralDocPage::hasSheet(DocSheet *sheet)
