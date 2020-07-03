@@ -10,11 +10,13 @@ CONFIG += c++11 link_pkgconfig
 
 PKGCONFIG += ddjvuapi dtkwidget
 
+3RDPARTTPATH = $$PWD/../3rdparty
 INCLUDEPATH += $$PWD/uiframe
-INCLUDEPATH += $$PWD/../3rdparty/include
+INCLUDEPATH += $${3RDPARTTPATH}/include
 
-LIBS += -L"$$PWD/../3rdparty/lib" -ldpoppler-qt -ldpoppler
-!system(cd $$PWD/../3rdparty/output && cmake $$PWD/../3rdparty/poppler-0.89.0 && make){
+
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldpoppler-qt -ldpoppler
+!system(mkdir $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build dpoppler library failed.")
 }
 
@@ -77,7 +79,7 @@ CONFIG(release, debug|release) {
 
 unix{
     d_poppler.path = /usr/lib
-    d_poppler.files = $$PWD/../3rdparty/lib/*.so*
+    d_poppler.files = $${3RDPARTTPATH}/lib/*.so*
     INSTALLS += d_poppler
 }
 
