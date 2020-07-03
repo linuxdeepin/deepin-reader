@@ -269,8 +269,6 @@ void CentralDocPage::onTabMoveOut(DocSheet *sheet)
     leaveSheet(sheet);
 
     if (m_pStackedLayout->count() <= 0) {
-        qDebug() << m_pStackedLayout->count();
-        qDebug() << m_pTabBar->count();
         emit sigNeedClose();
         return;
     }

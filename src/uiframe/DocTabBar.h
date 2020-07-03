@@ -84,7 +84,6 @@ private slots:
 
 private:
     int m_delayIndex = -1;
-    QString draguuid;
 };
 
 #endif // MAINTABWIDGET_H
