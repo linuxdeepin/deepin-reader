@@ -25,11 +25,12 @@
 #include <QMutex>
 #include <QStack>
 #include <QImage>
-
 #include "Global.h"
 
+class SheetBrowserPDFL;
 class SheetBrowserPDFLItem;
 struct RenderTaskPDFL {
+    SheetBrowserPDFL *view = nullptr;
     SheetBrowserPDFLItem *item = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
@@ -47,6 +48,8 @@ public:
     static void clearVipTask(SheetBrowserPDFLItem *item);
 
     static void clearTask(SheetBrowserPDFLItem *item);
+
+    static void clearTasks(SheetBrowserPDFL *view);
 
     static void appendVipTask(RenderTaskPDFL task);
 

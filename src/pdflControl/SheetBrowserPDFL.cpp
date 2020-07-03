@@ -140,6 +140,8 @@ void SheetBrowserPDFL::setBookMark(int index, int state)
 
 void SheetBrowserPDFL::onVerticalScrollBarValueChanged(int)
 {
+    wordsChangedLater();
+
     QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
 
     foreach (QGraphicsItem *item, items) {
@@ -171,6 +173,26 @@ void SheetBrowserPDFL::onHorizontalScrollBarValueChanged(int value)
             continue;
 
         pdfItem->renderViewPort();
+    }
+}
+
+void SheetBrowserPDFL::onWordsChanged()
+{
+    //改变当前可读取字体
+    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
+    foreach (QGraphicsItem *item, items) {
+        if (item->data(0).toString() != "SheetBrowserPDFLItem")
+            continue;
+
+        SheetBrowserPDFLItem *pdfItem = static_cast<SheetBrowserPDFLItem *>(item);
+
+        if (!m_items.contains(pdfItem))
+            continue;
+
+        if (nullptr == pdfItem)
+            continue;
+
+        pdfItem->loadWords();
     }
 }
 
@@ -256,6 +278,24 @@ void SheetBrowserPDFL::removeAnnotation(SheetBrowserPDFLAnnotation *annotation)
 
 }
 
+void SheetBrowserPDFL::wordsChangedLater()
+{
+    foreach (SheetBrowserPDFLItem *item, m_items) {
+        item->clearWords();
+    }
+
+    if (nullptr == m_scrollTimer) {
+        m_scrollTimer = new QTimer(this);
+        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowserPDFL::onWordsChanged);
+        m_scrollTimer->setSingleShot(true);
+    }
+
+    if (m_scrollTimer->isActive())
+        m_scrollTimer->stop();
+
+    m_scrollTimer->start(100);
+}
+
 void SheetBrowserPDFL::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
@@ -277,16 +317,6 @@ void SheetBrowserPDFL::wheelEvent(QWheelEvent *event)
 void SheetBrowserPDFL::deform(DocOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
-
-    int page = currentPage();
-
-    int diff = 0;
-
-    if (page > 0 && page <= m_items.count())
-        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
-
-    int width = 0;
-    int height = 0;
 
     switch (operation.rotation) {
     default:
@@ -328,14 +358,33 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
     }
 
+    //开始调整位置
+    int page = currentPage();
+
+    int diff = 0;
+
+    if (page > 0 && page <= m_items.count())
+        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+
+    int width = 0;
+    int height = 0;
+
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
+            m_items.at(i)->clearWords();
+
             m_items.at(i)->setPos(0, height);
+
             height += m_items.at(i)->boundingRect().height() + 5;
+
             if (m_items.at(i)->boundingRect().width() > width)
                 width = m_items.at(i)->boundingRect().width();
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
+        for (int i = 0; i < m_items.count(); ++i) {
+            m_items.at(i)->clearWords();
+        }
+
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
                 continue;
@@ -366,6 +415,8 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
 
     if (page > 0 && page <= m_items.count())
         verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + diff);
+
+    wordsChangedLater();
 }
 
 bool SheetBrowserPDFL::hasLoaded()
@@ -376,7 +427,16 @@ bool SheetBrowserPDFL::hasLoaded()
 void SheetBrowserPDFL::resizeEvent(QResizeEvent *event)
 {
     if (hasLoaded()) {
-        sigSizeChanged();
+        if (nullptr == m_resizeTimer) {
+            m_resizeTimer = new QTimer(this);
+            connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowserPDFL::sigSizeChanged);
+            m_resizeTimer->setSingleShot(true);
+        }
+
+        if (m_resizeTimer->isActive())
+            m_resizeTimer->stop();
+
+        m_resizeTimer->start(10);
     }
 
     QGraphicsView::resizeEvent(event);

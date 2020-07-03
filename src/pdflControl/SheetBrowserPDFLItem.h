@@ -75,11 +75,11 @@ public:
 
     void setWordSelectable(bool selectable);
 
-    void reloadWords();
+    void clearWords();
+
+    void loadWords();
 
     void reloadAnnotations();
-
-    void reload();
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -108,6 +108,7 @@ private:
     SheetBrowserPDFL *m_parent = nullptr;
 
     Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
+    double m_wordScaleFactor = -1;
     QList<SheetBrowserPDFLWord *> m_words;
 
     Dr::Rotation m_annotationRotation = Dr::NumberOfRotations;

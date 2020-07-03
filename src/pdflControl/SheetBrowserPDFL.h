@@ -81,6 +81,8 @@ public:
 
     void removeAnnotation(SheetBrowserPDFLAnnotation *annotation);
 
+    void wordsChangedLater();
+
 signals:
     void sigPageChanged(int page);
 
@@ -124,6 +126,8 @@ private slots:
 
     void onMenuItemClicked(const QString &objectname, const QVariant &param);
 
+    void onWordsChanged();
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserPDFLItem *> m_items;
@@ -136,6 +140,8 @@ private:
     DocSheetPDFL *m_sheet = nullptr;
     QPointF m_selectPressedPos;        //scene
     TipsWidget *m_tipsWidget = nullptr;
+    QTimer *m_resizeTimer = nullptr;
+    QTimer *m_scrollTimer = nullptr;
 };
 
 #endif // SHEETBROWSERPDFL_H

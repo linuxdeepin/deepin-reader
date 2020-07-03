@@ -46,6 +46,8 @@ SheetBrowserPDFLItem::SheetBrowserPDFLItem(SheetBrowserPDFL *parent, deepin_read
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
+    setCacheMode(CacheMode::ItemCoordinateCache);
+    setData(0, "SheetBrowserPDFLItem");
 }
 
 SheetBrowserPDFLItem::~SheetBrowserPDFLItem()
@@ -193,15 +195,6 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
         RenderThreadPDFL::appendTasks(tasks);
         m_imageScaleFactor = m_scaleFactor;
 
-        //load word
-        if (m_wordRotation != m_rotation) {
-            m_wordRotation = m_rotation;
-            reloadWords();
-        }
-
-        foreach (SheetBrowserPDFLWord *word, m_words)
-            word->setScaleFactor(m_scaleFactor);
-
         //load annotation
         if (m_annotationRotation != m_rotation || !qFuzzyCompare(m_annotationScaleFactor, m_scaleFactor)) {
             m_annotationScaleFactor = m_scaleFactor;
@@ -293,17 +286,39 @@ void SheetBrowserPDFLItem::setWordSelectable(bool selectable)
     }
 }
 
-void SheetBrowserPDFLItem::reloadWords()
+void SheetBrowserPDFLItem::clearWords()
 {
-    qDeleteAll(m_words);
+    if (m_words.isEmpty())
+        return;
+
+    foreach (SheetBrowserPDFLWord *word, m_words) {
+        scene()->removeItem(word);
+        delete word;
+    }
+
+    m_wordRotation = Dr::NumberOfRotations;
+    m_wordScaleFactor = -1;
     m_words.clear();
+}
 
-    QList<deepin_reader::Word> words = m_page->words(m_rotation);
+void SheetBrowserPDFLItem::loadWords()
+{
+    if (m_wordRotation != m_rotation) {
+        clearWords();
 
-    for (int i = 0; i < words.count(); ++i) {
-        SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
-        word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
-        m_words.append(word);
+        m_wordRotation = m_rotation;
+        QList<deepin_reader::Word> words = m_page->words(m_rotation);
+        for (int i = 0; i < words.count(); ++i) {
+            SheetBrowserPDFLWord *word = new SheetBrowserPDFLWord(this, words[i]);
+            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+            m_words.append(word);
+        }
+    }
+
+    if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
+        m_wordScaleFactor = m_scaleFactor;
+        foreach (SheetBrowserPDFLWord *word, m_words)
+            word->setScaleFactor(m_scaleFactor);
     }
 }
 
@@ -311,6 +326,7 @@ void SheetBrowserPDFLItem::reloadAnnotations()
 {
     qDeleteAll(m_annotations);
     m_annotations.clear();
+
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
 
@@ -358,19 +374,19 @@ bool SheetBrowserPDFLItem::removeAnnotation(deepin_reader::Annotation *annotatio
     return true;
 }
 
-void SheetBrowserPDFLItem::reload()
-{
-    double scaleFactor = m_scaleFactor;
-    Dr::Rotation rotation = m_rotation;
+//void SheetBrowserPDFLItem::reload()
+//{
+//    double scaleFactor = m_scaleFactor;
+//    Dr::Rotation rotation = m_rotation;
 
-    m_scaleFactor = -1;
-    m_rotation = Dr::NumberOfRotations;
-    m_wordRotation = Dr::NumberOfRotations;
-    m_annotationRotation = Dr::NumberOfRotations;
-    m_annotationScaleFactor = -1;
+//    m_scaleFactor = -1;
+//    m_rotation = Dr::NumberOfRotations;
+//    m_wordRotation = Dr::NumberOfRotations;
+//    m_annotationRotation = Dr::NumberOfRotations;
+//    m_annotationScaleFactor = -1;
 
-    render(scaleFactor, rotation);
-}
+//    render(scaleFactor, rotation);
+//}
 
 bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)
 {

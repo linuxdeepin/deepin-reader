@@ -28,6 +28,7 @@
 */
 #include "RenderThreadPDFL.h"
 #include "SheetBrowserPDFLItem.h"
+#include "SheetBrowserPDFL.h"
 
 #include <QTime>
 #include <QDebug>
@@ -85,6 +86,26 @@ void RenderThreadPDFL::clearTask(SheetBrowserPDFLItem *item)
             }
         }
     }
+
+    instance->m_mutex.unlock();
+}
+
+void RenderThreadPDFL::clearTasks(SheetBrowserPDFL *view)
+{
+    if (nullptr == instance)
+        instance = new RenderThreadPDFL;
+
+    instance->m_mutex.lock();
+
+    QStack<RenderTaskPDFL> tasks;
+
+    for (int i = 0; i < instance->m_tasks.count(); ++i) {
+        if (instance->m_tasks[i].view != view) {
+            tasks.append(instance->m_tasks[i]);
+        }
+    }
+
+    instance->m_tasks = tasks;
 
     instance->m_mutex.unlock();
 }
