@@ -669,3 +669,33 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
         tmptext.append("...");
     return tmptext;
 }
+
+bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
+{
+    QFile sourceFile(sourcePath);
+    if (!sourceFile.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    QFile destinationFile(destinationPath);
+    if (!destinationFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        return false;
+    }
+
+    const qint64 maxSize = 4096;
+    qint64 size = -1;
+
+    QScopedArrayPointer< char > buffer(new char[maxSize]);
+
+    do {
+        if ((size = sourceFile.read(buffer.data(), maxSize)) < 0) {
+            return false;
+        }
+
+        if (destinationFile.write(buffer.data(), size) < 0) {
+            return false;
+        }
+    } while (size > 0);
+
+    return true;
+}

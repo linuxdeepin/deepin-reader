@@ -72,6 +72,8 @@ public:
 
     static void copyText(const QString &sText);
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
+
+    static bool copyFile(const QString &sourcePath, const QString &destinationPath);
 };
 
 #endif // UTILS_H
