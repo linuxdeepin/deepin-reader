@@ -33,8 +33,7 @@
 #include "SheetBrowserPDFLWord.h"
 #include "SheetBrowserPDFLAnnotation.h"
 #include "widgets/TipsWidget.h"
-#include "pdfControl/menu/DefaultOperationMenu.h"
-#include "pdfControl/menu/TextOperationMenu.h"
+#include "SheetBrowserPdflMenu.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -415,33 +414,22 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
                 }
             }
 
+            SheetBrowserPDFLMenu menu;
+            connect(&menu, &SheetBrowserPDFLMenu::signalMenuItemClicked, this, &SheetBrowserPDFL::onMenuItemClicked);
             if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
                 //文字注释(图标)
-                TextOperationMenu textOperaMenu;
-                textOperaMenu.setClickPoint(event->pos());
-                textOperaMenu.setType(NOTE_ICON);
-                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
-
+                menu.initActions(m_sheet, item->itemIndex(), DocSheetMenuType_e::DOC_MENU_ANNO_ICON);
             } else if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationHighlight) {
                 //文字高亮注释
-                TextOperationMenu textOperaMenu;
-                textOperaMenu.setClickPoint(event->pos());
-                textOperaMenu.setType(NOTE_ICON);
-                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
-
+                menu.initActions(m_sheet, item->itemIndex(), DocSheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT);
             }  else if (!selectWords.isEmpty()) {
                 //选择文字
-                TextOperationMenu textOperaMenu;
-                textOperaMenu.setClickPoint(event->pos());
-                textOperaMenu.setType(NOTE_HIGHLIGHT);
-                textOperaMenu.execMenu(m_sheet, mapToGlobal(event->pos()), false, selectWords, "struuid");
+                menu.initActions(m_sheet, item->itemIndex(), DocSheetMenuType_e::DOC_MENU_SELECT_TEXT);
             } else if (nullptr != item) {
                 //默认
-                int index = item->itemIndex();
-                DefaultOperationMenu defaultMenu;
-                defaultMenu.setClickpoint(event->pos());
-                defaultMenu.execMenu(m_sheet, mapToGlobal(event->pos()), index);
+                menu.initActions(m_sheet, item->itemIndex(), DocSheetMenuType_e::DOC_MENU_DEFAULT);
             }
+            menu.exec(mapToGlobal(event->pos()));
         }
     } else if (QGraphicsView::ScrollHandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
@@ -739,3 +727,45 @@ void SheetBrowserPDFL::showEvent(QShowEvent *event)
     QGraphicsView::showEvent(event);
 }
 
+void SheetBrowserPDFL::onMenuItemClicked(const QString &objectname, const QVariant &param)
+{
+    if (objectname == "Copy") {
+
+    } else if (objectname == "RemoveAnnotation") {
+
+    } else if (objectname == "AddAnnotationIcon") {
+
+    } else if (objectname == "AddBookmark") {
+
+    } else if (objectname == "RemoveHighlight") {
+
+    } else if (objectname == "AddAnnotationHighlight") {
+
+    } else if (objectname == "Search") {
+
+    } else if (objectname == "RemoveBookmark") {
+
+    } else if (objectname == "AddAnnotationIcon") {
+
+    } else if (objectname == "Fullscreen") {
+
+    } else if (objectname == "SlideShow") {
+
+    } else if (objectname == "FirstPage") {
+
+    } else if (objectname == "PreviousPage") {
+
+    } else if (objectname == "NextPage") {
+
+    } else if (objectname == "LastPage") {
+
+    } else if (objectname == "RotateLeft") {
+
+    } else if (objectname == "RotateRight") {
+
+    } else if (objectname == "Print") {
+
+    } else if (objectname == "DocumentInfo") {
+
+    }
+}

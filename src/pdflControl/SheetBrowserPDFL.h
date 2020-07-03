@@ -122,6 +122,8 @@ private slots:
 
     void onHorizontalScrollBarValueChanged(int value);
 
+    void onMenuItemClicked(const QString &objectname, const QVariant &param);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserPDFLItem *> m_items;

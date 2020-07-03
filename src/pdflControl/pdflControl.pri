@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/SheetBrowserPDFLItem.h \
     $$PWD/RenderThreadPDFL.h \
     $$PWD/SheetBrowserPDFLWord.h \
-    $$PWD/SheetBrowserPDFLAnnotation.h
+    $$PWD/SheetBrowserPDFLAnnotation.h \
+    $$PWD/SheetBrowserPdflMenu.h
 
 SOURCES += \
     $$PWD/SheetBrowserPDFL.cpp \
@@ -12,5 +13,6 @@ SOURCES += \
     $$PWD/SheetBrowserPDFLItem.cpp \
     $$PWD/RenderThreadPDFL.cpp \
     $$PWD/SheetBrowserPDFLWord.cpp \
-    $$PWD/SheetBrowserPDFLAnnotation.cpp
+    $$PWD/SheetBrowserPDFLAnnotation.cpp \
+    $$PWD/SheetBrowserPdflMenu.cpp
 

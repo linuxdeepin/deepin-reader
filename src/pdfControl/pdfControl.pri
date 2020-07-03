@@ -22,7 +22,6 @@ HEADERS += \
     $$PWD/database/DBService.h \
     $$PWD/database/FileDataModel.h \
     $$PWD/database/HistroyDB.h \
-    $$PWD/menu/ColorWidgetAction.h \
     $$PWD/menu/DefaultOperationMenu.h \
     $$PWD/menu/TextOperationMenu.h
 
@@ -48,6 +47,5 @@ SOURCES += \
     $$PWD/database/DBService.cpp \
     $$PWD/database/FileDataModel.cpp \
     $$PWD/database/HistroyDB.cpp \
-    $$PWD/menu/ColorWidgetAction.cpp \
     $$PWD/menu/DefaultOperationMenu.cpp \
     $$PWD/menu/TextOperationMenu.cpp

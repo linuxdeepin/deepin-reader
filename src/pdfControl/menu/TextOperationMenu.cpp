@@ -1,6 +1,6 @@
 #include "TextOperationMenu.h"
 
-#include "ColorWidgetAction.h"
+#include "widgets/ColorWidgetAction.h"
 #include "app/AppInfo.h"
 #include "MsgHeader.h"
 #include "utils/Utils.h"

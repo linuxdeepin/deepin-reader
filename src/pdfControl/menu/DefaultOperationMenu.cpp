@@ -20,11 +20,11 @@ DefaultOperationMenu::~DefaultOperationMenu()
 
 void DefaultOperationMenu::initActions()
 {
-    m_pSearch = createAction(tr("Search"), SLOT(slotSearchClicked()));
+    createAction(tr("Search"), SLOT(slotSearchClicked()));
     this->addSeparator();
 
     m_pBookMark = createAction(tr("Add bookmark"), SLOT(slotBookMarkClicked()));
-    m_pAddIconNote = createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
+    createAction(tr("Add annotation"), SLOT(slotAddIconNote()));
     this->addSeparator();
 
     createAction(tr("Fullscreen"), SLOT(slotFullScreenClicked()));
@@ -94,8 +94,6 @@ void DefaultOperationMenu::execMenu(DocSheet *sheet, const QPoint &showPoint, co
         m_pEndPage->setEnabled(false);
     }
 
-    m_pSearch->setVisible(true);
-    m_pAddIconNote->setVisible(true);
     this->exec(showPoint);
 }
 
