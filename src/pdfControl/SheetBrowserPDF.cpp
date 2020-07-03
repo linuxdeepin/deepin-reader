@@ -171,6 +171,7 @@ void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 {
     if (nullptr == m_timer) {
         m_timer = new QTimer(this);
+        m_timer->setSingleShot(true);
         connect(m_timer, &QTimer::timeout, this, &SheetBrowserPDF::onHandleResize);
     }
     if (m_timer->isActive()) {
