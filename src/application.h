@@ -31,7 +31,6 @@ public:
 private:
     void initCfgPath();
     void initChildren();
-    void initI18n();
 };
 
 #endif  // APPLICATION_H_
