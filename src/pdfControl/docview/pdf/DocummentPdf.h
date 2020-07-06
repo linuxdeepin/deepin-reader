@@ -6,6 +6,7 @@
 #include <QFileInfo>
 
 class DocummentPDFPrivate;
+class QSemaphore;
 class DocummentPDF: public DocummentBase
 {
     Q_OBJECT
@@ -39,6 +40,10 @@ public:
 private:
     bool pdfsave(const QString &filePath, bool withChanges);
     void refreshOnePage(int ipage);
+
+public:
+    QSemaphore *imageSemapphore;
+
 private:
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), DocummentPDF)
 };

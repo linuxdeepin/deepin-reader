@@ -90,6 +90,7 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
 
         if (page->size().width() > m_maxWidth)
             m_maxWidth = page->size().width();
+
         if (page->size().height() > m_maxHeight)
             m_maxHeight = page->size().height();
 
@@ -103,9 +104,21 @@ bool SheetBrowserDJVU::loadPages(DocOperation &operation, const QSet<int> &bookm
         scene()->addItem(item);
     }
 
-    loadMouseShape(operation);
-    deform(operation);
     m_initPage = operation.currentPage;
+
+    if (m_initPage <= 1)
+        m_initPage = 1;
+
+    if (m_document->numberOfPages() < 1)
+        m_initPage = 0;
+
+    if (m_initPage > m_document->numberOfPages())
+        m_initPage = m_document->numberOfPages();
+
+    loadMouseShape(operation);
+
+    deform(operation);
+
     m_hasLoaded = true;
 
     return true;
@@ -155,18 +168,17 @@ void SheetBrowserDJVU::setBookMark(int index, int state)
 
 void SheetBrowserDJVU::onVerticalScrollBarValueChanged(int)
 {
-    emit sigPageChanged(currentPage());
+    pageChanged(visibleCurrentPage());
 }
 
 void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 {
     closeMagnifier();
 
-    SheetBrowserDJVUItem *item  = static_cast<SheetBrowserDJVUItem *>(itemAt(QPoint(point)));
-    if (nullptr == item)
-        return;
+    int index = currentPage() - 1;
 
-    int index = m_items.indexOf(item);
+    if (index < 0 || index > allPages() - 1)
+        return;
 
     QMenu menu(this);
     if (m_sheet->hasBookMark(index))
@@ -180,7 +192,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    QAction *firstPageAction = new QAction("First Page", &menu);
+    QAction *firstPageAction = new QAction(tr("First Page"), &menu);
     connect(firstPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageFirst();
     });
@@ -189,7 +201,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         firstPageAction->setDisabled(true);
     }
 
-    QAction *previousPageAction = new QAction("Previous Page", &menu);
+    QAction *previousPageAction = new QAction(tr("Previous Page"), &menu);
     connect(previousPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPagePrev();
     });
@@ -198,7 +210,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         previousPageAction->setDisabled(true);
     }
 
-    QAction *nextPageAction = new QAction("Next Page", &menu);
+    QAction *nextPageAction = new QAction(tr("Next Page"), &menu);
     connect(nextPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageNext();
     });
@@ -207,7 +219,7 @@ void SheetBrowserDJVU::onCustomContextMenuRequested(const QPoint &point)
         nextPageAction->setDisabled(true);
     }
 
-    QAction *lastPageAction = new QAction("Last Page", &menu);
+    QAction *lastPageAction = new QAction(tr("Last Page"), &menu);
     connect(lastPageAction, &QAction::triggered, [this]() {
         this->emit sigNeedPageLast();
     });
@@ -233,6 +245,7 @@ void SheetBrowserDJVU::wheelEvent(QWheelEvent *event)
         } else {
             emit sigWheelDown();
         }
+        return;
     }
 
     QGraphicsView::wheelEvent(event);
@@ -244,10 +257,12 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
 
     int page = currentPage();
 
-    int diff = 0;
+    qreal pageDiffFactor = 0;
 
-    if (page > 0 && page <= m_items.count())
-        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+    if (page > 0 && page <= m_items.count()) {
+        qreal diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+        pageDiffFactor = diff / m_items.at(page - 1)->boundingRect().height();
+    }
 
     int width = 0;
     int height = 0;
@@ -328,8 +343,9 @@ void SheetBrowserDJVU::deform(DocOperation &operation)
 
     setSceneRect(0, 0, width, height);
 
-    if (page > 0 && page <= m_items.count())
-        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + diff);
+    if (page > 0 && page <= m_items.count()) {
+        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + m_items[page - 1]->boundingRect().height()*pageDiffFactor);
+    }
 }
 
 bool SheetBrowserDJVU::hasLoaded()
@@ -406,7 +422,7 @@ int SheetBrowserDJVU::allPages()
     return m_items.count();
 }
 
-int SheetBrowserDJVU::currentPage()
+int SheetBrowserDJVU::visibleCurrentPage()
 {
     int value = verticalScrollBar()->value();
 
@@ -419,7 +435,18 @@ int SheetBrowserDJVU::currentPage()
         }
     }
 
+    if (value == verticalScrollBar()->maximum())
+        index = m_items.count() - 1;
+
     return index + 1;
+}
+
+int SheetBrowserDJVU::currentPage()
+{
+    if (m_curPage > 0)
+        return m_curPage;
+
+    return visibleCurrentPage();
 }
 
 int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
@@ -429,12 +456,23 @@ int SheetBrowserDJVU::viewPointInIndex(QPoint viewPoint)
     return m_items.indexOf(item);
 }
 
+void SheetBrowserDJVU::pageChanged(int page)
+{
+    if (page != m_curPage) {
+        m_curPage = page;
+
+        emit sigPageChanged(m_curPage);
+    }
+}
+
 void SheetBrowserDJVU::setCurrentPage(int page)
 {
     if (page < 1 && page > allPages())
         return;
 
     verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
+
+    pageChanged(page);
 }
 
 bool SheetBrowserDJVU::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
@@ -526,9 +564,9 @@ void SheetBrowserDJVU::dragEnterEvent(QDragEnterEvent *event)
 
 void SheetBrowserDJVU::showEvent(QShowEvent *event)
 {
-    if (1 != m_initPage) {
+    if (0 != m_initPage) {
         setCurrentPage(m_initPage);
-        m_initPage = 1;
+        m_initPage = 0;
     }
 
     QGraphicsView::showEvent(event);

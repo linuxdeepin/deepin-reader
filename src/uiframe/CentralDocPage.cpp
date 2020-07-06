@@ -51,6 +51,7 @@
 #include "djvuControl/DocSheetDJVU.h"
 #include "widgets/SlideWidget.h"
 #include "pdflControl/DocSheetPDFL.h"
+#include "widgets/FileAttrWidget.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -115,9 +116,9 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
     sigCurSheetChanged(sheet);
 
     if (DocSheet::existFileChanged()) {
-        BlockShutdown();
+        DocSheet::blockShutdown();
     } else {
-        UnBlockShutdown();
+        DocSheet::unBlockShutdown();
     }
 }
 
@@ -265,12 +266,6 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
     }
 
     this->activateWindow();
-    //文档刚打开时，模拟鼠标点击文档区域事件
-    QPoint pos(this->geometry().x(), this->geometry().y());
-
-    QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-    QApplication::sendEvent(this, &event0);
 
     sheet->defaultFocus();
 }
@@ -280,7 +275,14 @@ void CentralDocPage::onTabChanged(DocSheet *sheet)
     emit sigCurSheetChanged(sheet);
 
     if (nullptr != sheet) {
+        if (!m_curSheet.isNull()) {
+            m_curSheet->setActive(false);
+            m_curSheet = sheet;
+            m_curSheet->setActive(true);
+        }
+
         m_pStackedLayout->setCurrentWidget(sheet);
+
         sheet->defaultFocus();
     }
 }
@@ -308,6 +310,11 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         if (2 == ret) {
             sheet->saveData();
         }
+    }
+
+    if (m_curSheet == sheet) {
+        m_curSheet->setActive(false);
+        m_curSheet = nullptr;
     }
 
     m_pStackedLayout->removeWidget(sheet);
@@ -354,6 +361,22 @@ void CentralDocPage::onCentralMoveIn(DocSheet *sheet)
     addSheet(sheet);
 }
 
+void CentralDocPage::leaveSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    m_pStackedLayout->removeWidget(sheet);
+
+    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+}
+
 void CentralDocPage::enterSheet(DocSheet *sheet)
 {
     if (nullptr == sheet)
@@ -374,22 +397,12 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-}
 
-void CentralDocPage::leaveSheet(DocSheet *sheet)
-{
-    if (nullptr == sheet)
-        return;
-
-    m_pStackedLayout->removeWidget(sheet);
-
-    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
-    disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    if (!m_curSheet.isNull()) {
+        m_curSheet->setActive(false);
+        m_curSheet = sheet;
+        m_curSheet->setActive(true);
+    }
 }
 
 bool CentralDocPage::hasSheet(DocSheet *sheet)
@@ -550,45 +563,15 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     return nullptr;
 }
 
-void CentralDocPage::BlockShutdown()
+void CentralDocPage::showFileAttr()
 {
-    if (m_bBlockShutdown)
-        return;
+    auto pFileAttrWidget = new FileAttrWidget;
 
-    if (m_reply.value().isValid()) {
-        return;
-    }
+    pFileAttrWidget->setFileAttr(getCurSheet());
 
-    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
-                                         "/org/freedesktop/login1",
-                                         "org.freedesktop.login1.Manager",
-                                         QDBusConnection::systemBus());
+    pFileAttrWidget->setAttribute(Qt::WA_DeleteOnClose);
 
-    m_arg << QString("shutdown")             // what
-          << qApp->applicationDisplayName()           // who
-          << QObject::tr("Document not saved") // why
-          << QString("block");                        // mode
-
-    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
-    if (m_reply.isValid()) {
-        m_reply.value().fileDescriptor();
-        m_bBlockShutdown = true;
-    }
-}
-
-void CentralDocPage::UnBlockShutdown()
-{
-    auto splitterList = this->findChildren<DocSheet *>();
-    foreach (auto mainsplit, splitterList) {
-        if (mainsplit->fileChanged())
-            return;
-    }
-
-    if (m_reply.isValid()) {
-        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
-        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        m_bBlockShutdown = false;
-    }
+    pFileAttrWidget->showScreenCenter();
 }
 
 void CentralDocPage::handleShortcut(const QString &s)
@@ -615,7 +598,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         saveCurrent();
     } else if (s == KeyStr::g_ctrl_shift_s) {
         saveAsCurrent();
-    } else if (s == KeyStr::g_ctrl_h) {
+    } else if (s == KeyStr::g_f5) {
         openSlide();
     } else if (s == KeyStr::g_alt_z) {
         openMagnifer();
@@ -647,7 +630,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_shift_r) {
         if (getCurSheet())
             getCurSheet()->rotateRight();
-    }  else if (s == KeyStr::g_ctrl_larger) {
+    }  else if (s == KeyStr::g_alt_harger) {
         if (getCurSheet())
             getCurSheet()->zoomin();
     } else if (s == KeyStr::g_ctrl_equal) {
@@ -656,7 +639,7 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_smaller) {
         if (getCurSheet())
             getCurSheet()->zoomout();
-    } else if (s == KeyStr::g_ctrl_b) {
+    } else if (s == KeyStr::g_ctrl_d) {
         if (getCurSheet())
             getCurSheet()->setBookMark(getCurSheet()->currentIndex(), true);
     } else if (s == KeyStr::g_ctrl_f) {
@@ -665,10 +648,10 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == KeyStr::g_ctrl_c) {
         if (getCurSheet())
             getCurSheet()->copySelectedText();
-    } else if (s == KeyStr::g_ctrl_l) {
+    } else if (s == KeyStr::g_alt_h) {
         if (getCurSheet())
             getCurSheet()->highlightSelectedText();
-    } else if (s == KeyStr::g_ctrl_i) {
+    } else if (s == KeyStr::g_alt_a) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
     } else if (s == KeyStr::g_left) {

@@ -35,10 +35,16 @@
 #include <QStackedWidget>
 #include <QMimeData>
 #include <QUuid>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusUnixFileDescriptor>
 
 DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
+bool isBlockShutdown = false;
+QDBusInterface *blockShutdownInterface = nullptr;
+QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
 DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_type(type)
 {
@@ -301,6 +307,11 @@ void DocSheet::handleSearch()
     qDebug() << "unrealized";
 }
 
+void DocSheet::stopSearch()
+{
+
+}
+
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     return g_map.key(sheet);
@@ -312,6 +323,50 @@ DocSheet *DocSheet::getSheet(QString uuid)
         return g_map[uuid];
 
     return nullptr;
+}
+
+void DocSheet::blockShutdown()
+{
+    if (isBlockShutdown)
+        return;
+
+    if (blockShutdownReply.value().isValid()) {
+        return;
+    }
+
+    if (blockShutdownInterface == nullptr)
+        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1",
+                                                    "/org/freedesktop/login1",
+                                                    "org.freedesktop.login1.Manager",
+                                                    QDBusConnection::systemBus());
+
+    QList<QVariant> args;
+    args << QString("shutdown")             // what
+         << qApp->applicationDisplayName()           // who
+         << QObject::tr("Document not saved") // why
+         << QString("block");                        // mode
+
+    int fd = -1;
+    blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
+    if (blockShutdownReply.isValid()) {
+        fd = blockShutdownReply.value().fileDescriptor();
+        isBlockShutdown = true;
+    } else {
+        qDebug() << blockShutdownReply.error();
+    }
+}
+
+void DocSheet::unBlockShutdown()
+{
+    foreach (DocSheet *sheet, g_map.values()) {
+        if (sheet->fileChanged())
+            return;
+    }
+
+    if (blockShutdownReply.isValid()) {
+        blockShutdownReply = QDBusReply<QDBusUnixFileDescriptor>();
+        isBlockShutdown = false;
+    }
 }
 
 bool DocSheet::hasBookMark(int index)
@@ -349,6 +404,11 @@ qreal DocSheet::maxScaleFactor()
 {
     qDebug() << "unrealized";
     return 1;
+}
+
+void DocSheet::setActive(const bool &)
+{
+
 }
 
 void DocSheet::zoomin()

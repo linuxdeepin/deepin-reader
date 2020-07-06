@@ -73,7 +73,7 @@ public:
     static void copyText(const QString &sText);
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 
-    static bool copyFile(QFile &source, QFile &destination);
+    static bool copyFile(const QString &sourcePath, const QString &destinationPath);
     static QString getUuid();
 };
 

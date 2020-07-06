@@ -184,7 +184,7 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 
 void PagingWidget::onEditFinished()
 {
-    if (m_curIndex > 0)
+    if (m_curIndex >= 0)
         setIndex(m_curIndex);
 }
 

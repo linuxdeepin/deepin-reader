@@ -57,6 +57,7 @@ SheetBrowserPDF::SheetBrowserPDF(DocSheetPDF *sheet, DWidget *parent)
     : CustomWidget(parent), d_ptr(new SheetBrowserPDFPrivate(sheet, this))
 {
     setMouseTracking(true);  //  接受 鼠标滑动事件
+    setAutoFillBackground(false);
     initConnections();
 }
 
@@ -168,12 +169,16 @@ void SheetBrowserPDF::mouseReleaseEvent(QMouseEvent *event)
 //  文档 显示区域 大小变化
 void SheetBrowserPDF::resizeEvent(QResizeEvent *event)
 {
-    Q_D(SheetBrowserPDF);
-
-    if (d->hasOpened()) {
-        double scaleFactor = d->handleResize(event->size());
-        emit sigSizeChanged(scaleFactor);
+    if (nullptr == m_timer) {
+        m_timer = new QTimer(this);
+        m_timer->setSingleShot(true);
+        connect(m_timer, &QTimer::timeout, this, &SheetBrowserPDF::onHandleResize);
     }
+    if (m_timer->isActive()) {
+        m_timer->stop();
+    }
+
+    m_timer->start(10);
 
     CustomWidget::resizeEvent(event);
 }
@@ -191,6 +196,16 @@ void SheetBrowserPDF::leaveEvent(QEvent *event)
     Q_D(SheetBrowserPDF);
     d->hidetipwidget();
     CustomWidget::leaveEvent(event);
+}
+
+void SheetBrowserPDF::onHandleResize()
+{
+    Q_D(SheetBrowserPDF);
+
+    if (d->hasOpened()) {
+        double scaleFactor = d->handleResize(this->size());
+        emit sigSizeChanged(scaleFactor);
+    }
 }
 
 void SheetBrowserPDF::OpenFilePath(const QString &sPath)

@@ -97,6 +97,7 @@ public:
     QMap<QString, int> m_label2pagenum;
     QMap<int, QString> m_pagenum2label;
     double m_dCurPageViewPrecent = 0.0;//当前页面视图位置占比
+    bool m_bMouseHandleVScroll{false}; // 鼠标滚轮改变vscrollvalue
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
@@ -202,6 +203,7 @@ public:
     bool haslabel();
     QPoint transformPoint(const QPoint &pt, int pageIndex, RotateType_EM type, double scale);
     void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
+    void setActive(const bool &active);
 
 signals:
     void signal_pageChange(int);

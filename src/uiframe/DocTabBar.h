@@ -16,8 +16,6 @@ class DocTabBar : public DTabBar
 public:
     explicit DocTabBar(QWidget *parent);
 
-    ~DocTabBar() override;
-
     int indexOfFilePath(const QString &filePath);
 
     void insertSheet(DocSheet *sheet, int index = -1);
@@ -25,6 +23,8 @@ public:
     void removeSheet(DocSheet *sheet);
 
     void showSheet(DocSheet *sheet);
+
+    void updateTabWidth();
 
 signals:
     void sigTabMoveIn(DocSheet *);
@@ -46,7 +46,9 @@ protected:
 
     bool canInsertFromMimeData(int index, const QMimeData *source) const override;
 
-    void resizeEvent(QResizeEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+
+    void resizeEvent(QResizeEvent *e);
 
 private slots:
     void onDragActionChanged(Qt::DropAction action);
@@ -55,11 +57,9 @@ private slots:
 
     void onTabDroped(int index, Qt::DropAction da, QObject *target);//方法测试结果为当tab添加到其他的bar里释放
 
-    void onDroped();
+    void onSetCurrentIndex();
 
 signals:
-    void sigTabBarIndexChange(const QString &);
-
     void sigAddTab(const QString &);
 
     void sigCloseTab(const QString &);
@@ -75,14 +75,15 @@ signals:
 private:
     QString getFileName(const QString &strFilePath);
 
-    void updateTabWidth(int line);
-
 private slots:
     void onTabChanged(int);
 
     void onTabAddRequested();
 
     void onTabCloseRequested(int index);
+
+private:
+    int m_delayIndex = -1;
 };
 
 #endif // MAINTABWIDGET_H

@@ -10,8 +10,13 @@
 #include <QParallelAnimationGroup>
 #include <QDebug>
 #include <QFile>
+#include <QSemaphore>
 
+#include "RenderThreadPdf.h"
+//#include "RenderThreadPoolManagerPdf.h"
+#include "RenderThreadPdf.h"
 
+const int MAXIMAGESEMAPHORE = 10240;
 class DocummentPDFPrivate: public DocummentBasePrivate
 {
 //    Q_OBJECT
@@ -23,6 +28,11 @@ public:
 
     ~DocummentPDFPrivate() override
     {
+        this->threadloaddata.wait();
+        if (RenderThreadPdf::getIns()) {
+            RenderThreadPdf::destroyRenderPdfThread();
+        }
+
         qDeleteAll(m_pages);
         m_pages.clear();
         if (nullptr != document) {
@@ -32,7 +42,6 @@ public:
     }
 
     Poppler::Document *document;
-
     Q_DECLARE_PUBLIC(DocummentPDF)
 
 protected slots:
@@ -128,13 +137,14 @@ void DocummentPDFPrivate::setBasicInfo(const QString &filepath)
 DocummentPDF::DocummentPDF(DWidget *parent):
     DocummentBase(new DocummentPDFPrivate(this), parent)
 {
-
+    imageSemapphore = new QSemaphore(MAXIMAGESEMAPHORE);
 }
 
 DocummentPDF::~DocummentPDF()
 {
     Q_D(DocummentPDF);
     delete d;
+    delete imageSemapphore;
 }
 
 bool DocummentPDF::loadDocumment(QString filepath)
@@ -336,24 +346,13 @@ bool DocummentPDF::save(const QString &filePath)
     }
 
     temporaryFile.close();
-    if (!pdfsave(temporaryFile.fileName(), true)) {
+
+    const QString &tmpPath = temporaryFile.fileName();
+    if (!pdfsave(tmpPath, true)) {
         return false;
     }
 
-    // Copy from temporary file to actual file...
-    QFile file(filePath);
-
-    if (!temporaryFile.open()) {
-        return false;
-    }
-    if (temporaryFile.size() <= 1)
-        return  false;
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-
-    if (!Utils::copyFile(temporaryFile, file)) {
+    if (!Utils::copyFile(tmpPath, filePath)) {
         return false;
     }
     return true;
@@ -396,8 +395,9 @@ bool DocummentPDF::saveas(const QString &filePath, bool withChanges)
 
 bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
 {
-    Q_D(DocummentPDF);
 
+    Q_D(DocummentPDF);
+    imageSemapphore->tryAcquire(MAXIMAGESEMAPHORE, 60000);
     QScopedPointer< Poppler::PDFConverter > pdfConverter(d->document->pdfConverter());
 
     pdfConverter->setOutputFileName(filePath);
@@ -416,7 +416,7 @@ bool DocummentPDF::pdfsave(const QString &filePath, bool withChanges)
         qDebug() << __FUNCTION__ << pdfConverter->lastError();
 
     }
-
+    imageSemapphore->release(MAXIMAGESEMAPHORE);
     return bres;
 }
 
@@ -447,8 +447,10 @@ void DocummentPDF::refreshOnePage(int ipage)
     Q_D(DocummentPDF);
     if (!d->document)
         return ;
-    if (d->m_pages.count() > ipage)
-        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+    if (d->m_pages.count() > ipage) {
+        RenderThreadPdf::appendTask(d->m_pages.at(ipage), d->m_scale, d->m_rotate);
+//        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+    }
 }
 
 bool DocummentPDF::bDocummentExist()
@@ -574,22 +576,20 @@ Outline DocummentPDF::loadOutline(const QDomNode &parent, Poppler::Document *doc
 
         if (destination) {
             int pageIndex = destination->pageNumber();
-            qreal left = qQNaN();
-            qreal top = qQNaN();
+            qreal left = 0.0;
+            qreal top = 0.0;
 
             pageIndex = pageIndex >= 1 ? pageIndex : 1;
             pageIndex = pageIndex <= document->numPages() ? pageIndex : document->numPages();
 
-            //if (destination->isChangeLeft())
-            {
+            if (destination->isChangeLeft()) {
                 left = destination->left();
 
                 left = left >= 0.0 ? left : 0.0;
                 left = left <= 1.0 ? left : 1.0;
             }
 
-            //if (destination->isChangeTop())
-            {
+            if (destination->isChangeTop()) {
                 top = destination->top();
 
                 top = top >= 0.0 ? top : 0.0;

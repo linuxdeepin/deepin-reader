@@ -166,6 +166,13 @@ void DocummentProxy::moveIconAnnotation(const QString &, const QPoint &)
         return ;
 }
 
+void DocummentProxy::setActive(const bool &active)
+{
+    if (!m_documment || bcloseing)
+        return;
+    m_documment->setActive(active);
+}
+
 bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     if (!m_documment || bcloseing)
@@ -237,6 +244,8 @@ bool DocummentProxy::save(const QString &filepath)
 
 bool DocummentProxy::saveas(const QString &filepath, bool withChanges)
 {
+    clearsearch();
+
     if (m_documment && !bcloseing && m_documment->saveas(filepath, withChanges)) {
         return m_documment->freshFile(filepath);
     }
@@ -268,7 +277,9 @@ bool DocummentProxy::pageJump(int index)
 {
     if (!m_documment || bcloseing)
         return false;
+
     emit signal_pageJump(index);
+
     return true;
 }
 

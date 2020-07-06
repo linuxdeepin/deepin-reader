@@ -11,6 +11,10 @@
 #include <QParallelAnimationGroup>
 #include <poppler-qt5.h>
 #include <qglobal.h>
+#include "pdf/RenderThreadPdf.h"
+
+#include <QTimer>
+
 static QMutex mutexlockloaddata;
 
 DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrollArea(parent),
@@ -57,15 +61,23 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
         d->donotneedreloaddoc = true;
         switch (d->m_viewmode) {
         case ViewMode_SinglePage:
-            if (scrollBar_Y)
-                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
+//            if (scrollBar_Y)
+//                scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno).y());
+            showCurPageViewAfterScaleChanged();
             break;
         case ViewMode_FacingPage:
             if (scrollBar_Y)
                 scrollBar_Y->setValue(d->m_widgetrects.at(d->m_currentpageno / 2).y());
             break;
         }
-        showCurPageViewAfterScaleChanged();
+
+        QTimer::singleShot(500, [this]() {
+            Q_D(DocummentBase);
+            showCurPageViewAfterScaleChanged();
+            d->m_bMouseHandleVScroll = true;
+//            loadPages();
+        });
+
         d->donotneedreloaddoc = false;
     });
     connect(this->horizontalScrollBar(), &QScrollBar::rangeChanged, this, [ = ](int, int) {
@@ -640,25 +652,34 @@ bool DocummentBase::pageJump(int pagenum)
 
     DScrollBar *scrollBar_X = horizontalScrollBar();
     DScrollBar *scrollBar_Y = verticalScrollBar();
+
+    d->m_bMouseHandleVScroll = false;
     switch (d->m_viewmode) {
     case ViewMode_SinglePage:
         if (scrollBar_X)
             scrollBar_X->setValue(d->m_widgetrects.at(pagenum).x());
-        if (scrollBar_Y)
+        if (scrollBar_Y) {
+//            d->m_bMouseHandleVScroll = false;
             scrollBar_Y->setValue(d->m_widgetrects.at(pagenum).y());
+        }
         break;
     case ViewMode_FacingPage:
         if (scrollBar_X)
             scrollBar_X->setValue(d->m_widgetrects.at(pagenum / 2).x() + d->m_pages.at(pagenum)->x());
-        if (scrollBar_Y)
+        if (scrollBar_Y) {
+//            d->m_bMouseHandleVScroll = false;
             scrollBar_Y->setValue(d->m_widgetrects.at(pagenum / 2).y());
+        }
         break;
     }
 
     if (d->m_currentpageno != pagenum) {
         d->m_currentpageno = pagenum;
         emit signal_pageChange(d->m_currentpageno);
+        loadPages();
     }
+
+//    d->m_bMouseHandleVScroll = true;
     return true;
 }
 
@@ -676,6 +697,15 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
     scaleAndShow(dscale, rotate);
 }
 
+void DocummentBase::setActive(const bool &active)
+{
+    Q_D(DocummentBase);
+
+    for (int i = 0; i < d->m_pages.size(); i++) {
+        setActive(active);
+    }
+}
+
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);
@@ -683,6 +713,7 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     if (d->m_pages.size() < 1) {
         return;
     }
+//    d->m_bMouseHandleVScroll = false;
 
     if (qFuzzyCompare(scale, d->m_scale) && (rotate == RotateType_Normal || d->m_rotate == rotate)) {
         return;
@@ -700,6 +731,8 @@ void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
     }
 
     setViewModeAndShow(d->m_viewmode);
+
+    showCurPageViewAfterScaleChanged();
 }
 
 int DocummentBase::getCurrentPageNo()
@@ -834,13 +867,16 @@ void DocummentBase::slot_vScrollBarValueChanged(int)
 {
     Q_D(DocummentBase);
     if (!d->donotneedreloaddoc) {
-        calcCurPageViewPrecent();
         int pageno = currentPageNo();
-        if (d->m_currentpageno != pageno) {
+
+        if (d->m_bMouseHandleVScroll && d->m_currentpageno != pageno) {
             d->m_currentpageno = pageno;
             emit signal_pageChange(d->m_currentpageno);
+            calcCurPageViewPrecent();
         }
         loadPages();
+
+        d->m_bMouseHandleVScroll = true;
     }
 }
 
@@ -1066,8 +1102,10 @@ bool DocummentBase::loadPages()
     }
 
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
-        if (i >= 0 && i < d->m_pages.size())
-            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);
+        if (i >= 0 && i < d->m_pages.size()) {
+            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+//            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+        }
     }
 
     for (int i = 0; i < d->m_pages.size(); i++) {
@@ -1333,9 +1371,7 @@ void DocummentBase::findPrev()
                     scrollBar_X->setValue(xvalue);
             }
             d->m_cursearch--;
-        } /*else {
-            qDebug() << __FUNCTION__ << "first page";
-        }*/
+        }
     }
     d->bfindnext = false;
     d->m_pages.at(d->m_findcurpage)->update();
@@ -1383,11 +1419,9 @@ void DocummentBase::calcCurPageViewPrecent()
 void DocummentBase::showCurPageViewAfterScaleChanged()
 {
     Q_D(DocummentBase);
-    if (d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
+    if (d->m_viewmode == ViewMode_EM::ViewMode_SinglePage && d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
         this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
                                             static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
-        if (d->m_currentpageno < d->m_pages.count())
-            d->m_pages[d->m_currentpageno]->update();
     }
 }
 
@@ -1444,6 +1478,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
     }
 
     initConnect();
+
     scaleAndShow(0, d->m_rotate);
 }
 
@@ -1636,6 +1671,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
         pageJump(ipage);
         return;
     }
+    d->m_bMouseHandleVScroll = false;
     int xvalue, yvalue;
     xvalue = yvalue = 0;
     if (ipage < d->m_pages.size()) {
@@ -1670,7 +1706,7 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
             }
         } else if (d->m_viewmode == ViewMode_FacingPage) {
             double curwidgetwidth = d->m_widgets.at(ipage / 2)->width();
-            double topspace = (d->m_widgets.at(ipage)->height() - curheight) / 2;
+            double topspace = (d->m_widgets.at(ipage / 2)->height() - curheight) / 2;
             double leftspace = d->m_pages.at(ipage)->x();
 
             double leftposition = curwidth * realleft + leftspace ;
@@ -1691,6 +1727,12 @@ void DocummentBase::jumpToOutline(const qreal &realleft, const qreal &realtop, i
     QScrollBar *scrollBar_Y = verticalScrollBar();
     if (scrollBar_Y)
         scrollBar_Y->setValue(yvalue);
+
+    if (d->m_currentpageno != ipage) {
+        d->m_currentpageno = ipage;
+        emit signal_pageChange(d->m_currentpageno);
+        loadPages();
+    }
 }
 
 QString DocummentBase::pagenum2label(int index)

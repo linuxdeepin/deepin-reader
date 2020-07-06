@@ -113,6 +113,8 @@ public:
 
     qreal maxScaleFactor()override;
 
+    void setActive(const bool &) override;
+
     int pointInWhichPage(QPoint pos);
 
     void setFileChanged(bool hasChanged);
@@ -126,6 +128,10 @@ public:
     void setCurrentState(int state);
 
     int  currentState();
+
+    void stopSearch() override;
+signals:
+    void sigScaleChanged(double);
 
 private slots:
     void onFileOpenResult(const QString &, const bool &);

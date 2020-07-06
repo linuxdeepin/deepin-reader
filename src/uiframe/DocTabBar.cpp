@@ -15,13 +15,20 @@ DocTabBar::DocTabBar(QWidget *parent)
 {
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 2 ))
     this->setEnabledEmbedStyle(true);//设置直角样式
+
     this->setExpanding(true);//设置平铺窗口模式
+
 #endif
     this->setTabsClosable(true);
+
     this->setMovable(true);
+
     this->setElideMode(Qt::ElideMiddle);
+
     this->setVisibleAddButton(true);
+
     this->setDragable(true);
+
     this->setFocusPolicy(Qt::NoFocus);
 
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(onTabCloseRequested(int)));
@@ -35,11 +42,6 @@ DocTabBar::DocTabBar(QWidget *parent)
     connect(this, &DTabBar::tabDroped, this, &DocTabBar::onTabDroped);
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::onDragActionChanged);
-}
-
-DocTabBar::~DocTabBar()
-{
-
 }
 
 int DocTabBar::indexOfFilePath(const QString &filePath)
@@ -66,13 +68,13 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
 
     this->setTabToolTip(index, fileName);
 
-    this->setTabMinimumSize(index, QSize(140, 36));
-
     this->setTabData(index, DocSheet::getUuid(sheet));
 
-    updateTabWidth(92);
+    updateTabWidth();
 
-    this->setCurrentIndex(index);
+    m_delayIndex = index;
+
+    QTimer::singleShot(1, this, SLOT(onSetCurrentIndex()));
 }
 
 void DocTabBar::removeSheet(DocSheet *sheet)
@@ -80,6 +82,7 @@ void DocTabBar::removeSheet(DocSheet *sheet)
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             removeTab(i);
+            updateTabWidth();
             return;
         }
     }
@@ -91,6 +94,25 @@ void DocTabBar::showSheet(DocSheet *sheet)
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             this->setCurrentIndex(i);
             return;
+        }
+    }
+}
+
+void DocTabBar::updateTabWidth()
+{
+    int tabWidth = 100;
+    if (count() != 0) {
+        tabWidth = (this->width() - 40) / count();
+        for (int i = 0; i < count(); i++) {
+            if (tabWidth <= 140) {
+                setUsesScrollButtons(true);
+                setTabMinimumSize(i, QSize(140, 37));
+                setTabMaximumSize(i, QSize(140, 37));
+            } else {
+                setUsesScrollButtons(false);
+                setTabMinimumSize(i, QSize(tabWidth, 37));
+                setTabMaximumSize(i, QSize(tabWidth, 37));
+            }
         }
     }
 }
@@ -121,10 +143,7 @@ void DocTabBar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     this->setTabToolTip(index, tabName);
 
-    setTabMinimumSize(index, QSize(140, 36));
-
-    updateTabWidth(143);
-
+    updateTabWidth();
 }
 
 void DocTabBar::insertFromMimeData(int index, const QMimeData *source)
@@ -147,14 +166,36 @@ bool DocTabBar::canInsertFromMimeData(int, const QMimeData *source) const
     return source->hasFormat("deepin_reader/tabbar");
 }
 
+void DocTabBar::dragEnterEvent(QDragEnterEvent *event)
+{
+    DTabBar::dragEnterEvent(event);
+    if (event->mimeData()->hasFormat("deepin_reader/tabbar")) {
+        QTimer::singleShot(1, [this]() {
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+            QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+        });
+    }
+}
+
+void DocTabBar::resizeEvent(QResizeEvent *e)
+{
+    DTabBar::resizeEvent(e);
+    updateTabWidth();
+}
+
 void DocTabBar::onDragActionChanged(Qt::DropAction action)
 {
-    if (count() <= 1) {
-        QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
-    } else if (action == Qt::TargetMoveAction) {
-        QGuiApplication::changeOverrideCursor(Qt::DragMoveCursor);
-    } else if (action == Qt::IgnoreAction) {
-        QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+    if (action == Qt::IgnoreAction) {
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        if (count() <= 1)
+            QGuiApplication::changeOverrideCursor(Qt::ForbiddenCursor);
+        else
+            QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+    } else if (action == Qt::CopyAction) {
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
     } else if (dragIconWindow()) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
@@ -163,38 +204,11 @@ void DocTabBar::onDragActionChanged(Qt::DropAction action)
     }
 }
 
-void DocTabBar::resizeEvent(QResizeEvent *event)
-{
-    DTabBar::resizeEvent(event);
-    updateTabWidth(187);
-    this->resize(this->width(), 36);
-    this->update();
-}
-
 QString DocTabBar::getFileName(const QString &strFilePath)
 {
     int nLastPos = strFilePath.lastIndexOf('/');
-    nLastPos++;
-    return strFilePath.mid(nLastPos);
-}
 
-void DocTabBar::updateTabWidth(int)
-{
-    int tabWidth = 100;
-    if (count() != 0) {
-        tabWidth = (this->width() - 40) / count();
-        for (int i = 0; i < count(); i++) {
-            if (tabWidth <= 140) {
-                setUsesScrollButtons(true);
-                // 此处设置最小高度为36是为了能够在resize的时候进行重绘
-                setTabMinimumSize(i, QSize(140, 37));
-            } else {
-                setUsesScrollButtons(false);
-                setTabMinimumSize(i, QSize(tabWidth, 37));
-            }
-        }
-    }
-
+    return strFilePath.mid(++nLastPos);
 }
 
 void DocTabBar::onTabChanged(int index)
@@ -210,12 +224,14 @@ void DocTabBar::onTabReleased(int index)
     if (count() <= 1)
         return;
 
-    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+    int dropIndex = currentIndex();     //使用dropIndex替代index ,因为index是记录刚drag的index，当拖拽的时候几个item被移动了就会出错
+
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(dropIndex).toString());
 
     if (nullptr == sheet)
         return;
 
-    removeTab(index);
+    removeTab(dropIndex);
 
     emit sigTabNewWindow(sheet);
 }
@@ -224,7 +240,9 @@ void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
-    DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
+    int dropIndex = currentIndex();     //使用dropIndex替代index ,因为index是记录刚drag的index，当拖拽的时候几个item被移动了就会出错
+
+    DocSheet *sheet = DocSheet::getSheet(this->tabData(dropIndex).toString());
 
     if (nullptr == sheet)
         return;
@@ -234,20 +252,18 @@ void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
         if (count() <= 1) {//如果是最后一个，不允许
             return;
         }
-        removeTab(index);
+        removeTab(dropIndex);
         emit sigTabNewWindow(sheet);
     } else if (Qt::MoveAction == da) {
         //如果是移动
-        removeTab(index);
+        removeTab(dropIndex);
         emit sigTabMoveOut(sheet);
     }
 }
 
-void DocTabBar::onDroped()
+void DocTabBar::onSetCurrentIndex()
 {
-    if (count() <= 0) {
-        emit sigLastTabMoved();
-    }
+    setCurrentIndex(m_delayIndex);
 }
 
 //  新增

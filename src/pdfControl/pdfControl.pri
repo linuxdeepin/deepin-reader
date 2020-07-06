@@ -23,7 +23,8 @@ HEADERS += \
     $$PWD/database/FileDataModel.h \
     $$PWD/database/HistroyDB.h \
     $$PWD/menu/DefaultOperationMenu.h \
-    $$PWD/menu/TextOperationMenu.h
+    $$PWD/menu/TextOperationMenu.h \
+    $$PWD/docview/pdf/RenderThreadPdf.h
 
 SOURCES += \
     $$PWD/controller/Annotation.cpp \
@@ -48,4 +49,5 @@ SOURCES += \
     $$PWD/database/FileDataModel.cpp \
     $$PWD/database/HistroyDB.cpp \
     $$PWD/menu/DefaultOperationMenu.cpp \
-    $$PWD/menu/TextOperationMenu.cpp
+    $$PWD/menu/TextOperationMenu.cpp \
+    $$PWD/docview/pdf/RenderThreadPdf.cpp

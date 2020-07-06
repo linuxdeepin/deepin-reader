@@ -114,6 +114,8 @@ public:
 
     virtual void handleSearch();
 
+    virtual void stopSearch();
+
     virtual void copySelectedText();                    //复制选中文字
 
     virtual void highlightSelectedText();                   //高亮选中文字
@@ -133,6 +135,8 @@ public:
     virtual QList<qreal> scaleFactorList();
 
     virtual qreal maxScaleFactor();
+
+    virtual void setActive(const bool &);
 
     QSet<int> getBookMarkList() const;
 
@@ -189,9 +193,14 @@ public:
 
     static DocSheet *getSheet(QString uuid);
 
+    static void blockShutdown();
+
+    static void unBlockShutdown();
+
     static QMap<QString, DocSheet *> g_map;
 
     //===========以上是改版后的,优先使用(pdf看情况，如果未实现则不用) ,以下则逐步替换和删除
+
 
 public:
     virtual int label2pagenum(QString label);

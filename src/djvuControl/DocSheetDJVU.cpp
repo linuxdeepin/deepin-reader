@@ -279,7 +279,7 @@ bool DocSheetDJVU::saveData()
 bool DocSheetDJVU::saveAsData(QString filePath)
 {
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
-    return QFile::copy(this->filePath(), filePath);
+    return Utils::copyFile(this->filePath(), filePath);
 }
 
 void DocSheetDJVU::openMagnifier()
@@ -341,7 +341,7 @@ QList<qreal> DocSheetDJVU::scaleFactorList()
     qreal maxFactor = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
-        if (maxFactor - factor > 0.001)
+        if (maxFactor - factor > -0.0001)
             factorList.append(factor);
     }
 
@@ -351,6 +351,7 @@ QList<qreal> DocSheetDJVU::scaleFactorList()
 qreal DocSheetDJVU::maxScaleFactor()
 {
     qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
+    maxScaleFactor = maxScaleFactor > 5.0 ? 5.0 : maxScaleFactor;
 
     if (maxScaleFactor < 0.1)
         maxScaleFactor = 0.1;

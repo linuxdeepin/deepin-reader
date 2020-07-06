@@ -91,9 +91,10 @@ void CatalogWidget::setTitleTheme()
 
 void CatalogWidget::handleOpenSuccess()
 {
-    if (nullptr == m_sheet)
+    if (nullptr == m_sheet || bIshandOpenSuccess)
         return;
 
+    bIshandOpenSuccess = true;
     stFileInfo fileInfo;
     m_sheet->docBasicInfo(fileInfo);
     m_strTheme = fileInfo.strTheme;

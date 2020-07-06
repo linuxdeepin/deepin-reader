@@ -60,17 +60,21 @@ void BookMarkButton::leaveEvent(QEvent *)
 }
 
 
-void BookMarkButton::mousePressEvent(QMouseEvent *)
+void BookMarkButton::mousePressEvent(QMouseEvent *event)
 {
-    ispressed = true;
-    repaint();
+    if (event->button() == Qt::LeftButton) {
+        ispressed = true;
+        repaint();
+    }
 }
 
-void BookMarkButton::mouseReleaseEvent(QMouseEvent *)
+void BookMarkButton::mouseReleaseEvent(QMouseEvent *event)
 {
-    ispressed = false;
+    if (event->button() == Qt::LeftButton) {
+        ispressed = false;
 
-    emit sigClicked(!isclicked);
+        emit sigClicked(!isclicked);
 
-    repaint();
+        repaint();
+    }
 }

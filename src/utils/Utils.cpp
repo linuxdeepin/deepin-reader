@@ -671,24 +671,40 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
     return tmptext;
 }
 
-bool Utils::copyFile(QFile &source, QFile &destination)
+bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
 {
+    QFile sourceFile(sourcePath);
+    if (!sourceFile.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    QFile destinationFile(destinationPath);
+    if (!destinationFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        sourceFile.close();
+        return false;
+    }
+
     const qint64 maxSize = 4096;
     qint64 size = -1;
 
     QScopedArrayPointer< char > buffer(new char[maxSize]);
 
+    int ret = true;
     do {
-        if ((size = source.read(buffer.data(), maxSize)) < 0) {
-            return false;
+        if ((size = sourceFile.read(buffer.data(), maxSize)) < 0) {
+            ret = false;
+            break;
         }
 
-        if (destination.write(buffer.data(), size) < 0) {
-            return false;
+        if (destinationFile.write(buffer.data(), size) < 0) {
+            ret = false;
+            break;
         }
     } while (size > 0);
 
-    return true;
+    sourceFile.close();
+    destinationFile.close();
+    return ret;
 }
 
 QString Utils::getUuid()

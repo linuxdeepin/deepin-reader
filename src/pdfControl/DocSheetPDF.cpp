@@ -305,6 +305,13 @@ int DocSheetPDF::currentState()
     return m_currentState;
 }
 
+void DocSheetPDF::stopSearch()
+{
+    if (!m_pFindWidget)
+        return;
+    m_pFindWidget->stopSearch();
+}
+
 void DocSheetPDF::onFileOpenResult(const QString &, const bool &res)
 {
     if (res) {
@@ -393,12 +400,14 @@ bool DocSheetPDF::fileChanged()
 
 bool DocSheetPDF::saveData()
 {
+    stopSearch();
     Database::instance()->saveBookmarks(filePath(), m_bookmarks);
     return m_browser->saveData();
 }
 
 bool DocSheetPDF::saveAsData(QString filePath)
 {
+    stopSearch();
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
     return m_browser->saveAsData(filePath);
 }
@@ -520,7 +529,7 @@ QList<qreal> DocSheetPDF::scaleFactorList()
     qreal maxZoom = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
-        if (maxZoom - factor > 0.001)
+        if (maxZoom - factor > -0.0001)
             factorList.append(factor);
     }
 
@@ -535,6 +544,16 @@ qreal DocSheetPDF::maxScaleFactor()
     }
 
     return 1.0;
+}
+
+void DocSheetPDF::setActive(const bool &active)
+{
+    if (m_browser) {
+        DocummentProxy *docProxy = m_browser->GetDocProxy();
+        if (docProxy) {
+            docProxy->setActive(active);
+        }
+    }
 }
 
 int  DocSheetPDF::pointInWhichPage(QPoint pos)
@@ -592,5 +611,7 @@ void DocSheetPDF::onBrowserSizeChanged(double scaleFactor)
 {
     if (m_operation.scaleMode != Dr::ScaleFactorMode) {
         m_browser->setScale(scaleFactor * 100);
+        m_operation.scaleFactor = scaleFactor;
+        emit sigFileChanged(this);
     }
 }

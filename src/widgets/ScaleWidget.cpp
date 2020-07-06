@@ -67,6 +67,7 @@ void ScaleWidget::initWidget()
     connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
 
     DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+//    pNextBtn->setFlat(true);
     DStyle::setFrameRadius(pNextBtn, 12);
     pNextBtn->setFixedSize(24, 24);
     connect(pNextBtn, SIGNAL(clicked()), SLOT(onNextScale()));

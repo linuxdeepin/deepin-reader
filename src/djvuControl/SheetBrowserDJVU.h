@@ -111,13 +111,19 @@ private slots:
     void onCustomContextMenuRequested(const QPoint &);
 
 private:
+    void pageChanged(int page);
+
+    int visibleCurrentPage();
+
+private:
     deepin_reader::Document *m_document = nullptr;
     QList<SheetBrowserDJVUItem *> m_items;
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;         //最大一页的宽度
     int m_maxHeight = 0;        //最大一页的高度
     bool m_hasLoaded = false;   //是否已经加载过每页的信息
-    int m_initPage = 1;         //用于刚显示跳转的页数
+    int m_initPage = 0;         //用于刚显示跳转的页数
+    int m_curPage = 0;
     QLabel *m_magnifierLabel = nullptr;
     DocSheetDJVU *m_sheet = nullptr;
 };

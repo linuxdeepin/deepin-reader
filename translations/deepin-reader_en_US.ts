@@ -544,7 +544,7 @@
     <name>QObject</name>
     <message>
         <source>Document not saved</source>
-        <translation type="vanished">Document not saved</translation>
+        <translation>Document not saved</translation>
     </message>
 </context>
 <context>
@@ -606,6 +606,22 @@
     <message>
         <source>Last page</source>
         <translation type="obsolete">Last page</translation>
+    </message>
+    <message>
+        <source>First Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last Page</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

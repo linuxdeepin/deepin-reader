@@ -60,9 +60,14 @@ TRANSLATIONS += \
     ../translations/deepin-reader_zh_CN.ts
 
 target.path   = /usr/bin
+
 desktop.path  = /usr/share/applications
 desktop.files = $$PWD/deepin-reader.desktop
-INSTALLS += target desktop
+
+icon_files.path = /usr/share/icons/hicolor/scalable/apps
+icon_files.files = $$PWD/deepin-reader.svg
+
+INSTALLS += target desktop icon_files
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

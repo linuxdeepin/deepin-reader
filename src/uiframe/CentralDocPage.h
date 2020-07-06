@@ -25,9 +25,6 @@
 #include "app/ModuleHeader.h"
 #include "DocSheet.h"
 
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QDBusUnixFileDescriptor>
 #include <QMap>
 #include <QPointer>
 
@@ -99,6 +96,8 @@ public:
 
     void handleSearch();
 
+    void showFileAttr();
+
 public slots:
     void onOpened(DocSheet *, bool);
 
@@ -125,6 +124,8 @@ signals:
 
     void sigFindOperation(const int &);
 
+    void sigScaleChanged(double);
+
 signals:
     void sigRemoveFileTab(const QString &);
 
@@ -139,15 +140,11 @@ signals:
 private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
-    QDBusInterface      *m_pLoginManager = nullptr;
-
-    QDBusReply<QDBusUnixFileDescriptor> m_reply;
-    QList<QVariant> m_arg;
-    bool m_bBlockShutdown = false;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
-
     SlideWidget  *m_slideWidget = nullptr;
+    QPointer<DocSheet>  m_slideSheet = nullptr;
+    QPointer<DocSheet>  m_curSheet = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

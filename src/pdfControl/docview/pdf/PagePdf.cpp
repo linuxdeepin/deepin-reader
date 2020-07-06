@@ -1,5 +1,6 @@
 #include "PagePdf.h"
 #include "utils/Utils.h"
+#include "DocummentPdf.h"
 
 #include <QDebug>
 #include <QPainter>
@@ -9,25 +10,43 @@
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
 public:
+    Q_DECLARE_PUBLIC(PagePdf);
     PagePdfPrivate(PagePdf *parent): PageBasePrivate(parent)
     {
         m_page = nullptr;
     }
 
-    ~PagePdfPrivate() override;
-
+    ~PagePdfPrivate() override
+    {
+        QMutexLocker mutext(&m_imageMutex);
+        m_documentpdf = nullptr;
+        m_bClosed = true;
+        if (m_page) {
+            delete m_page;
+            m_page = nullptr;
+        }
+    }
     bool getImage(QImage &image, double width, double height) override
     {
+        QMutexLocker mutext(&m_imageMutex);
+        if (m_documentpdf) m_documentpdf->imageSemapphore->acquire();
         int xres = 72.0, yres = 72.0;
         double scalex = width / m_imagewidth;
         double scaley = height / m_imageheight;
-        if (!m_page)
+        if (!m_page) {
+            if (m_documentpdf) m_documentpdf->imageSemapphore->release();
             return false;
+        }
+
         image = m_page->renderToImage(xres * scalex, yres * scaley);
+        if (m_documentpdf) m_documentpdf->imageSemapphore->release();
         return true;
     }
     bool loadData() override
     {
+        if (m_bClosed) {
+            return false;
+        }
         loadWords();
         loadLinks();
         return true;
@@ -35,6 +54,9 @@ public:
 
     void setPage(Poppler::Page *page, int pageno)
     {
+        Q_Q(PagePdf);
+        if (m_documentpdf == nullptr)
+            m_documentpdf = dynamic_cast<DocummentPDF *>(q->parent());
         m_page = page;
         m_pageno = pageno;
         QSizeF qsize = m_page->pageSizeF();
@@ -42,7 +64,9 @@ public:
         m_imageheight = qsize.height();
     }
 
+    DocummentPDF *m_documentpdf = nullptr;
     Poppler::Page *m_page;
+    QMutex m_imageMutex;
 private:
     bool loadWords()
     {
@@ -167,21 +191,17 @@ private:
     }
 };
 
-PagePdfPrivate::~PagePdfPrivate()
-{
-    if (m_page) {
-        delete m_page;
-        m_page = nullptr;
-    }
-}
-
+QSet<PageBase *> PagePdf::m_pageItems{nullptr};
 PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
 {
+    m_pageItems.insert(this);
+    connect(this, SIGNAL(sigRenderFinish(QImage)), this, SLOT(slotRenderFinish(QImage)));
 }
 
 PagePdf::~PagePdf()
 {
+    m_pageItems.remove(this);
 }
 
 stSearchRes PagePdf::search(const QString &text, bool matchCase, bool wholeWords)
@@ -393,21 +413,21 @@ QString PagePdf::addHighlightAnnotation(const QColor &color)
  * @brief PagePdf::paintIconMoveRect
  * 绘制注释图标移动框
  */
-void PagePdf::paintIconMoveRect(QPainter &painter)
-{
-    Q_D(PagePdf);
-    if (d->m_drawMoveRect) {
-        painter.save();
-        QPen rectPen;
-        rectPen.setStyle(Qt::PenStyle(1));
-        rectPen.setWidth(1);
-        rectPen.setColor(Qt::red);
-        painter.setPen(rectPen);
-        QRectF rect(d->m_mouseMovePoint.x(), d->m_mouseMovePoint.y(), ICONANNOTE_WIDTH, ICONANNOTE_WIDTH);
-        painter.drawRect(translateRect(rect, d_ptr->m_scale, d_ptr->m_rotate));
-        painter.restore();
-    }
-}
+//void PagePdf::paintIconMoveRect(QPainter &painter)
+//{
+//    Q_D(PagePdf);
+//    if (d->m_drawMoveRect) {
+//        painter.save();
+//        QPen rectPen;
+//        rectPen.setStyle(Qt::PenStyle(1));
+//        rectPen.setWidth(1);
+//        rectPen.setColor(Qt::red);
+//        painter.setPen(rectPen);
+//        QRectF rect(d->m_mouseMovePoint.x(), d->m_mouseMovePoint.y(), ICONANNOTE_WIDTH, ICONANNOTE_WIDTH);
+//        painter.drawRect(translateRect(rect, d_ptr->m_scale, d_ptr->m_rotate));
+//        painter.restore();
+//    }
+//}
 
 QPointF PagePdf::globalPoint2Iner(const QPoint point)
 {
@@ -691,6 +711,7 @@ PageInterface *PagePdf::getInterFace()
 void PagePdf::deletePage()
 {
     Q_D(PagePdf);
+    QMutexLocker mutext(&d->m_imageMutex);
     if (nullptr != d->m_page) {
         delete d->m_page;
         d->m_page = nullptr;
@@ -720,12 +741,34 @@ bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, do
     return true;
 }
 
+bool PagePdf::renderImage(double scale, RotateType_EM rotate)
+{
+    Q_D(PagePdf);
+    d->m_scale = scale;
+    d->m_rotate = rotate;
+    QImage image;
+
+    if (!d->m_bActive)
+        return false;
+
+    if (d->getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof)) {
+        emit sigRenderFinish(image);
+        return true;
+    }
+
+    return false;
+}
+
 QImage PagePdf::thumbnail()
 {
     Q_D(PagePdf);
     return d->m_page->thumbnail();
 }
 
+bool PagePdf::existIns(PageBase *item)
+{
+    return m_pageItems.contains(item);
+}
 /**
  * @brief PagePdf::setDrawPoint
  * 鼠标移动的位置

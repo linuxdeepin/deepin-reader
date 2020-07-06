@@ -8,6 +8,8 @@
 #include <poppler-qt5.h>
 #include <unistd.h>
 #include <QObject>
+#include <QSet>
+#include <QSemaphore>
 
 //class PagePdf;
 class PagePdfPrivate;
@@ -37,16 +39,19 @@ public:
     void deletePage();
     void freshPage(Poppler::Page *page);
     bool getrectimage(QImage &image, double width, double scalebase, double magnifierscale, QPoint &pt) override;
+    bool renderImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) override;
 
     QImage thumbnail();
     void setDrawPoint(const QPoint &);
     void setDrawRect(const bool &draw);
+    static bool existIns(PageBase *item);
 protected:
     void paintEvent(QPaintEvent *event) override;
 private:
     QString addHighlightAnnotation(const QColor &color);
     void paintIconMoveRect(QPainter &painter);
 private:
+    static QSet<PageBase *> m_pageItems;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), PagePdf)
 
     // PageBase interface

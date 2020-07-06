@@ -9,14 +9,14 @@
 #include "utils/Utils.h"
 #include "MainWindow.h"
 #include "djvuControl/RenderThreadDJVU.h"
+#include "pdfControl/docview/pdf/RenderThreadPdf.h"
+#include "DocSheet.h"
+#include "widgets/SaveDialog.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     loadTranslator();
-    initCfgPath();
-    initChildren();
-
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
@@ -29,6 +29,9 @@ Application::Application(int &argc, char **argv)
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(static_cast<int>(256 * qApp->devicePixelRatio()), static_cast<int>(256 * qApp->devicePixelRatio())));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
+
+    initCfgPath();
+    initChildren();
 }
 
 void Application::setSreenRect(const QRect &rect)
@@ -40,8 +43,33 @@ void Application::setSreenRect(const QRect &rect)
 
 void Application::handleQuitAction()
 {
+    QList<DocSheet *> changedList;
+
+    foreach (auto sheet, DocSheet::g_map.values()) {
+        if (sheet->fileChanged())
+            changedList.append(sheet);
+    }
+
+    if (changedList.size() > 0) {   //需要提示保存
+        SaveDialog sd;
+
+        int nRes = sd.showExitDialog();
+
+        if (nRes <= 0) {
+            return;
+        }
+
+        if (nRes == 2) {
+            foreach (auto sheet, changedList) {
+                sheet->saveData();
+            }
+        }
+    }
+
     //线程退出
     RenderThreadDJVU::destroy();
+    RenderThreadPdf::destroyRenderPdfThread();
+
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
 }

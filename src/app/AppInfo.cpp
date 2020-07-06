@@ -32,7 +32,10 @@ void AppInfo::InitKeyList()
     m_pKeyList.append(QKeySequence::Print);
     m_pKeyList.append(QKeySequence::Save);
     m_pKeyList.append(QKeySequence::Copy);
-    m_pKeyList.append(QKeySequence(Qt::Key_F11));
+    m_pKeyList.append(QKeySequence(Qt::Key_F5));
+    m_pKeyList.append(QKeySequence(Qt::Key_Left));
+    m_pKeyList.append(QKeySequence(Qt::Key_Right));
+    m_pKeyList.append(QKeySequence(Qt::Key_Space));
     m_pKeyList.append(QKeySequence(Qt::Key_Escape));
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
@@ -42,15 +45,12 @@ void AppInfo::InitKeyList()
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_B));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_H));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_I));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_L));
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_D));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_M));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));      //  ctrl+-
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));      //  ctrl+=
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));       //  ctrl++
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
+    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));

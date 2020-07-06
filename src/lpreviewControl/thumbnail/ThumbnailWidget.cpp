@@ -61,8 +61,12 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::handleOpenSuccess()
 {
+    if (bIshandOpenSuccess)
+        return;
+    bIshandOpenSuccess = true;
     m_pImageListView->handleOpenSuccess();
     m_pPageWidget->handleOpenSuccess();
+    scrollToCurrentPage();
 }
 
 void ThumbnailWidget::handleRotate(int)
