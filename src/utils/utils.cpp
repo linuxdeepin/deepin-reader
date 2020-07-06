@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QFontMetrics>
 #include <QPainter>
+#include <QPainterPath>
 #include <QString>
 #include <QtMath>
 #include <QWidget>

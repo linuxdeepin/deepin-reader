@@ -26,6 +26,7 @@
 
 #include <QDebug>
 #include <QDesktopWidget>
+#include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <QTimer>
 
