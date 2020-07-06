@@ -32,7 +32,7 @@ QRectF SheetBrowserPDFLWord::boundingBox() const
     return m_word.boundingBox;
 }
 
-void SheetBrowserPDFLWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SheetBrowserPDFLWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (isSelected()) {
         painter->setBrush(QBrush(Qt::red));

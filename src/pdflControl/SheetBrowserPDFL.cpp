@@ -159,7 +159,7 @@ void SheetBrowserPDFL::onVerticalScrollBarValueChanged(int)
     emit sigPageChanged(currentPage());
 }
 
-void SheetBrowserPDFL::onHorizontalScrollBarValueChanged(int value)
+void SheetBrowserPDFL::onHorizontalScrollBarValueChanged(int)
 {
     QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
 
@@ -273,7 +273,7 @@ void SheetBrowserPDFL::addHighlightAnnotation(QString text, QColor color)
         item->addHighlightAnnotation(text, color);
 }
 
-void SheetBrowserPDFL::removeAnnotation(SheetBrowserPDFLAnnotation *annotation)
+void SheetBrowserPDFL::removeAnnotation(SheetBrowserPDFLAnnotation *)
 {
 
 }
@@ -787,7 +787,7 @@ void SheetBrowserPDFL::showEvent(QShowEvent *event)
     QGraphicsView::showEvent(event);
 }
 
-void SheetBrowserPDFL::onMenuItemClicked(const QString &objectname, const QVariant &param)
+void SheetBrowserPDFL::onMenuItemClicked(const QString &objectname, const QVariant &)
 {
     if (objectname == "Copy") {
 

@@ -756,7 +756,7 @@ QPointF PageBase::translatepoint(QPointF pt, double, RotateType_EM rotate)
 //    return false;
 //}
 
-bool PageBase::showImage(double scale, RotateType_EM rotate)
+bool PageBase::showImage(double, RotateType_EM)
 {
 //    Q_D(PageBase);
 //    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {

@@ -121,10 +121,10 @@ public:
     virtual QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text) Q_UNUSED(matchCase) Q_UNUSED(wholeWords) return QList< QRectF >(); }
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
-    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
-    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return 0; }
-    virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return 0; }
-    virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation)}
+    virtual Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return nullptr; }
+    virtual Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) { Q_UNUSED(boundary) Q_UNUSED(color) return nullptr; }
+    virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
+    virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
     virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
 };
@@ -146,7 +146,7 @@ public:
     virtual void setPaperColor(const QColor &paperColor) { Q_UNUSED(paperColor); }
     virtual Outline outline() const { return Outline(); }
     virtual Properties properties() const { return Properties(); }
-    virtual QAbstractItemModel *fonts() const { return 0; }
+    virtual QAbstractItemModel *fonts() const { return nullptr; }
     virtual bool wantsContinuousMode() const { return false; }
     virtual bool wantsSinglePageMode() const { return false; }
     virtual bool wantsTwoPagesMode() const { return false; }

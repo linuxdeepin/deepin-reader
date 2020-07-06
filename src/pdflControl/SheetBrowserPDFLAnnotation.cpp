@@ -6,7 +6,7 @@
 #include <QDebug>
 
 SheetBrowserPDFLAnnotation::SheetBrowserPDFLAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation) : QGraphicsItem(parent),
-    m_parent(parent), m_rect(rect), m_annotation(annotation)
+    m_annotation(annotation), m_rect(rect), m_parent(parent)
 {
 
 }
@@ -35,7 +35,7 @@ QRectF SheetBrowserPDFLAnnotation::boundingRect() const
                   m_rect.height() * m_parent->boundingRect().height());
 }
 
-void SheetBrowserPDFLAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SheetBrowserPDFLAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     painter->setBrush(QBrush(Qt::red));
     painter->setPen(Qt::NoPen);

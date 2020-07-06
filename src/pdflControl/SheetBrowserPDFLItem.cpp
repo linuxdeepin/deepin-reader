@@ -400,13 +400,13 @@ bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)
             m_bookmarkState = 0;
         update();
     } else if (event->type() == QEvent::GraphicsSceneMousePress) {
-        QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent *>(event);
+        QGraphicsSceneMouseEvent *t_event = dynamic_cast<QGraphicsSceneMouseEvent *>(event);
         m_posPressed = QPoint();
-        if (bookmarkMouseRect().contains(event->pos())) {
+        if (bookmarkMouseRect().contains(t_event->pos())) {
             m_bookmarkState = 2;
             if (nullptr != m_parent) {
                 m_parent->needBookmark(m_index, !m_bookmark);
-                if (!m_bookmark && bookmarkMouseRect().contains(event->pos()))
+                if (!m_bookmark && bookmarkMouseRect().contains(t_event->pos()))
                     m_bookmarkState = 1;
                 else if (m_bookmark)
                     m_bookmarkState = 3;
@@ -415,7 +415,7 @@ bool SheetBrowserPDFLItem::sceneEvent(QEvent *event)
             }
             update();
         } else {
-            m_posPressed = event->pos();
+            m_posPressed = t_event->pos();
         }
     } else if (event->type() == QEvent::GraphicsSceneMouseRelease) {
         m_posPressed = QPoint();

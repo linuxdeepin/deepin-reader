@@ -346,10 +346,10 @@ void DocSheet::blockShutdown()
          << QObject::tr("Document not saved") // why
          << QString("block");                        // mode
 
-    int fd = -1;
+//    int fd = -1;
     blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
     if (blockShutdownReply.isValid()) {
-        fd = blockShutdownReply.value().fileDescriptor();
+        /*fd =*/ blockShutdownReply.value().fileDescriptor();
         isBlockShutdown = true;
     } else {
         qDebug() << blockShutdownReply.error();

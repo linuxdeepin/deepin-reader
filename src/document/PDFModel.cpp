@@ -333,6 +333,8 @@ QString PDFAnnotation::contents() const
 int PDFAnnotation::type()
 {
     m_annotation->subType();
+
+    return 0;
 }
 
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
@@ -369,7 +371,7 @@ QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QR
     return render(72 * scaleFactor, 72 * scaleFactor, rotation, boundingRect);
 }
 
-QImage PDFPage::render(int width, int height, Qt::AspectRatioMode mode) const
+QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 {
     LOCK_PAGE
 

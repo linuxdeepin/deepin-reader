@@ -231,7 +231,7 @@ public:
         Q_D(PageBase);
         d->m_bcursearchshow = bshow;
     }
-    virtual bool renderImage(double scale = 1, RotateType_EM rotate = RotateType_Normal) {return false;}
+    virtual bool renderImage(double, RotateType_EM) {return false;}
     bool showImage(double scale = 1, RotateType_EM rotate = RotateType_Normal);
     void stopThread();
     void quitThread();

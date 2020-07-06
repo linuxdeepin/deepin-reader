@@ -219,7 +219,7 @@ void DocTabBar::onTabChanged(int index)
 
 }
 
-void DocTabBar::onTabReleased(int index)
+void DocTabBar::onTabReleased(int)
 {
     if (count() <= 1)
         return;
@@ -236,7 +236,7 @@ void DocTabBar::onTabReleased(int index)
     emit sigTabNewWindow(sheet);
 }
 
-void DocTabBar::onTabDroped(int index, Qt::DropAction da, QObject *target)
+void DocTabBar::onTabDroped(int, Qt::DropAction da, QObject *target)
 {
     Q_UNUSED(da)    //同程序da可以根据目标传回，跨程序全是copyAction
 
