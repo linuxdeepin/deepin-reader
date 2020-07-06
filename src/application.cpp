@@ -18,6 +18,7 @@
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
+    loadTranslator();
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
@@ -31,7 +32,6 @@ Application::Application(int &argc, char **argv)
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
 
-    initI18n();
     initCfgPath();
     initChildren();
 }
@@ -94,7 +94,3 @@ void Application::initChildren()
     m_pAppInfo = new AppInfo(this);
 }
 
-void Application::initI18n()
-{
-    loadTranslator();
-}
