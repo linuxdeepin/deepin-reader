@@ -24,6 +24,14 @@ enum Note_Type {
     NOTE_ICON,              //  页面注释
 };
 
+enum E_SideBar {
+    SIDE_THUMBNIL = 0,
+    SIDE_BOOKMARK,
+    SIDE_CATALOG,
+    SIDE_NOTE,
+    SIDE_SEARCH
+};
+
 //}
 
 namespace Constant {

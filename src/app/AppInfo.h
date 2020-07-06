@@ -9,11 +9,6 @@
 #include <QSize>
 #include <QSettings>
 
-enum ICON_RADIUS {
-    ICON_SMALL = 8,     // 小图标圆角
-    ICON_BIG = 10       // 大图标圆角
-};
-
 enum SET_KEY {
     KEY_APP_WIDTH,
     KEY_APP_HEIGHT

@@ -28,7 +28,6 @@
 #include "DocSheet.h"
 #include "MsgHeader.h"
 #include "ModuleHeader.h"
-#include "WidgetHeader.h"
 
 #include <DPushButton>
 #include <DHorizontalLine>
@@ -53,7 +52,7 @@ void NotesWidget::initWidget()
     this->setLayout(pVLayout);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setListType(DR_SPACE::E_NOTE_WIDGET);
+    m_pImageListView->setListType(E_SideBar::SIDE_NOTE);
     NotesDelegate *imageDelegate = new NotesDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
     connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));

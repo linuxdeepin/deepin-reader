@@ -36,45 +36,25 @@ class Utils : public QObject
     Q_OBJECT
 
 public:
-    static QString getQrcPath(const QString &imageName);
-    static QString getQrcPath(const QString &imageName, const QString &);
-    static QString getQssPath(const QString &qssName);
-    static QSize getRenderSize(int fontSize, const QString &string);
-    static void setFontSize(QPainter &painter, int textSize);
-    static void applyQss(QWidget *widget, const QString &qssName);
     static QString getKeyshortcut(QKeyEvent *keyEvent);
 
     static bool fileExists(const QString &path);
-    static bool fileIsWritable(const QString &path);
-    static bool fileIsHome(const QString &path);
-    static void passInputEvent(int wid);
-    static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
-    static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
-    static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-    static QByteArray getEncode(const QByteArray &data);
-    static qreal easeInOut(qreal x);
-    static qreal easeInQuad(qreal x);
-    static qreal easeInQuint(qreal x);
-    static qreal easeOutQuad(qreal x);
-    static qreal easeOutQuint(qreal x);
-    static QVariantMap getThemeMapFromPath(const QString &filepath);
-    static bool isMimeTypeSupport(const QString &filepath);
 
-    static QPixmap renderSVG(const QString &filePath, const QSize &size);
+    static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
 
     static QString getConfigPath();
-    static QString getSuffixList();
 
     static QString getInputDataSize(const qint64 &);
 
-    static bool runApp(const QString &args);
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
 
     static void copyText(const QString &sText);
+
+    static QString getUuid();
+
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 
     static bool copyFile(const QString &sourcePath, const QString &destinationPath);
-    static QString getUuid();
 };
 
 #endif // UTILS_H

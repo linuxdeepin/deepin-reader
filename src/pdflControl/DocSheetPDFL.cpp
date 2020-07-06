@@ -274,7 +274,7 @@ bool DocSheetPDFL::saveData()
 bool DocSheetPDFL::saveAsData(QString filePath)
 {
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
-    return QFile::copy(this->filePath(), filePath);
+    return Utils::copyFile(this->filePath(), filePath);
 }
 
 void DocSheetPDFL::openMagnifier()

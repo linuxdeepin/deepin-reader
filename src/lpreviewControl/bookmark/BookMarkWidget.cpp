@@ -18,7 +18,6 @@
  */
 #include "BookMarkWidget.h"
 #include "DocSheet.h"
-#include "WidgetHeader.h"
 #include "pdfControl/docview/DocummentProxy.h"
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
@@ -45,7 +44,7 @@ void BookMarkWidget::initWidget()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setListType(DR_SPACE::E_BOOKMARK_WIDGET);
+    m_pImageListView->setListType(E_SideBar::SIDE_BOOKMARK);
     BookMarkDelegate *imageDelegate = new BookMarkDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 

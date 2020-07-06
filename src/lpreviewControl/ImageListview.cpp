@@ -19,7 +19,6 @@
 #include "pdfControl/docview/DocummentProxy.h"
 #include "ImageViewModel.h"
 #include "Application.h"
-#include "WidgetHeader.h"
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
 
@@ -47,7 +46,7 @@ void ImageListView::initControl()
 {
     m_pBookMarkMenu = nullptr;
     m_pNoteMenu = nullptr;
-    m_listType = DR_SPACE::E_THUMBAIL_WIDGET;
+    m_listType = E_SideBar::SIDE_THUMBNIL;
     m_imageModel = new ImageViewModel(this);
     m_imageModel->setDocSheet(m_docSheet);
     this->setModel(m_imageModel);
@@ -65,7 +64,7 @@ void ImageListView::setListType(int type)
 
 void ImageListView::handleOpenSuccess()
 {
-    if (m_listType == DR_SPACE::E_THUMBAIL_WIDGET) {
+    if (m_listType == E_SideBar::SIDE_THUMBNIL) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         for (int pageIndex : pageList) {
             m_imageModel->setBookMarkVisible(pageIndex, true, false);
@@ -76,13 +75,13 @@ void ImageListView::handleOpenSuccess()
         for (int index = 0; index < pagesNum; index++)
             pageSrclst << index;
         m_imageModel->initModelLst(pageSrclst);
-    } else if (m_listType == DR_SPACE::E_BOOKMARK_WIDGET) {
+    } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         QList<ImagePageInfo_t> pageSrclst;
         for (int pageIndex : pageList)
             pageSrclst << pageIndex;
         m_imageModel->initModelLst(pageSrclst, true);
-    } else if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
+    } else if (m_listType == E_SideBar::SIDE_NOTE) {
         QList<stHighlightContent> noteLst;
         m_docSheet->getAllAnnotation(noteLst);
         QList<ImagePageInfo_t> pageSrclst;
@@ -144,9 +143,9 @@ void ImageListView::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::RightButton) {
         const QModelIndex &modelIndex = this->indexAt(event->pos());
         if (modelIndex.isValid()) {
-            if (m_listType == DR_SPACE::E_NOTE_WIDGET) {
+            if (m_listType == E_SideBar::SIDE_NOTE) {
                 showNoteMenu();
-            } else if (m_listType == DR_SPACE::E_BOOKMARK_WIDGET) {
+            } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
                 showBookMarkMenu();
             }
         }

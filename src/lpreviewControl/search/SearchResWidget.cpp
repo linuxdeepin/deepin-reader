@@ -21,7 +21,6 @@
 #include "pdfControl/docview/DocummentProxy.h"
 #include "lpreviewControl/ImageListview.h"
 #include "lpreviewControl/ImageViewModel.h"
-#include "WidgetHeader.h"
 #include "SearchResDelegate.h"
 
 #include <QStackedLayout>
@@ -48,7 +47,7 @@ void SearchResWidget::initWidget()
     this->setLayout(m_stackLayout);
 
     m_pImageListView = new ImageListView(m_sheet, this);
-    m_pImageListView->setListType(DR_SPACE::E_SEARCH_RES_WIDGET);
+    m_pImageListView->setListType(E_SideBar::SIDE_SEARCH);
     SearchResDelegate *imageDelegate = new SearchResDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
     m_stackLayout->addWidget(m_pImageListView);
