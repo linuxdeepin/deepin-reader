@@ -18,10 +18,6 @@
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    initI18n();
-    initCfgPath();
-    initChildren();
-
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setApplicationName(ConstantMsg::g_app_name);
     setOrganizationName("deepin");
@@ -34,6 +30,10 @@ Application::Application(int &argc, char **argv)
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(static_cast<int>(256 * qApp->devicePixelRatio()), static_cast<int>(256 * qApp->devicePixelRatio())));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
+
+    initI18n();
+    initCfgPath();
+    initChildren();
 }
 
 void Application::setSreenRect(const QRect &rect)
