@@ -6,7 +6,6 @@
 #include <QDateTime>
 
 #include <QMetaType>
-#include <QRectF>
 
 enum ViewMode_EM {
     ViewMode_SinglePage = 0,

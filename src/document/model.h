@@ -4,7 +4,6 @@
 #include <QList>
 #include <QtPlugin>
 #include <QRect>
-#include <QPainterPath>
 #include <QStandardItemModel>
 #include <QString>
 #include <QWidget>

@@ -37,7 +37,6 @@
 #include <QTimer>
 #include <QApplication>
 #include <QBitmap>
-#include <QMouseEvent>
 #include <DMenu>
 #include <DGuiApplicationHelper>
 

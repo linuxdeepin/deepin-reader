@@ -19,7 +19,6 @@
 #include "utils/utils.h"
 
 #include <QPainter>
-#include <QPainterPath>
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>

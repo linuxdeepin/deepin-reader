@@ -24,7 +24,6 @@
 
 #include <QColor>
 #include <QPainter>
-#include <QPainterPath>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QDebug>
