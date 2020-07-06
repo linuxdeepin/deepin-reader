@@ -32,6 +32,7 @@ void AppInfo::InitKeyList()
     m_pKeyList.append(QKeySequence::Print);
     m_pKeyList.append(QKeySequence::Save);
     m_pKeyList.append(QKeySequence::Copy);
+    m_pKeyList.append(QKeySequence(Qt::Key_F11));
     m_pKeyList.append(QKeySequence(Qt::Key_F5));
     m_pKeyList.append(QKeySequence(Qt::Key_Left));
     m_pKeyList.append(QKeySequence(Qt::Key_Right));

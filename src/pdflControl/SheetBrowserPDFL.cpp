@@ -557,7 +557,7 @@ void SheetBrowserPDFL::mouseMoveEvent(QMouseEvent *event)
                 if (!item->isPanel()) {
                     SheetBrowserPDFLAnnotation *annotation  = dynamic_cast<SheetBrowserPDFLAnnotation *>(item);
                     if (annotation != nullptr) {
-                        m_tipsWidget->setText(annotation->text());
+                        m_tipsWidget->setText(annotation->annotationText());
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->show();

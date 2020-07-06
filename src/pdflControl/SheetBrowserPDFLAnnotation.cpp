@@ -17,12 +17,12 @@ void SheetBrowserPDFLAnnotation::setScaleFactorAndRotation(Dr::Rotation rotation
     update();
 }
 
-int SheetBrowserPDFLAnnotation::type()
+int SheetBrowserPDFLAnnotation::annotationType()
 {
     return m_annotation->type();
 }
 
-QString SheetBrowserPDFLAnnotation::text()
+QString SheetBrowserPDFLAnnotation::annotationText()
 {
     return m_annotation->contents();
 }

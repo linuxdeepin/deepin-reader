@@ -32,9 +32,9 @@ public:
 
     void setScaleFactorAndRotation(Dr::Rotation rotation);
 
-    int type();
+    int annotationType();
 
-    QString text();
+    QString annotationText();
 
     QRectF boundingRect()const override;
 
