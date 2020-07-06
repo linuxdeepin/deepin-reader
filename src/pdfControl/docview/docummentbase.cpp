@@ -78,7 +78,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
             Q_D(DocummentBase);
             showCurPageViewAfterScaleChanged();
             d->m_bMouseHandleVScroll = true;
-            loadPages();
+//            loadPages();
         });
 
         d->donotneedreloaddoc = false;
