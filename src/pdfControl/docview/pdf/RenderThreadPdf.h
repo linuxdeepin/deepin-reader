@@ -33,6 +33,8 @@ public:
 
     void run() override;
 
+    void stopCurThread();
+
 private:
     QMutex m_threadMutex;
     QStack<RenderTaskPdf> m_renderTasks;

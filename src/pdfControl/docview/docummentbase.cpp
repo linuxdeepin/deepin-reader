@@ -74,11 +74,20 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
             break;
         }
 
-        QTimer::singleShot(500, [this]() {
+        QTimer::singleShot(200, [this]() {
             Q_D(DocummentBase);
             showCurPageViewAfterScaleChanged();
             d->m_bMouseHandleVScroll = true;
-//            loadPages();
+            loadPages();
+
+            QTimer::singleShot(300, [this]() {
+                Q_D(DocummentBase);
+                qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+
+                showCurPageViewAfterScaleChanged();
+
+                qInfo() << __LINE__ << __FUNCTION__ << "    now      d->m_currentpageno:" << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+            });
         });
 
         d->donotneedreloaddoc = false;
@@ -113,6 +122,8 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
 
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
+
+    connect(this, &DocummentBase::signal_loadPages, this, &DocummentBase::slot_loadPages);
 }
 
 DocummentBase::~DocummentBase()
@@ -828,6 +839,7 @@ void DocummentBase::showSinglePage()
         d->m_widgets.at(i)->setGeometry(rex, rey, d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->width(), d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height());
         rey += d->m_widgets.at(i)->layout()->margin() * 2 + d->m_pages.at(i)->height() + d->m_vboxLayout->spacing();
     }
+    d->m_vboxLayout->update();
 }
 void DocummentBase::showFacingPage()
 {
@@ -866,6 +878,7 @@ void DocummentBase::showFacingPage()
         d->m_widgetrects.append(QRect(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight));
         d->m_widgets.at(d->m_widgets.size() / 2)->setGeometry(rex, rey, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + d->m_widgets.at(d->m_widgets.size() / 2)->layout()->spacing() + d->m_pages.at(d->m_pages.size() - 1)->width() * 2, d->m_widgets.at(d->m_widgets.size() / 2)->layout()->margin() * 2 + reheight);
     }
+    d->m_vboxLayout->update();
 }
 
 Page::Link *DocummentBase::mouseBeOverLink(QPoint point)
@@ -1090,12 +1103,14 @@ bool DocummentBase::setViewModeAndShow(ViewMode_EM viewmode)
     return true;
 }
 
-bool DocummentBase::loadPages()
+void DocummentBase::slot_loadPages()
 {
     Q_D(DocummentBase);
 
     if (!bDocummentExist())
-        return false;
+        return;
+
+    RenderThreadPdf::getIns()->stopCurThread();
 
     int firstpagenum = 0, lastpagenum = 0;
 
@@ -1137,8 +1152,8 @@ bool DocummentBase::loadPages()
 
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
         if (i >= 0 && i < d->m_pages.size()) {
-//            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
-            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+//            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
         }
     }
 
@@ -1155,6 +1170,77 @@ bool DocummentBase::loadPages()
     }
 
     update(viewport()->rect());
+}
+
+bool DocummentBase::loadPages()
+{
+//    Q_D(DocummentBase);
+
+    if (!bDocummentExist())
+        return false;
+
+    emit signal_loadPages();
+
+//    RenderThreadPdf::getIns()->stopCurThread();
+
+//    int firstpagenum = 0, lastpagenum = 0;
+
+//    int curheight = 1;
+
+//    if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180 || d->m_rotate == RotateType_Normal) {
+//        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageHeight());
+//    } else {
+//        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageWidth());
+//    }
+
+//    int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
+//    icount = icount > 0 ? icount + 2 : 2;
+
+//    if (d->m_viewmode == ViewMode_SinglePage) {
+//        if (icount > 3 && icount <= 4) {
+//            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
+//            lastpagenum = d->m_currentpageno + 2;
+//        } else if (icount > 4) {
+//            firstpagenum = d->m_currentpageno - (icount - 2) >= 0 ? d->m_currentpageno - (icount - 2) : 0;
+//            lastpagenum = d->m_currentpageno + icount;
+//        } else {
+//            firstpagenum = d->m_currentpageno - 1 >= 0 ? d->m_currentpageno - 1 : d->m_currentpageno;
+//            lastpagenum = d->m_currentpageno + icount - 1;
+//        }
+//    } else if (d->m_viewmode == ViewMode_FacingPage) {
+//        //当前显示比例较小或者视窗较大，因此可以多加载几页
+//        if (icount > 3 && icount <= 4) {
+//            firstpagenum = d->m_currentpageno - 2 * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
+//            lastpagenum = d->m_currentpageno + icount * 2;
+//        } else if (icount > 4) {
+//            firstpagenum = d->m_currentpageno - (icount - 2) * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
+//            lastpagenum = d->m_currentpageno + icount * 2;
+//        } else {
+//            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
+//            lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
+//        }
+//    }
+
+//    for (int i = firstpagenum; i <= lastpagenum ; i++) {
+//        if (i >= 0 && i < d->m_pages.size()) {
+//            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+////            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+//        }
+//    }
+
+//    for (int i = 0; i < d->m_pages.size(); i++) {
+//        bool bshow = false;
+//        for (int j = firstpagenum ; j <= lastpagenum; j++) {
+//            if (i == j) {
+//                bshow = true;
+//                break;
+//            }
+//        }
+//        if (!bshow)
+//            d->m_pages.at(i)->clearImage();
+//    }
+
+//    update(viewport()->rect());
 
     return true;
 }

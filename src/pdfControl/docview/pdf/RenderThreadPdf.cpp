@@ -1,7 +1,7 @@
 #include "RenderThreadPdf.h"
 #include "pagepdf.h"
 
-//static int MAX_TASK_NUM = 30;
+static int MAX_TASK_NUM = 30;
 
 RenderThreadPdf *RenderThreadPdf::_ins{nullptr};
 RenderThreadPdf::RenderThreadPdf(QObject *object):
@@ -19,6 +19,9 @@ RenderThreadPdf::~RenderThreadPdf()
 
 RenderThreadPdf *RenderThreadPdf::getIns()
 {
+    if (nullptr == _ins) {
+        _ins = new RenderThreadPdf();
+    }
     return _ins;
 }
 
@@ -49,8 +52,8 @@ void RenderThreadPdf::appendTask(PageBase *item, double scaleFactor, RotateType_
         task.item = item;
         task.scaleFactor = scaleFactor;
         task.rotation = rotation;
-        _ins->m_renderTasks.append(task);
-//        _ins->m_renderTasks.prepend(task);
+//        _ins->m_renderTasks.append(task);
+        _ins->m_renderTasks.prepend(task);
     }
 
     _ins->m_threadMutex.unlock();
@@ -77,7 +80,16 @@ void RenderThreadPdf::run()
             break;
         }
 
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+
         _ins->m_threadMutex.lock();
+
+//        while (_ins->m_renderTasks.count() > MAX_TASK_NUM) {
+//            _ins->m_renderTasks.pop();
+//        }
+
         RenderTaskPdf task = m_renderTasks.pop();
         _ins->m_threadMutex.unlock();
 
@@ -86,6 +98,16 @@ void RenderThreadPdf::run()
         }
 
         reinterpret_cast<PagePdf *>(task.item)->renderImage(task.scaleFactor, task.rotation);
+    }
+}
+
+void RenderThreadPdf::stopCurThread()
+{
+    if (nullptr != _ins && _ins->isRunning()) {
+        m_threadQuit = true;
+        _ins->quit();
+        _ins->wait();
+        _ins->m_renderTasks.clear();
     }
 }
 

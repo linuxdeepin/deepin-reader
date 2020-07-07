@@ -103,7 +103,7 @@ public:
         m_spinner = nullptr;
         m_bquit = false;
         connect(&loadmagnifiercachethread, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)), this, SIGNAL(signal_loadMagnifierPixmapCache(QImage, double, double)));
-        connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
+//        connect(&threadreander, SIGNAL(signal_RenderFinish(QImage)), this, SIGNAL(signal_RenderFinish(QImage)));
     }
 
     virtual ~PageBasePrivate()
@@ -121,7 +121,7 @@ public:
 //            threadreander.quit();
 //            threadreander.wait();
 //        }
-        threadreander.setAutoDelete(true);
+//        threadreander.setAutoDelete(true);
     }
 
     QColor m_paintercolor;
@@ -138,7 +138,7 @@ public:
     RotateType_EM m_rotate;
     double m_scale;
     ThreadLoadMagnifierCache loadmagnifiercachethread;
-    ThreadRenderImage threadreander;
+//    ThreadRenderImage threadreander;
     double m_magnifierwidth;
     double m_magnifierheight;
     int m_pageno;

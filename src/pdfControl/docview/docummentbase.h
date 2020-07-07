@@ -211,6 +211,7 @@ signals:
     void signal_openResult(bool);
     void signal_autoplaytoend();
 //    void signal_scaleChanded();
+    void signal_loadPages();
 
 protected slots:
     void slot_vScrollBarValueChanged(int value);
@@ -223,6 +224,8 @@ protected slots:
     bool pageJump(int pagenum);
     void scaleAndShow(double scale, RotateType_EM rotate);
     bool setViewModeAndShow(ViewMode_EM viewmode);
+
+    void slot_loadPages();
 
 protected:
     void showSinglePage();
