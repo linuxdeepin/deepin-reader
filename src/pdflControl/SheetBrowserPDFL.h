@@ -124,8 +124,6 @@ private slots:
 
     void onHorizontalScrollBarValueChanged(int value);
 
-    void onMenuItemClicked(const QString &objectname, const QVariant &param);
-
     void onWordsChanged();
 
 private:

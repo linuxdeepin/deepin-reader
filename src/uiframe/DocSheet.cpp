@@ -466,12 +466,20 @@ DocOperation DocSheet::operation()
 
 void DocSheet::openSlide()
 {
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
 
+    doc->openSlide();
 }
 
 void DocSheet::closeSlide()
 {
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
 
+    doc->quitSlide();
 }
 
 void DocSheet::openFullScreen()

@@ -34,6 +34,10 @@
 #include "SheetBrowserPDFLAnnotation.h"
 #include "widgets/TipsWidget.h"
 #include "SheetBrowserPdflMenu.h"
+#include "widgets/PrintManager.h"
+#include "widgets/FileAttrWidget.h"
+#include "app/AppInfo.h"
+#include "Application.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -475,7 +479,53 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
             }
 
             SheetBrowserPDFLMenu menu;
-            connect(&menu, &SheetBrowserPDFLMenu::signalMenuItemClicked, this, &SheetBrowserPDFL::onMenuItemClicked);
+            connect(&menu, &SheetBrowserPDFLMenu::signalMenuItemClicked, [this, item](const QString & objectname, const QVariant & param) {
+                if (objectname == "Copy") {
+
+                } else if (objectname == "ColorWidgetAction") {
+                    QColor color = dApp->m_pAppInfo->getLightColorList().at(param.toInt());
+
+                } else if (objectname == "RemoveAnnotation") {
+
+                } else if (objectname == "AddAnnotationIcon") {
+
+                } else if (objectname == "AddBookmark") {
+                    m_sheet->setBookMark(item->itemIndex(), true);
+                } else if (objectname == "RemoveHighlight") {
+
+                } else if (objectname == "AddAnnotationHighlight") {
+
+                } else if (objectname == "Search") {
+                    m_sheet->handleSearch();
+                } else if (objectname == "RemoveBookmark") {
+                    m_sheet->setBookMark(item->itemIndex(), false);
+                } else if (objectname == "AddAnnotationIcon") {
+
+                } else if (objectname == "Fullscreen") {
+                    m_sheet->openFullScreen();
+                } else if (objectname == "SlideShow") {
+                    m_sheet->openSlide();
+                } else if (objectname == "FirstPage") {
+                    this->emit sigNeedPageFirst();
+                } else if (objectname == "PreviousPage") {
+                    this->emit sigNeedPagePrev();
+                } else if (objectname == "NextPage") {
+                    this->emit sigNeedPageNext();
+                } else if (objectname == "LastPage") {
+                    this->emit sigNeedPageLast();
+                } else if (objectname == "RotateLeft") {
+                    m_sheet->rotateLeft();
+                } else if (objectname == "RotateRight") {
+                    m_sheet->rotateRight();
+                } else if (objectname == "Print") {
+                    PrintManager p(m_sheet);
+                    p.showPrintDialog(m_sheet);
+                } else if (objectname == "DocumentInfo") {
+                    FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
+                    pFileAttrWidget->setFileAttr(m_sheet);
+                    pFileAttrWidget->showScreenCenter();
+                }
+            });
             if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), DocSheetMenuType_e::DOC_MENU_ANNO_ICON);
@@ -785,47 +835,4 @@ void SheetBrowserPDFL::showEvent(QShowEvent *event)
     }
 
     QGraphicsView::showEvent(event);
-}
-
-void SheetBrowserPDFL::onMenuItemClicked(const QString &objectname, const QVariant &)
-{
-    if (objectname == "Copy") {
-
-    } else if (objectname == "RemoveAnnotation") {
-
-    } else if (objectname == "AddAnnotationIcon") {
-
-    } else if (objectname == "AddBookmark") {
-
-    } else if (objectname == "RemoveHighlight") {
-
-    } else if (objectname == "AddAnnotationHighlight") {
-
-    } else if (objectname == "Search") {
-
-    } else if (objectname == "RemoveBookmark") {
-
-    } else if (objectname == "AddAnnotationIcon") {
-
-    } else if (objectname == "Fullscreen") {
-
-    } else if (objectname == "SlideShow") {
-
-    } else if (objectname == "FirstPage") {
-
-    } else if (objectname == "PreviousPage") {
-
-    } else if (objectname == "NextPage") {
-
-    } else if (objectname == "LastPage") {
-
-    } else if (objectname == "RotateLeft") {
-
-    } else if (objectname == "RotateRight") {
-
-    } else if (objectname == "Print") {
-
-    } else if (objectname == "DocumentInfo") {
-
-    }
 }
