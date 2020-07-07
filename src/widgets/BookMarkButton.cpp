@@ -1,11 +1,16 @@
 #include "BookMarkButton.h"
 #include "utils/Utils.h"
+
 #include<QColor>
 #include<QBrush>
 #include<QPen>
 #include<QPoint>
 #include<QPainter>
 #include <DApplicationHelper>
+#include<QPaintEvent>
+#include<QMouseEvent>
+
+DWIDGET_USE_NAMESPACE
 
 BookMarkButton::BookMarkButton(DWidget *parent)
     : DPushButton(parent),

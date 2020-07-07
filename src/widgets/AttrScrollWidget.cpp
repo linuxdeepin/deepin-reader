@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <DFontSizeManager>
 #include <DTextBrowser>
+#include <DLabel>
+#include <QGridLayout>
 
 #include "pdfControl/docview/CommonStruct.h"
 #include "pdfControl/docview/DocummentProxy.h"
@@ -10,6 +12,7 @@
 #include "DocSheet.h"
 #include "widgets/WordWrapLabel.h"
 
+DWIDGET_USE_NAMESPACE
 #define LAEBL_TEXT_WIDTH   165
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     : DFrame(parent)

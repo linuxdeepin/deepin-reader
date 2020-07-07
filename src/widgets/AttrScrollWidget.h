@@ -3,19 +3,16 @@
 
 #include <DFrame>
 #include <DWidget>
-#include <DLabel>
-#include <QGridLayout>
-
-DWIDGET_USE_NAMESPACE
 
 class DocSheet;
-class AttrScrollWidget : public DFrame
+class QGridLayout;
+class AttrScrollWidget : public Dtk::Widget::DFrame
 {
     Q_OBJECT
     Q_DISABLE_COPY(AttrScrollWidget)
 
 public:
-    explicit AttrScrollWidget(DocSheet *sheet, DWidget *parent  = nullptr);
+    explicit AttrScrollWidget(DocSheet *sheet, Dtk::Widget::DWidget *parent  = nullptr);
 
 private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData);

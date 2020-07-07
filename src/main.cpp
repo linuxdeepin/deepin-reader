@@ -1,15 +1,15 @@
 #include "MainWindow.h"
 #include "Application.h"
-#include <DLog>
-#include <DApplicationSettings>
-#include <QDesktopWidget>
 #include "app/ProcessController.h"
 #include "app/Json.h"
 #include "CentralDocPage.h"
-#include <QLockFile>
+
+#include <DLog>
 #include <QDebug>
+#include <QDesktopWidget>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 

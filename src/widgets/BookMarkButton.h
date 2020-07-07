@@ -1,16 +1,14 @@
 #ifndef BOOKMARKBUTTON_H
 #define BOOKMARKBUTTON_H
 
-#include<QPaintEvent>
-#include<QMouseEvent>
-#include<DPushButton>
-DWIDGET_USE_NAMESPACE
+#include <DPushButton>
+#include <DWidget>
 
-class BookMarkButton : public DPushButton
+class BookMarkButton : public Dtk::Widget::DPushButton
 {
     Q_OBJECT
 public:
-    BookMarkButton(DWidget *parent = nullptr);
+    BookMarkButton(Dtk::Widget::DWidget *parent = nullptr);
 
     bool clickState();
 
