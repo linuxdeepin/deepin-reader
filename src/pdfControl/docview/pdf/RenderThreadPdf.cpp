@@ -1,7 +1,7 @@
 #include "RenderThreadPdf.h"
 #include "pagepdf.h"
 
-static int MAXTASKNUM = 20;
+//static int MAX_TASK_NUM = 30;
 
 RenderThreadPdf *RenderThreadPdf::_ins{nullptr};
 RenderThreadPdf::RenderThreadPdf(QObject *object):
@@ -40,8 +40,9 @@ void RenderThreadPdf::appendTask(PageBase *item, double scaleFactor, RotateType_
         }
     }
 
-    if (_ins->m_renderTasks.count() > MAXTASKNUM)
-        _ins->m_renderTasks.clear();
+//    while (_ins->m_renderTasks.count() > MAX_TASK_NUM) {
+//        _ins->m_renderTasks.pop();
+//    }
 
     if (!exist) {
         RenderTaskPdf task;
@@ -49,6 +50,7 @@ void RenderThreadPdf::appendTask(PageBase *item, double scaleFactor, RotateType_
         task.scaleFactor = scaleFactor;
         task.rotation = rotation;
         _ins->m_renderTasks.append(task);
+//        _ins->m_renderTasks.prepend(task);
     }
 
     _ins->m_threadMutex.unlock();
