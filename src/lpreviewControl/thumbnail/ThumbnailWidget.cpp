@@ -101,7 +101,7 @@ void ThumbnailWidget::nextPage()
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH * scale, qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
+    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }

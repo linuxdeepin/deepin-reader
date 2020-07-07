@@ -101,7 +101,8 @@ void TipsWidget::paintEvent(QPaintEvent *event)
 void TipsWidget::adjustContent(const QString &text)
 {
     QFontMetricsF fontMetris(this->font());
-    int wordHeight = fontMetris.boundingRect(QRectF(0, 0, this->width() - 2 * m_lrMargin, 0), m_alignment | Qt::TextWrapAnywhere, text).height() + 2 * m_tbMargin;
+    int wordHeight = static_cast<int>(fontMetris.boundingRect(QRectF(0, 0, this->width() - 2 * m_lrMargin, 0),
+                                                              static_cast<int>(m_alignment | Qt::TextWrapAnywhere), text).height() + 2 * m_tbMargin);
     if (this->height() == wordHeight) return;
     setFixedHeight(wordHeight);
 }

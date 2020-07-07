@@ -123,7 +123,8 @@ void SheetBrowserPDFLItem::renderViewPort()
 
     QRectF viewRenderRectF = mapFromScene(visibleSceneRect).boundingRect();
 
-    QRect viewRenderRect = QRect(viewRenderRectF.x(), viewRenderRectF.y(), viewRenderRectF.width(), viewRenderRectF.height());
+    QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
+                                 static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
     RenderTaskPDFL task;
 
@@ -171,9 +172,9 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
                 int height = 400;
 
                 if (rect.height() < i * 400)
-                    height = rect.height() - 400 * i;
+                    height = static_cast<int>(rect.height() - 400 * i);
 
-                QRect renderRect = QRect(0, 400 * i, boundingRect().width(), height);
+                QRect renderRect = QRect(0, 400 * i, static_cast<int>(boundingRect().width()), height);
 
                 RenderTaskPDFL task;
                 task.item = this;
@@ -183,7 +184,8 @@ void SheetBrowserPDFLItem::render(double scaleFactor, Dr::Rotation rotation, boo
                 tasks.append(task);
             }
         } else {
-            QRect renderRect = QRect(boundingRect().x(), boundingRect().y(), boundingRect().width(), boundingRect().height());
+            QRect renderRect = QRect(static_cast<int>(boundingRect().x()), static_cast<int>(boundingRect().y()),
+                                     static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             RenderTaskPDFL task;
             task.item = this;
             task.scaleFactor = m_scaleFactor;
@@ -243,7 +245,7 @@ void SheetBrowserPDFLItem::handleRenderFinished(double scaleFactor, Dr::Rotation
         m_image = image;
     } else {
         if (m_image.isNull()) {
-            m_image = QImage(boundingRect().width(), boundingRect().height(), QImage::Format_RGB32);
+            m_image = QImage(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), QImage::Format_RGB32);
             m_image.fill(QColor(Qt::white));
         }
         QPainter painter(&m_image);

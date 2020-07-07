@@ -212,5 +212,5 @@ void RenderThreadPDFL::destroy()
 void RenderThreadPDFL::onTaskFinished(SheetBrowserPDFLItem *item, QImage image, double scaleFactor, int rotation, QRect rect)
 {
     if (SheetBrowserPDFLItem::existInstance(item))
-        item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image, rect);
+        item->handleRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
 }

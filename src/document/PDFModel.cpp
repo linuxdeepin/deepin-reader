@@ -774,7 +774,7 @@ bool PDFPage::removeAnnotation(Annotation *annotation)
 
     m_page->removeAnnotation(PDFAnnotation->m_annotation);
 
-    PDFAnnotation->m_annotation = 0;
+    PDFAnnotation->m_annotation = nullptr;
 
 #else
 
@@ -854,7 +854,7 @@ Page *PDFDocument::page(int index) const
         return new PDFPage(&m_mutex, page);
     }
 
-    return 0;
+    return nullptr;
 }
 
 bool PDFDocument::isLocked() const
@@ -1108,7 +1108,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath)
         return new deepin_reader::PDFDocument(document);
     }
 
-    return 0;
+    return nullptr;
 }
 
 }

@@ -214,7 +214,7 @@ void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
     if (mode == m_operation.layoutMode)
         return;
 
-    if (mode >= 0 && mode < Dr::NumberOfLayoutModes) {
+    if (mode >= Dr::SinglePageMode && mode < Dr::NumberOfLayoutModes) {
         m_operation.layoutMode = mode;
         m_browser->deform(m_operation);
         emit sigFileChanged(this);
@@ -223,7 +223,7 @@ void DocSheetDJVU::setLayoutMode(Dr::LayoutMode mode)
 
 void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 {
-    if (shape >= 0 && shape < Dr::NumberOfMouseShapes) {
+    if (shape >= Dr::MouseShapeNormal && shape < Dr::NumberOfMouseShapes) {
         closeMagnifier();
         m_operation.mouseShape = shape;
         m_browser->loadMouseShape(m_operation);
@@ -233,7 +233,7 @@ void DocSheetDJVU::setMouseShape(Dr::MouseShape shape)
 
 void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 {
-    if (mode >= 0 && mode <= Dr::FitToPageWorHMode) {
+    if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
         m_browser->deform(m_operation);
         emit sigFileChanged(this);
@@ -242,7 +242,7 @@ void DocSheetDJVU::setScaleMode(Dr::ScaleMode mode)
 
 void DocSheetDJVU::setScaleFactor(qreal scaleFactor)
 {
-    if (Dr::ScaleFactorMode == m_operation.scaleMode && scaleFactor == m_operation.scaleFactor)
+    if (Dr::ScaleFactorMode == m_operation.scaleMode && qFuzzyCompare(scaleFactor, m_operation.scaleFactor))
         return;
 
     if (scaleFactor > maxScaleFactor())
@@ -326,9 +326,9 @@ void DocSheetDJVU::docBasicInfo(stFileInfo &info)
 //        info.strProducter = document->producer();
 //        info.strCreater = document->creator();
 //        info.bsafe = document->isEncrypted();
-        info.iWidth = m_browser->maxWidth();
-        info.iHeight = m_browser->maxHeight();
-        info.iNumpages = m_browser->allPages();
+        info.iWidth = static_cast<unsigned int>(m_browser->maxWidth());
+        info.iHeight = static_cast<unsigned int>(m_browser->maxHeight());
+        info.iNumpages = static_cast<unsigned int>(m_browser->allPages());
     }
 
 }

@@ -81,7 +81,7 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::NoBrush);
     QPen pen(QColor(219, 189, 119), maxLineHeight);
     painter.setPen(pen);
-    int startLine = this->document()->documentMargin() - this->verticalScrollBar()->value();
+    int startLine = static_cast<int>(this->document()->documentMargin() - this->verticalScrollBar()->value());
     painter.drawLine(2, startLine, this->viewport()->width() - 4, startLine);
     pen.setWidth(1);
     painter.setPen(pen);

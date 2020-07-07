@@ -50,7 +50,7 @@ void RenderThreadDJVU::appendTask(SheetBrowserDJVUItem *item, double scaleFactor
     if (nullptr == instance)
         instance = new RenderThreadDJVU;
 
-    if (instance->m_curTask.item == item && instance->m_curTask.scaleFactor == scaleFactor && instance->m_curTask.rotation == rotation)
+    if (instance->m_curTask.item == item && qFuzzyCompare(instance->m_curTask.scaleFactor, scaleFactor) && instance->m_curTask.rotation == rotation)
         return;
 
     instance->m_mutex.lock();
@@ -119,5 +119,5 @@ void RenderThreadDJVU::destroy()
 void RenderThreadDJVU::onTaskFinished(SheetBrowserDJVUItem *item, QImage image, double scaleFactor, int rotation)
 {
     if (SheetBrowserDJVUItem::existInstance(item))
-        item->handleRenderFinished(scaleFactor, (Dr::Rotation)rotation, image);
+        item->handleRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image);
 }

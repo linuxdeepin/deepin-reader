@@ -248,9 +248,9 @@ QPixmap SlideWidget::drawImage(const QPixmap &srcImage, bool small)
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     qreal iwidth = srcImage.width() * scale;
     qreal iheight = srcImage.height() * scale;
-    painter.drawPixmap(QRect((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio(),
-                             (pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio(),
-                             iwidth, iheight), srcImage);
+    painter.drawPixmap(QRect(static_cast<int>((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio()),
+                             static_cast<int>((pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio()),
+                             static_cast<int>(iwidth), static_cast<int>(iheight)), srcImage);
     return pixmap;
 }
 

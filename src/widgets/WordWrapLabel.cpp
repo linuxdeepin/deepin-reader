@@ -19,13 +19,13 @@
 #include <QPainter>
 #include <QDebug>
 
-WordWrapLabel::WordWrapLabel(QWidget* parent)
+WordWrapLabel::WordWrapLabel(QWidget *parent)
     : DLabel(parent)
 {
     m_margin = 0;
 }
 
-void WordWrapLabel::setText(const QString& text)
+void WordWrapLabel::setText(const QString &text)
 {
     m_text = text;
     update();
@@ -53,7 +53,7 @@ void WordWrapLabel::paintEvent(QPaintEvent *event)
 void WordWrapLabel::adjustContent()
 {
     QFontMetrics fontMetris(this->font());
-    int wordHeight = fontMetris.boundingRect(0, 0, this->width() - 2 * m_margin, 0, this->alignment() | Qt::TextWrapAnywhere, m_text).height();
-    if(this->height() == wordHeight) return;
+    int wordHeight = fontMetris.boundingRect(0, 0, this->width() - 2 * m_margin, 0, static_cast<int>(this->alignment() | Qt::TextWrapAnywhere), m_text).height();
+    if (this->height() == wordHeight) return;
     setFixedSize(this->width(), wordHeight);
 }

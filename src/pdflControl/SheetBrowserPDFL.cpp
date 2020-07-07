@@ -323,15 +323,15 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
     case Dr::RotateBy0:
     case Dr::RotateBy180:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxWidth) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = (double)this->height() / (double) m_maxHeight;
+            operation.scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxHeight);
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = ((double)this->width() - 25.0) / (double) m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxWidth) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
             if (scaleFactor * m_maxHeight > this->height())
-                scaleFactor = (double)this->height() / (double) m_maxHeight;
+                scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxHeight);
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;
@@ -339,15 +339,15 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
     case Dr::RotateBy90:
     case Dr::RotateBy270:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = ((double)this->width() - 25.0) / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxHeight) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = (double)this->height() / (double) m_maxWidth;
+            operation.scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxWidth);
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = ((double)this->width() - 25.0) / (double) m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxHeight) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
             if (scaleFactor * m_maxWidth > this->height())
-                scaleFactor = (double)this->height() / (double) m_maxWidth;
+                scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxWidth);
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;
@@ -364,7 +364,7 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
     int diff = 0;
 
     if (page > 0 && page <= m_items.count())
-        diff = verticalScrollBar()->value() - m_items.at(page - 1)->pos().y();
+        diff = static_cast<int>(verticalScrollBar()->value() - m_items.at(page - 1)->pos().y());
 
     int width = 0;
     int height = 0;
@@ -378,7 +378,7 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
             height += m_items.at(i)->boundingRect().height() + 5;
 
             if (m_items.at(i)->boundingRect().width() > width)
-                width = m_items.at(i)->boundingRect().width();
+                width = static_cast<int>(m_items.at(i)->boundingRect().width());
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -403,10 +403,10 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
 
             if (m_items.count() > i + 1) {
                 if (m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width() > width)
-                    width = m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width();
+                    width = static_cast<int>(m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width());
             } else {
                 if (m_items.at(i)->boundingRect().width() > width)
-                    width = m_items.at(i)->boundingRect().width();
+                    width = static_cast<int>(m_items.at(i)->boundingRect().width());
             }
         }
     }
@@ -414,7 +414,7 @@ void SheetBrowserPDFL::deform(DocOperation &operation)
     setSceneRect(0, 0, width, height);
 
     if (page > 0 && page <= m_items.count())
-        verticalScrollBar()->setValue(m_items[page - 1]->pos().y() + diff);
+        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diff));
 
     wordsChangedLater();
 }
@@ -687,7 +687,7 @@ void SheetBrowserPDFL::setCurrentPage(int page)
     if (page < 1 && page > allPages())
         return;
 
-    verticalScrollBar()->setValue(m_items.at(page - 1)->pos().y());
+    verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
 }
 
 bool SheetBrowserPDFL::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
@@ -695,7 +695,7 @@ bool SheetBrowserPDFL::getImage(int index, QImage &image, double width, double h
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImage(width, height, mode);
+    image = m_items.at(index)->getImage(static_cast<int>(width), static_cast<int>(height), mode);
 
     return true;
 }
@@ -712,7 +712,7 @@ bool SheetBrowserPDFL::getImagePoint(QPoint viewPoint, double scaleFactor, QImag
     if (!item->contains(itemPoint))
         return false;
 
-    QPoint point = QPoint(itemPoint.x(), itemPoint.y());
+    QPoint point = QPoint(static_cast<int>(itemPoint.x()), static_cast<int>(itemPoint.y()));
 
     image = item->getImagePoint(scaleFactor, point);
 

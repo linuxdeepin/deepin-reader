@@ -10,22 +10,14 @@
 class PagePdfPrivate: public PageBasePrivate, public  PageInterface
 {
 public:
-    Q_DECLARE_PUBLIC(PagePdf);
+    Q_DECLARE_PUBLIC(PagePdf)
     PagePdfPrivate(PagePdf *parent): PageBasePrivate(parent)
     {
         m_page = nullptr;
     }
 
-    ~PagePdfPrivate() override
-    {
-        QMutexLocker mutext(&m_imageMutex);
-        m_documentpdf = nullptr;
-        m_bClosed = true;
-        if (m_page) {
-            delete m_page;
-            m_page = nullptr;
-        }
-    }
+    ~PagePdfPrivate() override;
+
     bool getImage(QImage &image, double width, double height) override
     {
         QMutexLocker mutext(&m_imageMutex);
@@ -190,6 +182,17 @@ private:
         return true;
     }
 };
+
+PagePdfPrivate::~PagePdfPrivate()
+{
+    QMutexLocker mutext(&m_imageMutex);
+    m_documentpdf = nullptr;
+    m_bClosed = true;
+    if (m_page) {
+        delete m_page;
+        m_page = nullptr;
+    }
+}
 
 QSet<PageBase *> PagePdf::m_pageItems{nullptr};
 PagePdf::PagePdf(QWidget *parent)
