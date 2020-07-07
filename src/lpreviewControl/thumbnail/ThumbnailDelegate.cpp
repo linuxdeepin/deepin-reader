@@ -43,7 +43,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         if (!pixmap.isNull()) {
             const int borderRadius = 6;
-            const QPixmap &scalePix = pixmap.scaled(static_cast<int>(174 * pixscale), static_cast<int>(174 * pixscale), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QPixmap &scalePix = pixmap.scaled(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
             const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
