@@ -22,6 +22,7 @@
 #define DOCSHEETPDFL_H
 
 #include "DocSheet.h"
+#include "document/Model.h"
 
 class SheetBrowserPDFL;
 class DocSheetPDFL : public DocSheet
@@ -87,6 +88,8 @@ public:
     bool magnifierOpened()override;
 
     void docBasicInfo(stFileInfo &info)override;
+
+    QList< deepin_reader::Annotation * > annotations()override;
 
     QList<qreal> scaleFactorList()override;
 

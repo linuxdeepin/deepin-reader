@@ -27,6 +27,7 @@
 #include "Global.h"
 #include "pdfControl/docview/CommonStruct.h"
 #include "ModuleHeader.h"
+#include "document/Model.h"
 
 class SheetSidebar;
 class SlideWidget;
@@ -137,6 +138,8 @@ public:
     virtual qreal maxScaleFactor();
 
     virtual void setActive(const bool &);
+
+    virtual QList< deepin_reader::Annotation * > annotations();     //用完后需要自行删除
 
     QSet<int> getBookMarkList() const;
 

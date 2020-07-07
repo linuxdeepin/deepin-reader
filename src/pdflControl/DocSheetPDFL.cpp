@@ -328,6 +328,13 @@ void DocSheetPDFL::docBasicInfo(stFileInfo &info)
 
 }
 
+QList<deepin_reader::Annotation *> DocSheetPDFL::annotations()
+{
+    if (nullptr == m_browser)
+        return QList< deepin_reader::Annotation * > ();
+    return m_browser->annotations();
+}
+
 QList<qreal> DocSheetPDFL::scaleFactorList()
 {
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};

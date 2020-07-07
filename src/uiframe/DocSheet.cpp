@@ -411,6 +411,11 @@ void DocSheet::setActive(const bool &)
 
 }
 
+QList<deepin_reader::Annotation *> DocSheet::annotations()
+{
+    return QList< deepin_reader::Annotation * > ();
+}
+
 void DocSheet::zoomin()
 {
     QList<qreal> dataList = scaleFactorList();

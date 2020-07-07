@@ -79,6 +79,8 @@ public:
 
     void loadWords();
 
+    void loadAnnotations();     //如果加载过则不加载
+
     void reloadAnnotations();
 
     QList< deepin_reader::Annotation * > annotations();

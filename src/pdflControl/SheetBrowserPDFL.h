@@ -22,9 +22,10 @@
 #define SHEETBROWSERPDFL_H
 
 #include <DGraphicsView>
+#include <QLabel>
+
 #include "document/Model.h"
 #include "Global.h"
-#include <QLabel>
 
 class DocOperation;
 class SheetBrowserPDFLItem;
@@ -83,6 +84,8 @@ public:
 
     void wordsChangedLater();
 
+    QList< deepin_reader::Annotation * > annotations();     //用完后需要自行删除
+
 signals:
     void sigPageChanged(int page);
 
@@ -128,18 +131,19 @@ private slots:
 
 private:
     deepin_reader::Document *m_document = nullptr;
+    QLabel *m_magnifierLabel = nullptr;
+    DocSheetPDFL *m_sheet = nullptr;
+    TipsWidget *m_tipsWidget = nullptr;
+    QTimer *m_resizeTimer = nullptr;
+    QTimer *m_scrollTimer = nullptr;
+
     QList<SheetBrowserPDFLItem *> m_items;
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;         //最大一页的宽度
     int m_maxHeight = 0;        //最大一页的高度
     bool m_hasLoaded = false;   //是否已经加载过每页的信息
     int m_initPage = 1;         //用于刚显示跳转的页数
-    QLabel *m_magnifierLabel = nullptr;
-    DocSheetPDFL *m_sheet = nullptr;
     QPointF m_selectPressedPos;        //scene
-    TipsWidget *m_tipsWidget = nullptr;
-    QTimer *m_resizeTimer = nullptr;
-    QTimer *m_scrollTimer = nullptr;
 };
 
 #endif // SHEETBROWSERPDFL_H

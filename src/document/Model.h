@@ -102,7 +102,10 @@ public:
         AnnotationRichMedia = 14,      ///< RichMediaAnnotation \since 0.36
         Annotation_BASE = 0
     };
+
     virtual int type() = 0;
+
+    int page = 0;
 
 signals:
     void wasModified();

@@ -300,6 +300,17 @@ void SheetBrowserPDFL::wordsChangedLater()
     m_scrollTimer->start(100);
 }
 
+QList<deepin_reader::Annotation *> SheetBrowserPDFL::annotations()
+{
+    QList<deepin_reader::Annotation *> list;
+    foreach (SheetBrowserPDFLItem *item, m_items) {
+        item->loadAnnotations();
+        list.append(item->annotations());
+    }
+
+    return list;
+}
+
 void SheetBrowserPDFL::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
@@ -494,7 +505,7 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RemoveHighlight") {
 
                 } else if (objectname == "AddAnnotationHighlight") {
-
+                    addHighlightAnnotation("xxx", QColor(Qt::red));
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {

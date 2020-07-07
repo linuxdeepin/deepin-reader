@@ -324,6 +324,12 @@ void SheetBrowserPDFLItem::loadWords()
     }
 }
 
+void SheetBrowserPDFLItem::loadAnnotations()
+{
+    if (m_annotations.isEmpty())
+        reloadAnnotations();
+}
+
 void SheetBrowserPDFLItem::reloadAnnotations()
 {
     qDeleteAll(m_annotations);
@@ -334,6 +340,7 @@ void SheetBrowserPDFLItem::reloadAnnotations()
 
     m_annotations = m_page->annotations();
     for (int i = 0; i < m_annotations.count(); ++i) {
+        m_annotations[i]->page = m_index + 1;
         foreach (QRectF rect, m_annotations[i]->boundary()) {
             SheetBrowserPDFLAnnotation *annotationItem = new SheetBrowserPDFLAnnotation(this, rect, m_annotations[i]);
             m_annotationItems.append(annotationItem);
@@ -343,15 +350,16 @@ void SheetBrowserPDFLItem::reloadAnnotations()
 
 QList<deepin_reader::Annotation *> SheetBrowserPDFLItem::annotations()
 {
-    return m_page->annotations();
+    return m_annotations;
 }
 
 void SheetBrowserPDFLItem::addHighlightAnnotation(QString text, QColor color)
 {
     QList<QRectF> boundarys;
     foreach (SheetBrowserPDFLWord *word, m_words) {
-        if (word->isSelected())
+        if (word->isSelected()) {
             boundarys.append(word->boundingBox());
+        }
     }
 
     if (boundarys.isEmpty())
