@@ -312,6 +312,7 @@ void SheetBrowserPDFPrivate::setSmallNoteWidgetSize(const QSize &size)
 void SheetBrowserPDFPrivate::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+        m_pDocViewProxy->setAdapteState(Dr::ScaleFactorMode);
         if (event->delta() > 0) {
             m_sheet->zoomin();
         } else {
