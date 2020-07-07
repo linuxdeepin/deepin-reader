@@ -238,19 +238,19 @@ void SlideWidget::onImageShowTimeOut()
     playImage();
 }
 
-QPixmap SlideWidget::drawImage(const QPixmap &srcImage, bool small)
+QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
 {
-    qreal scale = small ? 10.0 : 1.0;
     QPixmap pixmap(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
-    qreal iwidth = srcImage.width() * scale;
-    qreal iheight = srcImage.height() * scale;
+    qreal iwidth = srcImage.width();
+    qreal iheight = srcImage.height();
     painter.drawPixmap(QRect((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio(),
                              (pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio(),
-                             iwidth, iheight), srcImage);
+                             iwidth / dApp->devicePixelRatio(), iheight / dApp->devicePixelRatio()), srcImage);
+
     return pixmap;
 }
 

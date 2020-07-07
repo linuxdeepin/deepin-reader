@@ -42,7 +42,7 @@ private:
     void initImageControl();
 
     void playImage();
-    QPixmap drawImage(const QPixmap &srcImage, bool small = false);
+    QPixmap drawImage(const QPixmap &srcImage);
 
 private slots:
     void onParentDestroyed();
