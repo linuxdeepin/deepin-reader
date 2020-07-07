@@ -82,19 +82,18 @@ void ImageListView::handleOpenSuccess()
             pageSrclst << pageIndex;
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == E_SideBar::SIDE_NOTE) {
-        QList<stHighlightContent> noteLst;
-        m_docSheet->getAllAnnotation(noteLst);
+        const QList< deepin_reader::Annotation * > &annotationlst = m_docSheet->annotations();
         QList<ImagePageInfo_t> pageSrclst;
-        int pagesNum = noteLst.size();
+        int pagesNum = annotationlst.size();
         for (int index = 0; index < pagesNum; index++) {
-            const stHighlightContent &stH = noteLst.at(index);
-            if (!stH.strcontents.isEmpty()) {
-                int pageIndex = static_cast<int>(stH.ipage);
+            deepin_reader::Annotation *annotion = annotationlst.at(index);
+            if (!annotion->contents().isEmpty()) {
+                int pageIndex = static_cast<int>(annotion->page);
                 ImagePageInfo_t tImagePageInfo;
                 tImagePageInfo.pageIndex = pageIndex;
                 tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;
-                tImagePageInfo.struuid = stH.struuid;
-                tImagePageInfo.strcontents = stH.strcontents;
+                tImagePageInfo.annotation = annotion;
+                tImagePageInfo.strcontents = annotion->contents();
                 pageSrclst << tImagePageInfo;
             }
         }

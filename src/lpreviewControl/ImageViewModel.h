@@ -22,6 +22,7 @@
 
 #include "pdfControl/docview/CommonStruct.h"
 
+
 typedef enum ImageinfoType_e {
     IMAGE_PIXMAP       = Qt::UserRole,
     IMAGE_BOOKMARK     = Qt::UserRole + 1,
@@ -31,6 +32,9 @@ typedef enum ImageinfoType_e {
     IMAGE_SEARCH_COUNT = Qt::UserRole + 5,
 } ImageinfoType_e;
 
+namespace deepin_reader {
+class Annotation;
+}
 typedef struct ImagePageInfo_t {
     int pageIndex;
     int iType;
@@ -39,6 +43,8 @@ typedef struct ImagePageInfo_t {
     QString strcontents;
     QString strSearchcount;
 
+    deepin_reader::Annotation *annotation;
+
     ImagePageInfo_t()
     {
         pageIndex = -1;
@@ -46,6 +52,7 @@ typedef struct ImagePageInfo_t {
         struuid = "";
         strcontents = "";
         strSearchcount = "";
+        annotation = nullptr;
     }
 
     ImagePageInfo_t(int index)
