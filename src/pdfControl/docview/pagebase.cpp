@@ -521,8 +521,8 @@ void PageBase::loadMagnifierCacheThreadStart(double width, double height)
 void PageBase::slot_RenderFinish(QImage image)
 {
     Q_D(PageBase);
-    d->m_spinner->stop();
-    d->m_spinner->hide();
+//    d->m_spinner->stop();
+//    d->m_spinner->hide();
     d->havereander = true;
     QMatrix leftmatrix;
     switch (d->m_rotate) {
@@ -764,21 +764,21 @@ QPointF PageBase::translatepoint(QPointF pt, double, RotateType_EM rotate)
 
 bool PageBase::showImage(double scale, RotateType_EM rotate)
 {
-//    Q_D(PageBase);
-//    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
-//        return false;
-//    }
-//    d->m_scale = scale;
-//    d->m_rotate = rotate;
-//    d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
-//    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
-//    if (!d->threadreander.isRunning()) {
-//        d->threadreander.setRunningTrue();
-//        QThreadPool::globalInstance()->start(&d->threadreander);
-//    } else {
-//        d->threadreander.setRestart();
-//    }
-//    d->havereander = true;
+    Q_D(PageBase);
+    if (((d->m_scale - scale) < EPSINON || (scale - d->m_scale) < EPSINON) && d->m_rotate == rotate && d->havereander) {
+        return false;
+    }
+    d->m_scale = scale;
+    d->m_rotate = rotate;
+    d->threadreander.setPage(getInterFace(), d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof);
+    connect(d, SIGNAL(signal_RenderFinish(QImage)), this, SLOT(slot_RenderFinish(QImage)));
+    if (!d->threadreander.isRunning()) {
+        d->threadreander.setRunningTrue();
+        QThreadPool::globalInstance()->start(&d->threadreander);
+    } else {
+        d->threadreander.setRestart();
+    }
+    d->havereander = true;
 //    d->m_spinner->show();
 //    d->m_spinner->start();
     return true;
@@ -798,8 +798,8 @@ void PageBase::quitThread()
     if (d->loadmagnifiercachethread.isRunning()) {
         d->loadmagnifiercachethread.quit();
     }
-//    if (d->threadreander.isRunning())
-//        d->threadreander.setQuit();
+    if (d->threadreander.isRunning())
+        d->threadreander.setQuit();
     d->m_bquit = true;
 }
 

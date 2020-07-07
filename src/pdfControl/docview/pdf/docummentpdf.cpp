@@ -458,8 +458,8 @@ void DocummentPDF::refreshOnePage(int ipage)
     if (!d->document)
         return ;
     if (d->m_pages.count() > ipage) {
-        RenderThreadPdf::appendTask(d->m_pages.at(ipage), d->m_scale, d->m_rotate);
-//        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
+//        RenderThreadPdf::appendTask(d->m_pages.at(ipage), d->m_scale, d->m_rotate);
+        d->m_pages.at(ipage)->showImage(d->m_scale, d->m_rotate);
     }
 }
 

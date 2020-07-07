@@ -198,7 +198,7 @@ PagePdf::PagePdf(QWidget *parent)
     : PageBase(new PagePdfPrivate(this), parent)
 {
     m_pageItems.insert(this);
-    connect(this, SIGNAL(sigRenderFinish(QImage)), this, SLOT(slotRenderFinish(QImage)));
+//    connect(this, SIGNAL(sigRenderFinish(QImage)), this, SLOT(slotRenderFinish(QImage)));
 }
 
 PagePdf::~PagePdf()

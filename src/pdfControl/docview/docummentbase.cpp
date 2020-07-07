@@ -1137,8 +1137,8 @@ bool DocummentBase::loadPages()
 
     for (int i = firstpagenum; i <= lastpagenum ; i++) {
         if (i >= 0 && i < d->m_pages.size()) {
-            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
-//            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+//            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
         }
     }
 
