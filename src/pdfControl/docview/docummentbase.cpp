@@ -1179,7 +1179,6 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
 
-    qInfo() << __LINE__ <<  "   1111111111111  " << __FUNCTION__;
     emit signal_loadPages();
 
 //    RenderThreadPdf::getIns()->stopCurThread();
