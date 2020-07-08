@@ -27,6 +27,7 @@ include (utils/Utils.pri)
 include (widgets/widgets.pri)
 include (djvuControl/djvuControl.pri)
 include (document/document.pri)
+include (control/control.pri)
 include (lpreviewControl/lpreviewControl.pri)
 
 SOURCES += \

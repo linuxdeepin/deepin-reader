@@ -139,7 +139,7 @@ public:
 
     virtual void setActive(const bool &);
 
-    virtual QList< deepin_reader::Annotation * > annotations();     //用完后需要自行删除
+    virtual QList< deepin_reader::Annotation * > annotations();
 
     QSet<int> getBookMarkList() const;
 

@@ -18,50 +18,43 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef BrowserAnnotation_H
+#define BrowserAnnotation_H
 
-#include <QObject>
-#include <QSqlDatabase>
+#include <QGraphicsItem>
+#include "document/Model.h"
 
-class DocSheet;
-class Sheet;
-class QDateTime;
-class DocumentView;
-class Database : public QObject
+class BrowserPage;
+class BrowserAnnotation : public QGraphicsItem
 {
-    Q_OBJECT
-
 public:
-    static Database *instance();
+    explicit BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation);
 
-    ~Database();
+    void setScaleFactorAndRotation(Dr::Rotation rotation);
 
-    bool readOperation(DocSheet *sheet);
+    int annotationType();
 
-    bool saveOperation(DocSheet *sheet);
+    QString annotationText();
 
-    bool readOperation(Sheet *sheet);
+    QRectF boundingRect()const override;
 
-    bool saveOperation(Sheet *sheet);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
+    deepin_reader::Annotation *annotation();
 
-    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
+    void deleteMe();
 
 private:
-    Q_DISABLE_COPY(Database)
+    deepin_reader::Annotation *m_annotation;
 
-    static Database *s_instance;
+    Dr::Rotation m_rotation = Dr::RotateBy0;
 
-    Database(QObject *parent = 0);
+    QRectF m_rect;
 
-    bool prepareOperation();
+    QString m_text;
 
-    bool prepareBookmark();
-
-    QSqlDatabase m_database;
+    QGraphicsItem *m_parent = nullptr;
 
 };
 
-#endif // DATABASE_H
+#endif // BrowserAnnotation_H

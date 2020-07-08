@@ -18,50 +18,32 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef BrowserWord_H
+#define BrowserWord_H
 
-#include <QObject>
-#include <QSqlDatabase>
+#include <QGraphicsItem>
+#include "document/Model.h"
 
-class DocSheet;
-class Sheet;
-class QDateTime;
-class DocumentView;
-class Database : public QObject
+class BrowserPage;
+class BrowserWord : public QGraphicsItem
 {
-    Q_OBJECT
-
 public:
-    static Database *instance();
+    explicit BrowserWord(QGraphicsItem *parent, deepin_reader::Word word);
 
-    ~Database();
+    void setScaleFactor(qreal scaleFactor);
 
-    bool readOperation(DocSheet *sheet);
+    QString text();
 
-    bool saveOperation(DocSheet *sheet);
+    QRectF boundingRect()const override;
 
-    bool readOperation(Sheet *sheet);
+    QRectF boundingBox()const;
 
-    bool saveOperation(Sheet *sheet);
-
-    bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
-
-    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:
-    Q_DISABLE_COPY(Database)
+    deepin_reader::Word m_word;
 
-    static Database *s_instance;
-
-    Database(QObject *parent = 0);
-
-    bool prepareOperation();
-
-    bool prepareBookmark();
-
-    QSqlDatabase m_database;
-
+    qreal m_scaleFactor = 1;
 };
 
-#endif // DATABASE_H
+#endif // BrowserWord_H

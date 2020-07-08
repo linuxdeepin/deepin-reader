@@ -29,6 +29,7 @@
 #include "Database.h"
 #include "DocSheet.h"
 #include "Global.h"
+#include "control/Sheet.h"
 
 #include <QApplication>
 #include <QCryptographicHash>
@@ -134,6 +135,59 @@ bool Database::readOperation(DocSheet *sheet)
 }
 
 bool Database::saveOperation(DocSheet *sheet)
+{
+    if (nullptr != sheet && m_database.isOpen()) {
+        QSqlQuery query(m_database);
+
+        query.prepare(" replace into "
+                      " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,sidebarVisible,sidebarIndex,currentPage)"
+                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,:currentPage)");
+
+        query.bindValue(":filePath", sheet->filePath());
+        query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
+        query.bindValue(":mouseShape", sheet->m_operation.mouseShape);
+        query.bindValue(":scaleMode", sheet->m_operation.scaleMode);
+        query.bindValue(":rotation", sheet->m_operation.rotation);
+        query.bindValue(":scaleFactor", sheet->m_operation.scaleFactor);
+        query.bindValue(":sidebarVisible", sheet->m_operation.sidebarVisible);
+        query.bindValue(":sidebarIndex", sheet->m_operation.sidebarIndex);
+        query.bindValue(":currentPage", sheet->m_operation.currentPage);
+
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool Database::readOperation(Sheet *sheet)
+{
+    if (nullptr != sheet && m_database.isOpen()) {
+        QSqlQuery query(m_database);
+
+        query.prepare(" select * from operation where filePath = :filePath");
+        query.bindValue(":filePath", sheet->filePath());
+        if (!query.exec()) {
+            qDebug() << query.lastError().text();
+            return false;
+        }
+
+        if (query.next()) {
+            sheet->m_operation.layoutMode = static_cast<Dr::LayoutMode>(query.value("layoutMode").toInt());
+            sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(query.value("mouseShape").toInt());
+            sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(query.value("scaleMode").toInt());
+            sheet->m_operation.rotation = static_cast<Dr::Rotation>(query.value("rotation").toInt());
+            sheet->m_operation.scaleFactor = query.value("scaleFactor").toDouble();
+            sheet->m_operation.sidebarVisible = query.value("sidebarVisible").toInt();
+            sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
+            sheet->m_operation.currentPage = query.value("currentPage").toInt();
+        }
+    }
+
+    return true;
+}
+
+bool Database::saveOperation(Sheet *sheet)
 {
     if (nullptr != sheet && m_database.isOpen()) {
         QSqlQuery query(m_database);

@@ -58,6 +58,8 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
     int nPageSize = m_sheet->pagesNumber();
 
+    printer->margins();
+
     if (printer->fromPage() == 0 && printer->toPage() == 0) {
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;

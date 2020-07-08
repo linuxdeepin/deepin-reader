@@ -18,8 +18,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef SHEETBROWSERPDFLITEM_H
-#define SHEETBROWSERPDFLITEM_H
+#ifndef BrowserPage_H
+#define BrowserPage_H
 
 #include <QGraphicsItem>
 #include <QSet>
@@ -31,15 +31,15 @@ class Annotation;
 class Page;
 }
 
-class SheetBrowserPDFL;
-class SheetBrowserPDFLWord;
-class SheetBrowserPDFLAnnotation;
-class SheetBrowserPDFLItem : public QGraphicsItem
+class SheetBrowser;
+class BrowserWord;
+class BrowserAnnotation;
+class BrowserPage : public QGraphicsItem
 {
 public:
-    explicit SheetBrowserPDFLItem(SheetBrowserPDFL *parent, deepin_reader::Page *page);
+    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
-    ~SheetBrowserPDFLItem() override;
+    ~BrowserPage() override;
 
     QRectF boundingRect()const override;
 
@@ -65,7 +65,7 @@ public:
 
     void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
-    static bool existInstance(SheetBrowserPDFLItem *item);
+    static bool existInstance(BrowserPage *item);
 
     void setItemIndex(int itemIndex);
 
@@ -84,6 +84,8 @@ public:
     QList< deepin_reader::Annotation * > annotations();
 
     void addHighlightAnnotation(QString text, QColor color);
+
+    bool hasAnnotation(deepin_reader::Annotation *annotation);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
@@ -107,20 +109,20 @@ private:
     int m_bookmarkState = 0;   //1为on 2为pressed 3为show
     int m_index = 0;
     Dr::Rotation m_rotation = Dr::RotateBy0;
-    static QSet<SheetBrowserPDFLItem *> items;
-    SheetBrowserPDFL *m_parent = nullptr;
+    static QSet<BrowserPage *> items;
+    SheetBrowser *m_parent = nullptr;
 
     Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
     double m_wordScaleFactor = -1;
-    QList<SheetBrowserPDFLWord *> m_words;
+    QList<BrowserWord *> m_words;
 
     Dr::Rotation m_annotationRotation = Dr::NumberOfRotations;
     double m_annotationScaleFactor = -1;
-    QList<SheetBrowserPDFLAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
+    QList<BrowserAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
     QList<deepin_reader::Annotation *> m_annotations;
 
     QPointF m_posPressed;
     bool m_wordSelectable = false;
 };
 
-#endif // SHEETBROWSERPDFLITEM_H
+#endif // BrowserPage_H
