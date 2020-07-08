@@ -159,7 +159,7 @@ void DocSheet::jumpToPrevPage()
 
 deepin_reader::Outline DocSheet::outline()
 {
-    m_browser->outline();
+    return m_browser->outline();
 }
 
 void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, unsigned int page)

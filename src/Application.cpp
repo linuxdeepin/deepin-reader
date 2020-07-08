@@ -127,8 +127,6 @@ void Application::initCfgPath()
 
 void Application::initChildren()
 {
-	//LLLLLLLLLLLLLLLLLLLLLL
-    //m_pDBService = new DBService(this);
     m_pAppInfo = new AppInfo(this);
 }
 

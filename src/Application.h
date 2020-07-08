@@ -21,7 +21,6 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
-#include "pdfControl/database/DBService.h"
 
 class AppInfo;
 
@@ -49,8 +48,6 @@ protected:
     void handleQuitAction() override;
 
 public:
-    DBService *m_pDBService = nullptr;
-
     AppInfo   *m_pAppInfo = nullptr;
 
     bool isBlockShutdown = false;

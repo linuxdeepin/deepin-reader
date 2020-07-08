@@ -175,7 +175,7 @@ void CatalogTreeView::handleOpenSuccess()
 
         m_index = m_sheet->currentIndex();
         const deepin_reader::Outline &ol = m_sheet->outline();
-        foreach (const deepin_reader::Section &s, ol) {   //root
+        for (const deepin_reader::Section &s : ol) {   //root
             if (s.link.page > 0) {
                 auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
                 model->appendRow(itemList);
