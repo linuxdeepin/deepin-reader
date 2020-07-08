@@ -56,6 +56,8 @@ public:
         m_fileinfo = new stFileInfo;
         m_label2pagenum.clear();
         m_pagenum2label.clear();
+
+        m_pDelay = new QTimer(this);
     }
 
     virtual ~DocummentBasePrivate()
@@ -98,6 +100,8 @@ public:
     QMap<int, QString> m_pagenum2label;
     double m_dCurPageViewPrecent = 0.0;//当前页面视图位置占比
     bool m_bMouseHandleVScroll{false}; // 鼠标滚轮改变vscrollvalue
+
+    QTimer *m_pDelay{nullptr};
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
@@ -226,6 +230,8 @@ protected slots:
     bool setViewModeAndShow(ViewMode_EM viewmode);
 
     void slot_loadPages();
+
+    void slot_delay();
 
 protected:
     void showSinglePage();

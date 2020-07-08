@@ -74,21 +74,10 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
             break;
         }
 
-        QTimer::singleShot(200, [this]() {
-            Q_D(DocummentBase);
-            showCurPageViewAfterScaleChanged();
-            d->m_bMouseHandleVScroll = true;
-//            loadPages();
-
-            QTimer::singleShot(300, [this]() {
-                Q_D(DocummentBase);
-                qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
-
-                showCurPageViewAfterScaleChanged();
-
-                qInfo() << __LINE__ << __FUNCTION__ << "    now      d->m_currentpageno:" << d->m_currentpageno  << "        v box value page:" << currentPageNo();
-            });
-        });
+        if (d->m_pDelay->isActive()) {
+            d->m_pDelay->stop();
+        }
+        d->m_pDelay->start(200);
 
         d->donotneedreloaddoc = false;
     });
@@ -124,10 +113,15 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
 
     connect(this, &DocummentBase::signal_loadPages, this, &DocummentBase::slot_loadPages);
+
+    connect(d->m_pDelay, &QTimer::timeout, this, &DocummentBase::slot_delay);
 }
 
 DocummentBase::~DocummentBase()
 {
+    Q_D(DocummentBase);
+    disconnect(d->m_pDelay, &QTimer::timeout, this, &DocummentBase::slot_delay);
+    disconnect(this, &DocummentBase::signal_loadPages, this, &DocummentBase::slot_loadPages);
     this->hide();
 }
 
@@ -1170,6 +1164,27 @@ void DocummentBase::slot_loadPages()
     }
 
     update(viewport()->rect());
+}
+
+void DocummentBase::slot_delay()
+{
+    Q_D(DocummentBase);
+    showCurPageViewAfterScaleChanged();
+    d->m_bMouseHandleVScroll = true;
+    //            loadPages();
+
+    QTimer::singleShot(300, [this]() {
+        Q_D(DocummentBase);
+        qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+
+        showCurPageViewAfterScaleChanged();
+
+        qInfo() << __LINE__ << __FUNCTION__ << "    now      d->m_currentpageno:" << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+    });
+
+    if (d->m_pDelay->isActive()) {
+        d->m_pDelay->stop();
+    }
 }
 
 bool DocummentBase::loadPages()
