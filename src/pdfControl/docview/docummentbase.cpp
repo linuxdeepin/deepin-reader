@@ -78,7 +78,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
             Q_D(DocummentBase);
             showCurPageViewAfterScaleChanged();
             d->m_bMouseHandleVScroll = true;
-            loadPages();
+//            loadPages();
 
             QTimer::singleShot(300, [this]() {
                 Q_D(DocummentBase);
@@ -1179,6 +1179,7 @@ bool DocummentBase::loadPages()
     if (!bDocummentExist())
         return false;
 
+    qInfo() << __LINE__ <<  "   1111111111111  " << __FUNCTION__;
     emit signal_loadPages();
 
 //    RenderThreadPdf::getIns()->stopCurThread();
@@ -1483,8 +1484,9 @@ void DocummentBase::showCurPageViewAfterScaleChanged()
 {
     Q_D(DocummentBase);
     if (d->m_viewmode == ViewMode_EM::ViewMode_SinglePage && d->m_currentpageno >= 0 && d->m_currentpageno < d->m_widgetrects.size()) {
-        this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
-                                            static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
+        if (this->verticalScrollBar())
+            this->verticalScrollBar()->setValue(d->m_widgetrects.at(d->m_currentpageno).y() +
+                                                static_cast<int>(d->m_widgetrects.at(d->m_currentpageno).height() * d->m_dCurPageViewPrecent));
     }
 }
 
@@ -1499,6 +1501,7 @@ void DocummentBase::wheelEvent(QWheelEvent *e)
 
 void DocummentBase::slot_dataLoaded(bool result)
 {
+    qInfo() << __LINE__ <<  "   1111111111111  " << __FUNCTION__;
     emit signal_openResult(result);
 }
 
