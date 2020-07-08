@@ -155,7 +155,7 @@ public:
 //    QMutex m_mutexlockgetimage;
     QPixmap m_pixmapshow;//当前页文档图片
     bool m_bquit;
-    bool m_bActive{true};
+//    bool m_bActive{true};
     PageBase *q_ptr;
     bool  m_bClosed{false};
     Q_DECLARE_PUBLIC(PageBase)
@@ -230,11 +230,7 @@ public:
     void clearImage();
     bool setBookMarkState(bool state);
     virtual bool getrectimage(QImage &, double, double, double, QPoint &) {return  false;}
-    inline void setActive(const bool &active)
-    {
-        Q_D(PageBase);
-        d->m_bActive = active;
-    }
+
 signals:
     void signal_MagnifierPixmapCacheLoaded(int);
     void sigBookMarkButtonClicked(int page, bool state);

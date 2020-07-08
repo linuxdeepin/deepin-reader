@@ -681,8 +681,8 @@ bool PagePdf::renderImage(double scale, RotateType_EM rotate)
     d->m_rotate = rotate;
     QImage image;
 
-    if (!d->m_bActive)
-        return false;
+//    if (!d->m_bActive)
+//        return false;
 
     if (d->getImage(image, d->m_imagewidth * d->m_scale * d->pixelratiof, d->m_imageheight * d->m_scale * d->pixelratiof)) {
         emit sigRenderFinish(image);

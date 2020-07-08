@@ -109,8 +109,6 @@ public:
 
     qreal maxScaleFactor()override;
 
-    void setActive(const bool &) override;
-
     int pointInWhichPage(QPoint pos);
 
     void setFileChanged(bool hasChanged);

@@ -205,12 +205,6 @@ void CentralDocPage::onTabChanged(DocSheet *sheet)
     emit sigCurSheetChanged(sheet);
 
     if (nullptr != sheet) {
-        if (!m_curSheet.isNull()) {
-            m_curSheet->setActive(false);
-            m_curSheet = sheet;
-            m_curSheet->setActive(true);
-        }
-
         m_pStackedLayout->setCurrentWidget(sheet);
 
         sheet->defaultFocus();
@@ -241,11 +235,6 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         if (2 == ret) {
             sheet->saveData();
         }
-    }
-
-    if (m_curSheet == sheet) {
-        m_curSheet->setActive(false);
-        m_curSheet = nullptr;
     }
 
     m_pStackedLayout->removeWidget(sheet);
@@ -328,12 +317,6 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-    if (!m_curSheet.isNull()) {
-        m_curSheet->setActive(false);
-        m_curSheet = sheet;
-        m_curSheet->setActive(true);
-    }
 }
 
 bool CentralDocPage::hasSheet(DocSheet *sheet)

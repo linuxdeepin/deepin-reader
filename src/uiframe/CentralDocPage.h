@@ -130,7 +130,6 @@ private:
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     QPointer<DocSheet>  m_slideSheet = nullptr;
-    QPointer<DocSheet>  m_curSheet = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

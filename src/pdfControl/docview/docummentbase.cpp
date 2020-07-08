@@ -728,15 +728,6 @@ void DocummentBase::setScaleRotateViewModeAndShow(double scale, RotateType_EM ro
     scaleAndShow(dscale, rotate);
 }
 
-void DocummentBase::setActive(const bool &active)
-{
-    Q_D(DocummentBase);
-
-    for (int i = 0; i < d->m_pages.size(); i++) {
-        setActive(active);
-    }
-}
-
 void DocummentBase::scaleAndShow(double scale, RotateType_EM rotate)
 {
     Q_D(DocummentBase);

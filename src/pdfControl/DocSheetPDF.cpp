@@ -521,16 +521,6 @@ qreal DocSheetPDF::maxScaleFactor()
     return 1;
 }
 
-void DocSheetPDF::setActive(const bool &active)
-{
-    if (m_browser) {
-        DocummentProxy *docProxy = m_browser->GetDocProxy();
-        if (docProxy) {
-            docProxy->setActive(active);
-        }
-    }
-}
-
 int  DocSheetPDF::pointInWhichPage(QPoint pos)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();

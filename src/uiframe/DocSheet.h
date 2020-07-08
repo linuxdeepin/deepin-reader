@@ -130,8 +130,6 @@ public:
 
     virtual qreal maxScaleFactor();
 
-    virtual void setActive(const bool &);
-
     QSet<int> getBookMarkList() const;
 
     DocOperation operation();

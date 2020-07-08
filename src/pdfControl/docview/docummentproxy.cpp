@@ -167,13 +167,6 @@ void DocummentProxy::moveIconAnnotation(const QString &, const QPoint &)
         return ;
 }
 
-void DocummentProxy::setActive(const bool &active)
-{
-    if (!m_documment || bcloseing)
-        return;
-    m_documment->setActive(active);
-}
-
 bool DocummentProxy::iconAnnotationClicked(const QPoint &pos, QString &strtext, QString &struuid)
 {
     if (!m_documment || bcloseing)

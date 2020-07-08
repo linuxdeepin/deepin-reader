@@ -206,7 +206,6 @@ public:
     bool haslabel();
     QPoint transformPoint(const QPoint &pt, int pageIndex, RotateType_EM type, double scale);
     void setScaleRotateViewModeAndShow(double scale, RotateType_EM rotate, ViewMode_EM viewmode);
-    void setActive(const bool &active);
 
 signals:
     void signal_pageChange(int);
