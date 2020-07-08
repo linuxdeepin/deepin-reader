@@ -58,6 +58,7 @@ public:
         m_pagenum2label.clear();
 
         m_pDelay = new QTimer(this);
+        m_pDelaySetVBoxPosition = new QTimer(this);
     }
 
     virtual ~DocummentBasePrivate()
@@ -102,6 +103,7 @@ public:
     bool m_bMouseHandleVScroll{false}; // 鼠标滚轮改变vscrollvalue
 
     QTimer *m_pDelay{nullptr};
+    QTimer *m_pDelaySetVBoxPosition{nullptr};
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
@@ -232,6 +234,7 @@ protected slots:
     void slot_loadPages();
 
     void slot_delay();
+    void slot_setVBoxPosition();
 
 protected:
     void showSinglePage();

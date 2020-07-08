@@ -115,13 +115,21 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this, &DocummentBase::signal_loadPages, this, &DocummentBase::slot_loadPages);
 
     connect(d->m_pDelay, &QTimer::timeout, this, &DocummentBase::slot_delay);
+    connect(d->m_pDelaySetVBoxPosition, &QTimer::timeout, this, &DocummentBase::slot_setVBoxPosition);
 }
 
 DocummentBase::~DocummentBase()
 {
     Q_D(DocummentBase);
+    disconnect(d->m_pDelaySetVBoxPosition, &QTimer::timeout, this, &DocummentBase::slot_setVBoxPosition);
     disconnect(d->m_pDelay, &QTimer::timeout, this, &DocummentBase::slot_delay);
     disconnect(this, &DocummentBase::signal_loadPages, this, &DocummentBase::slot_loadPages);
+    if (d->m_pDelaySetVBoxPosition->isActive()) {
+        d->m_pDelaySetVBoxPosition->stop();
+    }
+    if (d->m_pDelay->isActive()) {
+        d->m_pDelay->stop();
+    }
     this->hide();
 }
 
@@ -1171,17 +1179,27 @@ void DocummentBase::slot_delay()
     Q_D(DocummentBase);
     showCurPageViewAfterScaleChanged();
     d->m_bMouseHandleVScroll = true;
-    //            loadPages();
 
-    QTimer::singleShot(300, [this]() {
-        Q_D(DocummentBase);
-        qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
-
-        showCurPageViewAfterScaleChanged();
-    });
+    if (d->m_pDelaySetVBoxPosition->isActive()) {
+        d->m_pDelaySetVBoxPosition->stop();
+    }
+    d->m_pDelaySetVBoxPosition->start(300);
 
     if (d->m_pDelay->isActive()) {
         d->m_pDelay->stop();
+    }
+}
+
+void DocummentBase::slot_setVBoxPosition()
+{
+    Q_D(DocummentBase);
+
+    qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+
+    showCurPageViewAfterScaleChanged();
+
+    if (d->m_pDelaySetVBoxPosition->isActive()) {
+        d->m_pDelaySetVBoxPosition->stop();
     }
 }
 
