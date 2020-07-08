@@ -6,7 +6,7 @@
 
 #include "ModuleHeader.h"
 #include "app/AppInfo.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "MainWindow.h"
 #include "djvuControl/RenderThreadDJVU.h"
 #include "pdfControl/docview/pdf/RenderThreadPdf.h"
@@ -22,7 +22,7 @@ Application::Application(int &argc, char **argv)
     setOrganizationName("deepin");
     setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
     setApplicationVersion(DApplication::buildVersion("1.0"));
-    setApplicationAcknowledgementPage(Constant::sAcknowledgementLink);
+    setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
 

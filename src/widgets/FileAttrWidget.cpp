@@ -16,7 +16,7 @@
 #include "Application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)

@@ -1,7 +1,7 @@
 #include "DocummentPdf.h"
 #include "PagePdf.h"
 #include "../SearchTask.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 
 #include <DScrollBar>
 #include <QImage>

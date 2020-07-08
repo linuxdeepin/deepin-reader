@@ -39,7 +39,7 @@ TitleWidget::~TitleWidget()
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
-    m_pThumbnailBtn->setIcon(QIcon::fromTheme(Pri::g_module + "thumbnails"));
+    m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
     m_pThumbnailBtn->setFocusPolicy(Qt::NoFocus);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
 }

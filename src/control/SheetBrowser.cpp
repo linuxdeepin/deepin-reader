@@ -670,7 +670,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         }
 
         QPainter painter(&pix);
-        painter.drawPixmap(0, 0, 244, 244, QIcon::fromTheme(Pri::g_module + "maganifier").pixmap(QSize(244, 244)));
+        painter.drawPixmap(0, 0, 244, 244, QIcon::fromTheme(QString("dr_") + "maganifier").pixmap(QSize(244, 244)));
         m_magnifierLabel->setPixmap(pix);
         m_magnifierLabel->move(QPoint(mousePos.x() - 122, mousePos.y() - 122));
 

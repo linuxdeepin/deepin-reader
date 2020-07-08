@@ -1,5 +1,5 @@
 #include "DocummentBase.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "PageBase.h"
 #include <QHBoxLayout>
 #include <QGridLayout>

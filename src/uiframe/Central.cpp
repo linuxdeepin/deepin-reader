@@ -28,7 +28,7 @@
 */
 #include "Central.h"
 #include "app/AppInfo.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
 #include "TitleMenu.h"
@@ -219,14 +219,14 @@ void Central::onShowTips(const QString &text, int iconIndex)
 {
     if (m_layout->currentIndex() == 0) {
         if (0 == iconIndex)
-            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
         else
-            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
     } else {
         if (0 == iconIndex)
-            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
         else
-            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(Pri::g_module + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
     }
 }
 

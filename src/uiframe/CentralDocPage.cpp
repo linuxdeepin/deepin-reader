@@ -44,7 +44,7 @@
 #include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/FindWidget.h"
 #include "pdfControl/docview/DocummentProxy.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "CentralDocPage.h"
 #include "Global.h"
 #include "pdfControl/DocSheetPDF.h"
@@ -427,7 +427,7 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.pdf")) {
                 DDialog dlg("", tr("Invalid file name"));
-                dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
+                dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);
@@ -446,7 +446,7 @@ bool CentralDocPage::saveAsCurrent()
 
             if (saveFilePath.endsWith("/.djvu")) {
                 DDialog dlg("", tr("Invalid file name"));
-                dlg.setIcon(QIcon::fromTheme(Pri::g_module + "exception-logo"));
+                dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
                 dlg.addButtons(QStringList() << tr("OK"));
                 QMargins mar(0, 0, 0, 30);
                 dlg.setContentLayoutContentsMargins(mar);

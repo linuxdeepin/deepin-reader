@@ -35,23 +35,8 @@ enum E_SideBar {
 //}
 
 namespace Constant {
-const QString sAcknowledgementLink = "https://www.deepin.org/acknowledgments/deepin_reader";
-
-const QString sPdf_Filter = "Pdf File (*.pdf)";
-const QString sTiff_Filter = "Tiff files (*.tiff)";
-const QString sPs_Filter = "Ps files (*.ps)";
-const QString sXps_Filter = "Xps files (*.xps)";
-const QString sDjvu_Filter = "Djvu files (*.djvu)";
 const QString sQStringSep = "&deepin_reader&";
 }  // namespace Constant
-
-// 图标类型
-namespace Pri {
-const QString g_icons = "icons";
-const QString g_texts = "texts";
-const QString g_actions = "actions";
-const QString g_module = "dr_";
-}  // namespace Pri
 
 namespace KeyStr {
 //const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换

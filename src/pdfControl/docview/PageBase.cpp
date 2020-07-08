@@ -1,5 +1,5 @@
 #include "PageBase.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include <QPainter>
 #include <QThreadPool>
 #include <QDebug>

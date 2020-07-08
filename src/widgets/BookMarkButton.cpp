@@ -1,5 +1,5 @@
 #include "BookMarkButton.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 
 #include<QColor>
 #include<QBrush>

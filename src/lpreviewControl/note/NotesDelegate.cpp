@@ -16,7 +16,7 @@
 */
 #include "NotesDelegate.h"
 #include "lpreviewControl/ImageViewModel.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 
 #include <QPainter>
 #include <QDebug>

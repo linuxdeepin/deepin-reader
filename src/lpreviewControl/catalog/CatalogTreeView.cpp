@@ -25,7 +25,7 @@
 #include "Application.h"
 
 #include "pdfControl/docview/DocummentProxy.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "DocSheet.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"

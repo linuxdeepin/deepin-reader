@@ -97,7 +97,7 @@ void CentralNavPage::slotUpdateTheme()
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
         plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window));
         iconSvg->setPalette(plt);
-        QIcon importIcon = QIcon::fromTheme(Pri::g_module + "import_photo");
+        QIcon importIcon = QIcon::fromTheme(QString("dr_") + "import_photo");
         int tW = 128;
         int tH = 128;
 

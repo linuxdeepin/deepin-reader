@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SlidePlayWidget.h"
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "ModuleHeader.h"
 
 #include <DPlatformWindowHandle>
@@ -90,7 +90,7 @@ DIconButton *SlidePlayWidget::createBtn(const QString &strname)
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(strname);
     btn->setFixedSize(50, 50);
-    btn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + strname));
+    btn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + strname));
     btn->setIconSize(QSize(36, 36));
     return  btn;
 }
@@ -130,9 +130,9 @@ void SlidePlayWidget::onExitClicked()
 void SlidePlayWidget::playStatusChanged()
 {
     if (m_autoPlay) {
-        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "suspend_normal"));
+        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + "suspend_normal"));
     } else {
-        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(Pri::g_module + "play_normal"));
+        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + "play_normal"));
     }
     emit signalPlayBtnClicked();
 }

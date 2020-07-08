@@ -1,6 +1,6 @@
 #include "AppInfo.h"
 
-#include "utils/Utils.h"
+#include "Utils.h"
 #include "ModuleHeader.h"
 #include <QDir>
 #include <QSettings>

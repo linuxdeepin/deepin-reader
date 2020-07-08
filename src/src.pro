@@ -20,7 +20,6 @@ LIBS += -L"$${3RDPARTTPATH}/lib" -ldpoppler-qt -ldpoppler
 }
 
 include (app/app.pri)
-include (utils/Utils.pri)
 include (widgets/widgets.pri)
 include (document/document.pri)
 include (control/control.pri)
