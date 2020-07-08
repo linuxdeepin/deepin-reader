@@ -109,10 +109,12 @@ void NotesWidget::DeleteItemByKey()
         QString uuid = tImagePageInfo.struuid;
         QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
         if (nType == NOTE_HIGHLIGHT) {
-            m_sheet->deleteAnnotation(MSG_NOTE_DELETE_CONTENT, sContent);
+        	//LLLLLLLLLLLLLLLLLLLLLL
+            //m_sheet->deleteAnnotation(MSG_NOTE_DELETE_CONTENT, sContent);
         } else {
             sContent += Constant::sQStringSep + "0";
-            m_sheet->deleteAnnotation(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+            //LLLLLLLLLLLLLLLLLLLLLL
+            //m_sheet->deleteAnnotation(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
         }
     }
 }
@@ -137,7 +139,8 @@ void NotesWidget::deleteAllItem()
             }
         }
     }
-    m_sheet->deleteAnnotations(tAnnolst);
+    //LLLLLLLLLLLLLLLLLLLLLL
+    //m_sheet->deleteAnnotations(tAnnolst);
 }
 
 void NotesWidget::addNoteItem(const QString &text, const int &iType)
@@ -196,16 +199,18 @@ void NotesWidget::onListItemClicked(int row)
     if (tImagePageInfo.pageIndex >= 0) {
         int index = tImagePageInfo.pageIndex;
         const QString &uuid = tImagePageInfo.struuid;
-        m_sheet->jumpToHighLight(uuid, index);
+        //LLLLLLLLLLLLLLLLLLLLLL
+        //m_sheet->jumpToHighLight(uuid, index);
     }
 }
 
 void NotesWidget::onAddAnnotation()
 {
-    DocSheetPDF *sheet = static_cast<DocSheetPDF *>(m_sheet.data());
-    if (nullptr == sheet)
-        return;
-    sheet->setCurrentState(NOTE_ADD_State);
+//LLLLLLLLLLLLLLLLLLLLLL
+//    DocSheetPDF *sheet = static_cast<DocSheetPDF *>(m_sheet.data());
+//    if (nullptr == sheet)
+//        return;
+//    sheet->setCurrentState(NOTE_ADD_State);
 }
 
 void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)

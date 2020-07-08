@@ -18,7 +18,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "DocSheetOldOld.h"
+#include "DocSheetOld.h"
 #include "pdfControl/docview/CommonStruct.h"
 #include "lpreviewControl/SheetSidebar.h"
 #include "Database.h"
@@ -46,18 +46,21 @@ DocSheetOld::DocSheetOld(Dr::FileType type, QString filePath, DWidget *parent)
     g_map[m_uuid] = this;
 
     if (type == Dr::PDF) {
-        dApp->m_pDBService->qSelectData(m_filePath, DB_BOOKMARK);
-        dApp->m_pDBService->qSelectData(m_filePath, DB_HISTROY);
-        m_bookmarks = dApp->m_pDBService->getBookMarkList(m_filePath).toSet();
+//LLLLLLLLLLLLLLLLLLLLLL
+//        dApp->m_pDBService->qSelectData(m_filePath, DB_BOOKMARK);
+//        dApp->m_pDBService->qSelectData(m_filePath, DB_HISTROY);
+//        m_bookmarks = dApp->m_pDBService->getBookMarkList(m_filePath).toSet();
     } else {
-        Database::instance()->readOperation(this);
-        Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+//LLLLLLLLLLLLLLLLLLLLLL
+//        Database::instance()->readOperation(this);
+//        Database::instance()->readBookmarks(m_filePath, m_bookmarks);
     }
 }
 
 DocSheetOld::~DocSheetOld()
 {
-    Database::instance()->saveOperation(this);
+	//LLLLLLLLLLLLLLLLLLLLLL
+    //Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
 }
 

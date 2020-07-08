@@ -95,9 +95,9 @@ void CatalogWidget::handleOpenSuccess()
         return;
 
     bIshandOpenSuccess = true;
-    stFileInfo fileInfo;
+    deepin_reader::FileInfo fileInfo;
     m_sheet->docBasicInfo(fileInfo);
-    m_strTheme = fileInfo.strTheme;
+    m_strTheme = fileInfo.theme;
     if (m_strTheme != "") {
         setTitleTheme();
     }

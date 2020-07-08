@@ -127,16 +127,16 @@ void CatalogTreeView::setRightControl(bool hasControl)
     rightnotifypagechanged = hasControl;
 }
 
-void CatalogTreeView::parseCatalogData(const Section &ol, QStandardItem *parentItem)
+void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStandardItem *parentItem)
 {
     foreach (auto s, ol.children) { //  2级显示
-        if (s.link.pageIndex > 0) {
-            auto itemList = getItemList(s.title, s.link.pageIndex, s.link.left, s.link.top);
+        if (s.link.page > 0) {
+            auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
             parentItem->appendRow(itemList);
 
             foreach (auto s1, s.children) { //  3级显示
-                if (s1.link.pageIndex > 0) {
-                    auto itemList1 = getItemList(s1.title, s1.link.pageIndex, s1.link.left, s1.link.top);
+                if (s1.link.page > 0) {
+                    auto itemList1 = getItemList(s1.title, s1.link.page, s1.link.left, s1.link.top);
                     itemList.at(0)->appendRow(itemList1);
                 }
             }
@@ -174,10 +174,10 @@ void CatalogTreeView::handleOpenSuccess()
             return;
 
         m_index = m_sheet->currentIndex();
-        const Outline &ol = m_sheet->outline();
-        foreach (const Section &s, ol) {   //root
-            if (s.link.pageIndex > 0) {
-                auto itemList = getItemList(s.title, s.link.pageIndex, s.link.left, s.link.top);
+        const deepin_reader::Outline &ol = m_sheet->outline();
+        foreach (const deepin_reader::Section &s, ol) {   //root
+            if (s.link.page > 0) {
+                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
                 model->appendRow(itemList);
                 parseCatalogData(s, itemList.at(0));
             }

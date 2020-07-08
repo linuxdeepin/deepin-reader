@@ -139,7 +139,8 @@ void BookMarkWidget::deleteAllItem()
             bookmarks << BookMarkStatus_t(curIndex, false);
         }
     }
-    m_sheet->setBookMarks(bookmarks);
+    //LLLLLLLLLLLLLLLLLLLLLL
+    //m_sheet->setBookMarks(bookmarks);
 }
 
 void BookMarkWidget::onAddBookMarkClicked()

@@ -25,7 +25,9 @@
 #include "pdfControl/docview/PageBase.h"
 
 DWIDGET_USE_NAMESPACE
-
+namespace deepin_reader {
+struct Section;
+}
 class DocSheet;
 class CatalogTreeView : public DTreeView
 {
@@ -57,7 +59,7 @@ protected slots:
     void onItemClicked(const QModelIndex &current);
 
 private:
-    void parseCatalogData(const Section &, QStandardItem *);
+    void parseCatalogData(const deepin_reader::Section &, QStandardItem *);
     void resizeCoulumnWidth();
     QList<QStandardItem *> getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
 

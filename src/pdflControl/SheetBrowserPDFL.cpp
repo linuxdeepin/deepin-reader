@@ -38,6 +38,7 @@
 #include "widgets/FileAttrWidget.h"
 #include "app/AppInfo.h"
 #include "Application.h"
+#include "utils/Utils.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -490,9 +491,9 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
             }
 
             SheetBrowserPDFLMenu menu;
-            connect(&menu, &SheetBrowserPDFLMenu::signalMenuItemClicked, [this, item](const QString & objectname, const QVariant & param) {
+            connect(&menu, &SheetBrowserPDFLMenu::signalMenuItemClicked, [ = ](const QString & objectname, const QVariant & param) {
                 if (objectname == "Copy") {
-
+                    Utils::copyText(selectWords);
                 } else if (objectname == "ColorWidgetAction") {
                     QColor color = dApp->m_pAppInfo->getLightColorList().at(param.toInt());
 
@@ -510,8 +511,6 @@ void SheetBrowserPDFL::mousePressEvent(QMouseEvent *event)
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), false);
-                } else if (objectname == "AddAnnotationIcon") {
-
                 } else if (objectname == "Fullscreen") {
                     m_sheet->openFullScreen();
                 } else if (objectname == "SlideShow") {

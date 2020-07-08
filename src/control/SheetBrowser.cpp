@@ -52,7 +52,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-SheetBrowser::SheetBrowser(Sheet *parent) : DGraphicsView(parent), m_sheet(parent)
+SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setScene(new QGraphicsScene());
 

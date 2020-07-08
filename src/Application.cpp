@@ -105,8 +105,9 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    RenderThreadDJVU::destroy();
-    RenderThreadPdf::destroyRenderPdfThread();
+    //LLLLLLLLLLLLLLLLLLLLLL
+    //RenderThreadDJVU::destroy();
+    //RenderThreadPdf::destroyRenderPdfThread();
 
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
@@ -126,7 +127,8 @@ void Application::initCfgPath()
 
 void Application::initChildren()
 {
-    m_pDBService = new DBService(this);
+	//LLLLLLLLLLLLLLLLLLLLLL
+    //m_pDBService = new DBService(this);
     m_pAppInfo = new AppInfo(this);
 }
 

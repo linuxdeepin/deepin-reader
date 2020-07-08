@@ -73,7 +73,7 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
 }
 
-DocSheet::~Sheet()
+DocSheet::~DocSheet()
 {
     Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
@@ -94,7 +94,7 @@ QUuid DocSheet::getUuid(DocSheet *sheet)
     return g_map.key(sheet);
 }
 
-Sheet *DocSheet::getSheet(QString uuid)
+DocSheet *DocSheet::getSheet(QString uuid)
 {
     if (g_map.contains(uuid))
         return g_map[uuid];
@@ -447,6 +447,18 @@ qreal DocSheet::maxScaleFactor()
         maxScaleFactor = 0.1;
 
     return maxScaleFactor;
+}
+
+QString DocSheet::filter()
+{
+    qDebug() << "uninit";
+    return "";
+}
+
+QSet<int> DocSheet::getBookMarkList() const
+{
+    qDebug() << "uninit";
+    return QSet<int>();
 }
 
 SheetOperation DocSheet::operation()

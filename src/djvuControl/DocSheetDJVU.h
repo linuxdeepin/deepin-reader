@@ -40,7 +40,7 @@ public:
 
     void setBookMark(int index, int state) override;
 
-    void setBookMarks(const QList<BookMarkStatus_t> &bookmarks) override;
+    //void setBookMarks(const QList<BookMarkStatus_t> &bookmarks) override;
 
     bool fileChanged()override;
 
@@ -88,7 +88,7 @@ public:
 
     bool magnifierOpened()override;
 
-    void docBasicInfo(stFileInfo &info)override;
+    //void docBasicInfo(stFileInfo &info)override;
 
     QList<qreal> scaleFactorList()override;
 
