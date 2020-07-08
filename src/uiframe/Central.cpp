@@ -260,8 +260,8 @@ void Central::dropEvent(QDropEvent *event)
         QStringList filePathList;
 
         for (auto url : mimeData->urls()) {
-            QString sFilePath = url.toLocalFile();
-            filePathList.append(sFilePath);
+            QString filePath = url.toLocalFile();
+            filePathList.append(filePath);
         }
 
         if (filePathList.count() > 0) {

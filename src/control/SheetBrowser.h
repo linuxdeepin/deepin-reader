@@ -40,7 +40,7 @@ public:
 
     ~SheetBrowser() override;
 
-    bool openFilePath(const QString &);
+    bool openFilePath(Dr::FileType fileType, const QString &);
 
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 

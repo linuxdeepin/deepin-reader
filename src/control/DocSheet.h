@@ -46,7 +46,7 @@ class DocSheet : public Dtk::Widget::DSplitter
     friend class SheetSidebar;
     friend class Database;
 public:
-    explicit DocSheet(Dr::FileType type, QString filePath, QWidget *parent = nullptr);
+    explicit DocSheet(Dr::FileType fileType, QString filePath, QWidget *parent = nullptr);
 
     ~DocSheet();
 
@@ -148,7 +148,7 @@ public:
 
     SheetOperation operation();
 
-    Dr::FileType type();
+    Dr::FileType fileType();
 
     QString filePath();
 
@@ -216,7 +216,7 @@ private:
     SheetBrowser *m_browser = nullptr;
 
     QString         m_filePath;
-    Dr::FileType    m_type;
+    Dr::FileType    m_fileType;
     QString         m_uuid;
 
     bool m_fileChanged = false;

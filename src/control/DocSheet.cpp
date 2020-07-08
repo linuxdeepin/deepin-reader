@@ -40,12 +40,13 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
+#include <QClipboard>
 
 DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
-DocSheet::DocSheet(Dr::FileType type, QString filePath,  QWidget *parent)
-    : DSplitter(parent), m_filePath(filePath), m_type(type)
+DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
+    : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
     m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
@@ -56,8 +57,8 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath,  QWidget *parent)
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-//    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
-//    m_sidebar->setMinimumWidth(266);
+    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+    m_sidebar->setMinimumWidth(266);
 
     m_browser = new SheetBrowser(this);
     m_browser->setMinimumWidth(481);
@@ -205,7 +206,7 @@ void DocSheet::rotateRight()
 
 bool DocSheet::openFileExec()
 {
-    if (m_browser->openFilePath(filePath())) {
+    if (m_browser->openFilePath(m_fileType, filePath())) {
         if (!m_browser->loadPages(m_operation, m_bookmarks))
             return false;
         handleOpenSuccess();
@@ -341,7 +342,12 @@ void DocSheet::stopSearch()
 
 void DocSheet::copySelectedText()
 {
+    QString selectedWordsText = m_browser->selectedWordsText();
+    if (selectedWordsText.isEmpty())
+        return;
 
+    QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
+    clipboard->setText(selectedWordsText);
 }
 
 void DocSheet::highlightSelectedText()
@@ -466,9 +472,9 @@ SheetOperation DocSheet::operation()
     return m_operation;
 }
 
-Dr::FileType DocSheet::type()
+Dr::FileType DocSheet::fileType()
 {
-    return m_type;
+    return m_fileType;
 }
 
 QString DocSheet::filePath()

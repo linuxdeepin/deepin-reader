@@ -70,16 +70,16 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
     m_curSheet = sheet;
 
-    if (nullptr == m_curSheet || m_curSheet->type() == Dr::Unknown) {
+    if (nullptr == m_curSheet || m_curSheet->fileType() == Dr::Unknown) {
         setBtnDisable(true);
         return;
 
-    } else if (Dr::PDF == m_curSheet->type()) {
+    } else if (Dr::PDF == m_curSheet->fileType()) {
         setBtnDisable(false);
         m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
         m_pSw->setSheet(m_curSheet);
 
-    } else if (Dr::DjVu == m_curSheet->type()) {
+    } else if (Dr::DjVu == m_curSheet->fileType()) {
         m_pThumbnailBtn->setDisabled(false);
         m_pSw->setDisabled(false);
 

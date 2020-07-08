@@ -40,7 +40,7 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (sheet->type() == Dr::DjVu) {
+        if (sheet->fileType() == Dr::DjVu) {
             if (a->objectName() == "Save")
                 a->setDisabled(true);
             else if (a->objectName() == "Search")

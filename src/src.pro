@@ -14,7 +14,6 @@ PKGCONFIG += ddjvuapi dtkwidget
 INCLUDEPATH += $$PWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/include
 
-
 LIBS += -L"$${3RDPARTTPATH}/lib" -ldpoppler-qt -ldpoppler
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build dpoppler library failed.")

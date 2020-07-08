@@ -134,111 +134,34 @@ void CentralDocPage::openFile(QString &filePath)
         }
     }
 
-    int fileType = Dr::fileType(filePath);
-
-    if (Dr::PDF == fileType) {
-//LLLLLLLLLLLLLLLLLLLLLL
-//        DocSheetOld *sheet = new DocSheetPDFL(filePath, this);
-
-//        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-//        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-//        if (!sheet->openFileExec()) {
-//            sheet->deleteLater();
-//            showTips(tr("Please check if the file is damaged"), 1);
-//            return;
-//        }
-
-//        m_pStackedLayout->addWidget(sheet);
-
-//        m_pStackedLayout->setCurrentWidget(sheet);
-
-//        //m_pTabBar->insertSheet(sheet);
-
-//        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-//        emit sigSheetCountChanged(m_pStackedLayout->count());
-
-        //onOpened(sheet, true);
-
-//        DocSheet *sheet = new DocSheetPDF(filePath, this);
-
-//        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-//        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
-//        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-//        sheet->openFile();
-
-//        m_pStackedLayout->addWidget(sheet);
-
-//        m_pStackedLayout->setCurrentWidget(sheet);
-
-//        sheet->defaultFocus();
-
-//        m_pTabBar->insertSheet(sheet);
-
-//        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-//        emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    } else if (Dr::DjVu == fileType) {
-//LLLLLLLLLLLLLLLLLLLLLL
-//        DocSheet *sheet = new DocSheetDJVU(filePath, this);
-
-//        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-//        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-//        if (!sheet->openFileExec()) {
-//            sheet->deleteLater();
-//            showTips(tr("Please check if the file is damaged"), 1);
-//            return;
-//        }
-
-//        m_pStackedLayout->addWidget(sheet);
-
-//        m_pStackedLayout->setCurrentWidget(sheet);
-
-//        m_pTabBar->insertSheet(sheet);
-
-//        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-//        emit sigSheetCountChanged(m_pStackedLayout->count());
-
-//        onOpened(sheet, true);
-
-    } /*else if (Dr::DOC == fileType) {
-        QProcess p(0);
-
-        QString outputName = QUuid::createUuid().toString();
-        QString dirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + outputName;
-
-        p.startDetached(QString("unoconv -f pdf -o %1 %2").arg(dirPath).arg(filePath));
-        p.waitForStarted();
-        p.waitForFinished();
-
-        DocSheet *sheet = new DocSheetPDF(dirPath, this);
-
-        connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-        connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
-        connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
-        sheet->openFile();
-
-        m_pStackedLayout->addWidget(sheet);
-
-        m_pStackedLayout->setCurrentWidget(sheet);
-
-        sheet->defaultFocus();
-
-        m_pTabBar->insertSheet(sheet);
-
-        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-        emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    }*/ else {
+    Dr::FileType fileType = Dr::fileType(filePath);
+    if (Dr::PDF != fileType && Dr::DjVu != fileType) {
         showTips(tr("The format is not supported"), 1);
+        return;
     }
+
+    DocSheet *sheet = new DocSheet(fileType, filePath, this);
+
+    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+    if (!sheet->openFileExec()) {
+        sheet->deleteLater();
+        showTips(tr("Please check if the file is damaged"), 1);
+        return;
+    }
+
+    m_pStackedLayout->addWidget(sheet);
+
+    m_pStackedLayout->setCurrentWidget(sheet);
+
+    m_pTabBar->insertSheet(sheet);
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+    emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    onOpened(sheet, true);
 }
 
 void CentralDocPage::addSheet(DocSheet *sheet)
@@ -316,7 +239,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     }
 
     if (m_curSheet == sheet) {
-    	//LLLLLLLLLLLLLLLLLLLLLL
+        //LLLLLLLLLLLLLLLLLLLLLL
         //m_curSheet->setActive(false);
         m_curSheet = nullptr;
     }
@@ -494,7 +417,7 @@ bool CentralDocPage::saveAsCurrent()
 
     QString sFilter = sheet->filter();
 
-    if (Dr::PDF == sheet->type()) {
+    if (Dr::PDF == sheet->fileType()) {
         QString saveFilePath;
 
         if (sFilter != "") {
@@ -513,7 +436,7 @@ bool CentralDocPage::saveAsCurrent()
             }
         }
         return sheet->saveAsData(saveFilePath);
-    } else if (Dr::DjVu == sheet->type()) {
+    } else if (Dr::DjVu == sheet->fileType()) {
         QString saveFilePath;
 
         if (sFilter != "") {

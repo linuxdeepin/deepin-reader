@@ -39,6 +39,7 @@
 #include "app/AppInfo.h"
 #include "Application.h"
 #include "ModuleHeader.h"
+#include "document/DjVuModel.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -79,9 +80,12 @@ SheetBrowser::~SheetBrowser()
         delete m_document;
 }
 
-bool SheetBrowser::openFilePath(const QString &filePath)
+bool SheetBrowser::openFilePath(Dr::FileType fileType, const QString &filePath)
 {
-    m_document = deepin_reader::PDFDocument::loadDocument(filePath);
+    if (Dr::PDF == fileType)
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath);
+    else if (Dr::DjVu == fileType)
+        m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == m_document)
         return false;
