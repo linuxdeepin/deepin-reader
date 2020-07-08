@@ -1178,8 +1178,6 @@ void DocummentBase::slot_delay()
         qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
 
         showCurPageViewAfterScaleChanged();
-
-        qInfo() << __LINE__ << __FUNCTION__ << "    now      d->m_currentpageno:" << d->m_currentpageno  << "        v box value page:" << currentPageNo();
     });
 
     if (d->m_pDelay->isActive()) {
@@ -1189,73 +1187,10 @@ void DocummentBase::slot_delay()
 
 bool DocummentBase::loadPages()
 {
-//    Q_D(DocummentBase);
-
     if (!bDocummentExist())
         return false;
 
     emit signal_loadPages();
-
-//    RenderThreadPdf::getIns()->stopCurThread();
-
-//    int firstpagenum = 0, lastpagenum = 0;
-
-//    int curheight = 1;
-
-//    if (d->m_rotate == RotateType_0 || d->m_rotate == RotateType_180 || d->m_rotate == RotateType_Normal) {
-//        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageHeight());
-//    } else {
-//        curheight = static_cast<int>(d->m_scale * d->m_pages.at(d->m_currentpageno)->getOriginalImageWidth());
-//    }
-
-//    int icount = curheight > 0 ? viewport()->rect().height() / (curheight) : 0; //当前页一共能显示多少个
-//    icount = icount > 0 ? icount + 2 : 2;
-
-//    if (d->m_viewmode == ViewMode_SinglePage) {
-//        if (icount > 3 && icount <= 4) {
-//            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
-//            lastpagenum = d->m_currentpageno + 2;
-//        } else if (icount > 4) {
-//            firstpagenum = d->m_currentpageno - (icount - 2) >= 0 ? d->m_currentpageno - (icount - 2) : 0;
-//            lastpagenum = d->m_currentpageno + icount;
-//        } else {
-//            firstpagenum = d->m_currentpageno - 1 >= 0 ? d->m_currentpageno - 1 : d->m_currentpageno;
-//            lastpagenum = d->m_currentpageno + icount - 1;
-//        }
-//    } else if (d->m_viewmode == ViewMode_FacingPage) {
-//        //当前显示比例较小或者视窗较大，因此可以多加载几页
-//        if (icount > 3 && icount <= 4) {
-//            firstpagenum = d->m_currentpageno - 2 * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
-//            lastpagenum = d->m_currentpageno + icount * 2;
-//        } else if (icount > 4) {
-//            firstpagenum = d->m_currentpageno - (icount - 2) * 2 >= 0 ? d->m_currentpageno - (icount - 2) * 2 : 0;
-//            lastpagenum = d->m_currentpageno + icount * 2;
-//        } else {
-//            firstpagenum = d->m_currentpageno - 2 >= 0 ? d->m_currentpageno - 2 : 0;
-//            lastpagenum = d->m_currentpageno + (icount - 1) * 2 + 1;
-//        }
-//    }
-
-//    for (int i = firstpagenum; i <= lastpagenum ; i++) {
-//        if (i >= 0 && i < d->m_pages.size()) {
-//            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
-////            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
-//        }
-//    }
-
-//    for (int i = 0; i < d->m_pages.size(); i++) {
-//        bool bshow = false;
-//        for (int j = firstpagenum ; j <= lastpagenum; j++) {
-//            if (i == j) {
-//                bshow = true;
-//                break;
-//            }
-//        }
-//        if (!bshow)
-//            d->m_pages.at(i)->clearImage();
-//    }
-
-//    update(viewport()->rect());
 
     return true;
 }
@@ -1515,7 +1450,6 @@ void DocummentBase::wheelEvent(QWheelEvent *e)
 
 void DocummentBase::slot_dataLoaded(bool result)
 {
-    qInfo() << __LINE__ <<  "   1111111111111  " << __FUNCTION__;
     emit signal_openResult(result);
 }
 
