@@ -20,7 +20,7 @@
 */
 #include "BrowserMenu.h"
 #include "widgets/ColorWidgetAction.h"
-#include "Sheet.h"
+#include "DocSheet.h"
 
 #include <DFontSizeManager>
 
@@ -29,7 +29,7 @@ BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
-void BrowserMenu::initActions(Sheet *Sheet, int index, SheetMenuType_e type)
+void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
 {
     if (type == DOC_MENU_ANNO_ICON) {
         createAction(tr("Copy"), "Copy");
@@ -55,7 +55,7 @@ void BrowserMenu::initActions(Sheet *Sheet, int index, SheetMenuType_e type)
         createAction(tr("Search"), "Search");
         this->addSeparator();
 
-        if (Sheet->hasBookMark(index))
+        if (sheet->hasBookMark(index))
             createAction(tr("Remove bookmark"), "RemoveBookmark");
         else
             createAction(tr("Add bookmark"), "AddBookmark");
@@ -76,7 +76,7 @@ void BrowserMenu::initActions(Sheet *Sheet, int index, SheetMenuType_e type)
 
         QAction *pNextPage = createAction(tr("Next page"), "NextPage");
         QAction *pEndPage = createAction(tr("Last page"), "LastPage");
-        if (index == Sheet->pagesNumber() - 1) {
+        if (index == sheet->pagesNumber() - 1) {
             pNextPage->setDisabled(true);
             pEndPage->setDisabled(true);
         }

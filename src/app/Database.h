@@ -41,10 +41,6 @@ public:
 
     bool saveOperation(DocSheet *sheet);
 
-    bool readOperation(Sheet *sheet);
-
-    bool saveOperation(Sheet *sheet);
-
     bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
 
     bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);

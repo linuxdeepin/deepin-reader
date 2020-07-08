@@ -26,10 +26,11 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Sheet.h"
+#include "DocSheet.h"
 #include "lpreviewControl/SheetSidebar.h"
 #include "SheetBrowser.h"
 #include "Database.h"
+#include "CentralDocPage.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -42,11 +43,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-QMap<QString, Sheet *> Sheet::g_map;
-//bool isBlockShutdown = false;
-//QDBusInterface *blockShutdownInterface = nullptr;
-//QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
-Sheet::Sheet(Dr::FileType type, QString filePath,  QWidget *parent)
+QMap<QString, DocSheet *> DocSheet::g_map;
+DocSheet::DocSheet(Dr::FileType type, QString filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_type(type)
 {
     m_uuid = QUuid::createUuid().toString();
@@ -75,74 +73,72 @@ Sheet::Sheet(Dr::FileType type, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
 }
 
-Sheet::~Sheet()
+DocSheet::~Sheet()
 {
     Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
 }
 
-bool Sheet::existFileChanged()
+bool DocSheet::existFileChanged()
 {
+    foreach (DocSheet *sheet, g_map.values()) {
+        if (sheet->fileChanged())
+            return true;
+    }
 
+    return false;
 }
 
-QUuid Sheet::getUuid(Sheet *)
+QUuid DocSheet::getUuid(DocSheet *sheet)
 {
-
+    return g_map.key(sheet);
 }
 
-Sheet *Sheet::getSheet(QString uuid)
+Sheet *DocSheet::getSheet(QString uuid)
 {
+    if (g_map.contains(uuid))
+        return g_map[uuid];
 
+    return nullptr;
 }
 
-void Sheet::blockShutdown()
-{
-
-}
-
-void Sheet::unBlockShutdown()
-{
-
-}
-
-void Sheet::initOperationData(const SheetOperation &opera)
+void DocSheet::initOperationData(const SheetOperation &opera)
 {
     m_operation = opera;
 }
 
-bool Sheet::isOpen()
+bool DocSheet::isOpen()
 {
     //...
     return false;
 }
 
-void Sheet::openFile()
+void DocSheet::openFile()
 {
 
 }
 
-void Sheet::jumpToPage(int page)
+void DocSheet::jumpToPage(int page)
 {
     m_browser->setCurrentPage(page);
 }
 
-void Sheet::jumpToIndex(int index)
+void DocSheet::jumpToIndex(int index)
 {
     m_browser->setCurrentPage(index + 1);
 }
 
-void Sheet::jumpToFirstPage()
+void DocSheet::jumpToFirstPage()
 {
     m_browser->setCurrentPage(1);
 }
 
-void Sheet::jumpToLastPage()
+void DocSheet::jumpToLastPage()
 {
     jumpToPage(m_browser->allPages());
 }
 
-void Sheet::jumpToNextPage()
+void DocSheet::jumpToNextPage()
 {
     int page = m_browser->currentPage() + (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
@@ -151,7 +147,7 @@ void Sheet::jumpToNextPage()
     jumpToPage(page);
 }
 
-void Sheet::jumpToPrevPage()
+void DocSheet::jumpToPrevPage()
 {
     int page = m_browser->currentPage() - (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
@@ -160,7 +156,22 @@ void Sheet::jumpToPrevPage()
     jumpToPage(page);
 }
 
-void Sheet::rotateLeft()
+deepin_reader::Outline DocSheet::outline()
+{
+    m_browser->outline();
+}
+
+void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, unsigned int page)
+{
+    m_browser->jumpToOutline(left, top, page);
+}
+
+void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation)
+{
+    m_browser->jumpToHighLight(annotation);
+}
+
+void DocSheet::rotateLeft()
 {
     if (Dr::RotateBy0 == m_operation.rotation)
         m_operation.rotation = Dr::RotateBy270;
@@ -176,7 +187,7 @@ void Sheet::rotateLeft()
     emit sigFileChanged(this);
 }
 
-void Sheet::rotateRight()
+void DocSheet::rotateRight()
 {
     if (Dr::RotateBy0 == m_operation.rotation)
         m_operation.rotation = Dr::RotateBy90;
@@ -192,7 +203,7 @@ void Sheet::rotateRight()
     emit sigFileChanged(this);
 }
 
-bool Sheet::openFileExec()
+bool DocSheet::openFileExec()
 {
     if (m_browser->openFilePath(filePath())) {
         if (!m_browser->loadPages(m_operation, m_bookmarks))
@@ -205,7 +216,7 @@ bool Sheet::openFileExec()
     return false;
 }
 
-void Sheet::setBookMark(int index, int state)
+void DocSheet::setBookMark(int index, int state)
 {
     if (state)
         m_bookmarks.insert(index);
@@ -221,7 +232,7 @@ void Sheet::setBookMark(int index, int state)
     emit sigFileChanged(this);
 }
 
-int Sheet::pagesNumber()
+int DocSheet::pagesNumber()
 {
     if (m_browser)
         return m_browser->allPages();
@@ -229,7 +240,7 @@ int Sheet::pagesNumber()
     return 0;
 }
 
-int Sheet::currentPage()
+int DocSheet::currentPage()
 {
     if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
         return 1;
@@ -237,7 +248,7 @@ int Sheet::currentPage()
     return m_operation.currentPage;
 }
 
-int Sheet::currentIndex()
+int DocSheet::currentIndex()
 {
     if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
         return 0;
@@ -245,7 +256,7 @@ int Sheet::currentIndex()
     return m_operation.currentPage - 1;
 }
 
-void Sheet::setLayoutMode(Dr::LayoutMode mode)
+void DocSheet::setLayoutMode(Dr::LayoutMode mode)
 {
     if (mode == m_operation.layoutMode)
         return;
@@ -257,7 +268,7 @@ void Sheet::setLayoutMode(Dr::LayoutMode mode)
     }
 }
 
-void Sheet::setMouseShape(Dr::MouseShape shape)
+void DocSheet::setMouseShape(Dr::MouseShape shape)
 {
     if (shape >= Dr::MouseShapeNormal && shape < Dr::NumberOfMouseShapes) {
         closeMagnifier();
@@ -267,7 +278,7 @@ void Sheet::setMouseShape(Dr::MouseShape shape)
     }
 }
 
-void Sheet::setScaleMode(Dr::ScaleMode mode)
+void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
@@ -276,7 +287,7 @@ void Sheet::setScaleMode(Dr::ScaleMode mode)
     }
 }
 
-void Sheet::setScaleFactor(qreal scaleFactor)
+void DocSheet::setScaleFactor(qreal scaleFactor)
 {
     if (Dr::ScaleFactorMode == m_operation.scaleMode && qFuzzyCompare(scaleFactor, m_operation.scaleFactor))
         return;
@@ -290,7 +301,7 @@ void Sheet::setScaleFactor(qreal scaleFactor)
     emit sigFileChanged(this);
 }
 
-bool Sheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
+bool DocSheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
 {
     if (m_browser)
         return m_browser->getImage(index, image, width, height, mode);
@@ -298,12 +309,12 @@ bool Sheet::getImage(int index, QImage &image, double width, double height, Qt::
     return false;
 }
 
-bool Sheet::fileChanged()
+bool DocSheet::fileChanged()
 {
     return m_fileChanged;
 }
 
-bool Sheet::saveData()
+bool DocSheet::saveData()
 {
     if (Database::instance()->saveBookmarks(filePath(), m_bookmarks)) {
         m_fileChanged = false;
@@ -312,63 +323,63 @@ bool Sheet::saveData()
     return false;
 }
 
-bool Sheet::saveAsData(QString filePath)
+bool DocSheet::saveAsData(QString filePath)
 {
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
     return Utils::copyFile(this->filePath(), filePath);
 }
 
-void Sheet::handleSearch()
+void DocSheet::handleSearch()
 {
 
 }
 
-void Sheet::stopSearch()
+void DocSheet::stopSearch()
 {
 
 }
 
-void Sheet::copySelectedText()
+void DocSheet::copySelectedText()
 {
 
 }
 
-void Sheet::highlightSelectedText()
+void DocSheet::highlightSelectedText()
 {
 
 }
 
-void Sheet::addSelectedTextHightlightAnnotation()
+void DocSheet::addSelectedTextHightlightAnnotation()
 {
 
 }
 
-void Sheet::openMagnifier()
+void DocSheet::openMagnifier()
 {
     if (m_browser)
         m_browser->openMagnifier();
 }
 
-void Sheet::closeMagnifier()
+void DocSheet::closeMagnifier()
 {
     if (m_browser)
         m_browser->closeMagnifier();
 }
 
-void Sheet::defaultFocus()
+void DocSheet::defaultFocus()
 {
     if (m_browser)
         m_browser->setFocus();
 }
 
-bool Sheet::magnifierOpened()
+bool DocSheet::magnifierOpened()
 {
     if (m_browser)
         return m_browser->magnifierOpened();
     return false;
 }
 
-//void Sheet::docBasicInfo(stFileInfo &info)
+//void DocSheet::docBasicInfo(stFileInfo &info)
 //{
 //    info.strFilepath = filePath();
 
@@ -394,21 +405,26 @@ bool Sheet::magnifierOpened()
 
 //}
 
-QList<deepin_reader::Annotation *> Sheet::annotations()
+QList<deepin_reader::Annotation *> DocSheet::annotations()
 {
     if (nullptr == m_browser)
         return QList< deepin_reader::Annotation * > ();
     return m_browser->annotations();
 }
 
-bool Sheet::removeAnnotation(deepin_reader::Annotation *annotation)
+QString DocSheet::addIconAnnotation(const QPoint &pos)
+{
+
+}
+
+bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     if (nullptr == m_browser)
         return false;
     return m_browser->removeAnnotation(annotation);
 }
 
-QList<qreal> Sheet::scaleFactorList()
+QList<qreal> DocSheet::scaleFactorList()
 {
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
     QList<qreal> factorList;
@@ -423,7 +439,7 @@ QList<qreal> Sheet::scaleFactorList()
     return  factorList;
 }
 
-qreal Sheet::maxScaleFactor()
+qreal DocSheet::maxScaleFactor()
 {
     qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
 
@@ -433,77 +449,126 @@ qreal Sheet::maxScaleFactor()
     return maxScaleFactor;
 }
 
-SheetOperation Sheet::operation()
+SheetOperation DocSheet::operation()
 {
     return m_operation;
 }
 
-Dr::FileType Sheet::type()
+Dr::FileType DocSheet::type()
 {
     return m_type;
 }
 
-QString Sheet::filePath()
+QString DocSheet::filePath()
 {
-    return QString();
+    return m_filePath;
 }
 
-bool Sheet::hasBookMark(int index)
+bool DocSheet::hasBookMark(int index)
+{
+    return m_bookmarks.contains(index);
+}
+
+void DocSheet::zoomin()
+{
+    QList<qreal> dataList = scaleFactorList();
+
+    for (int i = 0; i < dataList.count(); ++i) {
+        if (dataList[i] > (m_operation.scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
+}
+
+void DocSheet::zoomout()
+{
+    QList<qreal> dataList = scaleFactorList();
+
+    for (int i = dataList.count() - 1; i >= 0; --i) {
+        if (dataList[i] < (m_operation.scaleFactor)) {
+            setScaleFactor(dataList[i]);
+            return;
+        }
+    }
+}
+
+void DocSheet::setSidebarVisible(bool isVisible)
+{
+    m_operation.sidebarVisible = isVisible;
+    if (m_sidebar)
+        m_sidebar->setVisible(isVisible);
+    emit sigFileChanged(this);
+}
+
+void DocSheet::handleOpenSuccess()
+{
+    if (m_sidebar)
+        m_sidebar->handleOpenSuccess();
+}
+
+void DocSheet::showTips(const QString &tips, int iconIndex)
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->showTips(tips, iconIndex);
+}
+
+void DocSheet::openSlide()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->openSlide();
+}
+
+void DocSheet::closeSlide()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->quitSlide();
+}
+
+bool DocSheet::slideOpened()
 {
     return false;
 }
 
-void Sheet::zoomin()
+void DocSheet::openFullScreen()
 {
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
 
+    doc->openFullScreen();
 }
 
-void Sheet::zoomout()
+int DocSheet::label2pagenum(QString label)
 {
-
+    return 0;
 }
 
-void Sheet::setSidebarVisible(bool isVisible)
-{
-
-}
-
-void Sheet::handleOpenSuccess()
-{
-
-}
-
-void Sheet::showTips(const QString &tips, int iconIndex)
-{
-
-}
-
-void Sheet::openSlide()
-{
-
-}
-
-void Sheet::closeSlide()
-{
-
-}
-
-bool Sheet::slideOpened()
+bool DocSheet::haslabel()
 {
     return false;
 }
 
-void Sheet::openFullScreen()
+void DocSheet::docBasicInfo(deepin_reader::FileInfo &info)
 {
 
 }
 
-void Sheet::handleSlideKeyPressEvent(const QString &sKey)
+QString DocSheet::pagenum2label(int index)
 {
-
+    return "";
 }
 
-void Sheet::onBrowserPageChanged(int page)
+void DocSheet::onBrowserPageChanged(int page)
 {
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
@@ -511,7 +576,7 @@ void Sheet::onBrowserPageChanged(int page)
     }
 }
 
-void Sheet::onBrowserSizeChanged()
+void DocSheet::onBrowserSizeChanged()
 {
     if (m_operation.scaleMode != Dr::ScaleFactorMode) {
         m_browser->deform(m_operation);
@@ -519,37 +584,37 @@ void Sheet::onBrowserSizeChanged()
     }
 }
 
-void Sheet::onBrowserWheelUp()
+void DocSheet::onBrowserWheelUp()
 {
     zoomin();
 }
 
-void Sheet::onBrowserWheelDown()
+void DocSheet::onBrowserWheelDown()
 {
     zoomout();
 }
 
-void Sheet::onBrowserPageFirst()
+void DocSheet::onBrowserPageFirst()
 {
     jumpToFirstPage();
 }
 
-void Sheet::onBrowserPagePrev()
+void DocSheet::onBrowserPagePrev()
 {
     jumpToPrevPage();
 }
 
-void Sheet::onBrowserPageNext()
+void DocSheet::onBrowserPageNext()
 {
     jumpToNextPage();
 }
 
-void Sheet::onBrowserPageLast()
+void DocSheet::onBrowserPageLast()
 {
     jumpToLastPage();
 }
 
-void Sheet::onBrowserBookmark(int index, bool state)
+void DocSheet::onBrowserBookmark(int index, bool state)
 {
     setBookMark(index, state);
 }

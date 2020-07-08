@@ -18,7 +18,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "DocSheet.h"
+#include "DocSheetOldOld.h"
 #include "pdfControl/docview/CommonStruct.h"
 #include "lpreviewControl/SheetSidebar.h"
 #include "Database.h"
@@ -35,17 +35,11 @@
 #include <QStackedWidget>
 #include <QMimeData>
 #include <QUuid>
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QDBusUnixFileDescriptor>
 
 DWIDGET_USE_NAMESPACE
 
-QMap<QString, DocSheet *> DocSheet::g_map;
-bool isBlockShutdown = false;
-QDBusInterface *blockShutdownInterface = nullptr;
-QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
-DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
+QMap<QString, DocSheetOld *> DocSheetOld::g_map;
+DocSheetOld::DocSheetOld(Dr::FileType type, QString filePath, DWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_type(type)
 {
     m_uuid = QUuid::createUuid().toString();
@@ -61,263 +55,263 @@ DocSheet::DocSheet(Dr::FileType type, QString filePath, DWidget *parent)
     }
 }
 
-DocSheet::~DocSheet()
+DocSheetOld::~DocSheetOld()
 {
     Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
 }
 
-void DocSheet::initOperationData(const DocOperation &opera)
+void DocSheetOld::initOperationData(const DocOperation &opera)
 {
     m_operation = opera;
 }
 
-void DocSheet::openFile()
+void DocSheetOld::openFile()
 {
     qDebug() << "unrealized";
 }
 
-bool DocSheet::openFileExec()
+bool DocSheetOld::openFileExec()
 {
     qDebug() << "unrealized";
     return false;
 }
 
-void DocSheet::jumpToIndex(int)
+void DocSheetOld::jumpToIndex(int)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToPage(int)
+void DocSheetOld::jumpToPage(int)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToFirstPage()
+void DocSheetOld::jumpToFirstPage()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToLastPage()
+void DocSheetOld::jumpToLastPage()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToNextPage()
+void DocSheetOld::jumpToNextPage()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToPrevPage()
+void DocSheetOld::jumpToPrevPage()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::rotateLeft()
+void DocSheetOld::rotateLeft()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::rotateRight()
+void DocSheetOld::rotateRight()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setLayoutMode(Dr::LayoutMode)
+void DocSheetOld::setLayoutMode(Dr::LayoutMode)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setMouseShape(Dr::MouseShape)
+void DocSheetOld::setMouseShape(Dr::MouseShape)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::openMagnifier()
+void DocSheetOld::openMagnifier()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::closeMagnifier()
+void DocSheetOld::closeMagnifier()
 {
     qDebug() << "unrealized";
 }
 
-bool DocSheet::magnifierOpened()
+bool DocSheetOld::magnifierOpened()
 {
     qDebug() << "unrealized";
     return  false;
 }
 
-void DocSheet::setScaleFactor(qreal)
+void DocSheetOld::setScaleFactor(qreal)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setScaleMode(Dr::ScaleMode)
+void DocSheetOld::setScaleMode(Dr::ScaleMode)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setBookMark(int, int)
+void DocSheetOld::setBookMark(int, int)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::setBookMarks(const QList<BookMarkStatus_t> &)
+void DocSheetOld::setBookMarks(const QList<BookMarkStatus_t> &)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::copySelectedText()
+void DocSheetOld::copySelectedText()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::highlightSelectedText()
+void DocSheetOld::highlightSelectedText()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::addSelectedTextHightlightAnnotation()
+void DocSheetOld::addSelectedTextHightlightAnnotation()
 {
     qDebug() << "unrealized";
 }
 
-int DocSheet::pagesNumber()
+int DocSheetOld::pagesNumber()
 {
     qDebug() << "unrealized";
     return 0;
 }
 
-int DocSheet::currentPage()
+int DocSheetOld::currentPage()
 {
     qDebug() << "unrealized";
     return -1;
 }
 
-int DocSheet::currentIndex()
+int DocSheetOld::currentIndex()
 {
     qDebug() << "unrealized";
     return -1;
 }
 
-bool DocSheet::getImage(int, QImage &, double, double, Qt::AspectRatioMode)
+bool DocSheetOld::getImage(int, QImage &, double, double, Qt::AspectRatioMode)
 {
     qDebug() << "unrealized";
     return false;
 }
 
-void DocSheet::docBasicInfo(stFileInfo &)
+void DocSheetOld::docBasicInfo(stFileInfo &)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::getAllAnnotation(QList<stHighlightContent> &)
+void DocSheetOld::getAllAnnotation(QList<stHighlightContent> &)
 {
     qDebug() << "unrealized";
 }
 
-Outline DocSheet::outline()
+Outline DocSheetOld::outline()
 {
     qDebug() << "unrealized";
     return Outline();
 }
 
-void DocSheet::jumpToOutline(const qreal &, const qreal &, unsigned int)
+void DocSheetOld::jumpToOutline(const qreal &, const qreal &, unsigned int)
 {
     qDebug() << "unrealized";
 }
 
-bool DocSheet::isOpen()
+bool DocSheetOld::isOpen()
 {
     qDebug() << "unrealized";
     return false;
 }
 
-QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)
+QString DocSheetOld::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)
 {
     qDebug() << "unrealized";
     return "";
 }
 
-void DocSheet::deleteAnnotation(const int &, const QString &)
+void DocSheetOld::deleteAnnotation(const int &, const QString &)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::deleteAnnotations(const QList<AnnotationInfo_t> &)
+void DocSheetOld::deleteAnnotations(const QList<AnnotationInfo_t> &)
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::jumpToHighLight(const QString &, int)
+void DocSheetOld::jumpToHighLight(const QString &, int)
 {
     qDebug() << "unrealized";
 }
 
-QString DocSheet::pagenum2label(int)
+QString DocSheetOld::pagenum2label(int)
 {
     qDebug() << "unrealized";
     return QString();
 }
 
-bool DocSheet::haslabel()
+bool DocSheetOld::haslabel()
 {
     return false;
 }
 
-int DocSheet::label2pagenum(QString)
+int DocSheetOld::label2pagenum(QString)
 {
     qDebug() << "unrealized";
     return -1;
 }
 
-QString DocSheet::filter()
+QString DocSheetOld::filter()
 {
     qDebug() << "unrealized";
     return "";
 }
 
-void DocSheet::defaultFocus()
+void DocSheetOld::defaultFocus()
 {
     m_sidebar->setFocus();
 }
 
-bool DocSheet::fileChanged()
+bool DocSheetOld::fileChanged()
 {
     qDebug() << "unrealized";
     return false;
 }
 
-bool DocSheet::saveData()
+bool DocSheetOld::saveData()
 {
     qDebug() << "unrealized";
     return false;
 }
 
-bool DocSheet::saveAsData(QString)
+bool DocSheetOld::saveAsData(QString)
 {
     qDebug() << "unrealized";
     return false;
 }
 
-void DocSheet::handleSearch()
+void DocSheetOld::handleSearch()
 {
     qDebug() << "unrealized";
 }
 
-void DocSheet::stopSearch()
+void DocSheetOld::stopSearch()
 {
 
 }
 
-QUuid DocSheet::getUuid(DocSheet *sheet)
+QUuid DocSheetOld::getUuid(DocSheetOld *sheet)
 {
     return g_map.key(sheet);
 }
 
-DocSheet *DocSheet::getSheet(QString uuid)
+DocSheetOld *DocSheetOld::getSheet(QString uuid)
 {
     if (g_map.contains(uuid))
         return g_map[uuid];
@@ -325,62 +319,18 @@ DocSheet *DocSheet::getSheet(QString uuid)
     return nullptr;
 }
 
-void DocSheet::blockShutdown()
-{
-    if (isBlockShutdown)
-        return;
-
-    if (blockShutdownReply.value().isValid()) {
-        return;
-    }
-
-    if (blockShutdownInterface == nullptr)
-        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1",
-                                                    "/org/freedesktop/login1",
-                                                    "org.freedesktop.login1.Manager",
-                                                    QDBusConnection::systemBus());
-
-    QList<QVariant> args;
-    args << QString("shutdown")             // what
-         << qApp->applicationDisplayName()           // who
-         << QObject::tr("Document not saved") // why
-         << QString("block");                        // mode
-
-//    int fd = -1;
-    blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
-    if (blockShutdownReply.isValid()) {
-        /*fd =*/ blockShutdownReply.value().fileDescriptor();
-        isBlockShutdown = true;
-    } else {
-        qDebug() << blockShutdownReply.error();
-    }
-}
-
-void DocSheet::unBlockShutdown()
-{
-    foreach (DocSheet *sheet, g_map.values()) {
-        if (sheet->fileChanged())
-            return;
-    }
-
-    if (blockShutdownReply.isValid()) {
-        blockShutdownReply = QDBusReply<QDBusUnixFileDescriptor>();
-        isBlockShutdown = false;
-    }
-}
-
-bool DocSheet::hasBookMark(int index)
+bool DocSheetOld::hasBookMark(int index)
 {
     return m_bookmarks.contains(index);
 }
 
-void DocSheet::handleOpenSuccess()
+void DocSheetOld::handleOpenSuccess()
 {
     if (m_sidebar)
         m_sidebar->handleOpenSuccess();
 }
 
-void DocSheet::setSidebarVisible(bool isVisible)
+void DocSheetOld::setSidebarVisible(bool isVisible)
 {
     m_operation.sidebarVisible = isVisible;
     if (m_sidebar)
@@ -388,35 +338,35 @@ void DocSheet::setSidebarVisible(bool isVisible)
     emit sigFileChanged(this);
 }
 
-QString DocSheet::filePath()
+QString DocSheetOld::filePath()
 {
     return m_filePath;
 }
 
-QList<qreal> DocSheet::scaleFactorList()
+QList<qreal> DocSheetOld::scaleFactorList()
 {
     QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
 
     return  dataList;
 }
 
-qreal DocSheet::maxScaleFactor()
+qreal DocSheetOld::maxScaleFactor()
 {
     qDebug() << "unrealized";
     return 1;
 }
 
-void DocSheet::setActive(const bool &)
+void DocSheetOld::setActive(const bool &)
 {
 
 }
 
-QList<deepin_reader::Annotation *> DocSheet::annotations()
+QList<deepin_reader::Annotation *> DocSheetOld::annotations()
 {
     return QList< deepin_reader::Annotation * > ();
 }
 
-void DocSheet::zoomin()
+void DocSheetOld::zoomin()
 {
     QList<qreal> dataList = scaleFactorList();
 
@@ -428,7 +378,7 @@ void DocSheet::zoomin()
     }
 }
 
-void DocSheet::zoomout()
+void DocSheetOld::zoomout()
 {
     QList<qreal> dataList = scaleFactorList();
 
@@ -440,12 +390,12 @@ void DocSheet::zoomout()
     }
 }
 
-Dr::FileType DocSheet::type()
+Dr::FileType DocSheetOld::type()
 {
     return m_type;
 }
 
-void DocSheet::showTips(const QString &tips, int iconIndex)
+void DocSheetOld::showTips(const QString &tips, int iconIndex)
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -454,9 +404,9 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
-bool DocSheet::existFileChanged()
+bool DocSheetOld::existFileChanged()
 {
-    foreach (DocSheet *sheet, g_map.values()) {
+    foreach (DocSheetOld *sheet, g_map.values()) {
         if (sheet->fileChanged())
             return true;
     }
@@ -464,12 +414,12 @@ bool DocSheet::existFileChanged()
     return false;
 }
 
-DocOperation DocSheet::operation()
+DocOperation DocSheetOld::operation()
 {
     return m_operation;
 }
 
-void DocSheet::openSlide()
+void DocSheetOld::openSlide()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -478,7 +428,7 @@ void DocSheet::openSlide()
     doc->openSlide();
 }
 
-void DocSheet::closeSlide()
+void DocSheetOld::closeSlide()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -487,7 +437,7 @@ void DocSheet::closeSlide()
     doc->quitSlide();
 }
 
-void DocSheet::openFullScreen()
+void DocSheetOld::openFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
@@ -496,7 +446,7 @@ void DocSheet::openFullScreen()
     doc->openFullScreen();
 }
 
-QSet<int> DocSheet::getBookMarkList() const
+QSet<int> DocSheetOld::getBookMarkList() const
 {
     return m_bookmarks;
 }

@@ -18,8 +18,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DOCSHEET_H
-#define DOCSHEET_H
+#ifndef DocSheetOld_H
+#define DocSheetOld_H
 
 #include <DSplitter>
 #include <QMap>
@@ -42,16 +42,16 @@ struct DocOperation {
     int  currentPage            = 1;
 };
 
-class DocSheet : public Dtk::Widget::DSplitter
+class DocSheetOld : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DocSheet)
+    Q_DISABLE_COPY(DocSheetOld)
     friend class Database;
     friend class SheetSidebar;
 public:
-    explicit DocSheet(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
+    explicit DocSheetOld(Dr::FileType type, QString filePath, Dtk::Widget::DWidget *parent = nullptr);
 
-    virtual ~DocSheet();
+    virtual ~DocSheetOld();
 
     virtual void initOperationData(const DocOperation &opera);
 
@@ -178,9 +178,9 @@ protected:
     SheetSidebar *m_sidebar = nullptr;
 
 signals:
-    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
+    void sigFileChanged(DocSheetOld *);    //被修改了 书签 笔记
 
-    void sigOpened(DocSheet *, bool);
+    void sigOpened(DocSheetOld *, bool);
 
 private:
     QString         m_filePath;
@@ -192,15 +192,11 @@ private:
 public:
     static bool existFileChanged();
 
-    static QUuid getUuid(DocSheet *);
+    static QUuid getUuid(DocSheetOld *);
 
-    static DocSheet *getSheet(QString uuid);
+    static DocSheetOld *getSheet(QString uuid);
 
-    static void blockShutdown();
-
-    static void unBlockShutdown();
-
-    static QMap<QString, DocSheet *> g_map;
+    static QMap<QString, DocSheetOld *> g_map;
 
     //===========以上是改版后的,优先使用(pdf看情况，如果未实现则不用) ,以下则逐步替换和删除
 
@@ -223,4 +219,4 @@ signals:
 
 };
 
-#endif // DOCSHEET_H
+#endif // DocSheetOld_H

@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 #include <QString>
 #include <QWidget>
+#include <QDateTime>
 
 class QColor;
 class QImage;
@@ -70,6 +71,24 @@ struct Word {
 struct SearchResult {
     unsigned int page = 0;
     QList<Word> words;
+};
+
+struct FileInfo {
+    QString filePath;
+    QString theme;
+    QString auther;
+    QString keyword;
+    QString producter;
+    QString creater;
+    QDateTime createTime;
+    QDateTime changeTime;
+    QString format;
+    unsigned int width = 0;
+    unsigned int height = 0;
+    unsigned int numpages = 0;
+    bool     optimization = false;
+    bool     safe  = false;
+    float    size = 0;
 };
 
 class Annotation : public QObject

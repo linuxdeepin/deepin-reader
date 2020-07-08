@@ -24,7 +24,7 @@
 #include "DocSheet.h"
 
 class SheetBrowserDJVU;
-class DocSheetDJVU : public DocSheet
+class DocSheetDJVU : public DocSheetOld
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheetDJVU)

@@ -18,6 +18,9 @@
 #define APPLICATION_H_
 
 #include <DApplication>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusUnixFileDescriptor>
 #include "pdfControl/database/DBService.h"
 
 class AppInfo;
@@ -38,6 +41,10 @@ public:
 
     void setSreenRect(const QRect &rect);
 
+    void blockShutdown();
+
+    void unBlockShutdown();
+
 protected:
     void handleQuitAction() override;
 
@@ -45,6 +52,12 @@ public:
     DBService *m_pDBService = nullptr;
 
     AppInfo   *m_pAppInfo = nullptr;
+
+    bool isBlockShutdown = false;
+
+    QDBusInterface *blockShutdownInterface = nullptr;
+
+    QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
 
 private:
     void initCfgPath();

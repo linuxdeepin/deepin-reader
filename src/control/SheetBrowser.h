@@ -29,14 +29,14 @@
 
 class SheetOperation;
 class BrowserPage;
-class Sheet;
+class DocSheet;
 class TipsWidget;
 class BrowserAnnotation;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:
-    explicit SheetBrowser(Sheet *parent = nullptr);
+    explicit SheetBrowser(DocSheet *parent = nullptr);
 
     ~SheetBrowser() override;
 
@@ -88,6 +88,12 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
+    deepin_reader::Outline outline();
+
+    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
+
+    void jumpToHighLight(deepin_reader::Annotation *annotation);
+
 signals:
     void sigPageChanged(int page);
 
@@ -134,18 +140,18 @@ private slots:
 private:
     deepin_reader::Document *m_document = nullptr;
     QLabel *m_magnifierLabel = nullptr;
-    Sheet *m_sheet = nullptr;
+    DocSheet *m_sheet = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
 
     QList<BrowserPage *> m_items;
     double m_lastScaleFactor = 0;
-    int m_maxWidth = 0;         //最大一页的宽度
-    int m_maxHeight = 0;        //最大一页的高度
-    bool m_hasLoaded = false;   //是否已经加载过每页的信息
-    int m_initPage = 1;         //用于刚显示跳转的页数
-    QPointF m_selectPressedPos;        //scene
+    int m_maxWidth = 0;                 //最大一页的宽度
+    int m_maxHeight = 0;                //最大一页的高度
+    bool m_hasLoaded = false;           //是否已经加载过每页的信息
+    int m_initPage = 1;                 //用于刚显示跳转的页数
+    QPointF m_selectPressedPos;         //scene
 };
 
 #endif // SheetBrowser_H

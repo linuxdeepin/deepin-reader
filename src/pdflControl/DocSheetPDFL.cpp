@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QFileInfo>
 
-DocSheetPDFL::DocSheetPDFL(QString filePath, QWidget *parent) : DocSheet(Dr::PDF, filePath, parent)
+DocSheetPDFL::DocSheetPDFL(QString filePath, QWidget *parent) : DocSheetOld(Dr::PDF, filePath, parent)
 {
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0

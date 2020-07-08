@@ -29,7 +29,7 @@
 #include "SheetBrowser.h"
 #include "document/PDFModel.h"
 #include "BrowserPage.h"
-#include "Sheet.h"
+#include "DocSheet.h"
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "widgets/TipsWidget.h"
@@ -48,6 +48,7 @@
 #include <QBitmap>
 #include <DMenu>
 #include <DGuiApplicationHelper>
+#include <QDomDocument>
 
 DWIDGET_USE_NAMESPACE
 
@@ -322,11 +323,58 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
     return false;
 }
 
+deepin_reader::Outline SheetBrowser::outline()
+{
+    return m_document->outline();
+}
+
+void SheetBrowser::jumpToOutline(const qreal &left, const qreal &top, unsigned int page)
+{
+
+}
+
+void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation)
+{
+//    if (ipageIndex >= 0 && ipageIndex < d->m_pages.size()) {
+//        Poppler::Page *page = static_cast<PagePdf *>(d->m_pages.at(ipageIndex))->GetPage();
+//        QList<Poppler::Annotation *> listannote = page->annotations();
+//        foreach (Poppler::Annotation *annote, listannote) {
+//            if (annote->subType() == Poppler::Annotation::AHighlight && annote->uniqueName().indexOf(uuid) >= 0) {
+//                QList<Poppler::HighlightAnnotation::Quad> listquad = static_cast<Poppler::HighlightAnnotation *>(annote)->highlightQuads();
+
+//                if (listquad.size() > 0) {
+//                    QRectF rectbound;
+//                    rectbound.setTopLeft(listquad.at(0).points[0]);
+//                    rectbound.setTopRight(listquad.at(0).points[1]);
+//                    rectbound.setBottomLeft(listquad.at(0).points[3]);
+//                    rectbound.setBottomRight(listquad.at(0).points[2]);
+//                    int xvalue = 0, yvalue = 0;
+//                    rectbound.setX(rectbound.x()*d->m_pages.at(ipageIndex)->getOriginalImageWidth());
+//                    rectbound.setY(rectbound.y()*d->m_pages.at(ipageIndex)->getOriginalImageHeight());
+//                    rectbound.setWidth(rectbound.width()*d->m_pages.at(ipageIndex)->getOriginalImageWidth());
+//                    rectbound.setHeight(rectbound.height()*d->m_pages.at(ipageIndex)->getOriginalImageHeight());
+//                    cacularValueXY(xvalue, yvalue, ipageIndex, false, rectbound);
+//                    QScrollBar *scrollBar_Y = verticalScrollBar();
+//                    if (scrollBar_Y)
+//                        scrollBar_Y->setValue(yvalue);
+//                    if (xvalue > 0) {
+//                        QScrollBar *scrollBar_X = horizontalScrollBar();
+//                        if (scrollBar_X)
+//                            scrollBar_X->setValue(xvalue);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//        qDeleteAll(listannote);
+//    }
+}
+
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
 
-        Sheet *sheet = static_cast<Sheet *>(parentWidget());
+        DocSheet *sheet = static_cast<DocSheet *>(parentWidget());
         if (nullptr == sheet)
             return;
 

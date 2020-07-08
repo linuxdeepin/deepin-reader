@@ -18,8 +18,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef Sheet_H
-#define Sheet_H
+#ifndef DocSheet_H
+#define DocSheet_H
 
 #include <DSplitter>
 #include "document/Model.h"
@@ -38,29 +38,25 @@ struct SheetOperation {
 };
 
 class SheetBrowser;
-class Sheet : public Dtk::Widget::DSplitter
+class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
-    Q_DISABLE_COPY(Sheet)
+    Q_DISABLE_COPY(DocSheet)
 
     friend class Database;
 public:
-    explicit Sheet(Dr::FileType type, QString filePath, QWidget *parent = nullptr);
+    explicit DocSheet(Dr::FileType type, QString filePath, QWidget *parent = nullptr);
 
-    ~Sheet();
+    ~DocSheet();
 
 public:
     static bool existFileChanged();
 
-    static QUuid getUuid(Sheet *);
+    static QUuid getUuid(DocSheet *);
 
-    static Sheet *getSheet(QString uuid);
+    static DocSheet *getSheet(QString uuid);
 
-    static void blockShutdown();
-
-    static void unBlockShutdown();
-
-    static QMap<QString, Sheet *> g_map;
+    static QMap<QString, DocSheet *> g_map;
 
 public:
     void initOperationData(const SheetOperation &opera);
@@ -89,11 +85,11 @@ public:
 
     void jumpToPrevPage();
 
-    //Outline outline();
+    deepin_reader::Outline outline();
 
-    //void jumpToOutline(const qreal  &realleft, const qreal &realtop, unsigned int ipage = 0);
+    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
-    //void jumpToHighLight(const QString &uuid, int ipage);
+    void jumpToHighLight(deepin_reader::Annotation *annotation);
 
     void rotateLeft();
 
@@ -137,6 +133,8 @@ public:
 
     QList<deepin_reader::Annotation *> annotations();
 
+    QString addIconAnnotation(const QPoint &pos);
+
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     QList<qreal> scaleFactorList();
@@ -173,30 +171,22 @@ public:
 
     void openFullScreen();
 
-    void handleSlideKeyPressEvent(const QString &sKey);
-
-//===========
 public:
-    //virtual int label2pagenum(QString label);
+    int label2pagenum(QString label);
 
-    //virtual bool haslabel();
+    bool haslabel();
 
-    //virtual void docBasicInfo(stFileInfo &info);
+    void docBasicInfo(deepin_reader::FileInfo &info);
 
-    //virtual void getAllAnnotation(QList<stHighlightContent> &listres);
-
-    //virtual QString pagenum2label(int index);
-
-    //virtual QString addIconAnnotation(const QPoint &pos, const QColor &color = Qt::yellow, TextAnnoteType_Em type = TextAnnoteType_Note);
+    QString pagenum2label(int index);
 
 signals:
     void sigFindOperation(const int &);
-//==============
 
 signals:
-    void sigFileChanged(Sheet *);    //被修改了 书签 笔记
+    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
 
-    void sigOpened(Sheet *, bool);
+    void sigOpened(DocSheet *, bool);
 
 private slots:
     void onBrowserPageChanged(int page);
@@ -231,4 +221,4 @@ private:
     bool m_fileChanged = false;
 };
 
-#endif // Sheet_H
+#endif // DocSheet_H

@@ -116,9 +116,9 @@ void CentralDocPage::onSheetChanged(DocSheet *sheet)
     sigCurSheetChanged(sheet);
 
     if (DocSheet::existFileChanged()) {
-        DocSheet::blockShutdown();
+        dApp->blockShutdown();
     } else {
-        DocSheet::unBlockShutdown();
+        dApp->unBlockShutdown();
     }
 }
 

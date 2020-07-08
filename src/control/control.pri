@@ -4,8 +4,8 @@ HEADERS += \
     $$PWD/BrowserPage.h \
     $$PWD/BrowserRenderThread.h \
     $$PWD/BrowserWord.h \
-    $$PWD/Sheet.h \
-    $$PWD/SheetBrowser.h
+    $$PWD/SheetBrowser.h \
+    $$PWD/DocSheet.h
 
 SOURCES += \
     $$PWD/BrowserPage.cpp \
@@ -13,6 +13,7 @@ SOURCES += \
     $$PWD/BrowserMenu.cpp \
     $$PWD/BrowserRenderThread.cpp \
     $$PWD/BrowserWord.cpp \
-    $$PWD/Sheet.cpp \
-    $$PWD/SheetBrowser.cpp
+    $$PWD/SheetBrowser.cpp \
+    $$PWD/DocSheet.cpp
 
+INCLUDEPATH += $$PWD

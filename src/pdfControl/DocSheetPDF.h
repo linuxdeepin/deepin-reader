@@ -6,7 +6,7 @@
 
 #include "pdfControl/docview/CommonStruct.h"
 #include "ModuleHeader.h"
-#include "DocSheet.h"
+#include "DocSheetOld.h"
 
 class SpinnerWidget;
 class SheetBrowserPDF;
@@ -15,7 +15,7 @@ class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
 
-class DocSheetPDF : public DocSheet
+class DocSheetPDF : public DocSheetOld
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheetPDF)

@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QFileInfo>
 
-DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheet(Dr::DjVu, filePath, parent)
+DocSheetDJVU::DocSheetDJVU(QString filePath, QWidget *parent) : DocSheetOld(Dr::DjVu, filePath, parent)
 {
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0

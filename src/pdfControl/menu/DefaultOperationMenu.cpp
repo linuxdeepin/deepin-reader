@@ -1,11 +1,10 @@
 #include "DefaultOperationMenu.h"
 #include "app/AppInfo.h"
-#include "pdfControl/docview/DocummentProxy.h"
-#include "pdfControl/DocSheetPDF.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
 #include "widgets/PrintManager.h"
 #include "widgets/FileAttrWidget.h"
+#include "DocSheet.h"
 
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(parent)

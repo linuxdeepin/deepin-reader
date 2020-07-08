@@ -20,6 +20,7 @@
 #include "SlidePlayWidget.h"
 #include "Application.h"
 #include "lpreviewControl/threadmanager/ReaderImageThreadPoolManager.h"
+#include "ModuleHeader.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>

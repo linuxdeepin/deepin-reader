@@ -34,6 +34,44 @@ Application::Application(int &argc, char **argv)
     initChildren();
 }
 
+void Application::blockShutdown()
+{
+    if (isBlockShutdown)
+        return;
+
+    if (blockShutdownReply.value().isValid()) {
+        return;
+    }
+
+    if (blockShutdownInterface == nullptr)
+        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1",
+                                                    "/org/freedesktop/login1",
+                                                    "org.freedesktop.login1.Manager",
+                                                    QDBusConnection::systemBus());
+
+    QList<QVariant> args;
+    args << QString("shutdown")             // what
+         << qApp->applicationDisplayName()           // who
+         << QObject::tr("Document not saved") // why
+         << QString("block");                        // mode
+
+    blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
+    if (blockShutdownReply.isValid()) {
+        blockShutdownReply.value().fileDescriptor();
+        isBlockShutdown = true;
+    } else {
+        qDebug() << blockShutdownReply.error();
+    }
+}
+
+void Application::unBlockShutdown()
+{
+    if (blockShutdownReply.isValid()) {
+        blockShutdownReply = QDBusReply<QDBusUnixFileDescriptor>();
+        isBlockShutdown = false;
+    }
+}
+
 void Application::setSreenRect(const QRect &rect)
 {
     if (m_pAppInfo) {

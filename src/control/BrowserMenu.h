@@ -31,7 +31,7 @@ typedef enum SheetMenuType_e {
     DOC_MENU_SELECT_TEXT = 3
 } SheetMenuType_e;
 
-class Sheet;
+class DocSheet;
 class BrowserMenu : public DMenu
 {
     Q_OBJECT
@@ -40,7 +40,7 @@ signals:
 
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
-    void initActions(Sheet *Sheet, int index, SheetMenuType_e type);
+    void initActions(DocSheet *sheet, int index, SheetMenuType_e type);
 
 private slots:
     void onItemClicked();

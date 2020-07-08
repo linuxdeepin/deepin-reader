@@ -21,11 +21,8 @@ LIBS += -L"$${3RDPARTTPATH}/lib" -ldpoppler-qt -ldpoppler
 }
 
 include (app/app.pri)
-include (pdfControl/pdfControl.pri)
-include (pdflControl/pdflControl.pri)
 include (utils/Utils.pri)
 include (widgets/widgets.pri)
-include (djvuControl/djvuControl.pri)
 include (document/document.pri)
 include (control/control.pri)
 include (lpreviewControl/lpreviewControl.pri)
@@ -40,7 +37,7 @@ SOURCES += \
     uiframe/CentralNavPage.cpp \
     uiframe/CentralDocPage.cpp \
     uiframe/DocTabBar.cpp \
-    uiframe/DocSheet.cpp
+    uiframe/DocSheetOld.cpp
 
 HEADERS +=\
     Application.h \
@@ -51,7 +48,7 @@ HEADERS +=\
     uiframe/CentralNavPage.h \
     uiframe/CentralDocPage.h \
     uiframe/DocTabBar.h \
-    uiframe/DocSheet.h
+    uiframe/DocSheetOld.h
 
 RESOURCES +=         \
     ../resources/resources.qrc

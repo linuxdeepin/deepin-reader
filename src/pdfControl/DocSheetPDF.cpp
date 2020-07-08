@@ -36,7 +36,7 @@
 #include "Database.h"
 
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
-    : DocSheet(Dr::PDF, filePath, parent)
+    : DocSheetOld(Dr::PDF, filePath, parent)
 {
     m_operation.scaleFactor = 100.0;
     m_pRightWidget = new QStackedWidget(this);

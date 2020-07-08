@@ -25,7 +25,7 @@
 #include "document/Model.h"
 
 class SheetBrowserPDFL;
-class DocSheetPDFL : public DocSheet
+class DocSheetPDFL : public DocSheetOld
 {
     Q_OBJECT
     Q_DISABLE_COPY(DocSheetPDFL)
