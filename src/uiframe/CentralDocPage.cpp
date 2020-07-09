@@ -498,15 +498,15 @@ void CentralDocPage::showFileAttr()
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    if (s == KeyStr::g_esc && quitFullScreen())
+    if (s == Dr::key_esc && quitFullScreen())
         return;
 
-    if (s == KeyStr::g_esc && m_slideWidget) {
+    if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
     }
 
-    if (s == KeyStr::g_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
+    if (s == Dr::key_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
         return;
     }
@@ -516,73 +516,73 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (s == KeyStr::g_ctrl_s) {
+    if (s == Dr::key_ctrl_s) {
         saveCurrent();
-    } else if (s == KeyStr::g_ctrl_shift_s) {
+    } else if (s == Dr::key_ctrl_shift_s) {
         saveAsCurrent();
-    } else if (s == KeyStr::g_f5) {
+    } else if (s == Dr::key_f5) {
         openSlide();
-    } else if (s == KeyStr::g_alt_z) {
+    } else if (s == Dr::key_alt_z) {
         openMagnifer();
-    } else if (s == KeyStr::g_ctrl_p) {
+    } else if (s == Dr::key_ctrl_p) {
         printCurrent();
-    } else if (s == KeyStr::g_alt_1) {
+    } else if (s == Dr::key_alt_1) {
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeNormal);
-    } else if (s == KeyStr::g_alt_2) {
+    } else if (s == Dr::key_alt_2) {
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeHand);
-    } else if (s == KeyStr::g_ctrl_1) {
+    } else if (s == Dr::key_ctrl_1) {
         if (getCurSheet()) {
             getCurSheet()->setScaleMode(Dr::ScaleFactorMode);
             getCurSheet()->setScaleFactor(1);
         }
-    } else if (s == KeyStr::g_ctrl_m) {
+    } else if (s == Dr::key_ctrl_m) {
         if (getCurSheet())
             getCurSheet()->setSidebarVisible(true);
-    } else if (s == KeyStr::g_ctrl_2) {
+    } else if (s == Dr::key_ctrl_2) {
         if (getCurSheet())
             getCurSheet()->setScaleMode(Dr::FitToPageHeightMode);
-    } else if (s == KeyStr::g_ctrl_3) {
+    } else if (s == Dr::key_ctrl_3) {
         if (getCurSheet())
             getCurSheet()->setScaleMode(Dr::FitToPageWidthMode);
-    } else if (s == KeyStr::g_ctrl_r) {
+    } else if (s == Dr::key_ctrl_r) {
         if (getCurSheet())
             getCurSheet()->rotateLeft();
-    } else if (s == KeyStr::g_ctrl_shift_r) {
+    } else if (s == Dr::key_ctrl_shift_r) {
         if (getCurSheet())
             getCurSheet()->rotateRight();
-    }  else if (s == KeyStr::g_alt_harger) {
+    }  else if (s == Dr::key_alt_harger) {
         if (getCurSheet())
             getCurSheet()->zoomin();
-    } else if (s == KeyStr::g_ctrl_equal) {
+    } else if (s == Dr::key_ctrl_equal) {
         if (getCurSheet())
             getCurSheet()->zoomin();
-    } else if (s == KeyStr::g_ctrl_smaller) {
+    } else if (s == Dr::key_ctrl_smaller) {
         if (getCurSheet())
             getCurSheet()->zoomout();
-    } else if (s == KeyStr::g_ctrl_d) {
+    } else if (s == Dr::key_ctrl_d) {
         if (getCurSheet())
             getCurSheet()->setBookMark(getCurSheet()->currentIndex(), true);
-    } else if (s == KeyStr::g_ctrl_f) {
+    } else if (s == Dr::key_ctrl_f) {
         if (getCurSheet())
             getCurSheet()->handleSearch();
-    } else if (s == KeyStr::g_ctrl_c) {
+    } else if (s == Dr::key_ctrl_c) {
         if (getCurSheet())
             getCurSheet()->copySelectedText();
-    } else if (s == KeyStr::g_alt_h) {
+    } else if (s == Dr::key_alt_h) {
         if (getCurSheet())
             getCurSheet()->highlightSelectedText();
-    } else if (s == KeyStr::g_alt_a) {
+    } else if (s == Dr::key_alt_a) {
         if (getCurSheet())
             getCurSheet()->addSelectedTextHightlightAnnotation();
-    } else if (s == KeyStr::g_left) {
+    } else if (s == Dr::key_left) {
         if (getCurSheet())
             getCurSheet()->jumpToPrevPage();
-    } else if (s == KeyStr::g_right) {
+    } else if (s == Dr::key_right) {
         if (getCurSheet())
             getCurSheet()->jumpToNextPage();
-    } else if (s == KeyStr::g_f11) {
+    } else if (s == Dr::key_f11) {
         openFullScreen();
     }
 }

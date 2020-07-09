@@ -1,9 +1,4 @@
 #include "Application.h"
-
-#include <QIcon>
-#include <QDebug>
-#include <QDir>
-
 #include "Utils.h"
 #include "MainWindow.h"
 #include "BrowserRenderThread.h"
@@ -11,22 +6,23 @@
 #include "widgets/SaveDialog.h"
 #include "ModuleHeader.h"
 
+#include <QIcon>
+#include <QDebug>
+#include <QDir>
+
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     loadTranslator();
     setAttribute(Qt::AA_UseHighDpiPixmaps);
-    setApplicationName(ConstantMsg::g_app_name);
+    setApplicationName("deepin-reader");
     setOrganizationName("deepin");
-    setWindowIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    setWindowIcon(QIcon::fromTheme("deepin-reader"));
     setApplicationVersion(DApplication::buildVersion("1.0"));
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
-
-    QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(static_cast<int>(256 * qApp->devicePixelRatio()), static_cast<int>(256 * qApp->devicePixelRatio())));
-    px.setDevicePixelRatio(qApp->devicePixelRatio());
-    setProductIcon(QIcon(px));
+    setProductIcon(QIcon::fromTheme("deepin-reader"));
 }
 
 void Application::blockShutdown()
@@ -39,10 +35,7 @@ void Application::blockShutdown()
     }
 
     if (blockShutdownInterface == nullptr)
-        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1",
-                                                    "/org/freedesktop/login1",
-                                                    "org.freedesktop.login1.Manager",
-                                                    QDBusConnection::systemBus());
+        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus());
 
     QList<QVariant> args;
     args << QString("shutdown")             // what

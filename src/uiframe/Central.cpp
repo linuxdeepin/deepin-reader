@@ -160,9 +160,9 @@ bool Central::saveAll()
 
 void Central::handleShortcut(QString shortcut)
 {
-    if (shortcut == KeyStr::g_ctrl_o) {
+    if (shortcut == Dr::key_ctrl_o) {
         openFilesExec();
-    } if (shortcut == KeyStr::g_ctrl_shift_slash) { //  显示快捷键预览
+    } if (shortcut == Dr::key_ctrl_shift_slash) { //  显示快捷键预览
         ShortCutShow show;
         show.setSheet(m_docPage->getCurSheet());
         show.show();

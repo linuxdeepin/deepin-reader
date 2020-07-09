@@ -255,10 +255,10 @@ void SheetSidebar::adaptWindowSize(const double &scale)
 
 void SheetSidebar::keyPressEvent(QKeyEvent *event)
 {
-    QStringList pFilterList = QStringList() << KeyStr::g_pgup << KeyStr::g_pgdown
-                              << KeyStr::g_down << KeyStr::g_up
-                              << KeyStr::g_left << KeyStr::g_right
-                              << KeyStr::g_del;
+    QStringList pFilterList = QStringList() << Dr::key_pgUp << Dr::key_pgDown
+                              << Dr::key_down << Dr::key_up
+                              << Dr::key_left << Dr::key_right
+                              << Dr::key_delete;
     QString key = Utils::getKeyshortcut(event);
     if (pFilterList.contains(key)) {
         dealWithPressKey(key);
@@ -268,11 +268,11 @@ void SheetSidebar::keyPressEvent(QKeyEvent *event)
 
 void SheetSidebar::dealWithPressKey(const QString &sKey)
 {
-    if (sKey == KeyStr::g_up || sKey == KeyStr::g_pgup || sKey == KeyStr::g_left) {
+    if (sKey == Dr::key_up || sKey == Dr::key_pgUp || sKey == Dr::key_left) {
         onJumpToPrevPage();
-    } else if (sKey == KeyStr::g_down || sKey == KeyStr::g_pgdown || sKey == KeyStr::g_right) {
+    } else if (sKey == Dr::key_down || sKey == Dr::key_pgDown || sKey == Dr::key_right) {
         onJumpToNextPage();
-    } else if (sKey == KeyStr::g_del) {
+    } else if (sKey == Dr::key_delete) {
         deleteItemByKey();
     }
 }

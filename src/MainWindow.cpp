@@ -117,7 +117,7 @@ void MainWindow::initUI()
     setCentralWidget(m_central);
 
     titlebar()->setAutoHideOnFullscreen(true);
-    titlebar()->setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
@@ -176,22 +176,18 @@ void MainWindow::showDefaultSize()
 //  初始化 快捷键操作
 void MainWindow::initShortCut()
 {
-    auto pSigManager = new QSignalMapper(this);
-
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
-
     QList<QKeySequence> keyList;
     keyList.append(QKeySequence::Find);
     keyList.append(QKeySequence::Open);
     keyList.append(QKeySequence::Print);
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
-    keyList.append(QKeySequence(Qt::Key_F11));
-    keyList.append(QKeySequence(Qt::Key_F5));
     keyList.append(QKeySequence(Qt::Key_Left));
     keyList.append(QKeySequence(Qt::Key_Right));
     keyList.append(QKeySequence(Qt::Key_Space));
     keyList.append(QKeySequence(Qt::Key_Escape));
+    keyList.append(QKeySequence(Qt::Key_F5));
+    keyList.append(QKeySequence(Qt::Key_F11));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
@@ -209,9 +205,10 @@ void MainWindow::initShortCut()
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
-    keyList.append(QKeySequence(Qt::Key_Left));
-    keyList.append(QKeySequence(Qt::Key_Right));
-    keyList.append(QKeySequence(Qt::Key_Space));
+
+    auto pSigManager = new QSignalMapper(this);
+
+    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
 
     foreach (auto key, keyList) {
         auto action = new QAction(this);

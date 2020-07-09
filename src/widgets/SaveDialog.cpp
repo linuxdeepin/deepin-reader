@@ -33,7 +33,7 @@ SaveDialog::SaveDialog(QObject *parent)
 int SaveDialog::showExitDialog()
 {
     DDialog dlg(tr("Do you want to save the changes?"), "");
-    dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
     QMargins mar(0, 0, 0, 0);
@@ -45,7 +45,7 @@ int SaveDialog::showExitDialog()
 int SaveDialog::showTipDialog(const QString &content)
 {
     DDialog dlg(content, "");
-    dlg.setIcon(QIcon::fromTheme(ConstantMsg::g_app_name));
+    dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel"));
     dlg.addButton(tr("Ensure"), true, DDialog::ButtonRecommend);
     QMargins mar(0, 0, 0, 0);

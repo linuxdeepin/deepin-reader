@@ -106,11 +106,6 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     return tmp;
 }
 
-QString Utils::getConfigPath()
-{
-    return  QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-}
-
 QString Utils::getInputDataSize(const qint64 &dSize)
 {
     if (dSize < 1024) {

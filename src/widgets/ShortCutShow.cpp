@@ -183,14 +183,14 @@ void ShortCutShow::initDJVU()
     Toolsnames.clear();
     Editnames.clear();
 
-    windowKeymaps << KeyStr::g_esc  << KeyStr::g_f1
-                  << "PageUp" << "PageDown" << KeyStr::g_ctrl_o << KeyStr::g_alt_harger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
-                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
-                  << KeyStr::g_ctrl_d << "Delete" << KeyStr::g_alt_z
-                  << KeyStr::g_f5 << KeyStr::g_f11
-                  << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << "Ctrl+Shift+?";
+    windowKeymaps << Dr::key_esc  << Dr::key_f1
+                  << Dr::key_pgUp << Dr::key_pgDown << Dr::key_ctrl_o << Dr::key_alt_harger
+                  << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
+                  << Dr::key_ctrl_p << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2
+                  << Dr::key_ctrl_3 << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2
+                  << Dr::key_ctrl_d << Dr::key_delete << Dr::key_alt_z
+                  << Dr::key_f5 << Dr::key_f11
+                  << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
 
     shortcutnames << tr("Exit") << tr("Help")
                   << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")
@@ -225,14 +225,14 @@ void ShortCutShow::initPDF()
     Toolsnames.clear();
     Editnames.clear();
 
-    windowKeymaps << /*KeyStr::g_f11 << */KeyStr::g_esc  << KeyStr::g_f1
-                  << KeyStr::g_ctrl_f << "PageUp" << "PageDown" << KeyStr::g_ctrl_o << KeyStr::g_alt_harger
-                  << KeyStr::g_ctrl_smaller << KeyStr::g_ctrl_wheel << KeyStr::g_ctrl_shift_s
-                  << KeyStr::g_ctrl_p << KeyStr::g_ctrl_s << KeyStr::g_ctrl_m << KeyStr::g_ctrl_1 << KeyStr::g_ctrl_2
-                  << KeyStr::g_ctrl_3 << KeyStr::g_ctrl_r << KeyStr::g_ctrl_shift_r << KeyStr::g_alt_1 << KeyStr::g_alt_2
-                  << KeyStr::g_ctrl_d << KeyStr::g_alt_a << KeyStr::g_alt_h << "Delete" << KeyStr::g_alt_z
-                  << KeyStr::g_f5 << KeyStr::g_f11
-                  << KeyStr::g_ctrl_c << KeyStr::g_ctrl_x << KeyStr::g_ctrl_v << KeyStr::g_ctrl_z << KeyStr::g_ctrl_a << "Ctrl+Shift+?";
+    windowKeymaps << /*Dr::key_f11 << */Dr::key_esc  << Dr::key_f1
+                  << Dr::key_ctrl_f << "PageUp" << "PageDown" << Dr::key_ctrl_o << Dr::key_alt_harger
+                  << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
+                  << Dr::key_ctrl_p << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2
+                  << Dr::key_ctrl_3 << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2
+                  << Dr::key_ctrl_d << Dr::key_alt_a << Dr::key_alt_h << "Delete" << Dr::key_alt_z
+                  << Dr::key_f5 << Dr::key_f11
+                  << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
 
     shortcutnames << tr("Exit") << tr("Help")
                   << tr("Search") << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")

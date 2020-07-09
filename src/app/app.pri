@@ -2,7 +2,6 @@ HEADERS += \
     $$PWD/Global.h \
     $$PWD/Json.h \
     $$PWD/MsgHeader.h \
-    $$PWD/ModuleHeader.h \
     $$PWD/Database.h \
     $$PWD/Utils.h
 

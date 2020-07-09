@@ -265,12 +265,12 @@ void SlideWidget::mousePressEvent(QMouseEvent *event)
 
 void SlideWidget::handleKeyPressEvent(const QString &sKey)
 {
-    if (sKey == KeyStr::g_space) {
+    if (sKey == Dr::key_space) {
         bool autoplay = m_slidePlayWidget->getPlayStatus();
         m_slidePlayWidget->setPlayStatus(!autoplay);
-    } else if (sKey == KeyStr::g_left) {
+    } else if (sKey == Dr::key_left) {
         onPreBtnClicked();
-    } else if (sKey == KeyStr::g_right) {
+    } else if (sKey == Dr::key_right) {
         onNextBtnClicked();
     }
 }

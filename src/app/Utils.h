@@ -42,8 +42,6 @@ public:
 
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
 
-    static QString getConfigPath();
-
     static QString getInputDataSize(const qint64 &);
 
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
