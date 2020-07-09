@@ -187,7 +187,38 @@ void MainWindow::initShortCut()
 
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
 
-    auto keyList = dApp->m_pAppInfo->getKeyList();
+    QList<QKeySequence> keyList;
+    keyList.append(QKeySequence::Find);
+    keyList.append(QKeySequence::Open);
+    keyList.append(QKeySequence::Print);
+    keyList.append(QKeySequence::Save);
+    keyList.append(QKeySequence::Copy);
+    keyList.append(QKeySequence(Qt::Key_F11));
+    keyList.append(QKeySequence(Qt::Key_F5));
+    keyList.append(QKeySequence(Qt::Key_Left));
+    keyList.append(QKeySequence(Qt::Key_Right));
+    keyList.append(QKeySequence(Qt::Key_Space));
+    keyList.append(QKeySequence(Qt::Key_Escape));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_D));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_M));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
+    keyList.append(QKeySequence(Qt::Key_Left));
+    keyList.append(QKeySequence(Qt::Key_Right));
+    keyList.append(QKeySequence(Qt::Key_Space));
 
     foreach (auto key, keyList) {
         auto action = new QAction(this);

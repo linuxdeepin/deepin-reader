@@ -10,7 +10,6 @@ AppInfo::AppInfo(QObject *parent)
 {
     m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath(ConstantMsg::g_cfg_name), QSettings::IniFormat, parent);
     InitColor();
-    InitKeyList();
 }
 
 void AppInfo::InitColor()
@@ -25,49 +24,9 @@ void AppInfo::InitColor()
     m_listColor.append(QColor("#D5D5D1"));
 }
 
-void AppInfo::InitKeyList()
-{
-    m_pKeyList.append(QKeySequence::Find);
-    m_pKeyList.append(QKeySequence::Open);
-    m_pKeyList.append(QKeySequence::Print);
-    m_pKeyList.append(QKeySequence::Save);
-    m_pKeyList.append(QKeySequence::Copy);
-    m_pKeyList.append(QKeySequence(Qt::Key_F11));
-    m_pKeyList.append(QKeySequence(Qt::Key_F5));
-    m_pKeyList.append(QKeySequence(Qt::Key_Left));
-    m_pKeyList.append(QKeySequence(Qt::Key_Right));
-    m_pKeyList.append(QKeySequence(Qt::Key_Space));
-    m_pKeyList.append(QKeySequence(Qt::Key_Escape));
-    m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
-    m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
-    m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
-    m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
-    m_pKeyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_D));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_M));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
-    m_pKeyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
-    m_pKeyList.append(QKeySequence(Qt::Key_Left));
-    m_pKeyList.append(QKeySequence(Qt::Key_Right));
-    m_pKeyList.append(QKeySequence(Qt::Key_Space));
-}
-
 QList<QColor> AppInfo::getLightColorList()
 {
     return m_listColor;
-}
-
-QList<QKeySequence> AppInfo::getKeyList() const
-{
-    return m_pKeyList;
 }
 
 QRect AppInfo::screenRect() const
