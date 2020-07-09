@@ -90,17 +90,17 @@ void NoteViewWidget::setEditText(const QString &note)
 void NoteViewWidget::hideEvent(QHideEvent *event)
 {
     //  原来是有注释的, 被删除了
-    if (m_nWidgetType == NOTE_HIGHLIGHT) {
-        fileNoteHideEvent();
-    } else {
-        pageNoteHideEvent();
-    }
+    //LLLLLLLLLLLL
+//    if (m_nWidgetType == NOTE_HIGHLIGHT) {
+//        fileNoteHideEvent();
+//    } else {
+//        pageNoteHideEvent();
+//    }
     CustomWidget::hideEvent(event);
 }
 
 void NoteViewWidget::initWidget()
 {
-    m_nWidgetType = NOTE_HIGHLIGHT;
     setFixedSize(QSize(254, 320));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
@@ -117,64 +117,61 @@ void NoteViewWidget::initWidget()
 void NoteViewWidget::fileNoteHideEvent()
 {
     QString sText = m_pTextEdit->toPlainText().trimmed();
-    if (m_pNoteUuid == "") {
-        if (sText != "") {
-            QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
-            emit sigNeedAddHighLightAnnotation(msgContent);
-        }
-    } else {
-        if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
-            QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
+//LLLLLLLLLLLLLLLLLLLL
+//    if (m_pNoteUuid == "") {
+//        if (sText != "") {
+//            QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
+//            emit sigNeedAddHighLightAnnotation(msgContent);
+//        }
+//    } else {
+//        if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
+//            QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
 
-            emit sigNoteViewMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
+//            emit sigNoteViewMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
 
-        } else if (sText != m_strNote) {
-            QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-                                 sText + Constant::sQStringSep +
-                                 m_pNotePage;
-            emit sigNoteViewMsg(MSG_NOTE_UPDATE_CONTENT, msgContent);
-        }
-        m_strNote = sText;
-    }
+//        } else if (sText != m_strNote) {
+//            QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+//                                 sText + Constant::sQStringSep +
+//                                 m_pNotePage;
+//            emit sigNoteViewMsg(MSG_NOTE_UPDATE_CONTENT, msgContent);
+//        }
+//        m_strNote = sText;
+//    }
 }
 
 //  页面注释处理
 void NoteViewWidget::pageNoteHideEvent()
 {
-    if (m_pNoteUuid != "") {
-        QString sText = m_pTextEdit->toPlainText().trimmed();
-        if (m_strNote == "") {
-            if (sText != "") {
-                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-                                     sText + Constant::sQStringSep +
-                                     m_pNotePage;
-                emit sigNoteViewMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
-            } else {
-                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "1";
-                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-            }
-        } else {
-            if (sText == "") {
-                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "0";
-                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-            } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
-                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-                                     sText + Constant::sQStringSep +
-                                     m_pNotePage;
-                emit sigNoteViewMsg(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
-            }
-        }
-    }
+//LLLLLLLLLLLLLLLLL
+//    if (m_pNoteUuid != "") {
+//        QString sText = m_pTextEdit->toPlainText().trimmed();
+//        if (m_strNote == "") {
+//            if (sText != "") {
+//                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+//                                     sText + Constant::sQStringSep +
+//                                     m_pNotePage;
+//                emit sigNoteViewMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
+//            } else {
+//                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "1";
+//                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+//            }
+//        } else {
+//            if (sText == "") {
+//                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "0";
+//                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+//            } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
+//                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
+//                                     sText + Constant::sQStringSep +
+//                                     m_pNotePage;
+//                emit sigNoteViewMsg(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
+//            }
+//        }
+//    }
 }
 
 void NoteViewWidget::setNotePage(const QString &pNotePage)
 {
     m_pNotePage = pNotePage;
-}
-
-void NoteViewWidget::setWidgetType(const int &nWidgetType)
-{
-    m_nWidgetType = nWidgetType;
 }
 
 void NoteViewWidget::setNoteUuid(const QString &pNoteUuid)

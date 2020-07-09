@@ -57,7 +57,7 @@ private slots:
 
 private:
     void copyNoteContent();
-    void addNoteItem(const QString &, const int &iType = NOTE_HIGHLIGHT);
+    void addNoteItem(const QString &);
     void deleteNoteItem(const QString &);
     void updateNoteItem(const QString &);
     void deleteAllItem();

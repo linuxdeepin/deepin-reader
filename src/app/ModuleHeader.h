@@ -17,26 +17,7 @@ enum E_CUR_STATE {
     Magnifer_State,
     NOTE_ADD_State
 };
-
-// 注释类型
-enum Note_Type {
-    NOTE_HIGHLIGHT = 0,     //  高亮注释
-    NOTE_ICON,              //  页面注释
-};
-
-enum E_SideBar {
-    SIDE_THUMBNIL = 0,
-    SIDE_BOOKMARK,
-    SIDE_CATALOG,
-    SIDE_NOTE,
-    SIDE_SEARCH
-};
-
 //}
-
-namespace Constant {
-const QString sQStringSep = "&deepin_reader&";
-}  // namespace Constant
 
 namespace KeyStr {
 //const QString g_ctrl_alt_f = "Ctrl+Alt+F";  //  窗口大小切换

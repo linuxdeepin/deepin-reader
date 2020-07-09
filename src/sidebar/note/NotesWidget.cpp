@@ -103,18 +103,7 @@ void NotesWidget::DeleteItemByKey()
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-        int nType = tImagePageInfo.iType;
-        int pageIndex = tImagePageInfo.pageIndex;
-        QString uuid = tImagePageInfo.struuid;
-        QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
-        if (nType == NOTE_HIGHLIGHT) {
-            //LLLLLLLLLLLLLLLLLLLLLL
-            //m_sheet->deleteAnnotation(MSG_NOTE_DELETE_CONTENT, sContent);
-        } else {
-            sContent += Constant::sQStringSep + "0";
-            //LLLLLLLLLLLLLLLLLLLLLL
-            //m_sheet->deleteAnnotation(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-        }
+
     }
 }
 
@@ -142,26 +131,26 @@ void NotesWidget::deleteAllItem()
 //    m_sheet->deleteAnnotations(tAnnolst);
 }
 
-void NotesWidget::addNoteItem(const QString &text, const int &iType)
+void NotesWidget::addNoteItem(const QString &text)
 {
-    const QStringList &strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-    if (strList.count() == 3) {
-        ImagePageInfo_t tImagePageInfo;
-        tImagePageInfo.pageIndex = strList.at(2).trimmed().toInt();
-        tImagePageInfo.iType = iType;
-        tImagePageInfo.struuid = strList.at(0).trimmed();
-        tImagePageInfo.strcontents = strList.at(1).trimmed();
-        m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
+    //LLLLLLLLLLLLLLLLLLLL
+//    const QStringList &strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
+//    if (strList.count() == 3) {
+//        ImagePageInfo_t tImagePageInfo;
+//        tImagePageInfo.pageIndex = strList.at(2).trimmed().toInt();
+//        tImagePageInfo.strcontents = strList.at(1).trimmed();
+//        m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
-        int modelIndex = m_pImageListView->getImageModel()->findItemForuuid(tImagePageInfo.struuid);
-        if (modelIndex >= 0)
-            m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
-    }
+//        int modelIndex = m_pImageListView->getImageModel()->findItemForuuid(tImagePageInfo.struuid);
+//        if (modelIndex >= 0)
+//            m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
+//    }
 }
 
 void NotesWidget::deleteNoteItem(const QString &sUuid)
 {
-    m_pImageListView->getImageModel()->removeItemForuuid(sUuid);
+    //LLLLLLLLLLLLLLLLLLLL
+    //m_pImageListView->getImageModel()->removeItemForuuid(sUuid);
 }
 
 void NotesWidget::updateNoteItem(const QString &msgContent)
@@ -197,7 +186,6 @@ void NotesWidget::onListItemClicked(int row)
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
         int index = tImagePageInfo.pageIndex;
-        const QString &uuid = tImagePageInfo.struuid;
         //LLLLLLLLLLLLLLLLLLLLLL
         //m_sheet->jumpToHighLight(uuid, index);
     }
@@ -215,9 +203,9 @@ void NotesWidget::onAddAnnotation()
 void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)
 {
     if (msgType == MSG_NOTE_ADD_ITEM) {
-        addNoteItem(msgContent, NOTE_HIGHLIGHT);
+        addNoteItem(msgContent);
     } else if (msgType == MSG_NOTE_PAGE_ADD_ITEM) {
-        addNoteItem(msgContent, NOTE_ICON);
+        addNoteItem(msgContent);
     } else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
         deleteNoteItem(msgContent);
     } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {

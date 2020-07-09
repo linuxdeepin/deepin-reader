@@ -20,6 +20,18 @@
 #include <QAbstractListModel>
 #include <QMap>
 
+namespace deepin_reader {
+class Annotation;
+}
+
+typedef enum E_SideBar {
+    SIDE_THUMBNIL = 0,
+    SIDE_BOOKMARK,
+    SIDE_CATALOG,
+    SIDE_NOTE,
+    SIDE_SEARCH
+} E_SideBar;
+
 typedef enum ImageinfoType_e {
     IMAGE_PIXMAP       = Qt::UserRole,
     IMAGE_BOOKMARK     = Qt::UserRole + 1,
@@ -29,14 +41,9 @@ typedef enum ImageinfoType_e {
     IMAGE_SEARCH_COUNT = Qt::UserRole + 5,
 } ImageinfoType_e;
 
-namespace deepin_reader {
-class Annotation;
-}
 typedef struct ImagePageInfo_t {
     int pageIndex;
-    int iType;
 
-    QString struuid;
     QString strcontents;
     QString strSearchcount;
 
@@ -45,8 +52,6 @@ typedef struct ImagePageInfo_t {
     ImagePageInfo_t()
     {
         pageIndex = -1;
-        iType = -1;
-        struuid = "";
         strcontents = "";
         strSearchcount = "";
         annotation = nullptr;
@@ -55,7 +60,6 @@ typedef struct ImagePageInfo_t {
     ImagePageInfo_t(int index)
     {
         this->pageIndex = index;
-        this->iType = -1;
     }
 
     bool operator == (const ImagePageInfo_t &other) const
@@ -92,12 +96,12 @@ public:
     void insertPageIndex(int pageIndex);
     void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
-    void removeItemForuuid(const QString &uuid);
+    void removeItemForAnno(deepin_reader::Annotation *annotation);
 
     QList<QModelIndex> getModelIndexForPageIndex(int pageIndex);
     void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
     int getPageIndexForModelIndex(int row);
-    int findItemForuuid(const QString &uuid);
+    int findItemForAnno(deepin_reader::Annotation *annotation);
 
 public slots:
     void onUpdatePageImage(int pageIndex);

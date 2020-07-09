@@ -94,7 +94,6 @@ void ImageListView::handleOpenSuccess()
                 tImagePageInfo.pageIndex = pageIndex;
                 tImagePageInfo.annotation = annotion;
                 pageSrclst << tImagePageInfo;
-                qDebug() << "-----------" << pageIndex << annotion->page;
             }
         }
         m_imageModel->initModelLst(pageSrclst);

@@ -47,8 +47,6 @@ public:
 
     void setNotePage(const QString &pNotePage);
 
-    void setWidgetType(const int &nWidgetType);
-
 protected:
     void initWidget() override;
     void hideEvent(QHideEvent *event) override;
@@ -65,7 +63,6 @@ private:
     DWidget *widget;
     TransparentTextEdit *m_pTextEdit = nullptr;    // 注释
     QString m_strNote = "";                   // 注释内容
-    int     m_nWidgetType;         //  高亮注释\页面注释
 };
 
 class NoteShadowViewWidget : public DWidget

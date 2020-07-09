@@ -92,7 +92,6 @@ void SearchResWidget::addSearchsItem(const int &pageIndex, const QString &text, 
         return;
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = pageIndex;
-    tImagePageInfo.struuid = QString::number(pageIndex);
     tImagePageInfo.strcontents = text;
     tImagePageInfo.strSearchcount = tr("%1 items found").arg(resultNum);
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
