@@ -337,6 +337,11 @@ int PDFAnnotation::type()
     return 0;
 }
 
+Poppler::Annotation *PDFAnnotation::ownAnnotation()
+{
+    return m_annotation;
+}
+
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
     m_mutex(mutex),
     m_page(page)
@@ -825,7 +830,28 @@ QList< FormField * > PDFPage::formFields() const
 //        delete formField;
 //    }
 
-//    return formFields;
+    //    return formFields;
+}
+
+bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, const QColor &color)
+{
+    if (nullptr == annotation)
+        return false;
+
+    if (m_page->annotations().contains(annotation->ownAnnotation())) {
+
+        //set contains
+        annotation->ownAnnotation()->setContents(text);
+
+        //set Style(color)
+        Poppler::Annotation::Style style =  annotation->ownAnnotation()->style();
+        style.setColor(color);
+        annotation->ownAnnotation()->setStyle(style);
+
+        return true;
+    }
+
+    return false;
 }
 
 PDFDocument::PDFDocument(Poppler::Document *document) :

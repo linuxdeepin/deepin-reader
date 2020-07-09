@@ -237,6 +237,23 @@ void SheetBrowser::onWordsChanged()
     }
 }
 
+bool SheetBrowser::setAnnotationProperty(deepin_reader::Annotation *annotation, const QString &text, QColor color)
+{
+    if (nullptr == annotation)
+        return false;
+
+    foreach (BrowserPage *item, m_items) {
+        if (item->hasAnnotation(annotation)) {
+            //update annot text , color
+            if (item->hasAnnotation(annotation)) {
+                return item->updateAnnotation(annotation, text, color);
+            }
+        }
+    }
+
+    return false;
+}
+
 QString SheetBrowser::selectedWordsText()
 {
     QString text;
@@ -302,26 +319,20 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 
 bool SheetBrowser::updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color)
 {
+    if (nullptr == m_document || nullptr == annotation->annotation())
+        return false;
+
     deepin_reader::Annotation *annot = annotation->annotation();
-    foreach (BrowserPage *item, m_items) {
-        //update annot text
-//        if (item->hasAnnotation(annot))
 
-    }
-
-    return true;
+    return setAnnotationProperty(annot, text, color);
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
 {
-    foreach (BrowserPage *item, m_items) {
-        if (item->hasAnnotation(annotation)) {
-            //update annot text
-            //        if (item->hasAnnotation(annot))
-        }
-    }
+    if (nullptr == m_document || nullptr == annotation)
+        return false;
 
-    return true;
+    return setAnnotationProperty(annotation, text, color);
 }
 
 deepin_reader::Outline SheetBrowser::outline()

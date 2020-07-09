@@ -42,13 +42,15 @@ class PDFAnnotation : public Annotation
     friend class PDFPage;
 
 public:
-    ~PDFAnnotation();
+    ~PDFAnnotation() override;
 
-    QList<QRectF> boundary() const;
+    QList<QRectF> boundary() const override;
 
-    QString contents() const;
+    QString contents() const override;
 
-    int type();
+    int type() override;
+
+    Poppler::Annotation *ownAnnotation() override;
 
 private:
     Q_DISABLE_COPY(PDFAnnotation)
@@ -105,6 +107,8 @@ public:
     bool removeAnnotation(Annotation *annotation);
 
     QList< FormField * > formFields() const;
+
+    bool updateAnnotation(Annotation *annotation, const QString &, const QColor &);
 
 private:
     Q_DISABLE_COPY(PDFPage)

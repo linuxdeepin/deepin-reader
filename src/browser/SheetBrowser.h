@@ -94,9 +94,9 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor(Qt::white));
+    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor(Qt::yellow));
 
-    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor(Qt::white));
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor(Qt::yellow));
 
 signals:
     void sigPageChanged(int page);
@@ -122,15 +122,15 @@ protected:
 
     void resizeEvent(QResizeEvent *event) override;
 
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
 
-    void mouseMoveEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event) override;
 
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
-    void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
 
-    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) override;
 
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
 
@@ -144,6 +144,9 @@ private slots:
     void onHorizontalScrollBarValueChanged(int value);
 
     void onWordsChanged();
+
+private:
+    bool setAnnotationProperty(deepin_reader::Annotation *annotation, const QString &text, QColor color);
 
 private:
     deepin_reader::Document *m_document = nullptr;

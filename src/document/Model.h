@@ -35,6 +35,10 @@ class QSizeF;
 
 #include "Global.h"
 
+namespace Poppler {
+class Annotation;
+}
+
 namespace deepin_reader {
 struct Link {
     QPainterPath boundary;
@@ -113,6 +117,8 @@ public:
     virtual QList<QRectF> boundary() const = 0;
 
     virtual QString contents() const = 0;
+
+    virtual Poppler::Annotation *ownAnnotation() = 0;
 
     //数值同poppler类型
     enum AnnotationType {
