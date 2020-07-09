@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PrintManager.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "DocSheet.h"
 
 #include <QPrinter>

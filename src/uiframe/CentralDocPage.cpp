@@ -41,16 +41,11 @@
 #include "app/AppInfo.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/FindWidget.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "Utils.h"
 #include "CentralDocPage.h"
 #include "Global.h"
-#include "pdfControl/DocSheetPDF.h"
-#include "djvuControl/DocSheetDJVU.h"
 #include "widgets/SlideWidget.h"
-#include "pdflControl/DocSheetPDFL.h"
 #include "widgets/FileAttrWidget.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)

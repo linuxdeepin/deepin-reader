@@ -16,7 +16,6 @@
 */
 #include "ImageListview.h"
 #include "DocSheet.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "ImageViewModel.h"
 #include "Application.h"
 #include "menu/BookMarkMenu.h"

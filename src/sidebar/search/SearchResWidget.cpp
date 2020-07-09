@@ -18,12 +18,13 @@
  */
 #include "SearchResWidget.h"
 #include "DocSheet.h"
-#include "pdfControl/docview/DocummentProxy.h"
-#include "lpreviewControl/ImageListview.h"
-#include "lpreviewControl/ImageViewModel.h"
+#include "sidebar/ImageListview.h"
+#include "sidebar/ImageViewModel.h"
 #include "SearchResDelegate.h"
+#include "document/Model.h"
 
 #include <QStackedLayout>
+#include <DLabel>
 
 const int SEARCH_INDEX = 0;
 const int TIPS_INDEX = 1;
@@ -61,7 +62,7 @@ void SearchResWidget::initWidget()
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT /** 1.0*/));
 }
 
-void SearchResWidget::handFindContentComming(const stSearchRes &search)
+void SearchResWidget::handFindContentComming(const deepin_reader::stSearchRes &search)
 {
     QString strText;
     for (const QString &s : search.listtext) {

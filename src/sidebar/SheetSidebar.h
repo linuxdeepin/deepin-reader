@@ -25,7 +25,6 @@
 #include <QStackedLayout>
 
 #include "widgets/CustomWidget.h"
-#include "pdfControl/docview/CommonStruct.h"
 
 enum PreviewWidgesFlag {
     PREVIEW_THUMBNAIL = 0x0001,
@@ -36,6 +35,10 @@ enum PreviewWidgesFlag {
 };
 Q_DECLARE_FLAGS(PreviewWidgesFlags, PreviewWidgesFlag);
 Q_DECLARE_OPERATORS_FOR_FLAGS(PreviewWidgesFlags)
+
+namespace deepin_reader {
+struct stSearchRes;
+}
 
 class DocSheet;
 class ThumbnailWidget;
@@ -60,7 +63,7 @@ public :
     void setCurrentPage(int page);
     void handleOpenSuccess();
     void handleFindOperation(int);
-    void handleFindContentComming(const stSearchRes &);
+    void handleFindContentComming(const deepin_reader::stSearchRes &);
     int  handleFindFinished();
     void handleRotate(int);
     void handleUpdateThumbnail(const int &index);

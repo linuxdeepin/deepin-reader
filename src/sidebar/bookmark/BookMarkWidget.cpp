@@ -18,13 +18,14 @@
  */
 #include "BookMarkWidget.h"
 #include "DocSheet.h"
-#include "pdfControl/docview/DocummentProxy.h"
-#include "lpreviewControl/ImageListview.h"
-#include "lpreviewControl/ImageViewModel.h"
+#include "sidebar/ImageListview.h"
+#include "sidebar/ImageViewModel.h"
 #include "BookMarkDelegate.h"
 #include "widgets/SaveDialog.h"
 
 #include <DHorizontalLine>
+#include <DPushButton>
+#include <QHBoxLayout>
 
 const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
@@ -131,16 +132,16 @@ void BookMarkWidget::DeleteItemByKey()
 
 void BookMarkWidget::deleteAllItem()
 {
-    QList<BookMarkStatus_t> bookmarks;
-    int itemsize = m_pImageListView->model()->rowCount();
-    for (int i = 0; i < itemsize; i++) {
-        int curIndex = m_pImageListView->getPageIndexForModelIndex(i);
-        if (curIndex >= 0) {
-            bookmarks << BookMarkStatus_t(curIndex, false);
-        }
-    }
     //LLLLLLLLLLLLLLLLLLLLLL
-    //m_sheet->setBookMarks(bookmarks);
+//    QList<BookMarkStatus_t> bookmarks;
+//    int itemsize = m_pImageListView->model()->rowCount();
+//    for (int i = 0; i < itemsize; i++) {
+//        int curIndex = m_pImageListView->getPageIndexForModelIndex(i);
+//        if (curIndex >= 0) {
+//            bookmarks << BookMarkStatus_t(curIndex, false);
+//        }
+//    }
+//    m_sheet->setBookMarks(bookmarks);
 }
 
 void BookMarkWidget::onAddBookMarkClicked()

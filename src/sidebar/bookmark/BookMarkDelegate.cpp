@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "BookMarkDelegate.h"
-#include "lpreviewControl/ImageViewModel.h"
+#include "sidebar/ImageViewModel.h"
 #include "Application.h"
 
 #include <QPainter>

@@ -27,7 +27,6 @@
 #include "DocSheet.h"
 
 #include "widgets/CustomWidget.h"
-#include "pdfControl/docview/CommonStruct.h"
 
 class ScaleWidget;
 class DocSheet;

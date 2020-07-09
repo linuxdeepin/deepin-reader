@@ -76,8 +76,6 @@ public:
 
     void needBookmark(int index, bool state);
 
-    void popMenu(const QPoint &);
-
     QString selectedWordsText();
 
     void wordsChangedLater();

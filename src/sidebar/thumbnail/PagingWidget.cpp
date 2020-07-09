@@ -17,11 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PagingWidget.h"
+#include "DocSheet.h"
 
 #include <QValidator>
-
-#include "pdfControl/docview/DocummentProxy.h"
-#include "DocSheet.h"
 
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)

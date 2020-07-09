@@ -20,11 +20,11 @@
 
 #include <QHeaderView>
 #include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 #include <QDebug>
 
 #include "Application.h"
 
-#include "pdfControl/docview/DocummentProxy.h"
 #include "Utils.h"
 #include "DocSheet.h"
 #include "ModuleHeader.h"

@@ -9,7 +9,6 @@
 #include <QVBoxLayout>
 
 #include "AttrScrollWidget.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "widgets/WordWrapLabel.h"
 
 #include "ModuleHeader.h"

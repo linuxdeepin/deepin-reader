@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SearchResDelegate.h"
-#include "lpreviewControl/ImageViewModel.h"
+#include "sidebar/ImageViewModel.h"
 #include "Utils.h"
 
 #include <QPainter>

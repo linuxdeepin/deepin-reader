@@ -40,6 +40,7 @@
 #include "Application.h"
 #include "ModuleHeader.h"
 #include "document/DjVuModel.h"
+#include "Utils.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -237,68 +238,6 @@ void SheetBrowser::onWordsChanged()
     }
 }
 
-void SheetBrowser::popMenu(const QPoint &point)
-{
-    closeMagnifier();
-
-    BrowserPage *item  = static_cast<BrowserPage *>(itemAt(QPoint(point)));
-    if (nullptr == item)
-        return;
-
-    int index = m_items.indexOf(item);
-
-    QMenu menu(this);
-    if (m_sheet->hasBookMark(index))
-        menu.addAction(tr("Remove bookmark"), [this, index]() {
-        m_sheet->setBookMark(index, false);
-    });
-    else
-        menu.addAction(tr("Add bookmark"), [this, index]() {
-        m_sheet->setBookMark(index, true);
-    });
-
-    menu.addSeparator();
-
-    QAction *firstPageAction = new QAction("First Page", &menu);
-    connect(firstPageAction, &QAction::triggered, [this]() {
-        this->emit sigNeedPageFirst();
-    });
-    menu.addAction(firstPageAction);
-    if (index == 0) {
-        firstPageAction->setDisabled(true);
-    }
-
-    QAction *previousPageAction = new QAction("Previous Page", &menu);
-    connect(previousPageAction, &QAction::triggered, [this]() {
-        this->emit sigNeedPagePrev();
-    });
-    menu.addAction(previousPageAction);
-    if (index == 0) {
-        previousPageAction->setDisabled(true);
-    }
-
-    QAction *nextPageAction = new QAction("Next Page", &menu);
-    connect(nextPageAction, &QAction::triggered, [this]() {
-        this->emit sigNeedPageNext();
-    });
-    menu.addAction(nextPageAction);
-    if (index == m_items.count() - 1) {
-        nextPageAction->setDisabled(true);
-    }
-
-    QAction *lastPageAction = new QAction("Last Page", &menu);
-    connect(lastPageAction, &QAction::triggered, [this]() {
-        this->emit sigNeedPageLast();
-    });
-    menu.addAction(lastPageAction);
-    if (index == m_items.count() - 1) {
-        lastPageAction->setDisabled(true);
-    }
-
-    menu.move(mapToGlobal(point));
-    menu.exec();
-}
-
 QString SheetBrowser::selectedWordsText()
 {
     QString text;
@@ -319,10 +258,8 @@ void SheetBrowser::removeAnnotation(BrowserAnnotation *browserAnnotation)
     deepin_reader::Annotation *annotation = browserAnnotation->annotation();
     foreach (BrowserPage *item, m_items) {
         if (item->hasAnnotation(annotation))
-            return item->removeAnnotation(annotation);
+            item->removeAnnotation(annotation);
     }
-
-    return false;
 }
 
 void SheetBrowser::wordsChangedLater()
@@ -590,22 +527,22 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
 
             BrowserMenu menu;
-            connect(&menu, &BrowserMenu::signalMenuItemClicked, [this, item](const QString & objectname, const QVariant & param) {
+            connect(&menu, &BrowserMenu::signalMenuItemClicked, [ = ](const QString & objectname, const QVariant & param) {
                 if (objectname == "Copy") {
-
+                    Utils::copyText(selectWords);
                 } else if (objectname == "ColorWidgetAction") {
                     QColor color = dApp->m_pAppInfo->getLightColorList().at(param.toInt());
 
                 } else if (objectname == "RemoveAnnotation") {
-
+                    if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationIcon") {
 
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
-
+                    if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationHighlight") {
-                    addHighlightAnnotation("xxx", QColor(Qt::red));
+                    addHighlightAnnotation(selectWords, QColor(Qt::red));
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {
@@ -628,14 +565,14 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     m_sheet->rotateLeft();
                 } else if (objectname == "RotateRight") {
                     m_sheet->rotateRight();
-                }/* else if (objectname == "Print") {
+                } else if (objectname == "Print") {
                     PrintManager p(m_sheet);
                     p.showPrintDialog(m_sheet);
                 } else if (objectname == "DocumentInfo") {
                     FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
                     pFileAttrWidget->setFileAttr(m_sheet);
                     pFileAttrWidget->showScreenCenter();
-                }*/
+                }
             });
             if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
                 //文字注释(图标)
@@ -651,11 +588,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_DEFAULT);
             }
             menu.exec(mapToGlobal(event->pos()));
-        }
-    } else if (QGraphicsView::ScrollHandDrag == dragMode()) {
-        Qt::MouseButton btn = event->button();
-        if (btn == Qt::RightButton) {
-            popMenu(event->pos());
         }
     }
 

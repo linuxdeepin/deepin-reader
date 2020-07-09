@@ -24,6 +24,7 @@
 #include "bookmark/BookMarkWidget.h"
 #include "note/NotesWidget.h"
 #include "search/SearchResWidget.h"
+#include "document/Model.h"
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
@@ -200,7 +201,7 @@ void SheetSidebar::handleFindOperation(int type)
     }
 }
 
-void SheetSidebar::handleFindContentComming(const stSearchRes &res)
+void SheetSidebar::handleFindContentComming(const deepin_reader::stSearchRes &res)
 {
     m_searchWidget->handFindContentComming(res);
 }

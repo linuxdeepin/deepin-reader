@@ -22,7 +22,6 @@
 
 #include "CatalogTreeView.h"
 #include "widgets/CustomClickLabel.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "DocSheet.h"
 
 CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)

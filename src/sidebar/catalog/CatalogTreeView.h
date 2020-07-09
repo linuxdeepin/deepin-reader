@@ -22,8 +22,6 @@
 #include <DTreeView>
 #include <QStandardItemModel>
 
-#include "pdfControl/docview/PageBase.h"
-
 DWIDGET_USE_NAMESPACE
 namespace deepin_reader {
 struct Section;

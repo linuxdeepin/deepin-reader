@@ -19,7 +19,7 @@
 #include "DocSheet.h"
 #include "SlidePlayWidget.h"
 #include "Application.h"
-#include "lpreviewControl/threadmanager/ReaderImageThreadPoolManager.h"
+#include "sidebar/threadmanager/ReaderImageThreadPoolManager.h"
 #include "ModuleHeader.h"
 
 #include <DGuiApplicationHelper>

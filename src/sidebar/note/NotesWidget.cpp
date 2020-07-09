@@ -18,11 +18,9 @@
  */
 #include "NotesWidget.h"
 #include "app/AppInfo.h"
-#include "pdfControl/docview/DocummentProxy.h"
-#include "lpreviewControl/ImageListview.h"
-#include "lpreviewControl/ImageViewModel.h"
+#include "sidebar/ImageListview.h"
+#include "sidebar/ImageViewModel.h"
 #include "NotesDelegate.h"
-#include "pdfControl/DocSheetPDF.h"
 #include "widgets/SaveDialog.h"
 
 #include "DocSheet.h"
@@ -31,6 +29,7 @@
 
 #include <DPushButton>
 #include <DHorizontalLine>
+#include <QVBoxLayout>
 
 const int LEFTMINHEIGHT = 80;
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
@@ -109,7 +108,7 @@ void NotesWidget::DeleteItemByKey()
         QString uuid = tImagePageInfo.struuid;
         QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
         if (nType == NOTE_HIGHLIGHT) {
-        	//LLLLLLLLLLLLLLLLLLLLLL
+            //LLLLLLLLLLLLLLLLLLLLLL
             //m_sheet->deleteAnnotation(MSG_NOTE_DELETE_CONTENT, sContent);
         } else {
             sContent += Constant::sQStringSep + "0";
@@ -121,26 +120,26 @@ void NotesWidget::DeleteItemByKey()
 
 void NotesWidget::deleteAllItem()
 {
-    QList<AnnotationInfo_t> tAnnolst;
-    int itemsize = m_pImageListView->model()->rowCount();
-    for (int i = 0; i < itemsize; i++) {
-        ImagePageInfo_t tImagePageInfo;
-        m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
-        if (tImagePageInfo.pageIndex >= 0) {
-            int nType = tImagePageInfo.iType;
-            int pageIndex = tImagePageInfo.pageIndex;
-            QString uuid = tImagePageInfo.struuid;
-            QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
-            if (nType == NOTE_HIGHLIGHT) {
-                tAnnolst << AnnotationInfo_t(MSG_NOTE_DELETE_CONTENT, sContent);
-            } else {
-                sContent += Constant::sQStringSep + "0";
-                tAnnolst << AnnotationInfo_t(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-            }
-        }
-    }
     //LLLLLLLLLLLLLLLLLLLLLL
-    //m_sheet->deleteAnnotations(tAnnolst);
+//    QList<AnnotationInfo_t> tAnnolst;
+//    int itemsize = m_pImageListView->model()->rowCount();
+//    for (int i = 0; i < itemsize; i++) {
+//        ImagePageInfo_t tImagePageInfo;
+//        m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
+//        if (tImagePageInfo.pageIndex >= 0) {
+//            int nType = tImagePageInfo.iType;
+//            int pageIndex = tImagePageInfo.pageIndex;
+//            QString uuid = tImagePageInfo.struuid;
+//            QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
+//            if (nType == NOTE_HIGHLIGHT) {
+//                tAnnolst << AnnotationInfo_t(MSG_NOTE_DELETE_CONTENT, sContent);
+//            } else {
+//                sContent += Constant::sQStringSep + "0";
+//                tAnnolst << AnnotationInfo_t(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
+//            }
+//        }
+//    }
+//    m_sheet->deleteAnnotations(tAnnolst);
 }
 
 void NotesWidget::addNoteItem(const QString &text, const int &iType)

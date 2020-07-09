@@ -68,6 +68,17 @@ struct Word {
     QRectF boundingBox;
 };
 
+struct stSearchRes {
+    unsigned int ipage;
+    QList<QString> listtext;
+    stSearchRes()
+    {
+        ipage = 0;
+        listtext.clear();
+    }
+
+};
+
 struct SearchResult {
     unsigned int page = 0;
     QList<Word> words;

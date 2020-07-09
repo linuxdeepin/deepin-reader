@@ -6,8 +6,6 @@
 #include <DLabel>
 #include <QGridLayout>
 
-#include "pdfControl/docview/CommonStruct.h"
-#include "pdfControl/docview/DocummentProxy.h"
 #include "Utils.h"
 #include "DocSheet.h"
 #include "widgets/WordWrapLabel.h"

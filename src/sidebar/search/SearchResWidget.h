@@ -20,8 +20,10 @@
 #define SEARCHRESWIDGET_H
 
 #include "widgets/CustomWidget.h"
-#include "pdfControl/docview/CommonStruct.h"
 
+namespace deepin_reader {
+struct stSearchRes;
+}
 class DocSheet;
 class ImageListView;
 class QStackedLayout;
@@ -36,7 +38,7 @@ public:
 
     void clearFindResult();
     int  handleFindFinished();
-    void handFindContentComming(const stSearchRes &);
+    void handFindContentComming(const deepin_reader::stSearchRes &);
 
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
