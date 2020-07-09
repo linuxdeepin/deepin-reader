@@ -64,20 +64,7 @@ void ColorWidgetAction::slotBtnClicked(int index)
 
 void ColorWidgetAction::slotBtnDefaultClicked()
 {
-    int iIndex = -1;
-
-    auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
-    foreach (auto btn, btnList) {
-        if (btn->isSelected()) {
-            iIndex = btn->objectName().toInt();
-            break;
-        }
-    }
-
-    if (iIndex == -1) {
-        iIndex = 0;
-    }
-
+    int iIndex = getColorIndex();
     emit sigBtnGroupClicked(iIndex);
 }
 
@@ -125,4 +112,18 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     mainLayout->addItem(buttonLayout);
 
     pWidget->setLayout(mainLayout);
+}
+
+int ColorWidgetAction::getColorIndex()
+{
+    int iIndex = 0;
+
+    auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
+    foreach (auto btn, btnList) {
+        if (btn->isSelected()) {
+            iIndex = btn->objectName().toInt();
+            break;
+        }
+    }
+    return iIndex;
 }

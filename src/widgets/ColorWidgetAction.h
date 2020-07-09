@@ -18,6 +18,7 @@ public:
 public:
     void setBtnAddLightState(const bool &);
     void setcolor(bool benable);
+    int  getColorIndex();
 
 signals:
     void sigBtnGroupClicked(const int &);

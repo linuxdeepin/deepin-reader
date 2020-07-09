@@ -32,15 +32,17 @@ typedef enum SheetMenuType_e {
 } SheetMenuType_e;
 
 class DocSheet;
+class ColorWidgetAction;
 class BrowserMenu : public DMenu
 {
     Q_OBJECT
 signals:
-    void signalMenuItemClicked(const QString &objectname, const QVariant &param = QVariant());
+    void signalMenuItemClicked(const QString &objectname);
 
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
     void initActions(DocSheet *sheet, int index, SheetMenuType_e type);
+    int getColorIndex();
 
 private slots:
     void onItemClicked();
@@ -48,6 +50,10 @@ private slots:
 
 private:
     QAction *createAction(const QString &displayname, const QString &objectname);
+
+private:
+    int m_type;
+    ColorWidgetAction *m_pColorWidgetAction;
 };
 
 #endif // BrowserMenu_H

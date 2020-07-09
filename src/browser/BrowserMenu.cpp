@@ -31,6 +31,8 @@ BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
 
 void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
 {
+    m_type = type;
+    m_pColorWidgetAction = nullptr;
     if (type == DOC_MENU_ANNO_ICON) {
         createAction(tr("Copy"), "Copy");
         this->addSeparator();
@@ -40,10 +42,9 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
     } else if (type == DOC_MENU_ANNO_HIGHLIGHT || type == DOC_MENU_SELECT_TEXT) {
         createAction(tr("Copy"), "Copy");
         this->addSeparator();
-        ColorWidgetAction *pColorWidgetAction = new ColorWidgetAction(this);
-        pColorWidgetAction->setObjectName("ColorWidgetAction");
-        connect(pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(onSetHighLight(const int &)));
-        this->addAction(pColorWidgetAction);
+        m_pColorWidgetAction = new ColorWidgetAction(this);
+        connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(onSetHighLight(const int &)));
+        this->addAction(m_pColorWidgetAction);
 
         QAction *rmHighAct = createAction(tr("Remove highlight"), "RemoveHighlight");
         rmHighAct->setDisabled(true);
@@ -106,8 +107,19 @@ void BrowserMenu::onItemClicked()
     emit signalMenuItemClicked(sender()->objectName());
 }
 
-void BrowserMenu::onSetHighLight(const int &colorIndex)
+void BrowserMenu::onSetHighLight(const int &)
 {
-    emit signalMenuItemClicked(sender()->objectName(), colorIndex);
+    if (m_type == DOC_MENU_SELECT_TEXT) {
+        emit signalMenuItemClicked("AddTextHighlight");
+    } else if (m_type == DOC_MENU_ANNO_HIGHLIGHT) {
+        emit signalMenuItemClicked("AddAnnotationHighlight");
+    }
     this->close();
+}
+
+int BrowserMenu::getColorIndex()
+{
+    if (m_pColorWidgetAction)
+        return m_pColorWidgetAction->getColorIndex();
+    return 0;
 }

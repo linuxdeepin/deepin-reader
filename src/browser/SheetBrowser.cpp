@@ -527,12 +527,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
 
             BrowserMenu menu;
-            connect(&menu, &BrowserMenu::signalMenuItemClicked, [ = ](const QString & objectname, const QVariant & param) {
+            connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 if (objectname == "Copy") {
                     Utils::copyText(selectWords);
-                } else if (objectname == "ColorWidgetAction") {
-                    QColor color = dApp->m_pAppInfo->getLightColorList().at(param.toInt());
-
+                } else if (objectname == "AddTextHighlight") {
+                    QColor color = dApp->m_pAppInfo->getLightColorList().at(menu.getColorIndex());
+                    addHighlightAnnotation("", color);
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationIcon") {
@@ -542,13 +542,16 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RemoveHighlight") {
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationHighlight") {
-                    addHighlightAnnotation(selectWords, QColor(Qt::red));
+                    QColor color = dApp->m_pAppInfo->getLightColorList().at(menu.getColorIndex());
+                    if (annotation)  {
+                        //update
+                    } else {
+                        addHighlightAnnotation(selectWords, color);
+                    }
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), false);
-                } else if (objectname == "AddAnnotationIcon") {
-
                 } else if (objectname == "Fullscreen") {
                     m_sheet->openFullScreen();
                 } else if (objectname == "SlideShow") {
