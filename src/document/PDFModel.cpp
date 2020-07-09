@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright 2014 S. Razi Alavizadeh
 Copyright 2018 Marshall Banana
@@ -858,6 +858,7 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
     foreach (Poppler::Annotation *annot, m_page->annotations()) {
         if (annot && annot->boundary().contains(clickPoint)) {
+            qInfo() << "   22222222222   Annotation contents: " << annot->contents();
             return true;
         }
     }
@@ -865,28 +866,28 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
-Poppler::Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
+Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
 {
     if (nullptr == m_page)
         return nullptr;
 
-    QString strtype = "Note";
-    Poppler::Annotation::Style style;
-    style.setColor(Qt::yellow);
+//    QString strtype = "Note";
+//    Poppler::Annotation::Style style;
+//    style.setColor(Qt::yellow);
 
-    Poppler::Annotation::Popup popup;
-    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+//    Poppler::Annotation::Popup popup;
+//    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
 
-    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
+//    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
 
-    annotation->setBoundary(rect);
-    annotation->setTextIcon(strtype);
-    annotation->setStyle(style);
-    annotation->setPopup(popup);
-    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
-    m_page->addAnnotation(annotation);
+//    annotation->setBoundary(rect);
+//    annotation->setTextIcon(strtype);
+//    annotation->setStyle(style);
+//    annotation->setPopup(popup);
+//    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
+//    m_page->addAnnotation(annotation);
 
-    return annotation;
+    return (new PDFAnnotation(m_mutex, /*annotation*/nullptr));
 }
 
 PDFDocument::PDFDocument(Poppler::Document *document) :

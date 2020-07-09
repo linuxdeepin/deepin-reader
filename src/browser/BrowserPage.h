@@ -26,6 +26,10 @@
 
 #include "Global.h"
 
+#include "../document/PDFModel.h"
+
+using namespace deepin_reader;
+
 namespace deepin_reader {
 class Annotation;
 class Page;
@@ -91,7 +95,7 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    int addIconAnnotation(const QPointF, const QString);
+    Annotation *addIconAnnotation(const QPointF, const QString);
 
     bool mouseClickIconAnnot(QPointF &);
 

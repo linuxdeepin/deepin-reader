@@ -402,16 +402,14 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
     return true;
 }
 
-int BrowserPage::addIconAnnotation(const QPointF point, const QString text)
+Annotation *BrowserPage::addIconAnnotation(const QPointF point, const QString text)
 {
     if (nullptr == m_page || text == "" || text.isEmpty())
-        return -1;
+        return nullptr;
 
     QRectF rect;
 
-    m_page->addIconAnnotation(rect, text);
-
-    return 0;
+    return m_page->addIconAnnotation(rect, text);
 }
 
 bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
@@ -419,8 +417,7 @@ bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
     if (nullptr == m_page)
         return false;
 
-
-    return false;
+    return m_page->mouseClickIconAnnot(clickPoint);
 }
 
 //void BrowserPage::reload()

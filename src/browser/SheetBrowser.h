@@ -27,6 +27,8 @@
 #include "document/Model.h"
 #include "Global.h"
 
+using namespace deepin_reader;
+
 class SheetOperation;
 class BrowserPage;
 class DocSheet;
@@ -134,7 +136,7 @@ protected:
 
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
 
-    int addIconAnnotation(const QPointF, const QString);
+    Annotation *addIconAnnotation(const QPointF, const QString);
 
     BrowserPage *mouseClickInPage(QPointF &);
 

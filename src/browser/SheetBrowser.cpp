@@ -880,18 +880,21 @@ bool SheetBrowser::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &i
     return true;
 }
 
-int SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QString contents)
+Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QString contents)
 {
     BrowserPage *page{nullptr};
     QPointF pointf = clickPoint;
 
-    page =  mouseClickInPage(pointf);
+    mouseClickIconAnnot(pointf);
+
+    page = mouseClickInPage(pointf);
+
     if (nullptr != page) {
         qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
-//        page->addIconAnnotation(clickPoint, contents);
+        return page->addIconAnnotation(clickPoint, contents);
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SheetBrowser::openMagnifier()
