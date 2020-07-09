@@ -50,6 +50,8 @@ public:
 
     void activateSheet(DocSheet *sheet);  //将该sheet显示到最前面
 
+    void closeWithoutSave();
+
 public:
     void openfiles(const QStringList &filepaths);
 
@@ -72,7 +74,7 @@ private slots:
 
 private:
     Central            *m_central = nullptr;
-
+    bool m_needSave = true;
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();

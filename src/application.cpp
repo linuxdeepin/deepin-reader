@@ -73,7 +73,7 @@ void Application::handleQuitAction()
     RenderThreadPdf::destroyRenderPdfThread();
 
     foreach (MainWindow *window, MainWindow::m_list)
-        window->close();
+        window->closeWithoutSave();
 }
 
 //  初始化 deepin-reader 的配置文件目录, 包含 数据库, conf.cfg

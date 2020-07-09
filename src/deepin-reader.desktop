@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Office;Reading;
+Categories=Office;
 Exec=deepin-reader %F
 StartupNotify=true
 TryExec=deepin-reader

@@ -85,6 +85,12 @@ void MainWindow::activateSheet(DocSheet *sheet)
     m_central->showSheet(sheet);
 }
 
+void MainWindow::closeWithoutSave()
+{
+    m_needSave = false;
+    this->close();
+}
+
 void MainWindow::openfiles(const QStringList &filepaths)
 {
     m_central->openFiles(filepaths);
@@ -103,7 +109,7 @@ void MainWindow::setSreenRect(const QRect &rect)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (m_central->saveAll()) {
+    if (!m_needSave || m_central->saveAll()) {
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
 
         dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
