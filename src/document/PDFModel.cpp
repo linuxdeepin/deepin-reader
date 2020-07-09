@@ -865,6 +865,30 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
+Poppler::Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
+{
+    if (nullptr == m_page)
+        return nullptr;
+
+    QString strtype = "Note";
+    Poppler::Annotation::Style style;
+    style.setColor(Qt::yellow);
+
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+
+    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
+
+    annotation->setBoundary(rect);
+    annotation->setTextIcon(strtype);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
+    m_page->addAnnotation(annotation);
+
+    return annotation;
+}
+
 PDFDocument::PDFDocument(Poppler::Document *document) :
     m_mutex(),
     m_document(document)

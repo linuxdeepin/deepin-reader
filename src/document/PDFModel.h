@@ -112,6 +112,7 @@ public:
 
     bool mouseClickIconAnnot(QPointF &) override;
 
+    Poppler::Annotation *addIconAnnotation(const QRectF ponit, const QString text) override;
 private:
     Q_DISABLE_COPY(PDFPage)
 

@@ -91,7 +91,7 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    int addIconAnnotation(const QPointF &);
+    int addIconAnnotation(const QPointF, const QString);
 
     bool mouseClickIconAnnot(QPointF &);
 

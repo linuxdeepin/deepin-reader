@@ -888,6 +888,7 @@ int SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QString cont
     page =  mouseClickInPage(pointf);
     if (nullptr != page) {
         qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
+//        page->addIconAnnotation(clickPoint, contents);
     }
 
     return 0;
