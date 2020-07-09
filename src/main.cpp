@@ -1,7 +1,5 @@
 #include "MainWindow.h"
 #include "Application.h"
-#include "app/ProcessController.h"
-#include "app/Json.h"
 #include "CentralDocPage.h"
 
 #include <DLog>
@@ -64,8 +62,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    ProcessController controller;
-    dbus.registerObject("/com/deepin/Reader", &controller, QDBusConnection::ExportScriptableSlots);
+    dbus.registerObject("/com/deepin/Reader", &a, QDBusConnection::ExportScriptableSlots);
 
     DApplicationSettings savetheme;
     Dtk::Core::DLogManager::registerConsoleAppender();

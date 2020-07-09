@@ -34,7 +34,7 @@ DWIDGET_USE_NAMESPACE
 class Application : public DApplication
 {
     Q_OBJECT
-
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.Reader")
 public:
     Application(int &argc, char **argv);
 
@@ -43,6 +43,9 @@ public:
     void blockShutdown();
 
     void unBlockShutdown();
+
+public slots:
+    Q_SCRIPTABLE void handleFiles(QStringList filePathList);
 
 protected:
     void handleQuitAction() override;
