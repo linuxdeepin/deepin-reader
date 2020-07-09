@@ -408,6 +408,15 @@ int BrowserPage::addIconAnnotation(const QPointF &iconPoint)
     return 0;
 }
 
+bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
+{
+    if (nullptr == m_page)
+        return false;
+
+
+    return false;
+}
+
 //void BrowserPage::reload()
 //{
 //    double scaleFactor = m_scaleFactor;

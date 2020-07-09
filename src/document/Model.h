@@ -186,6 +186,7 @@ public:
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
     virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
+    virtual bool mouseClickIconAnnot(QPointF &) {return false;}
 };
 
 class Document: public QObject

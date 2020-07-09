@@ -110,6 +110,8 @@ public:
 
     bool updateAnnotation(Annotation *annotation, const QString &, const QColor &);
 
+    bool mouseClickIconAnnot(QPointF &) override;
+
 private:
     Q_DISABLE_COPY(PDFPage)
 

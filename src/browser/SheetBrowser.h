@@ -134,7 +134,7 @@ protected:
 
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
 
-    int addIconAnnotation(QPointF &);
+    int addIconAnnotation(const QPointF, const QString);
 
     BrowserPage *mouseClickInPage(QPointF &);
 
@@ -147,6 +147,8 @@ private slots:
 
 private:
     bool setAnnotationProperty(deepin_reader::Annotation *annotation, const QString &text, QColor color);
+
+    bool mouseClickIconAnnot(QPointF &);
 
 private:
     deepin_reader::Document *m_document = nullptr;

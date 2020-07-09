@@ -93,6 +93,8 @@ public:
 
     int addIconAnnotation(const QPointF &);
 
+    bool mouseClickIconAnnot(QPointF &);
+
 private:
     void reloadAnnotations();
 

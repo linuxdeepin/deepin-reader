@@ -243,13 +243,26 @@ bool SheetBrowser::setAnnotationProperty(deepin_reader::Annotation *annotation, 
         return false;
 
     foreach (BrowserPage *item, m_items) {
-        if (item->hasAnnotation(annotation)) {
-            //update annot text , color
-            if (item->hasAnnotation(annotation)) {
-                return item->updateAnnotation(annotation, text, color);
-            }
+        //update annot text , color
+        if (item && item->hasAnnotation(annotation)) {
+            return item->updateAnnotation(annotation, text, color);
         }
     }
+
+    return false;
+}
+
+bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
+{
+    if (nullptr == m_document)
+        return false;
+
+    BrowserPage *item = mouseClickInPage(clickPoint);
+
+    if (item) {
+        return item->mouseClickIconAnnot(clickPoint);
+    }
+
 
     return false;
 }
@@ -553,7 +566,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             m_selectPressedPos = mapToScene(event->pos());
 
             //add icon annotation
-            addIconAnnotation(m_selectPressedPos);
+            addIconAnnotation(m_selectPressedPos, "");
 
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
@@ -867,14 +880,16 @@ bool SheetBrowser::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &i
     return true;
 }
 
-int SheetBrowser::addIconAnnotation(QPointF &clickPoint)
+int SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QString contents)
 {
     BrowserPage *page{nullptr};
-    page =  mouseClickInPage(clickPoint);
+    QPointF pointf = clickPoint;
+
+    page =  mouseClickInPage(pointf);
     if (nullptr != page) {
         qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
-
     }
+
     return 0;
 }
 

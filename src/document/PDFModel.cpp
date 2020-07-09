@@ -854,6 +854,17 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     return false;
 }
 
+bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
+{
+    foreach (Poppler::Annotation *annot, m_page->annotations()) {
+        if (annot && annot->boundary().contains(clickPoint)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 PDFDocument::PDFDocument(Poppler::Document *document) :
     m_mutex(),
     m_document(document)
