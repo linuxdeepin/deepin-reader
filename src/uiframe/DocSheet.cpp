@@ -457,14 +457,17 @@ qreal DocSheet::maxScaleFactor()
 
 QString DocSheet::filter()
 {
-    qDebug() << "uninit";
+    if (Dr::PDF == m_fileType)
+        return  "Pdf File (*.pdf)";
+    else if (Dr::DjVu == m_fileType)
+        return "Djvu files (*.djvu)";
+
     return "";
 }
 
 QSet<int> DocSheet::getBookMarkList() const
 {
-    qDebug() << "uninit";
-    return QSet<int>();
+    return m_bookmarks;
 }
 
 SheetOperation DocSheet::operation()
