@@ -117,9 +117,9 @@ void BrowserMenu::onSetHighLight(const int &)
     this->close();
 }
 
-int BrowserMenu::getColorIndex()
+QColor BrowserMenu::getColor()
 {
     if (m_pColorWidgetAction)
-        return m_pColorWidgetAction->getColorIndex();
-    return 0;
+        return m_pColorWidgetAction->getColor();
+    return QColor("#FFA503");
 }

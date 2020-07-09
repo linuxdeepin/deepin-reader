@@ -42,7 +42,7 @@ signals:
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
     void initActions(DocSheet *sheet, int index, SheetMenuType_e type);
-    int getColorIndex();
+    QColor getColor();
 
 private slots:
     void onItemClicked();

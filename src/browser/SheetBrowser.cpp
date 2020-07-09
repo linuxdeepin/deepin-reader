@@ -573,7 +573,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 if (objectname == "Copy") {
                     Utils::copyText(selectWords);
                 } else if (objectname == "AddTextHighlight") {
-                    QColor color = dApp->m_pAppInfo->getLightColorList().at(menu.getColorIndex());
+                    QColor color = menu.getColor();
                     addHighlightAnnotation("", color);
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation) annotation->deleteMe();
@@ -584,7 +584,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RemoveHighlight") {
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationHighlight") {
-                    QColor color = dApp->m_pAppInfo->getLightColorList().at(menu.getColorIndex());
+                    QColor color = menu.getColor();
                     if (annotation)  {
                         //update
                     } else {

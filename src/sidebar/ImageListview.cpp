@@ -23,6 +23,7 @@
 #include "ModuleHeader.h"
 
 #include <QMouseEvent>
+#include <QDebug>
 
 ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
@@ -91,10 +92,9 @@ void ImageListView::handleOpenSuccess()
                 int pageIndex = static_cast<int>(annotion->page);
                 ImagePageInfo_t tImagePageInfo;
                 tImagePageInfo.pageIndex = pageIndex;
-                tImagePageInfo.iType = Note_Type::NOTE_HIGHLIGHT;
                 tImagePageInfo.annotation = annotion;
-                tImagePageInfo.strcontents = annotion->contents();
                 pageSrclst << tImagePageInfo;
+                qDebug() << "-----------" << pageIndex << annotion->page;
             }
         }
         m_imageModel->initModelLst(pageSrclst);

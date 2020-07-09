@@ -18,7 +18,8 @@ public:
 public:
     void setBtnAddLightState(const bool &);
     void setcolor(bool benable);
-    int  getColorIndex();
+    int getIndex();
+    QColor getColor();
 
 signals:
     void sigBtnGroupClicked(const int &);
@@ -32,6 +33,7 @@ private:
 
 private:
     CustomClickLabel *m_pClickLabel = nullptr;
+    QList<QColor> m_listColor;
 };
 
 #endif  // COLORWIDGETACTION_H

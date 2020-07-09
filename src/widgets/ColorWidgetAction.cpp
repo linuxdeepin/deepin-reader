@@ -64,7 +64,7 @@ void ColorWidgetAction::slotBtnClicked(int index)
 
 void ColorWidgetAction::slotBtnDefaultClicked()
 {
-    int iIndex = getColorIndex();
+    int iIndex = getIndex();
     emit sigBtnGroupClicked(iIndex);
 }
 
@@ -83,12 +83,20 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto sigMap = new QSignalMapper(this);
 
-    auto colorList = dApp->m_pAppInfo->getLightColorList();
+    m_listColor.clear();
+    m_listColor.append(QColor("#FFA503"));
+    m_listColor.append(QColor("#FF1C49"));
+    m_listColor.append(QColor("#9023FC"));
+    m_listColor.append(QColor("#3468FF"));
+    m_listColor.append(QColor("#00C7E1"));
+    m_listColor.append(QColor("#05EA6B"));
+    m_listColor.append(QColor("#FEF144"));
+    m_listColor.append(QColor("#D5D5D1"));
     int tW = 25;
     int tH = 25;
 
-    for (int iLoop = 0; iLoop < colorList.size(); iLoop++) {
-        auto btn = new RoundColorWidget(colorList.at(iLoop), pWidget);
+    for (int iLoop = 0; iLoop < m_listColor.size(); iLoop++) {
+        auto btn = new RoundColorWidget(m_listColor.at(iLoop), pWidget);
         btn->setAllClickNotify(true);
         btn->setObjectName(QString("%1").arg(iLoop));
         btn->setFixedSize(QSize(tW, tH));
@@ -114,7 +122,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     pWidget->setLayout(mainLayout);
 }
 
-int ColorWidgetAction::getColorIndex()
+int ColorWidgetAction::getIndex()
 {
     int iIndex = 0;
 
@@ -125,5 +133,10 @@ int ColorWidgetAction::getColorIndex()
             break;
         }
     }
-    return iIndex;
+    return  iIndex;
+}
+
+QColor ColorWidgetAction::getColor()
+{
+    return m_listColor.at(getIndex());
 }

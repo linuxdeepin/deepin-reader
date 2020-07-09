@@ -35,12 +35,9 @@ QRectF BrowserAnnotation::boundingRect() const
                   m_rect.height() * m_parent->boundingRect().height());
 }
 
-void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
+void BrowserAnnotation::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->setBrush(QBrush(Qt::red));
-    painter->setPen(Qt::NoPen);
-    painter->setOpacity(0.5);
-    painter->drawRect(option->rect.x(), option->rect.y(), option->rect.width(), option->rect.height());
+    //notTodo
 }
 
 deepin_reader::Annotation *BrowserAnnotation::annotation()
