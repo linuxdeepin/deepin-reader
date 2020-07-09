@@ -132,16 +132,15 @@ void BookMarkWidget::DeleteItemByKey()
 
 void BookMarkWidget::deleteAllItem()
 {
-    //LLLLLLLLLLLLLLLLLLLLLL
-//    QList<BookMarkStatus_t> bookmarks;
-//    int itemsize = m_pImageListView->model()->rowCount();
-//    for (int i = 0; i < itemsize; i++) {
-//        int curIndex = m_pImageListView->getPageIndexForModelIndex(i);
-//        if (curIndex >= 0) {
-//            bookmarks << BookMarkStatus_t(curIndex, false);
-//        }
-//    }
-//    m_sheet->setBookMarks(bookmarks);
+    QList<int> bookmarks;
+    int itemsize = m_pImageListView->model()->rowCount();
+    for (int i = 0; i < itemsize; i++) {
+        int curIndex = m_pImageListView->getPageIndexForModelIndex(i);
+        if (curIndex >= 0) {
+            bookmarks << curIndex;
+        }
+    }
+    m_sheet->setBookMarks(bookmarks, false);
 }
 
 void BookMarkWidget::onAddBookMarkClicked()

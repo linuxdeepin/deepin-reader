@@ -21,31 +21,27 @@
 
 #include "widgets/CustomWidget.h"
 
+namespace  deepin_reader {
+class Annotation;
+}
+class SheetBrowser;
 class TransparentTextEdit;
 class NoteViewWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(NoteViewWidget)
+    friend class NoteShadowViewWidget;
 
 public:
     explicit NoteViewWidget(DWidget *parent = nullptr);
     ~NoteViewWidget() override;
 
 signals:
-    void sigNeedAddHighLightAnnotation(const QString &msgContent);
-
-    void sigNoteViewMsg(const int &, const QString &);
-
     void sigNeedShowTips(const QString &tips, int index);
 
 public:
     void setEditText(const QString &note);
-
-    void setPointAndPage(const QString &);
-
-    void setNoteUuid(const QString &pNoteUuid);
-
-    void setNotePage(const QString &pNotePage);
+    void setAnnotation(deepin_reader::Annotation *annotation);
 
 protected:
     void initWidget() override;
@@ -53,16 +49,10 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void fileNoteHideEvent();
-    void pageNoteHideEvent();
-
-private:
-    QString m_pNoteUuid = "";
-    QString m_pNotePage = "";
-
-    DWidget *widget;
-    TransparentTextEdit *m_pTextEdit = nullptr;    // 注释
-    QString m_strNote = "";                   // 注释内容
+    QString m_strNote = "";
+    TransparentTextEdit *m_pTextEdit = nullptr;
+    deepin_reader::Annotation *m_annotation;
+    SheetBrowser *m_brower;
 };
 
 class NoteShadowViewWidget : public DWidget

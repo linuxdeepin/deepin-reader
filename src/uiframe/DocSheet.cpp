@@ -238,6 +238,23 @@ void DocSheet::setBookMark(int index, int state)
     emit sigFileChanged(this);
 }
 
+void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
+{
+    for (int index : indexlst) {
+        if (state)
+            m_bookmarks.insert(index);
+        else {
+            m_bookmarks.remove(index);
+        }
+        m_sidebar->setBookMark(index, state);
+        m_browser->setBookMark(index, state);
+    }
+
+    if (!state) showTips(tr("The bookmark has been removed"));
+    m_fileChanged = true;
+    emit sigFileChanged(this);
+}
+
 int DocSheet::pagesNumber()
 {
     if (m_browser)

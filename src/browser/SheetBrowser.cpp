@@ -37,6 +37,7 @@
 #include "widgets/PrintManager.h"
 #include "widgets/FileAttrWidget.h"
 #include "Application.h"
+#include "sidebar/note/NoteViewWidget.h"
 
 #include "document/DjVuModel.h"
 #include "Utils.h"
@@ -78,6 +79,9 @@ SheetBrowser::~SheetBrowser()
 
     if (nullptr != m_document)
         delete m_document;
+
+    if (nullptr != m_noteEditWidget)
+        delete m_noteEditWidget;
 }
 
 QImage SheetBrowser::firstThumbnail(const QString &filePath)
@@ -250,6 +254,23 @@ bool SheetBrowser::setAnnotationProperty(deepin_reader::Annotation *annotation, 
     }
 
     return false;
+}
+
+void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
+{
+    if (annotation == nullptr) {
+        Q_ASSERT(false && "showNoteEditWidget Annotation Is Null");
+        return;
+    }
+
+    m_tipsWidget->hide();
+    if (m_noteEditWidget == nullptr) {
+        m_noteEditWidget = new NoteShadowViewWidget(this);
+        connect(m_noteEditWidget->getNoteViewWidget(), SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(showTips(const QString &, int)));
+    }
+    m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
+    m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
+    m_noteEditWidget->showWidget(QCursor::pos());
 }
 
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
@@ -565,8 +586,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             m_selectPressedPos = mapToScene(event->pos());
 
-            //add icon annotation
-            addIconAnnotation(m_selectPressedPos, "");
+            BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemAt(event->pos()));
+            if (annotation != nullptr) {
+                showNoteEditWidget(annotation->annotation());
+            }
 
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
@@ -593,6 +616,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
+                const QPointF &clickPos = mapToScene(event->pos());
                 if (objectname == "Copy") {
                     Utils::copyText(selectWords);
                 } else if (objectname == "AddTextHighlight") {
@@ -601,7 +625,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationIcon") {
-
+                    if (annotation)  {
+                        updateAnnotation(annotation, annotation->annotationText(), QColor());
+                        showNoteEditWidget(annotation->annotation());
+                    } else {
+                        showNoteEditWidget(addIconAnnotation(clickPos, ""));
+                    }
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
@@ -609,9 +638,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
                     if (annotation)  {
-                        //update
+                        updateAnnotation(annotation, annotation->annotationText(), color);
+                        showNoteEditWidget(annotation->annotation());
                     } else {
-                        addHighlightAnnotation(selectWords, color);
+                        //showNoteEditWidget(addHighLightAnnotation("", color));
                     }
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
@@ -642,6 +672,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     pFileAttrWidget->showScreenCenter();
                 }
             });
+
             if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON);

@@ -19,8 +19,9 @@
 #include "NoteViewWidget.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
-
+#include "document/Model.h"
 #include "TransparentTextEdit.h"
+#include "browser/SheetBrowser.h"
 
 #include <QHBoxLayout>
 #include <DPlatformWindowHandle>
@@ -29,11 +30,12 @@
 #include <QLinearGradient>
 
 NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
-    : DWidget(parent)
+    : DWidget(nullptr)
 {
     setWindowFlag(Qt::Popup);
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
+    m_noteViewWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
 }
 
 void NoteShadowViewWidget::initWidget()
@@ -87,16 +89,20 @@ void NoteViewWidget::setEditText(const QString &note)
     m_strNote = note;
 }
 
+void NoteViewWidget::setAnnotation(deepin_reader::Annotation *annotation)
+{
+    m_annotation = annotation;
+}
+
 void NoteViewWidget::hideEvent(QHideEvent *event)
 {
-    //  原来是有注释的, 被删除了
-    //LLLLLLLLLLLL
-//    if (m_nWidgetType == NOTE_HIGHLIGHT) {
-//        fileNoteHideEvent();
-//    } else {
-//        pageNoteHideEvent();
-//    }
     CustomWidget::hideEvent(event);
+    QString sText = m_pTextEdit->toPlainText().trimmed();
+    if (sText.isEmpty()) {
+        m_brower->removeAnnotation(m_annotation);
+    } else {
+        m_brower->updateAnnotation(m_annotation, sText);
+    }
 }
 
 void NoteViewWidget::initWidget()
@@ -111,72 +117,6 @@ void NoteViewWidget::initWidget()
 
     pHLayoutContant->addWidget(m_pTextEdit);
     this->setLayout(pHLayoutContant);
-}
-
-//  高亮注释 处理
-void NoteViewWidget::fileNoteHideEvent()
-{
-    QString sText = m_pTextEdit->toPlainText().trimmed();
-//LLLLLLLLLLLLLLLLLLLL
-//    if (m_pNoteUuid == "") {
-//        if (sText != "") {
-//            QString msgContent = sText + Constant::sQStringSep + m_pNotePage;
-//            emit sigNeedAddHighLightAnnotation(msgContent);
-//        }
-//    } else {
-//        if (sText == "" && m_strNote != "") {   //  原来有内容, 被删了, 删除高亮
-//            QString msgContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage;
-
-//            emit sigNoteViewMsg(MSG_NOTE_DELETE_CONTENT, msgContent);
-
-//        } else if (sText != m_strNote) {
-//            QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-//                                 sText + Constant::sQStringSep +
-//                                 m_pNotePage;
-//            emit sigNoteViewMsg(MSG_NOTE_UPDATE_CONTENT, msgContent);
-//        }
-//        m_strNote = sText;
-//    }
-}
-
-//  页面注释处理
-void NoteViewWidget::pageNoteHideEvent()
-{
-//LLLLLLLLLLLLLLLLL
-//    if (m_pNoteUuid != "") {
-//        QString sText = m_pTextEdit->toPlainText().trimmed();
-//        if (m_strNote == "") {
-//            if (sText != "") {
-//                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-//                                     sText + Constant::sQStringSep +
-//                                     m_pNotePage;
-//                emit sigNoteViewMsg(MSG_NOTE_PAGE_ADD_CONTENT, msgContent);
-//            } else {
-//                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "1";
-//                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-//            }
-//        } else {
-//            if (sText == "") {
-//                QString sContent = m_pNoteUuid + Constant::sQStringSep + m_pNotePage + Constant::sQStringSep + "0";
-//                emit sigNoteViewMsg(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-//            } else if (sText != m_strNote) {  //  只有 和 原来已有注释内容不一样, 才会提示 保存
-//                QString msgContent = m_pNoteUuid  + Constant::sQStringSep +
-//                                     sText + Constant::sQStringSep +
-//                                     m_pNotePage;
-//                emit sigNoteViewMsg(MSG_NOTE_PAGE_UPDATE_CONTENT, msgContent);
-//            }
-//        }
-//    }
-}
-
-void NoteViewWidget::setNotePage(const QString &pNotePage)
-{
-    m_pNotePage = pNotePage;
-}
-
-void NoteViewWidget::setNoteUuid(const QString &pNoteUuid)
-{
-    m_pNoteUuid = pNoteUuid;
 }
 
 void NoteViewWidget::paintEvent(QPaintEvent *event)

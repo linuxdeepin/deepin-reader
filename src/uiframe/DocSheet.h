@@ -100,6 +100,8 @@ public:
 
     void setBookMark(int index, int state);
 
+    void setBookMarks(const QList<int> &indexlst, int state);
+
     void setLayoutMode(Dr::LayoutMode mode);
 
     void setScaleMode(Dr::ScaleMode mode);
@@ -164,8 +166,6 @@ public:
 
     void handleOpenSuccess();
 
-    void showTips(const QString &tips, int iconIndex = 0);
-
     void openSlide();
 
     void closeSlide();
@@ -173,6 +173,9 @@ public:
     bool slideOpened();
 
     void openFullScreen();
+
+public slots:
+    void showTips(const QString &tips, int iconIndex = 0);
 
 public:
     int label2pagenum(QString label);

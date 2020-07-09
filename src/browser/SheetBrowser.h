@@ -34,6 +34,7 @@ class BrowserPage;
 class DocSheet;
 class TipsWidget;
 class BrowserAnnotation;
+class NoteShadowViewWidget;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -154,11 +155,15 @@ private:
 
     bool mouseClickIconAnnot(QPointF &);
 
+    void showNoteEditWidget(deepin_reader::Annotation *annotation);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QLabel *m_magnifierLabel = nullptr;
     DocSheet *m_sheet = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
+    NoteShadowViewWidget *m_noteEditWidget = nullptr;
+
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
 

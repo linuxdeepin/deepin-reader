@@ -142,8 +142,6 @@ private:
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     SlideWidget  *m_slideWidget = nullptr;
-    QPointer<DocSheet>  m_slideSheet = nullptr;
-    QPointer<DocSheet>  m_curSheet = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H
