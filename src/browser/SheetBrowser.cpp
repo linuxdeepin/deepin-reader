@@ -897,6 +897,11 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
     return nullptr;
 }
 
+Annotation *SheetBrowser::addHighLightAnnotation(const QPointF start, const QPointF end, const QColor)
+{
+    return nullptr;
+}
+
 void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {

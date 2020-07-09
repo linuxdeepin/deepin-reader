@@ -138,6 +138,8 @@ protected:
 
     Annotation *addIconAnnotation(const QPointF, const QString);
 
+    Annotation *addHighLightAnnotation(const QPointF start, const QPointF end, const QColor);
+
     BrowserPage *mouseClickInPage(QPointF &);
 
 private slots:
