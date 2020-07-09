@@ -21,7 +21,6 @@
 #include "CentralNavPage.h"
 #include "MainWindow.h"
 #include "widgets/CustomClickLabel.h"
-#include "app/ProcessController.h"
 
 #include <DFileDialog>
 #include <DLabel>
