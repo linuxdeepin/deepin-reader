@@ -301,6 +301,30 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
     return false;
 }
 
+bool SheetBrowser::updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color)
+{
+    deepin_reader::Annotation *annot = annotation->annotation();
+    foreach (BrowserPage *item, m_items) {
+        //update annot text
+//        if (item->hasAnnotation(annot))
+
+    }
+
+    return true;
+}
+
+bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
+{
+    foreach (BrowserPage *item, m_items) {
+        if (item->hasAnnotation(annotation)) {
+            //update annot text
+            //        if (item->hasAnnotation(annot))
+        }
+    }
+
+    return true;
+}
+
 deepin_reader::Outline SheetBrowser::outline()
 {
     return m_document->outline();
@@ -345,7 +369,22 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation)
 //            }
 //        }
 //        qDeleteAll(listannote);
-//    }
+    //    }
+}
+
+BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
+{
+    foreach (BrowserPage *page, m_items) {
+        if (nullptr != page) {
+            if (point.x() > page->pos().x() && point.y() > page->pos().y() &&
+                    point.x() < (page->pos().x() + page->boundingRect().width()) &&
+                    point.y() < (page->pos().y() + page->boundingRect().height())) {
+                return  page;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
@@ -502,6 +541,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             scene()->setSelectionArea(QPainterPath());
 
             m_selectPressedPos = mapToScene(event->pos());
+
+            //add icon annotation
+            addIconAnnotation(m_selectPressedPos);
 
         } else if (btn == Qt::RightButton) {
             m_selectPressedPos = QPointF();
@@ -813,6 +855,17 @@ bool SheetBrowser::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &i
     image = item->getImagePoint(scaleFactor, point);
 
     return true;
+}
+
+int SheetBrowser::addIconAnnotation(QPointF &clickPoint)
+{
+    BrowserPage *page{nullptr};
+    page =  mouseClickInPage(clickPoint);
+    if (nullptr != page) {
+        qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
+
+    }
+    return 0;
 }
 
 void SheetBrowser::openMagnifier()

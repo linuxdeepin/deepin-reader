@@ -392,6 +392,12 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
     return true;
 }
 
+int BrowserPage::addIconAnnotation(const QPointF &iconPoint)
+{
+
+    return 0;
+}
+
 //void BrowserPage::reload()
 //{
 //    double scaleFactor = m_scaleFactor;

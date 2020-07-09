@@ -89,6 +89,8 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
+    int addIconAnnotation(const QPointF &);
+
 private:
     void reloadAnnotations();
 

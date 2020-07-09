@@ -94,6 +94,10 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
+    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor(Qt::white));
+
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor(Qt::white));
+
 signals:
     void sigPageChanged(int page);
 
@@ -129,6 +133,10 @@ protected:
     void wheelEvent(QWheelEvent *event);
 
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
+
+    int addIconAnnotation(QPointF &);
+
+    BrowserPage *mouseClickInPage(QPointF &);
 
 private slots:
     void onVerticalScrollBarValueChanged(int value);
