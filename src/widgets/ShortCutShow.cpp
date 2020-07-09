@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ShortCutShow.h"
-#include "ModuleHeader.h"
+
 #include "Global.h"
 #include "DocSheet.h"
 

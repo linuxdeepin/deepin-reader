@@ -22,7 +22,6 @@
 #define MAINTABWIDGETEX_H
 
 #include "widgets/CustomWidget.h"
-#include "app/ModuleHeader.h"
 #include "DocSheet.h"
 
 #include <QMap>

@@ -20,7 +20,7 @@
 #include "Application.h"
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
-#include "ModuleHeader.h"
+
 
 #include <QMouseEvent>
 #include <QDebug>

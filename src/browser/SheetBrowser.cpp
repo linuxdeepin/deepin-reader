@@ -37,7 +37,7 @@
 #include "widgets/PrintManager.h"
 #include "widgets/FileAttrWidget.h"
 #include "Application.h"
-#include "ModuleHeader.h"
+
 #include "document/DjVuModel.h"
 #include "Utils.h"
 

@@ -22,7 +22,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-#include "ModuleHeader.h"
+
 
 SaveDialog::SaveDialog(QObject *parent)
     : QObject(parent)

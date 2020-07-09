@@ -11,7 +11,7 @@
 #include "AttrScrollWidget.h"
 #include "widgets/WordWrapLabel.h"
 
-#include "ModuleHeader.h"
+
 #include "Application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"

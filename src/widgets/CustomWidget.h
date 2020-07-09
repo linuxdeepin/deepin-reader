@@ -32,7 +32,7 @@
 
 #include "CustomMenu.h"
 #include "Utils.h"
-#include "ModuleHeader.h"
+
 #include "MsgHeader.h"
 
 #include <QDebug>

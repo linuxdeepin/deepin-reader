@@ -16,7 +16,7 @@
 */
 #include "SlidePlayWidget.h"
 #include "Utils.h"
-#include "ModuleHeader.h"
+
 
 #include <DPlatformWindowHandle>
 #include <DWidget>

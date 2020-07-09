@@ -18,7 +18,7 @@
  */
 #include "TransparentTextEdit.h"
 #include "Application.h"
-#include "ModuleHeader.h"
+
 #include "MsgHeader.h"
 
 #include <DFontSizeManager>

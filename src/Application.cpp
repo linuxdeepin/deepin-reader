@@ -4,7 +4,6 @@
 #include "BrowserRenderThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
-#include "ModuleHeader.h"
 
 #include <QIcon>
 #include <QDebug>

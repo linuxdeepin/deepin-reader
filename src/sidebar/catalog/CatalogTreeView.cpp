@@ -27,7 +27,7 @@
 
 #include "Utils.h"
 #include "DocSheet.h"
-#include "ModuleHeader.h"
+
 #include "MsgHeader.h"
 
 #include <QProxyStyle>
