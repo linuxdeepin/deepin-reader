@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "MainWindow.h"
-#include "app/AppInfo.h"
+
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
@@ -38,6 +38,7 @@
 #include <DGuiApplicationHelper>
 #include <QDir>
 #include <QStandardPaths>
+#include <QSettings>
 
 DWIDGET_USE_NAMESPACE
 

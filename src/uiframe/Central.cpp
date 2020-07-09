@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Central.h"
-#include "app/AppInfo.h"
+
 #include "Utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"

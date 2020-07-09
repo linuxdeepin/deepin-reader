@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "NotesWidget.h"
-#include "app/AppInfo.h"
+
 #include "sidebar/ImageListview.h"
 #include "sidebar/ImageViewModel.h"
 #include "NotesDelegate.h"

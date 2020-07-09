@@ -36,7 +36,6 @@
 #include "BrowserMenu.h"
 #include "widgets/PrintManager.h"
 #include "widgets/FileAttrWidget.h"
-#include "app/AppInfo.h"
 #include "Application.h"
 #include "ModuleHeader.h"
 #include "document/DjVuModel.h"

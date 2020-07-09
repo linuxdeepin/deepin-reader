@@ -4,13 +4,12 @@
 #include <QDebug>
 #include <QDir>
 
-#include "ModuleHeader.h"
-#include "app/AppInfo.h"
 #include "Utils.h"
 #include "MainWindow.h"
 #include "BrowserRenderThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
+#include "ModuleHeader.h"
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -28,9 +27,6 @@ Application::Application(int &argc, char **argv)
     QPixmap px(QIcon::fromTheme(ConstantMsg::g_app_name).pixmap(static_cast<int>(256 * qApp->devicePixelRatio()), static_cast<int>(256 * qApp->devicePixelRatio())));
     px.setDevicePixelRatio(qApp->devicePixelRatio());
     setProductIcon(QIcon(px));
-
-    initCfgPath();
-    initChildren();
 }
 
 void Application::blockShutdown()
@@ -137,22 +133,5 @@ void Application::handleQuitAction()
 
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();
-}
-
-//  初始化 deepin-reader 的配置文件目录, 包含 数据库, conf.cfg
-void Application::initCfgPath()
-{
-    QString sDbPath = Utils::getConfigPath();
-    QDir dd(sDbPath);
-    if (! dd.exists()) {
-        dd.mkpath(sDbPath);
-        if (dd.exists())
-            qDebug() << __FUNCTION__ << "  create app dir succeed!";
-    }
-}
-
-void Application::initChildren()
-{
-    m_pAppInfo = new AppInfo(this);
 }
 

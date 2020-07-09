@@ -7,7 +7,7 @@
 #include <QDebug>
 
 #include "Application.h"
-#include "app/AppInfo.h"
+
 #include "widgets/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)

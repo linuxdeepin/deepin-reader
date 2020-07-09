@@ -38,7 +38,7 @@
 #include "DocSheet.h"
 #include "DocTabBar.h"
 #include "MainWindow.h"
-#include "app/AppInfo.h"
+
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
 #include "widgets/FindWidget.h"

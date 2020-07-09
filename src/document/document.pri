@@ -7,6 +7,7 @@ SOURCES += \
     $$PWD/PDFModel.cpp \
     $$PWD/DjVuModel.cpp
 
+INCLUDEPATH += $$PWD
 
 !without_pkgconfig {
     poppler_qt_pkg = poppler-qt$${QT_MAJOR_VERSION}

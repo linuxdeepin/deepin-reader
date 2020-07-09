@@ -39,3 +39,5 @@ SOURCES += \
     $$PWD/thumbnail/ThumbnailWidget.cpp \
     $$PWD/menu/NoteMenu.cpp \
     $$PWD/menu/BookMarkMenu.cpp
+
+INCLUDEPATH += $$PWD

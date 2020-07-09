@@ -49,18 +49,12 @@ protected:
     void handleQuitAction() override;
 
 public:
-    AppInfo   *m_pAppInfo = nullptr;
-
     bool isBlockShutdown = false;
 
     QDBusInterface *blockShutdownInterface = nullptr;
 
     QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
 
-private:
-    void initCfgPath();
-
-    void initChildren();
 };
 
 #endif  // APPLICATION_H_

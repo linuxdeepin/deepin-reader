@@ -41,3 +41,5 @@ SOURCES += \
     $$PWD/TipsWidget.cpp \
     $$PWD/WordWrapLabel.cpp \
     $$PWD/RoundColorWidget.cpp
+
+INCLUDEPATH += $$PWD
