@@ -38,8 +38,6 @@ class Application : public DApplication
 public:
     Application(int &argc, char **argv);
 
-    void setSreenRect(const QRect &rect);
-
     void blockShutdown();
 
     void unBlockShutdown();

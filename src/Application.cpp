@@ -107,13 +107,6 @@ void Application::handleFiles(QStringList filePathList)
     }
 }
 
-void Application::setSreenRect(const QRect &rect)
-{
-    if (m_pAppInfo) {
-        m_pAppInfo->setScreenRect(rect);
-    }
-}
-
 void Application::handleQuitAction()
 {
     QList<DocSheet *> changedList;

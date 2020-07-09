@@ -67,8 +67,6 @@ int main(int argc, char *argv[])
     DApplicationSettings savetheme;
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-    QApplication::desktop()->geometry();
-    a.setSreenRect(a.desktop()->geometry());
 
     if (!MainWindow::allowCreateWindow())
         return -1;

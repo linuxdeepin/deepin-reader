@@ -29,16 +29,6 @@ QList<QColor> AppInfo::getLightColorList()
     return m_listColor;
 }
 
-QRect AppInfo::screenRect() const
-{
-    return  m_screenRect;
-}
-
-void AppInfo::setScreenRect(const QRect &rect)
-{
-    m_screenRect = rect;
-}
-
 void AppInfo::setAppKeyValue(const int &iKey, const QString &sValue)
 {
     // initalize the configuration file.

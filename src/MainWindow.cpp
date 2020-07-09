@@ -36,6 +36,8 @@
 #include <DWidgetUtil>
 #include <QSignalMapper>
 #include <DGuiApplicationHelper>
+#include <QDir>
+#include <QStandardPaths>
 
 DWIDGET_USE_NAMESPACE
 
@@ -89,18 +91,15 @@ void MainWindow::doOpenFile(const QString &filePath)
     m_central->doOpenFile(filePath);
 }
 
-void MainWindow::setSreenRect(const QRect &rect)
-{
-    dApp->m_pAppInfo->setScreenRect(rect);
-}
-
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_central->saveAll()) {
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, QString("%1").arg(this->width()));
+        QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, QString("%1").arg(this->height()));
+        settings.setValue("LASTWIDTH", QString::number(this->width()));
+
+        settings.setValue("LASTHEIGHT", QString::number(this->height()));
 
         event->accept();
 
@@ -161,22 +160,15 @@ MainWindow *MainWindow::createWindow()
 //  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {
-    int nWidth = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_WIDTH).toInt();
-    int nHeight = dApp->m_pAppInfo->getAppKeyValue(KEY_APP_HEIGHT).toInt();
+    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
-    if (nWidth == 0 || nHeight == 0) {
-        int tWidth = 1000;
-        int tHeight = 680;
-        QString str = "";
+    int width  = settings.value("LASTWIDTH").toInt();
+    int height = settings.value("LASTHEIGHT").toInt();
 
-        resize(tWidth, tHeight);
-
-        str = QString::number(tWidth);
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_WIDTH, str);
-        str = QString::number(tHeight);
-        dApp->m_pAppInfo->setAppKeyValue(KEY_APP_HEIGHT, str);
+    if (width == 0 || height == 0) {
+        resize(1000, 680);
     } else {
-        resize(nWidth, nHeight);
+        resize(width, height);
     }
 }
 

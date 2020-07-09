@@ -54,8 +54,6 @@ public:
 
     void doOpenFile(const QString &filePath);
 
-    void setSreenRect(const QRect &); //得到屏幕的分辨率
-
 protected:
     void closeEvent(QCloseEvent *event) override;
 
