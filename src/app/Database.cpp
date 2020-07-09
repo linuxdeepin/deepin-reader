@@ -29,7 +29,7 @@
 #include "Database.h"
 #include "DocSheet.h"
 #include "Global.h"
-#include "control/DocSheet.h"
+#include "DocSheet.h"
 
 #include <QApplication>
 #include <QCryptographicHash>

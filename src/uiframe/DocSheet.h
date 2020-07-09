@@ -51,6 +51,8 @@ public:
     ~DocSheet();
 
 public:
+    static QImage firstThumbnail(const QString &filePath);
+
     static bool existFileChanged();
 
     static QUuid getUuid(DocSheet *);

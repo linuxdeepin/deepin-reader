@@ -80,6 +80,37 @@ SheetBrowser::~SheetBrowser()
         delete m_document;
 }
 
+QImage SheetBrowser::firstThumbnail(const QString &filePath)
+{
+    deepin_reader::Document *document = nullptr;
+
+    int fileType = Dr::fileType(filePath);
+
+    if (Dr::PDF == fileType)
+        document = deepin_reader::PDFDocument::loadDocument(filePath);
+    else if (Dr::DjVu == fileType)
+        document = deepin_reader::DjVuDocument::loadDocument(filePath);
+
+    if (nullptr == document)
+        return QImage();
+
+    if (document->numberOfPages() <= 0)
+        return QImage();
+
+    deepin_reader::Page *page = document->page(0);
+
+    if (page == nullptr)
+        return QImage();
+
+    QImage image = page->render(Dr::RotateBy0);
+
+    delete page;
+
+    delete document;
+
+    return image;
+}
+
 bool SheetBrowser::openFilePath(Dr::FileType fileType, const QString &filePath)
 {
     if (Dr::PDF == fileType)
@@ -283,9 +314,15 @@ void SheetBrowser::addHighlightAnnotation(QString text, QColor color)
         item->addHighlightAnnotation(text, color);
 }
 
-void SheetBrowser::removeAnnotation(BrowserAnnotation *)
+void SheetBrowser::removeAnnotation(BrowserAnnotation *browserAnnotation)
 {
+    deepin_reader::Annotation *annotation = browserAnnotation->annotation();
+    foreach (BrowserPage *item, m_items) {
+        if (item->hasAnnotation(annotation))
+            return item->removeAnnotation(annotation);
+    }
 
+    return false;
 }
 
 void SheetBrowser::wordsChangedLater()

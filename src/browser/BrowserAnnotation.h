@@ -27,6 +27,7 @@
 class BrowserPage;
 class BrowserAnnotation : public QGraphicsItem
 {
+    friend class SheetBrowser;
 public:
     explicit BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation);
 

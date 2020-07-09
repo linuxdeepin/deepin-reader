@@ -80,6 +80,11 @@ DocSheet::~DocSheet()
     g_map.remove(m_uuid);
 }
 
+QImage DocSheet::firstThumbnail(const QString &filePath)
+{
+    return SheetBrowser::firstThumbnail(filePath);
+}
+
 bool DocSheet::existFileChanged()
 {
     foreach (DocSheet *sheet, g_map.values()) {

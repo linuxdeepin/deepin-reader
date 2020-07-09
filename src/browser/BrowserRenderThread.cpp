@@ -205,8 +205,10 @@ void BrowserRenderThread::run()
 
 void BrowserRenderThread::destroy()
 {
-    if (nullptr != instance)
+    if (nullptr != instance) {
         delete instance;
+        instance = nullptr;
+    }
 }
 
 void BrowserRenderThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect)

@@ -8,8 +8,7 @@
 #include "app/AppInfo.h"
 #include "Utils.h"
 #include "MainWindow.h"
-#include "djvuControl/RenderThreadDJVU.h"
-#include "pdfControl/docview/pdf/RenderThreadPdf.h"
+#include "BrowserRenderThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
 
@@ -105,9 +104,7 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    //LLLLLLLLLLLLLLLLLLLLLL
-    //RenderThreadDJVU::destroy();
-    //RenderThreadPdf::destroyRenderPdfThread();
+    BrowserRenderThread::destroy();
 
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();

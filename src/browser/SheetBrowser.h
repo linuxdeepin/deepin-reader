@@ -40,6 +40,8 @@ public:
 
     ~SheetBrowser() override;
 
+    static QImage firstThumbnail(const QString &filePath);
+
     bool openFilePath(Dr::FileType fileType, const QString &);
 
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
@@ -78,21 +80,21 @@ public:
 
     QString selectedWordsText();
 
-    void addHighlightAnnotation(QString text, QColor color);
-
-    void removeAnnotation(BrowserAnnotation *annotation);
-
     void wordsChangedLater();
 
-    QList< deepin_reader::Annotation * > annotations();     //用完后需要自行删除
+    void addHighlightAnnotation(QString text, QColor color);
 
-    bool removeAnnotation(deepin_reader::Annotation *annotation);
+    QList< deepin_reader::Annotation * > annotations();
 
     deepin_reader::Outline outline();
 
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
     void jumpToHighLight(deepin_reader::Annotation *annotation);
+
+    void removeAnnotation(BrowserAnnotation *annotation);
+
+    bool removeAnnotation(deepin_reader::Annotation *annotation);
 
 signals:
     void sigPageChanged(int page);

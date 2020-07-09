@@ -84,14 +84,13 @@ CentralDocPage::~CentralDocPage()
 
 bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
 {
-//LLLLLLLLLLLLLLLLLLLLLL
-//    int fileType = Dr::fileType(filePath);
-//    if (Dr::DjVu == fileType) {
-//        QImage image = DocSheetDJVU::firstThumbnail(filePath);
-//        if (image.isNull())
-//            return false;
-//        return image.save(thumbnailPath, "PNG");
-//    }
+    int fileType = Dr::fileType(filePath);
+    if (Dr::DjVu == fileType) {
+        QImage image = DocSheet::firstThumbnail(filePath);
+        if (image.isNull())
+            return false;
+        return image.save(thumbnailPath, "PNG");
+    }
 
     return false;
 }
