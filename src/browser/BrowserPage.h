@@ -118,8 +118,7 @@ private:
     double m_wordScaleFactor = -1;
     QList<BrowserWord *> m_words;
 
-    Dr::Rotation m_annotationRotation = Dr::NumberOfRotations;
-    double m_annotationScaleFactor = -1;
+    bool m_hasLoadedAnnotation = false;
     QList<BrowserAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
     QList<deepin_reader::Annotation *> m_annotations;
 

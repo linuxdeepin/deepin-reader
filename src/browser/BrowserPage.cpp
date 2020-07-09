@@ -197,12 +197,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         BrowserRenderThread::appendTasks(tasks);
         m_imageScaleFactor = m_scaleFactor;
 
-        //load annotation
-        if (m_annotationRotation != m_rotation || !qFuzzyCompare(m_annotationScaleFactor, m_scaleFactor)) {
-            m_annotationScaleFactor = m_scaleFactor;
-            m_annotationRotation = m_rotation;
-            reloadAnnotations();
-        }
+        loadAnnotations();
 
         foreach (BrowserAnnotation *annotationItem, m_annotationItems)
             annotationItem->setScaleFactorAndRotation(m_rotation);
@@ -326,7 +321,7 @@ void BrowserPage::loadWords()
 
 void BrowserPage::loadAnnotations()
 {
-    if (m_annotations.isEmpty())
+    if (!m_hasLoadedAnnotation)
         reloadAnnotations();
 }
 
@@ -346,6 +341,8 @@ void BrowserPage::reloadAnnotations()
             m_annotationItems.append(annotationItem);
         }
     }
+
+    m_hasLoadedAnnotation = true;
 }
 
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
