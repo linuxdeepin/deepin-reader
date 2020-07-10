@@ -52,6 +52,8 @@
 #include <DGuiApplicationHelper>
 #include <QDomDocument>
 
+const int ICONANNOTE_WIDTH = 20;
+
 DWIDGET_USE_NAMESPACE
 
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
@@ -261,6 +263,51 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
     m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
     m_noteEditWidget->showWidget(QCursor::pos());
+}
+
+bool SheetBrowser::calcIconAnnotRect(const QPointF point, QRectF &iconRect)
+{
+    QPointF clickPoint = point;
+
+    if (nullptr == m_sheet || clickPoint.x() < 0 ||  clickPoint.y() < 0)
+        return false;
+
+    //计算添加图标注释的位置和大小(考虑缩放和旋转)
+    Dr::Rotation rotation = Dr::RotateBy0;
+    qreal scaleFactor     = 1.0;
+    SheetOperation  operation = m_sheet->operation();
+    rotation    = operation.rotation;
+    scaleFactor = operation.scaleFactor;
+
+    qreal width{0.0};
+    qreal height{0.0};
+    qreal value{0.0};
+    qreal x1{0};
+    qreal y1{0};
+
+    switch (rotation) {
+    case Dr::RotateBy0 : {
+        x1 = point.x() / (iconRect.width() * scaleFactor);
+        y1 = point.y() / (iconRect.height() * scaleFactor);
+        width  = ICONANNOTE_WIDTH / iconRect.width();
+        height = ICONANNOTE_WIDTH / iconRect.height();
+
+        value = x1 - width / 2.0;
+        iconRect.setX((value < 0.0) ? 0.0 : value);
+        value = y1 - width / 2.0;
+        iconRect.setY((value < 0.0) ? 0.0 : value);
+
+        iconRect.setWidth(width);
+        iconRect.setHeight(height);
+
+        return true;
+    }
+    break;
+    default:
+        break;
+    };
+
+    return false;
 }
 
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
@@ -591,6 +638,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     clickAnno = addIconAnnotation(m_selectPressedPos, "");
                 }
                 showNoteEditWidget(clickAnno);
+
                 m_annotationInserting = false;
             }
 
@@ -918,18 +966,28 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
 {
     BrowserPage *page{nullptr};
     QPointF pointf = clickPoint;
-
-    mouseClickIconAnnot(pointf);
+    Annotation *anno = nullptr;
+    QRectF iconRect;
 
     page = mouseClickInPage(pointf);
 
-    Annotation *anno = nullptr;
     if (nullptr != page) {
         qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
-        anno = page->addIconAnnotation(clickPoint, contents);
+        pointf = QPointF(clickPoint.x() - page->pos().x(), clickPoint.y() - page->pos().y());
+
+        iconRect.setWidth(page->boundingRect().width());
+        iconRect.setHeight(page->boundingRect().height());
+
+        bool isVaild = calcIconAnnotRect(pointf, iconRect);
+
+        if (isVaild)
+            anno = page->addIconAnnotation(iconRect, contents);
     }
 
-    if (anno) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
+    if (anno) {
+        anno->page = page->itemIndex();
+        emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
+    }
     return anno;
 }
 

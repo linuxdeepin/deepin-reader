@@ -891,23 +891,23 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
         return nullptr;
 
     LOCK_PAGE
-//    QString strtype = "Note";
-//    Poppler::Annotation::Style style;
-//    style.setColor(Qt::yellow);
+    QString strtype = "Note";
+    Poppler::Annotation::Style style;
+    style.setColor(Qt::yellow);
 
-//    Poppler::Annotation::Popup popup;
-//    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
+    Poppler::Annotation::Popup popup;
+    popup.setFlags(Poppler::Annotation::Hidden | Poppler::Annotation::ToggleHidingOnMouse);
 
-//    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
+    Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
 
-//    annotation->setBoundary(rect);
-//    annotation->setTextIcon(strtype);
-//    annotation->setStyle(style);
-//    annotation->setPopup(popup);
-//    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
-//    m_page->addAnnotation(annotation);
+    annotation->setBoundary(rect);
+    annotation->setTextIcon(strtype);
+    annotation->setStyle(style);
+    annotation->setPopup(popup);
+    annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
+    m_page->addAnnotation(annotation);
 
-    return (new PDFAnnotation(m_mutex, /*annotation*/nullptr));
+    return (new PDFAnnotation(m_mutex, annotation));
 }
 
 PDFDocument::PDFDocument(Poppler::Document *document) :

@@ -95,12 +95,14 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    Annotation *addIconAnnotation(const QPointF, const QString);
+    Annotation *addIconAnnotation(const QRectF, const QString);
 
     bool mouseClickIconAnnot(QPointF &);
 
 private:
     void reloadAnnotations();
+
+    QPoint point2Local(QPointF &);
 
 protected:
     bool sceneEvent(QEvent *event) override;

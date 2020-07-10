@@ -350,6 +350,18 @@ void BrowserPage::reloadAnnotations()
     m_hasLoadedAnnotation = true;
 }
 
+QPoint BrowserPage::point2Local(QPointF &point)
+{
+    QPoint tpoint(0, 0);
+
+    qInfo() << this->boundingRect() << "   3333  "  << point << "        "  << this->boundingRect().contains(point);
+
+    if (this->boundingRect().contains(point))
+        qInfo() << __LINE__ << "  22222222222     in  page   "  << __FUNCTION__;
+
+    return tpoint;
+}
+
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
     return m_annotations;
@@ -406,14 +418,24 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
     return true;
 }
 
-Annotation *BrowserPage::addIconAnnotation(const QPointF point, const QString text)
+Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
 {
-    if (nullptr == m_page || text == "" || text.isEmpty())
+    if (nullptr == m_page /*|| text == "" || text.isEmpty()*/)
         return nullptr;
 
-    QRectF rect;
+    Annotation *annot{nullptr};
+//    QRectF trect = rect;
+//    QPointF tpoint;
 
-    return m_page->addIconAnnotation(rect, text);
+//    point2Local(tpoint);
+
+    annot = m_page->addIconAnnotation(rect, text);
+
+    reloadAnnotations();        // 必须要reload 因为可能多个item共享同一个annotation
+
+    renderViewPort();
+
+    return annot;
 }
 
 bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)

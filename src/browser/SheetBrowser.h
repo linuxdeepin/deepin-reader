@@ -153,6 +153,8 @@ private:
 
     void showNoteEditWidget(deepin_reader::Annotation *annotation);
 
+    bool calcIconAnnotRect(const QPointF, QRectF &);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QLabel *m_magnifierLabel = nullptr;
