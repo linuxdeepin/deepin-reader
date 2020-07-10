@@ -120,6 +120,8 @@ public:
 
     virtual Poppler::Annotation *ownAnnotation() = 0;
 
+    virtual bool updateAnnotation(const QString contains, const QColor color) = 0;
+
     //数值同poppler类型
     enum AnnotationType {
         AnnotationText = 1,            ///< TextAnnotation

@@ -97,9 +97,9 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor(Qt::yellow));
+    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor());
 
-    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor(Qt::yellow));
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
 signals:
     void sigPageChanged(int page);

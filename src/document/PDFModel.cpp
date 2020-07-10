@@ -342,6 +342,25 @@ Poppler::Annotation *PDFAnnotation::ownAnnotation()
     return m_annotation;
 }
 
+bool PDFAnnotation::updateAnnotation(const QString contains, const QColor color)
+{
+    LOCK_ANNOTATION
+
+    if (nullptr == m_annotation)
+        return false;
+
+    if (!contains.isEmpty())
+        m_annotation->setContents(contains);
+
+    if (color.isValid()) {
+        Poppler::Annotation::Style style;
+        style.setColor(color);
+        m_annotation->setStyle(style);
+    }
+
+    return true;
+}
+
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
     m_mutex(mutex),
     m_page(page)
@@ -871,6 +890,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
     if (nullptr == m_page)
         return nullptr;
 
+    LOCK_PAGE
 //    QString strtype = "Note";
 //    Poppler::Annotation::Style style;
 //    style.setColor(Qt::yellow);

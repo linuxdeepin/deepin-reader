@@ -350,7 +350,7 @@ QList<deepin_reader::Annotation *> BrowserPage::annotations()
     return m_annotations;
 }
 
-bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, const QColor &color)
+bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString text, const QColor color)
 {
     if (nullptr == annotation)
         return false;
@@ -358,9 +358,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-
-
-    return true;
+    return  annotation->updateAnnotation(text, color);
 }
 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)

@@ -52,6 +52,8 @@ public:
 
     Poppler::Annotation *ownAnnotation() override;
 
+    bool updateAnnotation(const QString contains, const QColor color)  override;
+
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
