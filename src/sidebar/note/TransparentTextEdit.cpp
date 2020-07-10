@@ -75,7 +75,7 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
     int maxLineHeight = 2;
-    int totalheight = this->viewport()->height()/* + this->verticalScrollBar()->maximum()*/;
+    int totalheight = this->viewport()->height() - maxLineHeight/* + this->verticalScrollBar()->maximum()*/;
     const QFontMetricsF &fontmetricsf = QFontMetricsF(this->document()->defaultFont());
     qreal lineheight = fontmetricsf.height();
     painter.setBrush(Qt::NoBrush);
@@ -96,7 +96,6 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
         curh -= lineheight;
         painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
     }
-
 }
 
 void TransparentTextEdit::insertFromMimeData(const QMimeData *source)

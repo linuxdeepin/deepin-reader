@@ -452,7 +452,22 @@ bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     if (nullptr == m_browser)
         return false;
-    return m_browser->removeAnnotation(annotation);
+    int ret = m_browser->removeAnnotation(annotation);
+    if (ret) this->showTips(tr("The annotation has been removed"));
+    return ret;
+}
+
+bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annotations)
+{
+    if (nullptr == m_browser)
+        return false;
+
+    bool ret = false;
+    for (deepin_reader::Annotation *anno : annotations) {
+        ret = m_browser->removeAnnotation(anno);
+    }
+    if (ret) this->showTips(tr("The annotation has been removed"));
+    return ret;
 }
 
 QList<qreal> DocSheet::scaleFactorList()

@@ -573,12 +573,24 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             scene()->setSelectionArea(QPainterPath());
             m_selectPressedPos = mapToScene(event->pos());
 
-            BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemAt(event->pos()));
-            if (annotation != nullptr) {
-                showNoteEditWidget(annotation->annotation());
-            } else if (m_annotationInserting) {
-                deepin_reader::Annotation *annotation = addIconAnnotation(m_selectPressedPos, "");
-                showNoteEditWidget(annotation);
+            deepin_reader::Annotation *clickAnno = nullptr;
+            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
+            for (QGraphicsItem *itemIter : itemlst) {
+                BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemIter);
+                if (annotation != nullptr) {
+                    clickAnno = annotation->annotation();
+                    showNoteEditWidget(clickAnno);
+                    break;
+                }
+            }
+
+            if (m_annotationInserting) {
+                if (clickAnno && clickAnno->type() == 1/*AText*/) {
+                    updateAnnotation(clickAnno, clickAnno->contents());
+                } else {
+                    clickAnno = addIconAnnotation(m_selectPressedPos, "");
+                }
+                showNoteEditWidget(clickAnno);
                 m_annotationInserting = false;
             }
 

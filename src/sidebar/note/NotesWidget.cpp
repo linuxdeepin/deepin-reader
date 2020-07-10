@@ -103,7 +103,7 @@ void NotesWidget::DeleteItemByKey()
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-
+        m_sheet->removeAnnotation(tImagePageInfo.annotation);
     }
 }
 
@@ -114,7 +114,7 @@ void NotesWidget::deleteAllItem()
         ImagePageInfo_t tImagePageInfo;
         m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
         if (tImagePageInfo.pageIndex >= 0) {
-            int pageIndex = tImagePageInfo.pageIndex;
+            m_sheet->removeAnnotation(tImagePageInfo.annotation);
         }
     }
 }
@@ -122,8 +122,9 @@ void NotesWidget::deleteAllItem()
 void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
 {
     ImagePageInfo_t tImagePageInfo;
-    tImagePageInfo.pageIndex = anno->page;
+    tImagePageInfo.pageIndex = anno->page - 1;
     tImagePageInfo.strcontents = anno->contents();
+    tImagePageInfo.annotation = anno;
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
     int modelIndex = m_pImageListView->getImageModel()->findItemForAnno(anno);
@@ -152,9 +153,7 @@ void NotesWidget::onListMenuClick(const int &iAction)
         DeleteItemByKey();
     } else if (iAction == E_NOTE_DELETE_ALL) {
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all notes?"));
-        if (result) {
-            deleteAllItem();
-        }
+        if (result) deleteAllItem();
     }
 }
 
@@ -169,8 +168,7 @@ void NotesWidget::onListItemClicked(int row)
 
 void NotesWidget::onAddAnnotation()
 {
-//LLLLLLLLLLLLLLLLLLLLLL
-//    sheet->setCurrentState(NOTE_ADD_State);
+    m_sheet->setAnnotationInserting(true);
 }
 
 void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotation *anno)
@@ -178,7 +176,7 @@ void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotati
     if (msgType == MSG_NOTE_ADD) {
         addNoteItem(anno);
     } else if (msgType == MSG_NOTE_DELETE) {
-        addNoteItem(anno);
+        deleteNoteItem(anno);
     }
 }
 

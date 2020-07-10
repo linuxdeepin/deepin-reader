@@ -144,6 +144,8 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
+    bool removeAnnotations(const QList<deepin_reader::Annotation *> &annotations);
+
     QList<qreal> scaleFactorList();
 
     qreal maxScaleFactor();

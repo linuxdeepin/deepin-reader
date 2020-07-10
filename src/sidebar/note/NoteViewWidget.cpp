@@ -40,7 +40,7 @@ NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
 
 void NoteShadowViewWidget::initWidget()
 {
-    setFixedSize(QSize(278, 344));
+    setMaximumSize(QSize(278, 344));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
     pHLayoutContant->setMargin(12);
@@ -108,9 +108,11 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
 void NoteViewWidget::initWidget()
 {
     setFixedSize(QSize(254, 320));
+    setMinimumHeight(310);
+    setMaximumHeight(320);
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
-    pHLayoutContant->setContentsMargins(20, 22, 6, 22);
+    pHLayoutContant->setContentsMargins(20, 20, 6, 20);
 
     m_pTextEdit = new TransparentTextEdit(this);
     connect(m_pTextEdit, SIGNAL(sigNeedShowTips(const QString &, int)), this, SIGNAL(sigNeedShowTips(const QString &, int)));

@@ -89,9 +89,10 @@ void ImageListView::handleOpenSuccess()
         for (int index = 0; index < pagesNum; index++) {
             deepin_reader::Annotation *annotion = annotationlst.at(index);
             if (!annotion->contents().isEmpty()) {
-                int pageIndex = static_cast<int>(annotion->page);
+                int pageIndex = static_cast<int>(annotion->page) - 1;
                 ImagePageInfo_t tImagePageInfo;
                 tImagePageInfo.pageIndex = pageIndex;
+                tImagePageInfo.strcontents = annotion->contents();
                 tImagePageInfo.annotation = annotion;
                 pageSrclst << tImagePageInfo;
             }
