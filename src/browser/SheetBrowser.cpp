@@ -41,6 +41,7 @@
 
 #include "document/DjVuModel.h"
 #include "Utils.h"
+#include "PageRenderThread.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -192,22 +193,7 @@ void SheetBrowser::setAnnotationInserting(bool inserting)
 
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
-    wordsChangedLater();
-
-    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
-
-    foreach (QGraphicsItem *item, items) {
-        BrowserPage *pdfItem = static_cast<BrowserPage *>(item);
-
-        if (!m_items.contains(pdfItem))
-            continue;
-
-        if (nullptr == pdfItem)
-            continue;
-
-        pdfItem->renderViewPort();
-    }
-
+    handleVerticalScrollLater();
     emit sigPageChanged(currentPage());
 }
 
@@ -228,23 +214,13 @@ void SheetBrowser::onHorizontalScrollBarValueChanged(int)
     }
 }
 
-void SheetBrowser::onWordsChanged()
+void SheetBrowser::onVerticalScrollFinished()
 {
-    //改变当前可读取字体
-    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
-    foreach (QGraphicsItem *item, items) {
-        if (item->data(0).toString() != "BrowserPage")
-            continue;
-
-        BrowserPage *pdfItem = static_cast<BrowserPage *>(item);
-
-        if (!m_items.contains(pdfItem))
-            continue;
-
-        if (nullptr == pdfItem)
-            continue;
-
-        pdfItem->loadWords();
+    foreach (BrowserPage *page, m_items) {
+        if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
+            page->renderViewPort();
+            page->loadWords();
+        }
     }
 }
 
@@ -343,7 +319,7 @@ Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
     return anno;
 }
 
-void SheetBrowser::wordsChangedLater()
+void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {
         item->clearWords();
@@ -351,7 +327,7 @@ void SheetBrowser::wordsChangedLater()
 
     if (nullptr == m_scrollTimer) {
         m_scrollTimer = new QTimer(this);
-        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onWordsChanged);
+        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onVerticalScrollFinished);
         m_scrollTimer->setSingleShot(true);
     }
 
@@ -586,7 +562,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     if (page > 0 && page <= m_items.count())
         verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diff));
 
-    wordsChangedLater();
+    handleVerticalScrollLater();
 }
 
 bool SheetBrowser::hasLoaded()

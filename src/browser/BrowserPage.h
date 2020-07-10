@@ -40,6 +40,7 @@ class BrowserWord;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
+    friend class PageRenderThread;
 public:
     explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
@@ -110,11 +111,20 @@ protected:
 signals:
     void bookmarkPressed(int, bool bookmark);
 
+    struct ImageFragment {
+        QRect rect;
+        QImage image;
+    };
+
 private:
     deepin_reader::Page *m_page = nullptr;
 
-    QImage m_image;
-    QImage m_leftImage;
+    QList<ImageFragment> m_imageFragments;      //用来
+    ImageFragment m_viewportFragment;           //当前视图的
+
+    QImage m_image;         //当前逐步的image
+    QImage m_leftImage;     //上一张完整的image
+
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;
     bool m_bookmark = false;

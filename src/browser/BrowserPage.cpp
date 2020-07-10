@@ -33,6 +33,7 @@
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
+#include "PageRenderThread.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -48,7 +49,6 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
     setCacheMode(CacheMode::ItemCoordinateCache);
-    setData(0, "BrowserPage");
 }
 
 BrowserPage::~BrowserPage()
@@ -97,7 +97,6 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 {
     if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
         render(m_scaleFactor, m_rotation, false);
-        renderViewPort();
     }
 
     if (m_image.isNull())
@@ -127,9 +126,9 @@ void BrowserPage::renderViewPort()
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
-    RenderTaskPDFL task;
+    PageRenderTask task;
 
-    task.item = this;
+    task.page = this;
 
     task.scaleFactor = m_scaleFactor;
 
@@ -137,9 +136,7 @@ void BrowserPage::renderViewPort()
 
     task.renderRect = viewRenderRect;
 
-    BrowserRenderThread::clearVipTask(this);
-
-    BrowserRenderThread::appendVipTask(task);
+    PageRenderThread::appendTask(task);
 }
 
 void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater)
@@ -159,6 +156,9 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         m_leftImage = QImage();
         m_rotation  = rotation;
     }
+
+    m_image = QImage(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), QImage::Format_RGB32);
+    m_image.fill(QColor(Qt::white));
 
     if (!renderLater) {
         //之后替换为线程reader
@@ -204,8 +204,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
             annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 
-    m_image = QImage();
-
     update();
 }
 
@@ -238,6 +236,8 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 
 void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
 {
+    return;
+
     if (!qFuzzyCompare(scaleFactor, m_scaleFactor) || rotation != m_rotation)
         return;
 
@@ -298,8 +298,6 @@ void BrowserPage::clearWords()
         delete word;
     }
 
-    m_wordRotation = Dr::NumberOfRotations;
-    m_wordScaleFactor = -1;
     m_words.clear();
 }
 

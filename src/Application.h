@@ -42,6 +42,8 @@ public:
 
     void unBlockShutdown();
 
+    void addRenderTask();
+
 public slots:
     Q_SCRIPTABLE void handleFiles(QStringList filePathList);
 
