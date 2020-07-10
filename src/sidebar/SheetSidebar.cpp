@@ -222,9 +222,9 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
     if (curWidget) curWidget->updateThumbnail(index);
 }
 
-void SheetSidebar::handleAnntationMsg(const int &msg, const QString &text)
+void SheetSidebar::handleAnntationMsg(const int &msg, deepin_reader::Annotation *anno)
 {
-    if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, text);
+    if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, anno);
 }
 
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)

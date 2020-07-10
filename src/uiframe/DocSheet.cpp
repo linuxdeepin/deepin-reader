@@ -72,6 +72,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageFirst()), this, SLOT(onBrowserPageFirst()));
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
+    connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
 }
 
 DocSheet::~DocSheet()
@@ -447,11 +448,6 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
     return m_browser->annotations();
 }
 
-QString DocSheet::addIconAnnotation(const QPoint &pos)
-{
-
-}
-
 bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     if (nullptr == m_browser)
@@ -667,4 +663,9 @@ void DocSheet::onBrowserPageLast()
 void DocSheet::onBrowserBookmark(int index, bool state)
 {
     setBookMark(index, state);
+}
+
+void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *anno)
+{
+    m_sidebar->handleAnntationMsg(type, anno);
 }

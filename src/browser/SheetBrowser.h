@@ -85,21 +85,19 @@ public:
 
     void wordsChangedLater();
 
-    Annotation *addHighlightAnnotation(QString text, QColor color);
-
-    QList< deepin_reader::Annotation * > annotations();
-
     deepin_reader::Outline outline();
 
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
     void jumpToHighLight(deepin_reader::Annotation *annotation);
 
-    void removeAnnotation(BrowserAnnotation *annotation);
+    QList< deepin_reader::Annotation * > annotations();
+
+    Annotation *addHighlightAnnotation(QString text, QColor color);
+
+    Annotation *addIconAnnotation(const QPointF, const QString);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
-
-    bool updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color = QColor());
 
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
@@ -122,6 +120,8 @@ signals:
 
     void sigNeedBookMark(int index, bool state);
 
+    void sigOperaAnnotation(int type, deepin_reader::Annotation *annotation);
+
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -138,8 +138,6 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
-
-    Annotation *addIconAnnotation(const QPointF, const QString);
 
     BrowserPage *mouseClickInPage(QPointF &);
 

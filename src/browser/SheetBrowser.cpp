@@ -307,16 +307,8 @@ Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
     Annotation *anno = nullptr;
     foreach (BrowserPage *item, m_items)
         anno = item->addHighlightAnnotation(text, color);
+    if (anno) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     return anno;
-}
-
-void SheetBrowser::removeAnnotation(BrowserAnnotation *browserAnnotation)
-{
-    deepin_reader::Annotation *annotation = browserAnnotation->annotation();
-    foreach (BrowserPage *item, m_items) {
-        if (item->hasAnnotation(annotation))
-            item->removeAnnotation(annotation);
-    }
 }
 
 void SheetBrowser::wordsChangedLater()
@@ -350,22 +342,15 @@ QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 
 bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 {
+    bool ret = false;
     foreach (BrowserPage *item, m_items) {
-        if (item->hasAnnotation(annotation))
-            return item->removeAnnotation(annotation);
+        if (item->hasAnnotation(annotation)) {
+            ret = item->removeAnnotation(annotation);
+            break;
+        }
     }
-
+    if (ret) emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
     return false;
-}
-
-bool SheetBrowser::updateAnnotation(BrowserAnnotation *annotation, const QString &text, QColor color)
-{
-    if (nullptr == m_document || nullptr == annotation->annotation())
-        return false;
-
-    deepin_reader::Annotation *annot = annotation->annotation();
-
-    return setAnnotationProperty(annot, text, color);
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
@@ -373,7 +358,9 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     if (nullptr == m_document || nullptr == annotation)
         return false;
 
-    return setAnnotationProperty(annotation, text, color);
+    bool ret = setAnnotationProperty(annotation, text, color);
+    if (ret) emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
+    return ret;
 }
 
 deepin_reader::Outline SheetBrowser::outline()
@@ -636,7 +623,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
-                        updateAnnotation(annotation, annotation->annotationText(), QColor());
+                        updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
                         showNoteEditWidget(annotation->annotation());
                     } else {
                         showNoteEditWidget(addIconAnnotation(clickPos, ""));
@@ -648,7 +635,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
                     if (annotation)  {
-                        updateAnnotation(annotation, annotation->annotationText(), color);
+                        updateAnnotation(annotation->annotation(), annotation->annotationText(), color);
                         showNoteEditWidget(annotation->annotation());
                     } else {
                         showNoteEditWidget(addHighlightAnnotation("", color));
@@ -930,12 +917,14 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
 
     page = mouseClickInPage(pointf);
 
+    Annotation *anno = nullptr;
     if (nullptr != page) {
         qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
-        return page->addIconAnnotation(clickPoint, contents);
+        anno = page->addIconAnnotation(clickPoint, contents);
     }
 
-    return nullptr;
+    if (anno) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
+    return anno;
 }
 
 void SheetBrowser::openMagnifier()

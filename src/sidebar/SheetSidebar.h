@@ -38,6 +38,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(PreviewWidgesFlags)
 
 namespace deepin_reader {
 struct stSearchRes;
+class Annotation;
 }
 
 class DocSheet;
@@ -67,7 +68,7 @@ public :
     int  handleFindFinished();
     void handleRotate(int);
     void handleUpdateThumbnail(const int &index);
-    void handleAnntationMsg(const int &, const QString &);
+    void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

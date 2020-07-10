@@ -109,53 +109,31 @@ void NotesWidget::DeleteItemByKey()
 
 void NotesWidget::deleteAllItem()
 {
-    //LLLLLLLLLLLLLLLLLLLLLL
-//    QList<AnnotationInfo_t> tAnnolst;
-//    int itemsize = m_pImageListView->model()->rowCount();
-//    for (int i = 0; i < itemsize; i++) {
-//        ImagePageInfo_t tImagePageInfo;
-//        m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
-//        if (tImagePageInfo.pageIndex >= 0) {
-//            int nType = tImagePageInfo.iType;
-//            int pageIndex = tImagePageInfo.pageIndex;
-//            QString uuid = tImagePageInfo.struuid;
-//            QString sContent = uuid + Constant::sQStringSep + QString::number(pageIndex);
-//            if (nType == NOTE_HIGHLIGHT) {
-//                tAnnolst << AnnotationInfo_t(MSG_NOTE_DELETE_CONTENT, sContent);
-//            } else {
-//                sContent += Constant::sQStringSep + "0";
-//                tAnnolst << AnnotationInfo_t(MSG_NOTE_PAGE_DELETE_CONTENT, sContent);
-//            }
-//        }
-//    }
-//    m_sheet->deleteAnnotations(tAnnolst);
+    int itemsize = m_pImageListView->model()->rowCount();
+    for (int i = 0; i < itemsize; i++) {
+        ImagePageInfo_t tImagePageInfo;
+        m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
+        if (tImagePageInfo.pageIndex >= 0) {
+            int pageIndex = tImagePageInfo.pageIndex;
+        }
+    }
 }
 
-void NotesWidget::addNoteItem(const QString &text)
+void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
 {
-    //LLLLLLLLLLLLLLLLLLLL
-//    const QStringList &strList = text.split(Constant::sQStringSep, QString::SkipEmptyParts);
-//    if (strList.count() == 3) {
-//        ImagePageInfo_t tImagePageInfo;
-//        tImagePageInfo.pageIndex = strList.at(2).trimmed().toInt();
-//        tImagePageInfo.strcontents = strList.at(1).trimmed();
-//        m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
+    ImagePageInfo_t tImagePageInfo;
+    tImagePageInfo.pageIndex = anno->page;
+    tImagePageInfo.strcontents = anno->contents();
+    m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
-//        int modelIndex = m_pImageListView->getImageModel()->findItemForuuid(tImagePageInfo.struuid);
-//        if (modelIndex >= 0)
-//            m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
-//    }
+    int modelIndex = m_pImageListView->getImageModel()->findItemForAnno(anno);
+    if (modelIndex >= 0)
+        m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
 }
 
-void NotesWidget::deleteNoteItem(const QString &sUuid)
+void NotesWidget::deleteNoteItem(deepin_reader::Annotation *anno)
 {
-    //LLLLLLLLLLLLLLLLLLLL
-    //m_pImageListView->getImageModel()->removeItemForuuid(sUuid);
-}
-
-void NotesWidget::updateNoteItem(const QString &msgContent)
-{
-    addNoteItem(msgContent);
+    m_pImageListView->getImageModel()->removeItemForAnno(anno);
 }
 
 void NotesWidget::handleOpenSuccess()
@@ -185,31 +163,22 @@ void NotesWidget::onListItemClicked(int row)
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-        int index = tImagePageInfo.pageIndex;
-        //LLLLLLLLLLLLLLLLLLLLLL
-        //m_sheet->jumpToHighLight(uuid, index);
+        m_sheet->jumpToHighLight(tImagePageInfo.annotation);
     }
 }
 
 void NotesWidget::onAddAnnotation()
 {
 //LLLLLLLLLLLLLLLLLLLLLL
-//    DocSheetPDF *sheet = static_cast<DocSheetPDF *>(m_sheet.data());
-//    if (nullptr == sheet)
-//        return;
 //    sheet->setCurrentState(NOTE_ADD_State);
 }
 
-void NotesWidget::handleAnntationMsg(const int &msgType, const QString &msgContent)
+void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotation *anno)
 {
-    if (msgType == MSG_NOTE_ADD_ITEM) {
-        addNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_PAGE_ADD_ITEM) {
-        addNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_DELETE_ITEM || msgType == MSG_NOTE_PAGE_DELETE_ITEM) {
-        deleteNoteItem(msgContent);
-    } else if (msgType == MSG_NOTE_UPDATE_ITEM || msgType == MSG_NOTE_PAGE_UPDATE_ITEM) {
-        updateNoteItem(msgContent);
+    if (msgType == MSG_NOTE_ADD) {
+        addNoteItem(anno);
+    } else if (msgType == MSG_NOTE_DELETE) {
+        addNoteItem(anno);
     }
 }
 

@@ -142,8 +142,6 @@ public:
 
     QList<deepin_reader::Annotation *> annotations();
 
-    QString addIconAnnotation(const QPoint &pos);
-
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     QList<qreal> scaleFactorList();
@@ -216,6 +214,8 @@ private slots:
     void onBrowserPageLast();
 
     void onBrowserBookmark(int index, bool state);
+
+    void onBrowserOperaAnnotation(int, deepin_reader::Annotation *);
 
 private:
     SheetOperation  m_operation;

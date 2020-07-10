@@ -22,6 +22,9 @@
 #include "widgets/CustomWidget.h"
 #include <QPointer>
 
+namespace deepin_reader {
+class Annotation;
+}
 class DocSheet;
 class ImageListView;
 class DocummentProxy;
@@ -41,7 +44,7 @@ public:
     void nextPage();
     void DeleteItemByKey();
     void handleOpenSuccess();
-    void handleAnntationMsg(const int &, const QString &);
+    void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
@@ -57,9 +60,8 @@ private slots:
 
 private:
     void copyNoteContent();
-    void addNoteItem(const QString &);
-    void deleteNoteItem(const QString &);
-    void updateNoteItem(const QString &);
+    void addNoteItem(deepin_reader::Annotation *anno);
+    void deleteNoteItem(deepin_reader::Annotation *anno);
     void deleteAllItem();
 
 private:
