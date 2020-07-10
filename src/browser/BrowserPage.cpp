@@ -32,6 +32,7 @@
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
+#include "Application.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -215,7 +216,11 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
-    return m_page->render(width, height, mode);
+
+    QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QImage image = m_page->render(size.width(), size.height(), mode);
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    return image;
 }
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
