@@ -297,10 +297,12 @@ QString SheetBrowser::selectedWordsText()
     return text;
 }
 
-void SheetBrowser::addHighlightAnnotation(QString text, QColor color)
+Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
 {
+    Annotation *anno = nullptr;
     foreach (BrowserPage *item, m_items)
-        item->addHighlightAnnotation(text, color);
+        anno = item->addHighlightAnnotation(text, color);
+    return anno;
 }
 
 void SheetBrowser::removeAnnotation(BrowserAnnotation *browserAnnotation)
@@ -641,7 +643,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         updateAnnotation(annotation, annotation->annotationText(), color);
                         showNoteEditWidget(annotation->annotation());
                     } else {
-                        //showNoteEditWidget(addHighLightAnnotation("", color));
+                        showNoteEditWidget(addHighlightAnnotation("", color));
                     }
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
@@ -925,11 +927,6 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
         return page->addIconAnnotation(clickPoint, contents);
     }
 
-    return nullptr;
-}
-
-Annotation *SheetBrowser::addHighLightAnnotation(const QPointF start, const QPointF end, const QColor)
-{
     return nullptr;
 }
 

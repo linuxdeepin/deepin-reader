@@ -83,7 +83,7 @@ public:
 
     void wordsChangedLater();
 
-    void addHighlightAnnotation(QString text, QColor color);
+    Annotation *addHighlightAnnotation(QString text, QColor color);
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -138,8 +138,6 @@ protected:
     bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
 
     Annotation *addIconAnnotation(const QPointF, const QString);
-
-    Annotation *addHighLightAnnotation(const QPointF start, const QPointF end, const QColor);
 
     BrowserPage *mouseClickInPage(QPointF &);
 

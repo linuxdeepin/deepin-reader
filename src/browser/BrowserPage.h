@@ -89,7 +89,7 @@ public:
 
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &, const QColor &);
 
-    void addHighlightAnnotation(QString text, QColor color);
+    Annotation *addHighlightAnnotation(QString text, QColor color);
 
     bool hasAnnotation(deepin_reader::Annotation *annotation);
 

@@ -363,7 +363,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     return true;
 }
 
-void BrowserPage::addHighlightAnnotation(QString text, QColor color)
+Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
     QList<QRectF> boundarys;
     foreach (BrowserWord *word, m_words) {
@@ -373,13 +373,14 @@ void BrowserPage::addHighlightAnnotation(QString text, QColor color)
     }
 
     if (boundarys.isEmpty())
-        return;
+        return nullptr;
 
-    m_page->addHighlightAnnotation(boundarys, text, color);
+    Annotation *anno = m_page->addHighlightAnnotation(boundarys, text, color);
 
     reloadAnnotations();
 
     renderViewPort();
+    return anno;
 }
 
 bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)
