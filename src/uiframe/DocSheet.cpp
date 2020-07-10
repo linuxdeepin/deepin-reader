@@ -554,18 +554,23 @@ void DocSheet::zoomout()
     }
 }
 
-void DocSheet::setSidebarVisible(bool isVisible)
+bool DocSheet::sideBarVisible()
 {
-    m_operation.sidebarVisible = isVisible;
-    if (m_sidebar)
-        m_sidebar->setVisible(isVisible);
-    emit sigFileChanged(this);
+    return m_sidebar->isVisible();
+}
+
+void DocSheet::setSidebarVisible(bool isVisible, bool notify)
+{
+    m_sidebar->setVisible(isVisible);
+    if (notify) {
+        m_operation.sidebarVisible = isVisible;
+        emit sigFileChanged(this);
+    }
 }
 
 void DocSheet::handleOpenSuccess()
 {
-    if (m_sidebar)
-        m_sidebar->handleOpenSuccess();
+    m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
@@ -600,13 +605,30 @@ bool DocSheet::slideOpened()
     return false;
 }
 
+bool DocSheet::isFullScreen()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return false;
+    return doc->isFullScreen();
+}
+
 void DocSheet::openFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return;
-
+    setSidebarVisible(false);
     doc->openFullScreen();
+}
+
+void DocSheet::closeFullScreen()
+{
+    CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+    if (nullptr == doc)
+        return;
+
+    doc->quitFullScreen();
 }
 
 int DocSheet::label2pagenum(QString label)

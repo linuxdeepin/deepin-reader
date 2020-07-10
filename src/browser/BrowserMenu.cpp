@@ -64,7 +64,12 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         createAction(tr("Add annotation"), "AddAnnotationIcon");
         this->addSeparator();
 
-        createAction(tr("Fullscreen"), "Fullscreen");
+        if (sheet->isFullScreen()) {
+            createAction(tr("ExitFullscreen"), "ExitFullscreen");
+        } else {
+            createAction(tr("Fullscreen"), "Fullscreen");
+        }
+
         createAction(tr("Slide show"), "SlideShow");
         this->addSeparator();
 

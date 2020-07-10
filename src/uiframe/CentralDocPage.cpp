@@ -478,13 +478,13 @@ void CentralDocPage::showFileAttr()
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    if (s == Dr::key_esc && quitFullScreen())
-        return;
-
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
     }
+
+    if (s == Dr::key_esc && quitFullScreen())
+        return;
 
     if (s == Dr::key_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
@@ -611,6 +611,16 @@ void CentralDocPage::handleSearch()
 {
     DocSheet *docSheet = getCurSheet();
     if (docSheet) docSheet->handleSearch();
+}
+
+bool CentralDocPage::isFullScreen()
+{
+    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+
+    if (nullptr == mainWindow)
+        return false;
+
+    return mainWindow->isFullScreen();
 }
 
 void CentralDocPage::openFullScreen()

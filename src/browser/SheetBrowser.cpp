@@ -700,6 +700,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     m_sheet->setBookMark(item->itemIndex(), false);
                 } else if (objectname == "Fullscreen") {
                     m_sheet->openFullScreen();
+                } else if (objectname == "ExitFullscreen") {
+                    m_sheet->closeFullScreen();
                 } else if (objectname == "SlideShow") {
                     m_sheet->openSlide();
                 } else if (objectname == "FirstPage") {
@@ -746,9 +748,16 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_magnifierLabel) {
-        QPoint mousePos = event->pos();
+    QPoint mousePos = event->pos();
+    if (m_sheet->isFullScreen()) {
+        if (mousePos.x() == 0 && !m_sheet->sideBarVisible()) {
+            m_sheet->setSidebarVisible(true, false);
+        } else if (!m_sheet->operation().sidebarVisible && m_sheet->sideBarVisible()) {
+            m_sheet->setSidebarVisible(false, false);
+        }
+    }
 
+    if (m_magnifierLabel) {
         if (mousePos.y() < 122) {
             verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
             mousePos.setY(122);

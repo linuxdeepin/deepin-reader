@@ -166,7 +166,9 @@ public:
 
     void zoomout();
 
-    void setSidebarVisible(bool isVisible);
+    bool sideBarVisible();
+
+    void setSidebarVisible(bool isVisible, bool notify = true);
 
     void handleOpenSuccess();
 
@@ -176,7 +178,11 @@ public:
 
     bool slideOpened();
 
+    bool isFullScreen();
+
     void openFullScreen();
+
+    void closeFullScreen();
 
 public slots:
     void showTips(const QString &tips, int iconIndex = 0);

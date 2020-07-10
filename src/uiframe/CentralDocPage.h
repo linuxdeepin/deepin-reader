@@ -83,6 +83,8 @@ public:
 
     void quitSlide();
 
+    bool isFullScreen();
+
     void openFullScreen();
 
     bool quitFullScreen();
