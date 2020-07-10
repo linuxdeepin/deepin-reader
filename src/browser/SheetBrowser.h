@@ -149,8 +149,6 @@ private slots:
     void onWordsChanged();
 
 private:
-    bool setAnnotationProperty(deepin_reader::Annotation *annotation, const QString &text, QColor color);
-
     bool mouseClickIconAnnot(QPointF &);
 
     void showNoteEditWidget(deepin_reader::Annotation *annotation);

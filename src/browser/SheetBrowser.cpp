@@ -246,21 +246,6 @@ void SheetBrowser::onWordsChanged()
     }
 }
 
-bool SheetBrowser::setAnnotationProperty(deepin_reader::Annotation *annotation, const QString &text, QColor color)
-{
-    if (nullptr == annotation)
-        return false;
-
-    foreach (BrowserPage *item, m_items) {
-        //update annot text , color
-        if (item && item->hasAnnotation(annotation)) {
-            return item->updateAnnotation(annotation, text, color);
-        }
-    }
-
-    return false;
-}
-
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
 {
     if (annotation == nullptr) {
@@ -358,8 +343,17 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     if (nullptr == m_document || nullptr == annotation)
         return false;
 
-    bool ret = setAnnotationProperty(annotation, text, color);
+    bool ret{false};
+
+    foreach (BrowserPage *item, m_items) {
+        //update annot text , color
+        if (item && item->hasAnnotation(annotation)) {
+            ret = item->updateAnnotation(annotation, text, color);
+        }
+    }
+
     if (ret) emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
+
     return ret;
 }
 
