@@ -110,6 +110,10 @@ public:
 
     void setMouseShape(Dr::MouseShape shape);
 
+    void setAnnotationInserting(bool inserting);
+
+    void setState();
+
     void openMagnifier();
 
     void closeMagnifier();
@@ -217,14 +221,15 @@ private:
     SheetOperation  m_operation;
     QSet<int>       m_bookmarks;
 
-    SheetSidebar *m_sidebar = nullptr;
-    SheetBrowser *m_browser = nullptr;
+    SheetSidebar   *m_sidebar = nullptr;
+    SheetBrowser   *m_browser = nullptr;
 
     QString         m_filePath;
     Dr::FileType    m_fileType;
     QString         m_uuid;
 
     bool m_fileChanged = false;
+
 };
 
 #endif // DocSheet_H

@@ -183,6 +183,11 @@ void SheetBrowser::setBookMark(int index, int state)
     }
 }
 
+void SheetBrowser::setAnnotationInserting(bool inserting)
+{
+    m_annotationInserting = inserting;
+}
+
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
     wordsChangedLater();
@@ -585,12 +590,15 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         Qt::MouseButton btn = event->button();
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
-
             m_selectPressedPos = mapToScene(event->pos());
 
             BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemAt(event->pos()));
             if (annotation != nullptr) {
                 showNoteEditWidget(annotation->annotation());
+            } else if (m_annotationInserting) {
+                deepin_reader::Annotation *annotation = addIconAnnotation(m_selectPressedPos, "");
+                showNoteEditWidget(annotation);
+                m_annotationInserting = false;
             }
 
         } else if (btn == Qt::RightButton) {

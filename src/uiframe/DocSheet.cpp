@@ -301,6 +301,13 @@ void DocSheet::setMouseShape(Dr::MouseShape shape)
     }
 }
 
+void DocSheet::setAnnotationInserting(bool inserting)
+{
+    if (nullptr == m_browser)
+        return;
+    m_browser->setAnnotationInserting(inserting);
+}
+
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {

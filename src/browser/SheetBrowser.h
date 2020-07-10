@@ -53,6 +53,8 @@ public:
 
     void setBookMark(int index, int state);
 
+    void setAnnotationInserting(bool inserting);
+
     void deform(SheetOperation &operation);      //根据当前参数进行变换
 
     bool hasLoaded();
@@ -172,6 +174,7 @@ private:
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数
     QPointF m_selectPressedPos;         //scene
+    bool m_annotationInserting = false;     //正在插入注释状态
 };
 
 #endif // SheetBrowser_H
