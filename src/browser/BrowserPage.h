@@ -131,7 +131,7 @@ private:
     QPixmap m_viewportPixmap;
     QRect   m_viewportRenderedRect;
 
-    double m_imageScaleFactor   = 1;
+    double m_imageScaleFactor   = -1;
     double m_scaleFactor        = -1;
     bool m_bookmark = false;
     int m_bookmarkState = 0;   //1为on 2为pressed 3为show

@@ -266,6 +266,8 @@ void BrowserPage::handlePreRenderFinished(Dr::Rotation rotation, QImage image)
 
     m_pixmap = QPixmap::fromImage(image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio));
 
+    m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 2);
+
     update();
 }
 
