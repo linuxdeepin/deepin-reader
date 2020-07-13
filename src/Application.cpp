@@ -1,10 +1,10 @@
 #include "Application.h"
 #include "Utils.h"
 #include "MainWindow.h"
-#include "BrowserRenderThread.h"
+#include "RenderPageThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
-#include "PageRenderThread.h"
+#include "RenderViewportThread.h"
 
 #include <QIcon>
 #include <QDebug>
@@ -24,7 +24,7 @@ Application::Application(int &argc, char **argv)
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
     setProductIcon(QIcon::fromTheme("deepin-reader"));
 
-    PageRenderThread::createInstance();
+    RenderViewportThread::createInstance();
 }
 
 void Application::blockShutdown()
@@ -124,8 +124,8 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    PageRenderThread::destroyInstance();
-    BrowserRenderThread::destroy();
+    RenderViewportThread::destroyInstance();
+    RenderPageThread::destroy();
 
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();

@@ -41,7 +41,7 @@
 
 #include "document/DjVuModel.h"
 #include "Utils.h"
-#include "PageRenderThread.h"
+#include "RenderViewportThread.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -214,7 +214,7 @@ void SheetBrowser::onHorizontalScrollBarValueChanged(int)
     }
 }
 
-void SheetBrowser::onVerticalScrollFinished()
+void SheetBrowser::onSceneOfViewportChanged()
 {
     foreach (BrowserPage *page, m_items) {
         if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
@@ -459,7 +459,7 @@ void SheetBrowser::handleVerticalScrollLater()
 
     if (nullptr == m_scrollTimer) {
         m_scrollTimer = new QTimer(this);
-        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onVerticalScrollFinished);
+        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
         m_scrollTimer->setSingleShot(true);
     }
 
@@ -632,9 +632,6 @@ void SheetBrowser::deform(SheetOperation &operation)
         break;
     }
 
-    QTime time;
-    time.start();
-
     for (int i = 0; i < m_items.count(); ++i) {
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
     }
@@ -710,9 +707,24 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         deform(m_sheet->operationRef());
         m_sheet->setOperationChanged();
+
+        for (int i = 0; i < m_items.count(); ++i) {
+            m_items.at(i)->renderViewPort();
+        }
     }
 
     QGraphicsView::resizeEvent(event);
+
+    if (nullptr == m_resizeTimer) {
+        m_resizeTimer = new QTimer(this);
+        connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
+        m_resizeTimer->setSingleShot(true);
+    }
+
+    if (m_resizeTimer->isActive())
+        m_resizeTimer->stop();
+
+    m_resizeTimer->start(100);
 }
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)

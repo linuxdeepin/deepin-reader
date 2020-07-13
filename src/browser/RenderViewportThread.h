@@ -18,48 +18,40 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef BrowserRenderThread_H
-#define BrowserRenderThread_H
+#ifndef RenderViewportThread_H
+#define RenderViewportThread_H
 
 #include <QThread>
 #include <QMutex>
 #include <QStack>
 #include <QImage>
+#include <QPointer>
+#include "BrowserPage.h"
+
 #include "Global.h"
 
 class SheetBrowser;
 class BrowserPage;
-struct RenderTaskPDFL {
-    SheetBrowser *view = nullptr;
-    BrowserPage *item = nullptr;
+struct PageRenderTask {
+    BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
     QRect renderRect;
 };
 
-class BrowserRenderThread : public QThread
+class RenderViewportThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit BrowserRenderThread(QObject *parent = nullptr);
+    explicit RenderViewportThread(QObject *parent = nullptr);
 
-    ~BrowserRenderThread();
+    ~RenderViewportThread();
 
-    static void clearVipTask(BrowserPage *item);
+    static void createInstance();
 
-    static void clearTask(BrowserPage *item);
+    static void destroyInstance();
 
-    static void clearTasks(SheetBrowser *view);
-
-    static void appendVipTask(RenderTaskPDFL task);
-
-    static void appendTask(RenderTaskPDFL task);
-
-    static void appendTasks(QList<RenderTaskPDFL> list);
-
-    static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
-
-    static void destroy();
+    static void appendTask(PageRenderTask task);
 
     void run();
 
@@ -70,12 +62,11 @@ private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
 private:
-    RenderTaskPDFL m_curTask;
-    QStack<RenderTaskPDFL> m_tasks;
-    QStack<RenderTaskPDFL> m_vipTasks;
+    PageRenderTask m_curTask;
+    QStack<PageRenderTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
-    static BrowserRenderThread *instance;
+    static RenderViewportThread *m_instance;
 };
 
-#endif // BrowserRenderThread_H
+#endif // RenderViewportThread_H

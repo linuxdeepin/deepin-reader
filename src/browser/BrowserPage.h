@@ -40,7 +40,8 @@ class BrowserWord;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
-    friend class PageRenderThread;
+    friend class RenderPageThread;
+    friend class RenderViewportThread;
 public:
     explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
@@ -68,7 +69,11 @@ public:
 
     QImage getImagePoint(double scaleFactor, QPoint point); //根据某一个点返回100×100的图片
 
+    void handlePreRenderFinished(Dr::Rotation rotation, QImage image);
+
     void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
+
+    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
     static bool existInstance(BrowserPage *item);
 
@@ -100,8 +105,6 @@ public:
 
     bool mouseClickIconAnnot(QPointF &);
 
-    void setViewportFragment(QRect rect, QImage image);
-
 private:
     void reloadAnnotations();
 
@@ -121,11 +124,12 @@ signals:
 private:
     deepin_reader::Page *m_page = nullptr;
 
-    QList<ImageFragment> m_imageFragments;      //用来
-    ImageFragment m_viewportFragment;           //当前视图的
+    QPixmap m_pixmap;
+    bool    m_hasRendered = false;
+    QRect   m_renderedRect;         //已经加载的rect
 
-    QImage m_image;         //当前逐步的image
-    QImage m_leftImage;     //上一张完整的image
+    QPixmap m_viewportPixmap;
+    QRect   m_viewportRenderedRect;
 
     double m_imageScaleFactor   = 1;
     double m_scaleFactor        = -1;

@@ -35,7 +35,7 @@ class DocSheet;
 class TipsWidget;
 class BrowserAnnotation;
 class NoteShadowViewWidget;
-class PageRenderThread;
+class RenderViewportThread;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -145,7 +145,7 @@ private slots:
 
     void onHorizontalScrollBarValueChanged(int value);
 
-    void onVerticalScrollFinished();
+    void onSceneOfViewportChanged();
 
 private:
     bool mouseClickIconAnnot(QPointF &);
@@ -175,7 +175,7 @@ private:
     int m_initPage = 1;                 //用于刚显示跳转的页数
     QPointF m_selectPressedPos;         //scene
     bool m_annotationInserting = false;     //正在插入注释状态
-    PageRenderThread *m_pageThread = nullptr;
+    RenderViewportThread *m_pageThread = nullptr;
 };
 
 #endif // SheetBrowser_H

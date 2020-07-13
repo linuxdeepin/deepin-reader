@@ -26,32 +26,32 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "PageRenderThread.h"
+#include "RenderViewportThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
 
 #include <QTime>
 #include <QDebug>
 
-PageRenderThread *PageRenderThread::m_instance = nullptr;
-PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
+RenderViewportThread *RenderViewportThread::m_instance = nullptr;
+RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
 {
     connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
 }
 
-PageRenderThread::~PageRenderThread()
+RenderViewportThread::~RenderViewportThread()
 {
     m_quit = true;
     wait();
 }
 
-void PageRenderThread::createInstance()
+void RenderViewportThread::createInstance()
 {
     if (nullptr == m_instance)
-        m_instance = new PageRenderThread;
+        m_instance = new RenderViewportThread;
 }
 
-void PageRenderThread::destroyInstance()
+void RenderViewportThread::destroyInstance()
 {
     if (nullptr != m_instance) {
         delete m_instance;
@@ -59,7 +59,7 @@ void PageRenderThread::destroyInstance()
     }
 }
 
-void PageRenderThread::appendTask(PageRenderTask task)
+void RenderViewportThread::appendTask(PageRenderTask task)
 {
     if (nullptr == m_instance)
         return;
@@ -85,7 +85,7 @@ void PageRenderThread::appendTask(PageRenderTask task)
         m_instance->start();
 }
 
-void PageRenderThread::run()
+void RenderViewportThread::run()
 {
     m_quit = false;
 
@@ -111,10 +111,10 @@ void PageRenderThread::run()
     }
 }
 
-void PageRenderThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, int rotation, QRect rect)
+void RenderViewportThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, int rotation, QRect rect)
 {
     if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor) && (rotation == page->m_rotation)) {
-        page->setViewportFragment(rect, image);
+        page->handleViewportRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
     }
 }
 

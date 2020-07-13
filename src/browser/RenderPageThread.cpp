@@ -26,52 +26,30 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "BrowserRenderThread.h"
+#include "RenderPageThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
 
 #include <QTime>
 #include <QDebug>
 
-BrowserRenderThread *BrowserRenderThread::instance = nullptr;
-BrowserRenderThread::BrowserRenderThread(QObject *parent) : QThread(parent)
+RenderPageThread *RenderPageThread::instance = nullptr;
+RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
 {
-    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), Qt::QueuedConnection);
 }
 
-BrowserRenderThread::~BrowserRenderThread()
+RenderPageThread::~RenderPageThread()
 {
     instance = nullptr;
     m_quit = true;
     wait();
 }
 
-void BrowserRenderThread::clearVipTask(BrowserPage *item)
+void RenderPageThread::clearTask(BrowserPage *item)
 {
     if (nullptr == instance)
-        instance = new BrowserRenderThread;
-
-    instance->m_mutex.lock();
-
-    bool exist = true;
-    while (exist) {
-        exist = false;
-        for (int i = 0; i < instance->m_vipTasks.count(); ++i) {
-            if (instance->m_vipTasks[i].item == item) {
-                instance->m_vipTasks.remove(i);
-                exist = true;
-                break;
-            }
-        }
-    }
-
-    instance->m_mutex.unlock();
-}
-
-void BrowserRenderThread::clearTask(BrowserPage *item)
-{
-    if (nullptr == instance)
-        instance = new BrowserRenderThread;
+        instance = new RenderPageThread;
 
     instance->m_mutex.lock();
 
@@ -90,14 +68,14 @@ void BrowserRenderThread::clearTask(BrowserPage *item)
     instance->m_mutex.unlock();
 }
 
-void BrowserRenderThread::clearTasks(SheetBrowser *view)
+void RenderPageThread::clearTasks(SheetBrowser *view)
 {
     if (nullptr == instance)
-        instance = new BrowserRenderThread;
+        instance = new RenderPageThread;
 
     instance->m_mutex.lock();
 
-    QStack<RenderTaskPDFL> tasks;
+    QStack<RenderTask> tasks;
 
     for (int i = 0; i < instance->m_tasks.count(); ++i) {
         if (instance->m_tasks[i].view != view) {
@@ -110,22 +88,10 @@ void BrowserRenderThread::clearTasks(SheetBrowser *view)
     instance->m_mutex.unlock();
 }
 
-void BrowserRenderThread::appendVipTask(RenderTaskPDFL task)
+void RenderPageThread::appendTask(RenderTask task)
 {
     if (nullptr == instance)
-        instance = new BrowserRenderThread;
-
-    instance->m_mutex.lock();
-
-    instance->m_vipTasks.append(task);
-
-    instance->m_mutex.unlock();
-}
-
-void BrowserRenderThread::appendTask(RenderTaskPDFL task)
-{
-    if (nullptr == instance)
-        instance = new BrowserRenderThread;
+        instance = new RenderPageThread;
 
     instance->m_mutex.lock();
 
@@ -134,10 +100,10 @@ void BrowserRenderThread::appendTask(RenderTaskPDFL task)
     instance->m_mutex.unlock();
 }
 
-void BrowserRenderThread::appendTasks(QList<RenderTaskPDFL> list)
+void RenderPageThread::appendTasks(QList<RenderTask> list)
 {
     if (nullptr == instance)
-        instance = new BrowserRenderThread;
+        instance = new RenderPageThread;
 
     instance->m_mutex.lock();
 
@@ -150,14 +116,14 @@ void BrowserRenderThread::appendTasks(QList<RenderTaskPDFL> list)
         instance->start();
 }
 
-void BrowserRenderThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
+void RenderPageThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
 {
     if (nullptr == instance)
-        instance = new BrowserRenderThread;
+        instance = new RenderPageThread;
 
     instance->m_mutex.lock();
 
-    RenderTaskPDFL task;
+    RenderTask task;
     task.item = item;
     task.scaleFactor = scaleFactor;
     task.rotation = rotation;
@@ -170,7 +136,7 @@ void BrowserRenderThread::appendTask(BrowserPage *item, double scaleFactor, Dr::
         instance->start();
 }
 
-void BrowserRenderThread::run()
+void RenderPageThread::run()
 {
     m_quit = false;
 
@@ -181,14 +147,7 @@ void BrowserRenderThread::run()
         }
 
         m_mutex.lock();
-
-        if (m_vipTasks.isEmpty())
-            m_curTask = m_tasks.pop();
-        else {
-            m_curTask = m_vipTasks.pop();
-            m_vipTasks.clear();
-        }
-
+        m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
         if (!BrowserPage::existInstance(m_curTask.item))
@@ -197,13 +156,13 @@ void BrowserRenderThread::run()
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         if (!image.isNull())
-            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect, m_curTask.preRender);
 
-        m_curTask = RenderTaskPDFL();
+        m_curTask = RenderTask();
     }
 }
 
-void BrowserRenderThread::destroy()
+void RenderPageThread::destroy()
 {
     if (nullptr != instance) {
         delete instance;
@@ -211,8 +170,12 @@ void BrowserRenderThread::destroy()
     }
 }
 
-void BrowserRenderThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect)
+void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect, bool preRender)
 {
-    if (BrowserPage::existInstance(item))
-        item->handleRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
+    if (BrowserPage::existInstance(item)) {
+        if (preRender)
+            item->handlePreRenderFinished(static_cast<Dr::Rotation>(rotation), image);
+        else
+            item->handleRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
+    }
 }

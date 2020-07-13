@@ -28,12 +28,12 @@
 */
 #include "BrowserPage.h"
 #include "document/Model.h"
-#include "BrowserRenderThread.h"
+#include "RenderPageThread.h"
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
-#include "PageRenderThread.h"
+#include "RenderViewportThread.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -99,13 +99,15 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(QBrush(Qt::white));
     painter->drawRect(option->rect);
 
-    foreach (const ImageFragment &fragment, m_imageFragments) {
-        painter->drawImage(fragment.rect, fragment.image);
+    if (m_renderedRect.height() == 0) {
+        render(m_scaleFactor, m_rotation);
     }
 
-    if (!m_viewportFragment.image.isNull()) {
-        painter->drawImage(m_viewportFragment.rect, m_viewportFragment.image);
-    }
+    if (m_hasRendered)
+        painter->drawPixmap(option->rect, m_pixmap);
+
+    if (m_viewportRenderedRect.height() > 0)
+        painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -126,13 +128,17 @@ void BrowserPage::renderViewPort()
 
     QRectF intersectedRectF = this->mapToScene(this->boundingRect()).boundingRect().intersected(visibleSceneRectF);
 
+    if (intersectedRectF.height() <= 0 && intersectedRectF.width() <= 0)
+        return;
+
     QRectF viewRenderRectF = mapFromScene(intersectedRectF).boundingRect();
 
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
     //如果现在已经加载的rect包含viewRender 就不加入任务
-    //...
+    if (m_renderedRect.contains(viewRenderRect))
+        return;
 
     PageRenderTask task;
 
@@ -144,7 +150,7 @@ void BrowserPage::renderViewPort()
 
     task.renderRect = viewRenderRect;
 
-    PageRenderThread::appendTask(task);
+    RenderViewportThread::appendTask(task);
 }
 
 void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater)
@@ -159,57 +165,59 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
     m_scaleFactor = scaleFactor;
 
-    if (!m_image.isNull())
-        m_leftImage = m_image;
+    m_viewportRenderedRect = QRect();
+    m_viewportPixmap = QPixmap();
 
     if (m_rotation != rotation) {//旋转变化则强制移除
-        m_leftImage = QImage();
-        m_imageFragments.clear();
-        m_viewportFragment.image = QImage();
         m_rotation  = rotation;
-    } else if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor)) {
-
+        m_pixmap = QPixmap();
     }
 
-    m_image = QImage(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), QImage::Format_RGB32);
+    if (m_pixmap.isNull()) {
+        m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+        m_pixmap.fill(Qt::white);
+    } else
+        m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
+
+    m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
     //m_image.fill(QColor(Qt::white));//耗时操作
 
     if (!renderLater) {
+        m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 1);
         //之后替换为线程reader
-        BrowserRenderThread::clearTask(this);
+        RenderPageThread::clearTask(this);
 
-        QList<RenderTaskPDFL> tasks;
+        QList<RenderTask> tasks;
 
         QRectF rect = boundingRect();
 
-        if (rect.height() > 2000) {
-            for (int i = 0 ; i * 400 < rect.height(); ++i) {
-                int height = 400;
+        //加载模糊的图
+        RenderTask task;
+        task.item = this;
+        task.scaleFactor = 0.05;
+        task.rotation = m_rotation;
+        task.renderRect = QRect();
+        task.preRender = true;
+        tasks.append(task);
 
-                if (rect.height() < i * 400)
-                    height = static_cast<int>(rect.height() - 400 * i);
+        for (int i = 0 ; i * 400 < rect.height(); ++i) {
+            int height = 400;
 
-                QRect renderRect = QRect(0, 400 * i, static_cast<int>(boundingRect().width()), height);
+            if (rect.height() < i * 400)
+                height = static_cast<int>(rect.height() - 400 * i);
 
-                RenderTaskPDFL task;
-                task.item = this;
-                task.scaleFactor = m_scaleFactor;
-                task.rotation = m_rotation;
-                task.renderRect = renderRect;
-                tasks.append(task);
-            }
-        } else {
-            QRect renderRect = QRect(static_cast<int>(boundingRect().x()), static_cast<int>(boundingRect().y()),
-                                     static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
-            RenderTaskPDFL task;
+            QRect renderRect = QRect(0, 400 * i, static_cast<int>(boundingRect().width()), height);
+
+            RenderTask task;
             task.item = this;
             task.scaleFactor = m_scaleFactor;
             task.rotation = m_rotation;
             task.renderRect = renderRect;
+            task.preRender = false;
             tasks.append(task);
         }
 
-        BrowserRenderThread::appendTasks(tasks);
+        RenderPageThread::appendTasks(tasks);
         m_imageScaleFactor = m_scaleFactor;
 
         loadAnnotations();
@@ -226,7 +234,6 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
-
     QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
     QImage image = m_page->render(size.width(), size.height(), mode);
     image.setDevicePixelRatio(dApp->devicePixelRatio());
@@ -246,23 +253,49 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
-void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
+void BrowserPage::handlePreRenderFinished(Dr::Rotation rotation, QImage image)
 {
-    return;
-
-    if (!qFuzzyCompare(scaleFactor, m_scaleFactor) || rotation != m_rotation)
+    if (rotation != m_rotation)
         return;
 
-    if (rect.isNull()) {
-        m_image = image;
+    if (!m_pixmap.isNull())
+        return;
+
+    m_hasRendered = true;
+
+    image = image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio);
+
+    m_pixmap = QPixmap::fromImage(image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio));
+
+    update();
+}
+
+void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
+{
+    if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor) || rotation != m_rotation)
+        return;
+
+    m_hasRendered = true;
+
+    if (rect.height() == static_cast<int>(boundingRect().height())) {
+        m_pixmap = QPixmap::fromImage(image);
     } else {
-        if (m_image.isNull()) {
-            m_image = QImage(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), QImage::Format_RGB32);
-            m_image.fill(QColor(Qt::white));
-        }
-        QPainter painter(&m_image);
+        QPainter painter(&m_pixmap);
         painter.drawImage(rect, image);
     }
+
+    m_renderedRect.setHeight(rect.y() + rect.height());
+
+    update();
+}
+
+void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
+{
+    if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor) || rotation != m_rotation)
+        return;
+
+    m_viewportPixmap = QPixmap::fromImage(image);
+    m_viewportRenderedRect = rect;
     update();
 }
 
@@ -457,13 +490,6 @@ bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
         return false;
 
     return m_page->mouseClickIconAnnot(clickPoint);
-}
-
-void BrowserPage::setViewportFragment(QRect rect, QImage image)
-{
-    m_viewportFragment.rect = rect;
-    m_viewportFragment.image = image;
-    update();
 }
 
 bool BrowserPage::sceneEvent(QEvent *event)
