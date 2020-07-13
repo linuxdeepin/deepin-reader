@@ -154,6 +154,9 @@ private:
 
     bool calcIconAnnotRect(const QPointF, QRectF &);
 
+    bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
+
+    QPointF translate2Local(const QPointF);
 private:
     deepin_reader::Document *m_document = nullptr;
     QLabel *m_magnifierLabel = nullptr;

@@ -241,6 +241,13 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
     m_noteEditWidget->showWidget(QCursor::pos());
 }
 
+/**
+ * @brief SheetBrowser::calcIconAnnotRect
+ * 暂时先废弃
+ * @param point
+ * @param iconRect
+ * @return
+ */
 bool SheetBrowser::calcIconAnnotRect(const QPointF point, QRectF &iconRect)
 {
     QPointF clickPoint = point;
@@ -284,6 +291,131 @@ bool SheetBrowser::calcIconAnnotRect(const QPointF point, QRectF &iconRect)
     };
 
     return false;
+}
+
+/**
+ * @brief SheetBrowser::calcIconAnnotRect
+ * 目前该计算方法
+ * @param page
+ * @param point
+ * @param iconRect
+ * @return
+ */
+bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRectF &iconRect)
+{
+    QPointF clickPoint;
+
+    if (nullptr == page || nullptr == m_sheet)
+        return false;
+
+    //计算添加图标注释的位置和大小(考虑缩放和旋转)
+    Dr::Rotation rotation{Dr::RotateBy0};
+    qreal scaleFactor{1.0};
+    SheetOperation  operation = m_sheet->operation();
+    rotation    = operation.rotation;
+    scaleFactor = operation.scaleFactor;
+
+    qreal width{0.0};
+    qreal height{0.0};
+    qreal value{0.0};
+    qreal x1{0};
+    qreal y1{0};
+
+    clickPoint = QPointF(point.x() - page->pos().x(), point.y() - page->pos().y());
+    if (clickPoint.x() < 0 || clickPoint.y() < 0)
+        return false;
+
+    switch (rotation) {
+    case Dr::RotateBy0 : {
+        x1 = clickPoint.x() / (page->boundingRect().width() * scaleFactor);
+        y1 = clickPoint.y() / (page->boundingRect().height() * scaleFactor);
+        width  = ICONANNOTE_WIDTH / page->boundingRect().width();
+        height = ICONANNOTE_WIDTH / page->boundingRect().height();
+    }
+    break;
+    case Dr::RotateBy90 : {
+        clickPoint = QPointF(clickPoint.y(), page->boundingRect().width() - clickPoint.x());
+
+        x1 = clickPoint.x() / (page->boundingRect().height() * scaleFactor);
+        y1 = clickPoint.y() / (page->boundingRect().width() * scaleFactor);
+        width  = ICONANNOTE_WIDTH / page->boundingRect().height();
+        height = ICONANNOTE_WIDTH / page->boundingRect().width();
+    }
+    break;
+    case Dr::RotateBy180 : {
+        clickPoint = QPointF(page->boundingRect().width() - clickPoint.x(), page->boundingRect().height() - clickPoint.y());
+
+        x1 = clickPoint.x() / (page->boundingRect().width() * scaleFactor);
+        y1 = clickPoint.y() / (page->boundingRect().height() * scaleFactor);
+        width  = ICONANNOTE_WIDTH / page->boundingRect().width();
+        height = ICONANNOTE_WIDTH / page->boundingRect().height();
+    }
+    break;
+    case Dr::RotateBy270 : {
+        clickPoint = QPointF(page->boundingRect().height() - clickPoint.y(), clickPoint.x());
+
+        x1 = clickPoint.x() / (page->boundingRect().height() * scaleFactor);
+        y1 = clickPoint.y() / (page->boundingRect().width() * scaleFactor);
+        width  = ICONANNOTE_WIDTH / page->boundingRect().height();
+        height = ICONANNOTE_WIDTH / page->boundingRect().width();
+    }
+    break;
+    default:
+        break;
+    };
+
+    value = x1 - width / 2.0;
+    iconRect.setX((value < 0.0) ? 0.0 : value);
+    value = y1 - width / 2.0;
+    iconRect.setY((value < 0.0) ? 0.0 : value);
+
+    iconRect.setWidth(width);
+    iconRect.setHeight(height);
+
+    return true;
+}
+
+/**
+ * @brief SheetBrowser::translate2Local
+ * 将非0度的坐标点转换成0度的坐标点
+ * @return
+ */
+QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
+{
+    QPointF point = clickPoint;
+    BrowserPage *page{nullptr};
+
+    page = mouseClickInPage(point);
+
+    if (nullptr == m_sheet || nullptr == page || clickPoint.x() < 0 || clickPoint.y() < 0)
+        return  point;
+
+    Dr::Rotation rotation{Dr::RotateBy0};
+    SheetOperation  operation = m_sheet->operation();
+    rotation    = operation.rotation;
+
+    point = QPointF(point.x() - page->pos().x(), point.y() - page->pos().y());
+
+    switch (rotation) {
+    case Dr::RotateBy0 :
+        break;
+    case Dr::RotateBy90 : {
+        point = QPointF(point.y(), page->boundingRect().width() - point.x());
+    }
+    break;
+    case Dr::RotateBy180 : {
+        point = QPointF(page->boundingRect().width() - point.x(), page->boundingRect().height() - point.y());
+    }
+    break;
+    case Dr::RotateBy270 : {
+        point = QPointF(page->boundingRect().height() - point.y(), point.x());
+    }
+    break;
+    default:
+        break;
+    };
+
+    return  point;
 }
 
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
@@ -952,20 +1084,20 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
     page = mouseClickInPage(pointf);
 
     if (nullptr != page) {
-        qInfo() << "    1111111111111111111   point   in  page:"  <<  page->itemIndex();
+        //rotate 0
         pointf = QPointF(clickPoint.x() - page->pos().x(), clickPoint.y() - page->pos().y());
 
         iconRect.setWidth(page->boundingRect().width());
         iconRect.setHeight(page->boundingRect().height());
 
-        bool isVaild = calcIconAnnotRect(pointf, iconRect);
+//        bool isVaild = calcIconAnnotRect(pointf, iconRect);
+        bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
         if (isVaild)
             anno = page->addIconAnnotation(iconRect, contents);
     }
 
     if (anno) {
-        anno->page = page->itemIndex() + 1;
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     }
     return anno;

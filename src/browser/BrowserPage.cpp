@@ -430,18 +430,21 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
 {
-    if (nullptr == m_page /*|| text == "" || text.isEmpty()*/)
+    if (nullptr == m_page)
         return nullptr;
 
     Annotation *annot{nullptr};
-//    QRectF trect = rect;
-//    QPointF tpoint;
-
-//    point2Local(tpoint);
 
     annot = m_page->addIconAnnotation(rect, text);
 
-    reloadAnnotations();        // 必须要reload 因为可能多个item共享同一个annotation
+    if (annot) {
+        m_annotations.append(annot);
+        annot->page = m_index + 1;
+        foreach (QRectF rect, annot->boundary()) {
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
+            m_annotationItems.append(annotationItem);
+        }
+    }
 
     renderViewPort();
 
