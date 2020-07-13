@@ -173,16 +173,15 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         m_pixmap = QPixmap();
     }
 
-    if (m_pixmap.isNull()) {
-        m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
-        m_pixmap.fill(Qt::white);
-    } else
-        m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
-
     m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
-    //m_image.fill(QColor(Qt::white));//耗时操作
 
     if (!renderLater) {
+        if (m_pixmap.isNull()) {
+            m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+            m_pixmap.fill(Qt::white);
+        } else
+            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
+
         m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 1);
         //之后替换为线程reader
         RenderPageThread::clearTask(this);
