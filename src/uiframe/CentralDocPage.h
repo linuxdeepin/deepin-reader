@@ -114,14 +114,16 @@ public slots:
 
     void onCentralMoveIn(DocSheet *);       //从正文部分移入
 
-    void onSheetChanged(DocSheet *);        //文档被修改
+    void onSheetFileChanged(DocSheet *);        //文档被修改
+
+    void onSheetOperationChanged(DocSheet *);   //文档被操作
 
 signals:
     void sigSheetCountChanged(int);
 
     void sigNeedOpenFilesExec();
 
-    void sigCurSheetChanged(DocSheet *);        //当前的文档被 切换 改动 保存 等
+    void sigCurSheetChanged(DocSheet *);            //当前文档改变
 
     void sigFindOperation(const int &);
 

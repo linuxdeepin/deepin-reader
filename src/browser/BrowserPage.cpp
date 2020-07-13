@@ -48,7 +48,7 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
-    setCacheMode(CacheMode::ItemCoordinateCache);
+    //setCacheMode(CacheMode::ItemCoordinateCache);
 }
 
 BrowserPage::~BrowserPage()
@@ -95,14 +95,17 @@ void BrowserPage::setBookmark(bool hasBookmark)
 
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    if (m_image.isNull() || !qFuzzyCompare(m_imageScaleFactor, m_scaleFactor)) {
-        render(m_scaleFactor, m_rotation, false);
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(QBrush(Qt::white));
+    painter->drawRect(option->rect);
+
+    foreach (const ImageFragment &fragment, m_imageFragments) {
+        painter->drawImage(fragment.rect, fragment.image);
     }
 
-    if (m_image.isNull())
-        painter->drawImage(option->rect, m_leftImage);
-    else
-        painter->drawImage(option->rect.x(), option->rect.y(), m_image);
+    if (!m_viewportFragment.image.isNull()) {
+        painter->drawImage(m_viewportFragment.rect, m_viewportFragment.image);
+    }
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -119,12 +122,17 @@ void BrowserPage::renderViewPort()
 
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
 
-    QRectF visibleSceneRect = m_parent->mapToScene(viewPortRect).boundingRect();
+    QRectF visibleSceneRectF = m_parent->mapToScene(viewPortRect).boundingRect();
 
-    QRectF viewRenderRectF = mapFromScene(visibleSceneRect).boundingRect();
+    QRectF intersectedRectF = this->mapToScene(this->boundingRect()).boundingRect().intersected(visibleSceneRectF);
+
+    QRectF viewRenderRectF = mapFromScene(intersectedRectF).boundingRect();
 
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
+
+    //如果现在已经加载的rect包含viewRender 就不加入任务
+    //...
 
     PageRenderTask task;
 
@@ -144,8 +152,10 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (nullptr == m_page)
         return;
 
-    if (!m_image.isNull() && qFuzzyCompare(scaleFactor, m_imageScaleFactor) && rotation == m_rotation)
+    if (qFuzzyCompare(scaleFactor, m_imageScaleFactor) && rotation == m_rotation)
         return;
+
+    prepareGeometryChange();
 
     m_scaleFactor = scaleFactor;
 
@@ -154,11 +164,15 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
     if (m_rotation != rotation) {//旋转变化则强制移除
         m_leftImage = QImage();
+        m_imageFragments.clear();
+        m_viewportFragment.image = QImage();
         m_rotation  = rotation;
+    } else if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor)) {
+
     }
 
     m_image = QImage(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), QImage::Format_RGB32);
-    m_image.fill(QColor(Qt::white));
+    //m_image.fill(QColor(Qt::white));//耗时操作
 
     if (!renderLater) {
         //之后替换为线程reader
@@ -203,8 +217,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         foreach (BrowserAnnotation *annotationItem, m_annotationItems)
             annotationItem->setScaleFactorAndRotation(m_rotation);
     }
-
-    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
@@ -444,22 +456,17 @@ bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
     return m_page->mouseClickIconAnnot(clickPoint);
 }
 
-//void BrowserPage::reload()
-//{
-//    double scaleFactor = m_scaleFactor;
-//    Dr::Rotation rotation = m_rotation;
-
-//    m_scaleFactor = -1;
-//    m_rotation = Dr::NumberOfRotations;
-//    m_wordRotation = Dr::NumberOfRotations;
-//    m_annotationRotation = Dr::NumberOfRotations;
-//    m_annotationScaleFactor = -1;
-
-//    render(scaleFactor, rotation);
-//}
+void BrowserPage::setViewportFragment(QRect rect, QImage image)
+{
+    m_viewportFragment.rect = rect;
+    m_viewportFragment.image = image;
+    update();
+}
 
 bool BrowserPage::sceneEvent(QEvent *event)
 {
+    return QGraphicsItem::sceneEvent(event);
+
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
         if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))

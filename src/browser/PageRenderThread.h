@@ -58,6 +58,9 @@ public:
 signals:
     void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
+private slots:
+    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
+
 private:
     PageRenderTask m_curTask;
     QStack<PageRenderTask> m_tasks;

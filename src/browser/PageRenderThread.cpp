@@ -36,7 +36,7 @@
 PageRenderThread *PageRenderThread::m_instance = nullptr;
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
-
+    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
 }
 
 PageRenderThread::~PageRenderThread()
@@ -64,18 +64,25 @@ void PageRenderThread::appendTask(PageRenderTask task)
     if (nullptr == m_instance)
         return;
 
-    m_instance->m_mutex.lock();
     if (m_instance->m_curTask.page == task.page
             && m_instance->m_curTask.renderRect == task.renderRect
             && m_instance->m_curTask.rotation == task.rotation
-            && qFuzzyCompare(m_instance->m_curTask.scaleFactor, task.scaleFactor))
+            && qFuzzyCompare(m_instance->m_curTask.scaleFactor, task.scaleFactor)) {
         return;
+    }
 
-    m_instance->m_tasks.clear();
+    m_instance->m_mutex.lock();
+
+    for (int i = 0; i < m_instance->m_tasks.count(); ++i) {
+        if (m_instance->m_tasks[i].page == task.page)
+            m_instance->m_tasks.remove(i);
+    }
+
     m_instance->m_tasks.append(task);
     m_instance->m_mutex.unlock();
 
-    m_instance->start();
+    if (!m_instance->isRunning())
+        m_instance->start();
 }
 
 void PageRenderThread::run()
@@ -94,16 +101,20 @@ void PageRenderThread::run()
 
         if (BrowserPage::existInstance(m_curTask.page)) {
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-            if (!image.isNull() && qFuzzyCompare(m_curTask.scaleFactor, m_curTask.page->m_scaleFactor) && m_curTask.rotation != m_curTask.page->m_rotation) {
-                QPainter painter(&m_curTask.page->m_image);
-                painter.drawImage(m_curTask.renderRect, image);
-                m_curTask.page->update();
-            }
+            if (!image.isNull())
+                emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
         }
 
         m_mutex.lock();
         m_curTask = PageRenderTask();
         m_mutex.unlock();
+    }
+}
+
+void PageRenderThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, int rotation, QRect rect)
+{
+    if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor) && (rotation == page->m_rotation)) {
+        page->setViewportFragment(rect, image);
     }
 }
 

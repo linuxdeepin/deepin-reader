@@ -64,7 +64,6 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     m_browser->setMinimumWidth(481);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
-    connect(m_browser, SIGNAL(sigSizeChanged()), this, SLOT(onBrowserSizeChanged()));
     connect(m_browser, SIGNAL(sigWheelUp()), this, SLOT(onBrowserWheelUp()));
     connect(m_browser, SIGNAL(sigWheelDown()), this, SLOT(onBrowserWheelDown()));
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
@@ -191,7 +190,7 @@ void DocSheet::rotateLeft()
 
     m_browser->deform(m_operation);
     m_sidebar->handleRotate(m_operation.rotation);
-    emit sigFileChanged(this);
+    setOperationChanged();
 }
 
 void DocSheet::rotateRight()
@@ -207,7 +206,7 @@ void DocSheet::rotateRight()
 
     m_browser->deform(m_operation);
     m_sidebar->handleRotate(m_operation.rotation);
-    emit sigFileChanged(this);
+    setOperationChanged();
 }
 
 bool DocSheet::openFileExec()
@@ -216,7 +215,8 @@ bool DocSheet::openFileExec()
         if (!m_browser->loadPages(m_operation, m_bookmarks))
             return false;
         handleOpenSuccess();
-        emit sigFileChanged(this);
+        setFileChanged(false);
+        setOperationChanged();
         return true;
     }
 
@@ -235,8 +235,7 @@ void DocSheet::setBookMark(int index, int state)
     m_sidebar->setBookMark(index, state);
     m_browser->setBookMark(index, state);
 
-    m_fileChanged = true;
-    emit sigFileChanged(this);
+    setFileChanged(true);
 }
 
 void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
@@ -251,9 +250,10 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
         m_browser->setBookMark(index, state);
     }
 
-    if (!state) showTips(tr("The bookmark has been removed"));
-    m_fileChanged = true;
-    emit sigFileChanged(this);
+    if (!state)
+        showTips(tr("The bookmark has been removed"));
+
+    setFileChanged(true);
 }
 
 int DocSheet::pagesNumber()
@@ -288,7 +288,7 @@ void DocSheet::setLayoutMode(Dr::LayoutMode mode)
     if (mode >= Dr::SinglePageMode && mode < Dr::NumberOfLayoutModes) {
         m_operation.layoutMode = mode;
         m_browser->deform(m_operation);
-        emit sigFileChanged(this);
+        setOperationChanged();
     }
 }
 
@@ -298,7 +298,7 @@ void DocSheet::setMouseShape(Dr::MouseShape shape)
         closeMagnifier();
         m_operation.mouseShape = shape;
         m_browser->setMouseShape(m_operation.mouseShape);
-        emit sigFileChanged(this);
+        setOperationChanged();
     }
 }
 
@@ -314,7 +314,7 @@ void DocSheet::setScaleMode(Dr::ScaleMode mode)
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
         m_browser->deform(m_operation);
-        emit sigFileChanged(this);
+        setOperationChanged();
     }
 }
 
@@ -329,7 +329,7 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     m_operation.scaleMode = Dr::ScaleFactorMode;
     m_operation.scaleFactor = scaleFactor;
     m_browser->deform(m_operation);
-    emit sigFileChanged(this);
+    setOperationChanged();
 }
 
 bool DocSheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
@@ -515,6 +515,11 @@ SheetOperation DocSheet::operation()
     return m_operation;
 }
 
+SheetOperation &DocSheet::operationRef()
+{
+    return m_operation;
+}
+
 Dr::FileType DocSheet::fileType()
 {
     return m_fileType;
@@ -564,7 +569,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
     m_sidebar->setVisible(isVisible);
     if (notify) {
         m_operation.sidebarVisible = isVisible;
-        emit sigFileChanged(this);
+        setOperationChanged();
     }
 }
 
@@ -631,6 +636,17 @@ void DocSheet::closeFullScreen()
     doc->quitFullScreen();
 }
 
+void DocSheet::setFileChanged(bool changed)
+{
+    m_fileChanged = changed;
+    emit sigFileChanged(this);
+}
+
+void DocSheet::setOperationChanged()
+{
+    emit sigOperationChanged(this);
+}
+
 int DocSheet::label2pagenum(QString label)
 {
     return 0;
@@ -656,14 +672,6 @@ void DocSheet::onBrowserPageChanged(int page)
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
         m_sidebar->setCurrentPage(page);
-    }
-}
-
-void DocSheet::onBrowserSizeChanged()
-{
-    if (m_operation.scaleMode != Dr::ScaleFactorMode) {
-        m_browser->deform(m_operation);
-        emit sigFileChanged(this);
     }
 }
 

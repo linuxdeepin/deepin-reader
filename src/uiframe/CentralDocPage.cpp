@@ -103,18 +103,26 @@ void CentralDocPage::openCurFileFolder()
     }
 }
 
-void CentralDocPage::onSheetChanged(DocSheet *sheet)
+void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 {
-    if (nullptr == sheet && sheet != getCurSheet())
-        return;
-
-    sigCurSheetChanged(sheet);
-
     if (DocSheet::existFileChanged()) {
         dApp->blockShutdown();
     } else {
         dApp->unBlockShutdown();
     }
+
+    if (nullptr == sheet && sheet != getCurSheet())
+        return;
+
+    emit sigCurSheetChanged(sheet);
+}
+
+void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
+{
+    if (nullptr == sheet && sheet != getCurSheet())
+        return;
+
+    emit sigCurSheetChanged(sheet);
 }
 
 void CentralDocPage::openFile(QString &filePath)
@@ -136,14 +144,16 @@ void CentralDocPage::openFile(QString &filePath)
 
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
-    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
-    connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
-
     if (!sheet->openFileExec()) {
         sheet->deleteLater();
         showTips(tr("Please check if the file is damaged"), 1);
         return;
     }
+
+    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
+    connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     m_pStackedLayout->addWidget(sheet);
 
@@ -151,9 +161,9 @@ void CentralDocPage::openFile(QString &filePath)
 
     m_pTabBar->insertSheet(sheet);
 
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
     emit sigSheetCountChanged(m_pStackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
     onOpened(sheet, true);
 }
@@ -191,13 +201,13 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 
 void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
-    emit sigCurSheetChanged(sheet);
-
     if (nullptr != sheet) {
         m_pStackedLayout->setCurrentWidget(sheet);
 
         sheet->defaultFocus();
     }
+
+    emit sigCurSheetChanged(sheet);
 }
 
 void CentralDocPage::onTabMoveIn(DocSheet *sheet)
@@ -236,6 +246,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
 }
 
 void CentralDocPage::onTabMoveOut(DocSheet *sheet)
@@ -276,7 +287,8 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
 
     m_pStackedLayout->removeWidget(sheet);
 
-    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
+    disconnect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
@@ -292,7 +304,8 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
 
     sheet->setParent(this);
 
-    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
+    connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 

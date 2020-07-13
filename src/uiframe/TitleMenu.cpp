@@ -55,21 +55,6 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
     disableSaveButton(!sheet->fileChanged());
 }
 
-void TitleMenu::onCurSheetSaved(DocSheet *sheet)
-{
-    if (nullptr == sheet) {
-        disableSaveButton(true);
-        return;
-    }
-
-    const QList<QAction *> &actions = this->findChildren<QAction *>();
-    foreach (QAction *a, actions) {
-        a->setDisabled(false);
-    }
-
-    disableSaveButton(!sheet->fileChanged());
-}
-
 void TitleMenu::disableAllAction()
 {
     QStringList actiontextlist;

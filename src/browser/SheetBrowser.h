@@ -109,8 +109,6 @@ signals:
 
     void sigWheelDown();
 
-    void sigSizeChanged();
-
     void sigNeedPageFirst();
 
     void sigNeedPagePrev();

@@ -27,17 +27,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Central.h"
-
-#include "Utils.h"
 #include "CentralNavPage.h"
 #include "CentralDocPage.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "MainWindow.h"
-#include "widgets/ShortCutShow.h"
-#include <QFileInfo>
+#include "ShortCutShow.h"
+
 #include <QMimeData>
-#include <QUrl>
 #include <DMessageManager>
 #include <QStackedLayout>
 #include <DFileDialog>
@@ -48,20 +45,9 @@ Central::Central(QWidget *parent)
     setAcceptDrops(true);
 
     m_menu    = new TitleMenu(this);
-    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-
     m_widget  = new TitleWidget(this);
-
     m_docPage = new CentralDocPage(this);
-    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
-    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
-    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
-    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
-
     m_navPage = new CentralNavPage(this);
-    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-
     m_layout = new QStackedLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
@@ -69,9 +55,18 @@ Central::Central(QWidget *parent)
     m_layout->addWidget(m_docPage);
     setLayout(m_layout);
 
+    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
+    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
     connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
+
+    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
+    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
+    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
+    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
+    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
+
 }
 
 Central::~Central()

@@ -44,6 +44,7 @@ class DocSheet : public Dtk::Widget::DSplitter
     Q_DISABLE_COPY(DocSheet)
 
     friend class SheetSidebar;
+    friend class SheetBrowser;
     friend class Database;
 public:
     explicit DocSheet(Dr::FileType fileType, QString filePath, QWidget *parent = nullptr);
@@ -184,6 +185,13 @@ public:
 
     void closeFullScreen();
 
+    void setFileChanged(bool changed);
+
+    void setOperationChanged();
+
+private:
+    SheetOperation &operationRef();
+
 public slots:
     void showTips(const QString &tips, int iconIndex = 0);
 
@@ -200,14 +208,14 @@ signals:
     void sigFindOperation(const int &);
 
 signals:
-    void sigFileChanged(DocSheet *);    //被修改了 书签 笔记
+    void sigFileChanged(DocSheet *);         //被修改了 书签 注释等
+
+    void sigOperationChanged(DocSheet *);    //被修改了 缩放 当前页等
 
     void sigOpened(DocSheet *, bool);
 
 private slots:
     void onBrowserPageChanged(int page);
-
-    void onBrowserSizeChanged();
 
     void onBrowserWheelUp();
 

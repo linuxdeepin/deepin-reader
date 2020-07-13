@@ -39,7 +39,6 @@ signals:
 
 public slots:
     void onCurSheetChanged(DocSheet *);
-    void onCurSheetSaved(DocSheet *);
 
 public:
     void disableAllAction();

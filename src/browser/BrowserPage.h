@@ -100,6 +100,8 @@ public:
 
     bool mouseClickIconAnnot(QPointF &);
 
+    void setViewportFragment(QRect rect, QImage image);
+
 private:
     void reloadAnnotations();
 

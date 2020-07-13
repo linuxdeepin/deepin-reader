@@ -500,6 +500,9 @@ void SheetBrowser::deform(SheetOperation &operation)
         break;
     }
 
+    QTime time;
+    time.start();
+
     for (int i = 0; i < m_items.count(); ++i) {
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
     }
@@ -572,17 +575,9 @@ bool SheetBrowser::hasLoaded()
 
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
-    if (hasLoaded()) {
-        if (nullptr == m_resizeTimer) {
-            m_resizeTimer = new QTimer(this);
-            connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::sigSizeChanged);
-            m_resizeTimer->setSingleShot(true);
-        }
-
-        if (m_resizeTimer->isActive())
-            m_resizeTimer->stop();
-
-        m_resizeTimer->start(10);
+    if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
+        deform(m_sheet->operationRef());
+        m_sheet->setOperationChanged();
     }
 
     QGraphicsView::resizeEvent(event);
