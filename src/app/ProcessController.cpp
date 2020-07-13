@@ -86,6 +86,7 @@ void ProcessController::handleFiles(QStringList filePathList)
             if (sheet->filePath() == filePath) {
                 MainWindow *window = MainWindow::windowContainSheet(sheet);
                 if (nullptr != window) {
+                    window->showNormal();
                     window->activateSheet(sheet);
                     hasFind = true;
                     break;
@@ -96,6 +97,7 @@ void ProcessController::handleFiles(QStringList filePathList)
         if (!hasFind) {
             //如果不存在则打开
             if (MainWindow::m_list.count() > 0) {
+                MainWindow::m_list[0]->showNormal();
                 MainWindow::m_list[0]->activateWindow();
                 MainWindow::m_list[0]->doOpenFile(filePath);
                 continue;
