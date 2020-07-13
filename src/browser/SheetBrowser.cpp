@@ -994,7 +994,7 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
     }
 
     if (anno) {
-        anno->page = page->itemIndex();
+        anno->page = page->itemIndex() + 1;
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     }
     return anno;
