@@ -456,8 +456,20 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
     QList<QRectF> boundarys;
+    QRectF rect, recboundary;
+    qreal curwidth = this->boundingRect().width();
+    qreal curheight = this->boundingRect().height();
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected()) {
+            rect = word->boundingBox();
+            recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                           rect.top() / curheight));
+            recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                            rect.top() / curheight));
+            recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                              rect.bottom() / curheight));
+            recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                               rect.bottom() / curheight));
             boundarys.append(word->boundingBox());
         }
     }
@@ -470,7 +482,113 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     reloadAnnotations();
 
     renderViewPort();
+
     return anno;
+}
+
+/**
+ * @brief BrowserPage::addHighlightAnnotation
+ * 根据起始点添加高亮(目前测试用)
+ * @param start
+ * @param end
+ * @param text
+ * @param color
+ * @return
+ */
+Annotation *BrowserPage::addHighlightAnnotation(const QPointF start, const QPointF end, QString text, QColor color)
+{
+    Annotation *highLightAnnot{nullptr};
+    QList<QRectF> boundarys;
+    QRectF rect, recboundary;
+    qreal curwidth = this->boundingRect().width();
+    qreal curheight = this->boundingRect().height();
+
+    //calc highlit annot rect list
+    if (!start.isNull() && end.isNull()) {
+        bool startAddRect{false};
+        foreach (BrowserWord *word, m_words) {
+            if (word) {
+                if (word->boundingRect().contains(start)) {
+                    startAddRect = true;
+                }
+                if (startAddRect) {
+                    rect = word->boundingRect();
+                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                                   rect.top() / curheight));
+                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                    rect.top() / curheight));
+                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                      rect.bottom() / curheight));
+                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                       rect.bottom() / curheight));
+                    boundarys << recboundary;
+                }
+            }
+        }
+    } else if (start.isNull() && !end.isNull()) {
+        bool endAddRect{true};
+        foreach (BrowserWord *word, m_words) {
+            if (word) {
+                if (endAddRect) {
+                    rect = word->boundingRect();
+                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                                   rect.top() / curheight));
+                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                    rect.top() / curheight));
+                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                      rect.bottom() / curheight));
+                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                       rect.bottom() / curheight));
+                    boundarys << recboundary;
+                }
+                if (word->boundingRect().contains(end)) {
+                    endAddRect = false;
+                    boundarys << word->boundingRect();
+                }
+            }
+        }
+    } else {
+        bool startAddRect{false};
+        foreach (BrowserWord *word, m_words) {
+            if (word) {
+                if (word->boundingRect().contains(start)) {
+                    startAddRect = true;
+                }
+                if (startAddRect) {
+                    rect = word->boundingRect();
+                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                                   rect.top() / curheight));
+                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                    rect.top() / curheight));
+                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                      rect.bottom() / curheight));
+                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                       rect.bottom() / curheight));
+                    boundarys << recboundary;
+                }
+                if (word->boundingRect().contains(end)) {
+                    startAddRect = false;
+                    rect = word->boundingRect();
+                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                                   rect.top() / curheight));
+                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                    rect.top() / curheight));
+                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                      rect.bottom() / curheight));
+                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                       rect.bottom() / curheight));
+                    boundarys << recboundary;
+                }
+            }
+        }
+    }
+
+    if (boundarys.count()) {
+        //add highlight annot
+        highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
+    }
+
+    return highLightAnnot;
 }
 
 bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)

@@ -41,3 +41,8 @@ void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawRect(option->rect.x() + 1, option->rect.y() + 1, option->rect.width() - 2, option->rect.height() - 2);
     }
 }
+
+Word BrowserWord::getWord()
+{
+    return m_word;
+}

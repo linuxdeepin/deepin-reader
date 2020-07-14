@@ -74,6 +74,10 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
 
     m_tipsWidget = new TipsWidget(this);
+
+    connect(this, &SheetBrowser::sigAddHighLightAnnot, [this] {
+        addHighLightAnnotation("123", QColor(Qt::darkYellow));
+    });
 }
 
 SheetBrowser::~SheetBrowser()
@@ -456,6 +460,54 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
     return nullptr;
 }
 
+Annotation *SheetBrowser::addHighLightAnnotation(const QString, const QColor)
+{
+    //QList<BrowserPage *> m_items;
+    BrowserPage *startPage{nullptr};
+    BrowserPage *endPage{nullptr};
+    Annotation *highLightAnnot{nullptr};
+
+    startPage = mouseClickInPage(m_selectStartPos);
+    endPage = mouseClickInPage(m_selectEndPos);
+
+    if (nullptr == startPage || nullptr == endPage)
+        return nullptr;
+
+    if (startPage == endPage) {
+//            highLightAnnot = startPage->addHighlightAnnotation("123", QColor(Qt::darkYellow));
+        highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
+                                                           QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
+                                                           "123", QColor(Qt::darkYellow));
+        return highLightAnnot;
+    }
+
+    if (startPage != endPage && endPage->itemIndex() < startPage->itemIndex()) {
+        BrowserPage *tmpPage = endPage;
+        endPage = startPage;
+        startPage = tmpPage;
+        tmpPage = nullptr;
+    }
+
+    int startIndex = m_items.indexOf(startPage);
+    int endIndex = m_items.indexOf(endPage);
+
+    for (int index = startIndex; index <= endIndex; index++) {
+        if (m_items.at(index) == startPage) {
+            highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
+                                                               QPointF(),
+                                                               "", QColor(Qt::darkYellow));
+        } else if (m_items.at(index) == endPage) {
+            highLightAnnot = startPage->addHighlightAnnotation(QPointF(),
+                                                               QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
+                                                               "123", QColor(Qt::darkYellow));
+        } else {
+            highLightAnnot = startPage->addHighlightAnnotation(QPointF(), QPointF(), "", QColor(Qt::darkYellow));
+        }
+    }
+
+    return highLightAnnot;
+}
+
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
 {
     if (nullptr == m_document)
@@ -766,7 +818,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         Qt::MouseButton btn = event->button();
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
-            m_selectPressedPos = mapToScene(event->pos());
+            m_selectStartPos = QPointF();
+            m_selectEndPos = QPointF();
+            m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
             deepin_reader::Annotation *clickAnno = nullptr;
 //            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
@@ -778,6 +832,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 //                    break;
 //                }
 //            }
+            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
             clickAnno = getClickAnnot(m_selectPressedPos);
 
             if (m_annotationInserting) {
@@ -1055,6 +1110,9 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
         m_selectPressedPos = QPointF();
+        m_selectEndPos = mapToScene(event->pos());
+
+        emit sigAddHighLightAnnot();
     }
 
     QGraphicsView::mouseReleaseEvent(event);

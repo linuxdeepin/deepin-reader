@@ -99,6 +99,8 @@ public:
 
     Annotation *addHighlightAnnotation(QString text, QColor color);
 
+    Annotation *addHighlightAnnotation(const QPointF, const QPointF, QString text, QColor color);
+
     bool hasAnnotation(deepin_reader::Annotation *annotation);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);

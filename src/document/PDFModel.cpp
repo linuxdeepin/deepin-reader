@@ -748,6 +748,9 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, cons
 
 #ifdef HAS_POPPLER_20
 
+    double smallestrx = 1.0, largestx = 0.0;
+    double smallestry = 1.0, largestry = 0.0;
+    QRectF tboundary;
     Poppler::Annotation::Style style;
     style.setColor(color);
 
@@ -765,11 +768,21 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, cons
         quad.points[2] = boundary.bottomRight();
         quad.points[3] = boundary.bottomLeft();
         quadList.append(quad);
+        smallestrx = smallestrx > boundary.x() ? boundary.x() : smallestrx;
+        smallestry = smallestry > boundary.y() ? boundary.y() : smallestry;
+        largestx = largestx < boundary.x() ? boundary.x() : largestx;
+        largestry = largestry < boundary.y() ? boundary.y() : largestry;
     }
 
-    annotation->setHighlightQuads(quadList);
+    //如果需要在其它文档中查看注释必须调用setBoundary(recboundary)设置点击范围
+    tboundary.setX(smallestrx);
+    tboundary.setY(smallestry);
+    tboundary.setWidth(largestx - smallestrx);
+    tboundary.setHeight(largestry - smallestrx);
+    annotation->setBoundary(tboundary);
 
-    annotation->setBoundary(boundarys.value(0));
+    annotation->setHighlightQuads(quadList);
+//    annotation->setBoundary(boundarys.value(0));
     annotation->setStyle(style);
     annotation->setContents(text);
     annotation->setPopup(popup);

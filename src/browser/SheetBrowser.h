@@ -123,6 +123,7 @@ signals:
 
     void sigThumbnailUpdated(int index);
 
+    void sigAddHighLightAnnot();//test
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -161,6 +162,8 @@ private:
     QPointF translate2Local(const QPointF);
 
     Annotation *getClickAnnot(const QPointF);
+
+    Annotation *addHighLightAnnotation(const QString, const QColor);
 private:
     deepin_reader::Document *m_document = nullptr;
     QLabel *m_magnifierLabel = nullptr;
@@ -178,6 +181,8 @@ private:
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数
     QPointF m_selectPressedPos;         //scene
+    QPointF m_selectStartPos;           // 选取文字的结束位置
+    QPointF m_selectEndPos;             // 选取文字的结束位置
     bool m_annotationInserting = false;     //正在插入注释状态
     RenderViewportThread *m_pageThread = nullptr;
 };
