@@ -398,17 +398,25 @@ QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
 
     switch (rotation) {
     case Dr::RotateBy0 :
+        point = QPointF(abs(point.x()) / page->boundingRect().width(),
+                        abs(point.y()) / page->boundingRect().height());
         break;
     case Dr::RotateBy90 : {
         point = QPointF(point.y(), page->boundingRect().width() - point.x());
+        point = QPointF(abs(point.x()) / page->boundingRect().height(),
+                        abs(point.y()) / page->boundingRect().width());
     }
     break;
     case Dr::RotateBy180 : {
         point = QPointF(page->boundingRect().width() - point.x(), page->boundingRect().height() - point.y());
+        point = QPointF(abs(point.x()) / page->boundingRect().width(),
+                        abs(point.y()) / page->boundingRect().height());
     }
     break;
     case Dr::RotateBy270 : {
         point = QPointF(page->boundingRect().height() - point.y(), point.x());
+        point = QPointF(abs(point.x()) / page->boundingRect().height(),
+                        abs(point.y()) / page->boundingRect().width());
     }
     break;
     default:
@@ -416,6 +424,31 @@ QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
     };
 
     return  point;
+}
+
+Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
+{
+    if (nullptr == m_sheet)
+        return nullptr;
+
+    QPointF point = clickPoint;
+    BrowserPage *page{nullptr};
+
+    page = mouseClickInPage(point);
+
+    if (nullptr == page)
+        return nullptr;
+
+    point = translate2Local(point);
+
+    foreach (Annotation *annot, page->annotations()) {
+        foreach (QRectF rect, annot->boundary()) {
+            if (rect.contains(point))
+                return annot;
+        }
+    }
+
+    return nullptr;
 }
 
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
@@ -736,17 +769,20 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             m_selectPressedPos = mapToScene(event->pos());
 
             deepin_reader::Annotation *clickAnno = nullptr;
-            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
-            for (QGraphicsItem *itemIter : itemlst) {
-                BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemIter);
-                if (annotation != nullptr) {
-                    clickAnno = annotation->annotation();
-                    showNoteEditWidget(clickAnno);
-                    break;
-                }
-            }
+//            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
+//            for (QGraphicsItem *itemIter : itemlst) {
+//                BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemIter);
+//                if (annotation != nullptr) {
+//                    clickAnno = annotation->annotation();
+//                    showNoteEditWidget(clickAnno);
+//                    break;
+//                }
+//            }
+            clickAnno = getClickAnnot(m_selectPressedPos);
 
             if (m_annotationInserting) {
+                if (clickAnno)
+                    qInfo() << clickAnno->type();
                 if (clickAnno && clickAnno->type() == 1/*AText*/) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
@@ -755,6 +791,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 showNoteEditWidget(clickAnno);
 
                 m_annotationInserting = false;
+            } else {
+                if (nullptr != clickAnno)
+                    showNoteEditWidget(clickAnno);
             }
 
         } else if (btn == Qt::RightButton) {

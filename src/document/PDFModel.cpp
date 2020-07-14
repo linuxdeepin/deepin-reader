@@ -332,9 +332,7 @@ QString PDFAnnotation::contents() const
 
 int PDFAnnotation::type()
 {
-    m_annotation->subType();
-
-    return 0;
+    return m_annotation->subType();
 }
 
 Poppler::Annotation *PDFAnnotation::ownAnnotation()
@@ -906,6 +904,8 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
     annotation->setPopup(popup);
     annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
     m_page->addAnnotation(annotation);
+
+    qInfo() << "   icon  annot  subtype:" << annotation->subType();
 
     return (new PDFAnnotation(m_mutex, annotation));
 }
