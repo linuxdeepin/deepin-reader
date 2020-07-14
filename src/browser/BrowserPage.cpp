@@ -143,7 +143,7 @@ void BrowserPage::renderViewPort()
     if (m_viewportRenderedRect.contains(viewRenderRect))
         return;
 
-    PageRenderTask task;
+    RenderViewportTask task;
 
     task.page = this;
 
@@ -189,12 +189,12 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         //之后替换为线程reader
         RenderPageThread::clearTask(this);
 
-        QList<RenderTask> tasks;
+        QList<RenderPageTask> tasks;
 
         QRectF rect = boundingRect();
 
         //加载模糊的图
-//        RenderTask task;
+//        RenderPageTask task;
 //        task.item = this;
 //        task.scaleFactor = 0.05;
 //        task.rotation = m_rotation;
@@ -221,7 +221,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
                 QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
 
-                RenderTask task;
+                RenderPageTask task;
                 task.item = this;
                 task.scaleFactor = m_scaleFactor;
                 task.rotation = m_rotation;
@@ -380,7 +380,6 @@ void BrowserPage::clearWords()
 void BrowserPage::loadWords()
 {
     if (m_wordRotation != m_rotation) {
-        qDebug() << 1111111;
         clearWords();
 
         m_wordRotation = m_rotation;

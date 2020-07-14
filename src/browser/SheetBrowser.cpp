@@ -83,6 +83,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 SheetBrowser::~SheetBrowser()
 {
     qDeleteAll(m_items);
+    m_items.clear();
 
     if (nullptr != m_document)
         delete m_document;

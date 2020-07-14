@@ -76,7 +76,7 @@ void RenderPageThread::clearTasks(SheetBrowser *view)
 
     instance->m_mutex.lock();
 
-    QStack<RenderTask> tasks;
+    QStack<RenderPageTask> tasks;
 
     for (int i = 0; i < instance->m_tasks.count(); ++i) {
         if (instance->m_tasks[i].view != view) {
@@ -89,7 +89,7 @@ void RenderPageThread::clearTasks(SheetBrowser *view)
     instance->m_mutex.unlock();
 }
 
-void RenderPageThread::appendTask(RenderTask task)
+void RenderPageThread::appendTask(RenderPageTask task)
 {
     if (nullptr == instance)
         instance = new RenderPageThread;
@@ -101,7 +101,7 @@ void RenderPageThread::appendTask(RenderTask task)
     instance->m_mutex.unlock();
 }
 
-void RenderPageThread::appendTasks(QList<RenderTask> list)
+void RenderPageThread::appendTasks(QList<RenderPageTask> list)
 {
     if (nullptr == instance)
         instance = new RenderPageThread;
@@ -124,12 +124,12 @@ void RenderPageThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rot
 
     instance->m_mutex.lock();
 
-    RenderTask task;
+    RenderPageTask task;
     task.item = item;
     task.scaleFactor = scaleFactor;
     task.rotation = rotation;
     task.renderRect = renderRect;
-    instance->m_tasks.append(task);
+    instance->m_tasks.push(task);
 
     instance->m_mutex.unlock();
 
@@ -151,22 +151,19 @@ void RenderPageThread::run()
         m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
-        if (!BrowserPage::existInstance(m_curTask.item))
-            continue;
-
         while (RenderViewportThread::count(m_curTask.item)) {
             msleep(10);
         }
 
-//        QTime time;
-//        time.start();
+        if (!BrowserPage::existInstance(m_curTask.item))
+            continue;
+
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-//        qDebug() << m_curTask.renderRect << ":" << time.elapsed();
 
         if (!image.isNull())
             emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect, m_curTask.preRender);
 
-        m_curTask = RenderTask();
+        m_curTask = RenderPageTask();
     }
 }
 

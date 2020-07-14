@@ -32,7 +32,7 @@
 
 class SheetBrowser;
 class BrowserPage;
-struct PageRenderTask {
+struct RenderViewportTask {
     BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
@@ -51,7 +51,7 @@ public:
 
     static void destroyInstance();
 
-    static void appendTask(PageRenderTask task);
+    static void appendTask(RenderViewportTask task);
 
     static int  count(BrowserPage *page);        //当前任务数量
 
@@ -64,8 +64,8 @@ private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
 private:
-    PageRenderTask m_curTask;
-    QStack<PageRenderTask> m_tasks;
+    RenderViewportTask m_curTask;
+    QStack<RenderViewportTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
     static RenderViewportThread *m_instance;

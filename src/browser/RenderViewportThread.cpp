@@ -42,6 +42,7 @@ RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
 RenderViewportThread::~RenderViewportThread()
 {
     m_quit = true;
+    m_instance = nullptr;
     wait();
 }
 
@@ -59,7 +60,7 @@ void RenderViewportThread::destroyInstance()
     }
 }
 
-void RenderViewportThread::appendTask(PageRenderTask task)
+void RenderViewportThread::appendTask(RenderViewportTask task)
 {
     if (nullptr == m_instance)
         return;
@@ -74,11 +75,13 @@ void RenderViewportThread::appendTask(PageRenderTask task)
     m_instance->m_mutex.lock();
 
     for (int i = 0; i < m_instance->m_tasks.count(); ++i) {
-        if (m_instance->m_tasks[i].page == task.page)
+        if (m_instance->m_tasks[i].page == task.page) {
             m_instance->m_tasks.remove(i);
+            i = 0;
+        }
     }
 
-    m_instance->m_tasks.append(task);
+    m_instance->m_tasks.push(task);
     m_instance->m_mutex.unlock();
 
     if (!m_instance->isRunning())
@@ -91,7 +94,7 @@ int RenderViewportThread::count(BrowserPage *page)
         return 0;
 
     int count = 0;
-    foreach (PageRenderTask task, m_instance->m_tasks) {
+    foreach (RenderViewportTask task, m_instance->m_tasks) {
         if (task.page == page)
             count++;
     }
@@ -112,17 +115,14 @@ void RenderViewportThread::run()
         m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
-//        QTime time;
-//        time.start();
         if (BrowserPage::existInstance(m_curTask.page)) {
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
             if (!image.isNull())
                 emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
         }
-        //qDebug() << time.elapsed();
 
         m_mutex.lock();
-        m_curTask = PageRenderTask();
+        m_curTask = RenderViewportTask();
         m_mutex.unlock();
     }
 }

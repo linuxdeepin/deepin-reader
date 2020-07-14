@@ -178,7 +178,7 @@ private:
 
     mutable QMutex m_mutex;
 
-    Poppler::Document *m_document;
+    Poppler::Document *m_document = nullptr;
 };
 }
 

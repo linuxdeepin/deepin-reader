@@ -54,6 +54,7 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 #define LOCK_FORM_FIELD
 #define LOCK_PAGE
 #define LOCK_DOCUMENT
+#define LOCK_LONGTIMEOPERATION QMutexLocker mutexLocker(m_mutex);
 
 #endif // HAS_POPPLER_24
 
@@ -369,7 +370,11 @@ PDFPage::~PDFPage()
 {
     textCache()->remove(this);
 
+    LOCK_LONGTIMEOPERATION
+
     delete m_page;
+
+    m_page = nullptr;
 }
 
 QSize PDFPage::size() const
@@ -388,15 +393,11 @@ QSizeF PDFPage::sizeF() const
 
 QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
 {
-    LOCK_PAGE
-
     return render(72 * scaleFactor, 72 * scaleFactor, rotation, boundingRect);
 }
 
 QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 {
-    LOCK_PAGE
-
     int horizontalResolution = 72 * width / m_page->pageSize().width();
     int verticalResolution = 72 * height / m_page->pageSize().height();
 
@@ -405,7 +406,10 @@ QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 
 QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const
 {
-    LOCK_PAGE
+    LOCK_LONGTIMEOPERATION
+
+    if (m_page == nullptr)
+        return QImage();
 
     Poppler::Page::Rotation rotate;
 
@@ -442,6 +446,8 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 QImage PDFPage::thumbnail() const
 {
+    LOCK_PAGE
+
     return m_page->thumbnail();
 }
 
@@ -907,6 +913,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
         return nullptr;
 
     LOCK_PAGE
+
     QString strtype = "Note";
     Poppler::Annotation::Style style;
     style.setColor(Qt::yellow);
@@ -937,6 +944,7 @@ PDFDocument::PDFDocument(Poppler::Document *document) :
 PDFDocument::~PDFDocument()
 {
     delete m_document;
+    m_document = nullptr;
 }
 
 int PDFDocument::numberOfPages() const

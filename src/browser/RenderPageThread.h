@@ -29,7 +29,7 @@
 
 class SheetBrowser;
 class BrowserPage;
-struct RenderTask {
+struct RenderPageTask {
     SheetBrowser *view = nullptr;
     BrowserPage *item = nullptr;
     double scaleFactor = 1.0;
@@ -50,9 +50,9 @@ public:
 
     static void clearTasks(SheetBrowser *view);
 
-    static void appendTask(RenderTask task);
+    static void appendTask(RenderPageTask task);
 
-    static void appendTasks(QList<RenderTask> list);
+    static void appendTasks(QList<RenderPageTask> list);
 
     static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
@@ -67,8 +67,8 @@ private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect, bool preRender);
 
 private:
-    RenderTask m_curTask;
-    QStack<RenderTask> m_tasks;
+    RenderPageTask m_curTask;
+    QStack<RenderPageTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
     static RenderPageThread *instance;
