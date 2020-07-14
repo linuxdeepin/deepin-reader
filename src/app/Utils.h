@@ -53,6 +53,8 @@ public:
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 
     static bool copyFile(const QString &sourcePath, const QString &destinationPath);
+
+    static QImage copyImage(const QImage &srcimg, int x, int y, int w, int h);
 };
 
 #endif // UTILS_H

@@ -23,6 +23,7 @@
 
 #include <QGraphicsItem>
 #include <QSet>
+#include <QMutex>
 
 #include "Global.h"
 
@@ -69,7 +70,9 @@ public:
 
     QImage getImageRect(double scaleFactor, QRect rect);//获取缩放后的局部区域图片
 
-    QImage getImagePoint(double scaleFactor, QPoint point); //根据某一个点返回100×100的图片
+    QImage getImagePoint(double scaleFactor, QPoint point);
+
+    QImage getCurImagePoint(QPoint point);
 
     void handlePreRenderFinished(Dr::Rotation rotation, QImage image);
 
@@ -151,6 +154,8 @@ private:
 
     QPointF m_posPressed;
     bool m_wordSelectable = false;
+
+    QMutex m_imageMutex;
 };
 
 #endif // BrowserPage_H

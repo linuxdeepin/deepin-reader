@@ -38,6 +38,7 @@
 #include "widgets/FileAttrWidget.h"
 #include "Application.h"
 #include "sidebar/note/NoteViewWidget.h"
+#include "BrowserMagniFier.h"
 
 #include "document/DjVuModel.h"
 #include "Utils.h"
@@ -177,6 +178,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 {
+    closeMagnifier();
     if (Dr::MouseShapeHand == shape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
         foreach (BrowserPage *item, m_items) {
@@ -853,6 +855,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
 
         } else if (btn == Qt::RightButton) {
+            closeMagnifier();
             m_selectPressedPos = QPointF();
 
             BrowserPage *item = nullptr;
@@ -968,50 +971,28 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (m_magnifierLabel) {
+        QPoint magnifierPos = mousePos;
         if (mousePos.y() < 122) {
             verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
-            mousePos.setY(122);
+            magnifierPos.setY(122);
         }
 
         if (mousePos.x() < 122) {
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
-            mousePos.setX(122);
+            magnifierPos.setX(122);
         }
 
         if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
             verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
-            mousePos.setY(this->size().height() - 122);
+            magnifierPos.setY(this->size().height() - 122);
         }
 
         if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
-            mousePos.setX(this->size().width() - 122);
+            magnifierPos.setX(this->size().width() - 122);
         }
 
-        QImage image;
-        QPixmap pix(244, 244);
-        pix.fill(Qt::transparent);
-        if (getImagePoint(mousePos, m_lastScaleFactor + 2, image) && !image.isNull()) {
-            QPainter painter(&pix);
-            QPainterPath clippath;
-            clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
-            painter.setClipPath(clippath);
-            painter.drawImage(0, 0, image);
-            painter.end();
-        } else {
-            QPainter painter(&pix);
-            QPainterPath clippath;
-            clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
-            painter.setClipPath(clippath);
-            painter.fillRect(0, 0, 244, 244, Qt::white);
-            painter.end();
-        }
-
-        QPainter painter(&pix);
-        painter.drawPixmap(0, 0, 244, 244, QIcon::fromTheme(QString("dr_") + "maganifier").pixmap(QSize(244, 244)));
-        m_magnifierLabel->setPixmap(pix);
-        m_magnifierLabel->move(QPoint(mousePos.x() - 122, mousePos.y() - 122));
-
+        m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
     } else {
         if (m_selectPressedPos.isNull()) {
             QGraphicsItem *item = itemAt(event->pos());
@@ -1165,23 +1146,28 @@ bool SheetBrowser::getImage(int index, QImage &image, double width, double heigh
     return true;
 }
 
-bool SheetBrowser::getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image)
+BrowserPage *SheetBrowser::getBrowserPageForPoint(QPoint &viewPoint)
 {
-    BrowserPage *item  = static_cast<BrowserPage *>(itemAt(viewPoint));
+    BrowserPage *item = nullptr;
+    const QList<QGraphicsItem *> &itemlst = this->items(viewPoint);
+    for (QGraphicsItem *itemIter : itemlst) {
+        item = dynamic_cast<BrowserPage *>(itemIter);
+        if (item != nullptr) {
+            break;
+        }
+    }
 
     if (nullptr == item)
-        return false;
+        return nullptr;
 
-    QPointF itemPoint = item->mapFromScene(mapToScene(viewPoint));
+    const QPointF &itemPoint = item->mapFromScene(mapToScene(viewPoint));
 
-    if (!item->contains(itemPoint))
-        return false;
+    if (item->contains(itemPoint)) {
+        viewPoint = itemPoint.toPoint();
+        return item;
+    }
 
-    QPoint point = QPoint(static_cast<int>(itemPoint.x()), static_cast<int>(itemPoint.y()));
-
-    image = item->getImagePoint(scaleFactor, point);
-
-    return true;
+    return nullptr;
 }
 
 Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QString contents)
@@ -1216,13 +1202,7 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
 void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
-        m_magnifierLabel = new QLabel(this);
-        m_magnifierLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
-        m_magnifierLabel->setWindowFlag(Qt::FramelessWindowHint);
-        m_magnifierLabel->setAutoFillBackground(false);
-        m_magnifierLabel->setAttribute(Qt::WA_TranslucentBackground);
-        m_magnifierLabel->resize(244, 244);
-        m_magnifierLabel->show();
+        m_magnifierLabel = new BrowserMagniFier(this);
         setDragMode(QGraphicsView::RubberBandDrag);
         setMouseTracking(true);
         setCursor(QCursor(Qt::BlankCursor));

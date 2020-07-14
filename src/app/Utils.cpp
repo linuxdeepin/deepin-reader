@@ -208,3 +208,92 @@ bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
     destinationFile.close();
     return ret;
 }
+
+QImage Utils::copyImage(const QImage &srcimg, int x, int y, int w, int h)
+{
+    int dx = 0;
+    int dy = 0;
+    if (w <= 0 || h <= 0)
+        return QImage();
+
+    QImage::Format format = srcimg.format();
+    QImage image(w, h, format);
+    if (image.isNull())
+        return image;
+
+    int srcw = srcimg.width();
+    int srch = srcimg.height();
+    if (x < 0 || y < 0 || x + w > srcw || y + h > srch) {
+        // bitBlt will not cover entire image - clear it.
+        image.fill(Qt::white);
+        if (x < 0) {
+            dx = -x;
+            x = 0;
+        }
+        if (y < 0) {
+            dy = -y;
+            y = 0;
+        }
+    }
+
+    image.setColorTable(srcimg.colorTable());
+
+    int pixels_to_copy = qMax(w - dx, 0);
+    if (x > srcw)
+        pixels_to_copy = 0;
+    else if (pixels_to_copy > srcw - x)
+        pixels_to_copy = srcw - x;
+    int lines_to_copy = qMax(h - dy, 0);
+    if (y > srch)
+        lines_to_copy = 0;
+    else if (lines_to_copy > srch - y)
+        lines_to_copy = srch - y;
+
+    bool byteAligned = true;
+    if (format == QImage::Format_Mono || format == QImage::Format_MonoLSB)
+        byteAligned = !(dx & 7) && !(x & 7) && !(pixels_to_copy & 7);
+
+    if (byteAligned) {
+        const uchar *src = srcimg.bits() + ((x * srcimg.depth()) >> 3) + y * srcimg.bytesPerLine();
+        uchar *dest = image.bits() + ((dx * srcimg.depth()) >> 3) + dy * image.bytesPerLine();
+        const int bytes_to_copy = (pixels_to_copy * srcimg.depth()) >> 3;
+        for (int i = 0; i < lines_to_copy; ++i) {
+            memcpy(dest, src, bytes_to_copy);
+            src += srcimg.bytesPerLine();
+            dest += image.bytesPerLine();
+        }
+    } else if (format == QImage::Format_Mono) {
+        const uchar *src = srcimg.bits() + y * srcimg.bytesPerLine();
+        uchar *dest = image.bits() + dy * image.bytesPerLine();
+        for (int i = 0; i < lines_to_copy; ++i) {
+            for (int j = 0; j < pixels_to_copy; ++j) {
+                if (src[(x + j) >> 3] & (0x80 >> ((x + j) & 7)))
+                    dest[(dx + j) >> 3] |= (0x80 >> ((dx + j) & 7));
+                else
+                    dest[(dx + j) >> 3] &= ~(0x80 >> ((dx + j) & 7));
+            }
+            src += srcimg.bytesPerLine();
+            dest += image.bytesPerLine();
+        }
+    } else { // Format_MonoLSB
+        Q_ASSERT(format == QImage::Format_MonoLSB);
+        const uchar *src = srcimg.bits() + y * srcimg.bytesPerLine();
+        uchar *dest = image.bits() + dy * image.bytesPerLine();
+        for (int i = 0; i < lines_to_copy; ++i) {
+            for (int j = 0; j < pixels_to_copy; ++j) {
+                if (src[(x + j) >> 3] & (0x1 << ((x + j) & 7)))
+                    dest[(dx + j) >> 3] |= (0x1 << ((dx + j) & 7));
+                else
+                    dest[(dx + j) >> 3] &= ~(0x1 << ((dx + j) & 7));
+            }
+            src += srcimg.bytesPerLine();
+            dest += image.bytesPerLine();
+        }
+    }
+
+    image.setDotsPerMeterX(srcimg.dotsPerMeterX());
+    image.setDotsPerMeterY(srcimg.dotsPerMeterY());
+    image.setDevicePixelRatio(srcimg.devicePixelRatio());
+    image.setOffset(srcimg.offset());
+    return image;
+}

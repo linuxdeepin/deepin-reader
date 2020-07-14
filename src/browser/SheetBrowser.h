@@ -23,6 +23,7 @@
 
 #include <DGraphicsView>
 #include <QLabel>
+#include <QMutex>
 
 #include "document/Model.h"
 #include "Global.h"
@@ -36,10 +37,13 @@ class TipsWidget;
 class BrowserAnnotation;
 class NoteShadowViewWidget;
 class RenderViewportThread;
+class BrowserMagniFier;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:
+    friend class BrowserMagniFier;
+    friend class ReadMagnifierManager;
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
     ~SheetBrowser() override;
@@ -139,9 +143,9 @@ protected:
 
     void wheelEvent(QWheelEvent *event) override;
 
-    bool getImagePoint(QPoint viewPoint, double scaleFactor, QImage &image);
-
     BrowserPage *mouseClickInPage(QPointF &);
+
+    BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
 
 private slots:
     void onVerticalScrollBarValueChanged(int value);
@@ -166,7 +170,7 @@ private:
     Annotation *addHighLightAnnotation(const QString, const QColor);
 private:
     deepin_reader::Document *m_document = nullptr;
-    QLabel *m_magnifierLabel = nullptr;
+    BrowserMagniFier *m_magnifierLabel = nullptr;
     DocSheet *m_sheet = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;

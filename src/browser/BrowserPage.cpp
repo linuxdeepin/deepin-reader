@@ -34,6 +34,7 @@
 #include "BrowserAnnotation.h"
 #include "Application.h"
 #include "RenderViewportThread.h"
+#include "Utils.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -41,6 +42,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
 #include <QTime>
+#include <QMutexLocker>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -250,8 +252,8 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
     if (!m_pixmap.isNull()) {
-        QImage image = m_pixmap.toImage();
-        image.scaled(static_cast<int>(width), static_cast<int>(height), mode);
+        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode, Qt::SmoothTransformation);
+        image.setDevicePixelRatio(dApp->devicePixelRatio());
         return image;
     }
 
@@ -273,10 +275,17 @@ QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
-    QRect rect = QRect(static_cast<int>(point.x() * scaleFactor / m_scaleFactor - 122),
-                       static_cast<int>(point .y() * scaleFactor / m_scaleFactor  - 122), 244, 244);
+    QMutexLocker locker(&m_imageMutex);
+    int ss = 122 * scaleFactor / m_scaleFactor;
 
+    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
     return m_page->render(m_rotation, scaleFactor, rect);
+}
+
+QImage BrowserPage::getCurImagePoint(QPoint point)
+{
+    int ds = 122;
+    return Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds);
 }
 
 void BrowserPage::handlePreRenderFinished(Dr::Rotation rotation, QImage image)

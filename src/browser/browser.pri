@@ -1,5 +1,6 @@
 HEADERS += \
     $$PWD/BrowserAnnotation.h \
+    $$PWD/BrowserMagniFier.h \
     $$PWD/BrowserMenu.h \
     $$PWD/BrowserPage.h \
     $$PWD/BrowserWord.h \
@@ -8,6 +9,7 @@ HEADERS += \
     $$PWD/RenderPageThread.h
 
 SOURCES += \
+    $$PWD/BrowserMagniFier.cpp \
     $$PWD/BrowserPage.cpp \
     $$PWD/BrowserAnnotation.cpp \
     $$PWD/BrowserMenu.cpp \
