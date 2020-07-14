@@ -179,7 +179,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
 
     if (!renderLater) {
-        renderViewPort();
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
@@ -203,21 +202,24 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 //        task.preRender = true;
 //        tasks.append(task);
 
-        for (int i = 0 ; i * 400 < rect.height(); ++i) {
-            int height = 400;
+        int pieceWidth = 1000;
+        int pieceHeight = 1000;
 
-            if (rect.height() < i * 400)
-                height = static_cast<int>(rect.height() - 400 * i);
+        for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
+            int height = pieceHeight;
 
-            QRect renderRect = QRect(0, 400 * i, static_cast<int>(boundingRect().width()), height);
+            if (rect.height() < (i + 1) * pieceHeight)
+                height = static_cast<int>(rect.height() - pieceHeight * i);
 
-            for (int j = 0; j * 400 < renderRect.width(); ++j) {
-                int width = 400;
+            QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
 
-                if (renderRect.width() < i * 400)
-                    width = static_cast<int>(renderRect.width() - 400 * i);
+            for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
+                int width = pieceWidth;
 
-                QRect finalRenderRect = QRect(400 * j, 400 * i, width, height);
+                if (renderRect.width() < (j + 1) * pieceWidth)
+                    width = static_cast<int>(renderRect.width() - pieceWidth * j);
+
+                QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
 
                 RenderTask task;
                 task.item = this;
@@ -372,11 +374,13 @@ void BrowserPage::clearWords()
     }
 
     m_words.clear();
+    m_wordRotation = Dr::NumberOfRotations;
 }
 
 void BrowserPage::loadWords()
 {
     if (m_wordRotation != m_rotation) {
+        qDebug() << 1111111;
         clearWords();
 
         m_wordRotation = m_rotation;

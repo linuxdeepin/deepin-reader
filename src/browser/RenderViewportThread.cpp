@@ -112,14 +112,14 @@ void RenderViewportThread::run()
         m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
-        QTime time;
-        time.start();
+//        QTime time;
+//        time.start();
         if (BrowserPage::existInstance(m_curTask.page)) {
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
             if (!image.isNull())
                 emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
         }
-        qDebug() << time.elapsed();
+        //qDebug() << time.elapsed();
 
         m_mutex.lock();
         m_curTask = PageRenderTask();

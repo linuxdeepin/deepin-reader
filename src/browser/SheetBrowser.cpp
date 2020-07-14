@@ -492,7 +492,8 @@ Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
 void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {
-        item->clearWords();
+        if (!item->isVisible())
+            item->clearWords();
     }
 
     if (nullptr == m_scrollTimer) {
@@ -687,8 +688,6 @@ void SheetBrowser::deform(SheetOperation &operation)
 
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->clearWords();
-
             m_items.at(i)->setPos(0, height);
 
             height += m_items.at(i)->boundingRect().height() + 5;
@@ -697,10 +696,6 @@ void SheetBrowser::deform(SheetOperation &operation)
                 width = static_cast<int>(m_items.at(i)->boundingRect().width());
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
-        for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->clearWords();
-        }
-
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
                 continue;
@@ -746,9 +741,9 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
         deform(m_sheet->operationRef());
         m_sheet->setOperationChanged();
 
-        for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->renderViewPort();
-        }
+//        for (int i = 0; i < m_items.count(); ++i) {
+//            m_items.at(i)->renderViewPort();
+//        }
     }
 
     QGraphicsView::resizeEvent(event);

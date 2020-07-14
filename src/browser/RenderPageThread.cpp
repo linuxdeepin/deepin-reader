@@ -158,10 +158,10 @@ void RenderPageThread::run()
             msleep(10);
         }
 
-        QTime time;
-        time.start();
+//        QTime time;
+//        time.start();
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-        qDebug() << time.elapsed();
+//        qDebug() << m_curTask.renderRect << ":" << time.elapsed();
 
         if (!image.isNull())
             emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect, m_curTask.preRender);
