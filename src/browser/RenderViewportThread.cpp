@@ -85,6 +85,19 @@ void RenderViewportThread::appendTask(PageRenderTask task)
         m_instance->start();
 }
 
+int RenderViewportThread::count(BrowserPage *page)
+{
+    if (nullptr == m_instance)
+        return 0;
+
+    int count = 0;
+    foreach (PageRenderTask task, m_instance->m_tasks) {
+        if (task.page == page)
+            count++;
+    }
+    return count;
+}
+
 void RenderViewportThread::run()
 {
     m_quit = false;
@@ -99,11 +112,14 @@ void RenderViewportThread::run()
         m_curTask = m_tasks.pop();
         m_mutex.unlock();
 
+        QTime time;
+        time.start();
         if (BrowserPage::existInstance(m_curTask.page)) {
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
             if (!image.isNull())
                 emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
         }
+        qDebug() << time.elapsed();
 
         m_mutex.lock();
         m_curTask = PageRenderTask();

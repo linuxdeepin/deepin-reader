@@ -72,6 +72,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
     connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
+    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdateThumbnail(int)));
 }
 
 DocSheet::~DocSheet()
@@ -189,7 +190,7 @@ void DocSheet::rotateLeft()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    m_sidebar->handleRotate(m_operation.rotation);
+    if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -205,7 +206,7 @@ void DocSheet::rotateRight()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    m_sidebar->handleRotate(m_operation.rotation);
+    if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -232,7 +233,7 @@ void DocSheet::setBookMark(int index, int state)
         m_bookmarks.remove(index);
     }
 
-    m_sidebar->setBookMark(index, state);
+    if (m_sidebar) m_sidebar->setBookMark(index, state);
     m_browser->setBookMark(index, state);
 
     setFileChanged(true);
@@ -246,7 +247,7 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
         else {
             m_bookmarks.remove(index);
         }
-        m_sidebar->setBookMark(index, state);
+        if (m_sidebar) m_sidebar->setBookMark(index, state);
         m_browser->setBookMark(index, state);
     }
 
@@ -561,12 +562,15 @@ void DocSheet::zoomout()
 
 bool DocSheet::sideBarVisible()
 {
-    return m_sidebar->isVisible();
+    if (m_sidebar)
+        return m_sidebar->isVisible();
+
+    return false;
 }
 
 void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 {
-    m_sidebar->setVisible(isVisible);
+    if (m_sidebar) m_sidebar->setVisible(isVisible);
     if (notify) {
         m_operation.sidebarVisible = isVisible;
         setOperationChanged();
@@ -575,7 +579,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
 void DocSheet::handleOpenSuccess()
 {
-    m_sidebar->handleOpenSuccess();
+    if (m_sidebar) m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
@@ -671,7 +675,7 @@ void DocSheet::onBrowserPageChanged(int page)
 {
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
-        m_sidebar->setCurrentPage(page);
+        if (m_sidebar) m_sidebar->setCurrentPage(page);
     }
 }
 
@@ -712,5 +716,5 @@ void DocSheet::onBrowserBookmark(int index, bool state)
 
 void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *anno)
 {
-    m_sidebar->handleAnntationMsg(type, anno);
+    if (m_sidebar) m_sidebar->handleAnntationMsg(type, anno);
 }

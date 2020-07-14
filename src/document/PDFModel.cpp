@@ -440,6 +440,11 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
     return m_page->renderToImage(horizontalResolution, verticalResolution, x, y, w, h, rotate);
 }
 
+QImage PDFPage::thumbnail() const
+{
+    return m_page->thumbnail();
+}
+
 QString PDFPage::label() const
 {
     LOCK_PAGE

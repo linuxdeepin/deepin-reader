@@ -175,6 +175,7 @@ public:
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const = 0;
     virtual QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
+    virtual QImage thumbnail() const {return QImage();}
     virtual QString label() const { return QString(); }
     virtual QList< Link * > links() const { return QList< Link * >(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }

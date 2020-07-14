@@ -121,6 +121,8 @@ signals:
 
     void sigOperaAnnotation(int type, deepin_reader::Annotation *annotation);
 
+    void sigThumbnailUpdated(int index);
+
 protected:
     void showEvent(QShowEvent *event) override;
 

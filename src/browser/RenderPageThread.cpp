@@ -29,6 +29,7 @@
 #include "RenderPageThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
+#include "RenderViewportThread.h"
 
 #include <QTime>
 #include <QDebug>
@@ -153,7 +154,14 @@ void RenderPageThread::run()
         if (!BrowserPage::existInstance(m_curTask.item))
             continue;
 
+        while (RenderViewportThread::count(m_curTask.item)) {
+            msleep(10);
+        }
+
+        QTime time;
+        time.start();
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+        qDebug() << time.elapsed();
 
         if (!image.isNull())
             emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect, m_curTask.preRender);

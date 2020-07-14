@@ -67,6 +67,7 @@ public :
     void handleFindContentComming(const deepin_reader::stSearchRes &);
     int  handleFindFinished();
     void handleRotate(int);
+public slots:
     void handleUpdateThumbnail(const int &index);
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 

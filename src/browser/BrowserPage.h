@@ -65,6 +65,8 @@ public:
 
     QImage getImage(int width, int height, Qt::AspectRatioMode mode); //按宽高缩放
 
+    QImage thumbnail() ;
+
     QImage getImageRect(double scaleFactor, QRect rect);//获取缩放后的局部区域图片
 
     QImage getImagePoint(double scaleFactor, QPoint point); //根据某一个点返回100×100的图片
@@ -112,9 +114,6 @@ private:
 
 protected:
     bool sceneEvent(QEvent *event) override;
-
-signals:
-    void bookmarkPressed(int, bool bookmark);
 
     struct ImageFragment {
         QRect rect;

@@ -53,6 +53,8 @@ public:
 
     static void appendTask(PageRenderTask task);
 
+    static int  count(BrowserPage *page);        //当前任务数量
+
     void run();
 
 signals:

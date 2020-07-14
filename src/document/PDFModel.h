@@ -84,6 +84,8 @@ public:
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
 
+    QImage thumbnail() const;
+
     QString label() const;
 
     QList< Link * > links() const;

@@ -140,6 +140,9 @@ void BrowserPage::renderViewPort()
     if (m_renderedRect.contains(viewRenderRect))
         return;
 
+    if (m_viewportRenderedRect.contains(viewRenderRect))
+        return;
+
     PageRenderTask task;
 
     task.page = this;
@@ -176,6 +179,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
 
     if (!renderLater) {
+        renderViewPort();
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
@@ -191,13 +195,13 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         QRectF rect = boundingRect();
 
         //加载模糊的图
-        RenderTask task;
-        task.item = this;
-        task.scaleFactor = 0.05;
-        task.rotation = m_rotation;
-        task.renderRect = QRect();
-        task.preRender = true;
-        tasks.append(task);
+//        RenderTask task;
+//        task.item = this;
+//        task.scaleFactor = 0.05;
+//        task.rotation = m_rotation;
+//        task.renderRect = QRect();
+//        task.preRender = true;
+//        tasks.append(task);
 
         for (int i = 0 ; i * 400 < rect.height(); ++i) {
             int height = 400;
@@ -207,13 +211,23 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
             QRect renderRect = QRect(0, 400 * i, static_cast<int>(boundingRect().width()), height);
 
-            RenderTask task;
-            task.item = this;
-            task.scaleFactor = m_scaleFactor;
-            task.rotation = m_rotation;
-            task.renderRect = renderRect;
-            task.preRender = false;
-            tasks.append(task);
+            for (int j = 0; j * 400 < renderRect.width(); ++j) {
+                int width = 400;
+
+                if (renderRect.width() < i * 400)
+                    width = static_cast<int>(renderRect.width() - 400 * i);
+
+                QRect finalRenderRect = QRect(400 * j, 400 * i, width, height);
+
+                RenderTask task;
+                task.item = this;
+                task.scaleFactor = m_scaleFactor;
+                task.rotation = m_rotation;
+                task.renderRect = finalRenderRect;
+                task.preRender = false;
+                tasks.append(task);
+            }
+
         }
 
         RenderPageThread::appendTasks(tasks);
@@ -233,10 +247,21 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
+    if (!m_pixmap.isNull()) {
+        QImage image = m_pixmap.toImage();
+        image.scaled(static_cast<int>(width), static_cast<int>(height), mode);
+        return image;
+    }
+
     QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
     QImage image = m_page->render(size.width(), size.height(), mode);
     image.setDevicePixelRatio(dApp->devicePixelRatio());
     return image;
+}
+
+QImage BrowserPage::thumbnail()
+{
+    return m_page->thumbnail();
 }
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
@@ -286,6 +311,8 @@ void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation
     }
 
     m_renderedRect.setHeight(rect.y() + rect.height());
+
+    emit m_parent->sigThumbnailUpdated(m_index);
 
     update();
 }

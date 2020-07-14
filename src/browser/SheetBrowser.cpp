@@ -148,13 +148,18 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
             m_maxHeight = page->size().height();
 
         BrowserPage *item = new BrowserPage(this, page);
+
         item->setItemIndex(i);
 
         if (bookmarks.contains(i))
             item->setBookmark(true);
 
         m_items.append(item);
-        scene()->addItem(item);
+
+    }
+
+    for (int i = 0; i < m_items.count(); ++i) {
+        scene()->addItem(m_items[i]);
     }
 
     setMouseShape(operation.mouseShape);
