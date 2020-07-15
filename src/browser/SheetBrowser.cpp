@@ -578,7 +578,7 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
         }
     }
     if (ret) emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
-    return false;
+    return ret;
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
@@ -814,10 +814,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
         if (btn == Qt::LeftButton) {
+            QPointF mousepoint = mapToScene(event->pos());
             scene()->setSelectionArea(QPainterPath());
             m_selectStartPos = QPointF();
             m_selectEndPos = QPointF();
-            m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
             deepin_reader::Annotation *clickAnno = nullptr;
 //            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
@@ -830,20 +830,22 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 //                }
 //            }
             //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-            clickAnno = getClickAnnot(m_selectPressedPos);
+            clickAnno = getClickAnnot(mousepoint);
 
             if (m_annotationInserting) {
                 if (clickAnno && clickAnno->type() == 1/*AText*/) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
-                    clickAnno = addIconAnnotation(m_selectPressedPos, "");
+                    clickAnno = addIconAnnotation(mousepoint, "");
                 }
                 showNoteEditWidget(clickAnno);
-
                 m_annotationInserting = false;
             } else {
                 if (nullptr != clickAnno)
                     showNoteEditWidget(clickAnno);
+                else {
+                    m_selectStartPos = m_selectPressedPos = mousepoint;
+                }
             }
 
         } else if (btn == Qt::RightButton) {
@@ -859,17 +861,16 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             const QString &selectWords = selectedWordsText();
 
             foreach (QGraphicsItem *baseItem, list) {
-                if (nullptr != qgraphicsitem_cast<BrowserPage *>(baseItem)) {
-                    item = qgraphicsitem_cast<BrowserPage *>(baseItem);
-                    continue;
+                if (nullptr != dynamic_cast<BrowserAnnotation *>(baseItem)) {
+                    annotation = dynamic_cast<BrowserAnnotation *>(baseItem);
                 }
 
-                if (nullptr != qgraphicsitem_cast<BrowserAnnotation *>(baseItem)) {
-                    annotation = qgraphicsitem_cast<BrowserAnnotation *>(baseItem);
-                    continue;
+                if (nullptr != dynamic_cast<BrowserPage *>(baseItem)) {
+                    item = dynamic_cast<BrowserPage *>(baseItem);
                 }
             }
 
+            m_tipsWidget->hide();
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
@@ -878,9 +879,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddTextHighlight") {
                     QColor color = menu.getColor();
                     addHighLightAnnotation("", color);
-//                    addHighlightAnnotation("", color);弃用
                 } else if (objectname == "RemoveAnnotation") {
-                    if (annotation) annotation->deleteMe();
+                    if (annotation)  removeAnnotation(annotation->annotation());
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
@@ -888,10 +888,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     } else {
                         showNoteEditWidget(addIconAnnotation(clickPos, ""));
                     }
+                    m_noteEditWidget->move(mapToGlobal(event->pos()) - QPoint(12, 12));
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
-                    if (annotation) annotation->deleteMe();
+                    if (annotation)  removeAnnotation(annotation->annotation());
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
                     if (annotation)  {
@@ -900,6 +901,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     } else {
                         showNoteEditWidget(addHighlightAnnotation("", color));
                     }
+                    m_noteEditWidget->move(mapToGlobal(event->pos()) - QPoint(12, 12));
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {
@@ -932,10 +934,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 }
             });
 
-            if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationText) {
+            if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON);
-            } else if (nullptr != annotation && annotation->type() == deepin_reader::Annotation::AnnotationHighlight) {
+            } else if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationHighlight) {
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT);
             }  else if (!selectWords.isEmpty()) {

@@ -121,6 +121,9 @@ void NotesWidget::deleteAllItem()
 
 void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
 {
+    if (anno && anno->contents().isEmpty())
+        return;
+
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = anno->page - 1;
     tImagePageInfo.strcontents = anno->contents();

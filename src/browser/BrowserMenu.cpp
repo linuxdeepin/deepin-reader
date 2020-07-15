@@ -38,7 +38,10 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         this->addSeparator();
         createAction(tr("Remove annotation"), "RemoveAnnotation");
         createAction(tr("Add annotation"), "AddAnnotationIcon");
-        createAction(tr("Add bookmark"), "AddBookmark");
+        if (sheet->hasBookMark(index))
+            createAction(tr("Remove bookmark"), "RemoveBookmark");
+        else
+            createAction(tr("Add bookmark"), "AddBookmark");
     } else if (type == DOC_MENU_ANNO_HIGHLIGHT || type == DOC_MENU_SELECT_TEXT) {
         createAction(tr("Copy"), "Copy");
         this->addSeparator();
@@ -51,7 +54,10 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         if (type == DOC_MENU_ANNO_HIGHLIGHT) rmHighAct->setDisabled(false);
         this->addSeparator();
         createAction(tr("Add annotation"), "AddAnnotationHighlight");
-        createAction(tr("Add bookmark"), "AddBookmark");
+        if (sheet->hasBookMark(index))
+            createAction(tr("Remove bookmark"), "RemoveBookmark");
+        else
+            createAction(tr("Add bookmark"), "AddBookmark");
     } else {
         createAction(tr("Search"), "Search");
         this->addSeparator();
