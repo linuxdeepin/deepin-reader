@@ -433,18 +433,6 @@ void BrowserPage::reloadAnnotations()
     m_hasLoadedAnnotation = true;
 }
 
-QPoint BrowserPage::point2Local(QPointF &point)
-{
-    QPoint tpoint(0, 0);
-
-    qInfo() << this->boundingRect() << "   3333  "  << point << "        "  << this->boundingRect().contains(point);
-
-    if (this->boundingRect().contains(point))
-        qInfo() << __LINE__ << "  22222222222     in  page   "  << __FUNCTION__;
-
-    return tpoint;
-}
-
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
     return m_annotations;

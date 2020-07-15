@@ -333,39 +333,58 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
+    qreal x{0};
+    qreal y{0};
+
+    //计算坐标小于图标宽度情况
+    qreal space = ICONANNOTE_WIDTH * scaleFactor;
+    if (clickPoint.x() > ICONANNOTE_WIDTH / 2) {
+        x = (clickPoint.x() + space / 2.) > (page->boundingRect().width()) ? static_cast<int>((page->boundingRect().width()) - space / 2.) : clickPoint.x();
+    } else {
+        x = (clickPoint.x() < space / 2.) ? space / 2. : clickPoint.x();
+    }
+    if (clickPoint.y() > space / 2.) {
+        y = (clickPoint.y() + space / 2.) > (page->boundingRect().height()) ? static_cast<int>((page->boundingRect().height()) - space / 2.) : clickPoint.y();
+    } else {
+        y = (clickPoint.y() < space / 2.) ? space / 2. : clickPoint.y();
+    }
+
+    clickPoint.setX(x);
+    clickPoint.setY(y);
+
     switch (rotation) {
     case Dr::RotateBy0 : {
-        x1 = clickPoint.x() / (page->boundingRect().width() * scaleFactor);
-        y1 = clickPoint.y() / (page->boundingRect().height() * scaleFactor);
-        width  = ICONANNOTE_WIDTH / page->boundingRect().width();
-        height = ICONANNOTE_WIDTH / page->boundingRect().height();
+        x1 = clickPoint.x() / (page->boundingRect().width());
+        y1 = clickPoint.y() / (page->boundingRect().height());
+        width  = ICONANNOTE_WIDTH *  scaleFactor / page->boundingRect().width();
+        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
     }
     break;
     case Dr::RotateBy90 : {
         clickPoint = QPointF(clickPoint.y(), page->boundingRect().width() - clickPoint.x());
 
-        x1 = clickPoint.x() / (page->boundingRect().height() * scaleFactor);
-        y1 = clickPoint.y() / (page->boundingRect().width() * scaleFactor);
-        width  = ICONANNOTE_WIDTH / page->boundingRect().height();
-        height = ICONANNOTE_WIDTH / page->boundingRect().width();
+        x1 = clickPoint.x() / (page->boundingRect().height());
+        y1 = clickPoint.y() / (page->boundingRect().width());
+        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
+        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
     }
     break;
     case Dr::RotateBy180 : {
         clickPoint = QPointF(page->boundingRect().width() - clickPoint.x(), page->boundingRect().height() - clickPoint.y());
 
-        x1 = clickPoint.x() / (page->boundingRect().width() * scaleFactor);
-        y1 = clickPoint.y() / (page->boundingRect().height() * scaleFactor);
-        width  = ICONANNOTE_WIDTH / page->boundingRect().width();
-        height = ICONANNOTE_WIDTH / page->boundingRect().height();
+        x1 = clickPoint.x() / (page->boundingRect().width());
+        y1 = clickPoint.y() / (page->boundingRect().height());
+        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
+        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
     }
     break;
     case Dr::RotateBy270 : {
         clickPoint = QPointF(page->boundingRect().height() - clickPoint.y(), clickPoint.x());
 
-        x1 = clickPoint.x() / (page->boundingRect().height() * scaleFactor);
-        y1 = clickPoint.y() / (page->boundingRect().width() * scaleFactor);
-        width  = ICONANNOTE_WIDTH / page->boundingRect().height();
-        height = ICONANNOTE_WIDTH / page->boundingRect().width();
+        x1 = clickPoint.x() / (page->boundingRect().height());
+        y1 = clickPoint.y() / (page->boundingRect().width());
+        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
+        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
     }
     break;
     default:

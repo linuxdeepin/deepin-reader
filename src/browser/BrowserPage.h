@@ -115,8 +115,6 @@ public:
 private:
     void reloadAnnotations();
 
-    QPoint point2Local(QPointF &);
-
 protected:
     bool sceneEvent(QEvent *event) override;
 
