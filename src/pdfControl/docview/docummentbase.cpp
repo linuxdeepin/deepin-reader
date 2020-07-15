@@ -21,6 +21,11 @@ static QMutex mutexlockloaddata;
 DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrollArea(parent),
     d_ptr(ptr ? ptr : new DocummentBasePrivate(this))
 {
+    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
+    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
+
     qRegisterMetaType<stSearchRes>("&stSearchRes");
     Q_D(DocummentBase);
     setWidgetResizable(true);
