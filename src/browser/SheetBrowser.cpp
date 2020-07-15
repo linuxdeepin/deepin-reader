@@ -534,7 +534,7 @@ Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
     Annotation *anno = nullptr;
     foreach (BrowserPage *item, m_items)
         anno = item->addHighlightAnnotation(text, color);
-    if (anno) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
+    if (anno && !text.isEmpty()) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     return anno;
 }
 
@@ -595,7 +595,12 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
         }
     }
 
-    if (ret) emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
+    if (ret) {
+        if (!text.isEmpty())
+            emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
+        else
+            emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+    }
 
     return ret;
 }
@@ -994,7 +999,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             if (item != nullptr) {
                 if (!item->isPanel()) {
                     BrowserAnnotation *annotation  = dynamic_cast<BrowserAnnotation *>(item);
-                    if (annotation != nullptr) {
+                    if (annotation != nullptr && !annotation->annotationText().isEmpty()) {
                         m_tipsWidget->setText(annotation->annotationText());
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);
@@ -1186,7 +1191,7 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
             anno = page->addIconAnnotation(iconRect, contents);
     }
 
-    if (anno) {
+    if (anno && !contents.isEmpty()) {
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     }
     return anno;

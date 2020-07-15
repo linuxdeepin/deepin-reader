@@ -454,7 +454,10 @@ bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
     if (nullptr == m_browser)
         return false;
     int ret = m_browser->removeAnnotation(annotation);
-    if (ret) this->showTips(tr("The annotation has been removed"));
+    if (ret) {
+        setFileChanged(true);
+        this->showTips(tr("The annotation has been removed"));
+    }
     return ret;
 }
 
@@ -467,7 +470,10 @@ bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annot
     for (deepin_reader::Annotation *anno : annotations) {
         ret = m_browser->removeAnnotation(anno);
     }
-    if (ret) this->showTips(tr("The annotation has been removed"));
+    if (ret) {
+        setFileChanged(true);
+        this->showTips(tr("The annotation has been removed"));
+    }
     return ret;
 }
 
@@ -607,11 +613,6 @@ void DocSheet::closeSlide()
         return;
 
     doc->quitSlide();
-}
-
-bool DocSheet::slideOpened()
-{
-    return false;
 }
 
 bool DocSheet::isFullScreen()

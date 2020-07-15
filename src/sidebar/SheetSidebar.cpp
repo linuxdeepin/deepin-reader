@@ -225,6 +225,7 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
 void SheetSidebar::handleAnntationMsg(const int &msg, deepin_reader::Annotation *anno)
 {
     if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, anno);
+    handleUpdateThumbnail(anno->page - 1);
 }
 
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)

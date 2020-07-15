@@ -177,8 +177,6 @@ public:
 
     void closeSlide();
 
-    bool slideOpened();
-
     bool isFullScreen();
 
     void openFullScreen();
