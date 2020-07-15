@@ -71,7 +71,7 @@ public:
     CatalogModel(QAbstractItemView *parent): QStandardItemModel(parent)
     {
         m_parent = parent;
-    };
+    }
 
 protected:
     QVariant data(const QModelIndex &index, int role) const

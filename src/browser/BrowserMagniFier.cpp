@@ -97,7 +97,7 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
 
 void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const QImage &image)
 {
-    if (task.mousePos == m_lastPoint && task.scaleFactor == m_lastScaleFactor)
+    if (task.mousePos == m_lastPoint && qFuzzyCompare(task.scaleFactor, m_lastScaleFactor))
         setMagniFierImage(image);
 }
 

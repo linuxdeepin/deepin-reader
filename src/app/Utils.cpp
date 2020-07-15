@@ -258,7 +258,7 @@ QImage Utils::copyImage(const QImage &srcimg, int x, int y, int w, int h)
         uchar *dest = image.bits() + ((dx * srcimg.depth()) >> 3) + dy * image.bytesPerLine();
         const int bytes_to_copy = (pixels_to_copy * srcimg.depth()) >> 3;
         for (int i = 0; i < lines_to_copy; ++i) {
-            memcpy(dest, src, bytes_to_copy);
+            memcpy(dest, src, static_cast<size_t>(bytes_to_copy));
             src += srcimg.bytesPerLine();
             dest += image.bytesPerLine();
         }

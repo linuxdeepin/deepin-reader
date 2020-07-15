@@ -50,7 +50,7 @@ private:
 
     static Database *s_instance;
 
-    Database(QObject *parent = 0);
+    Database(QObject *parent = nullptr);
 
     bool prepareOperation();
 

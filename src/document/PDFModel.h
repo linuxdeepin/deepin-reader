@@ -72,45 +72,45 @@ class PDFPage : public Page
     friend class PDFDocument;
 
 public:
-    ~PDFPage();
+    ~PDFPage() override;
 
-    QSize size() const;
+    QSize size() const override;
 
-    QSizeF sizeF() const;
+    QSizeF sizeF() const override;
 
-    QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const;
+    QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const override;
 
-    QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const;
+    QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
 
-    QImage thumbnail() const;
+    QImage thumbnail() const override;
 
-    QString label() const;
+    QString label() const override;
 
-    QList< Link * > links() const;
+    QList< Link * > links() const override;
 
-    QString text(const QRectF &rect) const;
+    QString text(const QRectF &rect) const override;
 
-    QString cachedText(const QRectF &rect) const;
+    QString cachedText(const QRectF &rect) const override;
 
-    QList<Word> words(Dr::Rotation rotation)const;
+    QList<Word> words(Dr::Rotation rotation)const override;
 
-    QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const;
+    QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const override;
 
-    QList< Annotation * > annotations() const;
+    QList< Annotation * > annotations() const override;
 
-    bool canAddAndRemoveAnnotations() const;
+    bool canAddAndRemoveAnnotations() const override;
 
-    Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color);                 //跳转注释
+    Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) override;                 //跳转注释
 
-    Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color);            //高亮
+    Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) override;            //高亮
 
-    Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color);
+    Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) override;
 
-    bool removeAnnotation(Annotation *annotation);
+    bool removeAnnotation(Annotation *annotation) override;
 
-    QList< FormField * > formFields() const;
+    QList< FormField * > formFields() const override;
 
     bool updateAnnotation(Annotation *annotation, const QString &, const QColor &);
 

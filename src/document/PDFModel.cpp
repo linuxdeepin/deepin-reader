@@ -907,7 +907,7 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
-Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
+Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString)
 {
     if (nullptr == m_page)
         return nullptr;

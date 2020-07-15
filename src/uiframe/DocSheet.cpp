@@ -652,7 +652,7 @@ void DocSheet::setOperationChanged()
     emit sigOperationChanged(this);
 }
 
-int DocSheet::label2pagenum(QString label)
+int DocSheet::label2pagenum(QString)
 {
     return 0;
 }
@@ -662,12 +662,12 @@ bool DocSheet::haslabel()
     return false;
 }
 
-void DocSheet::docBasicInfo(deepin_reader::FileInfo &info)
+void DocSheet::docBasicInfo(deepin_reader::FileInfo &)
 {
 
 }
 
-QString DocSheet::pagenum2label(int index)
+QString DocSheet::pagenum2label(int)
 {
     return "";
 }

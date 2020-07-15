@@ -293,7 +293,6 @@ bool SheetBrowser::calcIconAnnotRect(const QPointF point, QRectF &iconRect)
 
         return true;
     }
-    break;
     default:
         break;
     };
@@ -634,7 +633,7 @@ void SheetBrowser::jumpToOutline(const qreal &left, const qreal &top, unsigned i
 
 }
 
-void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation)
+void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *)
 {
 //    if (ipageIndex >= 0 && ipageIndex < d->m_pages.size()) {
 //        Poppler::Page *page = static_cast<PagePdf *>(d->m_pages.at(ipageIndex))->GetPage();

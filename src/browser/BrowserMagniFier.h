@@ -41,7 +41,7 @@ class ReadMagnifierManager: public QThread
 {
 public:
     explicit ReadMagnifierManager();
-    ~ReadMagnifierManager();
+    ~ReadMagnifierManager() override;
 
 public:
     void addTask(const MagnifierInfo_t &task);
