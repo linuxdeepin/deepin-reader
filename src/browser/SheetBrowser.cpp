@@ -75,10 +75,6 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
 
     m_tipsWidget = new TipsWidget(this);
-
-    connect(this, &SheetBrowser::sigAddHighLightAnnot, [this] {
-        addHighLightAnnotation("123", QColor(Qt::darkYellow));
-    });
 }
 
 SheetBrowser::~SheetBrowser()
@@ -463,9 +459,8 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
     return nullptr;
 }
 
-Annotation *SheetBrowser::addHighLightAnnotation(const QString, const QColor)
+Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color)
 {
-    //QList<BrowserPage *> m_items;
     BrowserPage *startPage{nullptr};
     BrowserPage *endPage{nullptr};
     Annotation *highLightAnnot{nullptr};
@@ -477,10 +472,9 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString, const QColor)
         return nullptr;
 
     if (startPage == endPage) {
-//            highLightAnnot = startPage->addHighlightAnnotation("123", QColor(Qt::darkYellow));
         highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
                                                            QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
-                                                           "123", QColor(Qt::darkYellow));
+                                                           contains, color);
         return highLightAnnot;
     }
 
@@ -498,13 +492,13 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString, const QColor)
         if (m_items.at(index) == startPage) {
             highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
                                                                QPointF(),
-                                                               "", QColor(Qt::darkYellow));
+                                                               contains, color);
         } else if (m_items.at(index) == endPage) {
             highLightAnnot = startPage->addHighlightAnnotation(QPointF(),
                                                                QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
-                                                               "123", QColor(Qt::darkYellow));
+                                                               contains, color);
         } else {
-            highLightAnnot = startPage->addHighlightAnnotation(QPointF(), QPointF(), "", QColor(Qt::darkYellow));
+            highLightAnnot = startPage->addHighlightAnnotation(QPointF(), QPointF(), contains, color);
         }
     }
 
@@ -839,8 +833,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             clickAnno = getClickAnnot(m_selectPressedPos);
 
             if (m_annotationInserting) {
-                if (clickAnno)
-                    qInfo() << clickAnno->type();
                 if (clickAnno && clickAnno->type() == 1/*AText*/) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
@@ -885,7 +877,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     Utils::copyText(selectWords);
                 } else if (objectname == "AddTextHighlight") {
                     QColor color = menu.getColor();
-                    addHighlightAnnotation("", color);
+                    addHighLightAnnotation("", color);
+//                    addHighlightAnnotation("", color);弃用
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation) annotation->deleteMe();
                 } else if (objectname == "AddAnnotationIcon") {
@@ -1093,8 +1086,6 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     if (btn == Qt::LeftButton) {
         m_selectPressedPos = QPointF();
         m_selectEndPos = mapToScene(event->pos());
-
-        emit sigAddHighLightAnnot();
     }
 
     QGraphicsView::mouseReleaseEvent(event);

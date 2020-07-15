@@ -596,6 +596,10 @@ Annotation *BrowserPage::addHighlightAnnotation(const QPointF start, const QPoin
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
     }
 
+    reloadAnnotations();
+
+    renderViewPort();
+
     return highLightAnnot;
 }
 

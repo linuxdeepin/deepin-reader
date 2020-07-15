@@ -930,8 +930,6 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
     annotation->setFlags(annotation->flags() | Poppler::Annotation::FixedRotation);
     m_page->addAnnotation(annotation);
 
-    qInfo() << "   icon  annot  subtype:" << annotation->subType();
-
     return (new PDFAnnotation(m_mutex, annotation));
 }
 

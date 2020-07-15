@@ -127,7 +127,6 @@ signals:
 
     void sigThumbnailUpdated(int index);
 
-    void sigAddHighLightAnnot();//test
 protected:
     void showEvent(QShowEvent *event) override;
 
