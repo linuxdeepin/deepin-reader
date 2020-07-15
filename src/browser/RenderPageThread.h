@@ -56,7 +56,7 @@ public:
 
     static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
-    static void destroy();
+    static void destroyForever();
 
     void run();
 
@@ -71,6 +71,7 @@ private:
     QStack<RenderPageTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
+    static bool quitForever;
     static RenderPageThread *instance;
 };
 

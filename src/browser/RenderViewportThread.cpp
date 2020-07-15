@@ -34,6 +34,7 @@
 #include <QDebug>
 
 RenderViewportThread *RenderViewportThread::m_instance = nullptr;
+bool RenderViewportThread::quitForever = false;
 RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
 {
     connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
@@ -42,28 +43,25 @@ RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
 RenderViewportThread::~RenderViewportThread()
 {
     m_quit = true;
-    m_instance = nullptr;
     wait();
 }
 
-void RenderViewportThread::createInstance()
-{
-    if (nullptr == m_instance)
-        m_instance = new RenderViewportThread;
-}
-
-void RenderViewportThread::destroyInstance()
+void RenderViewportThread::destroyForever()
 {
     if (nullptr != m_instance) {
         delete m_instance;
+        quitForever = true;
         m_instance = nullptr;
     }
 }
 
 void RenderViewportThread::appendTask(RenderViewportTask task)
 {
-    if (nullptr == m_instance)
+    if (quitForever)
         return;
+
+    if (nullptr == m_instance)
+        m_instance = new RenderViewportThread;
 
     if (m_instance->m_curTask.page == task.page
             && m_instance->m_curTask.renderRect == task.renderRect

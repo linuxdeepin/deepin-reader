@@ -23,8 +23,6 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
     setProductIcon(QIcon::fromTheme("deepin-reader"));
-
-    RenderViewportThread::createInstance();
 }
 
 void Application::blockShutdown()
@@ -124,8 +122,8 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    RenderViewportThread::destroyInstance();
-    RenderPageThread::destroy();
+    RenderViewportThread::destroyForever();
+    RenderPageThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list)
         window->close();

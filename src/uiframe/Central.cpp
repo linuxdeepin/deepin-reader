@@ -45,28 +45,18 @@ Central::Central(QWidget *parent)
     setAcceptDrops(true);
 
     m_menu    = new TitleMenu(this);
+    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
+
     m_widget  = new TitleWidget(this);
-    m_docPage = new CentralDocPage(this);
+
     m_navPage = new CentralNavPage(this);
+    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
+
     m_layout = new QStackedLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
-    m_layout->addWidget(m_docPage);
     setLayout(m_layout);
-
-    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-    connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
-    connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
-
-    connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
-    connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
-    connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
-    connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
-    connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
-
 }
 
 Central::~Central()
@@ -85,7 +75,25 @@ TitleWidget *Central::titleWidget()
 
 void Central::doOpenFile(QString filePath)
 {
-    m_docPage->openFile(filePath);
+    docPage()->openFile(filePath);
+}
+
+CentralDocPage *Central::docPage()
+{
+    if (nullptr == m_docPage) {
+        m_docPage = new CentralDocPage(this);
+        m_layout->addWidget(m_docPage);
+        connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
+        connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
+        connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
+        connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
+        connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
+        connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
+        connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
+        connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
+    }
+
+    return m_docPage;
 }
 
 void Central::openFilesExec()
@@ -135,22 +143,22 @@ void Central::openFiles(QStringList filePathList)
 
 void Central::addSheet(DocSheet *sheet)
 {
-    m_docPage->addSheet(sheet);
+    docPage()->addSheet(sheet);
 }
 
 bool Central::hasSheet(DocSheet *sheet)
 {
-    return m_docPage->hasSheet(sheet);
+    return docPage()->hasSheet(sheet);
 }
 
 void Central::showSheet(DocSheet *sheet)
 {
-    m_docPage->showSheet(sheet);
+    docPage()->showSheet(sheet);
 }
 
 bool Central::saveAll()
 {
-    return m_docPage->saveAll();
+    return docPage()->saveAll();
 }
 
 void Central::handleShortcut(QString shortcut)
@@ -159,10 +167,10 @@ void Central::handleShortcut(QString shortcut)
         openFilesExec();
     } if (shortcut == Dr::key_ctrl_shift_slash) { //  显示快捷键预览
         ShortCutShow show;
-        show.setSheet(m_docPage->getCurSheet());
+        show.setSheet(docPage()->getCurSheet());
         show.show();
     } else
-        m_docPage->handleShortcut(shortcut);
+        docPage()->handleShortcut(shortcut);
 }
 
 void Central::onSheetCountChanged(int count)
@@ -188,15 +196,15 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "New tab") {
         openFilesExec();
     } else if (action == "Save") { //  保存当前显示文件
-        m_docPage->saveCurrent();
+        docPage()->saveCurrent();
     } else if (action == "Save as") {
-        m_docPage->saveAsCurrent();
+        docPage()->saveAsCurrent();
     } else if (action == "Magnifer") {   //  开启放大镜
-        m_docPage->openMagnifer();
+        docPage()->openMagnifer();
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
-        m_docPage->openCurFileFolder();
+        docPage()->openCurFileFolder();
     } else if (action == "Search") {
-        m_docPage->handleSearch();
+        docPage()->handleSearch();
     }
 }
 
@@ -249,7 +257,7 @@ void Central::dropEvent(QDropEvent *event)
         QString id = mimeData->data("deepin_reader/uuid");
         DocSheet *sheet = DocSheet::getSheet(id);
         if (nullptr != sheet)
-            m_docPage->onCentralMoveIn(sheet);
+            docPage()->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
         QStringList filePathList;

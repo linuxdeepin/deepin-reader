@@ -35,6 +35,7 @@
 #include <QDebug>
 
 RenderPageThread *RenderPageThread::instance = nullptr;
+bool RenderPageThread::quitForever = false;
 RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
 {
     connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), Qt::QueuedConnection);
@@ -42,13 +43,15 @@ RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
 
 RenderPageThread::~RenderPageThread()
 {
-    instance = nullptr;
     m_quit = true;
     wait();
 }
 
 void RenderPageThread::clearTask(BrowserPage *item)
 {
+    if (quitForever)
+        return;
+
     if (nullptr == instance)
         instance = new RenderPageThread;
 
@@ -71,6 +74,9 @@ void RenderPageThread::clearTask(BrowserPage *item)
 
 void RenderPageThread::clearTasks(SheetBrowser *view)
 {
+    if (quitForever)
+        return;
+
     if (nullptr == instance)
         instance = new RenderPageThread;
 
@@ -91,6 +97,9 @@ void RenderPageThread::clearTasks(SheetBrowser *view)
 
 void RenderPageThread::appendTask(RenderPageTask task)
 {
+    if (quitForever)
+        return;
+
     if (nullptr == instance)
         instance = new RenderPageThread;
 
@@ -103,6 +112,9 @@ void RenderPageThread::appendTask(RenderPageTask task)
 
 void RenderPageThread::appendTasks(QList<RenderPageTask> list)
 {
+    if (quitForever)
+        return;
+
     if (nullptr == instance)
         instance = new RenderPageThread;
 
@@ -119,6 +131,9 @@ void RenderPageThread::appendTasks(QList<RenderPageTask> list)
 
 void RenderPageThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
 {
+    if (quitForever)
+        return;
+
     if (nullptr == instance)
         instance = new RenderPageThread;
 
@@ -167,10 +182,11 @@ void RenderPageThread::run()
     }
 }
 
-void RenderPageThread::destroy()
+void RenderPageThread::destroyForever()
 {
     if (nullptr != instance) {
         delete instance;
+        quitForever = true;
         instance = nullptr;
     }
 }

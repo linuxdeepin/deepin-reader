@@ -47,9 +47,7 @@ public:
 
     ~RenderViewportThread();
 
-    static void createInstance();
-
-    static void destroyInstance();
+    static void destroyForever();
 
     static void appendTask(RenderViewportTask task);
 
@@ -68,6 +66,7 @@ private:
     QStack<RenderViewportTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
+    static bool quitForever;
     static RenderViewportThread *m_instance;
 };
 

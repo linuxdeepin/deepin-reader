@@ -67,6 +67,8 @@ public:
 
     void doOpenFile(QString filePath);
 
+    CentralDocPage *docPage();
+
 signals:
     void sigOpenFiles(const QString &);
 
