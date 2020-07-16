@@ -59,17 +59,17 @@ void SearchResWidget::initWidget()
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     m_stackLayout->addWidget(tipLab);
     m_stackLayout->setCurrentIndex(SEARCH_INDEX);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT /** 1.0*/));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
 }
 
-void SearchResWidget::handFindContentComming(const deepin_reader::stSearchRes &search)
+void SearchResWidget::handFindContentComming(const deepin_reader::SearchResult &search)
 {
     QString strText;
-    for (const QString &s : search.listtext) {
-        strText += s.trimmed();
+    for (const deepin_reader::Word &s : search.words) {
+        strText += s.text.trimmed();
         strText += QString("    ");
     }
-    addSearchsItem(static_cast<int>(search.ipage), strText, search.listtext.size());
+    addSearchsItem(search.page - 1, strText, search.words.size());
 }
 
 int  SearchResWidget::handleFindFinished()

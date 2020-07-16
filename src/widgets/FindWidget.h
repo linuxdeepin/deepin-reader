@@ -42,12 +42,13 @@ public:
     ~FindWidget() override;
 
 signals:
-    void sigFindOperation(const int &, const QString &);
+    void sigFindOperation(const int &, const QString &searchtext = "");
 
 public:
     void showPosition(const int &);
     void setSearchEditFocus();
     void stopSearch();
+    void setEditAlert(const int &iFlag);
 
 private slots:
     void findCancel();
@@ -58,17 +59,12 @@ private slots:
 
     void slotFindPrevBtnClicked();
 
-    void slotClearContent();
-
     void slotEditAborted();
+
+    void slotClearContent();
 
 private:
     void initWidget();
-
-    void initConnection();
-
-public:
-    void setEditAlert(const int &iFlag);
 
 private:
     DSearchEdit     *m_pSearchEdit = nullptr;

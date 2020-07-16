@@ -22,7 +22,7 @@
 #include "widgets/CustomWidget.h"
 
 namespace deepin_reader {
-struct stSearchRes;
+struct SearchResult;
 }
 class DocSheet;
 class ImageListView;
@@ -38,7 +38,7 @@ public:
 
     void clearFindResult();
     int  handleFindFinished();
-    void handFindContentComming(const deepin_reader::stSearchRes &);
+    void handFindContentComming(const deepin_reader::SearchResult &);
 
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

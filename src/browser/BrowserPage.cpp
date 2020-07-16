@@ -117,6 +117,15 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_pressed").pixmap(QSize(39, 39)));
     if (3 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
+
+    painter->save();
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(QColor(238, 220, 0, 100));
+    int lightsize = m_searchLightrectLst.size();
+    for (int i = 0; i < lightsize; i++) {
+        painter->drawRect(translateRect(m_searchLightrectLst[i]));
+    }
+    painter->restore();
 }
 
 void BrowserPage::renderViewPort()
@@ -678,4 +687,55 @@ bool BrowserPage::sceneEvent(QEvent *event)
     }
 
     return QGraphicsItem::sceneEvent(event);
+}
+
+void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
+{
+    m_searchLightrectLst = rectflst;
+    update();
+}
+
+void BrowserPage::clearSearchHighlightRects()
+{
+    m_searchLightrectLst.clear();
+    update();
+}
+
+QRectF BrowserPage::translateRect(QRectF &rect)
+{
+    //旋转角度逆时针增加
+    QRectF newrect;
+    switch (m_rotation) {
+    case Dr::RotateBy0: {
+        newrect.setX(rect.x()*m_scaleFactor);
+        newrect.setY(rect.y()*m_scaleFactor);
+        newrect.setWidth(rect.width()*m_scaleFactor);
+        newrect.setHeight(rect.height()*m_scaleFactor);
+        break;
+    }
+    case Dr::RotateBy90: {
+        newrect.setX((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor);
+        newrect.setY(rect.x()*m_scaleFactor);
+        newrect.setWidth(rect.height()*m_scaleFactor);
+        newrect.setHeight(rect.width()*m_scaleFactor);
+        break;
+    }
+    case Dr::RotateBy180: {
+        newrect.setX((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor);
+        newrect.setY((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor);
+        newrect.setWidth(rect.width()*m_scaleFactor);
+        newrect.setHeight(rect.height()*m_scaleFactor);
+        break;
+    }
+    case Dr::RotateBy270: {
+        newrect.setX(rect.y()*m_scaleFactor);
+        newrect.setY((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor);
+        newrect.setWidth(rect.height()*m_scaleFactor);
+        newrect.setHeight(rect.width()*m_scaleFactor);
+        break;
+    }
+    default:
+        break;
+    }
+    return  newrect;
 }

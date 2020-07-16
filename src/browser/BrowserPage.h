@@ -41,6 +41,7 @@ class BrowserWord;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
+    friend class BrowserSearch;
     friend class RenderPageThread;
     friend class RenderViewportThread;
 public:
@@ -112,6 +113,10 @@ public:
 
     bool mouseClickIconAnnot(QPointF &);
 
+    void setSearchHighlightRectf(const QList< QRectF > &rectflst);
+
+    void clearSearchHighlightRects();
+
 private:
     void reloadAnnotations();
 
@@ -152,6 +157,8 @@ private:
 
     QPointF m_posPressed;
     bool m_wordSelectable = false;
+
+    QList<QRectF> m_searchLightrectLst;
 
     QMutex m_imageMutex;
 };

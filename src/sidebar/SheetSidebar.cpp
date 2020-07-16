@@ -201,7 +201,7 @@ void SheetSidebar::handleFindOperation(int type)
     }
 }
 
-void SheetSidebar::handleFindContentComming(const deepin_reader::stSearchRes &res)
+void SheetSidebar::handleFindContentComming(const deepin_reader::SearchResult &res)
 {
     m_searchWidget->handFindContentComming(res);
 }

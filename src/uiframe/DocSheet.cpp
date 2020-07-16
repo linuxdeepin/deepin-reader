@@ -77,6 +77,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
 
 DocSheet::~DocSheet()
 {
+    stopSearch();
     Database::instance()->saveOperation(this);
     g_map.remove(m_uuid);
 }
@@ -357,18 +358,24 @@ bool DocSheet::saveData()
 
 bool DocSheet::saveAsData(QString filePath)
 {
+    stopSearch();
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
     return Utils::copyFile(this->filePath(), filePath);
 }
 
 void DocSheet::handleSearch()
 {
-
+    m_browser->handleSearch();
 }
 
 void DocSheet::stopSearch()
 {
+    m_browser->stopSearch();
+}
 
+void DocSheet::onFindContentComming(const deepin_reader::SearchResult &res)
+{
+    m_sidebar->handleFindContentComming(res);
 }
 
 void DocSheet::copySelectedText()
@@ -718,4 +725,17 @@ void DocSheet::onBrowserBookmark(int index, bool state)
 void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *anno)
 {
     if (m_sidebar) m_sidebar->handleAnntationMsg(type, anno);
+}
+
+void DocSheet::onFindOperation(int type, QString text)
+{
+    m_sidebar->handleFindOperation(type);
+    m_browser->handleFindOperation(type, text);
+    emit sigFindOperation(type);
+}
+
+void DocSheet::onFindFinished()
+{
+    int count = m_sidebar->handleFindFinished();
+    m_browser->handleFindFinished(count);
 }

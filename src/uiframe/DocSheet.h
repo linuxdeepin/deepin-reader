@@ -193,6 +193,12 @@ private:
 public slots:
     void showTips(const QString &tips, int iconIndex = 0);
 
+    void onFindOperation(int type, QString text);
+
+    void onFindContentComming(const deepin_reader::SearchResult &);
+
+    void onFindFinished();
+
 public:
     int label2pagenum(QString label);
 

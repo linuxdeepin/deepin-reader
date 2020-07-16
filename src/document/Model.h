@@ -70,21 +70,18 @@ struct Section {
 struct Word {
     QString text;
     QRectF boundingBox;
-};
 
-struct stSearchRes {
-    unsigned int ipage;
-    QList<QString> listtext;
-    stSearchRes()
+    Word() {};
+
+    Word(const QString &text, const QRectF &rectf)
     {
-        ipage = 0;
-        listtext.clear();
-    }
-
+        this->text = text;
+        this->boundingBox = rectf;
+    };
 };
 
 struct SearchResult {
-    unsigned int page = 0;
+    int page = 0;
     QList<Word> words;
 };
 

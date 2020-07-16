@@ -37,7 +37,7 @@ Q_DECLARE_FLAGS(PreviewWidgesFlags, PreviewWidgesFlag);
 Q_DECLARE_OPERATORS_FOR_FLAGS(PreviewWidgesFlags)
 
 namespace deepin_reader {
-struct stSearchRes;
+struct SearchResult;
 class Annotation;
 }
 
@@ -64,7 +64,7 @@ public :
     void setCurrentPage(int page);
     void handleOpenSuccess();
     void handleFindOperation(int);
-    void handleFindContentComming(const deepin_reader::stSearchRes &);
+    void handleFindContentComming(const deepin_reader::SearchResult &);
     int  handleFindFinished();
     void handleRotate(int);
 public slots:

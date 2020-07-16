@@ -27,8 +27,6 @@
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <QJsonObject>
-#include <QJsonDocument>
 
 #include "widgets/CustomWidget.h"
 
@@ -39,11 +37,9 @@ FindWidget::FindWidget(DWidget *parent)
     int tH = 60;
 
     setMinimumSize(QSize(tW, tH));
-    setWindowFlags(Qt::WindowStaysOnTopHint);
     setBlurBackgroundEnabled(true);
 
     initWidget();
-    initConnection();
 
     this->setVisible(false);
 }
@@ -90,12 +86,12 @@ void FindWidget::handleContentChanged()
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    emit sigFindOperation(E_FIND_NEXT, "");
+    emit sigFindOperation(E_FIND_NEXT);
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    emit sigFindOperation(E_FIND_PREV, "");
+    emit sigFindOperation(E_FIND_PREV);
 }
 
 //  文本内容变化, 为空, 则取消红色提示
@@ -112,7 +108,7 @@ void FindWidget::slotEditAborted()
 {
     m_strLastFindText = "";
     setEditAlert(0);
-    emit sigFindOperation(E_FIND_EXIT, "");
+    emit sigFindOperation(E_FIND_EXIT);
 }
 
 void FindWidget::initWidget()
@@ -171,10 +167,6 @@ void FindWidget::initWidget()
     layout->addWidget(findNextButton);
     layout->addWidget(closeButton);
     this->setLayout(layout);
-}
-
-void FindWidget::initConnection()
-{
 }
 
 //  设置 提醒红色

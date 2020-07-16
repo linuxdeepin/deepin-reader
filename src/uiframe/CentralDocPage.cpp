@@ -41,7 +41,6 @@
 
 #include "widgets/SaveDialog.h"
 #include "widgets/PrintManager.h"
-#include "widgets/FindWidget.h"
 #include "Utils.h"
 #include "CentralDocPage.h"
 #include "Global.h"

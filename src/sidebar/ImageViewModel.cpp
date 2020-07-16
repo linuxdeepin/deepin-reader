@@ -159,7 +159,13 @@ void ImageViewModel::insertPageIndex(int pageIndex)
 
 void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
-    int index = findItemForAnno(tImagePageInfo.annotation);
+    int index = -1;
+    if (tImagePageInfo.annotation == nullptr) {
+        index = m_pagelst.indexOf(tImagePageInfo);
+    } else {
+        index = findItemForAnno(tImagePageInfo.annotation);
+    }
+
     if (index == -1) {
         int iterIndex = 0;
         int rowCount = m_pagelst.size();

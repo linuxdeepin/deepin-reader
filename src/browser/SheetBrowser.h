@@ -38,6 +38,8 @@ class BrowserAnnotation;
 class NoteShadowViewWidget;
 class RenderViewportThread;
 class BrowserMagniFier;
+class FindWidget;
+class BrowserSearch;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -106,6 +108,14 @@ public:
 
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
+    void handleSearch();
+
+    void stopSearch();
+
+    void handleFindOperation(const int &iType, const QString &strFind);
+
+    void handleFindFinished(int searchcnt);
+
 signals:
     void sigPageChanged(int page);
 
@@ -173,6 +183,8 @@ private:
     DocSheet *m_sheet = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;
+    FindWidget *m_pFindWidget = nullptr;
+    BrowserSearch *m_searchTask = nullptr;
 
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;

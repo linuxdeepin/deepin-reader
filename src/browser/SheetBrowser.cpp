@@ -39,10 +39,12 @@
 #include "Application.h"
 #include "sidebar/note/NoteViewWidget.h"
 #include "BrowserMagniFier.h"
+#include "widgets/FindWidget.h"
 
 #include "document/DjVuModel.h"
 #include "Utils.h"
 #include "RenderViewportThread.h"
+#include "BrowserSearch.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -75,6 +77,12 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
 
     m_tipsWidget = new TipsWidget(this);
+
+    m_searchTask = new BrowserSearch(this);
+
+    qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
+    connect(m_searchTask, &BrowserSearch::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
+    connect(m_searchTask, &BrowserSearch::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
 }
 
 SheetBrowser::~SheetBrowser()
@@ -127,6 +135,7 @@ bool SheetBrowser::openFilePath(Dr::FileType fileType, const QString &filePath)
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
+    stopSearch();
     if (nullptr == m_document)
         return false;
 
@@ -779,6 +788,7 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
         m_resizeTimer->stop();
 
     m_resizeTimer->start(100);
+    if (m_pFindWidget) m_pFindWidget->showPosition(this->width());
 }
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
@@ -1224,4 +1234,44 @@ void SheetBrowser::showEvent(QShowEvent *event)
     }
 
     QGraphicsView::showEvent(event);
+}
+
+void SheetBrowser::handleSearch()
+{
+    if (m_pFindWidget == nullptr) {
+        m_pFindWidget = new FindWidget(this);
+        connect(m_pFindWidget, SIGNAL(sigFindOperation(const int &, const QString &)), m_sheet, SLOT(onFindOperation(const int &, const QString &)));
+    }
+
+    m_pFindWidget->showPosition(this->width());
+    m_pFindWidget->setSearchEditFocus();
+}
+
+void SheetBrowser::stopSearch()
+{
+    if (!m_pFindWidget)
+        return;
+
+    m_pFindWidget->stopSearch();
+}
+
+void SheetBrowser::handleFindOperation(const int &iType, const QString &strFind)
+{
+    if (iType == E_FIND_NEXT) {
+
+    } else if (iType == E_FIND_PREV) {
+
+    } else if (iType == E_FIND_EXIT) {
+        m_searchTask->stopSearch();
+        for (BrowserPage *page : m_items) {
+            page->clearSearchHighlightRects();
+        }
+    } else {
+        m_searchTask->startSearch(m_items, strFind, m_sheet->currentIndex());
+    }
+}
+
+void SheetBrowser::handleFindFinished(int searchcnt)
+{
+    m_pFindWidget->setEditAlert(searchcnt == 0);
 }
