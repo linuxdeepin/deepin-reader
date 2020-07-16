@@ -120,6 +120,8 @@ public:
 private:
     void reloadAnnotations();
 
+    QRectF translateRect(QRectF &rect);
+
 protected:
     bool sceneEvent(QEvent *event) override;
 
