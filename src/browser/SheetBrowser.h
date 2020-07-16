@@ -160,8 +160,6 @@ private:
 
     void showNoteEditWidget(deepin_reader::Annotation *annotation);
 
-    bool calcIconAnnotRect(const QPointF, QRectF &);
-
     bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
 
     QPointF translate2Local(const QPointF);

@@ -251,57 +251,6 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
 
 /**
  * @brief SheetBrowser::calcIconAnnotRect
- * 暂时先废弃
- * @param point
- * @param iconRect
- * @return
- */
-bool SheetBrowser::calcIconAnnotRect(const QPointF point, QRectF &iconRect)
-{
-    QPointF clickPoint = point;
-
-    if (nullptr == m_sheet || clickPoint.x() < 0 ||  clickPoint.y() < 0)
-        return false;
-
-    //计算添加图标注释的位置和大小(考虑缩放和旋转)
-    Dr::Rotation rotation = Dr::RotateBy0;
-    qreal scaleFactor     = 1.0;
-    SheetOperation  operation = m_sheet->operation();
-    rotation    = operation.rotation;
-    scaleFactor = operation.scaleFactor;
-
-    qreal width{0.0};
-    qreal height{0.0};
-    qreal value{0.0};
-    qreal x1{0};
-    qreal y1{0};
-
-    switch (rotation) {
-    case Dr::RotateBy0 : {
-        x1 = point.x() / (iconRect.width() * scaleFactor);
-        y1 = point.y() / (iconRect.height() * scaleFactor);
-        width  = ICONANNOTE_WIDTH / iconRect.width();
-        height = ICONANNOTE_WIDTH / iconRect.height();
-
-        value = x1 - width / 2.0;
-        iconRect.setX((value < 0.0) ? 0.0 : value);
-        value = y1 - width / 2.0;
-        iconRect.setY((value < 0.0) ? 0.0 : value);
-
-        iconRect.setWidth(width);
-        iconRect.setHeight(height);
-
-        return true;
-    }
-    default:
-        break;
-    };
-
-    return false;
-}
-
-/**
- * @brief SheetBrowser::calcIconAnnotRect
  * 目前该计算方法
  * @param page
  * @param point
