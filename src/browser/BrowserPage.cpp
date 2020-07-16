@@ -118,14 +118,12 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if (3 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
 
-    painter->save();
     painter->setPen(Qt::NoPen);
     painter->setBrush(QColor(238, 220, 0, 100));
     int lightsize = m_searchLightrectLst.size();
     for (int i = 0; i < lightsize; i++) {
         painter->drawRect(translateRect(m_searchLightrectLst[i]));
     }
-    painter->restore();
 }
 
 void BrowserPage::renderViewPort()
