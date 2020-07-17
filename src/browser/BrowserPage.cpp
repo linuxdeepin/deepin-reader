@@ -43,6 +43,7 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QTime>
 #include <QMutexLocker>
+#include <QTimer>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -414,6 +415,21 @@ void BrowserPage::loadWords()
     }
 }
 
+QList<BrowserWord *> BrowserPage::loadPageWord()
+{
+    QList<BrowserWord *> wordList;
+
+    QList<deepin_reader::Word> words = m_page->words(Dr::RotateBy0);
+    for (int i = 0; i < words.count(); ++i) {
+        BrowserWord *word = new BrowserWord(this, words[i]);
+        word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+//        word->setScaleFactor(m_scaleFactor);
+        wordList.append(word);
+    }
+
+    return wordList;
+}
+
 void BrowserPage::loadAnnotations()
 {
     if (!m_hasLoadedAnnotation)
@@ -459,36 +475,52 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 /**
  * @brief BrowserPage::addHighlightAnnotation
  * 添加文本高亮注释接口
- * @param start
- * @param end
- * @param text
- * @param color
- * @return
+ * @param text  高亮注释内容
+ * @param color 高亮注释颜色
+ * @return      当前添加高亮注释
  */
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
+    if (nullptr == m_page)
+        return nullptr;
+
     Annotation *highLightAnnot{nullptr};
     QList<QRectF> boundarys;
     QRectF rect, recboundary;
-    qreal curwidth = this->boundingRect().width();
-    qreal curheight = this->boundingRect().height();
+    int index{0};
+    qreal curwidth = m_page->sizeF().width();
+    qreal curheight = m_page->sizeF().height();
+
+    //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
+    QList<BrowserWord *> browserPageWord = loadPageWord();
 
     foreach (BrowserWord *word, m_words) {
-        if (word  && word->isSelected()) {
-            rect = word->boundingRect();
-            if (m_rotation != Dr::RotateBy0)
-                translate2NormalRect(rect);
-            recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                           rect.top() / curheight));
-            recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                            rect.top() / curheight));
-            recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                              rect.bottom() / curheight));
-            recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                               rect.bottom() / curheight));
-            boundarys << recboundary;
+        if (word && word->isSelected()) {
+
+            index = m_words.indexOf(word);
+
+            if (index >= 0 && index < browserPageWord.count()) {
+
+                BrowserWord *textWord = browserPageWord.at(index);
+
+                if (textWord) {
+                    rect = textWord->textBoundingRect();
+
+                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                                   rect.top() / curheight));
+                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                    rect.top() / curheight));
+                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                      rect.bottom() / curheight));
+                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                       rect.bottom() / curheight));
+                    boundarys << recboundary;
+                }
+            }
         }
     }
+
+    qDeleteAll(browserPageWord);
 
     if (boundarys.count()) {
         //add highlight annot
@@ -555,7 +587,7 @@ bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
 
 /**
  * @brief BrowserPage::translate2NormalPoint
- * 将文字范围转换成文档旋转0度范围
+ * 将文字范围转换成文档旋转0度范围(暂时弃用)
  */
 void BrowserPage::translate2NormalRect(QRectF &wordRect)
 {

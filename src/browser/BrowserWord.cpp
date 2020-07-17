@@ -27,6 +27,17 @@ QRectF BrowserWord::boundingRect() const
     return QRectF(m_word.boundingBox.x() * m_scaleFactor - 1, m_word.boundingBox.y() * m_scaleFactor - 1, m_word.boundingBox.width() * m_scaleFactor + 2, m_word.boundingBox.height() * m_scaleFactor + 2);
 }
 
+/**
+ * @brief BrowserWord::textBoundingRect
+ *文档文字的当前的rect
+ * @return
+ */
+QRectF BrowserWord::textBoundingRect() const
+{
+    return QRectF(m_word.boundingBox.x(), m_word.boundingBox.y(),
+                  m_word.boundingBox.width(), m_word.boundingBox.height());
+}
+
 QRectF BrowserWord::boundingBox() const
 {
     return m_word.boundingBox;

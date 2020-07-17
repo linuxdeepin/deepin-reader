@@ -36,6 +36,8 @@ public:
 
     QRectF boundingRect()const override;
 
+    QRectF textBoundingRect() const;
+
     QRectF boundingBox()const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

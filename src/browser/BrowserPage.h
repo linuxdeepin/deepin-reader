@@ -95,6 +95,8 @@ public:
 
     void loadWords();
 
+    QList<BrowserWord *> loadPageWord();
+
     void loadAnnotations();     //如果加载过则不加载
 
     QList< deepin_reader::Annotation * > annotations();
