@@ -191,7 +191,8 @@ void DocSheet::rotateLeft()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
+//    if (m_sidebar)
+//        m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -207,7 +208,7 @@ void DocSheet::rotateRight()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
+    //if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -685,16 +686,6 @@ void DocSheet::onBrowserPageChanged(int page)
         m_operation.currentPage = page;
         if (m_sidebar) m_sidebar->setCurrentPage(page);
     }
-}
-
-void DocSheet::onBrowserWheelUp()
-{
-    zoomin();
-}
-
-void DocSheet::onBrowserWheelDown()
-{
-    zoomout();
 }
 
 void DocSheet::onBrowserPageFirst()

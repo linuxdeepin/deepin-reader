@@ -258,7 +258,7 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode)
 {
-    if (!m_pixmap.isNull()) {
+    if (!m_pixmap.isNull() && m_pixmap.width() > width && m_pixmap.height() > height) {
         QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode, Qt::SmoothTransformation);
         image.setDevicePixelRatio(dApp->devicePixelRatio());
         return image;

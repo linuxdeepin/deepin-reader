@@ -635,16 +635,16 @@ BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-
-        DocSheet *sheet = static_cast<DocSheet *>(parentWidget());
-        if (nullptr == sheet)
+        if (nullptr == m_sheet)
             return;
 
         if (event->delta() > 0) {
-            emit sigWheelUp();
+            m_sheet->zoomin();
         } else {
-            emit sigWheelDown();
+            m_sheet->zoomout();
         }
+
+        return;
     }
 
     QGraphicsView::wheelEvent(event);
