@@ -456,15 +456,28 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     return  annotation->updateAnnotation(text, color);
 }
 
+/**
+ * @brief BrowserPage::addHighlightAnnotation
+ * 添加文本高亮注释接口
+ * @param start
+ * @param end
+ * @param text
+ * @param color
+ * @return
+ */
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
+    Annotation *highLightAnnot{nullptr};
     QList<QRectF> boundarys;
     QRectF rect, recboundary;
     qreal curwidth = this->boundingRect().width();
     qreal curheight = this->boundingRect().height();
+
     foreach (BrowserWord *word, m_words) {
-        if (word->isSelected()) {
-            rect = word->boundingBox();
+        if (word  && word->isSelected()) {
+            rect = word->boundingRect();
+            if (m_rotation != Dr::RotateBy0)
+                translate2NormalRect(rect);
             recboundary.setTopLeft(QPointF(rect.left() / curwidth,
                                            rect.top() / curheight));
             recboundary.setTopRight(QPointF(rect.right() / curwidth,
@@ -473,116 +486,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
                                               rect.bottom() / curheight));
             recboundary.setBottomRight(QPointF(rect.right() / curwidth,
                                                rect.bottom() / curheight));
-            boundarys.append(word->boundingBox());
-        }
-    }
-
-    if (boundarys.isEmpty())
-        return nullptr;
-
-    Annotation *anno = m_page->addHighlightAnnotation(boundarys, text, color);
-
-    reloadAnnotations();
-
-    renderViewPort();
-
-    return anno;
-}
-
-/**
- * @brief BrowserPage::addHighlightAnnotation
- * 根据起始点添加高亮(目前测试用)
- * @param start
- * @param end
- * @param text
- * @param color
- * @return
- */
-Annotation *BrowserPage::addHighlightAnnotation(const QPointF start, const QPointF end, QString text, QColor color)
-{
-    Annotation *highLightAnnot{nullptr};
-    QList<QRectF> boundarys;
-    QRectF rect, recboundary;
-    qreal curwidth = this->boundingRect().width();
-    qreal curheight = this->boundingRect().height();
-
-    //calc highlit annot rect list
-    if (!start.isNull() && end.isNull()) {
-        bool startAddRect{false};
-        foreach (BrowserWord *word, m_words) {
-            if (word) {
-                if (word->boundingRect().contains(start)) {
-                    startAddRect = true;
-                }
-                if (startAddRect) {
-                    rect = word->boundingRect();
-                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                                   rect.top() / curheight));
-                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                    rect.top() / curheight));
-                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                      rect.bottom() / curheight));
-                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                       rect.bottom() / curheight));
-                    boundarys << recboundary;
-                }
-            }
-        }
-    } else if (start.isNull() && !end.isNull()) {
-        bool endAddRect{true};
-        foreach (BrowserWord *word, m_words) {
-            if (word) {
-                if (endAddRect) {
-                    rect = word->boundingRect();
-                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                                   rect.top() / curheight));
-                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                    rect.top() / curheight));
-                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                      rect.bottom() / curheight));
-                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                       rect.bottom() / curheight));
-                    boundarys << recboundary;
-                }
-                if (word->boundingRect().contains(end)) {
-                    endAddRect = false;
-                    boundarys << word->boundingRect();
-                }
-            }
-        }
-    } else {
-        bool startAddRect{false};
-        foreach (BrowserWord *word, m_words) {
-            if (word) {
-                if (word->boundingRect().contains(start)) {
-                    startAddRect = true;
-                }
-                if (startAddRect) {
-                    rect = word->boundingRect();
-                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                                   rect.top() / curheight));
-                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                    rect.top() / curheight));
-                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                      rect.bottom() / curheight));
-                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                       rect.bottom() / curheight));
-                    boundarys << recboundary;
-                }
-                if (word->boundingRect().contains(end)) {
-                    startAddRect = false;
-                    rect = word->boundingRect();
-                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                                   rect.top() / curheight));
-                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                    rect.top() / curheight));
-                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                      rect.bottom() / curheight));
-                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                       rect.bottom() / curheight));
-                    boundarys << recboundary;
-                }
-            }
+            boundarys << recboundary;
         }
     }
 
@@ -647,6 +551,45 @@ bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
         return false;
 
     return m_page->mouseClickIconAnnot(clickPoint);
+}
+
+/**
+ * @brief BrowserPage::translate2NormalPoint
+ * 将文字范围转换成文档旋转0度范围
+ */
+void BrowserPage::translate2NormalRect(QRectF &wordRect)
+{
+    QPointF rectPoint = QPointF(wordRect.x(), wordRect.y());
+    qreal wordWidth = wordRect.width();
+    qreal wordHeight = wordRect.height();
+
+    qreal pageWidth = this->boundingRect().width();
+    qreal pageHeight = this->boundingRect().height();
+
+    switch (m_rotation) {
+    case Dr::RotateBy0:
+        break;
+    case Dr::RotateBy90: {
+        rectPoint = QPointF(rectPoint.y(), pageWidth - rectPoint.x());
+        wordRect.setWidth(wordHeight);
+        wordRect.setHeight(wordWidth);
+        wordRect.setX(rectPoint.x());
+        wordRect.setY(rectPoint.y());
+    }
+    break;
+    case Dr::RotateBy180: {
+        rectPoint = QPointF(pageWidth - rectPoint.x(), pageHeight - rectPoint.y());
+    }
+    break;
+    case Dr::RotateBy270: {
+        rectPoint = QPointF(pageHeight - rectPoint.y(),  rectPoint.x());
+        wordRect.setX(rectPoint.x());
+        wordRect.setY(rectPoint.y());
+        wordRect.setWidth(wordHeight);
+        wordRect.setHeight(wordWidth);
+    }
+    break;
+    }
 }
 
 bool BrowserPage::sceneEvent(QEvent *event)

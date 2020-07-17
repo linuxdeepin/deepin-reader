@@ -788,7 +788,6 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, cons
     annotation->setBoundary(tboundary);
 
     annotation->setHighlightQuads(quadList);
-//    annotation->setBoundary(boundarys.value(0));
     annotation->setStyle(style);
     annotation->setContents(text);
     annotation->setPopup(popup);

@@ -448,9 +448,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
         return nullptr;
 
     if (startPage == endPage) {
-        highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
-                                                           QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
-                                                           contains, color);
+        highLightAnnot = startPage->addHighlightAnnotation(contains, color);
         return highLightAnnot;
     }
 
@@ -465,17 +463,8 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     int endIndex = m_items.indexOf(endPage);
 
     for (int index = startIndex; index <= endIndex; index++) {
-        if (m_items.at(index) == startPage) {
-            highLightAnnot = startPage->addHighlightAnnotation(QPointF(m_selectStartPos.x() - startPage->pos().x(), m_selectStartPos.y() - startPage->pos().y()),
-                                                               QPointF(),
-                                                               contains, color);
-        } else if (m_items.at(index) == endPage) {
-            highLightAnnot = startPage->addHighlightAnnotation(QPointF(),
-                                                               QPointF(m_selectEndPos.x() - endPage->pos().x(), m_selectEndPos.y() - endPage->pos().y()),
-                                                               contains, color);
-        } else {
-            highLightAnnot = startPage->addHighlightAnnotation(QPointF(), QPointF(), contains, color);
-        }
+        if (m_items.at(index))
+            highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
     }
 
     return highLightAnnot;
@@ -802,15 +791,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             m_selectEndPos = QPointF();
 
             deepin_reader::Annotation *clickAnno = nullptr;
-//            const QList<QGraphicsItem *> &itemlst = this->items(event->pos());
-//            for (QGraphicsItem *itemIter : itemlst) {
-//                BrowserAnnotation *annotation = dynamic_cast<BrowserAnnotation *>(itemIter);
-//                if (annotation != nullptr) {
-//                    clickAnno = annotation->annotation();
-//                    showNoteEditWidget(clickAnno);
-//                    break;
-//                }
-//            }
+
             //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
             clickAnno = getClickAnnot(mousepoint);
 
@@ -1161,7 +1142,6 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
         iconRect.setWidth(page->boundingRect().width());
         iconRect.setHeight(page->boundingRect().height());
 
-//        bool isVaild = calcIconAnnotRect(pointf, iconRect);
         bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
         if (isVaild)
