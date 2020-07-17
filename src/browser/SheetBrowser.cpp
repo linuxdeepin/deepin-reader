@@ -83,10 +83,13 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &BrowserSearch::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &BrowserSearch::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
+    connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 }
 
 SheetBrowser::~SheetBrowser()
 {
+    disconnect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
+
     qDeleteAll(m_items);
     m_items.clear();
 
@@ -239,6 +242,15 @@ void SheetBrowser::onSceneOfViewportChanged()
             page->loadWords();
         }
     }
+}
+
+/**
+ * @brief SheetBrowser::onAddHighLightAnnot
+ */
+void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
+{
+    if (page)
+        page->addHighlightAnnotation(text, color);
 }
 
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
@@ -462,10 +474,12 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     int startIndex = m_items.indexOf(startPage);
     int endIndex = m_items.indexOf(endPage);
 
-    for (int index = startIndex; index <= endIndex; index++) {
+    for (int index = startIndex; index < endIndex; index++) {
         if (m_items.at(index))
-            highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
+            emit sigAddHighLightAnnot(m_items.at(index), contains, color); //highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
     }
+
+    highLightAnnot = endPage->addHighlightAnnotation(contains, color);
 
     return highLightAnnot;
 }

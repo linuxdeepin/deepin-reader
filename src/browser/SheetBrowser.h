@@ -135,7 +135,9 @@ signals:
 
     void sigThumbnailUpdated(int index);
 
-    void sigAddHighLightAnnot();//test
+    void sigAddHighLightAnnot();
+
+    void sigAddHighLightAnnot(BrowserPage *, QString, QColor);
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -163,6 +165,7 @@ private slots:
 
     void onSceneOfViewportChanged();
 
+    void onAddHighLightAnnot(BrowserPage *, QString, QColor);
 private:
     bool mouseClickIconAnnot(QPointF &);
 
