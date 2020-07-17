@@ -494,15 +494,6 @@ QString SheetBrowser::selectedWordsText()
     return text;
 }
 
-Annotation *SheetBrowser::addHighlightAnnotation(QString text, QColor color)
-{
-    Annotation *anno = nullptr;
-    foreach (BrowserPage *item, m_items)
-        anno = item->addHighlightAnnotation(text, color);
-    if (anno && !text.isEmpty()) emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
-    return anno;
-}
-
 void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {

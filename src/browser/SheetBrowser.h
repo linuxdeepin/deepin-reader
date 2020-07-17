@@ -100,8 +100,6 @@ public:
 
     QList< deepin_reader::Annotation * > annotations();
 
-    Annotation *addHighlightAnnotation(QString text, QColor color);
-
     Annotation *addIconAnnotation(const QPointF, const QString);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
