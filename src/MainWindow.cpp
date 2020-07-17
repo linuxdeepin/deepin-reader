@@ -82,6 +82,12 @@ void MainWindow::activateSheet(DocSheet *sheet)
     m_central->showSheet(sheet);
 }
 
+void MainWindow::closeWithoutSave()
+{
+    m_needSave = false;
+    this->close();
+}
+
 void MainWindow::openfiles(const QStringList &filepaths)
 {
     m_central->openFiles(filepaths);
@@ -95,7 +101,7 @@ void MainWindow::doOpenFile(const QString &filePath)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (m_central->saveAll()) {
+    if (!m_needSave || m_central->saveAll()) {
         QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
         settings.setValue("LASTWIDTH", QString::number(this->width()));

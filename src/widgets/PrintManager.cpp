@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPrintPreviewDialog>
 #include <QPrintDialog>
+#include <QDebug>
 
 PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
     : QObject(parent), m_sheet(sheet)
@@ -49,9 +50,18 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
     printer->setDocName(m_strPrintName);
 
+    qreal left = 0;
+    qreal top = 0;
+    qreal right = 0;
+    qreal bottom = 0;
+    printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::DevicePixel);
+
     QPainter painter(printer);
 
     QRect rect = painter.viewport();
+
+    QRect paintRect = QRect(left, top, rect.width() - left - right, rect.height() - bottom - top);
+    QRect ImageRect = QRect(0, 0, rect.width() - left - right, rect.height() - bottom - top);
 
     painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
@@ -63,14 +73,14 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
 
-            if (nPageSize > 100 && rect.width() > 800) {
+            if (nPageSize > 100 && ImageRect.width() > 800) {
                 //当页数过多时，处理一下
-                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(rect.height()) / static_cast<double>(rect.width()))) {
-                    painter.drawImage(rect, image);
+                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(ImageRect.height()) / static_cast<double>(ImageRect.width()))) {
+                    painter.drawImage(paintRect, image);
                 }
             } else {
-                if (m_sheet->getImage(iIndex, image, rect.width(), rect.height())) {
-                    painter.drawImage(rect, image);
+                if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height())) {
+                    painter.drawImage(paintRect, image);
                 }
             }
 
@@ -78,14 +88,13 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
                 printer->newPage();
         }
     } else {
-        printer->setPageMargins(5, 5, 5, 5, QPrinter::Inch);
         for (int iIndex = printer->fromPage() - 1; iIndex < printer->toPage(); iIndex++) {
             if (iIndex >= nPageSize)
                 break;
 
             QImage image;
-            if (m_sheet->getImage(iIndex, image, rect.width(), rect.height()))      //公司只有一台打印机，会发生向右偏移
-                painter.drawImage(rect, image);
+            if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height()))      //公司只有一台打印机，会发生向右偏移
+                painter.drawImage(paintRect, image);
 
             if (iIndex < printer->toPage() - 1)
                 printer->newPage();
