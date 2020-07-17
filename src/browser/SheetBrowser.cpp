@@ -830,11 +830,20 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 const QPointF &clickPos = mapToScene(event->pos());
                 if (objectname == "Copy") {
                     Utils::copyText(selectWords);
+                } else if (objectname == "CopyAnnoText") {
+                    if (annotation)
+                        Utils::copyText(annotation->annotationText());
                 } else if (objectname == "AddTextHighlight") {
                     QColor color = menu.getColor();
                     addHighLightAnnotation("", color);
+                } else if (objectname == "ChangeAnnotationColor") {
+                    if (annotation) {
+                        QColor color = menu.getColor();
+                        updateAnnotation(annotation->annotation(), annotation->annotationText(), color);
+                    }
                 } else if (objectname == "RemoveAnnotation") {
-                    if (annotation)  removeAnnotation(annotation->annotation());
+                    if (annotation)
+                        m_sheet->removeAnnotation(annotation->annotation());
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
@@ -846,7 +855,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
-                    if (annotation)  removeAnnotation(annotation->annotation());
+                    if (annotation)
+                        m_sheet->removeAnnotation(annotation->annotation());
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
                     if (annotation)  {

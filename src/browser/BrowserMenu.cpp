@@ -34,7 +34,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
     m_type = type;
     m_pColorWidgetAction = nullptr;
     if (type == DOC_MENU_ANNO_ICON) {
-        createAction(tr("Copy"), "Copy");
+        createAction(tr("Copy"), "CopyAnnoText");
         this->addSeparator();
         createAction(tr("Remove annotation"), "RemoveAnnotation");
         createAction(tr("Add annotation"), "AddAnnotationIcon");
@@ -43,7 +43,10 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         else
             createAction(tr("Add bookmark"), "AddBookmark");
     } else if (type == DOC_MENU_ANNO_HIGHLIGHT || type == DOC_MENU_SELECT_TEXT) {
-        createAction(tr("Copy"), "Copy");
+        if (type == DOC_MENU_ANNO_HIGHLIGHT)
+            createAction(tr("Copy"), "CopyAnnoText");
+        else
+            createAction(tr("Copy"), "Copy");
         this->addSeparator();
         m_pColorWidgetAction = new ColorWidgetAction(this);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(onSetHighLight(const int &)));
@@ -123,7 +126,7 @@ void BrowserMenu::onSetHighLight(const int &)
     if (m_type == DOC_MENU_SELECT_TEXT) {
         emit signalMenuItemClicked("AddTextHighlight");
     } else if (m_type == DOC_MENU_ANNO_HIGHLIGHT) {
-        emit signalMenuItemClicked("AddAnnotationHighlight");
+        emit signalMenuItemClicked("ChangeAnnotationColor");
     }
     this->close();
 }
