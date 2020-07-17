@@ -145,7 +145,7 @@ private:
     DocTabBar           *m_pTabBar = nullptr;
 
     QPointer<DocSheet>  m_magniferSheet = nullptr;
-    QPointer<DocSheet>  m_slideSheet = nullptr;
+    SlideWidget  *m_slideWidget = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

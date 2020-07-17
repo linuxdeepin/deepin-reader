@@ -221,10 +221,6 @@ signals:
 private slots:
     void onBrowserPageChanged(int page);
 
-    void onBrowserWheelUp();
-
-    void onBrowserWheelDown();
-
     void onBrowserPageFirst();
 
     void onBrowserPagePrev();
