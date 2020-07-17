@@ -862,7 +862,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), color);
                         showNoteEditWidget(annotation->annotation());
                     } else {
-                        showNoteEditWidget(addHighlightAnnotation("", color));
+                        showNoteEditWidget(addHighLightAnnotation("", color));
                     }
                     m_noteEditWidget->move(mapToGlobal(event->pos()) - QPoint(12, 12));
                 } else if (objectname == "Search") {
