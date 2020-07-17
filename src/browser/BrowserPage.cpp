@@ -125,6 +125,9 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     for (int i = 0; i < lightsize; i++) {
         painter->drawRect(translateRect(m_searchLightrectLst[i]));
     }
+    painter->setBrush(QColor(59, 148, 1, 100));
+    if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
+        painter->drawRect(translateRect(m_searchSelectLighRectf));
 }
 
 void BrowserPage::renderViewPort()
@@ -664,17 +667,43 @@ bool BrowserPage::sceneEvent(QEvent *event)
 
 void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
 {
-    m_searchLightrectLst = rectflst;
-    update();
+    if (rectflst.size() > 0) {
+        if (m_parent->currentPage() == this->itemIndex() + 1)
+            m_searchSelectLighRectf = rectflst.first();
+        m_searchLightrectLst = rectflst;
+        update();
+    }
 }
 
 void BrowserPage::clearSearchHighlightRects()
 {
+    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
     m_searchLightrectLst.clear();
     update();
 }
 
-QRectF BrowserPage::translateRect(QRectF &rect)
+void BrowserPage::clearSelectSearchHighlightRects()
+{
+    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
+    update();
+}
+
+int BrowserPage::searchHighlightRectSize()
+{
+    return m_searchLightrectLst.size();
+}
+
+QRectF BrowserPage::findSearchforIndex(int index)
+{
+    if (index >= 0 && index < m_searchLightrectLst.size()) {
+        m_searchSelectLighRectf = m_searchLightrectLst[index];
+        update();
+        return m_searchSelectLighRectf;
+    }
+    return QRectF(-1, -1, -1, -1);
+}
+
+QRectF BrowserPage::translateRect(const QRectF &rect)
 {
     //旋转角度逆时针增加
     QRectF newrect;

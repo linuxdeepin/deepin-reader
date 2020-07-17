@@ -60,7 +60,8 @@ void BrowserSearch::run()
         int curIndex = (index + m_startIndex) % size;
         BrowserPage *page = m_pagelst.at(curIndex);
         const QList< QRectF > &textrectLst = page->m_page->search(m_searchText, false, false);
-        page->setSearchHighlightRectf(textrectLst);
+        if (textrectLst.size() > 0)
+            page->setSearchHighlightRectf(textrectLst);
         for (const QRectF &rec : textrectLst) {
             if (m_quit) return;
             //获取搜索结果附近文字

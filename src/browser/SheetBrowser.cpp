@@ -1238,16 +1238,86 @@ void SheetBrowser::stopSearch()
 void SheetBrowser::handleFindOperation(const int &iType, const QString &strFind)
 {
     if (iType == E_FIND_NEXT) {
+        int size = m_items.size();
+        for (int index = 0; index < size; index++) {
+            int curIndex = m_searchCurIndex % size;
+            BrowserPage *page = m_items.at(curIndex);
+            int pageHighlightSize = page->searchHighlightRectSize();
+            if (pageHighlightSize > 0) {
+                if (m_lastFindPage && m_lastFindPage != page && m_changSearchFlag) {
+                    m_changSearchFlag = false;
+                    m_searchPageTextIndex = -1;
+                    m_lastFindPage->clearSelectSearchHighlightRects();
+                }
+
+                m_searchPageTextIndex++;
+                if (m_searchPageTextIndex >= pageHighlightSize) {
+                    //当前页搜索完了，可以进行下一页
+                    m_changSearchFlag = true;
+                    m_lastFindPage = page;
+                    m_searchCurIndex = curIndex + 1;
+
+                    if (m_searchCurIndex >= size)
+                        m_searchCurIndex = 0;
+                    continue;
+                }
+
+                const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+                horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
+                verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
+                break;
+            } else {
+                m_searchCurIndex++;
+                if (m_searchCurIndex >= size)
+                    m_searchCurIndex = 0;
+            }
+        }
 
     } else if (iType == E_FIND_PREV) {
+        int size = m_items.size();
+        for (int index = 0; index < size; index++) {
+            int curIndex = m_searchCurIndex % size;
+            BrowserPage *page = m_items.at(curIndex);
+            int pageHighlightSize = page->searchHighlightRectSize();
+            if (pageHighlightSize > 0) {
+                if (m_lastFindPage && m_lastFindPage != page && m_changSearchFlag) {
+                    m_changSearchFlag = false;
+                    m_searchPageTextIndex = pageHighlightSize;
+                    m_lastFindPage->clearSelectSearchHighlightRects();
+                }
 
-    } else if (iType == E_FIND_EXIT) {
-        m_searchTask->stopSearch();
-        for (BrowserPage *page : m_items) {
-            page->clearSearchHighlightRects();
+                m_searchPageTextIndex--;
+                if (m_searchPageTextIndex < 0) {
+                    //当前页搜索完了，可以进行下一页
+                    m_changSearchFlag = true;
+                    m_lastFindPage = page;
+                    m_searchCurIndex = curIndex - 1;
+
+                    if (m_searchCurIndex < 0)
+                        m_searchCurIndex = size - 1;
+                    continue;
+                }
+
+                const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+                horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
+                verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
+                break;
+            } else {
+                m_searchCurIndex--;
+                if (m_searchCurIndex < 0)
+                    m_searchCurIndex = size - 1;
+            }
         }
+    } else if (iType == E_FIND_EXIT) {
+        m_searchCurIndex = 0;
+        m_searchPageTextIndex = 0;
+        m_searchTask->stopSearch();
+        for (BrowserPage *page : m_items)
+            page->clearSearchHighlightRects();
     } else {
-        m_searchTask->startSearch(m_items, strFind, m_sheet->currentIndex());
+        m_searchCurIndex = m_sheet->currentIndex();
+        m_searchPageTextIndex = 0;
+        m_searchTask->startSearch(m_items, strFind, m_searchCurIndex);
     }
 }
 

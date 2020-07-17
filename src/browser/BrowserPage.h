@@ -119,10 +119,16 @@ public:
 
     void translate2NormalRect(QRectF &);
 
+    void clearSelectSearchHighlightRects();
+
+    int searchHighlightRectSize();
+
+    QRectF findSearchforIndex(int index);
+
+    QRectF translateRect(const QRectF &rect);
+
 private:
     void reloadAnnotations();
-
-    QRectF translateRect(QRectF &rect);
 
 protected:
     bool sceneEvent(QEvent *event) override;
@@ -162,6 +168,7 @@ private:
     QPointF m_posPressed;
     bool m_wordSelectable = false;
 
+    QRectF m_searchSelectLighRectf;
     QList<QRectF> m_searchLightrectLst;
 
     QMutex m_imageMutex;

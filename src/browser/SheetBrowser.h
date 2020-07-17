@@ -185,6 +185,7 @@ private:
     NoteShadowViewWidget *m_noteEditWidget = nullptr;
     FindWidget *m_pFindWidget = nullptr;
     BrowserSearch *m_searchTask = nullptr;
+    BrowserPage *m_lastFindPage = nullptr;
 
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
@@ -193,8 +194,11 @@ private:
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;                 //最大一页的宽度
     int m_maxHeight = 0;                //最大一页的高度
+    bool m_changSearchFlag = false;
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数
+    int m_searchCurIndex = 0;
+    int m_searchPageTextIndex = 0;
     QPointF m_selectPressedPos;         //scene
     QPointF m_selectStartPos;           // 选取文字的结束位置
     QPointF m_selectEndPos;             // 选取文字的结束位置
