@@ -484,6 +484,53 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     return highLightAnnot;
 }
 
+void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)
+{
+    if (nullptr == jumpPage)
+        return;
+
+    Dr::Rotation rotation{Dr::RotateBy0};
+    SheetOperation  operation = m_sheet->operation();
+    rotation = operation.rotation;
+
+    int linkX{0};
+    int linkY{0};
+
+    //各自留0.05的余量,为了能更好的浏览效果
+    switch (rotation) {
+    case Dr::RotateBy0: {
+        linkY = static_cast<int>((posTop - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((posLeft - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+    }
+    break;
+    case Dr::RotateBy90: {
+        linkY = static_cast<int>((posLeft - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((1.0 - posTop - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+    }
+    break;
+    case Dr::RotateBy180: {
+        linkY = static_cast<int>((1.0 - posTop - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((1.0 - posLeft - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+    }
+    break;
+    case Dr::RotateBy270: {
+        linkY = static_cast<int>((1.0 - posLeft - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((posTop - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+    }
+    break;
+    }
+
+    if (this->verticalScrollBar()) {
+        linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
+        this->verticalScrollBar()->setValue(linkY);
+    }
+    if (this->horizontalScrollBar()) {
+        linkX = (linkX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : linkX);
+        this->horizontalScrollBar()->setValue(linkX);
+    }
+
+}
+
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
 {
     if (nullptr == m_document)
@@ -580,9 +627,27 @@ deepin_reader::Outline SheetBrowser::outline()
     return m_document->outline();
 }
 
-void SheetBrowser::jumpToOutline(const qreal &left, const qreal &top, unsigned int page)
+void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, unsigned int index)
 {
+    int pageIndex = static_cast<int>(index);
 
+    if (nullptr == m_sheet || pageIndex < 0 || pageIndex >= m_items.count() || linkLeft < 0 || linkTop < 0)
+        return;
+
+    BrowserPage *jumpPage = m_items.at(pageIndex);
+    if (nullptr == jumpPage)
+        return;
+
+    Dr::Rotation rotation{Dr::RotateBy0};
+    SheetOperation  operation = m_sheet->operation();
+    rotation = operation.rotation;
+
+    if (rotation != Dr::NumberOfRotations && rotation != Dr::RotateBy0) {
+        setCurrentPage(++pageIndex);
+        return;
+    }
+
+    jump2PagePos(jumpPage, linkLeft, linkTop);
 }
 
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
@@ -600,44 +665,7 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     if (firstRect.isNull() || firstRect.isEmpty())
         return;
 
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
-    int annotX{0};
-    int annotY{0};
-
-    //各自留0.05的余量,为了能更好的浏览效果
-    switch (rotation) {
-    case Dr::RotateBy0: {
-        annotY = static_cast<int>((firstRect.y() - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        annotX = static_cast<int>((firstRect.x() - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
-    }
-    break;
-    case Dr::RotateBy90: {
-        annotY = static_cast<int>((firstRect.x() - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        annotX = static_cast<int>((1.0 - firstRect.y() - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
-    }
-    break;
-    case Dr::RotateBy180: {
-        annotY = static_cast<int>((1.0 - firstRect.y() - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        annotX = static_cast<int>((1.0 - firstRect.x() - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
-    }
-    break;
-    case Dr::RotateBy270: {
-        annotY = static_cast<int>((1.0 - firstRect.x() - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        annotX = static_cast<int>((firstRect.y() - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
-    }
-    break;
-    }
-
-    if (this->verticalScrollBar()) {
-        annotY = (annotY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : annotY);
-        this->verticalScrollBar()->setValue(annotY);
-    }
-    if (this->horizontalScrollBar()) {
-        annotX = (annotX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : annotX);
-        this->horizontalScrollBar()->setValue(annotX);
-    }
+    jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
 }
 
 BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)

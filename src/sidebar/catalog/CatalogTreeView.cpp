@@ -222,7 +222,8 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
         double left = current.data(Qt::UserRole + 2).toDouble();
         double top = current.data(Qt::UserRole + 3).toDouble();
         m_title = current.data(Qt::DisplayRole).toString();
-        m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
+        if (nPage >= 1)
+            m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
     }
     rightnotifypagechanged = false;
 
@@ -238,7 +239,8 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     double left = current.data(Qt::UserRole + 2).toDouble();
     double top = current.data(Qt::UserRole + 3).toDouble();
     m_title = current.data(Qt::DisplayRole).toString();
-    m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
+    if (nPage >= 1)
+        m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
 }
 
 //  窗口大小变化, 列的宽度随之变化

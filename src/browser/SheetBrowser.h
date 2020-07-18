@@ -178,6 +178,9 @@ private:
     Annotation *getClickAnnot(const QPointF);
 
     Annotation *addHighLightAnnotation(const QString, const QColor);
+
+    void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     BrowserMagniFier *m_magnifierLabel = nullptr;
