@@ -96,7 +96,7 @@ public:
 
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
-    void jumpToHighLight(deepin_reader::Annotation *annotation);
+    void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
 
     QList< deepin_reader::Annotation * > annotations();
 

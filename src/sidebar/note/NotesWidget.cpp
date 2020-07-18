@@ -165,7 +165,7 @@ void NotesWidget::onListItemClicked(int row)
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-        m_sheet->jumpToHighLight(tImagePageInfo.annotation);
+        m_sheet->jumpToHighLight(tImagePageInfo.annotation, tImagePageInfo.pageIndex);
     }
 }
 

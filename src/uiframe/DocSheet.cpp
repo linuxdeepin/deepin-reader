@@ -172,9 +172,9 @@ void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, unsigned int 
     m_browser->jumpToOutline(left, top, page);
 }
 
-void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation)
+void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
 {
-    m_browser->jumpToHighLight(annotation);
+    m_browser->jumpToHighLight(annotation, index);
 }
 
 void DocSheet::rotateLeft()
