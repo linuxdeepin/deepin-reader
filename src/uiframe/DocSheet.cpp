@@ -41,6 +41,7 @@
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>
 #include <QClipboard>
+#include <QFileInfo>
 
 DWIDGET_USE_NAMESPACE
 
@@ -422,32 +423,6 @@ bool DocSheet::magnifierOpened()
     return false;
 }
 
-//void DocSheet::docBasicInfo(stFileInfo &info)
-//{
-//    info.strFilepath = filePath();
-
-//    QFileInfo fileInfo(filePath());
-//    info.size = fileInfo.size();
-//    info.CreateTime = fileInfo.birthTime();
-//    info.ChangeTime = fileInfo.lastModified();
-//    info.strAuther = fileInfo.owner();
-//    info.strFilepath = fileInfo.filePath();
-
-//    if (m_browser) {
-//        info.strFormat = QString("PDFL");
-////        info.boptimization = document->isLinearized();
-////        info.strKeyword = document->keywords();
-////        info.strTheme = document->title();
-////        info.strProducter = document->producer();
-////        info.strCreater = document->creator();
-////        info.bsafe = document->isEncrypted();
-//        info.iWidth = static_cast<unsigned int>(m_browser->maxWidth());
-//        info.iHeight = static_cast<unsigned int>(m_browser->maxHeight());
-//        info.iNumpages = static_cast<unsigned int>(m_browser->allPages());
-//    }
-
-//}
-
 QList<deepin_reader::Annotation *> DocSheet::annotations()
 {
     if (nullptr == m_browser)
@@ -526,6 +501,17 @@ QString DocSheet::filter()
     else if (Dr::DjVu == m_fileType)
         return "Djvu files (*.djvu)";
 
+    return "";
+}
+
+QString DocSheet::format()
+{
+    if (Dr::PDF == m_fileType) {
+        const Properties &propertys = m_browser->properties();
+        return QString("PDF %1").arg(propertys.value("Version").toString());
+    } else if (Dr::DjVu == m_fileType) {
+        return QString("DJVU");
+    }
     return "";
 }
 
@@ -679,9 +665,26 @@ bool DocSheet::haslabel()
     return false;
 }
 
-void DocSheet::docBasicInfo(deepin_reader::FileInfo &)
+void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
 {
+    QFileInfo fileInfo(filePath());
+    tFileInfo.size = fileInfo.size();
+    tFileInfo.createTime = fileInfo.birthTime();
+    tFileInfo.changeTime = fileInfo.lastModified();
+    tFileInfo.auther = fileInfo.owner();
+    tFileInfo.filePath = fileInfo.filePath();
 
+    const Properties &propertys = m_browser->properties();
+    tFileInfo.format = format();
+    tFileInfo.optimization = propertys.value("Linearized").toBool();
+    tFileInfo.keyword = propertys.value("KeyWords").toString();
+    tFileInfo.theme = propertys.value("Title").toString();
+    tFileInfo.producter = propertys.value("Producer").toString();
+    tFileInfo.creater = propertys.value("Creator").toString();
+    tFileInfo.safe = propertys.value("Encrypted").toBool();
+    tFileInfo.width = static_cast<unsigned int>(m_browser->maxWidth());
+    tFileInfo.height = static_cast<unsigned int>(m_browser->maxHeight());
+    tFileInfo.numpages = static_cast<unsigned int>(m_browser->allPages());
 }
 
 QString DocSheet::pagenum2label(int)

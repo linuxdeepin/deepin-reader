@@ -94,6 +94,8 @@ public:
 
     deepin_reader::Outline outline();
 
+    Properties properties() const;
+
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
     void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);

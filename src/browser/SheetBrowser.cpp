@@ -634,6 +634,11 @@ deepin_reader::Outline SheetBrowser::outline()
     return m_document->outline();
 }
 
+Properties SheetBrowser::properties() const
+{
+    return m_document->properties();
+}
+
 void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, unsigned int index)
 {
     int pageIndex = static_cast<int>(index);

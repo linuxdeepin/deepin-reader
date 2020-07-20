@@ -1088,17 +1088,21 @@ Properties PDFDocument::properties() const
             value = m_document->date(key).toString();
         }
 
-        properties.push_back(qMakePair(key, value));
+        properties.insert(key, value);
     }
 
     int pdfMajorVersion = 1;
     int pdfMinorVersion = 0;
     m_document->getPdfVersion(&pdfMajorVersion, &pdfMinorVersion);
 
-    properties.push_back(qMakePair(tr("PDF version"), QString("%1.%2").arg(pdfMajorVersion).arg(pdfMinorVersion)));
+    properties.insert("Version", QString("v.%1.%2").arg(pdfMajorVersion).arg(pdfMinorVersion));
 
-    properties.push_back(qMakePair(tr("Encrypted"), m_document->isEncrypted() ? tr("Yes") : tr("No")));
-    properties.push_back(qMakePair(tr("Linearized"), m_document->isLinearized() ? tr("Yes") : tr("No")));
+    properties.insert("Encrypted", m_document->isEncrypted());
+    properties.insert("Linearized", m_document->isLinearized());
+    properties.insert("KeyWords", m_document->keywords());
+    properties.insert("Title", m_document->title());
+    properties.insert("Creator", m_document->creator());
+    properties.insert("Producer", m_document->producer());
 
     return properties;
 }

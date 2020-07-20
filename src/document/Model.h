@@ -59,7 +59,7 @@ struct Section;
 
 typedef QVector< Section > Outline;
 
-typedef QVector< QPair< QString, QString > > Properties;
+typedef QMap<QString, QVariant> Properties;
 
 struct Section {
     QString title;

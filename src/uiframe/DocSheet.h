@@ -153,6 +153,8 @@ public:
 
     QString filter();
 
+    QString format();
+
     QSet<int> getBookMarkList() const;
 
     SheetOperation operation();
@@ -213,7 +215,7 @@ public:
 
     bool haslabel();
 
-    void docBasicInfo(deepin_reader::FileInfo &info);
+    void docBasicInfo(deepin_reader::FileInfo &tFileInfo);
 
     QString pagenum2label(int index);
 

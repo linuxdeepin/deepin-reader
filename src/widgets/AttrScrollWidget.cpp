@@ -23,32 +23,32 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     gridLayout->setContentsMargins(0, 6, 0, 6);
     gridLayout->setSpacing(3);
 
-//    stFileInfo fileInfo;
-//    sheet->docBasicInfo(fileInfo);
-//    QLocale locale;
-//    QFontMetrics fm(font());
-//    //用最长字符来计算左侧最小宽度
-//    if (locale.language() == QLocale::English) {
-//        m_leftminwidth = fm.horizontalAdvance(("Time modified"));
-//    } else if (locale.language() == QLocale::Chinese) {
-//        m_leftminwidth = fm.horizontalAdvance("页面大小");
-//    }
+    deepin_reader::FileInfo fileInfo;
+    sheet->docBasicInfo(fileInfo);
+    QLocale locale;
+    QFontMetrics fm(font());
+    //用最长字符来计算左侧最小宽度
+    if (locale.language() == QLocale::English) {
+        m_leftminwidth = fm.horizontalAdvance(("Time modified"));
+    } else if (locale.language() == QLocale::Chinese) {
+        m_leftminwidth = fm.horizontalAdvance("页面大小");
+    }
 
-//    createLabel(gridLayout, 0, tr("Location"), fileInfo.strFilepath);
-//    createLabel(gridLayout, 1, tr("Subject"), fileInfo.strTheme);
-//    createLabel(gridLayout, 2, tr("Author"), fileInfo.strAuther);
-//    createLabel(gridLayout, 3, tr("Keywords"), fileInfo.strKeyword);
-//    createLabel(gridLayout, 4, tr("Producer"), fileInfo.strProducter);
-//    createLabel(gridLayout, 5, tr("Creator"), fileInfo.strCreater);
-//    createLabel(gridLayout, 6, tr("Time created"), fileInfo.CreateTime);
-//    createLabel(gridLayout, 7, tr("Time modified"), fileInfo.ChangeTime);
-//    createLabel(gridLayout, 8, tr("Format"), fileInfo.strFormat);
-//    createLabel(gridLayout, 9, tr("Pages"), QString("%1").arg(fileInfo.iNumpages));
-//    createLabel(gridLayout, 10, tr("Optimized"), fileInfo.boptimization);
-//    createLabel(gridLayout, 11, tr("Security"), fileInfo.bsafe);
-//    QString sPaperSize = QString("%1*%2").arg(fileInfo.iWidth).arg(fileInfo.iHeight);
-//    createLabel(gridLayout, 12, tr("Page size"), sPaperSize);
-//    createLabel(gridLayout, 13, tr("File size"), Utils::getInputDataSize(static_cast<qint64>(fileInfo.size)));
+    createLabel(gridLayout, 0, tr("Location"), fileInfo.filePath);
+    createLabel(gridLayout, 1, tr("Subject"), fileInfo.theme);
+    createLabel(gridLayout, 2, tr("Author"), fileInfo.auther);
+    createLabel(gridLayout, 3, tr("Keywords"), fileInfo.keyword);
+    createLabel(gridLayout, 4, tr("Producer"), fileInfo.producter);
+    createLabel(gridLayout, 5, tr("Creator"), fileInfo.creater);
+    createLabel(gridLayout, 6, tr("Time created"), fileInfo.createTime);
+    createLabel(gridLayout, 7, tr("Time modified"), fileInfo.changeTime);
+    createLabel(gridLayout, 8, tr("Format"), fileInfo.format);
+    createLabel(gridLayout, 9, tr("Pages"), QString("%1").arg(fileInfo.numpages));
+    createLabel(gridLayout, 10, tr("Optimized"), fileInfo.optimization);
+    createLabel(gridLayout, 11, tr("Security"), fileInfo.safe);
+    QString sPaperSize = QString("%1*%2").arg(fileInfo.width).arg(fileInfo.height);
+    createLabel(gridLayout, 12, tr("Page size"), sPaperSize);
+    createLabel(gridLayout, 13, tr("File size"), Utils::getInputDataSize(static_cast<qint64>(fileInfo.size)));
 
     auto vLayout = new QVBoxLayout;
     vLayout->setContentsMargins(10, 10, 10, 10);

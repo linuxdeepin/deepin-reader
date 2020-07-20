@@ -390,7 +390,7 @@ Properties loadProperties(miniexp_t annoExp)
             const QString value = QString::fromUtf8(miniexp_to_str(miniexp_cadr(keyValueItem)));
 
             if (!key.isEmpty() && !value.isEmpty()) {
-                properties.push_back(qMakePair(key, value));
+                properties.insert(key, value);
             }
         }
     }
