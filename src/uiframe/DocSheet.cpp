@@ -716,11 +716,28 @@ void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *ann
     if (m_sidebar) m_sidebar->handleAnntationMsg(type, anno);
 }
 
-void DocSheet::onFindOperation(int type, QString text)
+void DocSheet::handleFindNext()
 {
-    m_sidebar->handleFindOperation(type);
-    m_browser->handleFindOperation(type, text);
-    emit sigFindOperation(type);
+    m_browser->handleFindNext();
+}
+
+void DocSheet::handleFindPrev()
+{
+    m_browser->handleFindPrev();
+}
+
+void DocSheet::handleFindExit()
+{
+    m_browser->handleFindExit();
+    m_sidebar->handleFindOperation(E_FIND_EXIT);
+    emit sigFindOperation(E_FIND_EXIT);
+}
+
+void DocSheet::handleFindContent(const QString &strFind)
+{
+    m_browser->handleFindContent(strFind);
+    m_sidebar->handleFindOperation(E_FIND_CONTENT);
+    emit sigFindOperation(E_FIND_CONTENT);
 }
 
 void DocSheet::onFindFinished()

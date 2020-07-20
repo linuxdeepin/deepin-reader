@@ -31,6 +31,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DocSheet;
 class FindWidget : public DFloatingWidget
 {
     Q_OBJECT
@@ -41,10 +42,8 @@ public:
 
     ~FindWidget() override;
 
-signals:
-    void sigFindOperation(const int &, const QString &searchtext = "");
-
 public:
+    void setDocSheet(DocSheet *sheet);
     void showPosition(const int &);
     void setSearchEditFocus();
     void stopSearch();
@@ -67,6 +66,7 @@ private:
     void initWidget();
 
 private:
+    DocSheet *m_docSheet = nullptr;
     DSearchEdit     *m_pSearchEdit = nullptr;
     QString m_strLastFindText{""};//上一次查找内容
 };

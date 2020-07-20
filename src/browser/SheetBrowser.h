@@ -110,7 +110,13 @@ public:
 
     void stopSearch();
 
-    void handleFindOperation(const int &iType, const QString &strFind);
+    void handleFindNext();
+
+    void handleFindPrev();
+
+    void handleFindExit();
+
+    void handleFindContent(const QString &strFind);
 
     void handleFindFinished(int searchcnt);
 

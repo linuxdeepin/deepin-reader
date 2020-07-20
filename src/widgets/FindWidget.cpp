@@ -29,6 +29,7 @@
 #include <QDesktopWidget>
 
 #include "widgets/CustomWidget.h"
+#include "DocSheet.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -46,6 +47,11 @@ FindWidget::FindWidget(DWidget *parent)
 
 FindWidget::~FindWidget()
 {
+}
+
+void FindWidget::setDocSheet(DocSheet *sheet)
+{
+    m_docSheet = sheet;
 }
 
 void FindWidget::showPosition(const int &nParentWidth)
@@ -80,18 +86,18 @@ void FindWidget::handleContentChanged()
     if ((strFind != "") && (m_strLastFindText != strFind)) {
         m_strLastFindText = strFind;
         setEditAlert(0);
-        emit sigFindOperation(E_FIND_CONTENT, strFind);
+        m_docSheet->handleFindContent(strFind);
     }
 }
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    emit sigFindOperation(E_FIND_NEXT);
+    m_docSheet->handleFindNext();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    emit sigFindOperation(E_FIND_PREV);
+    m_docSheet->handleFindPrev();
 }
 
 //  文本内容变化, 为空, 则取消红色提示
@@ -108,7 +114,7 @@ void FindWidget::slotEditAborted()
 {
     m_strLastFindText = "";
     setEditAlert(0);
-    emit sigFindOperation(E_FIND_EXIT);
+    m_docSheet->handleFindExit();
 }
 
 void FindWidget::initWidget()

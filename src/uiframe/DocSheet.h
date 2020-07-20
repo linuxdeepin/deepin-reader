@@ -187,13 +187,19 @@ public:
 
     void setOperationChanged();
 
+    void handleFindNext();
+
+    void handleFindPrev();
+
+    void handleFindExit();
+
+    void handleFindContent(const QString &strFind);
+
 private:
     SheetOperation &operationRef();
 
 public slots:
     void showTips(const QString &tips, int iconIndex = 0);
-
-    void onFindOperation(int type, QString text);
 
     void onFindContentComming(const deepin_reader::SearchResult &);
 
