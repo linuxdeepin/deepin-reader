@@ -201,9 +201,12 @@ private:
 public slots:
     void showTips(const QString &tips, int iconIndex = 0);
 
+private slots:
     void onFindContentComming(const deepin_reader::SearchResult &);
 
     void onFindFinished();
+
+    void onRemoveAnnotation(deepin_reader::Annotation *annotation);
 
 public:
     int label2pagenum(QString label);

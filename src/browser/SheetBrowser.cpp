@@ -263,7 +263,9 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
     m_tipsWidget->hide();
     if (m_noteEditWidget == nullptr) {
         m_noteEditWidget = new NoteShadowViewWidget(this);
-        connect(m_noteEditWidget->getNoteViewWidget(), SIGNAL(sigNeedShowTips(const QString &, int)), m_sheet, SLOT(showTips(const QString &, int)));
+        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
+        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigRemoveAnnotation, m_sheet, &DocSheet::onRemoveAnnotation);
+        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigUpdateAnnotation, this, &SheetBrowser::onUpdateAnnotation);
     }
     m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
@@ -622,6 +624,11 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     return ret;
 }
 
+void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text)
+{
+    updateAnnotation(annotation, text);
+}
+
 deepin_reader::Outline SheetBrowser::outline()
 {
     return m_document->outline();
@@ -915,8 +922,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
-                    if (annotation)
+                    if (annotation) {
                         m_sheet->removeAnnotation(annotation->annotation());
+                    }
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
                     if (annotation)  {

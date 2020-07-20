@@ -100,9 +100,9 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
     QString sText = m_pTextEdit->toPlainText().trimmed();
 
     if (!m_annotation->contents().isEmpty() && sText.isEmpty()) {
-        m_brower->removeAnnotation(m_annotation);
+        emit sigRemoveAnnotation(m_annotation);
     } else if (m_annotation->contents() != sText) {
-        m_brower->updateAnnotation(m_annotation, sText);
+        emit sigUpdateAnnotation(m_annotation, sText);
     }
 }
 

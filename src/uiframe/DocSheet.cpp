@@ -455,14 +455,25 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
     return m_browser->annotations();
 }
 
+void DocSheet::onRemoveAnnotation(deepin_reader::Annotation *annotation)
+{
+    removeAnnotation(annotation);
+}
+
 bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     if (nullptr == m_browser)
         return false;
+
+    QString annoContent;
+    if (annotation && !annotation->contents().isEmpty())
+        annoContent = annotation->contents();
+
     int ret = m_browser->removeAnnotation(annotation);
     if (ret) {
         setFileChanged(true);
-        this->showTips(tr("The annotation has been removed"));
+        if (!annoContent.isEmpty())
+            this->showTips(tr("The annotation has been removed"));
     }
     return ret;
 }

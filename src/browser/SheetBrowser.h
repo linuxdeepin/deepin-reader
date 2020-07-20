@@ -172,6 +172,9 @@ private slots:
     void onSceneOfViewportChanged();
 
     void onAddHighLightAnnot(BrowserPage *, QString, QColor);
+
+    void onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
+
 private:
     bool mouseClickIconAnnot(QPointF &);
 
