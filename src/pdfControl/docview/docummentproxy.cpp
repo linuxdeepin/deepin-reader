@@ -19,7 +19,7 @@ DocummentProxy::DocummentProxy(DocSheet *sheet, QObject *parent)
     pwgt = static_cast<DWidget *>(parent);
 }
 
-bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
+bool DocummentProxy::openFile(Dr::FileType type, QString filepath, QString password, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     bool bre = false;
     m_path = filepath;
@@ -40,7 +40,7 @@ bool DocummentProxy::openFile(Dr::FileType type, QString filepath, unsigned int 
         connect(this, SIGNAL(signal_setViewModeAndShow(ViewMode_EM)), m_documment, SLOT(setViewModeAndShow(ViewMode_EM)));
         connect(m_documment, SIGNAL(sigPageBookMarkButtonClicked(int, bool)), this, SIGNAL(sigPageBookMarkButtonClicked(int, bool)));
         connect(m_documment, SIGNAL(signal_openResult(bool)), this, SIGNAL(signal_openResult(bool)));
-        bre = m_documment->openFile(m_path, ipage, rotatetype, scale, viewmode);
+        bre = m_documment->openFile(m_path, password, ipage, rotatetype, scale, viewmode);
     }
     bcloseing = false;
     return bre;

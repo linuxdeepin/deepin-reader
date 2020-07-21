@@ -113,7 +113,7 @@ DocummentBase::DocummentBase(DocummentBasePrivate *ptr, DWidget *parent): DScrol
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_vScrollBarValueChanged(int)));
     connect(this->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slot_hScrollBarValueChanged(int)));
     connect(d, SIGNAL(signal_docummentLoaded(bool)), this, SLOT(slot_docummentLoaded(bool)));
-    connect(this, SIGNAL(signal_loadDocumment(QString)), d, SLOT(loadDocumment(QString)));
+    connect(this, SIGNAL(signal_loadDocumment(QString, QString)), d, SLOT(loadDocumment(QString, QString)));
 
     connect(&d->threadloaddata, SIGNAL(signal_dataLoaded(bool)), this, SLOT(slot_dataLoaded(bool)));
 
@@ -1592,7 +1592,7 @@ void DocummentBase::waitThreadquit()
     QThreadPool::globalInstance()->waitForDone();
 }
 
-bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
+bool DocummentBase::openFile(QString filepath, QString password, unsigned int ipage, RotateType_EM rotatetype, double scale, ViewMode_EM viewmode)
 {
     Q_D(DocummentBase);
     d->m_scale = scale;
@@ -1601,7 +1601,7 @@ bool DocummentBase::openFile(QString filepath, unsigned int ipage, RotateType_EM
     d->m_currentpageno = static_cast<int>(ipage);
     d->donotneedreloaddoc = true;
 
-    if (!loadDocumment(filepath))
+    if (!loadDocumment(filepath, password))
         return false;
     return true;
 }
@@ -1662,12 +1662,12 @@ bool DocummentBase::loadData()
     return true;
 }
 
-bool DocummentBase::loadDoc(QString path)
+bool DocummentBase::loadDoc(QString path, QString password)
 {
     Q_D(DocummentBase);
     if (!bDocummentExist())
         return false;
-    d->loadDocumment(path);
+    d->loadDocumment(path, password);
     return true;
 }
 

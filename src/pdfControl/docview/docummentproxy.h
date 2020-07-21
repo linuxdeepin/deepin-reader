@@ -19,7 +19,7 @@ public:
             closeFileAndWaitThreadClearEnd();
     }
 public:
-    bool openFile(Dr::FileType type, QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
+    bool openFile(Dr::FileType type, QString filepath, QString password, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool closeFile();
     QPoint global2RelativePoint(QPoint globalpoint);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);

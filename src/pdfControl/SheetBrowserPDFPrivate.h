@@ -92,7 +92,7 @@ private:
     void __ShowNoteTipWidget(const QString &sText);
     void __CloseFileNoteWidget();
     void __SetCursor(const QCursor &cursor);
-    void OpenFilePath(const QString &sPath);
+    void OpenFilePath(const QString &sPath, QString password);
     void clearSelect();
 private:
     bool m_hasOpened = false;

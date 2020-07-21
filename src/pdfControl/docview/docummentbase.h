@@ -107,7 +107,7 @@ public:
 signals:
     void signal_docummentLoaded(bool);
 protected slots:
-    virtual void loadDocumment(QString) {}
+    virtual void loadDocumment(QString, QString) {}
 protected:
     DocummentBase *q_ptr;
     Q_DECLARE_PUBLIC(DocummentBase)
@@ -120,7 +120,7 @@ class DocummentBase: public DScrollArea
 public:
     DocummentBase(DocummentBasePrivate *ptr = nullptr, DWidget *parent = nullptr);
     virtual ~DocummentBase() override;
-    virtual bool loadDocumment(QString filepath) = 0;
+    virtual bool loadDocumment(QString filepath, QString password) = 0;
     virtual bool bDocummentExist() = 0;
     virtual bool getImage(int pagenum, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
     virtual bool save(const QString &);
@@ -168,7 +168,7 @@ public:
     }
     void stopLoadPageThread();
     void waitThreadquit();
-    bool openFile(QString filepath, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
+    bool openFile(QString filepath, QString password, unsigned int ipage = 0, RotateType_EM rotatetype = RotateType_0, double scale = 1.0, ViewMode_EM viewmode = ViewMode_SinglePage);
     bool setSelectTextStyle(QColor paintercolor = QColor(72, 118, 255, 100), QColor pencolor = QColor(72, 118, 255, 0), int penwidth = 0);
     void mouseSelectTextClear();
     bool mouseBeOverText(QPoint point);
@@ -186,7 +186,7 @@ public:
     void findNext();
     void findPrev();
     bool loadData();
-    bool loadDoc(QString);
+    bool loadDoc(QString, QString);
     int getPageSNum();
     QVector<PageBase *> *getPages();
     PageBase *getPage(int index);
@@ -211,7 +211,7 @@ signals:
     void signal_pageChange(int);
     void signal_searchRes(stSearchRes);
     void signal_searchover();
-    void signal_loadDocumment(QString);
+    void signal_loadDocumment(QString, QString);
     void sigPageBookMarkButtonClicked(int page, bool state);
     void signal_openResult(bool);
     void signal_autoplaytoend();

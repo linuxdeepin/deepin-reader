@@ -44,17 +44,18 @@ public:
     Q_DECLARE_PUBLIC(DocummentPDF)
 
 protected slots:
-    void loadDocumment(QString filepath) override;
+    void loadDocumment(QString filepath, QString password) override;
 
 private:
     void setBasicInfo(const QString &filepath);
 
 };
 
-void DocummentPDFPrivate::loadDocumment(QString filepath)
+void DocummentPDFPrivate::loadDocumment(QString filepath, QString password)
 {
     Q_Q(DocummentPDF);
-    document = Poppler::Document::load(filepath);
+    document = Poppler::Document::load(filepath, QByteArray(), QByteArray().append(password));
+
     if (nullptr == document || document->numPages() <= 0) {
         emit signal_docummentLoaded(false);
         return;
@@ -146,9 +147,9 @@ DocummentPDF::~DocummentPDF()
     delete imageSemapphore;
 }
 
-bool DocummentPDF::loadDocumment(QString filepath)
+bool DocummentPDF::loadDocumment(QString filepath, QString password)
 {
-    emit signal_loadDocumment(filepath);
+    emit signal_loadDocumment(filepath, password);
     return true;
 }
 

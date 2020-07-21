@@ -56,7 +56,11 @@ public:
 
     virtual bool isOpen();
 
-    virtual void openFile();
+    virtual bool isLocked();
+
+    virtual bool tryPassword(QString password);
+
+    virtual void openFile(QString password);
 
     virtual bool openFileExec();
 

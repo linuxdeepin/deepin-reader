@@ -25,7 +25,11 @@ public:
 
     virtual ~DocSheetPDF() override;
 
-    void openFile()override;
+    bool isLocked() override;
+
+    bool tryPassword(QString password) override;
+
+    void openFile(QString password)override;
 
     void jumpToPage(int page)override;
 

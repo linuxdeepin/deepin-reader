@@ -27,7 +27,7 @@ public:
     void title(QString &title) override;
     void setAnnotationText(int ipage, const QString &struuid, const QString &strtext) override;
     void getAnnotationText(const QString &struuid, QString &strtext, int ipage)override;
-    bool loadDocumment(QString filepath) override;
+    bool loadDocumment(QString filepath, QString password) override;
     void jumpToHighLight(const QString &uuid, int ipage) override;
     void changeAnnotationColor(int ipage, const QString uuid, const QColor &color) override;
     bool freshFile(QString file) override;

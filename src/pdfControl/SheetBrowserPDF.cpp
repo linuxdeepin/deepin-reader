@@ -208,10 +208,10 @@ void SheetBrowserPDF::onHandleResize()
     }
 }
 
-void SheetBrowserPDF::OpenFilePath(const QString &sPath)
+void SheetBrowserPDF::OpenFilePath(const QString &sPath, QString password)
 {
     Q_D(SheetBrowserPDF);
-    d->OpenFilePath(sPath);
+    d->OpenFilePath(sPath, password);
 }
 
 QString SheetBrowserPDF::getFilePath()

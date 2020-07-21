@@ -73,7 +73,7 @@ void DocSheet::initOperationData(const DocOperation &opera)
     m_operation = opera;
 }
 
-void DocSheet::openFile()
+void DocSheet::openFile(QString password)
 {
     qDebug() << "unrealized";
 }
@@ -228,6 +228,16 @@ bool DocSheet::isOpen()
 {
     qDebug() << "unrealized";
     return false;
+}
+
+bool DocSheet::isLocked()
+{
+    return false;
+}
+
+bool DocSheet::tryPassword(QString password)
+{
+    return true;
 }
 
 QString DocSheet::addIconAnnotation(const QPoint &, const QColor &, TextAnnoteType_Em)

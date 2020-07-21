@@ -126,8 +126,6 @@ void CentralDocPage::openFile(QString &filePath)
         connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
         connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-        sheet->openFile();
-
         m_pStackedLayout->addWidget(sheet);
 
         m_pStackedLayout->setCurrentWidget(sheet);
@@ -139,6 +137,19 @@ void CentralDocPage::openFile(QString &filePath)
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
         emit sigSheetCountChanged(m_pStackedLayout->count());
+
+        QString password;
+
+        if (sheet->isLocked()) {
+            do {
+                //...对话框 取密码
+            } while (!sheet->tryPassword(password));
+
+            //如果失败
+            //...onOpened(sheet,false)
+        }
+
+        sheet->openFile(password);
 
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(filePath, this);

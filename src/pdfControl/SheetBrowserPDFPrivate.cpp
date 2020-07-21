@@ -508,7 +508,7 @@ void SheetBrowserPDFPrivate::onFileOpenResult(bool openresult)
     emit q->sigFileOpenResult(m_pProxyData->getPath(), openresult);
 }
 
-void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
+void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath, QString password)
 {
     Q_Q(SheetBrowserPDF);
     //  实际文档类  唯一实例化设置 父窗口
@@ -546,7 +546,7 @@ void SheetBrowserPDFPrivate::OpenFilePath(const QString &sPath)
 
         int curIndex = fdm.getOper(CurIndex).toInt();
 
-        bool rl = m_pProxy->openFile(Dr::PDF, sPath, static_cast<unsigned int>(curIndex), rotatetype, scaleRatio, viewmode);
+        bool rl = m_pProxy->openFile(Dr::PDF, sPath, password, static_cast<unsigned int>(curIndex), rotatetype, scaleRatio, viewmode);
 
         if (rl) {
             m_pProxy->setViewFocus();

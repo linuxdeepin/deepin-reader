@@ -89,7 +89,7 @@ signals:
     void sigSizeChanged(double scaleFactor);
 
 public:
-    void OpenFilePath(const QString &);
+    void OpenFilePath(const QString &, QString);
 
     QString getFilePath();
 

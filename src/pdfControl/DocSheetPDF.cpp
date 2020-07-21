@@ -25,6 +25,7 @@
 #include <QStackedWidget>
 #include <QMimeData>
 #include <QUuid>
+#include <poppler-qt5.h>
 
 #include "widgets/SpinnerWidget.h"
 #include "pdfControl/SheetBrowserPDF.h"
@@ -94,9 +95,27 @@ DocSheetPDF::~DocSheetPDF()
         m_browser->saveOper();
 }
 
-void DocSheetPDF::openFile()
+bool DocSheetPDF::isLocked()
 {
-    m_browser->OpenFilePath(filePath());
+    Poppler::Document *document = Poppler::Document::load(filePath());
+    if (nullptr == document)
+        return false;
+
+    return document->isLocked();
+}
+
+bool DocSheetPDF::tryPassword(QString password)
+{
+    Poppler::Document *document = Poppler::Document::load(filePath());
+    if (nullptr == document || !document->isLocked())
+        return false;
+
+    return document->unlock(QByteArray(), QByteArray().append(password));
+}
+
+void DocSheetPDF::openFile(QString password)
+{
+    m_browser->OpenFilePath(filePath(), password);
 }
 
 void DocSheetPDF::jumpToPage(int page)
