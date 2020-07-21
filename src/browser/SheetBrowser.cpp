@@ -596,7 +596,9 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
             break;
         }
     }
-    if (ret) emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+    if (ret)
+        emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+
     return ret;
 }
 
@@ -608,7 +610,6 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     bool ret{false};
 
     foreach (BrowserPage *item, m_items) {
-        //update annot text , color
         if (item && item->hasAnnotation(annotation)) {
             ret = item->updateAnnotation(annotation, text, color);
         }

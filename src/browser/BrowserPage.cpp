@@ -130,7 +130,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawRect(translateRect(m_searchSelectLighRectf));
 }
 
-void BrowserPage::renderViewPort()
+void BrowserPage::renderViewPort(bool force)
 {
     if (nullptr == m_parent)
         return;
@@ -141,7 +141,7 @@ void BrowserPage::renderViewPort()
 
     QRectF intersectedRectF = this->mapToScene(this->boundingRect()).boundingRect().intersected(visibleSceneRectF);
 
-    if (intersectedRectF.height() <= 0 && intersectedRectF.width() <= 0)
+    if (!force && intersectedRectF.height() <= 0 && intersectedRectF.width() <= 0)
         return;
 
     QRectF viewRenderRectF = mapFromScene(intersectedRectF).boundingRect();
@@ -150,10 +150,10 @@ void BrowserPage::renderViewPort()
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
     //如果现在已经加载的rect包含viewRender 就不加入任务
-    if (m_renderedRect.contains(viewRenderRect))
+    if (!force && m_renderedRect.contains(viewRenderRect))
         return;
 
-    if (m_viewportRenderedRect.contains(viewRenderRect))
+    if (!force && m_viewportRenderedRect.contains(viewRenderRect))
         return;
 
     RenderViewportTask task;
@@ -526,11 +526,15 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     qDeleteAll(browserPageWord);
 
     if (boundarys.count()) {
-        //add highlight annot
+        loadAnnotations();
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
+        highLightAnnot->page = m_index + 1;
+        m_annotations.append(highLightAnnot);
+        foreach (QRectF rect, highLightAnnot->boundary()) {
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
+            m_annotationItems.append(annotationItem);
+        }
     }
-
-    reloadAnnotations();
 
     renderViewPort();
 
@@ -550,9 +554,16 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
     if (!m_page->removeAnnotation(annotation))
         return false;
 
-    reloadAnnotations();        // 必须要reload 因为可能多个item共享同一个annotation
+    m_annotations.removeAll(annotation);
 
-    renderViewPort();
+    foreach (BrowserAnnotation *annotation, m_annotationItems) {
+        if (annotation->annotation() == annotation->annotation()) {
+            m_annotationItems.removeAll(annotation);
+            delete annotation;
+        }
+    }
+
+    renderViewPort(true);
 
     return true;
 }
