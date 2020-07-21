@@ -102,10 +102,6 @@ public:
 
     bool canAddAndRemoveAnnotations() const override;
 
-    Annotation *addTextAnnotation(const QRectF &boundary, const QColor &color) override;                 //跳转注释
-
-    Annotation *addHighlightAnnotation(const QRectF &boundary, const QColor &color) override;            //高亮
-
     Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) override;
 
     bool removeAnnotation(Annotation *annotation) override;
