@@ -25,9 +25,11 @@
 #include "note/NotesWidget.h"
 #include "search/SearchResWidget.h"
 #include "document/Model.h"
+#include "threadmanager/ReaderImageThreadPoolManager.h"
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
+#include <QTimer>
 
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     : CustomWidget(parent)
@@ -166,16 +168,18 @@ void SheetSidebar::handleOpenSuccess()
 void SheetSidebar::handWidgetDocOpenSuccess()
 {
     if (m_bOpenDocOpenSuccess) {
-        QWidget *curWidget = m_stackLayout->currentWidget();
-        if (curWidget == m_thumbnailWidget) {
-            m_thumbnailWidget->handleOpenSuccess();
-        } else if (curWidget == m_catalogWidget) {
-            m_catalogWidget->handleOpenSuccess();
-        } else if (curWidget == m_bookmarkWidget) {
-            m_bookmarkWidget->handleOpenSuccess();
-        } else if (curWidget == m_notesWidget) {
-            m_notesWidget->handleOpenSuccess();
-        }
+        QTimer::singleShot(10, [this]() {
+            QWidget *curWidget = m_stackLayout->currentWidget();
+            if (curWidget == m_thumbnailWidget) {
+                m_thumbnailWidget->handleOpenSuccess();
+            } else if (curWidget == m_catalogWidget) {
+                m_catalogWidget->handleOpenSuccess();
+            } else if (curWidget == m_bookmarkWidget) {
+                m_bookmarkWidget->handleOpenSuccess();
+            } else if (curWidget == m_notesWidget) {
+                m_notesWidget->handleOpenSuccess();
+            }
+        });
     }
 }
 
@@ -222,9 +226,19 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
     if (curWidget) curWidget->updateThumbnail(index);
 }
 
+void SheetSidebar::handleUpdatePartThumbnail(const int &index)
+{
+    const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_sheet, index);
+    if (image.isNull()) {
+        handleUpdateThumbnail(index);
+    }
+}
+
 void SheetSidebar::handleAnntationMsg(const int &msg, deepin_reader::Annotation *anno)
 {
-    if (m_notesWidget) m_notesWidget->handleAnntationMsg(msg, anno);
+    if (m_notesWidget)
+        m_notesWidget->handleAnntationMsg(msg, anno);
+
     handleUpdateThumbnail(anno->page - 1);
 }
 

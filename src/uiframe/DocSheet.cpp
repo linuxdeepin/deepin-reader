@@ -71,7 +71,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
     connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
-    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdateThumbnail(int)));
+    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
 }
 
 DocSheet::~DocSheet()
@@ -190,8 +190,7 @@ void DocSheet::rotateLeft()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-//    if (m_sidebar)
-//        m_sidebar->handleRotate(m_operation.rotation);
+    m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -207,7 +206,7 @@ void DocSheet::rotateRight()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    //if (m_sidebar) m_sidebar->handleRotate(m_operation.rotation);
+    m_sidebar->handleRotate(m_operation.rotation);
     setOperationChanged();
 }
 
@@ -334,12 +333,9 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     setOperationChanged();
 }
 
-bool DocSheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
+bool DocSheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
 {
-    if (m_browser)
-        return m_browser->getImage(index, image, width, height, mode);
-
-    return false;
+    return m_browser->getImage(index, image, width, height, mode, bSrc);
 }
 
 bool DocSheet::fileChanged()
@@ -437,9 +433,6 @@ void DocSheet::onRemoveAnnotation(deepin_reader::Annotation *annotation)
 
 bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-    if (nullptr == m_browser)
-        return false;
-
     QString annoContent;
     if (annotation && !annotation->contents().isEmpty())
         annoContent = annotation->contents();
@@ -455,9 +448,6 @@ bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 
 bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annotations)
 {
-    if (nullptr == m_browser)
-        return false;
-
     bool ret = false;
     for (deepin_reader::Annotation *anno : annotations) {
         ret = m_browser->removeAnnotation(anno);

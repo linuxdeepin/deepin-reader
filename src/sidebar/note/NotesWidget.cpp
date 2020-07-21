@@ -109,14 +109,16 @@ void NotesWidget::DeleteItemByKey()
 
 void NotesWidget::deleteAllItem()
 {
+    QList<deepin_reader::Annotation *> annotations;
     int itemsize = m_pImageListView->model()->rowCount();
     for (int i = 0; i < itemsize; i++) {
         ImagePageInfo_t tImagePageInfo;
         m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
-        if (tImagePageInfo.pageIndex >= 0) {
-            m_sheet->removeAnnotation(tImagePageInfo.annotation);
+        if (tImagePageInfo.pageIndex >= 0 && tImagePageInfo.annotation) {
+            annotations << tImagePageInfo.annotation;
         }
     }
+    m_sheet->removeAnnotations(annotations);
 }
 
 void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)

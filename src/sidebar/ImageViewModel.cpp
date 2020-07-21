@@ -18,6 +18,8 @@
 #include "DocSheet.h"
 #include "threadmanager/ReaderImageThreadPoolManager.h"
 
+#include <QDebug>
+
 ImageViewModel::ImageViewModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent)
@@ -72,9 +74,13 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
     int nRow = m_pagelst.at(index.row()).pageIndex;
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
         const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
-        if (image.isNull())
-            onFetchImage(nRow);
-        else {
+        if (image.isNull()) {
+            QImage srcimg;
+            if (m_docSheet->getImage(nRow, srcimg, 174, 174, Qt::KeepAspectRatio, true) && !srcimg.isNull())
+                return QVariant::fromValue(srcimg);
+            else
+                onFetchImage(nRow);
+        } else {
             return QVariant::fromValue(image);
         }
     } else if (role == ImageinfoType_e::IMAGE_BOOKMARK) {

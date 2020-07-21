@@ -137,7 +137,7 @@ public:
 
     void addSelectedTextHightlightAnnotation();       //对选中文字添加高亮注释
 
-    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
+    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 
     void defaultFocus();
 

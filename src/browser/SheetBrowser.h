@@ -74,7 +74,7 @@ public:
 
     void setCurrentPage(int page);
 
-    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio);
+    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 
     void openMagnifier();
 

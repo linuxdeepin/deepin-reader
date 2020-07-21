@@ -1167,12 +1167,12 @@ void SheetBrowser::setCurrentPage(int page)
     verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
 }
 
-bool SheetBrowser::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode)
+bool SheetBrowser::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
 {
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImage(static_cast<int>(width), static_cast<int>(height), mode);
+    image = m_items.at(index)->getImage(static_cast<int>(width), static_cast<int>(height), mode, bSrc);
 
     return true;
 }

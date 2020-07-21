@@ -69,6 +69,7 @@ public :
     void handleRotate(int);
 public slots:
     void handleUpdateThumbnail(const int &index);
+    void handleUpdatePartThumbnail(const int &index);
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
 protected:
@@ -83,6 +84,8 @@ private slots:
     void onBtnClicked(int index);
     void onUpdateWidgetTheme();
 
+    void handWidgetDocOpenSuccess();
+
 private:
     void initConnections();
     DToolButton *createBtn(const QString &btnName, const QString &objName);
@@ -90,7 +93,6 @@ private:
     void onJumpToPrevPage();
     void onJumpToNextPage();
     void deleteItemByKey();
-    void handWidgetDocOpenSuccess();
 
 private:
     qreal m_scale;
