@@ -35,6 +35,8 @@ public:
 
     void stopCurThread();
 
+    void clearCurTaskList();
+
 private:
     QMutex m_threadMutex;
     QStack<RenderTaskPdf> m_renderTasks;

@@ -103,11 +103,22 @@ void RenderThreadPdf::run()
 
 void RenderThreadPdf::stopCurThread()
 {
+    _ins->m_threadMutex.lock();
     if (nullptr != _ins && _ins->isRunning()) {
-        m_threadQuit = true;
-        _ins->quit();
-        _ins->wait();
+//        m_threadQuit = true;
+//        _ins->quit();
+//        _ins->wait();
         _ins->m_renderTasks.clear();
+    }
+    _ins->m_threadMutex.unlock();
+}
+
+void RenderThreadPdf::clearCurTaskList()
+{
+    if (nullptr != _ins) {
+        _ins->m_threadMutex.lock();
+        _ins->m_renderTasks.clear();
+        _ins->m_threadMutex.unlock();
     }
 }
 
