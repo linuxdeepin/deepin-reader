@@ -131,18 +131,22 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     return image;
 }
 
-bool SheetBrowser::openFilePath(Dr::FileType fileType, const QString &filePath)
+bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath)
 {
     if (Dr::PDF == fileType)
         m_document = deepin_reader::PDFDocument::loadDocument(filePath);
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
-    stopSearch();
     if (nullptr == m_document)
         return false;
 
     return true;
+}
+
+bool SheetBrowser::save(const QString &filePath)
+{
+
 }
 
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)

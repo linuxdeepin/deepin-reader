@@ -52,7 +52,9 @@ public:
 
     static QImage firstThumbnail(const QString &filePath);
 
-    bool openFilePath(Dr::FileType fileType, const QString &);
+    bool open(const Dr::FileType &fileType, const QString &filePath);
+
+    bool save(const QString &filePath);
 
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 

@@ -44,6 +44,7 @@
 #include <QTime>
 #include <QMutexLocker>
 #include <QTimer>
+#include <QUuid>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -453,6 +454,10 @@ void BrowserPage::reloadAnnotations()
     m_annotations = m_page->annotations();
     for (int i = 0; i < m_annotations.count(); ++i) {
         m_annotations[i]->page = m_index + 1;
+        if (m_annotations[i]->uniqueName().isEmpty()) {
+            m_annotations[i]->setUniqueName(QUuid::createUuid().toString());
+        }
+
         foreach (QRectF rect, m_annotations[i]->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i]);
             m_annotationItems.append(annotationItem);
@@ -571,6 +576,17 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
     return true;
 }
 
+bool BrowserPage::removeAnnotationByUniqueName(QString uniqueName)
+{
+    foreach (deepin_reader::Annotation *annotation, m_annotations) {
+        if (annotation->uniqueName() == uniqueName) {
+            return removeAnnotation(annotation);
+        }
+    }
+
+    return false;
+}
+
 Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
 {
     if (nullptr == m_page)
@@ -589,7 +605,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         }
     }
 
-    renderViewPort();
+    renderViewPort(true);
 
     return annot;
 }

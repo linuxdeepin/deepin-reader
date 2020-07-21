@@ -212,7 +212,7 @@ void DocSheet::rotateRight()
 
 bool DocSheet::openFileExec()
 {
-    if (m_browser->openFilePath(m_fileType, filePath())) {
+    if (m_browser->open(m_fileType, filePath())) {
         if (!m_browser->loadPages(m_operation, m_bookmarks))
             return false;
         handleOpenSuccess();
@@ -345,6 +345,8 @@ bool DocSheet::fileChanged()
 
 bool DocSheet::saveData()
 {
+    //m_browser->save();
+
     if (Database::instance()->saveBookmarks(filePath(), m_bookmarks)) {
         m_fileChanged = false;
         return true;

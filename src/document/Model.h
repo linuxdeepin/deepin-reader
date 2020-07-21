@@ -119,6 +119,10 @@ public:
 
     virtual bool updateAnnotation(const QString contains, const QColor color) = 0;
 
+    virtual QString uniqueName() const {return QString();}
+
+    virtual bool setUniqueName(QString uniqueName) const {return false;}
+
     //数值同poppler类型
     enum AnnotationType {
         AnnotationText = 1,            ///< TextAnnotation

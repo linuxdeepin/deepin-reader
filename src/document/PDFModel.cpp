@@ -27,6 +27,7 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFormLayout>
 #include <QMessageBox>
 #include <QSettings>
+#include <QDebug>
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 
@@ -358,6 +359,26 @@ bool PDFAnnotation::updateAnnotation(const QString contains, const QColor color)
     }
 
     return true;
+}
+
+bool PDFAnnotation::setUniqueName(QString uniqueName) const
+{
+    LOCK_ANNOTATION
+
+    if (nullptr == m_annotation)
+        return false;
+
+    m_annotation->setUniqueName(uniqueName);
+
+    return true;
+}
+
+QString PDFAnnotation::uniqueName() const
+{
+    if (nullptr == m_annotation)
+        return QString();
+
+    return m_annotation->uniqueName();
 }
 
 PDFPage::PDFPage(QMutex *mutex, Poppler::Page *page) :
@@ -733,7 +754,7 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, cons
 #endif // HAS_POPPLER_20
 }
 
-bool PDFPage::removeAnnotation(Annotation *annotation)
+bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     LOCK_PAGE
 

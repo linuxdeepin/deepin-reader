@@ -54,6 +54,10 @@ public:
 
     bool updateAnnotation(const QString contains, const QColor color)  override;
 
+    bool setUniqueName(QString uniqueName) const override;
+
+    QString uniqueName() const override;
+
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
@@ -104,7 +108,7 @@ public:
 
     Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) override;
 
-    bool removeAnnotation(Annotation *annotation) override;
+    bool removeAnnotation(deepin_reader::Annotation *annotation) override;
 
     QList< FormField * > formFields() const override;
 
