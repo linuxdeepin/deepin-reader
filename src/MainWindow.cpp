@@ -32,6 +32,8 @@
 #include <DWidgetUtil>
 #include <QSignalMapper>
 #include <DGuiApplicationHelper>
+#include <QDBusConnection>
+
 #include "business/AppInfo.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
@@ -67,6 +69,10 @@ MainWindow::MainWindow(DMainWindow *parent)
 MainWindow::~MainWindow()
 {
     m_list.removeOne(this);
+    if (m_list.count() == 0) {
+        QDBusConnection dbus = QDBusConnection::sessionBus();
+        dbus.unregisterService("com.deepin.Reader");
+    }
 }
 
 void MainWindow::addSheet(DocSheet *sheet)
