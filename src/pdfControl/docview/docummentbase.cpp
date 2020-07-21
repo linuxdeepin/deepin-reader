@@ -1108,7 +1108,7 @@ void DocummentBase::slot_loadPages()
     if (!bDocummentExist())
         return;
 
-    RenderThreadPdf::getIns()->stopCurThread();
+//    RenderThreadPdf::getIns()->stopCurThread();
 
     int firstpagenum = 0, lastpagenum = 0;
 
