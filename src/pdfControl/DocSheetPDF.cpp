@@ -638,7 +638,8 @@ void DocSheetPDF::showEncryPage()
 void DocSheetPDF::onExtractPassword(const QString &password)
 {
     bool ret = this->tryPassword(password);
-    if (ret) {
+
+    if (!ret) {
         m_encryPage->hide();
         this->openFile(password);
         this->defaultFocus();
