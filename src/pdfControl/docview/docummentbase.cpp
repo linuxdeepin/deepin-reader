@@ -1190,7 +1190,7 @@ void DocummentBase::slot_setVBoxPosition()
 {
     Q_D(DocummentBase);
 
-    qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
+//    qInfo() << __LINE__ << __FUNCTION__ << "    before   d->m_currentpageno: " << d->m_currentpageno  << "        v box value page:" << currentPageNo();
 
     showCurPageViewAfterScaleChanged();
 
