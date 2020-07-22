@@ -521,7 +521,7 @@ QString DocSheetPDF::addIconAnnotation(const QPoint &pos, const QColor &color, T
 
 void DocSheetPDF::defaultFocus()
 {
-    if (m_browser)
+    if (!this->isLocked() && m_browser)
         m_browser->defaultFocus();
 }
 
