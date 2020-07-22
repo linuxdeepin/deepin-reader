@@ -59,7 +59,7 @@ void SearchResWidget::initWidget()
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     m_stackLayout->addWidget(tipLab);
     m_stackLayout->setCurrentIndex(SEARCH_INDEX);
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT /** 1.0*/));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
 }
 
 void SearchResWidget::handFindContentComming(const stSearchRes &search)
