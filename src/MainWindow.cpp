@@ -39,6 +39,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QSettings>
+#include <QDBusConnection>
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,6 +65,10 @@ MainWindow::MainWindow(DMainWindow *parent)
 MainWindow::~MainWindow()
 {
     m_list.removeOne(this);
+    if (m_list.count() <= 0) {
+        QDBusConnection dbus = QDBusConnection::sessionBus();
+        dbus.unregisterService("com.deepin.Reader");
+    }
 }
 
 void MainWindow::addSheet(DocSheet *sheet)
