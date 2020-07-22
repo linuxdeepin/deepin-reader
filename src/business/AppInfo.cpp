@@ -77,7 +77,7 @@ void AppInfo::setScreenRect(const QRect &rect)
 
 void AppInfo::setAppKeyValue(const int &iKey, const QString &sValue)
 {
-    // initalize the configuration file.
+    // initialize the configuration file.
     QString sKey = QString("%1").arg(iKey);
 
     QString ssValue = QString("%1").arg(sValue);
@@ -91,7 +91,7 @@ void AppInfo::setAppKeyValue(const int &iKey, const QString &sValue)
 
 QString AppInfo::getAppKeyValue(const int &iKey) const
 {
-    // initalize the configuration file.
+    // initialize the configuration file.
     QString sKey = QString("%1").arg(iKey);
 
     return m_pSettings->value(sKey).toString();
