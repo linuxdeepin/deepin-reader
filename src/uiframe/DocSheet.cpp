@@ -230,6 +230,11 @@ bool DocSheet::isOpen()
     return false;
 }
 
+bool DocSheet::isUnLocked()
+{
+    return true;
+}
+
 bool DocSheet::isLocked()
 {
     return false;

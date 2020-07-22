@@ -27,6 +27,8 @@ public:
 
     bool isLocked() override;
 
+    bool isUnLocked() override;
+
     bool tryPassword(QString password) override;
 
     void openFile(QString password)override;
@@ -162,6 +164,7 @@ protected:
     void childEvent(QChildEvent *c) override;
 
 private:
+    bool m_lockFile = false;
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;
     SpinnerWidget  *m_pSpinnerWidget = nullptr;

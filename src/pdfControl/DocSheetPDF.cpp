@@ -96,6 +96,11 @@ DocSheetPDF::~DocSheetPDF()
         m_browser->saveOper();
 }
 
+bool DocSheetPDF::isUnLocked()
+{
+    return !m_lockFile;
+}
+
 bool DocSheetPDF::isLocked()
 {
     Poppler::Document *document = Poppler::Document::load(filePath());
@@ -120,7 +125,7 @@ bool DocSheetPDF::tryPassword(QString password)
 
     delete document;
 
-    return isPassword;
+    return !isPassword;
 }
 
 void DocSheetPDF::openFile(QString password)
@@ -521,7 +526,7 @@ QString DocSheetPDF::addIconAnnotation(const QPoint &pos, const QColor &color, T
 
 void DocSheetPDF::defaultFocus()
 {
-    if (!this->isLocked() && m_browser)
+    if (this->isUnLocked() && m_browser)
         m_browser->defaultFocus();
 }
 
@@ -625,6 +630,7 @@ void DocSheetPDF::childEvent(QChildEvent *)
 
 void DocSheetPDF::showEncryPage()
 {
+    m_lockFile = true;
     if (m_encryPage == nullptr) {
         m_encryPage = new EncryptionPage(this);
         connect(m_encryPage, &EncryptionPage::sigExtractPassword, this, &DocSheetPDF::onExtractPassword);
@@ -639,10 +645,16 @@ void DocSheetPDF::onExtractPassword(const QString &password)
 {
     bool ret = this->tryPassword(password);
 
-    if (!ret) {
+    if (ret) {
+        m_lockFile = false;
         m_encryPage->hide();
         this->openFile(password);
         this->defaultFocus();
+
+        CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
+        if (nullptr == doc)
+            return;
+        emit doc->sigCurSheetChanged(this);
     } else {
         m_encryPage->wrongPassWordSlot();
     }

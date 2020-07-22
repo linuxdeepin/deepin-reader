@@ -56,6 +56,8 @@ public:
 
     virtual bool isOpen();
 
+    virtual bool isUnLocked();
+
     virtual bool isLocked();
 
     virtual bool tryPassword(QString password);
