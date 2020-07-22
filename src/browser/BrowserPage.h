@@ -129,6 +129,8 @@ public:
 
     QRectF translateRect(const QRectF &rect);
 
+    Annotation *getAnnotationForUUid(const QString &uuid);
+
 private:
     void reloadAnnotations();
 

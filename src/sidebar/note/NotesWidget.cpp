@@ -103,19 +103,19 @@ void NotesWidget::DeleteItemByKey()
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-        m_sheet->removeAnnotation(tImagePageInfo.annotation);
+        m_sheet->removeAnnotation(tImagePageInfo.struuid);
     }
 }
 
 void NotesWidget::deleteAllItem()
 {
-    QList<deepin_reader::Annotation *> annotations;
+    QList<QString> annotations;
     int itemsize = m_pImageListView->model()->rowCount();
     for (int i = 0; i < itemsize; i++) {
         ImagePageInfo_t tImagePageInfo;
         m_pImageListView->getImageModel()->getModelIndexImageInfo(i, tImagePageInfo);
-        if (tImagePageInfo.pageIndex >= 0 && tImagePageInfo.annotation) {
-            annotations << tImagePageInfo.annotation;
+        if (tImagePageInfo.pageIndex >= 0) {
+            annotations << tImagePageInfo.struuid;
         }
     }
     m_sheet->removeAnnotations(annotations);
@@ -129,17 +129,17 @@ void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = anno->page - 1;
     tImagePageInfo.strcontents = anno->contents();
-    tImagePageInfo.annotation = anno;
+    tImagePageInfo.struuid = anno->uniqueName();
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
-    int modelIndex = m_pImageListView->getImageModel()->findItemForAnno(anno);
+    int modelIndex = m_pImageListView->getImageModel()->findItemForUuid(tImagePageInfo.struuid);
     if (modelIndex >= 0)
         m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(modelIndex, 0));
 }
 
-void NotesWidget::deleteNoteItem(deepin_reader::Annotation *anno)
+void NotesWidget::deleteNoteItem(const QString &uuid)
 {
-    m_pImageListView->getImageModel()->removeItemForAnno(anno);
+    m_pImageListView->getImageModel()->removeItemForUuid(uuid);
 }
 
 void NotesWidget::handleOpenSuccess()
@@ -167,22 +167,13 @@ void NotesWidget::onListItemClicked(int row)
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
-        m_sheet->jumpToHighLight(tImagePageInfo.annotation, tImagePageInfo.pageIndex);
+        m_sheet->jumpToHighLight(tImagePageInfo.struuid, tImagePageInfo.pageIndex);
     }
 }
 
 void NotesWidget::onAddAnnotation()
 {
     m_sheet->setAnnotationInserting(true);
-}
-
-void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotation *anno)
-{
-    if (msgType == MSG_NOTE_ADD) {
-        addNoteItem(anno);
-    } else if (msgType == MSG_NOTE_DELETE) {
-        deleteNoteItem(anno);
-    }
 }
 
 void NotesWidget::copyNoteContent()

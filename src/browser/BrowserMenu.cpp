@@ -74,7 +74,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         this->addSeparator();
 
         if (sheet->isFullScreen()) {
-            createAction(tr("ExitFullscreen"), "ExitFullscreen");
+            createAction(tr("Exit Fullscreen"), "ExitFullscreen");
         } else {
             createAction(tr("Fullscreen"), "Fullscreen");
         }

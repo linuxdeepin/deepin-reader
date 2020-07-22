@@ -554,6 +554,15 @@ bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)
     return m_annotations.contains(annotation);
 }
 
+Annotation *BrowserPage::getAnnotationForUUid(const QString &uuid)
+{
+    for (Annotation *anno : m_annotations) {
+        if (anno->uniqueName() == uuid)
+            return anno;
+    }
+    return nullptr;
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     if (!m_annotations.contains(annotation))

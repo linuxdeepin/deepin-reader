@@ -20,10 +20,6 @@
 #include <QAbstractListModel>
 #include <QMap>
 
-namespace deepin_reader {
-class Annotation;
-}
-
 typedef enum E_SideBar {
     SIDE_THUMBNIL = 0,
     SIDE_BOOKMARK,
@@ -44,17 +40,15 @@ typedef enum ImageinfoType_e {
 typedef struct ImagePageInfo_t {
     int pageIndex;
 
+    QString struuid;
     QString strcontents;
     QString strSearchcount;
-
-    deepin_reader::Annotation *annotation;
 
     ImagePageInfo_t()
     {
         pageIndex = -1;
         strcontents = "";
         strSearchcount = "";
-        annotation = nullptr;
     }
 
     ImagePageInfo_t(int index)
@@ -96,12 +90,12 @@ public:
     void insertPageIndex(int pageIndex);
     void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
-    void removeItemForAnno(deepin_reader::Annotation *annotation);
+    void removeItemForUuid(const QString &uuid);
 
     QList<QModelIndex> getModelIndexForPageIndex(int pageIndex);
     void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);
     int getPageIndexForModelIndex(int row);
-    int findItemForAnno(deepin_reader::Annotation *annotation);
+    int findItemForUuid(const QString &uuid);
 
 public slots:
     void onUpdatePageImage(int pageIndex);

@@ -100,7 +100,7 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
     QString sText = m_pTextEdit->toPlainText().trimmed();
 
     if (!m_annotation->contents().isEmpty() && sText.isEmpty()) {
-        emit sigRemoveAnnotation(m_annotation);
+        emit sigRemoveAnnotation(m_annotation->uniqueName());
     } else if (m_annotation->contents() != sText) {
         emit sigUpdateAnnotation(m_annotation, sText);
     }

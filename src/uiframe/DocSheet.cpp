@@ -70,7 +70,8 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageFirst()), this, SLOT(onBrowserPageFirst()));
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
-    connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
+    connect(m_browser, SIGNAL(sigAddAnnotation(deepin_reader::Annotation *)), this, SLOT(onAddAnnotation(deepin_reader::Annotation *)));
+    connect(m_browser, SIGNAL(sigDeleteAnnotation(int, const QString &)), this, SLOT(onDeleteAnnotation(int, const QString &)));
     connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
 }
 
@@ -173,9 +174,9 @@ void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, unsigned int 
     m_browser->jumpToOutline(left, top, page);
 }
 
-void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
+void DocSheet::jumpToHighLight(const QString &uuid, const int index)
 {
-    m_browser->jumpToHighLight(annotation, index);
+    m_browser->jumpToHighLight(uuid, index);
 }
 
 void DocSheet::rotateLeft()
@@ -428,31 +429,35 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
     return m_browser->annotations();
 }
 
-void DocSheet::onRemoveAnnotation(deepin_reader::Annotation *annotation)
+void DocSheet::onRemoveAnnotation(const QString &uuid)
 {
-    removeAnnotation(annotation);
+    removeAnnotation(uuid);
 }
 
-bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
+bool DocSheet::removeHighlight(const QString &uuid)
 {
-    QString annoContent;
-    if (annotation && !annotation->contents().isEmpty())
-        annoContent = annotation->contents();
-
-    int ret = m_browser->removeAnnotation(annotation);
+    int ret = m_browser->removeAnnotation(uuid);
     if (ret) {
         setFileChanged(true);
-        if (!annoContent.isEmpty())
-            this->showTips(tr("The annotation has been removed"));
     }
     return ret;
 }
 
-bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annotations)
+bool DocSheet::removeAnnotation(const QString &uuid)
+{
+    int ret = m_browser->removeAnnotation(uuid);
+    if (ret) {
+        setFileChanged(true);
+        this->showTips(tr("The annotation has been removed"));
+    }
+    return ret;
+}
+
+bool DocSheet::removeAnnotations(const QList<QString> &uuids)
 {
     bool ret = false;
-    for (deepin_reader::Annotation *anno : annotations) {
-        ret = m_browser->removeAnnotation(anno);
+    for (const QString &uuid : uuids) {
+        ret = m_browser->removeAnnotation(uuid);
     }
     if (ret) {
         setFileChanged(true);
@@ -717,9 +722,14 @@ void DocSheet::onBrowserBookmark(int index, bool state)
     setBookMark(index, state);
 }
 
-void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *anno)
+void DocSheet::onAddAnnotation(deepin_reader::Annotation *anno)
 {
-    if (m_sidebar) m_sidebar->handleAnntationMsg(type, anno);
+    m_sidebar->addAnnotation(anno);
+}
+
+void DocSheet::onDeleteAnnotation(int index, const QString &uuid)
+{
+    m_sidebar->delteAnnotation(index, uuid);
 }
 
 void DocSheet::handleFindNext()

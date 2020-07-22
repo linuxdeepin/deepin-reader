@@ -38,7 +38,7 @@ public:
 
 signals:
     void sigNeedShowTips(const QString &tips, int index);
-    void sigRemoveAnnotation(deepin_reader::Annotation *annotation);
+    void sigRemoveAnnotation(const QString &);
     void sigUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
 
 public:
