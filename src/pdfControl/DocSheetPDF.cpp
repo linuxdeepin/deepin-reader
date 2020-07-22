@@ -655,6 +655,8 @@ void DocSheetPDF::onExtractPassword(const QString &password)
         if (nullptr == doc)
             return;
         emit doc->sigCurSheetChanged(this);
+        m_encryPage->close();
+        m_encryPage = nullptr;
     } else {
         m_encryPage->wrongPassWordSlot();
     }
