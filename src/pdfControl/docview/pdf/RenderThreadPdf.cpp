@@ -90,6 +90,7 @@ void RenderThreadPdf::run()
 //            _ins->m_renderTasks.pop();
 //        }
         if (m_renderTasks.count() <= 0) {
+            _ins->m_threadMutex.unlock();
             msleep(10);
             break;
         }
