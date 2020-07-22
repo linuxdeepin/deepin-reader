@@ -43,6 +43,9 @@ public slots:
     void wrongPassWordSlot();
     void onPasswordChanged();
 
+private slots:
+    void onUpdateTheme();
+
 private:
     DPushButton *m_nextbutton = nullptr;
     DPasswordEdit *m_password = nullptr;

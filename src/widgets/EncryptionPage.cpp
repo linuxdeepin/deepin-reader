@@ -69,11 +69,10 @@ void EncryptionPage::InitUI()
     mainlayout->addStretch();
 
     setAutoFillBackground(true);
-    DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
-    setPalette(plt);
 
+    onUpdateTheme();
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &EncryptionPage::onUpdateTheme);
 }
 
 void EncryptionPage::InitConnection()
@@ -117,4 +116,11 @@ void EncryptionPage::onPasswordChanged()
     } else {
         m_nextbutton->setEnabled(true);
     }
+}
+
+void EncryptionPage::onUpdateTheme()
+{
+    DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    setPalette(plt);
 }
