@@ -130,8 +130,6 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pStackedLayout->setCurrentWidget(sheet);
 
-        sheet->defaultFocus();
-
         m_pTabBar->insertSheet(sheet);
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
@@ -150,6 +148,8 @@ void CentralDocPage::openFile(QString &filePath)
         }
 
         sheet->openFile(password);
+
+        sheet->defaultFocus();
 
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(filePath, this);

@@ -98,19 +98,28 @@ DocSheetPDF::~DocSheetPDF()
 bool DocSheetPDF::isLocked()
 {
     Poppler::Document *document = Poppler::Document::load(filePath());
+
     if (nullptr == document)
         return false;
 
-    return document->isLocked();
+    bool isLocked = document->isLocked();
+    delete document;
+
+    return isLocked;
 }
 
 bool DocSheetPDF::tryPassword(QString password)
 {
     Poppler::Document *document = Poppler::Document::load(filePath());
+
     if (nullptr == document || !document->isLocked())
         return false;
 
-    return document->unlock(QByteArray(), QByteArray().append(password));
+    bool isPassword = document->unlock(QByteArray(), QByteArray().append(password));
+
+    delete document;
+
+    return isPassword;
 }
 
 void DocSheetPDF::openFile(QString password)
