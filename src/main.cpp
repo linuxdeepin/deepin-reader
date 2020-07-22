@@ -14,9 +14,6 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    // Init DTK.
-    Application::loadDXcbPlugin();
-
     Application a(argc, argv);
 
     QCommandLineParser parser;

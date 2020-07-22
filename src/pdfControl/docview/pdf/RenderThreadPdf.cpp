@@ -89,6 +89,10 @@ void RenderThreadPdf::run()
 //        while (_ins->m_renderTasks.count() > MAX_TASK_NUM) {
 //            _ins->m_renderTasks.pop();
 //        }
+        if (m_renderTasks.count() <= 0) {
+            msleep(10);
+            break;
+        }
 
         RenderTaskPdf task = m_renderTasks.pop();
         _ins->m_threadMutex.unlock();
