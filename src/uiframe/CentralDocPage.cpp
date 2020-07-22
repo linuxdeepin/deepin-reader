@@ -132,9 +132,6 @@ void CentralDocPage::openFile(QString &filePath)
 
         m_pTabBar->insertSheet(sheet);
 
-        emit sigSheetCountChanged(m_pStackedLayout->count());
-
-
         if (sheet->isLocked()) {
             sheet->showEncryPage();
         } else {
@@ -145,6 +142,8 @@ void CentralDocPage::openFile(QString &filePath)
 
             emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
         }
+
+        emit sigSheetCountChanged(m_pStackedLayout->count());
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(filePath, this);
 
