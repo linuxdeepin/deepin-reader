@@ -335,6 +335,25 @@
     </message>
 </context>
 <context>
+    <name>EncryptionPage</name>
+    <message>
+        <source>Encrypted file, please enter the password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileViewNoteWidget</name>
     <message>
         <source>Input limit reached</source>

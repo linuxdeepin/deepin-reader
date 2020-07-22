@@ -335,6 +335,25 @@
     </message>
 </context>
 <context>
+    <name>EncryptionPage</name>
+    <message>
+        <source>Encrypted file, please enter the password</source>
+        <translation>该文档已被加密,请输入密码</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation>密码错误</translation>
+    </message>
+</context>
+<context>
     <name>FileViewNoteWidget</name>
     <message>
         <source>Input limit reached</source>
