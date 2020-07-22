@@ -61,4 +61,7 @@
         <file>builtin/dark/icons/dr_bookmark_hover_39px.svg</file>
         <file>builtin/dark/icons/dr_bookmark_pressed_39px.svg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>builtin/icons/compress_lock_128px.svg</file>
+    </qresource>
 </RCC>

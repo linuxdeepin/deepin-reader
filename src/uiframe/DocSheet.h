@@ -134,6 +134,8 @@ public:
 
     virtual qreal maxScaleFactor();
 
+    virtual void showEncryPage();
+
     QSet<int> getBookMarkList() const;
 
     DocOperation operation();

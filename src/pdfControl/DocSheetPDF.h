@@ -14,7 +14,7 @@ class SheetSidebar;
 class DocummentProxy;
 class SheetBrowserArea;
 class FindWidget;
-
+class EncryptionPage;
 class DocSheetPDF : public DocSheet
 {
     Q_OBJECT
@@ -128,6 +128,9 @@ public:
     int  currentState();
 
     void stopSearch() override;
+
+    void showEncryPage() override;
+
 signals:
     void sigScaleChanged(double);
 
@@ -152,6 +155,12 @@ private slots:
 
     void onBrowserSizeChanged(double scaleFactor);
 
+    void onExtractPassword(const QString &password);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    void childEvent(QChildEvent *c) override;
+
 private:
     SheetBrowserPDF *m_browser = nullptr;
     QStackedWidget *m_pRightWidget = nullptr;
@@ -159,6 +168,8 @@ private:
     FindWidget     *m_pFindWidget = nullptr;
     bool            m_bOldState = false;
     int m_currentState = Default_State;
+
+    EncryptionPage  *m_encryPage = nullptr;
 };
 
 #endif // DOCSHEETPDF_H

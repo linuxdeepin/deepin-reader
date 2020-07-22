@@ -137,20 +137,12 @@ void CentralDocPage::openFile(QString &filePath)
         emit sigSheetCountChanged(m_pStackedLayout->count());
 
         QString password;
-
         if (sheet->isLocked()) {
-            do {
-                //...对话框 取密码
-            } while (!sheet->tryPassword(password));
-
-            //如果失败
-            //...onOpened(sheet,false)
+            sheet->showEncryPage();
+        } else {
+            sheet->openFile(password);
+            sheet->defaultFocus();
         }
-
-        sheet->openFile(password);
-
-        sheet->defaultFocus();
-
     } else if (Dr::DjVu == fileType) {
         DocSheet *sheet = new DocSheetDJVU(filePath, this);
 

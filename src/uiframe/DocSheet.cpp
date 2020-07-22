@@ -485,3 +485,8 @@ QSet<int> DocSheet::getBookMarkList() const
 {
     return m_bookmarks;
 }
+
+void DocSheet::showEncryPage()
+{
+    qDebug() << "unrealized";
+}

@@ -35,11 +35,12 @@
 #include "widgets/FindWidget.h"
 #include "djvuControl/SheetBrowserDJVU.h"
 #include "Database.h"
+#include "widgets/EncryptionPage.h"
 
 DocSheetPDF::DocSheetPDF(QString filePath, DWidget *parent)
     : DocSheet(Dr::PDF, filePath, parent)
 {
-    m_operation.scaleFactor = 100.0;
+    m_operation.scaleFactor = 1.0;
     m_pRightWidget = new QStackedWidget(this);
     m_pSpinnerWidget = new SpinnerWidget(this);
 
@@ -606,5 +607,42 @@ void DocSheetPDF::onBrowserSizeChanged(double scaleFactor)
         m_browser->setScale(scaleFactor * 100);
         m_operation.scaleFactor = scaleFactor;
         emit sigFileChanged(this);
+    }
+}
+
+void DocSheetPDF::resizeEvent(QResizeEvent *event)
+{
+    DocSheet::resizeEvent(event);
+    if (m_encryPage) {
+        m_encryPage->setGeometry(0, 0, this->width(), this->height());
+    }
+}
+
+void DocSheetPDF::childEvent(QChildEvent *)
+{
+    //Not todO;
+}
+
+void DocSheetPDF::showEncryPage()
+{
+    if (m_encryPage == nullptr) {
+        m_encryPage = new EncryptionPage(this);
+        connect(m_encryPage, &EncryptionPage::sigExtractPassword, this, &DocSheetPDF::onExtractPassword);
+        this->stackUnder(m_encryPage);
+    }
+    m_encryPage->setGeometry(0, 0, this->width(), this->height());
+    m_encryPage->raise();
+    m_encryPage->show();
+}
+
+void DocSheetPDF::onExtractPassword(const QString &password)
+{
+    bool ret = this->tryPassword(password);
+    if (ret) {
+        m_encryPage->hide();
+        this->openFile(password);
+        this->defaultFocus();
+    } else {
+        m_encryPage->wrongPassWordSlot();
     }
 }

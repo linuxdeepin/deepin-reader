@@ -1,4 +1,5 @@
 HEADERS += \
+    $$PWD/EncryptionPage.h \
     $$PWD/FileViewWidget.h \
     $$PWD/AttrScrollWidget.h \
     $$PWD/FileAttrWidget.h \
@@ -14,6 +15,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
+    $$PWD/EncryptionPage.cpp \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
     $$PWD/ScaleMenu.cpp \
