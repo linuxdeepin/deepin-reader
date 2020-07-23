@@ -591,19 +591,19 @@ QList<deepin_reader::Annotation *> SheetBrowser::annotations()
     return list;
 }
 
-bool SheetBrowser::removeAnnotation(const QString &uuid)
+bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     bool ret = false;
     foreach (BrowserPage *item, m_items) {
-        Annotation *annotation = item->getAnnotationForUUid(uuid);
-        if (annotation) {
+        if (item->hasAnnotation(annotation)) {
             ret = item->removeAnnotation(annotation);
-            if (ret)
-                emit sigDeleteAnnotation(item->itemIndex(), uuid);
-            return true;
+            break;
         }
     }
-    return false;
+    if (ret)
+        emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+
+    return ret;
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
@@ -613,8 +613,6 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
 
     bool ret{false};
 
-    int index = annotation->page - 1;
-    const QString &uuid = annotation->uniqueName();
     foreach (BrowserPage *item, m_items) {
         if (item && item->hasAnnotation(annotation)) {
             ret = item->updateAnnotation(annotation, text, color);
@@ -623,9 +621,9 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
 
     if (ret) {
         if (!text.isEmpty())
-            emit sigAddAnnotation(annotation);
+            emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
         else
-            emit sigDeleteAnnotation(index, uuid);
+            emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
     }
 
     return ret;
@@ -669,22 +667,15 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, un
     jump2PagePos(jumpPage, linkLeft, linkTop);
 }
 
-void SheetBrowser::jumpToHighLight(const QString &uuid, const int index)
+void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
 {
-    if (nullptr == m_sheet || index < 0 || index >= m_items.count())
+    if (nullptr == m_sheet || nullptr == annotation || (index < 0 || index >= m_items.count()))
         return;
 
     BrowserPage *jumpPage = m_items.at(index);
-    if (jumpPage == nullptr)
-        return;
-
-    Annotation *annotation = jumpPage->getAnnotationForUUid(uuid);
-    if (annotation == nullptr)
-        return;
-
     QList<QRectF> anootList = annotation->boundary();
 
-    if (anootList.count() < 1)
+    if (nullptr == jumpPage || anootList.count() < 1)
         return;
 
     QRectF firstRect = anootList.at(0);
@@ -929,7 +920,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     }
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation)
-                        m_sheet->removeAnnotation(annotation->annotation()->uniqueName());
+                        m_sheet->removeAnnotation(annotation->annotation());
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
@@ -942,10 +933,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
                     if (annotation) {
-                        if (annotation->annotationText().isEmpty())
-                            m_sheet->removeHighlight(annotation->annotation()->uniqueName());
-                        else
-                            m_sheet->removeAnnotation(annotation->annotation()->uniqueName());
+                        m_sheet->removeAnnotation(annotation->annotation());
                     }
                 } else if (objectname == "AddAnnotationHighlight") {
                     QColor color = menu.getColor();
@@ -1240,7 +1228,7 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
     }
 
     if (anno && !contents.isEmpty()) {
-        emit sigAddAnnotation(anno);
+        emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
     }
     return anno;
 }

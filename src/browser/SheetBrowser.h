@@ -100,13 +100,13 @@ public:
 
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
-    void jumpToHighLight(const QString &uuid, const int index);
+    void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
 
     QList< deepin_reader::Annotation * > annotations();
 
     Annotation *addIconAnnotation(const QPointF, const QString);
 
-    bool removeAnnotation(const QString &uuid);
+    bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
@@ -141,9 +141,7 @@ signals:
 
     void sigNeedBookMark(int index, bool state);
 
-    void sigAddAnnotation(deepin_reader::Annotation *annotation);
-
-    void sigDeleteAnnotation(int index, const QString &uuid);
+    void sigOperaAnnotation(int type, deepin_reader::Annotation *annotation);
 
     void sigThumbnailUpdated(int index);
 

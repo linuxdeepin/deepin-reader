@@ -44,8 +44,7 @@ public:
     void nextPage();
     void DeleteItemByKey();
     void handleOpenSuccess();
-    void addNoteItem(deepin_reader::Annotation *anno);
-    void deleteNoteItem(const QString &uuid);
+    void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
@@ -61,6 +60,8 @@ private slots:
 
 private:
     void copyNoteContent();
+    void addNoteItem(deepin_reader::Annotation *anno);
+    void deleteNoteItem(deepin_reader::Annotation *anno);
     void deleteAllItem();
 
 private:

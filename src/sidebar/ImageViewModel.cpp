@@ -165,7 +165,13 @@ void ImageViewModel::insertPageIndex(int pageIndex)
 
 void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
-    int index = findItemForUuid(tImagePageInfo.struuid);
+    int index = -1;
+    if (tImagePageInfo.annotation == nullptr) {
+        index = m_pagelst.indexOf(tImagePageInfo);
+    } else {
+        index = findItemForAnno(tImagePageInfo.annotation);
+    }
+
     if (index == -1) {
         int iterIndex = 0;
         int rowCount = m_pagelst.size();
@@ -191,9 +197,9 @@ void ImageViewModel::removePageIndex(int pageIndex)
     }
 }
 
-void ImageViewModel::removeItemForUuid(const QString &uuid)
+void ImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
 {
-    int index = findItemForUuid(uuid);
+    int index = findItemForAnno(annotation);
     if (index >= 0) {
         beginResetModel();
         m_pagelst.removeAt(index);
@@ -208,11 +214,11 @@ void ImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tIm
     }
 }
 
-int ImageViewModel::findItemForUuid(const QString &uuid)
+int ImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation)
 {
     int count = m_pagelst.size();
     for (int index = 0; index < count; index++) {
-        if (uuid == m_pagelst.at(index).struuid) {
+        if (annotation == m_pagelst.at(index).annotation) {
             return index;
         }
     }

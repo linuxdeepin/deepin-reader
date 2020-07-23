@@ -93,7 +93,7 @@ void ImageListView::handleOpenSuccess()
                 ImagePageInfo_t tImagePageInfo;
                 tImagePageInfo.pageIndex = pageIndex;
                 tImagePageInfo.strcontents = annotion->contents();
-                tImagePageInfo.struuid = annotion->uniqueName();
+                tImagePageInfo.annotation = annotion;
                 pageSrclst << tImagePageInfo;
             }
         }

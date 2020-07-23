@@ -234,20 +234,12 @@ void SheetSidebar::handleUpdatePartThumbnail(const int &index)
     }
 }
 
-void SheetSidebar::addAnnotation(deepin_reader::Annotation *anno)
+void SheetSidebar::handleAnntationMsg(const int &msg, deepin_reader::Annotation *anno)
 {
     if (m_notesWidget)
-        m_notesWidget->addNoteItem(anno);
+        m_notesWidget->handleAnntationMsg(msg, anno);
 
     handleUpdateThumbnail(anno->page - 1);
-}
-
-void SheetSidebar::delteAnnotation(int index, const QString &uuid)
-{
-    if (m_notesWidget)
-        m_notesWidget->deleteNoteItem(uuid);
-
-    handleUpdateThumbnail(index);
 }
 
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)

@@ -67,13 +67,10 @@ public :
     void handleFindContentComming(const deepin_reader::SearchResult &);
     int  handleFindFinished();
     void handleRotate(int);
-
-    void addAnnotation(deepin_reader::Annotation *anno);
-    void delteAnnotation(int index, const QString &uuid);
-
 public slots:
     void handleUpdateThumbnail(const int &index);
     void handleUpdatePartThumbnail(const int &index);
+    void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

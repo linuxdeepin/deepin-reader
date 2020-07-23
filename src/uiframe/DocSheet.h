@@ -93,7 +93,7 @@ public:
 
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
-    void jumpToHighLight(const QString &uuid, const int index);
+    void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
 
     void rotateLeft();
 
@@ -143,11 +143,9 @@ public:
 
     QList<deepin_reader::Annotation *> annotations();
 
-    bool removeHighlight(const QString &uuid);
+    bool removeAnnotation(deepin_reader::Annotation *annotation);
 
-    bool removeAnnotation(const QString &uuid);
-
-    bool removeAnnotations(const QList<QString> &uuids);
+    bool removeAnnotations(const QList<deepin_reader::Annotation *> &annotations);
 
     QList<qreal> scaleFactorList();
 
@@ -210,7 +208,7 @@ private slots:
 
     void onFindFinished();
 
-    void onRemoveAnnotation(const QString &uuid);
+    void onRemoveAnnotation(deepin_reader::Annotation *annotation);
 
 public:
     int label2pagenum(QString label);
@@ -244,9 +242,7 @@ private slots:
 
     void onBrowserBookmark(int index, bool state);
 
-    void onAddAnnotation(deepin_reader::Annotation *);
-
-    void onDeleteAnnotation(int index, const QString &uuid);
+    void onBrowserOperaAnnotation(int, deepin_reader::Annotation *);
 
 private:
     SheetOperation  m_operation;
