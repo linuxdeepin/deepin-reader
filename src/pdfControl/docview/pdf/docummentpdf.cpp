@@ -49,11 +49,15 @@ protected slots:
 private:
     void setBasicInfo(const QString &filepath);
 
+private:
+    QString m_wordPassword;
+
 };
 
 void DocummentPDFPrivate::loadDocumment(QString filepath, QString password)
 {
     Q_Q(DocummentPDF);
+    m_wordPassword = password;
     document = Poppler::Document::load(filepath, QByteArray(), QByteArray().append(password));
 
     if (nullptr == document || document->numPages() <= 0) {
@@ -531,7 +535,7 @@ bool DocummentPDF::freshFile(QString file)
         delete d->document;
         d->document = nullptr;
     }
-    d->document = Poppler::Document::load(file);
+    d->document = Poppler::Document::load(file, QByteArray(), QByteArray().append(d->m_wordPassword));
 
     if (nullptr == d->document || d->document->numPages() <= 0) {
         return false;
