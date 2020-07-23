@@ -441,22 +441,12 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
     return m_browser->annotations();
 }
 
-void DocSheet::onRemoveAnnotation(deepin_reader::Annotation *annotation)
+bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation, bool tips)
 {
-    removeAnnotation(annotation);
-}
-
-bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
-{
-    QString annoContent;
-    if (annotation && !annotation->contents().isEmpty())
-        annoContent = annotation->contents();
-
     int ret = m_browser->removeAnnotation(annotation);
     if (ret) {
         setDocumentChanged(true);
-        if (!annoContent.isEmpty())
-            this->showTips(tr("The annotation has been removed"));
+        if (tips) this->showTips(tr("The annotation has been removed"));
     }
     return ret;
 }
@@ -740,6 +730,8 @@ void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *ann
 {
     if (m_sidebar)
         m_sidebar->handleAnntationMsg(type, anno);
+    if (MSG_NOTE_DELETE != type)
+        setDocumentChanged(true);
 }
 
 void DocSheet::handleFindNext()

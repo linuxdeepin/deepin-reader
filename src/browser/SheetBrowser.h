@@ -181,6 +181,8 @@ private slots:
 
     void onAddHighLightAnnot(BrowserPage *, QString, QColor);
 
+    void onRemoveAnnotation(deepin_reader::Annotation *annotation);
+
     void onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
 
 private:

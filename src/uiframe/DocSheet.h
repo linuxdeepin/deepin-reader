@@ -143,7 +143,7 @@ public:
 
     QList<deepin_reader::Annotation *> annotations();
 
-    bool removeAnnotation(deepin_reader::Annotation *annotation);
+    bool removeAnnotation(deepin_reader::Annotation *annotation, bool tips = true);
 
     bool removeAnnotations(const QList<deepin_reader::Annotation *> &annotations);
 
@@ -209,8 +209,6 @@ private slots:
     void onFindContentComming(const deepin_reader::SearchResult &);
 
     void onFindFinished();
-
-    void onRemoveAnnotation(deepin_reader::Annotation *annotation);
 
 public:
     int label2pagenum(QString label);
