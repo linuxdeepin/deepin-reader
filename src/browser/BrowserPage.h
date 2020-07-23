@@ -49,6 +49,8 @@ public:
 
     ~BrowserPage() override;
 
+    void reOpen(deepin_reader::Page *page);
+
     QRectF boundingRect()const override;
 
     QRectF bookmarkRect();

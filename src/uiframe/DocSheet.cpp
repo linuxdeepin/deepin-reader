@@ -216,7 +216,6 @@ bool DocSheet::openFileExec()
         if (!m_browser->loadPages(m_operation, m_bookmarks))
             return false;
         handleOpenSuccess();
-        setFileChanged(false);
         setOperationChanged();
         return true;
     }
@@ -236,7 +235,7 @@ void DocSheet::setBookMark(int index, int state)
     if (m_sidebar) m_sidebar->setBookMark(index, state);
     m_browser->setBookMark(index, state);
 
-    setFileChanged(true);
+    setBookmarkChanged(true);
 }
 
 void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
@@ -254,7 +253,7 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
     if (!state)
         showTips(tr("The bookmark has been removed"));
 
-    setFileChanged(true);
+    setBookmarkChanged(true);
 }
 
 int DocSheet::pagesNumber()
@@ -340,25 +339,39 @@ bool DocSheet::getImage(int index, QImage &image, double width, double height, Q
 
 bool DocSheet::fileChanged()
 {
-    return m_fileChanged;
+    return (m_documentChanged || m_bookmarkChanged);
 }
 
 bool DocSheet::saveData()
 {
-    //m_browser->save();
+    if (m_documentChanged && !m_browser->save())
+        return false;
 
-    if (Database::instance()->saveBookmarks(filePath(), m_bookmarks)) {
-        m_fileChanged = false;
-        return true;
-    }
-    return false;
+    m_documentChanged = false;
+
+    if (m_bookmarkChanged && !Database::instance()->saveBookmarks(filePath(), m_bookmarks))
+        return false;
+
+    m_bookmarkChanged = false;
+
+    return true;
 }
 
 bool DocSheet::saveAsData(QString filePath)
 {
     stopSearch();
+
+    if (m_documentChanged) {
+        if (!m_browser->saveAs(filePath))
+            return false;
+    } else {
+        if (!Utils::copyFile(this->filePath(), filePath))
+            return false;
+    }
+
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
-    return Utils::copyFile(this->filePath(), filePath);
+
+    return true;
 }
 
 void DocSheet::handleSearch()
@@ -441,7 +454,7 @@ bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation)
 
     int ret = m_browser->removeAnnotation(annotation);
     if (ret) {
-        setFileChanged(true);
+        setDocumentChanged(true);
         if (!annoContent.isEmpty())
             this->showTips(tr("The annotation has been removed"));
     }
@@ -455,7 +468,7 @@ bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annot
         ret = m_browser->removeAnnotation(anno);
     }
     if (ret) {
-        setFileChanged(true);
+        setDocumentChanged(true);
         this->showTips(tr("The annotation has been removed"));
     }
     return ret;
@@ -636,9 +649,15 @@ void DocSheet::closeFullScreen()
     doc->quitFullScreen();
 }
 
-void DocSheet::setFileChanged(bool changed)
+void DocSheet::setDocumentChanged(bool changed)
 {
-    m_fileChanged = changed;
+    m_documentChanged = changed;
+    emit sigFileChanged(this);
+}
+
+void DocSheet::setBookmarkChanged(bool changed)
+{
+    m_bookmarkChanged = changed;
     emit sigFileChanged(this);
 }
 

@@ -55,6 +55,8 @@
 #include <DMenu>
 #include <DGuiApplicationHelper>
 #include <QDomDocument>
+#include <QFileInfo>
+#include <QTemporaryFile>
 
 const int ICONANNOTE_WIDTH = 20;
 
@@ -141,12 +143,83 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath)
     if (nullptr == m_document)
         return false;
 
+    m_fileType = fileType;
+    m_filePath = filePath;
+
     return true;
 }
 
-bool SheetBrowser::save(const QString &filePath)
+bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
 {
+    if (nullptr == m_document)  //未打开的无法重新打开
+        return false;
 
+    delete m_document;
+
+    if (Dr::PDF == fileType)
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath);
+    else if (Dr::DjVu == fileType)
+        m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
+
+    if (nullptr == m_document)
+        return false;
+
+    for (int i = 0; i < m_document->numberOfPages(); ++i) {
+        if (m_items.count() > i)
+            m_items[i]->reOpen(m_document->page(i));
+        else
+            return false;
+    }
+
+    return true;
+}
+
+bool SheetBrowser::save()
+{
+    if (m_filePath.isEmpty())
+        return false;
+
+    QTemporaryFile temporaryFile;
+
+    QString strtemfile = temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(m_filePath).fileName();
+
+    temporaryFile.setFileTemplate(strtemfile);
+
+    if (!temporaryFile.open()) {
+        return false;
+    }
+
+    temporaryFile.close();
+
+    if (!m_document->save(temporaryFile.fileName(), true)) {
+        return false;
+    }
+
+    QFile file(m_filePath);
+
+    if (!temporaryFile.open()) {
+        return false;
+    }
+    if (temporaryFile.size() <= 1)
+        return  false;
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        return false;
+    }
+
+    if (!Utils::copyFile(strtemfile, m_filePath)) {
+        return false;
+    }
+
+    return reOpen(m_fileType, m_filePath);
+}
+
+bool SheetBrowser::saveAs(const QString &filePath)
+{
+    if (!m_document->save(filePath, true))
+        return false;
+
+    return reOpen(m_fileType, filePath);
 }
 
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)

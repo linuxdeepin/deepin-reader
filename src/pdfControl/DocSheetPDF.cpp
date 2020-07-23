@@ -530,6 +530,18 @@ int  DocSheetPDF::pointInWhichPage(QPoint pos)
     return -1;
 }
 
+void DocSheetPDF::setDocumentChanged(bool changed)
+{
+    m_documentChanged = changed;
+    emit fileChanged();
+}
+
+void DocSheetPDF::setBookmarkChanged(bool changed)
+{
+    m_bookmarkChanged = changed;
+    emit fileChanged();
+}
+
 void DocSheetPDF::jumpToHighLight(const QString &uuid, int index)
 {
     DocummentProxy *docProxy = m_browser->GetDocProxy();

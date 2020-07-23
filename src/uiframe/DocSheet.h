@@ -185,7 +185,9 @@ public:
 
     void closeFullScreen();
 
-    void setFileChanged(bool changed);
+    void setDocumentChanged(bool changed);
+
+    void setBookmarkChanged(bool changed);
 
     void setOperationChanged();
 
@@ -255,7 +257,8 @@ private:
     Dr::FileType    m_fileType;
     QString         m_uuid;
 
-    bool m_fileChanged = false;
+    bool m_documentChanged = false;
+    bool m_bookmarkChanged = false;
 
 };
 

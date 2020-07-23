@@ -52,7 +52,6 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
-    //setCacheMode(CacheMode::ItemCoordinateCache);
 }
 
 BrowserPage::~BrowserPage()
@@ -60,6 +59,24 @@ BrowserPage::~BrowserPage()
     items.remove(this);
     if (nullptr != m_page)
         delete m_page;
+}
+
+void BrowserPage::reOpen(Page *page)
+{
+    if (nullptr != m_page)
+        delete m_page;
+
+    m_page = page;
+
+    qDeleteAll(m_annotations);
+    m_annotations.clear();
+
+    qDeleteAll(m_annotationItems);
+    m_annotationItems.clear();
+
+    m_hasLoadedAnnotation = false;
+
+    //文字不需要重新加载
 }
 
 QRectF BrowserPage::boundingRect() const

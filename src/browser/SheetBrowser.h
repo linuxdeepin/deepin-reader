@@ -54,7 +54,11 @@ public:
 
     bool open(const Dr::FileType &fileType, const QString &filePath);
 
-    bool save(const QString &filePath);
+    bool reOpen(const Dr::FileType &fileType, const QString &filePath);
+
+    bool save();
+
+    bool saveAs(const QString &filePath);
 
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 
@@ -198,6 +202,11 @@ private:
     deepin_reader::Document *m_document = nullptr;
     BrowserMagniFier *m_magnifierLabel = nullptr;
     DocSheet *m_sheet = nullptr;
+
+    Dr::FileType m_fileType;
+    QString m_filePath;
+    QString m_filePassword;
+
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;
     FindWidget *m_pFindWidget = nullptr;
