@@ -1411,11 +1411,9 @@ void DocummentBase::initConnect()
     Q_D(DocummentBase);
     for (int i = 0; i < d->m_pages.size(); i++) {
         d->m_pages.at(i)->setScaleAndRotate(d->m_scale, d->m_rotate);
-        connect(d->m_pages.at(i), &PageBase::sigBookMarkButtonClicked, this, [ = ](int page, bool state) {
-            emit sigPageBookMarkButtonClicked(page, state);
-        });
+        connect(d->m_pages.at(i), &PageBase::sigBookMarkButtonClicked, this, &DocummentBase::sigPageBookMarkButtonClicked);
         connect(d->m_pages.at(i), SIGNAL(signal_MagnifierPixmapCacheLoaded(int)), this, SLOT(slot_MagnifierPixmapCacheLoaded(int)));
-        QApplication::processEvents();
+        //QApplication::processEvents();
     }
 }
 
@@ -1502,7 +1500,7 @@ void DocummentBase::slot_docummentLoaded(bool result)
         d->m_vboxLayout->setAlignment(d->m_widget, Qt::AlignCenter);
         qwidget->setMouseTracking(true);
         d->m_widgets.append(qwidget);
-        QApplication::processEvents();
+        //QApplication::processEvents();
     }
 
     initConnect();
