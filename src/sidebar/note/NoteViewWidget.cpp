@@ -87,6 +87,10 @@ void NoteViewWidget::setEditText(const QString &note)
     m_pTextEdit->clear();
     m_pTextEdit->setPlainText(note);
     m_strNote = note;
+
+    QTextCursor cursor = m_pTextEdit->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    m_pTextEdit->setTextCursor(cursor);
 }
 
 void NoteViewWidget::setAnnotation(deepin_reader::Annotation *annotation)

@@ -58,7 +58,7 @@
 #include <QFileInfo>
 #include <QTemporaryFile>
 
-const int ICONANNOTE_WIDTH = 20;
+const int ICONANNOTE_WIDTH = 24;
 
 DWIDGET_USE_NAMESPACE
 
@@ -540,25 +540,28 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
     if (startPage == endPage) {
         highLightAnnot = startPage->addHighlightAnnotation(contains, color);
-        return highLightAnnot;
+    } else {
+        if (startPage != endPage && endPage->itemIndex() < startPage->itemIndex()) {
+            BrowserPage *tmpPage = endPage;
+            endPage = startPage;
+            startPage = tmpPage;
+            tmpPage = nullptr;
+        }
+
+        int startIndex = m_items.indexOf(startPage);
+        int endIndex = m_items.indexOf(endPage);
+
+        for (int index = startIndex; index < endIndex; index++) {
+            if (m_items.at(index))
+                emit sigAddHighLightAnnot(m_items.at(index), contains, color); //highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
+        }
+
+        highLightAnnot = endPage->addHighlightAnnotation(contains, color);
     }
 
-    if (startPage != endPage && endPage->itemIndex() < startPage->itemIndex()) {
-        BrowserPage *tmpPage = endPage;
-        endPage = startPage;
-        startPage = tmpPage;
-        tmpPage = nullptr;
+    if (highLightAnnot) {
+        emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
     }
-
-    int startIndex = m_items.indexOf(startPage);
-    int endIndex = m_items.indexOf(endPage);
-
-    for (int index = startIndex; index < endIndex; index++) {
-        if (m_items.at(index))
-            emit sigAddHighLightAnnot(m_items.at(index), contains, color); //highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
-    }
-
-    highLightAnnot = endPage->addHighlightAnnotation(contains, color);
 
     return highLightAnnot;
 }
@@ -931,31 +934,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
         if (btn == Qt::LeftButton) {
-            QPointF mousepoint = mapToScene(event->pos());
             scene()->setSelectionArea(QPainterPath());
-            m_selectStartPos = QPointF();
             m_selectEndPos = QPointF();
-
-            deepin_reader::Annotation *clickAnno = nullptr;
-
-            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-            clickAnno = getClickAnnot(mousepoint);
-
-            if (m_annotationInserting) {
-                if (clickAnno && clickAnno->type() == 1/*AText*/) {
-                    updateAnnotation(clickAnno, clickAnno->contents());
-                } else {
-                    clickAnno = addIconAnnotation(mousepoint, "");
-                }
-                showNoteEditWidget(clickAnno);
-                m_annotationInserting = false;
-            } else {
-                if (nullptr != clickAnno)
-                    showNoteEditWidget(clickAnno);
-                else {
-                    m_selectStartPos = m_selectPressedPos = mousepoint;
-                }
-            }
+            m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
@@ -1109,24 +1090,24 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
     } else {
         if (m_selectPressedPos.isNull()) {
-            QGraphicsItem *item = itemAt(event->pos());
-            if (item != nullptr) {
-                if (!item->isPanel()) {
-                    BrowserAnnotation *annotation  = dynamic_cast<BrowserAnnotation *>(item);
-                    if (annotation != nullptr && !annotation->annotationText().isEmpty()) {
-                        m_tipsWidget->setText(annotation->annotationText());
-                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
-                        m_tipsWidget->move(showRealPos);
-                        m_tipsWidget->show();
-                        setCursor(QCursor(Qt::PointingHandCursor));
-                    } else {
-                        m_tipsWidget->hide();
-                        setCursor(QCursor(Qt::IBeamCursor));
-                    }
+            BrowserPage *page = getBrowserPageForPoint(mousePos);
+            if (page) {
+                BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
+                if (browserAnno && !browserAnno->annotationText().isEmpty()) {
+                    m_tipsWidget->setText(browserAnno->annotationText());
+                    QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                    m_tipsWidget->move(showRealPos);
+                    m_tipsWidget->show();
+                    setCursor(QCursor(Qt::PointingHandCursor));
+                } else if (page->getBrowserWord(mousePos)) {
+                    m_tipsWidget->hide();
+                    setCursor(QCursor(Qt::IBeamCursor));
                 } else {
                     m_tipsWidget->hide();
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
+            } else {
+                setCursor(QCursor(Qt::ArrowCursor));
             }
         } else {
             m_tipsWidget->hide();
@@ -1205,8 +1186,26 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
+        const QPointF &mousepoint = mapToScene(event->pos());
         m_selectPressedPos = QPointF();
-        m_selectEndPos = mapToScene(event->pos());
+        m_selectEndPos = mousepoint;
+
+        deepin_reader::Annotation *clickAnno = nullptr;
+        //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
+        clickAnno = getClickAnnot(mousepoint);
+
+        if (m_annotationInserting) {
+            if (clickAnno && clickAnno->type() == 1/*AText*/) {
+                updateAnnotation(clickAnno, clickAnno->contents());
+            } else {
+                clickAnno = addIconAnnotation(mousepoint, "");
+            }
+            showNoteEditWidget(clickAnno);
+            m_annotationInserting = false;
+        } else {
+            if (nullptr != clickAnno && selectedWordsText().length() == 1)
+                showNoteEditWidget(clickAnno);
+        }
     }
 
     QGraphicsView::mouseReleaseEvent(event);

@@ -1,5 +1,6 @@
 #include "BrowserAnnotation.h"
 #include "BrowserPage.h"
+#include "document/Model.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -8,7 +9,10 @@
 BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation) : QGraphicsItem(parent),
     m_annotation(annotation), m_rect(rect), m_parent(parent)
 {
-
+    if (m_annotation->type() == 1/*TextIcon*/)
+        setZValue(deepin_reader::Z_ORDER_ICON);
+    else
+        setZValue(deepin_reader::Z_ORDER_HIGHLIGHT);
 }
 
 void BrowserAnnotation::setScaleFactorAndRotation(Dr::Rotation rotation)

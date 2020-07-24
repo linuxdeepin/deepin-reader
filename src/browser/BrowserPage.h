@@ -131,7 +131,9 @@ public:
 
     QRectF translateRect(const QRectF &rect);
 
-    Annotation *getAnnotationForUUid(const QString &uuid);
+    BrowserAnnotation *getBrowserAnnotation(const QPoint &point);
+
+    BrowserWord *getBrowserWord(const QPoint &point);
 
 private:
     void reloadAnnotations();

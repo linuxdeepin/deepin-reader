@@ -497,6 +497,8 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
+    renderViewPort(true);
+
     return  annotation->updateAnnotation(text, color);
 }
 
@@ -561,7 +563,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
     }
 
-    renderViewPort();
+    renderViewPort(true);
 
     return highLightAnnot;
 }
@@ -569,15 +571,6 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)
 {
     return m_annotations.contains(annotation);
-}
-
-Annotation *BrowserPage::getAnnotationForUUid(const QString &uuid)
-{
-    for (Annotation *anno : m_annotations) {
-        if (anno->uniqueName() == uuid)
-            return anno;
-    }
-    return nullptr;
 }
 
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
@@ -685,8 +678,6 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
 
 bool BrowserPage::sceneEvent(QEvent *event)
 {
-    return QGraphicsItem::sceneEvent(event);
-
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
         if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))
@@ -796,4 +787,32 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
         break;
     }
     return  newrect;
+}
+
+BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPoint &point)
+{
+    BrowserAnnotation *item = nullptr;
+    const QList<QGraphicsItem *> &itemlst = scene()->items(this->mapToScene(point));
+    for (QGraphicsItem *itemIter : itemlst) {
+        item = dynamic_cast<BrowserAnnotation *>(itemIter);
+        if (item != nullptr) {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
+BrowserWord *BrowserPage::getBrowserWord(const QPoint &point)
+{
+    BrowserWord *item = nullptr;
+    const QList<QGraphicsItem *> &itemlst = scene()->items(this->mapToScene(point));
+    for (QGraphicsItem *itemIter : itemlst) {
+        item = dynamic_cast<BrowserWord *>(itemIter);
+        if (item != nullptr) {
+            return item;
+        }
+    }
+
+    return nullptr;
 }

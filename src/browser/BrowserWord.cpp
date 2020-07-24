@@ -8,7 +8,7 @@
 
 BrowserWord::BrowserWord(QGraphicsItem *parent, deepin_reader::Word word) : QGraphicsItem(parent), m_word(word)
 {
-
+    setZValue(deepin_reader::Z_ORDER_SELECT_TEXT);
 }
 
 void BrowserWord::setScaleFactor(qreal scaleFactor)
@@ -46,9 +46,8 @@ QRectF BrowserWord::boundingBox() const
 void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (isSelected()) {
-        painter->setBrush(QBrush(Qt::red));
+        painter->setBrush(QColor(72, 118, 255, 100));
         painter->setPen(Qt::NoPen);
-        painter->setOpacity(0.1);
         painter->drawRect(option->rect.x() + 1, option->rect.y() + 1, option->rect.width() - 2, option->rect.height() - 2);
     }
 }

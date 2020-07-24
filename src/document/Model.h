@@ -40,6 +40,11 @@ class Annotation;
 }
 
 namespace deepin_reader {
+
+const int Z_ORDER_HIGHLIGHT   = 2;
+const int Z_ORDER_SELECT_TEXT = 3;
+const int Z_ORDER_ICON        = 4;
+
 struct Link {
     QPainterPath boundary;
     int page;
