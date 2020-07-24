@@ -104,13 +104,14 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
     m_curSheet = sheet;
 
-    if (nullptr == m_curSheet || m_curSheet->type() == Dr::Unknown || !m_curSheet->isUnLocked()) {
+    if (nullptr == m_curSheet || m_curSheet->type() == Dr::Unknown) {
         SetBtnDisable(true);
         return;
 
     } else if (Dr::PDF == m_curSheet->type()) {
-
-        SetBtnDisable(false);
+        if (m_curSheet->isUnLocked()) {
+            SetBtnDisable(false);
+        }
 
         m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
 
