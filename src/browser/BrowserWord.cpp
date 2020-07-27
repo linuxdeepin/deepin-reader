@@ -13,7 +13,6 @@ BrowserWord::BrowserWord(QGraphicsItem *parent, deepin_reader::Word word) : QGra
 
 void BrowserWord::setScaleFactor(qreal scaleFactor)
 {
-    setSelected(false);
     m_scaleFactor = scaleFactor;
     update();
 }

@@ -935,13 +935,13 @@ bool SheetBrowser::hasLoaded()
 
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
+    foreach (BrowserPage *item, m_items) {
+        item->clearWords();
+    }
+
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         deform(m_sheet->operationRef());
         m_sheet->setOperationChanged();
-
-//        for (int i = 0; i < m_items.count(); ++i) {
-//            m_items.at(i)->renderViewPort();
-//        }
     }
 
     QGraphicsView::resizeEvent(event);
