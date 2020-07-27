@@ -19,8 +19,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "TitleWidget.h"
-#include "widgets/ScaleWidget.h"
+#include "ScaleWidget.h"
 #include "DocSheet.h"
+#include "MsgHeader.h"
 
 #include <QHBoxLayout>
 

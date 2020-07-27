@@ -2,7 +2,8 @@ HEADERS += \
     $$PWD/Global.h \
     $$PWD/Json.h \
     $$PWD/Database.h \
-    $$PWD/Utils.h
+    $$PWD/Utils.h \
+    $$PWD/MsgHeader.h
 
 SOURCES += \
     $$PWD/Global.cpp \

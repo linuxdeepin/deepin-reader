@@ -33,8 +33,6 @@
 #include "CustomMenu.h"
 #include "Utils.h"
 
-#include "MsgHeader.h"
-
 #include <QDebug>
 
 

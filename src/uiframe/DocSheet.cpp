@@ -27,10 +27,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "DocSheet.h"
-#include "sidebar/SheetSidebar.h"
+#include "SheetSidebar.h"
 #include "SheetBrowser.h"
 #include "Database.h"
 #include "CentralDocPage.h"
+#include "MsgHeader.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>

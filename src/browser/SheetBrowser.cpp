@@ -40,7 +40,7 @@
 #include "sidebar/note/NoteViewWidget.h"
 #include "BrowserMagniFier.h"
 #include "widgets/FindWidget.h"
-
+#include "MsgHeader.h"
 #include "document/DjVuModel.h"
 #include "Utils.h"
 #include "RenderViewportThread.h"

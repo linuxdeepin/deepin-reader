@@ -26,6 +26,7 @@
 #include "search/SearchResWidget.h"
 #include "document/Model.h"
 #include "threadmanager/ReaderImageThreadPoolManager.h"
+#include "MsgHeader.h"
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
