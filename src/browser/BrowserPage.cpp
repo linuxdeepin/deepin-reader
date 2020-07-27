@@ -663,11 +663,9 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
     m_annotationItems.removeAll(m_lastClickIconAnnotation);
     annot = m_page->moveIconAnnotation(m_lastClickIconAnnotation->annotation(), moveRect);
 
-    if (annot) {
-        m_annotations.removeAll(m_lastClickIconAnnotation->annotation());
+    if (annot && m_annotations.contains(annot)) {
         delete m_lastClickIconAnnotation;
         m_lastClickIconAnnotation = nullptr;
-        m_annotations.append(annot);
         annot->page = m_index + 1;
         foreach (QRectF rect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);

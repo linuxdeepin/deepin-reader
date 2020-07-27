@@ -895,7 +895,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF rect)
 {
-    if (nullptr == m_page)
+    if (nullptr == m_page && nullptr == annot)
         return nullptr;
 
     LOCK_PAGE
@@ -904,7 +904,7 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF rect)
         //set rect
         annot->ownAnnotation()->setBoundary(rect);
 
-        return (new PDFAnnotation(m_mutex, annot->ownAnnotation()));
+        return annot;
     }
     return nullptr;
 }
