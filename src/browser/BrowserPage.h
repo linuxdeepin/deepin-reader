@@ -61,7 +61,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    void renderViewPort(bool force = false, bool cover = false);     //优先显示当前窗口
+    void renderViewPort(bool force = false);     //优先显示当前窗口
 
     void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false);
 
@@ -81,7 +81,7 @@ public:
 
     void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
-    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect(), bool cover = false);
+    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
     static bool existInstance(BrowserPage *item);
 

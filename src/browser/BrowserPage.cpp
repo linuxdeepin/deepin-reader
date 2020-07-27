@@ -163,7 +163,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
-void BrowserPage::renderViewPort(bool force, bool cover)
+void BrowserPage::renderViewPort(bool force)
 {
     if (nullptr == m_parent)
         return;
@@ -201,8 +201,6 @@ void BrowserPage::renderViewPort(bool force, bool cover)
     task.rotation = m_rotation;
 
     task.renderRect = viewRenderRect;
-
-    task.cover = cover;
 
     RenderViewportThread::appendTask(task);
 }
@@ -387,7 +385,7 @@ void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation
     update();
 }
 
-void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect, bool cover)
+void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
 {
     if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) || rotation != m_rotation)
         return;
@@ -396,10 +394,9 @@ void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation 
 
     m_viewportRenderedRect = rect;
 
-    if (cover) {
-        QPainter painter(&m_pixmap);
-        painter.drawImage(rect, image);
-    }
+    QPainter painter(&m_pixmap);
+
+    painter.drawImage(rect, image);
 
     update();
 }
@@ -533,7 +530,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    renderViewPort(true, true);
+    renderViewPort(true);
 
     return  annotation->updateAnnotation(text, color);
 }
@@ -599,7 +596,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
     }
 
-    renderViewPort(true, true);
+    renderViewPort(true);
 
     return highLightAnnot;
 }
@@ -698,7 +695,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
         }
     }
 
-    renderViewPort(true, true);
+    renderViewPort(true);
 
     return true;
 }
@@ -726,7 +723,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         }
     }
 
-    renderViewPort(true, true);
+    renderViewPort(true);
 
     return true;
 }
@@ -768,7 +765,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         }
     }
 
-    renderViewPort(true, true);
+    renderViewPort(true);
 
     return annot;
 }

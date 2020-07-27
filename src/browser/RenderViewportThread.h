@@ -37,7 +37,6 @@ struct RenderViewportTask {
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
     QRect renderRect;
-    bool cover = false;
 };
 
 class RenderViewportThread : public QThread
