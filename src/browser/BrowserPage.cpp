@@ -590,17 +590,17 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
 {
     QList<QRectF> rectList;
 
-    if (iconAnnot && iconAnnot->type() == 1) {
-
+    if (iconAnnot) {
         foreach (BrowserAnnotation *annotation, m_annotationItems) {
             if (annotation && annotation->isSame(iconAnnot)) {
                 m_lastClickIconAnnotation = annotation;
-                m_lastClickIconAnnotation->setDrawSelectRect(draw);
+                if (iconAnnot->type() == 1)
+                    m_lastClickIconAnnotation->setDrawSelectRect(draw);
                 m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
             }
         }
     } else {
-        if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->annotation()->type() == 1)
+        if (m_lastClickIconAnnotation)
             m_lastClickIconAnnotation->setDrawSelectRect(draw);
     }
 }

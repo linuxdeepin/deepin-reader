@@ -194,7 +194,7 @@ private:
 
     QPointF translate2Local(const QPointF);
 
-    Annotation *getClickAnnot(const QPointF);
+    Annotation *getClickAnnot(const QPointF, bool drawRect = false);
 
     Annotation *addHighLightAnnotation(const QString, const QColor);
 

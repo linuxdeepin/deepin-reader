@@ -491,7 +491,7 @@ QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
     return  point;
 }
 
-Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
+Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint, bool drawRect)
 {
     if (nullptr == m_sheet)
         return nullptr;
@@ -504,7 +504,7 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
     if (nullptr == page)
         return nullptr;
 
-    if (m_lastClickPage)
+    if (drawRect && m_lastClickPage)
         m_lastClickPage->setSelectIconRect(false);
 
     m_lastClickPage = page;
@@ -514,7 +514,8 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
     foreach (Annotation *annot, page->annotations()) {
         foreach (QRectF rect, annot->boundary()) {
             if (rect.contains(point)) {
-                page->setSelectIconRect(true, annot);
+                if (drawRect)
+                    page->setSelectIconRect(true, annot);
                 return annot;
             }
         }
@@ -799,6 +800,12 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
         return;
 
     jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
+
+    //画选中边框(仅图标注释)
+    if (m_lastClickPage)
+        m_lastClickPage->setSelectIconRect(false);
+    m_lastClickPage = jumpPage;
+    m_lastClickPage->setSelectIconRect(true, annotation);
 }
 
 BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
@@ -977,7 +984,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             deepin_reader::Annotation *clickAnno = nullptr;
 
 //            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-            clickAnno = getClickAnnot(m_selectPressedPos);
+            clickAnno = getClickAnnot(m_selectPressedPos, true);
             if (clickAnno && clickAnno->type() == 1) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
