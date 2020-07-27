@@ -132,7 +132,7 @@ public:
 
     virtual QString uniqueName() const {return QString();}
 
-    virtual bool setUniqueName(QString uniqueName) const {return false;}
+    virtual bool setUniqueName(QString uniqueName) const {Q_UNUSED(uniqueName) return false;}
 
     //数值同poppler类型
     enum AnnotationType {

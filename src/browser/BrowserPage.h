@@ -26,8 +26,7 @@
 #include <QMutex>
 
 #include "Global.h"
-
-#include "../document/PDFModel.h"
+#include "PDFModel.h"
 
 using namespace deepin_reader;
 
@@ -99,8 +98,6 @@ public:
 
     void scaleWords(bool force = false);
 
-    QList<BrowserWord *> loadPageWord();
-
     void loadAnnotations();     //如果加载过则不加载
 
     QList< deepin_reader::Annotation * > annotations();
@@ -160,39 +157,38 @@ protected:
 
 private:
     deepin_reader::Page *m_page = nullptr;
-
-    double  m_scaleFactor        = -1;       //当前被设置的缩放
-
-    QPixmap m_pixmap;                       //当前图片
-    bool    m_pixmapHasRendered = false;    //当前图片是否已经开始加载
-    double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
-    QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
-
-    QPixmap m_viewportPixmap;               //视图区域的图片
-    QRect   m_viewportRenderedRect;         //试图区域
-
-    bool m_bookmark = false;
-    int m_bookmarkState = 0;   //1为on 2为pressed 3为show
-    int m_index = 0;
-    Dr::Rotation m_rotation = Dr::NumberOfRotations;
-    static QSet<BrowserPage *> items;
     SheetBrowser *m_parent = nullptr;
 
-    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
-    double m_wordScaleFactor = -1;
-    QList<BrowserWord *> m_words;
+    int m_index = 0;                                    //当前索引
+    double  m_scaleFactor = -1;                         //当前被设置的缩放
+    Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
+
+    QPixmap m_pixmap;                     //当前图片
+    bool    m_pixmapHasRendered = false;  //当前图片是否已经开始加载
+    double  m_pixmapScaleFactor   = -1;   //当前图片的缩放
+    QRect   m_pixmapRenderedRect;         //当前图片已经加载的rect
+
+    QPixmap m_viewportPixmap;       //视图区域的图片
+    QRect   m_viewportRenderedRect; //试图区域
+
+    QList<BrowserWord *> m_words;                           //当前文字
+    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;    //当前文字的方向
+    double m_wordScaleFactor = -1;                          //当前文字的缩放
+
+    bool m_bookmark = false;   //当前是否有书签
+    int  m_bookmarkState = 0;  //当前书签状态 1为on 2为pressed 3为show
+
+    static QSet<BrowserPage *> items;
 
     bool m_hasLoadedAnnotation = false;
     QList<BrowserAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
     QList<deepin_reader::Annotation *> m_annotations;
 
     QPointF m_posPressed;
-    bool m_wordSelectable = false;
+    bool m_wordSelectable = false;      //文字是否可以选取
 
     QRectF m_searchSelectLighRectf;
     QList<QRectF> m_searchLightrectLst;
-
-    QMutex m_imageMutex;
 
     BrowserAnnotation *m_lastClickIconAnnotation{nullptr};
     bool m_drawIconRect{false}; // 绘制当前选中图标注释边框

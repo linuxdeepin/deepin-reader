@@ -316,8 +316,11 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
     }
 
     QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+
     QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
+
     image.setDevicePixelRatio(dApp->devicePixelRatio());
+
     return image;
 }
 
@@ -333,16 +336,17 @@ QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
-    QMutexLocker locker(&m_imageMutex);
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
 
     QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
+
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 QImage BrowserPage::getCurImagePoint(QPoint point)
 {
     int ds = 122;
+
     return Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds);
 }
 
@@ -468,25 +472,6 @@ void BrowserPage::scaleWords(bool force)
         foreach (BrowserWord *word, m_words)
             word->setScaleFactor(m_scaleFactor);
     }
-}
-
-/**
- * @brief BrowserPage::loadPageWord
- * 该方法暂时弃用
- * @return
- */
-QList<BrowserWord *> BrowserPage::loadPageWord()
-{
-    QList<BrowserWord *> wordList;
-
-    QList<deepin_reader::Word> words = m_page->words(Dr::RotateBy0);
-    for (int i = 0; i < words.count(); ++i) {
-        BrowserWord *word = new BrowserWord(this, words[i]);
-        word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
-        wordList.append(word);
-    }
-
-    return wordList;
 }
 
 void BrowserPage::loadAnnotations()
@@ -809,6 +794,7 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
         wordRect.setHeight(wordWidth);
     }
     break;
+    default: break;
     }
 }
 

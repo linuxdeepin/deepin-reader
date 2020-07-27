@@ -220,6 +220,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         if (page->size().width() > m_maxWidth)
             m_maxWidth = page->size().width();
+
         if (page->size().height() > m_maxHeight)
             m_maxHeight = page->size().height();
 
@@ -239,8 +240,11 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     }
 
     setMouseShape(operation.mouseShape);
+
     deform(operation);
+
     m_initPage = operation.currentPage;
+
     m_hasLoaded = true;
 
     return true;
@@ -601,6 +605,7 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
         linkX = static_cast<int>((posTop - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
     }
     break;
+    default: break;
     }
 
     if (this->verticalScrollBar()) {
