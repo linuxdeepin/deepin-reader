@@ -571,15 +571,13 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
             if (m_items.at(index))
                 emit sigAddHighLightAnnot(m_items.at(index), contains, color);
         }
-
-        if (highLightAnnot) {
-            emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
-        }
-
-        return highLightAnnot;
     }
 
-    return nullptr;
+    if (highLightAnnot) {
+        emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
+    }
+
+    return highLightAnnot;
 }
 
 void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)

@@ -557,13 +557,9 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
     QList<BrowserWord *> browserPageWord = loadPageWord();
 
-    foreach (BrowserWord *word, m_words) {
-        if (word && word->isSelected()) {
-
-            index = m_words.indexOf(word);
-
+    for (index = 0; index < m_words.count(); index++) {
+        if (m_words.at(index) && m_words.at(index)->isSelected()) {
             if (index >= 0 && index < browserPageWord.count()) {
-
                 BrowserWord *textWord = browserPageWord.at(index);
 
                 if (textWord) {
