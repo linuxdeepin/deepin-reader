@@ -237,8 +237,9 @@ private:
     QPointF m_selectEndPos;             // 选取文字的结束位置
     bool m_annotationInserting = false;     //正在插入注释状态
     RenderViewportThread *m_pageThread = nullptr;
-    bool m_selectIconAnnotation{false}; // 当前选中的图标注释
+    bool m_selectIconAnnotation{false}; // 当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
+    deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
 };
 
 #endif // SheetBrowser_H

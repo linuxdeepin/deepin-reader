@@ -992,6 +992,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
+        m_iconAnnot = nullptr;
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
             m_selectEndPos = QPointF();
@@ -1006,7 +1007,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
-                return DGraphicsView::mousePressEvent(event);
+                m_iconAnnot = clickAnno;
+                return ;//DGraphicsView::mousePressEvent(event);
             }
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
@@ -1134,6 +1136,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         m_lastClickPage->setIconMovePos(QPoint(static_cast<int>(m_iconAnnotationMovePos.x() - m_lastClickPage->x()),
                                                static_cast<int>(m_iconAnnotationMovePos.y() - m_lastClickPage->y())));
         setCursor(QCursor(Qt::PointingHandCursor));
+        if (m_tipsWidget)
+            m_tipsWidget->hide();
         return;
     }
 
@@ -1272,25 +1276,30 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
         clickAnno = getClickAnnot(mousepoint);
 
-        if (m_annotationInserting) {
-            if (clickAnno && clickAnno->type() == 1/*AText*/) {
-                updateAnnotation(clickAnno, clickAnno->contents());
-            } else {
-                clickAnno = addIconAnnotation(mousepoint, "");
-            }
-            showNoteEditWidget(clickAnno);
-            m_annotationInserting = false;
-        } else {
-            if (nullptr != clickAnno)
-                showNoteEditWidget(clickAnno);
-        }
-        m_selectEndPos = mapToScene(event->pos());
+        if (m_iconAnnot)
+            clickAnno = m_iconAnnot;
 
-        if (m_selectIconAnnotation && m_lastClickPage && (m_selectPressedPos != m_selectEndPos)) {
-            m_lastClickPage->setDrawMoveIconRect(false);
-            addNewIconAnnotDeleteOld(m_selectEndPos);
-        } else if (m_selectIconAnnotation && m_lastClickPage && (m_selectPressedPos == m_selectEndPos)) {
-            showNoteEditWidget(clickAnno);
+        if (!m_selectIconAnnotation) {
+            if (m_annotationInserting && (nullptr == m_iconAnnot)) {
+                if (clickAnno && clickAnno->type() == 1/*AText*/) {
+                    updateAnnotation(clickAnno, clickAnno->contents());
+                } else {
+                    clickAnno = addIconAnnotation(mousepoint, "");
+                }
+                showNoteEditWidget(clickAnno);
+                m_annotationInserting = false;
+            } else {
+                if (nullptr != clickAnno)
+                    showNoteEditWidget(clickAnno);
+            }
+            m_selectEndPos = mapToScene(event->pos());
+        } else {
+            if (m_lastClickPage && (m_selectPressedPos != m_selectEndPos)) {
+                m_lastClickPage->setDrawMoveIconRect(false);
+                addNewIconAnnotDeleteOld(m_selectEndPos);
+            } else if (m_lastClickPage && (m_selectPressedPos == m_selectEndPos)) {
+                showNoteEditWidget(clickAnno);
+            }
         }
 
         m_selectPressedPos = QPointF();
