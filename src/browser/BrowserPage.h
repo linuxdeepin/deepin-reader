@@ -97,7 +97,7 @@ public:
 
     void loadWords();
 
-    void scaleWords();
+    void scaleWords(bool force = false);
 
     QList<BrowserWord *> loadPageWord();
 

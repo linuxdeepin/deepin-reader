@@ -300,6 +300,8 @@ void SheetBrowser::onSceneOfViewportChanged()
 {
     foreach (BrowserPage *page, m_items) {
         if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
+            page->loadWords();
+            page->scaleWords(true);
             page->renderViewPort();
         }
     }

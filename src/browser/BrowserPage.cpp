@@ -245,10 +245,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
         m_pixmapHasRendered = true;
 
-        loadWords();
-
-        scaleWords();
-
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
@@ -301,7 +297,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
                 annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 
-    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
@@ -466,9 +461,9 @@ void BrowserPage::loadWords()
     }
 }
 
-void BrowserPage::scaleWords()
+void BrowserPage::scaleWords(bool force)
 {
-    if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
+    if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
         foreach (BrowserWord *word, m_words)
             word->setScaleFactor(m_scaleFactor);
