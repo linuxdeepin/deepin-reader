@@ -121,14 +121,13 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(QBrush(Qt::white));
     painter->drawRect(option->rect);
 
-    if (m_renderedRect.height() == 0) {
+    if (!m_pixmapHasRendered) {
         render(m_scaleFactor, m_rotation);
     }
 
-    if (m_hasRendered)
-        painter->drawPixmap(option->rect, m_pixmap);
+    painter->drawPixmap(option->rect, m_pixmap);
 
-    if (m_viewportRenderedRect.height() > 0)
+    if (!m_viewportPixmap.isNull())
         painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
 
     if (1 == m_bookmarkState)
@@ -164,12 +163,13 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
-void BrowserPage::renderViewPort(bool force)
+void BrowserPage::renderViewPort(bool force, bool cover)
 {
     if (nullptr == m_parent)
         return;
 
-    return;
+    if (!force && boundingRect().width() < 1000 && boundingRect().height() < 1000)
+        return;
 
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
 
@@ -186,7 +186,7 @@ void BrowserPage::renderViewPort(bool force)
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
     //如果现在已经加载的rect包含viewRender 就不加入任务
-    if (!force && m_renderedRect.contains(viewRenderRect))
+    if (!force && m_pixmapRenderedRect.contains(viewRenderRect))
         return;
 
     if (!force && m_viewportRenderedRect.contains(viewRenderRect))
@@ -202,6 +202,8 @@ void BrowserPage::renderViewPort(bool force)
 
     task.renderRect = viewRenderRect;
 
+    task.cover = cover;
+
     RenderViewportThread::appendTask(task);
 }
 
@@ -210,10 +212,12 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (nullptr == m_page)
         return;
 
-    if (qFuzzyCompare(scaleFactor, m_imageScaleFactor) && rotation == m_rotation)
+    if (qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rotation == m_rotation)
         return;
 
     prepareGeometryChange();
+
+    m_pixmapHasRendered = false;
 
     m_scaleFactor = scaleFactor;
 
@@ -225,17 +229,21 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     m_viewportPixmap = QPixmap();
 
     if (m_rotation != rotation) {//旋转变化则强制移除
-        m_rotation  = rotation;
-        m_pixmap = QPixmap();
         clearWords();
-        m_hasRendered = false;
-        m_imageScaleFactor = -1;
         m_wordScaleFactor = -1;
+
+        m_pixmap = QPixmap();
+        m_rotation = Dr::NumberOfRotations;
+        m_pixmapScaleFactor = -1;
+        m_rotation  = rotation;
     }
 
-    m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
+    if (!renderLater && m_pixmapScaleFactor != m_scaleFactor) {
+        m_pixmapScaleFactor = m_scaleFactor;
 
-    if (!renderLater) {
+        m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
+
+        m_pixmapHasRendered = true;
 
         loadWords();
 
@@ -247,24 +255,14 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         } else
             m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
 
-        m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 1);
-        //之后替换为线程reader
         RenderPageThread::clearTask(this);
 
         QList<RenderPageTask> tasks;
 
         QRectF rect = boundingRect();
 
-        //加载模糊的图
-//        RenderPageTask task;
-//        task.item = this;
-//        task.scaleFactor = 0.05;
-//        task.rotation = m_rotation;
-//        task.renderRect = QRect();
-//        task.preRender = true;
-//        tasks.append(task);
-
         int pieceWidth = 1000;
+
         int pieceHeight = 1000;
 
         for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
@@ -295,7 +293,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         }
 
         RenderPageThread::appendTasks(tasks);
-        m_imageScaleFactor = m_scaleFactor;
 
         loadAnnotations();
 
@@ -362,23 +359,19 @@ void BrowserPage::handlePreRenderFinished(Dr::Rotation rotation, QImage image)
     if (!m_pixmap.isNull())
         return;
 
-    m_hasRendered = true;
-
     image = image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio);
 
     m_pixmap = QPixmap::fromImage(image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio));
 
-    m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 2);
+    m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 2);
 
     update();
 }
 
 void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
 {
-    if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor) || rotation != m_rotation)
+    if (!qFuzzyCompare(scaleFactor, m_scaleFactor) || rotation != m_rotation)
         return;
-
-    m_hasRendered = true;
 
     if (rect.height() == static_cast<int>(boundingRect().height())) {
         m_pixmap = QPixmap::fromImage(image);
@@ -387,20 +380,27 @@ void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation
         painter.drawImage(rect, image);
     }
 
-    m_renderedRect.setHeight(rect.y() + rect.height());
+    m_pixmapRenderedRect.setHeight(rect.y() + rect.height());
 
     emit m_parent->sigThumbnailUpdated(m_index);
 
     update();
 }
 
-void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
+void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect, bool cover)
 {
-    if (!qFuzzyCompare(scaleFactor, m_imageScaleFactor) || rotation != m_rotation)
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) || rotation != m_rotation)
         return;
 
     m_viewportPixmap = QPixmap::fromImage(image);
+
     m_viewportRenderedRect = rect;
+
+    if (cover) {
+        QPainter painter(&m_pixmap);
+        painter.drawImage(rect, image);
+    }
+
     update();
 }
 
@@ -533,7 +533,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    renderViewPort(true);
+    renderViewPort(true, true);
 
     return  annotation->updateAnnotation(text, color);
 }
@@ -599,7 +599,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
     }
 
-    renderViewPort(true);
+    renderViewPort(true, true);
 
     return highLightAnnot;
 }
@@ -698,7 +698,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
         }
     }
 
-    renderViewPort(true);
+    renderViewPort(true, true);
 
     return true;
 }
@@ -726,7 +726,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         }
     }
 
-    renderViewPort(true);
+    renderViewPort(true, true);
 
     return true;
 }
@@ -768,7 +768,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         }
     }
 
-    renderViewPort(true);
+    renderViewPort(true, true);
 
     return annot;
 }

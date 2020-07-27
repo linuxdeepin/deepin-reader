@@ -61,7 +61,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    void renderViewPort(bool force = false);      //优先显示当前窗口
+    void renderViewPort(bool force = false, bool cover = false);     //优先显示当前窗口
 
     void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false);
 
@@ -81,7 +81,7 @@ public:
 
     void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
-    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
+    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect(), bool cover = false);
 
     static bool existInstance(BrowserPage *item);
 
@@ -161,19 +161,20 @@ protected:
 private:
     deepin_reader::Page *m_page = nullptr;
 
-    QPixmap m_pixmap;
-    bool    m_hasRendered = false;
-    QRect   m_renderedRect;         //已经加载的rect
+    double  m_scaleFactor        = -1;       //当前被设置的缩放
 
-    QPixmap m_viewportPixmap;
-    QRect   m_viewportRenderedRect;
+    QPixmap m_pixmap;                       //当前图片
+    bool    m_pixmapHasRendered = false;    //当前图片是否已经开始加载
+    double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
+    QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
 
-    double m_imageScaleFactor   = -1;
-    double m_scaleFactor        = -1;
+    QPixmap m_viewportPixmap;               //视图区域的图片
+    QRect   m_viewportRenderedRect;         //试图区域
+
     bool m_bookmark = false;
     int m_bookmarkState = 0;   //1为on 2为pressed 3为show
     int m_index = 0;
-    Dr::Rotation m_rotation = Dr::RotateBy0;
+    Dr::Rotation m_rotation = Dr::NumberOfRotations;
     static QSet<BrowserPage *> items;
     SheetBrowser *m_parent = nullptr;
 
