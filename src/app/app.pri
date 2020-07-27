@@ -1,7 +1,6 @@
 HEADERS += \
     $$PWD/Global.h \
     $$PWD/Json.h \
-    $$PWD/MsgHeader.h \
     $$PWD/Database.h \
     $$PWD/Utils.h
 

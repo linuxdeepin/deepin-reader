@@ -14,8 +14,6 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     // Init DTK.
-    Application::loadDXcbPlugin();
-
     Application a(argc, argv);
 
     QCommandLineParser parser;
@@ -65,6 +63,8 @@ int main(int argc, char *argv[])
     dbus.registerObject("/com/deepin/Reader", &a, QDBusConnection::ExportScriptableSlots);
 
     DApplicationSettings savetheme;
+    Q_UNUSED(savetheme)
+
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
