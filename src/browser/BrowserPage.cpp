@@ -613,7 +613,8 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
 {
     QList<QRectF> rectList;
 
-    if (iconAnnot) {
+    if (iconAnnot && iconAnnot->type() == 1) {
+
         foreach (BrowserAnnotation *annotation, m_annotationItems) {
             if (annotation && annotation->isSame(iconAnnot)) {
                 m_lastClickIconAnnotation = annotation;
@@ -622,7 +623,7 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
             }
         }
     } else {
-        if (m_lastClickIconAnnotation)
+        if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->annotation()->type() == 1)
             m_lastClickIconAnnotation->setDrawSelectRect(draw);
     }
 }
@@ -716,8 +717,8 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         return false;
 
     foreach (BrowserAnnotation *annotation, m_annotationItems) {
-        if (annota == annotation->annotation()) {
-            if (annota == m_lastClickIconAnnotation->annotation())
+        if (annotation && annotation->isSame(annota)) {
+            if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->isSame(annota))
                 m_lastClickIconAnnotation = nullptr;
             m_annotationItems.removeAll(annotation);
             delete annotation;
