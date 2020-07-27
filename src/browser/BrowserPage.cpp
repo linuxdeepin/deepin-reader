@@ -169,6 +169,8 @@ void BrowserPage::renderViewPort(bool force)
     if (nullptr == m_parent)
         return;
 
+    return;
+
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
 
     QRectF visibleSceneRectF = m_parent->mapToScene(viewPortRect).boundingRect();
@@ -219,16 +221,26 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
 
     m_viewportRenderedRect = QRect();
+
     m_viewportPixmap = QPixmap();
 
     if (m_rotation != rotation) {//旋转变化则强制移除
         m_rotation  = rotation;
         m_pixmap = QPixmap();
+        clearWords();
+        m_hasRendered = false;
+        m_imageScaleFactor = -1;
+        m_wordScaleFactor = -1;
     }
 
     m_renderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
 
     if (!renderLater) {
+
+        loadWords();
+
+        scaleWords();
+
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
@@ -291,6 +303,8 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
             if (annotationItem)
                 annotationItem->setScaleFactorAndRotation(m_rotation);
     }
+
+    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
@@ -426,6 +440,8 @@ void BrowserPage::setWordSelectable(bool selectable)
 
 void BrowserPage::clearWords()
 {
+    m_wordRotation = Dr::NumberOfRotations;
+
     if (m_words.isEmpty())
         return;
 
@@ -435,14 +451,12 @@ void BrowserPage::clearWords()
     }
 
     m_words.clear();
-    m_wordRotation = Dr::NumberOfRotations;
+
 }
 
 void BrowserPage::loadWords()
 {
     if (m_wordRotation != m_rotation) {
-        clearWords();
-
         m_wordRotation = m_rotation;
         QList<deepin_reader::Word> words = m_page->words(m_rotation);
         for (int i = 0; i < words.count(); ++i) {
@@ -451,7 +465,10 @@ void BrowserPage::loadWords()
             m_words.append(word);
         }
     }
+}
 
+void BrowserPage::scaleWords()
+{
     if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
         foreach (BrowserWord *word, m_words)
@@ -467,7 +484,6 @@ QList<BrowserWord *> BrowserPage::loadPageWord()
     for (int i = 0; i < words.count(); ++i) {
         BrowserWord *word = new BrowserWord(this, words[i]);
         word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
-//        word->setScaleFactor(m_scaleFactor);
         wordList.append(word);
     }
 

@@ -97,6 +97,8 @@ public:
 
     void loadWords();
 
+    void scaleWords();
+
     QList<BrowserWord *> loadPageWord();
 
     void loadAnnotations();     //如果加载过则不加载
