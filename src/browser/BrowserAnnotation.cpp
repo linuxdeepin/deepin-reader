@@ -62,8 +62,8 @@ void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->setPen(pen);
 
         QRect iconRect = option->rect;
-        iconRect.setWidth(ICON_SIZE * m_scaleFactor);
-        iconRect.setHeight(ICON_SIZE * m_scaleFactor);
+        iconRect.setWidth(static_cast<int>(ICON_SIZE * m_scaleFactor));
+        iconRect.setHeight(static_cast<int>(ICON_SIZE * m_scaleFactor));
         painter->drawRect(iconRect);
 
         painter->restore();
@@ -91,8 +91,11 @@ bool BrowserAnnotation::isSame(Annotation *annotation)
 
 void BrowserAnnotation::setDrawSelectRect(const bool draw)
 {
-    if (nullptr == m_annotation)
+    if (nullptr == m_annotation && m_annotation->type() != 1) {
+        m_drawSelectRect = false;
+        update();
         return;
+    }
 
     m_drawSelectRect = draw;
 

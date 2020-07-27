@@ -544,6 +544,9 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     if (nullptr == startPage || nullptr == endPage)
         return nullptr;
 
+    m_selectEndPos = QPointF();
+    m_selectStartPos = QPointF();
+
     if (startPage == endPage) {
         highLightAnnot = startPage->addHighlightAnnotation(contains, color);
     } else {
@@ -559,7 +562,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
         for (int index = startIndex; index < endIndex; index++) {
             if (m_items.at(index))
-                emit sigAddHighLightAnnot(m_items.at(index), contains, color); //highLightAnnot = m_items.at(index)->addHighlightAnnotation(contains, color);
+                emit sigAddHighLightAnnot(m_items.at(index), contains, color);
         }
 
         highLightAnnot = endPage->addHighlightAnnotation(contains, color);
@@ -575,6 +578,8 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
         return highLightAnnot;
     }
+
+    return nullptr;
 }
 
 void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)
@@ -649,8 +654,9 @@ void SheetBrowser::addNewIconAnnotDeleteOld(const QPointF clickPoint)
 
     bool isVaild = calcIconAnnotRect(nowPage, clickPoint, iconRect);
 
-    if (isVaild)
+    if (isVaild) {
         nowPage->moveIconAnnotation(iconRect);
+    }
 }
 
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
@@ -1111,7 +1117,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     if (m_selectIconAnnotation && m_lastClickPage) {
         m_iconAnnotationMovePos = mapToScene(mousePos);
         m_lastClickPage->setDrawMoveIconRect(true);
-        m_lastClickPage->setIconMovePos(QPoint(m_iconAnnotationMovePos.x() - m_lastClickPage->x(), m_iconAnnotationMovePos.y() - m_lastClickPage->y()));
+        m_lastClickPage->setIconMovePos(QPoint(static_cast<int>(m_iconAnnotationMovePos.x() - m_lastClickPage->x()),
+                                               static_cast<int>(m_iconAnnotationMovePos.y() - m_lastClickPage->y())));
         setCursor(QCursor(Qt::PointingHandCursor));
         return ;
     }
@@ -1244,9 +1251,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
-//        <<< <<< < Updated upstream
         const QPointF &mousepoint = mapToScene(event->pos());
-        m_selectPressedPos = QPointF();
         m_selectEndPos = mousepoint;
 
         deepin_reader::Annotation *clickAnno = nullptr;
@@ -1265,19 +1270,17 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             if (nullptr != clickAnno && selectedWordsText().length() == 1)
                 showNoteEditWidget(clickAnno);
         }
-//        == == == =
         m_selectEndPos = mapToScene(event->pos());
 
         if (m_selectIconAnnotation && m_lastClickPage && (m_selectPressedPos != m_selectEndPos)) {
             m_lastClickPage->setDrawMoveIconRect(false);
             addNewIconAnnotDeleteOld(m_selectEndPos);
+        } else if (m_selectIconAnnotation && m_lastClickPage && (m_selectPressedPos == m_selectEndPos)) {
+            showNoteEditWidget(clickAnno);
         }
 
-        m_selectEndPos = QPointF();
-        m_selectStartPos = QPointF();
         m_selectPressedPos = QPointF();
         m_selectIconAnnotation = false;
-//        >>> >>> > Stashed changes
     }
 
     QGraphicsView::mouseReleaseEvent(event);
