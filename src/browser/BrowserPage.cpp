@@ -470,6 +470,11 @@ void BrowserPage::scaleWords(bool force)
     }
 }
 
+/**
+ * @brief BrowserPage::loadPageWord
+ * 该方法暂时弃用
+ * @return
+ */
 QList<BrowserWord *> BrowserPage::loadPageWord()
 {
     QList<BrowserWord *> wordList;
@@ -546,37 +551,34 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 
     Annotation *highLightAnnot{nullptr};
     QList<QRectF> boundarys;
-    QRectF rect, recboundary;
+    QRectF rect;
+    QRectF recboundary;
     int index{0};
     qreal curwidth = m_page->sizeF().width();
     qreal curheight = m_page->sizeF().height();
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
-    QList<BrowserWord *> browserPageWord = loadPageWord();
+    QList<deepin_reader::Word> twords = m_page->words(Dr::RotateBy0);
 
     for (index = 0; index < m_words.count(); index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
-            if (index >= 0 && index < browserPageWord.count()) {
-                BrowserWord *textWord = browserPageWord.at(index);
+            if (index >= 0 && index < twords.count()) {
+                deepin_reader::Word tword = twords.at(index);
 
-                if (textWord) {
-                    rect = textWord->textBoundingRect();
+                rect = tword.wordBoundingRect();
 
-                    recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                                   rect.top() / curheight));
-                    recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                    rect.top() / curheight));
-                    recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                      rect.bottom() / curheight));
-                    recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                       rect.bottom() / curheight));
-                    boundarys << recboundary;
-                }
+                recboundary.setTopLeft(QPointF(rect.left() / curwidth,
+                                               rect.top() / curheight));
+                recboundary.setTopRight(QPointF(rect.right() / curwidth,
+                                                rect.top() / curheight));
+                recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
+                                                  rect.bottom() / curheight));
+                recboundary.setBottomRight(QPointF(rect.right() / curwidth,
+                                                   rect.bottom() / curheight));
+                boundarys << recboundary;
             }
         }
     }
-
-    qDeleteAll(browserPageWord);
 
     if (boundarys.count()) {
         loadAnnotations();

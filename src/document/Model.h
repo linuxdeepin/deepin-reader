@@ -77,6 +77,11 @@ struct Word {
     QString text;
     QRectF boundingBox;
 
+    QRectF wordBoundingRect() const
+    {
+        return QRectF(this->boundingBox.x(), this->boundingBox.y(), this->boundingBox.width(), this->boundingBox.height());
+    }
+
     Word() {};
 
     Word(const QString &text, const QRectF &rectf)
@@ -223,6 +228,7 @@ public:
     virtual bool wantsTwoPagesWithCoverPageMode() const { return false; }
     virtual bool wantsRightToLeftMode() const { return false; }
 };
+
 } // deepin_reader
 
 
