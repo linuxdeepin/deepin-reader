@@ -135,6 +135,16 @@ public:
 
     BrowserWord *getBrowserWord(const QPoint &point);
 
+    void setSelectIconRect(const bool draw, Annotation *iconAnnot = nullptr);
+
+    void setDrawMoveIconRect(const bool draw);
+
+    void setIconMovePos(const QPointF);
+
+    QString deleteNowSelectIconAnnotation();
+
+    bool moveIconAnnotation(const QRectF);
+
 private:
     void reloadAnnotations();
 
@@ -180,6 +190,12 @@ private:
     QList<QRectF> m_searchLightrectLst;
 
     QMutex m_imageMutex;
+
+    BrowserAnnotation *m_lastClickIconAnnotation{nullptr};
+    bool m_drawIconRect{false}; // 绘制当前选中图标注释边框
+    QRectF m_selecetIconAnnotationRect{QRectF()}; // 绘制选择的图标注释的外边框
+    bool m_drawMoveIconRect{false}; // 绘制移动图标注释边框
+    QPointF m_drawMoveIconPoint{QPointF()}; // 绘制移动图标注释点
 };
 
 #endif // BrowserPage_H

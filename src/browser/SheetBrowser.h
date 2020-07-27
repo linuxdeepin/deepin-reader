@@ -200,6 +200,8 @@ private:
 
     void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
 
+    void addNewIconAnnotDeleteOld(const QPointF);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     BrowserMagniFier *m_magnifierLabel = nullptr;
@@ -214,6 +216,7 @@ private:
     FindWidget *m_pFindWidget = nullptr;
     BrowserSearch *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;
+    BrowserPage *m_lastClickPage = nullptr;
 
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
@@ -232,6 +235,8 @@ private:
     QPointF m_selectEndPos;             // 选取文字的结束位置
     bool m_annotationInserting = false;     //正在插入注释状态
     RenderViewportThread *m_pageThread = nullptr;
+    bool m_selectIconAnnotation{false}; // 当前选中的图标注释
+    QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
 };
 
 #endif // SheetBrowser_H

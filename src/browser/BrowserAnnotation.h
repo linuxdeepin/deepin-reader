@@ -24,12 +24,16 @@
 #include <QGraphicsItem>
 #include "document/Model.h"
 
+const int ICON_SIZE = 23;
+
 class BrowserPage;
 class BrowserAnnotation : public QGraphicsItem
 {
     friend class SheetBrowser;
 public:
     explicit BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation);
+
+    ~BrowserAnnotation() override;
 
     void setScaleFactorAndRotation(Dr::Rotation rotation);
 
@@ -45,6 +49,12 @@ public:
 
     void deleteMe();
 
+    bool isSame(deepin_reader::Annotation *annotation);
+
+    void setDrawSelectRect(const bool draw);
+
+    void setScaleFactor(const double scale);
+
 private:
     deepin_reader::Annotation *m_annotation;
 
@@ -56,6 +66,9 @@ private:
 
     QGraphicsItem *m_parent = nullptr;
 
+    bool m_drawSelectRect{false};
+
+    double m_scaleFactor        = 1.0;
 };
 
 #endif // BrowserAnnotation_H

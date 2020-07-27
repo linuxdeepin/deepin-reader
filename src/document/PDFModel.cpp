@@ -39,6 +39,7 @@ along with qpdfview.  If not, see <http://www.gnu.org/licenses/>.
 
 #endif // QT_VERSION
 #include <QDebug>
+#include <QTimer>
 
 #include <poppler-form.h>
 
@@ -299,7 +300,10 @@ PDFAnnotation::PDFAnnotation(QMutex *mutex, Poppler::Annotation *annotation) : A
 
 PDFAnnotation::~PDFAnnotation()
 {
-    delete m_annotation;
+    if (m_annotation) {
+        delete m_annotation;
+        m_annotation = nullptr;
+    }
 }
 
 QList<QRectF> PDFAnnotation::boundary() const
@@ -329,11 +333,17 @@ QString PDFAnnotation::contents() const
 {
     LOCK_ANNOTATION
 
+    if (nullptr == m_annotation)
+        return QString();
+
     return m_annotation->contents();
 }
 
 int PDFAnnotation::type()
 {
+    if (nullptr == m_annotation)
+        return -1;
+
     return m_annotation->subType();
 }
 
@@ -768,6 +778,8 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
     m_page->removeAnnotation(PDFAnnotation->m_annotation);
 
     PDFAnnotation->m_annotation = nullptr;
+    delete PDFAnnotation;
+    PDFAnnotation = nullptr;
 
 #else
 
@@ -854,7 +866,7 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
-Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString)
+Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
 {
     if (nullptr == m_page)
         return nullptr;
@@ -870,6 +882,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString)
 
     Poppler::TextAnnotation *annotation = new Poppler::TextAnnotation(Poppler::TextAnnotation::Linked);
 
+    annotation->setContents(text);
     annotation->setBoundary(rect);
     annotation->setTextIcon(strtype);
     annotation->setStyle(style);
@@ -878,6 +891,22 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString)
     m_page->addAnnotation(annotation);
 
     return (new PDFAnnotation(m_mutex, annotation));
+}
+
+Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF rect)
+{
+    if (nullptr == m_page)
+        return nullptr;
+
+    LOCK_PAGE
+
+    if (annot->ownAnnotation()) {
+        //set rect
+        annot->ownAnnotation()->setBoundary(rect);
+
+        return (new PDFAnnotation(m_mutex, annot->ownAnnotation()));
+    }
+    return nullptr;
 }
 
 PDFDocument::PDFDocument(Poppler::Document *document) :

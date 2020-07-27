@@ -28,6 +28,7 @@
 #include <QString>
 #include <QWidget>
 #include <QDateTime>
+#include <QDebug>
 
 class QColor;
 class QImage;
@@ -195,6 +196,7 @@ public:
     virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
     virtual bool mouseClickIconAnnot(QPointF &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF ponit, const QString text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
+    virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
 };
 
 class Document: public QObject

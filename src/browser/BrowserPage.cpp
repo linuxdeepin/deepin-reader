@@ -36,6 +36,7 @@
 #include "RenderViewportThread.h"
 #include "Utils.h"
 
+#include <DApplicationHelper>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
@@ -146,6 +147,21 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(QColor(59, 148, 1, 100));
     if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
         painter->drawRect(translateRect(m_searchSelectLighRectf));
+
+    if (m_drawMoveIconRect) {
+        QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
+        painter->setPen(pen);
+
+        int x = static_cast<int>(m_drawMoveIconPoint.x() - ICON_SIZE * m_scaleFactor / 2.0);
+        int y = static_cast<int>(m_drawMoveIconPoint.y() - ICON_SIZE * m_scaleFactor / 2.0);
+
+        if (x < 0 || y < 0 || x > this->boundingRect().width() || y > this->boundingRect().height())
+            return;
+
+        QRect rect = QRect(x, y, static_cast<int>(ICON_SIZE * m_scaleFactor), static_cast<int>(ICON_SIZE * m_scaleFactor));
+
+        painter->drawRect(rect);
+    }
 }
 
 void BrowserPage::renderViewPort(bool force)
@@ -198,6 +214,9 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     prepareGeometryChange();
 
     m_scaleFactor = scaleFactor;
+
+    if (m_lastClickIconAnnotation)
+        m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
 
     m_viewportRenderedRect = QRect();
     m_viewportPixmap = QPixmap();
@@ -269,7 +288,8 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         loadAnnotations();
 
         foreach (BrowserAnnotation *annotationItem, m_annotationItems)
-            annotationItem->setScaleFactorAndRotation(m_rotation);
+            if (annotationItem)
+                annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 }
 
@@ -573,20 +593,121 @@ bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)
     return m_annotations.contains(annotation);
 }
 
-bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annotation)
+void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
 {
-    if (!m_annotations.contains(annotation))
+    QList<QRectF> rectList;
+
+    if (iconAnnot) {
+        foreach (BrowserAnnotation *annotation, m_annotationItems) {
+            if (annotation && annotation->isSame(iconAnnot)) {
+                m_lastClickIconAnnotation = annotation;
+                m_lastClickIconAnnotation->setDrawSelectRect(draw);
+                m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
+            }
+        }
+    } else {
+        if (m_lastClickIconAnnotation)
+            m_lastClickIconAnnotation->setDrawSelectRect(draw);
+    }
+}
+
+void BrowserPage::setDrawMoveIconRect(const bool draw)
+{
+    m_drawMoveIconRect = draw;
+
+    update();
+}
+
+void BrowserPage::setIconMovePos(const QPointF movePoint)
+{
+    m_drawMoveIconPoint = movePoint;
+
+    update();
+}
+
+/**
+ * @brief BrowserPage::deleteNowSelectIconAnnotation
+ * 删除当前选中的图标注释
+ * @return
+ */
+QString BrowserPage::deleteNowSelectIconAnnotation()
+{
+    if (nullptr == m_lastClickIconAnnotation)
+        return "";
+
+    QString iconAnnotationContains{""};
+
+    m_lastClickIconAnnotation->setDrawSelectRect(false);
+
+    iconAnnotationContains = m_lastClickIconAnnotation->annotationText();
+
+    removeAnnotation(m_lastClickIconAnnotation->annotation());
+
+    m_lastClickIconAnnotation = nullptr;
+
+    return iconAnnotationContains;
+}
+
+/**
+ * @brief BrowserPage::moveIconAnnotation
+ * 移动注释图标位置
+ * @return
+ */
+bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
+{
+    if (nullptr == m_page || nullptr == m_lastClickIconAnnotation)
         return false;
 
-    if (!m_page->removeAnnotation(annotation))
+    Annotation *annot{nullptr};
+
+    m_annotationItems.removeAll(m_lastClickIconAnnotation);
+    annot = m_page->moveIconAnnotation(m_lastClickIconAnnotation->annotation(), moveRect);
+
+    if (annot) {
+        m_annotations.removeAll(m_lastClickIconAnnotation->annotation());
+        delete m_lastClickIconAnnotation;
+        m_lastClickIconAnnotation = nullptr;
+        m_annotations.append(annot);
+        annot->page = m_index + 1;
+        foreach (QRectF rect, annot->boundary()) {
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
+            m_annotationItems.append(annotationItem);
+            m_lastClickIconAnnotation = annotationItem;
+        }
+
+        if (annot->type() == 1) {
+            if (m_lastClickIconAnnotation) {
+                m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
+                m_lastClickIconAnnotation->setDrawSelectRect(true);
+            }
+        }
+    }
+
+    renderViewPort(true);
+
+    return true;
+}
+
+bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
+{
+    if (nullptr == annota)
         return false;
 
-    m_annotations.removeAll(annotation);
+    if (!m_annotations.contains(annota))
+        return false;
+
+    m_annotations.removeAll(annota);
+
+    if (!m_page->removeAnnotation(annota))
+        return false;
 
     foreach (BrowserAnnotation *annotation, m_annotationItems) {
-        if (annotation->annotation() == annotation->annotation()) {
+        if (annota == annotation->annotation()) {
+            if (annota == m_lastClickIconAnnotation->annotation())
+                m_lastClickIconAnnotation = nullptr;
             m_annotationItems.removeAll(annotation);
             delete annotation;
+            annotation = nullptr;
         }
     }
 
@@ -621,6 +742,14 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         foreach (QRectF rect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
             m_annotationItems.append(annotationItem);
+            m_lastClickIconAnnotation = annotationItem;
+        }
+
+        if (annot->type() == 1) {
+            if (m_lastClickIconAnnotation) {
+                m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
+                m_lastClickIconAnnotation->setDrawSelectRect(true);
+            }
         }
     }
 

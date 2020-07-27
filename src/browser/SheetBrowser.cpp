@@ -441,7 +441,7 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
 
     value = x1 - width / 2.0;
     iconRect.setX((value < 0.0) ? 0.0 : value);
-    value = y1 - width / 2.0;
+    value = y1 - height / 2.0;
     iconRect.setY((value < 0.0) ? 0.0 : value);
 
     iconRect.setWidth(width);
@@ -514,12 +514,19 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint)
     if (nullptr == page)
         return nullptr;
 
+    if (m_lastClickPage)
+        m_lastClickPage->setSelectIconRect(false);
+
+    m_lastClickPage = page;
+
     point = translate2Local(point);
 
     foreach (Annotation *annot, page->annotations()) {
         foreach (QRectF rect, annot->boundary()) {
-            if (rect.contains(point))
+            if (rect.contains(point)) {
+                page->setSelectIconRect(true, annot);
                 return annot;
+            }
         }
     }
 
@@ -557,13 +564,18 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
         }
 
         highLightAnnot = endPage->addHighlightAnnotation(contains, color);
-    }
 
-    if (highLightAnnot) {
-        emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
-    }
+        for (int index = startIndex; index < endIndex; index++) {
+            if (m_items.at(index))
+                emit sigAddHighLightAnnot(m_items.at(index), contains, color);
+        }
 
-    return highLightAnnot;
+        if (highLightAnnot) {
+            emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
+        }
+
+        return highLightAnnot;
+    }
 }
 
 void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)
@@ -613,6 +625,35 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
 
 }
 
+/**
+ * @brief SheetBrowser::addNewIconAnnotDeleteOld
+ * 鼠标移动图标注释,删除之前的,在新位置添加一个新的
+ * @param point
+ */
+void SheetBrowser::addNewIconAnnotDeleteOld(const QPointF clickPoint)
+{
+    if (nullptr == m_lastClickPage)
+        return;
+
+    QPointF pointf = clickPoint;
+    QRectF iconRect;
+    BrowserPage *nowPage{nullptr};
+    QString  containt{""};
+
+    nowPage = mouseClickInPage(pointf);
+
+    if (nullptr == nowPage || m_lastClickPage != nowPage)
+        return;
+
+    iconRect.setWidth(nowPage->boundingRect().width());
+    iconRect.setHeight(nowPage->boundingRect().height());
+
+    bool isVaild = calcIconAnnotRect(nowPage, clickPoint, iconRect);
+
+    if (isVaild)
+        nowPage->moveIconAnnotation(iconRect);
+}
+
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
 {
     if (nullptr == m_document)
@@ -623,7 +664,6 @@ bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
     if (item) {
         return item->mouseClickIconAnnot(clickPoint);
     }
-
 
     return false;
 }
@@ -936,8 +976,19 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
             m_selectEndPos = QPointF();
+
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
+            deepin_reader::Annotation *clickAnno = nullptr;
+
+//            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
+            clickAnno = getClickAnnot(m_selectPressedPos);
+            if (clickAnno && clickAnno->type() == 1) {
+                m_selectIconAnnotation = true;
+                m_iconAnnotationMovePos = m_selectPressedPos;
+                m_annotationInserting = false;
+                return DGraphicsView::mousePressEvent(event);
+            }
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
             m_selectPressedPos = QPointF();
@@ -1057,6 +1108,15 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint mousePos = event->pos();
+
+    if (m_selectIconAnnotation && m_lastClickPage) {
+        m_iconAnnotationMovePos = mapToScene(mousePos);
+        m_lastClickPage->setDrawMoveIconRect(true);
+        m_lastClickPage->setIconMovePos(QPoint(m_iconAnnotationMovePos.x() - m_lastClickPage->x(), m_iconAnnotationMovePos.y() - m_lastClickPage->y()));
+        setCursor(QCursor(Qt::PointingHandCursor));
+        return ;
+    }
+
     if (m_sheet->isFullScreen()) {
         if (mousePos.x() == 0 && !m_sheet->sideBarVisible()) {
             m_sheet->setSidebarVisible(true, false);
@@ -1111,7 +1171,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             }
         } else {
             m_tipsWidget->hide();
-
             QPointF beginPos = m_selectPressedPos;
             QPointF endPos = mapToScene(event->pos());
 
@@ -1186,6 +1245,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
+//        <<< <<< < Updated upstream
         const QPointF &mousepoint = mapToScene(event->pos());
         m_selectPressedPos = QPointF();
         m_selectEndPos = mousepoint;
@@ -1206,6 +1266,19 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             if (nullptr != clickAnno && selectedWordsText().length() == 1)
                 showNoteEditWidget(clickAnno);
         }
+//        == == == =
+        m_selectEndPos = mapToScene(event->pos());
+
+        if (m_selectIconAnnotation && m_lastClickPage && (m_selectPressedPos != m_selectEndPos)) {
+            m_lastClickPage->setDrawMoveIconRect(false);
+            addNewIconAnnotDeleteOld(m_selectEndPos);
+        }
+
+        m_selectEndPos = QPointF();
+        m_selectStartPos = QPointF();
+        m_selectPressedPos = QPointF();
+        m_selectIconAnnotation = false;
+//        >>> >>> > Stashed changes
     }
 
     QGraphicsView::mouseReleaseEvent(event);
@@ -1291,9 +1364,6 @@ Annotation *SheetBrowser::addIconAnnotation(const QPointF clickPoint, const QStr
     page = mouseClickInPage(pointf);
 
     if (nullptr != page) {
-        //rotate 0
-        pointf = QPointF(clickPoint.x() - page->pos().x(), clickPoint.y() - page->pos().y());
-
         iconRect.setWidth(page->boundingRect().width());
         iconRect.setHeight(page->boundingRect().height());
 

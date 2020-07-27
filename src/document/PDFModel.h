@@ -117,6 +117,9 @@ public:
     bool mouseClickIconAnnot(QPointF &) override;
 
     Annotation *addIconAnnotation(const QRectF ponit, const QString text) override;
+
+    Annotation *moveIconAnnotation(Annotation *annot, const QRectF rect) override;
+
 private:
     Q_DISABLE_COPY(PDFPage)
 
