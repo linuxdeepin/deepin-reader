@@ -726,6 +726,8 @@ bool SheetBrowser::removeAllAnnotation()
             item->removeAllAnnotation();
     }
 
+    emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, nullptr);
+
     return true;
 }
 
