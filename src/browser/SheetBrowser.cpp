@@ -881,17 +881,19 @@ void SheetBrowser::deform(SheetOperation &operation)
         break;
     }
 
+    int page = operation.currentPage;
+    int diffY = 0;
+    int diffX = 0;
+
+    if (page > 0 && page <= m_items.count()) {
+        diffY = qRound((verticalScrollBar()->value() - m_items.at(page - 1)->pos().y()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
+        diffX = qRound((horizontalScrollBar()->value() - m_items.at(page - 1)->pos().x()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
+    }
+
+
     for (int i = 0; i < m_items.count(); ++i) {
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
     }
-
-    //开始调整位置
-    int page = currentPage();
-
-    int diff = 0;
-
-    if (page > 0 && page <= m_items.count())
-        diff = static_cast<int>(verticalScrollBar()->value() - m_items.at(page - 1)->pos().y());
 
     int width = 0;
     int height = 0;
@@ -934,8 +936,10 @@ void SheetBrowser::deform(SheetOperation &operation)
 
     setSceneRect(0, 0, width, height);
 
-    if (page > 0 && page <= m_items.count())
-        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diff));
+    if (page > 0 && page <= m_items.count()) {
+        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
+        horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
+    }
 
     handleVerticalScrollLater();
 }
