@@ -64,8 +64,7 @@ BrowserPage::~BrowserPage()
 
 void BrowserPage::reOpen(Page *page)
 {
-    if (nullptr != m_page)
-        delete m_page;
+    Page *tmpPage = m_page;
 
     m_page = page;
 
@@ -76,6 +75,9 @@ void BrowserPage::reOpen(Page *page)
     m_annotationItems.clear();
 
     m_hasLoadedAnnotation = false;
+
+    if (nullptr != tmpPage)
+        delete tmpPage;
 
     //文字不需要重新加载
 }

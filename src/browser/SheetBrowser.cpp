@@ -57,6 +57,8 @@
 #include <QDomDocument>
 #include <QFileInfo>
 #include <QTemporaryFile>
+#include <QStandardPaths>
+#include <QUuid>
 
 const int ICONANNOTE_WIDTH = 24;
 
@@ -154,7 +156,7 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
     if (nullptr == m_document)  //未打开的无法重新打开
         return false;
 
-    delete m_document;
+    deepin_reader::Document *tempDocument = m_document;
 
     if (Dr::PDF == fileType)
         m_document = deepin_reader::PDFDocument::loadDocument(filePath);
@@ -167,9 +169,9 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         if (m_items.count() > i)
             m_items[i]->reOpen(m_document->page(i));
-        else
-            return false;
     }
+
+    delete tempDocument;
 
     return true;
 }
@@ -179,37 +181,20 @@ bool SheetBrowser::save()
     if (m_filePath.isEmpty())
         return false;
 
-    QTemporaryFile temporaryFile;
+    QString tmpFilePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QUuid::createUuid().toString() + ".tmp";
 
-    QString strtemfile = temporaryFile.fileTemplate() + QLatin1String(".") + QFileInfo(m_filePath).fileName();
-
-    temporaryFile.setFileTemplate(strtemfile);
-
-    if (!temporaryFile.open()) {
+    if (!m_document->save(tmpFilePath, true)) {
         return false;
     }
 
-    temporaryFile.close();
+    QFile tmpFile(tmpFilePath);
 
-    if (!m_document->save(temporaryFile.fileName(), true)) {
+    if (!Utils::copyFile(tmpFilePath, m_filePath)) {
+        tmpFile.remove();
         return false;
     }
 
-    QFile file(m_filePath);
-
-    if (!temporaryFile.open()) {
-        return false;
-    }
-    if (temporaryFile.size() <= 1)
-        return  false;
-
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
-    }
-
-    if (!Utils::copyFile(strtemfile, m_filePath)) {
-        return false;
-    }
+    tmpFile.remove();
 
     return reOpen(m_fileType, m_filePath);
 }
