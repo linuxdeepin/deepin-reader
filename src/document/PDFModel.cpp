@@ -1145,9 +1145,9 @@ bool PDFDocument::wantsRightToLeftMode() const
 #endif // HAS_POPPLER_26
 }
 
-PDFDocument *PDFDocument::loadDocument(const QString &filePath)
+PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
 {
-    if (Poppler::Document *document = Poppler::Document::load(filePath)) {
+    if (Poppler::Document *document = Poppler::Document::load(filePath, QByteArray(), QByteArray().append(password))) {
         document->setRenderHint(Poppler::Document::Antialiasing, true);
         document->setRenderHint(Poppler::Document::TextAntialiasing, true);
 //        document->setRenderHint(Poppler::Document::TextSlightHinting, true);

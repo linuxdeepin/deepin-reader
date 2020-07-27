@@ -26,6 +26,7 @@
 
 class SheetSidebar;
 class SlideWidget;
+class EncryptionPage;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -69,7 +70,7 @@ public:
 
     void openFile();
 
-    bool openFileExec();
+    bool openFileExec(const QString &password);
 
     int pagesNumber();
 
@@ -199,6 +200,14 @@ public:
 
     void handleFindContent(const QString &strFind);
 
+    void showEncryPage();
+
+    bool tryPassword(QString password);
+
+    bool isLocked();
+
+    bool isUnLocked();
+
 private:
     SheetOperation &operationRef();
 
@@ -244,6 +253,12 @@ private slots:
 
     void onBrowserOperaAnnotation(int, deepin_reader::Annotation *);
 
+    void onExtractPassword(const QString &password);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    void childEvent(QChildEvent *c) override;
+
 private:
     SheetOperation  m_operation;
     QSet<int>       m_bookmarks;
@@ -255,9 +270,11 @@ private:
     Dr::FileType    m_fileType;
     QString         m_uuid;
 
+    bool m_filelocked      = false;
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;
 
+    EncryptionPage  *m_encryPage = nullptr;
 };
 
 #endif // DocSheet_H

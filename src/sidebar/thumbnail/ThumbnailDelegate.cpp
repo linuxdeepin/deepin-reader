@@ -40,6 +40,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         QMatrix matrix;
         matrix.rotate(rotate);
         QPixmap pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
+        pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
 
         if (!pixmap.isNull()) {
             const int borderRadius = 6;

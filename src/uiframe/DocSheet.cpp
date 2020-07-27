@@ -32,6 +32,8 @@
 #include "Database.h"
 #include "CentralDocPage.h"
 #include "MsgHeader.h"
+#include "widgets/EncryptionPage.h"
+#include "document/PDFModel.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -73,6 +75,9 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
     connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
     connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
+
+    this->addWidget(m_sidebar);
+    this->addWidget(m_browser);
 }
 
 DocSheet::~DocSheet()
@@ -211,9 +216,9 @@ void DocSheet::rotateRight()
     setOperationChanged();
 }
 
-bool DocSheet::openFileExec()
+bool DocSheet::openFileExec(const QString &password)
 {
-    if (m_browser->open(m_fileType, filePath())) {
+    if (m_browser->open(m_fileType, filePath(), password)) {
         if (!m_browser->loadPages(m_operation, m_bookmarks))
             return false;
         handleOpenSuccess();
@@ -223,7 +228,6 @@ bool DocSheet::openFileExec()
 
     return false;
 }
-
 void DocSheet::setBookMark(int index, int state)
 {
     if (state)
@@ -428,7 +432,7 @@ void DocSheet::closeMagnifier()
 
 void DocSheet::defaultFocus()
 {
-    if (m_browser)
+    if (isUnLocked() && m_browser)
         m_browser->setFocus();
 }
 
@@ -767,4 +771,80 @@ void DocSheet::onFindFinished()
 {
     int count = m_sidebar->handleFindFinished();
     m_browser->handleFindFinished(count);
+}
+
+void DocSheet::resizeEvent(QResizeEvent *event)
+{
+    DSplitter::resizeEvent(event);
+    if (m_encryPage) {
+        m_encryPage->setGeometry(0, 0, this->width(), this->height());
+    }
+}
+
+void DocSheet::childEvent(QChildEvent *)
+{
+    //Not todO;
+}
+
+void DocSheet::showEncryPage()
+{
+    m_filelocked = true;
+    if (m_encryPage == nullptr) {
+        m_encryPage = new EncryptionPage(this);
+        connect(m_encryPage, &EncryptionPage::sigExtractPassword, this, &DocSheet::onExtractPassword);
+        this->stackUnder(m_encryPage);
+    }
+    m_encryPage->setGeometry(0, 0, this->width(), this->height());
+    m_encryPage->raise();
+    m_encryPage->show();
+}
+
+bool DocSheet::isLocked()
+{
+    Document *document = nullptr;
+    if (Dr::PDF == m_fileType)
+        document = deepin_reader::PDFDocument::loadDocument(filePath());
+
+    if (nullptr == document)
+        return false;
+
+    return document->isLocked();
+}
+
+bool DocSheet::isUnLocked()
+{
+    return !m_filelocked;
+}
+
+bool DocSheet::tryPassword(QString password)
+{
+    Document *document = nullptr;
+    if (Dr::PDF == m_fileType)
+        document = deepin_reader::PDFDocument::loadDocument(filePath(), "");
+
+    if (nullptr == document || !document->isLocked())
+        return false;
+
+    bool isPassword = document->unlock(password);
+    delete document;
+    return !isPassword;
+}
+
+void DocSheet::onExtractPassword(const QString &password)
+{
+    bool ret = this->tryPassword(password);
+    if (ret) {
+        m_filelocked = false;
+        m_encryPage->hide();
+        this->openFileExec(password);
+        this->defaultFocus();
+
+        m_encryPage->close();
+        m_encryPage = nullptr;
+
+        CentralDocPage *doc = dynamic_cast<CentralDocPage *>(parent());
+        emit doc->sigCurSheetChanged(this);
+    } else {
+        m_encryPage->wrongPassWordSlot();
+    }
 }

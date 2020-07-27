@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     Application a(argc, argv);
 
     QCommandLineParser parser;
-
+    parser.addHelpOption();
     parser.addOptions({
         {
             {"f", "filePath"},

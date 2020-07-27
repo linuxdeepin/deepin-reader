@@ -124,6 +124,10 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     m_sheet = sheet;
     if (nullptr == sheet)
         return;
+    else if (!sheet->isUnLocked()) {
+        m_lineEdit->clear();
+        return;
+    }
 
     m_lineEdit->clear();
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";

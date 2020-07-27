@@ -55,6 +55,8 @@ public:
     static bool copyFile(const QString &sourcePath, const QString &destinationPath);
 
     static QImage copyImage(const QImage &srcimg, int x, int y, int w, int h);
+
+    static QPixmap renderSVG(const QString &filePath, const QSize &size);
 };
 
 #endif // UTILS_H

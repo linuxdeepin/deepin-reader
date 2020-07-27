@@ -172,7 +172,7 @@ public:
 
     bool wantsRightToLeftMode() const;
 
-    static deepin_reader::PDFDocument *loadDocument(const QString &filePath);
+    static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password = "");
 
 private:
     Q_DISABLE_COPY(PDFDocument)

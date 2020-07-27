@@ -52,7 +52,7 @@ public:
 
     static QImage firstThumbnail(const QString &filePath);
 
-    bool open(const Dr::FileType &fileType, const QString &filePath);
+    bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     bool reOpen(const Dr::FileType &fileType, const QString &filePath);
 

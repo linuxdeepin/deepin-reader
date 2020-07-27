@@ -143,10 +143,14 @@ void CentralDocPage::openFile(QString &filePath)
 
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
-    if (!sheet->openFileExec()) {
-        sheet->deleteLater();
-        showTips(tr("Please check if the file is damaged"), 1);
-        return;
+    if (sheet->isLocked()) {
+        sheet->showEncryPage();
+    } else {
+        if (!sheet->openFileExec("")) {
+            sheet->deleteLater();
+            showTips(tr("Please check if the file is damaged"), 1);
+            return;
+        }
     }
 
     connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));

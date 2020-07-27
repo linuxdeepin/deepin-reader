@@ -2,6 +2,7 @@ HEADERS += \
     $$PWD/AttrScrollWidget.h \
     $$PWD/BookMarkButton.h \
     $$PWD/ColorWidgetAction.h \
+    $$PWD/EncryptionPage.h \
     $$PWD/FileAttrWidget.h \
     $$PWD/FindWidget.h \
     $$PWD/HandleMenu.h \
@@ -24,6 +25,7 @@ SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
     $$PWD/BookMarkButton.cpp \
     $$PWD/ColorWidgetAction.cpp \
+    $$PWD/EncryptionPage.cpp \
     $$PWD/FileAttrWidget.cpp \
     $$PWD/FindWidget.cpp \
     $$PWD/HandleMenu.cpp \

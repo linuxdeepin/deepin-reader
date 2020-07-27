@@ -76,8 +76,13 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         return;
 
     } else if (Dr::PDF == m_curSheet->fileType()) {
-        setBtnDisable(false);
-        m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
+        if (m_curSheet->isUnLocked()) {
+            setBtnDisable(false);
+            m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
+        } else {
+            setBtnDisable(true);
+            m_pThumbnailBtn->setChecked(false);
+        }
         m_pSw->setSheet(m_curSheet);
 
     } else if (Dr::DjVu == m_curSheet->fileType()) {
