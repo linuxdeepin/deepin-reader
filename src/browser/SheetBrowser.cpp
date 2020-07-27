@@ -712,10 +712,21 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
             break;
         }
     }
+
     if (ret)
         emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
 
     return ret;
+}
+
+bool SheetBrowser::removeAllAnnotation()
+{
+    foreach (BrowserPage *item, m_items) {
+        if (item)
+            item->removeAllAnnotation();
+    }
+
+    return true;
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
@@ -987,7 +998,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             deepin_reader::Annotation *clickAnno = nullptr;
 
-//            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
+            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
             clickAnno = getClickAnnot(m_selectPressedPos, true);
             if (clickAnno && clickAnno->type() == 1) {
                 m_selectIconAnnotation = true;
@@ -1121,7 +1132,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         m_lastClickPage->setIconMovePos(QPoint(static_cast<int>(m_iconAnnotationMovePos.x() - m_lastClickPage->x()),
                                                static_cast<int>(m_iconAnnotationMovePos.y() - m_lastClickPage->y())));
         setCursor(QCursor(Qt::PointingHandCursor));
-        return ;
+        return;
     }
 
     if (m_sheet->isFullScreen()) {

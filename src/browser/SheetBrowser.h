@@ -112,6 +112,8 @@ public:
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
+    bool removeAllAnnotation();
+
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
     void handleSearch();

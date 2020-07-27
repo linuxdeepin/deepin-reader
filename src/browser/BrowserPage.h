@@ -144,6 +144,8 @@ public:
 
     bool moveIconAnnotation(const QRectF);
 
+    bool removeAllAnnotation();
+
 private:
     void reloadAnnotations();
 

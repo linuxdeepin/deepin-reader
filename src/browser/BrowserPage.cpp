@@ -680,6 +680,26 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
     return true;
 }
 
+bool BrowserPage::removeAllAnnotation()
+{
+    m_lastClickIconAnnotation = nullptr;
+
+    foreach (deepin_reader::Annotation *annot, m_annotations) {
+        if (annot) {
+            m_page->removeAnnotation(annot);
+        }
+    }
+
+    m_annotations.clear();
+
+    qDeleteAll(m_annotationItems);
+    m_annotationItems.clear();
+
+    renderViewPort(true);
+
+    return true;
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
