@@ -354,6 +354,8 @@ bool DocSheet::saveData()
 
     m_bookmarkChanged = false;
 
+    m_sidebar->changeResetModelData();
+
     return true;
 }
 
@@ -370,6 +372,8 @@ bool DocSheet::saveAsData(QString filePath)
     }
 
     Database::instance()->saveBookmarks(filePath, m_bookmarks);
+
+    m_sidebar->changeResetModelData();
 
     return true;
 }

@@ -207,3 +207,22 @@ void NotesWidget::updateThumbnail(const int &pageIndex)
 {
     m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
 }
+
+void NotesWidget::changeResetModelData()
+{
+    const QList< deepin_reader::Annotation * > &annotationlst = m_sheet->annotations();
+    QList<ImagePageInfo_t> pageSrclst;
+    int pagesNum = annotationlst.size();
+    for (int index = 0; index < pagesNum; index++) {
+        deepin_reader::Annotation *annotion = annotationlst.at(index);
+        if (!annotion->contents().isEmpty()) {
+            int pageIndex = static_cast<int>(annotion->page) - 1;
+            ImagePageInfo_t tImagePageInfo;
+            tImagePageInfo.pageIndex = pageIndex;
+            tImagePageInfo.strcontents = annotion->contents();
+            tImagePageInfo.annotation = annotion;
+            pageSrclst << tImagePageInfo;
+        }
+    }
+    m_pImageListView->getImageModel()->changeModelData(pageSrclst);
+}

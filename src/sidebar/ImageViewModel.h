@@ -97,6 +97,7 @@ public:
     void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
     void removeItemForAnno(deepin_reader::Annotation *annotation);
+    void changeModelData(const QList<ImagePageInfo_t> &pagelst);
 
     QList<QModelIndex> getModelIndexForPageIndex(int pageIndex);
     void getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo);

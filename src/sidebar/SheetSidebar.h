@@ -67,6 +67,8 @@ public :
     void handleFindContentComming(const deepin_reader::SearchResult &);
     int  handleFindFinished();
     void handleRotate(int);
+    void changeResetModelData();
+
 public slots:
     void handleUpdateThumbnail(const int &index);
     void handleUpdatePartThumbnail(const int &index);

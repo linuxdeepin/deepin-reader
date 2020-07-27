@@ -336,3 +336,10 @@ void SheetSidebar::onUpdateWidgetTheme()
         btn->setIcon(icon);
     }
 }
+
+void SheetSidebar::changeResetModelData()
+{
+    if (m_notesWidget) {
+        m_notesWidget->changeResetModelData();
+    }
+}

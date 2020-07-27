@@ -1267,7 +1267,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             showNoteEditWidget(clickAnno);
             m_annotationInserting = false;
         } else {
-            if (nullptr != clickAnno && selectedWordsText().length() == 1)
+            if (nullptr != clickAnno)
                 showNoteEditWidget(clickAnno);
         }
         m_selectEndPos = mapToScene(event->pos());

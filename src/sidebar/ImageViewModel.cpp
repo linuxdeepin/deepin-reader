@@ -42,6 +42,11 @@ void ImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool so
     endResetModel();
 }
 
+void ImageViewModel::changeModelData(const QList<ImagePageInfo_t> &pagelst)
+{
+    m_pagelst = pagelst;
+}
+
 void ImageViewModel::setDocSheet(DocSheet *sheet)
 {
     m_docSheet = sheet;
