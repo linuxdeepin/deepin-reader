@@ -70,7 +70,7 @@ public:
 
     bool openFileExec(const QString &password);
 
-    int pagesNumber();
+    int pagesNumber();      //总页数
 
     int currentPage();      //从1开始
 
@@ -111,8 +111,6 @@ public:
     void setMouseShape(Dr::MouseShape shape);
 
     void setAnnotationInserting(bool inserting);
-
-    void setState();
 
     void openMagnifier();
 
@@ -156,7 +154,7 @@ public:
 
     QSet<int> getBookMarkList() const;
 
-    SheetOperation operation();
+    SheetOperation operation() const;
 
     Dr::FileType fileType();
 

@@ -112,6 +112,8 @@ public:
 
     Annotation *addIconAnnotation(const QPointF, const QString);
 
+    Annotation *addHighLightAnnotation(const QString, const QColor);
+
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     bool removeAllAnnotation();
@@ -199,8 +201,6 @@ private:
     QPointF translate2Local(const QPointF);
 
     Annotation *getClickAnnot(const QPointF, bool drawRect = false);
-
-    Annotation *addHighLightAnnotation(const QString, const QColor);
 
     void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
 

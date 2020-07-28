@@ -405,12 +405,27 @@ void DocSheet::copySelectedText()
 
 void DocSheet::highlightSelectedText()
 {
+    if (!m_browser)
+        return;
 
+    if (m_browser->selectedWordsText().isEmpty())
+        return;
+
+    m_browser->addHighLightAnnotation("", QColor());
 }
 
 void DocSheet::addSelectedTextHightlightAnnotation()
 {
+    if (!m_browser)
+        return;
 
+    if (m_browser->selectedWordsText().isEmpty())
+        return;
+
+    //...进行高亮编辑
+    QString xx;
+
+    m_browser->addHighLightAnnotation(xx, QColor());
 }
 
 void DocSheet::openMagnifier()
@@ -519,7 +534,7 @@ QSet<int> DocSheet::getBookMarkList() const
     return m_bookmarks;
 }
 
-SheetOperation DocSheet::operation()
+SheetOperation DocSheet::operation() const
 {
     return m_operation;
 }
