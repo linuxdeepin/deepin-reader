@@ -112,13 +112,15 @@ public:
 
     Annotation *addIconAnnotation(const QPointF, const QString);
 
-    Annotation *addHighLightAnnotation(const QString, const QColor);
+    Annotation *addHighLightAnnotation(const QString, const QColor, QPoint &endPoint);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     bool removeAllAnnotation();
 
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
+
+    void showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point);
 
     void handleSearch();
 
@@ -193,8 +195,6 @@ private slots:
 
 private:
     bool mouseClickIconAnnot(QPointF &);
-
-    void showNoteEditWidget(deepin_reader::Annotation *annotation);
 
     bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
 

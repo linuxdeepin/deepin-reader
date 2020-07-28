@@ -57,6 +57,15 @@ public:
     static QImage copyImage(const QImage &srcimg, int x, int y, int w, int h);
 
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
+
+    static QList<QColor> getHiglightColorList();
+
+    static QColor getCurHiglightColor();
+
+    static void setHiglightColorIndex(int index);
+
+private:
+    static int m_colorIndex;
 };
 
 #endif // UTILS_H

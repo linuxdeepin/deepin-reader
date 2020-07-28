@@ -7,7 +7,7 @@
 #include <QDebug>
 
 #include "Application.h"
-
+#include "Utils.h"
 #include "widgets/RoundColorWidget.h"
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
@@ -55,7 +55,8 @@ void ColorWidgetAction::slotBtnClicked(int index)
         if (btnIndex == index) {
             btn->setSelected(true);
 
-            emit sigBtnGroupClicked(index);
+            Utils::setHiglightColorIndex(index);
+            emit sigBtnGroupClicked();
         } else {
             btn->setSelected(false);
         }
@@ -64,8 +65,8 @@ void ColorWidgetAction::slotBtnClicked(int index)
 
 void ColorWidgetAction::slotBtnDefaultClicked()
 {
-    int iIndex = getIndex();
-    emit sigBtnGroupClicked(iIndex);
+    Utils::setHiglightColorIndex(getIndex());
+    emit sigBtnGroupClicked();
 }
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
@@ -83,24 +84,17 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto sigMap = new QSignalMapper(this);
 
-    m_listColor.clear();
-    m_listColor.append(QColor("#FFA503"));
-    m_listColor.append(QColor("#FF1C49"));
-    m_listColor.append(QColor("#9023FC"));
-    m_listColor.append(QColor("#3468FF"));
-    m_listColor.append(QColor("#00C7E1"));
-    m_listColor.append(QColor("#05EA6B"));
-    m_listColor.append(QColor("#FEF144"));
-    m_listColor.append(QColor("#D5D5D1"));
+
     int tW = 25;
     int tH = 25;
 
-    for (int iLoop = 0; iLoop < m_listColor.size(); iLoop++) {
-        auto btn = new RoundColorWidget(m_listColor.at(iLoop), pWidget);
+    const QList<QColor> &colorlst =  Utils::getHiglightColorList();
+    for (int iLoop = 0; iLoop < colorlst.size(); iLoop++) {
+        auto btn = new RoundColorWidget(colorlst.at(iLoop), pWidget);
         btn->setAllClickNotify(true);
         btn->setObjectName(QString("%1").arg(iLoop));
         btn->setFixedSize(QSize(tW, tH));
-        if (iLoop == 0)
+        if (colorlst.at(iLoop) == Utils::getCurHiglightColor())
             btn->setSelected(true);
         connect(btn, SIGNAL(clicked()), sigMap, SLOT(map()));
         sigMap->setMapping(btn, iLoop);
@@ -134,9 +128,4 @@ int ColorWidgetAction::getIndex()
         }
     }
     return  iIndex;
-}
-
-QColor ColorWidgetAction::getColor()
-{
-    return m_listColor.at(getIndex());
 }

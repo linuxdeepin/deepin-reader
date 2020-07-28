@@ -42,11 +42,10 @@ signals:
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
     void initActions(DocSheet *sheet, int index, SheetMenuType_e type);
-    QColor getColor();
 
 private slots:
     void onItemClicked();
-    void onSetHighLight(const int &colorIndex);
+    void onSetHighLight();
 
 private:
     QAction *createAction(const QString &displayname, const QString &objectname);

@@ -411,7 +411,8 @@ void DocSheet::highlightSelectedText()
     if (m_browser->selectedWordsText().isEmpty())
         return;
 
-    m_browser->addHighLightAnnotation("", QColor());
+    QPoint ponintend;
+    m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend);
 }
 
 void DocSheet::addSelectedTextHightlightAnnotation()
@@ -423,9 +424,8 @@ void DocSheet::addSelectedTextHightlightAnnotation()
         return;
 
     //...进行高亮编辑
-    QString xx;
-
-    m_browser->addHighLightAnnotation(xx, QColor());
+    QPoint ponintend;
+    m_browser->showNoteEditWidget(m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend), ponintend);
 }
 
 void DocSheet::openMagnifier()

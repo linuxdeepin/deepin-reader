@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
+int Utils::m_colorIndex = 0;
 bool Utils::fileExists(const QString &path)
 {
     QFileInfo check_file(path);
@@ -314,4 +315,30 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
     }
 
     return pixmap;
+}
+
+QList<QColor> Utils::getHiglightColorList()
+{
+    QList<QColor> listColor;
+    listColor.append(QColor("#FFA503"));
+    listColor.append(QColor("#FF1C49"));
+    listColor.append(QColor("#9023FC"));
+    listColor.append(QColor("#3468FF"));
+    listColor.append(QColor("#00C7E1"));
+    listColor.append(QColor("#05EA6B"));
+    listColor.append(QColor("#FEF144"));
+    listColor.append(QColor("#D5D5D1"));
+    return listColor;
+}
+
+void Utils::setHiglightColorIndex(int index)
+{
+    m_colorIndex = index;
+}
+
+QColor Utils::getCurHiglightColor()
+{
+    const QList<QColor> &colorlst =  getHiglightColorList();
+    int index = qBound(0, m_colorIndex, colorlst.size() - 1);
+    return colorlst.at(index);
 }

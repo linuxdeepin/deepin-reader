@@ -328,7 +328,7 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
         page->addHighlightAnnotation(text, color);
 }
 
-void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
+void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
     if (annotation == nullptr) {
         Q_ASSERT(false && "showNoteEditWidget Annotation Is Null");
@@ -344,7 +344,7 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation)
     }
     m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
-    m_noteEditWidget->showWidget(QCursor::pos());
+    m_noteEditWidget->showWidget(point);
 }
 
 /**
@@ -532,17 +532,16 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint, bool drawRect)
     return nullptr;
 }
 
-Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color)
+Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &endPoint)
 {
-    //使用当前选中的颜色
-    //QColor useColor = color.isVaild()?color:curColor;
-
     BrowserPage *startPage{nullptr};
     BrowserPage *endPage{nullptr};
     Annotation *highLightAnnot{nullptr};
 
     startPage = mouseClickInPage(m_selectStartPos);
     endPage = mouseClickInPage(m_selectEndPos);
+
+    endPoint = this->mapToGlobal(this->mapFromScene(m_selectEndPos));
 
     if (nullptr == startPage || nullptr == endPage)
         return nullptr;
@@ -1052,12 +1051,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     if (annotation)
                         Utils::copyText(annotation->annotationText());
                 } else if (objectname == "AddTextHighlight") {
-                    QColor color = menu.getColor();
-                    addHighLightAnnotation("", color);
+                    QPoint pointEnd;
+                    addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
                 } else if (objectname == "ChangeAnnotationColor") {
                     if (annotation) {
-                        QColor color = menu.getColor();
-                        updateAnnotation(annotation->annotation(), annotation->annotationText(), color);
+                        updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                     }
                 } else if (objectname == "RemoveAnnotation") {
                     if (annotation)
@@ -1065,25 +1063,23 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
-                        showNoteEditWidget(annotation->annotation());
+                        showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
                     } else {
-                        showNoteEditWidget(addIconAnnotation(clickPos, ""));
+                        showNoteEditWidget(addIconAnnotation(clickPos, ""), mapToGlobal(event->pos()));
                     }
-                    m_noteEditWidget->move(mapToGlobal(event->pos()) - QPoint(12, 12));
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
                     if (annotation)
                         m_sheet->removeAnnotation(annotation->annotation(), !annotation->annotationText().isEmpty());
                 } else if (objectname == "AddAnnotationHighlight") {
-                    QColor color = menu.getColor();
                     if (annotation)  {
-                        updateAnnotation(annotation->annotation(), annotation->annotationText(), color);
-                        showNoteEditWidget(annotation->annotation());
+                        updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
+                        showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
                     } else {
-                        showNoteEditWidget(addHighLightAnnotation("", color));
+                        QPoint pointEnd;
+                        showNoteEditWidget(addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd), mapToGlobal(event->pos()));
                     }
-                    m_noteEditWidget->move(mapToGlobal(event->pos()) - QPoint(12, 12));
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();
                 } else if (objectname == "RemoveBookmark") {
@@ -1296,11 +1292,11 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 } else {
                     clickAnno = addIconAnnotation(mousepoint, "");
                 }
-                showNoteEditWidget(clickAnno);
+                showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
                 m_annotationInserting = false;
             } else {
                 if (nullptr != clickAnno)
-                    showNoteEditWidget(clickAnno);
+                    showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }
             m_selectEndPos = mapToScene(event->pos());
         } else {
@@ -1308,7 +1304,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 m_lastClickPage->setDrawMoveIconRect(false);
                 addNewIconAnnotDeleteOld(m_selectEndPos);
             } else if (m_lastClickPage && (m_selectPressedPos == m_selectEndPos)) {
-                showNoteEditWidget(clickAnno);
+                showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }
         }
 

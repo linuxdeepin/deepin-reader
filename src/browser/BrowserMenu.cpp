@@ -21,6 +21,7 @@
 #include "BrowserMenu.h"
 #include "widgets/ColorWidgetAction.h"
 #include "DocSheet.h"
+#include "Utils.h"
 
 #include <DFontSizeManager>
 
@@ -49,7 +50,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
             createAction(tr("Copy"), "Copy");
         this->addSeparator();
         m_pColorWidgetAction = new ColorWidgetAction(this);
-        connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked(const int &)), this, SLOT(onSetHighLight(const int &)));
+        connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
         this->addAction(m_pColorWidgetAction);
 
         QAction *rmHighAct = createAction(tr("Remove highlight"), "RemoveHighlight");
@@ -121,7 +122,7 @@ void BrowserMenu::onItemClicked()
     emit signalMenuItemClicked(sender()->objectName());
 }
 
-void BrowserMenu::onSetHighLight(const int &)
+void BrowserMenu::onSetHighLight()
 {
     if (m_type == DOC_MENU_SELECT_TEXT) {
         emit signalMenuItemClicked("AddTextHighlight");
@@ -129,11 +130,4 @@ void BrowserMenu::onSetHighLight(const int &)
         emit signalMenuItemClicked("ChangeAnnotationColor");
     }
     this->close();
-}
-
-QColor BrowserMenu::getColor()
-{
-    if (m_pColorWidgetAction)
-        return m_pColorWidgetAction->getColor();
-    return QColor("#FFA503");
 }
