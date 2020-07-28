@@ -226,7 +226,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (nullptr == m_page)
         return;
 
-    if (qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rotation == m_rotation)
+    if (renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
     prepareGeometryChange();
@@ -311,6 +311,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
                 annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 
+    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)

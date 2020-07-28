@@ -159,7 +159,7 @@ protected:
         QImage image;
     };
 
-private:
+public:
     deepin_reader::Page *m_page = nullptr;
     SheetBrowser *m_parent = nullptr;
 

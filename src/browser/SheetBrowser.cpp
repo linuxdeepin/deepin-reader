@@ -687,8 +687,7 @@ QString SheetBrowser::selectedWordsText()
 void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {
-        if (!item->isVisible())
-            item->clearWords();
+        item->clearWords();
     }
 
     if (nullptr == m_scrollTimer) {
@@ -700,7 +699,7 @@ void SheetBrowser::handleVerticalScrollLater()
     if (m_scrollTimer->isActive())
         m_scrollTimer->stop();
 
-    m_scrollTimer->start(100);
+    m_scrollTimer->start(500);
 }
 
 QList<deepin_reader::Annotation *> SheetBrowser::annotations()
@@ -913,7 +912,6 @@ void SheetBrowser::deform(SheetOperation &operation)
         diffY = qRound((verticalScrollBar()->value() - m_items.at(page - 1)->pos().y()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
         diffX = qRound((horizontalScrollBar()->value() - m_items.at(page - 1)->pos().x()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
     }
-
 
     for (int i = 0; i < m_items.count(); ++i) {
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
