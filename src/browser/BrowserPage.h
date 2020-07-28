@@ -37,6 +37,7 @@ class Page;
 
 class SheetBrowser;
 class BrowserWord;
+class BrowserLink;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
@@ -91,6 +92,8 @@ public:
     QString selectedWords();
 
     void setWordSelectable(bool selectable);
+
+    void loadLinks();
 
     void clearWords();
 
@@ -179,6 +182,8 @@ public:
     bool m_hasLoadedAnnotation = false;                 //是否已经加载注释
     QList<BrowserAnnotation *> m_annotationItems;       //一个注释可能对应多个annotationitems
     QList<deepin_reader::Annotation *> m_annotations;   //
+
+    QList<BrowserLink *> m_linkItems;
 
     QPointF m_posPressed;               //是否正在按下
     bool m_wordSelectable = false;      //文字是否可以选取

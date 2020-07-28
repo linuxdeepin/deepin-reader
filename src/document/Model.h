@@ -89,6 +89,8 @@ struct Word {
         this->text = text;
         this->boundingBox = rectf;
     };
+
+    bool hasSpaceAfter() const;
 };
 
 struct SearchResult {

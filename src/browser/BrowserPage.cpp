@@ -31,6 +31,7 @@
 #include "RenderPageThread.h"
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
+#include "BrowserLink.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
 #include "RenderViewportThread.h"
@@ -450,6 +451,15 @@ void BrowserPage::setWordSelectable(bool selectable)
     m_wordSelectable = selectable;
     foreach (BrowserWord *word, m_words) {
         word->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+    }
+}
+
+void BrowserPage::loadLinks()
+{
+    QList< Link * > links = m_page->links();
+    for (int i = 0; i < links.count(); ++i) {
+        BrowserLink *link = new BrowserLink(this, links[i]);
+        m_linkItems.append(link);
     }
 }
 

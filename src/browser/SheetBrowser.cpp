@@ -988,8 +988,6 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
         m_sheet->setOperationChanged();
     }
 
-    QGraphicsView::resizeEvent(event);
-
     if (nullptr == m_resizeTimer) {
         m_resizeTimer = new QTimer(this);
         connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
@@ -999,8 +997,12 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     if (m_resizeTimer->isActive())
         m_resizeTimer->stop();
 
-    m_resizeTimer->start(100);
-    if (m_pFindWidget) m_pFindWidget->showPosition(this->width());
+    m_resizeTimer->start(500);
+
+    if (m_pFindWidget)
+        m_pFindWidget->showPosition(this->width());
+
+    QGraphicsView::resizeEvent(event);
 }
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)

@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/BrowserWord.h \
     $$PWD/SheetBrowser.h \
     $$PWD/RenderViewportThread.h \
-    $$PWD/RenderPageThread.h
+    $$PWD/RenderPageThread.h \
+    $$PWD/BrowserLink.h
 
 SOURCES += \
     $$PWD/BrowserMagniFier.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     $$PWD/BrowserWord.cpp \
     $$PWD/SheetBrowser.cpp \
     $$PWD/RenderViewportThread.cpp \
-    $$PWD/RenderPageThread.cpp
+    $$PWD/RenderPageThread.cpp \
+    $$PWD/BrowserLink.cpp
 
 INCLUDEPATH += $$PWD
