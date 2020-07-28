@@ -534,6 +534,9 @@ Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint, bool drawRect)
 
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color)
 {
+    //使用当前选中的颜色
+    //QColor useColor = color.isVaild()?color:curColor;
+
     BrowserPage *startPage{nullptr};
     BrowserPage *endPage{nullptr};
     Annotation *highLightAnnot{nullptr};

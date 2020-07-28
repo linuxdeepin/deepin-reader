@@ -561,6 +561,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 
     for (index = 0; index < m_words.count(); index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
+            m_words.at(index)->setSelected(false);
             if (index >= 0 && index < twords.count()) {
                 deepin_reader::Word tword = twords.at(index);
 
