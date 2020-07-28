@@ -154,12 +154,8 @@ private:
 protected:
     bool sceneEvent(QEvent *event) override;
 
-    struct ImageFragment {
-        QRect rect;
-        QImage image;
-    };
-
 public:
+    static QSet<BrowserPage *> items;                   //用于记录多少个自己
     deepin_reader::Page *m_page = nullptr;
     SheetBrowser *m_parent = nullptr;
 
@@ -182,23 +178,21 @@ public:
     bool m_bookmark = false;   //当前是否有书签
     int  m_bookmarkState = 0;  //当前书签状态 1为on 2为pressed 3为show
 
-    static QSet<BrowserPage *> items;
+    bool m_hasLoadedAnnotation = false;                 //是否已经加载注释
+    QList<BrowserAnnotation *> m_annotationItems;       //一个注释可能对应多个annotationitems
+    QList<deepin_reader::Annotation *> m_annotations;   //
 
-    bool m_hasLoadedAnnotation = false;
-    QList<BrowserAnnotation *> m_annotationItems;  //一个注释可能对应多个annotationitems
-    QList<deepin_reader::Annotation *> m_annotations;
-
-    QPointF m_posPressed;
+    QPointF m_posPressed;               //是否正在按下
     bool m_wordSelectable = false;      //文字是否可以选取
 
     QRectF m_searchSelectLighRectf;
     QList<QRectF> m_searchLightrectLst;
 
     BrowserAnnotation *m_lastClickIconAnnotation{nullptr};
-    bool m_drawIconRect{false}; // 绘制当前选中图标注释边框
-    QRectF m_selecetIconAnnotationRect{QRectF()}; // 绘制选择的图标注释的外边框
-    bool m_drawMoveIconRect{false}; // 绘制移动图标注释边框
-    QPointF m_drawMoveIconPoint{QPointF()}; // 绘制移动图标注释点
+    bool m_drawIconRect{false};                         // 绘制当前选中图标注释边框
+    QRectF m_selecetIconAnnotationRect{QRectF()};       // 绘制选择的图标注释的外边框
+    bool m_drawMoveIconRect{false};                     // 绘制移动图标注释边框
+    QPointF m_drawMoveIconPoint{QPointF()};             // 绘制移动图标注释点
 };
 
 #endif // BrowserPage_H

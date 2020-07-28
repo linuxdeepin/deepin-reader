@@ -58,6 +58,13 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
 BrowserPage::~BrowserPage()
 {
     items.remove(this);
+
+    qDeleteAll(m_annotations);
+    m_annotations.clear();
+
+    qDeleteAll(m_annotationItems);
+    m_annotationItems.clear();
+
     if (nullptr != m_page)
         delete m_page;
 }
@@ -143,7 +150,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->drawPixmap(option->rect, m_pixmap);
 
-    if (!m_viewportPixmap.isNull())
+    if (m_viewportRenderedRect.isValid())
         painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
 
     if (1 == m_bookmarkState)
@@ -229,8 +236,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
-    prepareGeometryChange();
-
     m_pixmapHasRendered = false;
 
     m_scaleFactor = scaleFactor;
@@ -238,14 +243,14 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (m_lastClickIconAnnotation)
         m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
 
-    m_viewportRenderedRect = QRect();
-
-    m_viewportPixmap = QPixmap();
+    if (m_viewportRenderedRect.isValid()) {
+        m_viewportRenderedRect = QRect();
+        m_viewportPixmap = QPixmap();
+    }
 
     if (m_rotation != rotation) {//旋转变化则强制移除
         clearWords();
         m_wordScaleFactor = -1;
-
         m_pixmap = QPixmap();
         m_rotation = Dr::NumberOfRotations;
         m_pixmapScaleFactor = -1;
@@ -310,8 +315,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
             if (annotationItem)
                 annotationItem->setScaleFactorAndRotation(m_rotation);
     }
-
-    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
@@ -709,7 +712,10 @@ bool BrowserPage::removeAllAnnotation()
     m_annotations.clear();
 
     qDeleteAll(m_annotationItems);
+
     m_annotationItems.clear();
+
+    reload();
 
     renderViewPort(true);
 
