@@ -89,20 +89,6 @@ void BrowserPage::reOpen(Page *page)
     //文字不需要重新加载
 }
 
-void BrowserPage::reload()
-{
-    m_scaleFactor = -1;
-    m_rotation = Dr::NumberOfRotations;
-
-    m_pixmap = QPixmap();
-    m_pixmapHasRendered = false;
-    m_pixmapScaleFactor   = -1;
-    m_pixmapRenderedRect = QRect();
-
-    m_viewportPixmap = QPixmap();
-    m_viewportRenderedRect = QRect();
-}
-
 QRectF BrowserPage::boundingRect() const
 {
     if (nullptr == m_page)
@@ -228,12 +214,12 @@ void BrowserPage::renderViewPort(bool force)
     RenderViewportThread::appendTask(task);
 }
 
-void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater)
+void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, bool force)
 {
     if (nullptr == m_page)
         return;
 
-    if (renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
+    if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
     m_pixmapHasRendered = false;
@@ -703,6 +689,9 @@ bool BrowserPage::removeAllAnnotation()
 {
     m_lastClickIconAnnotation = nullptr;
 
+    if (m_annotations.isEmpty())
+        return true;
+
     foreach (deepin_reader::Annotation *annot, m_annotations) {
         if (annot) {
             m_page->removeAnnotation(annot);
@@ -715,7 +704,13 @@ bool BrowserPage::removeAllAnnotation()
 
     m_annotationItems.clear();
 
-    reload();
+    m_hasLoadedAnnotation = false;
+
+    Dr::Rotation rotation = m_rotation;
+
+    m_rotation = Dr::NumberOfRotations;
+
+    render(m_scaleFactor, rotation, true, true);
 
     renderViewPort(true);
 

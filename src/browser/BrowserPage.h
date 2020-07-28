@@ -50,8 +50,6 @@ public:
 
     void reOpen(deepin_reader::Page *page);
 
-    void reload();
-
     QRectF boundingRect()const override;
 
     QRectF bookmarkRect();
@@ -64,7 +62,7 @@ public:
 
     void renderViewPort(bool force = false);     //优先显示当前窗口
 
-    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false);
+    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false, bool force = false);
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
