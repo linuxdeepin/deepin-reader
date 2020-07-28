@@ -74,7 +74,8 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
     connect(m_browser, SIGNAL(sigOperaAnnotation(int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, deepin_reader::Annotation *)));
-    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
+    connect(m_browser, SIGNAL(sigPartThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
+    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdateThumbnail(int)));
 
     this->addWidget(m_sidebar);
     this->addWidget(m_browser);
@@ -464,20 +465,15 @@ bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation, bool tips
 {
     int ret = m_browser->removeAnnotation(annotation);
     if (ret) {
-        setDocumentChanged(true);
         if (tips) this->showTips(tr("The annotation has been removed"));
     }
     return ret;
 }
 
-bool DocSheet::removeAnnotations(const QList<deepin_reader::Annotation *> &annotations)
+bool DocSheet::removeAllAnnotation()
 {
-    bool ret = false;
-    for (deepin_reader::Annotation *anno : annotations) {
-        ret = m_browser->removeAnnotation(anno);
-    }
+    bool ret = m_browser->removeAllAnnotation();
     if (ret) {
-        setDocumentChanged(true);
         this->showTips(tr("The annotation has been removed"));
     }
     return ret;
@@ -747,10 +743,8 @@ void DocSheet::onBrowserBookmark(int index, bool state)
 
 void DocSheet::onBrowserOperaAnnotation(int type, deepin_reader::Annotation *anno)
 {
-    if (m_sidebar)
-        m_sidebar->handleAnntationMsg(type, anno);
-    if (MSG_NOTE_DELETE != type)
-        setDocumentChanged(true);
+    m_sidebar->handleAnntationMsg(type, anno);
+    setDocumentChanged(true);
 }
 
 void DocSheet::handleFindNext()

@@ -396,7 +396,7 @@ void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation
 
     m_pixmapRenderedRect.setHeight(rect.y() + rect.height());
 
-    emit m_parent->sigThumbnailUpdated(m_index);
+    emit m_parent->sigPartThumbnailUpdated(m_index);
 
     update();
 }

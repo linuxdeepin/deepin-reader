@@ -140,6 +140,7 @@ void ImageViewModel::onUpdatePageImage(int pageIndex)
 void ImageViewModel::onFetchImage(int index) const
 {
     ReaderImageParam_t tParam;
+    tParam.maxPixel = 198;
     tParam.pageIndex = index;
     tParam.sheet = m_docSheet;
     tParam.receiver = m_parent;

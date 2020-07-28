@@ -155,6 +155,8 @@ signals:
 
     void sigOperaAnnotation(int type, deepin_reader::Annotation *annotation);
 
+    void sigPartThumbnailUpdated(int index);
+
     void sigThumbnailUpdated(int index);
 
     void sigAddHighLightAnnot();
