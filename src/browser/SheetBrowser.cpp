@@ -1020,6 +1020,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
+
             m_selectPressedPos = QPointF();
 
             BrowserPage *item = nullptr;

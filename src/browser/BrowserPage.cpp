@@ -82,6 +82,20 @@ void BrowserPage::reOpen(Page *page)
     //文字不需要重新加载
 }
 
+void BrowserPage::reload()
+{
+    m_scaleFactor = -1;
+    m_rotation = Dr::NumberOfRotations;
+
+    m_pixmap = QPixmap();
+    m_pixmapHasRendered = false;
+    m_pixmapScaleFactor   = -1;
+    m_pixmapRenderedRect = QRect();
+
+    m_viewportPixmap = QPixmap();
+    m_viewportRenderedRect = QRect();
+}
+
 QRectF BrowserPage::boundingRect() const
 {
     if (nullptr == m_page)

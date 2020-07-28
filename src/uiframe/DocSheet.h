@@ -64,8 +64,6 @@ public:
     static QMap<QString, DocSheet *> g_map;
 
 public:
-    void initOperationData(const SheetOperation &opera);
-
     bool isOpen();
 
     void openFile();

@@ -50,6 +50,8 @@ public:
 
     void reOpen(deepin_reader::Page *page);
 
+    void reload();
+
     QRectF boundingRect()const override;
 
     QRectF bookmarkRect();
@@ -161,7 +163,7 @@ private:
     deepin_reader::Page *m_page = nullptr;
     SheetBrowser *m_parent = nullptr;
 
-    int m_index = 0;                                    //当前索引
+    int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 

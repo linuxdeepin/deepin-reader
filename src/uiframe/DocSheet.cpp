@@ -115,11 +115,6 @@ DocSheet *DocSheet::getSheet(QString uuid)
     return nullptr;
 }
 
-void DocSheet::initOperationData(const SheetOperation &opera)
-{
-    m_operation = opera;
-}
-
 bool DocSheet::isOpen()
 {
     //...
