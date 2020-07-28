@@ -760,9 +760,9 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     return ret;
 }
 
-void SheetBrowser::onRemoveAnnotation(deepin_reader::Annotation *annotation)
+void SheetBrowser::onRemoveAnnotation(deepin_reader::Annotation *annotation, bool tips)
 {
-    m_sheet->removeAnnotation(annotation);
+    m_sheet->removeAnnotation(annotation, tips);
 }
 
 void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text)
