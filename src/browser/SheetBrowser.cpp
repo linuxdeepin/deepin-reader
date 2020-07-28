@@ -1047,6 +1047,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
 
             m_tipsWidget->hide();
+
+            if (item == nullptr) return;
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
