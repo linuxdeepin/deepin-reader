@@ -52,6 +52,8 @@ public:
 
     static QImage firstThumbnail(const QString &filePath);
 
+    bool isUnLocked();
+
     bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     bool reOpen(const Dr::FileType &fileType, const QString &filePath);

@@ -788,7 +788,6 @@ void DocSheet::childEvent(QChildEvent *)
 
 void DocSheet::showEncryPage()
 {
-    m_filelocked = true;
     if (m_encryPage == nullptr) {
         m_encryPage = new EncryptionPage(this);
         connect(m_encryPage, &EncryptionPage::sigExtractPassword, this, &DocSheet::onExtractPassword);
@@ -813,7 +812,7 @@ bool DocSheet::isLocked()
 
 bool DocSheet::isUnLocked()
 {
-    return !m_filelocked;
+    return m_browser->isUnLocked();
 }
 
 bool DocSheet::tryPassword(QString password)
@@ -834,7 +833,6 @@ void DocSheet::onExtractPassword(const QString &password)
 {
     bool ret = this->tryPassword(password);
     if (ret) {
-        m_filelocked = false;
         m_encryPage->hide();
         this->openFileExec(password);
         this->defaultFocus();

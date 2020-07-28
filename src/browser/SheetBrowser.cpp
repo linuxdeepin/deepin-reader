@@ -135,6 +135,13 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     return image;
 }
 
+bool SheetBrowser::isUnLocked()
+{
+    if (m_document == nullptr)
+        return false;
+    return !m_document->isLocked();
+}
+
 bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
 {
     m_filePassword = password;

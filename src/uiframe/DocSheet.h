@@ -270,7 +270,6 @@ private:
     Dr::FileType    m_fileType;
     QString         m_uuid;
 
-    bool m_filelocked      = false;
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;
 
