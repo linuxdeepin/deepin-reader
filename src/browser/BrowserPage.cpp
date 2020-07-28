@@ -223,6 +223,8 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     if (nullptr == m_page)
         return;
 
+    hideWords();
+
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
@@ -463,6 +465,22 @@ void BrowserPage::loadLinks()
     }
 }
 
+void BrowserPage::hideWords()
+{
+    if (m_words.isEmpty())
+        return;
+
+    if (m_wordIsHide)
+        return;
+
+    m_wordIsHide = true;
+
+    foreach (BrowserWord *word, m_words) {
+        word->setFlag(QGraphicsItem::ItemIsSelectable, false);
+        word->setSelected(false);
+    }
+}
+
 void BrowserPage::clearWords()
 {
     m_wordRotation = Dr::NumberOfRotations;
@@ -476,7 +494,6 @@ void BrowserPage::clearWords()
     }
 
     m_words.clear();
-
 }
 
 void BrowserPage::loadWords()
@@ -488,6 +505,7 @@ void BrowserPage::loadWords()
             BrowserWord *word = new BrowserWord(this, words[i]);
             word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
             m_words.append(word);
+            m_wordIsHide = false;
         }
     }
 }
@@ -496,8 +514,12 @@ void BrowserPage::scaleWords(bool force)
 {
     if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
-        foreach (BrowserWord *word, m_words)
+        foreach (BrowserWord *word, m_words) {
             word->setScaleFactor(m_scaleFactor);
+            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+        }
+
+        m_wordIsHide = false;
     }
 }
 

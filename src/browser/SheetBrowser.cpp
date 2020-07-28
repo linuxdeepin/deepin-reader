@@ -980,7 +980,7 @@ bool SheetBrowser::hasLoaded()
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
     foreach (BrowserPage *item, m_items) {
-        item->clearWords();
+        item->hideWords();
     }
 
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {

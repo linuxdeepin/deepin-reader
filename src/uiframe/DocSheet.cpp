@@ -307,6 +307,7 @@ void DocSheet::setAnnotationInserting(bool inserting)
 {
     if (nullptr == m_browser)
         return;
+
     m_browser->setAnnotationInserting(inserting);
 }
 
@@ -314,8 +315,11 @@ void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
         m_operation.scaleMode = mode;
+
         m_browser->deform(m_operation);
+
         setOperationChanged();
+
     }
 }
 
@@ -328,8 +332,11 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
         scaleFactor = maxScaleFactor();
 
     m_operation.scaleMode = Dr::ScaleFactorMode;
+
     m_operation.scaleFactor = scaleFactor;
+
     m_browser->deform(m_operation);
+
     setOperationChanged();
 }
 
