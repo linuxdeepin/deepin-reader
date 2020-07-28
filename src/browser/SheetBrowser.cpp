@@ -1016,7 +1016,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
                 m_iconAnnot = clickAnno;
-                return ;//DGraphicsView::mousePressEvent(event);
+                return ;
             }
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
