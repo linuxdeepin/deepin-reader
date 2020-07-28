@@ -224,7 +224,7 @@ private:
     FindWidget *m_pFindWidget = nullptr;
     BrowserSearch *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;
-    BrowserPage *m_lastClickPage = nullptr;
+    BrowserPage *m_lastSelectIconAnnotPage = nullptr; // 最后选中图标注释所在页
 
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
