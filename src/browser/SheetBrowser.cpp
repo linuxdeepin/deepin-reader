@@ -288,6 +288,7 @@ void SheetBrowser::setAnnotationInserting(bool inserting)
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
     handleVerticalScrollLater();
+
     emit sigPageChanged(currentPage());
 }
 
@@ -681,7 +682,8 @@ QString SheetBrowser::selectedWordsText()
 void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {
-        item->clearWords();
+        if (!item->isVisible())
+            item->clearWords();
     }
 
     if (nullptr == m_scrollTimer) {
@@ -926,7 +928,7 @@ void SheetBrowser::deform(SheetOperation &operation)
 
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->setPos(0, height);
+            m_items.at(i)->setPos((operation.scaleFactor * m_maxWidth - m_items.at(i)->boundingRect().width()) / 2, height);
 
             height += m_items.at(i)->boundingRect().height() + 5;
 
@@ -1355,6 +1357,7 @@ void SheetBrowser::setCurrentPage(int page)
     if (page < 1 && page > allPages())
         return;
 
+    horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
     verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
 }
 

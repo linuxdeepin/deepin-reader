@@ -163,11 +163,14 @@ void RenderPageThread::run()
         }
 
         m_mutex.lock();
+
         m_curTask = m_tasks.pop();
+
         m_mutex.unlock();
 
+        //视图线程优先
         while (RenderViewportThread::count(m_curTask.item)) {
-            msleep(10);
+            msleep(100);
         }
 
         if (!BrowserPage::existInstance(m_curTask.item))

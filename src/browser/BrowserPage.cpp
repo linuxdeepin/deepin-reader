@@ -265,35 +265,45 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
         QRectF rect = boundingRect();
 
-        int pieceWidth = 1000;
+        if (rect.height() > 2000 || rect.height() > 2000) {
+            int pieceWidth = 1000;
 
-        int pieceHeight = 1000;
+            int pieceHeight = 1000;
 
-        for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
-            int height = pieceHeight;
+            for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
+                int height = pieceHeight;
 
-            if (rect.height() < (i + 1) * pieceHeight)
-                height = static_cast<int>(rect.height() - pieceHeight * i);
+                if (rect.height() < (i + 1) * pieceHeight)
+                    height = static_cast<int>(rect.height() - pieceHeight * i);
 
-            QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
+                QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
 
-            for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
-                int width = pieceWidth;
+                for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
+                    int width = pieceWidth;
 
-                if (renderRect.width() < (j + 1) * pieceWidth)
-                    width = static_cast<int>(renderRect.width() - pieceWidth * j);
+                    if (renderRect.width() < (j + 1) * pieceWidth)
+                        width = static_cast<int>(renderRect.width() - pieceWidth * j);
 
-                QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
+                    QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
 
-                RenderPageTask task;
-                task.item = this;
-                task.scaleFactor = m_scaleFactor;
-                task.rotation = m_rotation;
-                task.renderRect = finalRenderRect;
-                task.preRender = false;
-                tasks.append(task);
+                    RenderPageTask task;
+                    task.item = this;
+                    task.scaleFactor = m_scaleFactor;
+                    task.rotation = m_rotation;
+                    task.renderRect = finalRenderRect;
+                    task.preRender = false;
+                    tasks.append(task);
+                }
+
             }
-
+        } else {
+            RenderPageTask task;
+            task.item = this;
+            task.scaleFactor = m_scaleFactor;
+            task.rotation = m_rotation;
+            task.renderRect = QRect(rect.x(), rect.y(), rect.width(), rect.height());
+            task.preRender = false;
+            tasks.append(task);
         }
 
         RenderPageThread::appendTasks(tasks);
