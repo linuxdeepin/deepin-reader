@@ -193,6 +193,8 @@ private slots:
 
     void onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
 
+    void onInit();
+
 private:
     bool mouseClickIconAnnot(QPointF &);
 

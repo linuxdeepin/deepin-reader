@@ -768,6 +768,14 @@ void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, con
     updateAnnotation(annotation, text);
 }
 
+void SheetBrowser::onInit()
+{
+    if (1 != m_initPage) {
+        setCurrentPage(m_initPage);
+        m_initPage = 1;
+    }
+}
+
 deepin_reader::Outline SheetBrowser::outline()
 {
     return m_document->outline();
@@ -1459,10 +1467,7 @@ void SheetBrowser::dragEnterEvent(QDragEnterEvent *event)
 
 void SheetBrowser::showEvent(QShowEvent *event)
 {
-    if (1 != m_initPage) {
-        setCurrentPage(m_initPage);
-        m_initPage = 1;
-    }
+    QTimer::singleShot(100, this, SLOT(onInit()));
 
     QGraphicsView::showEvent(event);
 }
