@@ -568,11 +568,6 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
         }
 
         highLightAnnot = endPage->addHighlightAnnotation(contains, color);
-
-        for (int index = startIndex; index < endIndex; index++) {
-            if (m_items.at(index))
-                emit sigAddHighLightAnnot(m_items.at(index), contains, color);
-        }
     }
 
     if (highLightAnnot) {
