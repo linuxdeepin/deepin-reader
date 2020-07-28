@@ -53,7 +53,7 @@ public:
 
     void setDrawSelectRect(const bool draw);
 
-    void setScaleFactor(const double scale);
+    void setScaleFactor(const double scale); // 弃用
 
 private:
     deepin_reader::Annotation *m_annotation;
@@ -68,7 +68,7 @@ private:
 
     bool m_drawSelectRect{false};
 
-    double m_scaleFactor        = 1.0;
+    double m_scaleFactor        = 1.0; // 弃用
 };
 
 #endif // BrowserAnnotation_H

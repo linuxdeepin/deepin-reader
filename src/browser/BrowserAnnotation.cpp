@@ -62,8 +62,12 @@ void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->setPen(pen);
 
         QRect iconRect = option->rect;
-        iconRect.setWidth(static_cast<int>(ICON_SIZE * m_scaleFactor));
-        iconRect.setHeight(static_cast<int>(ICON_SIZE * m_scaleFactor));
+
+        int width = static_cast<int>(m_rect.width() * m_parent->boundingRect().width());
+        int height = static_cast<int>(m_rect.height() * m_parent->boundingRect().height());
+
+        iconRect.setWidth(static_cast<int>(width));
+        iconRect.setHeight(static_cast<int>(height));
         painter->drawRect(iconRect);
 
         painter->restore();
