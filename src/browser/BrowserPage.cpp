@@ -160,13 +160,16 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         painter->setPen(pen);
 
-        int x = static_cast<int>(m_drawMoveIconPoint.x() - ICON_SIZE * m_scaleFactor / 2.0);
-        int y = static_cast<int>(m_drawMoveIconPoint.y() - ICON_SIZE * m_scaleFactor / 2.0);
+        qreal iconWidth = (nullptr != m_lastClickIconAnnotation) ? (m_lastClickIconAnnotation->boundingRect().width()) : ICON_SIZE;
+        qreal iconHeight = (nullptr != m_lastClickIconAnnotation) ? (m_lastClickIconAnnotation->boundingRect().height()) : ICON_SIZE;
+
+        int x = static_cast<int>(m_drawMoveIconPoint.x() - iconWidth / 2.0);
+        int y = static_cast<int>(m_drawMoveIconPoint.y() - iconHeight / 2.0);
 
         if (x < 0 || y < 0 || x > this->boundingRect().width() || y > this->boundingRect().height())
             return;
 
-        QRect rect = QRect(x, y, static_cast<int>(ICON_SIZE * m_scaleFactor), static_cast<int>(ICON_SIZE * m_scaleFactor));
+        QRect rect = QRect(x, y, static_cast<int>(iconHeight), static_cast<int>(iconHeight));
 
         painter->drawRect(rect);
     }
