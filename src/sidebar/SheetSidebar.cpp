@@ -129,7 +129,9 @@ void SheetSidebar::initWidget()
     pVBoxLayout->addLayout(hLayout);
     onUpdateWidgetTheme();
     this->setVisible(false);
-    m_btnGroup->buttonClicked(0);
+
+    int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
+    m_btnGroup->buttonClicked(nId);
 }
 
 void SheetSidebar::onBtnClicked(int index)
