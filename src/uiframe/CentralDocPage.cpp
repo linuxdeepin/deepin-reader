@@ -579,7 +579,8 @@ void CentralDocPage::handleShortcut(const QString &s)
         if (getCurSheet())
             getCurSheet()->jumpToNextPage();
     } else if (s == Dr::key_f11) {
-        openFullScreen();
+        if (getCurSheet())
+            getCurSheet()->openFullScreen();
     }
 }
 
