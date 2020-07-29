@@ -66,6 +66,11 @@ DWIDGET_USE_NAMESPACE
 
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
+    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
+    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
+
     setScene(new QGraphicsScene());
 
     setFrameShape(QFrame::NoFrame);
