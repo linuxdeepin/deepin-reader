@@ -97,7 +97,7 @@ void TitleMenu::initActions()
 
     m_handleMenu = new HandleMenu(this);
     m_handleMenu->setDisabled(true);
-    m_handleMenu->setTitle(tr("Tool"));
+    m_handleMenu->setTitle(tr("Tools"));
     this->addMenu(m_handleMenu);
 
     QStringList fourActionList = QStringList() << tr("Search");

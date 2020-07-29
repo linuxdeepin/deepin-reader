@@ -33,7 +33,7 @@ void HandleMenu::initActions()
     m_docSheet = nullptr;
     QActionGroup *actionGroup = new QActionGroup(this);
 
-    m_textAction = new QAction(tr("Select Tool"), this);
+    m_textAction = new QAction(tr("Select Text"), this);
     connect(m_textAction, SIGNAL(triggered()), SLOT(onSelectText()));
     m_textAction->setObjectName("defaultshape");
     m_textAction->setCheckable(true);
