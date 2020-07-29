@@ -125,7 +125,8 @@ void Application::handleQuitAction()
     RenderViewportThread::destroyForever();
     RenderPageThread::destroyForever();
 
-    foreach (MainWindow *window, MainWindow::m_list)
-        window->close();
+    foreach (MainWindow *window, MainWindow::m_list) {
+        window->closeWithoutSave();
+    }
 }
 
