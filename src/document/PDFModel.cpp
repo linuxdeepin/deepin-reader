@@ -621,6 +621,12 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
             Word word;
             word.text = box->text().at(i);
             word.boundingBox = box->charBoundingBox(i);
+
+            if (i == (box->text().count() - 1))
+                word.hasSpaceAfter = box->hasSpaceAfter();
+            else
+                word.hasSpaceAfter = false;
+
             words.append(word);
         }
     }

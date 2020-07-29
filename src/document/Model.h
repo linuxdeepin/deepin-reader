@@ -75,22 +75,27 @@ struct Section {
 
 struct Word {
     QString text;
+
     QRectF boundingBox;
+
+    bool hasSpaceAfter;
 
     QRectF wordBoundingRect() const
     {
         return QRectF(this->boundingBox.x(), this->boundingBox.y(), this->boundingBox.width(), this->boundingBox.height());
     }
 
-    Word() {};
+    Word()
+    {
 
-    Word(const QString &text, const QRectF &rectf)
+    }
+
+    Word(const QString &text, const QRectF &rectf, const bool &hasSpaceAfter)
     {
         this->text = text;
         this->boundingBox = rectf;
-    };
-
-    bool hasSpaceAfter() const;
+        this->hasSpaceAfter = hasSpaceAfter;
+    }
 };
 
 struct SearchResult {

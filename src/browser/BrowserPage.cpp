@@ -442,8 +442,16 @@ QString BrowserPage::selectedWords()
 {
     QString text;
     foreach (BrowserWord *word, m_words) {
-        if (word->isSelected())
+        if (word->isSelected()) {
             text += word->text();
+            if (word->hasSpaceAfter()) {
+                text += " ";
+            }
+        }
+    }
+
+    if (text.right(1) == " ") {
+        text.remove(text.count() - 1, 1);
     }
 
     return text;
@@ -501,6 +509,7 @@ void BrowserPage::loadWords()
 {
     if (m_wordRotation != m_rotation) {
         m_wordRotation = m_rotation;
+
         QList<deepin_reader::Word> words = m_page->words(m_rotation);
         for (int i = 0; i < words.count(); ++i) {
             BrowserWord *word = new BrowserWord(this, words[i]);

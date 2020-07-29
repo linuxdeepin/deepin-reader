@@ -34,6 +34,8 @@ public:
 
     QString text();
 
+    bool hasSpaceAfter();
+
     QRectF boundingRect()const override;
 
     QRectF textBoundingRect() const;

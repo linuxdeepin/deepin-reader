@@ -72,7 +72,7 @@ void BrowserSearch::run()
             const QString &text = page->m_page->text(rctext);
             if (!text.isEmpty()) {
                 searchres.page = page->itemIndex() + 1;
-                searchres.words << Word(text, rec);
+                searchres.words << Word(text, rec, false);
                 emit sigSearchReady(searchres);
             }
 
