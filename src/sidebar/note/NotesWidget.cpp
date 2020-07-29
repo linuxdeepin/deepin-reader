@@ -71,7 +71,7 @@ void NotesWidget::initWidget()
     pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     pVLayout->addItem(pHBoxLayout);
 
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH /** 1.0*/, LEFTMINHEIGHT/* * 1.0*/));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
 }
 
 void NotesWidget::prevPage()

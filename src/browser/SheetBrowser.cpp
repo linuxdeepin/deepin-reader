@@ -593,26 +593,25 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     int linkX{0};
     int linkY{0};
 
-    //各自留0.05的余量,为了能更好的浏览效果
     switch (rotation) {
     case Dr::RotateBy0: {
-        linkY = static_cast<int>((posTop - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((posLeft - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>((posTop) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((posLeft) * jumpPage->boundingRect().width() + jumpPage->pos().x());
     }
     break;
     case Dr::RotateBy90: {
-        linkY = static_cast<int>((posLeft - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((1.0 - posTop - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>((posLeft) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().width() + jumpPage->pos().x());
     }
     break;
     case Dr::RotateBy180: {
-        linkY = static_cast<int>((1.0 - posTop - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((1.0 - posLeft - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((1.0 - posLeft) * jumpPage->boundingRect().width() + jumpPage->pos().x());
     }
     break;
     case Dr::RotateBy270: {
-        linkY = static_cast<int>((1.0 - posLeft - 0.05) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((posTop - 0.05) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>((1.0 - posLeft) * jumpPage->boundingRect().height() + jumpPage->pos().y());
+        linkX = static_cast<int>((posTop) * jumpPage->boundingRect().width() + jumpPage->pos().x());
     }
     break;
     default: break;
@@ -837,10 +836,10 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
 
     //画选中边框(仅图标注释)
-    if (m_lastSelectIconAnnotPage)
-        m_lastSelectIconAnnotPage->setSelectIconRect(false);
-    m_lastSelectIconAnnotPage = jumpPage;
-    m_lastSelectIconAnnotPage->setSelectIconRect(true, annotation);
+//    if (m_lastSelectIconAnnotPage)
+//        m_lastSelectIconAnnotPage->setSelectIconRect(false);
+//    m_lastSelectIconAnnotPage = jumpPage;
+//    m_lastSelectIconAnnotPage->setSelectIconRect(true, annotation);
 }
 
 BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
@@ -1625,4 +1624,23 @@ void SheetBrowser::curpageChanged(int curpage)
         m_currentPage = curpage;
         emit sigPageChanged(curpage);
     }
+}
+
+bool SheetBrowser::jump2Link(const QPointF point)
+{
+    QPointF mouseClickPoint = point;
+
+    BrowserPage *page{nullptr};
+
+    page = mouseClickInPage(mouseClickPoint);
+
+    if (nullptr == page)
+        return false;
+
+    mouseClickPoint = translate2Local(mouseClickPoint);
+
+    //跳转到相应link
+    //page->jump2Link(mouseClickPoint);
+
+    return true;
 }

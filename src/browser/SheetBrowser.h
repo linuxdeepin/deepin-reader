@@ -136,6 +136,8 @@ public:
 
     void handleFindFinished(int searchcnt);
 
+    bool jump2Link(const QPointF);
+
 signals:
     void sigPageChanged(int page);
 

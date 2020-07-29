@@ -145,11 +145,15 @@ public:
 
     void setIconMovePos(const QPointF);
 
+    QPointF translate2LocalPos(const QPointF);
+
     QString deleteNowSelectIconAnnotation();
 
     bool moveIconAnnotation(const QRectF);
 
     bool removeAllAnnotation();
+
+    bool jump2Link(const QPointF);
 
 private:
     void reloadAnnotations();

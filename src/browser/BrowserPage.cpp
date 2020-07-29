@@ -47,6 +47,7 @@
 #include <QMutexLocker>
 #include <QTimer>
 #include <QUuid>
+#include <QPainterPath>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -669,6 +670,28 @@ void BrowserPage::setIconMovePos(const QPointF movePoint)
     update();
 }
 
+QPointF BrowserPage::translate2LocalPos(const QPointF point)
+{
+    QPointF tPoint = point;
+
+    switch (m_rotation) {
+    case Dr::RotateBy90: {
+        tPoint = QPointF(point.y(), this->bookmarkRect().width() - point.x());
+    }
+    break;
+    case Dr::RotateBy180: {
+        tPoint = QPointF(this->bookmarkRect().width() - point.x(), this->boundingRect().height() - point.y());
+    }
+    break;
+    case Dr::RotateBy270: {
+        tPoint = QPointF(this->boundingRect().height() - point.y(), point.x());
+    }
+    break;
+    }
+
+    return tPoint;
+}
+
 /**
  * @brief BrowserPage::deleteNowSelectIconAnnotation
  * 删除当前选中的图标注释
@@ -758,6 +781,29 @@ bool BrowserPage::removeAllAnnotation()
     render(m_scaleFactor, rotation, true, true);
 
     renderViewPort(true);
+
+    return true;
+}
+
+bool BrowserPage::jump2Link(const QPointF point)
+{
+    QPointF localPoint = point;
+
+    if (nullptr == m_page)
+        return false;
+
+    QList<Link *> linkList = m_page->links();
+
+    if (linkList.count() < 1)
+        return false;
+
+    foreach (Link *link, linkList) {
+        if (link) {
+            if (link->boundary.boundingRect().contains(localPoint)) {
+                //to do
+            }
+        }
+    }
 
     return true;
 }
