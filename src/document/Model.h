@@ -78,8 +78,6 @@ struct Word {
 
     QRectF boundingBox;
 
-    bool hasSpaceAfter;
-
     QRectF wordBoundingRect() const
     {
         return QRectF(this->boundingBox.x(), this->boundingBox.y(), this->boundingBox.width(), this->boundingBox.height());
@@ -90,11 +88,10 @@ struct Word {
 
     }
 
-    Word(const QString &text, const QRectF &rectf, const bool &hasSpaceAfter)
+    Word(const QString &text, const QRectF &rectf)
     {
         this->text = text;
         this->boundingBox = rectf;
-        this->hasSpaceAfter = hasSpaceAfter;
     }
 };
 

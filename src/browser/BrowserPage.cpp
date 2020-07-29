@@ -444,14 +444,7 @@ QString BrowserPage::selectedWords()
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected()) {
             text += word->text();
-            if (word->hasSpaceAfter()) {
-                text += " ";
-            }
         }
-    }
-
-    if (text.right(1) == " ") {
-        text.remove(text.count() - 1, 1);
     }
 
     return text;

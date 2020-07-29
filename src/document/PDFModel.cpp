@@ -621,13 +621,20 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
             Word word;
             word.text = box->text().at(i);
             word.boundingBox = box->charBoundingBox(i);
-
-            if (i == (box->text().count() - 1))
-                word.hasSpaceAfter = box->hasSpaceAfter();
-            else
-                word.hasSpaceAfter = false;
-
             words.append(word);
+
+            if (box->hasSpaceAfter() && (i == (box->text().count() - 1))) {
+                Poppler::TextBox *nextBox = box->nextWord();
+                if (nextBox != nullptr) {
+                    if (qFuzzyCompare(word.boundingBox.y(), nextBox->charBoundingBox(0).y())) {
+                        Word spaceWord;
+                        spaceWord.text = " ";
+                        spaceWord.boundingBox = QRectF(word.boundingBox.x() + word.boundingBox.width(), word.boundingBox.y(), nextBox->charBoundingBox(0).x() - word.boundingBox.x() - word.boundingBox.width(), word.boundingBox.height());
+                        words.append(spaceWord);
+                    }
+
+                }
+            }
         }
     }
 
