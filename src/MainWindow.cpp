@@ -121,8 +121,39 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == this) {
+        if (event->type() == QEvent::HoverMove) {
+            QHoverEvent *mouseEvent = dynamic_cast<QHoverEvent *>(event);
+            bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
+            if (isFullscreen) {
+                int doctabbarH = m_docTabbarWidget ? m_docTabbarWidget->height() : 0;
+                if (mouseEvent->pos().y() > titlebar()->height() + doctabbarH) {
+                    if (m_docTabbarWidget) m_docTabbarWidget->setVisible(false);
+                    this->titlebar()->setVisible(false);
+                }
+                if (mouseEvent->pos().y() < 2) {
+                    if (m_docTabbarWidget) m_docTabbarWidget->setVisible(true);
+                    this->titlebar()->setVisible(true);
+                }
+            }
+        } else if (event->type() == QEvent::WindowStateChange) {
+            if (isFullScreen()) {
+                if (m_docTabbarWidget) m_docTabbarWidget->setVisible(false);
+                this->titlebar()->setVisible(false);
+            } else {
+                if (m_docTabbarWidget) m_docTabbarWidget->setVisible(true);
+                this->titlebar()->setVisible(true);
+            }
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
 void MainWindow::initUI()
 {
+    this->installEventFilter(this);
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
     setCentralWidget(m_central);
@@ -132,6 +163,7 @@ void MainWindow::initUI()
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
+    titlebar()->setAutoHideOnFullscreen(false);
 
     //移除焦点抢占和避免出现焦点样式
     titlebar()->setFocusPolicy(Qt::NoFocus);
@@ -146,6 +178,11 @@ void MainWindow::initUI()
 void MainWindow::onShortCut(const QString &key)
 {
     m_central->handleShortcut(key);
+}
+
+void MainWindow::setDocTabBarWidget(QWidget *widget)
+{
+    m_docTabbarWidget = widget;
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)

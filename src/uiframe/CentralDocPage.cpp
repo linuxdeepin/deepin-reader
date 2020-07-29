@@ -33,6 +33,7 @@
 #include <QMimeDatabase>
 #include <QProcess>
 #include <QUuid>
+#include <DTitlebar>
 
 #include "CentralDocPage.h"
 #include "DocSheet.h"
@@ -642,21 +643,25 @@ bool CentralDocPage::isFullScreen()
 
 void CentralDocPage::openFullScreen()
 {
-    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
         return;
 
-    if (!mainWindow->isFullScreen())
+    if (!mainWindow->isFullScreen()) {
+        mainWindow->setDocTabBarWidget(m_pTabBar);
         mainWindow->showFullScreen();
+    }
 }
+
 bool CentralDocPage::quitFullScreen()
 {
-    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
     if (nullptr == mainWindow)
         return false;
 
     if (mainWindow->isFullScreen()) {
+        mainWindow->setDocTabBarWidget(nullptr);
         mainWindow->showNormal();
         return true;
     }

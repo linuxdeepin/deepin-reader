@@ -51,6 +51,8 @@ public:
 
     void closeWithoutSave();
 
+    void setDocTabBarWidget(QWidget *widget);
+
 public:
     void openfiles(const QStringList &filepaths);
 
@@ -58,6 +60,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     void initUI();
@@ -70,6 +73,7 @@ private slots:
     void onShortCut(const QString &);
 
 private:
+    QWidget *m_docTabbarWidget = nullptr;
     Central *m_central = nullptr;
     bool m_needSave = true;
 

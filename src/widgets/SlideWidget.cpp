@@ -149,13 +149,10 @@ void SlideWidget::setWidgetState(bool full)
     if (m_parentIsDestroyed)
         return;
 
-    MainWindow *mainwindow = MainWindow::windowContainSheet(m_docSheet);
     if (full) {
-        mainwindow->titlebar()->setAutoHideOnFullscreen(false);
         m_nOldState = parentWidget()->windowState();
         parentWidget()->setWindowState(Qt::WindowFullScreen);
     } else {
-        mainwindow->titlebar()->setAutoHideOnFullscreen(true);
         if (parentWidget()->windowState() == Qt::WindowFullScreen) {
             if (m_nOldState == Qt::WindowMaximized) {
                 parentWidget()->showMaximized();
