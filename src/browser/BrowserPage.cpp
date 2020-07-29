@@ -821,6 +821,29 @@ bool BrowserPage::jump2Link(const QPointF point)
     return false;
 }
 
+bool BrowserPage::inLink(const QPointF pos)
+{
+    QPointF localPoint = pos;
+
+    if (nullptr == m_page)
+        return false;
+
+    QList<Link *> linkList = m_page->links();
+
+    if (linkList.count() < 1)
+        return false;
+
+    foreach (Link *link, linkList) {
+        if (link) {
+            if (link->boundary.boundingRect().contains(localPoint)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)

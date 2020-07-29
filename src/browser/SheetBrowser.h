@@ -216,6 +216,8 @@ private:
 
     void curpageChanged(int curpage);
 
+    bool isLink(const QPointF);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     BrowserMagniFier *m_magnifierLabel = nullptr;

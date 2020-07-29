@@ -1171,6 +1171,11 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
+    if (this->isLink(mapToScene(mousePos))) {
+        setCursor(QCursor(Qt::PointingHandCursor));
+        return;
+    }
+
     if (m_sheet->isFullScreen()) {
         if (mousePos.x() == 0 && !m_sheet->sideBarVisible()) {
             m_sheet->setSidebarVisible(true, false);
@@ -1632,6 +1637,23 @@ void SheetBrowser::curpageChanged(int curpage)
         m_currentPage = curpage;
         emit sigPageChanged(curpage);
     }
+}
+
+bool SheetBrowser::isLink(const QPointF point)
+{
+    QPointF mouseMovePoint = point;
+
+    BrowserPage *page{nullptr};
+
+    page = mouseClickInPage(mouseMovePoint);
+
+    if (nullptr == page)
+        return false;
+
+    mouseMovePoint = translate2Local(mouseMovePoint);
+
+    //判断当前位置是否有link
+    return page->inLink(mouseMovePoint);
 }
 
 bool SheetBrowser::jump2Link(const QPointF point)

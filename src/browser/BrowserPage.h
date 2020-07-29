@@ -155,6 +155,8 @@ public:
 
     bool jump2Link(const QPointF);
 
+    bool inLink(const QPointF);
+
 private:
     void reloadAnnotations();
 
