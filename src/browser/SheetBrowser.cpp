@@ -1319,7 +1319,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
                 m_annotationInserting = false;
             } else {
-                if (nullptr != clickAnno)
+                if (clickAnno && m_selectPressedPos == m_selectEndPos)
                     showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }
             m_selectEndPos = mapToScene(event->pos());

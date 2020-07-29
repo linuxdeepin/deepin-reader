@@ -52,6 +52,16 @@ void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
+void BrowserWord::mousePressEvent(QGraphicsSceneMouseEvent *)
+{
+    //NotTodo
+}
+
+void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
+{
+    //NotTodo
+}
+
 Word BrowserWord::getWord()
 {
     return m_word;
