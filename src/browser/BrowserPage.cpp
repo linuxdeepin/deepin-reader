@@ -48,6 +48,7 @@
 #include <QTimer>
 #include <QUuid>
 #include <QPainterPath>
+#include <QDesktopServices>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
@@ -802,12 +803,22 @@ bool BrowserPage::jump2Link(const QPointF point)
     foreach (Link *link, linkList) {
         if (link) {
             if (link->boundary.boundingRect().contains(localPoint)) {
-                //to do
+                QString urlStr = link->urlOrFileName;
+                if (urlStr.isEmpty()) {
+                    int page = link->page;
+                    if (m_parent) {
+                        m_parent->setCurrentPage(page);
+                        return true;
+                    }
+                } else {
+                    QDesktopServices::openUrl(QUrl(urlStr, QUrl::TolerantMode));
+                    return true;
+                }
             }
         }
     }
 
-    return true;
+    return false;
 }
 
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)

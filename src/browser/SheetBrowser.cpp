@@ -1026,6 +1026,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
+            if (jump2Link(m_selectStartPos))
+                return;
+
             deepin_reader::Annotation *clickAnno = nullptr;
 
             //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
@@ -1645,7 +1648,5 @@ bool SheetBrowser::jump2Link(const QPointF point)
     mouseClickPoint = translate2Local(mouseClickPoint);
 
     //跳转到相应link
-    //page->jump2Link(mouseClickPoint);
-
-    return true;
+    return page->jump2Link(mouseClickPoint);
 }
