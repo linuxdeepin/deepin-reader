@@ -138,4 +138,5 @@ void TitleWidget::setControlEnabled(const bool &enable)
 {
     m_pThumbnailBtn->setChecked(false);
     m_pThumbnailBtn->setEnabled(enable);
+    m_pSw->clear();
 }

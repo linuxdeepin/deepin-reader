@@ -210,6 +210,10 @@ private:
 
     void addNewIconAnnotDeleteOld(const QPointF);
 
+    int currentScrollValueForPage();
+
+    void curpageChanged(int curpage);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     BrowserMagniFier *m_magnifierLabel = nullptr;
@@ -246,6 +250,9 @@ private:
     bool m_selectIconAnnotation{false}; // 当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
+
+    int m_currentPage = 0;
+    bool m_bNeedNotifyCurPageChanged = true;
 };
 
 #endif // SheetBrowser_H

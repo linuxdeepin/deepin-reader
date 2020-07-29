@@ -37,6 +37,7 @@ public:
     ~ScaleWidget();
 
     void setSheet(DocSheet *sheet);
+    void clear();
 
 private:
     void initWidget();

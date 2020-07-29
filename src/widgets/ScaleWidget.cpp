@@ -125,7 +125,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     if (nullptr == sheet)
         return;
     else if (!sheet->isUnLocked()) {
-        m_lineEdit->clear();
+        clear();
         return;
     }
 
@@ -133,4 +133,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
     m_lineEdit->setText(text);
     m_lineEdit->lineEdit()->setCursorPosition(0);
+}
+
+void ScaleWidget::clear()
+{
+    m_lineEdit->clear();
 }

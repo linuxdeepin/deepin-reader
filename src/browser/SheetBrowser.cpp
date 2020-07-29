@@ -289,7 +289,10 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
     handleVerticalScrollLater();
 
-    emit sigPageChanged(currentPage());
+    int curScrollPage = currentScrollValueForPage();
+    if (m_bNeedNotifyCurPageChanged && curScrollPage != m_currentPage) {
+        curpageChanged(curScrollPage);
+    }
 }
 
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
@@ -615,6 +618,7 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     default: break;
     }
 
+    m_bNeedNotifyCurPageChanged = false;
     if (this->verticalScrollBar()) {
         linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
         this->verticalScrollBar()->setValue(linkY);
@@ -624,6 +628,8 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
         this->horizontalScrollBar()->setValue(linkX);
     }
 
+    m_bNeedNotifyCurPageChanged = true;
+    curpageChanged(jumpPage->itemIndex() + 1);
 }
 
 /**
@@ -1333,6 +1339,14 @@ int SheetBrowser::allPages()
 
 int SheetBrowser::currentPage()
 {
+    if (m_currentPage >= 0)
+        return m_currentPage;
+
+    return currentScrollValueForPage();
+}
+
+int SheetBrowser::currentScrollValueForPage()
+{
     int value = verticalScrollBar()->value();
 
     int index = 0;
@@ -1359,8 +1373,11 @@ void SheetBrowser::setCurrentPage(int page)
     if (page < 1 && page > allPages())
         return;
 
+    m_bNeedNotifyCurPageChanged = false;
     horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
     verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
+    m_bNeedNotifyCurPageChanged = true;
+    curpageChanged(page);
 }
 
 bool SheetBrowser::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
@@ -1600,4 +1617,12 @@ void SheetBrowser::handleFindContent(const QString &strFind)
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
     m_pFindWidget->setEditAlert(searchcnt == 0);
+}
+
+void SheetBrowser::curpageChanged(int curpage)
+{
+    if (m_currentPage != curpage) {
+        m_currentPage = curpage;
+        emit sigPageChanged(curpage);
+    }
 }
