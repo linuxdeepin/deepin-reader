@@ -128,10 +128,12 @@ QRectF BrowserPage::bookmarkMouseRect()
 void BrowserPage::setBookmark(bool hasBookmark)
 {
     m_bookmark = hasBookmark;
+
     if (hasBookmark)
         m_bookmarkState = 3;
     else
         m_bookmarkState = 0;
+
     update();
 }
 
@@ -143,10 +145,8 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->drawPixmap(option->rect, m_pixmap);
 
-    if (m_viewportRenderedRect.isValid())
+    if (m_viewportRenderedRect.isValid() && qFuzzyCompare(m_viewportScaleFactor, m_scaleFactor))
         painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
-    else
-        renderViewPort(false);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -208,10 +208,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
     if (m_rotation != rotation) {
         m_rotation = rotation;
-
-//        qDebug() << boundingRect().center();
-//        setTransformOriginPoint(boundingRect().center());
-
         if (Dr::RotateBy0 == m_rotation)
             this->setRotation(0);
         else if (Dr::RotateBy90 == m_rotation)
@@ -281,10 +277,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         }
 
         loadAnnotations();
-
-        foreach (BrowserAnnotation *annotationItem, m_annotationItems)
-            if (annotationItem)
-                annotationItem->setScaleFactorAndRotation(m_rotation);
     }
 }
 
@@ -312,7 +304,7 @@ void BrowserPage::renderViewPort(bool force)
     if (nullptr == m_parent)
         return;
 
-    if (!force && boundingRect().width() < 1000 && boundingRect().height() < 1000)
+    if (!force && boundingRect().width() < 2000 && boundingRect().height() < 2000)
         return;
 
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
@@ -348,8 +340,6 @@ void BrowserPage::renderViewPort(bool force)
 
     RenderViewportThread::appendTask(task);
 }
-
-
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
 {
@@ -404,8 +394,10 @@ QImage BrowserPage::getCurImagePoint(QPoint point)
 
 void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
 {
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) || rotation != m_rotation)
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
         return;
+
+    m_viewportScaleFactor = scaleFactor;
 
     m_viewportPixmap = QPixmap::fromImage(image);
 

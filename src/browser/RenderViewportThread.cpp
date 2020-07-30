@@ -92,10 +92,12 @@ int RenderViewportThread::count(BrowserPage *page)
         return 0;
 
     int count = 0;
+
     foreach (RenderViewportTask task, m_instance->m_tasks) {
         if (task.page == page)
             count++;
     }
+
     return count;
 }
 

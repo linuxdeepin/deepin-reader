@@ -33,10 +33,12 @@ signals:
 
 public:
     explicit BrowserSearch(QObject *parent = nullptr);
+
     ~BrowserSearch();
 
 public:
     void startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startPage);
+
     void stopSearch();
 
 protected:

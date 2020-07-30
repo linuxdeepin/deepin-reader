@@ -123,7 +123,7 @@ void RenderPageThread::appendTasks(QList<RenderPageTask> list)
 
     instance->m_mutex.lock();
 
-    for (int i = 0; i < list.count(); ++i)
+    for (int i = list.count() - 1; i >= 0; --i)
         instance->m_tasks.push_back(list[i]);
 
     instance->m_mutex.unlock();
@@ -170,11 +170,6 @@ void RenderPageThread::run()
         m_curTask = m_tasks.pop();
 
         m_mutex.unlock();
-
-        //视图线程优先
-        while (RenderViewportThread::count(m_curTask.item)) {
-            msleep(100);
-        }
 
         if (!BrowserPage::existInstance(m_curTask.item))
             continue;

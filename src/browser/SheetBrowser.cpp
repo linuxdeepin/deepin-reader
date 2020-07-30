@@ -295,6 +295,7 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
     handleVerticalScrollLater();
 
     int curScrollPage = currentScrollValueForPage();
+
     if (m_bNeedNotifyCurPageChanged && curScrollPage != m_currentPage) {
         curpageChanged(curScrollPage);
     }
@@ -302,6 +303,8 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
 
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 {
+    handleVerticalScrollLater();
+
     QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
 
     foreach (QGraphicsItem *item, items) {
@@ -702,7 +705,7 @@ void SheetBrowser::handleVerticalScrollLater()
     if (m_scrollTimer->isActive())
         m_scrollTimer->stop();
 
-    m_scrollTimer->start(500);
+    m_scrollTimer->start(100);
 }
 
 QList<deepin_reader::Annotation *> SheetBrowser::annotations()
@@ -785,6 +788,8 @@ void SheetBrowser::onInit()
         setCurrentPage(m_initPage);
         m_initPage = 1;
     }
+
+    onSceneOfViewportChanged();
 }
 
 deepin_reader::Outline SheetBrowser::outline()
@@ -1051,7 +1056,7 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     if (m_resizeTimer->isActive())
         m_resizeTimer->stop();
 
-    m_resizeTimer->start(500);
+    m_resizeTimer->start(100);
 
     if (m_pFindWidget)
         m_pFindWidget->showPosition(this->width());

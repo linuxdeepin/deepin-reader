@@ -179,6 +179,7 @@ public:
     double  m_pixmapScaleFactor   = -1;   //当前图片的缩放
     QRect   m_pixmapRenderedRect;         //当前图片已经加载的rect
 
+    double  m_viewportScaleFactor = -1;
     QPixmap m_viewportPixmap;       //视图区域的图片
     QRect   m_viewportRenderedRect; //试图区域
 
