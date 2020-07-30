@@ -38,7 +38,7 @@ RenderPageThread *RenderPageThread::instance = nullptr;
 bool RenderPageThread::quitForever = false;
 RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
 {
-    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect, bool)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
 }
 
 RenderPageThread::~RenderPageThread()
@@ -105,9 +105,12 @@ void RenderPageThread::appendTask(RenderPageTask task)
 
     instance->m_mutex.lock();
 
-    instance->m_tasks.append(task);
+    instance->m_tasks.push_back(task);
 
     instance->m_mutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
 }
 
 void RenderPageThread::appendTasks(QList<RenderPageTask> list)
@@ -120,8 +123,8 @@ void RenderPageThread::appendTasks(QList<RenderPageTask> list)
 
     instance->m_mutex.lock();
 
-    for (int i = list.count() - 1; i >= 0; i--)
-        instance->m_tasks.append(list[i]);
+    for (int i = 0; i < list.count(); ++i)
+        instance->m_tasks.push_back(list[i]);
 
     instance->m_mutex.unlock();
 
@@ -158,8 +161,8 @@ void RenderPageThread::run()
 
     while (!m_quit) {
         if (m_tasks.count() <= 0) {
-            msleep(10);
-            break;
+            msleep(100);
+            continue;
         }
 
         m_mutex.lock();
@@ -179,7 +182,7 @@ void RenderPageThread::run()
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         if (!image.isNull())
-            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect, m_curTask.preRender);
+            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         m_curTask = RenderPageTask();
     }
@@ -194,12 +197,9 @@ void RenderPageThread::destroyForever()
     }
 }
 
-void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect, bool preRender)
+void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect)
 {
     if (BrowserPage::existInstance(item)) {
-        if (preRender)
-            item->handlePreRenderFinished(static_cast<Dr::Rotation>(rotation), image);
-        else
-            item->handleRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
+        item->handleRenderFinished(scaleFactor, image, rect);
     }
 }

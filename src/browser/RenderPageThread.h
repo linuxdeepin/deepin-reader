@@ -35,7 +35,6 @@ struct RenderPageTask {
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
     QRect renderRect;
-    bool preRender = false; //先加载小图
 };
 
 class RenderPageThread : public QThread
@@ -61,10 +60,10 @@ public:
     void run();
 
 signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect, bool preRender);
+    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
 private slots:
-    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect, bool preRender);
+    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
 
 private:
     RenderPageTask m_curTask;

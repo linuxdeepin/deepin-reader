@@ -53,6 +53,8 @@ public:
 
     QRectF boundingRect()const override;
 
+    QRectF rect();
+
     QRectF bookmarkRect();
 
     QRectF bookmarkMouseRect();
@@ -61,9 +63,13 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
+    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false, bool force = false);
+
+    void handleRenderFinished(double scaleFactor, QImage image, QRect rect = QRect());
+
     void renderViewPort(bool force = false);     //优先显示当前窗口
 
-    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false, bool force = false);
+    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
@@ -77,12 +83,6 @@ public:
 
     QImage getCurImagePoint(QPoint point);
 
-    void handlePreRenderFinished(Dr::Rotation rotation, QImage image);
-
-    void handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
-
-    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
-
     static bool existInstance(BrowserPage *item);
 
     void setItemIndex(int itemIndex);
@@ -95,11 +95,11 @@ public:
 
     void loadLinks();
 
-    void hideWords();
-
     void clearWords();
 
     void loadWords();
+
+    void hideWords();
 
     void scaleWords(bool force = false);
 
@@ -180,8 +180,9 @@ public:
     QPixmap m_viewportPixmap;       //视图区域的图片
     QRect   m_viewportRenderedRect; //试图区域
 
+    QList<deepin_reader::Word> m_words1;
+    bool m_wordHasRendered = false;                         //当前文字是否被加载
     QList<BrowserWord *> m_words;                           //当前文字
-    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;    //当前文字的方向
     double m_wordScaleFactor = -1;                          //当前文字的缩放
 
     bool m_bookmark = false;   //当前是否有书签

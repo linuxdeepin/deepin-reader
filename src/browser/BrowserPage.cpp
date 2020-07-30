@@ -97,6 +97,14 @@ QRectF BrowserPage::boundingRect() const
     if (nullptr == m_page)
         return QRectF(0, 0, 0, 0);
 
+    return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
+}
+
+QRectF BrowserPage::rect()
+{
+    if (nullptr == m_page)
+        return QRectF(0, 0, 0, 0);
+
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
@@ -129,10 +137,6 @@ void BrowserPage::setBookmark(bool hasBookmark)
 
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(QBrush(Qt::white));
-    painter->drawRect(option->rect);
-
     if (!m_pixmapHasRendered) {
         render(m_scaleFactor, m_rotation);
     }
@@ -178,10 +182,130 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
+void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, bool force)
+{
+    if (nullptr == m_page)
+        return;
+
+    if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
+        return;
+
+    m_pixmapHasRendered = false;
+
+    m_scaleFactor = scaleFactor;
+
+    if (m_lastClickIconAnnotation)
+        m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
+
+    if (m_viewportRenderedRect.isValid()) {
+        m_viewportRenderedRect = QRect();
+        m_viewportPixmap = QPixmap();
+    }
+
+    if (m_rotation != rotation) {
+        m_rotation = rotation;
+        setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
+        if (Dr::RotateBy0 == m_rotation)
+            this->setRotation(0);
+        else if (Dr::RotateBy90 == m_rotation)
+            this->setRotation(90);
+        else if (Dr::RotateBy180 == m_rotation)
+            this->setRotation(180);
+        else if (Dr::RotateBy270 == m_rotation)
+            this->setRotation(270);
+    }
+
+    if (!renderLater && m_pixmapScaleFactor != m_scaleFactor) {
+        m_pixmapScaleFactor = m_scaleFactor;
+
+        m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
+
+        m_pixmapHasRendered = true;
+
+        if (m_pixmap.isNull()) {
+            m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+            m_pixmap.fill(Qt::white);
+        } else
+            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
+
+        RenderPageThread::clearTask(this);
+
+        QRectF rect = boundingRect();
+
+        if (rect.height() > 2000 || rect.height() > 2000) {
+            int pieceWidth = 1000;
+
+            int pieceHeight = 1000;
+
+            QList<RenderPageTask> tasks;
+
+            for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
+                int height = pieceHeight;
+
+                if (rect.height() < (i + 1) * pieceHeight)
+                    height = static_cast<int>(rect.height() - pieceHeight * i);
+
+                QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
+
+                for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
+                    int width = pieceWidth;
+
+                    if (renderRect.width() < (j + 1) * pieceWidth)
+                        width = static_cast<int>(renderRect.width() - pieceWidth * j);
+
+                    QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
+
+                    RenderPageTask task;
+                    task.item = this;
+                    task.scaleFactor = m_scaleFactor;
+                    task.rotation = Dr::RotateBy0;
+                    task.renderRect = finalRenderRect;
+                    tasks.append(task);
+                }
+                RenderPageThread::appendTasks(tasks);
+            }
+        } else {
+            RenderPageTask task;
+            task.item = this;
+            task.scaleFactor = m_scaleFactor;
+            task.rotation = Dr::RotateBy0;
+            task.renderRect = QRect(rect.x(), rect.y(), rect.width(), rect.height());
+            RenderPageThread::appendTask(task);
+        }
+
+        loadAnnotations();
+
+        foreach (BrowserAnnotation *annotationItem, m_annotationItems)
+            if (annotationItem)
+                annotationItem->setScaleFactorAndRotation(m_rotation);
+    }
+}
+
+void BrowserPage::handleRenderFinished(double scaleFactor, QImage image, QRect rect)
+{
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
+        return;
+
+    if (rect.height() == static_cast<int>(boundingRect().height())) {
+        m_pixmap = QPixmap::fromImage(image);
+    } else {
+        QPainter painter(&m_pixmap);
+        painter.drawImage(rect, image);
+    }
+
+    m_pixmapRenderedRect.setHeight(rect.y() + rect.height());
+
+    emit m_parent->sigPartThumbnailUpdated(m_index);
+
+    update();
+}
+
 void BrowserPage::renderViewPort(bool force)
 {
     if (nullptr == m_parent)
         return;
+
+    return;
 
     if (!force && boundingRect().width() < 1000 && boundingRect().height() < 1000)
         return;
@@ -213,113 +337,14 @@ void BrowserPage::renderViewPort(bool force)
 
     task.scaleFactor = m_scaleFactor;
 
-    task.rotation = m_rotation;
+    task.rotation = Dr::RotateBy0;
 
     task.renderRect = viewRenderRect;
 
     RenderViewportThread::appendTask(task);
 }
 
-void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, bool force)
-{
-    if (nullptr == m_page)
-        return;
 
-    hideWords();
-
-    if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
-        return;
-
-    m_pixmapHasRendered = false;
-
-    m_scaleFactor = scaleFactor;
-
-    if (m_lastClickIconAnnotation)
-        m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
-
-    if (m_viewportRenderedRect.isValid()) {
-        m_viewportRenderedRect = QRect();
-        m_viewportPixmap = QPixmap();
-    }
-
-    if (m_rotation != rotation) {//旋转变化则强制移除
-        clearWords();
-        m_wordScaleFactor = -1;
-        m_pixmap = QPixmap();
-        m_rotation = Dr::NumberOfRotations;
-        m_pixmapScaleFactor = -1;
-        m_rotation  = rotation;
-    }
-
-    if (!renderLater && m_pixmapScaleFactor != m_scaleFactor) {
-        m_pixmapScaleFactor = m_scaleFactor;
-
-        m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
-
-        m_pixmapHasRendered = true;
-
-        if (m_pixmap.isNull()) {
-            m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
-            m_pixmap.fill(Qt::white);
-        } else
-            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
-
-        RenderPageThread::clearTask(this);
-
-        QList<RenderPageTask> tasks;
-
-        QRectF rect = boundingRect();
-
-        if (rect.height() > 2000 || rect.height() > 2000) {
-            int pieceWidth = 1000;
-
-            int pieceHeight = 1000;
-
-            for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
-                int height = pieceHeight;
-
-                if (rect.height() < (i + 1) * pieceHeight)
-                    height = static_cast<int>(rect.height() - pieceHeight * i);
-
-                QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
-
-                for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
-                    int width = pieceWidth;
-
-                    if (renderRect.width() < (j + 1) * pieceWidth)
-                        width = static_cast<int>(renderRect.width() - pieceWidth * j);
-
-                    QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
-
-                    RenderPageTask task;
-                    task.item = this;
-                    task.scaleFactor = m_scaleFactor;
-                    task.rotation = m_rotation;
-                    task.renderRect = finalRenderRect;
-                    task.preRender = false;
-                    tasks.append(task);
-                }
-
-            }
-        } else {
-            RenderPageTask task;
-            task.item = this;
-            task.scaleFactor = m_scaleFactor;
-            task.rotation = m_rotation;
-            task.renderRect = QRect(rect.x(), rect.y(), rect.width(), rect.height());
-            task.preRender = false;
-            tasks.append(task);
-        }
-
-        RenderPageThread::appendTasks(tasks);
-
-        loadAnnotations();
-
-        foreach (BrowserAnnotation *annotationItem, m_annotationItems)
-            if (annotationItem)
-                annotationItem->setScaleFactorAndRotation(m_rotation);
-    }
-}
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
 {
@@ -370,42 +395,6 @@ QImage BrowserPage::getCurImagePoint(QPoint point)
     int ds = 122;
 
     return Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds);
-}
-
-void BrowserPage::handlePreRenderFinished(Dr::Rotation rotation, QImage image)
-{
-    if (rotation != m_rotation)
-        return;
-
-    if (!m_pixmap.isNull())
-        return;
-
-    image = image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio);
-
-    m_pixmap = QPixmap::fromImage(image.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::KeepAspectRatio));
-
-    m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 2);
-
-    update();
-}
-
-void BrowserPage::handleRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
-{
-    if (!qFuzzyCompare(scaleFactor, m_scaleFactor) || rotation != m_rotation)
-        return;
-
-    if (rect.height() == static_cast<int>(boundingRect().height())) {
-        m_pixmap = QPixmap::fromImage(image);
-    } else {
-        QPainter painter(&m_pixmap);
-        painter.drawImage(rect, image);
-    }
-
-    m_pixmapRenderedRect.setHeight(rect.y() + rect.height());
-
-    emit m_parent->sigPartThumbnailUpdated(m_index);
-
-    update();
 }
 
 void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
@@ -468,25 +457,9 @@ void BrowserPage::loadLinks()
     }
 }
 
-void BrowserPage::hideWords()
-{
-    if (m_words.isEmpty())
-        return;
-
-    if (m_wordIsHide)
-        return;
-
-    m_wordIsHide = true;
-
-    foreach (BrowserWord *word, m_words) {
-        word->setFlag(QGraphicsItem::ItemIsSelectable, false);
-        word->setSelected(false);
-    }
-}
-
 void BrowserPage::clearWords()
 {
-    m_wordRotation = Dr::NumberOfRotations;
+    m_wordHasRendered = false;
 
     if (m_words.isEmpty())
         return;
@@ -501,29 +474,47 @@ void BrowserPage::clearWords()
 
 void BrowserPage::loadWords()
 {
-    if (m_wordRotation != m_rotation) {
-        m_wordRotation = m_rotation;
-
-        QList<deepin_reader::Word> words = m_page->words(m_rotation);
-        for (int i = 0; i < words.count(); ++i) {
-            BrowserWord *word = new BrowserWord(this, words[i]);
+    if (!m_wordHasRendered) {
+        m_words1 = m_page->words(Dr::RotateBy0);
+        for (int i = 0; i < m_words1.count(); ++i) {
+            BrowserWord *word = new BrowserWord(this, m_words1[i]);
             word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
             m_words.append(word);
             m_wordIsHide = false;
         }
+        m_wordHasRendered = true;
     }
+}
+
+void BrowserPage::hideWords()
+{
+    if (m_wordIsHide)
+        return;
+
+    foreach (BrowserWord *word, m_words) {
+        word->setFlag(QGraphicsItem::ItemIsSelectable, false);
+        word->setParentItem(0);
+    }
+
+    m_wordIsHide = true;
 }
 
 void BrowserPage::scaleWords(bool force)
 {
+    if (m_wordIsHide) {
+        foreach (BrowserWord *word, m_words) {
+            word->setFlag(QGraphicsItem::ItemIsSelectable, true);
+            word->setParentItem(this);
+        }
+    }
+
+    m_wordIsHide = false;
+
     if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
         foreach (BrowserWord *word, m_words) {
             word->setScaleFactor(m_scaleFactor);
-            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
         }
-
-        m_wordIsHide = false;
     }
 }
 

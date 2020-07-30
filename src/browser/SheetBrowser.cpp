@@ -272,7 +272,7 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
             item->setWordSelectable(false);
         }
     } else if (Dr::MouseShapeNormal == shape) {
-        setDragMode(QGraphicsView::RubberBandDrag);
+        setDragMode(QGraphicsView::NoDrag);
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(true);
     }
@@ -321,8 +321,8 @@ void SheetBrowser::onSceneOfViewportChanged()
 {
     foreach (BrowserPage *page, m_items) {
         if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
-            page->loadWords();
-            page->scaleWords(true);
+//            page->loadWords();
+//            page->scaleWords(true);
             page->renderViewPort();
         }
     }
@@ -692,8 +692,7 @@ QString SheetBrowser::selectedWordsText()
 void SheetBrowser::handleVerticalScrollLater()
 {
     foreach (BrowserPage *item, m_items) {
-        if (!item->isVisible())
-            item->clearWords();
+        item->hideWords();
     }
 
     if (nullptr == m_scrollTimer) {
@@ -929,21 +928,48 @@ void SheetBrowser::deform(SheetOperation &operation)
         diffX = qRound((horizontalScrollBar()->value() - m_items.at(page - 1)->pos().x()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
     }
 
+    //进行render 并算出最宽的一行
+    int maxWidth = 0;
     for (int i = 0; i < m_items.count(); ++i) {
+        if (i % 2 == 1)
+            continue;
+
+        int j = i + 1;
+
         m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
+
+        if (j < m_items.count())
+            m_items.at(j)->render(operation.scaleFactor, operation.rotation, true);
+
+
+        if (Dr::SinglePageMode == operation.layoutMode) {
+            if (m_items.at(i)->rect().width() > maxWidth)
+                maxWidth = static_cast<int>(m_items.at(i)->rect().width());
+
+            if (j < m_items.count()) {
+                if (m_items.at(j)->rect().width() > maxWidth)
+                    maxWidth = static_cast<int>(m_items.at(j)->rect().width());
+            }
+
+        } else if (Dr::TwoPagesMode == operation.layoutMode) {
+            if (j < m_items.count()) {
+                if (static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width()) > maxWidth)
+                    maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
+            } else {
+                if (static_cast<int>(m_items.at(i)->rect().width()) > maxWidth)
+                    maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
+            }
+        }
     }
 
-    int width = 0;
     int height = 0;
 
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->setPos((operation.scaleFactor * m_maxWidth - m_items.at(i)->boundingRect().width()) / 2, height);
+            m_items.at(i)->setPos((maxWidth - m_items.at(i)->rect().width()) / 2, height);
 
-            height += m_items.at(i)->boundingRect().height() + 5;
+            height += m_items.at(i)->rect().height() + 5;
 
-            if (m_items.at(i)->boundingRect().width() > width)
-                width = static_cast<int>(m_items.at(i)->boundingRect().width());
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -952,27 +978,19 @@ void SheetBrowser::deform(SheetOperation &operation)
 
             if (m_items.count() > i + 1) {
                 m_items.at(i)->setPos(0, height);
-                m_items.at(i + 1)->setPos(m_items.at(i)->boundingRect().width() + 5, height);
+                m_items.at(i + 1)->setPos(m_items.at(i)->rect().width() + 5, height);
             } else {
                 m_items.at(i)->setPos(0, height);
             }
 
             if (m_items.count() > i + 1) {
-                height +=  qMax(m_items.at(i)->boundingRect().height(), m_items.at(i + 1)->boundingRect().height()) + 5;
+                height +=  qMax(m_items.at(i)->rect().height(), m_items.at(i + 1)->rect().height()) + 5;
             } else
-                height += m_items.at(i)->boundingRect().height() + 5;
-
-            if (m_items.count() > i + 1) {
-                if (m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width() > width)
-                    width = static_cast<int>(m_items.at(i)->boundingRect().width() + m_items.at(i + 1)->boundingRect().width());
-            } else {
-                if (m_items.at(i)->boundingRect().width() > width)
-                    width = static_cast<int>(m_items.at(i)->boundingRect().width());
-            }
+                height += m_items.at(i)->rect().height() + 5;
         }
     }
 
-    setSceneRect(0, 0, width, height);
+    setSceneRect(0, 0, maxWidth, height);
 
     if (page > 0 && page <= m_items.count()) {
         verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
@@ -989,10 +1007,6 @@ bool SheetBrowser::hasLoaded()
 
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
-    foreach (BrowserPage *item, m_items) {
-        item->hideWords();
-    }
-
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         deform(m_sheet->operationRef());
         m_sheet->setOperationChanged();
@@ -1022,6 +1036,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         m_iconAnnot = nullptr;
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
+
             m_selectEndPos = QPointF();
 
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
@@ -1029,10 +1044,19 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             if (jump2Link(m_selectStartPos))
                 return;
 
+            QPoint point = event->pos();
+
+            BrowserPage *page = getBrowserPageForPoint(point);
+
+            if (page != nullptr) {
+                m_selectIndex = page->itemIndex();
+            }
+
             deepin_reader::Annotation *clickAnno = nullptr;
 
             //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
             clickAnno = getClickAnnot(m_selectPressedPos, true);
+
             if (clickAnno && clickAnno->type() == 1) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
@@ -1040,6 +1064,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnot = clickAnno;
                 return ;
             }
+
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
 
@@ -1065,7 +1090,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             m_tipsWidget->hide();
 
-            if (item == nullptr) return;
+            if (item == nullptr)
+                return;
+
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
@@ -1208,8 +1235,27 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
     } else {
+        BrowserPage *page = getBrowserPageForPoint(mousePos);
+        if (page) {
+            page->loadWords();
+            page->scaleWords(false);
+
+            if (m_selectIndex >= 0) {//将两页之间所有的页面文字都取出来
+                if (page->itemIndex() - m_selectIndex > 1) {
+                    for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
+                        m_items.at(i)->loadWords();
+                        m_items.at(i)->scaleWords(false);
+                    }
+                } else if (m_selectIndex - page->itemIndex() > 1) {
+                    for (int i = page->itemIndex() + 1; i < m_selectIndex; ++i) {
+                        m_items.at(i)->loadWords();
+                        m_items.at(i)->scaleWords(false);
+                    }
+                }
+            }
+        }
+
         if (m_selectPressedPos.isNull()) {
-            BrowserPage *page = getBrowserPageForPoint(mousePos);
             if (page) {
                 BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
                 if (browserAnno && !browserAnno->annotationText().isEmpty()) {
@@ -1228,7 +1274,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             } else {
                 setCursor(QCursor(Qt::ArrowCursor));
             }
-        } else {
+        } else {//按下
             m_tipsWidget->hide();
             QPointF beginPos = m_selectPressedPos;
             QPointF endPos = mapToScene(event->pos());
@@ -1338,6 +1384,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         }
 
         m_selectPressedPos = QPointF();
+        m_selectIndex = -1;
         m_selectIconAnnotation = false;
     }
 
@@ -1460,7 +1507,7 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
-        setDragMode(QGraphicsView::RubberBandDrag);
+        setDragMode(QGraphicsView::NoDrag);
         setMouseTracking(true);
         setCursor(QCursor(Qt::BlankCursor));
     }
@@ -1478,7 +1525,7 @@ void SheetBrowser::closeMagnifier()
         if (Dr::MouseShapeHand == m_sheet->operation().mouseShape) {
             setDragMode(QGraphicsView::ScrollHandDrag);
         } else if (Dr::MouseShapeNormal == m_sheet->operation().mouseShape) {
-            setDragMode(QGraphicsView::RubberBandDrag);
+            setDragMode(QGraphicsView::NoDrag);
         }
     }
 }

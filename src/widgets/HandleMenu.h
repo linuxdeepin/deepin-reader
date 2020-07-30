@@ -43,7 +43,6 @@ private slots:
 private:
     QAction *m_textAction;
     QAction *m_handAction;
-
     DocSheet *m_docSheet;
 };
 

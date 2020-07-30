@@ -40,6 +40,7 @@ class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
 class BrowserSearch;
+class QGraphicsGridLayout;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -237,6 +238,7 @@ private:
     QTimer *m_resizeTimer = nullptr;
     QTimer *m_scrollTimer = nullptr;
 
+    QGraphicsGridLayout *m_layout;
     QList<BrowserPage *> m_items;
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;                 //最大一页的宽度
@@ -247,8 +249,10 @@ private:
     int m_searchCurIndex = 0;
     int m_searchPageTextIndex = 0;
     QPointF m_selectPressedPos;         //scene
-    QPointF m_selectStartPos;           // 选取文字的结束位置
+    QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置
+    int m_selectIndex = 0;              // 选取文字开始的index
+
     bool m_annotationInserting = false;     //正在插入注释状态
     RenderViewportThread *m_pageThread = nullptr;
     bool m_selectIconAnnotation{false}; // 当前是否有选中的图标注释
