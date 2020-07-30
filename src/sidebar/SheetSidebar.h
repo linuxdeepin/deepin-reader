@@ -86,7 +86,8 @@ private slots:
     void onBtnClicked(int index);
     void onUpdateWidgetTheme();
 
-    void handWidgetDocOpenSuccess();
+    void onHandWidgetDocOpenSuccess();
+    void onHandleOpenSuccessDelay();
 
 private:
     void initConnections();

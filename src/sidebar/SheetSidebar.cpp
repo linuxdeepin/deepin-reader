@@ -142,7 +142,7 @@ void SheetSidebar::onBtnClicked(int index)
     if (m_stackLayout->currentWidget() != m_searchWidget) {
         m_sheet->m_operation.sidebarIndex = index;
     }
-    handWidgetDocOpenSuccess();
+    onHandleOpenSuccessDelay();
 }
 
 void SheetSidebar::setBookMark(int index, int state)
@@ -165,24 +165,27 @@ void SheetSidebar::handleOpenSuccess()
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
     QAbstractButton *btn = m_btnGroup->button(nId);
     if (btn) m_btnGroup->buttonClicked(nId);
-    handWidgetDocOpenSuccess();
+    onHandleOpenSuccessDelay();
 }
 
-void SheetSidebar::handWidgetDocOpenSuccess()
+void SheetSidebar::onHandleOpenSuccessDelay()
 {
     if (m_bOpenDocOpenSuccess) {
-        QTimer::singleShot(10, [this]() {
-            QWidget *curWidget = m_stackLayout->currentWidget();
-            if (curWidget == m_thumbnailWidget) {
-                m_thumbnailWidget->handleOpenSuccess();
-            } else if (curWidget == m_catalogWidget) {
-                m_catalogWidget->handleOpenSuccess();
-            } else if (curWidget == m_bookmarkWidget) {
-                m_bookmarkWidget->handleOpenSuccess();
-            } else if (curWidget == m_notesWidget) {
-                m_notesWidget->handleOpenSuccess();
-            }
-        });
+        QTimer::singleShot(10, this, SLOT(onHandWidgetDocOpenSuccess()));
+    }
+}
+
+void SheetSidebar::onHandWidgetDocOpenSuccess()
+{
+    QWidget *curWidget = m_stackLayout->currentWidget();
+    if (curWidget == m_thumbnailWidget) {
+        m_thumbnailWidget->handleOpenSuccess();
+    } else if (curWidget == m_catalogWidget) {
+        m_catalogWidget->handleOpenSuccess();
+    } else if (curWidget == m_bookmarkWidget) {
+        m_bookmarkWidget->handleOpenSuccess();
+    } else if (curWidget == m_notesWidget) {
+        m_notesWidget->handleOpenSuccess();
     }
 }
 
