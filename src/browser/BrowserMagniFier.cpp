@@ -65,14 +65,38 @@ BrowserMagniFier::BrowserMagniFier(QWidget *parent)
     m_brwoser = dynamic_cast<SheetBrowser *>(parent);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
+    setAttribute(Qt::WA_DeleteOnClose);
     setAutoFillBackground(false);
     resize(244, 244);
     show();
 }
 
+void BrowserMagniFier::updateImage()
+{
+    QPoint point = m_lastScenePoint;
+    BrowserPage *page = m_brwoser->getBrowserPageForPoint(point);
+    if (page) {
+        const QImage &image = page->getCurImagePoint(point);
+        setMagniFierImage(image);
+    } else {
+        setMagniFierImage(QImage());
+    }
+
+    MagnifierInfo_t task;
+    task.page = page;
+    task.target = this;
+    task.slotFun = "onUpdateMagnifierImage";
+    task.mousePos = point;
+    task.scaleFactor = m_lastScaleFactor;
+    m_readManager.addTask(task);
+
+    m_lastPoint = point;
+}
+
 void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, double scaleFactor)
 {
     scaleFactor += 2;
+    m_lastScenePoint = mousePos;
     BrowserPage *page = m_brwoser->getBrowserPageForPoint(mousePos);
 
     if (page) {

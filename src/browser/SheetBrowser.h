@@ -260,6 +260,7 @@ private:
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
 
     int m_currentPage = 0;
+    int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
 };
 

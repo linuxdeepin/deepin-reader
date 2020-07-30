@@ -378,18 +378,20 @@ QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
+    const QPoint &transformPoint = translatePoint(point);
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
-
-    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
-
+    QRect rect = QRect(qRound(transformPoint.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(transformPoint.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 QImage BrowserPage::getCurImagePoint(QPoint point)
 {
     int ds = 122;
-
-    return Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds);
+    QTransform transform;
+    transform.rotate(m_rotation * 90);
+    QImage image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    return image;
 }
 
 void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
@@ -1034,6 +1036,31 @@ QRectF BrowserPage::getNorotateRecr(const QRectF &rect)
     return newrect;
 }
 
+QPoint BrowserPage::translatePoint(const QPoint &point)
+{
+    QPoint newpoint = point;
+    switch (m_rotation) {
+    case Dr::RotateBy90: {
+        newpoint.setX(boundingRect().height() - point.y());
+        newpoint.setY(point.x());
+        break;
+    }
+    case Dr::RotateBy180: {
+        newpoint.setX(boundingRect().width() - point.x());
+        newpoint.setY(boundingRect().height() - point.y());
+        break;
+    }
+    case Dr::RotateBy270: {
+        newpoint.setX(point.y());
+        newpoint.setY(boundingRect().width() - point.x());
+        break;
+    }
+    default:
+        break;
+    }
+    return  newpoint;
+}
+
 QRectF BrowserPage::translateRect(const QRectF &rect)
 {
     //旋转角度逆时针增加
@@ -1047,22 +1074,22 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
         break;
     }
     case Dr::RotateBy90: {
-        newrect.setX((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor);
+        newrect.setX((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setY(rect.x()*m_scaleFactor);
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy180: {
-        newrect.setX((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor);
-        newrect.setY((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor);
+        newrect.setX((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setWidth(rect.width()*m_scaleFactor);
         newrect.setHeight(rect.height()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy270: {
         newrect.setX(rect.y()*m_scaleFactor);
-        newrect.setY((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor);
+        newrect.setY((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;

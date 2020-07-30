@@ -63,6 +63,8 @@ public:
 
     void showMagnigierImage(QPoint viewPoint, QPoint magnifierPos, double scaleFactor);
 
+    void updateImage();
+
 private:
     void setMagniFierImage(const QImage &image);
 
@@ -72,6 +74,7 @@ private slots:
 private:
     qreal m_lastScaleFactor;
     QPoint m_lastPoint;
+    QPoint m_lastScenePoint;
 
     SheetBrowser *m_brwoser;
     ReadMagnifierManager m_readManager;

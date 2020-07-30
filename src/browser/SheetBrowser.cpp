@@ -71,6 +71,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
 
+    setMouseTracking(true);
+
     setScene(new QGraphicsScene());
 
     setFrameShape(QFrame::NoFrame);
@@ -1032,6 +1034,12 @@ void SheetBrowser::deform(SheetOperation &operation)
         horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
     }
 
+    //update Magnifier Image
+    if (operation.rotation != m_lastrotation) {
+        if (m_magnifierLabel) m_magnifierLabel->updateImage();
+    }
+    m_lastrotation = operation.rotation;
+
     handleVerticalScrollLater();
 }
 
@@ -1233,7 +1241,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    if (this->isLink(mapToScene(mousePos))) {
+    if (!m_magnifierLabel && this->isLink(mapToScene(mousePos))) {
         setCursor(QCursor(Qt::PointingHandCursor));
         return;
     }
@@ -1556,7 +1564,6 @@ void SheetBrowser::openMagnifier()
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
         setDragMode(QGraphicsView::NoDrag);
-        setMouseTracking(true);
         setCursor(QCursor(Qt::BlankCursor));
     }
 }
@@ -1565,10 +1572,9 @@ void SheetBrowser::closeMagnifier()
 {
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
-        m_magnifierLabel->deleteLater();
+        m_magnifierLabel->close();
         m_magnifierLabel = nullptr;
 
-        setMouseTracking(false);
         setCursor(QCursor(Qt::ArrowCursor));
         if (Dr::MouseShapeHand == m_sheet->operation().mouseShape) {
             setDragMode(QGraphicsView::ScrollHandDrag);

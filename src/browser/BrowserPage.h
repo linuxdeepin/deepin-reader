@@ -133,6 +133,8 @@ public:
 
     QRectF findSearchforIndex(int index);
 
+    QPoint translatePoint(const QPoint &point);
+
     QRectF translateRect(const QRectF &rect);
 
     QRectF getNorotateRecr(const QRectF &rect);
