@@ -21,7 +21,7 @@
 #ifndef MAINTABWIDGETEX_H
 #define MAINTABWIDGETEX_H
 
-#include "widgets/CustomWidget.h"
+#include "CustomWidget.h"
 #include "DocSheet.h"
 
 #include <QMap>

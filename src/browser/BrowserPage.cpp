@@ -145,6 +145,8 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     if (m_viewportRenderedRect.isValid())
         painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
+    else
+        renderViewPort(false);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -156,9 +158,11 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setPen(Qt::NoPen);
     painter->setBrush(QColor(238, 220, 0, 100));
     int lightsize = m_searchLightrectLst.size();
+
     for (int i = 0; i < lightsize; i++) {
         painter->drawRect(getNorotateRecr(m_searchLightrectLst[i]));
     }
+
     painter->setBrush(QColor(59, 148, 1, 100));
     if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
         painter->drawRect(getNorotateRecr(m_searchSelectLighRectf));
@@ -307,8 +311,6 @@ void BrowserPage::renderViewPort(bool force)
 {
     if (nullptr == m_parent)
         return;
-
-    return;
 
     if (!force && boundingRect().width() < 1000 && boundingRect().height() < 1000)
         return;

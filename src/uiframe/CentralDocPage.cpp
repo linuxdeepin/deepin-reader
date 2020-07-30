@@ -19,6 +19,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "CentralDocPage.h"
+#include "DocSheet.h"
+#include "DocTabBar.h"
+#include "MainWindow.h"
+#include "SaveDialog.h"
+#include "PrintManager.h"
+#include "SlideWidget.h"
+#include "FileAttrWidget.h"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -34,19 +41,6 @@
 #include <QProcess>
 #include <QUuid>
 #include <DTitlebar>
-
-#include "CentralDocPage.h"
-#include "DocSheet.h"
-#include "DocTabBar.h"
-#include "MainWindow.h"
-
-#include "widgets/SaveDialog.h"
-#include "widgets/PrintManager.h"
-#include "Utils.h"
-#include "CentralDocPage.h"
-#include "Global.h"
-#include "widgets/SlideWidget.h"
-#include "widgets/FileAttrWidget.h"
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)

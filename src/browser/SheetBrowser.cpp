@@ -321,8 +321,6 @@ void SheetBrowser::onSceneOfViewportChanged()
 {
     foreach (BrowserPage *page, m_items) {
         if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
-//            page->loadWords();
-//            page->scaleWords(true);
             page->renderViewPort();
         }
     }
@@ -883,6 +881,7 @@ void SheetBrowser::deform(SheetOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
 
+    //根据缩放模式调整缩放比例
     switch (operation.rotation) {
     default:
     case Dr::RotateBy0:
