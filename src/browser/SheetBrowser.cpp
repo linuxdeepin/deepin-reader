@@ -1240,7 +1240,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             page->loadWords();
             page->scaleWords(false);
 
-            if (m_selectIndex >= 0) {//将两页之间所有的页面文字都取出来
+            if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
                 if (page->itemIndex() - m_selectIndex > 1) {
                     for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
                         m_items.at(i)->loadWords();

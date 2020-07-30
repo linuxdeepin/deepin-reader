@@ -251,7 +251,7 @@ private:
     QPointF m_selectPressedPos;         //scene
     QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置
-    int m_selectIndex = 0;              // 选取文字开始的index
+    int m_selectIndex = -1;              // 选取文字开始的index
 
     bool m_annotationInserting = false;     //正在插入注释状态
     RenderViewportThread *m_pageThread = nullptr;
