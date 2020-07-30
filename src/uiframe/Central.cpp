@@ -175,16 +175,12 @@ void Central::handleShortcut(QString shortcut)
 
 void Central::onSheetCountChanged(int count)
 {
-    if (m_layout) {
-        if (count > 0) {
-            m_layout->setCurrentIndex(1);
-        } else if (count == 0) {
-            m_layout->setCurrentIndex(0);
-            m_navPage->setFocus();
-            if (m_widget) {
-                m_widget->setControlEnabled(false);
-            }
-        }
+    if (count > 0) {
+        m_layout->setCurrentIndex(1);
+    } else {
+        m_layout->setCurrentIndex(0);
+        m_navPage->setFocus();
+        m_widget->setControlEnabled(false);
     }
 }
 
@@ -272,4 +268,3 @@ void Central::dropEvent(QDropEvent *event)
         }
     }
 }
-

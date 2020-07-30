@@ -24,8 +24,8 @@
 #include <DPushButton>
 #include <DIconButton>
 #include <QPointer>
-#include "DocSheet.h"
 
+#include "DocSheet.h"
 #include "widgets/CustomWidget.h"
 
 class ScaleWidget;

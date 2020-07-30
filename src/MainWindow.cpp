@@ -31,6 +31,7 @@
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
+#include "CentralDocPage.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -40,6 +41,7 @@
 #include <QStandardPaths>
 #include <QSettings>
 #include <QDBusConnection>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -163,6 +165,7 @@ void MainWindow::initUI()
     titlebar()->setTitle("");
     titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
+    titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
     titlebar()->setAutoHideOnFullscreen(false);
 
     //移除焦点抢占和避免出现焦点样式
@@ -172,6 +175,8 @@ void MainWindow::initUI()
         if (!w->objectName().isEmpty())
             w->setFocusPolicy(Qt::NoFocus);
     }
+
+    QTimer::singleShot(10, this, SLOT(onUpdateTitleLabelRect()));
 }
 
 //  快捷键 实现
@@ -269,4 +274,16 @@ void MainWindow::initShortCut()
 
         pSigManager->setMapping(action, key.toString());
     }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    DMainWindow::resizeEvent(event);
+    onUpdateTitleLabelRect();
+}
+
+void MainWindow::onUpdateTitleLabelRect()
+{
+    QWidget *titleLabel = m_central->docPage()->getTitleLabel();
+    titleLabel->setFixedWidth(this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60);
 }

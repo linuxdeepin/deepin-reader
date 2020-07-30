@@ -50,7 +50,7 @@ void TitleWidget::initWidget()
     initBtns();
 
     QHBoxLayout *hlayout = new QHBoxLayout();
-    hlayout->setContentsMargins(5, 0, 0, 0);
+    hlayout->setContentsMargins(6, 0, 6, 0);
     hlayout->setSpacing(10);
     setLayout(hlayout);
     hlayout->addWidget(m_pThumbnailBtn);

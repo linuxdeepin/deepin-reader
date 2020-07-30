@@ -70,6 +70,12 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     mainLayout->setSpacing(0);
 
     this->setLayout(mainLayout);
+
+    m_pDocTabLabel = new DLabel(this);
+    m_pDocTabLabel->setElideMode(Qt::ElideMiddle);
+    m_pDocTabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
+    m_pDocTabLabel->setAlignment(Qt::AlignCenter);
+    connect(this, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
 }
 
 CentralDocPage::~CentralDocPage()
@@ -667,4 +673,27 @@ bool CentralDocPage::quitFullScreen()
     }
 
     return false;
+}
+
+QString CentralDocPage::getDocTabbarText(int index)
+{
+    if (index >= 0 && index < m_pTabBar->count())
+        return m_pTabBar->tabText(index);
+    return QString();
+}
+
+void CentralDocPage::onSheetCountChanged(int count)
+{
+    if (count == 1) {
+        m_pDocTabLabel->setText(this->getDocTabbarText(0));
+        m_pTabBar->setVisible(false);
+    } else {
+        m_pDocTabLabel->setText("");
+        m_pTabBar->setVisible(true);
+    }
+}
+
+QWidget *CentralDocPage::getTitleLabel()
+{
+    return m_pDocTabLabel;
 }

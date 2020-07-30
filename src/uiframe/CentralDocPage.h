@@ -26,6 +26,7 @@
 
 #include <QMap>
 #include <QPointer>
+#include <DLabel>
 
 class FileDataModel;
 class DocummentProxy;
@@ -99,6 +100,8 @@ public:
 
     void showFileAttr();
 
+    QWidget *getTitleLabel();
+
 public slots:
     void onOpened(DocSheet *, bool);
 
@@ -117,6 +120,8 @@ public slots:
     void onSheetFileChanged(DocSheet *);        //文档被修改
 
     void onSheetOperationChanged(DocSheet *);   //文档被操作
+
+    void onSheetCountChanged(int count);
 
 signals:
     void sigSheetCountChanged(int);
@@ -141,6 +146,10 @@ signals:
     void sigNeedActivateWindow();
 
 private:
+    QString getDocTabbarText(int index);
+
+private:
+    DLabel              *m_pDocTabLabel = nullptr;
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
 
