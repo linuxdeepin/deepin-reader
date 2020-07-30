@@ -856,8 +856,8 @@ BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
     foreach (BrowserPage *page, m_items) {
         if (nullptr != page) {
             if (point.x() > page->pos().x() && point.y() > page->pos().y() &&
-                    point.x() < (page->pos().x() + page->boundingRect().width()) &&
-                    point.y() < (page->pos().y() + page->boundingRect().height())) {
+                    point.x() < (page->pos().x() + page->rect().width()) &&
+                    point.y() < (page->pos().y() + page->rect().height())) {
                 return  page;
             }
         }
@@ -1453,7 +1453,7 @@ int SheetBrowser::currentScrollValueForPage()
     int index = 0;
 
     for (int i = 0; i < m_items.count(); ++i) {
-        if (m_items[i]->pos().y() + m_items[i]->boundingRect().height() >= value) {
+        if (m_items[i]->pos().y() + m_items[i]->rect().height() >= value) {
             index = i;
             break;
         }
