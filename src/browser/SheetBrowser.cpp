@@ -929,7 +929,10 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     //进行render 并算出最宽的一行
-    int maxWidth = 0;
+    int maxWidth = 0;           //最宽的一行
+    int maxHeight = 0;          //总高度
+    int space = 5;              //页之间间隙
+
     for (int i = 0; i < m_items.count(); ++i) {
         if (i % 2 == 1)
             continue;
@@ -956,41 +959,69 @@ void SheetBrowser::deform(SheetOperation &operation)
                 if (static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width()) > maxWidth)
                     maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
             } else {
-                if (static_cast<int>(m_items.at(i)->rect().width()) > maxWidth)
+                if (static_cast<int>(m_items.at(i)->rect().width()) > maxWidth) {
                     maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
+                    if (m_items.count() == 1)
+                        maxWidth *= 2;
+                }
             }
         }
     }
 
-    int height = 0;
-
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
-            m_items.at(i)->setPos((maxWidth - m_items.at(i)->rect().width()) / 2, height);
+            int x = (maxWidth - m_items.at(i)->rect().width()) / 2;
 
-            height += m_items.at(i)->rect().height() + 5;
+            if (Dr::RotateBy0 == operation.rotation)
+                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight);
+            else if (Dr::RotateBy90 == operation.rotation)
+                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height(), maxHeight);
+            else if (Dr::RotateBy180 == operation.rotation)
+                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
+            else if (Dr::RotateBy270 == operation.rotation)
+                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight + m_items.at(i)->boundingRect().width());
 
+            maxHeight += m_items.at(i)->rect().height() + space;
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
                 continue;
 
-            if (m_items.count() > i + 1) {
-                m_items.at(i)->setPos(0, height);
-                m_items.at(i + 1)->setPos(m_items.at(i)->rect().width() + 5, height);
-            } else {
-                m_items.at(i)->setPos(0, height);
+            int x = (maxWidth / 2 - m_items.at(i)->rect().width()) / 2;
+
+            if (Dr::RotateBy0 == operation.rotation) {
+                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight);
+                if (m_items.count() > i + 1) {
+                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + maxWidth / 2 + space, maxHeight);
+                }
+            } else if (Dr::RotateBy90 == operation.rotation) {
+                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height(), maxHeight);
+                if (m_items.count() > i + 1) {
+                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height() + maxWidth / 2 + space, maxHeight);
+                }
+            } else if (Dr::RotateBy180 == operation.rotation) {
+                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
+                if (m_items.count() > i + 1) {
+                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width() + maxWidth / 2 + space, maxHeight + m_items.at(i)->boundingRect().height());
+                }
+            } else if (Dr::RotateBy270 == operation.rotation) {
+                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight + m_items.at(i)->boundingRect().width());
+                if (m_items.count() > i + 1) {
+                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + maxWidth / 2 + space, maxHeight + m_items.at(i)->boundingRect().width());
+                }
             }
 
             if (m_items.count() > i + 1) {
-                height +=  qMax(m_items.at(i)->rect().height(), m_items.at(i + 1)->rect().height()) + 5;
+                maxHeight +=  qMax(m_items.at(i)->rect().height(), m_items.at(i + 1)->rect().height()) + space;
             } else
-                height += m_items.at(i)->rect().height() + 5;
+                maxHeight += m_items.at(i)->rect().height() + space;
         }
+
+        maxWidth += space;
     }
 
-    setSceneRect(0, 0, maxWidth, height);
+    setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
         verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
@@ -1301,8 +1332,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
             QList<QGraphicsItem *> words;               //应该只存这几页的words 暂时等于所有的
             words = scene()->items(sceneRect());        //倒序
-
-            if (endWord == nullptr) {
+            if (endWord == nullptr && m_sheet->operation().rotation == Dr::RotateBy0) {//暂时只考虑0度
                 if (endPos.y() > beginPos.y()) {
                     for (int i = 0; i < words.size(); ++i) {//从后向前检索
                         if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() < endPos.y()) {
@@ -1433,9 +1463,23 @@ void SheetBrowser::setCurrentPage(int page)
         return;
 
     m_bNeedNotifyCurPageChanged = false;
-    horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
-    verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
+
+    if (Dr::RotateBy0 == m_sheet->operation().rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
+    } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()) -  m_items.at(page - 1)->boundingRect().height());
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
+    } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()) - m_items.at(page - 1)->boundingRect().width());
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()) - m_items.at(page - 1)->boundingRect().height());
+    } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()) - m_items.at(page - 1)->boundingRect().width());
+    }
+
     m_bNeedNotifyCurPageChanged = true;
+
     curpageChanged(page);
 }
 

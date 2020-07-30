@@ -192,8 +192,6 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
 
     m_pixmapHasRendered = false;
 
-    m_scaleFactor = scaleFactor;
-
     if (m_lastClickIconAnnotation)
         m_lastClickIconAnnotation->setScaleFactor(scaleFactor);
 
@@ -202,9 +200,14 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
         m_viewportPixmap = QPixmap();
     }
 
+    m_scaleFactor = scaleFactor;
+
     if (m_rotation != rotation) {
         m_rotation = rotation;
-        setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
+
+//        qDebug() << boundingRect().center();
+//        setTransformOriginPoint(boundingRect().center());
+
         if (Dr::RotateBy0 == m_rotation)
             this->setRotation(0);
         else if (Dr::RotateBy90 == m_rotation)
