@@ -136,7 +136,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                     this->titlebar()->setVisible(false);
                 }
                 if (mouseEvent->pos().y() < 2) {
-                    if (m_docTabbarWidget) m_docTabbarWidget->setVisible(true);
+                    if (m_docTabbarWidget && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
+                        m_docTabbarWidget->setVisible(true);
+                    }
                     this->titlebar()->setVisible(true);
                 }
             }
@@ -145,7 +147,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 if (m_docTabbarWidget) m_docTabbarWidget->setVisible(false);
                 this->titlebar()->setVisible(false);
             } else {
-                if (m_docTabbarWidget) m_docTabbarWidget->setVisible(true);
+                if (m_docTabbarWidget && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
+                    m_docTabbarWidget->setVisible(true);
+                }
                 this->titlebar()->setVisible(true);
             }
         }

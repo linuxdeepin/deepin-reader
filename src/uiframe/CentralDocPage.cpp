@@ -667,8 +667,8 @@ bool CentralDocPage::quitFullScreen()
         return false;
 
     if (mainWindow->isFullScreen()) {
-        mainWindow->setDocTabBarWidget(nullptr);
         mainWindow->showNormal();
+        mainWindow->setDocTabBarWidget(nullptr);
         return true;
     }
 

@@ -135,6 +135,8 @@ public:
 
     QRectF translateRect(const QRectF &rect);
 
+    QRectF getNorotateRecr(const QRectF &rect);
+
     BrowserAnnotation *getBrowserAnnotation(const QPoint &point);
 
     BrowserWord *getBrowserWord(const QPoint &point);

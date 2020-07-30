@@ -157,11 +157,11 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(QColor(238, 220, 0, 100));
     int lightsize = m_searchLightrectLst.size();
     for (int i = 0; i < lightsize; i++) {
-        painter->drawRect(translateRect(m_searchLightrectLst[i]));
+        painter->drawRect(getNorotateRecr(m_searchLightrectLst[i]));
     }
     painter->setBrush(QColor(59, 148, 1, 100));
     if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
-        painter->drawRect(translateRect(m_searchSelectLighRectf));
+        painter->drawRect(getNorotateRecr(m_searchSelectLighRectf));
 
     if (m_drawMoveIconRect) {
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
@@ -1025,6 +1025,16 @@ QRectF BrowserPage::findSearchforIndex(int index)
         return m_searchSelectLighRectf;
     }
     return QRectF(-1, -1, -1, -1);
+}
+
+QRectF BrowserPage::getNorotateRecr(const QRectF &rect)
+{
+    QRectF newrect;
+    newrect.setX(rect.x()*m_scaleFactor);
+    newrect.setY(rect.y()*m_scaleFactor);
+    newrect.setWidth(rect.width()*m_scaleFactor);
+    newrect.setHeight(rect.height()*m_scaleFactor);
+    return newrect;
 }
 
 QRectF BrowserPage::translateRect(const QRectF &rect)
