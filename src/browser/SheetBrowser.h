@@ -40,7 +40,6 @@ class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
 class BrowserSearch;
-class QGraphicsGridLayout;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -49,7 +48,7 @@ public:
     friend class ReadMagnifierManager;
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
-    ~SheetBrowser() override;
+    virtual ~SheetBrowser() override;
 
     static QImage firstThumbnail(const QString &filePath);
 
@@ -221,25 +220,27 @@ private:
 
 private:
     deepin_reader::Document *m_document = nullptr;
-    BrowserMagniFier *m_magnifierLabel = nullptr;
     DocSheet *m_sheet = nullptr;
 
-    Dr::FileType m_fileType;
-    QString m_filePath;
-    QString m_filePassword;
-
+    BrowserMagniFier *m_magnifierLabel = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;
     FindWidget *m_pFindWidget = nullptr;
     BrowserSearch *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;
     BrowserPage *m_lastSelectIconAnnotPage = nullptr; // 最后选中图标注释所在页
+    QTimer *m_resizeTimer = nullptr;        //大小改变触发局部update
+    QTimer *m_scrollTimer = nullptr;        //滚动位移触发局部update
 
-    QTimer *m_resizeTimer = nullptr;
-    QTimer *m_scrollTimer = nullptr;
-
-    QGraphicsGridLayout *m_layout;
+    Dr::FileType m_fileType;
+    QString m_filePath;
+    QString m_filePassword;
     QList<BrowserPage *> m_items;
+
+    QPointF m_selectPressedPos;         //
+    QPointF m_selectStartPos;           // 选取文字的开始位置
+    QPointF m_selectEndPos;             // 选取文字的结束位置
+
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;                 //最大一页的宽度
     int m_maxHeight = 0;                //最大一页的高度
@@ -248,9 +249,6 @@ private:
     int m_initPage = 1;                 //用于刚显示跳转的页数
     int m_searchCurIndex = 0;
     int m_searchPageTextIndex = 0;
-    QPointF m_selectPressedPos;         //scene
-    QPointF m_selectStartPos;           // 选取文字的开始位置
-    QPointF m_selectEndPos;             // 选取文字的结束位置
     int m_selectIndex = -1;              // 选取文字开始的index
 
     bool m_annotationInserting = false;     //正在插入注释状态

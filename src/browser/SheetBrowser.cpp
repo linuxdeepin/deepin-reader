@@ -1052,19 +1052,20 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         deform(m_sheet->operationRef());
+
         m_sheet->setOperationChanged();
+
+        if (nullptr == m_resizeTimer) {
+            m_resizeTimer = new QTimer(this);
+            connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
+            m_resizeTimer->setSingleShot(true);
+        }
+
+        if (m_resizeTimer->isActive())
+            m_resizeTimer->stop();
+
+        m_resizeTimer->start(100);
     }
-
-    if (nullptr == m_resizeTimer) {
-        m_resizeTimer = new QTimer(this);
-        connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
-        m_resizeTimer->setSingleShot(true);
-    }
-
-    if (m_resizeTimer->isActive())
-        m_resizeTimer->stop();
-
-    m_resizeTimer->start(100);
 
     if (m_pFindWidget)
         m_pFindWidget->showPosition(this->width());

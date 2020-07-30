@@ -160,6 +160,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::initUI()
 {
     this->installEventFilter(this);
+
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
     setCentralWidget(m_central);

@@ -47,29 +47,21 @@ class BrowserPage : public QGraphicsItem
 public:
     explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
-    ~BrowserPage() override;
+    virtual ~BrowserPage() override;
+
+    static bool existInstance(BrowserPage *item);
 
     void reOpen(deepin_reader::Page *page);
 
-    QRectF boundingRect()const override;
+    QRectF boundingRect()const override;  //原矩形 不受旋转影响
 
-    QRectF rect();
+    QRectF rect();  //旋转后 实际矩形
 
-    QRectF bookmarkRect();
+    void setBookmark(const bool &hasBookmark);
 
-    QRectF bookmarkMouseRect();
-
-    void setBookmark(bool hasBookmark);
-
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
-    void render(double scaleFactor, Dr::Rotation rotation, bool renderLater = false, bool force = false);
-
-    void handleRenderFinished(double scaleFactor, QImage image, QRect rect = QRect());
+    void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     void renderViewPort(bool force = false);     //优先显示当前窗口
-
-    void handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect = QRect());
 
     QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
@@ -83,8 +75,6 @@ public:
 
     QImage getCurImagePoint(QPoint point);
 
-    static bool existInstance(BrowserPage *item);
-
     void setItemIndex(int itemIndex);
 
     int itemIndex();
@@ -94,8 +84,6 @@ public:
     void setWordSelectable(bool selectable);
 
     void loadLinks();
-
-    void clearWords();
 
     void loadWords();
 
@@ -117,6 +105,7 @@ public:
 
     bool removeAnnotationByUniqueName(QString uniqueName);
 
+    //================================
     Annotation *addIconAnnotation(const QRectF, const QString);
 
     bool mouseClickIconAnnot(QPointF &);
@@ -162,13 +151,23 @@ public:
     bool inLink(const QPointF);
 
 private:
+    void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
+
+    void handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
+
     void reloadAnnotations();
 
+    QRectF bookmarkRect();
+
+    QRectF bookmarkMouseRect();
+
 protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
     bool sceneEvent(QEvent *event) override;
 
-public:
-    static QSet<BrowserPage *> items;                   //用于记录多少个自己
+private:
+    static QSet<BrowserPage *> items;   //用于记录多少个自己
     deepin_reader::Page *m_page = nullptr;
     SheetBrowser *m_parent = nullptr;
 

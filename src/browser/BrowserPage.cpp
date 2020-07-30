@@ -125,7 +125,7 @@ QRectF BrowserPage::bookmarkMouseRect()
     return QRectF(boundingRect().width() - 40, 10, 29, 29);
 }
 
-void BrowserPage::setBookmark(bool hasBookmark)
+void BrowserPage::setBookmark(const bool &hasBookmark)
 {
     m_bookmark = hasBookmark;
 
@@ -186,7 +186,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
-void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderLater, bool force)
+void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
     if (nullptr == m_page)
         return;
@@ -280,7 +280,7 @@ void BrowserPage::render(double scaleFactor, Dr::Rotation rotation, bool renderL
     }
 }
 
-void BrowserPage::handleRenderFinished(double scaleFactor, QImage image, QRect rect)
+void BrowserPage::handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)
 {
     if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
         return;
@@ -341,6 +341,24 @@ void BrowserPage::renderViewPort(bool force)
     RenderViewportThread::appendTask(task);
 }
 
+void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)
+{
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
+        return;
+
+    m_viewportScaleFactor = scaleFactor;
+
+    m_viewportPixmap = QPixmap::fromImage(image);
+
+    m_viewportRenderedRect = rect;
+
+    QPainter painter(&m_pixmap);
+
+    painter.drawImage(rect, image);
+
+    update();
+}
+
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
 {
     return m_page->render(rotation, scaleFactor, boundingRect);
@@ -394,24 +412,6 @@ QImage BrowserPage::getCurImagePoint(QPoint point)
     return image;
 }
 
-void BrowserPage::handleViewportRenderFinished(double scaleFactor, Dr::Rotation rotation, QImage image, QRect rect)
-{
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
-        return;
-
-    m_viewportScaleFactor = scaleFactor;
-
-    m_viewportPixmap = QPixmap::fromImage(image);
-
-    m_viewportRenderedRect = rect;
-
-    QPainter painter(&m_pixmap);
-
-    painter.drawImage(rect, image);
-
-    update();
-}
-
 bool BrowserPage::existInstance(BrowserPage *item)
 {
     return items.contains(item);
@@ -454,21 +454,6 @@ void BrowserPage::loadLinks()
         BrowserLink *link = new BrowserLink(this, links[i]);
         m_linkItems.append(link);
     }
-}
-
-void BrowserPage::clearWords()
-{
-    m_wordHasRendered = false;
-
-    if (m_words.isEmpty())
-        return;
-
-    foreach (BrowserWord *word, m_words) {
-        scene()->removeItem(word);
-        delete word;
-    }
-
-    m_words.clear();
 }
 
 void BrowserPage::loadWords()

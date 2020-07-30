@@ -37,7 +37,7 @@ RenderViewportThread *RenderViewportThread::m_instance = nullptr;
 bool RenderViewportThread::quitForever = false;
 RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
 {
-    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
 }
 
 RenderViewportThread::~RenderViewportThread()
@@ -118,7 +118,7 @@ void RenderViewportThread::run()
         if (BrowserPage::existInstance(m_curTask.page)) {
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
             if (!image.isNull())
-                emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+                emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.renderRect);
         }
 
         m_mutex.lock();
@@ -127,10 +127,10 @@ void RenderViewportThread::run()
     }
 }
 
-void RenderViewportThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, int rotation, QRect rect)
+void RenderViewportThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, QRect rect)
 {
-    if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor) && (rotation == page->m_rotation)) {
-        page->handleViewportRenderFinished(scaleFactor, static_cast<Dr::Rotation>(rotation), image, rect);
+    if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor)) {
+        page->handleViewportRenderFinished(scaleFactor, image, rect);
     }
 }
 
