@@ -753,11 +753,13 @@ bool BrowserPage::removeAllAnnotation()
 
     m_hasLoadedAnnotation = false;
 
+    m_pixmap = QPixmap();
+
     m_pixmapScaleFactor = -1;
 
     render(m_scaleFactor, m_rotation, true, true);
 
-    renderViewPort(true);
+    renderViewPort(false);
 
     return true;
 }
