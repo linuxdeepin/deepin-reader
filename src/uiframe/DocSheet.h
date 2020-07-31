@@ -253,6 +253,7 @@ private slots:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
     void childEvent(QChildEvent *c) override;
 
 private:

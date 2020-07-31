@@ -61,7 +61,13 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
-    m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+    if (Dr::PDF == fileType)
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+    else if (Dr::DjVu == fileType)
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
+    else
+        m_sidebar = new SheetSidebar(this, 0);
+
     m_sidebar->setMinimumWidth(266);
 
     m_browser = new SheetBrowser(this);
@@ -233,7 +239,9 @@ void DocSheet::setBookMark(int index, int state)
         m_bookmarks.remove(index);
     }
 
-    if (m_sidebar) m_sidebar->setBookMark(index, state);
+    if (m_sidebar)
+        m_sidebar->setBookMark(index, state);
+
     m_browser->setBookMark(index, state);
 
     setBookmarkChanged(true);
@@ -247,7 +255,10 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
         else {
             m_bookmarks.remove(index);
         }
-        if (m_sidebar) m_sidebar->setBookMark(index, state);
+
+        if (m_sidebar)
+            m_sidebar->setBookMark(index, state);
+
         m_browser->setBookMark(index, state);
     }
 
@@ -431,7 +442,7 @@ void DocSheet::addSelectedTextHightlightAnnotation()
     if (m_browser->selectedWordsText().isEmpty())
         return;
 
-    //...进行高亮编辑
+    //进行高亮编辑
     QPoint ponintend;
     m_browser->showNoteEditWidget(m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend), ponintend);
 }
@@ -836,7 +847,9 @@ bool DocSheet::tryPassword(QString password)
         return false;
 
     bool isPassword = document->unlock(password);
+
     delete document;
+
     return !isPassword;
 }
 
@@ -845,6 +858,7 @@ void DocSheet::onExtractPassword(const QString &password)
     bool ret = this->tryPassword(password);
     if (ret) {
         m_encryPage->hide();
+
         this->openFileExec(password);
         this->defaultFocus();
 
@@ -852,6 +866,7 @@ void DocSheet::onExtractPassword(const QString &password)
         m_encryPage = nullptr;
 
         CentralDocPage *doc = dynamic_cast<CentralDocPage *>(parent());
+
         emit doc->sigCurSheetChanged(this);
     } else {
         m_encryPage->wrongPassWordSlot();
