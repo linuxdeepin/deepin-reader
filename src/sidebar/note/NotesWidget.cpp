@@ -149,7 +149,8 @@ void NotesWidget::onListMenuClick(const int &iAction)
         DeleteItemByKey();
     } else if (iAction == E_NOTE_DELETE_ALL) {
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all notes?"));
-        if (result) deleteAllItem();
+        if (result == 1)
+            deleteAllItem();
     }
 }
 

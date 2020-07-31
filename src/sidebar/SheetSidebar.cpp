@@ -229,7 +229,9 @@ void SheetSidebar::handleRotate(int rotate)
 void SheetSidebar::handleUpdateThumbnail(const int &index)
 {
     CustomWidget *curWidget = dynamic_cast<CustomWidget *>(m_stackLayout->currentWidget());
-    if (curWidget) curWidget->updateThumbnail(index);
+
+    if (curWidget)
+        curWidget->updateThumbnail(index);
 }
 
 void SheetSidebar::handleUpdatePartThumbnail(const int &index)
