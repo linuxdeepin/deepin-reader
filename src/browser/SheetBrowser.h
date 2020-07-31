@@ -110,7 +110,7 @@ public:
 
     QList< deepin_reader::Annotation * > annotations();
 
-    Annotation *addIconAnnotation(const QPointF, const QString);
+    Annotation *addIconAnnotation(BrowserPage *page, const QPointF, const QString);
 
     Annotation *addHighLightAnnotation(const QString, const QColor, QPoint &endPoint);
 
@@ -206,7 +206,7 @@ private:
 
     QPointF translate2Local(const QPointF);
 
-    Annotation *getClickAnnot(const QPointF, bool drawRect = false);
+    Annotation *getClickAnnot(BrowserPage *page, const QPointF, bool drawRect = false);
 
     void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
 
