@@ -1414,7 +1414,19 @@ int SheetBrowser::currentScrollValueForPage()
     int index = 0;
 
     for (int i = 0; i < m_items.count(); ++i) {
-        if (m_items[i]->pos().y() + m_items[i]->rect().height() >= value) {
+        int y = 0;
+
+        if (Dr::RotateBy0 == m_sheet->operation().rotation) {
+            y = m_items[i]->y();
+        } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
+            y = m_items[i]->y();
+        } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
+            y = m_items[i]->y() - m_items[i]->boundingRect().height();
+        } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
+            y = m_items[i]->y() - m_items[i]->boundingRect().width();
+        }
+
+        if (y + m_items[i]->rect().height() >= value) {
             index = i;
             break;
         }
