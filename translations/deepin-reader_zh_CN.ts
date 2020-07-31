@@ -104,6 +104,10 @@
         <source>Remove bookmark</source>
         <translation>删除书签</translation>
     </message>
+    <message>
+        <source>Remove All bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BookMarkWidget</name>
@@ -114,6 +118,85 @@
     <message>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete all bookmarks?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrowserMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">复制</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="unfinished">删除注释</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation type="unfinished">添加注释</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="unfinished">删除书签</translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished">添加书签</translation>
+    </message>
+    <message>
+        <source>Remove highlight</source>
+        <translation type="unfinished">取消高亮</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">搜索</translation>
+    </message>
+    <message>
+        <source>Exit Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide show</source>
+        <translation type="unfinished">幻灯片放映</translation>
+    </message>
+    <message>
+        <source>First page</source>
+        <translation type="unfinished">第一页</translation>
+    </message>
+    <message>
+        <source>Previous page</source>
+        <translation type="unfinished">前一页</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">后一页</translation>
+    </message>
+    <message>
+        <source>Last page</source>
+        <translation type="unfinished">最后一页</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation type="unfinished">左旋转</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation type="unfinished">右旋转</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">打印</translation>
+    </message>
+    <message>
+        <source>Document info</source>
+        <translation type="unfinished">文档信息</translation>
     </message>
 </context>
 <context>
@@ -226,15 +309,15 @@
     <name>DefaultOperationMenu</name>
     <message>
         <source>Remove bookmark</source>
-        <translation>删除书签</translation>
+        <translation type="vanished">删除书签</translation>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>添加书签</translation>
+        <translation type="vanished">添加书签</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation type="vanished">搜索</translation>
     </message>
     <message>
         <source>Add note</source>
@@ -242,19 +325,19 @@
     </message>
     <message>
         <source>First page</source>
-        <translation>第一页</translation>
+        <translation type="vanished">第一页</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation>前一页</translation>
+        <translation type="vanished">前一页</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation>后一页</translation>
+        <translation type="vanished">后一页</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation>最后一页</translation>
+        <translation type="vanished">最后一页</translation>
     </message>
     <message>
         <source>Exit fullscreen</source>
@@ -262,21 +345,32 @@
     </message>
     <message>
         <source>Add annotation</source>
-        <translation>添加注释</translation>
+        <translation type="vanished">添加注释</translation>
+    </message>
+</context>
+<context>
+    <name>DocSheet</name>
+    <message>
+        <source>The bookmark has been removed</source>
+        <translation type="unfinished">已删除书签</translation>
+    </message>
+    <message>
+        <source>The annotation has been removed</source>
+        <translation type="unfinished">已删除注释</translation>
     </message>
 </context>
 <context>
     <name>DocSheetDJVU</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation>已删除书签</translation>
+        <translation type="vanished">已删除书签</translation>
     </message>
 </context>
 <context>
     <name>DocSheetPDF</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation>已删除书签</translation>
+        <translation type="vanished">已删除书签</translation>
     </message>
 </context>
 <context>
@@ -335,6 +429,25 @@
     </message>
 </context>
 <context>
+    <name>EncryptionPage</name>
+    <message>
+        <source>Encrypted file, please enter the password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">确定</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileViewNoteWidget</name>
     <message>
         <source>Input limit reached</source>
@@ -367,23 +480,23 @@
     <name>FontMenu</name>
     <message>
         <source>Two-Page View</source>
-        <translation>双页显示</translation>
+        <translation type="vanished">双页显示</translation>
     </message>
     <message>
         <source>Fit Height</source>
-        <translation>适应高度</translation>
+        <translation type="vanished">适应高度</translation>
     </message>
     <message>
         <source>Fit Width</source>
-        <translation>适应宽度</translation>
+        <translation type="vanished">适应宽度</translation>
     </message>
     <message>
         <source>Rotate Left</source>
-        <translation>左旋转</translation>
+        <translation type="vanished">左旋转</translation>
     </message>
     <message>
         <source>Rotate Right</source>
-        <translation>右旋转</translation>
+        <translation type="vanished">右旋转</translation>
     </message>
 </context>
 <context>
@@ -490,6 +603,37 @@
     </message>
 </context>
 <context>
+    <name>Model::PDFDocument</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Embedded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+</context>
+<context>
     <name>NoteMenu</name>
     <message>
         <source>Copy</source>
@@ -498,6 +642,10 @@
     <message>
         <source>Remove annotation</source>
         <translation>删除注释</translation>
+    </message>
+    <message>
+        <source>Remove All annotation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -519,7 +667,22 @@
     </message>
     <message>
         <source>The annotation has been removed</source>
-        <translation>已删除注释</translation>
+        <translation type="vanished">已删除注释</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete all notes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PDFPage</name>
+    <message>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version 0.20.1 or higher of the Poppler library is required to add or remove annotations.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -565,6 +728,33 @@
         <source>Save</source>
         <translation>保存</translation>
     </message>
+    <message>
+        <source>Ensure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleMenu</name>
+    <message>
+        <source>Two-Page View</source>
+        <translation type="unfinished">双页显示</translation>
+    </message>
+    <message>
+        <source>Fit Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit Height</source>
+        <translation type="unfinished">适应高度</translation>
+    </message>
+    <message>
+        <source>Fit Width</source>
+        <translation type="unfinished">适应宽度</translation>
+    </message>
 </context>
 <context>
     <name>SearchResWidget</name>
@@ -585,34 +775,34 @@
     <name>SheetBrowserDJVU</name>
     <message>
         <source>Remove bookmark</source>
-        <translation>删除书签</translation>
+        <translation type="vanished">删除书签</translation>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>添加书签</translation>
+        <translation type="vanished">添加书签</translation>
     </message>
     <message>
         <source>First Page</source>
-        <translation>第一页</translation>
+        <translation type="vanished">第一页</translation>
     </message>
     <message>
         <source>Previous Page</source>
-        <translation>前一页</translation>
+        <translation type="vanished">前一页</translation>
     </message>
     <message>
         <source>Next Page</source>
-        <translation>后一页</translation>
+        <translation type="vanished">后一页</translation>
     </message>
     <message>
         <source>Last Page</source>
-        <translation>最后一页</translation>
+        <translation type="vanished">最后一页</translation>
     </message>
 </context>
 <context>
     <name>SheetBrowserPDFPrivate</name>
     <message>
         <source>Please select the text</source>
-        <translation>请选择文本</translation>
+        <translation type="vanished">请选择文本</translation>
     </message>
     <message>
         <source>Please check if the file is damaged</source>
@@ -792,24 +982,28 @@
         <source>1:1 size</source>
         <translation>默认大小</translation>
     </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TextOperationMenu</name>
     <message>
         <source>Copy</source>
-        <translation>复制</translation>
+        <translation type="vanished">复制</translation>
     </message>
     <message>
         <source>Remove highlight</source>
-        <translation>取消高亮</translation>
+        <translation type="vanished">取消高亮</translation>
     </message>
     <message>
         <source>Remove bookmark</source>
-        <translation>删除书签</translation>
+        <translation type="vanished">删除书签</translation>
     </message>
     <message>
         <source>Remove annotation</source>
-        <translation>删除注释</translation>
+        <translation type="vanished">删除注释</translation>
     </message>
     <message>
         <source>Add note</source>
@@ -817,7 +1011,7 @@
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>添加书签</translation>
+        <translation type="vanished">添加书签</translation>
     </message>
     <message>
         <source>Exit fullscreen</source>
@@ -825,7 +1019,7 @@
     </message>
     <message>
         <source>Add annotation</source>
-        <translation>添加注释</translation>
+        <translation type="vanished">添加注释</translation>
     </message>
 </context>
 <context>
@@ -848,7 +1042,7 @@
     </message>
     <message>
         <source>Print</source>
-        <translation>打印</translation>
+        <translation type="vanished">打印</translation>
     </message>
     <message>
         <source>New window</source>
@@ -860,7 +1054,7 @@
     </message>
     <message>
         <source>Document info</source>
-        <translation>文档信息</translation>
+        <translation type="vanished">文档信息</translation>
     </message>
     <message>
         <source>Magnifer</source>
@@ -868,11 +1062,11 @@
     </message>
     <message>
         <source>Search</source>
-        <translation type="vanished">搜索</translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <source>Slide show</source>
-        <translation>幻灯片放映</translation>
+        <translation type="vanished">幻灯片放映</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -881,6 +1075,10 @@
     <message>
         <source>Zoom out</source>
         <translation type="vanished">缩小</translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation type="unfinished">工具</translation>
     </message>
 </context>
 <context>
@@ -891,11 +1089,11 @@
     </message>
     <message>
         <source>Page Display</source>
-        <translation>视图调整</translation>
+        <translation type="vanished">视图调整</translation>
     </message>
     <message>
         <source>Select Text</source>
-        <translation>选择工具</translation>
+        <translation type="vanished">选择工具</translation>
     </message>
     <message>
         <source>Magnifier</source>
@@ -903,7 +1101,7 @@
     </message>
     <message>
         <source>Hand Tool</source>
-        <translation>手形工具</translation>
+        <translation type="vanished">手形工具</translation>
     </message>
 </context>
 <context>
@@ -911,6 +1109,25 @@
     <message>
         <source>Input limit reached</source>
         <translation>输入已达上限</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Document File Path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FilePath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ThumbnailPath Path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generate thumbnail.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

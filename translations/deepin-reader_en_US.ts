@@ -104,6 +104,10 @@
         <source>Remove bookmark</source>
         <translation>Remove bookmark</translation>
     </message>
+    <message>
+        <source>Remove All bookmark</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BookMarkWidget</name>
@@ -114,6 +118,85 @@
     <message>
         <source>Add bookmark</source>
         <translation>Add bookmark</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete all bookmarks?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BrowserMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copy</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="unfinished">Remove annotation</translation>
+    </message>
+    <message>
+        <source>Add annotation</source>
+        <translation type="unfinished">Add annotation</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="unfinished">Remove bookmark</translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished">Add bookmark</translation>
+    </message>
+    <message>
+        <source>Remove highlight</source>
+        <translation type="unfinished">Remove highlight</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished">Search</translation>
+    </message>
+    <message>
+        <source>Exit Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slide show</source>
+        <translation type="unfinished">Slide show</translation>
+    </message>
+    <message>
+        <source>First page</source>
+        <translation type="unfinished">First page</translation>
+    </message>
+    <message>
+        <source>Previous page</source>
+        <translation type="unfinished">Previous page</translation>
+    </message>
+    <message>
+        <source>Next page</source>
+        <translation type="unfinished">Next page</translation>
+    </message>
+    <message>
+        <source>Last page</source>
+        <translation type="unfinished">Last page</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation type="unfinished">Rotate left</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation type="unfinished">Rotate right</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">Print</translation>
+    </message>
+    <message>
+        <source>Document info</source>
+        <translation type="unfinished">Document info</translation>
     </message>
 </context>
 <context>
@@ -226,15 +309,15 @@
     <name>DefaultOperationMenu</name>
     <message>
         <source>Remove bookmark</source>
-        <translation>Remove bookmark</translation>
+        <translation type="vanished">Remove bookmark</translation>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>Add bookmark</translation>
+        <translation type="vanished">Add bookmark</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Search</translation>
+        <translation type="vanished">Search</translation>
     </message>
     <message>
         <source>Add note</source>
@@ -242,19 +325,19 @@
     </message>
     <message>
         <source>First page</source>
-        <translation>First page</translation>
+        <translation type="vanished">First page</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation>Previous page</translation>
+        <translation type="vanished">Previous page</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation>Next page</translation>
+        <translation type="vanished">Next page</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation>Last page</translation>
+        <translation type="vanished">Last page</translation>
     </message>
     <message>
         <source>Exit fullscreen</source>
@@ -262,21 +345,32 @@
     </message>
     <message>
         <source>Add annotation</source>
-        <translation type="unfinished">Add annotation</translation>
+        <translation type="obsolete">Add annotation</translation>
+    </message>
+</context>
+<context>
+    <name>DocSheet</name>
+    <message>
+        <source>The bookmark has been removed</source>
+        <translation type="unfinished">The bookmark has been removed</translation>
+    </message>
+    <message>
+        <source>The annotation has been removed</source>
+        <translation type="unfinished">The annotation has been removed</translation>
     </message>
 </context>
 <context>
     <name>DocSheetDJVU</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished">The bookmark has been removed</translation>
+        <translation type="obsolete">The bookmark has been removed</translation>
     </message>
 </context>
 <context>
     <name>DocSheetPDF</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished">The bookmark has been removed</translation>
+        <translation type="obsolete">The bookmark has been removed</translation>
     </message>
 </context>
 <context>
@@ -335,6 +429,25 @@
     </message>
 </context>
 <context>
+    <name>EncryptionPage</name>
+    <message>
+        <source>Encrypted file, please enter the password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FileViewNoteWidget</name>
     <message>
         <source>Input limit reached</source>
@@ -367,23 +480,23 @@
     <name>FontMenu</name>
     <message>
         <source>Two-Page View</source>
-        <translation>Two-Page View</translation>
+        <translation type="vanished">Two-Page View</translation>
     </message>
     <message>
         <source>Fit Height</source>
-        <translation>Fit Height</translation>
+        <translation type="vanished">Fit Height</translation>
     </message>
     <message>
         <source>Fit Width</source>
-        <translation>Fit Width</translation>
+        <translation type="vanished">Fit Width</translation>
     </message>
     <message>
         <source>Rotate Left</source>
-        <translation>Rotate Left</translation>
+        <translation type="vanished">Rotate Left</translation>
     </message>
     <message>
         <source>Rotate Right</source>
-        <translation>Rotate Right</translation>
+        <translation type="vanished">Rotate Right</translation>
     </message>
 </context>
 <context>
@@ -490,6 +603,37 @@
     </message>
 </context>
 <context>
+    <name>Model::PDFDocument</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Embedded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished">Yes</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished">No</translation>
+    </message>
+</context>
+<context>
     <name>NoteMenu</name>
     <message>
         <source>Copy</source>
@@ -498,6 +642,10 @@
     <message>
         <source>Remove annotation</source>
         <translation>Remove annotation</translation>
+    </message>
+    <message>
+        <source>Remove All annotation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -519,7 +667,22 @@
     </message>
     <message>
         <source>The annotation has been removed</source>
-        <translation>The annotation has been removed</translation>
+        <translation type="vanished">The annotation has been removed</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete all notes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PDFPage</name>
+    <message>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version 0.20.1 or higher of the Poppler library is required to add or remove annotations.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -565,6 +728,33 @@
         <source>Save</source>
         <translation>Save</translation>
     </message>
+    <message>
+        <source>Ensure</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleMenu</name>
+    <message>
+        <source>Two-Page View</source>
+        <translation type="unfinished">Two-Page View</translation>
+    </message>
+    <message>
+        <source>Fit Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit Height</source>
+        <translation type="unfinished">Fit Height</translation>
+    </message>
+    <message>
+        <source>Fit Width</source>
+        <translation type="unfinished">Fit Width</translation>
+    </message>
 </context>
 <context>
     <name>SearchResWidget</name>
@@ -585,11 +775,11 @@
     <name>SheetBrowserDJVU</name>
     <message>
         <source>Remove bookmark</source>
-        <translation type="unfinished">Remove bookmark</translation>
+        <translation type="obsolete">Remove bookmark</translation>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation type="unfinished">Add bookmark</translation>
+        <translation type="obsolete">Add bookmark</translation>
     </message>
     <message>
         <source>First page</source>
@@ -607,28 +797,12 @@
         <source>Last page</source>
         <translation type="obsolete">Last page</translation>
     </message>
-    <message>
-        <source>First Page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Previous Page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next Page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last Page</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SheetBrowserPDFPrivate</name>
     <message>
         <source>Please select the text</source>
-        <translation>Please select the text</translation>
+        <translation type="vanished">Please select the text</translation>
     </message>
     <message>
         <source>Please check if the file is damaged</source>
@@ -808,24 +982,28 @@
         <source>1:1 size</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TextOperationMenu</name>
     <message>
         <source>Copy</source>
-        <translation>Copy</translation>
+        <translation type="vanished">Copy</translation>
     </message>
     <message>
         <source>Remove highlight</source>
-        <translation>Remove highlight</translation>
+        <translation type="vanished">Remove highlight</translation>
     </message>
     <message>
         <source>Remove bookmark</source>
-        <translation>Remove bookmark</translation>
+        <translation type="vanished">Remove bookmark</translation>
     </message>
     <message>
         <source>Remove annotation</source>
-        <translation>Remove annotation</translation>
+        <translation type="vanished">Remove annotation</translation>
     </message>
     <message>
         <source>Add note</source>
@@ -833,7 +1011,7 @@
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>Add bookmark</translation>
+        <translation type="vanished">Add bookmark</translation>
     </message>
     <message>
         <source>Exit fullscreen</source>
@@ -841,7 +1019,7 @@
     </message>
     <message>
         <source>Add annotation</source>
-        <translation type="unfinished">Add annotation</translation>
+        <translation type="obsolete">Add annotation</translation>
     </message>
 </context>
 <context>
@@ -864,7 +1042,7 @@
     </message>
     <message>
         <source>Print</source>
-        <translation>Print</translation>
+        <translation type="vanished">Print</translation>
     </message>
     <message>
         <source>New window</source>
@@ -876,7 +1054,7 @@
     </message>
     <message>
         <source>Document info</source>
-        <translation>Document info</translation>
+        <translation type="vanished">Document info</translation>
     </message>
     <message>
         <source>Magnifer</source>
@@ -884,11 +1062,11 @@
     </message>
     <message>
         <source>Search</source>
-        <translation type="vanished">Search</translation>
+        <translation>Search</translation>
     </message>
     <message>
         <source>Slide show</source>
-        <translation>Slide show</translation>
+        <translation type="vanished">Slide show</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -897,6 +1075,10 @@
     <message>
         <source>Zoom out</source>
         <translation type="vanished">Zoom out</translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation type="unfinished">Tools</translation>
     </message>
 </context>
 <context>
@@ -907,11 +1089,11 @@
     </message>
     <message>
         <source>Page Display</source>
-        <translation>Page Display</translation>
+        <translation type="vanished">Page Display</translation>
     </message>
     <message>
         <source>Select Text</source>
-        <translation>Select Text</translation>
+        <translation type="vanished">Select Text</translation>
     </message>
     <message>
         <source>Magnifier</source>
@@ -919,7 +1101,7 @@
     </message>
     <message>
         <source>Hand Tool</source>
-        <translation>Hand Tool</translation>
+        <translation type="vanished">Hand Tool</translation>
     </message>
 </context>
 <context>
@@ -927,6 +1109,25 @@
     <message>
         <source>Input limit reached</source>
         <translation>Input limit reached</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Document File Path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FilePath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ThumbnailPath Path.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generate thumbnail.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

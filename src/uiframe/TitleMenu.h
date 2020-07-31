@@ -51,6 +51,7 @@ protected:
 
 private:
     void createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
+
     QAction *createAction(const QString &actionName, const QString &);
 
 private:

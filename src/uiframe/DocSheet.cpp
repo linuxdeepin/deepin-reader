@@ -607,7 +607,9 @@ bool DocSheet::sideBarVisible()
 
 void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 {
-    if (m_sidebar) m_sidebar->setVisible(isVisible);
+    if (m_sidebar)
+        m_sidebar->setVisible(isVisible);
+
     if (notify) {
         m_operation.sidebarVisible = isVisible;
         setOperationChanged();
@@ -616,7 +618,8 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
 void DocSheet::handleOpenSuccess()
 {
-    if (m_sidebar) m_sidebar->handleOpenSuccess();
+    if (m_sidebar)
+        m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
@@ -650,6 +653,7 @@ bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
+
         return false;
     return doc->isFullScreen();
 }
@@ -659,6 +663,7 @@ void DocSheet::openFullScreen()
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return;
+
     setSidebarVisible(false);
     doc->openFullScreen();
 }
@@ -675,12 +680,14 @@ void DocSheet::closeFullScreen()
 void DocSheet::setDocumentChanged(bool changed)
 {
     m_documentChanged = changed;
+
     emit sigFileChanged(this);
 }
 
 void DocSheet::setBookmarkChanged(bool changed)
 {
     m_bookmarkChanged = changed;
+
     emit sigFileChanged(this);
 }
 
