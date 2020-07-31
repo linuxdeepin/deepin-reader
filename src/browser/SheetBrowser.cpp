@@ -504,52 +504,19 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
     return nullptr;
 }
 
-//Annotation *SheetBrowser::getClickAnnot(const QPointF clickPoint, bool drawRect)
-//{
-//    if (nullptr == m_sheet)
-//        return nullptr;
-
-//    QPointF point = clickPoint;
-//    BrowserPage *page{nullptr};
-
-//    page = mouseClickInPage(point);
-
-//    if (nullptr == page)
-//        return nullptr;
-
-//    if (drawRect && m_lastSelectIconAnnotPage)
-//        m_lastSelectIconAnnotPage->setSelectIconRect(false);
-
-//    m_lastSelectIconAnnotPage = page;
-
-//    point = translate2Local(point);
-
-//    foreach (Annotation *annot, page->annotations()) {
-//        foreach (QRectF rect, annot->boundary()) {
-//            if (rect.contains(point)) {
-//                if (drawRect)
-//                    page->setSelectIconRect(true, annot);
-//                return annot;
-//            }
-//        }
-//    }
-
-//    return nullptr;
-//}
-
-Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &endPoint)
+Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
-    BrowserPage *startPage{nullptr};
-    BrowserPage *endPage{nullptr};
     Annotation *highLightAnnot{nullptr};
 
-    startPage = mouseClickInPage(m_selectStartPos);
-    endPage = mouseClickInPage(m_selectEndPos);
+    BrowserPage *startPage{nullptr};
+    BrowserPage *endPage{nullptr};
+    QPoint startPoint = this->mapFromScene(m_selectStartPos);
+    QPoint endPoint = this->mapFromScene(m_selectEndPos);
 
-    endPoint = this->mapToGlobal(this->mapFromScene(m_selectEndPos));
+    showPoint = this->mapToGlobal(this->mapFromScene(m_selectEndPos));
 
-    if (nullptr == startPage || nullptr == endPage)
-        return nullptr;
+    startPage = getBrowserPageForPoint(startPoint);
+    endPage = getBrowserPageForPoint(endPoint);
 
     m_selectEndPos = QPointF();
     m_selectStartPos = QPointF();
@@ -827,12 +794,6 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
         return;
 
     jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
-
-    //画选中边框(仅图标注释)
-//    if (m_lastSelectIconAnnotPage)
-//        m_lastSelectIconAnnotPage->setSelectIconRect(false);
-//    m_lastSelectIconAnnotPage = jumpPage;
-//    m_lastSelectIconAnnotPage->setSelectIconRect(true, annotation);
 }
 
 BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
@@ -1074,7 +1035,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             if (jump2Link(m_selectStartPos))
                 return DGraphicsView::mousePressEvent(event);
 
-
             if (page != nullptr) {
                 m_selectIndex = page->itemIndex();
             }
@@ -1155,8 +1115,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
                     } else {
-                        QPoint pointEnd;
-                        showNoteEditWidget(addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd), mapToGlobal(event->pos()));
+                        QPoint pointEnd = event->pos();
+                        deepin_reader::Annotation *addAnnot = nullptr;
+                        addAnnot = addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
+                        if (addAnnot)
+                            showNoteEditWidget(addAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "Search") {
                     m_sheet->handleSearch();

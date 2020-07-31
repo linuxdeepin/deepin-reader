@@ -112,7 +112,7 @@ public:
 
     Annotation *addIconAnnotation(BrowserPage *page, const QPointF, const QString);
 
-    Annotation *addHighLightAnnotation(const QString, const QColor, QPoint &endPoint);
+    Annotation *addHighLightAnnotation(const QString, const QColor, QPoint &);
 
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
