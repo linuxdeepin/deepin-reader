@@ -37,8 +37,11 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
     if (type == DOC_MENU_ANNO_ICON) {
         createAction(tr("Copy"), "CopyAnnoText");
         this->addSeparator();
-        createAction(tr("Remove annotation"), "RemoveAnnotation");
-        createAction(tr("Add annotation"), "AddAnnotationIcon");
+
+        if (sheet->fileType() == Dr::FileType::PDF) {
+            createAction(tr("Remove annotation"), "RemoveAnnotation");
+            createAction(tr("Add annotation"), "AddAnnotationIcon");
+        }
         if (sheet->hasBookMark(index))
             createAction(tr("Remove bookmark"), "RemoveBookmark");
         else
@@ -53,11 +56,14 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
         this->addAction(m_pColorWidgetAction);
 
-        QAction *rmHighAct = createAction(tr("Remove highlight"), "RemoveHighlight");
-        rmHighAct->setDisabled(true);
-        if (type == DOC_MENU_ANNO_HIGHLIGHT) rmHighAct->setDisabled(false);
-        this->addSeparator();
-        createAction(tr("Add annotation"), "AddAnnotationHighlight");
+        if (sheet->fileType() == Dr::FileType::PDF) {
+            QAction *rmHighAct = createAction(tr("Remove highlight"), "RemoveHighlight");
+            rmHighAct->setDisabled(true);
+            if (type == DOC_MENU_ANNO_HIGHLIGHT) rmHighAct->setDisabled(false);
+            this->addSeparator();
+            createAction(tr("Add annotation"), "AddAnnotationHighlight");
+        }
+
         if (sheet->hasBookMark(index))
             createAction(tr("Remove bookmark"), "RemoveBookmark");
         else
@@ -71,7 +77,10 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         else
             createAction(tr("Add bookmark"), "AddBookmark");
 
-        createAction(tr("Add annotation"), "AddAnnotationIcon");
+        if (sheet->fileType() == Dr::FileType::PDF) {
+            createAction(tr("Add annotation"), "AddAnnotationIcon");
+        }
+
         this->addSeparator();
 
         if (sheet->isFullScreen()) {
