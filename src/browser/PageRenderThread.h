@@ -18,56 +18,60 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef RenderViewportThread_H
-#define RenderViewportThread_H
+#ifndef PAGERENDERTHREAD_H
+#define PAGERENDERTHREAD_H
 
 #include <QThread>
 #include <QMutex>
 #include <QStack>
 #include <QImage>
-#include <QPointer>
-#include "BrowserPage.h"
-
 #include "Global.h"
 
 class SheetBrowser;
 class BrowserPage;
-struct RenderViewportTask {
-    BrowserPage *page = nullptr;
+struct RenderPageTask {
+    SheetBrowser *view = nullptr;
+    BrowserPage *item = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
     QRect renderRect;
 };
 
-class RenderViewportThread : public QThread
+class PageRenderThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit RenderViewportThread(QObject *parent = nullptr);
+    explicit PageRenderThread(QObject *parent = nullptr);
 
-    ~RenderViewportThread();
+    virtual ~PageRenderThread();
+
+    static void clearTask(BrowserPage *item);
+
+    static void clearTasks(SheetBrowser *view);
+
+    static void appendTask(RenderPageTask task);
+
+    static void appendTasks(QList<RenderPageTask> list);
+
+    static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
     static void destroyForever();
-
-    static void appendTask(RenderViewportTask task);
-
-    static int  count(BrowserPage *page);        //当前任务数量
 
     void run();
 
 signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
+    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
 
 private slots:
-    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
+    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
 
 private:
-    RenderViewportTask m_curTask;
-    QStack<RenderViewportTask> m_tasks;
+    RenderPageTask m_curTask;
+    QStack<RenderPageTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
     static bool quitForever;
-    static RenderViewportThread *m_instance;
+    static PageRenderThread *instance;
 };
 
-#endif // RenderViewportThread_H
+#endif // PAGERENDERTHREAD_H

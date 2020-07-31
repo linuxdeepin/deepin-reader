@@ -26,27 +26,27 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "RenderViewportThread.h"
+#include "PageViewportThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
 
 #include <QTime>
 #include <QDebug>
 
-RenderViewportThread *RenderViewportThread::m_instance = nullptr;
-bool RenderViewportThread::quitForever = false;
-RenderViewportThread::RenderViewportThread(QObject *parent) : QThread(parent)
+PageViewportThread *PageViewportThread::m_instance = nullptr;
+bool PageViewportThread::quitForever = false;
+PageViewportThread::PageViewportThread(QObject *parent) : QThread(parent)
 {
     connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
 }
 
-RenderViewportThread::~RenderViewportThread()
+PageViewportThread::~PageViewportThread()
 {
     m_quit = true;
     wait();
 }
 
-void RenderViewportThread::destroyForever()
+void PageViewportThread::destroyForever()
 {
     if (nullptr != m_instance) {
         delete m_instance;
@@ -55,13 +55,13 @@ void RenderViewportThread::destroyForever()
     }
 }
 
-void RenderViewportThread::appendTask(RenderViewportTask task)
+void PageViewportThread::appendTask(RenderViewportTask task)
 {
     if (quitForever)
         return;
 
     if (nullptr == m_instance)
-        m_instance = new RenderViewportThread;
+        m_instance = new PageViewportThread;
 
     if (m_instance->m_curTask.page == task.page
             && m_instance->m_curTask.renderRect == task.renderRect
@@ -86,7 +86,7 @@ void RenderViewportThread::appendTask(RenderViewportTask task)
         m_instance->start();
 }
 
-int RenderViewportThread::count(BrowserPage *page)
+int PageViewportThread::count(BrowserPage *page)
 {
     if (nullptr == m_instance)
         return 0;
@@ -101,7 +101,7 @@ int RenderViewportThread::count(BrowserPage *page)
     return count;
 }
 
-void RenderViewportThread::run()
+void PageViewportThread::run()
 {
     m_quit = false;
 
@@ -127,7 +127,7 @@ void RenderViewportThread::run()
     }
 }
 
-void RenderViewportThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, QRect rect)
+void PageViewportThread::onTaskFinished(BrowserPage *page, QImage image, double scaleFactor, QRect rect)
 {
     if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor)) {
         page->handleViewportRenderFinished(scaleFactor, image, rect);

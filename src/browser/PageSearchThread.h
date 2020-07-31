@@ -18,23 +18,23 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef BROWSERSEARCH_H
-#define BROWSERSEARCH_H
+#ifndef PAGESEARCHTHREAD_H
+#define PAGESEARCHTHREAD_H
 
 #include <QThread>
 #include "Model.h"
 
 class BrowserPage;
-class BrowserSearch : public QThread
+class PageSearchThread : public QThread
 {
     Q_OBJECT
 signals:
     void sigSearchReady(const deepin_reader::SearchResult &res);
 
 public:
-    explicit BrowserSearch(QObject *parent = nullptr);
+    explicit PageSearchThread(QObject *parent = nullptr);
 
-    ~BrowserSearch();
+    virtual ~PageSearchThread();
 
 public:
     void startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startPage);
@@ -51,4 +51,4 @@ private:
     QList<BrowserPage *> m_pagelst;
 };
 
-#endif // BROWSERSEARCH_H
+#endif // PAGESEARCHTHREAD_H

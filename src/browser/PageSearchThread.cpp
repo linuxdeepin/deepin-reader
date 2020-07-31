@@ -18,23 +18,23 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "BrowserSearch.h"
+#include "PageSearchThread.h"
 #include "BrowserPage.h"
 
 #include <QDebug>
 
-BrowserSearch::BrowserSearch(QObject *parent) : QThread(parent)
+PageSearchThread::PageSearchThread(QObject *parent) : QThread(parent)
 {
 
 }
 
-BrowserSearch::~BrowserSearch()
+PageSearchThread::~PageSearchThread()
 {
     m_quit = true;
     this->wait();
 }
 
-void BrowserSearch::startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startIndex)
+void PageSearchThread::startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startIndex)
 {
     stopSearch();
     m_quit = false;
@@ -44,14 +44,14 @@ void BrowserSearch::startSearch(const QList<BrowserPage *> pagelst, const QStrin
     start();
 }
 
-void BrowserSearch::stopSearch()
+void PageSearchThread::stopSearch()
 {
     m_quit = true;
     m_pagelst.clear();
     this->wait();
 }
 
-void BrowserSearch::run()
+void PageSearchThread::run()
 {
     SearchResult searchres;
     int size = m_pagelst.size();

@@ -1,10 +1,10 @@
 #include "Application.h"
 #include "Utils.h"
 #include "MainWindow.h"
-#include "RenderPageThread.h"
+#include "PageRenderThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
-#include "RenderViewportThread.h"
+#include "PageViewportThread.h"
 
 #include <QIcon>
 #include <QDebug>
@@ -122,8 +122,8 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    RenderViewportThread::destroyForever();
-    RenderPageThread::destroyForever();
+    PageViewportThread::destroyForever();
+    PageRenderThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list) {
         window->closeWithoutSave();

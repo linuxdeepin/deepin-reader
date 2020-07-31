@@ -3,23 +3,23 @@ HEADERS += \
     $$PWD/BrowserMagniFier.h \
     $$PWD/BrowserMenu.h \
     $$PWD/BrowserPage.h \
-    $$PWD/BrowserSearch.h \
     $$PWD/BrowserWord.h \
     $$PWD/SheetBrowser.h \
-    $$PWD/RenderViewportThread.h \
-    $$PWD/RenderPageThread.h \
-    $$PWD/BrowserLink.h
+    $$PWD/BrowserLink.h \
+    $$PWD/PageRenderThread.h \
+    $$PWD/PageSearchThread.h \
+    $$PWD/PageViewportThread.h
 
 SOURCES += \
     $$PWD/BrowserMagniFier.cpp \
     $$PWD/BrowserPage.cpp \
     $$PWD/BrowserAnnotation.cpp \
     $$PWD/BrowserMenu.cpp \
-    $$PWD/BrowserSearch.cpp \
     $$PWD/BrowserWord.cpp \
     $$PWD/SheetBrowser.cpp \
-    $$PWD/RenderViewportThread.cpp \
-    $$PWD/RenderPageThread.cpp \
-    $$PWD/BrowserLink.cpp
+    $$PWD/BrowserLink.cpp \
+    $$PWD/PageRenderThread.cpp \
+    $$PWD/PageSearchThread.cpp \
+    $$PWD/PageViewportThread.cpp
 
 INCLUDEPATH += $$PWD

@@ -28,13 +28,13 @@
 */
 #include "BrowserPage.h"
 #include "document/Model.h"
-#include "RenderPageThread.h"
+#include "PageRenderThread.h"
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
 #include "BrowserLink.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
-#include "RenderViewportThread.h"
+#include "PageViewportThread.h"
 #include "Utils.h"
 
 #include <DApplicationHelper>
@@ -231,7 +231,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         } else
             m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
 
-        RenderPageThread::clearTask(this);
+        PageRenderThread::clearTask(this);
 
         QRectF rect = boundingRect();
 
@@ -265,7 +265,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
                     task.renderRect = finalRenderRect;
                     tasks.append(task);
                 }
-                RenderPageThread::appendTasks(tasks);
+                PageRenderThread::appendTasks(tasks);
             }
         } else {
             RenderPageTask task;
@@ -273,7 +273,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             task.scaleFactor = m_scaleFactor;
             task.rotation = Dr::RotateBy0;
             task.renderRect = QRect(rect.x(), rect.y(), rect.width(), rect.height());
-            RenderPageThread::appendTask(task);
+            PageRenderThread::appendTask(task);
         }
 
         loadAnnotations();
@@ -338,7 +338,7 @@ void BrowserPage::renderViewPort(bool force)
 
     task.renderRect = viewRenderRect;
 
-    RenderViewportThread::appendTask(task);
+    PageViewportThread::appendTask(task);
 }
 
 void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)

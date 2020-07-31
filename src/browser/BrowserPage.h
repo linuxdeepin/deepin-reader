@@ -41,9 +41,9 @@ class BrowserLink;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
-    friend class BrowserSearch;
-    friend class RenderPageThread;
-    friend class RenderViewportThread;
+    friend class PageSearchThread;
+    friend class PageRenderThread;
+    friend class PageViewportThread;
 public:
     explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 

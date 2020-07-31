@@ -26,34 +26,34 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "RenderPageThread.h"
+#include "PageRenderThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
-#include "RenderViewportThread.h"
+#include "PageViewportThread.h"
 
 #include <QTime>
 #include <QDebug>
 
-RenderPageThread *RenderPageThread::instance = nullptr;
-bool RenderPageThread::quitForever = false;
-RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
+PageRenderThread *PageRenderThread::instance = nullptr;
+bool PageRenderThread::quitForever = false;
+PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
     connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
 }
 
-RenderPageThread::~RenderPageThread()
+PageRenderThread::~PageRenderThread()
 {
     m_quit = true;
     wait();
 }
 
-void RenderPageThread::clearTask(BrowserPage *item)
+void PageRenderThread::clearTask(BrowserPage *item)
 {
     if (quitForever)
         return;
 
     if (nullptr == instance)
-        instance = new RenderPageThread;
+        instance = new PageRenderThread;
 
     instance->m_mutex.lock();
 
@@ -72,13 +72,13 @@ void RenderPageThread::clearTask(BrowserPage *item)
     instance->m_mutex.unlock();
 }
 
-void RenderPageThread::clearTasks(SheetBrowser *view)
+void PageRenderThread::clearTasks(SheetBrowser *view)
 {
     if (quitForever)
         return;
 
     if (nullptr == instance)
-        instance = new RenderPageThread;
+        instance = new PageRenderThread;
 
     instance->m_mutex.lock();
 
@@ -95,13 +95,13 @@ void RenderPageThread::clearTasks(SheetBrowser *view)
     instance->m_mutex.unlock();
 }
 
-void RenderPageThread::appendTask(RenderPageTask task)
+void PageRenderThread::appendTask(RenderPageTask task)
 {
     if (quitForever)
         return;
 
     if (nullptr == instance)
-        instance = new RenderPageThread;
+        instance = new PageRenderThread;
 
     instance->m_mutex.lock();
 
@@ -113,13 +113,13 @@ void RenderPageThread::appendTask(RenderPageTask task)
         instance->start();
 }
 
-void RenderPageThread::appendTasks(QList<RenderPageTask> list)
+void PageRenderThread::appendTasks(QList<RenderPageTask> list)
 {
     if (quitForever)
         return;
 
     if (nullptr == instance)
-        instance = new RenderPageThread;
+        instance = new PageRenderThread;
 
     instance->m_mutex.lock();
 
@@ -132,13 +132,13 @@ void RenderPageThread::appendTasks(QList<RenderPageTask> list)
         instance->start();
 }
 
-void RenderPageThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
+void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
 {
     if (quitForever)
         return;
 
     if (nullptr == instance)
-        instance = new RenderPageThread;
+        instance = new PageRenderThread;
 
     instance->m_mutex.lock();
 
@@ -155,7 +155,7 @@ void RenderPageThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rot
         instance->start();
 }
 
-void RenderPageThread::run()
+void PageRenderThread::run()
 {
     m_quit = false;
 
@@ -183,7 +183,7 @@ void RenderPageThread::run()
     }
 }
 
-void RenderPageThread::destroyForever()
+void PageRenderThread::destroyForever()
 {
     if (nullptr != instance) {
         delete instance;
@@ -192,7 +192,7 @@ void RenderPageThread::destroyForever()
     }
 }
 
-void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect)
+void PageRenderThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect)
 {
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(scaleFactor, image, rect);

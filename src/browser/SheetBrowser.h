@@ -39,13 +39,14 @@ class NoteShadowViewWidget;
 class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
-class BrowserSearch;
+class PageSearchThread;
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:
     friend class BrowserMagniFier;
     friend class ReadMagnifierManager;
+
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
     virtual ~SheetBrowser() override;
@@ -226,7 +227,7 @@ private:
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;
     FindWidget *m_pFindWidget = nullptr;
-    BrowserSearch *m_searchTask = nullptr;
+    PageSearchThread *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;
     BrowserPage *m_lastSelectIconAnnotPage = nullptr; // 最后选中图标注释所在页
     QTimer *m_resizeTimer = nullptr;        //大小改变触发局部update

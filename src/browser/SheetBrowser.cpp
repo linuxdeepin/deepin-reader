@@ -43,8 +43,8 @@
 #include "MsgHeader.h"
 #include "document/DjVuModel.h"
 #include "Utils.h"
-#include "RenderViewportThread.h"
-#include "BrowserSearch.h"
+#include "PageViewportThread.h"
+#include "PageSearchThread.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -89,11 +89,11 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     m_tipsWidget = new TipsWidget(this);
 
-    m_searchTask = new BrowserSearch(this);
+    m_searchTask = new PageSearchThread(this);
 
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
-    connect(m_searchTask, &BrowserSearch::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
-    connect(m_searchTask, &BrowserSearch::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 }
 
@@ -1290,23 +1290,24 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
             QList<QGraphicsItem *> words;               //应该只存这几页的words 暂时等于所有的
             words = scene()->items(sceneRect());        //倒序
-            if (endWord == nullptr && m_sheet->operation().rotation == Dr::RotateBy0) {//暂时只考虑0度
-                if (endPos.y() > beginPos.y()) {
-                    for (int i = 0; i < words.size(); ++i) {//从后向前检索
-                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() < endPos.y()) {
-                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
-                            break;
-                        }
-                    }
-                } else {
-                    for (int i = words.size() - 1; i >= 0; i--) {
-                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() > endPos.y()) {
-                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
-                            break;
-                        }
-                    }
-                }
-            }
+
+//            if (endWord == nullptr && m_sheet->operation().rotation == Dr::RotateBy0) {//暂时只考虑0度
+//                if (endPos.y() > beginPos.y()) {
+//                    for (int i = 0; i < words.size(); ++i) {//从后向前检索
+//                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() < endPos.y()) {
+//                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
+//                            break;
+//                        }
+//                    }
+//                } else {
+//                    for (int i = words.size() - 1; i >= 0; i--) {
+//                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() > endPos.y()) {
+//                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
 
             //先考虑字到字的
             if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
