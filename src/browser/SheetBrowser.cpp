@@ -693,14 +693,12 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 bool SheetBrowser::removeAllAnnotation()
 {
     foreach (BrowserPage *item, m_items) {
-        if (item) {
-            item->removeAllAnnotation();
+        if (item && item->removeAllAnnotation()) {
             emit sigThumbnailUpdated(item->itemIndex());
         }
     }
 
     emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, nullptr);
-
     return true;
 }
 

@@ -737,7 +737,7 @@ bool BrowserPage::removeAllAnnotation()
     m_lastClickIconAnnotation = nullptr;
 
     if (m_annotations.isEmpty())
-        return true;
+        return false;
 
     foreach (deepin_reader::Annotation *annot, m_annotations) {
         if (annot) {
