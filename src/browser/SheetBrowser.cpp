@@ -374,11 +374,9 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
     if (nullptr == page || nullptr == m_sheet)
         return false;
 
-    //计算添加图标注释的位置和大小(考虑缩放和旋转)
-//    Dr::Rotation rotation{Dr::RotateBy0};
+    //计算添加图标注释的位置和大小(考虑缩放)
     qreal scaleFactor{1.0};
     SheetOperation  operation = m_sheet->operation();
-//    rotation    = operation.rotation;
     scaleFactor = operation.scaleFactor;
 
     qreal width{0.0};
@@ -387,7 +385,7 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
     qreal x1{0};
     qreal y1{0};
 
-    clickPoint = page->mapFromScene(point);//QPointF(point.x() - page->pos().x(), point.y() - page->pos().y());
+    clickPoint = page->mapFromScene(point);
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
@@ -414,45 +412,6 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
     y1 = clickPoint.y() / (page->boundingRect().height());
     width  = ICONANNOTE_WIDTH *  scaleFactor / page->boundingRect().width();
     height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-
-//    switch (rotation) {
-//    case Dr::RotateBy0 : {
-//        x1 = clickPoint.x() / (page->boundingRect().width());
-//        y1 = clickPoint.y() / (page->boundingRect().height());
-//        width  = ICONANNOTE_WIDTH *  scaleFactor / page->boundingRect().width();
-//        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-//    }
-//    break;
-//    case Dr::RotateBy90 : {
-//        clickPoint = QPointF(clickPoint.y(), page->boundingRect().width() - clickPoint.x());
-
-//        x1 = clickPoint.x() / (page->boundingRect().height());
-//        y1 = clickPoint.y() / (page->boundingRect().width());
-//        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-//        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
-//    }
-//    break;
-//    case Dr::RotateBy180 : {
-//        clickPoint = QPointF(page->boundingRect().width() - clickPoint.x(), page->boundingRect().height() - clickPoint.y());
-
-//        x1 = clickPoint.x() / (page->boundingRect().width());
-//        y1 = clickPoint.y() / (page->boundingRect().height());
-//        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
-//        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-//    }
-//    break;
-//    case Dr::RotateBy270 : {
-//        clickPoint = QPointF(page->boundingRect().height() - clickPoint.y(), clickPoint.x());
-
-//        x1 = clickPoint.x() / (page->boundingRect().height());
-//        y1 = clickPoint.y() / (page->boundingRect().width());
-//        width  = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-//        height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().width();
-//    }
-//    break;
-//    default:
-//        break;
-//    };
 
     value = x1 - width / 2.0;
     iconRect.setX((value < 0.0) ? 0.0 : value);
@@ -675,30 +634,21 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
 /**
  * @brief SheetBrowser::addNewIconAnnotDeleteOld
  * 鼠标移动图标注释,删除之前的,在新位置添加一个新的
- * @param point
+ * @param page
+ * @param clickPoint
  */
-void SheetBrowser::addNewIconAnnotDeleteOld(const QPointF clickPoint)
+void SheetBrowser::addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF clickPoint)
 {
-    if (nullptr == m_lastSelectIconAnnotPage)
+    if (nullptr == page)
         return;
 
-    QPointF pointf = clickPoint;
     QRectF iconRect;
-    BrowserPage *nowPage{nullptr};
     QString  containt{""};
 
-    nowPage = mouseClickInPage(pointf);
-
-    if (nullptr == nowPage || m_lastSelectIconAnnotPage != nowPage)
-        return;
-
-    iconRect.setWidth(nowPage->boundingRect().width());
-    iconRect.setHeight(nowPage->boundingRect().height());
-
-    bool isVaild = calcIconAnnotRect(nowPage, clickPoint, iconRect);
+    bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
-        nowPage->moveIconAnnotation(iconRect);
+        page->moveIconAnnotation(iconRect);
     }
 }
 
@@ -1266,8 +1216,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
         m_iconAnnotationMovePos = mapToScene(mousePos);
         m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
-        m_lastSelectIconAnnotPage->setIconMovePos(QPoint(static_cast<int>(m_iconAnnotationMovePos.x() - m_lastSelectIconAnnotPage->x()),
-                                                         static_cast<int>(m_iconAnnotationMovePos.y() - m_lastSelectIconAnnotPage->y())));
+        m_lastSelectIconAnnotPage->setIconMovePos(m_lastSelectIconAnnotPage->mapFromScene(m_iconAnnotationMovePos));
         setCursor(QCursor(Qt::PointingHandCursor));
         if (m_tipsWidget)
             m_tipsWidget->hide();
@@ -1439,7 +1388,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
         if (!m_selectIconAnnotation) {
             if (m_annotationInserting && (nullptr == m_iconAnnot)) {
-                if (clickAnno && clickAnno->type() == 1/*AText*/) {
+                if (clickAnno && clickAnno->type() == 1) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
                     clickAnno = addIconAnnotation(page, m_selectEndPos, "");
@@ -1455,7 +1404,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         } else {
             if (m_lastSelectIconAnnotPage && (m_selectPressedPos != m_selectEndPos)) {
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-                addNewIconAnnotDeleteOld(m_selectEndPos);
+                addNewIconAnnotDeleteOld(m_lastSelectIconAnnotPage, m_selectEndPos);
             } else if (clickAnno && m_lastSelectIconAnnotPage && (m_selectPressedPos == m_selectEndPos)) {
                 showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }

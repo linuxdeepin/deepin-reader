@@ -210,7 +210,7 @@ private:
 
     void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
 
-    void addNewIconAnnotDeleteOld(const QPointF);
+    void addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF);
 
     int currentScrollValueForPage();
 
