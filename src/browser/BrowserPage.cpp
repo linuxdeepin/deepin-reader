@@ -753,11 +753,9 @@ bool BrowserPage::removeAllAnnotation()
 
     m_hasLoadedAnnotation = false;
 
-    Dr::Rotation rotation = m_rotation;
+    m_pixmapScaleFactor = -1;
 
-    m_rotation = Dr::NumberOfRotations;
-
-    render(m_scaleFactor, rotation, true, true);
+    render(m_scaleFactor, m_rotation, true, true);
 
     renderViewPort(true);
 
