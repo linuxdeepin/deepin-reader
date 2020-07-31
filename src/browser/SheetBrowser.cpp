@@ -561,25 +561,27 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     int linkX{0};
     int linkY{0};
 
+    qInfo() << jumpPage->pos();
+
     switch (rotation) {
     case Dr::RotateBy0: {
-        linkY = static_cast<int>((posTop) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((posLeft) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
+        linkX = static_cast<int>(jumpPage->pos().x() + (posLeft) * jumpPage->boundingRect().width());
     }
     break;
     case Dr::RotateBy90: {
-        linkY = static_cast<int>((posLeft) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
+        linkX = static_cast<int>(jumpPage->pos().x() - (posTop) * jumpPage->boundingRect().height());
     }
     break;
     case Dr::RotateBy180: {
-        linkY = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((1.0 - posLeft) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>(jumpPage->pos().y() - (1.0 - posTop) * jumpPage->boundingRect().height());
+        linkX = static_cast<int>(jumpPage->pos().x() - (1.0 - posLeft) * jumpPage->boundingRect().width());
     }
     break;
     case Dr::RotateBy270: {
-        linkY = static_cast<int>((1.0 - posLeft) * jumpPage->boundingRect().height() + jumpPage->pos().y());
-        linkX = static_cast<int>((posTop) * jumpPage->boundingRect().width() + jumpPage->pos().x());
+        linkY = static_cast<int>(jumpPage->pos().y() - (posLeft) * jumpPage->boundingRect().width());
+        linkX = static_cast<int>(jumpPage->pos().x() + (posTop) * jumpPage->boundingRect().height());
     }
     break;
     default: break;
@@ -596,7 +598,7 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     }
 
     m_bNeedNotifyCurPageChanged = true;
-    curpageChanged(jumpPage->itemIndex() + 1);
+//    curpageChanged(jumpPage->itemIndex() + 1);
 }
 
 /**
@@ -783,6 +785,7 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     if (nullptr == m_sheet || nullptr == annotation || (index < 0 || index >= m_items.count()))
         return;
 
+    int pageIndex = index;
     BrowserPage *jumpPage = m_items.at(index);
     QList<QRectF> anootList = annotation->boundary();
 
@@ -792,6 +795,15 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     QRectF firstRect = anootList.at(0);
     if (firstRect.isNull() || firstRect.isEmpty())
         return;
+
+    Dr::Rotation rotation{Dr::RotateBy0};
+    SheetOperation  operation = m_sheet->operation();
+    rotation = operation.rotation;
+
+    if (rotation != Dr::NumberOfRotations && rotation != Dr::RotateBy0) {
+        setCurrentPage(++pageIndex);
+        return;
+    }
 
     jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
 }
