@@ -137,10 +137,11 @@ void ImageViewModel::onUpdatePageImage(int pageIndex)
         emit dataChanged(modelIndex, modelIndex);
 }
 
-void ImageViewModel::onFetchImage(int index) const
+void ImageViewModel::onFetchImage(int index, bool force) const
 {
     ReaderImageParam_t tParam;
     tParam.maxPixel = 198;
+    tParam.bForceUpdate = force;
     tParam.pageIndex = index;
     tParam.sheet = m_docSheet;
     tParam.receiver = m_parent;
@@ -148,9 +149,9 @@ void ImageViewModel::onFetchImage(int index) const
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
-void ImageViewModel::updatePageIndex(int index)
+void ImageViewModel::updatePageIndex(int index, bool force)
 {
-    onFetchImage(index);
+    onFetchImage(index, force);
 }
 
 void ImageViewModel::insertPageIndex(int pageIndex)

@@ -92,7 +92,7 @@ public:
     void initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort = false);
     void setDocSheet(DocSheet *sheet);
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);
-    void updatePageIndex(int pageIndex);
+    void updatePageIndex(int pageIndex, bool force = false);
     void insertPageIndex(int pageIndex);
     void insertPageIndex(const ImagePageInfo_t &tImagePageInfo);
     void removePageIndex(int pageIndex);
@@ -106,7 +106,7 @@ public:
 
 public slots:
     void onUpdatePageImage(int pageIndex);
-    void onFetchImage(int nRow) const;
+    void onFetchImage(int nRow, bool force = false) const;
 
 protected:
     int columnCount(const QModelIndex &) const override;

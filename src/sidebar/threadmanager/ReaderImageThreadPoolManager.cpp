@@ -75,7 +75,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
 
     //remove invalid task
     QMutexLocker mutext(&m_runMutex);
-    if (m_taskList.size() >= maxTaskList) {
+    if (!readImageParam.bForceUpdate && m_taskList.size() >= maxTaskList) {
         for (int index = maxTaskList; index < m_taskList.size(); index++) {
             QRunnable *runable = m_taskList.at(index).task;
             if (this->tryTake(runable)) {

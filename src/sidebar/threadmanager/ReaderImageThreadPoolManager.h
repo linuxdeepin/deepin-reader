@@ -25,6 +25,8 @@
 
 class DocSheet;
 typedef struct ReaderImageParam_t {
+    bool bForceUpdate = false;
+
     int pageIndex = 0;
     int maxPixel = 174;
     DocSheet *sheet = nullptr;

@@ -199,7 +199,7 @@ void NotesWidget::adaptWindowSize(const double &scale)
 
 void NotesWidget::updateThumbnail(const int &pageIndex)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex, true);
 }
 
 void NotesWidget::changeResetModelData()
