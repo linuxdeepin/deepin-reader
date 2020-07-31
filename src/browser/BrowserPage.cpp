@@ -459,9 +459,9 @@ void BrowserPage::loadLinks()
 void BrowserPage::loadWords()
 {
     if (!m_wordHasRendered) {
-        m_words1 = m_page->words(Dr::RotateBy0);
-        for (int i = 0; i < m_words1.count(); ++i) {
-            BrowserWord *word = new BrowserWord(this, m_words1[i]);
+        QList<Word> words = m_page->words(Dr::RotateBy0);
+        for (int i = 0; i < words.count(); ++i) {
+            BrowserWord *word = new BrowserWord(this, words[i]);
             word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
             m_words.append(word);
             m_wordIsHide = false;
@@ -665,6 +665,7 @@ QPointF BrowserPage::translate2LocalPos(const QPointF point)
         tPoint = QPointF(this->boundingRect().height() - point.y(), point.x());
     }
     break;
+    default: break;
     }
 
     return tPoint;

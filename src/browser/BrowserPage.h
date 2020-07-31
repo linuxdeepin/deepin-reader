@@ -184,7 +184,6 @@ private:
     QPixmap m_viewportPixmap;       //视图区域的图片
     QRect   m_viewportRenderedRect; //试图区域
 
-    QList<deepin_reader::Word> m_words1;
     bool m_wordHasRendered = false;                         //当前文字是否被加载
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放

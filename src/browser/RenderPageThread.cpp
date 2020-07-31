@@ -38,7 +38,7 @@ RenderPageThread *RenderPageThread::instance = nullptr;
 bool RenderPageThread::quitForever = false;
 RenderPageThread::RenderPageThread(QObject *parent) : QThread(parent)
 {
-    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, int, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, int, QRect)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
 }
 
 RenderPageThread::~RenderPageThread()
@@ -177,7 +177,7 @@ void RenderPageThread::run()
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
 
         if (!image.isNull())
-            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.renderRect);
 
         m_curTask = RenderPageTask();
     }
@@ -192,7 +192,7 @@ void RenderPageThread::destroyForever()
     }
 }
 
-void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect)
+void RenderPageThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect)
 {
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(scaleFactor, image, rect);

@@ -34,8 +34,7 @@ QRectF BrowserWord::boundingRect() const
  */
 QRectF BrowserWord::textBoundingRect() const
 {
-    return QRectF(m_word.boundingBox.x(), m_word.boundingBox.y(),
-                  m_word.boundingBox.width(), m_word.boundingBox.height());
+    return QRectF(m_word.boundingBox.x(), m_word.boundingBox.y(), m_word.boundingBox.width(), m_word.boundingBox.height());
 }
 
 QRectF BrowserWord::boundingBox() const

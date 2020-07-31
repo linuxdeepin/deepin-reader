@@ -146,6 +146,7 @@ bool SheetBrowser::isUnLocked()
 {
     if (m_document == nullptr)
         return false;
+
     return !m_document->isLocked();
 }
 

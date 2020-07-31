@@ -60,10 +60,10 @@ public:
     void run();
 
 signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
+    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
 
 private slots:
-    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, int rotation, QRect rect);
+    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
 
 private:
     RenderPageTask m_curTask;
