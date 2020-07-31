@@ -561,8 +561,6 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     int linkX{0};
     int linkY{0};
 
-    qInfo() << jumpPage->pos();
-
     switch (rotation) {
     case Dr::RotateBy0: {
         linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
@@ -598,7 +596,7 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     }
 
     m_bNeedNotifyCurPageChanged = true;
-//    curpageChanged(jumpPage->itemIndex() + 1);
+    curpageChanged(jumpPage->itemIndex() + 1);
 }
 
 /**
