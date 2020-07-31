@@ -354,6 +354,9 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
         connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
         connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigRemoveAnnotation, this, &SheetBrowser::onRemoveAnnotation);
         connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigUpdateAnnotation, this, &SheetBrowser::onUpdateAnnotation);
+        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigHide, this, [ = ] {
+            setIconAnnotSelect(false);
+        });
     }
     m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
@@ -1709,6 +1712,13 @@ bool SheetBrowser::isLink(const QPointF point)
 
     //判断当前位置是否有link
     return page->inLink(mouseMovePoint);
+}
+
+void SheetBrowser::setIconAnnotSelect(const bool select)
+{
+    if (m_lastSelectIconAnnotPage)
+        m_lastSelectIconAnnotPage->setSelectIconRect(select);
+    m_lastSelectIconAnnotPage = nullptr;
 }
 
 bool SheetBrowser::jump2Link(const QPointF point)

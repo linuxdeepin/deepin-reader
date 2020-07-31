@@ -219,6 +219,8 @@ private:
 
     bool isLink(const QPointF);
 
+    void setIconAnnotSelect(const bool);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     DocSheet *m_sheet = nullptr;

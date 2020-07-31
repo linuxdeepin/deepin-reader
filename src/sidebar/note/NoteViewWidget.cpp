@@ -108,6 +108,8 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
     } else if (m_annotation->contents() != sText) {
         emit sigUpdateAnnotation(m_annotation, sText);
     }
+
+    emit sigHide();
 }
 
 void NoteViewWidget::initWidget()
