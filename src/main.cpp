@@ -71,11 +71,7 @@ int main(int argc, char *argv[])
     if (!MainWindow::allowCreateWindow())
         return -1;
 
-    MainWindow *w = MainWindow::createWindow();
-
-    foreach (const QString &filePath, arguments) {
-        w->doOpenFile(filePath);
-    }
+    MainWindow *w = MainWindow::createWindow(arguments);
 
     w->show();
 

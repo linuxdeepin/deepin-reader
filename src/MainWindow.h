@@ -39,7 +39,7 @@ class MainWindow : public Dtk::Widget::DMainWindow
     Q_DISABLE_COPY(MainWindow)
 
 public:
-    explicit MainWindow(DMainWindow *parent = nullptr);
+    explicit MainWindow(QStringList filePathList, DMainWindow *parent = nullptr);
 
     ~MainWindow() override;
 
@@ -60,7 +60,9 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+
     bool eventFilter(QObject *obj, QEvent *event) override;
+
     void resizeEvent(QResizeEvent *event) override;
 
 private:
@@ -71,18 +73,21 @@ private:
     void initShortCut();
 
 private slots:
+    void onInit();
+
     void onShortCut(const QString &);
+
     void onUpdateTitleLabelRect();
 
 private:
     QWidget *m_docTabbarWidget = nullptr;
     Central *m_central = nullptr;
     bool m_needSave = true;
-
+    QStringList m_initFilePathList;
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();
-    static MainWindow *createWindow();
+    static MainWindow *createWindow(QStringList filePathList = QStringList());
     static QList<MainWindow *> m_list;
 };
 

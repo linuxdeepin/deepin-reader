@@ -46,22 +46,29 @@
 DWIDGET_USE_NAMESPACE
 
 QList<MainWindow *> MainWindow::m_list;
-MainWindow::MainWindow(DMainWindow *parent)
-    : DMainWindow(parent)
+MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
+    : m_initFilePathList(filePathList), DMainWindow(parent)
 {
     m_list.append(this);
 
     setTitlebarShadowEnabled(true);
-
-    initUI();
-
-    initShortCut();
 
     setMinimumSize(752, 360);
 
     showDefaultSize();
 
     Dtk::Widget::moveToCenter(this);
+
+    this->installEventFilter(this);
+
+    if (filePathList.isEmpty())     //不带参启动延时创建所有控件
+        QTimer::singleShot(100, this, SLOT(onInit()));
+    else {
+        onInit();
+        foreach (const QString &filePath, m_initFilePathList) {
+            doOpenFile(filePath);
+        }
+    }
 }
 
 MainWindow::~MainWindow()
@@ -75,17 +82,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::addSheet(DocSheet *sheet)
 {
+    if (nullptr == m_central)
+        return;
+
     m_central->addSheet(sheet);
 }
 
 bool MainWindow::hasSheet(DocSheet *sheet)
 {
+    if (nullptr == m_central)
+        return false;
+
     return m_central->hasSheet(sheet);
 }
 
 void MainWindow::activateSheet(DocSheet *sheet)
 {
+    if (nullptr == m_central)
+        return;
+
     this->activateWindow();
+
     m_central->showSheet(sheet);
 }
 
@@ -97,18 +114,24 @@ void MainWindow::closeWithoutSave()
 
 void MainWindow::openfiles(const QStringList &filepaths)
 {
+    if (nullptr == m_central)
+        return;
+
     m_central->openFiles(filepaths);
 }
 
 void MainWindow::doOpenFile(const QString &filePath)
 {
+    if (nullptr == m_central)
+        return;
+
     m_central->doOpenFile(filePath);
 }
 
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!m_needSave || m_central->saveAll()) {
+    if (!m_needSave || (m_central && m_central->saveAll())) {
         QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
         settings.setValue("LASTWIDTH", QString::number(this->width()));
@@ -132,35 +155,44 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             if (isFullscreen) {
                 int doctabbarH = m_docTabbarWidget ? m_docTabbarWidget->height() : 0;
                 if (mouseEvent->pos().y() > titlebar()->height() + doctabbarH) {
-                    if (m_docTabbarWidget) m_docTabbarWidget->setVisible(false);
-                    this->titlebar()->setVisible(false);
+                    if (m_docTabbarWidget)
+                        m_docTabbarWidget->setVisible(false);
+
+                    if (this->titlebar())
+                        this->titlebar()->setVisible(false);
                 }
                 if (mouseEvent->pos().y() < 2) {
-                    if (m_docTabbarWidget && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
+                    if (m_docTabbarWidget && m_central && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
                         m_docTabbarWidget->setVisible(true);
                     }
-                    this->titlebar()->setVisible(true);
+
+                    if (this->titlebar())
+                        this->titlebar()->setVisible(true);
                 }
             }
         } else if (event->type() == QEvent::WindowStateChange) {
             if (isFullScreen()) {
-                if (m_docTabbarWidget) m_docTabbarWidget->setVisible(false);
-                this->titlebar()->setVisible(false);
+                if (m_docTabbarWidget)
+                    m_docTabbarWidget->setVisible(false);
+
+                if (this->titlebar())
+                    this->titlebar()->setVisible(false);
             } else {
-                if (m_docTabbarWidget && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
+                if (m_docTabbarWidget && m_central && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
                     m_docTabbarWidget->setVisible(true);
                 }
-                this->titlebar()->setVisible(true);
+
+                if (this->titlebar())
+                    this->titlebar()->setVisible(true);
             }
         }
     }
+
     return QWidget::eventFilter(obj, event);
 }
 
 void MainWindow::initUI()
 {
-    this->installEventFilter(this);
-
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
     setCentralWidget(m_central);
@@ -187,6 +219,9 @@ void MainWindow::initUI()
 //  快捷键 实现
 void MainWindow::onShortCut(const QString &key)
 {
+    if (nullptr == m_central)
+        return;
+
     m_central->handleShortcut(key);
 }
 
@@ -211,9 +246,9 @@ bool MainWindow::allowCreateWindow()
     return m_list.count() < 20;
 }
 
-MainWindow *MainWindow::createWindow()
+MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
-    return new MainWindow();
+    return new MainWindow(filePathList);
 }
 
 //  窗口显示默认大小
@@ -281,14 +316,25 @@ void MainWindow::initShortCut()
     }
 }
 
+void MainWindow::onInit()
+{
+    initUI();
+
+    initShortCut();
+}
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     DMainWindow::resizeEvent(event);
+
     onUpdateTitleLabelRect();
 }
 
 void MainWindow::onUpdateTitleLabelRect()
 {
+    if (nullptr == m_central)
+        return;
+
     QWidget *titleLabel = m_central->docPage()->getTitleLabel();
     titleLabel->setFixedWidth(this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60);
 }
