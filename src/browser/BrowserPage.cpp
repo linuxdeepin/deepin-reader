@@ -736,20 +736,14 @@ bool BrowserPage::removeAllAnnotation()
 {
     m_lastClickIconAnnotation = nullptr;
 
-    if (m_annotations.isEmpty())
+    if (m_annotationItems.isEmpty())
         return false;
 
-    foreach (deepin_reader::Annotation *annot, m_annotations) {
-        if (annot) {
-            m_page->removeAnnotation(annot);
+    foreach (BrowserAnnotation *browserAnnot, m_annotationItems) {
+        if (browserAnnot && browserAnnot->annotation() && !browserAnnot->annotation()->contents().isEmpty()) {
+            browserAnnot->deleteMe();
         }
     }
-
-    m_annotations.clear();
-
-    qDeleteAll(m_annotationItems);
-
-    m_annotationItems.clear();
 
     m_hasLoadedAnnotation = false;
 
