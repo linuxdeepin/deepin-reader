@@ -33,6 +33,7 @@
 
 class Central;
 class DocSheet;
+class TitleMenu;
 class MainWindow : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
@@ -80,10 +81,12 @@ private slots:
     void onUpdateTitleLabelRect();
 
 private:
+    QStringList m_initFilePathList;
     QWidget *m_docTabbarWidget = nullptr;
+    TitleMenu *m_menu = nullptr;
     Central *m_central = nullptr;
     bool m_needSave = true;
-    QStringList m_initFilePathList;
+
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();

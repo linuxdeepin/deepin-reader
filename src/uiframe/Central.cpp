@@ -44,9 +44,6 @@ Central::Central(QWidget *parent)
 {
     setAcceptDrops(true);
 
-    m_menu    = new TitleMenu(this);
-    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-
     m_widget  = new TitleWidget(this);
 
     m_navPage = new CentralNavPage(this);
@@ -94,6 +91,12 @@ CentralDocPage *Central::docPage()
     }
 
     return m_docPage;
+}
+
+void Central::setMenu(TitleMenu *menu)
+{
+    m_menu = menu;
+    connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
 }
 
 void Central::openFilesExec()

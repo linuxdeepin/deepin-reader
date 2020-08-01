@@ -61,9 +61,13 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
 
     this->installEventFilter(this);
 
-    if (filePathList.isEmpty())     //不带参启动延时创建所有控件
-        QTimer::singleShot(100, this, SLOT(onInit()));
-    else {
+    m_menu = new TitleMenu(this);
+
+    titlebar()->setMenu(m_menu);
+
+    if (filePathList.isEmpty()) {   //不带参启动延时创建所有控件
+        QTimer::singleShot(10, this, SLOT(onInit()));
+    } else {
         onInit();
         foreach (const QString &filePath, m_initFilePathList) {
             doOpenFile(filePath);
@@ -195,12 +199,12 @@ void MainWindow::initUI()
 {
     m_central = new Central(this);
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+    m_central->setMenu(m_menu);
     setCentralWidget(m_central);
 
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
     titlebar()->setTitle("");
-    titlebar()->setMenu(m_central->titleMenu());
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
     titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
     titlebar()->setAutoHideOnFullscreen(false);

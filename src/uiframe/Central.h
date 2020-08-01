@@ -69,6 +69,8 @@ public:
 
     CentralDocPage *docPage();
 
+    void setMenu(TitleMenu *menu);
+
 signals:
     void sigOpenFiles(const QString &);
 
