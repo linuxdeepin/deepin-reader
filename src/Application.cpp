@@ -17,7 +17,7 @@ Application::Application(int &argc, char **argv)
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setApplicationName("deepin-reader");
     setOrganizationName("deepin");
-    setWindowIcon(QIcon::fromTheme("deepin-reader"));
+    //setWindowIcon(QIcon::fromTheme("deepin-reader"));     //耗时40ms
     setApplicationVersion(DApplication::buildVersion("1.0"));
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
