@@ -86,6 +86,10 @@ void CentralNavPage::initWidget()
 void CentralNavPage::slotChooseBtnClicked()
 {
     emit sigNeedOpenFilesExec();
+
+    DSuggestButton *btn = dynamic_cast<DSuggestButton *>(sender());
+    if (btn)
+        btn->clearFocus();
 }
 
 //  主题切换
