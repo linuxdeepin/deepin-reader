@@ -921,10 +921,8 @@ void SheetBrowser::deform(SheetOperation &operation)
                 if (static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width()) > maxWidth)
                     maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
             } else {
-                if (static_cast<int>(m_items.at(i)->rect().width()) > maxWidth) {
-                    maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
-                    if (m_items.count() == 1)
-                        maxWidth *= 2;
+                if (static_cast<int>(m_items.at(i)->rect().width()) * 2 > maxWidth) {
+                    maxWidth = static_cast<int>(m_items.at(i)->rect().width()) * 2;
                 }
             }
         }
