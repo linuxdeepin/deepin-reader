@@ -70,7 +70,7 @@ void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
     if (m_selectable)
         return;     //如果可以选中的情况下不允许单选
 
-    QGraphicsItem::mousePressEvent(e);
+    QGraphicsItem::mouseReleaseEvent(e);
 }
 
 Word BrowserWord::getWord()
