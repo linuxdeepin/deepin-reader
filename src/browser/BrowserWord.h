@@ -34,6 +34,8 @@ public:
 
     QString text();
 
+    void setSelectable(bool enable);
+
     QRectF boundingRect()const override;
 
     QRectF textBoundingRect() const;
@@ -51,6 +53,8 @@ private:
     deepin_reader::Word m_word;
 
     qreal m_scaleFactor = 1;
+
+    bool m_selectable = true;
 };
 
 #endif // BrowserWord_H

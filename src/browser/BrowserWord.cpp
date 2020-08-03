@@ -22,6 +22,12 @@ QString BrowserWord::text()
     return m_word.text;
 }
 
+void BrowserWord::setSelectable(bool enable)
+{
+    m_selectable = enable;
+    setFlag(QGraphicsItem::ItemIsSelectable, enable);
+}
+
 QRectF BrowserWord::boundingRect() const
 {
     return QRectF(m_word.boundingBox.x() * m_scaleFactor - 1, m_word.boundingBox.y() * m_scaleFactor - 1, m_word.boundingBox.width() * m_scaleFactor + 2, m_word.boundingBox.height() * m_scaleFactor + 2);
@@ -51,14 +57,20 @@ void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
-void BrowserWord::mousePressEvent(QGraphicsSceneMouseEvent *)
+void BrowserWord::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    //NotTodo
+    if (m_selectable)
+        return;     //如果可以选中的情况下不允许单选
+
+    QGraphicsItem::mousePressEvent(e);
 }
 
-void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
+void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    //NotTodo
+    if (m_selectable)
+        return;     //如果可以选中的情况下不允许单选
+
+    QGraphicsItem::mousePressEvent(e);
 }
 
 Word BrowserWord::getWord()

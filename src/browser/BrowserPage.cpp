@@ -443,7 +443,7 @@ void BrowserPage::setWordSelectable(bool selectable)
 {
     m_wordSelectable = selectable;
     foreach (BrowserWord *word, m_words) {
-        word->setFlag(QGraphicsItem::ItemIsSelectable, selectable);
+        word->setSelectable(selectable);
     }
 }
 
@@ -462,7 +462,7 @@ void BrowserPage::loadWords()
         QList<Word> words = m_page->words(Dr::RotateBy0);
         for (int i = 0; i < words.count(); ++i) {
             BrowserWord *word = new BrowserWord(this, words[i]);
-            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+            word->setSelectable(m_wordSelectable);
             m_words.append(word);
             m_wordIsHide = false;
         }
@@ -476,7 +476,7 @@ void BrowserPage::hideWords()
         return;
 
     foreach (BrowserWord *word, m_words) {
-        word->setFlag(QGraphicsItem::ItemIsSelectable, false);
+        word->setSelectable(false);
         word->setParentItem(0);
     }
 
@@ -487,7 +487,7 @@ void BrowserPage::scaleWords(bool force)
 {
     if (m_wordIsHide) {
         foreach (BrowserWord *word, m_words) {
-            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
+            word->setSelectable(m_wordSelectable);
             word->setParentItem(this);
         }
     }
