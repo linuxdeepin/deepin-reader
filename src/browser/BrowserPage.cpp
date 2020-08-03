@@ -487,7 +487,7 @@ void BrowserPage::scaleWords(bool force)
 {
     if (m_wordIsHide) {
         foreach (BrowserWord *word, m_words) {
-            word->setFlag(QGraphicsItem::ItemIsSelectable, true);
+            word->setFlag(QGraphicsItem::ItemIsSelectable, m_wordSelectable);
             word->setParentItem(this);
         }
     }
