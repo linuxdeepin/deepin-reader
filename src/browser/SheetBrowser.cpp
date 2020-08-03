@@ -906,7 +906,6 @@ void SheetBrowser::deform(SheetOperation &operation)
         if (j < m_items.count())
             m_items.at(j)->render(operation.scaleFactor, operation.rotation, true);
 
-
         if (Dr::SinglePageMode == operation.layoutMode) {
             if (m_items.at(i)->rect().width() > maxWidth)
                 maxWidth = static_cast<int>(m_items.at(i)->rect().width());
@@ -948,33 +947,33 @@ void SheetBrowser::deform(SheetOperation &operation)
             if (i % 2 == 1)
                 continue;
 
-            int x = (maxWidth / 2 - m_items.at(i)->rect().width()) / 2;
+            int x = maxWidth / 2 - m_items.at(i)->rect().width();
 
             if (Dr::RotateBy0 == operation.rotation) {
-                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight);
+                m_items.at(i)->setPos(x, maxHeight);
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + maxWidth / 2 + space, maxHeight);
+                    m_items.at(i + 1)->setPos(x + space + m_items.at(i)->rect().width(), maxHeight);
                 }
             } else if (Dr::RotateBy90 == operation.rotation) {
-                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height(), maxHeight);
+                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().height(), maxHeight);
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height() + maxWidth / 2 + space, maxHeight);
+                    m_items.at(i + 1)->setPos(x + space + m_items.at(i)->rect().width() + m_items.at(i + 1)->boundingRect().height(), maxHeight);
                 }
             } else if (Dr::RotateBy180 == operation.rotation) {
-                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
+                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i + 1)->boundingRect().height());
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width() + maxWidth / 2 + space, maxHeight + m_items.at(i)->boundingRect().height());
+                    m_items.at(i + 1)->setPos(x + m_items.at(i)->rect().width() + m_items.at(i + 1)->boundingRect().width(), maxHeight + m_items.at(i + 1)->boundingRect().height());
                 }
             } else if (Dr::RotateBy270 == operation.rotation) {
-                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight + m_items.at(i)->boundingRect().width());
+                m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x > 0 ? x : 0 + maxWidth / 2 + space, maxHeight + m_items.at(i)->boundingRect().width());
+                    m_items.at(i + 1)->setPos(x + m_items.at(i)->rect().width(), maxHeight + m_items.at(i + 1)->boundingRect().width());
                 }
             }
 
-            if (m_items.count() > i + 1) {
+            if (m_items.count() > i + 1)
                 maxHeight +=  qMax(m_items.at(i)->rect().height(), m_items.at(i + 1)->rect().height()) + space;
-            } else
+            else
                 maxHeight += m_items.at(i)->rect().height() + space;
         }
 
@@ -984,8 +983,19 @@ void SheetBrowser::deform(SheetOperation &operation)
     setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
-        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
-        horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
+        if (Dr::RotateBy0 == operation.rotation) {
+            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
+            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
+        } else if (Dr::RotateBy90 == operation.rotation) {
+            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
+            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() - m_items[page - 1]->boundingRect().height() + diffX));
+        } else if (Dr::RotateBy180 == operation.rotation) {
+            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() - m_items[page - 1]->boundingRect().height() + diffY));
+            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() - m_items[page - 1]->boundingRect().width() + diffX));
+        } else if (Dr::RotateBy270 == operation.rotation) {
+            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() - m_items[page - 1]->boundingRect().width() + diffY));
+            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
+        }
     }
 
     //update Magnifier Image
