@@ -60,10 +60,13 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$PWD/deepin-reader.desktop
 
-icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/deepin-reader.svg
+poppler.path = /usr/lib
+poppler.files = $${3RDPARTTPATH}/lib/*.so*
 
-INSTALLS += target desktop icon_files
+icon.path = /usr/share/icons/hicolor/scalable/apps
+icon.files = $$PWD/deepin-reader.svg
+
+INSTALLS += target desktop icon poppler
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
@@ -77,10 +80,3 @@ CONFIG(release, debug|release) {
     dtk_translations.files = $$PWD/../translations/*.qm
     INSTALLS += dtk_translations
 }
-
-unix{
-    d_poppler.path = /usr/lib
-    d_poppler.files = $${3RDPARTTPATH}/lib/*.so*
-    INSTALLS += d_poppler
-}
-
