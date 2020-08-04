@@ -47,32 +47,33 @@ DWIDGET_USE_NAMESPACE
 
 QList<MainWindow *> MainWindow::m_list;
 MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
-    : m_initFilePathList(filePathList), DMainWindow(parent)
+    : DMainWindow(parent), m_initFilePathList(filePathList)
 {
-    m_list.append(this);
-
-    setTitlebarShadowEnabled(true);
-
-    setMinimumSize(752, 360);
-
-    showDefaultSize();
-
-    Dtk::Widget::moveToCenter(this);
-
-    this->installEventFilter(this);
-
-    m_menu = new TitleMenu(this);
-
-    titlebar()->setMenu(m_menu);
+    initBase();
 
     if (filePathList.isEmpty()) {   //不带参启动延时创建所有控件
-        QTimer::singleShot(10, this, SLOT(onInit()));
+        QTimer::singleShot(10, this, SLOT(onDelayInit()));
+
     } else {
-        onInit();
+        initUI();
+
+        initShortCut();
+
         foreach (const QString &filePath, m_initFilePathList) {
             doOpenFile(filePath);
         }
     }
+}
+
+MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
+{
+    initBase();
+
+    initUI();
+
+    initShortCut();
+
+    addSheet(sheet);
 }
 
 MainWindow::~MainWindow()
@@ -255,6 +256,11 @@ MainWindow *MainWindow::createWindow(QStringList filePathList)
     return new MainWindow(filePathList);
 }
 
+MainWindow *MainWindow::createWindow(DocSheet *sheet)
+{
+    return new MainWindow(sheet);
+}
+
 //  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {
@@ -320,7 +326,7 @@ void MainWindow::initShortCut()
     }
 }
 
-void MainWindow::onInit()
+void MainWindow::onDelayInit()
 {
     initUI();
 
@@ -332,6 +338,25 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     DMainWindow::resizeEvent(event);
 
     onUpdateTitleLabelRect();
+}
+
+void MainWindow::initBase()
+{
+    m_list.append(this);
+
+    setTitlebarShadowEnabled(true);
+
+    setMinimumSize(752, 360);
+
+    showDefaultSize();
+
+    Dtk::Widget::moveToCenter(this);
+
+    this->installEventFilter(this);
+
+    m_menu = new TitleMenu(this);
+
+    titlebar()->setMenu(m_menu);
 }
 
 void MainWindow::onUpdateTitleLabelRect()

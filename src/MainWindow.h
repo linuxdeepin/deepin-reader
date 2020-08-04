@@ -42,6 +42,8 @@ class MainWindow : public Dtk::Widget::DMainWindow
 public:
     explicit MainWindow(QStringList filePathList, DMainWindow *parent = nullptr);
 
+    explicit MainWindow(DocSheet *sheet, DMainWindow *parent = nullptr);
+
     ~MainWindow() override;
 
     void addSheet(DocSheet *sheet);
@@ -67,30 +69,37 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void initUI();
+    void initBase();
 
-    void showDefaultSize();
+    void initUI();
 
     void initShortCut();
 
+    void showDefaultSize();
+
 private slots:
-    void onInit();
+    void onDelayInit();
 
     void onShortCut(const QString &);
 
     void onUpdateTitleLabelRect();
 
 private:
-    QStringList m_initFilePathList;
     QWidget *m_docTabbarWidget = nullptr;
+
     TitleMenu *m_menu = nullptr;
+
     Central *m_central = nullptr;
+
     bool m_needSave = true;
+
+    QStringList m_initFilePathList;
 
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();
     static MainWindow *createWindow(QStringList filePathList = QStringList());
+    static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
 };
 

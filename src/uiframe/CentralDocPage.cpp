@@ -270,9 +270,7 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 {
     leaveSheet(sheet);
 
-    MainWindow *window = MainWindow::createWindow();
-
-    window->addSheet(sheet);
+    MainWindow *window = MainWindow::createWindow(sheet);
 
     window->move(QCursor::pos());
 
