@@ -37,6 +37,7 @@ FindWidget::FindWidget(DWidget *parent)
     int tW = 414;
     int tH = 60;
 
+    setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(QSize(tW, tH));
     setBlurBackgroundEnabled(true);
 

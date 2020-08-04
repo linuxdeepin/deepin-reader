@@ -1597,6 +1597,7 @@ void SheetBrowser::handleSearch()
 {
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
+        connect(m_pFindWidget, &FindWidget::destroyed, [this]() { m_pFindWidget = nullptr; });
         m_pFindWidget->setDocSheet(m_sheet);
     }
 
