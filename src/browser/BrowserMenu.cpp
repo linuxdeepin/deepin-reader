@@ -94,14 +94,14 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
 
         QAction *pFirstPage = createAction(tr("First page"), "FirstPage");
         QAction *pPrevPage = createAction(tr("Previous page"), "PreviousPage");
-        if (index == 0) {
+        if (sheet->currentIndex() == 0) {
             pFirstPage->setDisabled(true);
             pPrevPage->setDisabled(true);
         }
 
         QAction *pNextPage = createAction(tr("Next page"), "NextPage");
         QAction *pEndPage = createAction(tr("Last page"), "LastPage");
-        if (index == sheet->pagesNumber() - 1) {
+        if (sheet->currentIndex() == sheet->pagesNumber() - 1) {
             pNextPage->setDisabled(true);
             pEndPage->setDisabled(true);
         }
