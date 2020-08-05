@@ -59,6 +59,8 @@ public:
 
     void setBookmark(const bool &hasBookmark);
 
+    void updateBookmarkState();
+
     void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     void renderViewPort(bool force = false);     //优先显示当前窗口

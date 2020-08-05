@@ -1188,6 +1188,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_DEFAULT);
             }
             menu.exec(mapToGlobal(event->pos()));
+
+            //菜单点击后，需要重新重置下页面，不然不会刷新书签状态
+            item->updateBookmarkState();
+            //这里return是不希望页面上再次触发GraphicsSceneHoverMove事件
+            return;
         }
     }
 

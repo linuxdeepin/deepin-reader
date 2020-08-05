@@ -137,6 +137,16 @@ void BrowserPage::setBookmark(const bool &hasBookmark)
     update();
 }
 
+void BrowserPage::updateBookmarkState()
+{
+    if (m_bookmark)
+        m_bookmarkState = 3;
+    else
+        m_bookmarkState = 0;
+
+    update();
+}
+
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (!m_pixmapHasRendered) {
@@ -952,6 +962,10 @@ bool BrowserPage::sceneEvent(QEvent *event)
     } else if (event->type() == QEvent::GraphicsSceneMousePress) {
         QGraphicsSceneMouseEvent *t_event = dynamic_cast<QGraphicsSceneMouseEvent *>(event);
         m_posPressed = QPoint();
+
+        if (t_event->button() == Qt::RightButton)
+            return QGraphicsItem::sceneEvent(event);
+
         if (bookmarkMouseRect().contains(t_event->pos())) {
             m_bookmarkState = 2;
             if (nullptr != m_parent) {
