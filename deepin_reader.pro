@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    src
+    src \
+   # test/deepin_reader_case

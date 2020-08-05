@@ -891,8 +891,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     //进行render 并算出最宽的一行
-    int maxWidth = 0;           //最宽的一行
-    int maxHeight = 0;          //总高度
+    double maxWidth = 0;           //最宽的一行
+    double maxHeight = 0;          //总高度
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
@@ -930,15 +930,17 @@ void SheetBrowser::deform(SheetOperation &operation)
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
             int x = (maxWidth - m_items.at(i)->rect().width()) / 2;
+            if (x < 0)
+                x = 0;
 
             if (Dr::RotateBy0 == operation.rotation)
-                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight);
+                m_items.at(i)->setPos(x, maxHeight);
             else if (Dr::RotateBy90 == operation.rotation)
-                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().height(), maxHeight);
+                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().height(), maxHeight);
             else if (Dr::RotateBy180 == operation.rotation)
-                m_items.at(i)->setPos(x > 0 ? x : 0 + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
+                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
             else if (Dr::RotateBy270 == operation.rotation)
-                m_items.at(i)->setPos(x > 0 ? x : 0, maxHeight + m_items.at(i)->boundingRect().width());
+                m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
 
             maxHeight += m_items.at(i)->rect().height() + space;
         }
