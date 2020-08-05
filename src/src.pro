@@ -59,7 +59,7 @@ TRANSLATIONS += \
 target.path   = /usr/bin
 
 desktop.path  = /usr/share/applications
-desktop.files = $$SRCPWD//deepin-reader.desktop
+desktop.files = $$SRCPWD/deepin-reader.desktop
 
 poppler.path = /usr/lib
 poppler.files = $${3RDPARTTPATH}/lib/*.so*
@@ -71,13 +71,13 @@ INSTALLS += target desktop icon poppler
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
-    TRANSLATIONFILES= $$files($$SRCPWD//../translations/*.ts)
+    TRANSLATIONFILES= $$files($$SRCPWD/../translations/*.ts)
     for(tsfile, TRANSLATIONFILES) {
         qmfile = $$replace(tsfile, .ts$, .qm)
         system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
     }
     #将qm文件添加到安装包
     dtk_translations.path = /usr/share/$$TARGET/translations
-    dtk_translations.files = $$SRCPWD//../translations/*.qm
+    dtk_translations.files = $$SRCPWD/../translations/*.qm
     INSTALLS += dtk_translations
 }

@@ -313,7 +313,8 @@ void BrowserPage::renderViewPort(bool force)
 
     QRectF intersectedRectF = this->mapToScene(this->boundingRect()).boundingRect().intersected(visibleSceneRectF);
 
-    if (!force && intersectedRectF.height() <= 0 && intersectedRectF.width() <= 0)
+    //如果不在当前可视范围则不加载 强制也没用
+    if (intersectedRectF.height() <= 0 && intersectedRectF.width() <= 0)
         return;
 
     QRectF viewRenderRectF = mapFromScene(intersectedRectF).boundingRect();
@@ -321,10 +322,15 @@ void BrowserPage::renderViewPort(bool force)
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
+    //开始不进行更新视图
+    if (!force && viewRenderRectF.x() == 0 && viewRenderRectF.y() == 0)
+        return;
+
     //如果现在已经加载的rect包含viewRender 就不加入任务
     if (!force && m_pixmapRenderedRect.contains(viewRenderRect))
         return;
 
+    //如果只是当前视图区域变小则不加载
     if (!force && m_viewportRenderedRect.contains(viewRenderRect))
         return;
 
