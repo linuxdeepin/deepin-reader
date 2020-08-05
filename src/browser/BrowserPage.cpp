@@ -247,7 +247,6 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         if (rect.height() > 2000 || rect.height() > 2000) {
             int pieceWidth = 1000;
-
             int pieceHeight = 1000;
 
             QList<RenderPageTask> tasks;
@@ -275,8 +274,8 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
                     task.renderRect = finalRenderRect;
                     tasks.append(task);
                 }
-                PageRenderThread::appendTasks(tasks);
             }
+            PageRenderThread::appendTasks(tasks);
         } else {
             RenderPageTask task;
             task.item = this;

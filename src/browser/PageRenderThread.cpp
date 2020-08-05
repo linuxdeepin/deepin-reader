@@ -34,7 +34,7 @@
 #include <QTime>
 #include <QDebug>
 
-PageRenderThread *PageRenderThread::instance = nullptr;
+QList<PageRenderThread *> PageRenderThread::instances;
 bool PageRenderThread::quitForever = false;
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
@@ -47,13 +47,12 @@ PageRenderThread::~PageRenderThread()
     wait();
 }
 
-void PageRenderThread::clearTask(BrowserPage *item)
+bool PageRenderThread::clearTask(BrowserPage *item)
 {
-    if (quitForever)
-        return;
-
-    if (nullptr == instance)
-        instance = new PageRenderThread;
+    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == instance) {
+        return false;
+    }
 
     instance->m_mutex.lock();
 
@@ -70,15 +69,16 @@ void PageRenderThread::clearTask(BrowserPage *item)
     }
 
     instance->m_mutex.unlock();
+
+    return true;
 }
 
-void PageRenderThread::clearTasks(SheetBrowser *view)
+bool PageRenderThread::clearTasks(SheetBrowser *view)
 {
-    if (quitForever)
-        return;
-
-    if (nullptr == instance)
-        instance = new PageRenderThread;
+    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == instance) {
+        return false;
+    }
 
     instance->m_mutex.lock();
 
@@ -93,15 +93,16 @@ void PageRenderThread::clearTasks(SheetBrowser *view)
     instance->m_tasks = tasks;
 
     instance->m_mutex.unlock();
+
+    return true;
 }
 
 void PageRenderThread::appendTask(RenderPageTask task)
 {
-    if (quitForever)
+    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == instance) {
         return;
-
-    if (nullptr == instance)
-        instance = new PageRenderThread;
+    }
 
     instance->m_mutex.lock();
 
@@ -115,11 +116,10 @@ void PageRenderThread::appendTask(RenderPageTask task)
 
 void PageRenderThread::appendTasks(QList<RenderPageTask> list)
 {
-    if (quitForever)
+    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == instance) {
         return;
-
-    if (nullptr == instance)
-        instance = new PageRenderThread;
+    }
 
     instance->m_mutex.lock();
 
@@ -134,11 +134,10 @@ void PageRenderThread::appendTasks(QList<RenderPageTask> list)
 
 void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
 {
-    if (quitForever)
+    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == instance) {
         return;
-
-    if (nullptr == instance)
-        instance = new PageRenderThread;
+    }
 
     instance->m_mutex.lock();
 
@@ -185,10 +184,15 @@ void PageRenderThread::run()
 
 void PageRenderThread::destroyForever()
 {
-    if (nullptr != instance) {
-        delete instance;
-        quitForever = true;
-        instance = nullptr;
+    quitForever = true;
+
+    QList<PageRenderThread *> instancesTemp = instances;
+    instances.clear();
+
+    foreach (PageRenderThread *instance, instancesTemp) {
+        if (nullptr != instance) {
+            delete instance;
+        }
     }
 }
 
@@ -197,4 +201,26 @@ void PageRenderThread::onTaskFinished(BrowserPage *item, QImage image, double sc
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(scaleFactor, image, rect);
     }
+}
+
+PageRenderThread *PageRenderThread::instance()
+{
+    if (quitForever)
+        return nullptr;
+
+    if (instances.count() <= 0) {
+        for (int i = 0; i < 4; ++i) {
+            PageRenderThread *instance = new PageRenderThread;
+            instances.append(instance);
+        }
+    }
+
+    static int threadCounter = 0;
+
+    int threadIndex = threadCounter++ % 4;
+
+    if (threadCounter > 1000)
+        threadCounter = 0;
+
+    return instances.value(threadIndex);
 }

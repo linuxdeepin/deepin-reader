@@ -45,9 +45,9 @@ public:
 
     virtual ~PageRenderThread();
 
-    static void clearTask(BrowserPage *item);
+    static bool clearTask(BrowserPage *item);
 
-    static void clearTasks(SheetBrowser *view);
+    static bool clearTasks(SheetBrowser *view);
 
     static void appendTask(RenderPageTask task);
 
@@ -70,8 +70,10 @@ private:
     QStack<RenderPageTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
+
     static bool quitForever;
-    static PageRenderThread *instance;
+    static QList<PageRenderThread *> instances;
+    static PageRenderThread *instance();
 };
 
 #endif // PAGERENDERTHREAD_H
