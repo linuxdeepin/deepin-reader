@@ -54,7 +54,7 @@ void CentralNavPage::initWidget()
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"), this);
-    chooseBtn->setFocusPolicy(Qt::StrongFocus);
+    chooseBtn->setFocusPolicy(Qt::NoFocus);
     int tW = 302;
     int tH = 36;
     chooseBtn->setFixedSize(QSize(tW, tH));
@@ -86,10 +86,6 @@ void CentralNavPage::initWidget()
 void CentralNavPage::slotChooseBtnClicked()
 {
     emit sigNeedOpenFilesExec();
-
-    DSuggestButton *btn = dynamic_cast<DSuggestButton *>(sender());
-    if (btn)
-        btn->clearFocus();
 }
 
 //  主题切换
