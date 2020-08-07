@@ -52,6 +52,9 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         else
             createAction(tr("Copy"), "Copy");
         this->addSeparator();
+
+        createAction(tr("Highlight"), type != DOC_MENU_SELECT_TEXT ? "ChangeAnnotationColor" : "AddTextHighlight");
+
         m_pColorWidgetAction = new ColorWidgetAction(this);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
         this->addAction(m_pColorWidgetAction);

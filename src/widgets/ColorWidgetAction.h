@@ -16,8 +16,6 @@ public:
     explicit ColorWidgetAction(DWidget *pParent = nullptr);
 
 public:
-    void setBtnAddLightState(const bool &);
-    void setcolor(bool benable);
     int getIndex();
 
 signals:
@@ -29,9 +27,6 @@ private slots:
 
 private:
     void initWidget(DWidget *pParent);
-
-private:
-    CustomClickLabel *m_pClickLabel = nullptr;
 };
 
 #endif  // COLORWIDGETACTION_H

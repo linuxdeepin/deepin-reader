@@ -16,37 +16,6 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     initWidget(pParent);
 }
 
-void ColorWidgetAction::setBtnAddLightState(const bool &bState)
-{
-    m_pClickLabel->setEnabled(!bState);
-    setcolor(!bState);
-}
-
-void ColorWidgetAction::setcolor(bool benable)
-{
-    QPalette plt = m_pClickLabel->palette();
-    if (benable) {
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-            plt.setColor(QPalette::WindowText, QColor("#E0E6F4"));
-        } else {
-            plt.setColor(QPalette::WindowText, QColor(0, 0, 0));
-        }
-    } else {
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-            QColor color("#CECEDE");
-            color.setAlpha(100);
-            plt.setColor(QPalette::WindowText, color);
-        } else {
-            QColor color("#000000");
-            color.setAlpha(100);
-            plt.setColor(QPalette::WindowText, color);
-        }
-    }
-
-    m_pClickLabel->setPalette(plt);
-}
-
-
 void ColorWidgetAction::slotBtnClicked(int index)
 {
     auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
@@ -71,12 +40,8 @@ void ColorWidgetAction::slotBtnDefaultClicked()
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
 {
-    auto pWidget = new DWidget(pParent);
+    DWidget *pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
-
-    m_pClickLabel = new CustomClickLabel(tr("Highlight"));
-    DFontSizeManager::instance()->bind(m_pClickLabel, DFontSizeManager::T6);
-    connect(m_pClickLabel, SIGNAL(clicked()), SLOT(slotBtnDefaultClicked()));
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->setContentsMargins(20, 6, 20, 6);
@@ -105,14 +70,8 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     buttonLayout->addStretch(1);
 
-    QHBoxLayout *playout = new QHBoxLayout;
-    playout->setContentsMargins(23, 0, 0, 0);
-    playout->addWidget(m_pClickLabel);
-
-    auto mainLayout = new QVBoxLayout;
-    mainLayout->addItem(playout);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addItem(buttonLayout);
-
     pWidget->setLayout(mainLayout);
 }
 

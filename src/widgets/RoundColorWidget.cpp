@@ -64,7 +64,8 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    painter.setPen(Qt::NoPen);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     int borderWidth = style()->pixelMetric(static_cast<QStyle::PixelMetric>(DStyle::PM_FocusBorderWidth), nullptr, this);
 
@@ -83,6 +84,5 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
     QRect r = squareRect.adjusted(5, 5, -5, -5);
     path.addEllipse(r);
     painter.setClipPath(path);
-    painter.drawPath(path);
     painter.fillPath(path, QBrush(m_color));
 }
