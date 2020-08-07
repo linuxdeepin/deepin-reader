@@ -116,7 +116,12 @@ void PageViewportThread::run()
         m_mutex.unlock();
 
         if (BrowserPage::existInstance(m_curTask.page)) {
+
+            QTime time;
+            time.start();
             QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+            qDebug() << "Viewport:" << time.elapsed();
+
             if (!image.isNull())
                 emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.renderRect);
         }

@@ -149,6 +149,9 @@ void BrowserPage::updateBookmarkState()
 
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
+    if (!m_viewportTryRender)
+        renderViewPort(false);
+
     if (!m_pixmapHasRendered) {
         render(m_scaleFactor, m_rotation);
     }
@@ -310,6 +313,8 @@ void BrowserPage::handleRenderFinished(const double &scaleFactor, const QImage &
 
 void BrowserPage::renderViewPort(bool force)
 {
+    m_viewportTryRender = true;
+
     if (nullptr == m_parent)
         return;
 
@@ -330,10 +335,6 @@ void BrowserPage::renderViewPort(bool force)
 
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
-
-    //开始不进行更新视图
-    if (!force && viewRenderRectF.x() == 0 && viewRenderRectF.y() == 0)
-        return;
 
     //如果现在已经加载的rect包含viewRender 就不加入任务
     if (!force && m_pixmapRenderedRect.contains(viewRenderRect))

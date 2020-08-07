@@ -1083,10 +1083,10 @@ Properties PDFDocument::properties() const
 
     int pdfMajorVersion = 1;
     int pdfMinorVersion = 0;
+
     m_document->getPdfVersion(&pdfMajorVersion, &pdfMinorVersion);
 
     properties.insert("Version", QString("v.%1.%2").arg(pdfMajorVersion).arg(pdfMinorVersion));
-
     properties.insert("Encrypted", m_document->isEncrypted());
     properties.insert("Linearized", m_document->isLinearized());
     properties.insert("KeyWords", m_document->keywords());
@@ -1163,46 +1163,13 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
     if (Poppler::Document *document = Poppler::Document::load(filePath, QByteArray(), QByteArray().append(password))) {
         document->setRenderHint(Poppler::Document::Antialiasing, true);
         document->setRenderHint(Poppler::Document::TextAntialiasing, true);
+//        document->setRenderHint(Poppler::Document::TextHinting, true);
 //        document->setRenderHint(Poppler::Document::TextSlightHinting, true);
-//        document->setRenderHint(Poppler::Document::IgnorePaperColor, false);
+        document->setRenderHint(Poppler::Document::IgnorePaperColor, false);
 //        document->setRenderHint(Poppler::Document::OverprintPreview, true);
 //        document->setRenderHint(Poppler::Document::ThinLineSolid, true);
 //        document->setRenderHint(Poppler::Document::ThinLineShape, true);
-
-#if defined(HAS_POPPLER_18)
-
-//        switch (m_settings->value("textHinting", Defaults::textHinting).toInt()) {
-//        default:
-//        case 0:
-//            document->setRenderHint(Poppler::Document::TextHinting, false);
-//            break;
-//        case 1:
-//            document->setRenderHint(Poppler::Document::TextHinting, true);
-//            document->setRenderHint(Poppler::Document::TextSlightHinting, false);
-//            break;
-//        case 2:
-//            document->setRenderHint(Poppler::Document::TextHinting, true);
-//            document->setRenderHint(Poppler::Document::TextSlightHinting, true);
-//            break;
-//        }
-
-#elif defined(HAS_POPPLER_14)
-
-        document->setRenderHint(Poppler::Document::TextHinting, m_settings->value("textHinting", Defaults::textHinting).toBool());
-
-#endif // HAS_POPPLER_18 HAS_POPPLER_14
-
-#ifdef HAS_POPPLER_35
-
-        //document->setRenderHint(Poppler::Document::IgnorePaperColor, m_settings->value("ignorePaperColor", Defaults::ignorePaperColor).toBool());
-
-#endif // HAS_POPPLER_35
-
-#ifdef HAS_POPPLER_22
-
-        //document->setRenderHint(Poppler::Document::OverprintPreview, m_settings->value("overprintPreview", Defaults::overprintPreview).toBool());
-
-#endif // HAS_POPPLER_22
+        document->setRenderHint(Poppler::Document::OverprintPreview, false);
 
         return new deepin_reader::PDFDocument(document);
     }
@@ -1212,8 +1179,3 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
 
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
-
-Q_EXPORT_PLUGIN2(qpdfview_pdf, qpdfview::PdfPlugin)
-
-#endif // QT_VERSION

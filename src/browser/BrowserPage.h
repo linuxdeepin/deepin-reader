@@ -182,6 +182,7 @@ private:
     double  m_pixmapScaleFactor   = -1;   //当前图片的缩放
     QRect   m_pixmapRenderedRect;         //当前图片已经加载的rect
 
+    bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
     double  m_viewportScaleFactor = -1;
     QPixmap m_viewportPixmap;       //视图区域的图片
     QRect   m_viewportRenderedRect; //试图区域
