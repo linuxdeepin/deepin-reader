@@ -962,14 +962,14 @@ void SheetBrowser::deform(SheetOperation &operation)
                     m_items.at(i + 1)->setPos(x + space + m_items.at(i)->rect().width() + m_items.at(i + 1)->boundingRect().height(), maxHeight);
                 }
             } else if (Dr::RotateBy180 == operation.rotation) {
-                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i + 1)->boundingRect().height());
+                m_items.at(i)->setPos(x + m_items.at(i)->boundingRect().width(), maxHeight + m_items.at(i)->boundingRect().height());
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x + m_items.at(i)->rect().width() + m_items.at(i + 1)->boundingRect().width(), maxHeight + m_items.at(i + 1)->boundingRect().height());
+                    m_items.at(i + 1)->setPos(x + space + m_items.at(i)->rect().width() + m_items.at(i + 1)->boundingRect().width(), maxHeight + m_items.at(i + 1)->boundingRect().height());
                 }
             } else if (Dr::RotateBy270 == operation.rotation) {
                 m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
                 if (m_items.count() > i + 1) {
-                    m_items.at(i + 1)->setPos(x + m_items.at(i)->rect().width(), maxHeight + m_items.at(i + 1)->boundingRect().width());
+                    m_items.at(i + 1)->setPos(x + space + m_items.at(i)->rect().width(), maxHeight + m_items.at(i + 1)->boundingRect().width());
                 }
             }
 
