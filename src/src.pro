@@ -39,7 +39,7 @@ SOURCES += \
     $$SRCPWD/uiframe/DocSheet.cpp
 
 HEADERS +=\
-    $$SRCPWD/Application.h \
+    $$SRCPWD/Application.h\
     $$SRCPWD/MainWindow.h \
     $$SRCPWD/uiframe/TitleWidget.h \
     $$SRCPWD/uiframe/TitleMenu.h \

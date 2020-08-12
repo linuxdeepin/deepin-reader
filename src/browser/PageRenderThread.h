@@ -47,8 +47,6 @@ public:
 
     static bool clearTask(BrowserPage *item);
 
-    static bool clearTasks(SheetBrowser *view);
-
     static void appendTask(RenderPageTask task);
 
     static void appendTasks(QList<RenderPageTask> list);
@@ -73,7 +71,7 @@ private:
 
     static bool quitForever;
     static QList<PageRenderThread *> instances;
-    static PageRenderThread *instance();
+    static PageRenderThread *instance(int itemIndex = -1);
 };
 
 #endif // PAGERENDERTHREAD_H

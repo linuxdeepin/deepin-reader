@@ -39,6 +39,11 @@ struct RenderViewportTask {
     QRect renderRect;
 };
 
+struct RenderViewportTaskPiece {
+    RenderViewportTask task;
+    int pieceIndex = 0;
+};
+
 class PageViewportThread : public QThread
 {
     Q_OBJECT
@@ -53,6 +58,8 @@ public:
 
     static int  count(BrowserPage *page);        //当前任务数量
 
+    void appendTaskPiece(RenderViewportTaskPiece task);
+
     void run();
 
 signals:
@@ -62,12 +69,13 @@ private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
 
 private:
-    RenderViewportTask m_curTask;
-    QStack<RenderViewportTask> m_tasks;
+    RenderViewportTaskPiece m_curTaskPiece;
+    QStack<RenderViewportTaskPiece> m_taskPieces;
     QMutex m_mutex;
     bool m_quit = false;
     static bool quitForever;
-    static PageViewportThread *m_instance;
+    static QList<PageViewportThread *> instances;
+    static PageViewportThread *instance(int threadIndex);
 };
 
 #endif // PAGEVIEWPORTTHREAD_H

@@ -33,7 +33,7 @@
 #include <QTime>
 #include <QDebug>
 
-PageViewportThread *PageViewportThread::m_instance = nullptr;
+QList<PageViewportThread *> PageViewportThread::instances;
 bool PageViewportThread::quitForever = false;
 PageViewportThread::PageViewportThread(QObject *parent) : QThread(parent)
 {
@@ -48,10 +48,15 @@ PageViewportThread::~PageViewportThread()
 
 void PageViewportThread::destroyForever()
 {
-    if (nullptr != m_instance) {
-        delete m_instance;
-        quitForever = true;
-        m_instance = nullptr;
+    quitForever = true;
+
+    QList<PageViewportThread *> instancesTemp = instances;
+    instances.clear();
+
+    foreach (PageViewportThread *instance, instancesTemp) {
+        if (nullptr != instance) {
+            delete instance;
+        }
     }
 }
 
@@ -60,45 +65,85 @@ void PageViewportThread::appendTask(RenderViewportTask task)
     if (quitForever)
         return;
 
-    if (nullptr == m_instance)
-        m_instance = new PageViewportThread;
+    PageViewportThread *thread = nullptr;
 
-    if (m_instance->m_curTask.page == task.page
-            && m_instance->m_curTask.renderRect == task.renderRect
-            && m_instance->m_curTask.rotation == task.rotation
-            && qFuzzyCompare(m_instance->m_curTask.scaleFactor, task.scaleFactor)) {
+    RenderViewportTaskPiece taskPiece0;
+    taskPiece0.task = task;
+    taskPiece0.task.renderRect = QRect(task.renderRect.x(), task.renderRect.y(), task.renderRect.width() / 2, task.renderRect.height() / 2);
+    taskPiece0.pieceIndex = 0;
+    thread = instance(0);
+    if (nullptr == thread)
         return;
-    }
+    thread->appendTaskPiece(taskPiece0);
 
-    m_instance->m_mutex.lock();
+    RenderViewportTaskPiece taskPiece1;
+    taskPiece1.task = task;
+    taskPiece1.task.renderRect = QRect(task.renderRect.x() + taskPiece0.task.renderRect.width(), task.renderRect.y(), task.renderRect.width() - taskPiece0.task.renderRect.width(), task.renderRect.height() / 2);
+    taskPiece1.pieceIndex = 1;
+    thread = instance(1);
+    if (nullptr == thread)
+        return;
+    thread->appendTaskPiece(taskPiece1);
 
-    for (int i = 0; i < m_instance->m_tasks.count(); ++i) {
-        if (m_instance->m_tasks[i].page == task.page) {
-            m_instance->m_tasks.remove(i);
-            i = 0;
-        }
-    }
+    RenderViewportTaskPiece taskPiece2;
+    taskPiece2.task = task;
+    taskPiece2.task.renderRect = QRect(task.renderRect.x(), task.renderRect.y() + taskPiece0.task.renderRect.height(), task.renderRect.width() / 2, task.renderRect.height() - taskPiece0.task.renderRect.height());
+    taskPiece2.pieceIndex = 2;
+    thread = instance(2);
+    if (nullptr == thread)
+        return;
+    thread->appendTaskPiece(taskPiece2);
 
-    m_instance->m_tasks.push(task);
-    m_instance->m_mutex.unlock();
+    RenderViewportTaskPiece taskPiece3;
+    taskPiece3.task = task;
+    taskPiece3.task.renderRect = QRect(task.renderRect.x() + taskPiece0.task.renderRect.width(), task.renderRect.y() + taskPiece0.task.renderRect.height(),
+                                       task.renderRect.width() - taskPiece0.task.renderRect.width(), task.renderRect.height() - taskPiece0.task.renderRect.height());
+    taskPiece3.pieceIndex = 3;
+    thread = instance(3);
+    if (nullptr == thread)
+        return;
 
-    if (!m_instance->isRunning())
-        m_instance->start();
+    thread->appendTaskPiece(taskPiece3);
 }
 
 int PageViewportThread::count(BrowserPage *page)
 {
-    if (nullptr == m_instance)
-        return 0;
+//    if (nullptr == m_instance)
+//        return 0;
 
     int count = 0;
 
-    foreach (RenderViewportTask task, m_instance->m_tasks) {
-        if (task.page == page)
-            count++;
-    }
+//    foreach (RenderViewportTask task, m_instance->m_tasks) {
+//        if (task.page == page)
+//            count++;
+//    }
 
     return count;
+}
+
+void PageViewportThread::appendTaskPiece(RenderViewportTaskPiece taskPiece)
+{
+    if (m_curTaskPiece.task.page == taskPiece.task.page
+            && m_curTaskPiece.task.renderRect == taskPiece.task.renderRect
+            && m_curTaskPiece.task.rotation == taskPiece.task.rotation
+            && qFuzzyCompare(m_curTaskPiece.task.scaleFactor, taskPiece.task.scaleFactor)) {
+        return;
+    }
+
+    m_mutex.lock();
+
+    for (int i = 0; i < m_taskPieces.count(); ++i) {
+        if (m_taskPieces[i].task.page == taskPiece.task.page) {
+            m_taskPieces.remove(i);
+            i = 0;
+        }
+    }
+
+    m_taskPieces.push(taskPiece);
+    m_mutex.unlock();
+
+    if (!isRunning())
+        start();
 }
 
 void PageViewportThread::run()
@@ -106,28 +151,30 @@ void PageViewportThread::run()
     m_quit = false;
 
     while (!m_quit) {
-        if (m_tasks.count() <= 0) {
+        if (m_taskPieces.count() <= 0) {
             msleep(100);
             break;
         }
 
         m_mutex.lock();
-        m_curTask = m_tasks.pop();
+        m_curTaskPiece = m_taskPieces.pop();
         m_mutex.unlock();
 
-        if (BrowserPage::existInstance(m_curTask.page)) {
+        if (BrowserPage::existInstance(m_curTaskPiece.task.page)) {
 
             QTime time;
             time.start();
-            QImage image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-            qDebug() << "Viewport:" << time.elapsed();
+            QImage image = m_curTaskPiece.task.page->getImage(m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.rotation, m_curTaskPiece.task.renderRect, m_curTaskPiece.pieceIndex);
+//            qDebug() << "Viewport:" << time.elapsed();
+//            qDebug() << m_curTaskPiece.task.renderRect;
+//            qDebug() << " ";
 
             if (!image.isNull())
-                emit sigTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.renderRect);
+                emit sigTaskFinished(m_curTaskPiece.task.page, image, m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.renderRect);
         }
 
         m_mutex.lock();
-        m_curTask = RenderViewportTask();
+        m_curTaskPiece = RenderViewportTaskPiece();
         m_mutex.unlock();
     }
 }
@@ -137,5 +184,20 @@ void PageViewportThread::onTaskFinished(BrowserPage *page, QImage image, double 
     if (BrowserPage::existInstance(page) && !image.isNull() && qFuzzyCompare(scaleFactor, page->m_scaleFactor)) {
         page->handleViewportRenderFinished(scaleFactor, image, rect);
     }
+}
+
+PageViewportThread *PageViewportThread::instance(int threadIndex)
+{
+    if (quitForever)
+        return nullptr;
+
+    if (instances.count() <= 0) {
+        for (int i = 0; i < 4; ++i) {
+            PageViewportThread *instance = new PageViewportThread;
+            instances.append(instance);
+        }
+    }
+
+    return instances.value(threadIndex);
 }
 

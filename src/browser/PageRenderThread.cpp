@@ -49,7 +49,10 @@ PageRenderThread::~PageRenderThread()
 
 bool PageRenderThread::clearTask(BrowserPage *item)
 {
-    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == item)
+        return true;
+
+    PageRenderThread *instance  = PageRenderThread::instance(item->itemIndex());
     if (nullptr == instance) {
         return false;
     }
@@ -73,33 +76,12 @@ bool PageRenderThread::clearTask(BrowserPage *item)
     return true;
 }
 
-bool PageRenderThread::clearTasks(SheetBrowser *view)
-{
-    PageRenderThread *instance  = PageRenderThread::instance();
-    if (nullptr == instance) {
-        return false;
-    }
-
-    instance->m_mutex.lock();
-
-    QStack<RenderPageTask> tasks;
-
-    for (int i = 0; i < instance->m_tasks.count(); ++i) {
-        if (instance->m_tasks[i].view != view) {
-            tasks.append(instance->m_tasks[i]);
-        }
-    }
-
-    instance->m_tasks = tasks;
-
-    instance->m_mutex.unlock();
-
-    return true;
-}
-
 void PageRenderThread::appendTask(RenderPageTask task)
 {
-    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == task.item)
+        return;
+
+    PageRenderThread *instance  = PageRenderThread::instance(task.item->itemIndex());
     if (nullptr == instance) {
         return;
     }
@@ -116,7 +98,13 @@ void PageRenderThread::appendTask(RenderPageTask task)
 
 void PageRenderThread::appendTasks(QList<RenderPageTask> list)
 {
-    PageRenderThread *instance  = PageRenderThread::instance();
+    if (list.count() <= 0)
+        return;
+
+    if (nullptr == list[0].item)
+        return;
+
+    PageRenderThread *instance  = PageRenderThread::instance(list[0].item->itemIndex());
     if (nullptr == instance) {
         return;
     }
@@ -134,7 +122,10 @@ void PageRenderThread::appendTasks(QList<RenderPageTask> list)
 
 void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect)
 {
-    PageRenderThread *instance  = PageRenderThread::instance();
+    if (nullptr == item)
+        return;
+
+    PageRenderThread *instance  = PageRenderThread::instance(item->itemIndex());
     if (nullptr == instance) {
         return;
     }
@@ -176,7 +167,7 @@ void PageRenderThread::run()
         QTime time;
         time.start();
         QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-        qDebug() << "Render:" << time.elapsed();
+        qDebug() << "thread:id" << QThread::currentThreadId() << " Render:" << time.elapsed() << " Rect:" << m_curTask.renderRect;
 
         if (!image.isNull())
             emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.renderRect);
@@ -206,7 +197,7 @@ void PageRenderThread::onTaskFinished(BrowserPage *item, QImage image, double sc
     }
 }
 
-PageRenderThread *PageRenderThread::instance()
+PageRenderThread *PageRenderThread::instance(int itemIndex)
 {
     if (quitForever)
         return nullptr;
@@ -221,6 +212,9 @@ PageRenderThread *PageRenderThread::instance()
     static int threadCounter = 0;
 
     int threadIndex = threadCounter++ % 4;
+
+    if (itemIndex != -1)
+        threadIndex = itemIndex % 4;
 
     if (threadCounter > 1000)
         threadCounter = 0;

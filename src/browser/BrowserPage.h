@@ -45,13 +45,13 @@ class BrowserPage : public QGraphicsItem
     friend class PageRenderThread;
     friend class PageViewportThread;
 public:
-    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
+    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
 
     virtual ~BrowserPage() override;
 
     static bool existInstance(BrowserPage *item);
 
-    void reOpen(deepin_reader::Page *page);
+    void reOpen(deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
 
     QRectF boundingRect()const override;  //原矩形 不受旋转影响
 
@@ -65,9 +65,9 @@ public:
 
     void renderViewPort(bool force = false);     //优先显示当前窗口
 
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
+    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect(), int renderInder = -1);
 
-    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc); //按宽高缩放
+    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc, int renderIndex = -1); //按宽高缩放
 
     QImage thumbnail() ;
 
@@ -169,8 +169,10 @@ protected:
     bool sceneEvent(QEvent *event) override;
 
 private:
-    static QSet<BrowserPage *> items;   //用于记录多少个自己
-    deepin_reader::Page *m_page = nullptr;
+    static QSet<BrowserPage *> items;                   //用于记录多少个自己
+    deepin_reader::Page *m_page = nullptr;              //主要操作更新
+    QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染
+
     SheetBrowser *m_parent = nullptr;
 
     int     m_index = 0;                                //当前索引

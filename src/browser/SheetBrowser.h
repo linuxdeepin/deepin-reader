@@ -223,6 +223,8 @@ private:
 
 private:
     deepin_reader::Document *m_document = nullptr;
+    QList<deepin_reader::Document *> m_renderDocuments;
+
     DocSheet *m_sheet = nullptr;
 
     BrowserMagniFier *m_magnifierLabel = nullptr;

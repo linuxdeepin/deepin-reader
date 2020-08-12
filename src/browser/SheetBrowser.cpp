@@ -153,6 +153,7 @@ bool SheetBrowser::isUnLocked()
 bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
 {
     m_filePassword = password;
+
     if (Dr::PDF == fileType)
         m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
     else if (Dr::DjVu == fileType)
@@ -161,8 +162,63 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     if (nullptr == m_document)
         return false;
 
+    for (int i = 0; i < 4; ++i) {
+        if (Dr::PDF == fileType)
+            m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, password));
+        else if (Dr::DjVu == fileType)
+            m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
+    }
+
     m_fileType = fileType;
     m_filePath = filePath;
+
+    return true;
+}
+
+bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
+{
+    if (nullptr == m_document)
+        return false;
+
+    for (int i = 0; i < m_document->numberOfPages(); ++i) {
+        deepin_reader::Page *page = m_document->page(i);
+
+        if (page == nullptr)
+            return false;
+
+        if (page->size().width() > m_maxWidth)
+            m_maxWidth = page->size().width();
+
+        if (page->size().height() > m_maxHeight)
+            m_maxHeight = page->size().height();
+
+        QList<deepin_reader::Page *> renderPages;
+
+        for (int j = 0; j < m_renderDocuments.count(); ++j)
+            renderPages.append(m_renderDocuments[j]->page(i));
+
+        BrowserPage *item = new BrowserPage(this, page, renderPages);
+
+        item->setItemIndex(i);
+
+        if (bookmarks.contains(i))
+            item->setBookmark(true);
+
+        m_items.append(item);
+
+    }
+
+    for (int i = 0; i < m_items.count(); ++i) {
+        scene()->addItem(m_items[i]);
+    }
+
+    setMouseShape(operation.mouseShape);
+
+    deform(operation);
+
+    m_initPage = operation.currentPage;
+
+    m_hasLoaded = true;
 
     return true;
 }
@@ -173,6 +229,7 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
         return false;
 
     deepin_reader::Document *tempDocument = m_document;
+    QList<deepin_reader::Document *> tempDocuments = m_renderDocuments;
 
     if (Dr::PDF == fileType)
         m_document = deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword);
@@ -182,12 +239,30 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
     if (nullptr == m_document)
         return false;
 
+    m_renderDocuments.clear();
+    for (int i = 0; i < 4; ++i) {
+        if (Dr::PDF == fileType)
+            m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword));
+        else if (Dr::DjVu == fileType)
+            m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
+    }
+
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        if (m_items.count() > i)
-            m_items[i]->reOpen(m_document->page(i));
+        if (m_items.count() > i) {
+            QList<deepin_reader::Page *> renderPages;
+            for (int j = 0; j < 4; ++j) {
+                if (m_renderDocuments.value(j) == nullptr)
+                    continue;
+                renderPages.append(m_renderDocuments.value(j)->page(i));
+            }
+            m_items[i]->reOpen(m_document->page(i), renderPages);
+        }
     }
 
     delete tempDocument;
+
+    foreach (deepin_reader::Document *tempDocument, tempDocuments)
+        delete tempDocument;
 
     return true;
 }
@@ -221,49 +296,6 @@ bool SheetBrowser::saveAs(const QString &filePath)
         return false;
 
     return reOpen(m_fileType, filePath);
-}
-
-bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
-{
-    if (nullptr == m_document)
-        return false;
-
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        deepin_reader::Page *page = m_document->page(i);
-
-        if (page == nullptr)
-            return false;
-
-        if (page->size().width() > m_maxWidth)
-            m_maxWidth = page->size().width();
-
-        if (page->size().height() > m_maxHeight)
-            m_maxHeight = page->size().height();
-
-        BrowserPage *item = new BrowserPage(this, page);
-
-        item->setItemIndex(i);
-
-        if (bookmarks.contains(i))
-            item->setBookmark(true);
-
-        m_items.append(item);
-
-    }
-
-    for (int i = 0; i < m_items.count(); ++i) {
-        scene()->addItem(m_items[i]);
-    }
-
-    setMouseShape(operation.mouseShape);
-
-    deform(operation);
-
-    m_initPage = operation.currentPage;
-
-    m_hasLoaded = true;
-
-    return true;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
@@ -978,7 +1010,6 @@ void SheetBrowser::deform(SheetOperation &operation)
             else
                 maxHeight += m_items.at(i)->rect().height() + space;
         }
-
         maxWidth += space;
     }
 

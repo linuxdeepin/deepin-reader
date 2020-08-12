@@ -51,7 +51,7 @@
 #include <QDesktopServices>
 
 QSet<BrowserPage *> BrowserPage::items;
-BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_page(page), m_parent(parent)
+BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages) : QGraphicsItem(), m_page(page), m_renderPages(renderPages), m_parent(parent)
 {
     items.insert(this);
     setAcceptHoverEvents(true);
@@ -72,11 +72,13 @@ BrowserPage::~BrowserPage()
         delete m_page;
 }
 
-void BrowserPage::reOpen(Page *page)
+void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
 {
     Page *tmpPage = m_page;
+    QList<deepin_reader::Page *> tempPages = m_renderPages;
 
     m_page = page;
+    m_renderPages = renderPages;
 
     qDeleteAll(m_annotations);
     m_annotations.clear();
@@ -87,6 +89,9 @@ void BrowserPage::reOpen(Page *page)
     m_hasLoadedAnnotation = false;
 
     if (nullptr != tmpPage)
+        delete tmpPage;
+
+    foreach (deepin_reader::Page *tmpPage, tempPages)
         delete tmpPage;
 
     //文字不需要重新加载
@@ -249,8 +254,8 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         QRectF rect = boundingRect();
 
         if (rect.height() > 2000 || rect.height() > 2000) {
-            int pieceWidth = 1000;
-            int pieceHeight = 1000;
+            int pieceWidth = 2000;
+            int pieceHeight = 2000;
 
             QList<RenderPageTask> tasks;
 
@@ -341,8 +346,8 @@ void BrowserPage::renderViewPort(bool force)
         return;
 
     //如果只是当前视图区域变小则不加载
-    if (!force && m_viewportRenderedRect.contains(viewRenderRect))
-        return;
+//    if (!force && m_viewportRenderedRect.contains(viewRenderRect))
+//        return;
 
     RenderViewportTask task;
 
@@ -353,7 +358,6 @@ void BrowserPage::renderViewPort(bool force)
     task.rotation = Dr::RotateBy0;
 
     task.renderRect = viewRenderRect;
-
     PageViewportThread::appendTask(task);
 }
 
@@ -375,13 +379,29 @@ void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const 
     update();
 }
 
-QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
+QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
 {
-    return m_page->render(rotation, scaleFactor, boundingRect);
+    deepin_reader::Page *page = m_page;
+
+    if (-1 != renderIndex)
+        page = m_renderPages.value(renderIndex);
+
+    if (nullptr == page)
+        return QImage();
+
+    return page->render(rotation, scaleFactor, boundingRect);
 }
 
-QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
+QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc, int renderIndex)
 {
+    deepin_reader::Page *page = m_page;
+
+    if (-1 != renderIndex)
+        page = m_renderPages.value(renderIndex);
+
+    if (nullptr == page)
+        return QImage();
+
     if (bSrc) {
         if (m_pixmap.isNull())
             return QImage();
@@ -391,9 +411,9 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
         return image;
     }
 
-    QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QSizeF size = page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
 
-    QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
+    QImage image = page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
 
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
