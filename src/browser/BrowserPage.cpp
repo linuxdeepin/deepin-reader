@@ -595,12 +595,15 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 
     int updateIndex = m_annotations.indexOf(annotation);
 
-    if (m_renderPages.count() >= 4) {
+    if (m_annotations0.count() > updateIndex && m_annotations1.count() > updateIndex &&
+            m_annotations2.count() > updateIndex && m_annotations3.count() > updateIndex) {
         m_annotations0[updateIndex]->updateAnnotation(text, color);
         m_annotations1[updateIndex]->updateAnnotation(text, color);
         m_annotations2[updateIndex]->updateAnnotation(text, color);
         m_annotations3[updateIndex]->updateAnnotation(text, color);
     }
+
+    return true;
 }
 
 /**
