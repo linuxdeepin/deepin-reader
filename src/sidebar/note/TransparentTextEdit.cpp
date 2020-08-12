@@ -49,7 +49,6 @@ void TransparentTextEdit::init()
     this->setFrameStyle(QFrame::NoFrame);
 
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setContextMenuPolicy(Qt::NoContextMenu);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
 }
