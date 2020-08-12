@@ -553,6 +553,13 @@ void BrowserPage::reloadAnnotations()
     m_annotationItems.clear();
 
     m_annotations = m_page->annotations();
+    if (m_renderPages.count() >= 4) {
+        m_annotations0 = m_renderPages[0]->annotations();
+        m_annotations1 = m_renderPages[1]->annotations();
+        m_annotations2 = m_renderPages[2]->annotations();
+        m_annotations3 = m_renderPages[3]->annotations();
+    }
+
     for (int i = 0; i < m_annotations.count(); ++i) {
         m_annotations[i]->page = m_index + 1;
         if (m_annotations[i]->uniqueName().isEmpty()) {
@@ -583,7 +590,17 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 
     renderViewPort(true);
 
-    return  annotation->updateAnnotation(text, color);
+    if (!annotation->updateAnnotation(text, color))
+        return false;
+
+    int updateIndex = m_annotations.indexOf(annotation);
+
+    if (m_renderPages.count() >= 4) {
+        m_annotations0[updateIndex]->updateAnnotation(text, color);
+        m_annotations1[updateIndex]->updateAnnotation(text, color);
+        m_annotations2[updateIndex]->updateAnnotation(text, color);
+        m_annotations3[updateIndex]->updateAnnotation(text, color);
+    }
 }
 
 /**
@@ -632,6 +649,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 
     if (boundarys.count()) {
         loadAnnotations();
+
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);

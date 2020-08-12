@@ -199,6 +199,10 @@ private:
     bool m_hasLoadedAnnotation = false;                 //是否已经加载注释
     QList<BrowserAnnotation *> m_annotationItems;       //一个注释可能对应多个annotationitems
     QList<deepin_reader::Annotation *> m_annotations;   //
+    QList<deepin_reader::Annotation *> m_annotations0;   //渲染page的注释
+    QList<deepin_reader::Annotation *> m_annotations1;   //
+    QList<deepin_reader::Annotation *> m_annotations2;   //
+    QList<deepin_reader::Annotation *> m_annotations3;   //
 
     QList<BrowserLink *> m_linkItems;
 
