@@ -60,8 +60,9 @@ void PrintManager::slotPrintPreview(QPrinter *printer)
 
     QRect rect = painter.viewport();
 
-    QRect paintRect = QRect(left, top, rect.width() - left - right, rect.height() - bottom - top);
-    QRect ImageRect = QRect(0, 0, rect.width() - left - right, rect.height() - bottom - top);
+    QRect paintRect = QRect(static_cast<int>(left), static_cast<int>(top),
+                            static_cast<int>(rect.width() - left - right), static_cast<int>(rect.height() - bottom - top));
+    QRect ImageRect = QRect(0, 0, static_cast<int>(rect.width() - left - right), static_cast<int>(rect.height() - bottom - top));
 
     painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 

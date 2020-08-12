@@ -961,7 +961,7 @@ void SheetBrowser::deform(SheetOperation &operation)
 
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
-            int x = (maxWidth - m_items.at(i)->rect().width()) / 2;
+            int x = static_cast<int>(maxWidth - m_items.at(i)->rect().width()) / 2;
             if (x < 0)
                 x = 0;
 
@@ -981,7 +981,7 @@ void SheetBrowser::deform(SheetOperation &operation)
             if (i % 2 == 1)
                 continue;
 
-            int x = maxWidth / 2 - m_items.at(i)->rect().width();
+            int x = static_cast<int>(maxWidth / 2 - m_items.at(i)->rect().width());
 
             if (Dr::RotateBy0 == operation.rotation) {
                 m_items.at(i)->setPos(x, maxHeight);
@@ -1463,13 +1463,13 @@ int SheetBrowser::currentScrollValueForPage()
         int y = 0;
 
         if (Dr::RotateBy0 == m_sheet->operation().rotation) {
-            y = m_items[i]->y();
+            y = static_cast<int>(m_items[i]->y());
         } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
-            y = m_items[i]->y();
+            y = static_cast<int>(m_items[i]->y());
         } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
-            y = m_items[i]->y() - m_items[i]->boundingRect().height();
+            y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().height());
         } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
-            y = m_items[i]->y() - m_items[i]->boundingRect().width();
+            y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().width());
         }
 
         if (y + m_items[i]->rect().height() >= value) {
@@ -1499,14 +1499,14 @@ void SheetBrowser::setCurrentPage(int page)
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
     } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()) -  m_items.at(page - 1)->boundingRect().height());
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x() -  m_items.at(page - 1)->boundingRect().height()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
     } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()) - m_items.at(page - 1)->boundingRect().width());
-        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()) - m_items.at(page - 1)->boundingRect().height());
+        horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x() - m_items.at(page - 1)->boundingRect().width()));
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y() - m_items.at(page - 1)->boundingRect().height()));
     } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
-        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()) - m_items.at(page - 1)->boundingRect().width());
+        verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y() - m_items.at(page - 1)->boundingRect().width()));
     }
 
     m_bNeedNotifyCurPageChanged = true;

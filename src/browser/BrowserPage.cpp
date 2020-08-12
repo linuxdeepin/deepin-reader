@@ -236,7 +236,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             this->setRotation(270);
     }
 
-    if (!renderLater && m_pixmapScaleFactor != m_scaleFactor) {
+    if (!renderLater && !qFuzzyCompare(m_pixmapScaleFactor, m_scaleFactor)) {
         m_pixmapScaleFactor = m_scaleFactor;
 
         m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
@@ -289,7 +289,8 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             task.item = this;
             task.scaleFactor = m_scaleFactor;
             task.rotation = Dr::RotateBy0;
-            task.renderRect = QRect(rect.x(), rect.y(), rect.width(), rect.height());
+            task.renderRect = QRect(static_cast<int>(rect.x()), static_cast<int>(rect.y()),
+                                    static_cast<int>(rect.width()), static_cast<int>(rect.height()));
             PageRenderThread::appendTask(task);
         }
 
@@ -513,7 +514,7 @@ void BrowserPage::hideWords()
 
     foreach (BrowserWord *word, m_words) {
         word->setSelectable(false);
-        word->setParentItem(0);
+        word->setParentItem(nullptr);
     }
 
     m_wordIsHide = true;
@@ -1094,18 +1095,18 @@ QPoint BrowserPage::translatePoint(const QPoint &point)
     QPoint newpoint = point;
     switch (m_rotation) {
     case Dr::RotateBy90: {
-        newpoint.setX(boundingRect().height() - point.y());
+        newpoint.setX(static_cast<int>(boundingRect().height() - point.y()));
         newpoint.setY(point.x());
         break;
     }
     case Dr::RotateBy180: {
-        newpoint.setX(boundingRect().width() - point.x());
-        newpoint.setY(boundingRect().height() - point.y());
+        newpoint.setX(static_cast<int>(boundingRect().width() - point.x()));
+        newpoint.setY(static_cast<int>(boundingRect().height() - point.y()));
         break;
     }
     case Dr::RotateBy270: {
         newpoint.setX(point.y());
-        newpoint.setY(boundingRect().width() - point.x());
+        newpoint.setY(static_cast<int>(boundingRect().width() - point.x()));
         break;
     }
     default:
