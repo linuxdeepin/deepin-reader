@@ -8,6 +8,7 @@
 DWIDGET_USE_NAMESPACE
 class DocSheet;
 class QVBoxLayout;
+class ImageWidget;
 class FileAttrWidget : public DAbstractDialog
 {
     Q_OBJECT
@@ -33,7 +34,7 @@ private:
 
 private:
     QVBoxLayout *m_pVBoxLayout = nullptr;
-    DLabel  *frameImage = nullptr;
+    ImageWidget *frameImage = nullptr;
 };
 
 #endif  // FILEATTRWIDGET_H

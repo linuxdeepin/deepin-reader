@@ -429,8 +429,8 @@ QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QR
 
 QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 {
-    int horizontalResolution = 72 * width / m_page->pageSize().width();
-    int verticalResolution = 72 * height / m_page->pageSize().height();
+    qreal horizontalResolution = 72.0 * width / m_page->pageSize().width();
+    qreal verticalResolution = 72.0 * height / m_page->pageSize().height();
 
     return render(horizontalResolution, verticalResolution, Dr::RotateBy0, QRect());
 }

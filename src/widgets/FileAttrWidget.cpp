@@ -17,6 +17,35 @@
 #include "MsgHeader.h"
 #include "Utils.h"
 
+class ImageWidget : public DWidget
+{
+public:
+    ImageWidget(DWidget *parent)
+        : DWidget(parent) {
+
+          };
+
+    void setPixmap(const QPixmap &pixmap)
+    {
+        if (!pixmap.isNull()) {
+            m_pixmap = pixmap;
+            update();
+        }
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event)
+    {
+        DWidget::paintEvent(event);
+        QPainter painter(this);
+        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+        painter.drawPixmap((this->width() - m_pixmap.width()) / 2, (this->height() - m_pixmap.height()) / 2, m_pixmap);
+    }
+
+private:
+    QPixmap m_pixmap;
+};
+
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
@@ -39,7 +68,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
         return;
 
     QImage image;
-    bool rl = sheet->getImage(0, image, 94, 113);
+    bool rl = sheet->getImage(0, image, 94, 113, Qt::KeepAspectRatio);
     if (rl) {
         if (frameImage) {
             const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);
@@ -122,7 +151,7 @@ void FileAttrWidget::initCloseBtn()
 
 void FileAttrWidget::initImageLabel()
 {
-    frameImage = new DLabel(this);
+    frameImage = new ImageWidget(this);
     frameImage->setFixedSize(98, 117);
 
     auto vlayout = new QVBoxLayout;
