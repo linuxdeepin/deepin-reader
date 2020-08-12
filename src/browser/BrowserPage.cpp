@@ -656,6 +656,10 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);
+        m_annotations0.append(highLightAnnot);
+        m_annotations1.append(highLightAnnot);
+        m_annotations2.append(highLightAnnot);
+        m_annotations3.append(highLightAnnot);
         foreach (QRectF rect, highLightAnnot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
             m_annotationItems.append(annotationItem);
@@ -880,6 +884,10 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         return false;
 
     m_annotations.removeAll(annota);
+    m_annotations0.removeAll(annota);
+    m_annotations1.removeAll(annota);
+    m_annotations2.removeAll(annota);
+    m_annotations3.removeAll(annota);
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -920,8 +928,12 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
     annot = m_page->addIconAnnotation(rect, text);
 
     if (annot) {
-        m_annotations.append(annot);
         annot->page = m_index + 1;
+        m_annotations.append(annot);
+        m_annotations0.append(annot);
+        m_annotations1.append(annot);
+        m_annotations2.append(annot);
+        m_annotations3.append(annot);
         foreach (QRectF rect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
             m_annotationItems.append(annotationItem);

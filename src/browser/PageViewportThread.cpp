@@ -161,7 +161,6 @@ void PageViewportThread::run()
         m_mutex.unlock();
 
         if (BrowserPage::existInstance(m_curTaskPiece.task.page)) {
-
             QTime time;
             time.start();
             QImage image = m_curTaskPiece.task.page->getImage(m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.rotation, m_curTaskPiece.task.renderRect, m_curTaskPiece.pieceIndex);
