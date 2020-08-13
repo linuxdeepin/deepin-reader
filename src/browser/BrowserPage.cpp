@@ -930,11 +930,9 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
 
     if (annot) {
         annot->page = m_index + 1;
+
         m_annotations.append(annot);
-        m_annotations0.append(annot);
-        m_annotations1.append(annot);
-        m_annotations2.append(annot);
-        m_annotations3.append(annot);
+
         foreach (QRectF rect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
             m_annotationItems.append(annotationItem);
@@ -946,6 +944,32 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
                 m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
                 m_lastClickIconAnnotation->setDrawSelectRect(true);
             }
+        }
+    }
+
+    if (m_renderPages.count() > 3) {
+        Annotation *annot0 = m_renderPages[0]->addIconAnnotation(rect, text);
+        if (annot0) {
+            annot0->page = m_index + 1;
+            m_annotations0.append(annot0);
+        }
+
+        Annotation *annot1 = m_renderPages[1]->addIconAnnotation(rect, text);
+        if (annot1) {
+            annot1->page = m_index + 1;
+            m_annotations1.append(annot1);
+        }
+
+        Annotation *annot2 = m_renderPages[2]->addIconAnnotation(rect, text);
+        if (annot2) {
+            annot2->page = m_index + 1;
+            m_annotations2.append(annot2);
+        }
+
+        Annotation *annot3 = m_renderPages[3]->addIconAnnotation(rect, text);
+        if (annot3) {
+            annot3->page = m_index + 1;
+            m_annotations3.append(annot3);
         }
     }
 
