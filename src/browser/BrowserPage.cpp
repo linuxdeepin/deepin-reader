@@ -513,6 +513,8 @@ void BrowserPage::hideWords()
         return;
 
     foreach (BrowserWord *word, m_words) {
+        if (word->isSelected())
+            continue;
         word->setSelectable(false);
         word->setParentItem(nullptr);
     }
