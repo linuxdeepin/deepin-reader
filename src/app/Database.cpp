@@ -124,7 +124,7 @@ bool Database::readOperation(DocSheet *sheet)
             sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(query.value("mouseShape").toInt());
             sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(query.value("scaleMode").toInt());
             sheet->m_operation.rotation = static_cast<Dr::Rotation>(query.value("rotation").toInt());
-            sheet->m_operation.scaleFactor = query.value("scaleFactor").toDouble();
+            sheet->m_operation.scaleFactor = qBound(0.1, query.value("scaleFactor").toDouble(), 5.0);
             sheet->m_operation.sidebarVisible = query.value("sidebarVisible").toInt();
             sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
             sheet->m_operation.currentPage = query.value("currentPage").toInt();

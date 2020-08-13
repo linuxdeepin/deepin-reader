@@ -72,7 +72,7 @@ public :
 public slots:
     void handleUpdateThumbnail(const int &index);
     void handleUpdatePartThumbnail(const int &index);
-    void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
+    void handleAnntationMsg(const int &, int, deepin_reader::Annotation *anno);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

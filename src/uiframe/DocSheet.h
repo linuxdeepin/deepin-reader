@@ -247,7 +247,7 @@ private slots:
 
     void onBrowserBookmark(int index, bool state);
 
-    void onBrowserOperaAnnotation(int, deepin_reader::Annotation *);
+    void onBrowserOperaAnnotation(int, int, deepin_reader::Annotation *);
 
     void onExtractPassword(const QString &password);
 

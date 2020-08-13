@@ -585,7 +585,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     }
 
     if (highLightAnnot) {
-        emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot);
+        emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
     }
 
     return highLightAnnot;
@@ -717,15 +717,17 @@ QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     bool ret = false;
+    int pageIndex = -1;
     foreach (BrowserPage *item, m_items) {
         if (item->hasAnnotation(annotation)) {
+            pageIndex = annotation->page - 1;
             ret = item->removeAnnotation(annotation);
             break;
         }
     }
 
     if (ret)
-        emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+        emit sigOperaAnnotation(MSG_NOTE_DELETE, pageIndex, annotation);
 
     return ret;
 }
@@ -738,7 +740,7 @@ bool SheetBrowser::removeAllAnnotation()
         }
     }
 
-    emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, nullptr);
+    emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, -1, nullptr);
     return true;
 }
 
@@ -748,7 +750,7 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
         return false;
 
     bool ret{false};
-
+    int pageIndex = annotation->page - 1;
     foreach (BrowserPage *item, m_items) {
         if (item && item->hasAnnotation(annotation)) {
             ret = item->updateAnnotation(annotation, text, color);
@@ -757,9 +759,9 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
 
     if (ret) {
         if (!text.isEmpty())
-            emit sigOperaAnnotation(MSG_NOTE_ADD, annotation);
+            emit sigOperaAnnotation(MSG_NOTE_ADD, pageIndex, annotation);
         else
-            emit sigOperaAnnotation(MSG_NOTE_DELETE, annotation);
+            emit sigOperaAnnotation(MSG_NOTE_DELETE, pageIndex, annotation);
     }
 
     return ret;
@@ -1576,7 +1578,7 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF cli
     }
 
     if (anno && !contents.isEmpty()) {
-        emit sigOperaAnnotation(MSG_NOTE_ADD, anno);
+        emit sigOperaAnnotation(MSG_NOTE_ADD, anno->page - 1, anno);
     }
     return anno;
 }

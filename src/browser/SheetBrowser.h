@@ -156,7 +156,7 @@ signals:
 
     void sigNeedBookMark(int index, bool state);
 
-    void sigOperaAnnotation(int type, deepin_reader::Annotation *annotation);
+    void sigOperaAnnotation(int type, int index, deepin_reader::Annotation *annotation);
 
     void sigPartThumbnailUpdated(int index);
 
