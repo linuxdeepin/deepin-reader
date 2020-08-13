@@ -77,6 +77,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setFrameShape(QFrame::NoFrame);
 
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
     setAttribute(Qt::WA_TranslucentBackground);
 
     setBackgroundBrush(QBrush(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color()));
