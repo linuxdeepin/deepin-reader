@@ -106,21 +106,6 @@ void PageViewportThread::appendTask(RenderViewportTask task)
     thread->appendTaskPiece(taskPiece3);
 }
 
-int PageViewportThread::count(BrowserPage *page)
-{
-//    if (nullptr == m_instance)
-//        return 0;
-
-    int count = 0;
-
-//    foreach (RenderViewportTask task, m_instance->m_tasks) {
-//        if (task.page == page)
-//            count++;
-//    }
-
-    return count;
-}
-
 void PageViewportThread::appendTaskPiece(RenderViewportTaskPiece taskPiece)
 {
     if (m_curTaskPiece.task.page == taskPiece.task.page

@@ -173,10 +173,10 @@ private:
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
     QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染
     QList<deepin_reader::Annotation *> m_annotations;   //
-    QList<deepin_reader::Annotation *> m_annotations0;   //渲染page的注释
-    QList<deepin_reader::Annotation *> m_annotations1;   //
-    QList<deepin_reader::Annotation *> m_annotations2;   //
-    QList<deepin_reader::Annotation *> m_annotations3;   //
+    QList<deepin_reader::Annotation *> m_annotations0;  //渲染page的注释
+    QList<deepin_reader::Annotation *> m_annotations1;  //
+    QList<deepin_reader::Annotation *> m_annotations2;  //
+    QList<deepin_reader::Annotation *> m_annotations3;  //
 
     SheetBrowser *m_parent = nullptr;
 
@@ -189,7 +189,7 @@ private:
     double  m_pixmapScaleFactor   = -1;   //当前图片的缩放
     QRect   m_pixmapRenderedRect;         //当前图片已经加载的rect
 
-    bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
+    bool    m_viewportTryRender = false;  //视图区域绘制尝试过调用
     double  m_viewportScaleFactor = -1;
     QPixmap m_viewportPixmap;       //视图区域的图片
     QRect   m_viewportRenderedRect; //试图区域

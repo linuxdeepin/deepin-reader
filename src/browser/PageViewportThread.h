@@ -48,22 +48,21 @@ class PageViewportThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit PageViewportThread(QObject *parent = nullptr);
-
-    virtual ~PageViewportThread();
-
     static void destroyForever();
 
     static void appendTask(RenderViewportTask task);
 
-    static int  count(BrowserPage *page);        //当前任务数量
+signals:
+    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
 
-    void appendTaskPiece(RenderViewportTaskPiece task);
+private:
+    explicit PageViewportThread(QObject *parent = nullptr);
+
+    virtual ~PageViewportThread();
 
     void run();
 
-signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
+    void appendTaskPiece(RenderViewportTaskPiece task);
 
 private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);

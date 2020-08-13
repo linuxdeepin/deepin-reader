@@ -41,10 +41,6 @@ class PageRenderThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit PageRenderThread(QObject *parent = nullptr);
-
-    virtual ~PageRenderThread();
-
     static bool clearTask(BrowserPage *item);
 
     static void appendTask(RenderPageTask task);
@@ -54,6 +50,11 @@ public:
     static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
     static void destroyForever();
+
+private:
+    explicit PageRenderThread(QObject *parent = nullptr);
+
+    ~PageRenderThread();
 
     void run();
 
