@@ -65,6 +65,18 @@ BrowserPage::~BrowserPage()
     qDeleteAll(m_annotations);
     m_annotations.clear();
 
+    qDeleteAll(m_annotations0);
+    m_annotations0.clear();
+
+    qDeleteAll(m_annotations1);
+    m_annotations1.clear();
+
+    qDeleteAll(m_annotations2);
+    m_annotations2.clear();
+
+    qDeleteAll(m_annotations3);
+    m_annotations3.clear();
+
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
 
@@ -591,11 +603,6 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    renderViewPort(true);
-
-    if (!annotation->updateAnnotation(text, color))
-        return false;
-
     int updateIndex = m_annotations.indexOf(annotation);
 
     if (m_annotations0.count() > updateIndex && m_annotations1.count() > updateIndex &&
@@ -605,6 +612,11 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
         m_annotations2[updateIndex]->updateAnnotation(text, color);
         m_annotations3[updateIndex]->updateAnnotation(text, color);
     }
+
+    if (!annotation->updateAnnotation(text, color))
+        return false;
+
+    renderViewPort(true);
 
     return true;
 }
@@ -659,10 +671,24 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);
-        m_annotations0.append(highLightAnnot);
-        m_annotations1.append(highLightAnnot);
-        m_annotations2.append(highLightAnnot);
-        m_annotations3.append(highLightAnnot);
+
+        if (m_renderPages.count() == 4) {
+            Annotation *highLightAnnotOther{nullptr};
+            for (int index = 0; index < 4; index++) {
+                highLightAnnotOther = m_renderPages[index]->addHighlightAnnotation(boundarys, text, color);
+                if (0 == index) {
+                    m_annotations0.append(highLightAnnotOther);
+                } else if (1 == index) {
+                    m_annotations1.append(highLightAnnotOther);
+                } else if (2 == index) {
+                    m_annotations2.append(highLightAnnotOther);
+                } else {
+                    m_annotations3.append(highLightAnnotOther);
+                }
+                highLightAnnotOther = nullptr;
+            }
+        }
+
         foreach (QRectF rect, highLightAnnot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
             m_annotationItems.append(annotationItem);
@@ -768,10 +794,21 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
     if (nullptr == m_page || nullptr == m_lastClickIconAnnotation)
         return false;
 
+
     Annotation *annot{nullptr};
+    QString containtStr = m_lastClickIconAnnotation->annotationText();
+
+    int annotIndex = m_annotations.indexOf(m_lastClickIconAnnotation->annotation());
 
     m_annotationItems.removeAll(m_lastClickIconAnnotation);
     annot = m_page->moveIconAnnotation(m_lastClickIconAnnotation->annotation(), moveRect);
+
+    if (m_renderPages.count() == 4) {
+        m_renderPages[0]->moveIconAnnotation(m_annotations0.at(annotIndex), moveRect);
+        m_renderPages[1]->moveIconAnnotation(m_annotations1.at(annotIndex), moveRect);
+        m_renderPages[2]->moveIconAnnotation(m_annotations2.at(annotIndex), moveRect);
+        m_renderPages[3]->moveIconAnnotation(m_annotations3.at(annotIndex), moveRect);
+    }
 
     if (annot && m_annotations.contains(annot)) {
         delete m_lastClickIconAnnotation;
@@ -886,11 +923,20 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     if (!m_annotations.contains(annota))
         return false;
 
+    int annotIndex = m_annotations.indexOf(annota);
+
     m_annotations.removeAll(annota);
-    m_annotations0.removeAll(annota);
-    m_annotations1.removeAll(annota);
-    m_annotations2.removeAll(annota);
-    m_annotations3.removeAll(annota);
+
+    if (m_renderPages.count() == 4) {
+        m_renderPages[0]->removeAnnotation(m_annotations0.at(annotIndex));
+        m_annotations0.removeAt(annotIndex);
+        m_renderPages[1]->removeAnnotation(m_annotations1.at(annotIndex));
+        m_annotations1.removeAt(annotIndex);
+        m_renderPages[2]->removeAnnotation(m_annotations2.at(annotIndex));
+        m_annotations2.removeAt(annotIndex);
+        m_renderPages[3]->removeAnnotation(m_annotations3.at(annotIndex));
+        m_annotations3.removeAt(annotIndex);
+    }
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -949,29 +995,20 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         }
     }
 
-    if (m_renderPages.count() > 3) {
-        Annotation *annot0 = m_renderPages[0]->addIconAnnotation(rect, text);
-        if (annot0) {
-            annot0->page = m_index + 1;
-            m_annotations0.append(annot0);
-        }
-
-        Annotation *annot1 = m_renderPages[1]->addIconAnnotation(rect, text);
-        if (annot1) {
-            annot1->page = m_index + 1;
-            m_annotations1.append(annot1);
-        }
-
-        Annotation *annot2 = m_renderPages[2]->addIconAnnotation(rect, text);
-        if (annot2) {
-            annot2->page = m_index + 1;
-            m_annotations2.append(annot2);
-        }
-
-        Annotation *annot3 = m_renderPages[3]->addIconAnnotation(rect, text);
-        if (annot3) {
-            annot3->page = m_index + 1;
-            m_annotations3.append(annot3);
+    if (m_renderPages.count() == 4) {
+        Annotation *annotOther{nullptr};
+        for (int index = 0; index < 4; index++) {
+            annotOther = m_renderPages[index]->addIconAnnotation(rect, text);
+            if (0 == index) {
+                m_annotations0.append(annotOther);
+            } else if (1 == index) {
+                m_annotations1.append(annotOther);
+            } else if (2 == index) {
+                m_annotations2.append(annotOther);
+            } else {
+                m_annotations3.append(annotOther);
+            }
+            annotOther = nullptr;
         }
     }
 

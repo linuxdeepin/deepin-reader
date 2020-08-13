@@ -73,7 +73,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setMouseTracking(true);
 
-    setScene(new QGraphicsScene());
+    setScene(new QGraphicsScene(this));
 
     setFrameShape(QFrame::NoFrame);
 
@@ -95,6 +95,13 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
+
+//    setAutoFillBackground(true);
+//    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+//        auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+//        plt.setColor(Dtk::Gui::DPalette::Background, /*plt.color(Dtk::Gui::DPalette::TextWarning)*/QColor(Qt::red));
+//        setPalette(plt);
+//    });
 }
 
 SheetBrowser::~SheetBrowser()
