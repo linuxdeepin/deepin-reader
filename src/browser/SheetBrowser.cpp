@@ -79,8 +79,6 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    setStyleSheet("QGraphicsView{background-color:white}");     //由于DTK bug不响应WA_TranslucentBackground参数写死了颜色，这里加样式表让dtk style失效
-
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
@@ -96,12 +94,12 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 
-//    setAutoFillBackground(true);
-//    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-//        auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-//        plt.setColor(Dtk::Gui::DPalette::Background, /*plt.color(Dtk::Gui::DPalette::TextWarning)*/QColor(Qt::red));
-//        setPalette(plt);
-//    });
+    setAutoFillBackground(true);
+    setBackgroundBrush(QBrush(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color()));
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        setBackgroundBrush(QBrush(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color()));
+    });
 }
 
 SheetBrowser::~SheetBrowser()
