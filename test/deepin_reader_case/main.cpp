@@ -1,8 +1,13 @@
-#include "tst_case1.h"
+#include "tst_mainwindow.h"
+#include "tst_siderbar.h"
 #include "Application.h"
 
 #include <gtest/gtest.h>
+#include <DApplicationSettings>
+#include <DLog>
 #include <QDebug>
+
+DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {

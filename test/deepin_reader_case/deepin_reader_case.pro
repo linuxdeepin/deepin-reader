@@ -45,7 +45,6 @@ SOURCES += \
     $$SRCPWD/uiframe/DocSheet.cpp
 
 HEADERS +=\
-    tst_case1.h\
     $$SRCPWD/Application.h\
     $$SRCPWD/MainWindow.h \
     $$SRCPWD/uiframe/TitleWidget.h \
@@ -54,7 +53,9 @@ HEADERS +=\
     $$SRCPWD/uiframe/CentralNavPage.h \
     $$SRCPWD/uiframe/CentralDocPage.h \
     $$SRCPWD/uiframe/DocTabBar.h \
-    $$SRCPWD/uiframe/DocSheet.h
+    $$SRCPWD/uiframe/DocSheet.h \
+    tst_siderbar.h \
+    tst_mainwindow.h
 
 RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc
