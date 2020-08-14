@@ -248,6 +248,9 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             this->setRotation(270);
     }
 
+    if (!m_wordIsHide)
+        scaleWords(false);
+
     if (!renderLater && !qFuzzyCompare(m_pixmapScaleFactor, m_scaleFactor)) {
         m_pixmapScaleFactor = m_scaleFactor;
 
@@ -400,6 +403,8 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
         m_words.append(word);
         m_wordIsHide = false;
     }
+
+    scaleWords(true);
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
@@ -540,8 +545,10 @@ void BrowserPage::hideWords()
 
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected())
-            continue;
+            return;
+    }
 
+    foreach (BrowserWord *word, m_words) {
         word->setSelectable(false);
         word->setParentItem(nullptr);
     }
@@ -551,6 +558,9 @@ void BrowserPage::hideWords()
 
 void BrowserPage::scaleWords(bool force)
 {
+    if (m_words.count() <= 0)
+        return;
+
     if (m_wordIsHide) {
         foreach (BrowserWord *word, m_words) {
             word->setSelectable(m_wordSelectable);
@@ -559,6 +569,8 @@ void BrowserPage::scaleWords(bool force)
     }
 
     m_wordIsHide = false;
+
+    prepareGeometryChange();
 
     if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;

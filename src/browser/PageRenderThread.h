@@ -47,7 +47,7 @@ class PageRenderThread : public QThread
 {
     Q_OBJECT
 public:
-    static bool clearTask(BrowserPage *item);
+    static bool clearTask(BrowserPage *item, int type = RenderPageTask::Image);
 
     static void appendTask(RenderPageTask task);
 

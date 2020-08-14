@@ -48,7 +48,7 @@ PageRenderThread::~PageRenderThread()
     wait();
 }
 
-bool PageRenderThread::clearTask(BrowserPage *item)
+bool PageRenderThread::clearTask(BrowserPage *item, int type)
 {
     if (nullptr == item)
         return true;
@@ -64,7 +64,7 @@ bool PageRenderThread::clearTask(BrowserPage *item)
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
-            if (instance->m_tasks[i].item == item) {
+            if (instance->m_tasks[i].item == item && instance->m_tasks[i].type == type) {
                 instance->m_tasks.remove(i);
                 exist = true;
                 break;
