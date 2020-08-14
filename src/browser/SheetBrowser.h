@@ -25,6 +25,11 @@
 #include <QLabel>
 #include <QMutex>
 
+#include <QGestureEvent>
+#include <QPanGesture>
+#include <QPinchGesture>
+#include <QSwipeGesture>
+
 #include "document/Model.h"
 #include "Global.h"
 
@@ -180,6 +185,16 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
 
     void wheelEvent(QWheelEvent *event) override;
+
+    bool event(QEvent *event) override;
+
+    bool gestureEvent(QGestureEvent *event);
+
+    void panTriggered(QPanGesture *);
+
+    void pinchTriggered(QPinchGesture *);
+
+    void swipeTriggered(QSwipeGesture *);
 
     BrowserPage *mouseClickInPage(QPointF &);
 

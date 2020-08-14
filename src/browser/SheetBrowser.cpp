@@ -83,6 +83,10 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setBackgroundBrush(QBrush(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color()));
 
+    grabGesture(Qt::PanGesture);//移动
+    grabGesture(Qt::PinchGesture);//捏合缩放
+    grabGesture(Qt::SwipeGesture);//滑动
+
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
@@ -874,6 +878,99 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
     QGraphicsView::wheelEvent(event);
 }
 
+bool SheetBrowser::event(QEvent *event)
+{
+    if (event->type() == QEvent::Gesture)
+        return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
+
+    return QGraphicsView::event(event);
+}
+
+bool SheetBrowser::gestureEvent(QGestureEvent *event)
+{
+//    if (QGesture *pan = event->gesture(Qt::PanGesture))
+//        panTriggered(reinterpret_cast<QPanGesture *>(pan));
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+        pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
+    if (QGesture *pinch = event->gesture(Qt::SwipeGesture))
+        swipeTriggered(reinterpret_cast<QSwipeGesture *>(pinch));
+    return true;
+}
+
+/**
+ * @brief SheetBrowser::panTriggered
+ * 触摸屏移动
+ * @param gesture
+ */
+void SheetBrowser::panTriggered(QPanGesture *gesture)
+{
+#ifndef QT_NO_CURSOR
+    switch (gesture->state()) {
+    case Qt::GestureStarted:
+    case Qt::GestureUpdated:
+        setCursor(Qt::SizeAllCursor);
+        break;
+    default:
+        setCursor(Qt::ArrowCursor);
+    }
+#endif
+    QPointF delta = gesture->delta();
+
+    this->horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() + delta.x()));
+    this->verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() + delta.y()));
+}
+
+/**
+ * @brief SheetBrowser::pinchTriggered
+ * 触摸屏缩放
+ */
+void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
+{
+    static qreal currentStepScaleFactor = 1.0;
+    qreal nowStepScaleFactor = 1.0;
+
+    QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
+    if (changeFlags & QPinchGesture::RotationAngleChanged) {
+        const qreal value = gesture->property("rotationAngle").toReal();
+        const qreal lastValue = gesture->property("lastRotationAngle").toReal();
+        const qreal rotationAngleDelta = value - lastValue;
+        /* if (gesture->state() == Qt::GestureFinished)*/ {
+            qInfo() << "  lastValue: " << lastValue;
+            if (lastValue > 0) {
+                m_sheet->rotateRight();
+            } else {
+                m_sheet->rotateLeft();
+            }
+        }
+    } else if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+        nowStepScaleFactor = gesture->totalScaleFactor();
+//        qInfo() << "nowStepScaleFactor:" << nowStepScaleFactor;
+        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor)) {
+            if (currentStepScaleFactor < nowStepScaleFactor) {
+                m_sheet->zoomin();
+            } else {
+                m_sheet->zoomout();
+            }
+
+            currentStepScaleFactor = nowStepScaleFactor;
+        }
+    }
+//    if (gesture->state() == Qt::GestureFinished) {
+    //    }
+}
+
+/**
+ * @brief SheetBrowser::swipeTriggered
+ * 触摸屏滑动
+ * @param gesture
+ */
+void SheetBrowser::swipeTriggered(QSwipeGesture *gesture)
+{
+    QSwipeGesture::SwipeDirection swipeDirection = gesture->verticalDirection();
+
+    qInfo() << "      swipeDirection    " << swipeDirection;
+}
+
 void SheetBrowser::deform(SheetOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
@@ -1105,7 +1202,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnot = clickAnno;
                 return ;
             }
-
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
 
