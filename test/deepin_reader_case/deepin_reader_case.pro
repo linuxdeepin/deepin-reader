@@ -13,6 +13,9 @@ CONFIG += c++11 link_pkgconfig
 PKGCONFIG += ddjvuapi dtkwidget
 
 SRCPWD=$$PWD/../../src    #用于被单元测试方便的复用
+#QMAKE_CXXFLAGS += --coverage #告诉g++我们要做coverage
+#LIBS += -lgcov
+
 3RDPARTTPATH = $$SRCPWD/../3rdparty
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/include
