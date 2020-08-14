@@ -49,6 +49,7 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     deepin_reader::Word getWord();
+
 private:
     deepin_reader::Word m_word;
 

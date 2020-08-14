@@ -392,6 +392,16 @@ void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const 
     update();
 }
 
+void BrowserPage::handleWordLoaded(const QList<Word> &words)
+{
+    for (int i = 0; i < words.count(); ++i) {
+        BrowserWord *word = new BrowserWord(this, words[i]);
+        word->setSelectable(m_wordSelectable);
+        m_words.append(word);
+        m_wordIsHide = false;
+    }
+}
+
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
 {
     deepin_reader::Page *page = m_page;
@@ -461,6 +471,13 @@ QImage BrowserPage::getCurImagePoint(QPoint point)
     return image;
 }
 
+QList<Word> BrowserPage::getWords()
+{
+    if (nullptr == m_page)
+        return QList<Word>();
+    return m_page->words(Dr::RotateBy0);
+}
+
 bool BrowserPage::existInstance(BrowserPage *item)
 {
     return items.contains(item);
@@ -508,13 +525,10 @@ void BrowserPage::loadLinks()
 void BrowserPage::loadWords()
 {
     if (!m_wordHasRendered) {
-        QList<Word> words = m_page->words(Dr::RotateBy0);
-        for (int i = 0; i < words.count(); ++i) {
-            BrowserWord *word = new BrowserWord(this, words[i]);
-            word->setSelectable(m_wordSelectable);
-            m_words.append(word);
-            m_wordIsHide = false;
-        }
+        RenderPageTask task;
+        task.type = RenderPageTask::word;
+        task.item = this;
+        PageRenderThread::appendTask(task);
         m_wordHasRendered = true;
     }
 }
@@ -527,6 +541,7 @@ void BrowserPage::hideWords()
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected())
             continue;
+
         word->setSelectable(false);
         word->setParentItem(nullptr);
     }

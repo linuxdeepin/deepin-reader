@@ -26,10 +26,16 @@
 #include <QStack>
 #include <QImage>
 #include "Global.h"
+#include "Model.h"
 
 class SheetBrowser;
 class BrowserPage;
 struct RenderPageTask {
+    enum RenderPageTaskType {
+        Image = 1,
+        word = 2
+    };
+    int type = RenderPageTaskType::Image;
     SheetBrowser *view = nullptr;
     BrowserPage *item = nullptr;
     double scaleFactor = 1.0;
@@ -59,10 +65,14 @@ private:
     void run();
 
 signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+    void sigImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+
+    void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+    void onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+
+    void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private:
     RenderPageTask m_curTask;

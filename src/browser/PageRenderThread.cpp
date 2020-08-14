@@ -38,7 +38,8 @@ QList<PageRenderThread *> PageRenderThread::instances;
 bool PageRenderThread::quitForever = false;
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
-    connect(this, SIGNAL(sigTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QImage, double, QRect)), this, SLOT(onImageTaskFinished(BrowserPage *, QImage, double, QRect)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), this, SLOT(onWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), Qt::QueuedConnection);
 }
 
 PageRenderThread::~PageRenderThread()
@@ -164,13 +165,15 @@ void PageRenderThread::run()
         if (!BrowserPage::existInstance(m_curTask.item))
             continue;
 
-        QTime time;
-        time.start();
-        QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
-        qDebug() << "thread:id" << QThread::currentThreadId() << " Render:" << time.elapsed() << " Rect:" << m_curTask.renderRect;
-
-        if (!image.isNull())
-            emit sigTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.renderRect);
+        if (RenderPageTask::Image == m_curTask.type) {
+            QImage image = m_curTask.item->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.renderRect);
+            if (!image.isNull())
+                emit sigImageTaskFinished(m_curTask.item, image, m_curTask.scaleFactor, m_curTask.renderRect);
+        } else if (RenderPageTask::word == m_curTask.type) {
+            QList<Word> words = m_curTask.item->getWords();
+            if (words.count() > 0)
+                emit sigWordTaskFinished(m_curTask.item, words);
+        }
 
         m_curTask = RenderPageTask();
     }
@@ -190,10 +193,17 @@ void PageRenderThread::destroyForever()
     }
 }
 
-void PageRenderThread::onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect)
+void PageRenderThread::onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect)
 {
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(scaleFactor, image, rect);
+    }
+}
+
+void PageRenderThread::onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words)
+{
+    if (BrowserPage::existInstance(item)) {
+        item->handleWordLoaded(words);
     }
 }
 
@@ -203,6 +213,7 @@ PageRenderThread *PageRenderThread::instance(int itemIndex)
         return nullptr;
 
     if (instances.count() <= 0) {
+        qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
         for (int i = 0; i < 4; ++i) {
             PageRenderThread *instance = new PageRenderThread;
             instances.append(instance);

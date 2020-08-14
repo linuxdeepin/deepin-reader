@@ -632,7 +632,6 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
                         spaceWord.boundingBox = QRectF(word.boundingBox.x() + word.boundingBox.width(), word.boundingBox.y(), nextBox->charBoundingBox(0).x() - word.boundingBox.x() - word.boundingBox.width(), word.boundingBox.height());
                         words.append(spaceWord);
                     }
-
                 }
             }
         }

@@ -77,6 +77,8 @@ public:
 
     QImage getCurImagePoint(QPoint point);
 
+    QList<Word> getWords();
+
     void setItemIndex(int itemIndex);
 
     int itemIndex();
@@ -156,6 +158,8 @@ private:
     void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
 
     void handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
+
+    void handleWordLoaded(const QList<Word> &words);
 
     void reloadAnnotations();
 
