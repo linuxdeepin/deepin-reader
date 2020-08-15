@@ -194,8 +194,6 @@ protected:
 
     void pinchTriggered(QPinchGesture *);
 
-    void swipeTriggered(QSwipeGesture *);
-
     BrowserPage *mouseClickInPage(QPointF &);
 
     BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
@@ -280,6 +278,7 @@ private:
     int m_currentPage = 0;
     int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
+    bool m_bTouch{false};
 };
 
 #endif // SheetBrowser_H

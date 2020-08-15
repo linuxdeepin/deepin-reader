@@ -83,6 +83,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setBackgroundBrush(QBrush(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color()));
 
+    setAttribute(Qt::WA_AcceptTouchEvents);
+
     grabGesture(Qt::PanGesture);//移动
     grabGesture(Qt::PinchGesture);//捏合缩放
     grabGesture(Qt::SwipeGesture);//滑动
@@ -880,6 +882,8 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
 
 bool SheetBrowser::event(QEvent *event)
 {
+    if (event->type() == QEvent::TouchBegin)
+        m_bTouch = true;
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
@@ -888,12 +892,8 @@ bool SheetBrowser::event(QEvent *event)
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
-//    if (QGesture *pan = event->gesture(Qt::PanGesture))
-//        panTriggered(reinterpret_cast<QPanGesture *>(pan));
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
-    if (QGesture *pinch = event->gesture(Qt::SwipeGesture))
-        swipeTriggered(reinterpret_cast<QSwipeGesture *>(pinch));
     return true;
 }
 
@@ -922,53 +922,54 @@ void SheetBrowser::panTriggered(QPanGesture *gesture)
 
 /**
  * @brief SheetBrowser::pinchTriggered
- * 触摸屏缩放
+ * 触摸屏缩放和旋转
  */
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
-    static qreal currentStepScaleFactor = 1.0;
-    qreal nowStepScaleFactor = 1.0;
+    static qreal currentStepScaleFactor = 0.0;
+//    static qreal rotationAngleDelta = 0.0;
+//    qInfo() << " ";
+//    qInfo() << " ";
+//    qInfo() << "======================================================================";
+//    qInfo() << "    changeFlags: " << gesture->changeFlags()  << "        scaleFactor: " <<     gesture->scaleFactor() << "    rotationAngle:" << gesture->rotationAngle();
 
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
-        const qreal value = gesture->property("rotationAngle").toReal();
-        const qreal lastValue = gesture->property("lastRotationAngle").toReal();
-        const qreal rotationAngleDelta = value - lastValue;
-        /* if (gesture->state() == Qt::GestureFinished)*/ {
-            qInfo() << "  lastValue: " << lastValue;
-            if (lastValue > 0) {
-                m_sheet->rotateRight();
-            } else {
+//        const qreal value = gesture->property("rotationAngle").toReal();
+//        const qreal lastValue = gesture->property("lastRotationAngle").toReal();
+//        if (!qFuzzyCompare(lastValue, value))
+//            rotationAngleDelta = (lastValue - value) * 100.0;
+
+        if (m_bTouch && qAbs(gesture->rotationAngle()) > 20.0 /*&& qAbs(rotationAngleDelta) > 15.0*/) {
+            if (gesture->rotationAngle() < 0.0) {
                 m_sheet->rotateLeft();
+            } else {
+                m_sheet->rotateRight();
             }
+            m_bTouch = false;
+            return;
         }
-    } else if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+    }
+
+    qreal nowStepScaleFactor = 0.0;
+    if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         nowStepScaleFactor = gesture->totalScaleFactor();
-//        qInfo() << "nowStepScaleFactor:" << nowStepScaleFactor;
-        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor)) {
+//        qInfo() << "currentStepScaleFactor:" << currentStepScaleFactor ;
+//        qInfo() << "nowStepScaleFactor:" <<  nowStepScaleFactor;
+//        qInfo() << "qAbs(currentStepScaleFactor - nowStepScaleFactor)*100:" << qAbs(currentStepScaleFactor - nowStepScaleFactor) * 100;
+//        qInfo() << "******************************************************";
+        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor) && qAbs(currentStepScaleFactor - nowStepScaleFactor) * 100 > 30.0) {
             if (currentStepScaleFactor < nowStepScaleFactor) {
                 m_sheet->zoomin();
             } else {
                 m_sheet->zoomout();
             }
-
+            m_bTouch = false;
             currentStepScaleFactor = nowStepScaleFactor;
+            return;
         }
     }
-//    if (gesture->state() == Qt::GestureFinished) {
-    //    }
-}
-
-/**
- * @brief SheetBrowser::swipeTriggered
- * 触摸屏滑动
- * @param gesture
- */
-void SheetBrowser::swipeTriggered(QSwipeGesture *gesture)
-{
-    QSwipeGesture::SwipeDirection swipeDirection = gesture->verticalDirection();
-
-    qInfo() << "      swipeDirection    " << swipeDirection;
+    //gesture->state() == Qt::GestureFinished
 }
 
 void SheetBrowser::deform(SheetOperation &operation)
