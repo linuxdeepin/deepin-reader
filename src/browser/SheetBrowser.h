@@ -29,6 +29,7 @@
 #include <QPanGesture>
 #include <QPinchGesture>
 #include <QSwipeGesture>
+#include <QTapGesture>
 
 #include "document/Model.h"
 #include "Global.h"
@@ -172,6 +173,15 @@ signals:
     void sigAddHighLightAnnot(BrowserPage *, QString, QColor);
 
 protected:
+    enum GestureAction {
+        GA_null,
+        GA_touch,
+        GA_click,
+        GA_slide,
+        GA_select,
+        GA_pinch
+    };
+
     void showEvent(QShowEvent *event) override;
 
     void resizeEvent(QResizeEvent *event) override;
@@ -193,6 +203,10 @@ protected:
     void panTriggered(QPanGesture *);
 
     void pinchTriggered(QPinchGesture *);
+
+    void tapGestureTriggered(QTapGesture *);
+
+//    void tapAndHoldGestureTriggered(QTapAndHoldGesture *);
 
     BrowserPage *mouseClickInPage(QPointF &);
 
@@ -279,6 +293,11 @@ private:
     int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
     bool m_bTouch{false};
+    GestureAction m_gestureAction = GA_null;
+    ulong m_touchBegin = 0;
+    ulong m_touchStop = 0;
+    QPoint m_lastTouchBeginPos;
+    Qt::GestureState m_tapStatus = Qt::NoGesture;
 };
 
 #endif // SheetBrowser_H

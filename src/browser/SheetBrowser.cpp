@@ -59,6 +59,7 @@
 #include <QTemporaryFile>
 #include <QStandardPaths>
 #include <QUuid>
+#include <QScroller>
 
 const int ICONANNOTE_WIDTH = 24;
 
@@ -86,8 +87,12 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     setAttribute(Qt::WA_AcceptTouchEvents);
 
     grabGesture(Qt::PanGesture);//移动
+
     grabGesture(Qt::PinchGesture);//捏合缩放
-    grabGesture(Qt::SwipeGesture);//滑动
+
+    grabGesture(Qt::TapGesture);
+
+    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
@@ -882,16 +887,62 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
 
 bool SheetBrowser::event(QEvent *event)
 {
-    if (event->type() == QEvent::TouchBegin)
-        m_bTouch = true;
+//    if (event->type() == QEvent::TouchBegin)
+//        m_bTouch = true;
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
+
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+
+//    qDebug() << "    000  mouseEvent  type:" << mouseEvent->type();
+    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        qDebug() << "MouseButtonPress action is over" << m_gestureAction;
+        m_touchStop = mouseEvent->timestamp();
+    }
+
+    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        m_touchStop = mouseEvent->timestamp();
+//        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
+//        m_lastTouchBeginPos = mouseEvent->pos();
+        qInfo() << "  MouseMove  m_gestureAction:" << m_gestureAction <<  "      m_touchBegin :" << m_touchBegin;
+        //滑动界面
+        if (m_gestureAction == GA_slide) {
+            qDebug() << " slide  widget... ";
+//            int  nowValue =  this->verticalScrollBar()->value();
+//            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
+        }
+
+        if (m_gestureAction != GA_null) {
+//            selectionCleared();
+            return true;
+        }
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        qDebug() << "MouseButtonRelease action is over" << m_gestureAction;
+        m_gestureAction = GA_null;
+    }
+
+    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        m_touchBegin = touchEvent->timestamp();
+        m_gestureAction = GA_touch;
+        m_bTouch = true;
+        qInfo() <<  "      m_touchBegin :" << m_touchBegin;
+    default:
+        break;
+    }
 
     return QGraphicsView::event(event);
 }
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
+    //    if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
+    //        tapAndHoldGestureTriggered(static_cast<QTapAndHoldGesture *>(tapAndHold));
+    if (QGesture *tap = event->gesture(Qt::TapGesture))
+        tapGestureTriggered(static_cast<QTapGesture *>(tap));
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
     return true;
@@ -969,8 +1020,32 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
             return;
         }
     }
-    //gesture->state() == Qt::GestureFinished
 }
+
+void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
+{
+//    qInfo() << "  2222222222222    tapGestureTriggered   ... " ;
+    m_tapStatus = tapGesture->state();
+    //滑动事件
+    if (m_tapStatus == Qt::GestureCanceled) {
+        //根据时间长短区分滑动翻滚和滑动选择
+        if (m_touchStop - m_touchBegin < 300) {
+            m_gestureAction = GA_slide;
+        } else {
+            m_gestureAction = GA_null;
+        }
+        qInfo() << " tapGestureTriggered  m_touchStop - m_touchBegin:" << (m_touchStop - m_touchBegin) << "      m_gestureAction:" << m_gestureAction;
+    } else if (m_tapStatus == Qt::GestureFinished) {
+        m_gestureAction = GA_click;
+        qInfo() << " tapGestureTriggered  GestureFinished " << m_tapStatus;
+    }
+}
+
+//void SheetBrowser::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
+//{
+//    qDebug() << "  11111111111111     " << "tapAndHoldGestureTriggered" << tapAndHold;
+//    m_tapStatus = tapAndHold->state();
+//}
 
 void SheetBrowser::deform(SheetOperation &operation)
 {
