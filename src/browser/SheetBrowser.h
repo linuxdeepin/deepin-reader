@@ -200,13 +200,7 @@ protected:
 
     bool gestureEvent(QGestureEvent *event);
 
-    void panTriggered(QPanGesture *);
-
     void pinchTriggered(QPinchGesture *);
-
-    void tapGestureTriggered(QTapGesture *);
-
-//    void tapAndHoldGestureTriggered(QTapAndHoldGesture *);
 
     BrowserPage *mouseClickInPage(QPointF &);
 

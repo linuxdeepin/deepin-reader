@@ -887,16 +887,12 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
 
 bool SheetBrowser::event(QEvent *event)
 {
-//    if (event->type() == QEvent::TouchBegin)
-//        m_bTouch = true;
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
-//    qDebug() << "    000  mouseEvent  type:" << mouseEvent->type();
     if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        qDebug() << "MouseButtonPress action is over" << m_gestureAction;
         m_touchStop = mouseEvent->timestamp();
     }
 
@@ -904,22 +900,18 @@ bool SheetBrowser::event(QEvent *event)
         m_touchStop = mouseEvent->timestamp();
 //        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
 //        m_lastTouchBeginPos = mouseEvent->pos();
-        qInfo() << "  MouseMove  m_gestureAction:" << m_gestureAction <<  "      m_touchBegin :" << m_touchBegin;
         //滑动界面
         if (m_gestureAction == GA_slide) {
-            qDebug() << " slide  widget... ";
 //            int  nowValue =  this->verticalScrollBar()->value();
 //            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
         }
 
         if (m_gestureAction != GA_null) {
-//            selectionCleared();
             return true;
         }
     }
 
     if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        qDebug() << "MouseButtonRelease action is over" << m_gestureAction;
         m_gestureAction = GA_null;
     }
 
@@ -929,7 +921,6 @@ bool SheetBrowser::event(QEvent *event)
         m_touchBegin = touchEvent->timestamp();
         m_gestureAction = GA_touch;
         m_bTouch = true;
-        qInfo() <<  "      m_touchBegin :" << m_touchBegin;
     default:
         break;
     }
@@ -939,36 +930,9 @@ bool SheetBrowser::event(QEvent *event)
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
-    //    if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
-    //        tapAndHoldGestureTriggered(static_cast<QTapAndHoldGesture *>(tapAndHold));
-    if (QGesture *tap = event->gesture(Qt::TapGesture))
-        tapGestureTriggered(static_cast<QTapGesture *>(tap));
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
     return true;
-}
-
-/**
- * @brief SheetBrowser::panTriggered
- * 触摸屏移动
- * @param gesture
- */
-void SheetBrowser::panTriggered(QPanGesture *gesture)
-{
-#ifndef QT_NO_CURSOR
-    switch (gesture->state()) {
-    case Qt::GestureStarted:
-    case Qt::GestureUpdated:
-        setCursor(Qt::SizeAllCursor);
-        break;
-    default:
-        setCursor(Qt::ArrowCursor);
-    }
-#endif
-    QPointF delta = gesture->delta();
-
-    this->horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() + delta.x()));
-    this->verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() + delta.y()));
 }
 
 /**
@@ -978,20 +942,10 @@ void SheetBrowser::panTriggered(QPanGesture *gesture)
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
     static qreal currentStepScaleFactor = 0.0;
-//    static qreal rotationAngleDelta = 0.0;
-//    qInfo() << " ";
-//    qInfo() << " ";
-//    qInfo() << "======================================================================";
-//    qInfo() << "    changeFlags: " << gesture->changeFlags()  << "        scaleFactor: " <<     gesture->scaleFactor() << "    rotationAngle:" << gesture->rotationAngle();
 
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
-//        const qreal value = gesture->property("rotationAngle").toReal();
-//        const qreal lastValue = gesture->property("lastRotationAngle").toReal();
-//        if (!qFuzzyCompare(lastValue, value))
-//            rotationAngleDelta = (lastValue - value) * 100.0;
-
-        if (m_bTouch && qAbs(gesture->rotationAngle()) > 20.0 /*&& qAbs(rotationAngleDelta) > 15.0*/) {
+        if (m_bTouch && qAbs(gesture->rotationAngle()) > 20.0) {
             if (gesture->rotationAngle() < 0.0) {
                 m_sheet->rotateLeft();
             } else {
@@ -1005,10 +959,6 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     qreal nowStepScaleFactor = 0.0;
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         nowStepScaleFactor = gesture->totalScaleFactor();
-//        qInfo() << "currentStepScaleFactor:" << currentStepScaleFactor ;
-//        qInfo() << "nowStepScaleFactor:" <<  nowStepScaleFactor;
-//        qInfo() << "qAbs(currentStepScaleFactor - nowStepScaleFactor)*100:" << qAbs(currentStepScaleFactor - nowStepScaleFactor) * 100;
-//        qInfo() << "******************************************************";
         if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor) && qAbs(currentStepScaleFactor - nowStepScaleFactor) * 100 > 30.0) {
             if (currentStepScaleFactor < nowStepScaleFactor) {
                 m_sheet->zoomin();
@@ -1021,31 +971,6 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
         }
     }
 }
-
-void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
-{
-//    qInfo() << "  2222222222222    tapGestureTriggered   ... " ;
-    m_tapStatus = tapGesture->state();
-    //滑动事件
-    if (m_tapStatus == Qt::GestureCanceled) {
-        //根据时间长短区分滑动翻滚和滑动选择
-        if (m_touchStop - m_touchBegin < 300) {
-            m_gestureAction = GA_slide;
-        } else {
-            m_gestureAction = GA_null;
-        }
-        qInfo() << " tapGestureTriggered  m_touchStop - m_touchBegin:" << (m_touchStop - m_touchBegin) << "      m_gestureAction:" << m_gestureAction;
-    } else if (m_tapStatus == Qt::GestureFinished) {
-        m_gestureAction = GA_click;
-        qInfo() << " tapGestureTriggered  GestureFinished " << m_tapStatus;
-    }
-}
-
-//void SheetBrowser::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
-//{
-//    qDebug() << "  11111111111111     " << "tapAndHoldGestureTriggered" << tapAndHold;
-//    m_tapStatus = tapAndHold->state();
-//}
 
 void SheetBrowser::deform(SheetOperation &operation)
 {
