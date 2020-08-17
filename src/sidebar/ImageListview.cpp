@@ -24,6 +24,7 @@
 
 #include <QMouseEvent>
 #include <QDebug>
+#include <QScroller>
 
 ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
@@ -41,6 +42,8 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     setViewMode(QListView::ListMode);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 }
 
 void ImageListView::initControl()

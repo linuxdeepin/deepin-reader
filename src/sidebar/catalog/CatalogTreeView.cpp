@@ -33,6 +33,7 @@
 #include <QProxyStyle>
 #include <QPainter>
 #include <QStylePainter>
+#include <QScroller>
 
 class ActiveProxyStyle : public QProxyStyle
 {
@@ -115,6 +116,8 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
+
+    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 }
 
 CatalogTreeView::~CatalogTreeView()
