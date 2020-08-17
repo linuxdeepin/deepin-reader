@@ -19,7 +19,7 @@ LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build deepin-poppler library failed.")
 }
-QMAKE_RPATHDIR += usr/lib/deepin-reader
+QMAKE_RPATHDIR += /usr/lib/deepin-reader
 
 include ($$SRCPWD/app/app.pri)
 include ($$SRCPWD/browser/browser.pri)
