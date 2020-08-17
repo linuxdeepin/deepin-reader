@@ -13,12 +13,13 @@ PKGCONFIG += ddjvuapi dtkwidget
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
 INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/include
+INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldpoppler-qt -ldpoppler
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-    error("Build dpoppler library failed.")
+    error("Build deepin-poppler library failed.")
 }
+QMAKE_RPATHDIR += usr/lib/deepin-reader
 
 include ($$SRCPWD/app/app.pri)
 include ($$SRCPWD/browser/browser.pri)
@@ -61,7 +62,7 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
-poppler.path = /usr/lib
+poppler.path = /usr/lib/deepin-reader
 poppler.files = $${3RDPARTTPATH}/lib/*.so*
 
 icon.path = /usr/share/icons/hicolor/scalable/apps

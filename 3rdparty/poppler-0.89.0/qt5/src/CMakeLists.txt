@@ -39,20 +39,20 @@ set(poppler_qt5_SRCS
   ArthurOutputDev.cc
   poppler-version.cpp
 )
-add_library(dpoppler-qt ${poppler_qt5_SRCS})
-set_target_properties(dpoppler-qt PROPERTIES VERSION 1.24.0 SOVERSION 1)
+add_library(deepin-poppler-qt ${poppler_qt5_SRCS})
+set_target_properties(deepin-poppler-qt PROPERTIES VERSION 1.24.0 SOVERSION 1)
 if(MINGW AND BUILD_SHARED_LIBS)
-    get_target_property(POPPLER_QT5_SOVERSION dpoppler-qt SOVERSION)
-    set_target_properties(dpoppler-qt PROPERTIES SUFFIX "-${POPPLER_QT5_SOVERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    get_target_property(POPPLER_QT5_SOVERSION deepin-poppler-qt SOVERSION)
+    set_target_properties(deepin-poppler-qt PROPERTIES SUFFIX "-${POPPLER_QT5_SOVERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
 endif()
-target_link_libraries(dpoppler-qt dpoppler ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Xml_LIBRARIES} ${FREETYPE_LIBRARIES})
+target_link_libraries(deepin-poppler-qt deepin-poppler ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Xml_LIBRARIES} ${FREETYPE_LIBRARIES})
 if(MSVC)
-target_link_libraries(dpoppler-qt dpoppler ${poppler_LIBS})
+target_link_libraries(deepin-poppler-qt deepin-poppler ${poppler_LIBS})
 endif()
 if (ENABLE_NSS3)
-    target_include_directories(dpoppler-qt SYSTEM PRIVATE ${NSS3_INCLUDE_DIRS})
+    target_include_directories(deepin-poppler-qt SYSTEM PRIVATE ${NSS3_INCLUDE_DIRS})
 endif()
-#install(TARGETS dpoppler-qt RUNTIME DESTINATION bin LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+#install(TARGETS deepin-poppler-qt RUNTIME DESTINATION bin LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 #install(FILES
 #  poppler-qt5.h

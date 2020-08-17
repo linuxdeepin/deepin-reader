@@ -13,7 +13,7 @@
 # define _POPPLER_QT5_LIB_IMPORT
 #endif
 
-#ifdef dpoppler_qt_EXPORTS
+#ifdef deepin_poppler_qt_EXPORTS
 # define POPPLER_QT5_EXPORT _POPPLER_QT5_LIB_EXPORT
 #else
 # define POPPLER_QT5_EXPORT _POPPLER_QT5_LIB_IMPORT

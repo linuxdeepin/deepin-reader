@@ -10,7 +10,7 @@ using namespace testing;
 
 DWIDGET_USE_NAMESPACE
 
-TEST(sidebar, test1)
+TEST(sidebar, test2)
 {
     EXPECT_EQ(1, 1);
 
