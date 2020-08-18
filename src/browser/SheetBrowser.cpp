@@ -574,15 +574,14 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     m_selectEndPos = QPointF();
     m_selectStartPos = QPointF();
 
+    if (startPage == nullptr || endPage == nullptr)
+        return nullptr;
+
     if (startPage == endPage) {
         highLightAnnot = startPage->addHighlightAnnotation(contains, color);
     } else {
-        if (startPage != endPage && endPage->itemIndex() < startPage->itemIndex()) {
-            BrowserPage *tmpPage = endPage;
-            endPage = startPage;
-            startPage = tmpPage;
-            tmpPage = nullptr;
-        }
+        if (endPage->itemIndex() < startPage->itemIndex())
+            qSwap(startPage, endPage);
 
         int startIndex = m_items.indexOf(startPage);
         int endIndex = m_items.indexOf(endPage);
