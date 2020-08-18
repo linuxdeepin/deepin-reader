@@ -1017,7 +1017,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         if (annot->type() == 1) {
             if (m_lastClickIconAnnotation) {
                 m_lastClickIconAnnotation->setScaleFactor(m_scaleFactor);
-                m_lastClickIconAnnotation->setDrawSelectRect(true);
+//                m_lastClickIconAnnotation->setDrawSelectRect(true);
             }
         }
     }
