@@ -696,6 +696,8 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         loadAnnotations();
 
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
+        if (highLightAnnot == nullptr)
+            return nullptr;
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);
 
