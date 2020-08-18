@@ -105,7 +105,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
-    connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
+    connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 }
 
 SheetBrowser::~SheetBrowser()
@@ -380,8 +380,15 @@ void SheetBrowser::onSceneOfViewportChanged()
  */
 void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
 {
-    if (page)
-        page->addHighlightAnnotation(text, color);
+    if (page) {
+        Annotation *highLightAnnot{nullptr};
+
+        highLightAnnot = page->addHighlightAnnotation(text, color);
+
+        if (highLightAnnot) {
+            emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
+        }
+    }
 }
 
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
@@ -582,7 +589,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
         for (int index = startIndex; index < endIndex; index++) {
             if (m_items.at(index))
-                emit sigAddHighLightAnnot(m_items.at(index), contains, color);
+                emit sigAddHighLightAnnot(m_items.at(index), QString(), color);
         }
 
         highLightAnnot = endPage->addHighlightAnnotation(contains, color);
@@ -1260,7 +1267,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
                     } else {
-                        showNoteEditWidget(addIconAnnotation(page, clickPos, ""), mapToGlobal(event->pos()));
+                        Annotation *iconAnnot = addIconAnnotation(page, clickPos, "");
+                        if (iconAnnot)
+                            showNoteEditWidget(iconAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "AddBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), true);
