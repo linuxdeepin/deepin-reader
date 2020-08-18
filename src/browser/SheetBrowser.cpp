@@ -1212,6 +1212,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             BrowserAnnotation *annotation = nullptr;
 
+            BrowserWord *selectWord = nullptr;
+
             QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
 
             const QString &selectWords = selectedWordsText();
@@ -1223,6 +1225,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
                 if (nullptr != dynamic_cast<BrowserPage *>(baseItem)) {
                     item = dynamic_cast<BrowserPage *>(baseItem);
+                }
+
+                if (nullptr != dynamic_cast<BrowserWord *>(baseItem)) {
+                    selectWord = dynamic_cast<BrowserWord *>(baseItem);
                 }
             }
 
@@ -1310,7 +1316,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             } else if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationHighlight) {
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT);
-            }  else if (!selectWords.isEmpty()) {
+            } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
             } else if (nullptr != item) {
