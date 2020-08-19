@@ -498,13 +498,13 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (s == Dr::key_esc && quitFullScreen())
-        return;
-
     if (s == Dr::key_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
         return;
     }
+
+    if (s == Dr::key_esc && quitFullScreen())
+        return;
 
     if (m_slideWidget) {
         m_slideWidget->handleKeyPressEvent(s);
