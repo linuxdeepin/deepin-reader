@@ -643,7 +643,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!annotation->updateAnnotation(text, color))
         return false;
 
-    renderViewPort(true);
+    updatePageFull();
 
     return true;
 }
@@ -724,7 +724,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
     }
 
-    renderViewPort(true);
+    updatePageFull();
 
     return highLightAnnot;
 }
@@ -871,19 +871,13 @@ bool BrowserPage::removeAllAnnotation()
 
     foreach (BrowserAnnotation *browserAnnot, m_annotationItems) {
         if (browserAnnot && browserAnnot->annotation() && !browserAnnot->annotation()->contents().isEmpty()) {
-            browserAnnot->deleteMe();
+            removeAnnotation(browserAnnot->annotation());
         }
     }
 
     m_hasLoadedAnnotation = false;
 
-    m_pixmap = QPixmap();
-
-    m_pixmapScaleFactor = -1;
-
-    render(m_scaleFactor, m_rotation, true, true);
-
-    renderViewPort(false);
+    updatePageFull();
 
     return true;
 }
@@ -980,7 +974,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         }
     }
 
-    renderViewPort(true);
+    updatePageFull();
 
     return true;
 }
@@ -1273,4 +1267,15 @@ BrowserWord *BrowserPage::getBrowserWord(const QPoint &point)
     }
 
     return nullptr;
+}
+
+void BrowserPage::updatePageFull()
+{
+    //m_pixmap = QPixmap();
+
+    m_pixmapScaleFactor = -1;
+
+    render(m_scaleFactor, m_rotation, true, true);
+
+    renderViewPort(false);
 }

@@ -167,6 +167,8 @@ private:
 
     QRectF bookmarkMouseRect();
 
+    void updatePageFull();
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
