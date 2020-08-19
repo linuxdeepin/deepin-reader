@@ -45,6 +45,7 @@ public:
     int  getModelIndexForPageIndex(int pageIndex);
     int  getPageIndexForModelIndex(int row);
     ImageViewModel *getImageModel();
+    void showMenu();
 
 private:
     void initControl();

@@ -26,6 +26,10 @@
 #include <QPointer>
 #include <DLineEdit>
 
+#include "DocSheet.h"
+#include "ScaleMenu.h"
+#include <DIconButton>
+
 class DocSheet;
 class ScaleMenu;
 class ScaleWidget : public Dtk::Widget::DWidget
@@ -38,6 +42,8 @@ public:
 
     void setSheet(DocSheet *sheet);
     void clear();
+
+    DIconButton *getDecreaseBtn();
 
 private:
     void initWidget();

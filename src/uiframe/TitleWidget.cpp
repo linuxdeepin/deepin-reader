@@ -41,7 +41,7 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-    m_pThumbnailBtn->setFocusPolicy(Qt::NoFocus);
+    m_pThumbnailBtn->setFocusPolicy(Qt::TabFocus);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
 }
 
@@ -59,6 +59,8 @@ void TitleWidget::initWidget()
     m_pSw->setDisabled(true);
     hlayout->addWidget(m_pSw);
     hlayout->addStretch(1);
+
+    this->setTabOrder(m_pThumbnailBtn, m_pSw->getDecreaseBtn());
 }
 
 void TitleWidget::setBtnDisable(const bool &bAble)

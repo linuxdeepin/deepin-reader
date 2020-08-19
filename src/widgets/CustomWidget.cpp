@@ -66,3 +66,12 @@ void CustomWidget::updateThumbnail(const int &)
 {
 
 }
+
+/**
+ * @brief CustomWidget::showMenu
+ * 显示菜单,响应键盘菜单键
+ */
+void CustomWidget::showMenu()
+{
+
+}

@@ -113,5 +113,9 @@ private:
     BookMarkWidget  *m_bookmarkWidget;
     NotesWidget     *m_notesWidget;
     SearchResWidget *m_searchWidget;
+
+    // QObject interface
+public:
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
 };
 #endif  // LEFTSHOWWIDGET_H

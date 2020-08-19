@@ -20,16 +20,14 @@
 */
 
 #include "ScaleWidget.h"
-#include "DocSheet.h"
-#include "ScaleMenu.h"
 
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include <DIconButton>
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
+    setFocusPolicy(Qt::NoFocus);
     initWidget();
 }
 
@@ -62,6 +60,7 @@ void ScaleWidget::initWidget()
     connect(arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    pPreBtn->setObjectName("SP_DecreaseElement");
     DStyle::setFrameRadius(pPreBtn, 12);
     pPreBtn->setFixedSize(24, 24);
     connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
@@ -75,6 +74,9 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(pNextBtn);
+
+    this->setTabOrder(pPreBtn, m_lineEdit);
+    this->setTabOrder(m_lineEdit, pNextBtn);
 }
 
 void ScaleWidget::onPrevScale()
@@ -138,4 +140,9 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 void ScaleWidget::clear()
 {
     m_lineEdit->clear();
+}
+
+DIconButton *ScaleWidget::getDecreaseBtn()
+{
+    return static_cast<DIconButton *>(this->findChild<DIconButton *>("SP_DecreaseElement"));
 }

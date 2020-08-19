@@ -61,6 +61,7 @@ public:
 public:
     virtual void adaptWindowSize(const double &);
     virtual void updateThumbnail(const int &);
+    virtual void showMenu();
 
 protected:
     virtual void initWidget();

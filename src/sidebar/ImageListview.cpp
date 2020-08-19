@@ -61,6 +61,24 @@ ImageViewModel *ImageListView::getImageModel()
     return m_imageModel;
 }
 
+void ImageListView::showMenu()
+{
+    QPoint point = mapToGlobal(this->pos());
+    if (m_listType == E_SideBar::SIDE_NOTE) {
+        if (m_pNoteMenu == nullptr) {
+            m_pNoteMenu = new NoteMenu(this);
+            connect(m_pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+        }
+        m_pNoteMenu->exec(point);
+    } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
+        if (m_pBookMarkMenu == nullptr) {
+            m_pBookMarkMenu = new BookMarkMenu(this);
+            connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+        }
+        m_pBookMarkMenu->exec(point);
+    }
+}
+
 void ImageListView::setListType(int type)
 {
     m_listType = type;

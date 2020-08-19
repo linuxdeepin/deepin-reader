@@ -37,6 +37,7 @@ SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     , m_sheet(parent)
     , m_widgetsFlag(widgesFlag | PREVIEW_SEARCH)
 {
+//    setFocusPolicy(Qt::NoFocus);
     initWidget();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebar::onUpdateWidgetTheme);
 }
@@ -132,6 +133,11 @@ void SheetSidebar::initWidget()
 
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
     m_btnGroup->buttonClicked(nId);
+
+    //add by 2020-8-19添加tab键焦点事件
+    for (int index = 0; index < m_btnGroup->buttons().count() - 2; index++) {
+        this->setTabOrder(m_btnGroup->button(index), m_btnGroup->button(index + 1));
+    }
 }
 
 void SheetSidebar::onBtnClicked(int index)
@@ -260,6 +266,11 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setCheckable(true);
+    if ("search" != objName) {
+        btn->setFocusPolicy(Qt::TabFocus);
+        //手动设置focus状态
+//        btn->setFocus(Qt::TabFocusReason);
+    }
     return btn;
 }
 
@@ -335,13 +346,44 @@ void SheetSidebar::deleteItemByKey()
     }
 }
 
+bool SheetSidebar::event(QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        //将事件转化为键盘事件
+        QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
+        //按下Tab键执行焦点切换事件
+        if (key_event->key() == Qt::Key_Tab) {
+            this->nextInFocusChain()->setFocus(Qt::TabFocusReason);
+        } else if (key_event->key() == Qt::Key_Menu) {
+            DToolButton *bookmarkbtn = this->findChild<DToolButton *>("bookmark");
+            if (bookmarkbtn && bookmarkbtn->isChecked()) {
+                if (m_bookmarkWidget) {
+                    m_bookmarkWidget->showMenu();
+                }
+            }
+            DToolButton *annotationbtn = this->findChild<DToolButton *>("annotation");
+            if (annotationbtn && annotationbtn->isChecked()) {
+                if (m_notesWidget) {
+                    m_notesWidget->showMenu();
+                }
+            }
+        }
+    }
+
+    CustomWidget::event(event);
+
+    event->ignore();
+
+    return true;
+}
+
 void SheetSidebar::onUpdateWidgetTheme()
 {
     updateWidgetTheme();
     const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
     for (QAbstractButton *btn : btns) {
         const QString &objName = btn->objectName();
-        const QIcon &icon = QIcon::fromTheme(QString("dr_") + objName);//PF::getIcon(QString("dr_") + objName);
+        const QIcon &icon = QIcon::fromTheme(QString("dr_") + objName);
         btn->setIcon(icon);
     }
 }

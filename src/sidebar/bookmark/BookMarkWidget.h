@@ -46,6 +46,7 @@ public:
     void initWidget() Q_DECL_OVERRIDE;
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;
+    void showMenu() Q_DECL_OVERRIDE;
 
 private slots:
     void onUpdateTheme();

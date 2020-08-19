@@ -70,7 +70,7 @@ void BookMarkWidget::initWidget()
     this->setLayout(pVBoxLayout);
 
     connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
-    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH/* * 1.0*/, LEFTMINHEIGHT/* * 1.0*/));
+    m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
 }
 
 
@@ -161,6 +161,13 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
 void BookMarkWidget::updateThumbnail(const int &index)
 {
     m_pImageListView->getImageModel()->updatePageIndex(index);
+}
+
+void BookMarkWidget::showMenu()
+{
+    if (m_pImageListView && m_pImageListView->count()) {
+        m_pImageListView->showMenu();
+    }
 }
 
 void BookMarkWidget::onUpdateTheme()

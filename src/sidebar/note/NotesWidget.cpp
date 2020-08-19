@@ -202,6 +202,13 @@ void NotesWidget::updateThumbnail(const int &pageIndex)
     m_pImageListView->getImageModel()->updatePageIndex(pageIndex, true);
 }
 
+void NotesWidget::showMenu()
+{
+    if (m_pImageListView) {
+        m_pImageListView->showMenu();
+    }
+}
+
 void NotesWidget::changeResetModelData()
 {
     const QList< deepin_reader::Annotation * > &annotationlst = m_sheet->annotations();
