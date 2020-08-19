@@ -215,7 +215,6 @@ private:
 
     QList<BrowserLink *> m_linkItems;
 
-    QPointF m_posPressed;               //是否正在按下
     bool m_wordIsHide = false;
     bool m_wordSelectable = false;      //文字是否可以选取
 

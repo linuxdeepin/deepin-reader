@@ -987,8 +987,6 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
         }
 
         update();
-    } else {
-        m_posPressed = clickPoint;
     }
 }
 
@@ -1145,7 +1143,6 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
 bool BrowserPage::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
-//        qDebug() << "========================================";
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
         if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))
             m_bookmarkState = 1;
@@ -1154,33 +1151,7 @@ bool BrowserPage::sceneEvent(QEvent *event)
         else
             m_bookmarkState = 0;
         update();
-    } else if (event->type() == QEvent::GraphicsSceneMousePress) {
-        QGraphicsSceneMouseEvent *t_event = dynamic_cast<QGraphicsSceneMouseEvent *>(event);
-        m_posPressed = QPoint();
-
-        if (t_event->button() == Qt::RightButton)
-            return QGraphicsItem::sceneEvent(event);
-
-//        if (bookmarkMouseRect().contains(t_event->pos())) {
-//            m_bookmarkState = 2;
-//            if (nullptr != m_parent) {
-//                m_parent->needBookmark(m_index, !m_bookmark);
-//                if (!m_bookmark && bookmarkMouseRect().contains(t_event->pos()))
-//                    m_bookmarkState = 1;
-//                else if (m_bookmark)
-//                    m_bookmarkState = 3;
-//                else
-//                    m_bookmarkState = 0;
-//            }
-//            qInfo() << "   m_bookmarkState:   " << m_bookmarkState << "     t_event->pos():" << t_event->pos();
-//            update();
-//        } else {
-//            m_posPressed = t_event->pos();
-//        }
-    } else if (event->type() == QEvent::GraphicsSceneMouseRelease) {
-        m_posPressed = QPoint();
     }
-
     return QGraphicsItem::sceneEvent(event);
 }
 
