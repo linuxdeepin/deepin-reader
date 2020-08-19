@@ -866,12 +866,41 @@ bool BrowserPage::removeAllAnnotation()
 {
     m_lastClickIconAnnotation = nullptr;
 
-    if (m_annotationItems.isEmpty())
+    if (m_annotations.isEmpty())
         return false;
 
-    foreach (BrowserAnnotation *browserAnnot, m_annotationItems) {
-        if (browserAnnot && browserAnnot->annotation() && !browserAnnot->annotation()->contents().isEmpty()) {
-            removeAnnotation(browserAnnot->annotation());
+    for (int index = 0; index < m_annotations.size(); index++) {
+        deepin_reader::Annotation *annota = m_annotations.at(index);
+        if (!m_annotations.contains(annota))
+            continue;
+
+        int annotIndex = m_annotations.indexOf(annota);
+
+        if (m_renderPages.count() == 4) {
+            m_renderPages[0]->removeAnnotation(m_annotations0.at(annotIndex));
+            m_annotations0.removeAt(annotIndex);
+            m_renderPages[1]->removeAnnotation(m_annotations1.at(annotIndex));
+            m_annotations1.removeAt(annotIndex);
+            m_renderPages[2]->removeAnnotation(m_annotations2.at(annotIndex));
+            m_annotations2.removeAt(annotIndex);
+            m_renderPages[3]->removeAnnotation(m_annotations3.at(annotIndex));
+            m_annotations3.removeAt(annotIndex);
+        }
+
+        if (!m_page->removeAnnotation(annota))
+            continue;
+
+        m_annotations.removeAt(index);
+        index--;
+
+        foreach (BrowserAnnotation *annotation, m_annotationItems) {
+            if (annotation && annotation->isSame(annota)) {
+                if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->isSame(annota))
+                    m_lastClickIconAnnotation = nullptr;
+                m_annotationItems.removeAll(annotation);
+                delete annotation;
+                annotation = nullptr;
+            }
         }
     }
 
