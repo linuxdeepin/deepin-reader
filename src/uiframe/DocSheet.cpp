@@ -516,8 +516,7 @@ qreal DocSheet::maxScaleFactor()
 {
     qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
 
-    if (maxScaleFactor < 0.1)
-        maxScaleFactor = 0.1;
+    maxScaleFactor = qBound(0.1, maxScaleFactor, 5.0);
 
     return maxScaleFactor;
 }
