@@ -444,7 +444,11 @@ void DocSheet::addSelectedTextHightlightAnnotation()
 
     //进行高亮编辑
     QPoint ponintend;
-    m_browser->showNoteEditWidget(m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend), ponintend);
+
+    Annotation *annot = m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend);
+
+    if (annot)
+        m_browser->showNoteEditWidget(annot, ponintend);
 }
 
 void DocSheet::openMagnifier()
