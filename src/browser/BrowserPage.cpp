@@ -871,7 +871,7 @@ bool BrowserPage::removeAllAnnotation()
 
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
-        if (!m_annotations.contains(annota))
+        if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
 
         int annotIndex = m_annotations.indexOf(annota);
