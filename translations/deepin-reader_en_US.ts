@@ -8,10 +8,6 @@
         <translation>Document Viewer</translation>
     </message>
     <message>
-        <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
-        <translation type="vanished">Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</translation>
-    </message>
-    <message>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,13 +88,6 @@
     </message>
 </context>
 <context>
-    <name>BookMarkItemWidget</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Remove bookmark</translation>
-    </message>
-</context>
-<context>
     <name>BookMarkMenu</name>
     <message>
         <source>Remove bookmark</source>
@@ -111,10 +100,6 @@
 </context>
 <context>
     <name>BookMarkWidget</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="vanished">The bookmark has been removed</translation>
-    </message>
     <message>
         <source>Add bookmark</source>
         <translation>Add bookmark</translation>
@@ -198,20 +183,9 @@
         <source>Document info</source>
         <translation type="unfinished">Document info</translation>
     </message>
-</context>
-<context>
-    <name>Central</name>
     <message>
-        <source>Unknown type</source>
-        <translation type="vanished">Unknown type</translation>
-    </message>
-    <message>
-        <source>%1 is not supported</source>
-        <translation type="vanished">%1 is not supported</translation>
-    </message>
-    <message>
-        <source>The format is not supported</source>
-        <translation type="vanished">The format is not supported</translation>
+        <source>Highlight</source>
+        <translation type="unfinished">Highlight</translation>
     </message>
 </context>
 <context>
@@ -223,10 +197,6 @@
     <message>
         <source>Save failed</source>
         <translation>Save failed</translation>
-    </message>
-    <message>
-        <source>No changes</source>
-        <translation type="vanished">No changes</translation>
     </message>
     <message>
         <source>Save as</source>
@@ -252,10 +222,6 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <source>Drag PDF files here</source>
-        <translation type="vanished">Drag PDF files here</translation>
-    </message>
-    <message>
         <source>Select File</source>
         <translation>Select File</translation>
     </message>
@@ -269,86 +235,6 @@
     </message>
 </context>
 <context>
-    <name>CentralWidget</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Unknown type</source>
-        <translation type="vanished">Unknown type</translation>
-    </message>
-    <message>
-        <source>%1 is not supported</source>
-        <translation type="vanished">%1 is not supported</translation>
-    </message>
-    <message>
-        <source>is not supported</source>
-        <translation type="vanished">is not supported</translation>
-    </message>
-</context>
-<context>
-    <name>ColorWidgetAction</name>
-    <message>
-        <source>Highlight</source>
-        <translation>Highlight</translation>
-    </message>
-</context>
-<context>
-    <name>CustomItemWidget</name>
-    <message>
-        <source>page</source>
-        <translation type="vanished">page</translation>
-    </message>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">Page %1</translation>
-    </message>
-</context>
-<context>
-    <name>DefaultOperationMenu</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Remove bookmark</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="vanished">Add bookmark</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Search</translation>
-    </message>
-    <message>
-        <source>Add note</source>
-        <translation type="vanished">Add note</translation>
-    </message>
-    <message>
-        <source>First page</source>
-        <translation type="vanished">First page</translation>
-    </message>
-    <message>
-        <source>Previous page</source>
-        <translation type="vanished">Previous page</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="vanished">Next page</translation>
-    </message>
-    <message>
-        <source>Last page</source>
-        <translation type="vanished">Last page</translation>
-    </message>
-    <message>
-        <source>Exit fullscreen</source>
-        <translation type="vanished">Exit fullscreen</translation>
-    </message>
-    <message>
-        <source>Add annotation</source>
-        <translation type="obsolete">Add annotation</translation>
-    </message>
-</context>
-<context>
     <name>DocSheet</name>
     <message>
         <source>The bookmark has been removed</source>
@@ -357,75 +243,6 @@
     <message>
         <source>The annotation has been removed</source>
         <translation type="unfinished">The annotation has been removed</translation>
-    </message>
-</context>
-<context>
-    <name>DocSheetDJVU</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="obsolete">The bookmark has been removed</translation>
-    </message>
-</context>
-<context>
-    <name>DocSheetPDF</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="obsolete">The bookmark has been removed</translation>
-    </message>
-</context>
-<context>
-    <name>DocummentFileHelper</name>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Please check if the file is damaged</translation>
-    </message>
-    <message>
-        <source>Saved successfully</source>
-        <translation type="vanished">Saved successfully</translation>
-    </message>
-    <message>
-        <source>Saved failed</source>
-        <translation type="vanished">Saved failed</translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="vanished">Save as</translation>
-    </message>
-    <message>
-        <source>No changes</source>
-        <translation type="vanished">No changes</translation>
-    </message>
-    <message>
-        <source>Invalid file name</source>
-        <translation type="vanished">Invalid file name</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>The file is already open</source>
-        <translation type="vanished">The file is already open</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Save</translation>
-    </message>
-    <message>
-        <source>Do you want to save the changes?</source>
-        <translation type="vanished">Do you want to save the changes?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancel</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="vanished">Discard</translation>
-    </message>
-    <message>
-        <source>File not supported</source>
-        <translation type="vanished">File not supported</translation>
     </message>
 </context>
 <context>
@@ -448,24 +265,6 @@
     </message>
 </context>
 <context>
-    <name>FileViewNoteWidget</name>
-    <message>
-        <source>Input limit reached</source>
-        <translation type="vanished">Input limit reached</translation>
-    </message>
-</context>
-<context>
-    <name>FileViewWidget</name>
-    <message>
-        <source>Please select the text</source>
-        <translation type="vanished">Please select the text</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Please check if the file is damaged</translation>
-    </message>
-</context>
-<context>
     <name>FindWidget</name>
     <message>
         <source>Next</source>
@@ -474,29 +273,6 @@
     <message>
         <source>Previous</source>
         <translation>Previous</translation>
-    </message>
-</context>
-<context>
-    <name>FontMenu</name>
-    <message>
-        <source>Two-Page View</source>
-        <translation type="vanished">Two-Page View</translation>
-    </message>
-    <message>
-        <source>Fit Height</source>
-        <translation type="vanished">Fit Height</translation>
-    </message>
-    <message>
-        <source>Fit Width</source>
-        <translation type="vanished">Fit Width</translation>
-    </message>
-    <message>
-        <source>Rotate Left</source>
-        <translation type="vanished">Rotate Left</translation>
-    </message>
-    <message>
-        <source>Rotate Right</source>
-        <translation type="vanished">Rotate Right</translation>
     </message>
 </context>
 <context>
@@ -511,95 +287,10 @@
     </message>
 </context>
 <context>
-    <name>HomeWidget</name>
-    <message>
-        <source>Drag PDF files here</source>
-        <translation type="vanished">Drag PDF files here</translation>
-    </message>
-    <message>
-        <source>Select File</source>
-        <translation type="vanished">Select File</translation>
-    </message>
-</context>
-<context>
     <name>ImageViewModel</name>
     <message>
         <source>Page %1</source>
         <translation type="unfinished">Page %1</translation>
-    </message>
-</context>
-<context>
-    <name>MainOperationWidget</name>
-    <message>
-        <source>Thumbnails</source>
-        <translation type="vanished">Thumbnails</translation>
-    </message>
-    <message>
-        <source>Bookmarks</source>
-        <translation type="vanished">Bookmarks</translation>
-    </message>
-    <message>
-        <source>Annotations</source>
-        <translation type="vanished">Annotations</translation>
-    </message>
-    <message>
-        <source>Catalog</source>
-        <translation type="vanished">Catalog</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Do you want to save the changes?</source>
-        <translation type="vanished">Do you want to save the changes?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Cancel</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="vanished">Discard</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Save</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Open</translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="vanished">Save as</translation>
-    </message>
-    <message>
-        <source>Display in file manager</source>
-        <translation type="vanished">Display in file manager</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="vanished">Print</translation>
-    </message>
-    <message>
-        <source>Document info</source>
-        <translation type="vanished">Document info</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">Search</translation>
-    </message>
-    <message>
-        <source>Slide show</source>
-        <translation type="vanished">Slide show</translation>
-    </message>
-    <message>
-        <source>Zoom in</source>
-        <translation type="vanished">Zoom in</translation>
-    </message>
-    <message>
-        <source>Zoom out</source>
-        <translation type="vanished">Zoom out</translation>
     </message>
 </context>
 <context>
@@ -649,25 +340,10 @@
     </message>
 </context>
 <context>
-    <name>NotesItemWidget</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">Copy</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">Remove annotation</translation>
-    </message>
-</context>
-<context>
     <name>NotesWidget</name>
     <message>
         <source>Add annotation</source>
         <translation>Add annotation</translation>
-    </message>
-    <message>
-        <source>The annotation has been removed</source>
-        <translation type="vanished">The annotation has been removed</translation>
     </message>
     <message>
         <source>Are you sure you want to delete all notes?</source>
@@ -690,17 +366,6 @@
     <message>
         <source>Invalid page number</source>
         <translation>Invalid page number</translation>
-    </message>
-</context>
-<context>
-    <name>PrintManager</name>
-    <message>
-        <source>No printer found</source>
-        <translation type="vanished">No printer found</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
@@ -759,54 +424,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <source> items found</source>
-        <translation type="vanished"> items found</translation>
-    </message>
-    <message>
         <source>No search results</source>
         <translation>No search results</translation>
     </message>
     <message>
         <source>%1 items found</source>
         <translation>%1 items found</translation>
-    </message>
-</context>
-<context>
-    <name>SheetBrowserDJVU</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="obsolete">Remove bookmark</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="obsolete">Add bookmark</translation>
-    </message>
-    <message>
-        <source>First page</source>
-        <translation type="obsolete">First page</translation>
-    </message>
-    <message>
-        <source>Previous page</source>
-        <translation type="obsolete">Previous page</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="obsolete">Next page</translation>
-    </message>
-    <message>
-        <source>Last page</source>
-        <translation type="obsolete">Last page</translation>
-    </message>
-</context>
-<context>
-    <name>SheetBrowserPDFPrivate</name>
-    <message>
-        <source>Please select the text</source>
-        <translation type="vanished">Please select the text</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Please check if the file is damaged</translation>
     </message>
 </context>
 <context>
@@ -903,10 +526,6 @@
         <translation>Thumbnails</translation>
     </message>
     <message>
-        <source>Fit page</source>
-        <translation type="vanished">Fit page</translation>
-    </message>
-    <message>
         <source>Fit height</source>
         <translation>Fit height</translation>
     </message>
@@ -988,46 +607,7 @@
     </message>
 </context>
 <context>
-    <name>TextOperationMenu</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">Copy</translation>
-    </message>
-    <message>
-        <source>Remove highlight</source>
-        <translation type="vanished">Remove highlight</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Remove bookmark</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">Remove annotation</translation>
-    </message>
-    <message>
-        <source>Add note</source>
-        <translation type="vanished">Add note</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="vanished">Add bookmark</translation>
-    </message>
-    <message>
-        <source>Exit fullscreen</source>
-        <translation type="vanished">Exit fullscreen</translation>
-    </message>
-    <message>
-        <source>Add annotation</source>
-        <translation type="obsolete">Add annotation</translation>
-    </message>
-</context>
-<context>
     <name>TitleMenu</name>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Open</translation>
-    </message>
     <message>
         <source>Save</source>
         <translation>Save</translation>
@@ -1041,10 +621,6 @@
         <translation>Display in file manager</translation>
     </message>
     <message>
-        <source>Print</source>
-        <translation type="vanished">Print</translation>
-    </message>
-    <message>
         <source>New window</source>
         <translation>New window</translation>
     </message>
@@ -1053,28 +629,12 @@
         <translation>New tab</translation>
     </message>
     <message>
-        <source>Document info</source>
-        <translation type="vanished">Document info</translation>
-    </message>
-    <message>
         <source>Magnifer</source>
         <translation>Magnifer</translation>
     </message>
     <message>
         <source>Search</source>
         <translation>Search</translation>
-    </message>
-    <message>
-        <source>Slide show</source>
-        <translation type="vanished">Slide show</translation>
-    </message>
-    <message>
-        <source>Zoom in</source>
-        <translation type="vanished">Zoom in</translation>
-    </message>
-    <message>
-        <source>Zoom out</source>
-        <translation type="vanished">Zoom out</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -1086,22 +646,6 @@
     <message>
         <source>Thumbnails</source>
         <translation>Thumbnails</translation>
-    </message>
-    <message>
-        <source>Page Display</source>
-        <translation type="vanished">Page Display</translation>
-    </message>
-    <message>
-        <source>Select Text</source>
-        <translation type="vanished">Select Text</translation>
-    </message>
-    <message>
-        <source>Magnifier</source>
-        <translation type="vanished">Magnifier</translation>
-    </message>
-    <message>
-        <source>Hand Tool</source>
-        <translation type="vanished">Hand Tool</translation>
     </message>
 </context>
 <context>

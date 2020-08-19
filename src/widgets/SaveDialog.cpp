@@ -36,7 +36,7 @@ int SaveDialog::showExitDialog()
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
-    QMargins mar(0, 0, 0, 0);
+    QMargins mar(12, 12, 12, 12);
     dlg.setContentLayoutContentsMargins(mar);
     int nRes = dlg.exec();
     return nRes;
@@ -48,7 +48,7 @@ int SaveDialog::showTipDialog(const QString &content)
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel"));
     dlg.addButton(tr("Ensure"), true, DDialog::ButtonRecommend);
-    QMargins mar(0, 0, 0, 0);
+    QMargins mar(12, 12, 12, 12);
     dlg.setContentLayoutContentsMargins(mar);
     int nRes = dlg.exec();
     return nRes;

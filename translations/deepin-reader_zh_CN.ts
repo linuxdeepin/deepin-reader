@@ -8,10 +8,6 @@
         <translation>文档查看器</translation>
     </message>
     <message>
-        <source>Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.</source>
-        <translation type="vanished">文档查看器一款为了方便查看PDF格式文档的阅读工具。</translation>
-    </message>
-    <message>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>文档查看器是一款支持PDF，DJVU等多种格式的文档阅读工具。</translation>
     </message>
@@ -92,13 +88,6 @@
     </message>
 </context>
 <context>
-    <name>BookMarkItemWidget</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">删除书签</translation>
-    </message>
-</context>
-<context>
     <name>BookMarkMenu</name>
     <message>
         <source>Remove bookmark</source>
@@ -106,22 +95,18 @@
     </message>
     <message>
         <source>Remove All bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">删除所有书签</translation>
     </message>
 </context>
 <context>
     <name>BookMarkWidget</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="vanished">已删除书签</translation>
-    </message>
     <message>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">您确定要删除所有书签吗？点击确定，删除所有书签；点击取消关闭弹框；</translation>
     </message>
 </context>
 <context>
@@ -156,11 +141,11 @@
     </message>
     <message>
         <source>Exit Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">退出全屏</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">全屏</translation>
     </message>
     <message>
         <source>Slide show</source>
@@ -198,20 +183,9 @@
         <source>Document info</source>
         <translation type="unfinished">文档信息</translation>
     </message>
-</context>
-<context>
-    <name>Central</name>
     <message>
-        <source>Unknown type</source>
-        <translation type="vanished">文件类型未知</translation>
-    </message>
-    <message>
-        <source>%1 is not supported</source>
-        <translation type="vanished">不支持%1</translation>
-    </message>
-    <message>
-        <source>The format is not supported</source>
-        <translation type="vanished">不支持该文件格式</translation>
+        <source>Highlight</source>
+        <translation type="unfinished">高亮</translation>
     </message>
 </context>
 <context>
@@ -223,10 +197,6 @@
     <message>
         <source>Save failed</source>
         <translation>保存失败</translation>
-    </message>
-    <message>
-        <source>No changes</source>
-        <translation type="vanished">文档未修改</translation>
     </message>
     <message>
         <source>Save as</source>
@@ -252,10 +222,6 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <source>Drag PDF files here</source>
-        <translation type="vanished">拖拽PDF文件到此</translation>
-    </message>
-    <message>
         <source>Select File</source>
         <translation>选择文件</translation>
     </message>
@@ -266,86 +232,6 @@
     <message>
         <source>Format supported: %1</source>
         <translation>支持格式：%1 </translation>
-    </message>
-</context>
-<context>
-    <name>CentralWidget</name>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">确定</translation>
-    </message>
-    <message>
-        <source>Unknown type</source>
-        <translation type="vanished">文件类型未知</translation>
-    </message>
-    <message>
-        <source>%1 is not supported</source>
-        <translation type="vanished">不支持%1</translation>
-    </message>
-    <message>
-        <source>is not supported</source>
-        <translation type="vanished">不支持</translation>
-    </message>
-</context>
-<context>
-    <name>ColorWidgetAction</name>
-    <message>
-        <source>Highlight</source>
-        <translation>高亮</translation>
-    </message>
-</context>
-<context>
-    <name>CustomItemWidget</name>
-    <message>
-        <source>page</source>
-        <translation type="vanished">页面</translation>
-    </message>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">第%1页</translation>
-    </message>
-</context>
-<context>
-    <name>DefaultOperationMenu</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">删除书签</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="vanished">添加书签</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">搜索</translation>
-    </message>
-    <message>
-        <source>Add note</source>
-        <translation type="vanished">添加注释</translation>
-    </message>
-    <message>
-        <source>First page</source>
-        <translation type="vanished">第一页</translation>
-    </message>
-    <message>
-        <source>Previous page</source>
-        <translation type="vanished">前一页</translation>
-    </message>
-    <message>
-        <source>Next page</source>
-        <translation type="vanished">后一页</translation>
-    </message>
-    <message>
-        <source>Last page</source>
-        <translation type="vanished">最后一页</translation>
-    </message>
-    <message>
-        <source>Exit fullscreen</source>
-        <translation type="vanished">退出全屏</translation>
-    </message>
-    <message>
-        <source>Add annotation</source>
-        <translation type="vanished">添加注释</translation>
     </message>
 </context>
 <context>
@@ -360,79 +246,10 @@
     </message>
 </context>
 <context>
-    <name>DocSheetDJVU</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="vanished">已删除书签</translation>
-    </message>
-</context>
-<context>
-    <name>DocSheetPDF</name>
-    <message>
-        <source>The bookmark has been removed</source>
-        <translation type="vanished">已删除书签</translation>
-    </message>
-</context>
-<context>
-    <name>DocummentFileHelper</name>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">请检查文件是否损坏</translation>
-    </message>
-    <message>
-        <source>Saved successfully</source>
-        <translation type="vanished">保存成功</translation>
-    </message>
-    <message>
-        <source>Saved failed</source>
-        <translation type="vanished">保存失败</translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="vanished">另存为</translation>
-    </message>
-    <message>
-        <source>No changes</source>
-        <translation type="vanished">文档未修改</translation>
-    </message>
-    <message>
-        <source>Invalid file name</source>
-        <translation type="vanished">请输入有效的文件名</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">确定</translation>
-    </message>
-    <message>
-        <source>The file is already open</source>
-        <translation type="vanished">文档已打开</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">保存</translation>
-    </message>
-    <message>
-        <source>Do you want to save the changes?</source>
-        <translation type="vanished">是否保存已编辑的文档？</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="vanished">不保存</translation>
-    </message>
-    <message>
-        <source>File not supported</source>
-        <translation type="vanished">不支持该文件</translation>
-    </message>
-</context>
-<context>
     <name>EncryptionPage</name>
     <message>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">该文档已被加密,请输入密码</translation>
     </message>
     <message>
         <source>OK</source>
@@ -440,29 +257,11 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">密码</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FileViewNoteWidget</name>
-    <message>
-        <source>Input limit reached</source>
-        <translation type="vanished">输入已达上限</translation>
-    </message>
-</context>
-<context>
-    <name>FileViewWidget</name>
-    <message>
-        <source>Please select the text</source>
-        <translation type="vanished">请选择文本</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">请检查文件是否损坏</translation>
+        <translation type="unfinished">密码错误</translation>
     </message>
 </context>
 <context>
@@ -477,29 +276,6 @@
     </message>
 </context>
 <context>
-    <name>FontMenu</name>
-    <message>
-        <source>Two-Page View</source>
-        <translation type="vanished">双页显示</translation>
-    </message>
-    <message>
-        <source>Fit Height</source>
-        <translation type="vanished">适应高度</translation>
-    </message>
-    <message>
-        <source>Fit Width</source>
-        <translation type="vanished">适应宽度</translation>
-    </message>
-    <message>
-        <source>Rotate Left</source>
-        <translation type="vanished">左旋转</translation>
-    </message>
-    <message>
-        <source>Rotate Right</source>
-        <translation type="vanished">右旋转</translation>
-    </message>
-</context>
-<context>
     <name>HandleMenu</name>
     <message>
         <source>Select Text</source>
@@ -511,95 +287,10 @@
     </message>
 </context>
 <context>
-    <name>HomeWidget</name>
-    <message>
-        <source>Drag PDF files here</source>
-        <translation type="vanished">拖拽PDF文件到此</translation>
-    </message>
-    <message>
-        <source>Select File</source>
-        <translation type="vanished">选择文件</translation>
-    </message>
-</context>
-<context>
     <name>ImageViewModel</name>
     <message>
         <source>Page %1</source>
         <translation>第%1页</translation>
-    </message>
-</context>
-<context>
-    <name>MainOperationWidget</name>
-    <message>
-        <source>Thumbnails</source>
-        <translation type="vanished">缩略图</translation>
-    </message>
-    <message>
-        <source>Bookmarks</source>
-        <translation type="vanished">书签</translation>
-    </message>
-    <message>
-        <source>Annotations</source>
-        <translation type="vanished">注释</translation>
-    </message>
-    <message>
-        <source>Catalog</source>
-        <translation type="vanished">目录</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Do you want to save the changes?</source>
-        <translation type="vanished">是否保存已编辑的文档？</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="vanished">不保存</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">保存</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">打开</translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="vanished">另存为</translation>
-    </message>
-    <message>
-        <source>Display in file manager</source>
-        <translation type="vanished">在文件管理器中显示</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="vanished">打印</translation>
-    </message>
-    <message>
-        <source>Document info</source>
-        <translation type="vanished">文档信息</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="vanished">搜索</translation>
-    </message>
-    <message>
-        <source>Slide show</source>
-        <translation type="vanished">幻灯片放映</translation>
-    </message>
-    <message>
-        <source>Zoom in</source>
-        <translation type="vanished">放大</translation>
-    </message>
-    <message>
-        <source>Zoom out</source>
-        <translation type="vanished">缩小</translation>
     </message>
 </context>
 <context>
@@ -645,18 +336,7 @@
     </message>
     <message>
         <source>Remove All annotation</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>NotesItemWidget</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">复制</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">删除注释</translation>
+        <translation type="unfinished">删除所有注释</translation>
     </message>
 </context>
 <context>
@@ -666,12 +346,8 @@
         <translation>添加注释</translation>
     </message>
     <message>
-        <source>The annotation has been removed</source>
-        <translation type="vanished">已删除注释</translation>
-    </message>
-    <message>
         <source>Are you sure you want to delete all notes?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">您确定要删除所有注释吗？点击确定，删除所有注释；点击取消关闭弹框；</translation>
     </message>
 </context>
 <context>
@@ -690,17 +366,6 @@
     <message>
         <source>Invalid page number</source>
         <translation>请输入有效的页码</translation>
-    </message>
-</context>
-<context>
-    <name>PrintManager</name>
-    <message>
-        <source>No printer found</source>
-        <translation type="vanished">无打印设备</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">确定</translation>
     </message>
 </context>
 <context>
@@ -730,7 +395,7 @@
     </message>
     <message>
         <source>Ensure</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">确定</translation>
     </message>
 </context>
 <context>
@@ -741,11 +406,11 @@
     </message>
     <message>
         <source>Fit Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">默认大小</translation>
     </message>
     <message>
         <source>Fit Page</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">适合页面</translation>
     </message>
     <message>
         <source>Fit Height</source>
@@ -759,54 +424,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <source> items found</source>
-        <translation type="vanished">个搜索结果</translation>
-    </message>
-    <message>
         <source>No search results</source>
         <translation>无搜索结果</translation>
     </message>
     <message>
         <source>%1 items found</source>
         <translation>%1个搜索结果</translation>
-    </message>
-</context>
-<context>
-    <name>SheetBrowserDJVU</name>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">删除书签</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="vanished">添加书签</translation>
-    </message>
-    <message>
-        <source>First Page</source>
-        <translation type="vanished">第一页</translation>
-    </message>
-    <message>
-        <source>Previous Page</source>
-        <translation type="vanished">前一页</translation>
-    </message>
-    <message>
-        <source>Next Page</source>
-        <translation type="vanished">后一页</translation>
-    </message>
-    <message>
-        <source>Last Page</source>
-        <translation type="vanished">最后一页</translation>
-    </message>
-</context>
-<context>
-    <name>SheetBrowserPDFPrivate</name>
-    <message>
-        <source>Please select the text</source>
-        <translation type="vanished">请选择文本</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">请检查文件是否损坏</translation>
     </message>
 </context>
 <context>
@@ -903,10 +526,6 @@
         <translation>打开目录缩略图</translation>
     </message>
     <message>
-        <source>Fit page</source>
-        <translation type="vanished">适应页面</translation>
-    </message>
-    <message>
         <source>Fit height</source>
         <translation>适应高度</translation>
     </message>
@@ -984,50 +603,11 @@
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TextOperationMenu</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">复制</translation>
-    </message>
-    <message>
-        <source>Remove highlight</source>
-        <translation type="vanished">取消高亮</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">删除书签</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">删除注释</translation>
-    </message>
-    <message>
-        <source>Add note</source>
-        <translation type="vanished">添加注释</translation>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="vanished">添加书签</translation>
-    </message>
-    <message>
-        <source>Exit fullscreen</source>
-        <translation type="vanished">退出全屏</translation>
-    </message>
-    <message>
-        <source>Add annotation</source>
-        <translation type="vanished">添加注释</translation>
+        <translation type="unfinished">全屏</translation>
     </message>
 </context>
 <context>
     <name>TitleMenu</name>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">打开</translation>
-    </message>
     <message>
         <source>Save</source>
         <translation>保存</translation>
@@ -1041,10 +621,6 @@
         <translation>在文件管理器中显示</translation>
     </message>
     <message>
-        <source>Print</source>
-        <translation type="vanished">打印</translation>
-    </message>
-    <message>
         <source>New window</source>
         <translation>新窗口</translation>
     </message>
@@ -1053,28 +629,12 @@
         <translation>新标签页</translation>
     </message>
     <message>
-        <source>Document info</source>
-        <translation type="vanished">文档信息</translation>
-    </message>
-    <message>
         <source>Magnifer</source>
         <translation>放大镜</translation>
     </message>
     <message>
         <source>Search</source>
         <translation>搜索</translation>
-    </message>
-    <message>
-        <source>Slide show</source>
-        <translation type="vanished">幻灯片放映</translation>
-    </message>
-    <message>
-        <source>Zoom in</source>
-        <translation type="vanished">放大</translation>
-    </message>
-    <message>
-        <source>Zoom out</source>
-        <translation type="vanished">缩小</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -1086,22 +646,6 @@
     <message>
         <source>Thumbnails</source>
         <translation>缩略图</translation>
-    </message>
-    <message>
-        <source>Page Display</source>
-        <translation type="vanished">视图调整</translation>
-    </message>
-    <message>
-        <source>Select Text</source>
-        <translation type="vanished">选择工具</translation>
-    </message>
-    <message>
-        <source>Magnifier</source>
-        <translation type="vanished">放大镜</translation>
-    </message>
-    <message>
-        <source>Hand Tool</source>
-        <translation type="vanished">手形工具</translation>
     </message>
 </context>
 <context>
