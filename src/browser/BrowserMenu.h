@@ -41,7 +41,7 @@ signals:
 
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
-    void initActions(DocSheet *sheet, int index, SheetMenuType_e type);
+    void initActions(DocSheet *sheet, int index, SheetMenuType_e type, const QString &copytext = "");
 
 private slots:
     void onItemClicked();

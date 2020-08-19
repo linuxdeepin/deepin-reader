@@ -30,7 +30,7 @@ BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
-void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
+void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, const QString &copytext)
 {
     m_type = type;
     m_pColorWidgetAction = nullptr;
@@ -47,13 +47,18 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type)
         else
             createAction(tr("Add bookmark"), "AddBookmark");
     } else if (type == DOC_MENU_ANNO_HIGHLIGHT || type == DOC_MENU_SELECT_TEXT) {
-        if (type == DOC_MENU_ANNO_HIGHLIGHT)
-            createAction(tr("Copy"), "CopyAnnoText");
-        else
+        if (type == DOC_MENU_ANNO_HIGHLIGHT) {
+            QAction *copyAnnoAction = createAction(tr("Copy"), "CopyAnnoText");
+            if (copytext.isEmpty())
+                copyAnnoAction->setDisabled(true);
+        } else {
             createAction(tr("Copy"), "Copy");
+        }
         this->addSeparator();
 
-        createAction(tr("Highlight"), type != DOC_MENU_SELECT_TEXT ? "ChangeAnnotationColor" : "AddTextHighlight");
+        QAction *highAct = createAction(tr("Highlight"), type != DOC_MENU_SELECT_TEXT ? "ChangeAnnotationColor" : "AddTextHighlight");
+        if (type == DOC_MENU_ANNO_HIGHLIGHT)
+            highAct->setDisabled(true);
 
         m_pColorWidgetAction = new ColorWidgetAction(this);
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
