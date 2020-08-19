@@ -76,6 +76,52 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
             createAction(tr("Remove bookmark"), "RemoveBookmark");
         else
             createAction(tr("Add bookmark"), "AddBookmark");
+    } else if (type == DOC_MENU_KEY) {
+        createAction(tr("Search"), "Search");
+        this->addSeparator();
+
+        if (sheet->hasBookMark(index))
+            createAction(tr("Remove bookmark"), "RemoveBookmark");
+        else
+            createAction(tr("Add bookmark"), "AddBookmark");
+
+        if (sheet->fileType() == Dr::FileType::PDF) {
+//            createAction(tr("Add annotation"), "AddAnnotationIcon");
+        }
+
+        this->addSeparator();
+
+        if (sheet->isFullScreen()) {
+            createAction(tr("Exit Fullscreen"), "ExitFullscreen");
+        } else {
+            createAction(tr("Fullscreen"), "Fullscreen");
+        }
+
+        createAction(tr("Slide show"), "SlideShow");
+        this->addSeparator();
+
+        QAction *pFirstPage = createAction(tr("First page"), "FirstPage");
+        QAction *pPrevPage = createAction(tr("Previous page"), "PreviousPage");
+        if (sheet->currentIndex() == 0) {
+            pFirstPage->setDisabled(true);
+            pPrevPage->setDisabled(true);
+        }
+
+        QAction *pNextPage = createAction(tr("Next page"), "NextPage");
+        QAction *pEndPage = createAction(tr("Last page"), "LastPage");
+        if (sheet->currentIndex() == sheet->pagesNumber() - 1) {
+            pNextPage->setDisabled(true);
+            pEndPage->setDisabled(true);
+        }
+
+        this->addSeparator();
+
+        createAction(tr("Rotate left"), "RotateLeft");
+        createAction(tr("Rotate right"), "RotateRight");
+        this->addSeparator();
+
+        createAction(tr("Print"), "Print");
+        createAction(tr("Document info"), "DocumentInfo");
     } else {
         createAction(tr("Search"), "Search");
         this->addSeparator();

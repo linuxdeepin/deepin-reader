@@ -898,7 +898,7 @@ bool SheetBrowser::event(QEvent *event)
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
             // show browser menu
             qInfo() << "   SheetBrowser   Key_Menu ...  ";
-//            this->showMenu();
+            this->showMenu();
         }
     }
 
@@ -1923,52 +1923,33 @@ bool SheetBrowser::jump2Link(const QPointF point)
     return page->jump2Link(mouseClickPoint);
 }
 
+/**
+ * @brief SheetBrowser::showMenu
+ * 根据菜单键弹出菜单
+ */
 void SheetBrowser::showMenu()
 {
     BrowserMenu menu;
+    QString selectWords = selectedWordsText();
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
-//        const QPointF &clickPos = mapToScene(event->pos());
-        QString selectWords = selectedWordsText();
         if (objectname == "Copy") {
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {
-//            if (annotation)
-//                Utils::copyText(annotation->annotationText());
         } else if (objectname == "AddTextHighlight") {
-//            QPoint pointEnd;
-//            addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
+            QPoint pointEnd;
+            addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
         } else if (objectname == "ChangeAnnotationColor") {
-//            if (annotation) {
-//                updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
-//            }
         } else if (objectname == "RemoveAnnotation") {
-//            if (annotation)
-//                m_sheet->removeAnnotation(annotation->annotation());
         } else if (objectname == "AddAnnotationIcon") {
-//            if (annotation)  {
-//                updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
-//                showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
-//            } else {
-//                Annotation *iconAnnot = addIconAnnotation(page, clickPos, "");
-//                if (iconAnnot)
-//                    showNoteEditWidget(iconAnnot, mapToGlobal(event->pos()));
-//            }
         } else if (objectname == "AddBookmark") {
             m_sheet->setBookMark(this->currentPage() - 1, true);
         } else if (objectname == "RemoveHighlight") {
-//            if (annotation)
-//                m_sheet->removeAnnotation(annotation->annotation(), !annotation->annotationText().isEmpty());
         } else if (objectname == "AddAnnotationHighlight") {
-//            if (annotation)  {
-//                updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
-//                showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
-//            } else {
-//                QPoint pointEnd = event->pos();
-//                deepin_reader::Annotation *addAnnot = nullptr;
-//                addAnnot = addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
-//                if (addAnnot)
-//                    showNoteEditWidget(addAnnot, mapToGlobal(event->pos()));
-//            }
+            QPoint pointEnd;
+            deepin_reader::Annotation *addAnnot = nullptr;
+            addAnnot = addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
+            if (addAnnot)
+                showNoteEditWidget(addAnnot, mapToGlobal(pointEnd));
         } else if (objectname == "Search") {
             m_sheet->handleSearch();
         } else if (objectname == "RemoveBookmark") {
@@ -2001,18 +1982,18 @@ void SheetBrowser::showMenu()
         }
     });
 
-//    if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
-//        //文字注释(图标)
-//        menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON);
-//    } else if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationHighlight) {
-//        //文字高亮注释
-//        menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT);
-//    } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
-//        //选择文字
-//        menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
-//    } else if (nullptr != item) {
-//        //默认
-//        menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_DEFAULT);
-//    }
-    menu.exec(QPoint(0, 0));
+
+    if (!selectWords.isEmpty()) {
+        //选择文字
+        menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_SELECT_TEXT);
+    } else {
+        //默认
+        menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_KEY);
+    }
+
+    QPoint parentPos = m_sheet->mapToGlobal(m_sheet->pos());
+
+    QPoint showPos(parentPos.x() + m_sheet->width() / 2, parentPos.y() + m_sheet->height() / 2);
+
+    menu.exec(showPos);
 }

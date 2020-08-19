@@ -28,7 +28,8 @@ typedef enum SheetMenuType_e {
     DOC_MENU_DEFAULT = 0,
     DOC_MENU_ANNO_ICON = 1,
     DOC_MENU_ANNO_HIGHLIGHT = 2,
-    DOC_MENU_SELECT_TEXT = 3
+    DOC_MENU_SELECT_TEXT = 3,
+    DOC_MENU_KEY = 4
 } SheetMenuType_e;
 
 class DocSheet;

@@ -359,8 +359,12 @@ bool PDFAnnotation::updateAnnotation(const QString contains, const QColor color)
     if (nullptr == m_annotation)
         return false;
 
-    if (!contains.isEmpty())
+    if (m_annotation->subType() == Poppler::Annotation::AText) {
+        if (!contains.isEmpty())
+            m_annotation->setContents(contains);
+    } else if (m_annotation->subType() == Poppler::Annotation::AHighlight) {
         m_annotation->setContents(contains);
+    }
 
     if (color.isValid()) {
         Poppler::Annotation::Style style;
