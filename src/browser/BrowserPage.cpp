@@ -967,6 +967,31 @@ bool BrowserPage::inLink(const QPointF pos)
     return false;
 }
 
+/**
+ * @brief BrowserPage::setPageBookMark
+ * 在书签附近文字时,有时添加/删除书签无效,特意在brower中先处理
+ * @param clickPoint
+ */
+void BrowserPage::setPageBookMark(const QPointF clickPoint)
+{
+    if (bookmarkMouseRect().contains(clickPoint)) {
+        m_bookmarkState = 2;
+        if (nullptr != m_parent) {
+            m_parent->needBookmark(m_index, !m_bookmark);
+            if (!m_bookmark && bookmarkMouseRect().contains(clickPoint))
+                m_bookmarkState = 1;
+            else if (m_bookmark)
+                m_bookmarkState = 3;
+            else
+                m_bookmarkState = 0;
+        }
+
+        update();
+    } else {
+        m_posPressed = clickPoint;
+    }
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
@@ -1136,21 +1161,22 @@ bool BrowserPage::sceneEvent(QEvent *event)
         if (t_event->button() == Qt::RightButton)
             return QGraphicsItem::sceneEvent(event);
 
-        if (bookmarkMouseRect().contains(t_event->pos())) {
-            m_bookmarkState = 2;
-            if (nullptr != m_parent) {
-                m_parent->needBookmark(m_index, !m_bookmark);
-                if (!m_bookmark && bookmarkMouseRect().contains(t_event->pos()))
-                    m_bookmarkState = 1;
-                else if (m_bookmark)
-                    m_bookmarkState = 3;
-                else
-                    m_bookmarkState = 0;
-            }
-            update();
-        } else {
-            m_posPressed = t_event->pos();
-        }
+//        if (bookmarkMouseRect().contains(t_event->pos())) {
+//            m_bookmarkState = 2;
+//            if (nullptr != m_parent) {
+//                m_parent->needBookmark(m_index, !m_bookmark);
+//                if (!m_bookmark && bookmarkMouseRect().contains(t_event->pos()))
+//                    m_bookmarkState = 1;
+//                else if (m_bookmark)
+//                    m_bookmarkState = 3;
+//                else
+//                    m_bookmarkState = 0;
+//            }
+//            qInfo() << "   m_bookmarkState:   " << m_bookmarkState << "     t_event->pos():" << t_event->pos();
+//            update();
+//        } else {
+//            m_posPressed = t_event->pos();
+//        }
     } else if (event->type() == QEvent::GraphicsSceneMouseRelease) {
         m_posPressed = QPoint();
     }

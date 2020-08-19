@@ -74,6 +74,10 @@ public slots:
     void handleUpdatePartThumbnail(const int &index);
     void handleAnntationMsg(const int &, int, deepin_reader::Annotation *anno);
 
+    // QObject interface
+public:
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
+
 protected:
     void initWidget() Q_DECL_OVERRIDE;
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
@@ -113,9 +117,5 @@ private:
     BookMarkWidget  *m_bookmarkWidget;
     NotesWidget     *m_notesWidget;
     SearchResWidget *m_searchWidget;
-
-    // QObject interface
-public:
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
 };
 #endif  // LEFTSHOWWIDGET_H

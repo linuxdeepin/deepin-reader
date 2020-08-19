@@ -154,6 +154,8 @@ public:
 
     bool inLink(const QPointF);
 
+    void setPageBookMark(const QPointF);
+
 private:
     void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
 

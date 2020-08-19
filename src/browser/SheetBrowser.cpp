@@ -1204,6 +1204,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             if (page != nullptr) {
                 m_selectIndex = page->itemIndex();
+
+                //add by dxh 2020-8-19  防止书签附近有文字时,操作书签无效
+                page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
             }
 
             deepin_reader::Annotation *clickAnno = nullptr;
