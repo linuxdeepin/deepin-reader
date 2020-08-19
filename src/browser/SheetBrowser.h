@@ -145,6 +145,8 @@ public:
 
     bool jump2Link(const QPointF);
 
+    void showMenu();
+
 signals:
     void sigPageChanged(int page);
 
