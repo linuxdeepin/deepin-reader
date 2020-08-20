@@ -101,6 +101,7 @@ private:
     void onJumpToPrevPage();
     void onJumpToNextPage();
     void deleteItemByKey();
+    void switchListView();
 
 private:
     qreal m_scale;

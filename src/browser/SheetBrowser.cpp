@@ -2031,7 +2031,6 @@ QString SheetBrowser::pageNum2Lable(const int index)
 {
     QMap<QString, int>::const_iterator iter;
     for (iter = m_lable2Page.constBegin(); iter != m_lable2Page.constEnd(); ++iter) {
-        qDebug() << iter.key() << ":" << iter.value();
         if (iter.value() == index)
             return iter.key();
     }

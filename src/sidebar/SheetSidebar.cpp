@@ -147,11 +147,6 @@ void SheetSidebar::initWidget()
 
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
     m_btnGroup->buttonClicked(nId);
-
-    //add by 2020-8-19添加tab键焦点事件
-    //    for (int index = 0; index < m_btnGroup->buttons().count() - 2; index++) {
-    //        this->setTabOrder(m_btnGroup->button(index), m_btnGroup->button(index + 1));
-    //    }
 }
 
 void SheetSidebar::onBtnClicked(int index)
@@ -317,11 +312,17 @@ bool SheetSidebar::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
+
+        if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+            //按钮响应回车事件
+            switchListView();
+        }
+
         if (keyEvent->key() == Qt::Key_Tab) {
             if (object->objectName() == "thumbnailNextBtn"
-                || object->objectName() == "CatalogWidget"
-                || object->objectName() == "BookmarkAddBtn"
-                || object->objectName() == "NotesAddBtn") {
+                    || object->objectName() == "CatalogWidget"
+                    || object->objectName() == "BookmarkAddBtn"
+                    || object->objectName() == "NotesAddBtn") {
                 m_btnGroup->button(0)->setFocus(Qt::TabFocusReason);
                 return true;
             } else {
@@ -385,6 +386,21 @@ void SheetSidebar::deleteItemByKey()
         m_bookmarkWidget->DeleteItemByKey();
     } else if (widget == m_notesWidget) {
         m_notesWidget->DeleteItemByKey();
+    }
+}
+
+/**
+ * @brief SheetSidebar::switchListView
+ * 按钮响应回车事件切换列表
+ */
+void SheetSidebar::switchListView()
+{
+    if (m_btnGroup && m_btnGroup->buttons().count() > 0) {
+        for (int index = 0; index < m_btnGroup->buttons().count() - 1; index++) {
+            if (m_btnGroup->button(index) && m_btnGroup->button(index)->hasFocus()) {
+                onBtnClicked(index);
+            }
+        }
     }
 }
 
