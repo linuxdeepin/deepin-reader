@@ -565,11 +565,16 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     BrowserPage *endPage{nullptr};
     QPoint startPoint = this->mapFromScene(m_selectStartPos);
     QPoint endPoint = this->mapFromScene(m_selectEndPos);
+    QPoint endPointSpare = this->mapFromScene(m_selectWordEndPos);
 
     showPoint = this->mapToGlobal(this->mapFromScene(m_selectEndPos));
 
     startPage = getBrowserPageForPoint(startPoint);
     endPage = getBrowserPageForPoint(endPoint);
+
+    if (nullptr == endPage) {
+        endPage = getBrowserPageForPoint(endPointSpare);
+    }
 
     m_selectEndPos = QPointF();
     m_selectStartPos = QPointF();
@@ -1196,6 +1201,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             scene()->setSelectionArea(QPainterPath());
 
             m_selectEndPos = QPointF();
+            m_selectWordEndPos = QPointF();
 
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
@@ -1494,6 +1500,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
             //先考虑字到字的
             if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
+                //记录选取文字的最后最后位置,如果在选取文字时,鼠标在文档外释放,以此坐标为准
+                m_selectWordEndPos = mapToScene(event->pos());
                 scene()->setSelectionArea(QPainterPath());
                 bool between = false;
                 for (int i = words.size() - 1; i >= 0; i--) {

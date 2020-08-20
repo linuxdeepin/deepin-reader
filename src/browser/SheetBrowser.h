@@ -267,7 +267,8 @@ private:
 
     QPointF m_selectPressedPos;         //
     QPointF m_selectStartPos;           // 选取文字的开始位置
-    QPointF m_selectEndPos;             // 选取文字的结束位置
+    QPointF m_selectEndPos;             // 选取文字的结束位置(鼠标释放的最后位置)
+    QPointF m_selectWordEndPos;         // 选取文字的结束位置(鼠标移动的最后位置)
 
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;                 //最大一页的宽度
