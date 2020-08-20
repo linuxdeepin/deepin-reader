@@ -204,6 +204,8 @@ public:
 
     bool isUnLocked();
 
+    int getPageLableIndex(const QString);
+
 private:
     SheetOperation &operationRef();
 
@@ -222,7 +224,7 @@ public:
 
     void docBasicInfo(deepin_reader::FileInfo &tFileInfo);
 
-    QString pagenum2label(int index);
+    QString pagenum2label(const int index);
 
 signals:
     void sigFindOperation(const int &);

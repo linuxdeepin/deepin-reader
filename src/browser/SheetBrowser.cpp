@@ -197,6 +197,10 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
         if (page == nullptr)
             return false;
 
+        if (!page->label().isEmpty()) {
+            m_lable2Page.insert(page->label(), i);
+        }
+
         if (page->size().width() > m_maxWidth)
             m_maxWidth = page->size().width();
 
@@ -2004,4 +2008,33 @@ void SheetBrowser::showMenu()
     QPoint showPos(parentPos.x() + m_sheet->width() / 2, parentPos.y() + m_sheet->height() / 2);
 
     menu.exec(showPos);
+}
+
+int SheetBrowser::pageLableIndex(const QString pageLable)
+{
+    if (m_lable2Page.count() <= 0 || !m_lable2Page.contains(pageLable))
+        return -1;
+
+    return m_lable2Page.value(pageLable);
+}
+
+bool SheetBrowser::pageHasLable()
+{
+    if (m_lable2Page.count() > 0) {
+        return true;
+    }
+
+    return false;
+}
+
+QString SheetBrowser::pageNum2Lable(const int index)
+{
+    QMap<QString, int>::const_iterator iter;
+    for (iter = m_lable2Page.constBegin(); iter != m_lable2Page.constEnd(); ++iter) {
+        qDebug() << iter.key() << ":" << iter.value();
+        if (iter.value() == index)
+            return iter.key();
+    }
+
+    return  QString();
 }

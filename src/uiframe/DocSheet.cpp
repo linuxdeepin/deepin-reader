@@ -699,14 +699,20 @@ void DocSheet::setOperationChanged()
     emit sigOperationChanged(this);
 }
 
-int DocSheet::label2pagenum(QString)
+int DocSheet::label2pagenum(QString lable)
 {
-    return 0;
+    if (nullptr == m_browser)
+        return 0;
+
+    return m_browser->pageLableIndex(lable);
 }
 
 bool DocSheet::haslabel()
 {
-    return false;
+    if (nullptr == m_browser)
+        return false;
+
+    return  m_browser->pageHasLable();
 }
 
 void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
@@ -731,9 +737,12 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
     tFileInfo.numpages = static_cast<unsigned int>(m_browser->allPages());
 }
 
-QString DocSheet::pagenum2label(int)
+QString DocSheet::pagenum2label(const int index)
 {
-    return "";
+    if (nullptr == m_browser)
+        return "";
+
+    return m_browser->pageNum2Lable(index);
 }
 
 void DocSheet::onBrowserPageChanged(int page)
@@ -845,6 +854,14 @@ bool DocSheet::isLocked()
 bool DocSheet::isUnLocked()
 {
     return m_browser->isUnLocked();
+}
+
+int DocSheet::getPageLableIndex(const QString pageLable)
+{
+    if (m_browser)
+        return -1;
+
+    return m_browser->pageLableIndex(pageLable);
 }
 
 bool DocSheet::tryPassword(QString password)

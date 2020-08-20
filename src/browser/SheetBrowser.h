@@ -147,6 +147,12 @@ public:
 
     void showMenu();
 
+    int pageLableIndex(const QString);
+
+    bool pageHasLable();
+
+    QString pageNum2Lable(const int);
+
 signals:
     void sigPageChanged(int page);
 
@@ -285,6 +291,8 @@ private:
     bool m_selectIconAnnotation{false}; // 当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
+
+    QMap<QString, int> m_lable2Page;    // 文档下标页码
 
     int m_currentPage = 0;
     int m_lastrotation = 0;
