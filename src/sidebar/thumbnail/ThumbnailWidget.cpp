@@ -114,3 +114,8 @@ void ThumbnailWidget::scrollToCurrentPage()
 {
     m_pImageListView->scrollToIndex(m_sheet->currentIndex());
 }
+
+QWidget *ThumbnailWidget::getLastFocusWidget()
+{
+    return m_pPageWidget->getLastFocusWidget();
+}

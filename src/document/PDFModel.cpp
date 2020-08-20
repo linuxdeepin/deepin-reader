@@ -160,15 +160,15 @@ public:
 
         switch (section) {
         case 0:
-            return PDFDocument::tr("Name");
+            return "Name";
         case 1:
-            return PDFDocument::tr("Type");
+            return "Type";
         case 2:
-            return PDFDocument::tr("Embedded");
+            return "Embedded";
         case 3:
-            return PDFDocument::tr("Subset");
+            return "Subset";
         case 4:
-            return PDFDocument::tr("File");
+            return "File";
         default:
             return QVariant();
         }
@@ -714,9 +714,6 @@ bool PDFPage::canAddAndRemoveAnnotations() const
     return true;
 
 #else
-
-    QMessageBox::information(0, tr("Information"), tr("Version 0.20.1 or higher of the Poppler library is required to add or remove annotations."));
-
     return false;
 
 #endif // HAS_POPPLER_20

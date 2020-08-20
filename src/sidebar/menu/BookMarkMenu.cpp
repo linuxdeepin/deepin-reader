@@ -30,7 +30,7 @@ void BookMarkMenu::initActions()
     QAction *dltBookMarkAction = this->addAction(tr("Remove bookmark"));
     connect(dltBookMarkAction, SIGNAL(triggered()), SLOT(slotDelete()));
 
-    QAction *dltAllBookMarkAction = this->addAction(tr("Remove All bookmark"));
+    QAction *dltAllBookMarkAction = this->addAction(tr("Remove all"));
     connect(dltAllBookMarkAction, SIGNAL(triggered()), SLOT(slotDeleteAll()));
 }
 

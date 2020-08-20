@@ -32,7 +32,7 @@ void NoteMenu::initActions()
     QAction *delAction = this->addAction(tr("Remove annotation"));
     connect(delAction, SIGNAL(triggered()), this, SLOT(slotDelete()));
 
-    QAction *delAllAction = this->addAction(tr("Remove All annotation"));
+    QAction *delAllAction = this->addAction(tr("Remove all"));
     connect(delAllAction, SIGNAL(triggered()), this, SLOT(slotAllDelete()));
 }
 

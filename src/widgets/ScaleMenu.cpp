@@ -30,7 +30,7 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
     m_sheet = docSheet;
     m_pTwoPageAction    = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
-    m_pFitDefaultAction = createAction(tr("Fit Default"), SLOT(onDefaultPage()), true);
+    m_pFitDefaultAction = createAction(tr("1:1 size"), SLOT(onDefaultPage()), true);
     m_pFitWorHAction    = createAction(tr("Fit Page"), SLOT(onFitPage()), true);
     m_pFiteHAction      = createAction(tr("Fit Height"), SLOT(onFiteH()), true);
     m_pFiteWAction      = createAction(tr("Fit Width"), SLOT(onFiteW()), true);

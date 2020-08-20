@@ -94,7 +94,7 @@
         <translation>Remove bookmark</translation>
     </message>
     <message>
-        <source>Remove All bookmark</source>
+        <source>Remove all</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -140,10 +140,6 @@
         <translation type="unfinished">Search</translation>
     </message>
     <message>
-        <source>Exit Fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,6 +182,10 @@
     <message>
         <source>Highlight</source>
         <translation type="unfinished">Highlight</translation>
+    </message>
+    <message>
+        <source>Exit fullscreen</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -296,26 +296,6 @@
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Embedded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Subset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation type="unfinished">Yes</translation>
     </message>
@@ -335,7 +315,7 @@
         <translation>Remove annotation</translation>
     </message>
     <message>
-        <source>Remove All annotation</source>
+        <source>Remove all</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -346,18 +326,7 @@
         <translation>Add annotation</translation>
     </message>
     <message>
-        <source>Are you sure you want to delete all notes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PDFPage</name>
-    <message>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version 0.20.1 or higher of the Poppler library is required to add or remove annotations.</source>
+        <source>Are you sure you want to delete all annotations?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -394,8 +363,8 @@
         <translation>Save</translation>
     </message>
     <message>
-        <source>Ensure</source>
-        <translation type="unfinished"></translation>
+        <source>Delete</source>
+        <translation type="unfinished">Delete</translation>
     </message>
 </context>
 <context>
@@ -403,10 +372,6 @@
     <message>
         <source>Two-Page View</source>
         <translation type="unfinished">Two-Page View</translation>
-    </message>
-    <message>
-        <source>Fit Default</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fit Page</source>
@@ -419,6 +384,10 @@
     <message>
         <source>Fit Width</source>
         <translation type="unfinished">Fit Width</translation>
+    </message>
+    <message>
+        <source>1:1 size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

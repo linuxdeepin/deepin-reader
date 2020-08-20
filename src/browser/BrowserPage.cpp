@@ -139,7 +139,7 @@ QRectF BrowserPage::bookmarkRect()
 
 QRectF BrowserPage::bookmarkMouseRect()
 {
-    return QRectF(boundingRect().width() - 40, 10, 29, 29);
+    return QRectF(boundingRect().width() - 27, 10, 14, 20);
 }
 
 void BrowserPage::setBookmark(const bool &hasBookmark)

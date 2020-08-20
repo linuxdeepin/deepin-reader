@@ -58,6 +58,7 @@ void NotesWidget::initWidget()
     connect(m_pImageListView, SIGNAL(sigListItemClicked(int)), SLOT(onListItemClicked(int)));
 
     m_pAddAnnotationBtn = new DPushButton(this);
+    m_pAddAnnotationBtn->setObjectName("NotesAddBtn");
     m_pAddAnnotationBtn->setFixedHeight(36);
     m_pAddAnnotationBtn->setMinimumWidth(170);
     m_pAddAnnotationBtn->setText(tr("Add annotation"));
@@ -148,7 +149,7 @@ void NotesWidget::onListMenuClick(const int &iAction)
     } else if (iAction == E_NOTE_DELETE) {
         DeleteItemByKey();
     } else if (iAction == E_NOTE_DELETE_ALL) {
-        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all notes?"));
+        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all annotations?"));
         if (result == 1)
             deleteAllItem();
     }

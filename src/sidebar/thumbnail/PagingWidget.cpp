@@ -57,6 +57,7 @@ void PagingWidget::initWidget()
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
     m_pNextPageBtn->setFixedSize(QSize(tW, tH));
+    m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
     m_pJumpPageLineEdit = new DLineEdit();
@@ -220,4 +221,9 @@ void PagingWidget::slotPrePageBtnClicked()
 void PagingWidget::slotNextPageBtnClicked()
 {
     m_sheet->jumpToNextPage();
+}
+
+QWidget *PagingWidget::getLastFocusWidget()
+{
+    return m_pNextPageBtn;
 }

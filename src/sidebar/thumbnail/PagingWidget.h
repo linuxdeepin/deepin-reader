@@ -45,6 +45,8 @@ public:
 
     void setIndex(int index);
 
+    QWidget *getLastFocusWidget();
+
 private slots:
     void slotPrePageBtnClicked();
     void slotNextPageBtnClicked();

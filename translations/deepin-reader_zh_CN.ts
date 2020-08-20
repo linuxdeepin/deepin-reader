@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>Application</name>
     <message>
@@ -94,8 +92,8 @@
         <translation>删除书签</translation>
     </message>
     <message>
-        <source>Remove All bookmark</source>
-        <translation type="unfinished">删除所有书签</translation>
+        <source>Remove all</source>
+        <translation>全部删除</translation>
     </message>
 </context>
 <context>
@@ -106,86 +104,86 @@
     </message>
     <message>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished">您确定要删除所有书签吗？点击确定，删除所有书签；点击取消关闭弹框；</translation>
+        <translation>您确定要删除所有书签吗？</translation>
     </message>
 </context>
 <context>
     <name>BrowserMenu</name>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>Remove annotation</source>
-        <translation type="unfinished">删除注释</translation>
+        <translation>删除注释</translation>
     </message>
     <message>
         <source>Add annotation</source>
-        <translation type="unfinished">添加注释</translation>
+        <translation>添加注释</translation>
     </message>
     <message>
         <source>Remove bookmark</source>
-        <translation type="unfinished">删除书签</translation>
+        <translation>删除书签</translation>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation type="unfinished">添加书签</translation>
+        <translation>添加书签</translation>
     </message>
     <message>
         <source>Remove highlight</source>
-        <translation type="unfinished">取消高亮</translation>
+        <translation>取消高亮</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">搜索</translation>
-    </message>
-    <message>
-        <source>Exit Fullscreen</source>
-        <translation type="unfinished">退出全屏</translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished">全屏</translation>
+        <translation>全屏</translation>
     </message>
     <message>
         <source>Slide show</source>
-        <translation type="unfinished">幻灯片放映</translation>
+        <translation>幻灯片放映</translation>
     </message>
     <message>
         <source>First page</source>
-        <translation type="unfinished">第一页</translation>
+        <translation>第一页</translation>
     </message>
     <message>
         <source>Previous page</source>
-        <translation type="unfinished">前一页</translation>
+        <translation>前一页</translation>
     </message>
     <message>
         <source>Next page</source>
-        <translation type="unfinished">后一页</translation>
+        <translation>后一页</translation>
     </message>
     <message>
         <source>Last page</source>
-        <translation type="unfinished">最后一页</translation>
+        <translation>最后一页</translation>
     </message>
     <message>
         <source>Rotate left</source>
-        <translation type="unfinished">左旋转</translation>
+        <translation>左旋转</translation>
     </message>
     <message>
         <source>Rotate right</source>
-        <translation type="unfinished">右旋转</translation>
+        <translation>右旋转</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished">打印</translation>
+        <translation>打印</translation>
     </message>
     <message>
         <source>Document info</source>
-        <translation type="unfinished">文档信息</translation>
+        <translation>文档信息</translation>
     </message>
     <message>
         <source>Highlight</source>
-        <translation type="unfinished">高亮</translation>
+        <translation>高亮</translation>
+    </message>
+    <message>
+        <source>Exit fullscreen</source>
+        <translation>退出全屏</translation>
     </message>
 </context>
 <context>
@@ -238,30 +236,30 @@
     <name>DocSheet</name>
     <message>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished">已删除书签</translation>
+        <translation>已删除书签</translation>
     </message>
     <message>
         <source>The annotation has been removed</source>
-        <translation type="unfinished">已删除注释</translation>
+        <translation>已删除注释</translation>
     </message>
 </context>
 <context>
     <name>EncryptionPage</name>
     <message>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished">该文档已被加密,请输入密码</translation>
+        <translation>此文档已加密，请输入密码</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">确定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">密码</translation>
+        <translation>密码</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished">密码错误</translation>
+        <translation>密码错误</translation>
     </message>
 </context>
 <context>
@@ -296,32 +294,12 @@
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Embedded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Subset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation>是</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation>否</translation>
     </message>
 </context>
 <context>
@@ -335,8 +313,8 @@
         <translation>删除注释</translation>
     </message>
     <message>
-        <source>Remove All annotation</source>
-        <translation type="unfinished">删除所有注释</translation>
+        <source>Remove all</source>
+        <translation>全部删除</translation>
     </message>
 </context>
 <context>
@@ -346,19 +324,8 @@
         <translation>添加注释</translation>
     </message>
     <message>
-        <source>Are you sure you want to delete all notes?</source>
-        <translation type="unfinished">您确定要删除所有注释吗？点击确定，删除所有注释；点击取消关闭弹框；</translation>
-    </message>
-</context>
-<context>
-    <name>PDFPage</name>
-    <message>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version 0.20.1 or higher of the Poppler library is required to add or remove annotations.</source>
-        <translation type="unfinished"></translation>
+        <source>Are you sure you want to delete all annotations?</source>
+        <translation>您确定要删除所有注释吗？</translation>
     </message>
 </context>
 <context>
@@ -394,31 +361,31 @@
         <translation>保存</translation>
     </message>
     <message>
-        <source>Ensure</source>
-        <translation type="unfinished">确定</translation>
+        <source>Delete</source>
+        <translation>删除</translation>
     </message>
 </context>
 <context>
     <name>ScaleMenu</name>
     <message>
         <source>Two-Page View</source>
-        <translation type="unfinished">双页显示</translation>
-    </message>
-    <message>
-        <source>Fit Default</source>
-        <translation type="unfinished">默认大小</translation>
+        <translation>双页显示</translation>
     </message>
     <message>
         <source>Fit Page</source>
-        <translation type="unfinished">适合页面</translation>
+        <translation>适合页面</translation>
     </message>
     <message>
         <source>Fit Height</source>
-        <translation type="unfinished">适应高度</translation>
+        <translation>适应高度</translation>
     </message>
     <message>
         <source>Fit Width</source>
-        <translation type="unfinished">适应宽度</translation>
+        <translation>适应宽度</translation>
+    </message>
+    <message>
+        <source>1:1 size</source>
+        <translation>默认大小</translation>
     </message>
 </context>
 <context>
@@ -603,7 +570,7 @@
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished">全屏</translation>
+        <translation>全屏</translation>
     </message>
 </context>
 <context>
@@ -638,7 +605,7 @@
     </message>
     <message>
         <source>Tools</source>
-        <translation type="unfinished">工具</translation>
+        <translation>工具</translation>
     </message>
 </context>
 <context>
@@ -659,19 +626,19 @@
     <name>main</name>
     <message>
         <source>Document File Path.</source>
-        <translation type="unfinished"></translation>
+        <translation>Document File Path.</translation>
     </message>
     <message>
         <source>FilePath</source>
-        <translation type="unfinished"></translation>
+        <translation>FilePath</translation>
     </message>
     <message>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"></translation>
+        <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"></translation>
+        <translation>Generate thumbnail.</translation>
     </message>
 </context>
 </TS>

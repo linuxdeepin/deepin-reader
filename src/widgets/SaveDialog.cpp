@@ -47,7 +47,7 @@ int SaveDialog::showTipDialog(const QString &content)
     DDialog dlg(content, "");
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel"));
-    dlg.addButton(tr("Ensure"), true, DDialog::ButtonRecommend);
+    dlg.addButton(tr("Delete"), true, DDialog::ButtonRecommend);
     QMargins mar(12, 12, 12, 12);
     dlg.setContentLayoutContentsMargins(mar);
     int nRes = dlg.exec();
