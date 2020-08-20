@@ -398,7 +398,7 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
     if (annotation == nullptr) {
-        Q_ASSERT(false && "showNoteEditWidget Annotation Is Null");
+        qCritical() << "annotation == nullptr";
         return;
     }
 
