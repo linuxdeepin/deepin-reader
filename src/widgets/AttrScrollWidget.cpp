@@ -11,10 +11,8 @@
 #include "widgets/WordWrapLabel.h"
 
 DWIDGET_USE_NAMESPACE
-#define LAEBL_TEXT_WIDTH   165
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     : DFrame(parent)
-    , m_leftminwidth(60)
 {
     setFrameShape(QFrame::NoFrame);
 
@@ -25,14 +23,6 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
 
     deepin_reader::FileInfo fileInfo;
     sheet->docBasicInfo(fileInfo);
-    QLocale locale;
-    QFontMetrics fm(font());
-    //用最长字符来计算左侧最小宽度
-    if (locale.language() == QLocale::English) {
-        m_leftminwidth = fm.horizontalAdvance(("Time modified"));
-    } else if (locale.language() == QLocale::Chinese) {
-        m_leftminwidth = fm.horizontalAdvance("页面大小");
-    }
 
     createLabel(gridLayout, 0, tr("Location"), fileInfo.filePath);
     createLabel(gridLayout, 1, tr("Subject"), fileInfo.theme);
@@ -76,11 +66,14 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     QString text = sData.isEmpty() ? tr("Unknown") : sData;
     WordWrapLabel *labelText = new WordWrapLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
-    labelText->setFixedWidth(LAEBL_TEXT_WIDTH);
+    labelText->setFixedWidth(200);
     labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     labelText->setText(text);
     layout->addWidget(labelText, index, 1);
+
+    m_leftWidgetlst << label;
+    m_rightWidgetlst << labelText;
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
@@ -98,6 +91,9 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     labelText->setAlignment(Qt::AlignTop);
     labelText->setWordWrap(true);
     layout->addWidget(labelText, index, 1);
+
+    m_leftWidgetlst << label;
+    m_rightWidgetlst << labelText;
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData)
@@ -112,4 +108,31 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
     labelText->setText(bData ? tr("Yes") : tr("No"));
     labelText->setAlignment(Qt::AlignTop);
     layout->addWidget(labelText, index, 1);
+
+    m_leftWidgetlst << label;
+    m_rightWidgetlst << labelText;
+}
+
+bool AttrScrollWidget::eventFilter(QObject *object, QEvent *event)
+{
+    if (object == this) {
+        if (event->type() == QEvent::Resize) {
+            QLocale locale;
+            QFontMetrics fm(font());
+            //用最长字符来计算左侧最小宽度
+            int leftMinwidth = 60;
+            if (locale.language() == QLocale::English) {
+                leftMinwidth = fm.horizontalAdvance(("Time modified"));
+            } else if (locale.language() == QLocale::Chinese) {
+                leftMinwidth = fm.horizontalAdvance("页面大小");
+            }
+
+            for (QWidget *widget : m_leftWidgetlst)
+                widget->setFixedWidth(leftMinwidth);
+
+            for (QWidget *widget : m_rightWidgetlst)
+                widget->setFixedWidth(240 - leftMinwidth);
+        }
+    }
+    return DFrame::eventFilter(object, event);
 }

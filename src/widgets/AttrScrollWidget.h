@@ -19,8 +19,11 @@ private:
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData);
     void createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData);
 
-private:
-    int m_leftminwidth;
+protected:
+    bool eventFilter(QObject *object, QEvent *event) override;
+
+    QList<QWidget *> m_leftWidgetlst;
+    QList<QWidget *> m_rightWidgetlst;
 };
 
 #endif // ATTRSCROLLWIDGET_H
