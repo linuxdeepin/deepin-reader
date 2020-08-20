@@ -123,6 +123,11 @@ void BookMarkWidget::handleBookMark(int index, int state)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
 
+DPushButton *BookMarkWidget::getAddBtn()
+{
+    return m_pAddBookMarkBtn;
+}
+
 void BookMarkWidget::DeleteItemByKey()
 {
     int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());

@@ -179,6 +179,11 @@ void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotati
     }
 }
 
+DPushButton *NotesWidget::getAddBtn()
+{
+    return m_pAddAnnotationBtn;
+}
+
 void NotesWidget::copyNoteContent()
 {
     ImagePageInfo_t tImagePageInfo;

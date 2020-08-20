@@ -63,6 +63,9 @@ ImageViewModel *ImageListView::getImageModel()
 
 void ImageListView::showMenu()
 {
+    if (!this->currentIndex().isValid())
+        return;
+
     QPoint point = mapToGlobal(this->pos());
     if (m_listType == E_SideBar::SIDE_NOTE) {
         if (m_pNoteMenu == nullptr) {
@@ -141,6 +144,7 @@ bool ImageListView::scrollToIndex(int index, bool scrollTo)
         this->setCurrentIndex(index);
         return true;
     } else {
+        this->setCurrentIndex(QModelIndex());
         this->clearSelection();
         return false;
     }

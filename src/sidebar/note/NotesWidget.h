@@ -46,6 +46,8 @@ public:
     void handleOpenSuccess();
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
+    DPushButton       *getAddBtn();
+
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;

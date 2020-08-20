@@ -31,6 +31,7 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <DPushButton>
 
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     : CustomWidget(parent)
@@ -77,13 +78,14 @@ void SheetSidebar::initWidget()
     hLayout->setContentsMargins(15, 0, 15, 0);
 
     m_btnGroup = new QButtonGroup(this);
+    DToolButton *thumbnailbtn = nullptr;
     connect(m_btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(onBtnClicked(int)));
     if (m_widgetsFlag.testFlag(PREVIEW_THUMBNAIL)) {
         m_thumbnailWidget = new ThumbnailWidget(m_sheet, this);
         int index = m_stackLayout->addWidget(m_thumbnailWidget);
-        DToolButton *btn = createBtn(tr("Thumbnails"), "thumbnail");
-        m_btnGroup->addButton(btn, index);
-        hLayout->addWidget(btn);
+        thumbnailbtn = createBtn(tr("Thumbnails"), "thumbnail");
+        m_btnGroup->addButton(thumbnailbtn, index);
+        hLayout->addWidget(thumbnailbtn);
         hLayout->addStretch();
     }
 
@@ -94,6 +96,8 @@ void SheetSidebar::initWidget()
         m_btnGroup->addButton(btn, index);
         hLayout->addWidget(btn);
         hLayout->addStretch();
+        if (thumbnailbtn)
+            this->setTabOrder(m_catalogWidget, thumbnailbtn);
     }
 
     if (m_widgetsFlag.testFlag(PREVIEW_BOOKMARK)) {
@@ -103,6 +107,8 @@ void SheetSidebar::initWidget()
         m_btnGroup->addButton(btn, index);
         hLayout->addWidget(btn);
         hLayout->addStretch();
+        if (thumbnailbtn)
+            this->setTabOrder(m_bookmarkWidget->getAddBtn(), thumbnailbtn);
     }
 
     if (m_widgetsFlag.testFlag(PREVIEW_NOTE)) {
@@ -112,6 +118,8 @@ void SheetSidebar::initWidget()
         m_btnGroup->addButton(btn, index);
         hLayout->addWidget(btn);
         hLayout->addStretch();
+        if (thumbnailbtn)
+            this->setTabOrder(m_notesWidget->getAddBtn(), thumbnailbtn);
     }
 
     //remove last spaceitem
@@ -370,11 +378,7 @@ bool SheetSidebar::event(QEvent *event)
         }
     }
 
-    CustomWidget::event(event);
-
-    event->ignore();
-
-    return true;
+    return CustomWidget::event(event);
 }
 
 void SheetSidebar::onUpdateWidgetTheme()
