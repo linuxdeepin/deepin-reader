@@ -1087,7 +1087,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
         }
     }
 
-    renderViewPort(true);
+    updatePageFull();
 
     return annot;
 }
