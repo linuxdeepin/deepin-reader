@@ -905,8 +905,6 @@ bool SheetBrowser::event(QEvent *event)
     if (event && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
-            // show browser menu
-            qInfo() << "   SheetBrowser   Key_Menu ...  ";
             this->showMenu();
         }
     }

@@ -332,7 +332,6 @@ bool SheetSidebar::eventFilter(QObject *object, QEvent *event)
                     if (nextbtn == nullptr)
                         m_btnGroup->button(0);
                     if (btn == object && btn->hasFocus()) {
-                        qDebug() << btn->objectName() << nextbtn->objectName() << btn->hasFocus() << nextbtn->hasFocus();
                         focusNextChild();
                         nextbtn->setFocus(Qt::TabFocusReason);
                         return true;
