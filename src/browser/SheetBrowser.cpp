@@ -122,6 +122,12 @@ SheetBrowser::~SheetBrowser()
         delete m_noteEditWidget;
 }
 
+/**
+ * @brief SheetBrowser::firstThumbnail
+ * 获取封面缩略图
+ * @param filePath
+ * @return
+ */
 QImage SheetBrowser::firstThumbnail(const QString &filePath)
 {
     deepin_reader::Document *document = nullptr;
@@ -153,6 +159,11 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     return image;
 }
 
+/**
+ * @brief SheetBrowser::isUnLocked
+ * 是否上锁
+ * @return
+ */
 bool SheetBrowser::isUnLocked()
 {
     if (m_document == nullptr)
@@ -161,6 +172,14 @@ bool SheetBrowser::isUnLocked()
     return !m_document->isLocked();
 }
 
+/**
+ * brief SheetBrowser::open
+ * 打开文档
+ * @param fileType
+ * @param filePath
+ * @param password
+ * @return
+ */
 bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
 {
     m_filePassword = password;
@@ -186,6 +205,13 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     return true;
 }
 
+/**
+ * @brief SheetBrowser::loadPages
+ * 加载文档信息
+ * @param operation
+ * @param bookmarks
+ * @return
+ */
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
@@ -238,6 +264,13 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     return true;
 }
 
+/**
+ * @brief SheetBrowser::reOpen
+ * 重新打开
+ * @param fileType
+ * @param filePath
+ * @return
+ */
 bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
 {
     if (nullptr == m_document)  //未打开的无法重新打开
@@ -282,6 +315,11 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
     return true;
 }
 
+/**
+ * @brief SheetBrowser::save
+ * 保存
+ * @return
+ */
 bool SheetBrowser::save()
 {
     if (m_filePath.isEmpty())
@@ -305,6 +343,12 @@ bool SheetBrowser::save()
     return reOpen(m_fileType, m_filePath);
 }
 
+/**
+ * @brief SheetBrowser::saveAs
+ * 另存为
+ * @param filePath
+ * @return
+ */
 bool SheetBrowser::saveAs(const QString &filePath)
 {
     if (!m_document->save(filePath, true))
@@ -328,6 +372,12 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
     }
 }
 
+/**
+ * @brief SheetBrowser::setBookMark
+ * 操作文档书签
+ * @param index
+ * @param state
+ */
 void SheetBrowser::setBookMark(int index, int state)
 {
     if (m_items.count() > index) {
@@ -335,11 +385,20 @@ void SheetBrowser::setBookMark(int index, int state)
     }
 }
 
+/**
+ * @brief SheetBrowser::setAnnotationInserting
+ * 设置添加图标注释标志位
+ * @param inserting true:添加,false:不添加
+ */
 void SheetBrowser::setAnnotationInserting(bool inserting)
 {
     m_annotationInserting = inserting;
 }
 
+/**
+ * @brief SheetBrowser::onVerticalScrollBarValueChanged
+ * 纵向滚动条数值改变槽函数
+ */
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
     handleVerticalScrollLater();
@@ -351,6 +410,10 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
     }
 }
 
+/**
+ * @brief SheetBrowser::onHorizontalScrollBarValueChanged
+ * 水平滚动条数值改变槽函数
+ */
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 {
     handleVerticalScrollLater();
@@ -370,6 +433,10 @@ void SheetBrowser::onHorizontalScrollBarValueChanged(int)
     }
 }
 
+/**
+ * @brief SheetBrowser::onSceneOfViewportChanged
+ * 当前试图区域改变,渲染文档
+ */
 void SheetBrowser::onSceneOfViewportChanged()
 {
     foreach (BrowserPage *page, m_items) {
@@ -381,6 +448,7 @@ void SheetBrowser::onSceneOfViewportChanged()
 
 /**
  * @brief SheetBrowser::onAddHighLightAnnot
+ * 添加高亮注释槽函数
  */
 void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
 {
@@ -533,6 +601,14 @@ QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
     return  point;
 }
 
+/**
+ * @brief SheetBrowser::getClickAnnot
+ * 获得当前鼠标点击的注释
+ * @param page 哪一页
+ * @param clickPoint 鼠标点击位置
+ * @param drawRect 是否绘制选择框
+ * @return 当前点击注释的指针
+ */
 Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPoint, bool drawRect)
 {
     if (nullptr == m_sheet || nullptr == page)
@@ -561,6 +637,14 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
     return nullptr;
 }
 
+/**
+ * @brief SheetBrowser::addHighLightAnnotation
+ * 添加高亮注释
+ * @param contains 注释内容
+ * @param color 高亮颜色
+ * @param showPoint 选取文字的结束坐标
+ * @return 新添加高亮注释的指针
+ */
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
     Annotation *highLightAnnot{nullptr};
@@ -610,6 +694,13 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     return highLightAnnot;
 }
 
+/**
+ * @brief SheetBrowser::jump2PagePos
+ * 跳转到哪一页
+ * @param jumpPage  跳转页的指针
+ * @param posLeft
+ * @param posTop
+ */
 void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)
 {
     if (nullptr == jumpPage)
@@ -662,9 +753,9 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
 
 /**
  * @brief SheetBrowser::addNewIconAnnotDeleteOld
- * 鼠标移动图标注释,删除之前的,在新位置添加一个新的
- * @param page
- * @param clickPoint
+ * 鼠标移动图标注释,设置当前图标注释的位置
+ * @param page 图标注释所在页的指针
+ * @param clickPoint 鼠标移动的位置
  */
 void SheetBrowser::addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF clickPoint)
 {
@@ -681,6 +772,12 @@ void SheetBrowser::addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF cli
     }
 }
 
+/**
+ * @brief SheetBrowser::mouseClickIconAnnot
+ * 鼠标是否点击了注释图标
+ * @param clickPoint 鼠标位置
+ * @return
+ */
 bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
 {
     if (nullptr == m_document)
@@ -695,6 +792,11 @@ bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
+/**
+ * @brief SheetBrowser::selectedWordsText
+ * 鼠标选择的文字
+ * @return 文字内容
+ */
 QString SheetBrowser::selectedWordsText()
 {
     QString text;
@@ -722,6 +824,11 @@ void SheetBrowser::handleVerticalScrollLater()
     m_scrollTimer->start(100);
 }
 
+/**
+ * @brief SheetBrowser::annotations
+ * 获取注释列表
+ * @return
+ */
 QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 {
     QList<deepin_reader::Annotation *> list;
@@ -733,6 +840,12 @@ QList<deepin_reader::Annotation *> SheetBrowser::annotations()
     return list;
 }
 
+/**
+ * @brief SheetBrowser::removeAnnotation
+ * 删除单个注释
+ * @param annotation 要删除注释的指针
+ * @return 操作状态
+ */
 bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 {
     bool ret = false;
@@ -751,6 +864,11 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
     return ret;
 }
 
+/**
+ * @brief SheetBrowser::removeAllAnnotation
+ * 删除当前文档的所有注释
+ * @return 是否操作成功
+ */
 bool SheetBrowser::removeAllAnnotation()
 {
     foreach (BrowserPage *item, m_items) {
@@ -763,6 +881,14 @@ bool SheetBrowser::removeAllAnnotation()
     return true;
 }
 
+/**
+ * @brief SheetBrowser::updateAnnotation
+ * 更新高亮注释
+ * @param annotation 高亮注释的指针
+ * @param text 注释内容
+ * @param color 高亮颜色
+ * @return 是否更新成功
+ */
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
 {
     if (nullptr == m_document || nullptr == annotation)
@@ -786,16 +912,32 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     return ret;
 }
 
+/**
+ * @brief SheetBrowser::onRemoveAnnotation
+ * 删除注释
+ * @param annotation 要删除注释的指针
+ * @param tips 是否显示提示框
+ */
 void SheetBrowser::onRemoveAnnotation(deepin_reader::Annotation *annotation, bool tips)
 {
     m_sheet->removeAnnotation(annotation, tips);
 }
 
+/**
+ * @brief SheetBrowser::onUpdateAnnotation
+ * 更新注释内容
+ * @param annotation 注释指针
+ * @param text 注释内容
+ */
 void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text)
 {
     updateAnnotation(annotation, text);
 }
 
+/**
+ * @brief SheetBrowser::onInit
+ * 重新渲染当前页
+ */
 void SheetBrowser::onInit()
 {
     if (1 != m_initPage) {
@@ -806,6 +948,11 @@ void SheetBrowser::onInit()
     onSceneOfViewportChanged();
 }
 
+/**
+ * @brief SheetBrowser::outline
+ * 文档中的链接
+ * @return
+ */
 deepin_reader::Outline SheetBrowser::outline()
 {
     return m_document->outline();
@@ -816,6 +963,13 @@ Properties SheetBrowser::properties() const
     return m_document->properties();
 }
 
+/**
+ * @brief SheetBrowser::jumpToOutline
+ * 点击目录列表中的目录,跳转到文档区域相应位置处
+ * @param linkLeft 链接到左侧的距离
+ * @param linkTop 链接到顶部的距离
+ * @param index 哪一页
+ */
 void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, unsigned int index)
 {
     int pageIndex = static_cast<int>(index);
@@ -839,6 +993,12 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, un
     jump2PagePos(jumpPage, linkLeft, linkTop);
 }
 
+/**
+ * @brief SheetBrowser::jumpToHighLight
+ * 点击注释列表中的注释,文档区跳到相应注释处
+ * @param annotation 点击的那个注释
+ * @param index 哪一页
+ */
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
 {
     if (nullptr == m_sheet || nullptr == annotation || (index < 0 || index >= m_items.count()))
@@ -867,6 +1027,12 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     jump2PagePos(jumpPage, firstRect.x(), firstRect.y());
 }
 
+/**
+ * @brief SheetBrowser::mouseClickInPage
+ * 根据鼠标点击位置获取当前页指针
+ * @param point
+ * @return
+ */
 BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
 {
     foreach (BrowserPage *page, m_items) {
@@ -882,6 +1048,11 @@ BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
     return nullptr;
 }
 
+/**
+ * @brief SheetBrowser::wheelEvent
+ * 鼠标滚轮事件
+ * @param event
+ */
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
@@ -900,6 +1071,12 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
     QGraphicsView::wheelEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::event
+ * 综合事件处理中心
+ * @param event
+ * @return
+ */
 bool SheetBrowser::event(QEvent *event)
 {
     if (event && event->type() == QEvent::KeyPress) {
@@ -950,6 +1127,12 @@ bool SheetBrowser::event(QEvent *event)
     return QGraphicsView::event(event);
 }
 
+/**
+ * @brief SheetBrowser::gestureEvent
+ * 处理触摸屏手势事件
+ * @param event
+ * @return
+ */
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
@@ -994,6 +1177,11 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     }
 }
 
+/**
+ * @brief SheetBrowser::deform
+ * 渲染当前视图中的页
+ * @param operation 渲染参数包括,大小,单双页,旋转,缩放比例
+ */
 void SheetBrowser::deform(SheetOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
@@ -1162,11 +1350,21 @@ void SheetBrowser::deform(SheetOperation &operation)
     handleVerticalScrollLater();
 }
 
+/**
+ * @brief SheetBrowser::hasLoaded
+ * 文档是否已加载过
+ * @return
+ */
 bool SheetBrowser::hasLoaded()
 {
     return m_hasLoaded;
 }
 
+/**
+ * @brief SheetBrowser::resizeEvent
+ * 当前文档视图大小变化事件
+ * @param event
+ */
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
@@ -1192,6 +1390,11 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     QGraphicsView::resizeEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::mousePressEvent
+ * 鼠标点击操作
+ * @param event
+ */
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
@@ -1364,6 +1567,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
     DGraphicsView::mousePressEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::mouseMoveEvent
+ * 鼠标移动操作
+ * @param event
+ */
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint mousePos = event->pos();
@@ -1528,6 +1736,11 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     QGraphicsView::mouseMoveEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::mouseReleaseEvent
+ * 鼠标释放操作
+ * @param event
+ */
 void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     Qt::MouseButton btn = event->button();
@@ -1576,11 +1789,21 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     QGraphicsView::mouseReleaseEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::allPages
+ * 当前文档页码总数
+ * @return
+ */
 int SheetBrowser::allPages()
 {
     return m_items.count();
 }
 
+/**
+ * @brief SheetBrowser::currentPage
+ * 当前页页码(从1开始)
+ * @return
+ */
 int SheetBrowser::currentPage()
 {
     if (m_currentPage >= 0)
@@ -1589,6 +1812,11 @@ int SheetBrowser::currentPage()
     return currentScrollValueForPage();
 }
 
+/**
+ * @brief SheetBrowser::currentScrollValueForPage
+ * 纵向滚动条值变化,得到滚动条当前位置所在文档页的页码
+ * @return 文档页的页码(页码从1开始)
+ */
 int SheetBrowser::currentScrollValueForPage()
 {
     int value = verticalScrollBar()->value();
@@ -1617,6 +1845,12 @@ int SheetBrowser::currentScrollValueForPage()
     return index + 1;
 }
 
+/**
+ * @brief SheetBrowser::viewPointInIndex
+ * 根据鼠标点击位置获取鼠标点击文档页的编号
+ * @param viewPoint 鼠标点击位置
+ * @return 文档页的编号,从0开始
+ */
 int SheetBrowser::viewPointInIndex(QPoint viewPoint)
 {
     BrowserPage *item  = static_cast<BrowserPage *>(itemAt(viewPoint));
@@ -1624,6 +1858,11 @@ int SheetBrowser::viewPointInIndex(QPoint viewPoint)
     return m_items.indexOf(item);
 }
 
+/**
+ * @brief SheetBrowser::setCurrentPage
+ * 页码跳转
+ * @param page 跳转的页码
+ */
 void SheetBrowser::setCurrentPage(int page)
 {
     if (page < 1 && page > allPages())
@@ -1650,6 +1889,17 @@ void SheetBrowser::setCurrentPage(int page)
     curpageChanged(page);
 }
 
+/**
+ * @brief SheetBrowser::getImage
+ * 获取文档页图片
+ * @param index 页码编号
+ * @param image 页码图片
+ * @param width 图片宽度
+ * @param height 图片高度
+ * @param mode 图片状态
+ * @param bSrc
+ * @return
+ */
 bool SheetBrowser::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
 {
     if (m_items.count() <= index)
@@ -1660,6 +1910,12 @@ bool SheetBrowser::getImage(int index, QImage &image, double width, double heigh
     return true;
 }
 
+/**
+ * @brief SheetBrowser::getBrowserPageForPoint
+ * 根据鼠标点击位置判断在哪一页
+ * @param viewPoint 鼠标点击位置
+ * @return 鼠标点击的页
+ */
 BrowserPage *SheetBrowser::getBrowserPageForPoint(QPoint &viewPoint)
 {
     BrowserPage *item = nullptr;
@@ -1684,6 +1940,14 @@ BrowserPage *SheetBrowser::getBrowserPageForPoint(QPoint &viewPoint)
     return nullptr;
 }
 
+/**
+ * @brief SheetBrowser::addIconAnnotation
+ * 添加图标注释
+ * @param page 哪一页
+ * @param clickPoint 要添加的注释图标的位置
+ * @param contents 图标注释内容
+ * @return 当前添加的注释
+ */
 Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF clickPoint, const QString contents)
 {
     Annotation *anno = nullptr;
@@ -1710,6 +1974,10 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF cli
     return anno;
 }
 
+/**
+ * @brief SheetBrowser::openMagnifier
+ * 打开放大镜
+ */
 void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
@@ -1719,6 +1987,10 @@ void SheetBrowser::openMagnifier()
     }
 }
 
+/**
+ * @brief SheetBrowser::closeMagnifier
+ * 关闭放大镜
+ */
 void SheetBrowser::closeMagnifier()
 {
     if (nullptr != m_magnifierLabel) {
@@ -1735,16 +2007,31 @@ void SheetBrowser::closeMagnifier()
     }
 }
 
+/**
+ * @brief SheetBrowser::magnifierOpened
+ * 是否开启了放大镜
+ * @return true:开启,false:未开启
+ */
 bool SheetBrowser::magnifierOpened()
 {
     return (nullptr != m_magnifierLabel) ;
 }
 
+/**
+ * @brief SheetBrowser::maxWidth
+ * 最大一页的宽度
+ * @return  宽度值
+ */
 int SheetBrowser::maxWidth()
 {
     return m_maxWidth;
 }
 
+/**
+ * @brief SheetBrowser::maxHeight
+ *最大一页的高度
+ * @return 高度值
+ */
 int SheetBrowser::maxHeight()
 {
     return m_maxHeight;
@@ -1755,11 +2042,21 @@ void SheetBrowser::needBookmark(int index, bool state)
     emit sigNeedBookMark(index, state);
 }
 
+/**
+ * @brief SheetBrowser::dragEnterEvent
+ * 忽略拖拽事件
+ * @param event
+ */
 void SheetBrowser::dragEnterEvent(QDragEnterEvent *event)
 {
     event->ignore();
 }
 
+/**
+ * @brief SheetBrowser::showEvent
+ * 文档显示事件,文档再次展示时,渲染当前视图中的页
+ * @param event
+ */
 void SheetBrowser::showEvent(QShowEvent *event)
 {
     QTimer::singleShot(100, this, SLOT(onInit()));
@@ -1767,6 +2064,10 @@ void SheetBrowser::showEvent(QShowEvent *event)
     QGraphicsView::showEvent(event);
 }
 
+/**
+ * @brief SheetBrowser::handleSearch
+ * 搜索操作,弹出搜索框
+ */
 void SheetBrowser::handleSearch()
 {
     if (m_pFindWidget == nullptr) {
@@ -1779,6 +2080,10 @@ void SheetBrowser::handleSearch()
     m_pFindWidget->setSearchEditFocus();
 }
 
+/**
+ * @brief SheetBrowser::stopSearch
+ * 停止搜索
+ */
 void SheetBrowser::stopSearch()
 {
     if (!m_pFindWidget)
@@ -1787,6 +2092,10 @@ void SheetBrowser::stopSearch()
     m_pFindWidget->stopSearch();
 }
 
+/**
+ * @brief SheetBrowser::handleFindNext
+ * 跳到下一个搜索条目中
+ */
 void SheetBrowser::handleFindNext()
 {
     int size = m_items.size();
@@ -1825,6 +2134,10 @@ void SheetBrowser::handleFindNext()
     }
 }
 
+/**
+ * @brief SheetBrowser::handleFindPrev
+ * 跳到前一个搜索条目中
+ */
 void SheetBrowser::handleFindPrev()
 {
     int size = m_items.size();
@@ -1863,6 +2176,10 @@ void SheetBrowser::handleFindPrev()
     }
 }
 
+/**
+ * @brief SheetBrowser::handleFindExit
+ * 结束搜索操作,结束搜索任务,清空搜索列表,展示上一次缩略图列表
+ */
 void SheetBrowser::handleFindExit()
 {
     m_searchCurIndex = 0;
@@ -1872,6 +2189,11 @@ void SheetBrowser::handleFindExit()
         page->clearSearchHighlightRects();
 }
 
+/**
+ * @brief SheetBrowser::handleFindContent
+ * 搜索操作
+ * @param strFind 要搜索的内容
+ */
 void SheetBrowser::handleFindContent(const QString &strFind)
 {
     m_searchCurIndex = m_sheet->currentIndex();
@@ -1879,11 +2201,21 @@ void SheetBrowser::handleFindContent(const QString &strFind)
     m_searchTask->startSearch(m_items, strFind, m_searchCurIndex);
 }
 
+/**
+ * @brief SheetBrowser::handleFindFinished
+ * 设置搜索框状态,如果有搜索框是正常,反之设置成Alert状态
+ * @param searchcnt 搜索条目数量
+ */
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
     m_pFindWidget->setEditAlert(searchcnt == 0);
 }
 
+/**
+ * @brief SheetBrowser::curpageChanged
+ * 页码变化
+ * @param curpage 当前页页码编号,从0开始
+ */
 void SheetBrowser::curpageChanged(int curpage)
 {
     if (m_currentPage != curpage) {
@@ -1892,6 +2224,12 @@ void SheetBrowser::curpageChanged(int curpage)
     }
 }
 
+/**
+ * @brief SheetBrowser::isLink
+ * 判断鼠标点击位置是否有链接或者目录
+ * @param point 鼠标点击位置
+ * @return true:有, false:没有
+ */
 bool SheetBrowser::isLink(const QPointF point)
 {
     QPointF mouseMovePoint = point;
@@ -1909,6 +2247,11 @@ bool SheetBrowser::isLink(const QPointF point)
     return page->inLink(mouseMovePoint);
 }
 
+/**
+ * @brief SheetBrowser::setIconAnnotSelect
+ * 设置注释图标选择框
+ * @param select true:是选择, false:取消选择
+ */
 void SheetBrowser::setIconAnnotSelect(const bool select)
 {
     if (m_lastSelectIconAnnotPage)
@@ -1916,6 +2259,12 @@ void SheetBrowser::setIconAnnotSelect(const bool select)
     m_lastSelectIconAnnotPage = nullptr;
 }
 
+/**
+ * @brief SheetBrowser::jump2Link
+ * 判断鼠标点击的位置是否有链接或者目录,如果有响应跳转
+ * @param point 鼠标点击的位置
+ * @return 返回跳转状态
+ */
 bool SheetBrowser::jump2Link(const QPointF point)
 {
     QPointF mouseClickPoint = point;
@@ -2008,6 +2357,12 @@ void SheetBrowser::showMenu()
     menu.exec(showPos);
 }
 
+/**
+ * @brief SheetBrowser::pageLableIndex
+ * 根据文档页页码得到文档页编号
+ * @param pageLable
+ * @return
+ */
 int SheetBrowser::pageLableIndex(const QString pageLable)
 {
     if (m_lable2Page.count() <= 0 || !m_lable2Page.contains(pageLable))
@@ -2016,6 +2371,11 @@ int SheetBrowser::pageLableIndex(const QString pageLable)
     return m_lable2Page.value(pageLable);
 }
 
+/**
+ * @brief SheetBrowser::pageHasLable
+ * 判断文档是否有文档页页码
+ * @return  如果有返回true,反之返回false
+ */
 bool SheetBrowser::pageHasLable()
 {
     if (m_lable2Page.count() > 0) {
@@ -2025,6 +2385,12 @@ bool SheetBrowser::pageHasLable()
     return false;
 }
 
+/**
+ * @brief SheetBrowser::pageNum2Lable
+ * 根据文档页编号得到文档页页码
+ * @param index 文档页编号
+ * @return 如果有返回文档页页码,反之返回空字符串
+ */
 QString SheetBrowser::pageNum2Lable(const int index)
 {
     QMap<QString, int>::const_iterator iter;
