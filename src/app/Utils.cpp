@@ -333,6 +333,8 @@ QList<QColor> Utils::getHiglightColorList()
 
 void Utils::setHiglightColorIndex(int index)
 {
+    if (m_colorIndex < 0 || m_colorIndex >= getHiglightColorList().size())
+        return;
     m_colorIndex = index;
 }
 

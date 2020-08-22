@@ -4,7 +4,7 @@ QT += core gui sql printsupport dbus network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = deepin-reader-test
+TARGET = deepin-reader
 
 TEMPLATE = app
 
@@ -35,7 +35,11 @@ include ($$SRCPWD/document/document.pri)
 
 SOURCES += \
     $$SRCPWD/Application.cpp \
-    main.cpp \
+    app/ut_utils.cpp \
+    sidebar/ut_sheetsidebar.cpp \
+    uiframe/ut_docsheet.cpp \
+    uiframe/ut_uiframe.cpp \
+    ut_main.cpp \
     $$SRCPWD/MainWindow.cpp \
     $$SRCPWD/uiframe/TitleMenu.cpp \
     $$SRCPWD/uiframe/TitleWidget.cpp \
@@ -43,7 +47,9 @@ SOURCES += \
     $$SRCPWD/uiframe/CentralNavPage.cpp \
     $$SRCPWD/uiframe/CentralDocPage.cpp \
     $$SRCPWD/uiframe/DocTabBar.cpp \
-    $$SRCPWD/uiframe/DocSheet.cpp
+    $$SRCPWD/uiframe/DocSheet.cpp \
+    ut_mainwindow.cpp \
+    widgets/ut_widgets.cpp
 
 HEADERS +=\
     $$SRCPWD/Application.h\
@@ -55,8 +61,13 @@ HEADERS +=\
     $$SRCPWD/uiframe/CentralDocPage.h \
     $$SRCPWD/uiframe/DocTabBar.h \
     $$SRCPWD/uiframe/DocSheet.h \
-    tst_siderbar.h \
-    tst_mainwindow.h
+    sidebar/ut_sheetsidebar.h \
+    app/ut_utils.h \
+    uiframe/ut_docsheet.h \
+    uiframe/ut_uiframe.h \
+    ut_defines.h \
+    ut_mainwindow.h \
+    widgets/ut_widgets.h
 
 RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc

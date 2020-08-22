@@ -4,7 +4,7 @@
 
 workdir=./build-deepin_reader_case-unknown-Debug
 
-executable=deepin-reader-test
+executable=deepin-reader
 
 build_dir=$workdir
 
