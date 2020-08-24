@@ -46,6 +46,9 @@ public:
     void setEditText(const QString &note);
     void setAnnotation(deepin_reader::Annotation *annotation);
 
+public slots:
+    void onBlurWindowChanged();
+
 protected:
     void initWidget() override;
     void hideEvent(QHideEvent *event) override;

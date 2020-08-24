@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QGraphicsDropShadowEffect>
 #include <QLinearGradient>
+#include <DWindowManagerHelper>
 
 NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
     : DWidget(nullptr)
@@ -44,17 +45,10 @@ void NoteShadowViewWidget::initWidget()
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
     pHLayoutContant->setMargin(12);
-
-    m_noteViewWidget = new NoteViewWidget(this);
-
-    pHLayoutContant->addWidget(m_noteViewWidget);
     this->setLayout(pHLayoutContant);
 
-    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(m_noteViewWidget);
-    shadowEffect->setOffset(4, 4);
-    shadowEffect->setColor(QColor(0, 0, 0, 100));
-    shadowEffect->setBlurRadius(16);
-    m_noteViewWidget->setGraphicsEffect(shadowEffect);
+    m_noteViewWidget = new NoteViewWidget(this);
+    pHLayoutContant->addWidget(m_noteViewWidget);
 }
 
 NoteViewWidget *NoteShadowViewWidget::getNoteViewWidget()
@@ -64,7 +58,7 @@ NoteViewWidget *NoteShadowViewWidget::getNoteViewWidget()
 
 void NoteShadowViewWidget::showWidget(const QPoint &point)
 {
-    move(point - QPoint(12, 12));
+    move(point - QPoint(this->layout()->margin(), this->layout()->margin()));
     raise();
     show();
 }
@@ -126,6 +120,27 @@ void NoteViewWidget::initWidget()
 
     pHLayoutContant->addWidget(m_pTextEdit);
     this->setLayout(pHLayoutContant);
+
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
+    shadowEffect->setOffset(4, 4);
+    shadowEffect->setColor(QColor(0, 0, 0, 100));
+    shadowEffect->setBlurRadius(16);
+    setGraphicsEffect(shadowEffect);
+
+    onBlurWindowChanged();
+    QObject::connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &NoteViewWidget::onBlurWindowChanged);
+}
+
+void NoteViewWidget::onBlurWindowChanged()
+{
+    if (DWindowManagerHelper::instance()->hasComposite()) {
+        this->graphicsEffect()->setEnabled(true);
+        parentWidget()->layout()->setMargin(12);
+
+    } else {
+        this->graphicsEffect()->setEnabled(false);
+        parentWidget()->layout()->setMargin(0);
+    }
 }
 
 void NoteViewWidget::paintEvent(QPaintEvent *event)
@@ -135,8 +150,12 @@ void NoteViewWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
     QPainterPath clippath;
     clippath.setFillRule(Qt::WindingFill);
-    int minRadius = 16;
-    int maxRadius = 32;
+    int minRadius = 0;
+    int maxRadius = 0;
+    if (DWindowManagerHelper::instance()->hasComposite()) {
+        minRadius = 16;
+        maxRadius = 32;
+    }
     clippath.moveTo(minRadius, 0);
     clippath.lineTo(this->width() - minRadius, 0);
     clippath.arcTo(this->width() - minRadius * 2, 0, minRadius * 2, minRadius * 2, 90, -90);
