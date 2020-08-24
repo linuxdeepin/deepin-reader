@@ -65,7 +65,7 @@ public:
 
     bool reOpen(const Dr::FileType &fileType, const QString &filePath);
 
-    bool save();
+    bool save(const QString &path);
 
     bool saveAs(const QString &filePath);
 

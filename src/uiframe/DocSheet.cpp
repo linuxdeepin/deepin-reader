@@ -363,7 +363,7 @@ bool DocSheet::fileChanged()
 
 bool DocSheet::saveData()
 {
-    if (m_documentChanged && !m_browser->save())
+    if (m_documentChanged && !m_browser->save(filePath()))
         return false;
 
     m_documentChanged = false;

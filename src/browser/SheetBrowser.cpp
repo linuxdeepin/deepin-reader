@@ -320,9 +320,9 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
  * 保存
  * @return
  */
-bool SheetBrowser::save()
+bool SheetBrowser::save(const QString &path)
 {
-    if (m_filePath.isEmpty())
+    if (path.isEmpty())
         return false;
 
     QString tmpFilePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QUuid::createUuid().toString() + ".tmp";
@@ -333,14 +333,14 @@ bool SheetBrowser::save()
 
     QFile tmpFile(tmpFilePath);
 
-    if (!Utils::copyFile(tmpFilePath, m_filePath)) {
+    if (!Utils::copyFile(tmpFilePath, path)) {
         tmpFile.remove();
         return false;
     }
 
     tmpFile.remove();
 
-    return reOpen(m_fileType, m_filePath);
+    return reOpen(m_fileType, path);
 }
 
 /**
@@ -351,10 +351,7 @@ bool SheetBrowser::save()
  */
 bool SheetBrowser::saveAs(const QString &filePath)
 {
-    if (!m_document->save(filePath, true))
-        return false;
-
-    return reOpen(m_fileType, filePath);
+    return save(filePath);
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)

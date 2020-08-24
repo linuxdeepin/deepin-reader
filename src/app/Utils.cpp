@@ -175,6 +175,9 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
 
 bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
 {
+    if (sourcePath == destinationPath)
+        return true;
+
     QFile sourceFile(sourcePath);
     if (!sourceFile.open(QIODevice::ReadOnly)) {
         return false;
