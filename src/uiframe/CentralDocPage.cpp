@@ -69,6 +69,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     m_pDocTabLabel->setElideMode(Qt::ElideMiddle);
     m_pDocTabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     m_pDocTabLabel->setAlignment(Qt::AlignCenter);
+    m_pDocTabLabel->setFocusPolicy(Qt::NoFocus);
     connect(this, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
 }
 

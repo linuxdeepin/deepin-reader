@@ -343,6 +343,22 @@ bool SheetSidebar::eventFilter(QObject *object, QEvent *event)
     return CustomWidget::eventFilter(object, event);
 }
 
+void SheetSidebar::showMenu()
+{
+    DToolButton *bookmarkbtn = this->findChild<DToolButton *>("bookmark");
+    if (bookmarkbtn && bookmarkbtn->isChecked()) {
+        if (m_bookmarkWidget) {
+            m_bookmarkWidget->showMenu();
+        }
+    }
+    DToolButton *annotationbtn = this->findChild<DToolButton *>("annotation");
+    if (annotationbtn && annotationbtn->isChecked()) {
+        if (m_notesWidget) {
+            m_notesWidget->showMenu();
+        }
+    }
+}
+
 void SheetSidebar::dealWithPressKey(const QString &sKey)
 {
     if (sKey == Dr::key_up || sKey == Dr::key_pgUp || sKey == Dr::key_left) {
@@ -409,19 +425,11 @@ bool SheetSidebar::event(QEvent *event)
         //将事件转化为键盘事件
         QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
         //按下Tab键执行焦点切换事件
-        if (key_event->key() == Qt::Key_Menu) {
-            DToolButton *bookmarkbtn = this->findChild<DToolButton *>("bookmark");
-            if (bookmarkbtn && bookmarkbtn->isChecked()) {
-                if (m_bookmarkWidget) {
-                    m_bookmarkWidget->showMenu();
-                }
-            }
-            DToolButton *annotationbtn = this->findChild<DToolButton *>("annotation");
-            if (annotationbtn && annotationbtn->isChecked()) {
-                if (m_notesWidget) {
-                    m_notesWidget->showMenu();
-                }
-            }
+        if (key_event->key() == Qt::Key_Menu && !key_event->isAutoRepeat()) {
+            showMenu();
+        }
+        if (key_event->key() == Qt::Key_M && (key_event->modifiers() & Qt::AltModifier) && !key_event->isAutoRepeat()) {
+            showMenu();
         }
     }
 

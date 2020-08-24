@@ -86,6 +86,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
+    void showMenu() override;
 
 private slots:
     void onBtnClicked(int index);

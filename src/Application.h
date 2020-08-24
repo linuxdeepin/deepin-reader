@@ -50,6 +50,8 @@ public slots:
 protected:
     void handleQuitAction() override;
 
+    bool notify(QObject *object, QEvent *event) override;
+
 public:
     bool isBlockShutdown = false;
 

@@ -1084,6 +1084,15 @@ bool SheetBrowser::event(QEvent *event)
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
             this->showMenu();
         }
+        if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
+            //搜索框
+            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
+                qInfo() << __LINE__ << __FUNCTION__;
+                return DGraphicsView::event(event);
+            }
+
+            this->showMenu();
+        }
     }
 
     if (event->type() == QEvent::Gesture)
