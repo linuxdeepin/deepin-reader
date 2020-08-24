@@ -211,12 +211,15 @@ void MainWindow::initUI()
     titlebar()->setAutoHideOnFullscreen(false);
 
     //移除焦点抢占和避免出现焦点样式
-    titlebar()->setFocusPolicy(Qt::NoFocus);
 //    QList<QWidget *> list = titlebar()->findChildren<QWidget *>();
 //    foreach (QWidget *w, list) {
 //        if (!w->objectName().isEmpty())
 //            w->setFocusPolicy(Qt::NoFocus);
 //    }
+
+    titlebar()->setFocusPolicy(Qt::NoFocus);
+
+    this->setTabOrder(titlebar(), m_central->titleWidget());
 
     QTimer::singleShot(10, this, SLOT(onUpdateTitleLabelRect()));
 }

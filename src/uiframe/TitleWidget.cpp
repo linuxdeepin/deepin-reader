@@ -28,8 +28,10 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(parent)
 {
-    setFocusPolicy(Qt::NoFocus);
+//    setFocusPolicy(Qt::NoFocus);
     initWidget();
+
+    setFocusProxy(m_pThumbnailBtn);
 }
 
 TitleWidget::~TitleWidget()
