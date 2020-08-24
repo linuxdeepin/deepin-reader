@@ -22,6 +22,7 @@
 #define CentralNavPage_H
 
 #include "widgets/CustomWidget.h"
+#include <QKeyEvent>
 
 class CentralNavPage : public CustomWidget
 {
@@ -38,6 +39,8 @@ signals:
 
 protected:
     void initWidget() override;
+
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void slotChooseBtnClicked();
