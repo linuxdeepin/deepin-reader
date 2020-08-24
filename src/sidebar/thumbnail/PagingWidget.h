@@ -58,8 +58,8 @@ private:
     void initWidget() override;
     void __SetBtnState(const int &currntPage, const int &totalPage);
 
-    void __NormalChangePage();
-    void __PageNumberJump();
+    void normalChangePage();
+    void pageNumberJump();
 
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签

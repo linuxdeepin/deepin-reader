@@ -24,6 +24,7 @@
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
+    setFocusPolicy(Qt::NoFocus);
     initWidget();
 
     slotUpdateTheme();
@@ -65,6 +66,7 @@ void PagingWidget::initWidget()
     tH = 36;
 
     m_pJumpPageLineEdit->setFixedSize(tW, tH);
+    m_pJumpPageLineEdit->setFocusPolicy(Qt::StrongFocus);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
@@ -175,9 +177,9 @@ void PagingWidget::handleOpenSuccess()
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
     if (m_pCurrantPageLab == nullptr) {
-        __NormalChangePage();
+        normalChangePage();
     } else {
-        __PageNumberJump();
+        pageNumberJump();
     }
 }
 
@@ -187,7 +189,7 @@ void PagingWidget::onEditFinished()
         setIndex(m_curIndex);
 }
 
-void PagingWidget::__NormalChangePage()
+void PagingWidget::normalChangePage()
 {
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
@@ -195,11 +197,10 @@ void PagingWidget::__NormalChangePage()
         m_sheet->showTips(tr("Invalid page number"), 1);
     } else {
         m_sheet->jumpToIndex(iPage - 1);
-        setFocus();
     }
 }
 
-void PagingWidget::__PageNumberJump()
+void PagingWidget::pageNumberJump()
 {
     int nPageSum = m_sheet->pagesNumber();
     QString sText = m_pJumpPageLineEdit->text();
@@ -207,7 +208,6 @@ void PagingWidget::__PageNumberJump()
 
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
         m_sheet->jumpToIndex(iPage);
-        setFocus();
     } else {
         m_sheet->showTips(tr("Invalid page number"), 1);
     }
