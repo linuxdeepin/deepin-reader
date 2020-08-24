@@ -35,7 +35,10 @@ include ($$SRCPWD/document/document.pri)
 
 SOURCES += \
     $$SRCPWD/Application.cpp \
+    app/ut_json.cpp \
     app/ut_utils.cpp \
+    document/ut_djvumodel.cpp \
+    document/ut_pdfmodel.cpp \
     sidebar/ut_sheetsidebar.cpp \
     uiframe/ut_docsheet.cpp \
     uiframe/ut_uiframe.cpp \
@@ -61,6 +64,9 @@ HEADERS +=\
     $$SRCPWD/uiframe/CentralDocPage.h \
     $$SRCPWD/uiframe/DocTabBar.h \
     $$SRCPWD/uiframe/DocSheet.h \
+    app/ut_json.h \
+    document/ut_djvumodel.h \
+    document/ut_pdfmodel.h \
     sidebar/ut_sheetsidebar.h \
     app/ut_utils.h \
     uiframe/ut_docsheet.h \

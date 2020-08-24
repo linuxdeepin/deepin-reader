@@ -57,7 +57,7 @@ void Ut_Widgets::TearDown()
 TEST(Ut_Widgets, CustomMenuTest)
 {
     CustomMenu menu;
-    EXPECT_TRUE(menu.createAction("test", "onTest", true));
+    EXPECT_TRUE(menu.createAction("test", nullptr, true));
 }
 
 TEST(Ut_Widgets, RoundColorWidgetTest)
