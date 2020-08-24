@@ -27,6 +27,7 @@
 
 #include "DocSheet.h"
 #include "widgets/CustomWidget.h"
+#include "widgets/CustemPushButton.h"
 
 class ScaleWidget;
 class DocSheet;
@@ -55,13 +56,13 @@ private slots:
 private:
     void initBtns();
     void setBtnDisable(const bool &bAble);
-    DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
+    CustemPushButton *createBtn(const QString &btnName, bool bCheckable = false);
 
 private:
     QStringList shortKeyList;
 
     ScaleWidget *m_pSw = nullptr;
-    DPushButton *m_pThumbnailBtn = nullptr;
+    CustemPushButton *m_pThumbnailBtn = nullptr;
     QPointer<DocSheet> m_curSheet = nullptr;
 };
 

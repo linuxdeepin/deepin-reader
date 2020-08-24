@@ -41,7 +41,7 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-    m_pThumbnailBtn->setFocusPolicy(Qt::TabFocus);
+//    m_pThumbnailBtn->setFocusPolicy(Qt::TabFocus);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
 }
 
@@ -103,7 +103,6 @@ void TitleWidget::onThumbnailBtnClicked()
 
     bool rl = m_pThumbnailBtn->isChecked();
     m_curSheet->setSidebarVisible(rl);
-
 }
 
 void TitleWidget::onFindOperation(const int &sAction)
@@ -118,10 +117,10 @@ void TitleWidget::onFindOperation(const int &sAction)
     }
 }
 
-DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+CustemPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     int tW = 36;
-    DPushButton *btn = new DPushButton(this);
+    CustemPushButton *btn = new CustemPushButton(this);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setToolTip(btnName);
