@@ -509,7 +509,7 @@ QList<qreal> DocSheet::scaleFactorList()
     qreal maxFactor = maxScaleFactor();
 
     foreach (qreal factor, dataList) {
-        if (maxFactor - factor > 0.001)
+        if (maxFactor - factor > -0.0001)
             factorList.append(factor);
     }
 
