@@ -43,7 +43,6 @@ void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-//    m_pThumbnailBtn->setFocusPolicy(Qt::TabFocus);
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
 }
 
@@ -63,6 +62,20 @@ void TitleWidget::initWidget()
     hlayout->addStretch(1);
 
     this->setTabOrder(m_pThumbnailBtn, m_pSw->getDecreaseBtn());
+}
+
+void TitleWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (nullptr == m_pSw)
+        return CustomWidget::keyPressEvent(event);
+
+    if (event->key() == Qt::Key_Up && !event->isAutoRepeat()) {
+        m_pSw->onPrevScale();
+    } else if (event->key() == Qt::Key_Down && !event->isAutoRepeat()) {
+        m_pSw->onNextScale();
+    }
+
+    return CustomWidget::keyPressEvent(event);
 }
 
 void TitleWidget::setBtnDisable(const bool &bAble)

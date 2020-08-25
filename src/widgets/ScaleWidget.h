@@ -48,9 +48,11 @@ public:
 private:
     void initWidget();
 
-private slots:
+public slots:
     void onPrevScale();
     void onNextScale();
+
+private slots:
     void onReturnPressed();
     void onEditFinished();
     void onArrowBtnlicked();

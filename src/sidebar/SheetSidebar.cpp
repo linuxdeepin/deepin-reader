@@ -179,7 +179,9 @@ void SheetSidebar::handleOpenSuccess()
     this->setVisible(m_sheet->operation().sidebarVisible);
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
     QAbstractButton *btn = m_btnGroup->button(nId);
-    if (btn) m_btnGroup->buttonClicked(nId);
+    if (btn) {
+        m_btnGroup->buttonClicked(nId);
+    }
     onHandleOpenSuccessDelay();
 }
 
