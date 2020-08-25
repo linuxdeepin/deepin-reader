@@ -857,7 +857,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
         }
     }
 
-    renderViewPort(true);
+    updatePageFull();
 
     return true;
 }
