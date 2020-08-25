@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 ~ 2020 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
  * Author:     duanxiaohui<duanxiaohui@uniontech.com>
  *
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CustemPushButton.h"
+
 #include <QDebug>
 
 CustemPushButton::CustemPushButton(DWidget *parent):

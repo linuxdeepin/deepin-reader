@@ -1,6 +1,8 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
+* Author:     zhangsong<zhangsong@uniontech.com>
+*
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify

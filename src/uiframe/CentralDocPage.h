@@ -24,9 +24,10 @@
 #include "CustomWidget.h"
 #include "DocSheet.h"
 
+#include <DLabel>
+
 #include <QMap>
 #include <QPointer>
-#include <DLabel>
 
 class FileDataModel;
 class DocummentProxy;

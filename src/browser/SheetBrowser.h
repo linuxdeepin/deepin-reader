@@ -21,18 +21,18 @@
 #ifndef SheetBrowser_H
 #define SheetBrowser_H
 
+#include "document/Model.h"
+#include "Global.h"
+
 #include <DGraphicsView>
+
 #include <QLabel>
 #include <QMutex>
-
 #include <QGestureEvent>
 #include <QPanGesture>
 #include <QPinchGesture>
 #include <QSwipeGesture>
 #include <QTapGesture>
-
-#include "document/Model.h"
-#include "Global.h"
 
 using namespace deepin_reader;
 

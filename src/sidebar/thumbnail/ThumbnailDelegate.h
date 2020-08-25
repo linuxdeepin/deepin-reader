@@ -1,12 +1,15 @@
 /*
-* Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     leiyu <leiyu@live.com>
-* Maintainer: leiyu <leiyu@deepin.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
+*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -23,17 +26,17 @@ DWIDGET_USE_NAMESPACE
 class ThumbnailDelegate : public DStyledItemDelegate
 {
 public:
-    ThumbnailDelegate(QAbstractItemView* parent = nullptr);
+    ThumbnailDelegate(QAbstractItemView *parent = nullptr);
 
 protected:
-    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
-    void drawBookMark(QPainter* painter, const QRect& rect, bool visible) const;
+    void drawBookMark(QPainter *painter, const QRect &rect, bool visible) const;
 
 private:
-    QAbstractItemView* m_parent;
+    QAbstractItemView *m_parent;
 };
 
 #endif // IMAGEVIEWDELEGATE_H

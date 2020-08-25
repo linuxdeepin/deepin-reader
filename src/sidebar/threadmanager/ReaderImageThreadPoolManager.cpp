@@ -1,12 +1,15 @@
 /*
-* Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     leiyu <leiyu@live.com>
-* Maintainer: leiyu <leiyu@deepin.com>
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
+*
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -23,6 +26,7 @@
 const int maxThreadCnt = 5;
 const int maxTaskList = 5;
 const char *threadPoolSlotFun = "onTaskFinished";
+
 void ReadImageTask::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {
     m_docParam = readImageParam;

@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2019 ~ 2020 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
  * Author:     duanxiaohui<duanxiaohui@uniontech.com>
+ *
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +23,9 @@
 
 #include <DWidget>
 #include <DLabel>
-#include <QMouseEvent>
 #include <DGuiApplicationHelper>
+
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 

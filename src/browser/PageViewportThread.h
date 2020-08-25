@@ -21,14 +21,14 @@
 #ifndef PAGEVIEWPORTTHREAD_H
 #define PAGEVIEWPORTTHREAD_H
 
+#include "BrowserPage.h"
+#include "Global.h"
+
 #include <QThread>
 #include <QMutex>
 #include <QStack>
 #include <QImage>
 #include <QPointer>
-#include "BrowserPage.h"
-
-#include "Global.h"
 
 class SheetBrowser;
 class BrowserPage;

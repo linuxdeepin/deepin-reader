@@ -20,6 +20,7 @@
 */
 #include "HandleMenu.h"
 #include "DocSheet.h"
+
 #include <QDebug>
 
 HandleMenu::HandleMenu(DWidget *parent)

@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2019 ~ 2020 UOS Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
- * Author:     wangzhxiaun
+ * Author:     wangzhixuan<wangzhixuan@uniontech.com>
+ *
+ * Maintainer: wangzhixuan<wangzhixuan@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BookMarkMenu.h"
+
 #include <QDebug>
 
 BookMarkMenu::BookMarkMenu(DWidget *parent)

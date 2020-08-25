@@ -21,12 +21,13 @@
 #ifndef PAGERENDERTHREAD_H
 #define PAGERENDERTHREAD_H
 
+#include "Global.h"
+#include "Model.h"
+
 #include <QThread>
 #include <QMutex>
 #include <QStack>
 #include <QImage>
-#include "Global.h"
-#include "Model.h"
 
 class SheetBrowser;
 class BrowserPage;

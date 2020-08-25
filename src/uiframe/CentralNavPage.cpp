@@ -26,6 +26,7 @@
 #include <DLabel>
 #include <DPushButton>
 #include <DSuggestButton>
+
 #include <QVBoxLayout>
 
 CentralNavPage::CentralNavPage(DWidget *parent)

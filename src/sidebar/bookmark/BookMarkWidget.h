@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
- *
- * Author:     leiyu
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     leiyu <leiyu@uniontech.com>
+*
+* Maintainer: leiyu <leiyu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +21,9 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include <QPointer>
-
 #include "widgets/CustomWidget.h"
+
+#include <QPointer>
 
 class DocSheet;
 class ImageListView;

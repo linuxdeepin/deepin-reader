@@ -1,10 +1,9 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
+ * Author:     duanxiaohui<duanxiaohui@uniontech.com>
  *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Rekols    <rekols@foxmail.com>
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "FindWidget.h"
+#include "widgets/CustomWidget.h"
+#include "DocSheet.h"
 
 #include <DDialogCloseButton>
 #include <DIconButton>
+
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-
-#include "widgets/CustomWidget.h"
-#include "DocSheet.h"
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)

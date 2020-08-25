@@ -21,8 +21,9 @@
 #ifndef BrowserWord_H
 #define BrowserWord_H
 
-#include <QGraphicsItem>
 #include "document/Model.h"
+
+#include <QGraphicsItem>
 
 class BrowserPage;
 class BrowserWord : public QGraphicsItem

@@ -27,7 +27,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "MainWindow.h"
-
 #include "TitleMenu.h"
 #include "TitleWidget.h"
 #include "Central.h"
@@ -35,8 +34,9 @@
 
 #include <DTitlebar>
 #include <DWidgetUtil>
-#include <QSignalMapper>
 #include <DGuiApplicationHelper>
+
+#include <QSignalMapper>
 #include <QDir>
 #include <QStandardPaths>
 #include <QSettings>

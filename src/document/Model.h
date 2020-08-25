@@ -1,7 +1,7 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     qpdfview
+* Author:     zhangsong<zhangsong@uniontech.com>
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *
@@ -21,6 +21,8 @@
 #ifndef DOCUMENTMODEL_H
 #define DOCUMENTMODEL_H
 
+#include "Global.h"
+
 #include <QList>
 #include <QtPlugin>
 #include <QRect>
@@ -33,8 +35,6 @@
 class QColor;
 class QImage;
 class QSizeF;
-
-#include "Global.h"
 
 namespace Poppler {
 class Annotation;

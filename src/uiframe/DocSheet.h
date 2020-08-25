@@ -21,8 +21,9 @@
 #ifndef DocSheet_H
 #define DocSheet_H
 
-#include <DSplitter>
 #include "document/Model.h"
+
+#include <DSplitter>
 
 class SheetSidebar;
 class SlideWidget;

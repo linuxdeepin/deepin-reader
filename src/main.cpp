@@ -3,11 +3,12 @@
 #include "CentralDocPage.h"
 
 #include <DLog>
+#include <DApplicationSettings>
+
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QDBusConnection>
 #include <QDBusInterface>
-#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 

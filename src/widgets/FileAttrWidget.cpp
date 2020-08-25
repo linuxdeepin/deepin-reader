@@ -1,29 +1,48 @@
+/*
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+ *
+ * Author:     duanxiaohui<duanxiaohui@uniontech.com>
+ *
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "FileAttrWidget.h"
-
-#include <DFontSizeManager>
-#include <DFrame>
-#include <DScrollArea>
-#include <DWindowCloseButton>
-#include <QFileInfo>
-#include <DWidgetUtil>
-#include <QVBoxLayout>
-
 #include "AttrScrollWidget.h"
 #include "widgets/WordWrapLabel.h"
-
-
 #include "Application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
 #include "Utils.h"
 
+#include <DFontSizeManager>
+#include <DFrame>
+#include <DScrollArea>
+#include <DWindowCloseButton>
+#include <DWidgetUtil>
+
+#include <QFileInfo>
+#include <QVBoxLayout>
+
 class ImageWidget : public DWidget
 {
 public:
     ImageWidget(DWidget *parent)
-        : DWidget(parent) {
+        : DWidget(parent)
+    {
 
-          };
+    };
 
     void setPixmap(const QPixmap &pixmap)
     {

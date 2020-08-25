@@ -21,8 +21,9 @@
 #ifndef BrowserAnnotation_H
 #define BrowserAnnotation_H
 
-#include <QGraphicsItem>
 #include "document/Model.h"
+
+#include <QGraphicsItem>
 
 const int ICON_SIZE = 23;
 

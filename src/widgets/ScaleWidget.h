@@ -18,17 +18,17 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #ifndef SCALEWIDGET_H
 #define SCALEWIDGET_H
 
-#include <DWidget>
-#include <QPointer>
-#include <DLineEdit>
-
 #include "DocSheet.h"
 #include "ScaleMenu.h"
+
+#include <DWidget>
 #include <DIconButton>
+#include <DLineEdit>
+
+#include <QPointer>
 
 class DocSheet;
 class ScaleMenu;

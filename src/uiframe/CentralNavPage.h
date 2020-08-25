@@ -22,6 +22,7 @@
 #define CentralNavPage_H
 
 #include "widgets/CustomWidget.h"
+
 #include <QKeyEvent>
 
 class CentralNavPage : public CustomWidget

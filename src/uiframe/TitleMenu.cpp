@@ -20,9 +20,9 @@
 */
 #include "TitleMenu.h"
 #include "widgets/HandleMenu.h"
+#include "DocSheet.h"
 
 #include <QSignalMapper>
-#include "DocSheet.h"
 #include <QDebug>
 
 TitleMenu::TitleMenu(DWidget *parent)

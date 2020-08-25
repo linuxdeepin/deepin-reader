@@ -21,8 +21,9 @@
 #ifndef PAGESEARCHTHREAD_H
 #define PAGESEARCHTHREAD_H
 
-#include <QThread>
 #include "Model.h"
+
+#include <QThread>
 
 class BrowserPage;
 class PageSearchThread : public QThread

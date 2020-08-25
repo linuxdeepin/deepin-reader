@@ -21,14 +21,15 @@
 #ifndef TITLEWIDGET_H
 #define TITLEWIDGET_H
 
-#include <DPushButton>
-#include <DIconButton>
-#include <QPointer>
-#include <QKeyEvent>
-
 #include "DocSheet.h"
 #include "widgets/CustomWidget.h"
 #include "widgets/CustemPushButton.h"
+
+#include <DPushButton>
+#include <DIconButton>
+
+#include <QPointer>
+#include <QKeyEvent>
 
 class ScaleWidget;
 class DocSheet;

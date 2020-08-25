@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 ~ 2020 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
  * Author:     duanxiaohui<duanxiaohui@uniontech.com>
  *
@@ -22,6 +22,7 @@
 #define CUSTEMPUSHBUTTON_H
 
 #include <DPushButton>
+
 #include <QKeyEvent>
 
 DWIDGET_USE_NAMESPACE

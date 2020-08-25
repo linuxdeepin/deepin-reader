@@ -18,6 +18,7 @@
 #define APPLICATION_H_
 
 #include <DApplication>
+
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusUnixFileDescriptor>

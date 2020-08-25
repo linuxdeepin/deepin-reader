@@ -34,10 +34,11 @@
 #include "MainWindow.h"
 #include "ShortCutShow.h"
 
-#include <QMimeData>
 #include <DMessageManager>
-#include <QStackedLayout>
 #include <DFileDialog>
+
+#include <QStackedLayout>
+#include <QMimeData>
 
 Central::Central(QWidget *parent)
     : CustomWidget(parent)

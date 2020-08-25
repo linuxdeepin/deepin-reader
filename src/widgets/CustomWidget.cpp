@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     duanxiaohui<duanxiaohui@uniontech.com>
+ *
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CustomWidget.h"
-
 
 #include <DWidgetUtil>
 

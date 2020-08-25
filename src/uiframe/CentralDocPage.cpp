@@ -27,6 +27,10 @@
 #include "SlideWidget.h"
 #include "FileAttrWidget.h"
 
+#include <DTitlebar>
+#include <DFileDialog>
+#include <DDialog>
+
 #include <QVBoxLayout>
 #include <QStackedLayout>
 #include <QDesktopServices>
@@ -34,13 +38,10 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QStackedLayout>
-#include <DFileDialog>
-#include <DDialog>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QProcess>
 #include <QUuid>
-#include <DTitlebar>
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)

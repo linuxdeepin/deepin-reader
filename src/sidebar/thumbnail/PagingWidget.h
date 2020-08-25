@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
- * Author:     duanxiaohui
+ * Author:     duanxiaohui<duanxiaohui@uniontech.com>
+ *
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +21,11 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include <DIconButton>
-#include <DLineEdit>
-
 #include "widgets/CustomWidget.h"
 #include "widgets/CustomClickLabel.h"
+
+#include <DIconButton>
+#include <DLineEdit>
 
 /**
  * @brief The ThumbnailItemWidget class

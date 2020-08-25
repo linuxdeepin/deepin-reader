@@ -38,6 +38,7 @@
 #include "Utils.h"
 
 #include <DApplicationHelper>
+
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QDebug>
