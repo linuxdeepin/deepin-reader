@@ -454,7 +454,7 @@ bool CentralDocPage::saveAsCurrent()
 void CentralDocPage::printCurrent()
 {
     DocSheet *sheet = getCurSheet();
-    if (nullptr == sheet)
+    if (nullptr == sheet || !sheet->isUnLocked())
         return;
 
     PrintManager p(sheet);
@@ -612,7 +612,8 @@ void CentralDocPage::quitMagnifer()
 
 void CentralDocPage::openSlide()
 {
-    if (m_slideWidget == nullptr) {
+    DocSheet *docSheet = getCurSheet();
+    if (docSheet && docSheet->isUnLocked() && m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(getCurSheet());
     }
 }
