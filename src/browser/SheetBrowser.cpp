@@ -1167,6 +1167,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
         }
     }
 
+    if (m_bTouch)
+        currentStepScaleFactor = 1.0;
+
     qreal nowStepScaleFactor = 0.0;
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         nowStepScaleFactor = gesture->totalScaleFactor();
