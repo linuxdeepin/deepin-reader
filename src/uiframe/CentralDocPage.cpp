@@ -463,7 +463,7 @@ void CentralDocPage::printCurrent()
 DocSheet *CentralDocPage::getCurSheet()
 {
     if (m_pStackedLayout != nullptr) {
-        return static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+        return dynamic_cast<DocSheet *>(m_pStackedLayout->currentWidget());
     }
 
     return nullptr;

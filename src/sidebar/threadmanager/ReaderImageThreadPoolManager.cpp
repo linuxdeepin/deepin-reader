@@ -41,7 +41,7 @@ void ReadImageTask::run()
 {
     QImage image;
     DocSheet *sheet = m_docParam.sheet;
-    if (!DocSheet::getUuid(sheet).isNull()) {
+    if (!DocSheet::getUuid(sheet).isNull() && sheet->isUnLocked()) {
         int totalPage = sheet->pagesNumber();
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
         bool bl = sheet->getImage(m_docParam.pageIndex, image, m_docParam.maxPixel, m_docParam.maxPixel, Qt::KeepAspectRatio);

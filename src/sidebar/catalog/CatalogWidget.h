@@ -53,9 +53,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void initConnections();
-
-private:
     QString             m_strTheme = "";
     DLabel              *titleLabel = nullptr;
     CatalogTreeView     *m_pTree = nullptr;

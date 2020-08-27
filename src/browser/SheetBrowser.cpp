@@ -652,7 +652,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     QPoint endPoint = this->mapFromScene(m_selectEndPos);
     QPoint endPointSpare = this->mapFromScene(m_selectWordEndPos);
 
-    showPoint = this->mapToGlobal(this->mapFromScene(m_selectEndPos));
+    showPoint = this->mapToGlobal(endPointSpare);
 
     startPage = getBrowserPageForPoint(startPoint);
     endPage = getBrowserPageForPoint(endPoint);
@@ -1084,7 +1084,6 @@ bool SheetBrowser::event(QEvent *event)
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
             //搜索框
             if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
-                qInfo() << __LINE__ << __FUNCTION__;
                 return DGraphicsView::event(event);
             }
 
@@ -2317,7 +2316,7 @@ void SheetBrowser::showMenu()
             deepin_reader::Annotation *addAnnot = nullptr;
             addAnnot = addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
             if (addAnnot)
-                showNoteEditWidget(addAnnot, mapToGlobal(pointEnd));
+                showNoteEditWidget(addAnnot, pointEnd);
         } else if (objectname == "Search") {
             m_sheet->handleSearch();
         } else if (objectname == "RemoveBookmark") {
@@ -2350,20 +2349,18 @@ void SheetBrowser::showMenu()
         }
     });
 
-
-    if (!selectWords.isEmpty()) {
+    const QPoint &menuPoint = this->mapFromScene(m_selectWordEndPos);
+    if (!selectWords.isEmpty() && menuPoint.y() >= 0 && menuPoint.x() >= 0) {
         //选择文字
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_SELECT_TEXT);
+        menu.exec(this->mapToGlobal(menuPoint));
     } else {
         //默认
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_KEY);
+        QPoint parentPos = m_sheet->mapToGlobal(m_sheet->pos());
+        QPoint showPos(parentPos.x() + m_sheet->width() / 2, parentPos.y() + m_sheet->height() / 2);
+        menu.exec(showPos);
     }
-
-    QPoint parentPos = m_sheet->mapToGlobal(m_sheet->pos());
-
-    QPoint showPos(parentPos.x() + m_sheet->width() / 2, parentPos.y() + m_sheet->height() / 2);
-
-    menu.exec(showPos);
 }
 
 /**

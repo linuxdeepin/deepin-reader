@@ -29,7 +29,6 @@ CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
     initWidget();
-    initConnections();
 }
 
 CatalogWidget::~CatalogWidget()
@@ -71,10 +70,6 @@ void CatalogWidget::resizeEvent(QResizeEvent *event)
     }
 
     CustomWidget::resizeEvent(event);
-}
-
-void CatalogWidget::initConnections()
-{
 }
 
 void CatalogWidget::setTitleTheme()
