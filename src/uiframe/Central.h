@@ -71,6 +71,11 @@ public:
 
     void setMenu(TitleMenu *menu);
 
+    // Set zoom
+    void zoomIn();
+
+    void zoomOut();
+
 signals:
     void sigOpenFiles(const QString &);
 

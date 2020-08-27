@@ -25,6 +25,10 @@
 
 #include <DWidget>
 
+#include <QTimer>
+#include <QMouseEvent>
+#include <QContextMenuEvent>
+
 DWIDGET_USE_NAMESPACE
 
 class TransparentTextEdit : public QTextEdit
@@ -46,8 +50,14 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void insertFromMimeData(const QMimeData *source) override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
     int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
+
+    QTimer *m_showMenuTimer;
+    QPoint m_mousePos;
 };
 
 #endif // TRANSPARENTTEXTEDIT_H

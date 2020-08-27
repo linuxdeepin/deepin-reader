@@ -45,6 +45,10 @@ public:
 
     void addRenderTask();
 
+signals:
+    // 触控板事件 name 事件名称 direction 手势方向 fingers 手指个数
+    void sigTouchPadEventSignal(QString name, QString direction, int fingers);
+
 public slots:
     Q_SCRIPTABLE void handleFiles(QStringList filePathList);
 

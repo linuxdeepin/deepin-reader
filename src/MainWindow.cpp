@@ -63,6 +63,8 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
             doOpenFile(filePath);
         }
     }
+
+    connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -74,10 +76,14 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     initShortCut();
 
     addSheet(sheet);
+
+    connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
 }
 
 MainWindow::~MainWindow()
 {
+    disconnect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
+
     m_list.removeOne(this);
     if (m_list.count() <= 0) {
         QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -271,6 +277,28 @@ void MainWindow::showDefaultSize()
     }
 }
 
+/**
+ * @brief MainWindow::zoomIn
+ * 放大
+ */
+void MainWindow::zoomIn()
+{
+    if (m_central) {
+        m_central->zoomIn();
+    }
+}
+
+/**
+ * @brief MainWindow::zoomOut
+ * 缩小
+ */
+void MainWindow::zoomOut()
+{
+    if (m_central) {
+        m_central->zoomOut();
+    }
+}
+
 //  初始化 快捷键操作
 void MainWindow::initShortCut()
 {
@@ -361,4 +389,30 @@ void MainWindow::onUpdateTitleLabelRect()
 
     QWidget *titleLabel = m_central->docPage()->getTitleLabel();
     titleLabel->setFixedWidth(this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60);
+}
+
+/**
+ * @brief Application::onTouchPadEventSignal
+ * 处理触控板手势信号
+ * @param name 触控板事件类型(手势或者触摸类型) pinch 捏 tap 敲 swipe 右键单击 单键
+ * @param direction 手势方向 触控板上 up 触控板下 down 左 left 右 right 无 none 向内 in 向外 out  触控屏上 top 触摸屏下 bot
+ * @param fingers 手指数量 (1,2,3,4,5)
+ * 注意libinput接收到触摸板事件后将接收到的数据通过Event广播出去
+ */
+void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
+{
+    qInfo() << "name :" << name << "  direction: " << direction << "   fingers: " << fingers;
+
+    // 当前窗口被激活,且有焦点
+    if (this->isActiveWindow()) {
+        if (name == "pinch" && fingers == 2) {
+            if (direction == "in") {
+                // 捏合 in是手指捏合的方向 向内缩小
+                zoomOut();  // zoom out 缩小
+            } else if (direction == "out") {
+                // 捏合 out是手指捏合的方向 向外放大
+                zoomIn();   // zoom in 放大
+            }
+        }
+    }
 }

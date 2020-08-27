@@ -77,12 +77,19 @@ private:
 
     void showDefaultSize();
 
+    // Set zoom
+    void zoomIn();
+
+    void zoomOut();
+
 private slots:
     void onDelayInit();
 
     void onShortCut(const QString &);
 
     void onUpdateTitleLabelRect();
+
+    void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
 private:
     QWidget *m_docTabbarWidget = nullptr;

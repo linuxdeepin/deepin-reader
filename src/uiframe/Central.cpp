@@ -100,6 +100,20 @@ void Central::setMenu(TitleMenu *menu)
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
 }
 
+void Central::zoomIn()
+{
+    if (m_docPage) {
+        m_docPage->zoomIn();
+    }
+}
+
+void Central::zoomOut()
+{
+    if (m_docPage) {
+        m_docPage->zoomOut();
+    }
+}
+
 void Central::openFilesExec()
 {
     DFileDialog dialog;

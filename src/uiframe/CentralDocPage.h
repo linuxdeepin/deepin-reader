@@ -103,6 +103,11 @@ public:
 
     QWidget *getTitleLabel();
 
+    // Set zoom
+    void zoomIn();
+
+    void zoomOut();
+
 public slots:
     void onOpened(DocSheet *, bool);
 

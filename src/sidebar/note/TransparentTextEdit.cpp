@@ -31,9 +31,29 @@
 #include <QMimeData>
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
-    : QTextEdit(parent)
+    : QTextEdit(parent),
+      m_showMenuTimer(nullptr)
 {
+//    grabGesture(Qt::TapGesture);
+//    grabGesture(Qt::TapAndHoldGesture);
+//    grabGesture(Qt::SwipeGesture);
+//    grabGesture(Qt::PanGesture);
+//    grabGesture(Qt::PinchGesture);
+
+    this->setObjectName("TransparentTextEdit");
+
     init();
+
+    m_showMenuTimer = new QTimer(this);
+    m_showMenuTimer->setInterval(1000);
+    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
+        m_showMenuTimer->stop();
+        qInfo()  << "         show   text  edit  menu ...  ";
+        QMouseEvent showMenuEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::NoButton, Qt::RightButton, Qt::NoModifier);
+        QCoreApplication::sendEvent(this, &showMenuEvent);
+        this->show();
+    });
+
 }
 
 void TransparentTextEdit::init()
@@ -104,4 +124,30 @@ void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
 {
     if (!source->text().isEmpty())
         this->insertPlainText(source->text());
+}
+
+void TransparentTextEdit::mousePressEvent(QMouseEvent *event)
+{
+    if (event->source() == Qt::MouseEventSynthesizedByQt) {
+        m_mousePos = QCursor::pos();
+        if (m_showMenuTimer) {
+            if (m_showMenuTimer->isActive()) {
+                m_showMenuTimer->stop();
+            }
+            m_showMenuTimer->start();
+        }
+    }
+
+    QTextEdit::mousePressEvent(event);
+}
+
+void TransparentTextEdit::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_showMenuTimer) {
+        if (m_showMenuTimer->isActive()) {
+            m_showMenuTimer->stop();
+        }
+    }
+
+    QTextEdit::mouseReleaseEvent(event);
 }

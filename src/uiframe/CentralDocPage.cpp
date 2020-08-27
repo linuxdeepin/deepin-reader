@@ -691,3 +691,19 @@ QWidget *CentralDocPage::getTitleLabel()
 {
     return m_pDocTabLabel;
 }
+
+void CentralDocPage::zoomIn()
+{
+    if (getCurSheet()) {
+        qInfo() << __LINE__  << __FUNCTION__;
+        getCurSheet()->zoomin();
+    }
+}
+
+void CentralDocPage::zoomOut()
+{
+    if (getCurSheet()) {
+        qInfo() << __LINE__  << __FUNCTION__;
+        getCurSheet()->zoomout();
+    }
+}
