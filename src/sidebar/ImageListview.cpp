@@ -68,7 +68,8 @@ void ImageListView::showMenu()
     if (!this->currentIndex().isValid())
         return;
 
-    QPoint point = mapToGlobal(this->pos() + QPoint(this->width() / 2, this->currentIndex().row() * 80 + 40));
+    const QRect &visualRect = this->visualRect(this->currentIndex());
+    QPoint point = mapToGlobal(QPoint(this->width() / 2 - 4, visualRect.y() + visualRect.height() / 2 - 4));
     if (m_listType == E_SideBar::SIDE_NOTE) {
         if (m_pNoteMenu == nullptr) {
             m_pNoteMenu = new NoteMenu(this);
