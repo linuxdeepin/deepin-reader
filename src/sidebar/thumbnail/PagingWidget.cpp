@@ -26,7 +26,6 @@
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
-    setFocusPolicy(Qt::NoFocus);
     initWidget();
 
     slotUpdateTheme();
@@ -55,6 +54,7 @@ void PagingWidget::initWidget()
     int tH = 36;
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
+    m_pPrePageBtn->setObjectName("thumbnailPreBtn");
     m_pPrePageBtn->setFixedSize(QSize(tW, tH));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
@@ -64,6 +64,7 @@ void PagingWidget::initWidget()
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
     m_pJumpPageLineEdit = new DLineEdit();
+    m_pJumpPageLineEdit->lineEdit()->setObjectName("pageEdit");
     tW = 60;
     tH = 36;
 

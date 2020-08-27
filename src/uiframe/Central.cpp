@@ -45,7 +45,7 @@ Central::Central(QWidget *parent)
 {
     setAcceptDrops(true);
 
-    m_widget  = new TitleWidget(this);
+    m_widget = new TitleWidget(parent);
 
     m_navPage = new CentralNavPage(this);
     connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));

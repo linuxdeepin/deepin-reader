@@ -22,16 +22,14 @@
 #include "ScaleWidget.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
+#include "MainWindow.h"
 
 #include <QHBoxLayout>
 
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(parent)
 {
-//    setFocusPolicy(Qt::NoFocus);
     initWidget();
-
-    setFocusProxy(m_pThumbnailBtn);
 }
 
 TitleWidget::~TitleWidget()
@@ -42,6 +40,7 @@ TitleWidget::~TitleWidget()
 void TitleWidget::initBtns()
 {
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
+    m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
     connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
 }
@@ -61,7 +60,21 @@ void TitleWidget::initWidget()
     hlayout->addWidget(m_pSw);
     hlayout->addStretch(1);
 
-    this->setTabOrder(m_pThumbnailBtn, m_pSw->getDecreaseBtn());
+    DIconButton *decBtn = m_pSw->findChild<DIconButton *>("SP_DecreaseElement");
+    DIconButton *incBtn = m_pSw->findChild<DIconButton *>("SP_IncreaseElement");
+    DLineEdit *scaleEdit = m_pSw->findChild<DLineEdit *>("scaleEdit");
+    this->setTabOrder(m_pThumbnailBtn, decBtn);
+    this->setTabOrder(decBtn, scaleEdit);
+    this->setTabOrder(scaleEdit, incBtn);
+
+    DIconButton *optBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    DIconButton *minBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+    DIconButton *maxBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+    DIconButton *closeBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+    this->setTabOrder(incBtn, optBtn);
+    this->setTabOrder(optBtn, minBtn);
+    this->setTabOrder(minBtn, maxBtn);
+    this->setTabOrder(maxBtn, closeBtn);
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)

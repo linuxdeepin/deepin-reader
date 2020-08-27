@@ -210,16 +210,8 @@ void MainWindow::initUI()
     titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
     titlebar()->setAutoHideOnFullscreen(false);
 
-    //移除焦点抢占和避免出现焦点样式
-//    QList<QWidget *> list = titlebar()->findChildren<QWidget *>();
-//    foreach (QWidget *w, list) {
-//        if (!w->objectName().isEmpty())
-//            w->setFocusPolicy(Qt::NoFocus);
-//    }
-
-    titlebar()->setFocusPolicy(Qt::NoFocus);
-
     this->setTabOrder(titlebar(), m_central->titleWidget());
+    Utils::setObjectNoFocusPolicy(this);
 
     QTimer::singleShot(10, this, SLOT(onUpdateTitleLabelRect()));
 }

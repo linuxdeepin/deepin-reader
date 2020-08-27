@@ -39,7 +39,6 @@ SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     , m_sheet(parent)
     , m_widgetsFlag(widgesFlag | PREVIEW_SEARCH)
 {
-//    setFocusPolicy(Qt::NoFocus);
     initWidget();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebar::onUpdateWidgetTheme);
 }
@@ -148,6 +147,8 @@ void SheetSidebar::initWidget()
 
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
     m_btnGroup->buttonClicked(nId);
+
+    Utils::setObjectNoFocusPolicy(this);
 }
 
 void SheetSidebar::onBtnClicked(int index)

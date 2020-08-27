@@ -32,7 +32,6 @@
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)
 {
-    setFocusPolicy(Qt::NoFocus);
     initWidget();
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::slotUpdateTheme);
@@ -56,6 +55,7 @@ void CentralNavPage::initWidget()
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
     auto chooseBtn = new DSuggestButton(tr("Select File"), this);
+    chooseBtn->setObjectName("SelectFileBtn");
     chooseBtn->setFocusPolicy(Qt::TabFocus);
     int tW = 302;
     int tH = 36;

@@ -26,7 +26,6 @@
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
-    setFocusPolicy(Qt::NoFocus);
     initWidget();
 }
 
@@ -43,12 +42,14 @@ void ScaleWidget::initWidget()
     setLayout(m_layout);
 
     m_lineEdit = new DLineEdit(this);
+    m_lineEdit->lineEdit()->setObjectName("scaleEdit");
     QFont font = m_lineEdit->font();
     font.setPixelSize(14);
     m_lineEdit->setFont(font);
     m_lineEdit->setFixedSize(120, 36);
 
     DIconButton *arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
+    arrowBtn->setObjectName("editArrowBtn");
     arrowBtn->setFixedSize(32, 32);
     arrowBtn->move(m_lineEdit->width() - arrowBtn->width() - 2, 2);
     m_lineEdit->lineEdit()->setTextMargins(0, 0, arrowBtn->width(), 0);
@@ -65,7 +66,7 @@ void ScaleWidget::initWidget()
     connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
 
     DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
-//    pNextBtn->setFlat(true);
+    pNextBtn->setObjectName("SP_IncreaseElement");
     DStyle::setFrameRadius(pNextBtn, 12);
     pNextBtn->setFixedSize(24, 24);
     connect(pNextBtn, SIGNAL(clicked()), SLOT(onNextScale()));
@@ -73,9 +74,6 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(pNextBtn);
-
-    this->setTabOrder(pPreBtn, m_lineEdit);
-    this->setTabOrder(m_lineEdit, pNextBtn);
 }
 
 void ScaleWidget::onPrevScale()
@@ -139,9 +137,4 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 void ScaleWidget::clear()
 {
     m_lineEdit->clear();
-}
-
-DIconButton *ScaleWidget::getDecreaseBtn()
-{
-    return static_cast<DIconButton *>(this->findChild<DIconButton *>("SP_DecreaseElement"));
 }

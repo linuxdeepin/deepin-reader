@@ -62,6 +62,8 @@ public:
 
     static void setHiglightColorIndex(int index);
 
+    static void setObjectNoFocusPolicy(QObject *obj);
+
 private:
     static int m_colorIndex;
 };

@@ -30,6 +30,7 @@
 #include <QUuid>
 #include <QFileInfo>
 #include <QImageReader>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -346,4 +347,13 @@ QColor Utils::getCurHiglightColor()
     const QList<QColor> &colorlst =  getHiglightColorList();
     int index = qBound(0, m_colorIndex, colorlst.size() - 1);
     return colorlst.at(index);
+}
+
+void Utils::setObjectNoFocusPolicy(QObject *obj)
+{
+    QList<QWidget *> list = obj->findChildren<QWidget *>();
+    foreach (QWidget *w, list) {
+        if (w->objectName().isEmpty())
+            w->setFocusPolicy(Qt::NoFocus);
+    }
 }

@@ -43,8 +43,6 @@ public:
     void setSheet(DocSheet *sheet);
     void clear();
 
-    DIconButton *getDecreaseBtn();
-
 private:
     void initWidget();
 
