@@ -375,6 +375,8 @@ bool DocSheet::saveData()
 
     m_sidebar->changeResetModelData();
 
+    dApp->unBlockShutdown();
+
     return true;
 }
 
