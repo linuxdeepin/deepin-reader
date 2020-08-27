@@ -54,10 +54,10 @@ void Application::blockShutdown()
         blockShutdownInterface = new QDBusInterface("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus());
 
     QList<QVariant> args;
-    args << QString("shutdown")             // what
-         << qApp->applicationDisplayName()           // who
+    args << QString("shutdown") // what
+         << qApp->applicationDisplayName() // who
          << QObject::tr("Document not saved") // why
-         << QString("block");                        // mode
+         << QString("delay"); // mode
 
     blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
     if (blockShutdownReply.isValid()) {
