@@ -2356,7 +2356,9 @@ void SheetBrowser::showMenu()
         }
     });
 
-    const QPoint &menuPoint = this->mapFromScene(m_selectWordEndPos);
+    QPoint menuPoint(-1, -1);
+    if (m_selectEndWord)
+        menuPoint = this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight()));
     if (!selectWords.isEmpty() && menuPoint.y() >= 0 && menuPoint.x() >= 0) {
         //选择文字
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_SELECT_TEXT);

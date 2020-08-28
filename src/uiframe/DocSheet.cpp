@@ -841,7 +841,7 @@ void DocSheet::showEncryPage()
     m_encryPage->show();
 }
 
-bool DocSheet::isLocked()
+bool DocSheet::needPassword()
 {
     Document *document = nullptr;
     if (Dr::PDF == m_fileType)

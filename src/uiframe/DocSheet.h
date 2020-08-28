@@ -201,7 +201,7 @@ public:
 
     bool tryPassword(QString password);
 
-    bool isLocked();
+    bool needPassword();
 
     bool isUnLocked();
 

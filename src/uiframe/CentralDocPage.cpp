@@ -145,7 +145,7 @@ void CentralDocPage::openFile(QString &filePath)
 
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
-    if (sheet->isLocked()) {
+    if (sheet->needPassword()) {
         sheet->showEncryPage();
     } else {
         if (!sheet->openFileExec("")) {
