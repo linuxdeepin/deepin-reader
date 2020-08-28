@@ -530,8 +530,7 @@ void CentralDocPage::handleShortcut(const QString &s)
             getCurSheet()->setMouseShape(Dr::MouseShapeHand);
     } else if (s == Dr::key_ctrl_1) {
         if (getCurSheet()) {
-            getCurSheet()->setScaleMode(Dr::ScaleFactorMode);
-            getCurSheet()->setScaleFactor(1);
+            getCurSheet()->setScaleMode(Dr::FitToPageDefaultMode);
         }
     } else if (s == Dr::key_ctrl_m) {
         if (getCurSheet())
