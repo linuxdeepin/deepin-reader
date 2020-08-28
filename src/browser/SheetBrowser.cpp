@@ -645,12 +645,14 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
     Annotation *highLightAnnot{nullptr};
-
     BrowserPage *startPage{nullptr};
     BrowserPage *endPage{nullptr};
+
+    m_pointMutex.lock();
     QPoint startPoint = this->mapFromScene(m_selectStartPos);
     QPoint endPoint = this->mapFromScene(m_selectEndPos);
     QPoint endPointSpare = this->mapFromScene(m_selectWordEndPos);
+    m_pointMutex.unlock();
 
     showPoint = this->mapToGlobal(endPointSpare);
 

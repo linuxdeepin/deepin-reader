@@ -303,6 +303,7 @@ private:
     ulong m_touchStop = 0;
     QPoint m_lastTouchBeginPos;
     Qt::GestureState m_tapStatus = Qt::NoGesture;
+    QMutex m_pointMutex;
 };
 
 #endif // SheetBrowser_H
