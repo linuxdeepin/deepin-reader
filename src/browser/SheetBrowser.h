@@ -23,6 +23,7 @@
 
 #include "document/Model.h"
 #include "Global.h"
+#include "BrowserWord.h"
 
 #include <DGraphicsView>
 
@@ -303,7 +304,8 @@ private:
     ulong m_touchStop = 0;
     QPoint m_lastTouchBeginPos;
     Qt::GestureState m_tapStatus = Qt::NoGesture;
-    QMutex m_pointMutex;
+    BrowserWord *m_selectStartWord = nullptr;
+    BrowserWord *m_selectEndWord = nullptr;
 };
 
 #endif // SheetBrowser_H

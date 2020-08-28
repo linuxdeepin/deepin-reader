@@ -30,7 +30,7 @@
 #include "document/PDFModel.h"
 #include "BrowserPage.h"
 #include "DocSheet.h"
-#include "BrowserWord.h"
+//#include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "widgets/TipsWidget.h"
 #include "BrowserMenu.h"
@@ -648,29 +648,21 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
     Annotation *highLightAnnot{nullptr};
-    BrowserPage *startPage{nullptr};
-    BrowserPage *endPage{nullptr};
 
-    m_pointMutex.lock();
-    QPoint startPoint = this->mapFromScene(m_selectStartPos);
-    QPoint endPoint = this->mapFromScene(m_selectEndPos);
-    QPoint endPointSpare = this->mapFromScene(m_selectWordEndPos);
-    m_pointMutex.unlock();
-
-    showPoint = this->mapToGlobal(endPointSpare);
-
-    startPage = getBrowserPageForPoint(startPoint);
-    endPage = getBrowserPageForPoint(endPoint);
-
-    if (nullptr == endPage) {
-        endPage = getBrowserPageForPoint(endPointSpare);
-    }
+    BrowserPage *startPage = static_cast<BrowserPage *>(m_selectStartWord->parentItem());
+    BrowserPage *endPage = static_cast<BrowserPage *>(m_selectEndWord->parentItem());
 
     m_selectEndPos = QPointF();
     m_selectStartPos = QPointF();
 
-    if (startPage == nullptr || endPage == nullptr)
+    if (startPage == nullptr || endPage == nullptr) {
+        m_selectStartWord = nullptr;
+        m_selectEndWord = nullptr;
         return nullptr;
+    }
+
+    //item坐标转成全局坐标,注释编辑框的显示位置
+    showPoint =  this->mapToGlobal(this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight())));
 
     if (startPage == endPage) {
         highLightAnnot = startPage->addHighlightAnnotation(contains, color);
@@ -692,6 +684,9 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     if (highLightAnnot) {
         emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
     }
+
+    m_selectStartWord = nullptr;
+    m_selectEndWord = nullptr;
 
     return highLightAnnot;
 }
@@ -1415,8 +1410,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         m_iconAnnot = nullptr;
         QPoint point = event->pos();
         BrowserPage *page = getBrowserPageForPoint(point);
+
         if (btn == Qt::LeftButton) {
             scene()->setSelectionArea(QPainterPath());
+
+            m_selectStartWord = nullptr;
+            m_selectEndWord = nullptr;
 
             m_selectEndPos = QPointF();
             m_selectWordEndPos = QPointF();
@@ -1725,6 +1724,9 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
                 //记录选取文字的最后最后位置,如果在选取文字时,鼠标在文档外释放,以此坐标为准
                 m_selectWordEndPos = mapToScene(event->pos());
+                m_selectStartWord = beginWord;
+                m_selectEndWord = endWord;
+
                 scene()->setSelectionArea(QPainterPath());
                 bool between = false;
                 for (int i = words.size() - 1; i >= 0; i--) {
