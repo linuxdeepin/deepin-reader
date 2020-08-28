@@ -217,14 +217,17 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     if (nullptr == m_document)
         return false;
 
+    m_lable2Page.clear();
+
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         deepin_reader::Page *page = m_document->page(i);
 
         if (page == nullptr)
             return false;
 
-        if (!page->label().isEmpty()) {
-            m_lable2Page.insert(page->label(), i);
+        const QString &labelPage = page->label();
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
         }
 
         if (page->size().width() > m_maxWidth)
