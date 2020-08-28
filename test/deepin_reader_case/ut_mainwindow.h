@@ -39,7 +39,6 @@ public:
     virtual void TearDown();
 
 public:
-    MainWindow *m_mainWindow;
 };
 
 #endif // UT_MAINWINDOW_H

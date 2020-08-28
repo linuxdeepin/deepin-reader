@@ -27,8 +27,6 @@ Ut_MainWindow::Ut_MainWindow()
 
 void Ut_MainWindow::SetUp()
 {
-    m_mainWindow = MainWindow::createWindow();
-    m_mainWindow->show();
 }
 
 void Ut_MainWindow::TearDown()
@@ -38,6 +36,9 @@ void Ut_MainWindow::TearDown()
 #ifdef UT_MAINWINDOW_TEST
 TEST_F(Ut_MainWindow, MainWindowTest)
 {
-    EXPECT_EQ(m_mainWindow->hasSheet(nullptr), false);
+    MainWindow *mainWindow = MainWindow::createWindow();
+    EXPECT_EQ(mainWindow->hasSheet(nullptr), false);
+    EXPECT_EQ(mainWindow->allowCreateWindow(), true);
+    EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
 }
 #endif

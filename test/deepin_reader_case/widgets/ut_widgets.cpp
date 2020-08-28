@@ -23,6 +23,7 @@
 #include "widgets/BookMarkButton.h"
 #include "widgets/ColorWidgetAction.h"
 #include "widgets/CustomClickLabel.h"
+#include "widgets/CustemPushButton.h"
 #include "widgets/CustomMenu.h"
 #include "widgets/CustomWidget.h"
 #include "widgets/EncryptionPage.h"
@@ -54,10 +55,65 @@ void Ut_Widgets::TearDown()
 }
 
 #ifdef UT_WIDGETS_TEST
+TEST(Ut_Widgets, BookMarkButtonTest)
+{
+    BookMarkButton bkBtn;
+}
+
+TEST(Ut_Widgets, BColorWidgetActionTest)
+{
+    ColorWidgetAction colorAction;
+}
+
+TEST(Ut_Widgets, CustemPushButtonTest)
+{
+    CustemPushButton cusBtn;
+}
+
+TEST(Ut_Widgets, CustomClickLabelTest)
+{
+    CustomClickLabel clickLabel;
+}
+
 TEST(Ut_Widgets, CustomMenuTest)
 {
     CustomMenu menu;
     EXPECT_TRUE(menu.createAction("test", nullptr, true));
+}
+
+TEST(Ut_Widgets, CustomWidgetTest)
+{
+    CustomWidget cusWidget;
+}
+
+TEST(Ut_Widgets, EncryptionPageTest)
+{
+    EncryptionPage encryPage;
+}
+
+TEST(Ut_Widgets, FileAttrWidgetTest)
+{
+    FileAttrWidget encryPage;
+}
+
+TEST(Ut_Widgets, FindWidgetTest)
+{
+    FindWidget findWidget;
+}
+
+TEST(Ut_Widgets, HandleMenuTest)
+{
+    HandleMenu handleMenu;
+}
+
+TEST(Ut_Widgets, SaveDialogTest)
+{
+    SaveDialog saveDialog;
+}
+
+TEST(Ut_Widgets, ScaleMenuTest)
+{
+    ScaleMenu scaleMenu;
 }
 
 TEST(Ut_Widgets, RoundColorWidgetTest)
@@ -68,9 +124,33 @@ TEST(Ut_Widgets, RoundColorWidgetTest)
     EXPECT_EQ(roundColorWidget.isSelected(), true);
 }
 
+TEST(Ut_Widgets, ShortCutShowTest)
+{
+    ShortCutShow shortCutDialog;
+}
+
+TEST(Ut_Widgets, SlidePlayWidgetTest)
+{
+    SlidePlayWidget slidePlaywidget;
+}
+
+TEST(Ut_Widgets, SpinnerWidgetTest)
+{
+    SpinnerWidget spinnerWidget;
+}
+
 TEST(Ut_Widgets, ScaleWidgetTest)
 {
     ScaleWidget scaleWidget;
-    EXPECT_TRUE(scaleWidget.getDecreaseBtn());
+}
+
+TEST(Ut_Widgets, TipsWidgetTest)
+{
+    TipsWidget tipsWidget;
+}
+
+TEST(Ut_Widgets, WordWrapLabelTest)
+{
+    WordWrapLabel wordLabel;
 }
 #endif
