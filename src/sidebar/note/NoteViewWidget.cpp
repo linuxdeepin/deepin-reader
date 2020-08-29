@@ -39,6 +39,7 @@ NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
     m_noteViewWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
+    this->setObjectName("NoteShadowViewWidget");
 }
 
 void NoteShadowViewWidget::initWidget()
@@ -65,12 +66,21 @@ void NoteShadowViewWidget::showWidget(const QPoint &point)
     show();
 }
 
-
 NoteViewWidget::NoteViewWidget(DWidget *parent)
     : CustomWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
+
+    connect(dApp, &Application::sigShowAnnotTextWidget, this, [ = ] {
+        if (this->isVisible() && m_pTextEdit)
+        {
+            qInfo() << "    NoteViewWidget  show  text edit menu ... ";
+            QMouseEvent showMenuEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+            QCoreApplication::sendEvent(m_pTextEdit, &showMenuEvent);
+            this->show();
+        }
+    });
 }
 
 NoteViewWidget::~NoteViewWidget()

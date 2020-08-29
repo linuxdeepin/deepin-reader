@@ -44,15 +44,15 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
 
     init();
 
-    m_showMenuTimer = new QTimer(this);
-    m_showMenuTimer->setInterval(1000);
-    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
-        m_showMenuTimer->stop();
-        qInfo()  << "         show   text  edit  menu ...  ";
-        QMouseEvent showMenuEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::NoButton, Qt::RightButton, Qt::NoModifier);
-        QCoreApplication::sendEvent(this, &showMenuEvent);
-        this->show();
-    });
+//    m_showMenuTimer = new QTimer(this);
+//    m_showMenuTimer->setInterval(1000);
+//    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
+//        m_showMenuTimer->stop();
+//        qInfo()  << "         show   text  edit  menu ...  ";
+//        QMouseEvent showMenuEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::NoButton, Qt::RightButton, Qt::NoModifier);
+//        QCoreApplication::sendEvent(this, &showMenuEvent);
+//        this->show();
+//    });
 
 }
 
@@ -126,28 +126,28 @@ void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
         this->insertPlainText(source->text());
 }
 
-void TransparentTextEdit::mousePressEvent(QMouseEvent *event)
-{
-    if (event->source() == Qt::MouseEventSynthesizedByQt) {
-        m_mousePos = QCursor::pos();
-        if (m_showMenuTimer) {
-            if (m_showMenuTimer->isActive()) {
-                m_showMenuTimer->stop();
-            }
-            m_showMenuTimer->start();
-        }
-    }
+//void TransparentTextEdit::mousePressEvent(QMouseEvent *event)
+//{
+//    if (event->source() == Qt::MouseEventSynthesizedByQt) {
+//        m_mousePos = QCursor::pos();
+//        if (m_showMenuTimer) {
+//            if (m_showMenuTimer->isActive()) {
+//                m_showMenuTimer->stop();
+//            }
+//            m_showMenuTimer->start();
+//        }
+//    }
 
-    QTextEdit::mousePressEvent(event);
-}
+//    QTextEdit::mousePressEvent(event);
+//}
 
-void TransparentTextEdit::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (m_showMenuTimer) {
-        if (m_showMenuTimer->isActive()) {
-            m_showMenuTimer->stop();
-        }
-    }
+//void TransparentTextEdit::mouseReleaseEvent(QMouseEvent *event)
+//{
+//    if (m_showMenuTimer) {
+//        if (m_showMenuTimer->isActive()) {
+//            m_showMenuTimer->stop();
+//        }
+//    }
 
-    QTextEdit::mouseReleaseEvent(event);
-}
+//    QTextEdit::mouseReleaseEvent(event);
+//}

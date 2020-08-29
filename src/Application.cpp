@@ -76,6 +76,11 @@ void Application::unBlockShutdown()
     }
 }
 
+void Application::showAnnotTextWidgetSig()
+{
+    emit sigShowAnnotTextWidget();
+}
+
 void Application::handleFiles(QStringList filePathList)
 {
     QList<DocSheet *> sheets = DocSheet::g_map.values();

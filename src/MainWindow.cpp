@@ -65,6 +65,13 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
     }
 
     connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
+
+    m_showMenuTimer = new  QTimer(this);
+    m_showMenuTimer->setInterval(1000);
+    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
+        m_showMenuTimer->stop();
+        dApp->showAnnotTextWidgetSig();
+    });
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -412,6 +419,15 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
             } else if (direction == "out") {
                 // 捏合 out是手指捏合的方向 向外放大
                 zoomIn();   // zoom in 放大
+            }
+        }
+        if (fingers == 0) {
+            if (direction == "up") {
+                m_showMenuTimer->stop();
+            } else if (direction == "down") {
+                if (!m_showMenuTimer->isActive()) {
+                    m_showMenuTimer->start();
+                }
             }
         }
     }

@@ -21,6 +21,9 @@
 
 #include "widgets/CustomWidget.h"
 
+#include <QMouseEvent>
+#include <QTimer>
+
 namespace  deepin_reader {
 class Annotation;
 }

@@ -649,8 +649,8 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 {
     Annotation *highLightAnnot{nullptr};
 
-    BrowserPage *startPage = static_cast<BrowserPage *>(m_selectStartWord->parentItem());
-    BrowserPage *endPage = static_cast<BrowserPage *>(m_selectEndWord->parentItem());
+    BrowserPage *startPage = qgraphicsitem_cast<BrowserPage *>(m_selectStartWord->parentItem());
+    BrowserPage *endPage = qgraphicsitem_cast<BrowserPage *>(m_selectEndWord->parentItem());
 
     m_selectEndPos = QPointF();
     m_selectStartPos = QPointF();
@@ -1405,6 +1405,19 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
  */
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
+    //处理触摸屏单指事件(包括点触,长按)
+    if (event->source() == Qt::MouseEventSynthesizedByQt && event->button() ==  Qt::LeftButton) {
+        QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
+        BrowserWord *beginWord = nullptr;
+        foreach (QGraphicsItem *item, beginItemList) {
+            if (item && !item->isPanel()) {
+                beginWord = qgraphicsitem_cast<BrowserWord *>(item);
+                if (beginWord && beginWord->isSelected())
+                    return DGraphicsView::mousePressEvent(event);
+            }
+        }
+    }
+
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
         m_iconAnnot = nullptr;

@@ -108,6 +108,8 @@ public:
     static MainWindow *createWindow(QStringList filePathList = QStringList());
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
+
+    QTimer *m_showMenuTimer{nullptr};
 };
 
 #endif // MainWindow_H
