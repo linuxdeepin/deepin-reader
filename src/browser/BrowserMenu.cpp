@@ -123,8 +123,10 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     } else {
-        createAction(tr("Search"), "Search");
-        this->addSeparator();
+        if (sheet->fileType() == Dr::FileType::PDF) {
+            createAction(tr("Search"), "Search");
+            this->addSeparator();
+        }
 
         if (sheet->hasBookMark(index))
             createAction(tr("Remove bookmark"), "RemoveBookmark");

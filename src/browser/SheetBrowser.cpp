@@ -2179,6 +2179,10 @@ void SheetBrowser::showEvent(QShowEvent *event)
  */
 void SheetBrowser::handleSearch()
 {
+    //目前只有PDF开放搜索功能
+    if (m_sheet->fileType() != Dr::FileType::PDF)
+        return;
+
     if (m_pFindWidget == nullptr) {
         m_pFindWidget = new FindWidget(this);
         connect(m_pFindWidget, &FindWidget::destroyed, [this]() { m_pFindWidget = nullptr; });
