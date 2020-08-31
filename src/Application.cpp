@@ -107,7 +107,7 @@ void Application::handleFiles(QStringList filePathList)
         if (!hasFind) {
             //如果不存在则打开
             if (MainWindow::m_list.count() > 0) {
-                MainWindow::m_list[0]->activateWindow();
+                MainWindow::m_list[0]->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
                 MainWindow::m_list[0]->doOpenFile(filePath);
                 continue;
             } else {
