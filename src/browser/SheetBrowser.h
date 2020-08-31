@@ -328,6 +328,7 @@ private:
     ulong m_lastMouseTime;
     int m_lastMouseYpos;
     qreal m_stepSpeed = 0;
+    bool m_touchScreenSelectWord = false; // 触摸屏触摸
 };
 
 #endif // SheetBrowser_H

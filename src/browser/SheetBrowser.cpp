@@ -651,6 +651,14 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 {
     Annotation *highLightAnnot{nullptr};
 
+    qInfo() << "     m_selectStartWord:" << m_selectStartWord << "     m_selectEndWord:" << m_selectEndWord;
+
+    if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
+        m_selectStartWord = nullptr;
+        m_selectEndWord = nullptr;
+        return nullptr;
+    }
+
     BrowserPage *startPage = qgraphicsitem_cast<BrowserPage *>(m_selectStartWord->parentItem());
     BrowserPage *endPage = qgraphicsitem_cast<BrowserPage *>(m_selectEndWord->parentItem());
 
@@ -689,6 +697,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
     m_selectStartWord = nullptr;
     m_selectEndWord = nullptr;
+    m_touchScreenSelectWord = false;
 
     return highLightAnnot;
 }
@@ -1449,35 +1458,33 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     //处理触摸屏单指事件(包括点触,长按)
-    bool isSelectText = false;
-
-    if (event->source() == Qt::MouseEventSynthesizedByQt && event->button() ==  Qt::LeftButton) {
-        QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
-        BrowserWord *beginWord = nullptr;
-        foreach (QGraphicsItem *item, beginItemList) {
-            if (item && !item->isPanel()) {
-                beginWord = qgraphicsitem_cast<BrowserWord *>(item);
-                if (beginWord && beginWord->isSelected()) {
-                    isSelectText = true;
-                    break;
-                }
-            }
-        }
-        return DGraphicsView::mousePressEvent(event);
-    }
+//    bool isSelectText = false;
+    QPoint point = event->pos();
+    BrowserPage *page = getBrowserPageForPoint(point);
 
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
         m_iconAnnot = nullptr;
-        QPoint point = event->pos();
-        BrowserPage *page = getBrowserPageForPoint(point);
 
-        if (event->source() != Qt::MouseEventSynthesizedByQt && btn == Qt::LeftButton) {
-            if (!isSelectText)
+        if (btn == Qt::LeftButton) {
+            if (event->source() == Qt::MouseEventSynthesizedByQt) {
+                QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
+                BrowserWord *beginWord = nullptr;
+                foreach (QGraphicsItem *item, beginItemList) {
+                    if (item && !item->isPanel()) {
+                        beginWord = qgraphicsitem_cast<BrowserWord *>(item);
+                        if (beginWord && beginWord->isSelected()) {
+                            m_touchScreenSelectWord = true;
+                            return DGraphicsView::mousePressEvent(event);
+                        }
+                    }
+                }
+            } else {
+                m_touchScreenSelectWord = false;
                 scene()->setSelectionArea(QPainterPath());
-
-            m_selectStartWord = nullptr;
-            m_selectEndWord = nullptr;
+                m_selectStartWord = nullptr;
+                m_selectEndWord = nullptr;
+            }
 
             m_selectEndPos = QPointF();
             m_selectWordEndPos = QPointF();
@@ -1648,6 +1655,10 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
  */
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_touchScreenSelectWord) {
+        return DGraphicsView::mouseMoveEvent(event);
+    }
+
     if (event->type() == QEvent::MouseMove && event->source() == Qt::MouseEventSynthesizedByQt) {
         const ulong diffTime = event->timestamp() - m_lastMouseTime;
         const int diffYpos = event->pos().y() - m_lastMouseYpos;
@@ -1677,7 +1688,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 //            return true;
 //        }
     }
-
 
     QPoint mousePos = event->pos();
 
