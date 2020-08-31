@@ -1449,6 +1449,8 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     //处理触摸屏单指事件(包括点触,长按)
+    bool isSelectText = false;
+
     if (event->source() == Qt::MouseEventSynthesizedByQt && event->button() ==  Qt::LeftButton) {
         QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
         BrowserWord *beginWord = nullptr;
@@ -1456,10 +1458,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             if (item && !item->isPanel()) {
                 beginWord = qgraphicsitem_cast<BrowserWord *>(item);
                 if (beginWord && beginWord->isSelected()) {
-                    return DGraphicsView::mousePressEvent(event);
+                    isSelectText = true;
+                    break;
                 }
             }
         }
+        return DGraphicsView::mousePressEvent(event);
     }
 
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
@@ -1468,8 +1472,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         QPoint point = event->pos();
         BrowserPage *page = getBrowserPageForPoint(point);
 
-        if (btn == Qt::LeftButton) {
-            scene()->setSelectionArea(QPainterPath());
+        if (event->source() != Qt::MouseEventSynthesizedByQt && btn == Qt::LeftButton) {
+            if (!isSelectText)
+                scene()->setSelectionArea(QPainterPath());
 
             m_selectStartWord = nullptr;
             m_selectEndWord = nullptr;
