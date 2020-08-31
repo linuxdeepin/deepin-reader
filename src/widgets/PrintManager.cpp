@@ -23,7 +23,6 @@
 
 #include <QPrinter>
 #include <QPainter>
-#include <QPrintPreviewDialog>
 #include <QPrintDialog>
 #include <QDebug>
 
@@ -36,16 +35,14 @@ PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
 
 void PrintManager::showPrintDialog(DWidget *widget)
 {
-    QPrinter printer;
+    DPrintPreviewDialog preview(widget);
 
-    QPrintPreviewDialog preview(&printer, widget);
-
-    connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(slotPrintPreview(QPrinter *)));
+    connect(&preview, SIGNAL(paintRequested(DPrinter *)), SLOT(slotPrintPreview(DPrinter *)));
 
     preview.exec();
 }
 
-void PrintManager::slotPrintPreview(QPrinter *printer)
+void PrintManager::slotPrintPreview(DPrinter *printer)
 {
     if (nullptr == m_sheet)
         return;

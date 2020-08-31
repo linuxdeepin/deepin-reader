@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include "dprintpreviewdialog.h"
+
 class QPrinter;
 
 DWIDGET_USE_NAMESPACE
@@ -41,7 +43,7 @@ public:
     void setPrintPath(const QString &strPrintPath);
 
 private slots:
-    void slotPrintPreview(QPrinter *printer);
+    void slotPrintPreview(DPrinter *printer);
 
 private:
     QString     m_strPrintName = "";
