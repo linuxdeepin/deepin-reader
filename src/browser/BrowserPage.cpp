@@ -269,9 +269,9 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         QRectF rect = boundingRect();
 
-        if (rect.height() > 2000 || rect.height() > 2000) {
-            int pieceWidth = 2000;
-            int pieceHeight = 2000;
+        if ((rect.height() > 1000 || rect.height() > 1000) && (m_page->size().height() > 2000 || m_page->size().height() > 2000)) {
+            int pieceWidth = 1000;
+            int pieceHeight = 1000;
 
             QList<RenderPageTask> tasks;
 
@@ -412,7 +412,7 @@ QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QR
 {
     deepin_reader::Page *page = m_page;
 
-    if (-1 != renderIndex)
+    if (-1 != renderIndex && m_renderPages.count() > renderIndex)
         page = m_renderPages.value(renderIndex);
 
     if (nullptr == page)
@@ -1153,6 +1153,8 @@ bool BrowserPage::sceneEvent(QEvent *event)
         else
             m_bookmarkState = 0;
         update();
+    } else if (event->type() == QEvent::HideToParent) {
+        qDebug() << 11111111111;
     }
     return QGraphicsItem::sceneEvent(event);
 }

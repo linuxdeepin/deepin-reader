@@ -194,11 +194,29 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     if (nullptr == m_document)
         return false;
 
-    for (int i = 0; i < 4; ++i) {
-        if (Dr::PDF == fileType)
-            m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, password));
-        else if (Dr::DjVu == fileType)
-            m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
+    for (int i = 0; i < m_document->numberOfPages(); ++i) {
+        deepin_reader::Page *page = m_document->page(i);
+
+        const QString &labelPage = page->label();
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
+        }
+
+        if (page->size().width() > m_maxWidth)
+            m_maxWidth = page->size().width();
+
+        if (page->size().height() > m_maxHeight)
+            m_maxHeight = page->size().height();
+
+    }
+
+    if (m_maxWidth > 2000 || m_maxHeight > 2000) {
+        for (int i = 0; i < 4; ++i) {
+            if (Dr::PDF == fileType)
+                m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, password));
+            else if (Dr::DjVu == fileType)
+                m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
+        }
     }
 
     m_fileType = fileType;
@@ -226,17 +244,6 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         if (page == nullptr)
             return false;
-
-        const QString &labelPage = page->label();
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-
-        if (page->size().width() > m_maxWidth)
-            m_maxWidth = page->size().width();
-
-        if (page->size().height() > m_maxHeight)
-            m_maxHeight = page->size().height();
 
         QList<deepin_reader::Page *> renderPages;
 
