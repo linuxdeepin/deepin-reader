@@ -106,6 +106,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
+
+//    new AutoScrollHandler(this);
 }
 
 SheetBrowser::~SheetBrowser()
@@ -1142,6 +1144,9 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
+    if (QGesture *tap = event->gesture(Qt::TapGesture))
+        tapGestureTriggered(static_cast<QTapGesture *>(tap));
+
     return true;
 }
 
@@ -1182,6 +1187,44 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
             currentStepScaleFactor = nowStepScaleFactor;
             return;
         }
+    }
+}
+
+/**
+ * @brief SheetBrowser::tapGestureTriggered
+ * 单指点击手势
+ * @param tapGesture
+ */
+void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
+{
+    switch (tapGesture->state()) {
+    case Qt::GestureStarted: {
+        m_gestureAction = GA_tap;
+        m_tapBeginTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+        break;
+    }
+    case Qt::GestureUpdated: {
+        break;
+    }
+    case Qt::GestureCanceled: {
+        //根据时间长短区分轻触滑动
+        qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
+        if (timeSpace < TAP_MOVE_DELAY || m_slideContinue) {
+            m_slideContinue = false;
+            m_gestureAction = GA_slide;
+        } else {
+            m_gestureAction = GA_null;
+        }
+        break;
+    }
+    case Qt::GestureFinished: {
+        m_gestureAction = GA_null;
+        break;
+    }
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
     }
 }
 
@@ -1412,8 +1455,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         foreach (QGraphicsItem *item, beginItemList) {
             if (item && !item->isPanel()) {
                 beginWord = qgraphicsitem_cast<BrowserWord *>(item);
-                if (beginWord && beginWord->isSelected())
+                if (beginWord && beginWord->isSelected()) {
                     return DGraphicsView::mousePressEvent(event);
+                }
             }
         }
     }
@@ -1599,6 +1643,37 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
  */
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
+    if (event->type() == QEvent::MouseMove && event->source() == Qt::MouseEventSynthesizedByQt) {
+        const ulong diffTime = event->timestamp() - m_lastMouseTime;
+        const int diffYpos = event->pos().y() - m_lastMouseYpos;
+        m_lastMouseTime = event->timestamp();
+        m_lastMouseYpos = event->pos().y();
+
+        if (m_gestureAction == GA_slide) {
+            //经过调试scaleFactor越小,滑动幅度越大
+            qreal scaleFactor = 0.2;//static_cast<int>(m_lastScaleFactor * 10);
+
+            /*开根号时数值越大衰减比例越大*/
+            qreal direction = diffYpos > 0 ? 1.0 : -1.0;
+            slideGesture(-direction * sqrt(abs(diffYpos)) / scaleFactor);
+
+            /*预算滑惯性动时间*/
+            m_stepSpeed = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTime + 0.000001);
+            duration = sqrt(abs(m_stepSpeed)) * 1000;
+
+            /*预算滑惯性动距离,4.0为调优数值*/
+            m_stepSpeed /= sqrt(scaleFactor * 4.0);
+            change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
+
+//            return true;
+        }
+
+//        if (m_gestureAction != GA_null) {
+//            return true;
+//        }
+    }
+
+
     QPoint mousePos = event->pos();
 
     if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
@@ -1771,6 +1846,12 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
  */
 void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
+//    if (m_gestureAction == GA_slide) {
+//        m_tween.start(0, 0, change, duration, std::bind(&SheetBrowser::slideGesture, this, std::placeholders::_1));
+//    }
+
+    m_gestureAction = GA_null;
+
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
         const QPointF &mousepoint = mapToScene(event->pos());
@@ -2285,6 +2366,15 @@ void SheetBrowser::setIconAnnotSelect(const bool select)
     if (m_lastSelectIconAnnotPage)
         m_lastSelectIconAnnotPage->setSelectIconRect(select);
     m_lastSelectIconAnnotPage = nullptr;
+}
+
+void SheetBrowser::slideGesture(const qreal diff)
+{
+    static qreal delta = 0.0;
+    int step = static_cast<int>(diff + delta);
+    delta = diff + delta - step;
+
+    this->verticalScrollBar()->setValue(this->verticalScrollBar()->value() + step);
 }
 
 /**

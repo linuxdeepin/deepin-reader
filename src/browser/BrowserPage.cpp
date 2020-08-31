@@ -1144,6 +1144,7 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
 bool BrowserPage::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
+//        qInfo() << __LINE__ << __FUNCTION__ << "      current page index :  " << this->m_index;
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
         if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))
             m_bookmarkState = 1;

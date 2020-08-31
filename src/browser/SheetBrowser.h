@@ -34,6 +34,12 @@
 #include <QPinchGesture>
 #include <QSwipeGesture>
 #include <QTapGesture>
+#include <QTimer>
+
+#include <math.h>
+
+#define CELL_TIME   15
+#define TAP_MOVE_DELAY 300
 
 using namespace deepin_reader;
 
@@ -47,6 +53,7 @@ class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
 class PageSearchThread;
+
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -184,6 +191,7 @@ signals:
 protected:
     enum GestureAction {
         GA_null,
+        GA_tap,
         GA_touch,
         GA_click,
         GA_slide,
@@ -210,6 +218,8 @@ protected:
     bool gestureEvent(QGestureEvent *event);
 
     void pinchTriggered(QPinchGesture *);
+
+    void tapGestureTriggered(QTapGesture *);
 
     BrowserPage *mouseClickInPage(QPointF &);
 
@@ -251,6 +261,8 @@ private:
 
     void setIconAnnotSelect(const bool);
 
+    void slideGesture(const qreal diff);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<deepin_reader::Document *> m_renderDocuments;
@@ -276,6 +288,8 @@ private:
     QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置(鼠标释放的最后位置)
     QPointF m_selectWordEndPos;         // 选取文字的结束位置(鼠标移动的最后位置)
+    BrowserWord *m_selectStartWord = nullptr;
+    BrowserWord *m_selectEndWord = nullptr;
 
     double m_lastScaleFactor = 0;
     int m_maxWidth = 0;                 //最大一页的宽度
@@ -304,8 +318,16 @@ private:
     ulong m_touchStop = 0;
     QPoint m_lastTouchBeginPos;
     Qt::GestureState m_tapStatus = Qt::NoGesture;
-    BrowserWord *m_selectStartWord = nullptr;
-    BrowserWord *m_selectEndWord = nullptr;
+
+    //tap
+    qint64 m_tapBeginTime = 0;
+    bool m_slideContinue = false;
+//    FlashTween m_tween;
+    qreal change = 0.0;
+    qreal duration = 0.0;
+    ulong m_lastMouseTime;
+    int m_lastMouseYpos;
+    qreal m_stepSpeed = 0;
 };
 
 #endif // SheetBrowser_H

@@ -75,10 +75,17 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     connect(dApp, &Application::sigShowAnnotTextWidget, this, [ = ] {
         if (this->isVisible() && m_pTextEdit)
         {
-            qInfo() << "    NoteViewWidget  show  text edit menu ... ";
-            QMouseEvent showMenuEvent(QEvent::MouseButtonPress, QCursor::pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-            QCoreApplication::sendEvent(m_pTextEdit, &showMenuEvent);
-            this->show();
+//            qInfo() << "    NoteViewWidget  show  text edit menu ... ";
+            QMenu *menu =  m_pTextEdit->createStandardContextMenu();
+            menu->exec(QCursor::pos());
+            //QContextMenuEvent showMenuEvent(QContextMenuEvent::Mouse, QPoint(10, 10), QPoint(500, 500));
+            //QCoreApplication::sendEvent(m_pTextEdit, &showMenuEvent);
+
+            if (menu) {
+                qInfo() << "    menu:" << menu;
+                delete  menu;
+                menu = nullptr;
+            }
         }
     });
 }
