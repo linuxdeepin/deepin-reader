@@ -113,7 +113,6 @@ SheetBrowser::~SheetBrowser()
     disconnect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 
     qDeleteAll(m_items);
-    m_items.clear();
 
     if (nullptr != m_document)
         delete m_document;
@@ -1143,58 +1142,58 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
  */
 bool SheetBrowser::event(QEvent *event)
 {
-//    if (event && event->type() == QEvent::KeyPress) {
-//        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-//        if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
-//            this->showMenu();
-//        }
-//        if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
-//            //搜索框
-//            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
-//                return DGraphicsView::event(event);
-//            }
+    if (event && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
+            this->showMenu();
+        }
+        if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
+            //搜索框
+            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
+                return DGraphicsView::event(event);
+            }
 
-//            this->showMenu();
-//        }
-//    }
+            this->showMenu();
+        }
+    }
 
-//    if (event->type() == QEvent::Gesture)
-//        return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
+    if (event->type() == QEvent::Gesture)
+        return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
-//    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
-//    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-//        m_touchStop = mouseEvent->timestamp();
-//    }
+    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        m_touchStop = mouseEvent->timestamp();
+    }
 
-//    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-//        m_touchStop = mouseEvent->timestamp();
-////        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
-////        m_lastTouchBeginPos = mouseEvent->pos();
-//        //滑动界面
-//        if (m_gestureAction == GA_slide) {
-////            int  nowValue =  this->verticalScrollBar()->value();
-////            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
-//        }
+    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        m_touchStop = mouseEvent->timestamp();
+//        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
+//        m_lastTouchBeginPos = mouseEvent->pos();
+        //滑动界面
+        if (m_gestureAction == GA_slide) {
+//            int  nowValue =  this->verticalScrollBar()->value();
+//            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
+        }
 
-//        if (m_gestureAction != GA_null) {
-//            return true;
-//        }
-//    }
+        if (m_gestureAction != GA_null) {
+            return true;
+        }
+    }
 
-//    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-//        m_gestureAction = GA_null;
-//    }
+    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+        m_gestureAction = GA_null;
+    }
 
-//    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
-//    switch (event->type()) {
-//    case QEvent::TouchBegin:
-//        m_touchBegin = touchEvent->timestamp();
-//        m_gestureAction = GA_touch;
-//        m_bTouch = true;
-//    default:
-//        break;
-//    }
+    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        m_touchBegin = touchEvent->timestamp();
+        m_gestureAction = GA_touch;
+        m_bTouch = true;
+    default:
+        break;
+    }
 
     return QGraphicsView::event(event);
 }

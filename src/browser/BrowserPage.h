@@ -192,30 +192,29 @@ private:
     double  m_scaleFactor = -1;                         //当前被设置的缩放
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 
-    QPixmap m_pixmap;                     //当前图片
-    bool    m_pixmapHasRendered = false;  //当前图片是否已经开始加载
-    double  m_pixmapScaleFactor   = -1;   //当前图片的缩放
-    QRect   m_pixmapRenderedRect;         //当前图片已经加载的rect
+    QPixmap m_pixmap;                       //当前图片
+    bool    m_pixmapHasRendered = false;    //当前图片是否已经开始加载
+    double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
+    QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
 
-    bool    m_viewportTryRender = false;  //视图区域绘制尝试过调用
+    bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
     double  m_viewportScaleFactor = -1;
-    QPixmap m_viewportPixmap;       //视图区域的图片
-    QRect   m_viewportRenderedRect; //试图区域
+    QPixmap m_viewportPixmap;               //视图区域的图片
+    QRect   m_viewportRenderedRect;         //试图区域
 
     bool m_wordHasRendered = false;                         //当前文字是否被加载
-    QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放
+    bool m_wordIsHide = false;
+    bool m_wordSelectable = false;                          //文字是否可以选取
+    QList<BrowserWord *> m_words;                           //当前文字
 
-    bool m_bookmark = false;   //当前是否有书签
-    int  m_bookmarkState = 0;  //当前书签状态 1为on 2为pressed 3为show
-
-    bool m_hasLoadedAnnotation = false;                 //是否已经加载注释
-    QList<BrowserAnnotation *> m_annotationItems;       //一个注释可能对应多个annotationitems
+    QList<BrowserAnnotation *> m_annotationItems;           //一个注释可能对应多个annotationitems
+    bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
 
     QList<BrowserLink *> m_linkItems;
 
-    bool m_wordIsHide = false;
-    bool m_wordSelectable = false;      //文字是否可以选取
+    bool m_bookmark = false;                                //当前是否有书签
+    int  m_bookmarkState = 0;                               //当前书签状态 1为on 2为pressed 3为show
 
     QRectF m_searchSelectLighRectf;
     QList<QRectF> m_searchLightrectLst;

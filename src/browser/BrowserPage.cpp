@@ -64,25 +64,20 @@ BrowserPage::~BrowserPage()
     items.remove(this);
 
     qDeleteAll(m_annotations);
-    m_annotations.clear();
 
     qDeleteAll(m_annotations0);
-    m_annotations0.clear();
 
     qDeleteAll(m_annotations1);
-    m_annotations1.clear();
 
     qDeleteAll(m_annotations2);
-    m_annotations2.clear();
 
     qDeleteAll(m_annotations3);
-    m_annotations3.clear();
 
     qDeleteAll(m_annotationItems);
-    m_annotationItems.clear();
+
+    qDeleteAll(m_linkItems);
 
     qDeleteAll(m_words);
-    m_words.clear();
 
     if (nullptr != m_page)
         delete m_page;
@@ -109,10 +104,9 @@ void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
     if (nullptr != tmpPage)
         delete tmpPage;
 
-    foreach (deepin_reader::Page *tmpPage, tempPages)
-        delete tmpPage;
+    qDeleteAll(tempPages);
 
-    //文字不需要重新加载
+    //word和link不需要重新加载
 }
 
 QRectF BrowserPage::boundingRect() const
