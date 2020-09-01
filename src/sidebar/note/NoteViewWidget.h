@@ -60,7 +60,7 @@ protected:
 private:
     QString m_strNote = "";
     TransparentTextEdit *m_pTextEdit = nullptr;
-    deepin_reader::Annotation *m_annotation;
+    deepin_reader::Annotation *m_annotation = nullptr;
     SheetBrowser *m_brower;
 };
 

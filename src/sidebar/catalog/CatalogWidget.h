@@ -46,6 +46,9 @@ public:
 
     void handlePage(int page);
 
+private:
+    void setTitleTheme();
+
 protected:
     void initWidget() override;
 
@@ -56,7 +59,6 @@ private:
     QString             m_strTheme = "";
     DLabel              *titleLabel = nullptr;
     CatalogTreeView     *m_pTree = nullptr;
-    void setTitleTheme();
     DocSheet *m_sheet;
 };
 
