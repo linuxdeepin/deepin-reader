@@ -103,6 +103,7 @@ private:
     void onJumpToNextPage();
     void deleteItemByKey();
     void switchListView();
+    bool dealSubControlFocus();
 
 private:
     qreal m_scale;

@@ -50,6 +50,8 @@ public:
 
     DPushButton       *getAddBtn();
 
+    bool addBtnCheckEnter();
+
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;

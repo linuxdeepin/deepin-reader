@@ -46,6 +46,8 @@ public:
 
     DPushButton *getAddBtn();
 
+    bool addBtnCheckEnter();
+
 public:
     void initWidget() Q_DECL_OVERRIDE;
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

@@ -318,6 +318,10 @@ bool SheetSidebar::eventFilter(QObject *object, QEvent *event)
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
 
         if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+            //书签和注释子界面响应回车事件
+            if (dealSubControlFocus())
+                return CustomWidget::eventFilter(object, event);
+
             //按钮响应回车事件
             switchListView();
         }
@@ -421,6 +425,24 @@ void SheetSidebar::switchListView()
             }
         }
     }
+}
+
+/**
+ * @brief SheetSidebar::dealSubControlFocus
+ * 处理子窗口中,子控件获得回车事件,在有焦点时
+ */
+bool SheetSidebar::dealSubControlFocus()
+{
+    if (m_btnGroup && m_btnGroup->buttons().count() > 0) {
+        QWidget *curWidget = m_stackLayout->currentWidget();
+        if (curWidget == m_bookmarkWidget) {
+            return m_bookmarkWidget->addBtnCheckEnter();
+        } else if (curWidget == m_notesWidget) {
+            return m_notesWidget->addBtnCheckEnter();
+        }
+    }
+
+    return false;
 }
 
 bool SheetSidebar::event(QEvent *event)

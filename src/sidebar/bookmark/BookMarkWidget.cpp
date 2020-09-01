@@ -131,6 +131,20 @@ DPushButton *BookMarkWidget::getAddBtn()
     return m_pAddBookMarkBtn;
 }
 
+/**
+ * @brief BookMarkWidget::addBtnCheckEnter
+ * 添加书签响应回车事件
+ */
+bool BookMarkWidget::addBtnCheckEnter()
+{
+    if (m_pAddBookMarkBtn && m_pAddBookMarkBtn->hasFocus()) {
+        onAddBookMarkClicked();
+        return true;
+    }
+
+    return false;
+}
+
 void BookMarkWidget::DeleteItemByKey()
 {
     int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
