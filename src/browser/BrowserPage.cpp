@@ -81,8 +81,13 @@ BrowserPage::~BrowserPage()
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
 
+    qDeleteAll(m_words);
+    m_words.clear();
+
     if (nullptr != m_page)
         delete m_page;
+
+    qDeleteAll(m_renderPages);
 }
 
 void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
@@ -269,7 +274,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         QRectF rect = boundingRect();
 
-        if ((rect.height() > 1000 || rect.height() > 1000) && (m_page->size().height() > 2000 || m_page->size().height() > 2000)) {
+        if ((rect.height() > 1000 || rect.width() > 1000) && (m_page->size().height() > 2000 || m_page->size().height() > 2000)) {
             int pieceWidth = 1000;
             int pieceHeight = 1000;
 
@@ -375,6 +380,7 @@ void BrowserPage::renderViewPort(bool force)
     task.rotation = Dr::RotateBy0;
 
     task.renderRect = viewRenderRect;
+
     PageViewportThread::appendTask(task);
 }
 
@@ -528,6 +534,12 @@ void BrowserPage::loadLinks()
     }
 }
 
+void BrowserPage::loadAnnotations()
+{
+    if (!m_hasLoadedAnnotation)
+        reloadAnnotations();
+}
+
 void BrowserPage::loadWords()
 {
     if (!m_wordHasRendered) {
@@ -539,8 +551,19 @@ void BrowserPage::loadWords()
     }
 }
 
-void BrowserPage::hideWords()
+void BrowserPage::clearCache()
 {
+    m_pixmap = QPixmap();
+    m_pixmapHasRendered = false;
+    m_pixmapScaleFactor = -1;
+    m_pixmapRenderedRect = QRect();
+
+    m_viewportPixmap = QPixmap();
+    m_viewportRenderedRect = QRect();
+    m_viewportScaleFactor = -1;
+
+    PageRenderThread::clearTask(this);
+
     if (m_wordIsHide)
         return;
 
@@ -579,12 +602,6 @@ void BrowserPage::scaleWords(bool force)
             word->setScaleFactor(m_scaleFactor);
         }
     }
-}
-
-void BrowserPage::loadAnnotations()
-{
-    if (!m_hasLoadedAnnotation)
-        reloadAnnotations();
 }
 
 void BrowserPage::reloadAnnotations()

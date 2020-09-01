@@ -253,6 +253,8 @@ private:
 
     void addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF);
 
+    void currentIndexRange(int &fromIndex, int &toIndex);
+
     int currentScrollValueForPage();
 
     void curpageChanged(int curpage);
@@ -302,8 +304,7 @@ private:
     int m_selectIndex = -1;              // 选取文字开始的index
 
     bool m_annotationInserting = false;     //正在插入注释状态
-    RenderViewportThread *m_pageThread = nullptr;
-    bool m_selectIconAnnotation{false}; // 当前是否有选中的图标注释
+    bool m_selectIconAnnotation = false; // 当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
 

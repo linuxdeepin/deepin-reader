@@ -136,7 +136,7 @@ class PDFDocument : public Document
     Q_DECLARE_TR_FUNCTIONS(Model::PDFDocument)
 
 public:
-    ~PDFDocument();
+    virtual ~PDFDocument();
 
     int numberOfPages() const;
 

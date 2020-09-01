@@ -91,11 +91,11 @@ public:
 
     void loadWords();
 
-    void hideWords();
+    void loadAnnotations();     //如果加载过则不加载
+
+    void clearCache();
 
     void scaleWords(bool force = false);
-
-    void loadAnnotations();     //如果加载过则不加载
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -211,7 +211,6 @@ private:
 
     bool m_hasLoadedAnnotation = false;                 //是否已经加载注释
     QList<BrowserAnnotation *> m_annotationItems;       //一个注释可能对应多个annotationitems
-
 
     QList<BrowserLink *> m_linkItems;
 

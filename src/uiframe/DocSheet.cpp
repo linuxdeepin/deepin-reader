@@ -850,7 +850,11 @@ bool DocSheet::needPassword()
     if (nullptr == document)
         return false;
 
-    return document->isLocked();
+    bool isLocked = document->isLocked();
+
+    delete document;
+
+    return isLocked;
 }
 
 bool DocSheet::isUnLocked()

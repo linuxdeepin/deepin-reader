@@ -106,8 +106,6 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
-
-//    new AutoScrollHandler(this);
 }
 
 SheetBrowser::~SheetBrowser()
@@ -119,6 +117,8 @@ SheetBrowser::~SheetBrowser()
 
     if (nullptr != m_document)
         delete m_document;
+
+    qDeleteAll(m_renderDocuments);
 
     if (nullptr != m_noteEditWidget)
         delete m_noteEditWidget;
@@ -208,6 +208,7 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
         if (page->size().height() > m_maxHeight)
             m_maxHeight = page->size().height();
 
+        delete page;
     }
 
     if (m_maxWidth > 2000 || m_maxHeight > 2000) {
@@ -788,6 +789,48 @@ void SheetBrowser::addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF cli
 }
 
 /**
+ * @brief SheetBrowser::currentIndexRange
+ * 当前显示的页数范围
+ * @param fromIndex 当前显示的第个页数索引
+ * @param toIndex 当前显示的最后个页数索引
+ * @return
+ */
+void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
+{
+    fromIndex = -1;
+    toIndex = -1;
+
+    int value = verticalScrollBar()->value();
+
+    for (int i = 0; i < m_items.count(); ++i) {
+        int y = 0;
+
+        if (Dr::RotateBy0 == m_sheet->operation().rotation) {
+            y = static_cast<int>(m_items[i]->y());
+        } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
+            y = static_cast<int>(m_items[i]->y());
+        } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
+            y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().height());
+        } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
+            y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().width());
+        }
+
+        if (-1 == fromIndex && y + m_items[i]->rect().height() >= value) {
+            fromIndex = i;
+        }
+
+        if (-1 == toIndex && y >= (value + this->height())) {
+            toIndex = i - 1;
+            break;
+        }
+
+        if (i == (m_items.count() - 1)) {
+            toIndex = i;
+        }
+    }
+}
+
+/**
  * @brief SheetBrowser::mouseClickIconAnnot
  * 鼠标是否点击了注释图标
  * @param clickPoint 鼠标位置
@@ -823,8 +866,14 @@ QString SheetBrowser::selectedWordsText()
 
 void SheetBrowser::handleVerticalScrollLater()
 {
+    int fromIndex = 0;
+    int toIndex = 0;
+    currentIndexRange(fromIndex, toIndex);
+
     foreach (BrowserPage *item, m_items) {
-        item->hideWords();
+        if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
+            item->clearCache();
+        }
     }
 
     if (nullptr == m_scrollTimer) {
@@ -1094,58 +1143,58 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
  */
 bool SheetBrowser::event(QEvent *event)
 {
-    if (event && event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
-            this->showMenu();
-        }
-        if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
-            //搜索框
-            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
-                return DGraphicsView::event(event);
-            }
+//    if (event && event->type() == QEvent::KeyPress) {
+//        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+//        if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
+//            this->showMenu();
+//        }
+//        if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
+//            //搜索框
+//            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
+//                return DGraphicsView::event(event);
+//            }
 
-            this->showMenu();
-        }
-    }
+//            this->showMenu();
+//        }
+//    }
 
-    if (event->type() == QEvent::Gesture)
-        return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
+//    if (event->type() == QEvent::Gesture)
+//        return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+//    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
-    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_touchStop = mouseEvent->timestamp();
-    }
+//    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+//        m_touchStop = mouseEvent->timestamp();
+//    }
 
-    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_touchStop = mouseEvent->timestamp();
-//        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
-//        m_lastTouchBeginPos = mouseEvent->pos();
-        //滑动界面
-        if (m_gestureAction == GA_slide) {
-//            int  nowValue =  this->verticalScrollBar()->value();
-//            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
-        }
+//    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+//        m_touchStop = mouseEvent->timestamp();
+////        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
+////        m_lastTouchBeginPos = mouseEvent->pos();
+//        //滑动界面
+//        if (m_gestureAction == GA_slide) {
+////            int  nowValue =  this->verticalScrollBar()->value();
+////            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
+//        }
 
-        if (m_gestureAction != GA_null) {
-            return true;
-        }
-    }
+//        if (m_gestureAction != GA_null) {
+//            return true;
+//        }
+//    }
 
-    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_gestureAction = GA_null;
-    }
+//    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+//        m_gestureAction = GA_null;
+//    }
 
-    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-        m_touchBegin = touchEvent->timestamp();
-        m_gestureAction = GA_touch;
-        m_bTouch = true;
-    default:
-        break;
-    }
+//    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+//    switch (event->type()) {
+//    case QEvent::TouchBegin:
+//        m_touchBegin = touchEvent->timestamp();
+//        m_gestureAction = GA_touch;
+//        m_bTouch = true;
+//    default:
+//        break;
+//    }
 
     return QGraphicsView::event(event);
 }
