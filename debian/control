@@ -8,5 +8,5 @@ Standards-Version: 4.1.3
 Package: deepin-reader
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.
+Description: Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.
+  Document Viewer is a powerful and easy-to-use software built-in the system for opening and viewing files quickly, supporting operations such as adding bookmarks, adding notes, and highlighting some text.
