@@ -601,16 +601,22 @@ void BrowserPage::scaleWords(bool force)
 void BrowserPage::reloadAnnotations()
 {
     qDeleteAll(m_annotations);
-    m_annotations.clear();
 
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
 
     m_annotations = m_page->annotations();
     if (m_renderPages.count() >= 4) {
+        qDeleteAll(m_annotations);
         m_annotations0 = m_renderPages[0]->annotations();
+
+        qDeleteAll(m_annotations1);
         m_annotations1 = m_renderPages[1]->annotations();
+
+        qDeleteAll(m_annotations2);
         m_annotations2 = m_renderPages[2]->annotations();
+
+        qDeleteAll(m_annotations3);
         m_annotations3 = m_renderPages[3]->annotations();
     }
 
