@@ -86,13 +86,9 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setAttribute(Qt::WA_AcceptTouchEvents);
 
-    grabGesture(Qt::PanGesture);//移动
-
     grabGesture(Qt::PinchGesture);//捏合缩放
 
     grabGesture(Qt::TapGesture);
-
-    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
@@ -1206,6 +1202,8 @@ bool SheetBrowser::event(QEvent *event)
  */
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
+    m_gestureAction = GA_null;
+
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
     if (QGesture *tap = event->gesture(Qt::TapGesture))
@@ -1221,10 +1219,11 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
     static qreal currentStepScaleFactor = 0.0;
+    m_gestureAction = GA_pinch;
 
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
-        if (m_bTouch && qAbs(gesture->rotationAngle()) > 20.0) {
+        if (m_bTouch && qAbs(gesture->rotationAngle()) > 25.0) {
             if (gesture->rotationAngle() < 0.0) {
                 m_sheet->rotateLeft();
             } else {
@@ -1241,7 +1240,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     qreal nowStepScaleFactor = 0.0;
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         nowStepScaleFactor = gesture->totalScaleFactor();
-        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor) && qAbs(currentStepScaleFactor - nowStepScaleFactor) * 100 > 30.0) {
+        //经过验证,阀值是0.8时,交互是比较好的
+        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor)
+                && qAbs(currentStepScaleFactor - nowStepScaleFactor) > 0.8) {
             if (currentStepScaleFactor < nowStepScaleFactor) {
                 m_sheet->zoomin();
             } else {
@@ -1261,6 +1262,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
  */
 void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
 {
+    if (m_gestureAction != GA_null)
+        return;
+
     switch (tapGesture->state()) {
     case Qt::GestureStarted: {
         m_gestureAction = GA_tap;
@@ -1735,13 +1739,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             /*预算滑惯性动距离,4.0为调优数值*/
             m_stepSpeed /= sqrt(scaleFactor * 4.0);
             change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
-
-//            return true;
         }
-
-//        if (m_gestureAction != GA_null) {
-//            return true;
-//        }
     }
 
     QPoint mousePos = event->pos();
@@ -1916,10 +1914,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
  */
 void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
-//    if (m_gestureAction == GA_slide) {
-//        m_tween.start(0, 0, change, duration, std::bind(&SheetBrowser::slideGesture, this, std::placeholders::_1));
-//    }
-
     m_gestureAction = GA_null;
 
     Qt::MouseButton btn = event->button();

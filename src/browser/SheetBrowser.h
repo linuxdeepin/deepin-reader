@@ -313,7 +313,7 @@ private:
     int m_currentPage = 0;
     int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
-    bool m_bTouch{false};
+    bool m_bTouch = false;
     GestureAction m_gestureAction = GA_null;
     ulong m_touchBegin = 0;
     ulong m_touchStop = 0;
