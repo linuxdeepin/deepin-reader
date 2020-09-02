@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
 
+    //test
     ::testing::InitGoogleTest(&argc, argv);
     qDebug() << RUN_ALL_TESTS();
     return a.exec();
