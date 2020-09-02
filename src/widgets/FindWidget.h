@@ -65,8 +65,8 @@ private:
 
 private:
     DocSheet *m_docSheet = nullptr;
-    DSearchEdit     *m_pSearchEdit = nullptr;
-    QString m_strLastFindText{""};//上一次查找内容
+    DSearchEdit *m_pSearchEdit = nullptr;
+    QString m_strLastFindText = ""; //上一次查找内容
 };
 
 #endif

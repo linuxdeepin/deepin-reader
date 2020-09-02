@@ -114,6 +114,9 @@ void ScaleWidget::onArrowBtnlicked()
 
 void ScaleWidget::onEditFinished()
 {
+    if (nullptr == m_sheet)
+        return;
+
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
     m_lineEdit->setText(text);
 }

@@ -19,20 +19,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "ut_widgets.h"
-#include "widgets/AttrScrollWidget.h"
-#include "widgets/BookMarkButton.h"
-#include "widgets/CustomClickLabel.h"
-#include "widgets/CustemPushButton.h"
-#include "widgets/PrintManager.h"
-#include "widgets/RoundColorWidget.h"
-#include "widgets/SaveDialog.h"
-#include "widgets/ScaleWidget.h"
-#include "widgets/ShortCutShow.h"
-#include "widgets/SlidePlayWidget.h"
-#include "widgets/SlideWidget.h"
-#include "widgets/SpinnerWidget.h"
-#include "widgets/TipsWidget.h"
-#include "widgets/WordWrapLabel.h"
 
 #define private public
 #define protected public
@@ -45,9 +31,26 @@
 #include "widgets/ColorWidgetAction.h"
 #include "widgets/FileAttrWidget.h"
 #include "widgets/HandleMenu.h"
+#include "widgets/ShortCutShow.h"
+#include "widgets/SlidePlayWidget.h"
+#include "widgets/SlideWidget.h"
+#include "widgets/ScaleWidget.h"
+#include "widgets/AttrScrollWidget.h"
+#include "widgets/BookMarkButton.h"
+#include "widgets/CustomClickLabel.h"
+#include "widgets/CustemPushButton.h"
+#include "widgets/PrintManager.h"
+#include "widgets/RoundColorWidget.h"
+#include "widgets/SaveDialog.h"
+#include "widgets/SpinnerWidget.h"
 
 #undef private
 #undef protected
+
+#define private public
+#include "widgets/TipsWidget.h"
+#include "widgets/WordWrapLabel.h"
+#undef private
 
 Ut_Widgets::Ut_Widgets()
 {
@@ -159,18 +162,18 @@ TEST(Ut_Widgets, FileAttrWidgetTest)
 TEST(Ut_Widgets, FindWidgetTest)
 {
     FindWidget findWidget;
-    //    findWidget.setDocSheet(0);
-    //    findWidget.showPosition(0);
-    //    findWidget.setSearchEditFocus();
-    //    findWidget.setEditAlert(true);
-    //    findWidget.setEditAlert(false);
-    //    findWidget.findCancel();
-    //    findWidget.handleContentChanged();
-    //    findWidget.slotFindNextBtnClicked();
-    //    findWidget.slotFindPrevBtnClicked();
-    //    findWidget.slotEditAborted();
-    //    findWidget.slotClearContent();
-    //    findWidget.stopSearch();
+    findWidget.setDocSheet(0);
+    findWidget.showPosition(0);
+    findWidget.setSearchEditFocus();
+    findWidget.setEditAlert(true);
+    findWidget.setEditAlert(false);
+    findWidget.findCancel();
+    findWidget.handleContentChanged();
+    findWidget.slotFindNextBtnClicked();
+    findWidget.slotFindPrevBtnClicked();
+    findWidget.slotEditAborted();
+    findWidget.slotClearContent();
+    findWidget.stopSearch();
 }
 
 TEST(Ut_Widgets, HandleMenuTest)
@@ -189,7 +192,13 @@ TEST(Ut_Widgets, SaveDialogTest)
 TEST(Ut_Widgets, ScaleMenuTest)
 {
     ScaleMenu scaleMenu;
-    //scaleMenu.readCurDocParam(0);
+    scaleMenu.readCurDocParam(0);
+    scaleMenu.onTwoPage();
+    scaleMenu.onFiteH();
+    scaleMenu.onFiteW();
+    scaleMenu.onDefaultPage();
+    scaleMenu.onFitPage();
+    scaleMenu.onScaleFactor();
 }
 
 TEST(Ut_Widgets, RoundColorWidgetTest)
@@ -203,30 +212,78 @@ TEST(Ut_Widgets, RoundColorWidgetTest)
 TEST(Ut_Widgets, ShortCutShowTest)
 {
     ShortCutShow shortCutDialog;
+    shortCutDialog.setSheet(0);
+    shortCutDialog.initDJVU();
 }
 
 TEST(Ut_Widgets, SlidePlayWidgetTest)
 {
     SlidePlayWidget slidePlaywidget;
+    slidePlaywidget.showControl();
+    slidePlaywidget.setPlayStatus(true);
+    EXPECT_TRUE(slidePlaywidget.getPlayStatus());
+    slidePlaywidget.setPlayStatus(false);
+    EXPECT_FALSE(slidePlaywidget.getPlayStatus());
+    EXPECT_TRUE(slidePlaywidget.createBtn("test"));
+    slidePlaywidget.playStatusChanged();
+    slidePlaywidget.onTimerout();
+    slidePlaywidget.onPreClicked();
+    slidePlaywidget.onPlayClicked();
+    slidePlaywidget.onNextClicked();
+    slidePlaywidget.onExitClicked();
+
+    QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(&slidePlaywidget, &mouseLPevent);
+
+    QMouseEvent mouseRPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(&slidePlaywidget, &mouseLPevent);
+
+    QEvent hoverE(QEvent::HoverEnter);
+    QCoreApplication::sendEvent(&slidePlaywidget, &hoverE);
+
+    QEvent hoverL(QEvent::HoverLeave);
+    QCoreApplication::sendEvent(&slidePlaywidget, &hoverL);
 }
 
 TEST(Ut_Widgets, SpinnerWidgetTest)
 {
     SpinnerWidget spinnerWidget;
+    spinnerWidget.startSpinner();
+    spinnerWidget.stopSpinner();
+    spinnerWidget.setSpinnerSize(QSize(100, 100));
 }
 
 TEST(Ut_Widgets, ScaleWidgetTest)
 {
     ScaleWidget scaleWidget;
+    scaleWidget.setSheet(0);
+    scaleWidget.clear();
+    scaleWidget.onPrevScale();
+    scaleWidget.onNextScale();
+    scaleWidget.onReturnPressed();
+    scaleWidget.onEditFinished();
+    scaleWidget.onArrowBtnlicked();
 }
 
 TEST(Ut_Widgets, TipsWidgetTest)
 {
     TipsWidget tipsWidget;
+    tipsWidget.setText("test");
+    tipsWidget.setAlignment(Qt::AlignCenter);
+    tipsWidget.setLeftRightMargin(-1);
+    tipsWidget.setTopBottomMargin(-1);
+    tipsWidget.setMaxLineCount(0);
+    tipsWidget.adjustContent("const QString & text");
+    tipsWidget.onUpdateTheme();
 }
 
 TEST(Ut_Widgets, WordWrapLabelTest)
 {
     WordWrapLabel wordLabel;
+    wordLabel.resize(100, 100);
+    wordLabel.setText("test");
+    wordLabel.setMargin(-1);
+    wordLabel.adjustContent();
+    wordLabel.update();
 }
 #endif

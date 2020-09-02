@@ -2,6 +2,8 @@
 #ifndef UT_DEFINES_TEST_H
 #define UT_DEFINES_TEST_H
 
+#define UT_FILE_TEST_FILE "/home/leiyu/Desktop/1.pdf"
+
 #define UT_JSON_TEST
 
 #define UT_UTILS_TEST

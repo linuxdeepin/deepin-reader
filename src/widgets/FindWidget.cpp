@@ -91,12 +91,14 @@ void FindWidget::handleContentChanged()
 
 void FindWidget::slotFindNextBtnClicked()
 {
-    m_docSheet->handleFindNext();
+    if (m_docSheet)
+        m_docSheet->handleFindNext();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
-    m_docSheet->handleFindPrev();
+    if (m_docSheet)
+        m_docSheet->handleFindPrev();
 }
 
 //  文本内容变化, 为空, 则取消红色提示
@@ -113,7 +115,8 @@ void FindWidget::slotEditAborted()
 {
     m_strLastFindText = "";
     setEditAlert(0);
-    m_docSheet->handleFindExit();
+    if (m_docSheet)
+        m_docSheet->handleFindExit();
 }
 
 void FindWidget::initWidget()

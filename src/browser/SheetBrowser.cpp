@@ -2038,7 +2038,7 @@ int SheetBrowser::viewPointInIndex(QPoint viewPoint)
  */
 void SheetBrowser::setCurrentPage(int page)
 {
-    if (page < 1 && page > allPages())
+    if (page < 1 || page > allPages())
         return;
 
     m_bNeedNotifyCurPageChanged = false;

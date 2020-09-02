@@ -70,7 +70,7 @@ void Ut_SheetSidebar::TearDown()
 #ifdef UT_SHEETSIDEBAR_TEST
 TEST_F(Ut_SheetSidebar, SidebarTest)
 {
-    const QString &path = "/home/leiyu/Desktop/1.pdf";
+    const QString &path = UT_FILE_TEST_FILE;
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
     mainWindow->show();
     ASSERT_TRUE(mainWindow->m_central);
@@ -345,12 +345,31 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     EXPECT_EQ(searchWidget.handleFindFinished(), 0);
     searchWidget.addSearchsItem(0, "test", 5);
     searchWidget.addSearchsItem(-1, "test", -1);
-    searchWidget.handFindContentComming(deepin_reader::SearchResult());
+    deepin_reader::SearchResult searchRes;
+    searchRes.words << deepin_reader::Word();
+    searchWidget.handFindContentComming(searchRes);
     EXPECT_EQ(searchWidget.handleFindFinished(), 2);
 
     searchWidget.m_sheet = nullptr;
     searchWidget.addSearchsItem(0, "test", 5);
     EXPECT_EQ(searchWidget.handleFindFinished(), 2);
+
+    EXPECT_TRUE(searchWidget.m_pImageListView);
+    searchWidget.m_pImageListView->handleOpenSuccess();
+    searchWidget.m_pImageListView->scrollToIndex(0);
+    searchWidget.m_pImageListView->scrollToIndex(-1);
+    searchWidget.m_pImageListView->scrollToIndex(10000);
+    searchWidget.m_pImageListView->scrollToModelInexPage(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
+    searchWidget.m_pImageListView->getModelIndexForPageIndex(0);
+    searchWidget.m_pImageListView->getPageIndexForModelIndex(0);
+    EXPECT_LT(searchWidget.m_pImageListView->getModelIndexForPageIndex(-1), 0);
+    EXPECT_TRUE(searchWidget.m_pImageListView->getImageModel());
+    searchWidget.m_pImageListView->onUpdatePageImage(0);
+    searchWidget.m_pImageListView->onUpdatePageImage(-1);
+    searchWidget.m_pImageListView->onItemClicked(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
+    searchWidget.m_pImageListView->onItemClicked(QModelIndex());
+    QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(searchWidget.m_pImageListView, &mouserevent);
 }
 
 TEST(Ut_BookMarkMenu, BookMarkMenuTest)

@@ -28,6 +28,9 @@ ScaleMenu::ScaleMenu(QWidget *parent) : CustomMenu(parent)
 
 void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
+    if (docSheet == nullptr)
+        return;
+
     m_sheet = docSheet;
     m_pTwoPageAction    = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
     m_pFitDefaultAction = createAction(tr("1:1 size"), SLOT(onDefaultPage()), true);
@@ -61,6 +64,9 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 
 void ScaleMenu::onTwoPage()
 {
+    if (m_sheet == nullptr)
+        return;
+
     if (m_pTwoPageAction->isChecked())
         m_sheet->setLayoutMode(Dr::TwoPagesMode);
     else
@@ -70,22 +76,26 @@ void ScaleMenu::onTwoPage()
 
 void ScaleMenu::onFiteH()
 {
-    m_sheet->setScaleMode(Dr::FitToPageHeightMode);
+    if (m_sheet)
+        m_sheet->setScaleMode(Dr::FitToPageHeightMode);
 }
 
 void ScaleMenu::onFiteW()
 {
-    m_sheet->setScaleMode(Dr::FitToPageWidthMode);
+    if (m_sheet)
+        m_sheet->setScaleMode(Dr::FitToPageWidthMode);
 }
 
 void ScaleMenu::onDefaultPage()
 {
-    m_sheet->setScaleMode(Dr::FitToPageDefaultMode);
+    if (m_sheet)
+        m_sheet->setScaleMode(Dr::FitToPageDefaultMode);
 }
 
 void ScaleMenu::onFitPage()
 {
-    m_sheet->setScaleMode(Dr::FitToPageWorHMode);
+    if (m_sheet)
+        m_sheet->setScaleMode(Dr::FitToPageWorHMode);
 }
 
 void ScaleMenu::onScaleFactor()
