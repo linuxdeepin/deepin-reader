@@ -49,8 +49,12 @@ public slots:
 private slots:
     void onUpdateTheme();
 
+protected:
+    bool eventFilter(QObject *object, QEvent *event);
+
 private:
     DPushButton *m_nextbutton = nullptr;
+    DPushButton *m_echoBtn = nullptr;
     DPasswordEdit *m_password = nullptr;
 };
 

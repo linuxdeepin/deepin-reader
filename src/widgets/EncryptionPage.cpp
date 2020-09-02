@@ -48,16 +48,18 @@ void EncryptionPage::InitUI()
     DFontSizeManager::instance()->bind(stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
-    m_nextbutton = new DPushButton(this);
-    m_nextbutton->setFixedSize(360, 36);
-    m_nextbutton->setText(tr("OK"));
-    m_nextbutton->setDisabled(true);
+
     m_password = new DPasswordEdit(this);
     m_password->setFixedSize(360, 36);
     QLineEdit *edit = m_password->lineEdit();
+    edit->setObjectName("passwdEdit");
     edit->setPlaceholderText(tr("Password"));
 
-    m_password->setFocusPolicy(Qt::StrongFocus);
+    m_nextbutton = new DPushButton(this);
+    m_nextbutton->setObjectName("ensureBtn");
+    m_nextbutton->setFixedSize(360, 36);
+    m_nextbutton->setText(tr("OK"));
+    m_nextbutton->setDisabled(true);
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->setSpacing(0);
@@ -81,6 +83,11 @@ void EncryptionPage::InitUI()
     onUpdateTheme();
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &EncryptionPage::onUpdateTheme);
+
+    m_nextbutton->installEventFilter(this);
+    m_echoBtn = m_password->findChild<QPushButton *>();
+    if (m_echoBtn)
+        m_echoBtn->installEventFilter(this);
 }
 
 void EncryptionPage::InitConnection()
@@ -110,6 +117,7 @@ void EncryptionPage::wrongPassWordSlot()
     m_password->clear();
     m_password->setAlert(true);
     m_password->showAlertMessage(tr("Wrong password"));
+    m_password->lineEdit()->setFocus(Qt::TabFocusReason);
 }
 
 void EncryptionPage::onPasswordChanged()
@@ -131,4 +139,17 @@ void EncryptionPage::onUpdateTheme()
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
+}
+
+bool EncryptionPage::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyevent = static_cast<QKeyEvent *>(event);
+        if (keyevent->key() == Qt::Key_Return || keyevent->key() == Qt::Key_Enter) {
+            if (object == m_nextbutton || object == m_echoBtn) {
+                emit dynamic_cast<QAbstractButton *>(object)->clicked();
+            }
+        }
+    }
+    return DWidget::eventFilter(object, event);
 }

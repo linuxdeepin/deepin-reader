@@ -607,7 +607,7 @@ void BrowserPage::reloadAnnotations()
 
     m_annotations = m_page->annotations();
     if (m_renderPages.count() >= 4) {
-        qDeleteAll(m_annotations);
+        qDeleteAll(m_annotations0);
         m_annotations0 = m_renderPages[0]->annotations();
 
         qDeleteAll(m_annotations1);
