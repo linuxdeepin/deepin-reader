@@ -1455,19 +1455,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
-        if (Dr::RotateBy0 == operation.rotation) {
-            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
-            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
-        } else if (Dr::RotateBy90 == operation.rotation) {
-            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
-            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() - m_items[page - 1]->boundingRect().height() + diffX));
-        } else if (Dr::RotateBy180 == operation.rotation) {
-            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() - m_items[page - 1]->boundingRect().height() + diffY));
-            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() - m_items[page - 1]->boundingRect().width() + diffX));
-        } else if (Dr::RotateBy270 == operation.rotation) {
-            verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() - m_items[page - 1]->boundingRect().width() + diffY));
-            horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
-        }
+        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
+        horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
     }
 
     //update Magnifier Image
