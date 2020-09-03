@@ -109,6 +109,11 @@ void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
     //word和link不需要重新加载
 }
 
+/**
+ * @brief BrowserPage::boundingRect
+ * 文档页rect(不一定是0度下的)
+ * @return
+ */
 QRectF BrowserPage::boundingRect() const
 {
     if (nullptr == m_page)
@@ -117,6 +122,11 @@ QRectF BrowserPage::boundingRect() const
     return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
 }
 
+/**
+ * @brief BrowserPage::rect
+ * 文档页rect(0度)
+ * @return
+ */
 QRectF BrowserPage::rect()
 {
     if (nullptr == m_page)
@@ -132,16 +142,31 @@ QRectF BrowserPage::rect()
     return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
 }
 
+/**
+ * @brief BrowserPage::bookmarkRect
+ * 书签范围
+ * @return
+ */
 QRectF BrowserPage::bookmarkRect()
 {
     return QRectF(boundingRect().width() - 40, 1, 39, 39);
 }
 
+/**
+ * @brief BrowserPage::bookmarkMouseRect
+ * 书签图标范围
+ * @return
+ */
 QRectF BrowserPage::bookmarkMouseRect()
 {
     return QRectF(boundingRect().width() - 27, 10, 14, 20);
 }
 
+/**
+ * @brief BrowserPage::setBookmark
+ * 设置书签
+ * @param hasBookmark
+ */
 void BrowserPage::setBookmark(const bool &hasBookmark)
 {
     m_bookmark = hasBookmark;
@@ -154,6 +179,10 @@ void BrowserPage::setBookmark(const bool &hasBookmark)
     update();
 }
 
+/**
+ * @brief BrowserPage::updateBookmarkState
+ * 更新书签状态
+ */
 void BrowserPage::updateBookmarkState()
 {
     if (m_bookmark)
@@ -164,6 +193,12 @@ void BrowserPage::updateBookmarkState()
     update();
 }
 
+/**
+ * @brief BrowserPage::paint
+ * 绘制接口
+ * @param painter
+ * @param option
+ */
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (!m_viewportTryRender)
@@ -216,6 +251,14 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 }
 
+/**
+ * @brief BrowserPage::render
+ * 文档缩略图渲染接口
+ * @param scaleFactor 缩放系数
+ * @param rotation 旋转角度
+ * @param renderLater
+ * @param force
+ */
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
     if (nullptr == m_page)
@@ -313,6 +356,13 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
     }
 }
 
+/**
+ * @brief BrowserPage::handleRenderFinished
+ * 渲染缩略图
+ * @param scaleFactor 缩放系数
+ * @param image 缩略图
+ * @param rect 范围
+ */
 void BrowserPage::handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)
 {
     if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
@@ -396,6 +446,11 @@ void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const 
     update();
 }
 
+/**
+ * brief BrowserPage::handleWordLoaded
+ * 控制文字加载
+ * @param words 要加载的文字
+ */
 void BrowserPage::handleWordLoaded(const QList<Word> &words)
 {
     m_wordIsRendering = false;
@@ -455,16 +510,35 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
     return image;
 }
 
+/**
+ * @brief BrowserPage::thumbnail
+ * 文档页的缩略图
+ * @return 缩略图
+ */
 QImage BrowserPage::thumbnail()
 {
     return m_page->thumbnail();
 }
 
+/**
+ * @brief BrowserPage::getImageRect
+ * 得到文档缩放之后的图
+ * @param scaleFactor 缩放系数
+ * @param rect 范围
+ * @return  文档缩放之后的图
+ */
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 {
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
+/**
+ * @brief BrowserPage::getImagePoint
+ * 得到鼠标点周围的片图(放大镜)
+ * @param scaleFactor 缩放比例
+ * @param point 鼠标点
+ * @return鼠标点周围的片图(带缩放)
+ */
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
     const QPoint &transformPoint = translatePoint(point);
@@ -473,6 +547,12 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
+/**
+ * @brief BrowserPage::getCurImagePoint
+ * 得到鼠标点周围的片图(放大镜)
+ * @param point 鼠标点
+ * @return 鼠标点周围的片图
+ */
 QImage BrowserPage::getCurImagePoint(QPoint point)
 {
     int ds = 122;
@@ -483,6 +563,11 @@ QImage BrowserPage::getCurImagePoint(QPoint point)
     return image;
 }
 
+/**
+ * @brief BrowserPage::getWords
+ * 得到文档无旋转下的左右文字
+ * @return 文字列表
+ */
 QList<Word> BrowserPage::getWords()
 {
     if (nullptr == m_page)
@@ -491,21 +576,42 @@ QList<Word> BrowserPage::getWords()
     return m_page->words(Dr::RotateBy0);
 }
 
+/**
+ * @brief BrowserPage::existInstance
+ * 页是否存在
+ * @param item 哪一页
+ * @return
+ */
 bool BrowserPage::existInstance(BrowserPage *item)
 {
     return items.contains(item);
 }
 
+/**
+ * @brief BrowserPage::setItemIndex
+ * 设置文档页的编号
+ * @param itemIndex 编号
+ */
 void BrowserPage::setItemIndex(int itemIndex)
 {
     m_index = itemIndex;
 }
 
+/**
+ * @brief BrowserPage::itemIndex
+ * 当前页的编号(从0开始)
+ * @return
+ */
 int BrowserPage::itemIndex()
 {
     return m_index;
 }
 
+/**
+ * @brief BrowserPage::selectedWords
+ * 得到当前选择文字内容
+ * @return  选择文字的内容
+ */
 QString BrowserPage::selectedWords()
 {
     QString text;
@@ -518,6 +624,11 @@ QString BrowserPage::selectedWords()
     return text;
 }
 
+/**
+ * @brief BrowserPage::setWordSelectable
+ * 设置文字是否可选择
+ * @param selectable true:可选   false:不可选
+ */
 void BrowserPage::setWordSelectable(bool selectable)
 {
     m_wordSelectable = selectable;
@@ -526,6 +637,10 @@ void BrowserPage::setWordSelectable(bool selectable)
     }
 }
 
+/**
+ * @brief BrowserPage::loadLinks
+ * 加载注释
+ */
 void BrowserPage::loadLinks()
 {
     QList< Link * > links = m_page->links();
@@ -535,6 +650,10 @@ void BrowserPage::loadLinks()
     }
 }
 
+/**
+ * @brief BrowserPage::loadAnnotations
+ * 加载注释
+ */
 void BrowserPage::loadAnnotations()
 {
     if (!m_hasLoadedAnnotation)
@@ -542,6 +661,7 @@ void BrowserPage::loadAnnotations()
 }
 
 void BrowserPage::loadWords(bool doNothingIfHide)
+
 {
     if (doNothingIfHide && m_wordIsHide)
         return;
@@ -582,6 +702,10 @@ void BrowserPage::loadWords(bool doNothingIfHide)
     m_wordIsRendering = true;
 }
 
+/**
+ * @brief BrowserPage::clearCache
+ * 清楚隐藏
+ */
 void BrowserPage::clearCache()
 {
     m_pixmap = QPixmap();
@@ -646,6 +770,10 @@ void BrowserPage::scaleWordsIfNotHidden()
     }
 }
 
+/**
+ * @brief BrowserPage::reloadAnnotations
+ * 重新加载页中所有注释
+ */
 void BrowserPage::reloadAnnotations()
 {
     qDeleteAll(m_annotations);
@@ -683,11 +811,24 @@ void BrowserPage::reloadAnnotations()
     m_hasLoadedAnnotation = true;
 }
 
+/**
+ * @brief BrowserPage::annotations
+ * 当前页中所有注释
+ * @return 注释列表
+ */
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
     return m_annotations;
 }
 
+/**
+ * @brief BrowserPage::updateAnnotation
+ * 更新注释内容,颜色
+ * @param annotation 当前注释
+ * @param text 注释内容
+ * @param color 注释高亮颜色
+ * @return true:更新成功  false:更新失败
+ */
 bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString text, const QColor color)
 {
     if (nullptr == annotation)
@@ -795,11 +936,23 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     return highLightAnnot;
 }
 
+/**
+ * @brief BrowserPage::hasAnnotation
+ * 当前页注释中是否有这个注释
+ * @param annotation 当前注释
+ * @return true:有       false:没有
+ */
 bool BrowserPage::hasAnnotation(deepin_reader::Annotation *annotation)
 {
     return m_annotations.contains(annotation);
 }
 
+/**
+ * @brief BrowserPage::setSelectIconRect
+ * 设置图标注释选择框
+ * @param draw true:绘制  false:取消绘制
+ * @param iconAnnot 图标注释
+ */
 void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
 {
     QList<QRectF> rectList;
@@ -819,6 +972,11 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
     }
 }
 
+/**
+ * @brief BrowserPage::setDrawMoveIconRect
+ * 绘制图标注释选择框
+ * @param draw true:绘制  false:取消绘制
+ */
 void BrowserPage::setDrawMoveIconRect(const bool draw)
 {
     m_drawMoveIconRect = draw;
@@ -826,6 +984,11 @@ void BrowserPage::setDrawMoveIconRect(const bool draw)
     update();
 }
 
+/**
+ * @brief BrowserPage::setIconMovePos
+ * 图标注释选择框移动位置
+ * @param movePoint 移动位置
+ */
 void BrowserPage::setIconMovePos(const QPointF movePoint)
 {
     m_drawMoveIconPoint = movePoint;
@@ -833,6 +996,12 @@ void BrowserPage::setIconMovePos(const QPointF movePoint)
     update();
 }
 
+/**
+ * @brief BrowserPage::translate2LocalPos
+ * 将非0度下的坐标转换成0度坐标
+ * @param point 坐标
+ * @return 0度坐标
+ */
 QPointF BrowserPage::translate2LocalPos(const QPointF point)
 {
     QPointF tPoint = point;
@@ -882,7 +1051,7 @@ QString BrowserPage::deleteNowSelectIconAnnotation()
 /**
  * @brief BrowserPage::moveIconAnnotation
  * 移动注释图标位置
- * @return
+ * @return true:移动成功   false:移动失败
  */
 bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
 {
@@ -928,6 +1097,11 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
     return true;
 }
 
+/**
+ * @brief BrowserPage::removeAllAnnotation
+ * 删除当前页中所有注释
+ * @return ture:删除成功       false:删除失败
+ */
 bool BrowserPage::removeAllAnnotation()
 {
     m_lastClickIconAnnotation = nullptr;
@@ -977,6 +1151,12 @@ bool BrowserPage::removeAllAnnotation()
     return true;
 }
 
+/**
+ * @brief BrowserPage::jump2Link
+ * 跳转到相应link处(如果是目录跳到文档正文处,如果是网址会在浏览器中打开)
+ * @param point 当前鼠标点
+ * @return true:跳转成功    false:跳转失败
+ */
 bool BrowserPage::jump2Link(const QPointF point)
 {
     QPointF localPoint = point;
@@ -1010,6 +1190,12 @@ bool BrowserPage::jump2Link(const QPointF point)
     return false;
 }
 
+/**
+ * @brief BrowserPage::inLink
+ * 当前鼠标位置是否有link
+ * @param pos 当前鼠标位置
+ * @return true:有  false:没有
+ */
 bool BrowserPage::inLink(const QPointF pos)
 {
     QPointF localPoint = pos;
@@ -1036,7 +1222,7 @@ bool BrowserPage::inLink(const QPointF pos)
 /**
  * @brief BrowserPage::setPageBookMark
  * 在书签附近文字时,有时添加/删除书签无效,特意在brower中先处理
- * @param clickPoint
+ * @param clickPoint 鼠标点击位置
  */
 void BrowserPage::setPageBookMark(const QPointF clickPoint)
 {
@@ -1056,6 +1242,12 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
     }
 }
 
+/**
+ * @brief BrowserPage::removeAnnotation
+ * 删除某个注释
+ * @param annota 具体哪个注释
+ * @return true:删除成功, false:删除失败
+ */
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
@@ -1097,6 +1289,12 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     return true;
 }
 
+/**
+ * @brief BrowserPage::removeAnnotationByUniqueName
+ * 根据序列号删除注释
+ * @param uniqueName 序列号
+ * @return true:删除成功, false:删除失败
+ */
 bool BrowserPage::removeAnnotationByUniqueName(QString uniqueName)
 {
     foreach (deepin_reader::Annotation *annotation, m_annotations) {
@@ -1108,6 +1306,13 @@ bool BrowserPage::removeAnnotationByUniqueName(QString uniqueName)
     return false;
 }
 
+/**
+ * @brief BrowserPage::addIconAnnotation
+ * 添加图标注释
+ * @param rect 图标rect
+ * @param text 注释内容
+ * @return 添加之后的注释,添加失败返回nullptr,反之不为nullptr
+ */
 Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
 {
     if (nullptr == m_page)
@@ -1158,6 +1363,12 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
     return annot;
 }
 
+/**
+ * @brief BrowserPage::mouseClickIconAnnot
+ * 当前鼠标点击位置是否有注释
+ * @param clickPoint 鼠标点击位置
+ * @return true:有  false:没有
+ */
 bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
     if (nullptr == m_page)
@@ -1206,6 +1417,12 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
     }
 }
 
+/**
+ * @brief BrowserPage::sceneEvent
+ *  画布事件,目前只处理HoverMove事件
+ * @param event
+ * @return
+ */
 bool BrowserPage::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
@@ -1224,6 +1441,11 @@ bool BrowserPage::sceneEvent(QEvent *event)
     return QGraphicsItem::sceneEvent(event);
 }
 
+/**
+ * @brief BrowserPage::setSearchHighlightRectf
+ * 设置当前搜索选择框,在搜索列表中
+ * @param rectflst
+ */
 void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
 {
     if (rectflst.size() > 0) {
@@ -1234,6 +1456,10 @@ void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
     }
 }
 
+/**
+ * @brief BrowserPage::clearSearchHighlightRects
+ *结束搜索,清除搜索选择框,清空搜索结果列表
+ */
 void BrowserPage::clearSearchHighlightRects()
 {
     m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
@@ -1241,17 +1467,32 @@ void BrowserPage::clearSearchHighlightRects()
     update();
 }
 
+/**
+ * @brief BrowserPage::clearSelectSearchHighlightRects
+ * 清除高亮选择框,在搜索结果中
+ */
 void BrowserPage::clearSelectSearchHighlightRects()
 {
     m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
     update();
 }
 
+/**
+ * @brief BrowserPage::searchHighlightRectSize
+ * 当前页中搜索到目标的个数
+ * @return 目标的个数
+ */
 int BrowserPage::searchHighlightRectSize()
 {
     return m_searchLightrectLst.size();
 }
 
+/**
+ * @brief BrowserPage::findSearchforIndex
+ * 得到搜索元素的rect,根据编号
+ * @param index 编号
+ * @return 编号对应的rect
+ */
 QRectF BrowserPage::findSearchforIndex(int index)
 {
     if (index >= 0 && index < m_searchLightrectLst.size()) {
@@ -1262,6 +1503,12 @@ QRectF BrowserPage::findSearchforIndex(int index)
     return QRectF(-1, -1, -1, -1);
 }
 
+/**
+ * @brief BrowserPage::getNorotateRecr
+ * 得到没有旋转rect
+ * @param rect
+ * @return
+ */
 QRectF BrowserPage::getNorotateRecr(const QRectF &rect)
 {
     QRectF newrect;
@@ -1272,6 +1519,12 @@ QRectF BrowserPage::getNorotateRecr(const QRectF &rect)
     return newrect;
 }
 
+/**
+ * @brief BrowserPage::translatePoint
+ * 将非0度(旋转角度)坐标点转换成0度坐标点
+ * @param point 转换之前坐标点
+ * @return 转换之后坐标点
+ */
 QPoint BrowserPage::translatePoint(const QPoint &point)
 {
     QPoint newpoint = point;
@@ -1297,6 +1550,12 @@ QPoint BrowserPage::translatePoint(const QPoint &point)
     return  newpoint;
 }
 
+/**
+ * @brief BrowserPage::translateRect
+ * 将非0度(旋转角度)rect转换成0度rect
+ * @param rect 转换之前rect
+ * @return 转换之后rect
+ */
 QRectF BrowserPage::translateRect(const QRectF &rect)
 {
     //旋转角度逆时针增加
@@ -1336,6 +1595,12 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
     return  newrect;
 }
 
+/**
+ * @brief BrowserPage::getBrowserAnnotation
+ * 获得注释,根据坐标点
+ * @param point 坐标点
+ * @return 坐标点下的注释
+ */
 BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPoint &point)
 {
     BrowserAnnotation *item = nullptr;
@@ -1350,6 +1615,12 @@ BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPoint &point)
     return nullptr;
 }
 
+/**
+ * @brief BrowserPage::getBrowserWord
+ * 根据坐标点获得当前的文字
+ * @param point 当前坐标点
+ * @return 坐标点下的文字
+ */
 BrowserWord *BrowserPage::getBrowserWord(const QPoint &point)
 {
     BrowserWord *item = nullptr;
@@ -1364,6 +1635,10 @@ BrowserWord *BrowserPage::getBrowserWord(const QPoint &point)
     return nullptr;
 }
 
+/**
+ * @brief BrowserPage::updatePageFull
+ * 更新整页
+ */
 void BrowserPage::updatePageFull()
 {
     //m_pixmap = QPixmap();
