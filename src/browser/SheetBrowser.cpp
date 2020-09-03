@@ -1158,31 +1158,6 @@ bool SheetBrowser::event(QEvent *event)
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-
-    if (event->type() == QEvent::MouseButtonPress && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_touchStop = mouseEvent->timestamp();
-    }
-
-    if (event->type() == QEvent::MouseMove && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_touchStop = mouseEvent->timestamp();
-//        const QPoint difference_pos = mouseEvent->pos() - m_lastTouchBeginPos;
-//        m_lastTouchBeginPos = mouseEvent->pos();
-        //滑动界面
-        if (m_gestureAction == GA_slide) {
-//            int  nowValue =  this->verticalScrollBar()->value();
-//            this->verticalScrollBar()->setValue(nowValue - difference_pos.y() / 4);
-        }
-
-        if (m_gestureAction != GA_null) {
-            return true;
-        }
-    }
-
-    if (event->type() == QEvent::MouseButtonRelease && mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-        m_gestureAction = GA_null;
-    }
-
     QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
     switch (event->type()) {
     case QEvent::TouchBegin:
@@ -1242,9 +1217,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     qreal nowStepScaleFactor = 0.0;
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         nowStepScaleFactor = gesture->totalScaleFactor();
-        //经过验证,阀值是0.8时,交互是比较好的
+        //经过验证,阀值是0.7时,交互是比较好的
         if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor)
-                && qAbs(currentStepScaleFactor - nowStepScaleFactor) > 0.8) {
+                && qAbs(currentStepScaleFactor - nowStepScaleFactor) > 0.7) {
             if (currentStepScaleFactor < nowStepScaleFactor) {
                 m_sheet->zoomin();
             } else {
@@ -1516,7 +1491,6 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     //处理触摸屏单指事件(包括点触,长按)
-//    bool isSelectText = false;
     QPoint point = event->pos();
     BrowserPage *page = getBrowserPageForPoint(point);
 
@@ -1724,8 +1698,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         m_lastMouseYpos = event->pos().y();
 
         if (m_gestureAction == GA_slide) {
-            //经过调试scaleFactor越小,滑动幅度越大
-            qreal scaleFactor = 0.2;//static_cast<int>(m_lastScaleFactor * 10);
+            //经过调试0.2比较合适
+            qreal scaleFactor = 0.2;
 
             /*开根号时数值越大衰减比例越大*/
             qreal direction = diffYpos > 0 ? 1.0 : -1.0;
