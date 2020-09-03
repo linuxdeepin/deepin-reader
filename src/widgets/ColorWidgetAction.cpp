@@ -34,6 +34,7 @@ ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
 {
     initWidget(pParent);
+    setSeparator(true);
 }
 
 void ColorWidgetAction::slotBtnClicked(int index)
