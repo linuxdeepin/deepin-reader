@@ -202,7 +202,7 @@ public:
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
-    virtual QList<Word> words(Dr::Rotation rotation)const {Q_UNUSED(rotation) return QList<Word>();}
+    virtual QList<Word> words(Dr::Rotation rotation) {Q_UNUSED(rotation) return QList<Word>();}
     virtual bool mouseClickIconAnnot(QPointF &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF ponit, const QString text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
     virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }

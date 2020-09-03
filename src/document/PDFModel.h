@@ -98,7 +98,7 @@ public:
 
     QString cachedText(const QRectF &rect) const override;
 
-    QList<Word> words(Dr::Rotation rotation)const override;
+    QList<Word> words(Dr::Rotation rotation) override;
 
     QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const override;
 
@@ -129,6 +129,9 @@ private:
 
     Poppler::Page *m_page;
 
+    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
+
+    QList<Word> m_words;
 };
 
 class PDFDocument : public Document

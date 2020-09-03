@@ -248,8 +248,8 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             this->setRotation(270);
     }
 
-    if (!m_wordIsHide)
-        scaleWords(false);
+//    if (m_wordHasRendered && !m_wordIsHide)
+//        loadWords(false);
 
     if (!renderLater && !qFuzzyCompare(m_pixmapScaleFactor, m_scaleFactor)) {
         m_pixmapScaleFactor = m_scaleFactor;
@@ -398,14 +398,20 @@ void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const 
 
 void BrowserPage::handleWordLoaded(const QList<Word> &words)
 {
+    m_wordIsRendering = false;
+
+    if (m_wordHasRendered)
+        return;
+
     for (int i = 0; i < words.count(); ++i) {
         BrowserWord *word = new BrowserWord(this, words[i]);
         word->setSelectable(m_wordSelectable);
         m_words.append(word);
-        m_wordIsHide = false;
     }
 
-    scaleWords(true);
+    m_wordHasRendered = true;
+
+    loadWords();
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
@@ -481,6 +487,7 @@ QList<Word> BrowserPage::getWords()
 {
     if (nullptr == m_page)
         return QList<Word>();
+
     return m_page->words(Dr::RotateBy0);
 }
 
@@ -534,15 +541,45 @@ void BrowserPage::loadAnnotations()
         reloadAnnotations();
 }
 
-void BrowserPage::loadWords()
+void BrowserPage::loadWords(bool doNothingIfHide)
 {
-    if (!m_wordHasRendered) {
-        RenderPageTask task;
-        task.type = RenderPageTask::word;
-        task.item = this;
-        PageRenderThread::appendTask(task);
-        m_wordHasRendered = true;
+    if (doNothingIfHide && m_wordIsHide)
+        return;
+
+    if (m_wordIsRendering)
+        return;
+
+    if (m_wordHasRendered) {
+        //如果已经加载则取消隐藏和改变大小
+        if (m_words.count() <= 0)
+            return;
+
+        if (m_wordIsHide) {
+            foreach (BrowserWord *word, m_words) {
+                word->setSelectable(m_wordSelectable);
+                word->setParentItem(this);
+                word->show();
+            }
+        }
+        m_wordIsHide = false;
+
+        prepareGeometryChange();
+
+        if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
+            m_wordScaleFactor = m_scaleFactor;
+            foreach (BrowserWord *word, m_words) {
+                word->setScaleFactor(m_scaleFactor);
+            }
+        }
+        return;
     }
+
+    RenderPageTask task;
+    task.type = RenderPageTask::word;
+    task.item = this;
+    PageRenderThread::appendTask(task);
+
+    m_wordIsRendering = true;
 }
 
 void BrowserPage::clearCache()
@@ -558,7 +595,12 @@ void BrowserPage::clearCache()
 
     PageRenderThread::clearTask(this);
 
-    if (m_wordIsHide)
+    hideWords();
+}
+
+void BrowserPage::hideWords()
+{
+    if (!m_wordHasRendered || m_wordIsHide)
         return;
 
     foreach (BrowserWord *word, m_words) {
@@ -566,16 +608,22 @@ void BrowserPage::clearCache()
             return;
     }
 
+    prepareGeometryChange();
+
     foreach (BrowserWord *word, m_words) {
         word->setSelectable(false);
         word->setParentItem(nullptr);
+        word->hide();
     }
 
     m_wordIsHide = true;
 }
 
-void BrowserPage::scaleWords(bool force)
+void BrowserPage::scaleWordsIfNotHidden()
 {
+    if (m_wordIsHide)
+        return;
+
     if (m_words.count() <= 0)
         return;
 
@@ -583,14 +631,14 @@ void BrowserPage::scaleWords(bool force)
         foreach (BrowserWord *word, m_words) {
             word->setSelectable(m_wordSelectable);
             word->setParentItem(this);
+            word->show();
         }
     }
-
     m_wordIsHide = false;
 
     prepareGeometryChange();
 
-    if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
+    if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
         foreach (BrowserWord *word, m_words) {
             word->setScaleFactor(m_scaleFactor);

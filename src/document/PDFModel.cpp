@@ -593,8 +593,13 @@ QString PDFPage::cachedText(const QRectF &rect) const
     return text.simplified();
 }
 
-QList<Word> PDFPage::words(Dr::Rotation rotation) const
+QList<Word> PDFPage::words(Dr::Rotation rotation)
 {
+    if (rotation == m_wordRotation)
+        return m_words;
+
+    m_wordRotation = rotation;
+
     Poppler::Page::Rotation rotate;
 
     switch (rotation) {
@@ -613,7 +618,6 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
         break;
     }
 
-    QList<Word> words;
     QList<Poppler::TextBox *> textBoxList = m_page->textList(rotate);
     for (int i = 0; i < textBoxList.count(); ++i) {
         Poppler::TextBox *box = textBoxList[i];
@@ -624,7 +628,7 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
             Word word;
             word.text = box->text().at(i);
             word.boundingBox = box->charBoundingBox(i);
-            words.append(word);
+            m_words.append(word);
 
             if (box->hasSpaceAfter() && (i == (box->text().count() - 1))) {
                 Poppler::TextBox *nextBox = box->nextWord();
@@ -633,14 +637,14 @@ QList<Word> PDFPage::words(Dr::Rotation rotation) const
                         Word spaceWord;
                         spaceWord.text = " ";
                         spaceWord.boundingBox = QRectF(word.boundingBox.x() + word.boundingBox.width(), word.boundingBox.y(), nextBox->charBoundingBox(0).x() - word.boundingBox.x() - word.boundingBox.width(), word.boundingBox.height());
-                        words.append(spaceWord);
+                        m_words.append(spaceWord);
                     }
                 }
             }
         }
     }
 
-    return words;
+    return m_words;
 }
 
 QList< QRectF > PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const

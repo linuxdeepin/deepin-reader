@@ -89,13 +89,15 @@ public:
 
     void loadLinks();
 
-    void loadWords();
+    void loadWords(bool doNothingIfHide = false);
 
     void loadAnnotations();     //如果加载过则不加载
 
-    void clearCache();
+    void hideWords();
 
-    void scaleWords(bool force = false);
+    void scaleWordsIfNotHidden();
+
+    void clearCache();
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -202,11 +204,13 @@ private:
     QPixmap m_viewportPixmap;               //视图区域的图片
     QRect   m_viewportRenderedRect;         //试图区域
 
-    bool m_wordHasRendered = false;                         //当前文字是否被加载
-    double m_wordScaleFactor = -1;                          //当前文字的缩放
-    bool m_wordIsHide = false;
-    bool m_wordSelectable = false;                          //文字是否可以选取
     QList<BrowserWord *> m_words;                           //当前文字
+    bool m_wordIsRendering = false;                         //当前文字是否正在加载
+    bool m_wordHasRendered = false;                         //当前文字是否被加载
+    bool m_wordNeeded      = false;                         //当前文字是否需要
+    bool m_wordIsHide      = true;                          //当前文字是否隐藏状态
+    bool m_wordSelectable = false;                          //当前文字是否可以选取
+    double m_wordScaleFactor = -1;                          //当前文字的缩放
 
     QList<BrowserAnnotation *> m_annotationItems;           //一个注释可能对应多个annotationitems
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释

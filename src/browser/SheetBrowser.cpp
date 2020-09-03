@@ -444,9 +444,21 @@ void SheetBrowser::onHorizontalScrollBarValueChanged(int)
  */
 void SheetBrowser::onSceneOfViewportChanged()
 {
-    foreach (BrowserPage *page, m_items) {
-        if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
-            page->renderViewPort();
+    int fromIndex = 0;
+    int toIndex = 0;
+    currentIndexRange(fromIndex, toIndex);
+
+    foreach (BrowserPage *item, m_items) {
+        if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
+            item->clearCache();
+        }
+    }
+
+    if (m_maxHeight > 2000 || m_maxWidth > 2000) {
+        foreach (BrowserPage *page, m_items) {
+            if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
+                page->renderViewPort();
+            }
         }
     }
 }
@@ -861,16 +873,6 @@ QString SheetBrowser::selectedWordsText()
 
 void SheetBrowser::handleVerticalScrollLater()
 {
-    int fromIndex = 0;
-    int toIndex = 0;
-    currentIndexRange(fromIndex, toIndex);
-
-    foreach (BrowserPage *item, m_items) {
-        if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
-            item->clearCache();
-        }
-    }
-
     if (nullptr == m_scrollTimer) {
         m_scrollTimer = new QTimer(this);
         connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
@@ -1357,6 +1359,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
+        m_items[i]->hideWords();
+
         if (i % 2 == 1)
             continue;
 
@@ -1404,6 +1408,8 @@ void SheetBrowser::deform(SheetOperation &operation)
                 m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
 
             maxHeight += m_items.at(i)->rect().height() + space;
+
+            m_items[i]->loadWords(true);
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -1438,6 +1444,10 @@ void SheetBrowser::deform(SheetOperation &operation)
                 maxHeight +=  qMax(m_items.at(i)->rect().height(), m_items.at(i + 1)->rect().height()) + space;
             else
                 maxHeight += m_items.at(i)->rect().height() + space;
+
+            m_items[i]->loadWords(true);
+            if (m_items.count() > i + 1)
+                m_items[i + 1]->loadWords(true);
         }
         maxWidth += space;
     }
@@ -1794,18 +1804,15 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         BrowserPage *page = getBrowserPageForPoint(mousePos);
         if (page) {
             page->loadWords();
-            page->scaleWords(false);
 
             if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
                 if (page->itemIndex() - m_selectIndex > 1) {
                     for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
                         m_items.at(i)->loadWords();
-                        m_items.at(i)->scaleWords(false);
                     }
                 } else if (m_selectIndex - page->itemIndex() > 1) {
                     for (int i = page->itemIndex() + 1; i < m_selectIndex; ++i) {
                         m_items.at(i)->loadWords();
-                        m_items.at(i)->scaleWords(false);
                     }
                 }
             }
