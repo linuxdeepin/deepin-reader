@@ -236,14 +236,14 @@ void Central::onShowTips(const QString &text, int iconIndex)
 {
     if (m_layout->currentIndex() == 0) {
         if (0 == iconIndex)
-            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "ok"), text);
         else
-            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
+            DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "warning"), text);
     } else {
         if (0 == iconIndex)
-            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "ok")/*QIcon(":/icons/deepin/builtin/ok.svg")*/, text);
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "ok"), text);
         else
-            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "warning")/*QIcon(":/icons/deepin/builtin/warning.svg")*/, text);
+            DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "warning"), text);
     }
 }
 

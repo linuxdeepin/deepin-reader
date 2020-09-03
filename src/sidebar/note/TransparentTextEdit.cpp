@@ -79,7 +79,7 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
     int maxLineHeight = 2;
-    int totalheight = this->viewport()->height() - maxLineHeight/* + this->verticalScrollBar()->maximum()*/;
+    int totalheight = this->viewport()->height() - maxLineHeight;
     const QFontMetricsF &fontmetricsf = QFontMetricsF(this->document()->defaultFont());
     qreal lineheight = fontmetricsf.height();
     painter.setBrush(Qt::NoBrush);
