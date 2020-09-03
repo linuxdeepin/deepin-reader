@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -241,6 +243,10 @@
     <message>
         <source>The annotation has been removed</source>
         <translation>已删除注释</translation>
+    </message>
+    <message>
+        <source>Please select the text</source>
+        <translation type="unfinished">请选择文本</translation>
     </message>
 </context>
 <context>

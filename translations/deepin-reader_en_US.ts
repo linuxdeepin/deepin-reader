@@ -244,12 +244,16 @@
         <source>The annotation has been removed</source>
         <translation type="unfinished">The annotation has been removed</translation>
     </message>
+    <message>
+        <source>Please select the text</source>
+        <translation type="unfinished">Please select the text</translation>
+    </message>
 </context>
 <context>
     <name>EncryptionPage</name>
     <message>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Encrypted file, please enter the password</translation>
     </message>
     <message>
         <source>OK</source>
@@ -257,11 +261,11 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Password</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wrong password</translation>
     </message>
 </context>
 <context>

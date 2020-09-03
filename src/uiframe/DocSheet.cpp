@@ -429,8 +429,10 @@ void DocSheet::highlightSelectedText()
     if (!m_browser)
         return;
 
-    if (m_browser->selectedWordsText().isEmpty())
+    if (m_browser->selectedWordsText().isEmpty()) {
+        showTips(tr("Please select the text"), 1);
         return;
+    }
 
     QPoint ponintend;
     m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend);
@@ -441,8 +443,10 @@ void DocSheet::addSelectedTextHightlightAnnotation()
     if (!m_browser)
         return;
 
-    if (m_browser->selectedWordsText().isEmpty())
+    if (m_browser->selectedWordsText().isEmpty()) {
+        showTips(tr("Please select the text"), 1);
         return;
+    }
 
     //进行高亮编辑
     QPoint ponintend;
