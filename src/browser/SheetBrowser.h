@@ -164,10 +164,6 @@ public:
 signals:
     void sigPageChanged(int page);
 
-    void sigWheelUp();
-
-    void sigWheelDown();
-
     void sigNeedPageFirst();
 
     void sigNeedPagePrev();

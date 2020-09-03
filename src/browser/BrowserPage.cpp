@@ -660,11 +660,9 @@ void BrowserPage::loadAnnotations()
         reloadAnnotations();
 }
 
-void BrowserPage::loadWords(bool doNothingIfHide)
-
+void BrowserPage::loadWords()
 {
-    if (doNothingIfHide && m_wordIsHide)
-        return;
+    m_wordNeeded = true;
 
     if (m_wordIsRendering)
         return;
@@ -673,15 +671,6 @@ void BrowserPage::loadWords(bool doNothingIfHide)
         //如果已经加载则取消隐藏和改变大小
         if (m_words.count() <= 0)
             return;
-
-        if (m_wordIsHide) {
-            foreach (BrowserWord *word, m_words) {
-                word->setSelectable(m_wordSelectable);
-                word->setParentItem(this);
-                word->show();
-            }
-        }
-        m_wordIsHide = false;
 
         prepareGeometryChange();
 
@@ -704,7 +693,7 @@ void BrowserPage::loadWords(bool doNothingIfHide)
 
 /**
  * @brief BrowserPage::clearCache
- * 清楚隐藏
+ *  删除缓存图片
  */
 void BrowserPage::clearCache()
 {
@@ -718,13 +707,15 @@ void BrowserPage::clearCache()
     m_viewportScaleFactor = -1;
 
     PageRenderThread::clearTask(this);
-
-    hideWords();
 }
 
-void BrowserPage::hideWords()
+/**
+ * @brief BrowserPage::clearWords
+ *  删除缓存文字
+ */
+void BrowserPage::clearWords()
 {
-    if (!m_wordHasRendered || m_wordIsHide)
+    if (!m_wordHasRendered)
         return;
 
     foreach (BrowserWord *word, m_words) {
@@ -734,31 +725,27 @@ void BrowserPage::hideWords()
 
     prepareGeometryChange();
 
-    foreach (BrowserWord *word, m_words) {
-        word->setSelectable(false);
-        word->setParentItem(nullptr);
-        word->hide();
-    }
+    m_wordHasRendered = false;
+    m_wordNeeded = false;
 
-    m_wordIsHide = true;
+    QList<BrowserWord *> t_word = m_words;
+    m_words.clear();
+
+    foreach (BrowserWord *word, t_word) {
+        word->setParentItem(nullptr);
+        scene()->removeItem(word);
+        delete word;
+    }
 }
 
-void BrowserPage::scaleWordsIfNotHidden()
+/**
+ * @brief BrowserPage::scaleWords
+ *  改变文字缩放
+ */
+void BrowserPage::scaleWords()
 {
-    if (m_wordIsHide)
+    if (!m_wordHasRendered || m_words.count() <= 0)
         return;
-
-    if (m_words.count() <= 0)
-        return;
-
-    if (m_wordIsHide) {
-        foreach (BrowserWord *word, m_words) {
-            word->setSelectable(m_wordSelectable);
-            word->setParentItem(this);
-            word->show();
-        }
-    }
-    m_wordIsHide = false;
 
     prepareGeometryChange();
 

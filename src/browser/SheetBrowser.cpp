@@ -451,6 +451,7 @@ void SheetBrowser::onSceneOfViewportChanged()
     foreach (BrowserPage *item, m_items) {
         if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
             item->clearCache();
+            item->clearWords();
         }
     }
 
@@ -1334,7 +1335,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
-        m_items[i]->hideWords();
+        m_items[i]->clearWords();
 
         if (i % 2 == 1)
             continue;
@@ -1384,7 +1385,7 @@ void SheetBrowser::deform(SheetOperation &operation)
 
             maxHeight += m_items.at(i)->rect().height() + space;
 
-            m_items[i]->loadWords(true);
+            m_items[i]->scaleWords();
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -1420,9 +1421,9 @@ void SheetBrowser::deform(SheetOperation &operation)
             else
                 maxHeight += m_items.at(i)->rect().height() + space;
 
-            m_items[i]->loadWords(true);
+            m_items[i]->scaleWords();
             if (m_items.count() > i + 1)
-                m_items[i + 1]->loadWords(true);
+                m_items[i + 1]->scaleWords();
         }
         maxWidth += space;
     }

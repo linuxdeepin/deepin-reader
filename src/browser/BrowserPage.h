@@ -89,15 +89,15 @@ public:
 
     void loadLinks();
 
-    void loadWords(bool doNothingIfHide = false);
+    void loadWords();
 
     void loadAnnotations();     //如果加载过则不加载
 
-    void hideWords();
-
-    void scaleWordsIfNotHidden();
+    void scaleWords();  //更改缩放如果存在文字
 
     void clearCache();
+
+    void clearWords();      //清除文字 被选中除外
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -208,7 +208,6 @@ private:
     bool m_wordIsRendering = false;                         //当前文字是否正在加载
     bool m_wordHasRendered = false;                         //当前文字是否被加载
     bool m_wordNeeded      = false;                         //当前文字是否需要
-    bool m_wordIsHide      = true;                          //当前文字是否隐藏状态
     bool m_wordSelectable = false;                          //当前文字是否可以选取
     double m_wordScaleFactor = -1;                          //当前文字的缩放
 

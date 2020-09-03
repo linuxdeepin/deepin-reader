@@ -31,6 +31,8 @@ class BrowserWord : public QGraphicsItem
 public:
     explicit BrowserWord(QGraphicsItem *parent, deepin_reader::Word word);
 
+    ~BrowserWord();
+
     void setScaleFactor(qreal scaleFactor);
 
     QString text();
