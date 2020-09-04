@@ -2458,12 +2458,20 @@ void SheetBrowser::showMenu()
         if (objectname == "Copy") {
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {
+            if (m_iconAnnot)
+                Utils::copyText(m_iconAnnot->contents());
         } else if (objectname == "AddTextHighlight") {
             QPoint pointEnd;
             addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
         } else if (objectname == "ChangeAnnotationColor") {
         } else if (objectname == "RemoveAnnotation") {
+            if (m_iconAnnot) {
+                if (m_sheet->removeAnnotation(m_iconAnnot))
+                    m_iconAnnot = nullptr;
+            }
         } else if (objectname == "AddAnnotationIcon") {
+            if (m_iconAnnot)
+                showNoteEditWidget(m_iconAnnot, this->mapToGlobal(this->mapFromScene(m_selectEndPos)));
         } else if (objectname == "AddBookmark") {
             m_sheet->setBookMark(this->currentPage() - 1, true);
         } else if (objectname == "RemoveHighlight") {
@@ -2513,9 +2521,10 @@ void SheetBrowser::showMenu()
         //选择文字
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_SELECT_TEXT);
         menu.exec(this->mapToGlobal(menuPoint));
-    } else  if (m_lastSelectIconAnnotPage && m_items.contains(m_lastSelectIconAnnotPage)) {
-        //选择注释图标
-        menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_ANNO_ICON);
+    } else  if (m_iconAnnot) {
+        //文字注释(图标)
+        menuPoint = this->mapFromScene(m_selectEndPos);
+        menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_ANNO_ICON, m_iconAnnot->contents());
         menu.exec(this->mapToGlobal(menuPoint));
     } else {
         //默认
