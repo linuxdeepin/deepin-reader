@@ -1143,6 +1143,12 @@ bool SheetBrowser::event(QEvent *event)
 {
     if (event && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent && keyEvent->key() == Qt::Key_Tab && !keyEvent->isAutoRepeat()) {
+            if (m_lastSelectIconAnnotPage && m_items.contains(m_lastSelectIconAnnotPage)) {
+                m_lastSelectIconAnnotPage->setSelectIconRect(false);
+            }
+        }
+
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
             this->showMenu();
         }
@@ -2418,7 +2424,7 @@ void SheetBrowser::slideGesture(const qreal diff)
 }
 
 /**
- * @brief SheetBrowser::jump2Link
+ * @brief SheetBrowser::jump2Li
  * 判断鼠标点击的位置是否有链接或者目录,如果有响应跳转
  * @param point 鼠标点击的位置
  * @return 返回跳转状态
@@ -2500,11 +2506,16 @@ void SheetBrowser::showMenu()
     });
 
     QPoint menuPoint(-1, -1);
+
     if (m_selectEndWord)
         menuPoint = this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight()));
     if (!selectWords.isEmpty() && menuPoint.y() >= 0 && menuPoint.x() >= 0) {
         //选择文字
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_SELECT_TEXT);
+        menu.exec(this->mapToGlobal(menuPoint));
+    } else  if (m_lastSelectIconAnnotPage && m_items.contains(m_lastSelectIconAnnotPage)) {
+        //选择注释图标
+        menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_ANNO_ICON);
         menu.exec(this->mapToGlobal(menuPoint));
     } else {
         //默认

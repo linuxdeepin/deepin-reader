@@ -25,13 +25,30 @@
 
 #include <QGraphicsItem>
 
+
+/**
+ * @brief The BrowserLink class
+ * 文档链接类
+ */
 class BrowserLink : public QGraphicsItem
 {
 public:
     explicit BrowserLink(QGraphicsItem *parent, deepin_reader::Link *link);
 
+    /**
+     * @brief boundingRect
+     * 链接大小范围
+     * @return
+     */
     QRectF boundingRect()const override;
 
+    /**
+     * @brief paint
+     * 绘制接口
+     * @param painter
+     * @param option
+     * @param widget
+     */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 };

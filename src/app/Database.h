@@ -37,12 +37,38 @@ public:
 
     ~Database();
 
+    /**
+     * @brief readOperation
+     * 读取操作
+     * @param sheet 哪个文档
+     * @return
+     */
     bool readOperation(DocSheet *sheet);
 
+    /**
+     * @brief saveOperation
+     * 保存操作
+     * @param sheet 哪个文档
+     * @return
+     */
     bool saveOperation(DocSheet *sheet);
 
+    /**
+     * @brief readBookmarks
+     * 读取书签
+     * @param filePath 文件名(唯一标识)
+     * @param bookmarks 书签列表
+     * @return
+     */
     bool readBookmarks(const QString &filePath, QSet<int> &bookmarks);
 
+    /**
+     * @brief saveBookmarks
+     * 保存书签
+     * @param filePath 文件名(唯一标识)
+     * @param bookmarks 书签列表
+     * @return
+     */
     bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
 
 private:
@@ -52,8 +78,18 @@ private:
 
     Database(QObject *parent = nullptr);
 
+    /**
+     * @brief prepareOperation
+     *准备操作记录表(文档操作)
+     * @return
+     */
     bool prepareOperation();
 
+    /**
+     * @brief prepareBookmark
+     * 准备书签表
+     * @return
+     */
     bool prepareBookmark();
 
     QSqlDatabase m_database;

@@ -27,6 +27,10 @@
 
 const int ICON_SIZE = 23;
 
+/**
+ *文档注释类,显示类型,图元元素
+ */
+
 class BrowserPage;
 class BrowserAnnotation : public QGraphicsItem
 {
@@ -36,25 +40,70 @@ public:
 
     ~BrowserAnnotation() override;
 
+    /**
+     * @brief setScaleFactorAndRotation
+     * 设置注释缩放和旋转参数
+     * @param rotation
+     */
     void setScaleFactorAndRotation(Dr::Rotation rotation);
 
+    /**
+     * @brief annotationType
+     * 注释类型
+     * @return
+     */
     int annotationType();
 
+    /**
+     * @brief annotationText
+     * 注释内容
+     * @return
+     */
     QString annotationText();
 
+    /**
+     * @brief boundingRect
+     * 注释大小范围(无缩放和旋转时的范围)
+     * @return
+     */
     QRectF boundingRect()const override;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
+    /**
+     * @brief annotation
+     * 注释指针
+     * @return
+     */
     deepin_reader::Annotation *annotation();
 
+    /**
+     * @brief deleteMe
+     * 删除该注释
+     */
     void deleteMe();
 
+    /**
+     * @brief isSame
+     * 操作注释是否与该注释相同
+     * @param annotation
+     * @return
+     */
     bool isSame(deepin_reader::Annotation *annotation);
 
+    /**
+     * @brief setDrawSelectRect
+     * 设置选择框
+     * @param draw
+     */
     void setDrawSelectRect(const bool draw);
 
-    void setScaleFactor(const double scale); // 弃用
+    /**
+     * @brief setScaleFactor
+     * 设置缩放系数
+     * @param scale
+     */
+    void setScaleFactor(const double scale);
 
 private:
     deepin_reader::Annotation *m_annotation;

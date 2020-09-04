@@ -37,6 +37,10 @@ typedef struct MagnifierInfo_t {
 } MagnifierInfo_t;
 Q_DECLARE_METATYPE(MagnifierInfo_t);
 
+/**
+ * @brief The ReadMagnifierManager class
+ * 放大镜任务线程
+ */
 class ReadMagnifierManager: public QThread
 {
 public:
@@ -44,9 +48,18 @@ public:
     ~ReadMagnifierManager() override;
 
 public:
+    /**
+     * @brief addTask
+     * 添加放大镜任务
+     * @param task
+     */
     void addTask(const MagnifierInfo_t &task);
 
 protected:
+    /**
+     * @brief run
+     * 具体任务执行接口
+     */
     void run() override;
 
 private:
@@ -54,6 +67,10 @@ private:
     QList<MagnifierInfo_t> m_tTasklst;
 };
 
+/**
+ * @brief The BrowserMagniFier class
+ * 放大镜控件
+ */
 class BrowserMagniFier : public QLabel
 {
     Q_OBJECT
@@ -61,14 +78,36 @@ class BrowserMagniFier : public QLabel
 public:
     BrowserMagniFier(QWidget *parent);
 
+    /**
+     * @brief showMagnigierImage
+     * 显示放大区域的图片
+     * @param viewPoint
+     * @param magnifierPos
+     * @param scaleFactor
+     */
     void showMagnigierImage(QPoint viewPoint, QPoint magnifierPos, double scaleFactor);
 
+    /**
+     * @brief updateImage
+     * 更新显示的图片
+     */
     void updateImage();
 
 private:
+    /**
+     * @brief setMagniFierImage
+     * 设置要显示的图片
+     * @param image
+     */
     void setMagniFierImage(const QImage &image);
 
 private slots:
+    /**
+     * @brief onUpdateMagnifierImage
+     * 更新放大镜区域内的图片
+     * @param task
+     * @param image
+     */
     void onUpdateMagnifierImage(const MagnifierInfo_t &task, const QImage &image);
 
 private:
