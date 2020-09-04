@@ -71,7 +71,7 @@ void ThumbnailWidget::handleOpenSuccess()
     scrollToCurrentPage();
 }
 
-void ThumbnailWidget::handleRotate(int)
+void ThumbnailWidget::handleRotate()
 {
     m_pImageListView->reset();
     scrollToCurrentPage();

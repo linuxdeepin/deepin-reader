@@ -40,7 +40,7 @@ public:
 public:
     void handleOpenSuccess();
     void handlePage(int index);
-    void handleRotate(int rotate);
+    void handleRotate();
     void setBookMarkState(const int &index, const int &type);
 
     void prevPage();

@@ -240,9 +240,10 @@ int SheetSidebar::handleFindFinished()
     return m_searchWidget->handleFindFinished();
 }
 
-void SheetSidebar::handleRotate(int rotate)
+void SheetSidebar::handleRotate()
 {
-    if (m_thumbnailWidget) m_thumbnailWidget->handleRotate(rotate);
+    if (m_thumbnailWidget)
+        m_thumbnailWidget->handleRotate();
 }
 
 void SheetSidebar::handleUpdateThumbnail(const int &index)
@@ -255,6 +256,9 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
 
 void SheetSidebar::handleUpdatePartThumbnail(const int &index)
 {
+    if (index < 0 || index >= m_sheet->pagesNumber())
+        return;
+
     const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_sheet, index);
     if (image.isNull()) {
         handleUpdateThumbnail(index);

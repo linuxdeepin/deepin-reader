@@ -198,7 +198,7 @@ void DocSheet::rotateLeft()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    m_sidebar->handleRotate(m_operation.rotation);
+    m_sidebar->handleRotate();
     setOperationChanged();
 }
 
@@ -214,7 +214,7 @@ void DocSheet::rotateRight()
         m_operation.rotation = Dr::RotateBy0;
 
     m_browser->deform(m_operation);
-    m_sidebar->handleRotate(m_operation.rotation);
+    m_sidebar->handleRotate();
     setOperationChanged();
 }
 

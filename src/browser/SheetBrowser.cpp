@@ -2356,7 +2356,8 @@ void SheetBrowser::handleFindContent(const QString &strFind)
  */
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    m_pFindWidget->setEditAlert(searchcnt == 0);
+    if (m_pFindWidget)
+        m_pFindWidget->setEditAlert(searchcnt == 0);
 }
 
 /**

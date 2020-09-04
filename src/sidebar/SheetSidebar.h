@@ -66,7 +66,7 @@ public :
     void handleFindOperation(int);
     void handleFindContentComming(const deepin_reader::SearchResult &);
     int  handleFindFinished();
-    void handleRotate(int);
+    void handleRotate();
     void changeResetModelData();
 
 public slots:
