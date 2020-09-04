@@ -50,6 +50,8 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void insertFromMimeData(const QMimeData *source) override;
 
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
 };

@@ -29,6 +29,7 @@
 #include <QScrollBar>
 #include <QTextBlock>
 #include <QMimeData>
+#include <QMenu>
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
@@ -106,4 +107,20 @@ void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
 {
     if (!source->text().isEmpty())
         this->insertPlainText(source->text());
+}
+
+void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
+        QMenu *menu =  this->createStandardContextMenu();
+
+        if (menu) {
+            menu->exec(this->cursor().pos());
+            delete  menu;
+            menu = nullptr;
+        }
+        return;
+    }
+
+    QTextEdit::keyPressEvent(keyEvent);
 }
