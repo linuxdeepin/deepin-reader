@@ -68,11 +68,13 @@ void TitleWidget::initWidget()
     this->setTabOrder(scaleEdit, incBtn);
 
     DIconButton *optBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    DIconButton *fullBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
     DIconButton *minBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
     DIconButton *maxBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
     DIconButton *closeBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
     this->setTabOrder(incBtn, optBtn);
-    this->setTabOrder(optBtn, minBtn);
+    this->setTabOrder(optBtn, fullBtn);
+    this->setTabOrder(fullBtn, minBtn);
     this->setTabOrder(minBtn, maxBtn);
     this->setTabOrder(maxBtn, closeBtn);
 }
