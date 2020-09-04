@@ -22,6 +22,7 @@
 #define TIPSWIDGET_H
 
 #include <DWidget>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 class TipsWidget : public DWidget
@@ -35,6 +36,7 @@ public:
     void setLeftRightMargin(int margin);
     void setTopBottomMargin(int margin);
     void setMaxLineCount(int maxLinecnt);
+    void setAutoChecked(bool autoChecked);
 
 private:
     void initWidget();
@@ -42,9 +44,12 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private slots:
     void onUpdateTheme();
+    void onTimeOut();
 
 private:
     QString m_text;
@@ -52,6 +57,10 @@ private:
     int m_tbMargin;
     int m_maxLineCount;
     Qt::Alignment m_alignment;
+
+    QTimer m_timer;
+    QWidget *m_parent;
+    bool m_autoChecked = false;
 };
 
 #endif // TIPSWIDGET_H

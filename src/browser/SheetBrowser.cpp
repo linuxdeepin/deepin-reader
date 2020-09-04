@@ -95,6 +95,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
 
     m_tipsWidget = new TipsWidget(this);
+    m_tipsWidget->setAutoChecked(true);
 
     m_searchTask = new PageSearchThread(this);
 

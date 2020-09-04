@@ -29,6 +29,7 @@
 
 TipsWidget::TipsWidget(QWidget *parent) : DWidget(parent)
 {
+    m_parent = parent;
     setWindowFlags(Qt::ToolTip);
     initWidget();
     onUpdateTheme();
@@ -47,6 +48,9 @@ void TipsWidget::initWidget()
 
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &TipsWidget::onUpdateTheme);
+
+    m_timer.setInterval(100);
+    connect(&m_timer, &QTimer::timeout, this, &TipsWidget::onTimeOut);
 }
 
 void TipsWidget::onUpdateTheme()
@@ -109,4 +113,29 @@ void TipsWidget::adjustContent(const QString &text)
                                                               static_cast<int>(m_alignment | Qt::TextWrapAnywhere), text).height() + 2 * m_tbMargin);
     if (this->height() == wordHeight) return;
     setFixedHeight(wordHeight);
+}
+
+void TipsWidget::showEvent(QShowEvent *event)
+{
+    DWidget::showEvent(event);
+    if (m_autoChecked)
+        m_timer.start();
+}
+
+void TipsWidget::hideEvent(QHideEvent *event)
+{
+    DWidget::hideEvent(event);
+    m_timer.stop();
+}
+
+void TipsWidget::setAutoChecked(bool autoChecked)
+{
+    m_autoChecked = autoChecked;
+}
+
+void TipsWidget::onTimeOut()
+{
+    if (this->isVisible() && !m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos()))) {
+        this->hide();
+    }
 }
