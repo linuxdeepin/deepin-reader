@@ -54,8 +54,10 @@ RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc
 
 TRANSLATIONS += \
-    $$SRCPWD/../translations/deepin-reader_en_US.ts\
-    $$SRCPWD/../translations/deepin-reader_zh_CN.ts
+    $$SRCPWD/../translations/deepin-reader_en_US.ts \
+    $$SRCPWD/../translations/deepin-reader_zh_CN.ts \
+    $$SRCPWD/../translations/deepin-reader_zh_TW.ts \
+    $$SRCPWD/../translations/deepin-reader_zh_HK.ts
 
 target.path   = /usr/bin
 
