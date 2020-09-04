@@ -426,7 +426,7 @@ void DocSheet::copySelectedText()
 
 void DocSheet::highlightSelectedText()
 {
-    if (!m_browser)
+    if (!m_browser || fileType() != Dr::FileType::PDF)
         return;
 
     if (m_browser->selectedWordsText().isEmpty()) {
@@ -440,7 +440,7 @@ void DocSheet::highlightSelectedText()
 
 void DocSheet::addSelectedTextHightlightAnnotation()
 {
-    if (!m_browser)
+    if (!m_browser || fileType() != Dr::FileType::PDF)
         return;
 
     if (m_browser->selectedWordsText().isEmpty()) {
