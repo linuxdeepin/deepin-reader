@@ -49,7 +49,7 @@ public:
     void adaptWindowSize(const double &scale)  Q_DECL_OVERRIDE;
     void updateThumbnail(const int &index) Q_DECL_OVERRIDE;
 
-    QWidget *getLastFocusWidget();
+    void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 protected:
     void initWidget() Q_DECL_OVERRIDE;

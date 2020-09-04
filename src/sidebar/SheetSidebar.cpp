@@ -77,55 +77,64 @@ void SheetSidebar::initWidget()
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(15, 0, 15, 0);
 
-    m_btnGroup = new QButtonGroup(this);
-    connect(m_btnGroup, SIGNAL(buttonClicked(int)), this, SLOT(onBtnClicked(int)));
+    QList<QWidget *> tabWidgetlst;
+
     if (m_widgetsFlag.testFlag(PREVIEW_THUMBNAIL)) {
         m_thumbnailWidget = new ThumbnailWidget(m_sheet, this);
         int index = m_stackLayout->addWidget(m_thumbnailWidget);
         DToolButton *btn = createBtn(tr("Thumbnails"), "thumbnail");
-        m_btnGroup->addButton(btn, index);
+        m_btnGroupMap.insert(index, btn);
         hLayout->addWidget(btn);
         hLayout->addStretch();
 
-        m_thumbnailWidget->getLastFocusWidget()->installEventFilter(this);
-        btn->installEventFilter(this);
+        connect(btn, &QToolButton::clicked, [this, index]() {
+            onBtnClicked(index);
+        });
+
+        m_thumbnailWidget->setTabOrderWidget(tabWidgetlst);
     }
 
     if (m_widgetsFlag.testFlag(PREVIEW_CATALOG)) {
         m_catalogWidget = new CatalogWidget(m_sheet, this);
-        m_catalogWidget->setObjectName("CatalogWidget");
         int index = m_stackLayout->addWidget(m_catalogWidget);
         DToolButton *btn = createBtn(tr("Catalog"), "catalog");
-        m_btnGroup->addButton(btn, index);
+        m_btnGroupMap.insert(index, btn);
         hLayout->addWidget(btn);
         hLayout->addStretch();
 
-        m_catalogWidget->installEventFilter(this);
-        btn->installEventFilter(this);
+        connect(btn, &QToolButton::clicked, [this, index]() {
+            onBtnClicked(index);
+        });
     }
 
     if (m_widgetsFlag.testFlag(PREVIEW_BOOKMARK)) {
         m_bookmarkWidget = new BookMarkWidget(m_sheet, this);
         int index = m_stackLayout->addWidget(m_bookmarkWidget);
         DToolButton *btn = createBtn(tr("Bookmarks"), "bookmark");
-        m_btnGroup->addButton(btn, index);
+        m_btnGroupMap.insert(index, btn);
         hLayout->addWidget(btn);
         hLayout->addStretch();
 
-        m_bookmarkWidget->getAddBtn()->installEventFilter(this);
-        btn->installEventFilter(this);
+        connect(btn, &QToolButton::clicked, [this, index]() {
+            onBtnClicked(index);
+        });
+
+        m_bookmarkWidget->setTabOrderWidget(tabWidgetlst);
     }
 
     if (m_widgetsFlag.testFlag(PREVIEW_NOTE)) {
         m_notesWidget = new NotesWidget(m_sheet, this);
         int index = m_stackLayout->addWidget(m_notesWidget);
         DToolButton *btn = createBtn(tr("Annotations"), "annotation");
-        m_btnGroup->addButton(btn, index);
+        m_btnGroupMap.insert(index, btn);
         hLayout->addWidget(btn);
         hLayout->addStretch();
 
-        m_notesWidget->getAddBtn()->installEventFilter(this);
-        btn->installEventFilter(this);
+        connect(btn, &QToolButton::clicked, [this, index]() {
+            onBtnClicked(index);
+        });
+
+        m_notesWidget->setTabOrderWidget(tabWidgetlst);
     }
 
     //remove last spaceitem
@@ -137,7 +146,7 @@ void SheetSidebar::initWidget()
         m_searchId = m_stackLayout->addWidget(m_searchWidget);
         DToolButton *btn = createBtn("Search", "search");
         btn->setVisible(false);
-        m_btnGroup->addButton(btn, m_searchId);
+        m_btnGroupMap.insert(m_searchId, btn);
     }
 
     pVBoxLayout->addLayout(m_stackLayout);
@@ -146,14 +155,24 @@ void SheetSidebar::initWidget()
     this->setVisible(false);
 
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
-    m_btnGroup->buttonClicked(nId);
+    onBtnClicked(nId);
 
     Utils::setObjectNoFocusPolicy(this);
+    for (int i = 0; i < tabWidgetlst.size() - 1; i++) {
+        setTabOrder(tabWidgetlst.at(i), tabWidgetlst.at(i + 1));
+    }
 }
 
 void SheetSidebar::onBtnClicked(int index)
 {
-    m_btnGroup->button(index)->setChecked(true);
+    if (!m_btnGroupMap.contains(index))
+        return;
+
+    for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+        iter.value()->setChecked(false);
+    }
+
+    m_btnGroupMap.value(index)->setChecked(true);
     m_stackLayout->setCurrentIndex(index);
     adaptWindowSize(m_scale);
     if (m_stackLayout->currentWidget() != m_searchWidget) {
@@ -180,10 +199,7 @@ void SheetSidebar::handleOpenSuccess()
     m_bOpenDocOpenSuccess = true;
     this->setVisible(m_sheet->operation().sidebarVisible);
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
-    QAbstractButton *btn = m_btnGroup->button(nId);
-    if (btn) {
-        m_btnGroup->buttonClicked(nId);
-    }
+    onBtnClicked(nId);
     onHandleOpenSuccessDelay();
 }
 
@@ -211,20 +227,20 @@ void SheetSidebar::onHandWidgetDocOpenSuccess()
 void SheetSidebar::handleFindOperation(int type)
 {
     if (type == E_FIND_CONTENT) {
-        const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
-        for (QAbstractButton *btn : btns) btn->setEnabled(false);
+        for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+            iter.value()->setEnabled(false);
+        }
 
         m_searchWidget->clearFindResult();
-        QAbstractButton *btn = m_btnGroup->button(m_searchId);
-        if (btn) m_btnGroup->buttonClicked(m_searchId);
+        onBtnClicked(m_searchId);
         this->setVisible(true);
     } else if (type == E_FIND_EXIT) {
-        const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
-        for (QAbstractButton *btn : btns) btn->setEnabled(true);
+        for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+            iter.value()->setEnabled(true);
+        }
 
         int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
-        QAbstractButton *btn = m_btnGroup->button(nId);
-        if (btn) m_btnGroup->buttonClicked(nId);
+        onBtnClicked(nId);
         this->setVisible(m_sheet->operation().sidebarVisible);
         m_searchWidget->clearFindResult();
     }
@@ -316,45 +332,6 @@ void SheetSidebar::keyPressEvent(QKeyEvent *event)
     CustomWidget::keyPressEvent(event);
 }
 
-bool SheetSidebar::eventFilter(QObject *object, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
-
-        if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-            //书签和注释子界面响应回车事件
-            if (dealSubControlFocus())
-                return CustomWidget::eventFilter(object, event);
-
-            //按钮响应回车事件
-            switchListView();
-        }
-
-        if (keyEvent->key() == Qt::Key_Tab) {
-            if (object->objectName() == "thumbnailNextBtn"
-                    || object->objectName() == "CatalogWidget"
-                    || object->objectName() == "BookmarkAddBtn"
-                    || object->objectName() == "NotesAddBtn") {
-                m_btnGroup->button(0)->setFocus(Qt::TabFocusReason);
-                return true;
-            } else {
-                for (int i = 0; i < m_btnGroup->buttons().size() - 2; i++) {
-                    QAbstractButton *btn = m_btnGroup->buttons().at(i);
-                    QAbstractButton *nextbtn = m_btnGroup->buttons().at(i + 1);
-                    if (nextbtn == nullptr)
-                        m_btnGroup->button(0);
-                    if (btn == object && btn->hasFocus()) {
-                        focusNextChild();
-                        nextbtn->setFocus(Qt::TabFocusReason);
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-    return CustomWidget::eventFilter(object, event);
-}
-
 void SheetSidebar::showMenu()
 {
     DToolButton *bookmarkbtn = this->findChild<DToolButton *>("bookmark");
@@ -416,39 +393,6 @@ void SheetSidebar::deleteItemByKey()
     }
 }
 
-/**
- * @brief SheetSidebar::switchListView
- * 按钮响应回车事件切换列表
- */
-void SheetSidebar::switchListView()
-{
-    if (m_btnGroup && m_btnGroup->buttons().count() > 0) {
-        for (int index = 0; index < m_btnGroup->buttons().count() - 1; index++) {
-            if (m_btnGroup->button(index) && m_btnGroup->button(index)->hasFocus()) {
-                onBtnClicked(index);
-            }
-        }
-    }
-}
-
-/**
- * @brief SheetSidebar::dealSubControlFocus
- * 处理子窗口中,子控件获得回车事件,在有焦点时
- */
-bool SheetSidebar::dealSubControlFocus()
-{
-    if (m_btnGroup && m_btnGroup->buttons().count() > 0) {
-        QWidget *curWidget = m_stackLayout->currentWidget();
-        if (curWidget == m_bookmarkWidget) {
-            return m_bookmarkWidget->addBtnCheckEnter();
-        } else if (curWidget == m_notesWidget) {
-            return m_notesWidget->addBtnCheckEnter();
-        }
-    }
-
-    return false;
-}
-
 bool SheetSidebar::event(QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -469,11 +413,10 @@ bool SheetSidebar::event(QEvent *event)
 void SheetSidebar::onUpdateWidgetTheme()
 {
     updateWidgetTheme();
-    const QList<QAbstractButton *> &btns = m_btnGroup->buttons();
-    for (QAbstractButton *btn : btns) {
-        const QString &objName = btn->objectName();
+    for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+        const QString &objName = iter.value()->objectName();
         const QIcon &icon = QIcon::fromTheme(QString("dr_") + objName);
-        btn->setIcon(icon);
+        iter.value()->setIcon(icon);
     }
 }
 

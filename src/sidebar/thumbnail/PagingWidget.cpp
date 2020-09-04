@@ -53,16 +53,6 @@ void PagingWidget::initWidget()
     int tW = 36;
     int tH = 36;
 
-    m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
-    m_pPrePageBtn->setObjectName("thumbnailPreBtn");
-    m_pPrePageBtn->setFixedSize(QSize(tW, tH));
-    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
-
-    m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(tW, tH));
-    m_pNextPageBtn->setObjectName("thumbnailNextBtn");
-    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
-
     m_pJumpPageLineEdit = new DLineEdit();
     m_pJumpPageLineEdit->lineEdit()->setObjectName("pageEdit");
     tW = 60;
@@ -78,6 +68,16 @@ void PagingWidget::initWidget()
 
     m_pJumpPageLineEdit->setFont(font);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
+
+    m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
+    m_pPrePageBtn->setObjectName("thumbnailPreBtn");
+    m_pPrePageBtn->setFixedSize(QSize(tW, tH));
+    connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
+
+    m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
+    m_pNextPageBtn->setFixedSize(QSize(tW, tH));
+    m_pNextPageBtn->setObjectName("thumbnailNextBtn");
+    connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
     m_pCurrantPageLab = new CustomClickLabel("");
     font = m_pCurrantPageLab->font();
@@ -111,7 +111,7 @@ void PagingWidget::slotUpdateTheme()
     }
 }
 
-void PagingWidget::__SetBtnState(const int &currntPage, const int &totalPage)
+void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
 {
     if (currntPage == 1) {                  //  第一页
         m_pPrePageBtn->setEnabled(false);
@@ -138,7 +138,7 @@ void PagingWidget::setIndex(int index)
     int totalPage = m_sheet->pagesNumber();
     int inputData = index;
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
-    __SetBtnState(currntPage, totalPage);
+    setBtnState(currntPage, totalPage);
 
     if (m_pCurrantPageLab) {
         m_pCurrantPageLab->setText(QString::number(currntPage));
@@ -226,7 +226,9 @@ void PagingWidget::slotNextPageBtnClicked()
     m_sheet->jumpToNextPage();
 }
 
-QWidget *PagingWidget::getLastFocusWidget()
+void PagingWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
-    return m_pNextPageBtn;
+    tabWidgetlst << m_pJumpPageLineEdit;
+    tabWidgetlst << m_pPrePageBtn;
+    tabWidgetlst << m_pNextPageBtn;
 }

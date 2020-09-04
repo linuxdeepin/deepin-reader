@@ -118,7 +118,7 @@ void ThumbnailWidget::scrollToCurrentPage()
     m_pImageListView->scrollToIndex(m_sheet->currentIndex());
 }
 
-QWidget *ThumbnailWidget::getLastFocusWidget()
+void ThumbnailWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
-    return m_pPageWidget->getLastFocusWidget();
+    m_pPageWidget->setTabOrderWidget(tabWidgetlst);
 }

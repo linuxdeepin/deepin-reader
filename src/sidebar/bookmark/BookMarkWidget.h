@@ -44,9 +44,8 @@ public:
     void handleOpenSuccess();
     void handleBookMark(int index, int state);
 
-    DPushButton *getAddBtn();
-
     bool addBtnCheckEnter();
+    void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 public:
     void initWidget() Q_DECL_OVERRIDE;

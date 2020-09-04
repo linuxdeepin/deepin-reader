@@ -131,6 +131,7 @@ void TitleWidget::onThumbnailBtnClicked()
     if (m_curSheet.isNull())
         return;
 
+    m_pThumbnailBtn->setChecked(!m_pThumbnailBtn->isChecked());
     bool rl = m_pThumbnailBtn->isChecked();
     m_curSheet->setSidebarVisible(rl);
 }
@@ -147,10 +148,10 @@ void TitleWidget::onFindOperation(const int &sAction)
     }
 }
 
-CustemPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
+DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
 {
     int tW = 36;
-    CustemPushButton *btn = new CustemPushButton(this);
+    DPushButton *btn = new DPushButton(this);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setToolTip(btnName);

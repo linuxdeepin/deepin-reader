@@ -48,9 +48,8 @@ public:
     void handleOpenSuccess();
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
-    DPushButton       *getAddBtn();
-
     bool addBtnCheckEnter();
+    void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;

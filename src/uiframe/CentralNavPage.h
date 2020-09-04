@@ -41,8 +41,6 @@ signals:
 protected:
     void initWidget() override;
 
-    void keyPressEvent(QKeyEvent *event) override;
-
 private slots:
     void slotChooseBtnClicked();
 

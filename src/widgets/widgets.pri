@@ -19,8 +19,7 @@ HEADERS += \
     $$PWD/CustomWidget.h \
     $$PWD/TipsWidget.h \
     $$PWD/WordWrapLabel.h \
-    $$PWD/RoundColorWidget.h \
-    $$PWD/CustemPushButton.h
+    $$PWD/RoundColorWidget.h
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
@@ -43,7 +42,6 @@ SOURCES += \
     $$PWD/CustomWidget.cpp \
     $$PWD/TipsWidget.cpp \
     $$PWD/WordWrapLabel.cpp \
-    $$PWD/RoundColorWidget.cpp \
-    $$PWD/CustemPushButton.cpp
+    $$PWD/RoundColorWidget.cpp
 
 INCLUDEPATH += $$PWD

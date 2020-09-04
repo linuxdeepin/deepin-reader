@@ -85,7 +85,6 @@ protected:
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
     void showMenu() override;
 
 private slots:
@@ -102,8 +101,6 @@ private:
     void onJumpToPrevPage();
     void onJumpToNextPage();
     void deleteItemByKey();
-    void switchListView();
-    bool dealSubControlFocus();
 
 private:
     qreal m_scale;
@@ -113,7 +110,7 @@ private:
 
     DocSheet *m_sheet;
     QStackedLayout *m_stackLayout;
-    QButtonGroup *m_btnGroup;
+    QMap<int, DToolButton *> m_btnGroupMap;
     PreviewWidgesFlags m_widgetsFlag;
 
     ThumbnailWidget *m_thumbnailWidget;

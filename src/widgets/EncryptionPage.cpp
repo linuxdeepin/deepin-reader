@@ -83,11 +83,6 @@ void EncryptionPage::InitUI()
     onUpdateTheme();
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &EncryptionPage::onUpdateTheme);
-
-    m_nextbutton->installEventFilter(this);
-    m_echoBtn = m_password->findChild<QPushButton *>();
-    if (m_echoBtn)
-        m_echoBtn->installEventFilter(this);
 }
 
 void EncryptionPage::InitConnection()
@@ -139,17 +134,4 @@ void EncryptionPage::onUpdateTheme()
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
-}
-
-bool EncryptionPage::eventFilter(QObject *object, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyevent = static_cast<QKeyEvent *>(event);
-        if (keyevent->key() == Qt::Key_Return || keyevent->key() == Qt::Key_Enter) {
-            if (object == m_nextbutton || object == m_echoBtn) {
-                emit dynamic_cast<QAbstractButton *>(object)->clicked();
-            }
-        }
-    }
-    return DWidget::eventFilter(object, event);
 }

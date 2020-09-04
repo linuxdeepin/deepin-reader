@@ -47,7 +47,7 @@ public:
 
     void setIndex(int index);
 
-    QWidget *getLastFocusWidget();
+    void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 private slots:
     void slotPrePageBtnClicked();
@@ -58,7 +58,7 @@ private slots:
     void onEditFinished();
 private:
     void initWidget() override;
-    void __SetBtnState(const int &currntPage, const int &totalPage);
+    void setBtnState(const int &currntPage, const int &totalPage);
 
     void normalChangePage();
     void pageNumberJump();

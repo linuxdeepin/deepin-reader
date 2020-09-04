@@ -180,11 +180,6 @@ void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotati
     }
 }
 
-DPushButton *NotesWidget::getAddBtn()
-{
-    return m_pAddAnnotationBtn;
-}
-
 /**
  * @brief NotesWidget::addBtnCheckEnter
  * 添加注释响应回车事件
@@ -246,4 +241,9 @@ void NotesWidget::changeResetModelData()
         }
     }
     m_pImageListView->getImageModel()->changeModelData(pageSrclst);
+}
+
+void NotesWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
+{
+    tabWidgetlst << m_pAddAnnotationBtn;
 }

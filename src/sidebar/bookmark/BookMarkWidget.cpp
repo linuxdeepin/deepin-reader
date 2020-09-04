@@ -126,11 +126,6 @@ void BookMarkWidget::handleBookMark(int index, int state)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
 
-DPushButton *BookMarkWidget::getAddBtn()
-{
-    return m_pAddBookMarkBtn;
-}
-
 /**
  * @brief BookMarkWidget::addBtnCheckEnter
  * 添加书签响应回车事件
@@ -210,4 +205,9 @@ void BookMarkWidget::onListMenuClick(const int &iType)
             deleteAllItem();
         }
     }
+}
+
+void BookMarkWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
+{
+    tabWidgetlst << m_pAddBookMarkBtn;
 }
