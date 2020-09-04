@@ -1531,28 +1531,26 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
-            if (jump2Link(m_selectStartPos))
-                return DGraphicsView::mousePressEvent(event);
-
             if (page != nullptr) {
                 m_selectIndex = page->itemIndex();
-
                 //add by dxh 2020-8-19  防止书签附近有文字时,操作书签无效
                 page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
             }
 
             deepin_reader::Annotation *clickAnno = nullptr;
-
             //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
             clickAnno = getClickAnnot(page, m_selectPressedPos, true);
-
             if (clickAnno && clickAnno->type() == 1) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
                 m_iconAnnot = clickAnno;
-                return ;
+                return DGraphicsView::mousePressEvent(event);
             }
+
+            if (jump2Link(m_selectStartPos))
+                return DGraphicsView::mousePressEvent(event);
+
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
 
