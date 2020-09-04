@@ -54,7 +54,7 @@ public slots:
 
 private slots:
     void onFindOperation(const int &);
-    void onThumbnailBtnClicked();
+    void onThumbnailBtnClicked(bool checked);
 
 private:
     void initBtns();

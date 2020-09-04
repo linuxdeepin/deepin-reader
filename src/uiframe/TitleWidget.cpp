@@ -42,7 +42,7 @@ void TitleWidget::initBtns()
     m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
     m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-    connect(m_pThumbnailBtn, SIGNAL(clicked()), SLOT(onThumbnailBtnClicked()));
+    connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
 }
 
 void TitleWidget::initWidget()
@@ -126,12 +126,12 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
     }
 }
 
-void TitleWidget::onThumbnailBtnClicked()
+void TitleWidget::onThumbnailBtnClicked(bool checked)
 {
     if (m_curSheet.isNull())
         return;
 
-    m_pThumbnailBtn->setChecked(!m_pThumbnailBtn->isChecked());
+    m_pThumbnailBtn->setChecked(checked);
     bool rl = m_pThumbnailBtn->isChecked();
     m_curSheet->setSidebarVisible(rl);
 }

@@ -158,7 +158,7 @@ bool Application::notify(QObject *object, QEvent *event)
         if ((object->inherits("QAbstractButton")) && (keyevent->key() == Qt::Key_Return || keyevent->key() == Qt::Key_Enter)) {
             QAbstractButton *pushButton = dynamic_cast<QAbstractButton *>(object);
             if (pushButton) {
-                emit pushButton->clicked();
+                emit pushButton->clicked(!pushButton->isChecked());
                 return true;
             }
         }
