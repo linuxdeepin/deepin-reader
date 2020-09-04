@@ -46,6 +46,14 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
     m_handleMenu->setDisabled(false);
     m_handleMenu->readCurDocParam(sheet);
     disableSaveButton(!sheet->fileChanged());
+
+    QAction *searchAction = this->findChild<QAction *>("Search");
+    if (searchAction) {
+        if (sheet->fileType() == Dr::PDF)
+            searchAction->setVisible(true);
+        else
+            searchAction->setVisible(false);
+    }
 }
 
 void TitleMenu::disableAllAction()
