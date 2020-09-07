@@ -96,6 +96,7 @@ private slots:
 
 private:
     int m_delayIndex = -1;
+    QTimer *m_intervalTimer = nullptr;
 };
 
 #endif // MAINTABWIDGET_H

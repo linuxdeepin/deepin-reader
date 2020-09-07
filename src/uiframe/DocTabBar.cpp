@@ -64,6 +64,9 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::onDragActionChanged);
 
+    m_intervalTimer = new QTimer(this);
+
+    m_intervalTimer->setSingleShot(true);
 }
 
 int DocTabBar::indexOfFilePath(const QString &filePath)
@@ -297,11 +300,16 @@ void DocTabBar::onTabAddRequested()
 //  关闭
 void DocTabBar::onTabCloseRequested(int index)
 {
+    if (m_intervalTimer->isActive())
+        return;
+
     DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
 
     if (nullptr == sheet)
         return;
 
     emit sigTabClosed(sheet);
+
+    m_intervalTimer->start(10);    //100ms内的重复点击将被过滤
 }
 

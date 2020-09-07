@@ -179,6 +179,7 @@ private:
     static QSet<BrowserPage *> items;                   //用于记录多少个自己
 
     SheetBrowser *m_parent = nullptr;
+
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
     QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染的副本
 
@@ -198,31 +199,28 @@ private:
     QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
 
     bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
-    double  m_viewportScaleFactor = -1;
+    double  m_viewportScaleFactor = -1;     //视图区域的缩放
     QPixmap m_viewportPixmap;               //视图区域的图片
     QRect   m_viewportRenderedRect;         //试图区域
 
     QList<BrowserWord *> m_words;                           //当前文字
+    double m_wordScaleFactor = -1;                          //当前文字的缩放
     bool m_wordIsRendering = false;                         //当前文字是否正在加载
     bool m_wordHasRendered = false;                         //当前文字是否被加载
     bool m_wordNeeded      = false;                         //当前文字是否需要
     bool m_wordSelectable  = false;                         //当前文字是否可以选取
-    double m_wordScaleFactor = -1;                          //当前文字的缩放
 
     QList<BrowserAnnotation *> m_annotationItems;           //一个deepin_reader::Annotation可能对应多个annotationItems
+    BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
+    bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
+    QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 
     QList<QRectF> m_searchLightrectLst;                     //搜索结果
     QRectF m_searchSelectLighRectf;
 
-
-    BrowserAnnotation *m_lastClickIconAnnotation = nullptr;
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
-    bool m_drawIconRect = false;                            // 绘制当前选中图标注释边框
-    QRectF m_selecetIconAnnotationRect;                     // 绘制选择的图标注释的外边框
-    bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
-    QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 };
 
 #endif // BrowserPage_H
