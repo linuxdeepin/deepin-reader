@@ -31,7 +31,6 @@
 #include "PageRenderThread.h"
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
-#include "BrowserLink.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
 #include "PageViewportThread.h"
@@ -52,7 +51,7 @@
 #include <QDesktopServices>
 
 QSet<BrowserPage *> BrowserPage::items;
-BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages) : QGraphicsItem(), m_page(page), m_renderPages(renderPages), m_parent(parent)
+BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages) : QGraphicsItem(), m_parent(parent), m_page(page), m_renderPages(renderPages)
 {
     items.insert(this);
     setAcceptHoverEvents(true);
@@ -74,8 +73,6 @@ BrowserPage::~BrowserPage()
     qDeleteAll(m_annotations3);
 
     qDeleteAll(m_annotationItems);
-
-    qDeleteAll(m_linkItems);
 
     qDeleteAll(m_words);
 
@@ -638,21 +635,8 @@ void BrowserPage::setWordSelectable(bool selectable)
 }
 
 /**
- * @brief BrowserPage::loadLinks
- * 加载注释
- */
-void BrowserPage::loadLinks()
-{
-    QList< Link * > links = m_page->links();
-    for (int i = 0; i < links.count(); ++i) {
-        BrowserLink *link = new BrowserLink(this, links[i]);
-        m_linkItems.append(link);
-    }
-}
-
-/**
  * @brief BrowserPage::loadAnnotations
- * 加载注释
+ * 加载注释 如果已经加载则不再加载
  */
 void BrowserPage::loadAnnotations()
 {
@@ -660,6 +644,10 @@ void BrowserPage::loadAnnotations()
         reloadAnnotations();
 }
 
+/**
+ * @brief BrowserPage::loadWords
+ * 加载文字 如果正在加载则不进行操作 如果已经加载过则按当前缩放改变大小
+ */
 void BrowserPage::loadWords()
 {
     m_wordNeeded = true;
@@ -692,10 +680,10 @@ void BrowserPage::loadWords()
 }
 
 /**
- * @brief BrowserPage::clearCache
- *  删除缓存图片
+ * @brief BrowserPage::clearPixmap
+ * 删除缓存图片
  */
-void BrowserPage::clearCache()
+void BrowserPage::clearPixmap()
 {
     m_pixmap = QPixmap();
     m_pixmapHasRendered = false;
@@ -1427,7 +1415,6 @@ void BrowserPage::translate2NormalRect(QRectF &wordRect)
 bool BrowserPage::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
-//        qInfo() << __LINE__ << __FUNCTION__ << "      current page index :  " << this->m_index;
         QGraphicsSceneHoverEvent *moveevent = dynamic_cast<QGraphicsSceneHoverEvent *>(event);
         if (!m_bookmark && bookmarkMouseRect().contains(moveevent->pos()))
             m_bookmarkState = 1;
@@ -1436,8 +1423,6 @@ bool BrowserPage::sceneEvent(QEvent *event)
         else
             m_bookmarkState = 0;
         update();
-    } else if (event->type() == QEvent::HideToParent) {
-        qDebug() << 11111111111;
     }
     return QGraphicsItem::sceneEvent(event);
 }

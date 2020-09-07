@@ -37,7 +37,6 @@ class Page;
 
 class SheetBrowser;
 class BrowserWord;
-class BrowserLink;
 class BrowserAnnotation;
 class BrowserPage : public QGraphicsItem
 {
@@ -87,17 +86,15 @@ public:
 
     void setWordSelectable(bool selectable);
 
-    void loadLinks();
-
     void loadWords();
 
     void loadAnnotations();     //如果加载过则不加载
 
-    void scaleWords();  //更改缩放如果存在文字
+    void scaleWords();          //更改缩放如果存在文字
 
-    void clearCache();
+    void clearPixmap();         //
 
-    void clearWords();      //清除文字 被选中除外
+    void clearWords();          //清除文字 被选中除外
 
     QList< deepin_reader::Annotation * > annotations();
 
@@ -180,15 +177,16 @@ protected:
 
 private:
     static QSet<BrowserPage *> items;                   //用于记录多少个自己
-    deepin_reader::Page *m_page = nullptr;              //主要操作更新
-    QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染
-    QList<deepin_reader::Annotation *> m_annotations;   //
-    QList<deepin_reader::Annotation *> m_annotations0;  //渲染page的注释
-    QList<deepin_reader::Annotation *> m_annotations1;  //
-    QList<deepin_reader::Annotation *> m_annotations2;  //
-    QList<deepin_reader::Annotation *> m_annotations3;  //
 
     SheetBrowser *m_parent = nullptr;
+    deepin_reader::Page *m_page = nullptr;              //主要操作更新
+    QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染的副本
+
+    deepin_reader::AnnotationList m_annotations;   //
+    deepin_reader::AnnotationList m_annotations0;  // 渲染page的注释  之后改成QList<deepin_reader::m_annotations> m_renderAnnotations
+    deepin_reader::AnnotationList m_annotations1;  //
+    deepin_reader::AnnotationList m_annotations2;  //
+    deepin_reader::AnnotationList m_annotations3;  //
 
     int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放
@@ -208,25 +206,23 @@ private:
     bool m_wordIsRendering = false;                         //当前文字是否正在加载
     bool m_wordHasRendered = false;                         //当前文字是否被加载
     bool m_wordNeeded      = false;                         //当前文字是否需要
-    bool m_wordSelectable = false;                          //当前文字是否可以选取
+    bool m_wordSelectable  = false;                         //当前文字是否可以选取
     double m_wordScaleFactor = -1;                          //当前文字的缩放
 
-    QList<BrowserAnnotation *> m_annotationItems;           //一个注释可能对应多个annotationitems
+    QList<BrowserAnnotation *> m_annotationItems;           //一个deepin_reader::Annotation可能对应多个annotationItems
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
 
-    QList<BrowserLink *> m_linkItems;
-
-    bool m_bookmark = false;                                //当前是否有书签
-    int  m_bookmarkState = 0;                               //当前书签状态 1为on 2为pressed 3为show
-
+    QList<QRectF> m_searchLightrectLst;                     //搜索结果
     QRectF m_searchSelectLighRectf;
-    QList<QRectF> m_searchLightrectLst;
 
-    BrowserAnnotation *m_lastClickIconAnnotation{nullptr};
-    bool m_drawIconRect{false};                         // 绘制当前选中图标注释边框
-    QRectF m_selecetIconAnnotationRect{QRectF()};       // 绘制选择的图标注释的外边框
-    bool m_drawMoveIconRect{false};                     // 绘制移动图标注释边框
-    QPointF m_drawMoveIconPoint{QPointF()};             // 绘制移动图标注释点
+
+    BrowserAnnotation *m_lastClickIconAnnotation = nullptr;
+    bool m_bookmark = false;                                // 当前是否有书签
+    int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
+    bool m_drawIconRect = false;                            // 绘制当前选中图标注释边框
+    QRectF m_selecetIconAnnotationRect;                     // 绘制选择的图标注释的外边框
+    bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
+    QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 };
 
 #endif // BrowserPage_H

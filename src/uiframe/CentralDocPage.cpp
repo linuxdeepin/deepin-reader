@@ -47,7 +47,6 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
 {
     m_pTabBar = new DocTabBar(this);
-    connect(m_pTabBar, SIGNAL(sigLastTabMoved()), this, SIGNAL(sigNeedClose()));
     connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
     connect(m_pTabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
@@ -228,6 +227,9 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
+    if (!DocSheet::existSheet(sheet))
+        return;
+
     if (sheet->fileChanged()) {
 
         int ret = SaveDialog::showExitDialog();
@@ -246,11 +248,11 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         m_pTabBar->removeSheet(sheet);
     }
 
-    sheet->deleteLater();
-
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+
+    delete sheet;   //确保删除
 
 }
 

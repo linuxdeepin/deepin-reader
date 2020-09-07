@@ -30,7 +30,6 @@
 #include "document/PDFModel.h"
 #include "BrowserPage.h"
 #include "DocSheet.h"
-//#include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "widgets/TipsWidget.h"
 #include "BrowserMenu.h"
@@ -451,7 +450,7 @@ void SheetBrowser::onSceneOfViewportChanged()
 
     foreach (BrowserPage *item, m_items) {
         if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
-            item->clearCache();
+            item->clearPixmap();
             item->clearWords();
         }
     }

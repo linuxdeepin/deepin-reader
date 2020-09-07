@@ -60,6 +60,8 @@ public:
 
     static QUuid getUuid(DocSheet *);
 
+    static bool existSheet(DocSheet *sheet);
+
     static DocSheet *getSheet(QString uuid);
 
     static QMap<QString, DocSheet *> g_map;

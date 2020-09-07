@@ -63,6 +63,7 @@ DocTabBar::DocTabBar(QWidget *parent)
     connect(this, &DTabBar::tabDroped, this, &DocTabBar::onTabDroped);
 
     connect(this, &DTabBar::dragActionChanged, this, &DocTabBar::onDragActionChanged);
+
 }
 
 int DocTabBar::indexOfFilePath(const QString &filePath)

@@ -114,6 +114,11 @@ QUuid DocSheet::getUuid(DocSheet *sheet)
     return g_map.key(sheet);
 }
 
+bool DocSheet::existSheet(DocSheet *sheet)
+{
+    return g_map.values().contains(sheet);
+}
+
 DocSheet *DocSheet::getSheet(QString uuid)
 {
     if (g_map.contains(uuid))

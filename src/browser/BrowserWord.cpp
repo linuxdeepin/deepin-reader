@@ -85,7 +85,7 @@ void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 void BrowserWord::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     if (m_selectable)
-        return;     //如果可以选中的情况下不允许单选
+        return;     //在可以选中的情况下不允许单选
 
     QGraphicsItem::mousePressEvent(e);
 }
@@ -93,7 +93,7 @@ void BrowserWord::mousePressEvent(QGraphicsSceneMouseEvent *e)
 void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     if (m_selectable)
-        return;     //如果可以选中的情况下不允许单选
+        return;     //在可以选中的情况下不允许单选
 
     QGraphicsItem::mouseReleaseEvent(e);
 }

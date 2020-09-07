@@ -80,14 +80,6 @@ private slots:
     void onSetCurrentIndex();
 
 signals:
-    void sigAddTab(const QString &);
-
-    void sigCloseTab(const QString &);
-
-    void sigFileCountChanged(int);
-
-    void sigLastTabMoved();     //最后一个tab移入其他程序
-
     void sigTabChanged(DocSheet *);
 
     void sigNeedActivateWindow();
