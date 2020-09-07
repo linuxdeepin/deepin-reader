@@ -125,7 +125,7 @@ void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
     emit sigCurSheetChanged(sheet);
 }
 
-void CentralDocPage::openFile(QString &filePath)
+void CentralDocPage::openFile(const QString &filePath)
 {
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_pTabBar) {
@@ -181,6 +181,9 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 
 void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 {
+    if (sheet == nullptr)
+        return;
+
     if (!ret) {
         m_pStackedLayout->removeWidget(sheet);
 

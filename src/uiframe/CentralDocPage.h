@@ -49,7 +49,7 @@ public:
 public:
     static bool firstThumbnail(QString filePath, QString thumbnailPath);     //生成第一页的缩略图
 
-    void openFile(QString &filePath);
+    void openFile(const QString &filePath);
 
     bool saveAll();
 
@@ -92,10 +92,6 @@ public:
     bool quitFullScreen();
 
     void openCurFileFolder();
-
-    void BlockShutdown();
-
-    void UnBlockShutdown();
 
     void handleSearch();
 

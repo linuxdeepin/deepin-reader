@@ -38,7 +38,6 @@
 #include "widgets/AttrScrollWidget.h"
 #include "widgets/BookMarkButton.h"
 #include "widgets/CustomClickLabel.h"
-#include "widgets/CustemPushButton.h"
 #include "widgets/PrintManager.h"
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
@@ -97,19 +96,6 @@ TEST(Ut_Widgets, BColorWidgetActionTest)
     EXPECT_TRUE(colorAction.getIndex() >= 0);
     colorAction.slotBtnClicked(0);
     colorAction.slotBtnDefaultClicked();
-}
-
-TEST(Ut_Widgets, CustemPushButtonTest)
-{
-    CustemPushButton cusBtn;
-    QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&cusBtn, &keyevent);
-
-    QKeyEvent keyevent1(QEvent::KeyPress, Qt::Key_Enter, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&cusBtn, &keyevent1);
-
-    QKeyEvent keyevent2(QEvent::KeyPress, Qt::Key_Return, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&cusBtn, &keyevent2);
 }
 
 TEST(Ut_Widgets, CustomClickLabelTest)

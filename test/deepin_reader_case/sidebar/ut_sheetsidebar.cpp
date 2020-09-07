@@ -130,8 +130,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     sideBar.onJumpToPrevPage();
     sideBar.onJumpToNextPage();
     sideBar.deleteItemByKey();
-    sideBar.switchListView();
-    sideBar.dealSubControlFocus();
 
     QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
     QCoreApplication::sendEvent(&sideBar, &sidekeyLevent);
@@ -197,7 +195,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     thumbnailWidget.updateThumbnail(0);
     thumbnailWidget.updateThumbnail(10000);
     thumbnailWidget.scrollToCurrentPage();
-    EXPECT_TRUE(thumbnailWidget.getLastFocusWidget());
 
     thumbnailWidget.m_sheet = nullptr;
     thumbnailWidget.prevPage();
@@ -248,7 +245,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     bookwidget.onAddBookMarkClicked();
     bookwidget.onListMenuClick(E_BOOKMARK_DELETE);
     bookwidget.deleteAllItem();
-    EXPECT_TRUE(bookwidget.getAddBtn());
     bookwidget.m_sheet = nullptr;
     bookwidget.prevPage();
 
@@ -277,7 +273,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     noteWidget.addNoteItem(0);
     noteWidget.deleteNoteItem(0);
     noteWidget.deleteAllItem();
-    EXPECT_TRUE(noteWidget.getAddBtn());
     noteWidget.m_sheet = nullptr;
     noteWidget.prevPage();
     noteWidget.nextPage();

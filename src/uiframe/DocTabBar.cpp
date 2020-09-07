@@ -84,6 +84,9 @@ int DocTabBar::indexOfFilePath(const QString &filePath)
 
 void DocTabBar::insertSheet(DocSheet *sheet, int index)
 {
+    if (sheet == nullptr)
+        return;
+
     QString fileName = getFileName(sheet->filePath());
 
     if (-1 == index)

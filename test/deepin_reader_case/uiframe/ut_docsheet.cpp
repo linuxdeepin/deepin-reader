@@ -60,6 +60,23 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     ASSERT_TRUE(mainWindow->m_central->titleMenu());
     ASSERT_TRUE(mainWindow->m_central->titleWidget());
 
+    mainWindow->m_central->openFiles(QStringList() << path);
+    mainWindow->m_central->addSheet(0);
+    mainWindow->m_central->hasSheet(0);
+    mainWindow->m_central->showSheet(0);
+    mainWindow->m_central->handleShortcut(Dr::key_esc);
+    mainWindow->m_central->doOpenFile(path);
+    mainWindow->m_central->zoomIn();
+    mainWindow->m_central->zoomOut();
+    mainWindow->m_central->onSheetCountChanged(0);
+    mainWindow->m_central->onSheetCountChanged(1);
+    mainWindow->m_central->onMenuTriggered("Save");
+    mainWindow->m_central->onMenuTriggered("Magnifer");
+    mainWindow->m_central->onMenuTriggered("Display in file manager");
+    mainWindow->m_central->onMenuTriggered("Search");
+    mainWindow->m_central->onNeedActivateWindow();
+    mainWindow->m_central->onShowTips("const QString & text, int iconIndex = 0");
+
     DocSheet *sheet = docpage->getSheet(path);
     ASSERT_TRUE(sheet);
     EXPECT_TRUE(mainWindow->m_central->hasSheet(sheet));
@@ -75,6 +92,81 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     EXPECT_TRUE(docpage->getTitleLabel());
     EXPECT_TRUE(!docpage->getDocTabbarText(0).isEmpty());
 
+    docpage->openFile(path);
+    docpage->saveAll();
+    docpage->addSheet(0);
+    docpage->enterSheet(0);
+    docpage->leaveSheet(0);
+    docpage->hasSheet(0);
+    docpage->showSheet(0);
+    docpage->showSheet(sheet);
+
+    sheet->openSlide();
+    docpage->handleShortcut(Dr::key_esc);
+
+    sheet->openMagnifier();
+    docpage->handleShortcut(Dr::key_esc);
+
+    sheet->openFullScreen();
+    docpage->handleShortcut(Dr::key_esc);
+    docpage->handleShortcut(Dr::key_ctrl_s);
+    docpage->handleShortcut(Dr::key_f5);
+    sheet->closeSlide();
+    docpage->handleShortcut(Dr::key_alt_z);
+    sheet->closeMagnifier();
+    docpage->handleShortcut(Dr::key_alt_1);
+    docpage->handleShortcut(Dr::key_alt_2);
+    docpage->handleShortcut(Dr::key_ctrl_1);
+    docpage->handleShortcut(Dr::key_ctrl_m);
+    docpage->handleShortcut(Dr::key_ctrl_2);
+    docpage->handleShortcut(Dr::key_ctrl_3);
+    docpage->handleShortcut(Dr::key_ctrl_r);
+    docpage->handleShortcut(Dr::key_ctrl_shift_r);
+    docpage->handleShortcut(Dr::key_alt_harger);
+    docpage->handleShortcut(Dr::key_ctrl_equal);
+    docpage->handleShortcut(Dr::key_ctrl_smaller);
+    docpage->handleShortcut(Dr::key_ctrl_d);
+    docpage->handleShortcut(Dr::key_ctrl_f);
+    docpage->handleShortcut(Dr::key_ctrl_c);
+    docpage->handleShortcut(Dr::key_alt_h);
+    docpage->handleShortcut(Dr::key_alt_a);
+    docpage->handleShortcut(Dr::key_left);
+    docpage->handleShortcut(Dr::key_right);
+    docpage->handleShortcut(Dr::key_f11);
+    sheet->closeFullScreen();
+
+    docpage->showTips("Test", 0);
+    docpage->showTips("Test", 1);
+    docpage->openMagnifer();
+    docpage->quitMagnifer();
+    docpage->openSlide();
+    docpage->quitSlide();
+    docpage->handleSearch();
+
+    docpage->zoomIn();
+    docpage->zoomOut();
+
+    docpage->onTabChanged(0);
+    docpage->onTabChanged(sheet);
+    docpage->onTabMoveIn(0);
+    docpage->onTabMoveIn(sheet);
+
+    docpage->onTabClosed(0);
+    docpage->onTabMoveOut(0);
+    docpage->onCentralMoveIn(0);
+    docpage->onSheetFileChanged(0);
+    docpage->onSheetOperationChanged(0);
+
+    docpage->onSheetCountChanged(0);
+    docpage->onSheetCountChanged(1);
+    docpage->getDocTabbarText(0);
+    docpage->getDocTabbarText(1);
+    docpage->getDocTabbarText(-1);
+    docpage->getDocTabbarText(10000);
+
+    docpage->onOpened(0, true);
+    docpage->onOpened(0, false);
+    sheet->saveData();
     //DocSheet
     EXPECT_FALSE(sheet->firstThumbnail(path).isNull());
     EXPECT_FALSE(sheet->existFileChanged());
