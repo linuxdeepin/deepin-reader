@@ -789,6 +789,20 @@ void BrowserPage::reloadAnnotations()
             m_annotations[i]->setUniqueName(QUuid::createUuid().toString());
         }
 
+        //图标注释,可能是其它系统上不一样的样式,需刷新下位置达到重新刷新成自己样式的图标的目的
+        if (m_annotations[i]->type() == 1 /*Text*/) {
+            const QList<QRectF> &annoBoundary = m_annotations[i]->boundary();
+            if (annoBoundary.size() > 0) {
+                m_page->moveIconAnnotation(m_annotations[i], annoBoundary.at(0));
+                if (m_renderPages.count() == 4) {
+                    m_renderPages[0]->moveIconAnnotation(m_annotations0.at(i), annoBoundary.at(0));
+                    m_renderPages[1]->moveIconAnnotation(m_annotations1.at(i), annoBoundary.at(0));
+                    m_renderPages[2]->moveIconAnnotation(m_annotations2.at(i), annoBoundary.at(0));
+                    m_renderPages[3]->moveIconAnnotation(m_annotations3.at(i), annoBoundary.at(0));
+                }
+            }
+        }
+
         foreach (QRectF rect, m_annotations[i]->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i]);
             m_annotationItems.append(annotationItem);
