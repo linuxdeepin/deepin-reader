@@ -1124,7 +1124,7 @@ bool BrowserPage::removeAllAnnotation()
 
         foreach (BrowserAnnotation *annotation, m_annotationItems) {
             if (annotation && annotation->isSame(annota)) {
-                if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->isSame(annota))
+                if (m_lastClickIconAnnotation == annotation)
                     m_lastClickIconAnnotation = nullptr;
                 m_annotationItems.removeAll(annotation);
                 delete annotation;
@@ -1265,7 +1265,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     foreach (BrowserAnnotation *annotation, m_annotationItems) {
         if (annotation && annotation->isSame(annota)) {
-            if (m_lastClickIconAnnotation && m_lastClickIconAnnotation->isSame(annota))
+            if (m_lastClickIconAnnotation == annotation)
                 m_lastClickIconAnnotation = nullptr;
             m_annotationItems.removeAll(annotation);
             delete annotation;
