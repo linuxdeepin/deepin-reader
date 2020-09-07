@@ -845,6 +845,10 @@ void DocSheet::showEncryPage()
         connect(m_encryPage, &EncryptionPage::sigExtractPassword, this, &DocSheet::onExtractPassword);
         this->stackUnder(m_encryPage);
     }
+
+    //bugid:46645 密码输入框在的时候,先暂时屏蔽掉browser的焦点
+    m_browser->setFocusPolicy(Qt::NoFocus);
+
     m_encryPage->setGeometry(0, 0, this->width(), this->height());
     m_encryPage->raise();
     m_encryPage->show();
@@ -899,6 +903,7 @@ void DocSheet::onExtractPassword(const QString &password)
 {
     bool ret = this->tryPassword(password);
     if (ret) {
+        m_browser->setFocusPolicy(Qt::StrongFocus);
         m_encryPage->hide();
 
         this->openFileExec(password);
