@@ -509,7 +509,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (s == Dr::key_esc && quitFullScreen())
+    if ((s == Dr::key_esc || s == Dr::key_f11) && quitFullScreen())
         return;
 
     if (m_slideWidget) {
