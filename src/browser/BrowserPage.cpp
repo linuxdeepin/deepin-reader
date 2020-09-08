@@ -233,8 +233,8 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         painter->setPen(pen);
 
-        qreal iconWidth = (nullptr != m_lastClickIconAnnotationItem) ? (m_lastClickIconAnnotationItem->boundingRect().width()) : ICON_SIZE;
-        qreal iconHeight = (nullptr != m_lastClickIconAnnotationItem) ? (m_lastClickIconAnnotationItem->boundingRect().height()) : ICON_SIZE;
+        qreal iconWidth = (nullptr != m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) ? (m_lastClickIconAnnotationItem->boundingRect().width()) : ICON_SIZE;
+        qreal iconHeight = (nullptr != m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) ? (m_lastClickIconAnnotationItem->boundingRect().height()) : ICON_SIZE;
 
         int x = static_cast<int>(m_drawMoveIconPoint.x() - iconWidth / 2.0);
         int y = static_cast<int>(m_drawMoveIconPoint.y() - iconHeight / 2.0);
@@ -266,7 +266,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
     m_pixmapHasRendered = false;
 
-    if (m_lastClickIconAnnotationItem)
+    if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem))
         m_lastClickIconAnnotationItem->setScaleFactor(scaleFactor);
 
     if (m_viewportRenderedRect.isValid()) {
@@ -751,6 +751,12 @@ void BrowserPage::scaleWords()
  */
 void BrowserPage::reloadAnnotations()
 {
+    //在reload之前将上一次选中去掉,避免操作野指针
+    if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
+        m_lastClickIconAnnotationItem->setDrawSelectRect(false);
+        m_lastClickIconAnnotationItem = nullptr;
+    }
+
     qDeleteAll(m_annotations);
 
     qDeleteAll(m_annotationItems);
@@ -956,7 +962,7 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
             }
         }
     } else {
-        if (m_lastClickIconAnnotationItem)
+        if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem))
             m_lastClickIconAnnotationItem->setDrawSelectRect(draw);
     }
 }
