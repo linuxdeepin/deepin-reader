@@ -391,9 +391,9 @@ void SheetSidebar::deleteItemByKey()
 {
     QWidget *widget = m_stackLayout->currentWidget();
     if (widget == m_bookmarkWidget) {
-        m_bookmarkWidget->DeleteItemByKey();
+        m_bookmarkWidget->deleteItemByKey();
     } else if (widget == m_notesWidget) {
-        m_notesWidget->DeleteItemByKey();
+        m_notesWidget->deleteItemByKey();
     }
 }
 

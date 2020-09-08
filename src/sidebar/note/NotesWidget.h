@@ -44,7 +44,7 @@ public:
 
     void prevPage();
     void nextPage();
-    void DeleteItemByKey();
+    void deleteItemByKey();
     void handleOpenSuccess();
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 

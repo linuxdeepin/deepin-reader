@@ -23,13 +23,32 @@
 #include <DStyledItemDelegate>
 
 DWIDGET_USE_NAMESPACE
+
+/**
+ * @brief The BookMarkDelegate class
+ * 书签目录代理类
+ */
 class BookMarkDelegate : public DStyledItemDelegate
 {
 public:
     explicit BookMarkDelegate(QAbstractItemView *parent = nullptr);
 
 protected:
+    /**
+     * @brief paint
+     * 书签目录节点绘制
+     * @param painter
+     * @param option
+     * @param index
+     */
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    /**
+     * @brief sizeHint
+     * 返回节点大小
+     * @param option
+     * @param index
+     * @return QSize
+     */
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:

@@ -112,8 +112,8 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     this->viewport()->setAutoFillBackground(false);
     this->setContentsMargins(0, 0, 0, 0);
 
-    connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(SlotCollapsed(const QModelIndex &)));
-    connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(SlotExpanded(const QModelIndex &)));
+    connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(slotCollapsed(const QModelIndex &)));
+    connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(slotExpanded(const QModelIndex &)));
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
@@ -190,7 +190,7 @@ void CatalogTreeView::handleOpenSuccess()
 }
 
 //  折叠 节点处理
-void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
+void CatalogTreeView::slotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
 
@@ -201,7 +201,7 @@ void CatalogTreeView::SlotCollapsed(const QModelIndex &index)
 }
 
 //  展开 节点处理
-void CatalogTreeView::SlotExpanded(const QModelIndex &index)
+void CatalogTreeView::slotExpanded(const QModelIndex &index)
 {
     Q_UNUSED(index);
 

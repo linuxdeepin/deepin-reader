@@ -100,7 +100,7 @@ void NotesWidget::nextPage()
     m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
-void NotesWidget::DeleteItemByKey()
+void NotesWidget::deleteItemByKey()
 {
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(m_pImageListView->currentIndex().row(), tImagePageInfo);
@@ -148,7 +148,7 @@ void NotesWidget::onListMenuClick(const int &iAction)
     if (iAction == E_NOTE_COPY) {
         copyNoteContent();
     } else if (iAction == E_NOTE_DELETE) {
-        DeleteItemByKey();
+        deleteItemByKey();
     } else if (iAction == E_NOTE_DELETE_ALL) {
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all annotations?"));
         if (result == 1)

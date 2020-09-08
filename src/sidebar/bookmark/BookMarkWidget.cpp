@@ -140,7 +140,7 @@ bool BookMarkWidget::addBtnCheckEnter()
     return false;
 }
 
-void BookMarkWidget::DeleteItemByKey()
+void BookMarkWidget::deleteItemByKey()
 {
     int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
     if (curIndex >= 0)
@@ -198,7 +198,7 @@ void BookMarkWidget::onUpdateTheme()
 void BookMarkWidget::onListMenuClick(const int &iType)
 {
     if (iType == E_BOOKMARK_DELETE) {
-        DeleteItemByKey();
+        deleteItemByKey();
     } else if (iType == E_BOOKMARK_DELETE_ALL) {
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?"));
         if (result == 1) {
