@@ -872,7 +872,6 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
     foreach (Poppler::Annotation *annot, m_page->annotations()) {
         if (annot && annot->boundary().contains(clickPoint)) {
-            qInfo() << "   22222222222   Annotation contents: " << annot->contents();
             return true;
         }
     }

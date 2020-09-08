@@ -65,8 +65,6 @@ int main(int argc, char *argv[])
 
     bool isConnect = QDBusConnection::systemBus().connect(GESTURE_SERVICE, GESTURE_PATH, GESTURE_INTERFACE, GESTURE_SIGNAL, &a, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
-    qInfo() << "  TouchPad   isConnect: " << isConnect;
-
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
 

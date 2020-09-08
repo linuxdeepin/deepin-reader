@@ -408,8 +408,6 @@ void MainWindow::onUpdateTitleLabelRect()
  */
 void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
 {
-    qInfo() << "name :" << name << "  direction: " << direction << "   fingers: " << fingers;
-
     // 当前窗口被激活,且有焦点
     if (this->isActiveWindow()) {
         if (name == "pinch" && fingers == 2) {
