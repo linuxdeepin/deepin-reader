@@ -40,6 +40,11 @@ struct SheetOperation {
 };
 
 class SheetBrowser;
+
+/**
+ * @brief The DocSheet class
+ * 嵌入当前窗体中心控件，一个类表示并显示操作一个文档
+ */
 class DocSheet : public Dtk::Widget::DSplitter
 {
     Q_OBJECT
@@ -54,88 +59,271 @@ public:
     ~DocSheet();
 
 public:
+    /**
+     * @brief firstThumbnail
+     * 获取对应文档的第一页
+     * @param filePath 需要处理的文档路径
+     */
     static QImage firstThumbnail(const QString &filePath);
 
+    /**
+     * @brief existFileChanged
+     * 进程所有的文档是否存在被修改的
+     * @return
+     */
     static bool existFileChanged();
 
-    static QUuid getUuid(DocSheet *);
+    /**
+     * @brief getUuid
+     * 根据文档返回对应的uuid
+     * @param sheet
+     * @return
+     */
+    static QUuid getUuid(DocSheet *sheet);
 
+    /**
+     * @brief existSheet
+     * 进程是否存在该文档
+     * @param sheet
+     * @return
+     */
     static bool existSheet(DocSheet *sheet);
 
+    /**
+     * @brief getSheet
+     * 根据uuid返回sheet
+     * @param uuid
+     * @return
+     */
     static DocSheet *getSheet(QString uuid);
 
     static QMap<QString, DocSheet *> g_map;
 
 public:
-    bool isOpen();
-
-    void openFile();
-
+    /**
+     * @brief openFileExec
+     * 阻塞式打开文档
+     * @param password 文档密码
+     * @return
+     */
     bool openFileExec(const QString &password);
 
-    int pagesNumber();      //总页数
+    /**
+     * @brief pagesNumber
+     * 获取文档总页数
+     * @return
+     */
+    int pagesNumber();
 
-    int currentPage();      //从1开始
+    /**
+     * @brief currentPage
+     * 获取当前文档页数 base 1
+     * @return
+     */
+    int currentPage();
 
-    int currentIndex();     //从0开始
+    /**
+     * @brief currentPage
+     * 获取当前文档索引值 base 0
+     * @return
+     */
+    int currentIndex();
 
+    /**
+     * @brief jumpToIndex
+     * 跳转到索引
+     * @param index 索引值
+     */
     void jumpToIndex(int index);
 
+    /**
+     * @brief jumpToPage
+     * 跳转到页
+     * @param page 页码
+     */
     void jumpToPage(int page);
 
+    /**
+     * @brief jumpToFirstPage
+     * 跳转到第一页
+     */
     void jumpToFirstPage();
 
+    /**
+     * @brief jumpToLastPage
+     * 跳转到最后一页
+     */
     void jumpToLastPage();
 
+    /**
+     * @brief jumpToNextPage
+     * 跳转到下一页
+     */
     void jumpToNextPage();
 
+    /**
+     * @brief jumpToPrevPage
+     * 跳转到上一页
+     */
     void jumpToPrevPage();
 
-    deepin_reader::Outline outline();
-
-    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
-
-    void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
-
+    /**
+     * @brief rotateLeft
+     * 左旋转
+     */
     void rotateLeft();
 
+    /**
+     * @brief rotateRight
+     * 右旋转
+     */
     void rotateRight();
 
+    /**
+     * @brief outline
+     * 获取跳转链接列表
+     * @return
+     */
+    deepin_reader::Outline outline();
+
+    /**
+     * @brief jumpToOutline
+     * 跳转到指定位置
+     * @param left 距离左边距离
+     * @param top 距离上边距离
+     * @param page 跳转的页码
+     */
+    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
+
+    /**
+     * @brief jumpToHighLight
+     * 跳转到注释位置
+     * @param annotation 注释
+     * @param index 跳转的索引值
+     */
+    void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
+
+    /**
+     * @brief setBookMark
+     * 设置书签
+     * @param index 被设置的索引
+     * @param state 被设置的状态
+     */
     void setBookMark(int index, int state);
 
+    /**
+     * @brief setBookMarks
+     * 批量设置书签
+     * @param indexlst 被设置的索引列表
+     * @param state 被设置的状态
+     */
     void setBookMarks(const QList<int> &indexlst, int state);
 
+    /**
+     * @brief setLayoutMode
+     * 批量布局类型
+     * @param mode
+     */
     void setLayoutMode(Dr::LayoutMode mode);
 
+    /**
+     * @brief setScaleMode
+     * 批量缩放类型
+     * @param mode
+     */
     void setScaleMode(Dr::ScaleMode mode);
 
-    void setScaleFactor(qreal scaleFactor);     //base is 1 ;设置后自动取消自适应
+    /**
+     * @brief setScaleFactor
+     * 批量缩放因子;base 1;设置后自动取消自适应
+     * @param scaleFactor
+     */
+    void setScaleFactor(qreal scaleFactor);     //
 
+    /**
+     * @brief setMouseShape
+     * 设置鼠标样式
+     * @param mode
+     */
     void setMouseShape(Dr::MouseShape shape);
 
+    /**
+     * @brief setAnnotationInserting
+     * 设置注释插入状态;设置后点击文档可以在鼠标位置插入图标注释
+     * @param inserting
+     */
     void setAnnotationInserting(bool inserting);
 
+    /**
+     * @brief openMagnifier
+     * 调用browser打开放大镜
+     */
     void openMagnifier();
 
+    /**
+     * @brief closeMagnifier
+     * 调用browser关闭放大镜
+     */
     void closeMagnifier();
 
+    /**
+     * @brief magnifierOpened
+     * 获取放大镜是否被打开
+     * @return
+     */
     bool magnifierOpened();
 
+    /**
+     * @brief fileChanged
+     * 文档是否被改变
+     * @return 是否被改变
+     */
     bool fileChanged();
 
+    /**
+     * @brief saveData
+     * 保存文档
+     * @return 是否成功
+     */
     bool saveData();
 
+    /**
+     * @brief saveData
+     * 另存为文档
+     * @param 另存为路径
+     * @return 是否成功
+     */
     bool saveAsData(QString filePath);
 
+    /**
+     * @brief handleSearch
+     * 通知browser进入搜索模式
+     */
     void handleSearch();
 
+    /**
+     * @brief stopSearch
+     * 通知browser通知搜索
+     */
     void stopSearch();
 
-    void copySelectedText();                    //复制选中文字
+    /**
+     * @brief copySelectedText
+     * 复制选中文字到剪贴板
+     */
+    void copySelectedText();
 
-    void highlightSelectedText();                   //高亮选中文字
+    /**
+     * @brief highlightSelectedText
+     * 高亮选中文字
+     */
+    void highlightSelectedText();
 
-    void addSelectedTextHightlightAnnotation();       //对选中文字添加高亮注释
+    /**
+     * @brief addSelectedTextHightlightAnnotation
+     * 对选中文字添加高亮注释
+     */
+    void addSelectedTextHightlightAnnotation();
 
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 

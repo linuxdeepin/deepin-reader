@@ -127,17 +127,6 @@ DocSheet *DocSheet::getSheet(QString uuid)
     return nullptr;
 }
 
-bool DocSheet::isOpen()
-{
-    //...
-    return false;
-}
-
-void DocSheet::openFile()
-{
-
-}
-
 void DocSheet::jumpToPage(int page)
 {
     m_browser->setCurrentPage(page);
