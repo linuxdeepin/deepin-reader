@@ -805,7 +805,7 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const QRectF rect)
     }
     break;
     case Dr::RotateBy180: {
-        posLeft = rect.left();
+        posLeft = rect.right();
         posTop = rect.bottom();
         linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
         linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
