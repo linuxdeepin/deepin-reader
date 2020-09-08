@@ -26,6 +26,11 @@
 #include <QGraphicsItem>
 
 class BrowserPage;
+
+/**
+ * @brief The BrowserWord class
+ * 用于表示视图框架中一页文档中的某个文字
+ */
 class BrowserWord : public QGraphicsItem
 {
 public:
@@ -33,25 +38,60 @@ public:
 
     ~BrowserWord();
 
+    /**
+     * @brief setScaleFactor
+     * 为了让文字占比固定,视图改变时需要设置缩放因子
+     * @param scaleFactor 缩放因子
+     */
     void setScaleFactor(qreal scaleFactor);
 
+    /**
+     * @brief text
+     * 获取文字文本
+     * @return
+     */
     QString text();
 
+    /**
+     * @brief setSelectable
+     * 设置文字是否可以被选中
+     * @param enable
+     */
     void setSelectable(bool enable);
 
+    /**
+     * @brief BrowserWord::boundingRect
+     * 视图项的区域
+     * @return
+     */
     QRectF boundingRect()const override;
 
+    /**
+     * @brief BrowserWord::textBoundingRect
+     * 文档文字的区域
+     * @return
+     */
     QRectF textBoundingRect() const;
 
+    /**
+     * @brief BrowserWord::boundingBox
+     * 文字自身的区域
+     * @return
+     */
     QRectF boundingBox()const;
+
+    /**
+     * @brief BrowserWord::getWord
+     * 获取文字
+     * @return
+     */
+    deepin_reader::Word getWord();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
-    deepin_reader::Word getWord();
 
 private:
     deepin_reader::Word m_word;

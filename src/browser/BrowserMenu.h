@@ -34,6 +34,7 @@ typedef enum SheetMenuType_e {
 
 class DocSheet;
 class ColorWidgetAction;
+
 /**
  * @brief The BrowserMenu class
  * 文档菜单
@@ -85,6 +86,7 @@ private:
 
 private:
     int m_type;
+
     ColorWidgetAction *m_pColorWidgetAction;
 };
 

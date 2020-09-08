@@ -27,11 +27,12 @@
 
 const int ICON_SIZE = 23;
 
-/**
- *文档注释类,显示类型,图元元素
- */
-
 class BrowserPage;
+
+/**
+ * @brief The BrowserAnnotation class
+ * 用于跟随视图框架变化的注释项
+ */
 class BrowserAnnotation : public QGraphicsItem
 {
     friend class SheetBrowser;
@@ -68,8 +69,6 @@ public:
      */
     QRectF boundingRect()const override;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
     /**
      * @brief annotation
      * 注释指针
@@ -105,6 +104,9 @@ public:
      */
     void setScaleFactor(const double scale);
 
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
 private:
     deepin_reader::Annotation *m_annotation;
 
@@ -116,9 +118,9 @@ private:
 
     QGraphicsItem *m_parent = nullptr;
 
-    bool m_drawSelectRect{false};
+    bool m_drawSelectRect = false;
 
-    double m_scaleFactor        = 1.0; // 弃用
+    double m_scaleFactor = 1.0;
 };
 
 #endif // BrowserAnnotation_H

@@ -54,6 +54,10 @@ class BrowserMagniFier;
 class FindWidget;
 class PageSearchThread;
 
+/**
+ * @brief The SheetBrowser class
+ * 浏览文档内容区域,使用视图框架
+ */
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
@@ -113,8 +117,6 @@ public:
 
     QString selectedWordsText();
 
-    void handleVerticalScrollLater();
-
     deepin_reader::Outline outline();
 
     Properties properties() const;
@@ -160,6 +162,8 @@ public:
     bool pageHasLable();
 
     QString pageNum2Lable(const int);
+
+    void beginViewportChange();
 
 signals:
     void sigPageChanged(int page);
@@ -222,19 +226,19 @@ protected:
     BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
 
 private slots:
+    void onInit();
+
     void onVerticalScrollBarValueChanged(int value);
 
     void onHorizontalScrollBarValueChanged(int value);
 
-    void onSceneOfViewportChanged();
+    void onViewportChanged();
 
     void onAddHighLightAnnot(BrowserPage *, QString, QColor);
 
     void onRemoveAnnotation(deepin_reader::Annotation *annotation, bool tips);
 
     void onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
-
-    void onInit();
 
 private:
     bool mouseClickIconAnnot(QPointF &);
@@ -275,9 +279,8 @@ private:
     FindWidget *m_pFindWidget = nullptr;
     PageSearchThread *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;
-    BrowserPage *m_lastSelectIconAnnotPage = nullptr; // 最后选中图标注释所在页
-    QTimer *m_resizeTimer = nullptr;        //大小改变触发局部update
-    QTimer *m_scrollTimer = nullptr;        //滚动位移触发局部update
+    BrowserPage *m_lastSelectIconAnnotPage = nullptr;   // 最后选中图标注释所在页
+    QTimer *m_viewportChangeTimer = nullptr;            //用于延时进行视图区域更新 防止高频率调用
 
     Dr::FileType m_fileType;
     QString m_filePath;

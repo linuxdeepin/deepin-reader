@@ -38,6 +38,11 @@ class Page;
 class SheetBrowser;
 class BrowserWord;
 class BrowserAnnotation;
+
+/**
+ * @brief The BrowserPage class
+ * 用于视图框架中表示一页文档
+ */
 class BrowserPage : public QGraphicsItem
 {
     friend class PageSearchThread;

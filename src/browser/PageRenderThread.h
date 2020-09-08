@@ -44,18 +44,51 @@ struct RenderPageTask {
     QRect renderRect;
 };
 
+/**
+ * @brief The PageRenderThread class
+ * 执行加载图片和文字等耗时操作的线程
+ */
 class PageRenderThread : public QThread
 {
     Q_OBJECT
 public:
+    /**
+     * @brief clearTask
+     * 清除该项和该类型的任务
+     * @param item 项指针
+     * @param type 任务类型
+     * @return 是否成功
+     */
     static bool clearTask(BrowserPage *item, int type = RenderPageTask::Image);
 
+    /**
+     * @brief appendTask
+     * 添加任务
+     * @param task 任务
+     */
     static void appendTask(RenderPageTask task);
 
+    /**
+     * @brief appendTasks
+     * 批量添加任务
+     * @param list 任务列表
+     */
     static void appendTasks(QList<RenderPageTask> list);
 
+    /**
+     * @brief appendTasks
+     * 根据任务参数添加任务
+     * @param item 项指针
+     * @param scaleFactor 缩放因子
+     * @param rotation 旋转
+     * @param renderRect 所占区域
+     */
     static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
 
+    /**
+     * @brief destroyForever
+     * 销毁线程且不会再被创建
+     */
     static void destroyForever();
 
 private:

@@ -29,9 +29,6 @@ class BrowserPage;
 class PageSearchThread : public QThread
 {
     Q_OBJECT
-signals:
-    void sigSearchReady(const deepin_reader::SearchResult &res);
-
 public:
     explicit PageSearchThread(QObject *parent = nullptr);
 
@@ -41,6 +38,9 @@ public:
     void startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startPage);
 
     void stopSearch();
+
+signals:
+    void sigSearchReady(const deepin_reader::SearchResult &res);
 
 protected:
     void run() override;

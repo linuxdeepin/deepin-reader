@@ -44,13 +44,26 @@ struct RenderViewportTaskPiece {
     int pieceIndex = 0;
 };
 
+/**
+ * @brief The PageRenderThread class
+ * 用于切割加载超大单页局部图片的线程
+ */
 class PageViewportThread : public QThread
 {
     Q_OBJECT
 public:
-    static void destroyForever();
-
+    /**
+     * @brief appendTask
+     * 添加任务
+     * @param task 任务
+     */
     static void appendTask(RenderViewportTask task);
+
+    /**
+     * @brief destroyForever
+     * 销毁线程且不会再被创建
+     */
+    static void destroyForever();
 
 signals:
     void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
@@ -62,7 +75,12 @@ private:
 
     void run();
 
-    void appendTaskPiece(RenderViewportTaskPiece task);
+    /**
+     * @brief appendTaskPiece
+     * 添加被切割成的碎片任务
+     * @param taskPiece 碎片任务
+     */
+    void appendTaskPiece(RenderViewportTaskPiece taskPiece);
 
 private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);

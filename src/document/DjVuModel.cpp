@@ -1,7 +1,7 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     zhangsong<zhangsong@uniontech.com>
+* Author:     qpdfview
 *
 * Maintainer: zhangsong<zhangsong@uniontech.com>
 *

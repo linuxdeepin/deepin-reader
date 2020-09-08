@@ -35,7 +35,7 @@ typedef struct MagnifierInfo_t {
     double scaleFactor;
     BrowserPage *page;
 } MagnifierInfo_t;
-Q_DECLARE_METATYPE(MagnifierInfo_t);
+Q_DECLARE_METATYPE(MagnifierInfo_t)
 
 /**
  * @brief The ReadMagnifierManager class

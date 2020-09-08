@@ -406,7 +406,7 @@ void SheetBrowser::setAnnotationInserting(bool inserting)
  */
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
-    handleVerticalScrollLater();
+    beginViewportChange();
 
     int curScrollPage = currentScrollValueForPage();
 
@@ -421,28 +421,32 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
  */
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 {
-    handleVerticalScrollLater();
-
-    QList<QGraphicsItem *> items = scene()->items(mapToScene(this->rect()));
-
-    foreach (QGraphicsItem *item, items) {
-        BrowserPage *pdfItem = static_cast<BrowserPage *>(item);
-
-        if (!m_items.contains(pdfItem))
-            continue;
-
-        if (nullptr == pdfItem)
-            continue;
-
-        pdfItem->renderViewPort();
-    }
+    beginViewportChange();
 }
 
 /**
- * @brief SheetBrowser::onSceneOfViewportChanged
- * 当前试图区域改变,渲染文档
+ * @brief SheetBrowser::beginViewportChange
+ * 延时进行视图更新 过滤高频率调用
  */
-void SheetBrowser::onSceneOfViewportChanged()
+void SheetBrowser::beginViewportChange()
+{
+    if (nullptr == m_viewportChangeTimer) {
+        m_viewportChangeTimer = new QTimer(this);
+        connect(m_viewportChangeTimer, &QTimer::timeout, this, &SheetBrowser::onViewportChanged);
+        m_viewportChangeTimer->setSingleShot(true);
+    }
+
+    if (m_viewportChangeTimer->isActive())
+        m_viewportChangeTimer->stop();
+
+    m_viewportChangeTimer->start(100);
+}
+
+/**
+ * @brief SheetBrowser::onViewportChanged
+ * 当前试图区域改变一小段时间之后,渲染文档
+ */
+void SheetBrowser::onViewportChanged()
 {
     int fromIndex = 0;
     int toIndex = 0;
@@ -453,14 +457,9 @@ void SheetBrowser::onSceneOfViewportChanged()
             item->clearPixmap();
             item->clearWords();
         }
-    }
 
-    if (m_maxHeight > 2000 || m_maxWidth > 2000) {
-        foreach (BrowserPage *page, m_items) {
-            if (mapToScene(this->rect()).intersects(page->mapToScene(page->boundingRect()))) {
-                page->renderViewPort();
-            }
-        }
+        if (item->boundingRect().width() > 1000 || item->boundingRect().height() > 1000)
+            item->renderViewPort();
     }
 }
 
@@ -933,20 +932,6 @@ QString SheetBrowser::selectedWordsText()
     return text;
 }
 
-void SheetBrowser::handleVerticalScrollLater()
-{
-    if (nullptr == m_scrollTimer) {
-        m_scrollTimer = new QTimer(this);
-        connect(m_scrollTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
-        m_scrollTimer->setSingleShot(true);
-    }
-
-    if (m_scrollTimer->isActive())
-        m_scrollTimer->stop();
-
-    m_scrollTimer->start(100);
-}
-
 /**
  * @brief SheetBrowser::annotations
  * 获取注释列表
@@ -1068,7 +1053,7 @@ void SheetBrowser::onInit()
         m_initPage = 1;
     }
 
-    onSceneOfViewportChanged();
+    onViewportChanged();
 }
 
 /**
@@ -1509,7 +1494,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
     m_lastrotation = operation.rotation;
 
-    handleVerticalScrollLater();
+    beginViewportChange();
 }
 
 /**
@@ -1531,19 +1516,7 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         deform(m_sheet->operationRef());
-
         m_sheet->setOperationChanged();
-
-        if (nullptr == m_resizeTimer) {
-            m_resizeTimer = new QTimer(this);
-            connect(m_resizeTimer, &QTimer::timeout, this, &SheetBrowser::onSceneOfViewportChanged);
-            m_resizeTimer->setSingleShot(true);
-        }
-
-        if (m_resizeTimer->isActive())
-            m_resizeTimer->stop();
-
-        m_resizeTimer->start(100);
     }
 
     if (m_pFindWidget)
@@ -2071,7 +2044,7 @@ int SheetBrowser::viewPointInIndex(QPoint viewPoint)
 /**
  * @brief SheetBrowser::setCurrentPage
  * 页码跳转
- * @param page 跳转的页码
+ * @param page 跳转的页码(base 1)
  */
 void SheetBrowser::setCurrentPage(int page)
 {
@@ -2264,7 +2237,7 @@ void SheetBrowser::dragEnterEvent(QDragEnterEvent *event)
 
 /**
  * @brief SheetBrowser::showEvent
- * 文档显示事件,文档再次展示时,渲染当前视图中的页
+ * 第一次显示之后跳转到初始页码
  * @param event
  */
 void SheetBrowser::showEvent(QShowEvent *event)
@@ -2639,3 +2612,4 @@ QString SheetBrowser::pageNum2Lable(const int index)
 
     return  QString();
 }
+
