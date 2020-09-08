@@ -23,8 +23,10 @@
 
 #include "widgets/CustomWidget.h"
 
-#include <QKeyEvent>
-
+/**
+ * @brief The CentralNavPage class
+ * 嵌入当前窗体中心控件的无文档默认页面
+ */
 class CentralNavPage : public CustomWidget
 {
     Q_OBJECT
@@ -33,18 +35,25 @@ class CentralNavPage : public CustomWidget
 public:
     explicit CentralNavPage(DWidget *parent = nullptr);
 
-    ~CentralNavPage() override;
-
 signals:
+    /**
+     * @brief sigNeedOpenFilesExec
+     * 请求阻塞式选择并打开文档
+     */
     void sigNeedOpenFilesExec();
 
-protected:
-    void initWidget() override;
-
 private slots:
-    void slotChooseBtnClicked();
+    /**
+     * @brief onChooseButtonClicked
+     * 选择文档按钮被点击处理
+     */
+    void onChooseButtonClicked();
 
-    void slotUpdateTheme();
+    /**
+     * @brief onThemeChanged
+     * 主题变化时处理
+     */
+    void onThemeChanged();
 
 };
 

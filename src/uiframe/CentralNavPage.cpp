@@ -32,18 +32,6 @@
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)
 {
-    initWidget();
-    slotUpdateTheme();
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::slotUpdateTheme);
-}
-
-CentralNavPage::~CentralNavPage()
-{
-
-}
-
-void CentralNavPage::initWidget()
-{
     auto tipsLabel = new CustomClickLabel(tr("Drag documents here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
     tipsLabel->setForegroundRole(DPalette::TextTips);
@@ -54,13 +42,13 @@ void CentralNavPage::initWidget()
     formatLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
-    auto chooseBtn = new DSuggestButton(tr("Select File"), this);
-    chooseBtn->setObjectName("SelectFileBtn");
-    chooseBtn->setFocusPolicy(Qt::TabFocus);
+    auto chooseButton = new DSuggestButton(tr("Select File"), this);
+    chooseButton->setObjectName("SelectFileBtn");
+    chooseButton->setFocusPolicy(Qt::TabFocus);
     int tW = 302;
     int tH = 36;
-    chooseBtn->setFixedSize(QSize(tW, tH));
-    connect(chooseBtn, &DPushButton::clicked, this, &CentralNavPage::slotChooseBtnClicked);
+    chooseButton->setFixedSize(QSize(tW, tH));
+    connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::onChooseButtonClicked);
 
     auto layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -79,19 +67,23 @@ void CentralNavPage::initWidget()
     layout->addWidget(tipsLabel);
     layout->addWidget(formatLabel);
     layout->addSpacing(14);
-    layout->addWidget(chooseBtn, 1, Qt::AlignHCenter);
+    layout->addWidget(chooseButton, 1, Qt::AlignHCenter);
     layout->addStretch();
 
     this->setLayout(layout);
+
+    onThemeChanged();
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::onThemeChanged);
 }
 
-void CentralNavPage::slotChooseBtnClicked()
+void CentralNavPage::onChooseButtonClicked()
 {
     emit sigNeedOpenFilesExec();
 }
 
 //  主题切换
-void CentralNavPage::slotUpdateTheme()
+void CentralNavPage::onThemeChanged()
 {
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {

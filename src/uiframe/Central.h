@@ -37,6 +37,11 @@ class TitleMenu;
 class TitleWidget;
 class DocSheet;
 class QStackedLayout;
+
+/**
+ * @brief The CustomWidget class
+ * 嵌入mainwindow的中心控件
+ */
 class Central : public CustomWidget
 {
     Q_OBJECT
@@ -47,55 +52,142 @@ public:
 
     ~Central() override;
 
-    TitleMenu *titleMenu();
-
-    TitleWidget *titleWidget();
-
+    /**
+     * @brief openFilesExec
+     * 阻塞式打开文件选择对话框选择文件并打开
+     * @return
+     */
     void openFilesExec();
 
+    /**
+     * @brief openFiles
+     * 批量打开文件 会进行是否已存在判断
+     * @param filePathList 文件路径列表
+     */
     void openFiles(QStringList filePathList);
 
-    void addSheet(DocSheet *sheet);
-
-    bool hasSheet(DocSheet *sheet);
-
-    void showSheet(DocSheet *sheet);
-
-    bool saveAll();
-
-    void handleShortcut(QString shortcut);
-
+    /**
+     * @brief doOpenFile
+     * 直接打开文件 不进行判断
+     * @param filePath 文件路径
+     */
     void doOpenFile(QString filePath);
 
-    CentralDocPage *docPage();
-
-    void setMenu(TitleMenu *menu);
-
-    // Set zoom
+    /**
+     * @brief zoomIn
+     * 文档放大
+     */
     void zoomIn();
 
+    /**
+     * @brief zoomOut
+     * 文档缩小
+     */
     void zoomOut();
 
-signals:
-    void sigOpenFiles(const QString &);
+    /**
+     * @brief addSheet
+     * 直接添加一个文档页
+     * @param sheet
+     */
+    void addSheet(DocSheet *sheet);
 
+    /**
+     * @brief hasSheet
+     * 本窗口是否含有该文档页
+     * @param sheet
+     * @return
+     */
+    bool hasSheet(DocSheet *sheet);
+
+    /**
+     * @brief showSheet
+     * 显示传入的文档页
+     * @param sheet
+     */
+    void showSheet(DocSheet *sheet);
+
+    /**
+     * @brief saveAll
+     * 保存本窗口所有文档页
+     * @return 保存成功
+     */
+    bool saveAll();
+
+    /**
+     * @brief handleShortcut
+     * 本窗口处理快捷键
+     * @param shortcut 快捷键字符串
+     */
+    void handleShortcut(QString shortcut);
+
+    /**
+     * @brief titleWidget
+     * 获取提供给mainwindow的标题控件
+     * @return
+     */
+    TitleWidget *titleWidget();
+
+    /**
+     * @brief docPage
+     * 获取文档浏览堆栈窗口
+     * @return
+     */
+    CentralDocPage *docPage();
+
+    /**
+     * @brief setMenu
+     * 设置菜单
+     * @return
+     */
+    void setMenu(TitleMenu *menu);
+
+signals:
+    /**
+     * @brief sigNeedClose
+     * 需要关闭本窗口
+     */
     void sigNeedClose();
+
+public slots:
+    /**
+     * @brief onSheetCountChanged
+     * 根据当前文档个数变化后改变显示导航页面还是文档浏览页面
+     * @param count 当前文档个数
+     */
+    void onSheetCountChanged(int count);
+
+    /**
+     * @brief onMenuTriggered
+     * 菜单功能触发处理
+     * @param action 菜单功能名称
+     */
+    void onMenuTriggered(const QString &action);
+
+    /**
+     * @brief onOpenFilesExec
+     * 打开文件请求处理
+     */
+    void onOpenFilesExec();
+
+    /**
+     * @brief onNeedActivateWindow
+     * 将窗口设为活跃窗口的请求处理
+     */
+    void onNeedActivateWindow();
+
+    /**
+     * @brief onShowTips
+     * 弹出提示的请求处理
+     * @param text 请求显示文本
+     * @param iconIndex 请求显示图标索引
+     */
+    void onShowTips(const QString &text, int iconIndex = 0);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
 
     void dropEvent(QDropEvent *event) override;
-
-public slots:
-    void onSheetCountChanged(int count);
-
-    void onMenuTriggered(const QString &action);
-
-    void onOpenFilesExec();
-
-    void onNeedActivateWindow();
-
-    void onShowTips(const QString &text, int iconIndex = 0);
 
 private:
     QStackedLayout      *m_layout = nullptr;

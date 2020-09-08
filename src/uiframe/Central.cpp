@@ -61,11 +61,6 @@ Central::~Central()
 {
 }
 
-TitleMenu *Central::titleMenu()
-{
-    return m_menu;
-}
-
 TitleWidget *Central::titleWidget()
 {
     return m_widget;

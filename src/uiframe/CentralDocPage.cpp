@@ -363,7 +363,6 @@ bool CentralDocPage::saveAll()
     }
 
     if (changedList.size() > 0) {   //需要提示保存
-
         int nRes = SaveDialog::showExitDialog();
 
         if (nRes <= 0) {
@@ -632,7 +631,8 @@ void CentralDocPage::quitSlide()
 void CentralDocPage::handleSearch()
 {
     DocSheet *docSheet = getCurSheet();
-    if (docSheet) docSheet->handleSearch();
+    if (docSheet)
+        docSheet->handleSearch();
 }
 
 bool CentralDocPage::isFullScreen()
@@ -683,7 +683,10 @@ QString CentralDocPage::getDocTabbarText(int index)
 void CentralDocPage::onSheetCountChanged(int count)
 {
     if (count == 1) {
-        m_pDocTabLabel->setText(this->getDocTabbarText(0));
+        if (m_pTabBar->count() <= 0)
+            return;
+
+        m_pDocTabLabel->setText(m_pTabBar->tabText(0));
         m_pTabBar->setVisible(false);
     } else {
         m_pDocTabLabel->setText("");
@@ -699,7 +702,6 @@ QWidget *CentralDocPage::getTitleLabel()
 void CentralDocPage::zoomIn()
 {
     if (getCurSheet()) {
-        qInfo() << __LINE__  << __FUNCTION__;
         getCurSheet()->zoomin();
     }
 }
@@ -707,7 +709,6 @@ void CentralDocPage::zoomIn()
 void CentralDocPage::zoomOut()
 {
     if (getCurSheet()) {
-        qInfo() << __LINE__  << __FUNCTION__;
         getCurSheet()->zoomout();
     }
 }
