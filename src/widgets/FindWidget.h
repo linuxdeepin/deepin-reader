@@ -63,6 +63,9 @@ private slots:
 private:
     void initWidget();
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private:
     DocSheet *m_docSheet = nullptr;
     DSearchEdit *m_pSearchEdit = nullptr;
