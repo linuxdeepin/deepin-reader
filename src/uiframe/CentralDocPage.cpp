@@ -673,13 +673,6 @@ bool CentralDocPage::quitFullScreen()
     return false;
 }
 
-QString CentralDocPage::getDocTabbarText(int index)
-{
-    if (index >= 0 && index < m_pTabBar->count())
-        return m_pTabBar->tabText(index);
-    return QString();
-}
-
 void CentralDocPage::onSheetCountChanged(int count)
 {
     if (count == 1) {
