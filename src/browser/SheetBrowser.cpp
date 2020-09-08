@@ -87,7 +87,9 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     grabGesture(Qt::PinchGesture);//捏合缩放
 
-    grabGesture(Qt::TapGesture);
+//    grabGesture(Qt::TapGesture);
+
+    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
@@ -666,8 +668,6 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 {
     Annotation *highLightAnnot{nullptr};
 
-    qInfo() << "     m_selectStartWord:" << m_selectStartWord << "     m_selectEndWord:" << m_selectEndWord;
-
     if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
         m_selectStartWord = nullptr;
         m_selectEndWord = nullptr;
@@ -1237,8 +1237,8 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
-    if (QGesture *tap = event->gesture(Qt::TapGesture))
-        tapGestureTriggered(static_cast<QTapGesture *>(tap));
+//    if (QGesture *tap = event->gesture(Qt::TapGesture))
+//        tapGestureTriggered(static_cast<QTapGesture *>(tap));
 
     return true;
 }
@@ -1731,29 +1731,29 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return DGraphicsView::mouseMoveEvent(event);
     }
 
-    if (event->type() == QEvent::MouseMove && event->source() == Qt::MouseEventSynthesizedByQt) {
-        const ulong diffTime = event->timestamp() - m_lastMouseTime;
-        const int diffYpos = event->pos().y() - m_lastMouseYpos;
-        m_lastMouseTime = event->timestamp();
-        m_lastMouseYpos = event->pos().y();
+//    if (event->type() == QEvent::MouseMove && event->source() == Qt::MouseEventSynthesizedByQt) {
+//        const ulong diffTime = event->timestamp() - m_lastMouseTime;
+//        const int diffYpos = event->pos().y() - m_lastMouseYpos;
+//        m_lastMouseTime = event->timestamp();
+//        m_lastMouseYpos = event->pos().y();
 
-        if (m_gestureAction == GA_slide) {
-            //经过调试0.2比较合适
-            qreal scaleFactor = 0.2;
+//        if (m_gestureAction == GA_slide) {
+//            //经过调试0.2比较合适
+//            qreal scaleFactor = 0.2;
 
-            /*开根号时数值越大衰减比例越大*/
-            qreal direction = diffYpos > 0 ? 1.0 : -1.0;
-            slideGesture(-direction * sqrt(abs(diffYpos)) / scaleFactor);
+//            /*开根号时数值越大衰减比例越大*/
+//            qreal direction = diffYpos > 0 ? 1.0 : -1.0;
+//            slideGesture(-direction * sqrt(abs(diffYpos)) / scaleFactor);
 
-            /*预算滑惯性动时间*/
-            m_stepSpeed = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTime + 0.000001);
-            duration = sqrt(abs(m_stepSpeed)) * 1000;
+//            /*预算滑惯性动时间*/
+//            m_stepSpeed = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTime + 0.000001);
+//            duration = sqrt(abs(m_stepSpeed)) * 1000;
 
-            /*预算滑惯性动距离,4.0为调优数值*/
-            m_stepSpeed /= sqrt(scaleFactor * 4.0);
-            change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
-        }
-    }
+//            /*预算滑惯性动距离,4.0为调优数值*/
+//            m_stepSpeed /= sqrt(scaleFactor * 4.0);
+//            change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
+//        }
+//    }
 
     QPoint mousePos = event->pos();
 
@@ -2547,6 +2547,9 @@ void SheetBrowser::showMenu()
     });
 
     QPoint menuPoint(-1, -1);
+
+    if (m_lastSelectIconAnnotPage)
+        m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
 
     if (m_selectEndWord)
         menuPoint = this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight()));
