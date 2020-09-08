@@ -247,6 +247,8 @@ private:
 
     void jump2PagePos(BrowserPage *page, const qreal left, const qreal top);
 
+    void jump2PagePos(BrowserPage *page, const QRectF);
+
     void addNewIconAnnotDeleteOld(BrowserPage *page, const QPointF);
 
     void currentIndexRange(int &fromIndex, int &toIndex);
