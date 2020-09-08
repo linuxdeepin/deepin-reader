@@ -368,6 +368,8 @@ void SheetSidebar::onJumpToPrevPage()
         m_bookmarkWidget->prevPage();
     } else if (curWidget == m_notesWidget) {
         m_notesWidget->prevPage();
+    } else if (curWidget == m_catalogWidget) {
+        m_catalogWidget->prevPage();
     }
 }
 
@@ -380,6 +382,8 @@ void SheetSidebar::onJumpToNextPage()
         m_bookmarkWidget->nextPage();
     } else if (curWidget == m_notesWidget) {
         m_notesWidget->nextPage();
+    } else if (curWidget == m_catalogWidget) {
+        m_catalogWidget->nextPage();
     }
 }
 

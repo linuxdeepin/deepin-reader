@@ -44,6 +44,10 @@ public:
 
     void setRightControl(bool hasControl);
 
+    void nextPage();
+
+    void prevPage();
+
 public:
     void handleOpenSuccess();
 
@@ -63,6 +67,7 @@ private:
     void parseCatalogData(const deepin_reader::Section &, QStandardItem *);
     void resizeCoulumnWidth();
     QList<QStandardItem *> getItemList(const QString &, const int &, const qreal  &realleft, const qreal &realtop);
+    void scrollToIndex(const QModelIndex &newIndex);
 
 private slots:
     void SlotCollapsed(const QModelIndex &);

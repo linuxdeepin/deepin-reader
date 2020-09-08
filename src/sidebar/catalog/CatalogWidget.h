@@ -46,6 +46,10 @@ public:
 
     void handlePage(int page);
 
+    void nextPage();
+
+    void prevPage();
+
 private:
     void setTitleTheme();
 

@@ -305,3 +305,25 @@ void CatalogTreeView::resizeCoulumnWidth()
         this->setColumnWidth(1, maxPageColumnWid);
     }
 }
+
+void CatalogTreeView::nextPage()
+{
+    const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
+    scrollToIndex(newCurrent);
+}
+
+void CatalogTreeView::prevPage()
+{
+    const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
+    scrollToIndex(newCurrent);
+}
+
+void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
+{
+    if (newIndex.isValid()) {
+        rightnotifypagechanged = false;
+        currentChanged(newIndex, currentIndex());
+        this->selectionModel()->select(newIndex, QItemSelectionModel::SelectCurrent);
+        this->setCurrentIndex(newIndex);
+    }
+}

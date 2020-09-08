@@ -104,3 +104,13 @@ void CatalogWidget::handlePage(int index)
     m_pTree->setIndex(index);
     m_pTree->setRightControl(true);
 }
+
+void CatalogWidget::nextPage()
+{
+    m_pTree->nextPage();
+}
+
+void CatalogWidget::prevPage()
+{
+    m_pTree->prevPage();
+}

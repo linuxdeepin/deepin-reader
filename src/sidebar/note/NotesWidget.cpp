@@ -91,6 +91,7 @@ void NotesWidget::nextPage()
 {
     if (m_sheet.isNull())
         return;
+
     int curPage = m_pImageListView->currentIndex().row() + 1;
     if (curPage >= m_pImageListView->model()->rowCount())
         return;
