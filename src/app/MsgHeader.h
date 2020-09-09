@@ -40,6 +40,7 @@ enum E_FIND_WIDGET_MSG {
 //  高亮&注释消息
 enum E_NOTE_MSG {
     MSG_NOTE_ADD = 0,
+    MSG_NOTE_MOVE,
     MSG_NOTE_DELETE,
     MSG_ALL_NOTE_DELETE
 };

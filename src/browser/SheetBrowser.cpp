@@ -1717,6 +1717,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             if (m_lastSelectIconAnnotPage && (m_selectPressedPos != m_selectEndPos)) {
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos);
+                emit sigOperaAnnotation(MSG_NOTE_MOVE, -1, nullptr);
             } else if (clickAnno && m_lastSelectIconAnnotPage && (m_selectPressedPos == m_selectEndPos)) {
                 showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }
