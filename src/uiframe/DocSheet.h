@@ -630,30 +630,88 @@ public:
     void docBasicInfo(deepin_reader::FileInfo &fileInfo);
 
 signals:
-    void sigFindOperation(const int &);
+    /**
+     * @brief sigFindOperation
+     * 请求查找操作
+     * @param operation 查找操作
+     */
+    void sigFindOperation(const int &operation);
 
-signals:
-    void sigFileChanged(DocSheet *);         //被修改了 书签 注释等
-
-    void sigOperationChanged(DocSheet *);    //被修改了 缩放 当前页等
-
+    /**
+     * @brief sigOpened
+     * 文档打开结果通知
+     * @param sheet 被打开的文档
+     */
     void sigOpened(DocSheet *, bool);
 
+    /**
+     * @brief sigFileChanged
+     * 文档内容变化通知
+     * @param sheet 被变化的文档
+     */
+    void sigFileChanged(DocSheet *sheet);         //被修改了 书签 注释等
+
+    /**
+     * @brief sigOperationChanged
+     * 文档操作变化通知
+     * @param sheet 被变化的文档
+     */
+    void sigOperationChanged(DocSheet *sheet);    //被修改了 缩放 当前页等
+
 private slots:
+    /**
+     * @brief onBrowserPageChanged
+     * 当前页变化处理
+     * @param page 最新页码
+     */
     void onBrowserPageChanged(int page);
 
+    /**
+     * @brief onBrowserPageFirst
+     * 跳转到第一页请求的处理
+     */
     void onBrowserPageFirst();
 
+    /**
+     * @brief onBrowserPagePrev
+     * 跳转到上一页请求的处理
+     */
     void onBrowserPagePrev();
 
+    /**
+     * @brief onBrowserPageNext
+     * 跳转到下一页请求的处理
+     */
     void onBrowserPageNext();
 
+    /**
+     * @brief onBrowserPageLast
+     * 跳转到最后一页请求的处理
+     */
     void onBrowserPageLast();
 
+    /**
+     * @brief onBrowserBookmark
+     * 书签变化请求的处理
+     * @param index 索引
+     * @param state 书签状态
+     */
     void onBrowserBookmark(int index, bool state);
 
-    void onBrowserOperaAnnotation(int, int, deepin_reader::Annotation *);
+    /**
+     * @brief onBrowserOperaAnnotation
+     * 注释操作的处理
+     * @param type 操作类型
+     * @param index 索引
+     * @param Annotation 注释指针
+     */
+    void onBrowserOperaAnnotation(int type, int index, deepin_reader::Annotation *annotation);
 
+    /**
+     * @brief onExtractPassword
+     * 密码执行处理
+     * @param password
+     */
     void onExtractPassword(const QString &password);
 
 protected:

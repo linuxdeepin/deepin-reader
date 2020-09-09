@@ -733,7 +733,8 @@ void DocSheet::onBrowserPageChanged(int page)
 {
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
-        if (m_sidebar) m_sidebar->setCurrentPage(page);
+        if (m_sidebar)
+            m_sidebar->setCurrentPage(page);
     }
 }
 

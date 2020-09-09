@@ -172,6 +172,8 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     if (nullptr == m_document)
         return false;
 
+    m_lable2Page.clear();
+
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         deepin_reader::Page *page = m_document->page(i);
 
@@ -211,8 +213,6 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 {
     if (nullptr == m_document)
         return false;
-
-    m_lable2Page.clear();
 
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         deepin_reader::Page *page = m_document->page(i);
