@@ -49,20 +49,22 @@ TitleWidget::TitleWidget(DWidget *parent)
     this->setTabOrder(decBtn, scaleEdit);
     this->setTabOrder(scaleEdit, incBtn);
 
-    DIconButton *optBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-    DIconButton *fullBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
-    DIconButton *minBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
-    DIconButton *maxBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
-    DIconButton *closeBtn = parent()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+    if (parent) {
+        DIconButton *optBtn = parent->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+        DIconButton *fullBtn = parent->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+        DIconButton *minBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+        DIconButton *maxBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+        DIconButton *closeBtn = parent->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
 
-    this->setTabOrder(incBtn, optBtn);
-    if (nullptr != fullBtn) {
-        this->setTabOrder(optBtn, fullBtn);
-        this->setTabOrder(fullBtn, minBtn);
-    } else
-        this->setTabOrder(optBtn, minBtn);
-    this->setTabOrder(minBtn, maxBtn);
-    this->setTabOrder(maxBtn, closeBtn);
+        this->setTabOrder(incBtn, optBtn);
+        if (nullptr != fullBtn) {
+            this->setTabOrder(optBtn, fullBtn);
+            this->setTabOrder(fullBtn, minBtn);
+        } else
+            this->setTabOrder(optBtn, minBtn);
+        this->setTabOrder(minBtn, maxBtn);
+        this->setTabOrder(maxBtn, closeBtn);
+    }
 }
 
 TitleWidget::~TitleWidget()
@@ -76,11 +78,6 @@ void TitleWidget::initBtns()
     m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
     connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
-}
-
-void TitleWidget::initWidget()
-{
-
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)
