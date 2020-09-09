@@ -32,6 +32,11 @@
 
 class ScaleWidget;
 class DocSheet;
+
+/**
+ * @brief The TitleWidget class
+ * 窗体自定义标题栏
+ */
 class TitleWidget : public CustomWidget
 {
     Q_OBJECT
@@ -39,6 +44,7 @@ class TitleWidget : public CustomWidget
 
 public:
     explicit TitleWidget(DWidget *parent = nullptr);
+
     ~TitleWidget() override;
 
 public:
@@ -48,11 +54,6 @@ public:
      * @param enable
      */
     void setControlEnabled(const bool &enable);
-
-protected:
-    void initWidget() override;
-
-    void keyPressEvent(QKeyEvent *event) override;
 
 public slots:
     /**
@@ -97,6 +98,9 @@ private:
      * @return 返回当前创建的按钮
      */
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     QStringList shortKeyList;

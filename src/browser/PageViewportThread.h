@@ -65,9 +65,6 @@ public:
      */
     static void destroyForever();
 
-signals:
-    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
-
 private:
     explicit PageViewportThread(QObject *parent = nullptr);
 
@@ -81,6 +78,9 @@ private:
      * @param taskPiece 碎片任务
      */
     void appendTaskPiece(RenderViewportTaskPiece taskPiece);
+
+signals:
+    void sigTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);
 
 private slots:
     void onTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRect rect);

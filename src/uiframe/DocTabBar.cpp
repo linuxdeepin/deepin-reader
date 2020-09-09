@@ -87,7 +87,7 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     if (sheet == nullptr)
         return;
 
-    QString fileName = getFileName(sheet->filePath());
+    QString fileName = QFile(sheet->filePath()).fileName();
 
     if (-1 == index)
         index = addTab(fileName);
@@ -230,13 +230,6 @@ void DocTabBar::onDragActionChanged(Qt::DropAction action)
         if (QGuiApplication::overrideCursor())
             QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
-}
-
-QString DocTabBar::getFileName(const QString &strFilePath)
-{
-    int nLastPos = strFilePath.lastIndexOf('/');
-
-    return strFilePath.mid(++nLastPos);
 }
 
 void DocTabBar::onTabChanged(int index)

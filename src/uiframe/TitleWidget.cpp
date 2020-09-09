@@ -29,24 +29,6 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : CustomWidget(parent)
 {
-    initWidget();
-}
-
-TitleWidget::~TitleWidget()
-{
-
-}
-
-void TitleWidget::initBtns()
-{
-    m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
-    m_pThumbnailBtn->setObjectName("Thumbnails");
-    m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-    connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
-}
-
-void TitleWidget::initWidget()
-{
     initBtns();
 
     QHBoxLayout *hlayout = new QHBoxLayout();
@@ -81,6 +63,24 @@ void TitleWidget::initWidget()
         this->setTabOrder(optBtn, minBtn);
     this->setTabOrder(minBtn, maxBtn);
     this->setTabOrder(maxBtn, closeBtn);
+}
+
+TitleWidget::~TitleWidget()
+{
+
+}
+
+void TitleWidget::initBtns()
+{
+    m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
+    m_pThumbnailBtn->setObjectName("Thumbnails");
+    m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
+    connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
+}
+
+void TitleWidget::initWidget()
+{
+
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)

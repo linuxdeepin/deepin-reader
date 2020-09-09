@@ -26,6 +26,11 @@
 class QSignalMapper;
 class DocSheet;
 class HandleMenu;
+
+/**
+ * @brief The TitleMenu class
+ * 窗体默认菜单
+ */
 class TitleMenu : public CustomMenu
 {
     Q_OBJECT
