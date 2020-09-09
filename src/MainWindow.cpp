@@ -175,6 +175,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             if (isFullscreen && m_FullTitleWidget) {
                 if (m_TitleAnimation == nullptr) {
                     m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry");
+                    m_TitleAnimation->setEasingCurve(QEasingCurve::OutCubic);
                     connect(m_TitleAnimation, &QPropertyAnimation::finished, this, &MainWindow::onTitleAniFinished);
                 }
 

@@ -670,6 +670,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             m_sidebar->setVisible(true);
         }
 
+        m_sideAnimation->setEasingCurve(QEasingCurve::OutCubic);
         m_fullSiderBarVisible = isVisible;
         m_sideAnimation->stop();
         int duration = 300 * (m_sidebar->width() + m_sidebar->pos().x()) / m_sidebar->width();
