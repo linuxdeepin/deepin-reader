@@ -39,21 +39,48 @@ class Application : public DApplication
 public:
     Application(int &argc, char **argv);
 
+    /**
+     * @brief blockShutdown
+     * 文档变化阻塞关闭
+     */
     void blockShutdown();
 
+    /**
+     * @brief unBlockShutdown
+     * 文档未变化不阻塞关闭
+     */
     void unBlockShutdown();
 
+    /**
+     * @brief addRenderTask
+     * 增加渲染任务
+     */
     void addRenderTask();
 
+    /**
+     * @brief showAnnotTextWidgetSig
+     * 显示注释编辑框
+     */
     void showAnnotTextWidgetSig();
 
 signals:
-    // 触控板事件 name 事件名称 direction 手势方向 fingers 手指个数
+    /**
+     * @brief sigTouchPadEventSignal
+     * 触控板事件
+     * @param name  事件名称
+     * @param direction  手势方向
+     * @param fingers  手指个数
+     */
     void sigTouchPadEventSignal(QString name, QString direction, int fingers);
 
     void sigShowAnnotTextWidget();
 
 public slots:
+    /**
+     * @brief handleFiles
+     * 接收DBus打开文件响应接口
+     * @param filePathList
+     */
     Q_SCRIPTABLE void handleFiles(QStringList filePathList);
 
 protected:
