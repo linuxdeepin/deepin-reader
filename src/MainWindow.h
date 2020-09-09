@@ -46,19 +46,54 @@ public:
 
     ~MainWindow() override;
 
+    /**
+     * @brief addSheet
+     * 添加新文档窗口
+     * @param sheet
+     */
     void addSheet(DocSheet *sheet);
 
+    /**
+     * @brief hasSheet
+     * 是否有这个文档
+     * @param sheet
+     * @return
+     */
     bool hasSheet(DocSheet *sheet);
 
-    void activateSheet(DocSheet *sheet);  //将该sheet显示到最前面
+    /**
+     * @brief activateSheet
+     * 活动文档显示到最前面
+     * @param sheet 哪个文档
+     */
+    void activateSheet(DocSheet *sheet);
 
+    /**
+     * @brief closeWithoutSave
+     * 不需要保存的子窗口直接关闭
+     */
     void closeWithoutSave();
 
+    /**
+     * @brief setDocTabBarWidget
+     * 全屏时设置tabbar
+     * @param widget tabbar
+     */
     void setDocTabBarWidget(QWidget *widget);
 
 public:
+    /**
+     * @brief openfiles
+     * 打开多个文件
+     * @param filepaths 多个文件路径
+     */
     void openfiles(const QStringList &filepaths);
 
+    /**
+     * @brief doOpenFile
+     * 打开单个文件
+     * @param filePath 文件全路径
+     */
     void doOpenFile(const QString &filePath);
 
 protected:
@@ -69,26 +104,65 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
+    /**
+     * @brief initBase
+     * 初始化基础项
+     */
     void initBase();
 
+    /**
+     * @brief initUI
+     * 初始化UI
+     */
     void initUI();
 
+    /**
+     * @brief initShortCut
+     * 初始化响应快捷键接口
+     */
     void initShortCut();
 
+    /**
+     * @brief showDefaultSize
+     * 显示默认大小
+     */
     void showDefaultSize();
 
-    // Set zoom
+    /**
+     * @brief zoomIn
+     * 放大
+     */
     void zoomIn();
 
+    /**
+     * @brief zoomOut
+     * 缩小
+     */
     void zoomOut();
 
 private slots:
     void onDelayInit();
 
+    /**
+     * @brief onShortCut
+     * 处理快捷键事件
+     */
     void onShortCut(const QString &);
 
+    /**
+     * @brief onUpdateTitleLabelRect
+     * 更新提示标签大小
+     */
     void onUpdateTitleLabelRect();
 
+    /**
+     * @brief Application::onTouchPadEventSignal
+     * 处理触控板手势信号
+     * @param name 触控板事件类型(手势或者触摸类型) pinch 捏 tap 敲 swipe 滑 右键单击 单键
+     * @param direction 手势方向 触控板上 up 触控板下 down 左 left 右 right 无 none 向内 in 向外 out  触控屏上 top 触摸屏下 bot
+     * @param fingers 手指数量 (1,2,3,4,5)
+     * 注意libinput接收到触摸板事件后将接收到的数据通过Event广播出去
+     */
     void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
 private:
