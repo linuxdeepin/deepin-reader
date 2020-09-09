@@ -25,15 +25,12 @@
 
 #include <QObject>
 
-//#include "dprintpreviewdialog.h"
-
-#include <QPrintPreviewDialog>
-
-class QPrinter;
+#include "dprintpreviewdialog.h"
 
 DWIDGET_USE_NAMESPACE
 
 class DocSheet;
+class QPrinter;
 class PrintManager : public QObject
 {
     Q_OBJECT
@@ -45,7 +42,7 @@ public:
     void setPrintPath(const QString &strPrintPath);
 
 private slots:
-    void slotPrintPreview(QPrinter *printer);
+    void slotPrintPreview(DPrinter *printer);
 
 private:
     QString     m_strPrintName = "";
