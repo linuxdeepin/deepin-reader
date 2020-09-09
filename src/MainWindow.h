@@ -40,8 +40,20 @@ class MainWindow : public Dtk::Widget::DMainWindow
     Q_DISABLE_COPY(MainWindow)
 
 public:
+    /**
+     * @brief MainWindow
+     * 根据文件路径列表会直接打开对应文件
+     * @param filePathList 文件路径列表
+     * @param parent
+     */
     explicit MainWindow(QStringList filePathList, DMainWindow *parent = nullptr);
 
+    /**
+     * @brief MainWindow
+     * 直接显示传入已经存在的sheet
+     * @param sheet
+     * @param parent
+     */
     explicit MainWindow(DocSheet *sheet, DMainWindow *parent = nullptr);
 
     ~MainWindow() override;
@@ -81,7 +93,6 @@ public:
      */
     void setDocTabBarWidget(QWidget *widget);
 
-public:
     /**
      * @brief openfiles
      * 打开多个文件
@@ -141,6 +152,10 @@ private:
     void zoomOut();
 
 private slots:
+    /**
+     * @brief onDelayInit
+     * 延时初始化
+     */
     void onDelayInit();
 
     /**
