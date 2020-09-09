@@ -87,8 +87,8 @@ Outline loadOutline(const QDomNode &parent, Poppler::Document *document)
 
         if (destination) {
             int page = destination->pageNumber();
-            qreal left = qQNaN();
-            qreal top = qQNaN();
+            qreal left = 0;
+            qreal top = 0;
 
             page = page >= 1 ? page : 1;
             page = page <= document->numPages() ? page : document->numPages();

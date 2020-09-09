@@ -241,6 +241,7 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     double left = current.data(Qt::UserRole + 2).toDouble();
     double top = current.data(Qt::UserRole + 3).toDouble();
     m_title = current.data(Qt::DisplayRole).toString();
+
     if (nPage >= 1)
         m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
 }

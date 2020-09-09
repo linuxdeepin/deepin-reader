@@ -48,9 +48,9 @@ const int Z_ORDER_ICON        = 4;
 
 struct Link {
     QPainterPath boundary;
-    int page;
-    qreal left;
-    qreal top;
+    int page = 1;
+    qreal left = 0;
+    qreal top = 0;
     QString urlOrFileName;
     Link() : boundary(), page(-1), left(0.0), top(0.0), urlOrFileName() {}
     Link(const QPainterPath &boundary, int page, qreal left = 0.0, qreal top = 0.0) : boundary(boundary), page(page), left(left), top(top), urlOrFileName() {}
