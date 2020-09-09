@@ -34,6 +34,7 @@
 class Central;
 class DocSheet;
 class TitleMenu;
+class QPropertyAnimation;
 class MainWindow : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
@@ -93,6 +94,9 @@ public:
      */
     void setDocTabBarWidget(QWidget *widget);
 
+    void resizeFullTitleWidget();
+
+public:
     /**
      * @brief openfiles
      * 打开多个文件
@@ -180,8 +184,14 @@ private slots:
      */
     void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
+    void onMainWindowFull();
+
+    void onTitleAniFinished();
+
 private:
-    QWidget *m_docTabbarWidget = nullptr;
+    QWidget *m_FullTitleWidget = nullptr;
+    QWidget *m_docTabWidget = nullptr;
+    QPropertyAnimation *m_TitleAnimation = nullptr;
 
     TitleMenu *m_menu = nullptr;
 

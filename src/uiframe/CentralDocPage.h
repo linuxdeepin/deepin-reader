@@ -34,6 +34,7 @@ class DocummentProxy;
 class QStackedLayout;
 class DocTabBar;
 class SlideWidget;
+class QVBoxLayout;
 
 /**
  * @brief The CentralDocPage class
@@ -213,7 +214,7 @@ public:
      * @brief openFullScreen
      * 当前窗体进入退出
      */
-    bool quitFullScreen();
+    bool quitFullScreen(bool force = false);
 
     /**
      * @brief openCurFileFolder
@@ -366,6 +367,7 @@ private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
     SlideWidget         *m_slideWidget = nullptr;
+    QVBoxLayout *m_mainLayout = nullptr;
 };
 
 #endif // MAINTABWIDGETEX_H

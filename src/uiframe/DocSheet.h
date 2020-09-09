@@ -28,6 +28,7 @@
 class SheetSidebar;
 class SlideWidget;
 class EncryptionPage;
+class QPropertyAnimation;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -40,7 +41,6 @@ struct SheetOperation {
 };
 
 class SheetBrowser;
-
 /**
  * @brief The DocSheet class
  * 嵌入当前窗体中心控件，一个类表示并显示操作一个文档
@@ -492,7 +492,7 @@ public:
      * @brief closeFullScreen
      * 关闭全屏模式
      */
-    void closeFullScreen();
+    bool closeFullScreen(bool force = false);
 
     /**
      * @brief setDocumentChanged
@@ -614,6 +614,8 @@ private slots:
      */
     void onFindFinished();
 
+    void onSideAniFinished();
+
 public:
     /**
      * @brief haslabel
@@ -732,8 +734,10 @@ private:
 
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;
+    bool m_fullSiderBarVisible = false;
 
     EncryptionPage  *m_encryPage = nullptr;
+    QPropertyAnimation *m_sideAnimation = nullptr;
 };
 
 #endif // DocSheet_H

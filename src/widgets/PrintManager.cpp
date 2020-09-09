@@ -35,14 +35,14 @@ PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
 
 void PrintManager::showPrintDialog(DWidget *widget)
 {
-    DPrintPreviewDialog preview(widget);
+    //    DPrintPreviewDialog preview(widget);
 
-    connect(&preview, SIGNAL(paintRequested(DPrinter *)), SLOT(slotPrintPreview(DPrinter *)));
+    //    connect(&preview, SIGNAL(paintRequested(DPrinter *)), SLOT(slotPrintPreview(DPrinter *)));
 
-    preview.exec();
+    //    preview.exec();
 }
 
-void PrintManager::slotPrintPreview(DPrinter *printer)
+void PrintManager::slotPrintPreview(QPrinter *printer)
 {
     if (nullptr == m_sheet)
         return;

@@ -25,7 +25,9 @@
 
 #include <QObject>
 
-#include "dprintpreviewdialog.h"
+//#include "dprintpreviewdialog.h"
+
+#include <QPrintPreviewDialog>
 
 class QPrinter;
 
@@ -43,7 +45,7 @@ public:
     void setPrintPath(const QString &strPrintPath);
 
 private slots:
-    void slotPrintPreview(DPrinter *printer);
+    void slotPrintPreview(QPrinter *printer);
 
 private:
     QString     m_strPrintName = "";

@@ -52,6 +52,7 @@ class SheetSidebar : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SheetSidebar)
+    Q_PROPERTY(QPoint movepos READ pos WRITE move)
 
 signals:
     void sigAdaptWindowSize(const double &scale);

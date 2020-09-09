@@ -1535,10 +1535,10 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return QGraphicsView::mouseMoveEvent(event);
     }
 
-    if (m_sheet->isFullScreen()) {
-        if (mousePos.x() == 0 && !m_sheet->sideBarVisible()) {
+    if (m_sheet->isFullScreen() && !m_sheet->operation().sidebarVisible) {
+        if (mousePos.x() <= 0) {
             m_sheet->setSidebarVisible(true, false);
-        } else if (!m_sheet->operation().sidebarVisible && m_sheet->sideBarVisible()) {
+        } else {
             m_sheet->setSidebarVisible(false, false);
         }
     }

@@ -56,14 +56,14 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
 
     m_pStackedLayout = new QStackedLayout;
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    m_mainLayout = new QVBoxLayout(this);
 
-    mainLayout->addWidget(m_pTabBar);
-    mainLayout->addItem(m_pStackedLayout);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
+    m_mainLayout->addWidget(m_pTabBar);
+    m_mainLayout->addItem(m_pStackedLayout);
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
 
-    this->setLayout(mainLayout);
+    this->setLayout(m_mainLayout);
 
     m_pDocTabLabel = new DLabel(this);
     m_pDocTabLabel->setElideMode(Qt::ElideMiddle);
@@ -508,7 +508,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if ((s == Dr::key_esc || s == Dr::key_f11) && quitFullScreen())
+    if ((s == Dr::key_esc || s == Dr::key_f11) && getCurSheet() && getCurSheet()->closeFullScreen())
         return;
 
     if (m_slideWidget) {
@@ -653,20 +653,25 @@ void CentralDocPage::openFullScreen()
         return;
 
     if (!mainWindow->isFullScreen()) {
+        m_mainLayout->removeWidget(m_pTabBar);
         mainWindow->setDocTabBarWidget(m_pTabBar);
         mainWindow->showFullScreen();
     }
 }
 
-bool CentralDocPage::quitFullScreen()
+bool CentralDocPage::quitFullScreen(bool force)
 {
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
     if (nullptr == mainWindow)
         return false;
 
-    if (mainWindow->isFullScreen()) {
-        mainWindow->showNormal();
+    if (mainWindow->isFullScreen() || force) {
+        m_pTabBar->setParent(this);
+        m_mainLayout->insertWidget(0, m_pTabBar);
+        m_pTabBar->setVisible(m_pTabBar->count() > 1);
         mainWindow->setDocTabBarWidget(nullptr);
+        if (mainWindow->isFullScreen())
+            mainWindow->showNormal();
         return true;
     }
 
@@ -684,6 +689,15 @@ void CentralDocPage::onSheetCountChanged(int count)
     } else {
         m_pDocTabLabel->setText("");
         m_pTabBar->setVisible(true);
+    }
+
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
+    if (mainWindow && mainWindow->isFullScreen()) {
+        mainWindow->resizeFullTitleWidget();
+    } else if (m_pTabBar->parent() != this) {
+        m_pTabBar->setParent(this);
+        m_mainLayout->insertWidget(0, m_pTabBar);
+        m_pTabBar->setVisible(count > 1);
     }
 }
 

@@ -42,6 +42,8 @@
 #include <QSettings>
 #include <QDBusConnection>
 #include <QTimer>
+#include <QDesktopWidget>
+#include <QPropertyAnimation>
 
 DWIDGET_USE_NAMESPACE
 
@@ -170,43 +172,48 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         if (event->type() == QEvent::HoverMove) {
             QHoverEvent *mouseEvent = dynamic_cast<QHoverEvent *>(event);
             bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
-            if (isFullscreen) {
-                int doctabbarH = m_docTabbarWidget ? m_docTabbarWidget->height() : 0;
-                if (mouseEvent->pos().y() > titlebar()->height() + doctabbarH) {
-                    if (m_docTabbarWidget)
-                        m_docTabbarWidget->setVisible(false);
-
-                    if (this->titlebar())
-                        this->titlebar()->setVisible(false);
+            if (isFullscreen && m_FullTitleWidget) {
+                if (m_TitleAnimation == nullptr) {
+                    m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry");
+                    connect(m_TitleAnimation, &QPropertyAnimation::finished, this, &MainWindow::onTitleAniFinished);
                 }
-                if (mouseEvent->pos().y() < 2) {
-                    if (m_docTabbarWidget && m_central && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
-                        m_docTabbarWidget->setVisible(true);
-                    }
 
-                    if (this->titlebar())
-                        this->titlebar()->setVisible(true);
+                if (m_TitleAnimation->state() != QPropertyAnimation::Running) {
+                    m_TitleAnimation->stop();
+                    int duration = 200 * (50 + m_FullTitleWidget->pos().y()) / 50;
+                    duration = duration <= 0 ? 200 : duration;
+                    m_TitleAnimation->setDuration(duration);
+                    m_TitleAnimation->setStartValue(QRect(0, m_FullTitleWidget->pos().y(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+
+                    if (m_FullTitleWidget->pos().y() >= 0 && mouseEvent->pos().y() > m_FullTitleWidget->height()) {
+                        m_TitleAnimation->setEndValue(QRect(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+                        m_TitleAnimation->start();
+                    } else if (m_FullTitleWidget->pos().y() < 0 && mouseEvent->pos().y() < 2) {
+                        m_FullTitleWidget->setVisible(true);
+                        if (m_docTabWidget && m_FullTitleWidget->height() > titlebar()->height())
+                            m_docTabWidget->setVisible(true);
+                        else if (m_docTabWidget && m_FullTitleWidget->height() <= titlebar()->height())
+                            m_docTabWidget->setVisible(false);
+
+                        m_TitleAnimation->setEndValue(QRect(0, 0, dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+                        m_TitleAnimation->start();
+                    }
                 }
             }
         } else if (event->type() == QEvent::WindowStateChange) {
-            if (isFullScreen()) {
-                if (m_docTabbarWidget)
-                    m_docTabbarWidget->setVisible(false);
-
-                if (this->titlebar())
-                    this->titlebar()->setVisible(false);
-            } else {
-                if (m_docTabbarWidget && m_central && m_central->docPage()->getTitleLabel()->property("text").toString().isEmpty()) {
-                    m_docTabbarWidget->setVisible(true);
-                }
-
-                if (this->titlebar())
-                    this->titlebar()->setVisible(true);
+            bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
+            if (isFullscreen) {
+                onMainWindowFull();
+            } else if (m_FullTitleWidget) {
+                //非本应用控件触发的,需要强制触发一次
+                m_central->docPage()->getCurSheet()->closeFullScreen(true);
+                this->setMenuWidget(titlebar());
+                m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height());
             }
         }
     }
 
-    return QWidget::eventFilter(obj, event);
+    return DMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::initUI()
@@ -216,7 +223,6 @@ void MainWindow::initUI()
     m_central->setMenu(m_menu);
     setCentralWidget(m_central);
 
-    titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
     titlebar()->setTitle("");
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
@@ -240,7 +246,53 @@ void MainWindow::onShortCut(const QString &key)
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
 {
-    m_docTabbarWidget = widget;
+    if (m_FullTitleWidget == nullptr) {
+        m_FullTitleWidget = new CustomWidget(this);
+        this->stackUnder(m_FullTitleWidget);
+        m_FullTitleWidget->setFocusPolicy(Qt::NoFocus);
+    }
+
+    m_docTabWidget = widget;
+}
+
+void MainWindow::onTitleAniFinished()
+{
+    if (m_FullTitleWidget->pos().y() < 0)
+        m_FullTitleWidget->setVisible(false);
+}
+
+void MainWindow::onMainWindowFull()
+{
+    if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
+        return;
+
+    if (this->menuWidget()) {
+        this->menuWidget()->setParent(nullptr);
+        this->setMenuWidget(nullptr);
+    }
+
+    bool tabbarVisible = m_docTabWidget->isVisible();
+    titlebar()->setParent(m_FullTitleWidget);
+    m_docTabWidget->setParent(m_FullTitleWidget);
+
+    titlebar()->show();
+    m_docTabWidget->setVisible(tabbarVisible);
+
+    titlebar()->setGeometry(0, 0, dApp->desktop()->screenGeometry().width(), titlebar()->height());
+    m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->desktop()->screenGeometry().width(), 37);
+
+    int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
+    m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
+    m_FullTitleWidget->setVisible(false);
+}
+
+void MainWindow::resizeFullTitleWidget()
+{
+    if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
+        return;
+
+    int fulltitleH = m_docTabWidget->isVisible() ? titlebar()->height() + 37 : titlebar()->height();
+    m_FullTitleWidget->resize(dApp->desktop()->screenGeometry().width(), fulltitleH);
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)

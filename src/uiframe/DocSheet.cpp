@@ -45,6 +45,8 @@
 #include <QDBusUnixFileDescriptor>
 #include <QClipboard>
 #include <QFileInfo>
+#include <QPropertyAnimation>
+#include <QDesktopWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -600,29 +602,9 @@ void DocSheet::zoomout()
     }
 }
 
-bool DocSheet::sideBarVisible()
-{
-    if (m_sidebar)
-        return m_sidebar->isVisible();
-
-    return false;
-}
-
-void DocSheet::setSidebarVisible(bool isVisible, bool notify)
-{
-    if (m_sidebar)
-        m_sidebar->setVisible(isVisible);
-
-    if (notify) {
-        m_operation.sidebarVisible = isVisible;
-        setOperationChanged();
-    }
-}
-
 void DocSheet::handleOpenSuccess()
 {
-    if (m_sidebar)
-        m_sidebar->handleOpenSuccess();
+    m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
@@ -652,6 +634,64 @@ void DocSheet::closeSlide()
     doc->quitSlide();
 }
 
+void DocSheet::setSidebarVisible(bool isVisible, bool notify)
+{
+    if (notify) {
+        m_sidebar->setVisible(isVisible);
+        m_operation.sidebarVisible = isVisible;
+
+        if (isVisible) {
+            this->insertWidget(0, m_sidebar);
+        } else if (isFullScreen()) {
+            m_sidebar->setParent(0);
+            m_sidebar->setParent(this);
+
+            m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+            m_sidebar->move(-m_sidebar->width(), 0);
+            m_sidebar->setVisible(true);
+        }
+
+        setOperationChanged();
+    } else {
+        if (m_sideAnimation == nullptr) {
+            m_sideAnimation = new QPropertyAnimation(m_sidebar, "movepos");
+            connect(m_sideAnimation, &QPropertyAnimation::finished, this, &DocSheet::onSideAniFinished);
+        }
+
+        if (m_sideAnimation->state() == QPropertyAnimation::Running && m_fullSiderBarVisible == isVisible)
+            return;
+
+        if (isFullScreen() && this->indexOf(m_sidebar) >= 0) {
+            m_sidebar->setParent(0);
+            m_sidebar->setParent(this);
+
+            m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+            m_sidebar->move(-m_sidebar->width(), 0);
+            m_sidebar->setVisible(true);
+        }
+
+        m_fullSiderBarVisible = isVisible;
+        m_sideAnimation->stop();
+        int duration = 300 * (m_sidebar->width() + m_sidebar->pos().x()) / m_sidebar->width();
+        duration = duration <= 0 ? 300 : duration;
+        m_sideAnimation->setDuration(duration);
+        m_sideAnimation->setStartValue(QPoint(m_sidebar->pos().x(), 0));
+        if (isVisible) {
+            m_sidebar->setVisible(true);
+            m_sideAnimation->setEndValue(QPoint(0, 0));
+        } else {
+            m_sideAnimation->setEndValue(QPoint(-m_sidebar->width(), 0));
+        }
+        m_sideAnimation->start();
+    }
+}
+
+void DocSheet::onSideAniFinished()
+{
+    if (m_sidebar->pos().x() < 0)
+        m_sidebar->setVisible(false);
+}
+
 bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -668,16 +708,27 @@ void DocSheet::openFullScreen()
         return;
 
     setSidebarVisible(false);
+    m_sidebar->setParent(0);
+    m_sidebar->setParent(this);
+
+    m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+    m_sidebar->move(-m_sidebar->width(), 0);
+    m_sidebar->setVisible(true);
+
     doc->openFullScreen();
 }
 
-void DocSheet::closeFullScreen()
+bool DocSheet::closeFullScreen(bool force)
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
-        return;
+        return false;
 
-    doc->quitFullScreen();
+    this->insertWidget(0, m_sidebar);
+    m_sidebar->move(0, 0);
+    m_sidebar->setVisible(this->operation().sidebarVisible);
+
+    return doc->quitFullScreen(force);
 }
 
 void DocSheet::setDocumentChanged(bool changed)
@@ -807,9 +858,12 @@ void DocSheet::resizeEvent(QResizeEvent *event)
     }
 }
 
-void DocSheet::childEvent(QChildEvent *)
+void DocSheet::childEvent(QChildEvent *event)
 {
     //Not todO;
+    if (event->removed()) {
+        return DSplitter::childEvent(event);
+    }
 }
 
 void DocSheet::showEncryPage()
