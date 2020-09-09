@@ -142,7 +142,7 @@ void PagingWidget::setIndex(int index)
 
     if (m_pCurrantPageLab) {
         m_pCurrantPageLab->setText(QString::number(currntPage));
-        QString sPage = m_sheet->pagenum2label(inputData);
+        QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(sPage);
     } else {
         m_pJumpPageLineEdit->setText(QString::number(currntPage));
@@ -207,7 +207,7 @@ void PagingWidget::pageNumberJump()
 {
     int nPageSum = m_sheet->pagesNumber();
     QString sText = m_pJumpPageLineEdit->text();
-    int iPage = m_sheet->label2pagenum(sText);
+    int iPage = m_sheet->getIndexByPageLable(sText);
 
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
         m_sheet->jumpToIndex(iPage);

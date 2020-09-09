@@ -325,97 +325,309 @@ public:
      */
     void addSelectedTextHightlightAnnotation();
 
+    /**
+     * @brief getImage
+     * 获得对应页的图片
+     * @param index 索引
+     * @param image 传出的图片
+     * @param width 需要的宽度
+     * @param height 需要的高度
+     * @param mode 缩放模式
+     * @param bSrc 使用已有的图缩放
+     * @return 是否成功
+     */
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 
+    /**
+     * @brief defaultFocus
+     * 焦点到默认控件上去
+     */
     void defaultFocus();
 
+    /**
+     * @brief annotations
+     * 获取所有的注释
+     * @return
+     */
     QList<deepin_reader::Annotation *> annotations();
 
+    /**
+     * @brief removeAnnotation
+     * 删除注释并提示
+     * @param annotation 被删除的注释指针
+     * @param tips 是否提示
+     * @return 是否执行成功
+     */
     bool removeAnnotation(deepin_reader::Annotation *annotation, bool tips = true);
 
+    /**
+     * @brief removeAnnotation
+     * 删除所有注释
+     * @return 是否执行成功
+     */
     bool removeAllAnnotation();
 
+    /**
+     * @brief scaleFactorList
+     * 获取缩放因子列表
+     * @return
+     */
     QList<qreal> scaleFactorList();
 
+    /**
+     * @brief maxScaleFactor
+     * 获取最大的缩放因子 (产品文档中根据文档大小对缩放因子有限制)
+     * @return
+     */
     qreal maxScaleFactor();
 
+    /**
+     * @brief filter
+     * 文件选择框过滤
+     * @return
+     */
     QString filter();
 
+    /**
+     * @brief format
+     * 获取类型名称
+     * @return
+     */
     QString format();
 
+    /**
+     * @brief getBookMarkList
+     * 获取书签列表
+     * @return
+     */
     QSet<int> getBookMarkList() const;
 
+    /**
+     * @brief operation
+     * 获取用户操作
+     * @return
+     */
     SheetOperation operation() const;
 
+    /**
+     * @brief fileType
+     * 获取文件类型
+     * @return
+     */
     Dr::FileType fileType();
 
+    /**
+     * @brief filePath
+     * 获取文件路径
+     * @return
+     */
     QString filePath();
 
+    /**
+     * @brief hasBookMark
+     * 查看是否含有对应页书签
+     * @return
+     */
     bool hasBookMark(int index);
 
-    void zoomin();  //放大一级
+    /**
+     * @brief zoomin
+     * 放大一级
+     */
+    void zoomin();
 
+    /**
+     * @brief zoomout
+     * 缩小一级
+     */
     void zoomout();
 
+    /**
+     * @brief sideBarVisible
+     * 获取左侧栏是否显示
+     * @return
+     */
     bool sideBarVisible();
 
+    /**
+     * @brief setSidebarVisible
+     * 设置左侧栏显示
+     * @param isVisible 显示
+     * @param notify 是否通知操作变化
+     */
     void setSidebarVisible(bool isVisible, bool notify = true);
 
+    /**
+     * @brief handleOpenSuccess
+     * 打开成功后处理
+     */
     void handleOpenSuccess();
 
+    /**
+     * @brief openSlide
+     * 通知父窗口打开幻灯片
+     */
     void openSlide();
 
+    /**
+     * @brief openSlide
+     * 通知父窗口关闭幻灯片
+     */
     void closeSlide();
 
+    /**
+     * @brief isFullScreen
+     * 获取是否是全屏
+     * @return
+     */
     bool isFullScreen();
 
+    /**
+     * @brief openFullScreen
+     * 打开全屏模式
+     */
     void openFullScreen();
 
+    /**
+     * @brief closeFullScreen
+     * 关闭全屏模式
+     */
     void closeFullScreen();
 
+    /**
+     * @brief setDocumentChanged
+     * 设置文档本身被修改
+     * @param chenged
+     */
     void setDocumentChanged(bool changed);
 
+    /**
+     * @brief setBookmarkChanged
+     * 设置文档书签被修改(书签存在数据库不随文件)
+     * @param chenged
+     */
     void setBookmarkChanged(bool changed);
 
+    /**
+     * @brief setOperationChanged
+     * 设置用户操作信息被修改
+     */
     void setOperationChanged();
 
+    /**
+     * @brief handleFindNext
+     * 搜索下一个
+     */
     void handleFindNext();
 
+    /**
+     * @brief handleFindPrev
+     * 搜索上一个
+     */
     void handleFindPrev();
 
+    /**
+     * @brief handleFindExit
+     * 退出搜索
+     */
     void handleFindExit();
 
+    /**
+     * @brief handleFindContent
+     * 处理搜索文本
+     * @param strFind 被搜索关键词
+     */
     void handleFindContent(const QString &strFind);
 
+    /**
+     * @brief showEncryPage
+     * 显示解锁页面
+     */
     void showEncryPage();
 
+    /**
+     * @brief tryPassword
+     * 尝试密码是否正确
+     * @param password 密码
+     * @return
+     */
     bool tryPassword(QString password);
 
+    /**
+     * @brief needPassword
+     * 获取是否需要密码
+     * @return
+     */
     bool needPassword();
 
+    /**
+     * @brief isUnLocked
+     * 获取是否被加锁
+     * @return
+     */
     bool isUnLocked();
 
-    int getPageLableIndex(const QString);
+    /**
+     * @brief getPageLableIndex
+     * 获取文档下标的索引
+     * @param pageLable 下标
+     * @return  索引
+     */
+    int getIndexByPageLable(const QString &pageLable);
+
+    /**
+     * @brief getPageLabelByIndex
+     * 获取索引的文档下标
+     * @param index 索引
+     * @return 下标
+     */
+    QString getPageLabelByIndex(const int &index);
 
 private:
+    /**
+     * @brief operationRef
+     * 获取操作的引用(可以直接修改)
+     * @return
+     */
     SheetOperation &operationRef();
 
 public slots:
+    /**
+     * @brief showTips
+     * 通知父窗口弹出提示框
+     * @param tips 显示内容
+     * @param iconIndex 图片索引
+     */
     void showTips(const QString &tips, int iconIndex = 0);
 
 private slots:
-    void onFindContentComming(const deepin_reader::SearchResult &);
+    /**
+     * @brief onFindContentComming
+     * 搜索结果的处理
+     * @param searchResult 搜索结果
+     */
+    void onFindContentComming(const deepin_reader::SearchResult &searchResult);
 
+    /**
+     * @brief onFindFinished
+     * 搜索结束的处理
+     */
     void onFindFinished();
 
 public:
-    int label2pagenum(QString label);
-
+    /**
+     * @brief haslabel
+     * 获取是否有文档页码
+     * @return
+     */
     bool haslabel();
 
-    void docBasicInfo(deepin_reader::FileInfo &tFileInfo);
-
-    QString pagenum2label(const int index);
+    /**
+     * @brief docBasicInfo
+     * 获取文档信息
+     * @param fileInfo 用于传出的文档信息
+     */
+    void docBasicInfo(deepin_reader::FileInfo &fileInfo);
 
 signals:
     void sigFindOperation(const int &);
