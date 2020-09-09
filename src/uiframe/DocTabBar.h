@@ -92,6 +92,11 @@ private slots:
 
     void onTabAddRequested();
 
+    /**
+     * @brief onTabCloseRequested
+     * 关闭哪个文档
+     * @param index
+     */
     void onTabCloseRequested(int index);
 
 private:

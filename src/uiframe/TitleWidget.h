@@ -42,6 +42,11 @@ public:
     ~TitleWidget() override;
 
 public:
+    /**
+     * @brief setControlEnabled
+     * 设置控件知否可用单元
+     * @param enable
+     */
     void setControlEnabled(const bool &enable);
 
 protected:
@@ -50,15 +55,47 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 public slots:
+    /**
+     * @brief onCurSheetChanged
+     * 文档窗口切换单元
+     */
     void onCurSheetChanged(DocSheet *);
 
 private slots:
+    /**
+     * @brief onFindOperation
+     * 搜索列表控制单元
+     */
     void onFindOperation(const int &);
+
+    /**
+     * @brief onThumbnailBtnClicked
+     * 缩略图列表显隐按钮
+     * @param checked
+     */
     void onThumbnailBtnClicked(bool checked);
 
 private:
+    /**
+     * @brief initBtns
+     * 初始化按钮
+     */
     void initBtns();
+
+    /**
+     * @brief setBtnDisable
+     * 设置按钮是否可用
+     * @param bAble
+     */
     void setBtnDisable(const bool &bAble);
+
+    /**
+     * @brief createBtn
+     * 创建按钮
+     * @param btnName 按钮名字
+     * @param bCheckable 是否checked
+     * @return 返回当前创建的按钮
+     */
     DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
 
 private:

@@ -35,23 +35,58 @@ public:
     explicit TitleMenu(DWidget *parent = nullptr);
 
 signals:
+    /**
+     * @brief sigActionTriggered
+     * 菜单单击事件
+     * @param action 某个菜单名称
+     */
     void sigActionTriggered(const QString &action);
 
 public slots:
+    /**
+     * @brief onCurSheetChanged
+     * 文档窗口切换
+     */
     void onCurSheetChanged(DocSheet *);
 
 public:
+    /**
+     * @brief disableAllAction
+     * 所有事件皆不可用
+     */
     void disableAllAction();
 
 private:
+    /**
+     * @brief disableSaveButton
+     * 设置保存按钮是否可用
+     * @param disable
+     */
     void disableSaveButton(bool disable);
 
 protected:
+    /**
+     * @brief initActions
+     * 初始化菜单事件
+     */
     void initActions() override;
 
 private:
+    /**
+     * @brief createActionMap
+     * 创建菜单事件集合
+     * @param pSigManager
+     * @param actionList
+     * @param actionObjList
+     */
     void createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
 
+    /**
+     * @brief createAction
+     * 创建菜单事件
+     * @param actionName 事件名称
+     * @return 事件
+     */
     QAction *createAction(const QString &actionName, const QString &);
 
 private:
