@@ -926,7 +926,6 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     if (nullptr == m_sheet || nullptr == annotation || (index < 0 || index >= m_items.count()))
         return;
 
-    int pageIndex = index;
     BrowserPage *jumpPage = m_items.at(index);
     QList<QRectF> anootList = annotation->boundary();
 
@@ -937,16 +936,6 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     if (firstRect.isNull() || firstRect.isEmpty())
         return;
 
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
-
-//    if (rotation != Dr::NumberOfRotations && rotation != Dr::RotateBy0) {
-//        setCurrentPage(++pageIndex);
-//        return;
-//    }
-
-//    jump2PagePos(jumpPage, firstRect.left(), firstRect.top());
     jump2PagePos(jumpPage, firstRect);
 }
 
