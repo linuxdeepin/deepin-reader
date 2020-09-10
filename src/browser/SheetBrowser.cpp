@@ -1496,6 +1496,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (!m_magnifierLabel && this->isLink(mapToScene(mousePos))) {
+        if (m_tipsWidget)
+            m_tipsWidget->hide();
         setCursor(QCursor(Qt::PointingHandCursor));
         return QGraphicsView::mouseMoveEvent(event);
     }
