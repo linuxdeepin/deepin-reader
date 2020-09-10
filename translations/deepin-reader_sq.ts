@@ -314,7 +314,7 @@
     </message>
     <message>
         <source>Remove annotation</source>
-        <translation>Hiqe shënimin</translation>
+        <translation>Hiq shënim</translation>
     </message>
     <message>
         <source>Remove all</source>
@@ -466,7 +466,7 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>Hape</translation>
+        <translation>Hap</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -638,11 +638,11 @@
     </message>
     <message>
         <source>ThumbnailPath Path.</source>
-        <translation>Shteg ShtegMiniature</translation>
+        <translation>Shteg ShtegMiniature.</translation>
     </message>
     <message>
         <source>Generate thumbnail.</source>
-        <translation>Prodho miniaturë</translation>
+        <translation>Prodho miniaturë.</translation>
     </message>
 </context>
 </TS>

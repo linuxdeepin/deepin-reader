@@ -542,7 +542,7 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation>복사하기</translation>
+        <translation>복사</translation>
     </message>
     <message>
         <source>Cut</source>

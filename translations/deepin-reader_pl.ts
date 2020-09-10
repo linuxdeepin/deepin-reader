@@ -100,7 +100,7 @@
     <name>BookMarkWidget</name>
     <message>
         <source>Add bookmark</source>
-        <translation>Dodaj zakładkę</translation>
+        <translation>Dodać zakładkę</translation>
     </message>
     <message>
         <source>Are you sure you want to delete all bookmarks?</source>

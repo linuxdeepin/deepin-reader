@@ -522,7 +522,7 @@
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation>Yerimi ekle</translation>
+        <translation>Yer imi ekle</translation>
     </message>
     <message>
         <source>Add annotation</source>

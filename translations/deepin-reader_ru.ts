@@ -210,8 +210,7 @@
     </message>
     <message>
         <source>The format is not supported</source>
-        <translation>Формат не поддерживается
-</translation>
+        <translation>Формат не поддерживается</translation>
     </message>
     <message>
         <source>Please check if the file is damaged</source>
@@ -527,7 +526,7 @@
     </message>
     <message>
         <source>Add annotation</source>
-        <translation>Добавить примечание</translation>
+        <translation>Добавить аннотацию</translation>
     </message>
     <message>
         <source>Highlight</source>

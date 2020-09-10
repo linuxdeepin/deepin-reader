@@ -470,7 +470,7 @@
     </message>
     <message>
         <source>Zoom in</source>
-        <translation>頁面放大</translation>
+        <translation>放大</translation>
     </message>
     <message>
         <source>Zoom out</source>
@@ -554,7 +554,7 @@
     </message>
     <message>
         <source>Slide show</source>
-        <translation>搜尋</translation>
+        <translation>幻燈片秀</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -616,7 +616,7 @@
     <name>TitleWidget</name>
     <message>
         <source>Thumbnails</source>
-        <translation>縮圖</translation>
+        <translation>打開目錄縮圖</translation>
     </message>
 </context>
 <context>

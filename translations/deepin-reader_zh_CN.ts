@@ -470,11 +470,11 @@
     </message>
     <message>
         <source>Zoom in</source>
-        <translation>页面放大</translation>
+        <translation>放大</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation>页面缩小</translation>
+        <translation>缩小</translation>
     </message>
     <message>
         <source>Zoom in/Zoom out</source>
@@ -494,7 +494,7 @@
     </message>
     <message>
         <source>Thumbnails</source>
-        <translation>打开目录缩略图</translation>
+        <translation>缩略图</translation>
     </message>
     <message>
         <source>Fit height</source>

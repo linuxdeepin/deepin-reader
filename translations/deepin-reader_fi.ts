@@ -3,7 +3,7 @@
     <name>Application</name>
     <message>
         <source>Document Viewer</source>
-        <translation>Deepin asiakirjat</translation>
+        <translation>Asiakirjat</translation>
     </message>
     <message>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
