@@ -220,7 +220,7 @@ public:
      * @brief scaleWords
      *  更改缩放如果存在文字
      */
-    void scaleWords();
+    void scaleWords(bool force = false);
 
     /**
      * @brief clearPixmap

@@ -414,7 +414,8 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
     m_wordHasRendered = true;
 
-    loadWords();
+    scaleWords(true);
+
 }
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
@@ -605,14 +606,14 @@ void BrowserPage::clearWords()
     }
 }
 
-void BrowserPage::scaleWords()
+void BrowserPage::scaleWords(bool force)
 {
     if (!m_wordHasRendered || m_words.count() <= 0)
         return;
 
     prepareGeometryChange();
 
-    if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
+    if (force || !qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
         m_wordScaleFactor = m_scaleFactor;
         foreach (BrowserWord *word, m_words) {
             word->setScaleFactor(m_scaleFactor);
