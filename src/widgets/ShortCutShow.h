@@ -36,14 +36,31 @@ class ShortCutShow : public QObject
 public:
     explicit ShortCutShow(QObject *parent = nullptr);
 
+    /**
+     * @brief setSheet
+     * 设置文档对象
+     * @param sheet
+     */
     void setSheet(DocSheet *sheet);
 
 public:
+    /**
+     * @brief show
+     * 显示
+     */
     void show();
 
 private:
+    /**
+     * @brief initPDF
+     * 初始化PDF快捷玉兰
+     */
     void initPDF();
 
+    /**
+     * @brief initDJVU
+     * 初始化DJVU快捷预览
+     */
     void initDJVU();
 
 private:

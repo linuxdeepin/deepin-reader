@@ -23,6 +23,10 @@
 
 #include <QObject>
 
+/**
+ * @brief The SaveDialog class
+ * 保存提示窗口
+ */
 class SaveDialog : public QObject
 {
     Q_OBJECT
@@ -31,7 +35,19 @@ class SaveDialog : public QObject
 public:
     explicit SaveDialog(QObject *parent = nullptr);
 
+    /**
+     * @brief showExitDialog
+     * 退出保存提示窗口
+     * @return
+     */
     static int showExitDialog();
+
+    /**
+     * @brief showTipDialog
+     * 提示窗口
+     * @param content
+     * @return
+     */
     static int showTipDialog(const QString &content);
 };
 

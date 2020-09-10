@@ -37,11 +37,6 @@ RoundColorWidget::RoundColorWidget(const QColor &color, QWidget *parent)
 {
 }
 
-bool RoundColorWidget::isSelected()
-{
-    return m_isSelected;
-}
-
 void RoundColorWidget::setSelected(bool selected)
 {
     if (m_isSelected == selected)

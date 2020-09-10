@@ -20,24 +20,24 @@
 */
 #include "CentralNavPage.h"
 #include "MainWindow.h"
-#include "widgets/CustomClickLabel.h"
 
 #include <DFileDialog>
 #include <DLabel>
 #include <DPushButton>
 #include <DSuggestButton>
+#include <DLabel>
 
 #include <QVBoxLayout>
 
 CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)
 {
-    auto tipsLabel = new CustomClickLabel(tr("Drag documents here"), this);
+    auto tipsLabel = new DLabel(tr("Drag documents here"), this);
     tipsLabel->setAlignment(Qt::AlignHCenter);
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
-    auto formatLabel = new CustomClickLabel(tr("Format supported: %1").arg("PDF,DJVU"), this);
+    auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU"), this);
     formatLabel->setAlignment(Qt::AlignHCenter);
     formatLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
@@ -97,7 +97,7 @@ void CentralNavPage::onThemeChanged()
         iconSvg->setPixmap(importIcon.pixmap(QSize(tW, tH)));
     }
 
-    auto customClickLabelList = this->findChildren<CustomClickLabel *>();
+    auto customClickLabelList = this->findChildren<DLabel *>();
     foreach (auto l, customClickLabelList) {
         l->setForegroundRole(DPalette::TextTips);
     }

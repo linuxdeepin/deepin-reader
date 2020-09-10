@@ -45,6 +45,10 @@ typedef struct MenuItem_t {
     }
 } MenuItem_t;
 
+/**
+ * @brief The CustomMenu class
+ * 菜单
+ */
 class CustomMenu : public DMenu
 {
     Q_OBJECT
@@ -55,10 +59,21 @@ public:
     virtual ~CustomMenu();
 
 signals:
+    /**
+     * @brief sigClickAction
+     * Aciton点击信号
+     */
     void sigClickAction(const int &);
-    void sigActionTrigger(const int &, const QString &);
 
 public:
+    /**
+     * @brief createAction
+     * 创建Action
+     * @param objName
+     * @param member
+     * @param checkable
+     * @return
+     */
     QAction *createAction(const QString &objName, const char *member, bool checkable);
 
 protected:

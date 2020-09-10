@@ -91,17 +91,6 @@ void EncryptionPage::InitConnection()
     connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
 }
 
-void EncryptionPage::setPassowrdFocus()
-{
-    m_password->setFocus(Qt::OtherFocusReason);
-}
-
-void EncryptionPage::resetPage()
-{
-    m_password->clear();
-    m_password->setAlert(false);
-}
-
 void EncryptionPage::nextbuttonClicked()
 {
     emit sigExtractPassword(m_password->text());

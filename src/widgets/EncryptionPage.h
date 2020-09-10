@@ -26,27 +26,61 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The EncryptionPage class
+ * 加密界面
+ */
 class EncryptionPage: public DWidget
 {
     Q_OBJECT
 public:
     EncryptionPage(QWidget *parent = nullptr);
     ~EncryptionPage();
+
+    /**
+     * @brief InitUI
+     * 初始化控件
+     */
     void InitUI();
+
+    /**
+     * @brief InitConnection
+     * 初始化connect
+     */
     void InitConnection();
 
-    void setPassowrdFocus();
-    void resetPage();
-
 signals:
+    /**
+     * @brief sigExtractPassword
+     * 密码输入确认信号
+     * @param password
+     */
     void sigExtractPassword(const QString &password);
 
 public slots:
+    /**
+     * @brief nextbuttonClicked
+     * 密码输入确认
+     */
     void nextbuttonClicked();
+
+    /**
+     * @brief wrongPassWordSlot
+     * 密码错误响应
+     */
     void wrongPassWordSlot();
+
+    /**
+     * @brief onPasswordChanged
+     * 密码输入框字符改变
+     */
     void onPasswordChanged();
 
 private slots:
+    /**
+     * @brief onUpdateTheme
+     * 主题更新
+     */
     void onUpdateTheme();
 
 private:

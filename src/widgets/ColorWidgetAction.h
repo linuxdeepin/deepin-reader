@@ -21,14 +21,16 @@
 #ifndef COLORWIDGETACTION_H
 #define COLORWIDGETACTION_H
 
-#include "widgets/CustomClickLabel.h"
-
 #include <DWidget>
 
 #include <QWidgetAction>
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The ColorWidgetAction class
+ * 颜色选项框Aciton
+ */
 class ColorWidgetAction : public QWidgetAction
 {
     Q_OBJECT
@@ -37,17 +39,26 @@ class ColorWidgetAction : public QWidgetAction
 public:
     explicit ColorWidgetAction(DWidget *pParent = nullptr);
 
-public:
-    int getIndex();
-
 signals:
+    /**
+     * @brief sigBtnGroupClicked
+     * 颜色按钮点击信号
+     */
     void sigBtnGroupClicked();
 
 private slots:
+    /**
+     * @brief slotBtnClicked
+     * 响应颜色按钮点击
+     */
     void slotBtnClicked(int);
-    void slotBtnDefaultClicked();
 
 private:
+    /**
+     * @brief initWidget
+     * 控件初始化
+     * @param pParent
+     */
     void initWidget(DWidget *pParent);
 };
 

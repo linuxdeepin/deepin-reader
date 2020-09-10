@@ -43,7 +43,7 @@ PagingWidget::~PagingWidget()
  */
 void PagingWidget::initWidget()
 {
-    m_pTotalPagesLab = new CustomClickLabel(QString("/xxx"));
+    m_pTotalPagesLab = new DLabel(QString("/xxx"));
     QFont font = m_pTotalPagesLab->font();
     font.setPixelSize(14);
 
@@ -79,7 +79,7 @@ void PagingWidget::initWidget()
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
-    m_pCurrantPageLab = new CustomClickLabel("");
+    m_pCurrantPageLab = new DLabel("");
     font = m_pCurrantPageLab->font();
     font.setPixelSize(14);
 

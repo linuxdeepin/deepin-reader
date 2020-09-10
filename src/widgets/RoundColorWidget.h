@@ -25,6 +25,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The RoundColorWidget class
+ * 颜色选项框控件
+ */
 class RoundColorWidget : public DWidget
 {
     Q_OBJECT
@@ -32,16 +36,41 @@ class RoundColorWidget : public DWidget
 
 public:
     explicit RoundColorWidget(const QColor &color, QWidget *parent = nullptr);
-    bool isSelected();
+
+    /**
+     * @brief setSelected
+     * 设置是否选中
+     * @param selected
+     */
     void setSelected(bool selected);
+
+    /**
+     * @brief setAllClickNotify
+     * 点击是否发送点击信号
+     * @param bnotify
+     */
     inline void setAllClickNotify(bool bnotify) {m_allnotify = bnotify;}
-    static const int EXTRA = 2; //2px extra space to avoid line cutted off
 
 Q_SIGNALS:
+    /**
+     * @brief clicked
+     * 点击信号
+     */
     void clicked();
 
 protected:
+    /**
+     * @brief mousePressEvent
+     * 鼠标点击事件
+     * @param event
+     */
     void mousePressEvent(QMouseEvent *event);
+
+    /**
+     * @brief paintEvent
+     * 绘制事件
+     * @param event
+     */
     void paintEvent(QPaintEvent *event);
 
 private:

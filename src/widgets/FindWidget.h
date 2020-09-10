@@ -30,6 +30,10 @@
 DWIDGET_USE_NAMESPACE
 
 class DocSheet;
+/**
+ * @brief The FindWidget class
+ * 搜索窗口
+ */
 class FindWidget : public DFloatingWidget
 {
     Q_OBJECT
@@ -41,34 +45,89 @@ public:
     ~FindWidget() override;
 
 public:
+    /**
+     * @brief setDocSheet
+     * 设置文档对象
+     * @param sheet
+     */
     void setDocSheet(DocSheet *sheet);
 
+    /**
+     * @brief showPosition
+     * 设置显示位置
+     */
     void showPosition(const int &);
 
+    /**
+     * @brief setSearchEditFocus
+     * 设置搜索编辑框焦点
+     */
     void setSearchEditFocus();
 
+    /**
+     * @brief stopSearch
+     * 停止搜索
+     */
     void stopSearch();
 
+    /**
+     * @brief setEditAlert
+     * 搜索编辑框提示
+     * @param iFlag
+     */
     void setEditAlert(const int &iFlag);
 
 private slots:
+    /**
+     * @brief findCancel
+     * 取消搜索
+     */
     void findCancel();
 
+    /**
+     * @brief handleContentChanged
+     * 开始搜索
+     */
     void handleContentChanged();
 
+    /**
+     * @brief slotFindNextBtnClicked
+     * 查找下一个
+     */
     void slotFindNextBtnClicked();
 
+    /**
+     * @brief slotFindPrevBtnClicked
+     * 查找上一个
+     */
     void slotFindPrevBtnClicked();
 
+    /**
+     * @brief slotEditAborted
+     * 终止搜索
+     */
     void slotEditAborted();
 
+    /**
+     * @brief slotClearContent
+     * 清空搜索内容
+     */
     void slotClearContent();
 
 private:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
+    /**
+     * @brief keyPressEvent
+     * 键盘按键事件
+     * @param event
+     */
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     DocSheet *m_docSheet = nullptr;

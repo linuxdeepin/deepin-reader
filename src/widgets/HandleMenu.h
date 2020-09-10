@@ -24,6 +24,10 @@
 #include "widgets/CustomMenu.h"
 
 class DocSheet;
+/**
+ * @brief The HandleMenu class
+ * 选择工具菜单
+ */
 class HandleMenu : public CustomMenu
 {
     Q_OBJECT
@@ -31,13 +35,32 @@ class HandleMenu : public CustomMenu
 
 public:
     HandleMenu(DWidget *parent = nullptr);
+
+    /**
+     * @brief readCurDocParam
+     * 读取文档数据
+     * @param docSheet
+     */
     void readCurDocParam(DocSheet *docSheet);
 
 protected:
+    /**
+     * @brief initActions
+     * 初始化Action
+     */
     void initActions();
 
 private slots:
+    /**
+     * @brief onHandTool
+     * 手型工具
+     */
     void onHandTool();
+
+    /**
+     * @brief onSelectText
+     * 文本选择工具
+     */
     void onSelectText();
 
 private:

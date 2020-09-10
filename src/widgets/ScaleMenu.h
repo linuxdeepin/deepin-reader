@@ -24,20 +24,59 @@
 #include "widgets/CustomMenu.h"
 
 class DocSheet;
+/**
+ * @brief The ScaleMenu class
+ * 缩放比菜单
+ */
 class ScaleMenu : public CustomMenu
 {
     Q_OBJECT
 
 public:
     explicit ScaleMenu(QWidget *parent = nullptr);
+
+    /**
+     * @brief readCurDocParam
+     * 读取文档数据参数
+     * @param docSheet
+     */
     void readCurDocParam(DocSheet *docSheet);
 
 private slots:
+    /**
+     * @brief onTwoPage
+     * 双页显示
+     */
     void onTwoPage();
+
+    /**
+     * @brief onFiteH
+     * 适应高度
+     */
     void onFiteH();
+
+    /**
+     * @brief onFiteW
+     * 适应宽度
+     */
     void onFiteW();
+
+    /**
+     * @brief onDefaultPage
+     * 默认大小
+     */
     void onDefaultPage();
+
+    /**
+     * @brief onFitPage
+     * 适合页面
+     */
     void onFitPage();
+
+    /**
+     * @brief onScaleFactor
+     * 百分比
+     */
     void onScaleFactor();
 
 private:

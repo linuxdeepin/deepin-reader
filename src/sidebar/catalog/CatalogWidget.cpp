@@ -20,7 +20,6 @@
  */
 #include "CatalogWidget.h"
 #include "CatalogTreeView.h"
-#include "widgets/CustomClickLabel.h"
 #include "DocSheet.h"
 
 #include <QVBoxLayout>
@@ -44,7 +43,7 @@ void CatalogWidget::initWidget()
 
     titleLayout->setContentsMargins(10, 0, 10, 0);
 
-    titleLabel = new CustomClickLabel("", this);
+    titleLabel = new DLabel("", this);
 
     titleLabel->setForegroundRole(DPalette::TextTips);
 

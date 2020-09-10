@@ -22,10 +22,10 @@
 #define PAGINGWIDGET_H
 
 #include "widgets/CustomWidget.h"
-#include "widgets/CustomClickLabel.h"
 
 #include <DIconButton>
 #include <DLineEdit>
+#include <DLabel>
 
 class DocSheet;
 

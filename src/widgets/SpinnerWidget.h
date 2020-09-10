@@ -25,6 +25,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The SpinnerWidget class
+ * 加载中控件
+ */
 class SpinnerWidget : public DWidget
 {
     Q_OBJECT
@@ -32,11 +36,30 @@ public:
     explicit SpinnerWidget(DWidget *parent = nullptr);
 
 public:
+    /**
+     * @brief startSpinner
+     * 开始加载效果
+     */
     void startSpinner();
+
+    /**
+     * @brief stopSpinner
+     * 停止加载状态哦效果
+     */
     void stopSpinner();
+
+    /**
+     * @brief setSpinnerSize
+     * 设置加载控件大小
+     * @param s
+     */
     void setSpinnerSize(const QSize &s);
 
 private:
+    /**
+     * @brief InitSpinner
+     * 初始化加载控件
+     */
     void InitSpinner();
 };
 

@@ -1,6 +1,5 @@
 HEADERS += \
     $$PWD/AttrScrollWidget.h \
-    $$PWD/BookMarkButton.h \
     $$PWD/ColorWidgetAction.h \
     $$PWD/EncryptionPage.h \
     $$PWD/FileAttrWidget.h \
@@ -14,7 +13,6 @@ HEADERS += \
     $$PWD/SaveDialog.h \
     $$PWD/PrintManager.h \
     $$PWD/ShortCutShow.h \
-    $$PWD/CustomClickLabel.h \
     $$PWD/CustomMenu.h \
     $$PWD/CustomWidget.h \
     $$PWD/TipsWidget.h \
@@ -23,7 +21,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
-    $$PWD/BookMarkButton.cpp \
     $$PWD/ColorWidgetAction.cpp \
     $$PWD/EncryptionPage.cpp \
     $$PWD/FileAttrWidget.cpp \
@@ -37,7 +34,6 @@ SOURCES += \
     $$PWD/SaveDialog.cpp \
     $$PWD/PrintManager.cpp \
     $$PWD/ShortCutShow.cpp \
-    $$PWD/CustomClickLabel.cpp \
     $$PWD/CustomMenu.cpp \
     $$PWD/CustomWidget.cpp \
     $$PWD/TipsWidget.cpp \

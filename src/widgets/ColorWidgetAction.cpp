@@ -53,12 +53,6 @@ void ColorWidgetAction::slotBtnClicked(int index)
     }
 }
 
-void ColorWidgetAction::slotBtnDefaultClicked()
-{
-    Utils::setHiglightColorIndex(getIndex());
-    emit sigBtnGroupClicked();
-}
-
 void ColorWidgetAction::initWidget(DWidget *pParent)
 {
     DWidget *pWidget = new DWidget(pParent);
@@ -94,18 +88,4 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addItem(buttonLayout);
     pWidget->setLayout(mainLayout);
-}
-
-int ColorWidgetAction::getIndex()
-{
-    int iIndex = 0;
-
-    auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
-    foreach (auto btn, btnList) {
-        if (btn->isSelected()) {
-            iIndex = btn->objectName().toInt();
-            break;
-        }
-    }
-    return  iIndex;
 }

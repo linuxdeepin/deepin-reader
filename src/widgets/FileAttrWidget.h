@@ -29,6 +29,11 @@ DWIDGET_USE_NAMESPACE
 class DocSheet;
 class QVBoxLayout;
 class ImageWidget;
+
+/**
+ * @brief The FileAttrWidget class
+ * 文件信息窗口
+ */
 class FileAttrWidget : public DAbstractDialog
 {
     Q_OBJECT
@@ -39,17 +44,42 @@ public:
 
     ~FileAttrWidget() override;
 
+    /**
+     * @brief setFileAttr
+     * 设置文档对象
+     * @param sheet
+     */
     void setFileAttr(DocSheet *sheet);
 
+    /**
+     * @brief showScreenCenter
+     * 居中显示
+     */
     void showScreenCenter();
 
 private:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget();
 
+    /**
+     * @brief initCloseBtn
+     * 初始化关闭按钮
+     */
     void initCloseBtn();
 
+    /**
+     * @brief initImageLabel
+     * 初始化图片显示控件
+     */
     void initImageLabel();
 
+    /**
+     * @brief addTitleFrame
+     * 添加标题控件
+     */
     void addTitleFrame(const QString &);
 
 private:

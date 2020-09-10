@@ -58,12 +58,37 @@ public:
     virtual ~CustomWidget();
 
 public:
+    /**
+     * @brief CustomWidget::adaptWindowSize
+     * 缩略图列表自适应视窗大小
+     * @param scale  缩放因子 大于0的数
+     */
     virtual void adaptWindowSize(const double &);
+
+    /**
+     * @brief CustomWidget::updateThumbnail
+     * 高亮操作之后要跟换相应的缩略图
+     * @param index 页码数，从0开始
+     */
     virtual void updateThumbnail(const int &);
+
+    /**
+     * @brief CustomWidget::showMenu
+     * 显示菜单,响应键盘菜单键
+     */
     virtual void showMenu();
 
 protected:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     virtual void initWidget();
+
+    /**
+     * @brief updateWidgetTheme
+     * 主题变换更新
+     */
     void updateWidgetTheme();
 
 protected:
