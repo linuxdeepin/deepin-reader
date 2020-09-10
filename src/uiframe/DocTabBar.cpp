@@ -87,7 +87,7 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
     if (sheet == nullptr)
         return;
 
-    QString fileName = QFile(sheet->filePath()).fileName();
+    QString fileName = QFileInfo(sheet->filePath()).fileName();
 
     if (-1 == index)
         index = addTab(fileName);
