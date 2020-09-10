@@ -78,10 +78,6 @@ HEADERS +=\
 RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc
 
-TRANSLATIONS += \
-    $$SRCPWD/../translations/deepin-reader_en_US.ts\
-    $$SRCPWD/../translations/deepin-reader_zh_CN.ts
-
 target.path   = /usr/bin
 
 desktop.path  = /usr/share/applications
