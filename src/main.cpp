@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     dbus.registerObject("/com/deepin/Reader", &a, QDBusConnection::ExportScriptableSlots);
 
-    bool isConnect = QDBusConnection::systemBus().connect(GESTURE_SERVICE, GESTURE_PATH, GESTURE_INTERFACE, GESTURE_SIGNAL, &a, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
+    QDBusConnection::systemBus().connect(GESTURE_SERVICE, GESTURE_PATH, GESTURE_INTERFACE, GESTURE_SIGNAL, &a, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)

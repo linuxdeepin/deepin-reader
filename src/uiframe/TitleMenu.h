@@ -69,13 +69,6 @@ private:
      */
     void disableSaveButton(bool disable);
 
-protected:
-    /**
-     * @brief initActions
-     * 初始化菜单事件
-     */
-    void initActions() override;
-
 private:
     /**
      * @brief createActionMap

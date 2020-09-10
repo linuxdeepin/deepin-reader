@@ -70,7 +70,7 @@ public:
     virtual ~SheetBrowser() override;
 
     /**
-     * @brief SheetBrowser::firstThumbnail
+     * @brief firstThumbnail
      * 获取封面缩略图
      * @param filePath
      * @return
@@ -78,14 +78,14 @@ public:
     static QImage firstThumbnail(const QString &filePath);
 
     /**
-     * @brief SheetBrowser::isUnLocked
+     * @brief isUnLocked
      * 是否上锁
      * @return
      */
     bool isUnLocked();
 
     /**
-     * brief SheetBrowser::open
+     * brief open
      * 打开文档
      * @param fileType
      * @param filePath
@@ -95,7 +95,7 @@ public:
     bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     /**
-     * @brief SheetBrowser::reOpen
+     * @brief reOpen
      * 重新打开
      * @param fileType
      * @param filePath
@@ -104,14 +104,14 @@ public:
     bool reOpen(const Dr::FileType &fileType, const QString &filePath);
 
     /**
-     * @brief SheetBrowser::save
+     * @brief save
      * 保存
      * @return
      */
     bool save(const QString &path);
 
     /**
-     * @brief SheetBrowser::saveAs
+     * @brief saveAs
      * 另存为
      * @param filePath
      * @return
@@ -119,7 +119,7 @@ public:
     bool saveAs(const QString &filePath);
 
     /**
-     * @brief SheetBrowser::loadPages
+     * @brief loadPages
      * 加载文档信息
      * @param operation
      * @param bookmarks
@@ -128,14 +128,14 @@ public:
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
-     * @brief SheetBrowser::setMouseShape
+     * @brief setMouseShape
      * 根据鼠标样式,设置文字是否可选
      * @param shape 鼠标样式
      */
     void setMouseShape(const Dr::MouseShape &shape);
 
     /**
-     * @brief SheetBrowser::setBookMark
+     * @brief setBookMark
      * 操作文档书签
      * @param index
      * @param state
@@ -143,42 +143,42 @@ public:
     void setBookMark(int index, int state);
 
     /**
-     * @brief SheetBrowser::setAnnotationInserting
+     * @brief setAnnotationInserting
      * 设置添加图标注释标志位
      * @param inserting true:添加,false:不添加
      */
     void setAnnotationInserting(bool inserting);
 
     /**
-     * @brief SheetBrowser::deform
+     * @brief deform
      * 渲染当前视图中的页
      * @param operation 渲染参数包括,大小,单双页,旋转,缩放比例
      */
     void deform(SheetOperation &operation);
 
     /**
-     * @brief SheetBrowser::hasLoaded
+     * @brief hasLoaded
      * 文档是否已加载过
      * @return
      */
     bool hasLoaded();
 
     /**
-     * @brief SheetBrowser::allPages
+     * @brief allPages
      * 当前文档页码总数
      * @return
      */
     int allPages();
 
     /**
-     * @brief SheetBrowser::currentPage
+     * @brief currentPage
      * 当前页页码(从1开始)
      * @return
      */
     int currentPage();
 
     /**
-     * @brief SheetBrowser::viewPointInIndex
+     * @brief viewPointInIndex
      * 根据鼠标点击位置获取鼠标点击文档页的编号
      * @param viewPoint 鼠标点击位置
      * @return 文档页的编号,从0开始
@@ -186,14 +186,14 @@ public:
     int viewPointInIndex(QPoint viewPoint);
 
     /**
-     * @brief SheetBrowser::setCurrentPage
+     * @brief setCurrentPage
      * 页码跳转
      * @param page 跳转的页码(base 1)
      */
     void setCurrentPage(int page);
 
     /**
-     * @brief SheetBrowser::getImage
+     * @brief getImage
      * 获取文档页图片
      * @param index 页码编号
      * @param image 页码图片
@@ -206,33 +206,33 @@ public:
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 
     /**
-     * @brief SheetBrowser::openMagnifier
+     * @brief openMagnifier
      * 打开放大镜
      */
     void openMagnifier();
 
     /**
-     * @brief SheetBrowser::closeMagnifier
+     * @brief closeMagnifier
      * 关闭放大镜
      */
     void closeMagnifier();
 
     /**
-     * @brief SheetBrowser::magnifierOpened
+     * @brief magnifierOpened
      * 是否开启了放大镜
      * @return true:开启,false:未开启
      */
     bool magnifierOpened();
 
     /**
-     * @brief SheetBrowser::maxWidth
+     * @brief maxWidth
      * 最大一页的宽度
      * @return  宽度值
      */
     int maxWidth();
 
     /**
-     * @brief SheetBrowser::maxHeight
+     * @brief maxHeight
      *最大一页的高度
      * @return 高度值
      */
@@ -241,14 +241,14 @@ public:
     void needBookmark(int index, bool state);
 
     /**
-     * @brief SheetBrowser::selectedWordsText
+     * @brief selectedWordsText
      * 鼠标选择的文字
      * @return 文字内容
      */
     QString selectedWordsText();
 
     /**
-     * @brief SheetBrowser::outline
+     * @brief outline
      * 文档中的链接
      * @return
      */
@@ -262,7 +262,7 @@ public:
     Properties properties() const;
 
     /**
-     * @brief SheetBrowser::jumpToOutline
+     * @brief jumpToOutline
      * 点击目录列表中的目录,跳转到文档区域相应位置处
      * @param linkLeft 链接到左侧的距离
      * @param linkTop 链接到顶部的距离
@@ -271,7 +271,7 @@ public:
     void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
 
     /**
-     * @brief SheetBrowser::jumpToHighLight
+     * @brief jumpToHighLight
      * 点击注释列表中的注释,文档区跳到相应注释处
      * @param annotation 点击的那个注释
      * @param index 哪一页
@@ -279,14 +279,14 @@ public:
     void jumpToHighLight(deepin_reader::Annotation *annotation, const int index);
 
     /**
-     * @brief SheetBrowser::annotations
+     * @brief annotations
      * 获取注释列表
      * @return 注释列表
      */
     QList< deepin_reader::Annotation * > annotations();
 
     /**
-     * @brief SheetBrowser::addIconAnnotation
+     * @brief addIconAnnotation
      * 添加图标注释
      * @param page 哪一页
      * @param clickPoint 要添加的注释图标的位置
@@ -296,7 +296,7 @@ public:
     Annotation *addIconAnnotation(BrowserPage *page, const QPointF, const QString);
 
     /**
-     * @brief SheetBrowser::addHighLightAnnotation
+     * @brief addHighLightAnnotation
      * 添加高亮注释
      * @param contains 注释内容
      * @param color 高亮颜色
@@ -306,7 +306,7 @@ public:
     Annotation *addHighLightAnnotation(const QString, const QColor, QPoint &);
 
     /**
-     * @brief SheetBrowser::removeAnnotation
+     * @brief removeAnnotation
      * 删除单个注释
      * @param annotation 要删除注释的指针
      * @return 操作状态
@@ -314,14 +314,14 @@ public:
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     /**
-     * @brief SheetBrowser::removeAllAnnotation
+     * @brief removeAllAnnotation
      * 删除当前文档的所有注释
      * @return 是否操作成功
      */
     bool removeAllAnnotation();
 
     /**
-     * @brief SheetBrowser::updateAnnotation
+     * @brief updateAnnotation
      * 更新高亮注释
      * @param annotation 高亮注释的指针
      * @param text 注释内容
@@ -331,7 +331,7 @@ public:
     bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color = QColor());
 
     /**
-     * @brief SheetBrowser::showNoteEditWidget
+     * @brief showNoteEditWidget
      * 显示注释编辑框
      * @param annotation 注释
      * @param point 显示位置
@@ -339,51 +339,51 @@ public:
     void showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point);
 
     /**
-     * @brief SheetBrowser::handleSearch
+     * @brief handleSearch
      * 搜索操作,弹出搜索框
      */
     void handleSearch();
 
     /**
-     * @brief SheetBrowser::stopSearch
+     * @brief stopSearch
      * 停止搜索
      */
     void stopSearch();
 
     /**
-     * @brief SheetBrowser::handleFindNext
+     * @brief handleFindNext
      * 跳到下一个搜索条目中
      */
     void handleFindNext();
 
     /**
-     * @brief SheetBrowser::handleFindPrev
+     * @brief handleFindPrev
      * 跳到前一个搜索条目中
      */
     void handleFindPrev();
 
     /**
-     * @brief SheetBrowser::handleFindExit
+     * @brief handleFindExit
      * 结束搜索操作,结束搜索任务,清空搜索列表,展示上一次缩略图列表
      */
     void handleFindExit();
 
     /**
-     * @brief SheetBrowser::handleFindContent
+     * @brief handleFindContent
      * 搜索操作
      * @param strFind 要搜索的内容
      */
     void handleFindContent(const QString &strFind);
 
     /**
-     * @brief SheetBrowser::handleFindFinished
+     * @brief handleFindFinished
      * 设置搜索框状态,如果有搜索框是正常,反之设置成Alert状态
      * @param searchcnt 搜索条目数量
      */
     void handleFindFinished(int searchcnt);
 
     /**
-     * @brief SheetBrowser::jump2Li
+     * @brief jump2Li
      * 判断鼠标点击的位置是否有链接或者目录,如果有响应跳转
      * @param point 鼠标点击的位置
      * @return 返回跳转状态
@@ -391,13 +391,13 @@ public:
     bool jump2Link(const QPointF);
 
     /**
-     * @brief SheetBrowser::showMenu
+     * @brief showMenu
      * 根据菜单键弹出菜单
      */
     void showMenu();
 
     /**
-     * @brief SheetBrowser::pageLableIndex
+     * @brief pageLableIndex
      * 根据文档页页码得到文档页编号
      * @param pageLable 文档页页码
      * @return 文档页编号
@@ -405,14 +405,14 @@ public:
     int pageLableIndex(const QString);
 
     /**
-     * @brief SheetBrowser::pageHasLable
+     * @brief pageHasLable
      * 文档是否有文档页页码
      * @return  如果有返回true,反之返回false
      */
     bool pageHasLable();
 
     /**
-     * @brief SheetBrowser::pageNum2Lable
+     * @brief pageNum2Lable
      * 根据文档页编号得到文档页页码
      * @param index 文档页编号
      * @return 如果有返回文档页页码,反之返回空字符串
@@ -420,7 +420,7 @@ public:
     QString pageNum2Lable(const int);
 
     /**
-     * @brief SheetBrowser::beginViewportChange
+     * @brief beginViewportChange
      * 延时进行视图更新 过滤高频率调用
      */
     void beginViewportChange();
@@ -467,56 +467,56 @@ protected:
     };
 
     /**
-     * @brief SheetBrowser::showEvent
+     * @brief showEvent
      * 第一次显示之后跳转到初始页码
      * @param event
      */
     void showEvent(QShowEvent *event) override;
 
     /**
-     * @brief SheetBrowser::resizeEvent
+     * @brief resizeEvent
      * 当前文档视图大小变化事件
      * @param event
      */
     void resizeEvent(QResizeEvent *event) override;
 
     /**
-     * @brief SheetBrowser::mousePressEvent
+     * @brief mousePressEvent
      * 鼠标点击操作,鼠标左键点击注释或者目录操作,鼠标右键菜单操作
      * @param event
      */
     void mousePressEvent(QMouseEvent *event) override;
 
     /**
-     * @brief SheetBrowser::mouseMoveEvent
+     * @brief mouseMoveEvent
      * 鼠标移动操作,移动注释图标,选取文字等操作
      * @param event
      */
     void mouseMoveEvent(QMouseEvent *event) override;
 
     /**
-     * @brief SheetBrowser::mouseReleaseEvent
+     * @brief mouseReleaseEvent
      * 鼠标释放操作,主要是添加图标注释操作,还有选取文字动作等参数,以及展示注释内容
      * @param event
      */
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     /**
-     * @brief SheetBrowser::dragEnterEvent
+     * @brief dragEnterEvent
      * 忽略拖拽事件
      * @param event
      */
     void dragEnterEvent(QDragEnterEvent *event) override;
 
     /**
-     * @brief SheetBrowser::wheelEvent
+     * @brief wheelEvent
      * 鼠标滚轮事件,主要是文档缩放(ctrl+wheel)
      * @param event
      */
     void wheelEvent(QWheelEvent *event) override;
 
     /**
-     * @brief SheetBrowser::event
+     * @brief event
      * 综合事件处理中心,处理显示菜单和触摸屏手势
      * @param event 系统事件
      * @return
@@ -524,7 +524,7 @@ protected:
     bool event(QEvent *event) override;
 
     /**
-     * @brief SheetBrowser::gestureEvent
+     * @brief gestureEvent
      * 处理触摸屏手势事件
      * @param event
      * @return
@@ -532,13 +532,13 @@ protected:
     bool gestureEvent(QGestureEvent *event);
 
     /**
-     * @brief SheetBrowser::pinchTriggered
+     * @brief pinchTriggered
      * 触摸屏双指缩放和旋转
      */
     void pinchTriggered(QPinchGesture *);
 
     /**
-     * @brief SheetBrowser::tapGestureTriggered
+     * @brief tapGestureTriggered
      * 单指点击手势
      * @param tapGesture
      */
@@ -549,28 +549,32 @@ protected:
     BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
 
 private slots:
+    /**
+     * @brief onInit
+     * 初始化响应,跳转到初始化页
+     */
     void onInit();
 
     /**
-     * @brief SheetBrowser::onVerticalScrollBarValueChanged
+     * @brief onVerticalScrollBarValueChanged
      * 纵向滚动条数值改变槽函数,并通知左侧栏页变化
      */
     void onVerticalScrollBarValueChanged(int value);
 
     /**
-     * @brief SheetBrowser::onHorizontalScrollBarValueChanged
+     * @brief onHorizontalScrollBarValueChanged
      * 水平滚动条数值改变槽函数
      */
     void onHorizontalScrollBarValueChanged(int value);
 
     /**
-     * @brief SheetBrowser::onViewportChanged
+     * @brief onViewportChanged
      * 当前视图区域改变,渲染文档
      */
     void onViewportChanged();
 
     /**
-     * @brief SheetBrowser::onAddHighLightAnnot
+     * @brief onAddHighLightAnnot
      * 添加高亮注释
      * @param page 哪一页
      * @param text 注释内容
@@ -579,7 +583,7 @@ private slots:
     void onAddHighLightAnnot(BrowserPage *page, QString text, QColor color);
 
     /**
-     * @brief SheetBrowser::onRemoveAnnotation
+     * @brief onRemoveAnnotation
      * 删除注释
      * @param annotation 要删除注释的指针
      * @param tips 是否显示提示框
@@ -587,7 +591,7 @@ private slots:
     void onRemoveAnnotation(deepin_reader::Annotation *annotation, bool tips);
 
     /**
-     * @brief SheetBrowser::onUpdateAnnotation
+     * @brief onUpdateAnnotation
      * 更新注释内容
      * @param annotation 哪个注释
      * @param text 注释内容
@@ -596,7 +600,7 @@ private slots:
 
 private:
     /**
-     * @brief SheetBrowser::mouseClickIconAnnot
+     * @brief mouseClickIconAnnot
      * 鼠标是否点击了注释图标
      * @param clickPoint 鼠标点击位置
      * @return true:是     false:否
@@ -604,7 +608,7 @@ private:
     bool mouseClickIconAnnot(QPointF &);
 
     /**
-     * @brief SheetBrowser::calcIconAnnotRect
+     * @brief calcIconAnnotRect
      * 计算注释图标范围
      * @param page 图标注释在哪一页
      * @param point 当前点击的坐标点
@@ -614,14 +618,14 @@ private:
     bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
 
     /**
-     * @brief SheetBrowser::translate2Local
+     * @brief translate2Local
      * 将非0度的坐标点转换成0度的坐标点
      * @return
      */
     QPointF translate2Local(const QPointF);
 
     /**
-     * @brief SheetBrowser::getClickAnnot
+     * @brief getClickAnnot
      * 获得当前鼠标点击的注释
      * @param page 哪一页
      * @param clickPoint 鼠标点击位置
@@ -631,7 +635,7 @@ private:
     Annotation *getClickAnnot(BrowserPage *page, const QPointF, bool drawRect = false);
 
     /**
-     * @brief SheetBrowser::jump2PagePos
+     * @brief jump2PagePos
      * 响应左侧注释列表点击事件,跳到对应文档目录处
      * @param jumpPage  哪一页
      * @param posLeft   目录到左侧距离
@@ -640,7 +644,7 @@ private:
     void jump2PagePos(BrowserPage *page, const qreal posLeft, const qreal posTop);
 
     /**
-     * @brief SheetBrowser::jump2PagePos
+     * @brief jump2PagePos
      * 响应左侧注释列表点击事件,跳到对应文档注释处
      * @param jumpPage 哪一页
      * @param rect 注释起始范围
@@ -648,7 +652,7 @@ private:
     void jump2PagePos(BrowserPage *page, const QRectF);
 
     /**
-     * @brief SheetBrowser::moveIconAnnot
+     * @brief moveIconAnnot
      * 鼠标移动图标注释,设置当前图标注释的位置
      * @param page 图标注释所在页的指针
      * @param clickPoint 鼠标移动的位置
@@ -656,7 +660,7 @@ private:
     void moveIconAnnot(BrowserPage *page, const QPointF);
 
     /**
-     * @brief SheetBrowser::currentIndexRange
+     * @brief currentIndexRange
      * 当前显示的页数范围
      * @param fromIndex 当前显示的起始页码索引
      * @param toIndex 当前显示的结束页码索引
@@ -665,21 +669,21 @@ private:
     void currentIndexRange(int &fromIndex, int &toIndex);
 
     /**
-     * @brief SheetBrowser::currentScrollValueForPage
+     * @brief currentScrollValueForPage
      * 纵向滚动条值变化,得到滚动条当前位置所在文档页的编号
      * @return 文档页的编号(页码从1开始)
      */
     int currentScrollValueForPage();
 
     /**
-     * @brief SheetBrowser::curpageChanged
+     * @brief curpageChanged
      * 页码变化,通知左侧栏
      * @param curpage 当前页页码编号,从0开始
      */
     void curpageChanged(int curpage);
 
     /**
-     * @brief SheetBrowser::isLink
+     * @brief isLink
      * 判断鼠标点击位置是否有链接或者目录
      * @param point 鼠标点击位置
      * @return true:有, false:没有
@@ -687,7 +691,7 @@ private:
     bool isLink(const QPointF);
 
     /**
-     * @brief SheetBrowser::setIconAnnotSelect
+     * @brief setIconAnnotSelect
      * 设置注释图标选择框
      * @param select true:是选择, false:取消选择
      */

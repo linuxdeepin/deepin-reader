@@ -14,7 +14,7 @@ result_report_dir=$build_dir/report/report.xml
 
 #下面二选1进行操作，一种正向操作，一种逆向操作
 
-extract_info="*/Read_20200723_sp3/*"
+extract_info="/home/samson/project/deepin_reader/*"
 
 remove_info="*/test/*"
 

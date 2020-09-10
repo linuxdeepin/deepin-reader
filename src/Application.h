@@ -52,12 +52,6 @@ public:
     void unBlockShutdown();
 
     /**
-     * @brief addRenderTask
-     * 增加渲染任务
-     */
-    void addRenderTask();
-
-    /**
      * @brief showAnnotTextWidgetSig
      * 显示注释编辑框
      */

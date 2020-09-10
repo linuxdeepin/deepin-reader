@@ -6,7 +6,8 @@ mode = developer
 [deepin-document-viewer.deepin-document-viewer]
 file_filter = translations/deepin-reader_<lang>.ts
 source_file = translations/deepin-reader_en_US.ts
-source_lang = en_US
+preTranslate_file = src/deepin-reader.desktop
+source_lang = en
 type = QT
 
 [deepin-document-viewer.deepin-document-viewer-desktop-ts]

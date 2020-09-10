@@ -503,6 +503,10 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
+    if (s == Dr::key_f11 && m_slideWidget) {    //幻灯片时 f11设置为不起作    用
+        return;
+    }
+
     if (s == Dr::key_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
         return;
