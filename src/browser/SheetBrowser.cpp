@@ -636,12 +636,12 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     break;
     case Dr::RotateBy90: {
         linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>(/*jumpPage->pos().x() -*/ (1.0 - posTop) * jumpPage->boundingRect().height());
+        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height());
     }
     break;
     case Dr::RotateBy180: {
-        linkY = static_cast<int>(jumpPage->pos().y() - (/*1.0 -*/ posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() - (/*1.0 -*/ posLeft) * jumpPage->boundingRect().width());
+        linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
+        linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
     }
     break;
     case Dr::RotateBy270: {
