@@ -23,16 +23,42 @@
 #include <DStyledItemDelegate>
 
 DWIDGET_USE_NAMESPACE
+/**
+ * @brief The ThumbnailDelegate class
+ * 缩略图代理
+ */
 class ThumbnailDelegate : public DStyledItemDelegate
 {
 public:
     ThumbnailDelegate(QAbstractItemView *parent = nullptr);
 
 protected:
+    /**
+     * @brief paint
+     * 绘制事件
+     * @param painter
+     * @param option
+     * @param index
+     */
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+    /**
+     * @brief sizeHint
+     * 节点大小
+     * @param option
+     * @param index
+     * @return
+     */
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
+    /**
+     * @brief drawBookMark
+     * 绘制书签图标
+     * @param painter
+     * @param rect
+     * @param visible
+     */
     void drawBookMark(QPainter *painter, const QRect &rect, bool visible) const;
 
 private:

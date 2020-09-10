@@ -48,59 +48,198 @@ class BookMarkWidget;
 class NotesWidget;
 class SearchResWidget;
 class QButtonGroup;
+
+/**
+ * @brief The SheetSidebar class
+ * 左侧栏控件
+ */
 class SheetSidebar : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SheetSidebar)
     Q_PROPERTY(QPoint movepos READ pos WRITE move)
 
-signals:
-    void sigAdaptWindowSize(const double &scale);
-
 public :
     explicit SheetSidebar(DocSheet *parent = nullptr, PreviewWidgesFlags widgesFlag = PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     ~SheetSidebar() override;
 
+    /**
+     * @brief setBookMark
+     * 设置书签状态
+     * @param index
+     * @param state
+     */
     void setBookMark(int index, int state);
+
+    /**
+     * @brief setCurrentPage
+     * 设置当前页
+     * @param page
+     */
     void setCurrentPage(int page);
+
+    /**
+     * @brief handleOpenSuccess
+     * 文档打开成功
+     */
     void handleOpenSuccess();
+
+    /**
+     * @brief handleFindOperation
+     * 搜索状态
+     */
     void handleFindOperation(int);
+
+    /**
+     * @brief handleFindContentComming
+     * 搜索节点处理
+     */
     void handleFindContentComming(const deepin_reader::SearchResult &);
+
+    /**
+     * @brief handleFindFinished
+     * 搜索结束
+     * @return
+     */
     int  handleFindFinished();
+
+    /**
+     * @brief handleRotate
+     * 文档旋转
+     */
     void handleRotate();
+
+    /**
+     * @brief changeResetModelData
+     * 重置模型数据
+     */
     void changeResetModelData();
 
 public slots:
+    /**
+     * @brief handleUpdateThumbnail
+     * 刷新指定页码数据
+     * @param index
+     */
     void handleUpdateThumbnail(const int &index);
+
+    /**
+     * @brief handleUpdatePartThumbnail
+     * 缓存中无缩略图数据,进行刷新
+     * @param index
+     */
     void handleUpdatePartThumbnail(const int &index);
+
+    /**
+     * @brief handleAnntationMsg
+     * 注释操作类型处理
+     * @param anno
+     */
     void handleAnntationMsg(const int &, int, deepin_reader::Annotation *anno);
 
     // QObject interface
 public:
+    /**
+    * @brief event
+    * 事件处理
+    * @param event
+    * @return
+    */
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
 protected:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget() Q_DECL_OVERRIDE;
+
+    /**
+     * @brief adaptWindowSize
+     * 窗口大小变化
+     */
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 
 protected:
+    /**
+     * @brief resizeEvent
+     * 窗口大小变化事件
+     * @param event
+     */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /**
+     * @brief keyPressEvent
+     * 键盘按键事件
+     * @param event
+     */
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+
+    /**
+     * @brief showMenu
+     * 菜单显示
+     */
     void showMenu() override;
 
 private slots:
+    /**
+     * @brief onBtnClicked
+     * 缩略图,目录,书签,注释分页按钮切换
+     * @param index
+     */
     void onBtnClicked(int index);
+
+    /**
+     * @brief onUpdateWidgetTheme
+     * 主题变化刷新
+     */
     void onUpdateWidgetTheme();
 
+    /**
+     * @brief onHandWidgetDocOpenSuccess
+     * 文档打开成功处理
+     */
     void onHandWidgetDocOpenSuccess();
+
+    /**
+     * @brief onHandleOpenSuccessDelay
+     * 文档打开成功延迟处理
+     */
     void onHandleOpenSuccessDelay();
 
 private:
-    void initConnections();
+    /**
+     * @brief createBtn
+     * 分页按钮创建
+     * @param btnName
+     * @param objName
+     * @return
+     */
     DToolButton *createBtn(const QString &btnName, const QString &objName);
+
+    /**
+     * @brief dealWithPressKey
+     * 键盘按键处理
+     * @param sKey
+     */
     void dealWithPressKey(const QString &sKey);
+
+    /**
+     * @brief onJumpToPrevPage
+     * 上一页跳转
+     */
     void onJumpToPrevPage();
+
+    /**
+     * @brief onJumpToNextPage
+     * 下一页跳转
+     */
     void onJumpToNextPage();
+
+    /**
+     * @brief deleteItemByKey
+     * 删除按键处理
+     */
     void deleteItemByKey();
 
 private:

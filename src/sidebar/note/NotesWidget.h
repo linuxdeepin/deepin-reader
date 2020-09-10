@@ -30,47 +30,143 @@ class Annotation;
 class DocSheet;
 class ImageListView;
 class DocummentProxy;
+
+/**
+ * @brief The NotesWidget class
+ * 注释缩略图控件
+ */
 class NotesWidget : public CustomWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(NotesWidget)
 
-signals:
-    void sigUpdateThumbnail(const int &page);
-
 public:
     explicit NotesWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~NotesWidget() override;
 
+    /**
+     * @brief prevPage
+     * 上一页
+     */
     void prevPage();
+
+    /**
+     * @brief nextPage
+     * 下一页
+     */
     void nextPage();
+
+    /**
+     * @brief deleteItemByKey
+     * 删除节点
+     */
     void deleteItemByKey();
+
+    /**
+     * @brief handleOpenSuccess
+     * 文档打开成功,初始化数据
+     */
     void handleOpenSuccess();
+
+    /**
+     * @brief handleAnntationMsg
+     * 注释操作,添加,删除,删除全部
+     * @param anno
+     */
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
+    /**
+     * @brief addBtnCheckEnter
+     * 响应添加注释按钮操作
+     * @return
+     */
     bool addBtnCheckEnter();
+
+    /**
+     * @brief setTabOrderWidget
+     * 设置TAB顺序
+     * @param tabWidgetlst
+     */
     void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 public:
+    /**
+     * @brief adaptWindowSize
+     * 调整大小
+     */
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
+
+    /**
+     * @brief updateThumbnail
+     * 刷新指定页
+     */
     void updateThumbnail(const int &) Q_DECL_OVERRIDE;
+
+    /**
+     * @brief showMenu
+     * 显示菜单
+     */
     void showMenu() Q_DECL_OVERRIDE;
 
 public slots:
+    /**
+     * @brief changeResetModelData
+     * 重新加载注释目录数据
+     */
     void changeResetModelData();
 
 private:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget() Q_DECL_OVERRIDE;
 
 private slots:
+    /**
+     * @brief onListMenuClick
+     * 响应注释菜单点击
+     */
     void onListMenuClick(const int &);
+
+    /**
+     * @brief onListItemClicked
+     * 响应注释节点点击
+     * @param row
+     */
     void onListItemClicked(int row);
+
+    /**
+     * @brief onAddAnnotation
+     * 响应添加注释按钮
+     */
     void onAddAnnotation();
 
 private:
+    /**
+     * @brief copyNoteContent
+     * 拷贝注释内容
+     */
     void copyNoteContent();
+
+    /**
+     * @brief addNoteItem
+     * 添加注释
+     * @param anno
+     */
     void addNoteItem(deepin_reader::Annotation *anno);
+
+    /**
+     * @brief deleteNoteItem
+     * 删除注释
+     * @param anno
+     */
     void deleteNoteItem(deepin_reader::Annotation *anno);
+
+    /**
+     * @brief deleteAllItem
+     * 删除所有注释
+     */
     void deleteAllItem();
 
 private:

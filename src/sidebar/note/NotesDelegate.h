@@ -23,13 +23,32 @@
 #include <DStyledItemDelegate>
 
 DWIDGET_USE_NAMESPACE
+/**
+ * @brief The NotesDelegate class
+ * 注释代理
+ */
 class NotesDelegate : public DStyledItemDelegate
 {
 public:
     explicit NotesDelegate(QAbstractItemView *parent = nullptr);
 
 protected:
+    /**
+     * @brief paint
+     * 绘制
+     * @param painter
+     * @param option
+     * @param index
+     */
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+    /**
+     * @brief sizeHint
+     * 节点大小
+     * @param option
+     * @param index
+     * @return
+     */
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:

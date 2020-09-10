@@ -58,11 +58,31 @@ private:
 } ReaderImageParam_t;
 Q_DECLARE_METATYPE(ReaderImageParam_t);
 
+/**
+ * @brief The ReadImageTask class
+ * 获取文档图片线程类
+ */
 class ReadImageTask: public QRunnable
 {
 public:
+    /**
+     * @brief addgetDocImageTask
+     * 添加获取图片任务
+     * @param readImageParam
+     */
     void addgetDocImageTask(const ReaderImageParam_t &readImageParam);
+
+    /**
+     * @brief setThreadPoolManager
+     * 设置线程池管理对象
+     * @param object
+     */
     void setThreadPoolManager(QObject *object);
+
+    /**
+     * @brief run
+     * run
+     */
     void run() override;
 
 private:
@@ -70,6 +90,10 @@ private:
     ReaderImageParam_t m_docParam;
 };
 
+/**
+ * @brief The ReaderImageThreadPoolManager class
+ * 图片获取线程池管理类
+ */
 class ReaderImageThreadPoolManager: public QThreadPool
 {
     Q_OBJECT
@@ -79,12 +103,43 @@ public:
     static ReaderImageThreadPoolManager *getInstance();
 
 public:
+    /**
+     * @brief addgetDocImageTask
+     * 添加图片获取任务
+     * @param readImageParam
+     */
     void addgetDocImageTask(const ReaderImageParam_t &readImageParam);
+
+    /**
+     * @brief getImageForDocSheet
+     * 获取指定文档,指定页数的图片
+     * @param sheet 文档
+     * @param pageIndex 页数
+     * @return 图片
+     */
     QPixmap getImageForDocSheet(DocSheet *sheet, int pageIndex);
 
 private slots:
+    /**
+     * @brief onTaskFinished
+     * 获取图片任务结束
+     * @param task
+     * @param image
+     */
     void onTaskFinished(const ReaderImageParam_t &task, const QImage &image);
+
+    /**
+     * @brief onDocProxyDestroyed
+     * 文档已被销毁
+     * @param obj
+     */
     void onDocProxyDestroyed(QObject *obj);
+
+    /**
+     * @brief onReceiverDestroyed
+     * 接收函数对象已被销毁
+     * @param obj
+     */
     void onReceiverDestroyed(QObject *obj);
 
 private:

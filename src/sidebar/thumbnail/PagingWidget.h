@@ -27,13 +27,12 @@
 #include <DIconButton>
 #include <DLineEdit>
 
-/**
- * @brief The ThumbnailItemWidget class
- * @brief   显示的数字 比 实际的文档 多 1
- * @brief   跳转页窗体
- */
-
 class DocSheet;
+
+/**
+ * @brief The PagingWidget class
+ * 缩略图目录底部控件
+ */
 class PagingWidget : public CustomWidget
 {
     Q_OBJECT
@@ -43,24 +42,82 @@ public:
     explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
     ~PagingWidget() override;
 
+    /**
+     * @brief handleOpenSuccess
+     * 文档打开成功,初始化相关数据
+     */
     void handleOpenSuccess();
 
+    /**
+     * @brief setIndex
+     * 设置指定页数
+     * @param index
+     */
     void setIndex(int index);
 
+    /**
+     * @brief setTabOrderWidget
+     * 设置TAB切换控件顺序
+     * @param tabWidgetlst
+     */
     void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 private slots:
+    /**
+     * @brief slotPrePageBtnClicked
+     * 上一页按钮点击响应
+     */
     void slotPrePageBtnClicked();
+
+    /**
+     * @brief slotNextPageBtnClicked
+     * 下一页按钮点击响应
+     */
     void slotNextPageBtnClicked();
+
+    /**
+     * @brief slotUpdateTheme
+     * 主题变更
+     */
     void slotUpdateTheme();
 
+    /**
+     * @brief SlotJumpPageLineEditReturnPressed
+     * 页数编辑框确认响应
+     */
     void SlotJumpPageLineEditReturnPressed();
+
+    /**
+     * @brief onEditFinished
+     * 页数编辑框编辑结束
+     */
     void onEditFinished();
+
 private:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget() override;
+
+    /**
+     * @brief setBtnState
+     * 设置上一页,下一页按钮禁用状态
+     * @param currntPage
+     * @param totalPage
+     */
     void setBtnState(const int &currntPage, const int &totalPage);
 
+    /**
+     * @brief normalChangePage
+     * 跳转文档指定页数
+     */
     void normalChangePage();
+
+    /**
+     * @brief pageNumberJump
+     * 页面跳转
+     */
     void pageNumberJump();
 
 private:

@@ -28,6 +28,11 @@ class DocSheet;
 class PagingWidget;
 class ImageListView;
 class DocummentProxy;
+
+/**
+ * @brief The ThumbnailWidget class
+ * 缩略图目录
+ */
 class ThumbnailWidget : public CustomWidget
 {
     Q_OBJECT
@@ -38,23 +43,78 @@ public:
     ~ThumbnailWidget() Q_DECL_OVERRIDE;
 
 public:
+    /**
+     * @brief handleOpenSuccess
+     * 文档打开成功,初始化数据
+     */
     void handleOpenSuccess();
+
+    /**
+     * @brief handlePage
+     * 滚动到指定页数
+     * @param index
+     */
     void handlePage(int index);
+
+    /**
+     * @brief handleRotate
+     * 缩略图旋转
+     */
     void handleRotate();
+
+    /**
+     * @brief setBookMarkState
+     * 设置书签状态
+     * @param index 页数
+     * @param type 1: 可见 0: 不可见
+     */
     void setBookMarkState(const int &index, const int &type);
 
+    /**
+     * @brief prevPage
+     * 上一页
+     */
     void prevPage();
+
+    /**
+     * @brief nextPage
+     * 下一页
+     */
     void nextPage();
 
+    /**
+     * @brief adaptWindowSize
+     * 控件大小变化响应
+     * @param scale
+     */
     void adaptWindowSize(const double &scale)  Q_DECL_OVERRIDE;
+
+    /**
+     * @brief updateThumbnail
+     * 刷新指定页数
+     * @param index
+     */
     void updateThumbnail(const int &index) Q_DECL_OVERRIDE;
 
+    /**
+     * @brief setTabOrderWidget
+     * 设置TAB控件切换顺序
+     * @param tabWidgetlst
+     */
     void setTabOrderWidget(QList<QWidget *> &tabWidgetlst);
 
 protected:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget() Q_DECL_OVERRIDE;
 
 private:
+    /**
+     * @brief scrollToCurrentPage
+     * 滚动到当前页数
+     */
     void scrollToCurrentPage();
 
 private:

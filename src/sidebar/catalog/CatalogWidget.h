@@ -42,21 +42,51 @@ public:
 
     ~CatalogWidget() override;
 
+    /**
+     * @brief handleOpenSuccess
+     * 文档打开成功,初始化数据
+     */
     void handleOpenSuccess();
 
+    /**
+     * @brief handlePage
+     * 选中指定页
+     * @param page
+     */
     void handlePage(int page);
 
+    /**
+     * @brief nextPage
+     * 下一页
+     */
     void nextPage();
 
+    /**
+     * @brief prevPage
+     * 上一页
+     */
     void prevPage();
 
 private:
+    /**
+     * @brief setTitleTheme
+     * 设置标题名称
+     */
     void setTitleTheme();
 
 protected:
+    /**
+     * @brief initWidget
+     * 初始化控件
+     */
     void initWidget() override;
 
 protected:
+    /**
+     * @brief resizeEvent
+     * resize事件
+     * @param event
+     */
     void resizeEvent(QResizeEvent *event) override;
 
 private:

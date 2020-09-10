@@ -31,6 +31,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The TransparentTextEdit class
+ * 文本编辑控件
+ */
 class TransparentTextEdit : public QTextEdit
 {
     Q_OBJECT
@@ -38,18 +42,47 @@ public:
     explicit TransparentTextEdit(DWidget *parent = nullptr);
 
 signals:
+    /**
+     * @brief sigNeedShowTips
+     * 提示信号
+     * @param tips
+     */
     void sigNeedShowTips(const QString &tips, int);
 
 private:
+    /**
+     * @brief init
+     * 初始化
+     */
     void init();
 
 private slots:
+    /**
+     * @brief slotTextEditMaxContantNum
+     * 检测编辑框是否达到字数上限
+     */
     void slotTextEditMaxContantNum();
 
 protected:
+    /**
+     * @brief paintEvent
+     * 绘制事件
+     * @param event
+     */
     void paintEvent(QPaintEvent *event) override;
+
+    /**
+     * @brief insertFromMimeData
+     * 重载剪贴板插入函数
+     * @param source
+     */
     void insertFromMimeData(const QMimeData *source) override;
 
+    /**
+     * @brief keyPressEvent
+     * 键盘按键事件
+     * @param event
+     */
     void keyPressEvent(QKeyEvent *event) override;
 
 private:

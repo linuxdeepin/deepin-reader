@@ -23,6 +23,10 @@
 
 #include "widgets/CustomMenu.h"
 
+/**
+ * @brief The BookMarkMenu class
+ * 书签菜单
+ */
 class BookMarkMenu : public CustomMenu
 {
     Q_OBJECT
@@ -33,10 +37,23 @@ public:
 
     // CustomMenu interface
 protected:
+    /**
+     * @brief initActions
+     * 初始化Action
+     */
     void initActions() override;
 
 private slots:
+    /**
+     * @brief slotDelete
+     * 删除
+     */
     void slotDelete();
+
+    /**
+     * @brief slotDeleteAll
+     * 删除所有
+     */
     void slotDeleteAll();
 };
 

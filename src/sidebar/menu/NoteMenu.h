@@ -23,6 +23,10 @@
 
 #include "widgets/CustomMenu.h"
 
+/**
+ * @brief The NoteMenu class
+ * 注释菜单
+ */
 class NoteMenu : public CustomMenu
 {
     Q_OBJECT
@@ -33,11 +37,29 @@ public:
 
     // CustomMenu interface
 protected:
+    /**
+     * @brief initActions
+     * 初始化Aciton
+     */
     void initActions() override;
 
 private slots:
+    /**
+     * @brief slotCopy
+     * 拷贝
+     */
     void slotCopy();
+
+    /**
+     * @brief slotDelete
+     * 删除
+     */
     void slotDelete();
+
+    /**
+     * @brief slotAllDelete
+     * 删除所有
+     */
     void slotAllDelete();
 };
 
