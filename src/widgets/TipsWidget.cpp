@@ -23,6 +23,7 @@
 #include <DPlatformWindowHandle>
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
+#include <DApplication>
 
 #include <QPainter>
 #include <QDebug>
@@ -49,7 +50,7 @@ void TipsWidget::initWidget()
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &TipsWidget::onUpdateTheme);
 
-    m_timer.setInterval(100);
+    m_timer.setInterval(300);
     connect(&m_timer, &QTimer::timeout, this, &TipsWidget::onTimeOut);
 }
 
@@ -135,7 +136,7 @@ void TipsWidget::setAutoChecked(bool autoChecked)
 
 void TipsWidget::onTimeOut()
 {
-    if (this->isVisible() && !m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos()))) {
+    if (this->isVisible() && (!m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos())) || DApplication::widgetAt(QCursor::pos()) == nullptr)) {
         this->hide();
     }
 }
