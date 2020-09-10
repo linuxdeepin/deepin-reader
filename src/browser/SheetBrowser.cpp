@@ -1483,30 +1483,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return DGraphicsView::mouseMoveEvent(event);
     }
 
-//    if (event->type() == QEvent::MouseMove && event->source() == Qt::MouseEventSynthesizedByQt) {
-//        const ulong diffTime = event->timestamp() - m_lastMouseTime;
-//        const int diffYpos = event->pos().y() - m_lastMouseYpos;
-//        m_lastMouseTime = event->timestamp();
-//        m_lastMouseYpos = event->pos().y();
-
-//        if (m_gestureAction == GA_slide) {
-//            //经过调试0.2比较合适
-//            qreal scaleFactor = 0.2;
-
-//            /*开根号时数值越大衰减比例越大*/
-//            qreal direction = diffYpos > 0 ? 1.0 : -1.0;
-//            slideGesture(-direction * sqrt(abs(diffYpos)) / scaleFactor);
-
-//            /*预算滑惯性动时间*/
-//            m_stepSpeed = static_cast<qreal>(diffYpos) / static_cast<qreal>(diffTime + 0.000001);
-//            duration = sqrt(abs(m_stepSpeed)) * 1000;
-
-//            /*预算滑惯性动距离,4.0为调优数值*/
-//            m_stepSpeed /= sqrt(scaleFactor * 4.0);
-//            change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
-//        }
-//    }
-
     QPoint mousePos = event->pos();
 
     if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
