@@ -214,8 +214,8 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     catalogWidget.handleOpenSuccess();
 
     EXPECT_TRUE(catalogWidget.m_pTree);
-    catalogWidget.m_pTree->SlotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
-    catalogWidget.m_pTree->SlotCollapsed(catalogWidget.m_pTree->model()->index(0, 0));
+    catalogWidget.m_pTree->slotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
+    catalogWidget.m_pTree->slotCollapsed(catalogWidget.m_pTree->model()->index(0, 0));
     catalogWidget.m_pTree->onItemClicked(catalogWidget.m_pTree->model()->index(0, 0));
     catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
     QMouseEvent mouseevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
@@ -235,7 +235,7 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     bookwidget.updateThumbnail(-1);
     bookwidget.updateThumbnail(10000);
     bookwidget.nextPage();
-    bookwidget.DeleteItemByKey();
+    bookwidget.deleteItemByKey();
     bookwidget.handlePage(0);
     bookwidget.handleBookMark(0, 1);
     bookwidget.prevPage();
@@ -252,7 +252,7 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     NotesWidget noteWidget(sheet);
     noteWidget.prevPage();
     noteWidget.nextPage();
-    noteWidget.DeleteItemByKey();
+    noteWidget.deleteItemByKey();
     noteWidget.handleOpenSuccess();
     noteWidget.handleAnntationMsg(-1, 0);
     noteWidget.handleAnntationMsg(0, 0);

@@ -442,12 +442,6 @@ public:
      */
     void zoomout();
 
-    /**
-     * @brief sideBarVisible
-     * 获取左侧栏是否显示
-     * @return
-     */
-    bool sideBarVisible();
 
     /**
      * @brief setSidebarVisible

@@ -36,8 +36,6 @@
 #include "widgets/SlideWidget.h"
 #include "widgets/ScaleWidget.h"
 #include "widgets/AttrScrollWidget.h"
-#include "widgets/BookMarkButton.h"
-#include "widgets/CustomClickLabel.h"
 #include "widgets/PrintManager.h"
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
@@ -64,48 +62,10 @@ void Ut_Widgets::TearDown()
 }
 
 #ifdef UT_WIDGETS_TEST
-TEST(Ut_Widgets, BookMarkButtonTest)
-{
-    BookMarkButton bkBtn;
-    bkBtn.setClickState(true);
-    EXPECT_TRUE(bkBtn.clickState());
-    bkBtn.repaint();
-
-    QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&bkBtn, &mouseLPevent);
-
-    QMouseEvent mouseRPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&bkBtn, &mouseLPevent);
-
-    QMouseEvent mouseLRevent(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&bkBtn, &mouseLRevent);
-
-    QMouseEvent mouseRRevent(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&bkBtn, &mouseLRevent);
-
-    QEvent hoverE(QEvent::HoverEnter);
-    QCoreApplication::sendEvent(&bkBtn, &hoverE);
-
-    QEvent hoverL(QEvent::HoverLeave);
-    QCoreApplication::sendEvent(&bkBtn, &hoverL);
-}
-
 TEST(Ut_Widgets, BColorWidgetActionTest)
 {
     ColorWidgetAction colorAction;
-    EXPECT_TRUE(colorAction.getIndex() >= 0);
     colorAction.slotBtnClicked(0);
-    colorAction.slotBtnDefaultClicked();
-}
-
-TEST(Ut_Widgets, CustomClickLabelTest)
-{
-    CustomClickLabel clickLabel;
-    QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&clickLabel, &mouseLPevent);
-
-    QMouseEvent mouseRPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&clickLabel, &mouseLPevent);
 }
 
 TEST(Ut_Widgets, CustomMenuTest)
@@ -129,8 +89,6 @@ TEST(Ut_Widgets, CustomWidgetTest)
 TEST(Ut_Widgets, EncryptionPageTest)
 {
     EncryptionPage encryPage;
-    encryPage.setPassowrdFocus();
-    encryPage.resetPage();
     encryPage.nextbuttonClicked();
     encryPage.wrongPassWordSlot();
     encryPage.onPasswordChanged();
@@ -192,7 +150,6 @@ TEST(Ut_Widgets, RoundColorWidgetTest)
     RoundColorWidget roundColorWidget(Qt::red);
     roundColorWidget.setSelected(true);
     roundColorWidget.setAllClickNotify(false);
-    EXPECT_EQ(roundColorWidget.isSelected(), true);
 }
 
 TEST(Ut_Widgets, ShortCutShowTest)

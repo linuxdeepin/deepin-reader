@@ -57,7 +57,6 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     CentralDocPage *docpage = mainWindow->m_central->docPage();
     //Central
     ASSERT_TRUE(docpage);
-    ASSERT_TRUE(mainWindow->m_central->titleMenu());
     ASSERT_TRUE(mainWindow->m_central->titleWidget());
 
     mainWindow->m_central->openFiles(QStringList() << path);
@@ -90,7 +89,6 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     EXPECT_FALSE(docpage->isFullScreen());
     EXPECT_FALSE(docpage->quitFullScreen());
     EXPECT_TRUE(docpage->getTitleLabel());
-    EXPECT_TRUE(!docpage->getDocTabbarText(0).isEmpty());
 
     docpage->openFile(path);
     docpage->saveAll();
@@ -159,10 +157,6 @@ TEST_F(Ut_DocSheet, DocSheetTest)
 
     docpage->onSheetCountChanged(0);
     docpage->onSheetCountChanged(1);
-    docpage->getDocTabbarText(0);
-    docpage->getDocTabbarText(1);
-    docpage->getDocTabbarText(-1);
-    docpage->getDocTabbarText(10000);
 
     docpage->onOpened(0, true);
     docpage->onOpened(0, false);
@@ -172,7 +166,6 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     EXPECT_FALSE(sheet->existFileChanged());
     const QString &uuid = DocSheet::getUuid(sheet).toString();
     EXPECT_EQ(DocSheet::getSheet(uuid), sheet);
-    EXPECT_FALSE(sheet->isOpen());
     EXPECT_TRUE(sheet->pagesNumber() > 0);
     EXPECT_TRUE(sheet->currentPage() > 0 && sheet->currentPage() <= sheet->pagesNumber());
     EXPECT_TRUE(sheet->currentIndex() >= 0 && sheet->currentIndex() < sheet->pagesNumber());
@@ -195,8 +188,13 @@ TEST_F(Ut_DocSheet, DocSheetTest)
 
     sheet->jumpToIndex(0);
     sheet->jumpToNextPage();
-    EXPECT_TRUE(sheet->currentIndex() == 1);
-    EXPECT_TRUE(sheet->currentPage() == 2);
+    if (sheet->operation().layoutMode == Dr::SinglePageMode) {
+        EXPECT_TRUE(sheet->currentIndex() == 1);
+        EXPECT_TRUE(sheet->currentPage() == 2);
+    } else {
+        EXPECT_TRUE(sheet->currentIndex() == 2);
+        EXPECT_TRUE(sheet->currentPage() == 3);
+    }
 
     sheet->jumpToLastPage();
     sheet->jumpToNextPage();
@@ -204,8 +202,13 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber());
 
     sheet->jumpToPrevPage();
-    EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 2);
-    EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 1);
+    if (sheet->operation().layoutMode == Dr::SinglePageMode) {
+        EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 2);
+        EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 1);
+    } else {
+        EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 3);
+        EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 2);
+    }
 
     sheet->jumpToIndex(0);
     sheet->jumpToPrevPage();
@@ -296,7 +299,6 @@ TEST_F(Ut_DocSheet, DocSheetTest)
 
     sheet->zoomin();
     sheet->zoomout();
-    sheet->sideBarVisible();
 
     sheet->setSidebarVisible(true);
     sheet->setSidebarVisible(false);
@@ -321,22 +323,14 @@ TEST_F(Ut_DocSheet, DocSheetTest)
     sheet->needPassword();
     sheet->isUnLocked();
 
-    sheet->getPageLableIndex("1");
-
     sheet->operationRef();
     sheet->showTips("test", 0);
     sheet->onFindContentComming(deepin_reader::SearchResult());
     sheet->onFindFinished();
-
-    sheet->label2pagenum("1");
     sheet->haslabel();
 
     deepin_reader::FileInfo tFileInfo;
     sheet->docBasicInfo(tFileInfo);
-
-    sheet->pagenum2label(0);
-    sheet->pagenum2label(-1);
-    sheet->pagenum2label(10000);
 
     sheet->onBrowserPageChanged(0);
     sheet->onBrowserPageChanged(-1);
