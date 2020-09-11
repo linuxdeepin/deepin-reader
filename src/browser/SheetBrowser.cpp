@@ -1393,8 +1393,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                     }
                 } else if (objectname == "RemoveAnnotation") {
-                    if (annotation)
+                    if (annotation) {
+                        m_selectIconAnnotation = false;
+                        if (m_lastSelectIconAnnotPage)
+                            m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                         m_sheet->removeAnnotation(annotation->annotation());
+                    }
                 } else if (objectname == "AddAnnotationIcon") {
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
@@ -2091,6 +2095,9 @@ void SheetBrowser::showMenu()
         } else if (objectname == "ChangeAnnotationColor") {
         } else if (objectname == "RemoveAnnotation") {
             if (m_iconAnnot) {
+                m_selectIconAnnotation = false;
+                if (m_lastSelectIconAnnotPage)
+                    m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 if (m_sheet->removeAnnotation(m_iconAnnot))
                     m_iconAnnot = nullptr;
             }
