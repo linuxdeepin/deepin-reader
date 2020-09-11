@@ -30,6 +30,7 @@
 #include <QDir>
 #include <QTimer>
 #include <QUuid>
+#include <QWindow>
 
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
@@ -214,6 +215,9 @@ void DocTabBar::resizeEvent(QResizeEvent *e)
 
 void DocTabBar::onDragActionChanged(Qt::DropAction action)
 {
+    if (nullptr == dragIconWindow())    //不存在拖拽窗口执行setDisableWindowOverrideCursor会导致崩溃
+        return;
+
     if (action == Qt::IgnoreAction) {
         DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
         if (count() <= 1)

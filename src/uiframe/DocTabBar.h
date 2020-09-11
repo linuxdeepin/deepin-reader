@@ -178,13 +178,38 @@ private slots:
     void onTabCloseRequested(int index);
 
 protected:
+    /**
+     * @brief createMimeDataFromTab
+     * 移动前获取标签需要被传出的数据
+     * @param index
+     * @param option
+     */
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const override;
 
-    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source) override; //只是先生成一个tab,结束后自动删除
-
-    void insertFromMimeData(int index, const QMimeData *source) override;            //完全DROP 需要添加tab并打开对应的文档
-
+    /**
+     * @brief canInsertFromMimeData
+     * 查看是否允许被移入
+     * @param index
+     * @param source
+     * @return
+     */
     bool canInsertFromMimeData(int index, const QMimeData *source) const override;
+
+    /**
+     * @brief insertFromMimeDataOnDragEnter
+     * 只是先生成一个tab,结束后自动删除
+     * @param index
+     * @param source
+     */
+    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source) override;
+
+    /**
+     * @brief insertFromMimeData
+     * 最终完全DROP 需要添加tab并打开对应的文档
+     * @param index
+     * @param source
+     */
+    void insertFromMimeData(int index, const QMimeData *source) override;
 
     void dragEnterEvent(QDragEnterEvent *event) override;
 
