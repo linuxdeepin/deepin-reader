@@ -40,7 +40,6 @@ SOURCES += \
     document/ut_djvumodel.cpp \
     document/ut_pdfmodel.cpp \
     sidebar/ut_sheetsidebar.cpp \
-    uiframe/ut_docsheet.cpp \
     uiframe/ut_uiframe.cpp \
     ut_main.cpp \
     $$SRCPWD/MainWindow.cpp \
@@ -69,7 +68,6 @@ HEADERS +=\
     document/ut_pdfmodel.h \
     sidebar/ut_sheetsidebar.h \
     app/ut_utils.h \
-    uiframe/ut_docsheet.h \
     uiframe/ut_uiframe.h \
     ut_defines.h \
     ut_mainwindow.h \

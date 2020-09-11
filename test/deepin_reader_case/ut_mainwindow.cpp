@@ -41,5 +41,6 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_EQ(mainWindow->allowCreateWindow(), true);
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
     mainWindow->close();
+    MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE << UT_FILE_TEST_FILE_2)->close();
 }
 #endif
