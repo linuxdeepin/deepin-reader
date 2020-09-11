@@ -37,11 +37,26 @@ class PrintManager : public QObject
 public:
     explicit PrintManager(DocSheet *sheet, QObject *parent = nullptr);
 
+    /**
+     * @brief showPrintDialog
+     * 显示打印窗口
+     * @param widget
+     */
     void showPrintDialog(DWidget *widget);
 
+    /**
+     * @brief setPrintPath
+     * 设置打印文件
+     * @param strPrintPath
+     */
     void setPrintPath(const QString &strPrintPath);
 
 private slots:
+    /**
+     * @brief slotPrintPreview
+     * 打印预览
+     * @param printer
+     */
     void slotPrintPreview(DPrinter *printer);
 
 private:

@@ -40,34 +40,106 @@ class Utils : public QObject
     Q_OBJECT
 
 public:
+    /**
+     * @brief getKeyshortcut
+     * 组合快捷键
+     * @param keyEvent
+     * @return
+     */
     static QString getKeyshortcut(QKeyEvent *keyEvent);
 
     static bool fileExists(const QString &path);
 
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
 
+    /**
+     * @brief getInputDataSize
+     * 数据单位换算,最大是G
+     * @return
+     */
     static QString getInputDataSize(const qint64 &);
 
+    /**
+     * @brief roundQPixmap
+     * 生成带圆角缩略图
+     * @param img_in
+     * @param radius
+     * @return
+     */
     static QPixmap roundQPixmap(const QPixmap &img_in, int radius);
 
+    /**
+     * @brief copyText
+     *复制文本到系统剪切板
+     * @param sText
+     */
     static void copyText(const QString &sText);
 
+    /**
+     * @brief getUuid
+     * 获取UUID(唯一)
+     * @return
+     */
     static QString getUuid();
 
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 
+    /**
+     * @brief copyFile
+     * 复制文件
+     * @param sourcePath
+     * @param destinationPath
+     * @return
+     */
     static bool copyFile(const QString &sourcePath, const QString &destinationPath);
 
+    /**
+     * @brief copyImage
+     * 复制缩略图
+     * @param srcimg
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
     static QImage copyImage(const QImage &srcimg, int x, int y, int w, int h);
 
+    /**
+     * @brief renderSVG
+     * 渲染缩略图
+     * @param filePath
+     * @param size
+     * @return
+     */
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
+    /**
+     * @brief getHiglightColorList
+     * 注释高亮颜色列表
+     * @return
+     */
     static QList<QColor> getHiglightColorList();
 
+    /**
+     * @brief getCurHiglightColor
+     * 当前注释高亮颜色
+     * @return
+     */
     static QColor getCurHiglightColor();
 
+    /**
+     * @brief setHiglightColorIndex
+     * 设置全局注释高亮颜色
+     * @param index
+     */
     static void setHiglightColorIndex(int index);
 
+    /**
+     * @brief setObjectNoFocusPolicy
+     * 设置对象的焦点策略
+     * @param obj
+     */
     static void setObjectNoFocusPolicy(QObject *obj);
 
 private:

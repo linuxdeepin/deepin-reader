@@ -32,7 +32,7 @@ class PageSearchThread : public QThread
 public:
     explicit PageSearchThread(QObject *parent = nullptr);
 
-    virtual ~PageSearchThread();
+    virtual ~PageSearchThread() override;
 
 public:
     void startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startPage);
