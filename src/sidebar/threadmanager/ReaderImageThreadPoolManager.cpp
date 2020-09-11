@@ -25,7 +25,7 @@
 
 const int maxThreadCnt = 5;
 const int maxTaskList = 5;
-const char *threadPoolSlotFun = "onTaskFinished";
+const static char *threadPoolSlotFun = "onTaskFinished";
 
 void ReadImageTask::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {

@@ -77,7 +77,7 @@ public:
     QAction *createAction(const QString &objName, const char *member, bool checkable);
 
 protected:
-    virtual void initActions() {};
+    virtual void initActions() {}
 };
 
 

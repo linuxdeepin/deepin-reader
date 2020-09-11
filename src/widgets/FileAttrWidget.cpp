@@ -41,8 +41,7 @@ public:
     ImageWidget(DWidget *parent)
         : DWidget(parent)
     {
-
-    };
+    }
 
     void setPixmap(const QPixmap &pixmap)
     {
@@ -53,17 +52,19 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent *event)
-    {
-        DWidget::paintEvent(event);
-        QPainter painter(this);
-        painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-        painter.drawPixmap((this->width() - m_pixmap.width()) / 2, (this->height() - m_pixmap.height()) / 2, m_pixmap);
-    }
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QPixmap m_pixmap;
 };
+
+void ImageWidget::paintEvent(QPaintEvent *event)
+{
+    DWidget::paintEvent(event);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    painter.drawPixmap((this->width() - m_pixmap.width()) / 2, (this->height() - m_pixmap.height()) / 2, m_pixmap);
+}
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)

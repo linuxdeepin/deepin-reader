@@ -36,7 +36,7 @@ class BrowserWord : public QGraphicsItem
 public:
     explicit BrowserWord(QGraphicsItem *parent, deepin_reader::Word word);
 
-    ~BrowserWord();
+    ~BrowserWord() override;
 
     /**
      * @brief setScaleFactor

@@ -74,19 +74,21 @@ public:
     }
 
 protected:
-    QVariant data(const QModelIndex &index, int role) const
-    {
-        if (role == Qt::SizeHintRole) {
-            QSize size = QStandardItemModel::data(index, role).toSize();
-            size.setHeight(m_parent->fontMetrics().height());
-            return size;
-        }
-        return QStandardItemModel::data(index, role);
-    }
+    QVariant data(const QModelIndex &index, int role) const;
 
 private:
     QAbstractItemView *m_parent;
 };
+
+QVariant CatalogModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::SizeHintRole) {
+        QSize size = QStandardItemModel::data(index, role).toSize();
+        size.setHeight(m_parent->fontMetrics().height());
+        return size;
+    }
+    return QStandardItemModel::data(index, role);
+}
 
 CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     : DTreeView(parent), m_sheet(sheet)

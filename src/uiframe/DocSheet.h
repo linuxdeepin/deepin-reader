@@ -56,7 +56,7 @@ class DocSheet : public Dtk::Widget::DSplitter
 public:
     explicit DocSheet(Dr::FileType fileType, QString filePath, QWidget *parent = nullptr);
 
-    ~DocSheet();
+    ~DocSheet() override;
 
 public:
     /**

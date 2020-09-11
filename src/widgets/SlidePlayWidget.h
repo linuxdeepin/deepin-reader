@@ -157,7 +157,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 private:
-    bool m_autoPlay = true;;
+    bool m_autoPlay = true;
     QTimer m_timer;
     DIconButton *m_playBtn;
 };

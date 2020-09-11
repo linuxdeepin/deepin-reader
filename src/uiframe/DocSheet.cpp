@@ -68,7 +68,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     else if (Dr::DjVu == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
     else
-        m_sidebar = new SheetSidebar(this, 0);
+        m_sidebar = new SheetSidebar(this, nullptr);
 
     m_sidebar->setMinimumWidth(266);
 
@@ -643,7 +643,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
         if (isVisible) {
             this->insertWidget(0, m_sidebar);
         } else if (isFullScreen()) {
-            m_sidebar->setParent(0);
+            m_sidebar->setParent(nullptr);
             m_sidebar->setParent(this);
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
@@ -662,7 +662,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             return;
 
         if (isFullScreen() && this->indexOf(m_sidebar) >= 0) {
-            m_sidebar->setParent(0);
+            m_sidebar->setParent(nullptr);
             m_sidebar->setParent(this);
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
@@ -709,7 +709,7 @@ void DocSheet::openFullScreen()
         return;
 
     setSidebarVisible(false);
-    m_sidebar->setParent(0);
+    m_sidebar->setParent(nullptr);
     m_sidebar->setParent(this);
 
     m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
