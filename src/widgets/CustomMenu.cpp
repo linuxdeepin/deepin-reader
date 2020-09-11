@@ -37,8 +37,7 @@ QAction *CustomMenu::createAction(const QString &objName, const char *member, bo
     QAction *action = new QAction(objName, this);
     action->setObjectName(objName);
     action->setCheckable(checkable);
-    if (member != nullptr)
-        connect(action, SIGNAL(triggered()), this, member);
+    connect(action, SIGNAL(triggered()), this, member);
     this->addAction(action);
     return action;
 }

@@ -42,14 +42,11 @@
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
 
-#include "widgets/SlideWidget.h"
 #undef private
 #undef protected
 
 #include "Central.h"
 #include "DocSheet.h"
-#include "widgets/AttrScrollWidget.h"
-#include "widgets/PrintManager.h"
 #include "MsgHeader.h"
 
 #include <QUuid>
@@ -139,37 +136,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
 
     QKeyEvent sideekeyDevent(QEvent::KeyPress, Qt::Key_Delete, Qt::ControlModifier);
     QCoreApplication::sendEvent(&sideBar, &sideekeyDevent);
-
-    //AttrScrollWidget
-    AttrScrollWidget widgetTest(sheet);
-    widgetTest.resize(100, 400);
-
-    //PrintManager
-    PrintManager printManager(sheet);
-
-    //SlideWidget
-    SlideWidget slidewidget(sheet);
-    slidewidget.playImage();
-    slidewidget.drawImage(QPixmap());
-
-    slidewidget.onPreBtnClicked();
-    slidewidget.onPlayBtnClicked();
-    slidewidget.onNextBtnClicked();
-    slidewidget.onExitBtnClicked();
-    slidewidget.onImagevalueChanged(0);
-    slidewidget.onImageShowTimeOut();
-
-    slidewidget.onFetchImage(0);
-    slidewidget.onUpdatePageImage(0);
-    slidewidget.setWidgetState(false);
-    slidewidget.setWidgetState(true);
-    slidewidget.handleKeyPressEvent(Dr::key_space);
-    slidewidget.handleKeyPressEvent(Dr::key_space);
-    slidewidget.handleKeyPressEvent(Dr::key_left);
-    slidewidget.handleKeyPressEvent(Dr::key_right);
-
-    slidewidget.onParentDestroyed();
-    slidewidget.setWidgetState(true);
 
     //ThumbnailWidget
     ThumbnailWidget thumbnailWidget(sheet);

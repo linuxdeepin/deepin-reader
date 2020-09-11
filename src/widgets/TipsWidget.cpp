@@ -136,7 +136,7 @@ void TipsWidget::setAutoChecked(bool autoChecked)
 
 void TipsWidget::onTimeOut()
 {
-    if (this->isVisible() && (!m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos())) || DApplication::widgetAt(QCursor::pos()) == nullptr)) {
+    if (this->isVisible() && ((m_parent && !m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos()))) || DApplication::widgetAt(QCursor::pos()) == nullptr)) {
         this->hide();
     }
 }

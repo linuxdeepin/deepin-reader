@@ -133,7 +133,7 @@ private:
     Qt::Alignment m_alignment;
 
     QTimer m_timer;
-    QWidget *m_parent;
+    QWidget *m_parent = nullptr;
     bool m_autoChecked = false;
 };
 

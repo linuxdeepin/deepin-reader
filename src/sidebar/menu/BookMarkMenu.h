@@ -41,7 +41,7 @@ protected:
      * @brief initActions
      * 初始化Action
      */
-    void initActions() override;
+    void initActions();
 
 private slots:
     /**

@@ -29,25 +29,32 @@
 #include "widgets/CustomWidget.h"
 #include "widgets/EncryptionPage.h"
 #include "widgets/ColorWidgetAction.h"
-#include "widgets/FileAttrWidget.h"
 #include "widgets/HandleMenu.h"
 #include "widgets/ShortCutShow.h"
 #include "widgets/SlidePlayWidget.h"
 #include "widgets/SlideWidget.h"
 #include "widgets/ScaleWidget.h"
-#include "widgets/AttrScrollWidget.h"
 #include "widgets/PrintManager.h"
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/SpinnerWidget.h"
+#include "widgets/SlideWidget.h"
+#include "widgets/FileAttrWidget.h"
+#include "widgets/AttrScrollWidget.h"
 
 #undef private
 #undef protected
 
 #define private public
+#include "MainWindow.h"
+#include "CentralDocPage.h"
+
 #include "widgets/TipsWidget.h"
 #include "widgets/WordWrapLabel.h"
 #undef private
+
+#include "Central.h"
+#include "DocSheet.h"
 
 Ut_Widgets::Ut_Widgets()
 {
@@ -62,6 +69,144 @@ void Ut_Widgets::TearDown()
 }
 
 #ifdef UT_WIDGETS_TEST
+TEST(Ut_Widgets, SheetWidgetTest)
+{
+    const QString &path = UT_FILE_TEST_FILE;
+    MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
+    ASSERT_TRUE(mainWindow->m_central);
+
+    CentralDocPage *docpage = mainWindow->m_central->docPage();
+    //Central
+    ASSERT_TRUE(docpage);
+
+    DocSheet *sheet = docpage->getSheet(path);
+    ASSERT_TRUE(sheet);
+
+    //ScaleMenu
+    {
+        ScaleMenu scaleMenu;
+        scaleMenu.readCurDocParam(0);
+        scaleMenu.onTwoPage();
+        scaleMenu.onFiteH();
+        scaleMenu.onFiteW();
+        scaleMenu.onDefaultPage();
+        scaleMenu.onFitPage();
+        scaleMenu.onScaleFactor();
+
+        scaleMenu.readCurDocParam(sheet);
+        scaleMenu.onTwoPage();
+        scaleMenu.onFiteH();
+        scaleMenu.onFiteW();
+        scaleMenu.onDefaultPage();
+        scaleMenu.onFitPage();
+        scaleMenu.onScaleFactor();
+    }
+
+    //    //FileAttrWidget
+    {
+        FileAttrWidget filewidget;
+        filewidget.setAttribute(Qt::WA_ShowModal, false);
+        filewidget.setFileAttr(0);
+        filewidget.setFileAttr(sheet);
+        filewidget.addTitleFrame("");
+        filewidget.resize(600, 600);
+        filewidget.showScreenCenter();
+    }
+
+    //PrintManager
+    PrintManager printManager(sheet);
+
+    //SlideWidget
+    {
+        SlideWidget *slidewidget = new SlideWidget(sheet);
+        slidewidget->playImage();
+        slidewidget->drawImage(QPixmap());
+
+        slidewidget->onImagevalueChanged(0);
+        slidewidget->onImageShowTimeOut();
+
+        slidewidget->onFetchImage(0);
+        slidewidget->onUpdatePageImage(0);
+        slidewidget->onPlayBtnClicked();
+        slidewidget->handleKeyPressEvent(Dr::key_space);
+        slidewidget->handleKeyPressEvent(Dr::key_left);
+        slidewidget->handleKeyPressEvent(Dr::key_right);
+
+        slidewidget->onPreBtnClicked();
+        slidewidget->onPlayBtnClicked();
+        slidewidget->onNextBtnClicked();
+        slidewidget->onExitBtnClicked();
+
+        slidewidget->onParentDestroyed();
+        slidewidget->close();
+    }
+
+    //HandleMenu
+    {
+        HandleMenu handleMenu;
+        handleMenu.readCurDocParam(0);
+        handleMenu.onHandTool();
+        handleMenu.onSelectText();
+
+        handleMenu.readCurDocParam(sheet);
+        handleMenu.onHandTool();
+        handleMenu.onSelectText();
+    }
+
+    //ScaleWidget
+    {
+        ScaleWidget scaleWidget;
+        scaleWidget.setSheet(0);
+        scaleWidget.clear();
+        scaleWidget.onPrevScale();
+        scaleWidget.onNextScale();
+        scaleWidget.onReturnPressed();
+        scaleWidget.onEditFinished();
+        scaleWidget.onArrowBtnlicked();
+
+        scaleWidget.setSheet(sheet);
+        scaleWidget.clear();
+        scaleWidget.onPrevScale();
+        scaleWidget.onNextScale();
+        scaleWidget.onReturnPressed();
+        scaleWidget.onEditFinished();
+    }
+
+    //FindWidget
+    {
+        FindWidget findWidget;
+        findWidget.setDocSheet(0);
+        findWidget.showPosition(0);
+        findWidget.setSearchEditFocus();
+        findWidget.setEditAlert(true);
+        findWidget.setEditAlert(false);
+        findWidget.handleContentChanged();
+        findWidget.slotFindNextBtnClicked();
+        findWidget.slotFindPrevBtnClicked();
+        findWidget.slotEditAborted();
+        findWidget.slotClearContent();
+        findWidget.stopSearch();
+        findWidget.findCancel();
+
+        findWidget.setDocSheet(sheet);
+        findWidget.slotFindNextBtnClicked();
+        findWidget.slotFindPrevBtnClicked();
+        findWidget.slotEditAborted();
+        findWidget.slotClearContent();
+        findWidget.stopSearch();
+        findWidget.findCancel();
+
+        QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
+        QCoreApplication::sendEvent(&findWidget, &sidekeyLevent);
+
+        QKeyEvent sidekeyUpLevent(QEvent::KeyPress, Qt::Key_Up, Qt::ControlModifier);
+        QCoreApplication::sendEvent(&findWidget, &sidekeyUpLevent);
+    }
+
+    sheet->saveData();
+    mainWindow->close();
+}
+
 TEST(Ut_Widgets, BColorWidgetActionTest)
 {
     ColorWidgetAction colorAction;
@@ -95,61 +240,25 @@ TEST(Ut_Widgets, EncryptionPageTest)
     encryPage.onUpdateTheme();
 }
 
-TEST(Ut_Widgets, FileAttrWidgetTest)
-{
-    FileAttrWidget filewidget;
-    filewidget.setFileAttr(0);
-    filewidget.showScreenCenter();
-    filewidget.addTitleFrame("");
-}
-
-TEST(Ut_Widgets, FindWidgetTest)
-{
-    FindWidget findWidget;
-    findWidget.setDocSheet(0);
-    findWidget.showPosition(0);
-    findWidget.setSearchEditFocus();
-    findWidget.setEditAlert(true);
-    findWidget.setEditAlert(false);
-    findWidget.findCancel();
-    findWidget.handleContentChanged();
-    findWidget.slotFindNextBtnClicked();
-    findWidget.slotFindPrevBtnClicked();
-    findWidget.slotEditAborted();
-    findWidget.slotClearContent();
-    findWidget.stopSearch();
-}
-
-TEST(Ut_Widgets, HandleMenuTest)
-{
-    HandleMenu handleMenu;
-    handleMenu.readCurDocParam(0);
-    handleMenu.onHandTool();
-    handleMenu.onSelectText();
-}
-
 TEST(Ut_Widgets, SaveDialogTest)
 {
     SaveDialog saveDialog;
-}
-
-TEST(Ut_Widgets, ScaleMenuTest)
-{
-    ScaleMenu scaleMenu;
-    scaleMenu.readCurDocParam(0);
-    scaleMenu.onTwoPage();
-    scaleMenu.onFiteH();
-    scaleMenu.onFiteW();
-    scaleMenu.onDefaultPage();
-    scaleMenu.onFitPage();
-    scaleMenu.onScaleFactor();
+    saveDialog.showTipDialog("1111111");
+    saveDialog.showExitDialog();
 }
 
 TEST(Ut_Widgets, RoundColorWidgetTest)
 {
     RoundColorWidget roundColorWidget(Qt::red);
+    roundColorWidget.setSelected(false);
     roundColorWidget.setSelected(true);
-    roundColorWidget.setAllClickNotify(false);
+    roundColorWidget.setAllClickNotify(true);
+    roundColorWidget.resize(600, 600);
+    roundColorWidget.repaint();
+    roundColorWidget.show();
+
+    QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(&roundColorWidget, &mouseLPevent);
 }
 
 TEST(Ut_Widgets, ShortCutShowTest)
@@ -157,6 +266,7 @@ TEST(Ut_Widgets, ShortCutShowTest)
     ShortCutShow shortCutDialog;
     shortCutDialog.setSheet(0);
     shortCutDialog.initDJVU();
+    shortCutDialog.show();
 }
 
 TEST(Ut_Widgets, SlidePlayWidgetTest)
@@ -181,10 +291,10 @@ TEST(Ut_Widgets, SlidePlayWidgetTest)
     QMouseEvent mouseRPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(&slidePlaywidget, &mouseLPevent);
 
-    QEvent hoverE(QEvent::HoverEnter);
+    QEvent hoverE(QEvent::Enter);
     QCoreApplication::sendEvent(&slidePlaywidget, &hoverE);
 
-    QEvent hoverL(QEvent::HoverLeave);
+    QEvent hoverL(QEvent::Leave);
     QCoreApplication::sendEvent(&slidePlaywidget, &hoverL);
 }
 
@@ -196,37 +306,29 @@ TEST(Ut_Widgets, SpinnerWidgetTest)
     spinnerWidget.setSpinnerSize(QSize(100, 100));
 }
 
-TEST(Ut_Widgets, ScaleWidgetTest)
-{
-    ScaleWidget scaleWidget;
-    scaleWidget.setSheet(0);
-    scaleWidget.clear();
-    scaleWidget.onPrevScale();
-    scaleWidget.onNextScale();
-    scaleWidget.onReturnPressed();
-    scaleWidget.onEditFinished();
-    scaleWidget.onArrowBtnlicked();
-}
-
 TEST(Ut_Widgets, TipsWidgetTest)
 {
     TipsWidget tipsWidget;
+    tipsWidget.show();
     tipsWidget.setText("test");
+    tipsWidget.setAutoChecked(true);
     tipsWidget.setAlignment(Qt::AlignCenter);
     tipsWidget.setLeftRightMargin(-1);
     tipsWidget.setTopBottomMargin(-1);
     tipsWidget.setMaxLineCount(0);
     tipsWidget.adjustContent("const QString & text");
     tipsWidget.onUpdateTheme();
+    tipsWidget.onTimeOut();
 }
 
 TEST(Ut_Widgets, WordWrapLabelTest)
 {
     WordWrapLabel wordLabel;
-    wordLabel.resize(100, 100);
-    wordLabel.setText("test");
-    wordLabel.setMargin(-1);
+    wordLabel.show();
+    wordLabel.setFixedWidth(200);
+    wordLabel.resize(200, 100);
+    wordLabel.setText("test_111111111111111111111111111111111");
+    wordLabel.setMargin(0);
     wordLabel.adjustContent();
-    wordLabel.update();
 }
 #endif

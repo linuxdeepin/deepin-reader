@@ -40,5 +40,6 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_EQ(mainWindow->hasSheet(nullptr), false);
     EXPECT_EQ(mainWindow->allowCreateWindow(), true);
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
+    mainWindow->close();
 }
 #endif
