@@ -967,9 +967,13 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
             return;
 
         if (event->delta() > 0) {
-            m_sheet->zoomin();
+            QTimer::singleShot(50, this, [ = ] {
+                m_sheet->zoomin();
+            });
         } else {
-            m_sheet->zoomout();
+            QTimer::singleShot(50, this, [ = ] {
+                m_sheet->zoomout();
+            });
         }
 
         return;
