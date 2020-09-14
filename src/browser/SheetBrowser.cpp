@@ -1302,7 +1302,14 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         m_iconAnnot = nullptr;
 
         if (btn == Qt::LeftButton) {
+            //清除上一次选中
+            if (m_lastSelectIconAnnotPage)
+                m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
+
             if (event->source() == Qt::MouseEventSynthesizedByQt) {
+                //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
+                setDocTapGestrue(point);
+
                 QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
                 BrowserWord *beginWord = nullptr;
                 foreach (QGraphicsItem *item, beginItemList) {
@@ -1487,6 +1494,14 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
+    if (event->source() == Qt::MouseEventSynthesizedByQt) {
+        if (m_selectIconAnnotation) {
+            QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
+        } else {
+            QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+        }
+    }
+
     if (m_touchScreenSelectWord) {
         return DGraphicsView::mouseMoveEvent(event);
     }
@@ -2066,6 +2081,22 @@ void SheetBrowser::slideGesture(const qreal diff)
     this->verticalScrollBar()->setValue(this->verticalScrollBar()->value() + step);
 }
 
+void SheetBrowser::setDocTapGestrue(const QPoint mousePos)
+{
+    QPoint point = mousePos;
+    BrowserPage *page = getBrowserPageForPoint(point);
+    if (nullptr == page)
+        return;
+
+    BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
+
+    if (page->getBrowserWord(mousePos) || browserAnno || (!m_magnifierLabel && this->isLink(mapToScene(mousePos)))) {
+        QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
+    } else {
+        QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+    }
+}
+
 bool SheetBrowser::jump2Link(const QPointF point)
 {
     QPointF mouseClickPoint = point;
@@ -2151,9 +2182,6 @@ void SheetBrowser::showMenu()
 
     QPoint menuPoint(-1, -1);
 
-    if (m_lastSelectIconAnnotPage)
-        m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-
     if (m_selectEndWord)
         menuPoint = this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight()));
     if (!selectWords.isEmpty() && menuPoint.y() >= 0 && menuPoint.x() >= 0) {
@@ -2162,6 +2190,8 @@ void SheetBrowser::showMenu()
         menu.exec(this->mapToGlobal(menuPoint));
     } else  if (m_iconAnnot) {
         //文字注释(图标)
+        if (m_lastSelectIconAnnotPage)
+            m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
         menuPoint = this->mapFromScene(m_selectEndPos);
         menu.initActions(m_sheet, this->currentPage() - 1, SheetMenuType_e::DOC_MENU_ANNO_ICON, m_iconAnnot->contents());
         menu.exec(this->mapToGlobal(menuPoint));

@@ -699,6 +699,12 @@ private:
 
     void slideGesture(const qreal diff);
 
+    /**
+     * @brief setDocTapGestrue
+     * 根据手势点击位置设置文档滑动方式
+     */
+    void setDocTapGestrue(const QPoint);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<deepin_reader::Document *> m_renderDocuments;
