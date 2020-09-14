@@ -65,7 +65,8 @@ void ScaleWidget::initWidget()
     pPreBtn->setFixedSize(24, 24);
     connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
 
-    DIconButton *pNextBtn = new DIconButton(DStyle::SP_IncreaseElement);
+    DIconButton *pNextBtn = new DIconButton(this/*DStyle::SP_IncreaseElement*/);
+    pNextBtn->setIcon(QIcon::fromTheme("dr_button_add"));
     pNextBtn->setObjectName("SP_IncreaseElement");
     DStyle::setFrameRadius(pNextBtn, 12);
     pNextBtn->setFixedSize(24, 24);

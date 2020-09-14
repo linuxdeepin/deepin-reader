@@ -61,5 +61,7 @@
         <file>builtin/dark/icons/dr_bookmark_hover_39px.svg</file>
         <file>builtin/dark/icons/dr_bookmark_pressed_39px.svg</file>
         <file>builtin/icons/dr_compress_lock_128px.svg</file>
+        <file>builtin/light/texts/dr_button_add_12px.svg</file>
+        <file>builtin/dark/texts/dr_button_add_12px.svg</file>
     </qresource>
 </RCC>
