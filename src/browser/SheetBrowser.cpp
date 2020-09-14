@@ -1303,8 +1303,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
         if (btn == Qt::LeftButton) {
             //清除上一次选中
-            if (m_lastSelectIconAnnotPage)
-                m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
+            clearSelectIconAnnotAfterMenu();
 
             if (event->source() == Qt::MouseEventSynthesizedByQt) {
                 //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
@@ -1468,6 +1467,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             });
 
             if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
+                if (m_lastSelectIconAnnotPage)
+                    m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON, annotation->annotationText());
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
@@ -1841,8 +1842,7 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF cli
     QRectF iconRect;
 
     if (nullptr != page) {
-        if (m_lastSelectIconAnnotPage)
-            m_lastSelectIconAnnotPage->setSelectIconRect(false);
+        clearSelectIconAnnotAfterMenu();
 
         m_lastSelectIconAnnotPage = page;
 
@@ -1856,6 +1856,10 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF cli
     }
 
     if (anno && !contents.isEmpty()) {
+        m_selectIconAnnotation = true;
+        if (m_lastSelectIconAnnotPage) {
+            m_lastSelectIconAnnotPage->setSelectIconRect(true);
+        }
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno->page - 1, anno);
     }
     return anno;
@@ -2097,6 +2101,15 @@ void SheetBrowser::setDocTapGestrue(const QPoint mousePos)
     }
 }
 
+void SheetBrowser::clearSelectIconAnnotAfterMenu()
+{
+    m_selectIconAnnotation = false;
+    if (m_lastSelectIconAnnotPage) {
+        m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
+        m_lastSelectIconAnnotPage->setSelectIconRect(false);
+    }
+}
+
 bool SheetBrowser::jump2Link(const QPointF point)
 {
     QPointF mouseClickPoint = point;
@@ -2202,6 +2215,8 @@ void SheetBrowser::showMenu()
         QPoint showPos(parentPos.x() + m_sheet->width() / 2, parentPos.y() + m_sheet->height() / 2);
         menu.exec(showPos);
     }
+
+    clearSelectIconAnnotAfterMenu();
 }
 
 int SheetBrowser::pageLableIndex(const QString pageLable)

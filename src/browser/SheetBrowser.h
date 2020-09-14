@@ -705,6 +705,12 @@ private:
      */
     void setDocTapGestrue(const QPoint);
 
+    /**
+     * @brief clearSelectIconAnnotAfterMenu
+     * 图标注释消失之后清除图标注释的选中状态
+     */
+    void clearSelectIconAnnotAfterMenu();
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<deepin_reader::Document *> m_renderDocuments;
