@@ -87,6 +87,20 @@ void NotesWidget::prevPage()
     m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
 }
 
+void NotesWidget::pageUp()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &newCurrent = m_pImageListView->pageUpIndex();
+    if (!newCurrent.isValid())
+        return;
+
+    int pageIndex = m_pImageListView->getPageIndexForModelIndex(newCurrent.row());
+    m_sheet->jumpToIndex(pageIndex);
+    m_pImageListView->scrollToModelInexPage(newCurrent);
+}
+
 void NotesWidget::nextPage()
 {
     if (m_sheet.isNull())
@@ -95,9 +109,24 @@ void NotesWidget::nextPage()
     int curPage = m_pImageListView->currentIndex().row() + 1;
     if (curPage >= m_pImageListView->model()->rowCount())
         return;
+
     int pageIndex = m_pImageListView->getPageIndexForModelIndex(curPage);
     m_sheet->jumpToIndex(pageIndex);
     m_pImageListView->scrollToModelInexPage(m_pImageListView->model()->index(curPage, 0));
+}
+
+void NotesWidget::pageDown()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &newCurrent = m_pImageListView->pageDownIndex();
+    if (!newCurrent.isValid())
+        return;
+
+    int pageIndex = m_pImageListView->getPageIndexForModelIndex(newCurrent.row());
+    m_sheet->jumpToIndex(pageIndex);
+    m_pImageListView->scrollToModelInexPage(newCurrent);
 }
 
 void NotesWidget::deleteItemByKey()

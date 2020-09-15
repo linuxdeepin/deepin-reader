@@ -69,10 +69,22 @@ public:
     void nextPage();
 
     /**
+     * @brief pageDownPage
+     * 下一翻页
+     */
+    void pageDownPage();
+
+    /**
      * @brief prevPage
      * 上一页
      */
     void prevPage();
+
+    /**
+     * @brief pageUpPage
+     * 上一翻页
+     */
+    void pageUpPage();
 
 public:
     /**

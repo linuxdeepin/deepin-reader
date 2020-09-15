@@ -231,10 +231,22 @@ private:
     void onJumpToPrevPage();
 
     /**
+     * @brief onJumpToPageUp
+     * 上一翻页
+     */
+    void onJumpToPageUp();
+
+    /**
      * @brief onJumpToNextPage
      * 下一页跳转
      */
     void onJumpToNextPage();
+
+    /**
+     * @brief onJumpToPageDown
+     * 下一翻页
+     */
+    void onJumpToPageDown();
 
     /**
      * @brief deleteItemByKey

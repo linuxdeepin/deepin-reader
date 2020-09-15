@@ -351,10 +351,14 @@ void SheetSidebar::showMenu()
 
 void SheetSidebar::dealWithPressKey(const QString &sKey)
 {
-    if (sKey == Dr::key_up || sKey == Dr::key_pgUp || sKey == Dr::key_left) {
+    if (sKey == Dr::key_up || sKey == Dr::key_left) {
         onJumpToPrevPage();
-    } else if (sKey == Dr::key_down || sKey == Dr::key_pgDown || sKey == Dr::key_right) {
+    } else if (sKey == Dr::key_pgUp) {
+        onJumpToPageUp();
+    } else if (sKey == Dr::key_down || sKey == Dr::key_right) {
         onJumpToNextPage();
+    } else if (sKey == Dr::key_pgDown) {
+        onJumpToPageDown();
     } else if (sKey == Dr::key_delete) {
         deleteItemByKey();
     }
@@ -374,6 +378,20 @@ void SheetSidebar::onJumpToPrevPage()
     }
 }
 
+void SheetSidebar::onJumpToPageUp()
+{
+    QWidget *curWidget = m_stackLayout->currentWidget();
+    if (curWidget == m_thumbnailWidget) {
+        m_thumbnailWidget->pageUp();
+    } else if (curWidget == m_bookmarkWidget) {
+        m_bookmarkWidget->pageUp();
+    } else if (curWidget == m_notesWidget) {
+        m_notesWidget->pageUp();
+    } else if (curWidget == m_catalogWidget) {
+        m_catalogWidget->pageUp();
+    }
+}
+
 void SheetSidebar::onJumpToNextPage()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
@@ -385,6 +403,20 @@ void SheetSidebar::onJumpToNextPage()
         m_notesWidget->nextPage();
     } else if (curWidget == m_catalogWidget) {
         m_catalogWidget->nextPage();
+    }
+}
+
+void SheetSidebar::onJumpToPageDown()
+{
+    QWidget *curWidget = m_stackLayout->currentWidget();
+    if (curWidget == m_thumbnailWidget) {
+        m_thumbnailWidget->pageDown();
+    } else if (curWidget == m_bookmarkWidget) {
+        m_bookmarkWidget->pageDown();
+    } else if (curWidget == m_notesWidget) {
+        m_notesWidget->pageDown();
+    } else if (curWidget == m_catalogWidget) {
+        m_catalogWidget->pageDown();
     }
 }
 

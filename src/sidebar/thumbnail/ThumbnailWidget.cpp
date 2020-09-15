@@ -94,10 +94,34 @@ void ThumbnailWidget::prevPage()
         m_sheet->jumpToPrevPage();
 }
 
+void ThumbnailWidget::pageUp()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
+    if (!pageIndex.isValid())
+        return;
+
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
+}
+
 void ThumbnailWidget::nextPage()
 {
     if (!m_sheet.isNull())
         m_sheet->jumpToNextPage();
+}
+
+void ThumbnailWidget::pageDown()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
+    if (!pageIndex.isValid())
+        return;
+
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)

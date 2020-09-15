@@ -77,10 +77,22 @@ public:
     void prevPage();
 
     /**
+     * @brief pageUp
+     * 上翻页
+     */
+    void pageUp();
+
+    /**
      * @brief nextPage
      * 下一页
      */
     void nextPage();
+
+    /**
+     * @brief pageDown
+     * 下翻页
+     */
+    void pageDown();
 
     /**
      * @brief adaptWindowSize

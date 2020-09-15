@@ -315,9 +315,21 @@ void CatalogTreeView::nextPage()
     scrollToIndex(newCurrent);
 }
 
+void CatalogTreeView::pageDownPage()
+{
+    const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
+    scrollToIndex(newCurrent);
+}
+
 void CatalogTreeView::prevPage()
 {
     const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
+    scrollToIndex(newCurrent);
+}
+
+void CatalogTreeView::pageUpPage()
+{
+    const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
     scrollToIndex(newCurrent);
 }
 

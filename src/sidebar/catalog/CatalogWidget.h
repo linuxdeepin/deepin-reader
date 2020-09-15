@@ -62,10 +62,22 @@ public:
     void nextPage();
 
     /**
+     * @brief pageDown
+     * 上一翻页
+     */
+    void pageDown();
+
+    /**
      * @brief prevPage
      * 上一页
      */
     void prevPage();
+
+    /**
+     * @brief pageUp
+     * 下一翻页
+     */
+    void pageUp();
 
 private:
     /**

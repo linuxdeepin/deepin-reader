@@ -215,3 +215,13 @@ void ImageListView::onUpdatePageImage(int pageIndex)
 {
     m_imageModel->onUpdatePageImage(pageIndex);
 }
+
+QModelIndex ImageListView::pageUpIndex()
+{
+    return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
+}
+
+QModelIndex ImageListView::pageDownIndex()
+{
+    return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
+}

@@ -51,10 +51,22 @@ public:
     void prevPage();
 
     /**
+     * @brief pageUp
+     * 上一翻页
+     */
+    void pageUp();
+
+    /**
      * @brief nextPage
      * 下一页
      */
     void nextPage();
+
+    /**
+     * @brief pageDown
+     * 下一翻页
+     */
+    void pageDown();
 
     /**
      * @brief deleteItemByKey

@@ -81,18 +81,45 @@ void BookMarkWidget::prevPage()
 {
     if (m_sheet.isNull())
         return;
+
     int curPage = m_pImageListView->currentIndex().row() - 1;
     if (curPage < 0)
         return;
+
     m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(curPage));
+}
+
+void BookMarkWidget::pageUp()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
+    if (!pageIndex.isValid())
+        return;
+
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void BookMarkWidget::nextPage()
 {
-    int curPage = m_pImageListView->currentIndex().row() + 1;
-    if (curPage >= m_pImageListView->model()->rowCount())
+    if (m_sheet.isNull())
         return;
+
+    int curPage = m_pImageListView->currentIndex().row() + 1;
     m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(curPage));
+}
+
+void BookMarkWidget::pageDown()
+{
+    if (m_sheet.isNull())
+        return;
+
+    const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
+    if (!pageIndex.isValid())
+        return;
+
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void BookMarkWidget::handleOpenSuccess()

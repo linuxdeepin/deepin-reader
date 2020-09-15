@@ -115,6 +115,20 @@ public:
      */
     void showMenu();
 
+    /**
+     * @brief pageUpIndex
+     * 上翻页
+     * @return
+     */
+    QModelIndex pageUpIndex();
+
+    /**
+     * @brief pageDownIndex
+     * 下翻页
+     * @return
+     */
+    QModelIndex pageDownIndex();
+
 private:
     /**
      * @brief initControl

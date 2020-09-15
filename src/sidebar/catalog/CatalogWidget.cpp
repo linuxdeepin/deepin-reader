@@ -113,3 +113,13 @@ void CatalogWidget::prevPage()
 {
     m_pTree->prevPage();
 }
+
+void CatalogWidget::pageDown()
+{
+    m_pTree->pageDownPage();
+}
+
+void CatalogWidget::pageUp()
+{
+    m_pTree->pageUpPage();
+}
