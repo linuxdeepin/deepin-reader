@@ -225,7 +225,7 @@ void SheetSidebar::onHandWidgetDocOpenSuccess()
     }
 }
 
-void SheetSidebar::handleFindOperation(int type)
+void SheetSidebar::handleFindOperation(int type, const QString &strFind)
 {
     if (type == E_FIND_CONTENT) {
         for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
@@ -233,6 +233,7 @@ void SheetSidebar::handleFindOperation(int type)
         }
 
         m_searchWidget->clearFindResult();
+        m_searchWidget->searchKey(strFind);
         onBtnClicked(m_searchId);
         this->setVisible(true);
     } else if (type == E_FIND_EXIT) {

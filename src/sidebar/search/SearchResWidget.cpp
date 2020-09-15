@@ -80,24 +80,36 @@ int  SearchResWidget::handleFindFinished()
     int searchCount = m_pImageListView->model()->rowCount();
     if (searchCount <= 0)
         m_stackLayout->setCurrentIndex(TIPS_INDEX);
+    else
+        m_stackLayout->setCurrentIndex(SEARCH_INDEX);
     return searchCount;
 }
 
 void SearchResWidget::clearFindResult()
 {
+    m_searchKey.clear();
     m_stackLayout->setCurrentIndex(SEARCH_INDEX);
     m_pImageListView->getImageModel()->resetData();
 }
 
+void SearchResWidget::searchKey(const QString &searchKey)
+{
+    m_searchKey = searchKey;
+}
+
 void SearchResWidget::addSearchsItem(const int &pageIndex, const QString &text, const int &resultNum)
 {
-    if (nullptr == m_sheet)
+    if (nullptr == m_sheet && !text.contains(m_searchKey))
         return;
+
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = pageIndex;
     tImagePageInfo.strcontents = text;
     tImagePageInfo.strSearchcount = tr("%1 items found").arg(resultNum);
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
+
+    if (m_stackLayout->currentIndex() != SEARCH_INDEX)
+        m_stackLayout->setCurrentIndex(SEARCH_INDEX);
 }
 
 void SearchResWidget::adaptWindowSize(const double &scale)

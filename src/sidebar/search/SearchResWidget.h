@@ -61,6 +61,13 @@ public:
      */
     void handFindContentComming(const deepin_reader::SearchResult &);
 
+    /**
+     * @brief searchKey
+     * 搜索关键词
+     * @param searchKey
+     */
+    void searchKey(const QString &searchKey);
+
 public:
     /**
      * @brief adaptWindowSize
@@ -93,6 +100,7 @@ private:
 
 private:
     DocSheet *m_sheet;
+    QString m_searchKey;
     QStackedLayout *m_stackLayout;
     ImageListView *m_pImageListView;
 };

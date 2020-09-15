@@ -2035,6 +2035,9 @@ void SheetBrowser::handleFindContent(const QString &strFind)
 {
     m_searchCurIndex = m_sheet->currentIndex();
     m_searchPageTextIndex = 0;
+    for (BrowserPage *page : m_items)
+        page->clearSearchHighlightRects();
+
     m_searchTask->startSearch(m_items, strFind, m_searchCurIndex);
 }
 

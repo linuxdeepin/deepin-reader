@@ -88,7 +88,7 @@ public :
      * @brief handleFindOperation
      * 搜索状态
      */
-    void handleFindOperation(int);
+    void handleFindOperation(int, const QString &strFind = "");
 
     /**
      * @brief handleFindContentComming

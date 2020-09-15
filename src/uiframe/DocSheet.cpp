@@ -841,7 +841,7 @@ void DocSheet::handleFindExit()
 void DocSheet::handleFindContent(const QString &strFind)
 {
     m_browser->handleFindContent(strFind);
-    m_sidebar->handleFindOperation(E_FIND_CONTENT);
+    m_sidebar->handleFindOperation(E_FIND_CONTENT, strFind);
     emit sigFindOperation(E_FIND_CONTENT);
 }
 
