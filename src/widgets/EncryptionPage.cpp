@@ -54,6 +54,7 @@ void EncryptionPage::InitUI()
     QLineEdit *edit = m_password->lineEdit();
     edit->setObjectName("passwdEdit");
     edit->setPlaceholderText(tr("Password"));
+    edit->setFocus(Qt::TabFocusReason);
 
     m_nextbutton = new DPushButton(this);
     m_nextbutton->setObjectName("ensureBtn");
