@@ -1270,6 +1270,9 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
     m_lastrotation = operation.rotation;
 
+    if (m_tipsWidget)
+        m_tipsWidget->hide();
+
     beginViewportChange();
 }
 
