@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "Application.h"
 #include "CentralDocPage.h"
+#include "accessible.h"
 
 #include <DLog>
 #include <DApplicationSettings>
@@ -9,6 +10,7 @@
 #include <QDesktopWidget>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <QAccessible>
 
 DWIDGET_USE_NAMESPACE
 
@@ -65,6 +67,7 @@ int main(int argc, char *argv[])
 
     QDBusConnection::systemBus().connect(GESTURE_SERVICE, GESTURE_PATH, GESTURE_INTERFACE, GESTURE_SIGNAL, &a, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
+    QAccessible::installFactory(accessibleFactory);
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
 

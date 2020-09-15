@@ -4,7 +4,9 @@ HEADERS += \
     $$PWD/Database.h \
     $$PWD/TimeElapsedUtils.h \
     $$PWD/Utils.h \
-    $$PWD/MsgHeader.h
+    $$PWD/MsgHeader.h \
+    $$PWD/accessibledefine.h \
+    $$PWD/accessible.h
 
 SOURCES += \
     $$PWD/Global.cpp \
