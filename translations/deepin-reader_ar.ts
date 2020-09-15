@@ -350,7 +350,7 @@
         <translation>حسناً</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="114"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
         <source>Wrong password</source>
         <translation type="unfinished"/>
     </message>

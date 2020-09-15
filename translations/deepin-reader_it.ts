@@ -351,7 +351,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="114"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
         <source>Wrong password</source>
         <translation>Password errata</translation>
     </message>
