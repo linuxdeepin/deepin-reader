@@ -16,14 +16,14 @@
 
 inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString &fallback)
 {
-    const QString lowerFallback = fallback.toLower();
+    const QString lowerFallback = fallback;
     // 避免重复生成
     static QMap<QObject *, QString> objnameMap;
     if (!objnameMap[w].isEmpty())
         return objnameMap[w];
 
     static QMap<QAccessible::Role, QList<QString>> accessibleMap;
-    QString oldAccessName = w->accessibleName().toLower();
+    QString oldAccessName = w->accessibleName();
     oldAccessName.replace(SEPARATOR, "");
 
     // 按照类型添加固定前缀
@@ -34,7 +34,7 @@ inline QString getAccessibleName(QWidget *w, QAccessible::Role r, const QString 
         prefix = "Form";
         break;
     case QAccessible::Button:
-        prefix = "Btn";
+        prefix = "Button";
         break;
     case QAccessible::StaticText:
         prefix = "Label";

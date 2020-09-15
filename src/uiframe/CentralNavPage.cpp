@@ -33,21 +33,22 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     : CustomWidget(parent)
 {
     auto tipsLabel = new DLabel(tr("Drag documents here"), this);
+    tipsLabel->setAccessibleName("Label_Drag documents here");
     tipsLabel->setAlignment(Qt::AlignHCenter);
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
     auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU"), this);
+    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg("PDF,DJVU"));
     formatLabel->setAlignment(Qt::AlignHCenter);
     formatLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);
 
     auto chooseButton = new DSuggestButton(tr("Select File"), this);
     chooseButton->setObjectName("SelectFileBtn");
+    chooseButton->setAccessibleName("SelectFile");
     chooseButton->setFocusPolicy(Qt::TabFocus);
-    int tW = 302;
-    int tH = 36;
-    chooseButton->setFixedSize(QSize(tW, tH));
+    chooseButton->setFixedSize(302,36);
     connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::onChooseButtonClicked);
 
     auto layout = new QVBoxLayout;
@@ -57,10 +58,9 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     layout->addStretch();
 
     auto iconSvg = new DLabel(this);
-    tW = 128;
-    tH = 128;
-    iconSvg->setFixedSize(QSize(tW, tW));
+    iconSvg->setFixedSize(128,128);
     iconSvg->setObjectName("iconSvg");
+    iconSvg->setAccessibleName("Label_Icon");
 
     layout->addWidget(iconSvg, 0, Qt::AlignHCenter);
     layout->addSpacing(10);

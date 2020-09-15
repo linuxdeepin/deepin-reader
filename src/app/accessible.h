@@ -10,6 +10,10 @@
 #include "DocTabBar.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
+#include "BrowserPage.h"
+#include "BrowserMagniFier.h"
+#include "SheetBrowser.h"
+#include "SheetSidebar.h"
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>
@@ -41,6 +45,8 @@ SET_FORM_ACCESSIBLE(DocSheet, "DocSheet")
 SET_FORM_ACCESSIBLE(DocTabBar, "DocTabBar")
 SET_FORM_ACCESSIBLE(TitleMenu, "TitleMenu")
 SET_FORM_ACCESSIBLE(TitleWidget, "TitleWidget")
+SET_FORM_ACCESSIBLE(SheetSidebar, "SheetSidebar")
+SET_FORM_ACCESSIBLE(SheetBrowser, "SheetBrowser")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
@@ -60,6 +66,7 @@ SET_BUTTON_ACCESSIBLE(DPushButton, m_w->objectName().isEmpty() ? "DPushButton" :
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "DIconButton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DCheckBox, m_w->objectName().isEmpty() ? "DCheckBox" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DCommandLinkButton, "DCommandLinkButton")
+SET_LABEL_ACCESSIBLE(DLabel, m_w->objectName().isEmpty() ? "DLabel" : m_w->objectName())   //不生效
 SET_FORM_ACCESSIBLE(DTitlebar, m_w->objectName().isEmpty() ? "DTitlebar" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DToolButton, m_w->objectName().isEmpty() ? "DToolButton" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DDialog, m_w->objectName().isEmpty() ? "DDialog" : m_w->objectName())
@@ -79,6 +86,8 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DocTabBar);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleMenu);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetSidebar);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetBrowser);
 
     //  Qt 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);
