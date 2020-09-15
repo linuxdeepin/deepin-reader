@@ -147,6 +147,7 @@ void SheetSidebar::initWidget()
         DToolButton *btn = createBtn("Search", "search");
         btn->setVisible(false);
         m_btnGroupMap.insert(m_searchId, btn);
+        tabWidgetlst << btn;
     }
 
     pVBoxLayout->addLayout(m_stackLayout);
@@ -159,7 +160,7 @@ void SheetSidebar::initWidget()
 
     Utils::setObjectNoFocusPolicy(this);
     for (int i = 0; i < tabWidgetlst.size() - 1; i++) {
-        setTabOrder(tabWidgetlst.at(i), tabWidgetlst.at(i + 1));
+        QWidget::setTabOrder(tabWidgetlst.at(i), tabWidgetlst.at(i + 1));
     }
 }
 

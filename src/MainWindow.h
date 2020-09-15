@@ -39,6 +39,7 @@ class MainWindow : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)
+    Q_PROPERTY(QList<QWidget *> orderWidgets WRITE updateOrderWidgets)
 
 public:
     /**
@@ -95,6 +96,8 @@ public:
     void setDocTabBarWidget(QWidget *widget);
 
     void resizeFullTitleWidget();
+
+    void updateOrderWidgets(const QList<QWidget *> &orderlst);
 
 public:
     /**
@@ -185,6 +188,8 @@ private slots:
     void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
     void onMainWindowFull();
+
+    void onMainWindowExitFull();
 
     void onTitleAniFinished();
 

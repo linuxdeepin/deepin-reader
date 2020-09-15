@@ -207,9 +207,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 onMainWindowFull();
             } else if (m_FullTitleWidget) {
                 //非本应用控件触发的,需要强制触发一次
-                m_central->docPage()->getCurSheet()->closeFullScreen(true);
-                this->setMenuWidget(titlebar());
-                m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height());
+                onMainWindowExitFull();
             }
         }
     }
@@ -230,9 +228,7 @@ void MainWindow::initUI()
     titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
     titlebar()->setAutoHideOnFullscreen(false);
 
-    this->setTabOrder(titlebar(), m_central->titleWidget());
     Utils::setObjectNoFocusPolicy(this);
-
     QTimer::singleShot(10, this, SLOT(onUpdateTitleLabelRect()));
 }
 
@@ -285,6 +281,15 @@ void MainWindow::onMainWindowFull()
     int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
     m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
     m_FullTitleWidget->setVisible(false);
+    updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
+}
+
+void MainWindow::onMainWindowExitFull()
+{
+    m_central->docPage()->getCurSheet()->closeFullScreen(true);
+    this->setMenuWidget(titlebar());
+    m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height());
+    updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
 }
 
 void MainWindow::resizeFullTitleWidget()
@@ -481,5 +486,12 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
                 }
             }
         }
+    }
+}
+
+void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
+{
+    for (int i = 0; i < orderlst.size() - 1; i++) {
+        QWidget::setTabOrder(orderlst.at(i), orderlst.at(i + 1));
     }
 }

@@ -70,6 +70,20 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     m_pDocTabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     m_pDocTabLabel->setAlignment(Qt::AlignCenter);
     connect(this, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
+
+    QWidget *mainwindow = parent->parentWidget();
+    if (mainwindow) {
+        DIconButton *leftButton = m_pTabBar->findChild<DIconButton *>("leftButton");
+        DIconButton *rightButton = m_pTabBar->findChild<DIconButton *>("rightButton");
+        DIconButton *addButton = m_pTabBar->findChild<DIconButton *>("AddButton");
+
+        QList<QWidget *> orderlst = mainwindow->property("orderlist").value<QList<QWidget *>>();
+        orderlst << leftButton;
+        orderlst << rightButton;
+        orderlst << addButton;
+        mainwindow->setProperty("orderlist", QVariant::fromValue(orderlst));
+        mainwindow->setProperty("orderWidgets", QVariant::fromValue(orderlst));
+    }
 }
 
 CentralDocPage::~CentralDocPage()

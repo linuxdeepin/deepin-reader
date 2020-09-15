@@ -45,26 +45,25 @@ TitleWidget::TitleWidget(DWidget *parent)
     DIconButton *decBtn = m_pSw->findChild<DIconButton *>("SP_DecreaseElement");
     DIconButton *incBtn = m_pSw->findChild<DIconButton *>("SP_IncreaseElement");
     DLineEdit *scaleEdit = m_pSw->findChild<DLineEdit *>("scaleEdit");
-    this->setTabOrder(m_pThumbnailBtn, decBtn);
-    this->setTabOrder(decBtn, scaleEdit);
-    this->setTabOrder(scaleEdit, incBtn);
 
-    if (parent) {
-        DIconButton *optBtn = parent->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-        DIconButton *fullBtn = parent->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
-        DIconButton *minBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMinButton");
-        DIconButton *maxBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
-        DIconButton *closeBtn = parent->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+    DIconButton *optBtn = parent->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    DIconButton *fullBtn = parent->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+    DIconButton *minBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+    DIconButton *maxBtn = parent->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+    DIconButton *closeBtn = parent->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
 
-        this->setTabOrder(incBtn, optBtn);
-        if (nullptr != fullBtn) {
-            this->setTabOrder(optBtn, fullBtn);
-            this->setTabOrder(fullBtn, minBtn);
-        } else
-            this->setTabOrder(optBtn, minBtn);
-        this->setTabOrder(minBtn, maxBtn);
-        this->setTabOrder(maxBtn, closeBtn);
-    }
+    QList<QWidget *> orderlst;
+    orderlst << m_pThumbnailBtn;
+    orderlst << decBtn;
+    orderlst << scaleEdit;
+    orderlst << incBtn;
+    orderlst << optBtn;
+    if (fullBtn)
+        orderlst << fullBtn;
+    orderlst << minBtn;
+    orderlst << maxBtn;
+    orderlst << closeBtn;
+    parent->setProperty("orderlist", QVariant::fromValue(orderlst));
 }
 
 TitleWidget::~TitleWidget()
