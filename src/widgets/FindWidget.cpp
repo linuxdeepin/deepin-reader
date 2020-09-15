@@ -123,7 +123,7 @@ void FindWidget::initWidget()
 {
     m_pSearchEdit = new DSearchEdit(this);
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
-    m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::TabFocus);
+    m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
     m_pSearchEdit->setFixedSize(QSize(270, 36));
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
