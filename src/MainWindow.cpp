@@ -121,9 +121,11 @@ void MainWindow::activateSheet(DocSheet *sheet)
     if (nullptr == m_central)
         return;
 
+    m_central->showSheet(sheet);
+
     this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
 
-    m_central->showSheet(sheet);
+    this->activateWindow();
 }
 
 void MainWindow::closeWithoutSave()

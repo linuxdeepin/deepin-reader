@@ -60,6 +60,10 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << path << UT_FILE_TEST_FILE_2 << UT_FILE_TEST_FILE_3);
     MainWindow *mainWindow2 = MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE_4 << UT_FILE_TEST_FILE_5 << UT_FILE_TEST_FILE_6);
 
+    //Central
+    ASSERT_TRUE(CentralDocPage1);
+    ASSERT_TRUE(mainWindow1->m_central->titleWidget());
+
     QStyleOptionTab optionTab;
     QMimeData *mimeData = CentralDocPage1->m_pTabBar->createMimeDataFromTab(0, optionTab);
 
@@ -79,14 +83,15 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     CentralDocPage2->m_pTabBar->canInsertFromMimeData(0, mimeData);
     CentralDocPage2->m_pTabBar->insertFromMimeData(0, mimeData);
+
+    CentralDocPage2->m_pTabBar->onTabReleased(100);
+    CentralDocPage2->m_pTabBar->onTabReleased(0);
+
+    CentralDocPage2->m_pTabBar->onTabCloseRequested(100);
     CentralDocPage2->m_pTabBar->onTabCloseRequested(0);
 
     mainWindow1->resize(600, 800);
     ASSERT_TRUE(mainWindow1->m_central);
-
-    //Central
-    ASSERT_TRUE(CentralDocPage1);
-    ASSERT_TRUE(mainWindow1->m_central->titleWidget());
 
     mainWindow1->m_central->addSheet(0);
     mainWindow1->m_central->hasSheet(0);
