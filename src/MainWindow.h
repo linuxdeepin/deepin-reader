@@ -203,6 +203,7 @@ private:
     Central *m_central = nullptr;
 
     bool m_needSave = true;
+    int m_lastWindowState = Qt::WindowNoState;
 
     QStringList m_initFilePathList;
 

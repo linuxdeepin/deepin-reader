@@ -728,14 +728,20 @@ bool DocSheet::closeFullScreen(bool force)
     if (nullptr == doc)
         return false;
 
-    this->insertWidget(0, m_sidebar);
-    m_sidebar->move(0, 0);
-    m_sidebar->setVisible(this->operation().sidebarVisible);
-
     if (m_browser)
         m_browser->hideSubTipsWidget();
 
-    return doc->quitFullScreen(force);
+    if (force) {
+        this->insertWidget(0, m_sidebar);
+        m_sidebar->move(0, 0);
+        m_sidebar->setVisible(this->operation().sidebarVisible);
+
+        return doc->quitFullScreen(force);
+    } else if (doc->topLevelWidget()->windowState().testFlag(Qt::WindowFullScreen)) {
+        doc->topLevelWidget()->showNormal();
+        return true;
+    }
+    return false;
 }
 
 void DocSheet::setDocumentChanged(bool changed)
@@ -862,6 +868,10 @@ void DocSheet::resizeEvent(QResizeEvent *event)
     DSplitter::resizeEvent(event);
     if (m_encryPage) {
         m_encryPage->setGeometry(0, 0, this->width(), this->height());
+    }
+
+    if (isFullScreen()) {
+        m_sidebar->resize(m_sidebar->width(), this->height());
     }
 }
 
