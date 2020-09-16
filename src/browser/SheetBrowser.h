@@ -604,6 +604,18 @@ private slots:
      */
     void onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text);
 
+    /**
+     * @brief onSetDocSlideGesture
+     * 设置文档触摸屏滑动事件
+     */
+    void onSetDocSlideGesture();
+
+    /**
+     * @brief onRemoveDocSlideGesture
+     * 移除文档触摸屏滑动事件
+     */
+    void onRemoveDocSlideGesture();
+
 private:
     /**
      * @brief mouseClickIconAnnot
@@ -716,6 +728,13 @@ private:
      * 图标注释消失之后清除图标注释的选中状态
      */
     void clearSelectIconAnnotAfterMenu();
+
+    /**
+     * @brief mousePressWord
+     * 判断当前鼠标或者手指点击位置是否有文字
+     * @return
+     */
+    bool mousePressWord(const QPointF);
 
 private:
     deepin_reader::Document *m_document = nullptr;

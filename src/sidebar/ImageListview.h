@@ -163,6 +163,18 @@ private slots:
      */
     void onItemClicked(const QModelIndex &index);
 
+    /**
+     * @brief onSetDocSlideGesture
+     * 设置文档触摸屏滑动事件
+     */
+    void onSetThumbnailListSlideGesture();
+
+    /**
+     * @brief onRemoveDocSlideGesture
+     * 移除文档触摸屏滑动事件
+     */
+    void onRemoveThumbnailListSlideGesture();
+
 protected:
     /**
      * @brief mousePressEvent

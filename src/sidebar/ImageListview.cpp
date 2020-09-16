@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QScroller>
+#include <QScrollBar>
 
 ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
@@ -46,6 +47,10 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+
+    connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &ImageListView::onRemoveThumbnailListSlideGesture);
+
+    connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &ImageListView::onSetThumbnailListSlideGesture);
 }
 
 void ImageListView::initControl()
@@ -134,6 +139,16 @@ void ImageListView::onItemClicked(const QModelIndex &index)
         m_docSheet->jumpToIndex(m_imageModel->getPageIndexForModelIndex(index.row()));
         emit sigListItemClicked(index.row());
     }
+}
+
+void ImageListView::onSetThumbnailListSlideGesture()
+{
+    QScroller::grabGesture(this, QScroller::TouchGesture);//缩略图列表滑动
+}
+
+void ImageListView::onRemoveThumbnailListSlideGesture()
+{
+    QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);//缩略图列表不滑动
 }
 
 bool ImageListView::scrollToIndex(int index, bool scrollTo)
