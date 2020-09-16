@@ -251,7 +251,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 if (this->titlebar())
                     this->titlebar()->setVisible(true);
 
-                m_central->docPage()->getCurSheet()->closeFullScreen(true);
+                if (m_central && m_central->docPage()->getCurSheet())
+                    m_central->docPage()->getCurSheet()->closeFullScreen(true);
             }
         }
     }
