@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 #include <QWidget>
+#include <QProcessEnvironment>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -355,5 +356,18 @@ void Utils::setObjectNoFocusPolicy(QObject *obj)
     foreach (QWidget *w, list) {
         if (w->objectName().isEmpty())
             w->setFocusPolicy(Qt::NoFocus);
+    }
+}
+
+bool Utils::isWayland()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+        return true;
+    } else {
+        return false;
     }
 }

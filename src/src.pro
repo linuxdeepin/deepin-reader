@@ -21,10 +21,10 @@ LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 }
 QMAKE_RPATHDIR += /usr/lib/deepin-reader
 
-QMAKE_CXXFLAGS+= -fPIE
+QMAKE_CXXFLAGS += "-fPIE -Wl,--as-needed"
 QMAKE_LFLAGS += -pie
 contains(QMAKE_HOST.arch, mips64):{
-    QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl,--as-need"
+    QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
 }
 
 include ($$SRCPWD/app/app.pri)

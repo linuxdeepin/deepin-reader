@@ -142,6 +142,13 @@ public:
      */
     static void setObjectNoFocusPolicy(QObject *obj);
 
+    /**
+     * @brief isWayland
+     * 是否wayLand
+     * @return
+     */
+    static bool isWayland();
+
 private:
     static int m_colorIndex;
 };
