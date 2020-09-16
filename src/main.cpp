@@ -18,6 +18,9 @@ int main(int argc, char *argv[])
 {
     // Init DTK.
     Application a(argc, argv);
+    if (Utils::isWayland()) {
+        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    }
 
     QCommandLineParser parser;
     parser.addHelpOption();
