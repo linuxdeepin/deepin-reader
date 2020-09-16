@@ -43,7 +43,6 @@ SET_FORM_ACCESSIBLE(CentralDocPage, "CentralDocPage")
 SET_FORM_ACCESSIBLE(CentralNavPage, "CentralNavPage")
 SET_FORM_ACCESSIBLE(DocSheet, "DocSheet")
 SET_FORM_ACCESSIBLE(DocTabBar, "DocTabBar")
-SET_FORM_ACCESSIBLE(TitleMenu, "TitleMenu")
 SET_FORM_ACCESSIBLE(TitleWidget, "TitleWidget")
 SET_FORM_ACCESSIBLE(SheetSidebar, "SheetSidebar")
 SET_FORM_ACCESSIBLE(SheetBrowser, "SheetBrowser")
@@ -84,7 +83,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CentralNavPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DocSheet);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DocTabBar);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleMenu);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetSidebar);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetBrowser);

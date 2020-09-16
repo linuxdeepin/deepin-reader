@@ -43,7 +43,10 @@ TitleWidget::TitleWidget(DWidget *parent)
     hlayout->addStretch(1);
 
     DIconButton *decBtn = m_pSw->findChild<DIconButton *>("SP_DecreaseElement");
+    decBtn->setEnabledCircle(true);
     DIconButton *incBtn = m_pSw->findChild<DIconButton *>("SP_IncreaseElement");
+    incBtn->setEnabledCircle(true);
+
     DLineEdit *scaleEdit = m_pSw->findChild<DLineEdit *>("scaleEdit");
 
     DIconButton *optBtn = parent->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
