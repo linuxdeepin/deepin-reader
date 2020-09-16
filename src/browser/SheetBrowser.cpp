@@ -1334,7 +1334,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             if (mousePressWord(mapToScene(event->pos()))) {
                 if (event->source() == Qt::MouseEventSynthesizedByQt) {
-                    qInfo() << "    mouse  Press  is Word  ...  ";
                     QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
                 }
             }
