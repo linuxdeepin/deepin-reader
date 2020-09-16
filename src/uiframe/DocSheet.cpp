@@ -716,6 +716,9 @@ void DocSheet::openFullScreen()
     m_sidebar->move(-m_sidebar->width(), 0);
     m_sidebar->setVisible(true);
 
+    if (m_browser)
+        m_browser->hideSubTipsWidget();
+
     doc->openFullScreen();
 }
 
@@ -728,6 +731,9 @@ bool DocSheet::closeFullScreen(bool force)
     this->insertWidget(0, m_sidebar);
     m_sidebar->move(0, 0);
     m_sidebar->setVisible(this->operation().sidebarVisible);
+
+    if (m_browser)
+        m_browser->hideSubTipsWidget();
 
     return doc->quitFullScreen(force);
 }

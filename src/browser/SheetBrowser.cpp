@@ -380,6 +380,13 @@ void SheetBrowser::beginViewportChange()
     m_viewportChangeTimer->start(100);
 }
 
+void SheetBrowser::hideSubTipsWidget()
+{
+    if (m_tipsWidget)
+        m_tipsWidget->hide();
+    setCursor(QCursor(Qt::ArrowCursor));
+}
+
 void SheetBrowser::onViewportChanged()
 {
     int fromIndex = 0;

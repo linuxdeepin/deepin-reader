@@ -425,6 +425,12 @@ public:
      */
     void beginViewportChange();
 
+    /**
+     * @brief hideTipsWidget
+     * 全屏时隐藏注释提示框,并设置鼠标为指针样式
+     */
+    void hideSubTipsWidget();
+
 signals:
     void sigPageChanged(int page);
 
