@@ -705,7 +705,7 @@ bool DocSheet::isFullScreen()
 void DocSheet::openFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
+    if (nullptr == doc || !isUnLocked())
         return;
 
     setSidebarVisible(false);
