@@ -22,6 +22,7 @@
 #include "BrowserPage.h"
 
 #include <QDebug>
+#include <QRectF>
 
 PageSearchThread::PageSearchThread(QObject *parent) : QThread(parent)
 {

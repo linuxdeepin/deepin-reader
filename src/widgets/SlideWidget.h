@@ -24,6 +24,7 @@
 
 #include <DWidget>
 #include <DSpinner>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 class DocSheet;

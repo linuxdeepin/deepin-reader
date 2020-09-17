@@ -35,6 +35,7 @@ class NoteMenu;
  * @brief The ImageListView class
  * 左侧栏缩略图目录VIEW
  */
+class QMouseEvent;
 class ImageListView : public DListView
 {
     Q_OBJECT

@@ -31,6 +31,8 @@
 
 #include "widgets/CustomWidget.h"
 
+#include <QDragEnterEvent>
+
 class CentralDocPage;
 class CentralNavPage;
 class TitleMenu;

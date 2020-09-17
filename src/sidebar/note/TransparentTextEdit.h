@@ -26,7 +26,6 @@
 #include <DWidget>
 
 #include <QTimer>
-#include <QMouseEvent>
 #include <QContextMenuEvent>
 
 DWIDGET_USE_NAMESPACE

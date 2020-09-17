@@ -31,6 +31,9 @@
 #include <QWidget>
 #include <QDateTime>
 #include <QDebug>
+#include <QPainterPath>
+#include <QPointF>
+#include <QRectF>
 
 class QColor;
 class QImage;

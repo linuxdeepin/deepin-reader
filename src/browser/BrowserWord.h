@@ -24,6 +24,7 @@
 #include "document/Model.h"
 
 #include <QGraphicsItem>
+#include <QRectF>
 
 class BrowserPage;
 

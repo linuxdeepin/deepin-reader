@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QSet>
 
 class DocSheet;
 class Sheet;

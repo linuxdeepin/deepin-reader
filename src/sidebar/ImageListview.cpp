@@ -24,10 +24,10 @@
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
 
-#include <QMouseEvent>
 #include <QDebug>
 #include <QScroller>
 #include <QScrollBar>
+#include <QSet>
 
 ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)

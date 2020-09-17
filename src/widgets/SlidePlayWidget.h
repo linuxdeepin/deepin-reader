@@ -25,6 +25,7 @@
 #include <DIconButton>
 
 #include <QTimer>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 /**

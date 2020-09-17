@@ -27,6 +27,8 @@
 #include <QGraphicsItem>
 #include <QSet>
 #include <QMutex>
+#include <QPointF>
+#include <QRectF>
 
 using namespace deepin_reader;
 

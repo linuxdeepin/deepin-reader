@@ -25,6 +25,7 @@
 #include <QIcon>
 #include <QDebug>
 #include <QDir>
+#include <QMouseEvent>
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)

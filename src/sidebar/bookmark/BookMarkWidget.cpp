@@ -28,6 +28,7 @@
 #include <DHorizontalLine>
 #include <DPushButton>
 #include <QHBoxLayout>
+#include <QSet>
 
 const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)

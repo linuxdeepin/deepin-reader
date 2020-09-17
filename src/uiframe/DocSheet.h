@@ -24,6 +24,7 @@
 #include "document/Model.h"
 
 #include <DSplitter>
+#include <QSet>
 
 class SheetSidebar;
 class SlideWidget;

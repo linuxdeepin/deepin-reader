@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
+#include <QPainterPath>
 
 NotesDelegate::NotesDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)

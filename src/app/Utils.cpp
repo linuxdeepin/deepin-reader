@@ -32,6 +32,7 @@
 #include <QImageReader>
 #include <QWidget>
 #include <QProcessEnvironment>
+#include <QPainterPath>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);

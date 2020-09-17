@@ -30,6 +30,7 @@
 #include <QTextBlock>
 #include <QMimeData>
 #include <QMenu>
+#include <QPointF>
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)

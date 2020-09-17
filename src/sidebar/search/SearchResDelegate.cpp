@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
+#include <QPainterPath>
 
 SearchResDelegate::SearchResDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)

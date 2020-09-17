@@ -35,6 +35,12 @@
 #include <QSwipeGesture>
 #include <QTapGesture>
 #include <QTimer>
+#include <QSet>
+#include <QPointF>
+#include <QRectF>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
 
 #include <math.h>
 

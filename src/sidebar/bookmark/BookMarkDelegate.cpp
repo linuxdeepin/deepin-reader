@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
+#include <QPainterPath>
 
 BookMarkDelegate::BookMarkDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)

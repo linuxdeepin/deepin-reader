@@ -24,6 +24,7 @@
 #include "document/Model.h"
 
 #include <QGraphicsItem>
+#include <QRectF>
 
 const int ICON_SIZE = 23;
 

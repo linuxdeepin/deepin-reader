@@ -11,6 +11,7 @@
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QPointF>
 
 #define SEPARATOR "_"
 

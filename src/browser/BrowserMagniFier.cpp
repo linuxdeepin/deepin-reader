@@ -27,6 +27,7 @@
 #include <QMutexLocker>
 #include <QMetaObject>
 #include <QDebug>
+#include <QPainterPath>
 
 ReadMagnifierManager::ReadMagnifierManager()
 {

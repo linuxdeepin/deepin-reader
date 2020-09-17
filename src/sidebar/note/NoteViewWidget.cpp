@@ -31,6 +31,8 @@
 #include <QGraphicsDropShadowEffect>
 #include <QLinearGradient>
 #include <DWindowManagerHelper>
+#include <QPainterPath>
+#include <QPointF>
 
 NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
     : DWidget(nullptr)

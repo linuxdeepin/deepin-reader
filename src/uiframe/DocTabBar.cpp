@@ -25,7 +25,6 @@
 #include <DPlatformWindowHandle>
 
 #include <QDebug>
-#include <QDragEnterEvent>
 #include <QMimeData>
 #include <QDir>
 #include <QTimer>

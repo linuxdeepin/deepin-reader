@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
+#include <QPainterPath>
 
 ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)

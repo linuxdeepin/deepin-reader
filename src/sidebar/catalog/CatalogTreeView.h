@@ -23,6 +23,7 @@
 
 #include <DTreeView>
 
+#include <QMouseEvent>
 #include <QStandardItemModel>
 
 DWIDGET_USE_NAMESPACE

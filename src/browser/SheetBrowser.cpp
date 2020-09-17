@@ -59,6 +59,7 @@
 #include <QStandardPaths>
 #include <QUuid>
 #include <QScroller>
+#include <QPainterPath>
 
 const int ICONANNOTE_WIDTH = 24;
 

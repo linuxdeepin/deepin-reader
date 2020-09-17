@@ -22,6 +22,7 @@
 #define CUSTOMCONTROL_ROUNDCOLORWIDGET_H
 
 #include <DWidget>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 

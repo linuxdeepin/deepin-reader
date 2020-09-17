@@ -26,6 +26,8 @@
 #include <QCoreApplication>
 #include <QMutex>
 #include <QScopedPointer>
+#include <QPointF>
+#include <QRectF>
 
 namespace Poppler {
 class Annotation;
