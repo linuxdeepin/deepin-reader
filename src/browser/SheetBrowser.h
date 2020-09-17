@@ -616,6 +616,12 @@ private slots:
      */
     void onRemoveDocSlideGesture();
 
+    /**
+     * @brief onRemoveIconAnnotSelect
+     * 注释菜单隐藏取消图标注释选中
+     */
+    void onRemoveIconAnnotSelect();
+
 private:
     /**
      * @brief mouseClickIconAnnot

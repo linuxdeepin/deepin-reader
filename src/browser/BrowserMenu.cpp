@@ -173,6 +173,13 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
     }
 }
 
+void BrowserMenu::hideEvent(QHideEvent *event)
+{
+    emit sigMenuHide();
+
+    DMenu::hideEvent(event);
+}
+
 QAction *BrowserMenu::createAction(const QString &displayname, const QString &objectname)
 {
     QAction *action = new  QAction(displayname, this);

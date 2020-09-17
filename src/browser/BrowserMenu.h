@@ -50,6 +50,8 @@ signals:
      */
     void signalMenuItemClicked(const QString &objectname);
 
+    void sigMenuHide();
+
 public:
     explicit BrowserMenu(QWidget *parent = nullptr);
     /**
@@ -61,6 +63,10 @@ public:
      * @param copytext
      */
     void initActions(DocSheet *sheet, int index, SheetMenuType_e type, const QString &copytext = "");
+
+    // QWidget interface
+protected:
+    void hideEvent(QHideEvent *event) override;
 
 private slots:
     /**
@@ -88,6 +94,7 @@ private:
     int m_type;
 
     ColorWidgetAction *m_pColorWidgetAction;
+
 };
 
 #endif // BrowserMenu_H

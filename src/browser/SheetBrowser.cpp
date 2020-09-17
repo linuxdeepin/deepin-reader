@@ -897,6 +897,11 @@ void SheetBrowser::onRemoveDocSlideGesture()
     QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);//文档不滑动
 }
 
+void SheetBrowser::onRemoveIconAnnotSelect()
+{
+    clearSelectIconAnnotAfterMenu();
+}
+
 /**
  * @brief SheetBrowser::onInit
  * 重新渲染当前页
@@ -1499,6 +1504,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     pFileAttrWidget->showScreenCenter();
                 }
             });
+
+            connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
             if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
                 if (m_lastSelectIconAnnotPage)
@@ -2173,6 +2180,7 @@ void SheetBrowser::showMenu()
 {
     BrowserMenu menu;
     QString selectWords = selectedWordsText();
+    connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
         if (objectname == "Copy") {
             Utils::copyText(selectWords);
