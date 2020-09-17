@@ -45,6 +45,8 @@ void CatalogWidget::initWidget()
 
     titleLabel = new DLabel("", this);
 
+    titleLabel->setAccessibleName("Label_title");
+
     titleLabel->setForegroundRole(DPalette::TextTips);
 
     titleLabel->setAlignment(Qt::AlignCenter);
@@ -58,6 +60,8 @@ void CatalogWidget::initWidget()
     mainLayout->addLayout(titleLayout);
 
     m_pTree = new CatalogTreeView(m_sheet, this);
+    m_pTree->setAccessibleName("View_CatalogTree");
+
     mainLayout->addWidget(m_pTree);
     this->setLayout(mainLayout);
 }

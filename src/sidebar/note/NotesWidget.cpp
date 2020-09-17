@@ -51,6 +51,7 @@ void NotesWidget::initWidget()
     this->setLayout(pVLayout);
 
     m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_NOTE);
     NotesDelegate *imageDelegate = new NotesDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
@@ -59,6 +60,7 @@ void NotesWidget::initWidget()
 
     m_pAddAnnotationBtn = new DPushButton(this);
     m_pAddAnnotationBtn->setObjectName("NotesAddBtn");
+    m_pAddAnnotationBtn->setAccessibleName("NotesAdd");
     m_pAddAnnotationBtn->setFixedHeight(36);
     m_pAddAnnotationBtn->setMinimumWidth(170);
     m_pAddAnnotationBtn->setText(tr("Add annotation"));
@@ -68,7 +70,10 @@ void NotesWidget::initWidget()
     QHBoxLayout *pHBoxLayout = new QHBoxLayout;
     pHBoxLayout->setContentsMargins(10, 6, 10, 6);
     pVLayout->addWidget(m_pImageListView);
-    pVLayout->addWidget(new DHorizontalLine(this));
+
+    DHorizontalLine *line = new DHorizontalLine(this);
+    line->setAccessibleName("NotesLine");
+    pVLayout->addWidget(line);
     pHBoxLayout->addWidget(m_pAddAnnotationBtn);
     pVLayout->addItem(pHBoxLayout);
 

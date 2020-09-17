@@ -122,7 +122,7 @@ private:
 
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
-    DLabel              *m_pCurrantPageLab = nullptr;       // 当前文档当前页码
+    DLabel              *m_pCurrentPageLab = nullptr;       // 当前文档当前页码
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码

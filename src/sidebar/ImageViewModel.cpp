@@ -104,6 +104,8 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(m_pagelst.at(index.row()).strcontents);
     } else if (role == ImageinfoType_e::IMAGE_SEARCH_COUNT) {
         return QVariant::fromValue(m_pagelst.at(index.row()).strSearchcount);
+    }else if (role == Qt::AccessibleTextRole) {
+        return index.row();
     }
     return QVariant();
 }

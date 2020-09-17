@@ -69,8 +69,10 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 {
     this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
     this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
+    this->verticalScrollBar()->setAccessibleName("verticalScrollBar");
     this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
+    this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
 
     setMouseTracking(true);
 
@@ -103,6 +105,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(horizontalScrollBar(), &QScrollBar::sliderReleased, this, &SheetBrowser::onSetDocSlideGesture);
 
     m_tipsWidget = new TipsWidget(this);
+    m_tipsWidget->setAccessibleName("Tips");
     m_tipsWidget->setAutoChecked(true);
 
     m_searchTask = new PageSearchThread(this);

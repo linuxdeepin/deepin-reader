@@ -14,6 +14,11 @@
 #include "BrowserMagniFier.h"
 #include "SheetBrowser.h"
 #include "SheetSidebar.h"
+#include "thumbnail/ThumbnailWidget.h"
+#include "catalog/CatalogWidget.h"
+#include "bookmark/BookMarkWidget.h"
+#include "note/NotesWidget.h"
+#include "search/SearchResWidget.h"
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>
@@ -46,6 +51,11 @@ SET_FORM_ACCESSIBLE(DocTabBar, "DocTabBar")
 SET_FORM_ACCESSIBLE(TitleWidget, "TitleWidget")
 SET_FORM_ACCESSIBLE(SheetSidebar, "SheetSidebar")
 SET_FORM_ACCESSIBLE(SheetBrowser, "SheetBrowser")
+SET_FORM_ACCESSIBLE(ThumbnailWidget, "ThumbnailWidget")
+SET_FORM_ACCESSIBLE(CatalogWidget, "CatalogWidget")
+SET_FORM_ACCESSIBLE(BookMarkWidget, "BookMarkWidget")
+SET_FORM_ACCESSIBLE(NotesWidget, "NotesWidget")
+SET_FORM_ACCESSIBLE(SearchResWidget, "SearchResWidget")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
@@ -85,6 +95,11 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetSidebar);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SheetBrowser);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ThumbnailWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CatalogWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BookMarkWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), NotesWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SearchResWidget);
 
     //  Qt 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);

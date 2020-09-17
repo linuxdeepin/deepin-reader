@@ -46,16 +46,20 @@ ThumbnailWidget::~ThumbnailWidget()
 void ThumbnailWidget::initWidget()
 {
     m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setAccessibleName("View_ImageList");
     ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
     m_pPageWidget = new PagingWidget(m_sheet, this);
-
+    m_pPageWidget->setAccessibleName("Paging");
     QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
     vBoxLayout->setSpacing(0);
     vBoxLayout->setContentsMargins(0, 0, 0, 0);
     vBoxLayout->addWidget(m_pImageListView);
-    vBoxLayout->addWidget(new DHorizontalLine(this));
+
+    DHorizontalLine *line = new DHorizontalLine(this);
+    line->setAccessibleName("ThumbnailLine");
+    vBoxLayout->addWidget(line);
     vBoxLayout->addWidget(m_pPageWidget);
     this->setLayout(vBoxLayout);
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));

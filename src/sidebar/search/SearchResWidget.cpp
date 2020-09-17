@@ -51,6 +51,7 @@ void SearchResWidget::initWidget()
     this->setLayout(m_stackLayout);
 
     m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_SEARCH);
     SearchResDelegate *imageDelegate = new SearchResDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);

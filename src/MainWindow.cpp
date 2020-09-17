@@ -62,7 +62,8 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
         initShortCut();
 
         foreach (const QString &filePath, m_initFilePathList) {
-            doOpenFile(filePath);
+            if(QFile(filePath).exists())        //过滤不存在的文件,需求中不含有提示文件不存在的文案
+                doOpenFile(filePath);
         }
     }
 
@@ -451,6 +452,8 @@ void MainWindow::initBase()
     this->installEventFilter(this);
 
     m_menu = new TitleMenu(this);
+
+    m_menu->setAccessibleName("Menu_Title");
 
     titlebar()->setMenu(m_menu);
 }

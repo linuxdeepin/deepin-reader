@@ -78,12 +78,14 @@ void ImageListView::showMenu()
     if (m_listType == E_SideBar::SIDE_NOTE) {
         if (m_pNoteMenu == nullptr) {
             m_pNoteMenu = new NoteMenu(this);
+            m_pNoteMenu->setAccessibleName("Menu_Note");
             connect(m_pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
         }
         m_pNoteMenu->exec(point);
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
         if (m_pBookMarkMenu == nullptr) {
             m_pBookMarkMenu = new BookMarkMenu(this);
+            m_pBookMarkMenu->setAccessibleName("Menu_BookMark");
             connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
         }
         m_pBookMarkMenu->exec(point);

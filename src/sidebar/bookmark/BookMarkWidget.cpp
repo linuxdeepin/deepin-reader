@@ -48,12 +48,14 @@ void BookMarkWidget::initWidget()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
     m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_BOOKMARK);
     BookMarkDelegate *imageDelegate = new BookMarkDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
 
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setObjectName("BookmarkAddBtn");
+    m_pAddBookMarkBtn->setAccessibleName("BookmarkAdd");
     m_pAddBookMarkBtn->setFixedHeight(36);
     m_pAddBookMarkBtn->setMinimumWidth(170);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
@@ -69,7 +71,9 @@ void BookMarkWidget::initWidget()
     pVBoxLayout->setSpacing(0);
 
     pVBoxLayout->addWidget(m_pImageListView);
-    pVBoxLayout->addWidget(new DHorizontalLine(this));
+    DHorizontalLine *line = new DHorizontalLine(this);
+    line->setAccessibleName("BookMarkLine");
+    pVBoxLayout->addWidget(line);
     pVBoxLayout->addItem(pHBoxLayout);
     this->setLayout(pVBoxLayout);
 

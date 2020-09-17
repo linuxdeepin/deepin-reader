@@ -44,6 +44,7 @@ PagingWidget::~PagingWidget()
 void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(QString("/xxx"));
+    m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
     QFont font = m_pTotalPagesLab->font();
     font.setPixelSize(14);
 
@@ -54,7 +55,9 @@ void PagingWidget::initWidget()
     int tH = 36;
 
     m_pJumpPageLineEdit = new DLineEdit();
-    m_pJumpPageLineEdit->lineEdit()->setObjectName("pageEdit");
+    m_pJumpPageLineEdit->setAccessibleName("Page");
+    m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
+    m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
     tW = 60;
     tH = 36;
 
@@ -70,28 +73,31 @@ void PagingWidget::initWidget()
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
+    m_pPrePageBtn->setAccessibleName("Button_ThumbnailPre");
     m_pPrePageBtn->setObjectName("thumbnailPreBtn");
     m_pPrePageBtn->setFixedSize(QSize(tW, tH));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
     m_pNextPageBtn->setFixedSize(QSize(tW, tH));
+    m_pNextPageBtn->setAccessibleName("Button_ThumbnailNext");
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
-    m_pCurrantPageLab = new DLabel("");
-    font = m_pCurrantPageLab->font();
+    m_pCurrentPageLab = new DLabel("");
+    m_pCurrentPageLab->setAccessibleName("CurrentPage");
+    font = m_pCurrentPageLab->font();
     font.setPixelSize(14);
 
-    m_pCurrantPageLab->setFont(font);
-    m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+    m_pCurrentPageLab->setFont(font);
+    m_pCurrentPageLab->setForegroundRole(DPalette::Text);
 
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 6, 10, 6);
     hLayout->addWidget(m_pJumpPageLineEdit);
     hLayout->addSpacing(5);
 
-    hLayout->addWidget(m_pCurrantPageLab);
+    hLayout->addWidget(m_pCurrentPageLab);
     hLayout->addWidget(m_pTotalPagesLab);
     hLayout->addStretch(1);
     hLayout->addWidget(m_pPrePageBtn);
@@ -106,8 +112,8 @@ void PagingWidget::slotUpdateTheme()
         m_pTotalPagesLab->setForegroundRole(DPalette::Text);
     }
 
-    if (m_pCurrantPageLab) {
-        m_pCurrantPageLab->setForegroundRole(DPalette::Text);
+    if (m_pCurrentPageLab) {
+        m_pCurrentPageLab->setForegroundRole(DPalette::Text);
     }
 }
 
@@ -140,8 +146,8 @@ void PagingWidget::setIndex(int index)
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
 
-    if (m_pCurrantPageLab) {
-        m_pCurrantPageLab->setText(QString::number(currntPage));
+    if (m_pCurrentPageLab) {
+        m_pCurrentPageLab->setText(QString::number(currntPage));
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(sPage);
     } else {
@@ -162,12 +168,12 @@ void PagingWidget::handleOpenSuccess()
 
     bool isHasLabel = m_sheet->haslabel();
     if (!isHasLabel) {
-        delete m_pCurrantPageLab;
-        m_pCurrantPageLab =  nullptr;
+        delete m_pCurrentPageLab;
+        m_pCurrentPageLab =  nullptr;
     }
 
     int totalPage = m_sheet->pagesNumber();
-    if (m_pCurrantPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
+    if (m_pCurrentPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
         //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
     }
 
@@ -179,7 +185,7 @@ void PagingWidget::handleOpenSuccess()
 //  输入框  敲回车键 响应
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
-    if (m_pCurrantPageLab == nullptr) {
+    if (m_pCurrentPageLab == nullptr) {
         normalChangePage();
     } else {
         pageNumberJump();
