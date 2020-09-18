@@ -106,6 +106,8 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
     m_curSheet = sheet;
 
+    emit dApp->emitSheetChanged();
+
     if (nullptr == m_curSheet || m_curSheet->fileType() == Dr::Unknown) {
         setBtnDisable(true);
         return;

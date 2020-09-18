@@ -57,6 +57,8 @@ public:
      */
     void showAnnotTextWidgetSig();
 
+    void emitSheetChanged();
+
 signals:
     /**
      * @brief sigTouchPadEventSignal
@@ -69,6 +71,7 @@ signals:
 
     void sigShowAnnotTextWidget();
 
+    void sigSetPasswdFocus();
 public slots:
     /**
      * @brief handleFiles

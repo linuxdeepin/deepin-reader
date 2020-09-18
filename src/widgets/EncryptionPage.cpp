@@ -20,6 +20,7 @@
 #include "Utils.h"
 
 #include <DFontSizeManager>
+#include <DApplication>
 
 #include <QBoxLayout>
 #include <DGuiApplicationHelper>
@@ -54,7 +55,6 @@ void EncryptionPage::InitUI()
     QLineEdit *edit = m_password->lineEdit();
     edit->setObjectName("passwdEdit");
     edit->setPlaceholderText(tr("Password"));
-    edit->setFocus(Qt::TabFocusReason);
 
     m_nextbutton = new DPushButton(this);
     m_nextbutton->setObjectName("ensureBtn");
@@ -90,6 +90,8 @@ void EncryptionPage::InitConnection()
 {
     connect(m_password, &DPasswordEdit::textChanged, this, &EncryptionPage::onPasswordChanged);
     connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
+
+    connect(dApp, SIGNAL(sigSetPasswdFocus()), this, SLOT(onSetPasswdFocus()));
 }
 
 void EncryptionPage::nextbuttonClicked()
@@ -116,6 +118,13 @@ void EncryptionPage::onPasswordChanged()
         m_nextbutton->setDisabled(true);
     } else {
         m_nextbutton->setEnabled(true);
+    }
+}
+
+void EncryptionPage::onSetPasswdFocus()
+{
+    if (this->isVisible() && m_password) {
+        m_password->lineEdit()->setFocus(Qt::TabFocusReason);
     }
 }
 

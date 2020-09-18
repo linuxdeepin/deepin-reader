@@ -76,6 +76,12 @@ public slots:
      */
     void onPasswordChanged();
 
+    /**
+     * @brief onSetPasswdFocus
+     * 设置密码输入框的焦点,在切换到当前窗口时
+     */
+    void onSetPasswdFocus();
+
 private slots:
     /**
      * @brief onUpdateTheme
