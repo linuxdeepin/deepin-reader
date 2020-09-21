@@ -63,6 +63,9 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
+    m_browser = new SheetBrowser(this);
+    m_browser->setMinimumWidth(481);
+
     if (Dr::PDF == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     else if (Dr::DjVu == fileType)
@@ -71,9 +74,6 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
         m_sidebar = new SheetSidebar(this, nullptr);
 
     m_sidebar->setMinimumWidth(266);
-
-    m_browser = new SheetBrowser(this);
-    m_browser->setMinimumWidth(481);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
