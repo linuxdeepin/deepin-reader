@@ -14,17 +14,12 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
+INCLUDEPATH += $${3RDPARTTPATH}/include
 
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build deepin-poppler library failed.")
 }
 LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
-
-!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && qmake $${3RDPARTTPATH}/deepinpdf && make){
-    error("Build deepinpdf library failed.")
-}
-INCLUDEPATH += $${3RDPARTTPATH}/deepinpdf/src
-LIBS += -L"$${3RDPARTTPATH}/deepinpdf/lib" -ldeepinpdf
 
 QMAKE_RPATHDIR += /usr/lib/deepin-reader
 QMAKE_CXXFLAGS += "-fPIE -Wl,--as-needed"
