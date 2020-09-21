@@ -15,12 +15,18 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build deepin-poppler library failed.")
 }
-QMAKE_RPATHDIR += /usr/lib/deepin-reader
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 
+!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && qmake $${3RDPARTTPATH}/deepinpdf && make){
+    error("Build deepinpdf library failed.")
+}
+INCLUDEPATH += $${3RDPARTTPATH}/deepinpdf/src
+LIBS += -L"$${3RDPARTTPATH}/deepinpdf/lib" -ldeepinpdf
+
+QMAKE_RPATHDIR += /usr/lib/deepin-reader
 QMAKE_CXXFLAGS += "-fPIE -Wl,--as-needed"
 QMAKE_LFLAGS += -pie
 contains(QMAKE_HOST.arch, mips64):{
@@ -70,10 +76,13 @@ desktop.files = $$SRCPWD/deepin-reader.desktop
 poppler.path = /usr/lib/deepin-reader
 poppler.files = $${3RDPARTTPATH}/lib/*.so*
 
+deepinpdf.path = /usr/lib/deepin-reader
+deepinpdf.files = $${3RDPARTTPATH}/deepinpdf/lib/*.so*
+
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon poppler
+INSTALLS += target desktop icon poppler deepinpdf
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

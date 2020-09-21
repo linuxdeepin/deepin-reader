@@ -51,35 +51,29 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setFont(font);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
-    int tW = 36;
-    int tH = 36;
-
     m_pJumpPageLineEdit = new DLineEdit();
     m_pJumpPageLineEdit->setAccessibleName("Page");
     m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
     m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
-    tW = 60;
-    tH = 36;
-
-    m_pJumpPageLineEdit->setFixedSize(tW, tH);
+    m_pJumpPageLineEdit->setFixedSize(60, 36);
     m_pJumpPageLineEdit->setFocusPolicy(Qt::StrongFocus);
+    m_pJumpPageLineEdit->setClearButtonEnabled(false);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
-    m_pJumpPageLineEdit->setClearButtonEnabled(false);
+
     font = m_pJumpPageLineEdit->font();
     font.setPixelSize(14);
-
     m_pJumpPageLineEdit->setFont(font);
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setAccessibleName("Button_ThumbnailPre");
     m_pPrePageBtn->setObjectName("thumbnailPreBtn");
-    m_pPrePageBtn->setFixedSize(QSize(tW, tH));
+    m_pPrePageBtn->setFixedSize(QSize(60, 36));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(tW, tH));
+    m_pNextPageBtn->setFixedSize(QSize(60, 36));
     m_pNextPageBtn->setAccessibleName("Button_ThumbnailNext");
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));

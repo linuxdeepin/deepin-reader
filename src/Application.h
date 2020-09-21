@@ -51,7 +51,7 @@ public:
      */
     void unBlockShutdown();
 
-    /**
+    /** 
      * @brief showAnnotTextWidgetSig
      * 显示注释编辑框
      */

@@ -1,11 +1,13 @@
 HEADERS += \
     $$PWD/Model.h \
     $$PWD/PDFModel.h \
-    $$PWD/DjVuModel.h
+    $$PWD/DjVuModel.h \
+    $$PWD/PDFiumModel.h
 
 SOURCES += \
     $$PWD/PDFModel.cpp \
-    $$PWD/DjVuModel.cpp
+    $$PWD/DjVuModel.cpp \
+    $$PWD/PDFiumModel.cpp
 
 INCLUDEPATH += $$PWD
 
