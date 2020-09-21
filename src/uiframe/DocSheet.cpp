@@ -648,7 +648,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
             m_sidebar->move(-m_sidebar->width(), 0);
-            m_sidebar->setVisible(true);
+            m_sidebar->setVisible(false);
         }
 
         setOperationChanged();
@@ -667,7 +667,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
             m_sidebar->move(-m_sidebar->width(), 0);
-            m_sidebar->setVisible(true);
+            m_sidebar->setVisible(false);
         }
 
         m_sideAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -689,8 +689,9 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
 void DocSheet::onSideAniFinished()
 {
-    if (m_sidebar->pos().x() < 0)
+    if (m_sidebar->pos().x() < 0) {
         m_sidebar->setVisible(false);
+    }
 }
 
 bool DocSheet::isFullScreen()
@@ -705,7 +706,7 @@ bool DocSheet::isFullScreen()
 void DocSheet::openFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc || !isUnLocked())
+    if (nullptr == doc)
         return;
 
     setSidebarVisible(false);
@@ -714,7 +715,7 @@ void DocSheet::openFullScreen()
 
     m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
     m_sidebar->move(-m_sidebar->width(), 0);
-    m_sidebar->setVisible(true);
+    m_sidebar->setVisible(false);
 
     if (m_browser)
         m_browser->hideSubTipsWidget();
