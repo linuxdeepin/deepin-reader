@@ -1,12 +1,10 @@
 HEADERS += \
-    $$PWD/DPdfModelController.h \
     $$PWD/Model.h \
     $$PWD/PDFModel.h \
     $$PWD/DjVuModel.h \
     $$PWD/PDFiumModel.h
 
 SOURCES += \
-    $$PWD/DPdfModelController.cpp \
     $$PWD/PDFModel.cpp \
     $$PWD/DjVuModel.cpp \
     $$PWD/PDFiumModel.cpp
