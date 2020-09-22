@@ -934,6 +934,11 @@ bool BrowserPage::removeAllAnnotation()
 
 bool BrowserPage::jump2Link(const QPointF point)
 {
+    if (m_rotation != Dr::RotateBy0) {
+        Q_UNUSED(point)
+        return false;
+    }
+
     QPointF localPoint = point;
 
     if (nullptr == m_page)
@@ -967,6 +972,11 @@ bool BrowserPage::jump2Link(const QPointF point)
 
 bool BrowserPage::inLink(const QPointF pos)
 {
+    if (m_rotation != Dr::RotateBy0) {
+        Q_UNUSED(pos)
+        return false;
+    }
+
     QPointF localPoint = pos;
 
     if (nullptr == m_page)

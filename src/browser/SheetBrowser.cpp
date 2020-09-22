@@ -2165,6 +2165,7 @@ bool SheetBrowser::mousePressWord(const QPointF pressPos)
 
 bool SheetBrowser::jump2Link(const QPointF point)
 {
+
     QPointF mouseClickPoint = point;
 
     BrowserPage *page{nullptr};
