@@ -19,6 +19,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "PDFModel.h"
+#include "DPdfModelController.h"
+#include "dpdfiuminterface.h"
 
 #include <QCache>
 #include <QFormLayout>
@@ -1160,6 +1162,9 @@ bool PDFDocument::wantsRightToLeftMode() const
 
 PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
 {
+    DPdfiumInterface *document = DPdfModelController::getInstance()->loadFile(filePath, password);
+    qDebug() << document->isValid() << document->pageCount() << document->filename();
+
     if (Poppler::Document *document = Poppler::Document::load(filePath, QByteArray(), QByteArray().append(password))) {
         document->setRenderHint(Poppler::Document::Antialiasing, true);
         document->setRenderHint(Poppler::Document::TextAntialiasing, true);

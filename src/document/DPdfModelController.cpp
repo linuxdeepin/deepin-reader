@@ -18,25 +18,25 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "DPdfController.h"
+#include "DPdfModelController.h"
 
 #include <QPluginLoader>
 #include <QDir>
 #include <QDebug>
 #include <QCoreApplication>
 
-Q_GLOBAL_STATIC(DPdfController, theInstance)
-DPdfController::DPdfController()
+Q_GLOBAL_STATIC(DPdfModelController, theInstance)
+DPdfModelController::DPdfModelController()
 {
     qDebug() << "load pdfplugin result = " << loadDPdfPlugin();
 }
 
-DPdfiumControlInterface *DPdfController::getInstance()
+DPdfiumControlInterface *DPdfModelController::getInstance()
 {
     return theInstance()->m_dPdfPlugin;
 }
 
-bool DPdfController::loadDPdfPlugin()
+bool DPdfModelController::loadDPdfPlugin()
 {
     QDir pluginsDir("/home/leiyu/workspace/Work/Read_20200723_sp3/3rdparty/lib");
     QPluginLoader pluginLoader(pluginsDir.absoluteFilePath("libdpdf"));

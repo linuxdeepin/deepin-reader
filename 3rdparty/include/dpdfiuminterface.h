@@ -18,19 +18,20 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DPDFIUMCONTROLINTERFACE_H
-#define DPDFIUMCONTROLINTERFACE_H
+#ifndef DPDFIUMINTERFACR_H
+#define DPDFIUMINTERFACR_H
 
 #include <QObject>
 
-class DPdfiumInterface;
-class DPdfiumControlInterface
+class DPdfiumInterface
 {
 public:
-    virtual ~DPdfiumControlInterface() = 0;
+    virtual bool isValid() const = 0;
 
-    virtual DPdfiumInterface *loadFile(QString filename, QString password = QString()) = 0;
+    virtual QString filename() const = 0;
+
+    virtual int pageCount() const = 0;
 };
-Q_DECLARE_INTERFACE(DPdfiumControlInterface, "org.deepin-project.DPdfiumControlInterface")
+Q_DECLARE_INTERFACE(DPdfiumInterface, "org.deepin-project.DPdfiumInterface")
 
-#endif // DPDFIUMCONTROLINTERFACE_H
+#endif // DPDFIUMINTERFACR_H

@@ -24,10 +24,10 @@
 #include <QObject>
 #include "dpdfiumcontrolinterface.h"
 
-class DPdfController
+class DPdfModelController
 {
 public:
-    DPdfController();
+    DPdfModelController();
     static DPdfiumControlInterface *getInstance();
 
 private:
