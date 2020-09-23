@@ -1,4 +1,4 @@
-QT += core gui sql printsupport dbus network xml
+QT += core gui sql printsupport dbus xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,13 +15,13 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build deepin-poppler library failed.")
 }
 QMAKE_RPATHDIR += /usr/lib/deepin-reader
 
-QMAKE_CXXFLAGS += "-fPIE -Wl,--as-needed"
+QMAKE_CXXFLAGS += "-Wl,--as-needed -fPIE"
 QMAKE_LFLAGS += -pie
 contains(QMAKE_HOST.arch, mips64):{
     QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
