@@ -792,7 +792,7 @@ private:
 
     QMap<QString, int> m_lable2Page;    // 文档下标页码
 
-    int m_currentPage = -1;
+    int m_currentPage = 0;
     int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
     bool m_bTouch = false;

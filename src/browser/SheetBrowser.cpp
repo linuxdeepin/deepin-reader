@@ -1766,7 +1766,7 @@ int SheetBrowser::allPages()
 
 int SheetBrowser::currentPage()
 {
-    if (m_currentPage >= 0)
+    if (m_currentPage >= 1)
         return m_currentPage;
 
     return currentScrollValueForPage();
