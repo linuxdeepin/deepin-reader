@@ -923,7 +923,7 @@ bool DocSheet::isUnLocked()
 
 int DocSheet::getIndexByPageLable(const QString &pageLable)
 {
-    if (m_browser)
+    if (m_browser == nullptr)
         return -1;
 
     return m_browser->pageLableIndex(pageLable);
