@@ -350,7 +350,7 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 
 void SheetBrowser::setBookMark(int index, int state)
 {
-    if (m_items.count() > index) {
+    if (index >= 0 && index < m_items.count()) {
         m_items.at(index)->setBookmark(state);
     }
 }

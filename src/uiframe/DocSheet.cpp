@@ -228,6 +228,9 @@ bool DocSheet::openFileExec(const QString &password)
 }
 void DocSheet::setBookMark(int index, int state)
 {
+    if (index < 0 || index >= pagesNumber())
+        return;
+
     if (state)
         m_bookmarks.insert(index);
     else {
