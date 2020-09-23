@@ -934,7 +934,7 @@ bool BrowserPage::removeAllAnnotation()
 
 bool BrowserPage::jump2Link(const QPointF point)
 {
-    if (m_rotation != Dr::RotateBy0) {
+    if ((m_rotation != Dr::RotateBy0) && (m_rotation < Dr::NumberOfRotations)) {
         Q_UNUSED(point)
         return false;
     }
@@ -972,7 +972,7 @@ bool BrowserPage::jump2Link(const QPointF point)
 
 bool BrowserPage::inLink(const QPointF pos)
 {
-    if (m_rotation != Dr::RotateBy0) {
+    if ((m_rotation != Dr::RotateBy0) && (m_rotation < Dr::NumberOfRotations)) {
         Q_UNUSED(pos)
         return false;
     }
