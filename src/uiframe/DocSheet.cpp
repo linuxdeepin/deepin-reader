@@ -63,6 +63,9 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
+    m_browser = new SheetBrowser(this);
+    m_browser->setMinimumWidth(481);
+
     if (Dr::PDF == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     else if (Dr::DjVu == fileType)
@@ -71,9 +74,6 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
         m_sidebar = new SheetSidebar(this, nullptr);
 
     m_sidebar->setMinimumWidth(266);
-
-    m_browser = new SheetBrowser(this);
-    m_browser->setMinimumWidth(481);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
@@ -228,6 +228,9 @@ bool DocSheet::openFileExec(const QString &password)
 }
 void DocSheet::setBookMark(int index, int state)
 {
+    if (index < 0 || index >= pagesNumber())
+        return;
+
     if (state)
         m_bookmarks.insert(index);
     else {
@@ -648,7 +651,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
             m_sidebar->move(-m_sidebar->width(), 0);
-            m_sidebar->setVisible(true);
+            m_sidebar->setVisible(false);
         }
 
         setOperationChanged();
@@ -667,7 +670,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
             m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
             m_sidebar->move(-m_sidebar->width(), 0);
-            m_sidebar->setVisible(true);
+            m_sidebar->setVisible(false);
         }
 
         m_sideAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -689,8 +692,9 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 
 void DocSheet::onSideAniFinished()
 {
-    if (m_sidebar->pos().x() < 0)
+    if (m_sidebar->pos().x() < 0) {
         m_sidebar->setVisible(false);
+    }
 }
 
 bool DocSheet::isFullScreen()
@@ -705,7 +709,7 @@ bool DocSheet::isFullScreen()
 void DocSheet::openFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc || !isUnLocked())
+    if (nullptr == doc)
         return;
 
     setSidebarVisible(false);
@@ -714,7 +718,7 @@ void DocSheet::openFullScreen()
 
     m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
     m_sidebar->move(-m_sidebar->width(), 0);
-    m_sidebar->setVisible(true);
+    m_sidebar->setVisible(false);
 
     if (m_browser)
         m_browser->hideSubTipsWidget();
@@ -922,7 +926,7 @@ bool DocSheet::isUnLocked()
 
 int DocSheet::getIndexByPageLable(const QString &pageLable)
 {
-    if (m_browser)
+    if (m_browser == nullptr)
         return -1;
 
     return m_browser->pageLableIndex(pageLable);

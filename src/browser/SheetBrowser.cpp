@@ -350,7 +350,7 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 
 void SheetBrowser::setBookMark(int index, int state)
 {
-    if (m_items.count() > index) {
+    if (index >= 0 && index < m_items.count()) {
         m_items.at(index)->setBookmark(state);
     }
 }
@@ -1766,7 +1766,7 @@ int SheetBrowser::allPages()
 
 int SheetBrowser::currentPage()
 {
-    if (m_currentPage >= 0)
+    if (m_currentPage >= 1)
         return m_currentPage;
 
     return currentScrollValueForPage();
@@ -2165,6 +2165,7 @@ bool SheetBrowser::mousePressWord(const QPointF pressPos)
 
 bool SheetBrowser::jump2Link(const QPointF point)
 {
+
     QPointF mouseClickPoint = point;
 
     BrowserPage *page{nullptr};

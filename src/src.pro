@@ -1,4 +1,4 @@
-QT += core gui sql printsupport dbus network xml
+QT += core gui sql printsupport dbus xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,8 +22,9 @@ INCLUDEPATH += $${3RDPARTTPATH}/include
 LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
 
 QMAKE_RPATHDIR += /usr/lib/deepin-reader
-QMAKE_CXXFLAGS += "-fPIE -Wl,--as-needed"
+QMAKE_CXXFLAGS += "-Wl,--as-needed -fPIE"
 QMAKE_LFLAGS += -pie
+
 contains(QMAKE_HOST.arch, mips64):{
     QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
 }

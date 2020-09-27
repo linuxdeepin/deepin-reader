@@ -212,7 +212,7 @@ void PagingWidget::pageNumberJump()
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
         m_sheet->jumpToIndex(iPage);
     } else {
-        m_sheet->showTips(tr("Invalid page number"), 1);
+        normalChangePage();
     }
 }
 

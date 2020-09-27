@@ -62,7 +62,7 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
         initShortCut();
 
         foreach (const QString &filePath, m_initFilePathList) {
-            if(QFile(filePath).exists())        //过滤不存在的文件,需求中不含有提示文件不存在的文案
+            if (QFile(filePath).exists())       //过滤不存在的文件,需求中不含有提示文件不存在的文案
                 doOpenFile(filePath);
         }
     }
@@ -88,6 +88,13 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     addSheet(sheet);
 
     connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
+
+    m_showMenuTimer = new  QTimer(this);
+    m_showMenuTimer->setInterval(1000);
+    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
+        m_showMenuTimer->stop();
+        dApp->showAnnotTextWidgetSig();
+    });
 }
 
 MainWindow::~MainWindow()

@@ -5,8 +5,6 @@
 
 #include <DLog>
 #include <DApplicationSettings>
-
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QDBusConnection>
 #include <QDBusInterface>
