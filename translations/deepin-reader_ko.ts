@@ -2,12 +2,12 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/Application.cpp" line="39"/>
+        <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>문서 보기도구</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>문서 뷰어는 문서 파일을 읽고 PDF, DJVU 등을 지원하는 도구입니다.</translation>
     </message>
@@ -121,12 +121,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="58"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
         <translation>북마크 추가</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="203"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation type="unfinished"/>
     </message>
@@ -254,41 +254,41 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="141"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
         <source>The format is not supported</source>
         <translation>형식이 지원되지 않음</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="152"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="199"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
         <source>Please check if the file is damaged</source>
         <translation>파일이 손상되었는지 확인하십시오</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="394"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
         <source>Save failed</source>
         <translation>저장 실패</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="400"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
         <source>Saved successfully</source>
         <translation>성공적으로 저장됨</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="420"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
         <source>Save as</source>
         <translation>다른 이름으로 저장</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="423"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
         <source>Invalid file name</source>
         <translation>잘못된 파일 이름</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="425"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="444"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
@@ -301,12 +301,12 @@
         <translation>문서를 여기로 드래그</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="40"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>지원되는 형식: %1</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="45"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>파일 선택</translation>
     </message>
@@ -314,20 +314,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="234"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="262"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
         <translation>북마크가 제거되었습니다</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="429"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="443"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
         <translation>텍스트를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="492"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="501"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="495"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>주석이 제거되었습니다</translation>
     </message>
@@ -335,22 +335,22 @@
 <context>
     <name>EncryptionPage</name>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="50"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="51"/>
         <source>Encrypted file, please enter the password</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="56"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="57"/>
         <source>Password</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="61"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="62"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="106"/>
         <source>Wrong password</source>
         <translation type="unfinished"/>
     </message>
@@ -425,12 +425,12 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="64"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
         <translation>주석 추가</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="153"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation type="unfinished"/>
     </message>
@@ -438,8 +438,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="200"/>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="215"/>
+        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
         <source>Invalid page number</source>
         <translation>잘못된 페이지 번호</translation>
     </message>
@@ -447,7 +446,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/Application.cpp" line="59"/>
+        <location filename="../src/Application.cpp" line="60"/>
         <source>Document not saved</source>
         <translation>저장되지 않은 문서</translation>
     </message>
@@ -512,12 +511,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="59"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
         <translation>검색 결과 없음</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="99"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>%1개 항목 발견</translation>
     </message>
@@ -772,7 +771,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Copy</source>
-        <translation>복사</translation>
+        <translation>복사하기</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -850,7 +849,7 @@
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="105"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="106"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
@@ -875,7 +874,12 @@
         <translation>도구</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="58"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="56"/>
+        <source>Menu_Hand</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="59"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
@@ -883,7 +887,7 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/uiframe/TitleWidget.cpp" line="77"/>
+        <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
         <translation>썸네일</translation>
     </message>
@@ -891,7 +895,7 @@
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="73"/>
+        <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
         <translation>입력 한계 도달함</translation>
     </message>
@@ -899,23 +903,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="25"/>
+        <location filename="../src/main.cpp" line="28"/>
         <source>Document File Path.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="26"/>
-        <location filename="../src/main.cpp" line="30"/>
+        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="34"/>
+        <location filename="../src/main.cpp" line="37"/>
         <source>Generate thumbnail.</source>
         <translation type="unfinished"/>
     </message>

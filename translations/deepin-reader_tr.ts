@@ -2,12 +2,12 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/Application.cpp" line="39"/>
+        <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>Belge Görüntüleyici</translation>
     </message>
     <message>
-        <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>Belge Görüntüleyici, belgeleri okuyan bir araçtır, PDF, DJVU vb. türleri destekler.</translation>
     </message>
@@ -121,12 +121,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="58"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
         <translation>Yer imi ekle</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="203"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>Tüm yer imlerini silmek istediğinizden emin misiniz?</translation>
     </message>
@@ -254,41 +254,41 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="141"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
         <source>The format is not supported</source>
         <translation>Biçim desteklenmiyor</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="152"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="199"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
         <source>Please check if the file is damaged</source>
         <translation>Dosyanın hasarlı olup olmadığını kontrol edin</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="394"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
         <source>Save failed</source>
         <translation>Kayıt başarısız</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="400"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
         <source>Saved successfully</source>
         <translation>Başarıyla kaydedildi</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="420"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
         <source>Save as</source>
         <translation>Farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="423"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
         <source>Invalid file name</source>
         <translation>Geçersiz dosya adı</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="425"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="444"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
@@ -301,12 +301,12 @@
         <translation>Belgeleri buraya sürükle</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="40"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>Desteklenen biçim: %1</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="45"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Dosya Seç</translation>
     </message>
@@ -314,20 +314,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="234"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="262"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
         <translation>Yer imi kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="429"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="443"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
         <translation>Lütfen metni seç</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="492"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="501"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="495"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>Ek açıklama kaldırıldı</translation>
     </message>
@@ -335,22 +335,22 @@
 <context>
     <name>EncryptionPage</name>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="50"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="51"/>
         <source>Encrypted file, please enter the password</source>
         <translation>Şifrelenmiş dosya, lütfen parolayı gir</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="56"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="57"/>
         <source>Password</source>
         <translation>Parola</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="61"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="62"/>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="106"/>
         <source>Wrong password</source>
         <translation>Yanlış parola</translation>
     </message>
@@ -425,12 +425,12 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="64"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
         <translation>Açıklama ekle</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="153"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Tüm ek açıklamaları silmek istediğinizden emin misiniz?</translation>
     </message>
@@ -438,8 +438,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="200"/>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="215"/>
+        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
         <source>Invalid page number</source>
         <translation>Geçersiz dosya adı</translation>
     </message>
@@ -447,7 +446,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/Application.cpp" line="59"/>
+        <location filename="../src/Application.cpp" line="60"/>
         <source>Document not saved</source>
         <translation>Belge kaydedilmedi</translation>
     </message>
@@ -512,12 +511,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="59"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
         <translation>Arama sonucu bulunamadı</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="99"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>%1 öge bulundu</translation>
     </message>
@@ -730,7 +729,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Add bookmark</source>
-        <translation>Yer imi ekle</translation>
+        <translation>Yerimi ekle</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -850,7 +849,7 @@
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="105"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="106"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
@@ -875,7 +874,12 @@
         <translation>Araçlar</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="58"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="56"/>
+        <source>Menu_Hand</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="59"/>
         <source>Search</source>
         <translation>Ara</translation>
     </message>
@@ -883,7 +887,7 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/uiframe/TitleWidget.cpp" line="77"/>
+        <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
         <translation>Küçük resimler</translation>
     </message>
@@ -891,7 +895,7 @@
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="73"/>
+        <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
         <translation>Giriş sınırına ulaşıldı</translation>
     </message>
@@ -899,23 +903,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="25"/>
+        <location filename="../src/main.cpp" line="28"/>
         <source>Document File Path.</source>
         <translation>Belge Dosya Yolu.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="26"/>
-        <location filename="../src/main.cpp" line="30"/>
+        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
         <translation>DosyaYolu</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
         <translation>KüçükResimYolu Yolu.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="34"/>
+        <location filename="../src/main.cpp" line="37"/>
         <source>Generate thumbnail.</source>
         <translation>Küçük resim oluştur.</translation>
     </message>
