@@ -874,11 +874,6 @@
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="56"/>
-        <source>Menu_Hand</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="59"/>
         <source>Search</source>
         <translation>搜索</translation>
