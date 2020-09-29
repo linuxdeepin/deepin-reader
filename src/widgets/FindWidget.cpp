@@ -25,7 +25,6 @@
 #include <DDialogCloseButton>
 #include <DIconButton>
 
-#include <QDebug>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 

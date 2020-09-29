@@ -24,7 +24,6 @@
 #include <QFormLayout>
 #include <QMessageBox>
 #include <QSettings>
-#include <QDebug>
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 
@@ -35,7 +34,6 @@
 #include <poppler-qt4.h>
 
 #endif // QT_VERSION
-#include <QDebug>
 #include <QTimer>
 
 #include <poppler-form.h>

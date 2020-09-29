@@ -23,7 +23,6 @@
 #include "DocSheet.h"
 
 #include <QSignalMapper>
-#include <QDebug>
 
 TitleMenu::TitleMenu(DWidget *parent)
     : CustomMenu(parent)

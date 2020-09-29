@@ -20,7 +20,6 @@
 #include "ReaderImageThreadPoolManager.h"
 #include "DocSheet.h"
 
-#include <QDebug>
 #include <QUuid>
 
 const int maxThreadCnt = 5;

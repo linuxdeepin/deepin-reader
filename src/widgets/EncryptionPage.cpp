@@ -24,7 +24,6 @@
 
 #include <QBoxLayout>
 #include <DGuiApplicationHelper>
-#include <QDebug>
 
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)

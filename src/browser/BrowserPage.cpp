@@ -40,7 +40,6 @@
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
 #include <QTime>

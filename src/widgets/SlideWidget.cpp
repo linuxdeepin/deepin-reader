@@ -30,7 +30,6 @@
 #include <DApplication>
 #include <DTitlebar>
 
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QTimer>

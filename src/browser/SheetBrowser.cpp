@@ -45,7 +45,6 @@
 #include "PageViewportThread.h"
 #include "PageSearchThread.h"
 
-#include <QDebug>
 #include <QGraphicsItem>
 #include <QScrollBar>
 #include <QTimer>
@@ -60,6 +59,7 @@
 #include <QUuid>
 #include <QScroller>
 #include <QPainterPath>
+#include <QDebug>
 
 const int ICONANNOTE_WIDTH = 24;
 

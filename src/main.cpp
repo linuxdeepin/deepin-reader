@@ -3,7 +3,7 @@
 #include "CentralDocPage.h"
 #include "accessible.h"
 
-#include <DLog>
+#include <QCommandLineParser>
 #include <DApplicationSettings>
 #include <QDesktopWidget>
 #include <QDBusConnection>
@@ -71,9 +71,6 @@ int main(int argc, char *argv[])
     QAccessible::installFactory(accessibleFactory);
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
-
-    Dtk::Core::DLogManager::registerConsoleAppender();
-    Dtk::Core::DLogManager::registerFileAppender();
 
     if (!MainWindow::allowCreateWindow())
         return -1;

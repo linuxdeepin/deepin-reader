@@ -28,7 +28,6 @@
 #include <DLabel>
 
 #include <QGridLayout>
-#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)

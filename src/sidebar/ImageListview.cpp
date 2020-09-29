@@ -24,7 +24,6 @@
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
 
-#include <QDebug>
 #include <QScroller>
 #include <QScrollBar>
 #include <QSet>

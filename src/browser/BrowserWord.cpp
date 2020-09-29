@@ -24,7 +24,6 @@
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QDebug>
 
 BrowserWord::BrowserWord(QGraphicsItem *parent, deepin_reader::Word word) : QGraphicsItem(parent), m_word(word)
 {

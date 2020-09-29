@@ -27,7 +27,6 @@
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 
-#include <QDebug>
 #include <QProxyStyle>
 #include <QPainter>
 #include <QStylePainter>

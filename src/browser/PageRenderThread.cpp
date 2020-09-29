@@ -32,7 +32,6 @@
 #include "PageViewportThread.h"
 
 #include <QTime>
-#include <QDebug>
 
 QList<PageRenderThread *> PageRenderThread::instances;
 bool PageRenderThread::quitForever = false;

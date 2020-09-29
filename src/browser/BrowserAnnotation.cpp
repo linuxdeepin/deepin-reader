@@ -26,7 +26,6 @@
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-#include <QDebug>
 
 BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation) : QGraphicsItem(parent),
     m_annotation(annotation), m_rect(rect), m_parent(parent)

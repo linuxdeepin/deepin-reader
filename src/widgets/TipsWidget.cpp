@@ -26,7 +26,6 @@
 #include <DApplication>
 
 #include <QPainter>
-#include <QDebug>
 #include <QRectF>
 
 TipsWidget::TipsWidget(QWidget *parent) : DWidget(parent)

@@ -22,7 +22,6 @@
 
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <QDebug>
 
 namespace Dr {
 FileType fileType(const QString &filePath)

@@ -20,8 +20,6 @@
  */
 #include "BookMarkMenu.h"
 
-#include <QDebug>
-
 BookMarkMenu::BookMarkMenu(DWidget *parent)
     : CustomMenu(parent)
 {

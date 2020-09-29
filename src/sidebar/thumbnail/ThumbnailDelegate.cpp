@@ -24,7 +24,6 @@
 #include <DGuiApplicationHelper>
 
 #include <QPainter>
-#include <QDebug>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
 #include <QPainterPath>

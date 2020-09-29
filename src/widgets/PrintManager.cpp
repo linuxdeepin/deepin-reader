@@ -24,7 +24,6 @@
 #include <QPrinter>
 #include <QPainter>
 #include <QPrintDialog>
-#include <QDebug>
 
 PrintManager::PrintManager(DocSheet *sheet, QObject *parent)
     : QObject(parent), m_sheet(sheet)

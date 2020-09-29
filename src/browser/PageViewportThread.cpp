@@ -31,7 +31,6 @@
 #include "SheetBrowser.h"
 
 #include <QTime>
-#include <QDebug>
 
 QList<PageViewportThread *> PageViewportThread::instances;
 bool PageViewportThread::quitForever = false;

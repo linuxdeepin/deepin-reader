@@ -28,7 +28,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSignalMapper>
-#include <QDebug>
 
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)

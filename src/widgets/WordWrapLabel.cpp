@@ -21,7 +21,6 @@
 #include "WordWrapLabel.h"
 
 #include <QPainter>
-#include <QDebug>
 
 WordWrapLabel::WordWrapLabel(QWidget *parent)
     : DLabel(parent)

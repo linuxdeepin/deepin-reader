@@ -25,7 +25,6 @@
 #include <QColor>
 #include <QPainter>
 #include <QApplication>
-#include <QDebug>
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE

@@ -25,7 +25,6 @@
 #include <DFontSizeManager>
 
 #include <QPainter>
-#include <QDebug>
 #include <QScrollBar>
 #include <QTextBlock>
 #include <QMimeData>
