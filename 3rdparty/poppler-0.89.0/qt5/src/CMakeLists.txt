@@ -52,7 +52,7 @@ endif()
 if (ENABLE_NSS3)
     target_include_directories(deepin-poppler-qt SYSTEM PRIVATE ${NSS3_INCLUDE_DIRS})
 endif()
-#install(TARGETS deepin-poppler-qt DESTINATION /usr/lib)
+install(TARGETS deepin-poppler-qt DESTINATION /usr/lib)
 
 #install(FILES
 #  poppler-qt5.h

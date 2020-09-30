@@ -17,12 +17,16 @@ INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
 CONFIG(debug, debug|release) {
     LIBS += -L"$${3RDPARTTPATH}/lib"
+    !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
+        error("Build deepin-poppler library failed.")
+    }
 }
 
-!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-    error("Build deepin-poppler library failed.")
+CONFIG(release, debug|release) {
+    !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make install){
+        error("Build deepin-poppler library failed.")
+    }
 }
-
 LIBS += -ldeepin-poppler-qt
 
 QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
@@ -72,13 +76,10 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
-poppler.path = /usr/lib
-poppler.files = $${3RDPARTTPATH}/lib/*.so*
-
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon poppler
+INSTALLS += target desktop icon
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

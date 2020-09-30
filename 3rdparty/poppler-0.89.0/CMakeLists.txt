@@ -546,7 +546,7 @@ target_link_libraries(deepin-poppler LINK_PRIVATE ${poppler_LIBS})
 if(CMAKE_USE_PTHREADS_INIT)
    target_link_libraries(deepin-poppler LINK_PRIVATE Threads::Threads)
 endif()
-#install(TARGETS deepin-poppler DESTINATION /usr/lib)
+install(TARGETS deepin-poppler DESTINATION /usr/lib)
 
 #if(ENABLE_UNSTABLE_API_ABI_HEADERS)
 #  install(FILES
