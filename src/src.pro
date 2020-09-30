@@ -15,12 +15,17 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
+CONFIG(debug, debug|release) {
+    LIBS += -L"$${3RDPARTTPATH}/lib"
+}
+
 !system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
     error("Build deepin-poppler library failed.")
 }
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt
 
-QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE -zignore"
+LIBS += -ldeepin-poppler-qt
+
+QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
 QMAKE_LFLAGS += -pie
 
 contains(QMAKE_HOST.arch, mips64):{
