@@ -155,7 +155,7 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    auto item1 = new QStandardItem(QString::number(index));
+    auto item1 = new QStandardItem(QString::number(index + 1));
     item1->setData(index);
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);

@@ -674,14 +674,6 @@ private:
     void jump2PagePos(BrowserPage *page, const qreal posLeft, const qreal posTop);
 
     /**
-     * @brief jump2PagePos
-     * 响应左侧注释列表点击事件,跳到对应文档注释处
-     * @param jumpPage 哪一页
-     * @param rect 注释起始范围
-     */
-    void jump2PagePos(BrowserPage *page, const QRectF);
-
-    /**
      * @brief moveIconAnnot
      * 鼠标移动图标注释,设置当前图标注释的位置
      * @param page 图标注释所在页的指针

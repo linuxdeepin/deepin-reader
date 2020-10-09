@@ -51,8 +51,6 @@
 #include <QApplication>
 #include <QBitmap>
 #include <DMenu>
-#include <DGuiApplicationHelper>
-#include <QDomDocument>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QStandardPaths>
@@ -601,105 +599,38 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     SheetOperation  operation = m_sheet->operation();
     rotation = operation.rotation;
 
-    int linkX{0};
-    int linkY{0};
+    int linkX = 0;
+    int linkY = 0;
 
     switch (rotation) {
     case Dr::RotateBy0: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posLeft) * jumpPage->boundingRect().width());
+        linkY = static_cast<int>(jumpPage->pos().y() + jumpPage->boundingRect().height() - posTop * m_lastScaleFactor);
+        linkX = static_cast<int>(jumpPage->pos().x() + posLeft * m_lastScaleFactor);
     }
     break;
     case Dr::RotateBy90: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height());
+        linkY = static_cast<int>(jumpPage->pos().y() + jumpPage->boundingRect().width() - posLeft * m_lastScaleFactor);
+        linkX = static_cast<int>(jumpPage->pos().x() + jumpPage->boundingRect().height() - posTop * m_lastScaleFactor);
     }
     break;
     case Dr::RotateBy180: {
-        linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
+        linkY = static_cast<int>(jumpPage->pos().y() + posTop * m_lastScaleFactor);
+        linkX = static_cast<int>(jumpPage->pos().x() + jumpPage->boundingRect().width() - posLeft * m_lastScaleFactor);
     }
     break;
     case Dr::RotateBy270: {
-        linkY = static_cast<int>(jumpPage->pos().y() - (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posTop) * jumpPage->boundingRect().height());
+        linkY = static_cast<int>(jumpPage->pos().y() + posLeft * m_lastScaleFactor);
+        linkX = static_cast<int>(jumpPage->pos().x() + posTop * m_lastScaleFactor);
     }
     break;
     default: break;
     }
 
     m_bNeedNotifyCurPageChanged = false;
-    if (this->verticalScrollBar()) {
-        linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
-        this->verticalScrollBar()->setValue(linkY);
-    }
-    if (this->horizontalScrollBar()) {
-        linkX = (linkX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : linkX);
-        this->horizontalScrollBar()->setValue(linkX);
-    }
-
+    this->verticalScrollBar()->setValue(linkY);
+    this->horizontalScrollBar()->setValue(linkX);
     m_bNeedNotifyCurPageChanged = true;
-    curpageChanged(jumpPage->itemIndex() + 1);
-}
 
-void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const QRectF rect)
-{
-    if (nullptr == jumpPage)
-        return;
-
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
-
-    int linkX{0};
-    int linkY{0};
-    qreal posLeft = 0.0;
-    qreal posTop = 0.0;
-
-    posLeft = rect.left();
-    posTop = rect.top();
-
-    switch (rotation) {
-    case Dr::RotateBy0: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy90: {
-        posLeft = rect.left();
-        posTop = rect.bottom();
-        linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    case Dr::RotateBy180: {
-        posLeft = rect.right();
-        posTop = rect.bottom();
-        linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy270: {
-        posLeft = rect.right();
-        posTop = rect.top();
-        linkY = static_cast<int>(jumpPage->pos().y() - (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    default: break;
-    }
-
-    m_bNeedNotifyCurPageChanged = false;
-    if (this->verticalScrollBar()) {
-        linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
-        this->verticalScrollBar()->setValue(linkY);
-    }
-    if (this->horizontalScrollBar()) {
-        linkX = (linkX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : linkX);
-        this->horizontalScrollBar()->setValue(linkX);
-    }
-
-    m_bNeedNotifyCurPageChanged = true;
     curpageChanged(jumpPage->itemIndex() + 1);
 }
 
@@ -927,7 +858,7 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     if (firstRect.isNull() || firstRect.isEmpty())
         return;
 
-    jump2PagePos(jumpPage, firstRect);
+    jump2PagePos(jumpPage, firstRect.left(), firstRect.top());
 }
 
 /**
