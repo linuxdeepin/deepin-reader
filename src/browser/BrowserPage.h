@@ -51,7 +51,7 @@ class BrowserPage : public QGraphicsItem
     friend class PageRenderThread;
     friend class PageViewportThread;
 public:
-    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
+    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
     virtual ~BrowserPage() override;
 
@@ -69,7 +69,7 @@ public:
      * @param page
      * @param renderPages 渲染页
      */
-    void reOpen(deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
+    void reOpen(deepin_reader::Page *page);
 
     /**
      * @brief boundingRect
@@ -116,22 +116,14 @@ public:
     void renderViewPort(bool force = false);
 
     /**
-     * @brief thumbnail
-     * 文档页的缩略图(大部分获取是空的)
-     * @return 缩略图
-     */
-    QImage thumbnail();
-
-    /**
      * @brief getImage
      * 获取该缩放后的图片中的一部分
      * @param scaleFactor 缩放因子
      * @param rotation 旋转
      * @param boundingRect 范围 默认为获取全部
-     * @param renderIndex 选择线程 -1默认
      * @return
      */
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect(), int renderIndex = -1);
+    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
     /**
      * @brief getImage
@@ -140,10 +132,9 @@ public:
      * @param height 高
      * @param mode 缩放模式
      * @param bSrc 是否可以使用已存在图片缩放
-     * @param renderIndex 选择线程 -1默认
      * @return
      */
-    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc, int renderIndex = -1);
+    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc);
 
     /**
      * @brief getImageRect
@@ -279,14 +270,6 @@ public:
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     /**
-     * @brief removeAnnotationByUniqueName
-     * 根据序列号删除注释
-     * @param uniqueName 序列号
-     * @return true:删除成功, false:删除失败
-     */
-    bool removeAnnotationByUniqueName(QString uniqueName);
-
-    /**
      * @brief addIconAnnotation
      * 添加图标注释
      * @param rect 图标rect
@@ -308,7 +291,7 @@ public:
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
      */
-    void setSearchHighlightRectf(const QList< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QVector< QRectF > &rectflst);
 
     /**
      * @brief clearSearchHighlightRects
@@ -499,13 +482,8 @@ private:
     SheetBrowser *m_parent = nullptr;
 
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
-    QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染的副本
 
-    deepin_reader::AnnotationList m_annotations;   //
-    deepin_reader::AnnotationList m_annotations0;  // 渲染page的注释  之后改成QList<deepin_reader::m_annotations> m_renderAnnotations
-    deepin_reader::AnnotationList m_annotations1;  //
-    deepin_reader::AnnotationList m_annotations2;  //
-    deepin_reader::AnnotationList m_annotations3;  //
+    deepin_reader::AnnotationList m_annotations;
 
     int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放
@@ -534,7 +512,7 @@ private:
     bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
     QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 
-    QList<QRectF> m_searchLightrectLst;                     //搜索结果
+    QVector<QRectF> m_searchLightrectLst;                     //搜索结果
     QRectF m_searchSelectLighRectf;
 
     bool m_bookmark = false;                                // 当前是否有书签

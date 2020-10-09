@@ -274,7 +274,7 @@ public:
      * @param linkTop 链接到顶部的距离
      * @param index 哪一页
      */
-    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
+    void jumpToOutline(const qreal  &left, const qreal &top, int page);
 
     /**
      * @brief jumpToHighLight
@@ -750,7 +750,6 @@ private:
 
 private:
     deepin_reader::Document *m_document = nullptr;
-    QList<deepin_reader::Document *> m_renderDocuments;
 
     DocSheet *m_sheet = nullptr;
 

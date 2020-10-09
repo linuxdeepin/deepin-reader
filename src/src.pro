@@ -13,17 +13,11 @@ PKGCONFIG += ddjvuapi dtkwidget
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
 INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
+INCLUDEPATH += $${3RDPARTTPATH}/include
 
-LIBS += -L"$${3RDPARTTPATH}/lib"
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldpdf
 
-!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-    error("Build deepin-poppler library failed.")
-}
-
-LIBS += -ldeepin-poppler-qt
-
-QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
+QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE -zignore"
 QMAKE_LFLAGS += -pie
 
 contains(QMAKE_HOST.arch, mips64):{
@@ -70,10 +64,13 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
+poppler.path = /usr/lib
+poppler.files = $${3RDPARTTPATH}/lib/*.so*
+
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon
+INSTALLS += target desktop icon poppler
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

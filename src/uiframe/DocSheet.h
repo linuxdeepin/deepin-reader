@@ -194,7 +194,7 @@ public:
      * @param top 距离上边距离
      * @param page 跳转的页码
      */
-    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
+    void jumpToOutline(const qreal  &left, const qreal &top, int page);
 
     /**
      * @brief jumpToHighLight

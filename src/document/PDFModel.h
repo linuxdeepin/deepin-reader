@@ -29,12 +29,9 @@
 #include <QPointF>
 #include <QRectF>
 
-namespace Poppler {
-class Annotation;
-class Document;
-class FormField;
-class Page;
-}
+class DPdfDoc;
+class DPdfPage;
+class DPdfAnnot;
 
 namespace deepin_reader {
 class PDFAnnotation : public Annotation
@@ -52,22 +49,16 @@ public:
 
     int type() override;
 
-    Poppler::Annotation *ownAnnotation() override;
-
-    bool updateAnnotation(const QString contains, const QColor color)  override;
-
-    bool setUniqueName(QString uniqueName) const override;
-
-    QString uniqueName() const override;
+    DPdfAnnot *ownAnnotation() override;
 
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
-    PDFAnnotation(QMutex *mutex, Poppler::Annotation *annotation);
+    PDFAnnotation(QMutex *mutex, DPdfAnnot *annotation);
 
     mutable QMutex *m_mutex;
 
-    Poppler::Annotation *m_annotation;
+    DPdfAnnot *m_annotation;
 
 };
 
@@ -80,8 +71,6 @@ class PDFPage : public Page
 public:
     ~PDFPage() override;
 
-    QSize size() const override;
-
     QSizeF sizeF() const override;
 
     QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const override;
@@ -90,31 +79,23 @@ public:
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
 
-    QImage thumbnail() const override;
-
     QString label() const override;
 
-    QList< Link * > links() const override;
+    Link getLinkAtPoint(const QPointF &point) const override;
 
     QString text(const QRectF &rect) const override;
 
-    QString cachedText(const QRectF &rect) const override;
-
     QList<Word> words(Dr::Rotation rotation) override;
 
-    QList< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const override;
+    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
     QList< Annotation * > annotations() const override;
-
-    bool canAddAndRemoveAnnotations() const override;
 
     Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) override;
 
     bool removeAnnotation(deepin_reader::Annotation *annotation) override;
 
-    QList< FormField * > formFields() const override;
-
-    bool updateAnnotation(Annotation *annotation, const QString &, const QColor &);
+    bool updateAnnotation(Annotation *annotation, const QString &, const QColor &) override;
 
     bool mouseClickIconAnnot(QPointF &) override;
 
@@ -125,15 +106,17 @@ public:
 private:
     Q_DISABLE_COPY(PDFPage)
 
-    PDFPage(QMutex *mutex, Poppler::Page *page);
+    PDFPage(QMutex *mutex, DPdfPage *page);
 
     mutable QMutex *m_mutex;
 
-    Poppler::Page *m_page;
+    DPdfPage *m_page;
 
     Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
 
     QList<Word> m_words;
+
+    QSizeF m_pageSizef;
 };
 
 class PDFDocument : public Document
@@ -147,46 +130,24 @@ public:
 
     Page *page(int index) const;
 
-    bool isLocked() const;
-
-    bool unlock(const QString &password);
-
     QStringList saveFilter() const;
 
-    bool canSave() const;
-
     bool save(const QString &filePath, bool withChanges) const;
-
-    bool canBePrintedUsingCUPS() const;
-
-    void setPaperColor(const QColor &paperColor);
 
     Outline outline() const;
 
     Properties properties() const;
 
-    QAbstractItemModel *fonts() const;
-
-    bool wantsContinuousMode() const;
-
-    bool wantsSinglePageMode() const;
-
-    bool wantsTwoPagesMode() const;
-
-    bool wantsTwoPagesWithCoverPageMode() const;
-
-    bool wantsRightToLeftMode() const;
-
-    static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password = "");
+    static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password, int &status);
 
 private:
     Q_DISABLE_COPY(PDFDocument)
 
-    PDFDocument(Poppler::Document *document);
+    PDFDocument(DPdfDoc *document);
 
     mutable QMutex m_mutex;
 
-    Poppler::Document *m_document = nullptr;
+    DPdfDoc *m_document = nullptr;
 };
 }
 

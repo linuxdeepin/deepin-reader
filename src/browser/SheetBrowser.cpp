@@ -125,8 +125,6 @@ SheetBrowser::~SheetBrowser()
     if (nullptr != m_document)
         delete m_document;
 
-    qDeleteAll(m_renderDocuments);
-
     if (nullptr != m_noteEditWidget)
         delete m_noteEditWidget;
 }
@@ -137,8 +135,9 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
+    int status = -1;
     if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath);
+        document = deepin_reader::PDFDocument::loadDocument(filePath, QString(), status);
     else if (Dr::DjVu == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
@@ -167,51 +166,21 @@ bool SheetBrowser::isUnLocked()
     if (m_document == nullptr)
         return false;
 
-    return !m_document->isLocked();
+    return true;
 }
 
 bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
 {
     m_filePassword = password;
 
+    int status = -1;
     if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password, status);
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == m_document)
         return false;
-
-    m_lable2Page.clear();
-
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        deepin_reader::Page *page = m_document->page(i);
-
-        if (page == nullptr)
-            return false;
-
-        const QString &labelPage = page->label();
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-
-        if (page->size().width() > m_maxWidth)
-            m_maxWidth = page->size().width();
-
-        if (page->size().height() > m_maxHeight)
-            m_maxHeight = page->size().height();
-
-        delete page;
-    }
-
-    if (m_maxWidth > 2000 || m_maxHeight > 2000) {
-        for (int i = 0; i < 4; ++i) {
-            if (Dr::PDF == fileType)
-                m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, password));
-            else if (Dr::DjVu == fileType)
-                m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
-        }
-    }
 
     m_fileType = fileType;
     m_filePath = filePath;
@@ -224,18 +193,15 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     if (nullptr == m_document)
         return false;
 
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
+    m_lable2Page.clear();
+    int allPageCnt = m_document->numberOfPages();
+    for (int i = 0; i < allPageCnt; ++i) {
         deepin_reader::Page *page = m_document->page(i);
 
         if (page == nullptr)
             return false;
 
-        QList<deepin_reader::Page *> renderPages;
-
-        for (int j = 0; j < m_renderDocuments.count(); ++j)
-            renderPages.append(m_renderDocuments[j]->page(i));
-
-        BrowserPage *item = new BrowserPage(this, page, renderPages);
+        BrowserPage *item = new BrowserPage(this, page);
 
         item->setItemIndex(i);
 
@@ -244,6 +210,16 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         m_items.append(item);
 
+        const QString &labelPage = page->label();
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
+        }
+
+        if (page->sizeF().width() > m_maxWidth)
+            m_maxWidth = page->sizeF().width();
+
+        if (page->sizeF().height() > m_maxHeight)
+            m_maxHeight = page->sizeF().height();
     }
 
     for (int i = 0; i < m_items.count(); ++i) {
@@ -267,40 +243,23 @@ bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
         return false;
 
     deepin_reader::Document *tempDocument = m_document;
-    QList<deepin_reader::Document *> tempDocuments = m_renderDocuments;
 
+    int status = -1;
     if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword);
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword, status);
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == m_document)
         return false;
 
-    m_renderDocuments.clear();
-    for (int i = 0; i < 4; ++i) {
-        if (Dr::PDF == fileType)
-            m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword));
-        else if (Dr::DjVu == fileType)
-            m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
-    }
-
     for (int i = 0; i < m_document->numberOfPages(); ++i) {
         if (m_items.count() > i) {
-            QList<deepin_reader::Page *> renderPages;
-            for (int j = 0; j < 4; ++j) {
-                if (m_renderDocuments.value(j) == nullptr)
-                    continue;
-                renderPages.append(m_renderDocuments.value(j)->page(i));
-            }
-            m_items[i]->reOpen(m_document->page(i), renderPages);
+            m_items[i]->reOpen(m_document->page(i));
         }
     }
 
     delete tempDocument;
-
-    foreach (deepin_reader::Document *tempDocument, tempDocuments)
-        delete tempDocument;
 
     return true;
 }
@@ -930,9 +889,9 @@ Properties SheetBrowser::properties() const
     return m_document->properties();
 }
 
-void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, unsigned int index)
+void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, int index)
 {
-    int pageIndex = static_cast<int>(index);
+    int pageIndex = index;
 
     if (nullptr == m_sheet || pageIndex < 0 || pageIndex >= m_items.count() || linkLeft < 0 || linkTop < 0)
         return;

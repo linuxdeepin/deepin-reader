@@ -48,9 +48,10 @@
 #include <QUuid>
 #include <QPainterPath>
 #include <QDesktopServices>
+#include <QDebug>
 
 QSet<BrowserPage *> BrowserPage::items;
-BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages) : QGraphicsItem(), m_parent(parent), m_page(page), m_renderPages(renderPages)
+BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
 {
     items.insert(this);
     setAcceptHoverEvents(true);
@@ -63,31 +64,19 @@ BrowserPage::~BrowserPage()
 
     qDeleteAll(m_annotations);
 
-    qDeleteAll(m_annotations0);
-
-    qDeleteAll(m_annotations1);
-
-    qDeleteAll(m_annotations2);
-
-    qDeleteAll(m_annotations3);
-
     qDeleteAll(m_annotationItems);
 
     qDeleteAll(m_words);
 
     if (nullptr != m_page)
         delete m_page;
-
-    qDeleteAll(m_renderPages);
 }
 
-void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
+void BrowserPage::reOpen(Page *page)
 {
     Page *tmpPage = m_page;
-    QList<deepin_reader::Page *> tempPages = m_renderPages;
 
     m_page = page;
-    m_renderPages = renderPages;
 
     qDeleteAll(m_annotations);
     m_annotations.clear();
@@ -99,10 +88,6 @@ void BrowserPage::reOpen(Page *page, QList<deepin_reader::Page *> renderPages)
 
     if (nullptr != tmpPage)
         delete tmpPage;
-
-    qDeleteAll(tempPages);
-
-    //word和link不需要重新加载
 }
 
 QRectF BrowserPage::boundingRect() const
@@ -268,48 +253,12 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         PageRenderThread::clearTask(this);
 
-        QRectF rect = boundingRect();
-
-        if ((rect.height() > 1000 || rect.width() > 1000) && (m_page->size().height() > 2000 || m_page->size().height() > 2000)) {
-            int pieceWidth = 1000;
-            int pieceHeight = 1000;
-
-            QList<RenderPageTask> tasks;
-
-            for (int i = 0 ; i * pieceHeight < rect.height(); ++i) {
-                int height = pieceHeight;
-
-                if (rect.height() < (i + 1) * pieceHeight)
-                    height = static_cast<int>(rect.height() - pieceHeight * i);
-
-                QRect renderRect = QRect(0, pieceHeight * i, static_cast<int>(boundingRect().width()), height);
-
-                for (int j = 0; j * pieceWidth < renderRect.width(); ++j) {
-                    int width = pieceWidth;
-
-                    if (renderRect.width() < (j + 1) * pieceWidth)
-                        width = static_cast<int>(renderRect.width() - pieceWidth * j);
-
-                    QRect finalRenderRect = QRect(pieceWidth * j, pieceHeight * i, width, height);
-
-                    RenderPageTask task;
-                    task.item = this;
-                    task.scaleFactor = m_scaleFactor;
-                    task.rotation = Dr::RotateBy0;
-                    task.renderRect = finalRenderRect;
-                    tasks.append(task);
-                }
-            }
-            PageRenderThread::appendTasks(tasks);
-        } else {
-            RenderPageTask task;
-            task.item = this;
-            task.scaleFactor = m_scaleFactor;
-            task.rotation = Dr::RotateBy0;
-            task.renderRect = QRect(static_cast<int>(rect.x()), static_cast<int>(rect.y()),
-                                    static_cast<int>(rect.width()), static_cast<int>(rect.height()));
-            PageRenderThread::appendTask(task);
-        }
+        RenderPageTask task;
+        task.item = this;
+        task.scaleFactor = m_scaleFactor;
+        task.rotation = Dr::RotateBy0;
+        task.renderRect = boundingRect().toRect();
+        PageRenderThread::appendTask(task);
 
         loadAnnotations();
     }
@@ -377,6 +326,8 @@ void BrowserPage::renderViewPort(bool force)
 
     task.renderRect = viewRenderRect;
 
+    qDebug() << m_scaleFactor << viewRenderRect;
+
     PageViewportThread::appendTask(task);
 }
 
@@ -417,27 +368,17 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 }
 
-QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect, int renderIndex)
+QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
 {
-    deepin_reader::Page *page = m_page;
-
-    if (-1 != renderIndex && m_renderPages.count() > renderIndex)
-        page = m_renderPages.value(renderIndex);
-
-    if (nullptr == page)
+    if (nullptr == m_page)
         return QImage();
 
-    return page->render(rotation, scaleFactor, boundingRect);
+    return m_page->render(rotation, scaleFactor, boundingRect);
 }
 
-QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc, int renderIndex)
+QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
 {
-    deepin_reader::Page *page = m_page;
-
-    if (-1 != renderIndex)
-        page = m_renderPages.value(renderIndex);
-
-    if (nullptr == page)
+    if (nullptr == m_page)
         return QImage();
 
     if (bSrc) {
@@ -449,18 +390,13 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
         return image;
     }
 
-    QSizeF size = page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
 
-    QImage image = page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
+    QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
 
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     return image;
-}
-
-QImage BrowserPage::thumbnail()
-{
-    return m_page->thumbnail();
 }
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
@@ -634,37 +570,15 @@ void BrowserPage::reloadAnnotations()
     m_annotationItems.clear();
 
     m_annotations = m_page->annotations();
-    if (m_renderPages.count() >= 4) {
-        qDeleteAll(m_annotations0);
-        m_annotations0 = m_renderPages[0]->annotations();
-
-        qDeleteAll(m_annotations1);
-        m_annotations1 = m_renderPages[1]->annotations();
-
-        qDeleteAll(m_annotations2);
-        m_annotations2 = m_renderPages[2]->annotations();
-
-        qDeleteAll(m_annotations3);
-        m_annotations3 = m_renderPages[3]->annotations();
-    }
 
     for (int i = 0; i < m_annotations.count(); ++i) {
         m_annotations[i]->page = m_index + 1;
-        if (m_annotations[i]->uniqueName().isEmpty()) {
-            m_annotations[i]->setUniqueName(QUuid::createUuid().toString());
-        }
 
         //图标注释,可能是其它系统上不一样的样式,需刷新下位置达到重新刷新成自己样式的图标的目的
         if (m_annotations[i]->type() == 1 /*Text*/) {
             const QList<QRectF> &annoBoundary = m_annotations[i]->boundary();
             if (annoBoundary.size() > 0) {
                 m_page->moveIconAnnotation(m_annotations[i], annoBoundary.at(0));
-                if (m_renderPages.count() == 4) {
-                    m_renderPages[0]->moveIconAnnotation(m_annotations0.at(i), annoBoundary.at(0));
-                    m_renderPages[1]->moveIconAnnotation(m_annotations1.at(i), annoBoundary.at(0));
-                    m_renderPages[2]->moveIconAnnotation(m_annotations2.at(i), annoBoundary.at(0));
-                    m_renderPages[3]->moveIconAnnotation(m_annotations3.at(i), annoBoundary.at(0));
-                }
             }
         }
 
@@ -690,17 +604,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    int updateIndex = m_annotations.indexOf(annotation);
-
-    if (m_annotations0.count() > updateIndex && m_annotations1.count() > updateIndex &&
-            m_annotations2.count() > updateIndex && m_annotations3.count() > updateIndex) {
-        m_annotations0[updateIndex]->updateAnnotation(text, color);
-        m_annotations1[updateIndex]->updateAnnotation(text, color);
-        m_annotations2[updateIndex]->updateAnnotation(text, color);
-        m_annotations3[updateIndex]->updateAnnotation(text, color);
-    }
-
-    if (!annotation->updateAnnotation(text, color))
+    if (!m_page->updateAnnotation(annotation, text, color))
         return false;
 
     updatePageFull();
@@ -753,23 +657,6 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
             return nullptr;
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);
-
-        if (m_renderPages.count() == 4) {
-            Annotation *highLightAnnotOther{nullptr};
-            for (int index = 0; index < 4; index++) {
-                highLightAnnotOther = m_renderPages[index]->addHighlightAnnotation(boundarys, text, color);
-                if (0 == index) {
-                    m_annotations0.append(highLightAnnotOther);
-                } else if (1 == index) {
-                    m_annotations1.append(highLightAnnotOther);
-                } else if (2 == index) {
-                    m_annotations2.append(highLightAnnotOther);
-                } else {
-                    m_annotations3.append(highLightAnnotOther);
-                }
-                highLightAnnotOther = nullptr;
-            }
-        }
 
         foreach (QRectF rect, highLightAnnot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
@@ -847,17 +734,8 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
     Annotation *annot{nullptr};
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
-    int annotIndex = m_annotations.indexOf(m_lastClickIconAnnotationItem->annotation());
-
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
     annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
-
-    if (m_renderPages.count() == 4) {
-        m_renderPages[0]->moveIconAnnotation(m_annotations0.at(annotIndex), moveRect);
-        m_renderPages[1]->moveIconAnnotation(m_annotations1.at(annotIndex), moveRect);
-        m_renderPages[2]->moveIconAnnotation(m_annotations2.at(annotIndex), moveRect);
-        m_renderPages[3]->moveIconAnnotation(m_annotations3.at(annotIndex), moveRect);
-    }
 
     if (annot && m_annotations.contains(annot)) {
         delete m_lastClickIconAnnotationItem;
@@ -894,19 +772,6 @@ bool BrowserPage::removeAllAnnotation()
         if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
 
-        int annotIndex = m_annotations.indexOf(annota);
-
-        if (m_renderPages.count() == 4) {
-            m_renderPages[0]->removeAnnotation(m_annotations0.at(annotIndex));
-            m_annotations0.removeAt(annotIndex);
-            m_renderPages[1]->removeAnnotation(m_annotations1.at(annotIndex));
-            m_annotations1.removeAt(annotIndex);
-            m_renderPages[2]->removeAnnotation(m_annotations2.at(annotIndex));
-            m_annotations2.removeAt(annotIndex);
-            m_renderPages[3]->removeAnnotation(m_annotations3.at(annotIndex));
-            m_annotations3.removeAt(annotIndex);
-        }
-
         if (!m_page->removeAnnotation(annota))
             continue;
 
@@ -938,33 +803,8 @@ bool BrowserPage::jump2Link(const QPointF point)
         return false;
     }
 
-    QPointF localPoint = point;
-
     if (nullptr == m_page)
         return false;
-
-    QList<Link *> linkList = m_page->links();
-
-    if (linkList.count() < 1)
-        return false;
-
-    foreach (Link *link, linkList) {
-        if (link) {
-            if (link->boundary.boundingRect().contains(localPoint)) {
-                QString urlStr = link->urlOrFileName;
-                if (urlStr.isEmpty()) {
-                    int page = link->page;
-                    if (m_parent) {
-                        m_parent->setCurrentPage(page);
-                        return true;
-                    }
-                } else {
-                    QDesktopServices::openUrl(QUrl(urlStr, QUrl::TolerantMode));
-                    return true;
-                }
-            }
-        }
-    }
 
     return false;
 }
@@ -974,24 +814,6 @@ bool BrowserPage::inLink(const QPointF pos)
     if ((m_rotation != Dr::RotateBy0) && (m_rotation < Dr::NumberOfRotations)) {
         Q_UNUSED(pos)
         return false;
-    }
-
-    QPointF localPoint = pos;
-
-    if (nullptr == m_page)
-        return false;
-
-    QList<Link *> linkList = m_page->links();
-
-    if (linkList.count() < 1)
-        return false;
-
-    foreach (Link *link, linkList) {
-        if (link) {
-            if (link->boundary.boundingRect().contains(localPoint)) {
-                return true;
-            }
-        }
     }
 
     return false;
@@ -1023,20 +845,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     if (!m_annotations.contains(annota))
         return false;
 
-    int annotIndex = m_annotations.indexOf(annota);
-
     m_annotations.removeAll(annota);
-
-    if (m_renderPages.count() == 4) {
-        m_renderPages[0]->removeAnnotation(m_annotations0.at(annotIndex));
-        m_annotations0.removeAt(annotIndex);
-        m_renderPages[1]->removeAnnotation(m_annotations1.at(annotIndex));
-        m_annotations1.removeAt(annotIndex);
-        m_renderPages[2]->removeAnnotation(m_annotations2.at(annotIndex));
-        m_annotations2.removeAt(annotIndex);
-        m_renderPages[3]->removeAnnotation(m_annotations3.at(annotIndex));
-        m_annotations3.removeAt(annotIndex);
-    }
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -1054,17 +863,6 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     updatePageFull();
 
     return true;
-}
-
-bool BrowserPage::removeAnnotationByUniqueName(QString uniqueName)
-{
-    foreach (deepin_reader::Annotation *annotation, m_annotations) {
-        if (annotation->uniqueName() == uniqueName) {
-            return removeAnnotation(annotation);
-        }
-    }
-
-    return false;
 }
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
@@ -1092,23 +890,6 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
                 m_lastClickIconAnnotationItem->setScaleFactor(m_scaleFactor);
                 m_lastClickIconAnnotationItem->setDrawSelectRect(true);
             }
-        }
-    }
-
-    if (m_renderPages.count() == 4) {
-        Annotation *annotOther{nullptr};
-        for (int index = 0; index < 4; index++) {
-            annotOther = m_renderPages[index]->addIconAnnotation(rect, text);
-            if (0 == index) {
-                m_annotations0.append(annotOther);
-            } else if (1 == index) {
-                m_annotations1.append(annotOther);
-            } else if (2 == index) {
-                m_annotations2.append(annotOther);
-            } else {
-                m_annotations3.append(annotOther);
-            }
-            annotOther = nullptr;
         }
     }
 
@@ -1146,7 +927,7 @@ bool BrowserPage::sceneEvent(QEvent *event)
     return QGraphicsItem::sceneEvent(event);
 }
 
-void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
+void BrowserPage::setSearchHighlightRectf(const QVector< QRectF > &rectflst)
 {
     if (rectflst.size() > 0) {
         if (m_parent->currentPage() == this->itemIndex() + 1)

@@ -145,7 +145,7 @@ void PageViewportThread::run()
         m_mutex.unlock();
 
         if (BrowserPage::existInstance(m_curTaskPiece.task.page)) {
-            QImage image = m_curTaskPiece.task.page->getImage(m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.rotation, m_curTaskPiece.task.renderRect, m_curTaskPiece.pieceIndex);
+            QImage image = m_curTaskPiece.task.page->getImage(m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.rotation, m_curTaskPiece.task.renderRect);
 
             if (!image.isNull())
                 emit sigTaskFinished(m_curTaskPiece.task.page, image, m_curTaskPiece.task.scaleFactor, m_curTaskPiece.task.renderRect);
