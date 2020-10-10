@@ -1,0 +1,3 @@
+[submodule "3rdparty/deepin-pdfium"]
+	path = 3rdparty/deepin-pdfium
+	url = git@gitee.com:pigzhang/deepin-pdfium.git
