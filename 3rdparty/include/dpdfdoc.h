@@ -97,6 +97,19 @@ public:
     Properies proeries();
 
     /**
+     * @brief 下标真实页码
+     * @return
+     */
+    QString label(int index) const;
+
+    /**
+     * @brief 获取页面大小
+     * @param index
+     * @return
+     */
+    QSizeF pageSizeF(int index) const;
+
+    /**
      * @brief 尝试加载文档是否成功
      * @param filename
      * @param password

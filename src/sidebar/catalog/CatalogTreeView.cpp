@@ -32,6 +32,7 @@
 #include <QStylePainter>
 #include <QScroller>
 #include <QHeaderView>
+#include <QDebug>
 
 class ActiveProxyStyle : public QProxyStyle
 {

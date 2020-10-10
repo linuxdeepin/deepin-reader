@@ -177,6 +177,12 @@ public:
     void setItemIndex(int itemIndex);
 
     /**
+     * @brief 页面大小
+     * @param pagesize
+     */
+    void setPageSize(const QSizeF &pagesize);
+
+    /**
      * @brief itemIndex
      * 当前页的编号(从0开始)
      * @return
@@ -484,6 +490,8 @@ private:
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
 
     deepin_reader::AnnotationList m_annotations;
+
+    QSizeF m_pageSizeF;
 
     int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放

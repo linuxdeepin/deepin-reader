@@ -186,6 +186,14 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     return true;
 }
 
+Page *SheetBrowser::page(int index)
+{
+    if (nullptr == m_document)
+        return nullptr;
+
+    return m_document->page(index);
+}
+
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
@@ -194,13 +202,9 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     m_lable2Page.clear();
     int allPageCnt = m_document->numberOfPages();
     for (int i = 0; i < allPageCnt; ++i) {
-        deepin_reader::Page *page = m_document->page(i);
-
-        if (page == nullptr)
-            return false;
-
-        BrowserPage *item = new BrowserPage(this, page);
-
+        const QSizeF &pageSize = m_document->pageSizeF(i);
+        BrowserPage *item = new BrowserPage(this, nullptr);
+        item->setPageSize(pageSize);
         item->setItemIndex(i);
 
         if (bookmarks.contains(i))
@@ -208,16 +212,16 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         m_items.append(item);
 
-        const QString &labelPage = page->label();
+        const QString &labelPage = m_document->label(i);
         if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
             m_lable2Page.insert(labelPage, i);
         }
 
-        if (page->sizeF().width() > m_maxWidth)
-            m_maxWidth = page->sizeF().width();
+        if (pageSize.width() > m_maxWidth)
+            m_maxWidth = pageSize.width();
 
-        if (page->sizeF().height() > m_maxHeight)
-            m_maxHeight = page->sizeF().height();
+        if (pageSize.height() > m_maxHeight)
+            m_maxHeight = pageSize.height();
     }
 
     for (int i = 0; i < m_items.count(); ++i) {

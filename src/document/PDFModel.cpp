@@ -26,7 +26,7 @@
 #define LOCK_ANNOTATION
 #define LOCK_FORM_FIELD
 #define LOCK_PAGE
-#define LOCK_DOCUMENT
+#define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
 #define LOCK_LONGTIMEOPERATION QMutexLocker mutexLocker(m_mutex);
 
 namespace deepin_reader {
@@ -147,13 +147,6 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
     }
 
     return m_page->image(horizontalResolution, verticalResolution, x, y, w, h);
-}
-
-QString PDFPage::label() const
-{
-    LOCK_PAGE
-
-    return m_page->label();
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
@@ -333,6 +326,20 @@ Page *PDFDocument::page(int index) const
     return nullptr;
 }
 
+QString PDFDocument::label(int index) const
+{
+    LOCK_DOCUMENT
+
+    return m_document->label(index);
+}
+
+QSizeF PDFDocument::pageSizeF(int index) const
+{
+    LOCK_DOCUMENT
+
+    return m_document->pageSizeF(index);
+}
+
 QStringList PDFDocument::saveFilter() const
 {
     return QStringList() << "Portable document format (*.pdf)";
@@ -361,22 +368,26 @@ void collectOuleLine(const DPdfDoc::Outline &cOutline, deepin_reader::Outline &o
 
 Outline PDFDocument::outline() const
 {
-    Outline outline;
-
     LOCK_DOCUMENT
 
+    if (m_outline.size() > 0)
+        return m_outline;
+
     const DPdfDoc::Outline &cOutline = m_document->outline();
-    collectOuleLine(cOutline, outline);
-    return outline;
+    collectOuleLine(cOutline, m_outline);
+    return m_outline;
 }
 
 Properties PDFDocument::properties() const
 {
     LOCK_DOCUMENT
 
-    Properties properties = m_document->proeries();
+    if (m_fileProperties.size() > 0)
+        return m_fileProperties;
 
-    return properties;
+    m_fileProperties = m_document->proeries();
+
+    return m_fileProperties;
 }
 
 PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password, int &status)

@@ -187,7 +187,6 @@ public:
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const = 0;
     virtual QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
-    virtual QString label() const { return QString(); }
     virtual Link getLinkAtPoint(const QPointF &) const { return Link(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
@@ -222,7 +221,9 @@ public:
     virtual ~Document() {}
     virtual int numberOfPages() const = 0;
     virtual Page *page(int index) const = 0;
+    virtual QSizeF pageSizeF(int) const { return QSizeF(0, 0); };
     virtual QStringList saveFilter() const { return QStringList(); }
+    virtual QString label(int) const { return QString(); };
     virtual bool canSave() const { return false; }
     virtual bool save(const QString &filePath, bool withChanges) const { Q_UNUSED(filePath); Q_UNUSED(withChanges); return false; }
     virtual bool canBePrintedUsingCUPS() const { return false; }

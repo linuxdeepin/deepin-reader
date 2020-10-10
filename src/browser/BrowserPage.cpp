@@ -92,25 +92,19 @@ void BrowserPage::reOpen(Page *page)
 
 QRectF BrowserPage::boundingRect() const
 {
-    if (nullptr == m_page)
-        return QRectF(0, 0, 0, 0);
-
-    return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
+    return QRectF(0, 0, static_cast<double>(m_pageSizeF.width() * m_scaleFactor), static_cast<double>(m_pageSizeF.height() * m_scaleFactor));
 }
 
 QRectF BrowserPage::rect()
 {
-    if (nullptr == m_page)
-        return QRectF(0, 0, 0, 0);
-
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, static_cast<double>(m_page->sizeF().height() * m_scaleFactor), static_cast<double>(m_page->sizeF().width() * m_scaleFactor));
+        return QRectF(0, 0, static_cast<double>(m_pageSizeF.height() * m_scaleFactor), static_cast<double>(m_pageSizeF.width() * m_scaleFactor));
     default: break;
     }
 
-    return QRectF(0, 0, static_cast<double>(m_page->sizeF().width() * m_scaleFactor), static_cast<double>(m_page->sizeF().height() * m_scaleFactor));
+    return QRectF(0, 0, static_cast<double>(m_pageSizeF.width() * m_scaleFactor), static_cast<double>(m_pageSizeF.height() * m_scaleFactor));
 }
 
 QRectF BrowserPage::bookmarkRect()
@@ -145,14 +139,11 @@ void BrowserPage::updateBookmarkState()
     update();
 }
 
-/**
- * @brief BrowserPage::paint
- * 绘制接口
- * @param painter
- * @param option
- */
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
+    if (m_page == nullptr)
+        m_page = m_parent->page(itemIndex());
+
     if (!m_viewportTryRender)
         renderViewPort(false);
 
@@ -205,9 +196,6 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
-    if (nullptr == m_page)
-        return;
-
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
@@ -326,8 +314,6 @@ void BrowserPage::renderViewPort(bool force)
 
     task.renderRect = viewRenderRect;
 
-    qDebug() << m_scaleFactor << viewRenderRect;
-
     PageViewportThread::appendTask(task);
 }
 
@@ -390,7 +376,7 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
         return image;
     }
 
-    QSizeF size = m_page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QSizeF size = m_pageSizeF.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
 
     QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
 
@@ -438,6 +424,11 @@ bool BrowserPage::existInstance(BrowserPage *item)
 void BrowserPage::setItemIndex(int itemIndex)
 {
     m_index = itemIndex;
+}
+
+void BrowserPage::setPageSize(const QSizeF &pagesize)
+{
+    m_pageSizeF = pagesize;
 }
 
 int BrowserPage::itemIndex()
@@ -558,6 +549,9 @@ void BrowserPage::scaleWords(bool force)
 
 void BrowserPage::reloadAnnotations()
 {
+    if (m_page == nullptr)
+        return;
+
     //在reload之前将上一次选中去掉,避免操作野指针
     if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
         m_lastClickIconAnnotationItem->setDrawSelectRect(false);
@@ -622,8 +616,8 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     QRectF rect;
     QRectF recboundary;
     int index{0};
-    qreal curwidth = m_page->sizeF().width();
-    qreal curheight = m_page->sizeF().height();
+    qreal curwidth = m_pageSizeF.width();
+    qreal curheight = m_pageSizeF.height();
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
     QList<deepin_reader::Word> twords = m_page->words(Dr::RotateBy0);
@@ -1013,22 +1007,22 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
         break;
     }
     case Dr::RotateBy90: {
-        newrect.setX((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((m_pageSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setY(rect.x()*m_scaleFactor);
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy180: {
-        newrect.setX((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
-        newrect.setY((m_page->sizeF().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((m_pageSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((m_pageSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setWidth(rect.width()*m_scaleFactor);
         newrect.setHeight(rect.height()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy270: {
         newrect.setX(rect.y()*m_scaleFactor);
-        newrect.setY((m_page->sizeF().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((m_pageSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;

@@ -79,8 +79,6 @@ public:
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
 
-    QString label() const override;
-
     Link getLinkAtPoint(const QPointF &point) const override;
 
     QString text(const QRectF &rect) const override;
@@ -132,6 +130,10 @@ public:
 
     QStringList saveFilter() const;
 
+    QString label(int index) const;
+
+    QSizeF pageSizeF(int index) const;
+
     bool save(const QString &filePath, bool withChanges) const;
 
     Outline outline() const;
@@ -148,6 +150,10 @@ private:
     mutable QMutex m_mutex;
 
     DPdfDoc *m_document = nullptr;
+
+    mutable Properties m_fileProperties;
+
+    mutable Outline m_outline;
 };
 }
 

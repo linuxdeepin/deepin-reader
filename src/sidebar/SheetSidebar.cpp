@@ -298,7 +298,7 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
     auto btn = new DToolButton(this);
     btn->setToolTip(btnName);
     btn->setObjectName(objName);
-    btn->setAccessibleName("Button_"+objName);
+    btn->setAccessibleName("Button_" + objName);
     btn->setFixedSize(QSize(tW, tW));
     btn->setIconSize(QSize(tW, tW));
     btn->setCheckable(true);

@@ -87,12 +87,6 @@ public:
     QString text(int start, int charCount = 1) const;
 
     /**
-     * @brief 下标真实页码
-     * @return
-     */
-    QString label() const;
-
-    /**
      * @brief 获取当前支持操作的所有注释
      * @return 注释列表，只会列出已支持的注释
      */
