@@ -12,10 +12,15 @@ PKGCONFIG += ddjvuapi dtkwidget
 
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
-INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/include
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldpdf
+INCLUDEPATH += $$SRCPWD/uiframe
+INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
+
+!system(cd $${3RDPARTTPATH}/deepin-pdfium && qmake && make -j16){
+    error("Build deepin-pdfium library failed.")
+}
+
+LIBS += -L"$${3RDPARTTPATH}/deepin-pdfium/lib" -ldpdf
 
 QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE -zignore"
 QMAKE_LFLAGS += -pie
@@ -64,13 +69,13 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
-poppler.path = /usr/lib
-poppler.files = $${3RDPARTTPATH}/lib/*.so*
+deepin-pdfium.path = /usr/lib
+deepin-pdfium.files = $${3RDPARTTPATH}/deepin-pdfium/lib/*.so*
 
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon poppler
+INSTALLS += target desktop icon deepin-pdfium
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
