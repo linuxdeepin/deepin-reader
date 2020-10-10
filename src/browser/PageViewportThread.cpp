@@ -91,6 +91,7 @@ void PageViewportThread::appendTask(RenderViewportTask task)
     thread = instance(2);
     if (nullptr == thread)
         return;
+
     thread->appendTaskPiece(taskPiece2);
 
     RenderViewportTaskPiece taskPiece3;
