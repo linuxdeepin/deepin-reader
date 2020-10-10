@@ -24,10 +24,8 @@
 #include <QDebug>
 
 #define LOCK_ANNOTATION
-#define LOCK_FORM_FIELD
-#define LOCK_PAGE
 #define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
-#define LOCK_LONGTIMEOPERATION QMutexLocker mutexLocker(m_mutex);
+#define LOCK_PAGE QMutexLocker mutexLocker(m_mutex);
 
 namespace deepin_reader {
 
@@ -51,20 +49,9 @@ QList<QRectF> PDFAnnotation::boundary() const
 
     QList<QRectF> rectFList;
 
-    //    if (m_annotation->type() == DPdfAnnot::AText) {
-    //        rectFList.append(m_annotation->boundary().normalized());
-    //    } else if (m_annotation->subType() == Poppler::Annotation::AHighlight) {
-    //        QList<Poppler::HighlightAnnotation::Quad> quads = static_cast<Poppler::HighlightAnnotation *>(m_annotation)->highlightQuads();
-    //        foreach (Poppler::HighlightAnnotation::Quad quad, quads) {
-    //            QRectF rectbound;
-    //            rectbound.setTopLeft(quad.points[0]);
-    //            rectbound.setTopRight(quad.points[1]);
-    //            rectbound.setBottomLeft(quad.points[3]);
-    //            rectbound.setBottomRight(quad.points[2]);
-    //            rectFList.append(rectbound);
-    //        }
-    //    }
-
+    if (m_annotation->type() == DPdfAnnot::AText || m_annotation->type() == DPdfAnnot::AHighlight) {
+        rectFList.append(m_annotation->boundaries());
+    }
     return rectFList;
 }
 
@@ -100,7 +87,7 @@ PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
 
 PDFPage::~PDFPage()
 {
-    LOCK_LONGTIMEOPERATION
+    LOCK_PAGE
 
     delete m_page;
 
@@ -129,7 +116,7 @@ QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 
 QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRect boundingRect) const
 {
-    LOCK_LONGTIMEOPERATION
+    LOCK_PAGE
 
     if (m_page == nullptr)
         return QImage();
@@ -179,11 +166,13 @@ QList<Word> PDFPage::words(Dr::Rotation rotation)
 
     m_wordRotation = rotation;
 
+    LOCK_PAGE
+
     int charCount = m_page->countChars();
     for (int i = 0; i < charCount; i++) {
         Word word;
         word.text = m_page->text(i);
-        const auto textrects = m_page->getTextRect(i);
+        const QVector<QRectF> &textrects = m_page->getTextRect(i);
         if (textrects.size() > 0)
             word.boundingBox = m_page->getTextRect(i).first();
         m_words.append(word);
@@ -223,17 +212,18 @@ QList< Annotation * > PDFPage::annotations() const
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
     LOCK_PAGE
+
     return new PDFAnnotation(m_mutex, m_page->createHightLightAnnot(boundarys, text, color));
 }
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-    LOCK_PAGE
-
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
 
     if (PDFAnnotation == nullptr)
         return false;
+
+    LOCK_PAGE
 
     m_page->removeAnnot(PDFAnnotation->m_annotation);
 
@@ -249,6 +239,8 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     if (nullptr == annotation)
         return false;
 
+    LOCK_PAGE
+
     if (m_page->annots().contains(annotation->ownAnnotation())) {
         if (annotation->type() == DPdfAnnot::AText)
             m_page->updateTextAnnot(annotation->ownAnnotation(), text);
@@ -262,6 +254,8 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
+    LOCK_PAGE
+
     foreach (DPdfAnnot *annot, m_page->annots()) {
         if (annot && annot->pointIn(clickPoint)) {
             return true;
@@ -287,7 +281,6 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF rect)
         return nullptr;
 
     LOCK_PAGE
-
 
     if (annot->ownAnnotation()) {
         m_page->updateTextAnnot(annot->ownAnnotation(), annot->ownAnnotation()->text(), rect.center());
