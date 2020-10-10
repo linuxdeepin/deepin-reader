@@ -154,7 +154,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->drawPixmap(option->rect, m_pixmap);
 
     if (m_viewportRenderedRect.isValid() && qFuzzyCompare(m_viewportScaleFactor, m_scaleFactor))
-        painter->drawPixmap(m_viewportRenderedRect, m_viewportPixmap);
+        painter->drawImage(m_viewportRenderedRect, m_viewportImage);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -206,7 +206,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
     if (m_viewportRenderedRect.isValid()) {
         m_viewportRenderedRect = QRect();
-        m_viewportPixmap = QPixmap();
+        m_viewportImage = QImage();
     }
 
     m_scaleFactor = scaleFactor;
@@ -324,7 +324,7 @@ void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const 
 
     m_viewportScaleFactor = scaleFactor;
 
-    m_viewportPixmap = QPixmap::fromImage(image);
+    m_viewportImage = image;
 
     m_viewportRenderedRect = rect;
 
@@ -500,7 +500,7 @@ void BrowserPage::clearPixmap()
     m_pixmapScaleFactor = -1;
     m_pixmapRenderedRect = QRect();
 
-    m_viewportPixmap = QPixmap();
+    m_viewportImage = QImage();
     m_viewportRenderedRect = QRect();
     m_viewportScaleFactor = -1;
 

@@ -504,7 +504,7 @@ private:
 
     bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
     double  m_viewportScaleFactor = -1;     //视图区域的缩放
-    QPixmap m_viewportPixmap;               //视图区域的图片
+    QImage m_viewportImage;               //视图区域的图片
     QRect   m_viewportRenderedRect;         //试图区域
 
     QList<BrowserWord *> m_words;                           //当前文字

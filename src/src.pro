@@ -22,7 +22,7 @@ INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
 
 LIBS += -L"$${3RDPARTTPATH}/deepin-pdfium/lib" -ldpdf
 
-QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE -zignore"
+QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
 QMAKE_LFLAGS += -pie
 
 contains(QMAKE_HOST.arch, mips64):{
