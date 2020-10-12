@@ -36,7 +36,7 @@
 class ActiveProxyStyle : public QProxyStyle
 {
 public:
-    ActiveProxyStyle(DWidget *parent)
+    explicit ActiveProxyStyle(DWidget *parent)
     {
         this->setParent(parent);
     }
@@ -67,7 +67,7 @@ public:
 class CatalogModel: public QStandardItemModel
 {
 public:
-    CatalogModel(QAbstractItemView *parent): QStandardItemModel(parent)
+    explicit CatalogModel(QAbstractItemView *parent): QStandardItemModel(parent)
     {
         m_parent = parent;
     }

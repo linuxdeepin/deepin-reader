@@ -99,10 +99,10 @@ private:
     void addSearchsItem(const int &pageIndex, const QString &text, const int &resultNum);
 
 private:
-    DocSheet *m_sheet;
+    DocSheet *m_sheet = nullptr;
     QString m_searchKey;
-    QStackedLayout *m_stackLayout;
-    ImageListView *m_pImageListView;
+    QStackedLayout *m_stackLayout = nullptr;
+    ImageListView *m_pImageListView = nullptr;
 };
 
 #endif  // NOTESFORM_H

@@ -30,7 +30,7 @@ DWIDGET_USE_NAMESPACE
 class ThumbnailDelegate : public DStyledItemDelegate
 {
 public:
-    ThumbnailDelegate(QAbstractItemView *parent = nullptr);
+    explicit ThumbnailDelegate(QAbstractItemView *parent = nullptr);
 
 protected:
     /**
@@ -62,7 +62,7 @@ private:
     void drawBookMark(QPainter *painter, const QRect &rect, bool visible) const;
 
 private:
-    QAbstractItemView *m_parent;
+    QAbstractItemView *m_parent = nullptr;
 };
 
 #endif // IMAGEVIEWDELEGATE_H

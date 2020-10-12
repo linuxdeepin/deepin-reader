@@ -71,9 +71,8 @@ DocTabBar::DocTabBar(QWidget *parent)
 int DocTabBar::indexOfFilePath(const QString &filePath)
 {
     //修改成根据文件的绝对路径查重
-    DocSheet *docSheet{nullptr};
     for (int i = 0; i < count(); ++i) {
-        docSheet = DocSheet::getSheet(this->tabData(i).toString());
+        DocSheet *docSheet = DocSheet::getSheet(this->tabData(i).toString());
         if (docSheet && (docSheet->filePath() == filePath)) {
             return i;
         }
@@ -127,9 +126,8 @@ void DocTabBar::showSheet(DocSheet *sheet)
 
 void DocTabBar::updateTabWidth()
 {
-    int tabWidth = 100;
     if (count() != 0) {
-        tabWidth = (this->width() - 40) / count();
+        int tabWidth = (this->width() - 40) / count();
         for (int i = 0; i < count(); i++) {
             if (tabWidth <= 140) {
                 setUsesScrollButtons(true);

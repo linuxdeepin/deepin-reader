@@ -43,7 +43,7 @@
 class Transaction
 {
 public:
-    Transaction(QSqlDatabase &database) :  m_committed(false), m_database(database)
+    explicit Transaction(QSqlDatabase &database) :  m_committed(false), m_database(database)
     {
         m_database.transaction();
     }

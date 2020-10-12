@@ -131,8 +131,8 @@ private:
 
 private:
     QPointer<DocSheet> m_sheet;
-    PagingWidget *m_pPageWidget;
-    ImageListView *m_pImageListView;
+    PagingWidget *m_pPageWidget = nullptr;
+    ImageListView *m_pImageListView = nullptr;
 };
 
 #endif  // THUMBNAILWIDGET_H

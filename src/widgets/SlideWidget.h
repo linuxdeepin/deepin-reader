@@ -40,7 +40,8 @@ class SlideWidget : public DWidget
 {
     Q_OBJECT
 public:
-    SlideWidget(DocSheet *docsheet);
+    explicit SlideWidget(DocSheet *docsheet);
+
     ~SlideWidget() override;
 
 public slots:

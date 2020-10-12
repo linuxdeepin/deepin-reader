@@ -177,10 +177,10 @@ private slots:
     void slotExpanded(const QModelIndex &);
 
 private:
-    int m_index;
+    int m_index = -1;
     QString m_title;
     bool rightnotifypagechanged = false;
-    DocSheet *m_sheet;
+    DocSheet *m_sheet = nullptr;
 };
 
 #endif // CATALOGTREEVIEW_H

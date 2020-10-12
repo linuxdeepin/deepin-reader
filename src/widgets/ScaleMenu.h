@@ -80,11 +80,11 @@ private slots:
     void onScaleFactor();
 
 private:
-    QAction *m_pTwoPageAction;
-    QAction *m_pFitDefaultAction;
-    QAction *m_pFitWorHAction;
-    QAction *m_pFiteHAction;
-    QAction *m_pFiteWAction;
+    QAction *m_pTwoPageAction = nullptr;
+    QAction *m_pFitDefaultAction = nullptr;
+    QAction *m_pFitWorHAction = nullptr;
+    QAction *m_pFiteHAction = nullptr;
+    QAction *m_pFiteWAction = nullptr;
     DocSheet *m_sheet = nullptr;
     QList<QAction *> m_actionGroup;
 };

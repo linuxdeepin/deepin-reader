@@ -713,18 +713,17 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     if (nullptr == m_page)
         return nullptr;
 
-    Annotation *highLightAnnot{nullptr};
+    Annotation *highLightAnnot = nullptr;
     QList<QRectF> boundarys;
     QRectF rect;
     QRectF recboundary;
-    int index{0};
     qreal curwidth = m_page->sizeF().width();
     qreal curheight = m_page->sizeF().height();
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
     QList<deepin_reader::Word> twords = m_page->words(Dr::RotateBy0);
 
-    for (index = 0; index < m_words.count(); index++) {
+    for (int index = 0; index < m_words.count(); index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
             m_words.at(index)->setSelected(false);
             if (index >= 0 && index < twords.count()) {

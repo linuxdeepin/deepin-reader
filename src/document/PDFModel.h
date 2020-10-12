@@ -61,8 +61,6 @@ public:
     QString uniqueName() const override;
 
 private:
-    Q_DISABLE_COPY(PDFAnnotation)
-
     PDFAnnotation(QMutex *mutex, Poppler::Annotation *annotation);
 
     mutable QMutex *m_mutex;
@@ -123,8 +121,6 @@ public:
     Annotation *moveIconAnnotation(Annotation *annot, const QRectF rect) override;
 
 private:
-    Q_DISABLE_COPY(PDFPage)
-
     PDFPage(QMutex *mutex, Poppler::Page *page);
 
     mutable QMutex *m_mutex;
@@ -180,8 +176,6 @@ public:
     static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password = "");
 
 private:
-    Q_DISABLE_COPY(PDFDocument)
-
     PDFDocument(Poppler::Document *document);
 
     mutable QMutex m_mutex;

@@ -34,7 +34,7 @@ class HandleMenu : public CustomMenu
     Q_DISABLE_COPY(HandleMenu)
 
 public:
-    HandleMenu(DWidget *parent = nullptr);
+    explicit HandleMenu(DWidget *parent = nullptr);
 
     /**
      * @brief readCurDocParam
@@ -64,9 +64,9 @@ private slots:
     void onSelectText();
 
 private:
-    QAction *m_textAction;
-    QAction *m_handAction;
-    DocSheet *m_docSheet;
+    QAction *m_textAction = nullptr;
+    QAction *m_handAction = nullptr;
+    DocSheet *m_docSheet = nullptr;
 };
 
 #endif // HANDLEMENU_H

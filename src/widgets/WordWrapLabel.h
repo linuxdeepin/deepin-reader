@@ -31,7 +31,7 @@ DWIDGET_USE_NAMESPACE
 class WordWrapLabel : public DLabel
 {
 public:
-    WordWrapLabel(QWidget *parent = nullptr);
+    explicit WordWrapLabel(QWidget *parent = nullptr);
 
     /**
      * @brief setText

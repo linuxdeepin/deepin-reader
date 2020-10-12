@@ -77,7 +77,7 @@ private:
 
     static Database *s_instance;
 
-    Database(QObject *parent = nullptr);
+    explicit Database(QObject *parent = nullptr);
 
     /**
      * @brief prepareOperation

@@ -52,9 +52,8 @@ DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
-    : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
+    : DSplitter(parent), m_filePath(filePath), m_fileType(fileType),m_uuid(QUuid::createUuid().toString())
 {
-    m_uuid = QUuid::createUuid().toString();
     g_map[m_uuid] = this;
 
     Database::instance()->readOperation(this);

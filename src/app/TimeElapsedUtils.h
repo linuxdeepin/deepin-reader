@@ -27,6 +27,7 @@ class TimeElapsedUtils
 {
 public:
     explicit TimeElapsedUtils(const QString &func);
+
     ~TimeElapsedUtils();
 
 private:

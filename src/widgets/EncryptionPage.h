@@ -34,7 +34,7 @@ class EncryptionPage: public DWidget
 {
     Q_OBJECT
 public:
-    EncryptionPage(QWidget *parent = nullptr);
+    explicit EncryptionPage(QWidget *parent = nullptr);
     ~EncryptionPage();
 
     /**

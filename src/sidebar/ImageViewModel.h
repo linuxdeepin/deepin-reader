@@ -49,20 +49,11 @@ typedef struct ImagePageInfo_t {
 
     QString strcontents;
     QString strSearchcount;
+    deepin_reader::Annotation *annotation = nullptr;
 
-    deepin_reader::Annotation *annotation;
-
-    ImagePageInfo_t()
+    ImagePageInfo_t(int index = -1):pageIndex(index)
     {
-        pageIndex = -1;
-        strcontents = "";
-        strSearchcount = "";
-        annotation = nullptr;
-    }
 
-    ImagePageInfo_t(int index)
-    {
-        this->pageIndex = index;
     }
 
     bool operator == (const ImagePageInfo_t &other) const
@@ -92,7 +83,7 @@ class ImageViewModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    ImageViewModel(QObject *parent = nullptr);
+    explicit  ImageViewModel(QObject *parent = nullptr);
 
 public:
     /**
@@ -252,8 +243,8 @@ protected:
     bool setData(const QModelIndex &index, const QVariant &data, int role) override;
 
 private:
-    QObject *m_parent;
-    DocSheet *m_docSheet;
+    QObject *m_parent = nullptr;
+    DocSheet *m_docSheet = nullptr;
     QList<ImagePageInfo_t> m_pagelst;
     QMap<int, bool> m_cacheBookMarkMap;
 };

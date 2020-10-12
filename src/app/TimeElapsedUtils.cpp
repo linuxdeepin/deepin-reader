@@ -22,9 +22,8 @@
 
 #include <QDebug>
 
-TimeElapsedUtils::TimeElapsedUtils(const QString &func)
+TimeElapsedUtils::TimeElapsedUtils(const QString &func):m_func(func)
 {
-    m_func = func;
     m_elapseTime.start();
 }
 

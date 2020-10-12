@@ -53,7 +53,7 @@ class CustomWidget : public DWidget
     Q_DISABLE_COPY(CustomWidget)
 
 public:
-    CustomWidget(DWidget *parent = nullptr);
+    explicit CustomWidget(DWidget *parent = nullptr);
     virtual ~CustomWidget();
 
 public:

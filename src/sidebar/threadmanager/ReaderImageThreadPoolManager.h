@@ -86,7 +86,7 @@ public:
     void run() override;
 
 private:
-    QObject *m_threadpoolManager;
+    QObject *m_threadpoolManager = nullptr;
     ReaderImageParam_t m_docParam;
 };
 

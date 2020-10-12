@@ -159,9 +159,9 @@ private:
     void deleteAllItem();
 
 private:
-    QPointer<DocSheet>   m_sheet;
-    DPushButton         *m_pAddBookMarkBtn;
-    ImageListView       *m_pImageListView;
+    QPointer<DocSheet> m_sheet;
+    DPushButton       *m_pAddBookMarkBtn = nullptr;
+    ImageListView     *m_pImageListView = nullptr;
 };
 
 #endif  // BOOKMARKFORM_H

@@ -38,7 +38,7 @@
 class ImageWidget : public DWidget
 {
 public:
-    ImageWidget(DWidget *parent)
+    explicit ImageWidget(DWidget *parent)
         : DWidget(parent)
     {
     }

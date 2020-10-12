@@ -37,11 +37,12 @@ typedef enum E_MENU_ACTION {
 
 typedef struct MenuItem_t {
     QString rootItem;
+
     QList<MenuItem_t> childItems;
 
-    MenuItem_t(const QString &rootitem)
+    explicit MenuItem_t(const QString &rootitem):rootItem(rootitem)
     {
-        this->rootItem = rootitem;
+
     }
 } MenuItem_t;
 
@@ -55,7 +56,8 @@ class CustomMenu : public DMenu
     Q_DISABLE_COPY(CustomMenu)
 
 public:
-    CustomMenu(DWidget *parent = nullptr);
+    explicit CustomMenu(DWidget *parent = nullptr);
+
     virtual ~CustomMenu();
 
 signals:

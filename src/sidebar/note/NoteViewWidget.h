@@ -127,7 +127,8 @@ private:
 class NoteShadowViewWidget : public DWidget
 {
 public:
-    NoteShadowViewWidget(QWidget *parent);
+    explicit NoteShadowViewWidget(QWidget *parent);
+
     NoteViewWidget *getNoteViewWidget();
 
     /**
@@ -144,7 +145,7 @@ private:
     void initWidget();
 
 private:
-    NoteViewWidget *m_noteViewWidget;
+    NoteViewWidget *m_noteViewWidget = nullptr;
 };
 
 #endif  // NOTEVIEWWIDGET_H

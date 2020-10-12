@@ -42,6 +42,7 @@ class NotesWidget : public CustomWidget
 
 public:
     explicit NotesWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~NotesWidget() override;
 
     /**
@@ -183,8 +184,8 @@ private:
 
 private:
     QPointer<DocSheet> m_sheet;
-    ImageListView     *m_pImageListView;
-    DPushButton       *m_pAddAnnotationBtn;
+    ImageListView     *m_pImageListView = nullptr;
+    DPushButton       *m_pAddAnnotationBtn = nullptr;
 };
 
 #endif  // NOTESFORM_H

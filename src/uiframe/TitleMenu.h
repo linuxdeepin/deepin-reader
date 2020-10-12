@@ -88,7 +88,7 @@ private:
     QAction *createAction(const QString &actionName, const QString &);
 
 private:
-    HandleMenu *m_handleMenu;
+    HandleMenu *m_handleMenu = nullptr;
 };
 
 

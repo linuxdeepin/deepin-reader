@@ -76,7 +76,7 @@ class BrowserMagniFier : public QLabel
     Q_OBJECT
 
 public:
-    BrowserMagniFier(QWidget *parent);
+    explicit BrowserMagniFier(QWidget *parent);
 
     /**
      * @brief showMagnigierImage

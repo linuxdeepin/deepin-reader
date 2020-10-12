@@ -255,20 +255,20 @@ private:
     void deleteItemByKey();
 
 private:
-    qreal m_scale;
-    int  m_searchId;
-    bool m_bOldVisible;
-    bool m_bOpenDocOpenSuccess;
+    qreal m_scale = -1;
+    int  m_searchId = -1;
+    bool m_bOldVisible = false;
+    bool m_bOpenDocOpenSuccess = false;
 
-    DocSheet *m_sheet;
-    QStackedLayout *m_stackLayout;
+    DocSheet *m_sheet = nullptr;
+    QStackedLayout *m_stackLayout = nullptr;
     QMap<int, DToolButton *> m_btnGroupMap;
     PreviewWidgesFlags m_widgetsFlag;
 
-    ThumbnailWidget *m_thumbnailWidget;
-    CatalogWidget   *m_catalogWidget;
-    BookMarkWidget  *m_bookmarkWidget;
-    NotesWidget     *m_notesWidget;
-    SearchResWidget *m_searchWidget;
+    ThumbnailWidget *m_thumbnailWidget = nullptr;
+    CatalogWidget   *m_catalogWidget = nullptr;
+    BookMarkWidget  *m_bookmarkWidget = nullptr;
+    NotesWidget     *m_notesWidget = nullptr;
+    SearchResWidget *m_searchWidget = nullptr;
 };
 #endif  // LEFTSHOWWIDGET_H
