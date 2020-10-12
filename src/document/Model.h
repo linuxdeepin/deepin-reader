@@ -47,7 +47,7 @@ const int Z_ORDER_ICON        = 4;
 
 struct Link {
     QPainterPath boundary;
-    int page = 1;
+    int page = -1;
     qreal left = 0;
     qreal top = 0;
     QString urlOrFileName;
@@ -58,6 +58,11 @@ struct Link {
     Link(const QRectF &boundingRect, const QString &url) : boundary(), page(-1), left(0.0), top(0.0), urlOrFileName(url) { boundary.addRect(boundingRect); }
     Link(const QPainterPath &boundary, const QString &fileName, int page) : boundary(boundary), page(page), left(0.0), top(0.0), urlOrFileName(fileName) {}
     Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(), page(page), left(0.0), top(0.0), urlOrFileName(fileName) { boundary.addRect(boundingRect); }
+
+    bool isValid()
+    {
+        return page >= 1 || !urlOrFileName.isEmpty();
+    }
 };
 
 struct Section;

@@ -470,23 +470,22 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRe
 QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
 {
     QPointF point = clickPoint;
-    BrowserPage *page{nullptr};
+    BrowserPage *page = nullptr;
 
     page = mouseClickInPage(point);
 
     if (nullptr == m_sheet || nullptr == page || clickPoint.x() < 0 || clickPoint.y() < 0)
         return  point;
 
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation    = operation.rotation;
+    const SheetOperation  &operation = m_sheet->operation();
+    Dr::Rotation rotation    = operation.rotation;
 
     point = QPointF(point.x() - page->pos().x(), point.y() - page->pos().y());
 
     switch (rotation) {
     case Dr::RotateBy0 :
-        point = QPointF(abs(point.x()) / page->boundingRect().width(),
-                        abs(point.y()) / page->boundingRect().height());
+        point = QPointF(point.x() / operation.scaleFactor,
+                        point.y() / operation.scaleFactor);
         break;
     case Dr::RotateBy90 : {
         point = QPointF(point.y(), page->boundingRect().width() - point.x());

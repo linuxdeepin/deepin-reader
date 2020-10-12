@@ -825,6 +825,16 @@ bool BrowserPage::jump2Link(const QPointF point)
         m_page = m_parent->page(itemIndex());
     }
 
+    Link link = m_page->getLinkAtPoint(point);
+    if (link.page > 0) {
+        m_parent->setCurrentPage(link.page);
+        return true;
+    } else if (!link.urlOrFileName.isEmpty()) {
+        const QUrl &url = QUrl(link.urlOrFileName, QUrl::TolerantMode);
+        QDesktopServices::openUrl(url);
+        return true;
+    }
+
     return false;
 }
 
@@ -835,7 +845,8 @@ bool BrowserPage::inLink(const QPointF pos)
         return false;
     }
 
-    return false;
+    Link link = m_page->getLinkAtPoint(pos);
+    return link.isValid();
 }
 
 void BrowserPage::setPageBookMark(const QPointF clickPoint)
