@@ -477,6 +477,22 @@ private:
      */
     void updatePageFull();
 
+    /**
+     * @brief 搜索
+     * @param text
+     * @param matchCase
+     * @param wholeWords
+     * @return
+     */
+    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords);
+
+    /**
+     * @brief 获取指定范围文本
+     * @param rect
+     * @return
+     */
+    QString text(const QRectF &rect);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
