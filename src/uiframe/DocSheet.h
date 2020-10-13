@@ -192,9 +192,9 @@ public:
      * 跳转到指定位置
      * @param left 距离左边距离
      * @param top 距离上边距离
-     * @param page 跳转的页码
+     * @param index 跳转的页码
      */
-    void jumpToOutline(const qreal  &left, const qreal &top, int page);
+    void jumpToOutline(const qreal  &left, const qreal &top, int index);
 
     /**
      * @brief jumpToHighLight

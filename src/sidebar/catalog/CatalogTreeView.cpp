@@ -277,8 +277,8 @@ void CatalogTreeView::setIndex(int index, const QString &title)
     if (model) {
         const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
         foreach (QStandardItem *item, itemList) {
-            int itemPage = item->data().toInt();
-            if (itemPage == index + 1 && (title.isEmpty() || title == item->data(Qt::DisplayRole).toString())) {
+            int itemIndex = item->data().toInt();
+            if (itemIndex == index && (title.isEmpty() || title == item->data(Qt::DisplayRole).toString())) {
                 QList<QStandardItem *> parentlst;
                 parentlst << item;
                 QStandardItem *parent = item->parent();

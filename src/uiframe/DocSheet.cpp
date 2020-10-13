@@ -172,9 +172,9 @@ deepin_reader::Outline DocSheet::outline()
     return m_browser->outline();
 }
 
-void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int page)
+void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
 {
-    m_browser->jumpToOutline(left, top, page);
+    m_browser->jumpToOutline(left, top, index);
 }
 
 void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)

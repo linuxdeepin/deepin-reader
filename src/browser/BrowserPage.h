@@ -156,7 +156,7 @@ public:
      * @param point 鼠标点
      * @return 鼠标点周围的片图
      */
-    QImage getCurImagePoint(QPoint point);
+    QImage getCurImagePoint(QPointF point);
 
     /**
      * @brief getWords
@@ -281,14 +281,6 @@ public:
     Annotation *addIconAnnotation(const QRectF, const QString);
 
     /**
-     * @brief mouseClickIconAnnot
-     * 当前鼠标点击位置是否有注释
-     * @param clickPoint 鼠标点击位置
-     * @return true:有  false:没有
-     */
-    bool mouseClickIconAnnot(QPointF &);
-
-    /**
      * @brief setSearchHighlightRectf
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
@@ -323,14 +315,6 @@ public:
     QRectF findSearchforIndex(int index);
 
     /**
-     * @brief translatePoint
-     * 将非0度(旋转角度)坐标点转换成0度坐标点
-     * @param point 转换之前坐标点
-     * @return 转换之后坐标点
-     */
-    QPoint translatePoint(const QPoint &point);
-
-    /**
      * @brief translateRect
      * 将非0度(旋转角度)rect转换成0度rect
      * @param rect 转换之前rect
@@ -349,18 +333,18 @@ public:
     /**
      * @brief getBrowserAnnotation
      * 获得注释,根据坐标点
-     * @param point 坐标点
+     * @param point PageItem坐标系统
      * @return 坐标点下的注释
      */
-    BrowserAnnotation *getBrowserAnnotation(const QPoint &point);
+    BrowserAnnotation *getBrowserAnnotation(const QPointF &point);
 
     /**
      * @brief getBrowserWord
      * 根据坐标点获得当前的文字
-     * @param point 当前坐标点
+     * @param point PageItem坐标系统
      * @return 坐标点下的文字
      */
-    BrowserWord *getBrowserWord(const QPoint &point);
+    BrowserWord *getBrowserWord(const QPointF &point);
 
     /**
      * @brief setSelectIconRect

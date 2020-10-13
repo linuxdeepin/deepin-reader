@@ -402,13 +402,14 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
         m_page = m_parent->page(itemIndex());
     }
 
-    const QPoint &transformPoint = translatePoint(point);
+    QTransform transform;
+    transform.rotate(m_rotation * 90);
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
-    QRect rect = QRect(qRound(transformPoint.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(transformPoint.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
-    return m_page->render(m_rotation, scaleFactor, rect);
+    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
+    return m_page->render(Dr::Rotation::RotateBy0, scaleFactor, rect).transformed(transform, Qt::SmoothTransformation);
 }
 
-QImage BrowserPage::getCurImagePoint(QPoint point)
+QImage BrowserPage::getCurImagePoint(QPointF point)
 {
     int ds = 122;
     QTransform transform;
@@ -816,11 +817,6 @@ bool BrowserPage::removeAllAnnotation()
 
 bool BrowserPage::jump2Link(const QPointF point)
 {
-    if ((m_rotation != Dr::RotateBy0) && (m_rotation < Dr::NumberOfRotations)) {
-        Q_UNUSED(point)
-        return false;
-    }
-
     if (nullptr == m_page) {
         m_page = m_parent->page(itemIndex());
     }
@@ -840,9 +836,8 @@ bool BrowserPage::jump2Link(const QPointF point)
 
 bool BrowserPage::inLink(const QPointF pos)
 {
-    if ((m_rotation != Dr::RotateBy0) && (m_rotation < Dr::NumberOfRotations)) {
-        Q_UNUSED(pos)
-        return false;
+    if (nullptr == m_page) {
+        m_page = m_parent->page(itemIndex());
     }
 
     Link link = m_page->getLinkAtPoint(pos);
@@ -933,15 +928,6 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
     return annot;
 }
 
-bool BrowserPage::mouseClickIconAnnot(QPointF &clickPoint)
-{
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
-    return m_page->mouseClickIconAnnot(clickPoint);
-}
-
 /**
  * @brief BrowserPage::sceneEvent
  *  画布事件,目前只处理HoverMove事件
@@ -1011,31 +997,6 @@ QRectF BrowserPage::getNorotateRect(const QRectF &rect)
     return newrect;
 }
 
-QPoint BrowserPage::translatePoint(const QPoint &point)
-{
-    QPoint newpoint = point;
-    switch (m_rotation) {
-    case Dr::RotateBy90: {
-        newpoint.setX(static_cast<int>(boundingRect().height() - point.y()));
-        newpoint.setY(point.x());
-        break;
-    }
-    case Dr::RotateBy180: {
-        newpoint.setX(static_cast<int>(boundingRect().width() - point.x()));
-        newpoint.setY(static_cast<int>(boundingRect().height() - point.y()));
-        break;
-    }
-    case Dr::RotateBy270: {
-        newpoint.setX(point.y());
-        newpoint.setY(static_cast<int>(boundingRect().width() - point.x()));
-        break;
-    }
-    default:
-        break;
-    }
-    return  newpoint;
-}
-
 QRectF BrowserPage::translateRect(const QRectF &rect)
 {
     //旋转角度逆时针增加
@@ -1075,7 +1036,7 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
     return  newrect;
 }
 
-BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPoint &point)
+BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPointF &point)
 {
     BrowserAnnotation *item = nullptr;
     const QList<QGraphicsItem *> &itemlst = scene()->items(this->mapToScene(point));
@@ -1089,7 +1050,7 @@ BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPoint &point)
     return nullptr;
 }
 
-BrowserWord *BrowserPage::getBrowserWord(const QPoint &point)
+BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
 {
     BrowserWord *item = nullptr;
     const QList<QGraphicsItem *> &itemlst = scene()->items(this->mapToScene(point));

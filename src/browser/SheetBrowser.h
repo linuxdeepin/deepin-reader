@@ -399,7 +399,7 @@ public:
      * @param point 鼠标点击的位置
      * @return 返回跳转状态
      */
-    bool jump2Link(const QPointF);
+    bool jump2Link(QPointF);
 
     /**
      * @brief showMenu
@@ -561,9 +561,7 @@ protected:
      */
     void tapGestureTriggered(QTapGesture *);
 
-    BrowserPage *mouseClickInPage(QPointF &);
-
-    BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
+    BrowserPage *getBrowserPageForPoint(QPointF &viewPoint);
 
 private slots:
     /**
@@ -635,14 +633,6 @@ private slots:
 
 private:
     /**
-     * @brief mouseClickIconAnnot
-     * 鼠标是否点击了注释图标
-     * @param clickPoint 鼠标点击位置
-     * @return true:是     false:否
-     */
-    bool mouseClickIconAnnot(QPointF &);
-
-    /**
      * @brief calcIconAnnotRect
      * 计算注释图标范围
      * @param page 图标注释在哪一页
@@ -657,7 +647,7 @@ private:
      * 将非0度的坐标点转换成0度的坐标点
      * @return
      */
-    QPointF translate2Local(const QPointF);
+    QPointF translate2Local(QPointF);
 
     /**
      * @brief getClickAnnot
@@ -715,7 +705,7 @@ private:
      * @param point 鼠标点击位置
      * @return true:有, false:没有
      */
-    bool isLink(const QPointF);
+    bool isLink(QPointF);
 
     /**
      * @brief setIconAnnotSelect
@@ -730,7 +720,7 @@ private:
      * @brief setDocTapGestrue
      * 根据手势点击位置设置文档滑动方式
      */
-    void setDocTapGestrue(const QPoint);
+    void setDocTapGestrue(QPoint);
 
     /**
      * @brief clearSelectIconAnnotAfterMenu

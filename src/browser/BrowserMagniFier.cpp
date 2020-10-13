@@ -73,7 +73,7 @@ BrowserMagniFier::BrowserMagniFier(QWidget *parent)
 
 void BrowserMagniFier::updateImage()
 {
-    QPoint point = m_lastScenePoint;
+    QPointF point = m_lastScenePoint;
     BrowserPage *page = m_brwoser->getBrowserPageForPoint(point);
     if (page) {
         const QImage &image = page->getCurImagePoint(point);
@@ -86,21 +86,23 @@ void BrowserMagniFier::updateImage()
     task.page = page;
     task.target = this;
     task.slotFun = "onUpdateMagnifierImage";
-    task.mousePos = point;
+    task.mousePos = point.toPoint();
     task.scaleFactor = m_lastScaleFactor;
     m_readManager.addTask(task);
 
-    m_lastPoint = point;
+    m_lastPoint = point.toPoint();
 }
 
 void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, double scaleFactor)
 {
     scaleFactor += 2;
     m_lastScenePoint = mousePos;
-    BrowserPage *page = m_brwoser->getBrowserPageForPoint(mousePos);
+
+    QPointF ponitf = mousePos;
+    BrowserPage *page = m_brwoser->getBrowserPageForPoint(ponitf);
 
     if (page) {
-        const QImage &image = page->getCurImagePoint(mousePos);
+        const QImage &image = page->getCurImagePoint(ponitf);
         setMagniFierImage(image);
     } else {
         setMagniFierImage(QImage());
@@ -111,11 +113,11 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
     task.page = page;
     task.target = this;
     task.slotFun = "onUpdateMagnifierImage";
-    task.mousePos = mousePos;
+    task.mousePos = ponitf.toPoint();
     task.scaleFactor = scaleFactor;
     m_readManager.addTask(task);
 
-    m_lastPoint = mousePos;
+    m_lastPoint = ponitf.toPoint();
     m_lastScaleFactor = scaleFactor;
 }
 
