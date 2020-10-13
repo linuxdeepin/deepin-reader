@@ -229,8 +229,8 @@ public:
     virtual QSizeF pageSizeF(int) const { return QSizeF(0, 0); };
     virtual QStringList saveFilter() const { return QStringList(); }
     virtual QString label(int) const { return QString(); };
-    virtual bool canSave() const { return false; }
-    virtual bool save(const QString &filePath, bool withChanges) const { Q_UNUSED(filePath); Q_UNUSED(withChanges); return false; }
+    virtual bool save(const QString &filePath) const { Q_UNUSED(filePath); return false; }
+    virtual bool saveAs(const QString &filePath) const { Q_UNUSED(filePath); return false; }
     virtual bool canBePrintedUsingCUPS() const { return false; }
     virtual void setPaperColor(const QColor &paperColor) { Q_UNUSED(paperColor); }
     virtual Outline outline() const { return Outline(); }

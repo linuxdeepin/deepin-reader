@@ -124,21 +124,23 @@ class PDFDocument : public Document
 public:
     virtual ~PDFDocument();
 
-    int numberOfPages() const;
+    int numberOfPages() const override;
 
-    Page *page(int index) const;
+    Page *page(int index) const override;
 
-    QStringList saveFilter() const;
+    QStringList saveFilter() const override;
 
-    QString label(int index) const;
+    QString label(int index) const override;
 
-    QSizeF pageSizeF(int index) const;
+    QSizeF pageSizeF(int index) const override;
 
-    bool save(const QString &filePath, bool withChanges) const;
+    bool save(const QString &filePath) const override;
 
-    Outline outline() const;
+    bool saveAs(const QString &filePath) const override;
 
-    Properties properties() const;
+    Outline outline() const override;
+
+    Properties properties() const override;
 
     static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password, int &status);
 

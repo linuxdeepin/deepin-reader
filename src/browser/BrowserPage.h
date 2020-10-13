@@ -97,14 +97,6 @@ public:
     static bool existInstance(BrowserPage *item);
 
     /**
-     * @brief reOpen
-     * 重新对自己赋值
-     * @param page
-     * @param renderPages 渲染页
-     */
-    void reOpen(deepin_reader::Page *page);
-
-    /**
      * @brief renderViewPort
      * 优先显示当前窗口
      * @param force

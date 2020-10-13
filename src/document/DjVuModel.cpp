@@ -798,15 +798,13 @@ QStringList DjVuDocument::saveFilter() const
     return QStringList() << QLatin1String("DjVu (*.djvu *.djv)");
 }
 
-bool DjVuDocument::canSave() const
+bool DjVuDocument::saveAs(const QString &filePath) const
 {
-    return true;
+    return save(filePath);
 }
 
-bool DjVuDocument::save(const QString &filePath, bool withChanges) const
+bool DjVuDocument::save(const QString &filePath) const
 {
-    Q_UNUSED(withChanges);
-
     LOCK_DOCUMENT
 
 #ifdef _MSC_VER

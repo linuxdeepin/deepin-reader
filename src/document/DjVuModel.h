@@ -76,19 +76,19 @@ class DjVuDocument : public Document
 public:
     ~DjVuDocument();
 
-    int numberOfPages() const;
+    int numberOfPages() const override;
 
-    Page *page(int index) const;
+    Page *page(int index) const override;
 
-    QStringList saveFilter() const;
+    QStringList saveFilter() const override;
 
-    bool canSave() const;
+    bool save(const QString &filePath) const override;
 
-    bool save(const QString &filePath, bool withChanges) const;
+    bool saveAs(const QString &filePath) const override;
 
-    Outline outline() const;
+    Outline outline() const override;
 
-    Properties properties() const;
+    Properties properties() const override;
 
     static deepin_reader::DjVuDocument *loadDocument(const QString &filePath);
 

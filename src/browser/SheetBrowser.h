@@ -96,14 +96,6 @@ public:
     bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     /**
-     * @brief 重新打开
-     * @param fileType 文档格式类型
-     * @param filePath 文档所在路径
-     * @return
-     */
-    bool reOpen(const Dr::FileType &fileType, const QString &filePath);
-
-    /**
      * @brief 保存
      * @path 保存到路径
      * @return

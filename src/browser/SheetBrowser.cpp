@@ -245,59 +245,20 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     return true;
 }
 
-bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
-{
-    if (nullptr == m_document)  //未打开的无法重新打开
-        return false;
-
-    deepin_reader::Document *tempDocument = m_document;
-
-    int status = -1;
-    if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword, status);
-    else if (Dr::DjVu == fileType)
-        m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
-
-    if (nullptr == m_document)
-        return false;
-
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        if (m_items.count() > i) {
-            m_items[i]->reOpen(m_document->page(i));
-        }
-    }
-
-    delete tempDocument;
-
-    return true;
-}
-
 bool SheetBrowser::save(const QString &path)
 {
     if (path.isEmpty())
         return false;
 
-    QString tmpFilePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QUuid::createUuid().toString() + ".tmp";
-
-    if (!m_document->save(tmpFilePath, true)) {
-        return false;
-    }
-
-    QFile tmpFile(tmpFilePath);
-
-    if (!Utils::copyFile(tmpFilePath, path)) {
-        tmpFile.remove();
-        return false;
-    }
-
-    tmpFile.remove();
-
-    return reOpen(m_fileType, path);
+    return m_document->save(path);
 }
 
-bool SheetBrowser::saveAs(const QString &filePath)
+bool SheetBrowser::saveAs(const QString &path)
 {
-    return save(filePath);
+    if (path.isEmpty())
+        return false;
+
+    return m_document->saveAs(path);;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)

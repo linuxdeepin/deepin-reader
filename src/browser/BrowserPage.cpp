@@ -72,24 +72,6 @@ BrowserPage::~BrowserPage()
         delete m_page;
 }
 
-void BrowserPage::reOpen(Page *page)
-{
-    Page *tmpPage = m_page;
-
-    m_page = page;
-
-    qDeleteAll(m_annotations);
-    m_annotations.clear();
-
-    qDeleteAll(m_annotationItems);
-    m_annotationItems.clear();
-
-    m_hasLoadedAnnotation = false;
-
-    if (nullptr != tmpPage)
-        delete tmpPage;
-}
-
 QRectF BrowserPage::boundingRect() const
 {
     return QRectF(0, 0, static_cast<double>(m_pageSizeF.width() * m_scaleFactor), static_cast<double>(m_pageSizeF.height() * m_scaleFactor));

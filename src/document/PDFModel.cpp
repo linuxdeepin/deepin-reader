@@ -338,11 +338,18 @@ QStringList PDFDocument::saveFilter() const
     return QStringList() << "Portable document format (*.pdf)";
 }
 
-bool PDFDocument::save(const QString &filePath, bool withChanges) const
+bool PDFDocument::save(const QString &filePath) const
 {
     LOCK_DOCUMENT
+    Q_UNUSED(filePath)
 
-    return false;
+    return m_document->save();
+}
+
+bool PDFDocument::saveAs(const QString &filePath) const
+{
+    LOCK_DOCUMENT
+    return m_document->saveAs(filePath);
 }
 
 void collectOuleLine(const DPdfDoc::Outline &cOutline, deepin_reader::Outline &outline)
