@@ -61,64 +61,57 @@ class FindWidget;
 class PageSearchThread;
 
 /**
- * @brief The SheetBrowser class
- * 浏览文档内容区域,使用视图框架
+ * @brief 浏览文档内容区域,使用视图框架
  */
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:
     friend class BrowserMagniFier;
-    friend class ReadMagnifierManager;
 
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
     virtual ~SheetBrowser() override;
 
     /**
-     * @brief firstThumbnail
-     * 获取封面缩略图
-     * @param filePath
+     * @brief 获取封面缩略图
+     * @param filePath 文档所在路径
      * @return
      */
     static QImage firstThumbnail(const QString &filePath);
 
     /**
-     * @brief isUnLocked
-     * 是否上锁
+     * @brief 文档是否上锁
      * @return
      */
     bool isUnLocked();
 
     /**
-     * brief open
-     * 打开文档
-     * @param fileType
-     * @param filePath
-     * @param password
+     * brief 打开文档
+     * @param fileType 文档格式类型
+     * @param filePath 文档所在路径
+     * @param password 文档密码
      * @return
      */
     bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     /**
-     * @brief reOpen
-     * 重新打开
-     * @param fileType
-     * @param filePath
+     * @brief 重新打开
+     * @param fileType 文档格式类型
+     * @param filePath 文档所在路径
      * @return
      */
     bool reOpen(const Dr::FileType &fileType, const QString &filePath);
 
     /**
-     * @brief save
-     * 保存
+     * @brief 保存
+     * @path 保存到路径
      * @return
      */
     bool save(const QString &path);
 
     /**
-     * @brief saveAs
-     * 另存为
+     * @brief 另存为
      * @param filePath
      * @return
      */
@@ -779,8 +772,8 @@ private:
     BrowserWord *m_selectEndWord = nullptr;
 
     double m_lastScaleFactor = 0;
-    int m_maxWidth = 0;                 //最大一页的宽度
-    int m_maxHeight = 0;                //最大一页的高度
+    qreal m_maxWidth = 0;                 //最大一页的宽度
+    qreal m_maxHeight = 0;                //最大一页的高度
     bool m_changSearchFlag = false;
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数

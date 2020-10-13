@@ -65,13 +65,6 @@ DWIDGET_USE_NAMESPACE
 
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
-    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
-    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
-    this->verticalScrollBar()->setAccessibleName("verticalScrollBar");
-    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
-    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
-    this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
-
     setMouseTracking(true);
 
     setScene(new QGraphicsScene(this));
@@ -112,6 +105,13 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
+
+    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
+    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
+    this->verticalScrollBar()->setAccessibleName("verticalScrollBar");
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
+    this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
 }
 
 SheetBrowser::~SheetBrowser()
@@ -200,11 +200,16 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
         return false;
 
     m_lable2Page.clear();
+
     int allPageCnt = m_document->numberOfPages();
+
     for (int i = 0; i < allPageCnt; ++i) {
         const QSizeF &pageSize = m_document->pageSizeF(i);
+
         BrowserPage *item = new BrowserPage(this, nullptr);
+
         item->setPageSize(pageSize);
+
         item->setItemIndex(i);
 
         if (bookmarks.contains(i))
@@ -213,6 +218,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
         m_items.append(item);
 
         const QString &labelPage = m_document->label(i);
+
         if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
             m_lable2Page.insert(labelPage, i);
         }

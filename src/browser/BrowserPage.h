@@ -56,6 +56,39 @@ public:
     virtual ~BrowserPage() override;
 
     /**
+     * @brief 文档页原矩形 不受旋转影响
+     * @return
+     */
+    QRectF boundingRect()const override;
+
+    /**
+     * @brief 文档页实际矩形
+     * @return
+     */
+    QRectF rect();  //
+
+    /**
+     * @brief 设置书签
+     * @param hasBookmark 是否存在书签
+     */
+    void setBookmark(const bool &hasBookmark);
+
+    /**
+     * @brief 文档进行加载像显示内容
+     * @param scaleFactor 缩放系数
+     * @param rotation 旋转角度
+     * @param renderLater 是否延迟加载
+     * @param force 是否强制更新
+     */
+    void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
+
+    /**
+     * @brief updateBookmarkState
+     * 更新书签状态
+     */
+    void updateBookmarkState();
+
+    /**
      * @brief existInstance
      * 页是否存在
      * @param item 哪一页
@@ -70,43 +103,6 @@ public:
      * @param renderPages 渲染页
      */
     void reOpen(deepin_reader::Page *page);
-
-    /**
-     * @brief boundingRect
-     * 文档页rect(不一定是0度下的)
-     * @return
-     */
-    QRectF boundingRect()const override;  //原矩形 不受旋转影响
-
-    /**
-     * @brief rect
-     * 文档页rect(0度)
-     * @return
-     */
-    QRectF rect();  //旋转后 实际矩形
-
-    /**
-     * @brief setBookmark
-     * 设置书签
-     * @param hasBookmark
-     */
-    void setBookmark(const bool &hasBookmark);
-
-    /**
-     * @brief updateBookmarkState
-     * 更新书签状态
-     */
-    void updateBookmarkState();
-
-    /**
-     * @brief render
-     * 文档缩略图渲染接口
-     * @param scaleFactor 缩放系数
-     * @param rotation 旋转角度
-     * @param renderLater
-     * @param force
-     */
-    void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     /**
      * @brief renderViewPort
