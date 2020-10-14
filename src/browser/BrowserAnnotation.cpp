@@ -65,10 +65,10 @@ QString BrowserAnnotation::annotationText()
 
 QRectF BrowserAnnotation::boundingRect() const
 {
-    return QRectF(m_rect.x() * m_parent->boundingRect().width(),
-                  m_rect.y() * m_parent->boundingRect().height(),
-                  m_rect.width() * m_parent->boundingRect().width(),
-                  m_rect.height() * m_parent->boundingRect().height());
+    return QRectF(m_rect.x() * m_scaleFactor,
+                  m_rect.y() * m_scaleFactor,
+                  m_rect.width() * m_scaleFactor,
+                  m_rect.height() * m_scaleFactor);
 }
 
 void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
@@ -77,15 +77,7 @@ void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     if (m_drawSelectRect) {
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         painter->setPen(pen);
-
-        QRect iconRect = option->rect;
-
-        int width = static_cast<int>(m_rect.width() * m_parent->boundingRect().width());
-        int height = static_cast<int>(m_rect.height() * m_parent->boundingRect().height());
-
-        iconRect.setWidth(static_cast<int>(width));
-        iconRect.setHeight(static_cast<int>(height));
-        painter->drawRect(iconRect);
+        painter->drawRect(option->rect);
     }
 }
 

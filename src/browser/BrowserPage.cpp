@@ -562,16 +562,7 @@ void BrowserPage::reloadAnnotations()
 
     for (int i = 0; i < m_annotations.count(); ++i) {
         m_annotations[i]->page = m_index + 1;
-
-        //图标注释,可能是其它系统上不一样的样式,需刷新下位置达到重新刷新成自己样式的图标的目的
-        if (m_annotations[i]->type() == 1 /*Text*/) {
-            const QList<QRectF> &annoBoundary = m_annotations[i]->boundary();
-            if (annoBoundary.size() > 0) {
-                m_page->moveIconAnnotation(m_annotations[i], annoBoundary.at(0));
-            }
-        }
-
-        foreach (QRectF rect, m_annotations[i]->boundary()) {
+        foreach (const QRectF &rect, m_annotations[i]->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i]);
             m_annotationItems.append(annotationItem);
         }
@@ -611,48 +602,31 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         m_page = m_parent->page(itemIndex());
     }
 
-    Annotation *highLightAnnot{nullptr};
+    Annotation *highLightAnnot = nullptr;
     QList<QRectF> boundarys;
-    QRectF rect;
-    QRectF recboundary;
-    int index = 0;
-    qreal curwidth = m_pageSizeF.width();
-    qreal curheight = m_pageSizeF.height();
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
-    QList<deepin_reader::Word> twords = m_page->words(Dr::RotateBy0);
+    const QList<deepin_reader::Word> &twords = m_page->words(Dr::RotateBy0);
+    int wordCnt = twords.size();
 
-    for (index = 0; index < m_words.count(); index++) {
+    for (int index = 0; index < wordCnt; index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
             m_words.at(index)->setSelected(false);
-            if (index >= 0 && index < twords.count()) {
-                deepin_reader::Word tword = twords.at(index);
-
-                rect = tword.wordBoundingRect();
-
-                recboundary.setTopLeft(QPointF(rect.left() / curwidth,
-                                               rect.top() / curheight));
-                recboundary.setTopRight(QPointF(rect.right() / curwidth,
-                                                rect.top() / curheight));
-                recboundary.setBottomLeft(QPointF(rect.left() / curwidth,
-                                                  rect.bottom() / curheight));
-                recboundary.setBottomRight(QPointF(rect.right() / curwidth,
-                                                   rect.bottom() / curheight));
-                boundarys << recboundary;
-            }
+            boundarys << twords[index].wordBoundingRect();
         }
     }
 
-    if (boundarys.count()) {
+    if (boundarys.count() > 0) {
         loadAnnotations();
 
         highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
         if (highLightAnnot == nullptr)
             return nullptr;
+
         highLightAnnot->page = m_index + 1;
         m_annotations.append(highLightAnnot);
 
-        foreach (QRectF rect, highLightAnnot->boundary()) {
+        foreach (const QRectF &rect, highLightAnnot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
             m_annotationItems.append(annotationItem);
         }
@@ -676,9 +650,9 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
         foreach (BrowserAnnotation *annotation, m_annotationItems) {
             if (annotation && annotation->isSame(iconAnnot)) {
                 m_lastClickIconAnnotationItem = annotation;
+                m_lastClickIconAnnotationItem->setScaleFactor(m_scaleFactor);
                 if (iconAnnot->type() == 1)
                     m_lastClickIconAnnotationItem->setDrawSelectRect(draw);
-                m_lastClickIconAnnotationItem->setScaleFactor(m_scaleFactor);
             }
         }
     } else {
@@ -704,13 +678,11 @@ void BrowserPage::setIconMovePos(const QPointF movePoint)
 QString BrowserPage::deleteNowSelectIconAnnotation()
 {
     if (nullptr == m_lastClickIconAnnotationItem)
-        return "";
-
-    QString iconAnnotationContains{""};
+        return QString();
 
     m_lastClickIconAnnotationItem->setDrawSelectRect(false);
 
-    iconAnnotationContains = m_lastClickIconAnnotationItem->annotationText();
+    const QString &iconAnnotationContains = m_lastClickIconAnnotationItem->annotationText();
 
     removeAnnotation(m_lastClickIconAnnotationItem->annotation());
 
@@ -719,7 +691,7 @@ QString BrowserPage::deleteNowSelectIconAnnotation()
     return iconAnnotationContains;
 }
 
-bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
+bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
 {
     if (nullptr == m_lastClickIconAnnotationItem)
         return false;
@@ -738,7 +710,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF moveRect)
         delete m_lastClickIconAnnotationItem;
         m_lastClickIconAnnotationItem = nullptr;
         annot->page = m_index + 1;
-        foreach (QRectF rect, annot->boundary()) {
+        foreach (const QRectF &rect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
             m_annotationItems.append(annotationItem);
             m_lastClickIconAnnotationItem = annotationItem;
@@ -839,7 +811,6 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
             else
                 m_bookmarkState = 0;
         }
-
         update();
     }
 }
@@ -876,23 +847,21 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     return true;
 }
 
-Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text)
+Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
     if (nullptr == m_page) {
         m_page = m_parent->page(itemIndex());
     }
 
-    Annotation *annot = nullptr;
-
-    annot = m_page->addIconAnnotation(rect, text);
+    Annotation *annot = m_page->addIconAnnotation(rect, text);
 
     if (annot) {
         annot->page = m_index + 1;
 
         m_annotations.append(annot);
 
-        foreach (QRectF rect, annot->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
+        foreach (const QRectF &arect, annot->boundary()) {
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, arect, annot);
             m_annotationItems.append(annotationItem);
             m_lastClickIconAnnotationItem = annotationItem;
         }
@@ -910,12 +879,6 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF rect, const QString text
     return annot;
 }
 
-/**
- * @brief BrowserPage::sceneEvent
- *  画布事件,目前只处理HoverMove事件
- * @param event
- * @return
- */
 bool BrowserPage::sceneEvent(QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {

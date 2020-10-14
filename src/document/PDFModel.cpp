@@ -265,17 +265,17 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
     return false;
 }
 
-Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
+Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
     if (nullptr == m_page)
         return nullptr;
 
     LOCK_PAGE
 
-    return new PDFAnnotation(m_mutex, m_page->createTextAnnot(rect.center().toPoint(), text));
+    return new PDFAnnotation(m_mutex, m_page->createTextAnnot(rect.center(), text));
 }
 
-Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF rect)
+Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
     if (nullptr == m_page && nullptr == annot)
         return nullptr;

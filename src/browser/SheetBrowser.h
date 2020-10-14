@@ -296,7 +296,7 @@ public:
      * @param contents 图标注释内容
      * @return 当前添加的注释
      */
-    Annotation *addIconAnnotation(BrowserPage *page, const QPointF, const QString);
+    Annotation *addIconAnnotation(BrowserPage *page, const QPointF&, const QString&);
 
     /**
      * @brief addHighLightAnnotation
@@ -632,7 +632,7 @@ private:
      * @param iconRect 注释图标的范围
      * @return  true:计算成功    false:计算失败
      */
-    bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
+    bool calcIconAnnotRect(BrowserPage *page, const QPointF &, QRectF &);
 
     /**
      * @brief translate2Local
@@ -666,7 +666,7 @@ private:
      * @param page 图标注释所在页的指针
      * @param clickPoint 鼠标移动的位置
      */
-    void moveIconAnnot(BrowserPage *page, const QPointF);
+    void moveIconAnnot(BrowserPage *page, const QPointF &);
 
     /**
      * @brief currentIndexRange

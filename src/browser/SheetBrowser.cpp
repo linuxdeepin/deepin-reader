@@ -345,7 +345,7 @@ void SheetBrowser::onViewportChanged()
 void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
 {
     if (page) {
-        Annotation *highLightAnnot{nullptr};
+        Annotation *highLightAnnot = nullptr;
 
         highLightAnnot = page->addHighlightAnnotation(text, color);
 
@@ -377,60 +377,19 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
     m_noteEditWidget->showWidget(point);
 }
 
-bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRectF &iconRect)
+bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
 {
-    QPointF clickPoint;
-
     if (nullptr == page || nullptr == m_sheet)
         return false;
 
-    //计算添加图标注释的位置和大小(考虑缩放)
-    qreal scaleFactor{1.0};
-    SheetOperation  operation = m_sheet->operation();
-    scaleFactor = operation.scaleFactor;
+    const SheetOperation  &operation = m_sheet->operation();
+    qreal scaleFactor = operation.scaleFactor;
 
-    qreal width{0.0};
-    qreal height{0.0};
-    qreal value{0.0};
-    qreal x1{0};
-    qreal y1{0};
-
-    clickPoint = page->mapFromScene(point);
+    QPointF clickPoint = page->mapFromScene(point);
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
-    qreal x{0};
-    qreal y{0};
-
-    //计算坐标小于图标宽度情况
-    qreal space = ICONANNOTE_WIDTH * scaleFactor;
-    if (clickPoint.x() > ICONANNOTE_WIDTH / 2) {
-        x = (clickPoint.x() + space / 2.) > (page->boundingRect().width()) ? static_cast<int>((page->boundingRect().width()) - space / 2.) : clickPoint.x();
-    } else {
-        x = (clickPoint.x() < space / 2.) ? space / 2. : clickPoint.x();
-    }
-    if (clickPoint.y() > space / 2.) {
-        y = (clickPoint.y() + space / 2.) > (page->boundingRect().height()) ? static_cast<int>((page->boundingRect().height()) - space / 2.) : clickPoint.y();
-    } else {
-        y = (clickPoint.y() < space / 2.) ? space / 2. : clickPoint.y();
-    }
-
-    clickPoint.setX(x);
-    clickPoint.setY(y);
-
-    x1 = clickPoint.x() / (page->boundingRect().width());
-    y1 = clickPoint.y() / (page->boundingRect().height());
-    width  = ICONANNOTE_WIDTH *  scaleFactor / page->boundingRect().width();
-    height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-
-    value = x1 - width / 2.0;
-    iconRect.setX((value < 0.0) ? 0.0 : value);
-    value = y1 - height / 2.0;
-    iconRect.setY((value < 0.0) ? 0.0 : value);
-
-    iconRect.setWidth(width);
-    iconRect.setHeight(height);
-
+    iconRect = QRectF(clickPoint.x() / scaleFactor - 12, clickPoint.y() / scaleFactor - 12, 24, 24);
     return true;
 }
 
@@ -449,19 +408,17 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
     if (nullptr == m_sheet || nullptr == page)
         return nullptr;
 
-    QPointF point = page->mapFromScene(clickPoint);
+    QPointF pagePointF = page->mapFromScene(clickPoint);
 
     if (drawRect && m_lastSelectIconAnnotPage)
         m_lastSelectIconAnnotPage->setSelectIconRect(false);
 
     m_lastSelectIconAnnotPage = page;
 
-    point = QPointF(abs(point.x()) / page->boundingRect().width(),
-                    abs(point.y()) / page->boundingRect().height());
-
+    pagePointF = translate2Local(pagePointF);
     foreach (Annotation *annot, page->annotations()) {
-        foreach (QRectF rect, annot->boundary()) {
-            if (rect.contains(point)) {
+        foreach (const QRectF &rect, annot->boundary()) {
+            if (rect.contains(pagePointF)) {
                 if (drawRect)
                     page->setSelectIconRect(true, annot);
                 return annot;
@@ -474,7 +431,7 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
 
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
-    Annotation *highLightAnnot{nullptr};
+    Annotation *highLightAnnot = nullptr;
 
     if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
         m_selectStartWord = nullptr;
@@ -552,14 +509,12 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     curpageChanged(jumpPage->itemIndex() + 1);
 }
 
-void SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF clickPoint)
+void SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
 {
     if (nullptr == page)
         return;
 
     QRectF iconRect;
-    QString  containt{""};
-
     bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
@@ -752,7 +707,7 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
         return;
 
     BrowserPage *jumpPage = m_items.at(index);
-    QList<QRectF> anootList = annotation->boundary();
+    const QList<QRectF> &anootList = annotation->boundary();
 
     if (nullptr == jumpPage || anootList.count() < 1)
         return;
@@ -1169,10 +1124,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
             }
 
-            deepin_reader::Annotation *clickAnno = nullptr;
-            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-            clickAnno = getClickAnnot(page, m_selectPressedPos, true);
-            if (clickAnno && clickAnno->type() == 1) {
+            deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
+            if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
@@ -1195,7 +1148,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             BrowserWord *selectWord = nullptr;
 
-            QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
+            const QList<QGraphicsItem *>  &list = scene()->items(mapToScene(event->pos()));
 
             const QString &selectWords = selectedWordsText();
 
@@ -1300,7 +1253,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
-            if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
+            if (annotation && annotation->annotationType() == deepin_reader::Annotation::AText) {
                 if (m_lastSelectIconAnnotPage)
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
@@ -1308,7 +1261,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
-            } else if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationHighlight) {
+            } else if (annotation && annotation->annotationType() == deepin_reader::Annotation::AHighlight) {
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT, annotation->annotationText());
             } else if (nullptr != item) {
@@ -1660,19 +1613,15 @@ BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
     return nullptr;
 }
 
-Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF clickPoint, const QString contents)
+Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &clickPoint, const QString &contents)
 {
     Annotation *anno = nullptr;
-    QRectF iconRect;
-
     if (nullptr != page) {
         clearSelectIconAnnotAfterMenu();
 
         m_lastSelectIconAnnotPage = page;
 
-        iconRect.setWidth(page->boundingRect().width());
-        iconRect.setHeight(page->boundingRect().height());
-
+        QRectF iconRect;
         bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
         if (isVaild)

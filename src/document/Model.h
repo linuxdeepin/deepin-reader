@@ -143,21 +143,10 @@ public:
 
     //数值同poppler类型
     enum AnnotationType {
-        AnnotationText = 1,            ///< TextAnnotation
-        AnnotationLine = 2,            ///< LineAnnotation
-        AnnotationGeom = 3,            ///< GeomAnnotation
-        AnnotationHighlight = 4,       ///< HighlightAnnotation
-        AnnotationStamp = 5,           ///< StampAnnotation
-        AnnotationInk = 6,             ///< InkAnnotation
-        AnnotationLink = 7,            ///< LinkAnnotation
-        AnnotationCaret = 8,           ///< CaretAnnotation
-        AnnotationFileAttachment = 9,  ///< FileAttachmentAnnotation
-        AnnotationSound = 10,          ///< SoundAnnotation
-        AnnotationMovie = 11,          ///< MovieAnnotation
-        AnnotationScreen = 12,         ///< ScreenAnnotation \since 0.20
-        AnnotationWidget = 13,         ///< WidgetAnnotation \since 0.22
-        AnnotationRichMedia = 14,      ///< RichMediaAnnotation \since 0.36
-        Annotation_BASE = 0
+        AUnknown = 0,         ///< 前期支持以外的
+        AText = 1,            ///< TextAnnotation
+        AHighlight = 2,       ///< HighlightAnnotation
+        ALink = 3
     };
 
     virtual int type() = 0;
@@ -204,8 +193,8 @@ public:
     virtual QList<Word> words(Dr::Rotation rotation) {Q_UNUSED(rotation) return QList<Word>();}
     virtual bool mouseClickIconAnnot(QPointF &) {return false;}
     virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;};
-    virtual Annotation *addIconAnnotation(const QRectF ponit, const QString text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
-    virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
+    virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
+    virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
 };
 
 class Document: public QObject

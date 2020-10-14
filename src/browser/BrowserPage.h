@@ -270,7 +270,7 @@ public:
      * @param text 注释内容
      * @return 添加之后的注释,添加失败返回nullptr,反之不为nullptr
      */
-    Annotation *addIconAnnotation(const QRectF, const QString);
+    Annotation *addIconAnnotation(const QRectF &, const QString &);
 
     /**
      * @brief setSearchHighlightRectf
@@ -372,7 +372,7 @@ public:
      * 移动注释图标位置
      * @return true:移动成功   false:移动失败
      */
-    bool moveIconAnnotation(const QRectF);
+    bool moveIconAnnotation(const QRectF &);
 
     /**
      * @brief removeAllAnnotation
