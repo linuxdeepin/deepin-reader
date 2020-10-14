@@ -1,0 +1,3 @@
+#include "dpdfdoc.h"
+#include "dpdfpage.h"
+#include "dpdfannot.h"

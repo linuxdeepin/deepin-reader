@@ -15,12 +15,15 @@
 
 *.so
 
+*.so.1
+
+*.so.1.0
+
+*.so.1.0.0
+
 *.dll
 
 *.dylib
-
-3rdparty/deepin-pdfium
-
 
 # Qt-es
 
@@ -60,7 +63,7 @@ Makefile*
 
 *build-*
 
-
+*.qmake.stash
 
 # Qt unit tests
 
