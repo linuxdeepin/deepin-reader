@@ -19,9 +19,7 @@
 
 *.dylib
 
-3rdparty/output/*
-
-3rdparty/lib/*
+3rdparty/deepin-pdfium
 
 
 # Qt-es
