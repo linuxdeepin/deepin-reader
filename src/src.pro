@@ -16,7 +16,7 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 INCLUDEPATH += $$SRCPWD/uiframe
 INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
 
-!system(cd $${3RDPARTTPATH}/deepin-pdfium && qmake && make -j16 && make clean){
+!system(cd $${3RDPARTTPATH} && sh config.sh){
     error("Build deepin-pdfium library failed.")
 }
 
