@@ -117,7 +117,7 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
     if (m_annotation == nullptr)
         return;
 
-    if (m_annotation->type() == 1/*Text*/ &&  sText.isEmpty()) {
+    if (m_annotation->type() == deepin_reader::Annotation::AText &&  sText.isEmpty()) {
         emit sigRemoveAnnotation(m_annotation, !m_annotation->contents().isEmpty());
     } else if (m_annotation->contents() != sText) {
         emit sigUpdateAnnotation(m_annotation, sText);

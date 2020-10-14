@@ -27,10 +27,10 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation) : QGraphicsItem(parent),
-    m_annotation(annotation), m_rect(rect), m_parent(parent)
+BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation, qreal scalefactor) : QGraphicsItem(parent),
+    m_annotation(annotation), m_rect(rect), m_parent(parent), m_scaleFactor(scalefactor)
 {
-    if (m_annotation->type() == 1/*TextIcon*/)
+    if (m_annotation->type() == deepin_reader::Annotation::AText)
         setZValue(deepin_reader::Z_ORDER_ICON);
     else
         setZValue(deepin_reader::Z_ORDER_HIGHLIGHT);

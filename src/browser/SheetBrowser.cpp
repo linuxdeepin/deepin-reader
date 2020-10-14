@@ -59,8 +59,6 @@
 #include <QPainterPath>
 #include <QDebug>
 
-const int ICONANNOTE_WIDTH = 24;
-
 DWIDGET_USE_NAMESPACE
 
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
@@ -389,7 +387,7 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QR
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
-    iconRect = QRectF(clickPoint.x() / scaleFactor - 12, clickPoint.y() / scaleFactor - 12, 24, 24);
+    iconRect = QRectF(clickPoint.x() / scaleFactor - 10, clickPoint.y() / scaleFactor - 10, 20, 20);
     return true;
 }
 
@@ -509,17 +507,18 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     curpageChanged(jumpPage->itemIndex() + 1);
 }
 
-void SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
+bool SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
 {
     if (nullptr == page)
-        return;
+        return false;
 
     QRectF iconRect;
     bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
-        page->moveIconAnnotation(iconRect);
+        return page->moveIconAnnotation(iconRect);
     }
+    return false;
 }
 
 void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
@@ -1463,16 +1462,14 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
         QPointF point = event->pos();
         BrowserPage *page = getBrowserPageForPoint(point);
-        deepin_reader::Annotation *clickAnno = nullptr;
-        //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-        clickAnno = getClickAnnot(page, mousepoint);
+        deepin_reader::Annotation *clickAnno = getClickAnnot(page, mousepoint);
 
         if (m_iconAnnot)
             clickAnno = m_iconAnnot;
 
         if (!m_selectIconAnnotation) {
             if (m_annotationInserting && (nullptr == m_iconAnnot)) {
-                if (clickAnno && clickAnno->type() == 1) {
+                if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
                     clickAnno = addIconAnnotation(page, m_selectEndPos, "");
@@ -1488,8 +1485,8 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         } else {
             if (m_lastSelectIconAnnotPage && (m_selectPressedPos != m_selectEndPos)) {
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-                moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos);
-                emit sigOperaAnnotation(MSG_NOTE_MOVE, -1, nullptr);
+                if (moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos))
+                    emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
             } else if (clickAnno && m_lastSelectIconAnnotPage && (m_selectPressedPos == m_selectEndPos)) {
                 showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }

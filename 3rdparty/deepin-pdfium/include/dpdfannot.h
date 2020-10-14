@@ -50,10 +50,10 @@ public:
 
     QList<QRectF> boundaries() override;
 
-    void setPos(QPointF pos);
+    void setRectF(const QRectF &rectf);
 
 private:
-    QPointF m_pos;
+    QRectF m_rect;
 };
 
 class DEEPIN_PDFIUM_EXPORT DPdfHightLightAnnot : public DPdfAnnot

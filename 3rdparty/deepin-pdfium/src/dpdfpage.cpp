@@ -96,7 +96,30 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
             //获取位置
             FS_RECTF rectF;
             if (FPDFAnnot_GetRect(annot, &rectF)) {//注释图标为24x24
-                dAnnot->setPos(QPointF(static_cast<double>(rectF.left) + 12, m_height - static_cast<double>(rectF.top) + 12));
+                QRectF annorectF(rectF.left, m_height - rectF.top, 20, 20);
+                dAnnot->setRectF(annorectF);
+
+                FS_RECTF newrectf;
+                newrectf.left = annorectF.left();
+                newrectf.top = m_height - annorectF.top();
+                newrectf.right = annorectF.right();
+                newrectf.bottom = m_height - annorectF.bottom();
+                FPDFAnnot_SetRect(annot, &newrectf);
+            }
+
+            ulong quadCount = FPDFAnnot_CountAttachmentPoints(annot);
+            QList<QRectF> list;
+            for (ulong i = 0; i < quadCount; ++i) {
+                FS_QUADPOINTSF quad;
+                if (!FPDFAnnot_GetAttachmentPoints(annot, i, &quad))
+                    continue;
+
+                QRectF rectF;
+                rectF.setX(static_cast<double>(quad.x1));
+                rectF.setY(m_height - static_cast<double>(quad.y1));
+                rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
+                rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
+                list.append(rectF);
             }
 
             //获取文本
@@ -296,18 +319,18 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
 
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
-    FS_RECTF rectF;
-    rectF.left = point.x() - 12;
-    rectF.top = height() - point.y() + 12;
-    rectF.right = point.x() + 12;
-    rectF.bottom = rectF.top - 24;
-
-    if (!FPDFAnnot_SetRect(annot, &rectF)) {
+    if (!FPDFAnnot_SetStringValue(annot, "Contents", text.utf16())) {
         FPDFPage_CloseAnnot(annot);
         return nullptr;
     }
 
-    if (!FPDFAnnot_SetStringValue(annot, "Contents", text.utf16())) {
+    FS_RECTF rectF;
+    rectF.left = point.x() - 10;
+    rectF.top = height() - point.y() + 10;
+    rectF.right = point.x() + 10;
+    rectF.bottom = rectF.top - 20;
+
+    if (!FPDFAnnot_SetRect(annot, &rectF)) {
         FPDFPage_CloseAnnot(annot);
         return nullptr;
     }
@@ -316,7 +339,7 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
 
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
-    dAnnot->setPos(point);
+    dAnnot->setRectF(QRectF(point.x() - 10, point.y() - 10, 20, 20));
 
     dAnnot->setText(text);
 
@@ -346,17 +369,17 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point)
 
     if (!point.isNull()) {
         FS_RECTF rectF;
-        rectF.left = point.x() - 12;
-        rectF.top = height() - point.y() + 12;
-        rectF.right = point.x() + 12;
-        rectF.bottom = rectF.top - 24;
+        rectF.left = point.x() - 10;
+        rectF.top = height() - point.y() + 10;
+        rectF.right = point.x() + 10;
+        rectF.bottom = rectF.top - 20;
 
         if (!FPDFAnnot_SetRect(annot, &rectF)) {
             FPDFPage_CloseAnnot(annot);
             return false;
         }
 
-        textAnnot->setPos(point);
+        textAnnot->setRectF(QRectF(point.x() - 10, point.y() - 10, 20, 20));
     }
 
     FPDFPage_CloseAnnot(annot);

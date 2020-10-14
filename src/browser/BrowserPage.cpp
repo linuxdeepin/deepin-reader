@@ -554,6 +554,7 @@ void BrowserPage::reloadAnnotations()
     }
 
     qDeleteAll(m_annotations);
+    m_annotations.clear();
 
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
@@ -563,7 +564,7 @@ void BrowserPage::reloadAnnotations()
     for (int i = 0; i < m_annotations.count(); ++i) {
         m_annotations[i]->page = m_index + 1;
         foreach (const QRectF &rect, m_annotations[i]->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i]);
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i], m_scaleFactor);
             m_annotationItems.append(annotationItem);
         }
     }
@@ -627,7 +628,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         m_annotations.append(highLightAnnot);
 
         foreach (const QRectF &rect, highLightAnnot->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot);
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot, m_scaleFactor);
             m_annotationItems.append(annotationItem);
         }
     }
@@ -651,7 +652,7 @@ void BrowserPage::setSelectIconRect(const bool draw, Annotation *iconAnnot)
             if (annotation && annotation->isSame(iconAnnot)) {
                 m_lastClickIconAnnotationItem = annotation;
                 m_lastClickIconAnnotationItem->setScaleFactor(m_scaleFactor);
-                if (iconAnnot->type() == 1)
+                if (iconAnnot->type() == deepin_reader::Annotation::AText)
                     m_lastClickIconAnnotationItem->setDrawSelectRect(draw);
             }
         }
@@ -700,18 +701,17 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
         m_page = m_parent->page(itemIndex());
     }
 
-    Annotation *annot = nullptr;
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
-    annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
+    Annotation *annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
 
     if (annot && m_annotations.contains(annot)) {
         delete m_lastClickIconAnnotationItem;
         m_lastClickIconAnnotationItem = nullptr;
         annot->page = m_index + 1;
         foreach (const QRectF &rect, annot->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot);
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, annot, m_scaleFactor);
             m_annotationItems.append(annotationItem);
             m_lastClickIconAnnotationItem = annotationItem;
         }
@@ -861,12 +861,12 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
         m_annotations.append(annot);
 
         foreach (const QRectF &arect, annot->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, arect, annot);
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, arect, annot, m_scaleFactor);
             m_annotationItems.append(annotationItem);
             m_lastClickIconAnnotationItem = annotationItem;
         }
 
-        if (annot->type() == 1) {
+        if (annot->type() == deepin_reader::Annotation::AText) {
             if (m_lastClickIconAnnotationItem) {
                 m_lastClickIconAnnotationItem->setScaleFactor(m_scaleFactor);
                 m_lastClickIconAnnotationItem->setDrawSelectRect(true);

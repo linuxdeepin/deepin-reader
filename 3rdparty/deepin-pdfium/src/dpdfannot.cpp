@@ -24,20 +24,20 @@ DPdfTextAnnot::DPdfTextAnnot()
 
 bool DPdfTextAnnot::pointIn(QPointF pos)
 {
-    return QRectF(m_pos.x() - 12, m_pos.y() - 12, 24, 24).contains(pos);
+    return m_rect.contains(pos);
 }
 
 QList<QRectF> DPdfTextAnnot::boundaries()
 {
     QList<QRectF> list;
-    list << QRectF(m_pos.x() - 12, m_pos.y() - 12, 24, 24);
+    list << m_rect;
 
     return list;
 }
 
-void DPdfTextAnnot::setPos(QPointF pos)
+void DPdfTextAnnot::setRectF(const QRectF &rectf)
 {
-    m_pos = pos;
+    m_rect = rectf;
 }
 
 DPdfHightLightAnnot::DPdfHightLightAnnot()
