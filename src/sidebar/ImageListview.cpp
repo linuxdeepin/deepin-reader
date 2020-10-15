@@ -28,6 +28,7 @@
 #include <QScroller>
 #include <QScrollBar>
 #include <QSet>
+#include <QMouseEvent>
 
 ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
