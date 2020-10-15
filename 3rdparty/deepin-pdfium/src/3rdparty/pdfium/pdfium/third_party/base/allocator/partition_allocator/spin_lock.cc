@@ -48,6 +48,9 @@
 #elif defined(ARCH_CPU_S390_FAMILY)
 // just do nothing
 #define YIELD_PROCESSOR ((void)0)
+#elif defined(ARCH_CPU_ALPHA21264_FAMILY)
+// just do nothing
+#define YIELD_PROCESSOR ((void)0)
 #endif  // ARCH
 
 #ifndef YIELD_PROCESSOR
