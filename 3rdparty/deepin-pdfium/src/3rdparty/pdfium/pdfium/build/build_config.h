@@ -193,8 +193,17 @@
 #define ARCH_CPU_32_BITS 1
 #define ARCH_CPU_BIG_ENDIAN 1
 #endif
+#elif defined(__SW64)
+#define ARCH_CPU_S390_FAMILY 1
+#define ARCH_CPU_S390X 1
+#define ARCH_CPU_64_BITS 1
+#define ARCH_CPU_BIG_ENDIAN 1
 #else
-#error Please add support for your architecture in build/build_config.h
+#define ARCH_CPU_S390_FAMILY 1
+#define ARCH_CPU_S390X 1
+#define ARCH_CPU_64_BITS 1
+#define ARCH_CPU_BIG_ENDIAN 1
+//#error Please add support for your architecture in build/build_config.h
 #endif
 
 // Type detection for wchar_t.
