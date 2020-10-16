@@ -85,7 +85,7 @@ struct Word {
 
     QRectF wordBoundingRect() const
     {
-        return QRectF(this->boundingBox.x(), this->boundingBox.y(), this->boundingBox.width(), this->boundingBox.height());
+        return boundingBox;
     }
 
     Word()
@@ -190,7 +190,7 @@ public:
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
-    virtual QList<Word> words(Dr::Rotation rotation) {Q_UNUSED(rotation) return QList<Word>();}
+    virtual QList<Word> words() {return QList<Word>();}
     virtual bool mouseClickIconAnnot(QPointF &) {return false;}
     virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;};
     virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }

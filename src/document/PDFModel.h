@@ -83,7 +83,7 @@ public:
 
     QString text(const QRectF &rect) const override;
 
-    QList<Word> words(Dr::Rotation rotation) override;
+    QList<Word> words() override;
 
     QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
@@ -109,8 +109,6 @@ private:
     mutable QMutex *m_mutex;
 
     DPdfPage *m_page;
-
-    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
 
     QList<Word> m_words;
 

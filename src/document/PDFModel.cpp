@@ -159,23 +159,42 @@ QString PDFPage::text(const QRectF &rect) const
     return m_page->text(rect).simplified();
 }
 
-QList<Word> PDFPage::words(Dr::Rotation rotation)
+QList<Word> PDFPage::words()
 {
-    if (rotation == m_wordRotation)
+    if (m_words.size() > 0)
         return m_words;
-
-    m_wordRotation = rotation;
 
     LOCK_PAGE
 
     int charCount = m_page->countChars();
+    QPointF lastOffset(0, 0);
+
     for (int i = 0; i < charCount; i++) {
         Word word;
         word.text = m_page->text(i);
-        const QVector<QRectF> &textrects = m_page->getTextRect(i);
-        if (textrects.size() > 0)
-            word.boundingBox = m_page->getTextRect(i).first();
-        m_words.append(word);
+
+        QRectF rectf;
+        if (m_page->getTextRect(i, rectf)) {
+            //换行
+            if (rectf.top() > lastOffset.y() || lastOffset.y() > rectf.bottom())
+                lastOffset = QPointF(rectf.x(), rectf.center().y());
+
+            if (rectf.width() > 0) {
+                word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
+                lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
+
+                int curWordsSize = m_words.size();
+                if (curWordsSize > 2 && m_words.at(curWordsSize - 1).wordBoundingRect().width() == 0
+                        && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
+                        && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
+                        && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
+                    QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
+                    m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(), prevBoundRectF.y(), word.boundingBox.x() - prevBoundRectF.right(), prevBoundRectF.height());
+                }
+            }
+
+            m_words.append(word);
+        }
     }
     return m_words;
 }

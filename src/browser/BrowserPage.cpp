@@ -407,7 +407,7 @@ QList<Word> BrowserPage::getWords()
         m_page = m_parent->page(itemIndex());
     }
 
-    return m_page->words(Dr::RotateBy0);
+    return m_page->words();
 }
 
 bool BrowserPage::existInstance(BrowserPage *item)
@@ -607,15 +607,31 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     QList<QRectF> boundarys;
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
-    const QList<deepin_reader::Word> &twords = m_page->words(Dr::RotateBy0);
+    const QList<deepin_reader::Word> &twords = m_page->words();
     int wordCnt = twords.size();
+
+    QRectF selectBoundRectF;
+    bool bresetSelectRect = true;
 
     for (int index = 0; index < wordCnt; index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
             m_words.at(index)->setSelected(false);
-            boundarys << twords[index].wordBoundingRect();
+
+            const QRectF &textRectf = twords[index].wordBoundingRect();
+            if (bresetSelectRect) {
+                bresetSelectRect = false;
+                selectBoundRectF = textRectf;
+            } else {
+                if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
+                    selectBoundRectF = selectBoundRectF.united(textRectf);
+                } else {
+                    boundarys << selectBoundRectF;
+                    selectBoundRectF = textRectf;
+                }
+            }
         }
     }
+    boundarys << selectBoundRectF;
 
     if (boundarys.count() > 0) {
         loadAnnotations();
