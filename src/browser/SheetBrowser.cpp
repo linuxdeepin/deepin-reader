@@ -42,7 +42,6 @@
 #include "MsgHeader.h"
 #include "document/DjVuModel.h"
 #include "Utils.h"
-#include "PageViewportThread.h"
 #include "PageSearchThread.h"
 
 #include <QGraphicsItem>

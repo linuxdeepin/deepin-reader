@@ -33,7 +33,6 @@
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
-#include "PageViewportThread.h"
 #include "Utils.h"
 
 #include <DApplicationHelper>
