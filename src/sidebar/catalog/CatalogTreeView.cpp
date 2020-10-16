@@ -32,6 +32,7 @@
 #include <QStylePainter>
 #include <QScroller>
 #include <QHeaderView>
+#include <QDebug>
 
 class ActiveProxyStyle : public QProxyStyle
 {
@@ -133,13 +134,13 @@ void CatalogTreeView::setRightControl(bool hasControl)
 void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStandardItem *parentItem)
 {
     foreach (auto s, ol.children) { //  2级显示
-        if (s.link.page > 0) {
-            auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+        if (s.nIndex >= 0) {
+            auto itemList = getItemList(s.title, s.nIndex, s.offsetPointF.x(), s.offsetPointF.y());
             parentItem->appendRow(itemList);
 
             foreach (auto s1, s.children) { //  3级显示
-                if (s1.link.page > 0) {
-                    auto itemList1 = getItemList(s1.title, s1.link.page, s1.link.left, s1.link.top);
+                if (s.nIndex >= 0) {
+                    auto itemList1 = getItemList(s1.title, s1.nIndex, s1.offsetPointF.x(), s1.offsetPointF.y());
                     itemList.at(0)->appendRow(itemList1);
                 }
             }
@@ -155,7 +156,7 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    auto item1 = new QStandardItem(QString::number(index));
+    auto item1 = new QStandardItem(QString::number(index + 1));
     item1->setData(index);
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
@@ -179,8 +180,8 @@ void CatalogTreeView::handleOpenSuccess()
         m_index = m_sheet->currentIndex();
         const deepin_reader::Outline &ol = m_sheet->outline();
         for (const deepin_reader::Section &s : ol) {   //root
-            if (s.link.page > 0) {
-                auto itemList = getItemList(s.title, s.link.page, s.link.left, s.link.top);
+            if (s.nIndex >= 0) {
+                auto itemList = getItemList(s.title, s.nIndex, s.offsetPointF.x(), s.offsetPointF.y());
                 model->appendRow(itemList);
                 parseCatalogData(s, itemList.at(0));
             }
@@ -221,12 +222,12 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
         if (nullptr == m_sheet)
             return;
 
-        int nPage = current.data(Qt::UserRole + 1).toInt();
+        int nIndex = current.data(Qt::UserRole + 1).toInt();
         double left = current.data(Qt::UserRole + 2).toDouble();
         double top = current.data(Qt::UserRole + 3).toDouble();
         m_title = current.data(Qt::DisplayRole).toString();
-        if (nPage >= 1)
-            m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
+        if (nIndex >= 0)
+            m_sheet->jumpToOutline(left, top, nIndex);
     }
     rightnotifypagechanged = false;
 
@@ -238,13 +239,13 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     if (nullptr == m_sheet)
         return;
 
-    int nPage = current.data(Qt::UserRole + 1).toInt();
+    int nIndex = current.data(Qt::UserRole + 1).toInt();
     double left = current.data(Qt::UserRole + 2).toDouble();
     double top = current.data(Qt::UserRole + 3).toDouble();
     m_title = current.data(Qt::DisplayRole).toString();
 
-    if (nPage >= 1)
-        m_sheet->jumpToOutline(left, top, static_cast<unsigned int>(nPage - 1));
+    if (nIndex >= 0)
+        m_sheet->jumpToOutline(left, top, nIndex);
 }
 
 //  窗口大小变化, 列的宽度随之变化
@@ -276,8 +277,8 @@ void CatalogTreeView::setIndex(int index, const QString &title)
     if (model) {
         const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
         foreach (QStandardItem *item, itemList) {
-            int itemPage = item->data().toInt();
-            if (itemPage == index + 1 && (title.isEmpty() || title == item->data(Qt::DisplayRole).toString())) {
+            int itemIndex = item->data().toInt();
+            if (itemIndex == index && (title.isEmpty() || title == item->data(Qt::DisplayRole).toString())) {
                 QList<QStandardItem *> parentlst;
                 parentlst << item;
                 QStandardItem *parent = item->parent();

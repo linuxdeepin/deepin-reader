@@ -1,4 +1,4 @@
-QT += core gui sql printsupport dbus xml
+QT += core gui sql printsupport dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,14 +12,15 @@ PKGCONFIG += ddjvuapi dtkwidget
 
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
-INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
-!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-    error("Build deepin-poppler library failed.")
+INCLUDEPATH += $$SRCPWD/uiframe
+INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
+
+!system(cd $${3RDPARTTPATH}/deepin-pdfium && qmake && make -j16 && make clean){
+    error("Build deepin-pdfium library failed.")
 }
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt
+LIBS += -L"$${3RDPARTTPATH}/deepin-pdfium/lib" -ldpdf
 
 QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
 QMAKE_LFLAGS += -pie
@@ -68,13 +69,13 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
+deepin-pdfium.path = /usr/lib
+deepin-pdfium.files = $${3RDPARTTPATH}/deepin-pdfium/lib/*.so*
+
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-poppler.path = /usr/lib
-poppler.files = $${3RDPARTTPATH}/lib/*.so*
-
-INSTALLS += target desktop icon poppler
+INSTALLS += target desktop icon deepin-pdfium
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

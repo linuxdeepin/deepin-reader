@@ -29,8 +29,7 @@
 class BrowserPage;
 
 /**
- * @brief The BrowserWord class
- * 用于表示视图框架中一页文档中的某个文字
+ * @brief 用于表示一页文档中的某个文字
  */
 class BrowserWord : public QGraphicsItem
 {
@@ -39,33 +38,31 @@ public:
 
     ~BrowserWord() override;
 
-    /**
-     * @brief setScaleFactor
-     * 为了让文字占比固定,视图改变时需要设置缩放因子
-     * @param scaleFactor 缩放因子
-     */
-    void setScaleFactor(qreal scaleFactor);
+    QRectF boundingRect()const override;
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     /**
-     * @brief text
-     * 获取文字文本
+     * @brief 获取文字文本
      * @return
      */
     QString text();
 
     /**
-     * @brief setSelectable
-     * 设置文字是否可以被选中
-     * @param enable
+     * @brief 设置文字无法选中
+     * @param enable 是否可以被选中
      */
     void setSelectable(bool enable);
 
     /**
-     * @brief BrowserWord::boundingRect
-     * 视图项的区域
-     * @return
+     * @brief 为了让文字占比固定,视图改变时需要设置缩放因子
+     * @param scaleFactor 缩放因子
      */
-    QRectF boundingRect()const override;
+    void setScaleFactor(qreal scaleFactor);
 
     /**
      * @brief BrowserWord::textBoundingRect
@@ -88,11 +85,6 @@ public:
      */
     deepin_reader::Word getWord();
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     deepin_reader::Word m_word;

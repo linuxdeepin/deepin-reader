@@ -51,9 +51,42 @@ class BrowserPage : public QGraphicsItem
     friend class PageRenderThread;
     friend class PageViewportThread;
 public:
-    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
+    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
     virtual ~BrowserPage() override;
+
+    /**
+     * @brief 文档页原矩形 不受旋转影响
+     * @return
+     */
+    QRectF boundingRect()const override;
+
+    /**
+     * @brief 文档页实际矩形
+     * @return
+     */
+    QRectF rect();  //
+
+    /**
+     * @brief 设置书签
+     * @param hasBookmark 是否存在书签
+     */
+    void setBookmark(const bool &hasBookmark);
+
+    /**
+     * @brief 文档进行加载像显示内容
+     * @param scaleFactor 缩放系数
+     * @param rotation 旋转角度
+     * @param renderLater 是否延迟加载
+     * @param force 是否强制更新
+     */
+    void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
+
+    /**
+     * @brief updateBookmarkState
+     * 更新书签状态
+     */
+    void updateBookmarkState();
 
     /**
      * @brief existInstance
@@ -64,51 +97,6 @@ public:
     static bool existInstance(BrowserPage *item);
 
     /**
-     * @brief reOpen
-     * 重新对自己赋值
-     * @param page
-     * @param renderPages 渲染页
-     */
-    void reOpen(deepin_reader::Page *page, QList<deepin_reader::Page *> renderPages);
-
-    /**
-     * @brief boundingRect
-     * 文档页rect(不一定是0度下的)
-     * @return
-     */
-    QRectF boundingRect()const override;  //原矩形 不受旋转影响
-
-    /**
-     * @brief rect
-     * 文档页rect(0度)
-     * @return
-     */
-    QRectF rect();  //旋转后 实际矩形
-
-    /**
-     * @brief setBookmark
-     * 设置书签
-     * @param hasBookmark
-     */
-    void setBookmark(const bool &hasBookmark);
-
-    /**
-     * @brief updateBookmarkState
-     * 更新书签状态
-     */
-    void updateBookmarkState();
-
-    /**
-     * @brief render
-     * 文档缩略图渲染接口
-     * @param scaleFactor 缩放系数
-     * @param rotation 旋转角度
-     * @param renderLater
-     * @param force
-     */
-    void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
-
-    /**
      * @brief renderViewPort
      * 优先显示当前窗口
      * @param force
@@ -116,22 +104,14 @@ public:
     void renderViewPort(bool force = false);
 
     /**
-     * @brief thumbnail
-     * 文档页的缩略图(大部分获取是空的)
-     * @return 缩略图
-     */
-    QImage thumbnail();
-
-    /**
      * @brief getImage
      * 获取该缩放后的图片中的一部分
      * @param scaleFactor 缩放因子
      * @param rotation 旋转
      * @param boundingRect 范围 默认为获取全部
-     * @param renderIndex 选择线程 -1默认
      * @return
      */
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect(), int renderIndex = -1);
+    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
 
     /**
      * @brief getImage
@@ -140,10 +120,9 @@ public:
      * @param height 高
      * @param mode 缩放模式
      * @param bSrc 是否可以使用已存在图片缩放
-     * @param renderIndex 选择线程 -1默认
      * @return
      */
-    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc, int renderIndex = -1);
+    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc);
 
     /**
      * @brief getImageRect
@@ -169,7 +148,7 @@ public:
      * @param point 鼠标点
      * @return 鼠标点周围的片图
      */
-    QImage getCurImagePoint(QPoint point);
+    QImage getCurImagePoint(QPointF point);
 
     /**
      * @brief getWords
@@ -184,6 +163,12 @@ public:
      * @param itemIndex 编号
      */
     void setItemIndex(int itemIndex);
+
+    /**
+     * @brief 页面大小
+     * @param pagesize
+     */
+    void setPageSize(const QSizeF &pagesize);
 
     /**
      * @brief itemIndex
@@ -279,36 +264,20 @@ public:
     bool removeAnnotation(deepin_reader::Annotation *annotation);
 
     /**
-     * @brief removeAnnotationByUniqueName
-     * 根据序列号删除注释
-     * @param uniqueName 序列号
-     * @return true:删除成功, false:删除失败
-     */
-    bool removeAnnotationByUniqueName(QString uniqueName);
-
-    /**
      * @brief addIconAnnotation
      * 添加图标注释
      * @param rect 图标rect
      * @param text 注释内容
      * @return 添加之后的注释,添加失败返回nullptr,反之不为nullptr
      */
-    Annotation *addIconAnnotation(const QRectF, const QString);
-
-    /**
-     * @brief mouseClickIconAnnot
-     * 当前鼠标点击位置是否有注释
-     * @param clickPoint 鼠标点击位置
-     * @return true:有  false:没有
-     */
-    bool mouseClickIconAnnot(QPointF &);
+    Annotation *addIconAnnotation(const QRectF &, const QString &);
 
     /**
      * @brief setSearchHighlightRectf
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
      */
-    void setSearchHighlightRectf(const QList< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QVector< QRectF > &rectflst);
 
     /**
      * @brief clearSearchHighlightRects
@@ -338,14 +307,6 @@ public:
     QRectF findSearchforIndex(int index);
 
     /**
-     * @brief translatePoint
-     * 将非0度(旋转角度)坐标点转换成0度坐标点
-     * @param point 转换之前坐标点
-     * @return 转换之后坐标点
-     */
-    QPoint translatePoint(const QPoint &point);
-
-    /**
      * @brief translateRect
      * 将非0度(旋转角度)rect转换成0度rect
      * @param rect 转换之前rect
@@ -364,18 +325,18 @@ public:
     /**
      * @brief getBrowserAnnotation
      * 获得注释,根据坐标点
-     * @param point 坐标点
+     * @param point PageItem坐标系统
      * @return 坐标点下的注释
      */
-    BrowserAnnotation *getBrowserAnnotation(const QPoint &point);
+    BrowserAnnotation *getBrowserAnnotation(const QPointF &point);
 
     /**
      * @brief getBrowserWord
      * 根据坐标点获得当前的文字
-     * @param point 当前坐标点
+     * @param point PageItem坐标系统
      * @return 坐标点下的文字
      */
-    BrowserWord *getBrowserWord(const QPoint &point);
+    BrowserWord *getBrowserWord(const QPointF &point);
 
     /**
      * @brief setSelectIconRect
@@ -411,7 +372,7 @@ public:
      * 移动注释图标位置
      * @return true:移动成功   false:移动失败
      */
-    bool moveIconAnnotation(const QRectF);
+    bool moveIconAnnotation(const QRectF &);
 
     /**
      * @brief removeAllAnnotation
@@ -488,6 +449,22 @@ private:
      */
     void updatePageFull();
 
+    /**
+     * @brief 搜索
+     * @param text
+     * @param matchCase
+     * @param wholeWords
+     * @return
+     */
+    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords);
+
+    /**
+     * @brief 获取指定范围文本
+     * @param rect
+     * @return
+     */
+    QString text(const QRectF &rect);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
@@ -499,13 +476,10 @@ private:
     SheetBrowser *m_parent = nullptr;
 
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
-    QList<deepin_reader::Page *> m_renderPages;         //用来专注于渲染的副本
 
-    deepin_reader::AnnotationList m_annotations;   //
-    deepin_reader::AnnotationList m_annotations0;  // 渲染page的注释  之后改成QList<deepin_reader::m_annotations> m_renderAnnotations
-    deepin_reader::AnnotationList m_annotations1;  //
-    deepin_reader::AnnotationList m_annotations2;  //
-    deepin_reader::AnnotationList m_annotations3;  //
+    deepin_reader::AnnotationList m_annotations;
+
+    QSizeF m_pageSizeF;
 
     int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放
@@ -518,7 +492,7 @@ private:
 
     bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
     double  m_viewportScaleFactor = -1;     //视图区域的缩放
-    QPixmap m_viewportPixmap;               //视图区域的图片
+    QImage m_viewportImage;               //视图区域的图片
     QRect   m_viewportRenderedRect;         //试图区域
 
     QList<BrowserWord *> m_words;                           //当前文字
@@ -534,7 +508,7 @@ private:
     bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
     QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 
-    QList<QRectF> m_searchLightrectLst;                     //搜索结果
+    QVector<QRectF> m_searchLightrectLst;                     //搜索结果
     QRectF m_searchSelectLighRectf;
 
     bool m_bookmark = false;                                // 当前是否有书签

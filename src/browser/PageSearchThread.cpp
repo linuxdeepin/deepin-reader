@@ -61,7 +61,7 @@ void PageSearchThread::run()
         int curIndex = (index + m_startIndex) % size;
         BrowserPage *page = m_pagelst.at(curIndex);
         searchres.page = page->itemIndex() + 1;
-        const QList< QRectF > &textrectLst = page->m_page->search(m_searchText, false, false);
+        const QVector< QRectF > &textrectLst = page->search(m_searchText, false, false);
         if (textrectLst.size() > 0)
             page->setSearchHighlightRectf(textrectLst);
         for (const QRectF &rec : textrectLst) {
@@ -71,7 +71,7 @@ void PageSearchThread::run()
             rctext.setX(rctext.x() - 40);
             rctext.setWidth(rctext.width() + 80);
 
-            const QString &text = page->m_page->text(rctext);
+            const QString &text = page->text(rctext);
             if (!text.isEmpty()) {
                 searchres.words << Word(text, rec);
             }

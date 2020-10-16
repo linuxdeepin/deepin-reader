@@ -13,19 +13,24 @@ CONFIG += c++11 link_pkgconfig
 PKGCONFIG += ddjvuapi dtkwidget
 
 SRCPWD=$$PWD/../../src    #用于被单元测试方便的复用
-QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
 3RDPARTTPATH = $$SRCPWD/../3rdparty
-INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
-INCLUDEPATH += $$SRCPWD
 
-LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
-!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-    error("Build deepin-poppler library failed.")
+INCLUDEPATH += $$SRCPWD/uiframe
+INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
+
+!system(cd $${3RDPARTTPATH}/deepin-pdfium && qmake && make -j16){
+    error("Build deepin-pdfium library failed.")
 }
-QMAKE_RPATHDIR += /usr/lib/deepin-reader
+
+LIBS += -L"$${3RDPARTTPATH}/deepin-pdfium/lib" -ldpdf
+
+QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE -zignore"
+QMAKE_LFLAGS += -pie
+
+contains(QMAKE_HOST.arch, mips64):{
+    QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
+}
 
 include ($$SRCPWD/app/app.pri)
 include ($$SRCPWD/browser/browser.pri)

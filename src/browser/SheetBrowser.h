@@ -61,64 +61,49 @@ class FindWidget;
 class PageSearchThread;
 
 /**
- * @brief The SheetBrowser class
- * 浏览文档内容区域,使用视图框架
+ * @brief 浏览文档内容区域,使用视图框架
  */
 class SheetBrowser : public Dtk::Widget::DGraphicsView
 {
     Q_OBJECT
 public:
     friend class BrowserMagniFier;
-    friend class ReadMagnifierManager;
 
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
     virtual ~SheetBrowser() override;
 
     /**
-     * @brief firstThumbnail
-     * 获取封面缩略图
-     * @param filePath
+     * @brief 获取封面缩略图
+     * @param filePath 文档所在路径
      * @return
      */
     static QImage firstThumbnail(const QString &filePath);
 
     /**
-     * @brief isUnLocked
-     * 是否上锁
+     * @brief 文档是否上锁
      * @return
      */
     bool isUnLocked();
 
     /**
-     * brief open
-     * 打开文档
-     * @param fileType
-     * @param filePath
-     * @param password
+     * brief 打开文档
+     * @param fileType 文档格式类型
+     * @param filePath 文档所在路径
+     * @param password 文档密码
      * @return
      */
     bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
 
     /**
-     * @brief reOpen
-     * 重新打开
-     * @param fileType
-     * @param filePath
-     * @return
-     */
-    bool reOpen(const Dr::FileType &fileType, const QString &filePath);
-
-    /**
-     * @brief save
-     * 保存
+     * @brief 保存
+     * @path 保存到路径
      * @return
      */
     bool save(const QString &path);
 
     /**
-     * @brief saveAs
-     * 另存为
+     * @brief 另存为
      * @param filePath
      * @return
      */
@@ -132,6 +117,13 @@ public:
      * @return
      */
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
+
+    /**
+     * @brief 获取指定页面
+     * @param index
+     * @return
+     */
+    Page *page(int index);
 
     /**
      * @brief setMouseShape
@@ -244,6 +236,11 @@ public:
      */
     int maxHeight();
 
+    /**
+     * @brief 添加标签状态
+     * @param index
+     * @param state
+     */
     void needBookmark(int index, bool state);
 
     /**
@@ -274,7 +271,7 @@ public:
      * @param linkTop 链接到顶部的距离
      * @param index 哪一页
      */
-    void jumpToOutline(const qreal  &left, const qreal &top, unsigned int page);
+    void jumpToOutline(const qreal  &left, const qreal &top, int page);
 
     /**
      * @brief jumpToHighLight
@@ -299,7 +296,7 @@ public:
      * @param contents 图标注释内容
      * @return 当前添加的注释
      */
-    Annotation *addIconAnnotation(BrowserPage *page, const QPointF, const QString);
+    Annotation *addIconAnnotation(BrowserPage *page, const QPointF &, const QString &);
 
     /**
      * @brief addHighLightAnnotation
@@ -394,7 +391,7 @@ public:
      * @param point 鼠标点击的位置
      * @return 返回跳转状态
      */
-    bool jump2Link(const QPointF);
+    bool jump2Link(QPointF);
 
     /**
      * @brief showMenu
@@ -556,9 +553,7 @@ protected:
      */
     void tapGestureTriggered(QTapGesture *);
 
-    BrowserPage *mouseClickInPage(QPointF &);
-
-    BrowserPage *getBrowserPageForPoint(QPoint &viewPoint);
+    BrowserPage *getBrowserPageForPoint(QPointF &viewPoint);
 
 private slots:
     /**
@@ -630,14 +625,6 @@ private slots:
 
 private:
     /**
-     * @brief mouseClickIconAnnot
-     * 鼠标是否点击了注释图标
-     * @param clickPoint 鼠标点击位置
-     * @return true:是     false:否
-     */
-    bool mouseClickIconAnnot(QPointF &);
-
-    /**
      * @brief calcIconAnnotRect
      * 计算注释图标范围
      * @param page 图标注释在哪一页
@@ -645,14 +632,14 @@ private:
      * @param iconRect 注释图标的范围
      * @return  true:计算成功    false:计算失败
      */
-    bool calcIconAnnotRect(BrowserPage *page, const QPointF, QRectF &);
+    bool calcIconAnnotRect(BrowserPage *page, const QPointF &, QRectF &);
 
     /**
      * @brief translate2Local
      * 将非0度的坐标点转换成0度的坐标点
      * @return
      */
-    QPointF translate2Local(const QPointF);
+    QPointF translate2Local(QPointF);
 
     /**
      * @brief getClickAnnot
@@ -674,20 +661,12 @@ private:
     void jump2PagePos(BrowserPage *page, const qreal posLeft, const qreal posTop);
 
     /**
-     * @brief jump2PagePos
-     * 响应左侧注释列表点击事件,跳到对应文档注释处
-     * @param jumpPage 哪一页
-     * @param rect 注释起始范围
-     */
-    void jump2PagePos(BrowserPage *page, const QRectF);
-
-    /**
      * @brief moveIconAnnot
      * 鼠标移动图标注释,设置当前图标注释的位置
      * @param page 图标注释所在页的指针
      * @param clickPoint 鼠标移动的位置
      */
-    void moveIconAnnot(BrowserPage *page, const QPointF);
+    bool moveIconAnnot(BrowserPage *page, const QPointF &);
 
     /**
      * @brief currentIndexRange
@@ -718,7 +697,7 @@ private:
      * @param point 鼠标点击位置
      * @return true:有, false:没有
      */
-    bool isLink(const QPointF);
+    bool isLink(QPointF);
 
     /**
      * @brief setIconAnnotSelect
@@ -733,7 +712,7 @@ private:
      * @brief setDocTapGestrue
      * 根据手势点击位置设置文档滑动方式
      */
-    void setDocTapGestrue(const QPoint);
+    void setDocTapGestrue(QPoint);
 
     /**
      * @brief clearSelectIconAnnotAfterMenu
@@ -750,7 +729,6 @@ private:
 
 private:
     deepin_reader::Document *m_document = nullptr;
-    QList<deepin_reader::Document *> m_renderDocuments;
 
     DocSheet *m_sheet = nullptr;
 
@@ -776,8 +754,8 @@ private:
     BrowserWord *m_selectEndWord = nullptr;
 
     double m_lastScaleFactor = 0;
-    int m_maxWidth = 0;                 //最大一页的宽度
-    int m_maxHeight = 0;                //最大一页的高度
+    qreal m_maxWidth = 0;                 //最大一页的宽度
+    qreal m_maxHeight = 0;                //最大一页的高度
     bool m_changSearchFlag = false;
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数

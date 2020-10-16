@@ -51,8 +51,6 @@
 #include <QApplication>
 #include <QBitmap>
 #include <DMenu>
-#include <DGuiApplicationHelper>
-#include <QDomDocument>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QStandardPaths>
@@ -61,19 +59,10 @@
 #include <QPainterPath>
 #include <QDebug>
 
-const int ICONANNOTE_WIDTH = 24;
-
 DWIDGET_USE_NAMESPACE
 
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
-    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
-    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
-    this->verticalScrollBar()->setAccessibleName("verticalScrollBar");
-    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
-    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
-    this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
-
     setMouseTracking(true);
 
     setScene(new QGraphicsScene(this));
@@ -114,6 +103,13 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
+
+    this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
+    this->verticalScrollBar()->setProperty("_d_slider_spaceDown", 8);
+    this->verticalScrollBar()->setAccessibleName("verticalScrollBar");
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
+    this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
+    this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
 }
 
 SheetBrowser::~SheetBrowser()
@@ -125,8 +121,6 @@ SheetBrowser::~SheetBrowser()
     if (nullptr != m_document)
         delete m_document;
 
-    qDeleteAll(m_renderDocuments);
-
     if (nullptr != m_noteEditWidget)
         delete m_noteEditWidget;
 }
@@ -137,8 +131,9 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
+    int status = -1;
     if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath);
+        document = deepin_reader::PDFDocument::loadDocument(filePath, QString(), status);
     else if (Dr::DjVu == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
@@ -167,51 +162,21 @@ bool SheetBrowser::isUnLocked()
     if (m_document == nullptr)
         return false;
 
-    return !m_document->isLocked();
+    return true;
 }
 
 bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
 {
     m_filePassword = password;
 
+    int status = -1;
     if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password, status);
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == m_document)
         return false;
-
-    m_lable2Page.clear();
-
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        deepin_reader::Page *page = m_document->page(i);
-
-        if (page == nullptr)
-            return false;
-
-        const QString &labelPage = page->label();
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-
-        if (page->size().width() > m_maxWidth)
-            m_maxWidth = page->size().width();
-
-        if (page->size().height() > m_maxHeight)
-            m_maxHeight = page->size().height();
-
-        delete page;
-    }
-
-    if (m_maxWidth > 2000 || m_maxHeight > 2000) {
-        for (int i = 0; i < 4; ++i) {
-            if (Dr::PDF == fileType)
-                m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, password));
-            else if (Dr::DjVu == fileType)
-                m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
-        }
-    }
 
     m_fileType = fileType;
     m_filePath = filePath;
@@ -219,23 +184,29 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     return true;
 }
 
+Page *SheetBrowser::page(int index)
+{
+    if (nullptr == m_document)
+        return nullptr;
+
+    return m_document->page(index);
+}
+
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
         return false;
 
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        deepin_reader::Page *page = m_document->page(i);
+    m_lable2Page.clear();
 
-        if (page == nullptr)
-            return false;
+    int allPageCnt = m_document->numberOfPages();
 
-        QList<deepin_reader::Page *> renderPages;
+    for (int i = 0; i < allPageCnt; ++i) {
+        const QSizeF &pageSize = m_document->pageSizeF(i);
 
-        for (int j = 0; j < m_renderDocuments.count(); ++j)
-            renderPages.append(m_renderDocuments[j]->page(i));
+        BrowserPage *item = new BrowserPage(this, nullptr);
 
-        BrowserPage *item = new BrowserPage(this, page, renderPages);
+        item->setPageSize(pageSize);
 
         item->setItemIndex(i);
 
@@ -244,6 +215,17 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         m_items.append(item);
 
+        const QString &labelPage = m_document->label(i);
+
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
+        }
+
+        if (pageSize.width() > m_maxWidth)
+            m_maxWidth = pageSize.width();
+
+        if (pageSize.height() > m_maxHeight)
+            m_maxHeight = pageSize.height();
     }
 
     for (int i = 0; i < m_items.count(); ++i) {
@@ -261,76 +243,20 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     return true;
 }
 
-bool SheetBrowser::reOpen(const Dr::FileType &fileType, const QString &filePath)
-{
-    if (nullptr == m_document)  //未打开的无法重新打开
-        return false;
-
-    deepin_reader::Document *tempDocument = m_document;
-    QList<deepin_reader::Document *> tempDocuments = m_renderDocuments;
-
-    if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword);
-    else if (Dr::DjVu == fileType)
-        m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
-
-    if (nullptr == m_document)
-        return false;
-
-    m_renderDocuments.clear();
-    for (int i = 0; i < 4; ++i) {
-        if (Dr::PDF == fileType)
-            m_renderDocuments.append(deepin_reader::PDFDocument::loadDocument(filePath, m_filePassword));
-        else if (Dr::DjVu == fileType)
-            m_renderDocuments.append(deepin_reader::DjVuDocument::loadDocument(filePath));
-    }
-
-    for (int i = 0; i < m_document->numberOfPages(); ++i) {
-        if (m_items.count() > i) {
-            QList<deepin_reader::Page *> renderPages;
-            for (int j = 0; j < 4; ++j) {
-                if (m_renderDocuments.value(j) == nullptr)
-                    continue;
-                renderPages.append(m_renderDocuments.value(j)->page(i));
-            }
-            m_items[i]->reOpen(m_document->page(i), renderPages);
-        }
-    }
-
-    delete tempDocument;
-
-    foreach (deepin_reader::Document *tempDocument, tempDocuments)
-        delete tempDocument;
-
-    return true;
-}
-
 bool SheetBrowser::save(const QString &path)
 {
     if (path.isEmpty())
         return false;
 
-    QString tmpFilePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QUuid::createUuid().toString() + ".tmp";
-
-    if (!m_document->save(tmpFilePath, true)) {
-        return false;
-    }
-
-    QFile tmpFile(tmpFilePath);
-
-    if (!Utils::copyFile(tmpFilePath, path)) {
-        tmpFile.remove();
-        return false;
-    }
-
-    tmpFile.remove();
-
-    return reOpen(m_fileType, path);
+    return m_document->save(path);
 }
 
-bool SheetBrowser::saveAs(const QString &filePath)
+bool SheetBrowser::saveAs(const QString &path)
 {
-    return save(filePath);
+    if (path.isEmpty())
+        return false;
+
+    return m_document->saveAs(path);;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
@@ -417,7 +343,7 @@ void SheetBrowser::onViewportChanged()
 void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
 {
     if (page) {
-        Annotation *highLightAnnot{nullptr};
+        Annotation *highLightAnnot = nullptr;
 
         highLightAnnot = page->addHighlightAnnotation(text, color);
 
@@ -449,107 +375,30 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
     m_noteEditWidget->showWidget(point);
 }
 
-bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF point, QRectF &iconRect)
+bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
 {
-    QPointF clickPoint;
-
     if (nullptr == page || nullptr == m_sheet)
         return false;
 
-    //计算添加图标注释的位置和大小(考虑缩放)
-    qreal scaleFactor{1.0};
-    SheetOperation  operation = m_sheet->operation();
-    scaleFactor = operation.scaleFactor;
+    const SheetOperation  &operation = m_sheet->operation();
+    qreal scaleFactor = operation.scaleFactor;
 
-    qreal width{0.0};
-    qreal height{0.0};
-    qreal value{0.0};
-    qreal x1{0};
-    qreal y1{0};
-
-    clickPoint = page->mapFromScene(point);
+    QPointF clickPoint = page->mapFromScene(point);
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
-    qreal x{0};
-    qreal y{0};
-
-    //计算坐标小于图标宽度情况
-    qreal space = ICONANNOTE_WIDTH * scaleFactor;
-    if (clickPoint.x() > ICONANNOTE_WIDTH / 2) {
-        x = (clickPoint.x() + space / 2.) > (page->boundingRect().width()) ? static_cast<int>((page->boundingRect().width()) - space / 2.) : clickPoint.x();
-    } else {
-        x = (clickPoint.x() < space / 2.) ? space / 2. : clickPoint.x();
-    }
-    if (clickPoint.y() > space / 2.) {
-        y = (clickPoint.y() + space / 2.) > (page->boundingRect().height()) ? static_cast<int>((page->boundingRect().height()) - space / 2.) : clickPoint.y();
-    } else {
-        y = (clickPoint.y() < space / 2.) ? space / 2. : clickPoint.y();
-    }
-
-    clickPoint.setX(x);
-    clickPoint.setY(y);
-
-    x1 = clickPoint.x() / (page->boundingRect().width());
-    y1 = clickPoint.y() / (page->boundingRect().height());
-    width  = ICONANNOTE_WIDTH *  scaleFactor / page->boundingRect().width();
-    height = ICONANNOTE_WIDTH * scaleFactor / page->boundingRect().height();
-
-    value = x1 - width / 2.0;
-    iconRect.setX((value < 0.0) ? 0.0 : value);
-    value = y1 - height / 2.0;
-    iconRect.setY((value < 0.0) ? 0.0 : value);
-
-    iconRect.setWidth(width);
-    iconRect.setHeight(height);
-
+    iconRect = QRectF(clickPoint.x() / scaleFactor - 10, clickPoint.y() / scaleFactor - 10, 20, 20);
     return true;
 }
 
-QPointF SheetBrowser::translate2Local(const QPointF clickPoint)
+QPointF SheetBrowser::translate2Local(QPointF clickPoint)
 {
-    QPointF point = clickPoint;
-    BrowserPage *page{nullptr};
+    const SheetOperation  &operation = m_sheet->operation();
 
-    page = mouseClickInPage(point);
+    clickPoint = QPointF(clickPoint.x() / operation.scaleFactor,
+                         clickPoint.y() / operation.scaleFactor);
 
-    if (nullptr == m_sheet || nullptr == page || clickPoint.x() < 0 || clickPoint.y() < 0)
-        return  point;
-
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation    = operation.rotation;
-
-    point = QPointF(point.x() - page->pos().x(), point.y() - page->pos().y());
-
-    switch (rotation) {
-    case Dr::RotateBy0 :
-        point = QPointF(abs(point.x()) / page->boundingRect().width(),
-                        abs(point.y()) / page->boundingRect().height());
-        break;
-    case Dr::RotateBy90 : {
-        point = QPointF(point.y(), page->boundingRect().width() - point.x());
-        point = QPointF(abs(point.x()) / page->boundingRect().height(),
-                        abs(point.y()) / page->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy180 : {
-        point = QPointF(page->boundingRect().width() - point.x(), page->boundingRect().height() - point.y());
-        point = QPointF(abs(point.x()) / page->boundingRect().width(),
-                        abs(point.y()) / page->boundingRect().height());
-    }
-    break;
-    case Dr::RotateBy270 : {
-        point = QPointF(page->boundingRect().height() - point.y(), point.x());
-        point = QPointF(abs(point.x()) / page->boundingRect().height(),
-                        abs(point.y()) / page->boundingRect().width());
-    }
-    break;
-    default:
-        break;
-    };
-
-    return  point;
+    return clickPoint;
 }
 
 Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPoint, bool drawRect)
@@ -557,19 +406,17 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
     if (nullptr == m_sheet || nullptr == page)
         return nullptr;
 
-    QPointF point = page->mapFromScene(clickPoint);
+    QPointF pagePointF = page->mapFromScene(clickPoint);
 
     if (drawRect && m_lastSelectIconAnnotPage)
         m_lastSelectIconAnnotPage->setSelectIconRect(false);
 
     m_lastSelectIconAnnotPage = page;
 
-    point = QPointF(abs(point.x()) / page->boundingRect().width(),
-                    abs(point.y()) / page->boundingRect().height());
-
+    pagePointF = translate2Local(pagePointF);
     foreach (Annotation *annot, page->annotations()) {
-        foreach (QRectF rect, annot->boundary()) {
-            if (rect.contains(point)) {
+        foreach (const QRectF &rect, annot->boundary()) {
+            if (rect.contains(pagePointF)) {
                 if (drawRect)
                     page->setSelectIconRect(true, annot);
                 return annot;
@@ -582,7 +429,7 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
 
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
-    Annotation *highLightAnnot{nullptr};
+    Annotation *highLightAnnot = nullptr;
 
     if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
         m_selectStartWord = nullptr;
@@ -638,125 +485,40 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     if (nullptr == jumpPage)
         return;
 
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
-
-    int linkX{0};
-    int linkY{0};
-
-    switch (rotation) {
-    case Dr::RotateBy0: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy90: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    case Dr::RotateBy180: {
-        linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy270: {
-        linkY = static_cast<int>(jumpPage->pos().y() - (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    default: break;
-    }
+    const SheetOperation &operation = m_sheet->operation();
+    Dr::Rotation rotation = operation.rotation;
 
     m_bNeedNotifyCurPageChanged = false;
-    if (this->verticalScrollBar()) {
-        linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
-        this->verticalScrollBar()->setValue(linkY);
+    if (Dr::RotateBy0 == rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posLeft * m_lastScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posTop * m_lastScaleFactor));
+    } else if (Dr::RotateBy90 == rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posTop * m_lastScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posLeft * m_lastScaleFactor));
+    } else if (Dr::RotateBy180 == rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posLeft * m_lastScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posTop * m_lastScaleFactor));
+    } else if (Dr::RotateBy270 == rotation) {
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posTop * m_lastScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posLeft * m_lastScaleFactor));
     }
-    if (this->horizontalScrollBar()) {
-        linkX = (linkX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : linkX);
-        this->horizontalScrollBar()->setValue(linkX);
-    }
-
     m_bNeedNotifyCurPageChanged = true;
+
     curpageChanged(jumpPage->itemIndex() + 1);
 }
 
-void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const QRectF rect)
-{
-    if (nullptr == jumpPage)
-        return;
-
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
-
-    int linkX{0};
-    int linkY{0};
-    qreal posLeft = 0.0;
-    qreal posTop = 0.0;
-
-    posLeft = rect.left();
-    posTop = rect.top();
-
-    switch (rotation) {
-    case Dr::RotateBy0: {
-        linkY = static_cast<int>(jumpPage->pos().y() + (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy90: {
-        posLeft = rect.left();
-        posTop = rect.bottom();
-        linkY = static_cast<int>(jumpPage->pos().y() + (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>((1.0 - posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    case Dr::RotateBy180: {
-        posLeft = rect.right();
-        posTop = rect.bottom();
-        linkY = static_cast<int>(jumpPage->pos().y() - (posTop) * jumpPage->boundingRect().height());
-        linkX = static_cast<int>(jumpPage->pos().x() - (posLeft) * jumpPage->boundingRect().width());
-    }
-    break;
-    case Dr::RotateBy270: {
-        posLeft = rect.right();
-        posTop = rect.top();
-        linkY = static_cast<int>(jumpPage->pos().y() - (posLeft) * jumpPage->boundingRect().width());
-        linkX = static_cast<int>(jumpPage->pos().x() + (posTop) * jumpPage->boundingRect().height());
-    }
-    break;
-    default: break;
-    }
-
-    m_bNeedNotifyCurPageChanged = false;
-    if (this->verticalScrollBar()) {
-        linkY = (linkY > this->verticalScrollBar()->maximum() ? this->verticalScrollBar()->maximum() : linkY);
-        this->verticalScrollBar()->setValue(linkY);
-    }
-    if (this->horizontalScrollBar()) {
-        linkX = (linkX > this->horizontalScrollBar()->maximum() ? this->horizontalScrollBar()->maximum() : linkX);
-        this->horizontalScrollBar()->setValue(linkX);
-    }
-
-    m_bNeedNotifyCurPageChanged = true;
-    curpageChanged(jumpPage->itemIndex() + 1);
-}
-
-void SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF clickPoint)
+bool SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
 {
     if (nullptr == page)
-        return;
+        return false;
 
     QRectF iconRect;
-    QString  containt{""};
-
     bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
-        page->moveIconAnnotation(iconRect);
+        return page->moveIconAnnotation(iconRect);
     }
+    return false;
 }
 
 void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
@@ -792,20 +554,6 @@ void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
             toIndex = i;
         }
     }
-}
-
-bool SheetBrowser::mouseClickIconAnnot(QPointF &clickPoint)
-{
-    if (nullptr == m_document)
-        return false;
-
-    BrowserPage *item = mouseClickInPage(clickPoint);
-
-    if (item) {
-        return item->mouseClickIconAnnot(clickPoint);
-    }
-
-    return false;
 }
 
 QString SheetBrowser::selectedWordsText()
@@ -930,66 +678,61 @@ Properties SheetBrowser::properties() const
     return m_document->properties();
 }
 
-void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, unsigned int index)
+void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, int index)
 {
-    int pageIndex = static_cast<int>(index);
+    int pageIndex = index;
 
     if (nullptr == m_sheet || pageIndex < 0 || pageIndex >= m_items.count() || linkLeft < 0 || linkTop < 0)
         return;
 
-    BrowserPage *jumpPage = m_items.at(pageIndex);
-    if (nullptr == jumpPage)
-        return;
-
-    Dr::Rotation rotation{Dr::RotateBy0};
-    SheetOperation  operation = m_sheet->operation();
-    rotation = operation.rotation;
+    const SheetOperation  &operation = m_sheet->operation();
+    Dr::Rotation rotation = operation.rotation;
 
     if (rotation != Dr::NumberOfRotations && rotation != Dr::RotateBy0) {
         setCurrentPage(++pageIndex);
         return;
     }
 
-    jump2PagePos(jumpPage, linkLeft, linkTop);
+    BrowserPage *jumpPage = m_items.at(pageIndex);
+    if (nullptr == jumpPage)
+        return;
+
+    jump2PagePos(jumpPage, linkLeft, jumpPage->boundingRect().height() / operation.scaleFactor - linkTop);
 }
 
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
 {
-    if (nullptr == m_sheet || nullptr == annotation || (index < 0 || index >= m_items.count()))
+    if (nullptr == m_sheet || nullptr == annotation || index < 0 || index >= m_items.count())
         return;
 
     BrowserPage *jumpPage = m_items.at(index);
-    QList<QRectF> anootList = annotation->boundary();
+    const QList<QRectF> &anootList = annotation->boundary();
 
     if (nullptr == jumpPage || anootList.count() < 1)
         return;
 
-    QRectF firstRect = anootList.at(0);
-    if (firstRect.isNull() || firstRect.isEmpty())
+    QRectF rect = anootList.at(0);
+    if (rect.isNull())
         return;
 
-    jump2PagePos(jumpPage, firstRect);
-}
+    int posLeft = rect.left();
+    int posTop = rect.top();
 
-/**
- * @brief SheetBrowser::mouseClickInPage
- * 根据鼠标点击位置获取当前页指针
- * @param point
- * @return
- */
-BrowserPage *SheetBrowser::mouseClickInPage(QPointF &point)
-{
-    foreach (BrowserPage *page, m_items) {
-        if (nullptr != page) {
-            if (point.x() > page->pos().x() && point.y() > page->pos().y() &&
-                    point.x() < (page->pos().x() + page->rect().width()) &&
-                    point.y() < (page->pos().y() + page->rect().height())) {
-                return  page;
-            }
-        }
+    const SheetOperation &operation = m_sheet->operation();
+    Dr::Rotation rotation = operation.rotation;
+
+    if (Dr::RotateBy90 == rotation) {
+        posLeft = rect.left();
+        posTop = rect.bottom();
+    } else if (Dr::RotateBy180 == rotation) {
+        posLeft = rect.right();
+        posTop = rect.bottom();
+    } else if (Dr::RotateBy270 == rotation) {
+        posLeft = rect.right();
+        posTop = rect.top();
     }
 
-    return nullptr;
+    jump2PagePos(jumpPage, posLeft, posTop);
 }
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
@@ -1329,7 +1072,7 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     //处理触摸屏单指事件(包括点触,长按)
-    QPoint point = event->pos();
+    QPointF point = event->pos();
     BrowserPage *page = getBrowserPageForPoint(point);
 
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
@@ -1349,7 +1092,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             if (event->source() == Qt::MouseEventSynthesizedByQt) {
                 //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
-                setDocTapGestrue(point);
+                setDocTapGestrue(event->pos());
 
                 QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
                 BrowserWord *beginWord = nullptr;
@@ -1380,10 +1123,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
             }
 
-            deepin_reader::Annotation *clickAnno = nullptr;
-            //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-            clickAnno = getClickAnnot(page, m_selectPressedPos, true);
-            if (clickAnno && clickAnno->type() == 1) {
+            deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
+            if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
@@ -1392,7 +1133,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 return DGraphicsView::mousePressEvent(event);
             }
 
-            if (jump2Link(m_selectStartPos))
+            if (jump2Link(event->pos()))
                 return DGraphicsView::mousePressEvent(event);
 
         } else if (btn == Qt::RightButton) {
@@ -1406,7 +1147,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             BrowserWord *selectWord = nullptr;
 
-            QList<QGraphicsItem *>  list = scene()->items(mapToScene(event->pos()));
+            const QList<QGraphicsItem *>  &list = scene()->items(mapToScene(event->pos()));
 
             const QString &selectWords = selectedWordsText();
 
@@ -1511,7 +1252,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
-            if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationText) {
+            if (annotation && annotation->annotationType() == deepin_reader::Annotation::AText) {
                 if (m_lastSelectIconAnnotPage)
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
@@ -1519,7 +1260,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
-            } else if (nullptr != annotation && annotation->annotationType() == deepin_reader::Annotation::AnnotationHighlight) {
+            } else if (annotation && annotation->annotationType() == deepin_reader::Annotation::AHighlight) {
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT, annotation->annotationText());
             } else if (nullptr != item) {
@@ -1556,7 +1297,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    if (!m_magnifierLabel && this->isLink(mapToScene(mousePos))) {
+    if (!m_magnifierLabel && this->isLink(mousePos)) {
         if (m_tipsWidget)
             m_tipsWidget->hide();
         setCursor(QCursor(Qt::PointingHandCursor));
@@ -1595,7 +1336,9 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
     } else {
-        BrowserPage *page = getBrowserPageForPoint(mousePos);
+        QPointF mousposF = event->pos();
+        BrowserPage *page = getBrowserPageForPoint(mousposF);
+
         if (page) {
             page->loadWords();
 
@@ -1614,14 +1357,14 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         if (m_selectPressedPos.isNull()) {
             if (page) {
-                BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
+                BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
                 if (browserAnno && !browserAnno->annotationText().isEmpty()) {
                     m_tipsWidget->setText(browserAnno->annotationText());
                     QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                     m_tipsWidget->move(showRealPos);
                     m_tipsWidget->show();
                     setCursor(QCursor(Qt::PointingHandCursor));
-                } else if (page->getBrowserWord(mousePos)) {
+                } else if (page->getBrowserWord(mousposF)) {
                     m_tipsWidget->hide();
                     setCursor(QCursor(Qt::IBeamCursor));
                 } else {
@@ -1717,18 +1460,16 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         const QPointF &mousepoint = mapToScene(event->pos());
         m_selectEndPos = mousepoint;
 
-        QPoint point = event->pos();
+        QPointF point = event->pos();
         BrowserPage *page = getBrowserPageForPoint(point);
-        deepin_reader::Annotation *clickAnno = nullptr;
-        //使用此方法,为了处理所有旋转角度的情况(0,90,180,270)
-        clickAnno = getClickAnnot(page, mousepoint);
+        deepin_reader::Annotation *clickAnno = getClickAnnot(page, mousepoint);
 
         if (m_iconAnnot)
             clickAnno = m_iconAnnot;
 
         if (!m_selectIconAnnotation) {
             if (m_annotationInserting && (nullptr == m_iconAnnot)) {
-                if (clickAnno && clickAnno->type() == 1) {
+                if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                     updateAnnotation(clickAnno, clickAnno->contents());
                 } else {
                     clickAnno = addIconAnnotation(page, m_selectEndPos, "");
@@ -1744,8 +1485,8 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         } else {
             if (m_lastSelectIconAnnotPage && (m_selectPressedPos != m_selectEndPos)) {
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-                moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos);
-                emit sigOperaAnnotation(MSG_NOTE_MOVE, -1, nullptr);
+                if (moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos))
+                    emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
             } else if (clickAnno && m_lastSelectIconAnnotPage && (m_selectPressedPos == m_selectEndPos)) {
                 showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
             }
@@ -1849,43 +1590,35 @@ bool SheetBrowser::getImage(int index, QImage &image, double width, double heigh
  * @param viewPoint 鼠标点击位置
  * @return 鼠标点击的页
  */
-BrowserPage *SheetBrowser::getBrowserPageForPoint(QPoint &viewPoint)
+BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
 {
     BrowserPage *item = nullptr;
-    const QList<QGraphicsItem *> &itemlst = this->items(viewPoint);
+    QPoint ponit = viewPoint.toPoint();
+    const QList<QGraphicsItem *> &itemlst = this->items(ponit);
     for (QGraphicsItem *itemIter : itemlst) {
         item = dynamic_cast<BrowserPage *>(itemIter);
         if (item != nullptr) {
-            break;
+            const QPointF &itemPoint = item->mapFromScene(mapToScene(ponit));
+
+            if (item->contains(itemPoint)) {
+                viewPoint = itemPoint;
+                return item;
+            }
         }
-    }
-
-    if (nullptr == item)
-        return nullptr;
-
-    const QPointF &itemPoint = item->mapFromScene(mapToScene(viewPoint));
-
-    if (item->contains(itemPoint)) {
-        viewPoint = itemPoint.toPoint();
-        return item;
     }
 
     return nullptr;
 }
 
-Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF clickPoint, const QString contents)
+Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &clickPoint, const QString &contents)
 {
     Annotation *anno = nullptr;
-    QRectF iconRect;
-
     if (nullptr != page) {
         clearSelectIconAnnotAfterMenu();
 
         m_lastSelectIconAnnotPage = page;
 
-        iconRect.setWidth(page->boundingRect().width());
-        iconRect.setHeight(page->boundingRect().height());
-
+        QRectF iconRect;
         bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
         if (isVaild)
@@ -2092,21 +1825,17 @@ void SheetBrowser::curpageChanged(int curpage)
     }
 }
 
-bool SheetBrowser::isLink(const QPointF point)
+bool SheetBrowser::isLink(QPointF viewpoint)
 {
-    QPointF mouseMovePoint = point;
-
-    BrowserPage *page{nullptr};
-
-    page = mouseClickInPage(mouseMovePoint);
+    BrowserPage *page = getBrowserPageForPoint(viewpoint);
 
     if (nullptr == page)
         return false;
 
-    mouseMovePoint = translate2Local(mouseMovePoint);
+    viewpoint = translate2Local(viewpoint);
 
     //判断当前位置是否有link
-    return page->inLink(mouseMovePoint);
+    return page->inLink(viewpoint);
 }
 
 void SheetBrowser::setIconAnnotSelect(const bool select)
@@ -2125,16 +1854,16 @@ void SheetBrowser::slideGesture(const qreal diff)
     this->verticalScrollBar()->setValue(this->verticalScrollBar()->value() + step);
 }
 
-void SheetBrowser::setDocTapGestrue(const QPoint mousePos)
+void SheetBrowser::setDocTapGestrue(QPoint mousePos)
 {
-    QPoint point = mousePos;
-    BrowserPage *page = getBrowserPageForPoint(point);
+    QPointF viewpoint = mousePos;
+    BrowserPage *page = getBrowserPageForPoint(viewpoint);
     if (nullptr == page)
         return;
 
-    BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
+    BrowserAnnotation *browserAnno = page->getBrowserAnnotation(viewpoint);
 
-    if (browserAnno || (!m_magnifierLabel && this->isLink(mapToScene(mousePos)))) {
+    if (browserAnno || !m_magnifierLabel || this->isLink(mousePos)) {
         QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
     }
 }
@@ -2163,22 +1892,17 @@ bool SheetBrowser::mousePressWord(const QPointF pressPos)
     return false;
 }
 
-bool SheetBrowser::jump2Link(const QPointF point)
+bool SheetBrowser::jump2Link(QPointF point)
 {
-
-    QPointF mouseClickPoint = point;
-
-    BrowserPage *page{nullptr};
-
-    page = mouseClickInPage(mouseClickPoint);
+    BrowserPage *page = getBrowserPageForPoint(point);
 
     if (nullptr == page)
         return false;
 
-    mouseClickPoint = translate2Local(mouseClickPoint);
+    point = translate2Local(point);
 
     //跳转到相应link
-    return page->jump2Link(mouseClickPoint);
+    return page->jump2Link(point);
 }
 
 void SheetBrowser::showMenu()

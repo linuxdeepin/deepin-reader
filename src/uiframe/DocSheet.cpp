@@ -171,9 +171,9 @@ deepin_reader::Outline DocSheet::outline()
     return m_browser->outline();
 }
 
-void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, unsigned int page)
+void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
 {
-    m_browser->jumpToOutline(left, top, page);
+    m_browser->jumpToOutline(left, top, index);
 }
 
 void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
@@ -904,18 +904,20 @@ void DocSheet::showEncryPage()
 
 bool DocSheet::needPassword()
 {
+    int status = -1;
     Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath());
+        document = deepin_reader::PDFDocument::loadDocument(filePath(), QString(), status);
+
+    if (status == Document::PASSWORD_ERROR)
+        return true;
 
     if (nullptr == document)
         return false;
 
-    bool isLocked = document->isLocked();
-
     delete document;
 
-    return isLocked;
+    return false;
 }
 
 bool DocSheet::isUnLocked()
@@ -941,18 +943,16 @@ QString DocSheet::getPageLabelByIndex(const int &index)
 
 bool DocSheet::tryPassword(QString password)
 {
+    int status = -1;
     Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath(), "");
+        document = deepin_reader::PDFDocument::loadDocument(filePath(), password, status);
 
-    if (nullptr == document || !document->isLocked())
-        return false;
-
-    bool isPassword = document->unlock(password);
-
-    delete document;
-
-    return !isPassword;
+    if (status == Document::SUCCESS) {
+        delete document;
+        return true;
+    }
+    return false;
 }
 
 void DocSheet::onExtractPassword(const QString &password)

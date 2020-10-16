@@ -253,10 +253,10 @@ QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
     return QString();
 }
 
-QList< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform &transform, const QStringList &words, bool matchCase, bool wholeWords)
+QVector< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform &transform, const QStringList &words, bool matchCase, bool wholeWords)
 {
     if (words.isEmpty()) {
-        return QList< QRectF >();
+        return QVector< QRectF >();
     }
 
     const Qt::CaseSensitivity caseSensitivity = matchCase ? Qt::CaseSensitive : Qt::CaseInsensitive;
@@ -264,8 +264,8 @@ QList< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform &t
     QRectF result;
     int wordIndex = 0;
 
-    QList< miniexp_t > texts;
-    QList< QRectF > results;
+    QVector< miniexp_t > texts;
+    QVector< QRectF > results;
 
     texts.append(pageTextExp);
 
@@ -374,7 +374,7 @@ Outline loadOutline(miniexp_t outlineExp, const QHash< QString, int > &pageByNam
             }
 
             if (ok) {
-                section.link.page = page;
+                section.nIndex = page - 1;
             }
         }
 
@@ -704,7 +704,7 @@ QString DjVuPage::text(const QRectF &rect) const
     return text.simplified();
 }
 
-QList< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
+QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
     LOCK_PAGE
 
@@ -727,7 +727,7 @@ QList< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool whole
     const QTransform transform = QTransform::fromScale(72.0 / m_resolution, 72.0 / m_resolution);
     const QStringList words = text.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
 
-    const QList< QRectF > results = findText(pageTextExp, m_size, transform, words, matchCase, wholeWords);
+    const QVector< QRectF > results = findText(pageTextExp, m_size, transform, words, matchCase, wholeWords);
 
     {
         LOCK_PAGE_GLOBAL
@@ -798,15 +798,13 @@ QStringList DjVuDocument::saveFilter() const
     return QStringList() << QLatin1String("DjVu (*.djvu *.djv)");
 }
 
-bool DjVuDocument::canSave() const
+bool DjVuDocument::saveAs(const QString &filePath) const
 {
-    return true;
+    return save(filePath);
 }
 
-bool DjVuDocument::save(const QString &filePath, bool withChanges) const
+bool DjVuDocument::save(const QString &filePath) const
 {
-    Q_UNUSED(withChanges);
-
     LOCK_DOCUMENT
 
 #ifdef _MSC_VER
