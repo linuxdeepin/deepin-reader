@@ -10,17 +10,27 @@ CONFIG += c++11 link_pkgconfig
 
 PKGCONFIG += ddjvuapi dtkwidget
 
+DEFINES += THIRDPARTYDEV  #调试第三方库时打开
+
 SRCPWD=$$PWD    #用于被单元测试方便的复用
-3RDPARTTPATH = $$SRCPWD/../3rdparty
 
-INCLUDEPATH += $$SRCPWD/uiframe
-INCLUDEPATH += $${3RDPARTTPATH}/deepin-pdfium/include
+THIRDRDPARTYPATH = $$SRCPWD/../3rdparty
 
-!system(cd $${3RDPARTTPATH}/deepin-pdfium && qmake && make -j16 && make clean){
-    error("Build deepin-pdfium library failed.")
+contains(DEFINES,THIRDPARTYDEV){
+    THIRDRDPARTYPATH = $$SRCPWD/../..
 }
 
-LIBS += -L"$${3RDPARTTPATH}/deepin-pdfium/lib" -ldpdf
+INCLUDEPATH += $$SRCPWD/uiframe
+
+INCLUDEPATH += $${THIRDRDPARTYPATH}/deepin-pdfium/include
+
+LIBS += -L"$${THIRDRDPARTYPATH}/deepin-pdfium/lib" -ldpdf
+
+!contains( DEFINES,THIRDPARTYDEV){
+!system(cd $${THIRDRDPARTYPATH}/deepin-pdfium && qmake && make -j16 && make clean){
+    error("Build deepin-pdfium library failed.")
+}
+}
 
 QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
 QMAKE_LFLAGS += -pie
@@ -70,7 +80,7 @@ desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
 deepin-pdfium.path = /usr/lib
-deepin-pdfium.files = $${3RDPARTTPATH}/deepin-pdfium/lib/*.so*
+deepin-pdfium.files = $${THIRDRDPARTYPATH}/deepin-pdfium/lib/*.so*
 
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg

@@ -122,7 +122,7 @@ class PDFDocument : public Document
     Q_DECLARE_TR_FUNCTIONS(Model::PDFDocument)
 
 public:
-    virtual ~PDFDocument();
+    virtual ~PDFDocument() override;
 
     int numberOfPages() const override;
 
