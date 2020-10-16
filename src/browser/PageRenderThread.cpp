@@ -40,7 +40,7 @@ PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
     m_delayTimer = new QTimer(this);
     m_delayTimer->setSingleShot(true);
     connect(m_delayTimer, &QTimer::timeout, this, &PageRenderThread::onDelayTaskTimeout);
-    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QImage, double, QRectF)), this, SLOT(onImageTaskFinished(BrowserPage *, QImage, double, QRectF)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QPixmap, double, QRectF)), this, SLOT(onImageTaskFinished(BrowserPage *, QPixmap, double, QRectF)), Qt::QueuedConnection);
     connect(this, SIGNAL(sigWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), this, SLOT(onWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), Qt::QueuedConnection);
 }
 
@@ -66,7 +66,7 @@ bool PageRenderThread::clearTask(BrowserPage *item, int type)
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
-            if (instance->m_tasks[i].page == item && instance->m_tasks[i].type == type) {
+            if (instance->m_tasks[i].page == item && instance->m_tasks[i].type == type && instance->m_tasks[i].rect.isEmpty()) {
                 instance->m_tasks.remove(i);
                 exist = true;
                 break;
@@ -85,6 +85,7 @@ void PageRenderThread::appendTask(RenderPageTask task)
         return;
 
     PageRenderThread *instance  = PageRenderThread::instance(task.page->itemIndex());
+
     if (nullptr == instance) {
         return;
     }
@@ -114,7 +115,7 @@ void PageRenderThread::appendDelayTask(RenderPageTask task)
     if (instance->m_delayTimer->isActive())
         instance->m_delayTimer->stop();
 
-    instance->m_delayTimer->start(1000);
+    instance->m_delayTimer->start(300);
 }
 
 void PageRenderThread::appendTasks(QList<RenderPageTask> list)
@@ -187,13 +188,14 @@ void PageRenderThread::run()
 
         if (RenderPageTask::Image == m_curTask.type) {
             QImage image;
+
             if (m_curTask.rect.isEmpty())
                 image = m_curTask.page->getImage(m_curTask.scaleFactor);
             else
                 image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rotation, m_curTask.rect);
 
             if (!image.isNull())
-                emit sigImageTaskFinished(m_curTask.page, image, m_curTask.scaleFactor, m_curTask.rect);
+                emit sigImageTaskFinished(m_curTask.page, QPixmap::fromImage(image), m_curTask.scaleFactor, m_curTask.rect);
 
         } else if (RenderPageTask::word == m_curTask.type) {
             QList<Word> words = m_curTask.page->getWords();
@@ -219,10 +221,10 @@ void PageRenderThread::destroyForever()
     }
 }
 
-void PageRenderThread::onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor,  QRectF rect)
+void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, double scaleFactor,  QRectF rect)
 {
     if (BrowserPage::existInstance(item)) {
-        item->handleRenderFinished(scaleFactor, image, rect);
+        item->handleRenderFinished(scaleFactor, pixmap, rect);
     }
 }
 

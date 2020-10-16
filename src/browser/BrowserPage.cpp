@@ -125,12 +125,12 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if (m_page == nullptr)
         m_page = m_parent->page(itemIndex());
 
-    if (!m_viewportRendered)
-        renderViewPort(false);
-
     if (!m_pixmapIsLastest) {
         render(m_scaleFactor, m_rotation);
     }
+
+    if (!m_viewportRendered)
+        renderViewPort(m_scaleFactor, false);
 
     painter->drawPixmap(option->rect, m_pixmap);
 
@@ -150,6 +150,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 
     painter->setBrush(QColor(59, 148, 1, 100));
+
     if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
         painter->drawRect(getNorotateRect(m_searchSelectLighRectf));
 
@@ -170,6 +171,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
         painter->drawRect(rect);
     }
+
 }
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
@@ -207,38 +209,33 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
-            PageRenderThread::appendTask(task);
+
         } else {
             PageRenderThread::clearTask(this);
-            PageRenderThread::appendDelayTask(task);
         }
 
+        PageRenderThread::appendDelayTask(task);
         loadAnnotations();
     }
 
     update();
-
-
 }
 
-void BrowserPage::handleRenderFinished(const double &scaleFactor, const QImage &image, const QRectF &rect)
+void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)
 {
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rect.isEmpty())
         return;
 
-    QTime time;
-    time.start();
     if (rect.isEmpty()) {
         m_pixmapHasRendered = true;
         m_pixmapIsLastest = true;
-        m_pixmap = QPixmap::fromImage(image);
+        m_pixmap = pixmap;
     } else {
         QPainter painter(&m_pixmap);
-        painter.drawImage(rect, image);
+        painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
     }
 
     emit m_parent->sigPartThumbnailUpdated(m_index);
-    qDebug() << time.elapsed();
     update();
 }
 
@@ -270,17 +267,11 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor, bool force)
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
-    RenderPageTask task;
+    QImage image = getImage(scaleFactor, Dr::RotateBy0, viewRenderRect);
 
-    task.page = this;
+    QPainter painter(&m_pixmap);
 
-    task.scaleFactor = scaleFactor;
-
-    task.rotation = Dr::RotateBy0;
-
-    task.rect = viewRenderRect;
-
-    PageRenderThread::appendTask(task);
+    painter.drawImage(viewRenderRect, image);
 }
 
 QImage BrowserPage::getImage(double scaleFactor)

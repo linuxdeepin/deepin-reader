@@ -96,9 +96,7 @@ PDFPage::~PDFPage()
 
 QSizeF PDFPage::sizeF() const
 {
-    LOCK_PAGE
-
-            return m_pageSizef;
+    return m_pageSizef;
 }
 
 QImage PDFPage::render(const qreal &scaleFactor) const
@@ -148,8 +146,6 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
 {
-    LOCK_PAGE
-
     Link link;
     DPdfPage::Link dlInk = m_page->getLinkAtPoint(point.x(), point.y());
     if (dlInk.isValid()) {
@@ -164,8 +160,6 @@ Link PDFPage::getLinkAtPoint(const QPointF &point) const
 
 QString PDFPage::text(const QRectF &rect) const
 {
-    LOCK_PAGE
-
     return m_page->text(rect).simplified();
 }
 
@@ -173,8 +167,6 @@ QList<Word> PDFPage::words()
 {
     if (m_words.size() > 0)
         return m_words;
-
-    LOCK_PAGE
 
     int charCount = m_page->countChars();
     QPointF lastOffset(0, 0);
@@ -211,8 +203,6 @@ QList<Word> PDFPage::words()
 
 QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
-    LOCK_PAGE
-
     QVector<QRectF> results;
 
     results = m_page->search(text, matchCase, wholeWords);
@@ -222,8 +212,6 @@ QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeW
 
 QList< Annotation * > PDFPage::annotations() const
 {
-    LOCK_PAGE
-
     QList< Annotation * > annotations;
 
     foreach (DPdfAnnot *annotation, m_page->annots()) {
@@ -240,8 +228,6 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
-    LOCK_PAGE
-
     return new PDFAnnotation(m_mutex, m_page->createHightLightAnnot(boundarys, text, color));
 }
 
@@ -251,8 +237,6 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 
     if (PDFAnnotation == nullptr)
         return false;
-
-    LOCK_PAGE
 
     m_page->removeAnnot(PDFAnnotation->m_annotation);
 
@@ -268,8 +252,6 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     if (nullptr == annotation)
         return false;
 
-    LOCK_PAGE
-
     if (m_page->annots().contains(annotation->ownAnnotation())) {
         if (annotation->type() == DPdfAnnot::AText)
             m_page->updateTextAnnot(annotation->ownAnnotation(), text);
@@ -283,8 +265,6 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
-    LOCK_PAGE
-
     foreach (DPdfAnnot *annot, m_page->annots()) {
         if (annot && annot->pointIn(clickPoint)) {
             return true;
@@ -299,8 +279,6 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
     if (nullptr == m_page)
         return nullptr;
 
-    LOCK_PAGE
-
     return new PDFAnnotation(m_mutex, m_page->createTextAnnot(rect.center(), text));
 }
 
@@ -308,8 +286,6 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
     if (nullptr == m_page || nullptr == annot)
         return nullptr;
-
-    LOCK_PAGE
 
     if (annot->ownAnnotation()) {
         m_page->updateTextAnnot(annot->ownAnnotation(), annot->ownAnnotation()->text(), rect.center());
@@ -332,15 +308,11 @@ PDFDocument::~PDFDocument()
 
 int PDFDocument::numberOfPages() const
 {
-    LOCK_DOCUMENT
-
     return m_document->pageCount();
 }
 
 Page *PDFDocument::page(int index) const
 {
-    LOCK_DOCUMENT
-
     if (DPdfPage *page = m_document->page(index)) {
         return new PDFPage(&m_mutex, page);
     }
@@ -350,15 +322,11 @@ Page *PDFDocument::page(int index) const
 
 QString PDFDocument::label(int index) const
 {
-    LOCK_DOCUMENT
-
     return m_document->label(index);
 }
 
 QSizeF PDFDocument::pageSizeF(int index) const
 {
-    LOCK_DOCUMENT
-
     return m_document->pageSizeF(index);
 }
 

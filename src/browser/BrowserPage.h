@@ -419,7 +419,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRectF &rect);
+    void handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect);
 
     /**
      * brief handleWordLoaded

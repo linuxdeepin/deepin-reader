@@ -104,12 +104,12 @@ private:
     void run();
 
 signals:
-    void sigImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRectF rect);
+    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, double scaleFactor, QRectF rect);
 
     void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRectF rect);
+    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, double scaleFactor, QRectF rect);
 
     void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
