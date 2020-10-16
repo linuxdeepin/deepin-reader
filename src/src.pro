@@ -32,7 +32,7 @@ LIBS += -L"$${THIRDRDPARTYPATH}/deepin-pdfium/lib" -ldpdf
 }
 }
 
-QMAKE_CXXFLAGS += "-Wl,--as-needed -Wl,-O1 -fPIE"
+QMAKE_CXXFLAGS += -fPIE
 QMAKE_LFLAGS += -pie
 
 contains(QMAKE_HOST.arch, mips64):{

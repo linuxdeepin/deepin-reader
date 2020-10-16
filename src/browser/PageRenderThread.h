@@ -37,11 +37,10 @@ struct RenderPageTask {
         word = 2
     };
     int type = RenderPageTaskType::Image;
-    SheetBrowser *view = nullptr;
-    BrowserPage *item = nullptr;
+    BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
     Dr::Rotation rotation = Dr::RotateBy0;
-    QRect renderRect;
+    QRectF rect = QRectF();
 };
 
 /**
@@ -67,6 +66,12 @@ public:
      * @param task 任务
      */
     static void appendTask(RenderPageTask task);
+
+    /**
+     * @brief 添加延时任务
+     * @param task 任务
+     */
+    static void appendDelayTask(RenderPageTask task);
 
     /**
      * @brief appendTasks
@@ -99,20 +104,25 @@ private:
     void run();
 
 signals:
-    void sigImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+    void sigImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRectF rect);
 
     void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRect rect);
+    void onImageTaskFinished(BrowserPage *item, QImage image, double scaleFactor, QRectF rect);
 
     void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
+
+    void onDelayTaskTimeout();
 
 private:
     RenderPageTask m_curTask;
     QStack<RenderPageTask> m_tasks;
     QMutex m_mutex;
     bool m_quit = false;
+
+    RenderPageTask m_delayTask;
+    QTimer *m_delayTimer = nullptr;
 
     static bool quitForever;
     static QList<PageRenderThread *> instances;

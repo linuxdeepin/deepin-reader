@@ -98,10 +98,20 @@ QSizeF PDFPage::sizeF() const
 {
     LOCK_PAGE
 
-    return m_pageSizef;
+            return m_pageSizef;
 }
 
-QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
+QImage PDFPage::render(const qreal &scaleFactor) const
+{
+    LOCK_PAGE
+
+    if (m_page == nullptr)
+        return QImage();
+
+    return m_page->image(scaleFactor);
+}
+
+QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect) const
 {
     return render(scaleFactor, scaleFactor, rotation, boundingRect);
 }
@@ -114,17 +124,17 @@ QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
     return render(horizontalResolution, verticalResolution, Dr::RotateBy0, QRect(0, 0, width, height));
 }
 
-QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRect boundingRect) const
+QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRectF boundingRect) const
 {
     LOCK_PAGE
 
     if (m_page == nullptr)
         return QImage();
 
-    int x = 0;
-    int y = 0;
-    int w = m_page->width();
-    int h = m_page->height();
+    qreal x = 0;
+    qreal y = 0;
+    qreal w = m_page->width();
+    qreal h = m_page->height();
 
     if (!boundingRect.isNull()) {
         x = boundingRect.x();

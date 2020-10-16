@@ -47,6 +47,7 @@
 #include <QFileInfo>
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 

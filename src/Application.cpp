@@ -20,7 +20,6 @@
 #include "PageRenderThread.h"
 #include "DocSheet.h"
 #include "widgets/SaveDialog.h"
-#include "PageViewportThread.h"
 
 #include <QIcon>
 #include <QDebug>
@@ -149,7 +148,6 @@ void Application::handleQuitAction()
     }
 
     //线程退出
-    PageViewportThread::destroyForever();
     PageRenderThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list) {

@@ -506,7 +506,7 @@ QImage DjVuPage::render(int width, int height, Qt::AspectRatioMode mode)const
     return image;
 }
 
-QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const QRect &boundingRect) const
+QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect) const
 {
     LOCK_PAGE
 

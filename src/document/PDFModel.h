@@ -73,11 +73,13 @@ public:
 
     QSizeF sizeF() const override;
 
-    QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const override;
+    QImage render(const qreal & scaleFactor) const override;
+
+    QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const override;
 
     QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
 
-    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
+    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRectF boundingRect) const;
 
     Link getLinkAtPoint(const QPointF &point) const override;
 

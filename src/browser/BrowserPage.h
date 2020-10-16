@@ -83,6 +83,13 @@ public:
     void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     /**
+     * @brief renderViewPort
+     * 优先显示当前窗口
+     * @param force
+     */
+    void renderViewPort(const qreal &scaleFactor, bool force = false);
+
+    /**
      * @brief updateBookmarkState
      * 更新书签状态
      */
@@ -97,11 +104,11 @@ public:
     static bool existInstance(BrowserPage *item);
 
     /**
-     * @brief renderViewPort
-     * 优先显示当前窗口
-     * @param force
+     * @brief 获取缩放图片
+     * @param scaleFactor 缩放因子
+     * @return
      */
-    void renderViewPort(bool force = false);
+    QImage getImage(double scaleFactor = 1);
 
     /**
      * @brief getImage
@@ -111,7 +118,7 @@ public:
      * @param boundingRect 范围 默认为获取全部
      * @return
      */
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
+    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect = QRectF());
 
     /**
      * @brief getImage
@@ -412,9 +419,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
-
-    void handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
+    void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRectF &rect);
 
     /**
      * brief handleWordLoaded
@@ -486,14 +491,10 @@ private:
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 
     QPixmap m_pixmap;                       //当前图片
-    bool    m_pixmapHasRendered = false;    //当前图片是否已经开始加载
+    bool    m_pixmapIsLastest   = false;    //当前图示是否最新
+    bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
     double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
-    QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
-
-    bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
-    double  m_viewportScaleFactor = -1;     //视图区域的缩放
-    QImage m_viewportImage;               //视图区域的图片
-    QRect   m_viewportRenderedRect;         //试图区域
+    bool    m_viewportRendered = false;     //图片初始化加载视图窗口
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放

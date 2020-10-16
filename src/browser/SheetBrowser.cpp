@@ -334,9 +334,6 @@ void SheetBrowser::onViewportChanged()
             item->clearPixmap();
             item->clearWords();
         }
-
-        if (item->boundingRect().width() > 1000 || item->boundingRect().height() > 1000)
-            item->renderViewPort();
     }
 }
 
@@ -654,10 +651,6 @@ void SheetBrowser::onRemoveIconAnnotSelect()
     clearSelectIconAnnotAfterMenu();
 }
 
-/**
- * @brief SheetBrowser::onInit
- * 重新渲染当前页
- */
 void SheetBrowser::onInit()
 {
     if (1 != m_initPage) {
@@ -742,13 +735,9 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
             return;
 
         if (event->delta() > 0) {
-            QTimer::singleShot(50, this, [ = ] {
-                m_sheet->zoomin();
-            });
+            m_sheet->zoomin();
         } else {
-            QTimer::singleShot(50, this, [ = ] {
-                m_sheet->zoomout();
-            });
+            m_sheet->zoomout();
         }
 
         return;
@@ -789,8 +778,8 @@ bool SheetBrowser::event(QEvent *event)
         m_touchBegin = touchEvent->timestamp();
         m_gestureAction = GA_touch;
         m_bTouch = true;
-    default:
         break;
+    default: break;
     }
 
     return QGraphicsView::event(event);
