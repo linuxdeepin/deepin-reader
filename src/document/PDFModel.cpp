@@ -23,7 +23,6 @@
 
 #include <QDebug>
 
-#define LOCK_ANNOTATION
 #define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
 #define LOCK_PAGE QMutexLocker mutexLocker(m_mutex);
 
@@ -45,8 +44,6 @@ PDFAnnotation::~PDFAnnotation()
 
 QList<QRectF> PDFAnnotation::boundary() const
 {
-    LOCK_ANNOTATION
-
     QList<QRectF> rectFList;
 
     if (m_annotation->type() == DPdfAnnot::AText || m_annotation->type() == DPdfAnnot::AHighlight) {
@@ -57,8 +54,6 @@ QList<QRectF> PDFAnnotation::boundary() const
 
 QString PDFAnnotation::contents() const
 {
-    LOCK_ANNOTATION
-
     if (nullptr == m_annotation)
         return QString();
 
@@ -186,7 +181,7 @@ QList<Word> PDFPage::words()
                 lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
 
                 int curWordsSize = m_words.size();
-                if (curWordsSize > 2 && m_words.at(curWordsSize - 1).wordBoundingRect().width() == 0
+                if (curWordsSize > 2 && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
                         && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
                         && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
                         && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {

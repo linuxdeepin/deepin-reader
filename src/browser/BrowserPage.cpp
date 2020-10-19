@@ -129,8 +129,8 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         render(m_scaleFactor, m_rotation);
     }
 
-    if (!m_viewportRendered)
-        renderViewPort(m_scaleFactor, false);
+    if (!m_viewportRendered && !m_pixmapHasRendered && isBigDoc())
+        renderViewPort(m_scaleFactor);
 
     painter->drawPixmap(option->rect, m_pixmap);
 
@@ -176,6 +176,9 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
+    if (m_page == nullptr)
+        m_page = m_parent->page(itemIndex());
+
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
@@ -214,42 +217,32 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             PageRenderThread::clearTask(this);
         }
 
-        PageRenderThread::appendDelayTask(task);
+        if (!isBigDoc())
+            PageRenderThread::appendTask(task); //小文档取消延时
+        else
+            PageRenderThread::appendDelayTask(task);
+
         loadAnnotations();
     }
 
     update();
 }
 
-void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)
-{
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rect.isEmpty())
-        return;
-
-    if (rect.isEmpty()) {
-        m_pixmapHasRendered = true;
-        m_pixmapIsLastest = true;
-        m_pixmap = pixmap;
-    } else {
-        QPainter painter(&m_pixmap);
-        painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
-    }
-
-    emit m_parent->sigPartThumbnailUpdated(m_index);
-    update();
-}
-
-void BrowserPage::renderViewPort(const qreal &scaleFactor, bool force)
+void BrowserPage::renderRect(const qreal &scaleFactor, const QRect &rect)
 {
     if (nullptr == m_parent)
         return;
 
-    if (!force && (m_pixmapHasRendered || m_viewportRendered))
-        return;
+    QImage image = getImage(scaleFactor, Dr::RotateBy0, rect);
 
-    m_viewportRendered = true;
+    QPainter painter(&m_pixmap);
 
-    if (boundingRect().width() < 1000 && boundingRect().height() < 1000)
+    painter.drawImage(rect, image);
+}
+
+void BrowserPage::renderViewPort(const qreal &scaleFactor)
+{
+    if (nullptr == m_parent)
         return;
 
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
@@ -267,11 +260,35 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor, bool force)
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
-    QImage image = getImage(scaleFactor, Dr::RotateBy0, viewRenderRect);
+    //扩大加载的视图窗口范围 防止小范围的拖动
+    int expand = 200;
+    viewRenderRect.setX(viewRenderRect.x() - expand < 0 ? 0 : viewRenderRect.x() - expand);
+    viewRenderRect.setY(viewRenderRect.y() - expand < 0 ? 0 : viewRenderRect.y() - expand);
+    viewRenderRect.setWidth(viewRenderRect.x() + viewRenderRect.width() + expand * 2 > boundingRect().width() ? viewRenderRect.width() :  viewRenderRect.width() + expand * 2);
+    viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
-    QPainter painter(&m_pixmap);
+    renderRect(scaleFactor, viewRenderRect);
 
-    painter.drawImage(viewRenderRect, image);
+    m_viewportRendered = true;
+}
+
+void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)
+{
+    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rect.isEmpty())
+        return;
+
+    if (rect.isEmpty()) {
+        m_pixmapHasRendered = true;
+        m_pixmapIsLastest = true;
+        m_pixmap = pixmap;
+    } else {
+        QPainter painter(&m_pixmap);
+        painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
+    }
+
+    emit m_parent->sigPartThumbnailUpdated(m_index);
+
+    update();
 }
 
 QImage BrowserPage::getImage(double scaleFactor)
@@ -1010,4 +1027,12 @@ QString BrowserPage::text(const QRectF &rect)
     }
 
     return m_page->text(rect);
+}
+
+bool BrowserPage::isBigDoc()
+{
+    if (boundingRect().width() > 1000 && boundingRect().height() > 1000)
+        return true;
+
+    return false;
 }

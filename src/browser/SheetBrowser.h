@@ -732,6 +732,8 @@ private:
 
     DocSheet *m_sheet = nullptr;
 
+    QMutex m_pageMutex;     //取页数的锁
+
     BrowserMagniFier *m_magnifierLabel = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     NoteShadowViewWidget *m_noteEditWidget = nullptr;

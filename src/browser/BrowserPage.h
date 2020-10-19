@@ -56,13 +56,13 @@ public:
     virtual ~BrowserPage() override;
 
     /**
-     * @brief 文档页原矩形 不受旋转影响
+     * @brief 文档页缩放后的原区域 不受旋转影响
      * @return
      */
     QRectF boundingRect()const override;
 
     /**
-     * @brief 文档页实际矩形
+     * @brief 文档页实际区域
      * @return
      */
     QRectF rect();  //
@@ -83,11 +83,18 @@ public:
     void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     /**
+     * @brief 加载局部区域
+     * @param scaleFactor 缩放系数
+     * @param rect 需要被局部加载的文档区域
+     */
+    void renderRect(const qreal &scaleFactor, const QRect &rect);
+
+    /**
      * @brief renderViewPort
      * 优先显示当前窗口
      * @param force
      */
-    void renderViewPort(const qreal &scaleFactor, bool force = false);
+    void renderViewPort(const qreal &scaleFactor);
 
     /**
      * @brief updateBookmarkState
@@ -469,6 +476,12 @@ private:
      * @return
      */
     QString text(const QRectF &rect);
+
+    /**
+     * @brief 是否属于超大文档
+     * @return
+     */
+    bool isBigDoc();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
