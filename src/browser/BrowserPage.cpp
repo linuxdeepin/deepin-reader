@@ -233,11 +233,15 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRect &rect)
     if (nullptr == m_parent)
         return;
 
+    m_viewportRendered = true;
+
     QImage image = getImage(scaleFactor, Dr::RotateBy0, rect);
 
     QPainter painter(&m_pixmap);
 
     painter.drawImage(rect, image);
+
+    update();
 }
 
 void BrowserPage::renderViewPort(const qreal &scaleFactor)
@@ -268,8 +272,6 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
     viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
     renderRect(scaleFactor, viewRenderRect);
-
-    m_viewportRendered = true;
 }
 
 void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)
@@ -540,7 +542,7 @@ QList<deepin_reader::Annotation *> BrowserPage::annotations()
     return m_annotations;
 }
 
-bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString text, const QColor color)
+bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, const QColor &color)
 {
     if (nullptr == annotation)
         return false;
@@ -553,7 +555,14 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_page->updateAnnotation(annotation, text, color))
         return false;
 
-    updatePageFull();
+    QRectF renderBoundary;
+    const QList<QRectF> &annoBoundarys = annotation->boundary();
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -606,9 +615,15 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot, m_scaleFactor);
             m_annotationItems.append(annotationItem);
         }
-    }
 
-    updatePageFull();
+        QRectF renderBoundary;
+        for (int i = 0; i < boundarys.size(); i++) {
+            renderBoundary = renderBoundary | boundarys.at(i);
+        }
+
+        renderBoundary.adjust(-10, -10, 10, 10);
+        renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    }
 
     return highLightAnnot;
 }
@@ -674,9 +689,13 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
 
     loadPage();
 
+    QList<QRectF> annoBoundarys;
+
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
+    annoBoundarys << m_lastClickIconAnnotationItem->annotation()->boundary();
+    annoBoundarys << moveRect;
     Annotation *annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
 
     if (annot && m_annotations.contains(annot)) {
@@ -695,9 +714,15 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
                 m_lastClickIconAnnotationItem->setDrawSelectRect(true);
             }
         }
-    }
 
-    updatePageFull();
+        QRectF renderBoundary;
+        for (int i = 0; i < annoBoundarys.size(); i++) {
+            renderBoundary = renderBoundary | annoBoundarys.at(i);
+        }
+
+        renderBoundary.adjust(-10, -10, 10, 10);
+        renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    }
 
     return true;
 }
@@ -711,10 +736,14 @@ bool BrowserPage::removeAllAnnotation()
 
     loadPage();
 
+    QList<QRectF> annoBoundarys;
+
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
         if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
+
+        annoBoundarys << annota->boundary();
 
         if (!m_page->removeAnnotation(annota))
             continue;
@@ -735,7 +764,13 @@ bool BrowserPage::removeAllAnnotation()
 
     m_hasLoadedAnnotation = false;
 
-    updatePageFull();
+    QRectF renderBoundary;
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -794,6 +829,8 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     loadPage();
 
+    const QList<QRectF> &annoBoundarys = annota->boundary();
+
     if (!m_page->removeAnnotation(annota))
         return false;
 
@@ -807,7 +844,13 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         }
     }
 
-    updatePageFull();
+    QRectF renderBoundary;
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -837,7 +880,14 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
         }
     }
 
-    updatePageFull();
+    QRectF renderBoundary;
+    const QList<QRectF> &annoBoundarys = annot->boundary();
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return annot;
 }
@@ -970,15 +1020,6 @@ BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
     }
 
     return nullptr;
-}
-
-void BrowserPage::updatePageFull()
-{
-    m_pixmapScaleFactor = -1;
-
-    render(m_scaleFactor, m_rotation, true, true);
-
-    renderViewPort(false);
 }
 
 QVector<QRectF> BrowserPage::search(const QString &text, bool matchCase, bool wholeWords)

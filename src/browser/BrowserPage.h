@@ -250,7 +250,7 @@ public:
      * @param color 注释高亮颜色
      * @return true:更新成功  false:更新失败
      */
-    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString, const QColor);
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString&, const QColor&);
 
     /**
      * @brief addHighlightAnnotation
@@ -454,12 +454,6 @@ private:
      * @return
      */
     QRectF bookmarkMouseRect();
-
-    /**
-     * @brief updatePageFull
-     * 更新整页
-     */
-    void updatePageFull();
 
     /**
      * @brief 搜索
