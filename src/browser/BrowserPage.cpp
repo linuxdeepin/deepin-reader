@@ -228,12 +228,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
     update();
 }
 
-void BrowserPage::renderRect(const qreal &scaleFactor, const QRect &rect)
+void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 {
     if (nullptr == m_parent)
         return;
-
-    m_viewportRendered = true;
 
     QImage image = getImage(scaleFactor, Dr::RotateBy0, rect);
 
@@ -272,6 +270,8 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
     viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
     renderRect(scaleFactor, viewRenderRect);
+
+    m_viewportRendered = true;
 }
 
 void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)

@@ -87,7 +87,7 @@ public:
      * @param scaleFactor 缩放系数
      * @param rect 需要被局部加载的文档区域
      */
-    void renderRect(const qreal &scaleFactor, const QRect &rect);
+    void renderRect(const qreal &scaleFactor, const QRectF &rect);
 
     /**
      * @brief renderViewPort
@@ -250,7 +250,7 @@ public:
      * @param color 注释高亮颜色
      * @return true:更新成功  false:更新失败
      */
-    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString&, const QColor&);
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &, const QColor &);
 
     /**
      * @brief addHighlightAnnotation
