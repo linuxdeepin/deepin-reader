@@ -214,6 +214,8 @@ QList< Annotation * > PDFPage::annotations() const
             annotations.append(new PDFAnnotation(m_mutex, annotation));
             continue;
         }
+
+        delete annotation;
     }
 
     return annotations;

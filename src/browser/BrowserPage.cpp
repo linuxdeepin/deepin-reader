@@ -293,9 +293,7 @@ void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap 
 
 QImage BrowserPage::getImage(double scaleFactor)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->render(scaleFactor);
 }
@@ -321,18 +319,14 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->render(rotation, scaleFactor, boundingRect);
 }
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     if (bSrc) {
         if (m_pixmap.isNull())
@@ -354,18 +348,14 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     QTransform transform;
     transform.rotate(m_rotation * 90);
@@ -386,9 +376,7 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
 
 QList<Word> BrowserPage::getWords()
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->words();
 }
@@ -520,9 +508,7 @@ void BrowserPage::scaleWords(bool force)
 
 void BrowserPage::reloadAnnotations()
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     //在reload之前将上一次选中去掉,避免操作野指针
     if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
@@ -562,9 +548,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     if (!m_page->updateAnnotation(annotation, text, color))
         return false;
@@ -576,9 +560,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     Annotation *highLightAnnot = nullptr;
     QList<QRectF> boundarys;
@@ -690,9 +672,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
     if (nullptr == m_lastClickIconAnnotationItem)
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
@@ -729,9 +709,7 @@ bool BrowserPage::removeAllAnnotation()
     if (m_annotations.isEmpty())
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
@@ -764,9 +742,7 @@ bool BrowserPage::removeAllAnnotation()
 
 bool BrowserPage::jump2Link(const QPointF point)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     Link link = m_page->getLinkAtPoint(point);
     if (link.page > 0) {
@@ -783,9 +759,7 @@ bool BrowserPage::jump2Link(const QPointF point)
 
 bool BrowserPage::inLink(const QPointF pos)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     Link link = m_page->getLinkAtPoint(pos);
     return link.isValid();
@@ -818,9 +792,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     m_annotations.removeAll(annota);
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -842,9 +814,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     Annotation *annot = m_page->addIconAnnotation(rect, text);
 
@@ -1013,18 +983,14 @@ void BrowserPage::updatePageFull()
 
 QVector<QRectF> BrowserPage::search(const QString &text, bool matchCase, bool wholeWords)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->search(text, matchCase, wholeWords);
 }
 
 QString BrowserPage::text(const QRectF &rect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    loadPage();
 
     return m_page->text(rect);
 }
@@ -1035,4 +1001,11 @@ bool BrowserPage::isBigDoc()
         return true;
 
     return false;
+}
+
+void BrowserPage::loadPage()
+{
+    if (nullptr == m_page) {
+        m_page = m_parent->page(itemIndex());
+    }
 }
