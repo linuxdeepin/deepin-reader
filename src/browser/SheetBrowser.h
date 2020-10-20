@@ -119,13 +119,6 @@ public:
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
-     * @brief 获取指定页面
-     * @param index
-     * @return
-     */
-    Page *page(int index);
-
-    /**
      * @brief setMouseShape
      * 根据鼠标样式,设置文字是否可选
      * @param shape 鼠标样式

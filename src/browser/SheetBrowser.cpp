@@ -181,14 +181,6 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     return true;
 }
 
-Page *SheetBrowser::page(int index)
-{
-    if (nullptr == m_document)
-        return nullptr;
-
-    return m_document->page(index);
-}
-
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
 {
     if (nullptr == m_document)
@@ -201,7 +193,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     for (int i = 0; i < allPageCnt; ++i) {
         const QSizeF &pageSize = m_document->pageSizeF(i);
 
-        BrowserPage *item = new BrowserPage(this, nullptr);
+        BrowserPage *item = new BrowserPage(this, m_document->page(i));
 
         item->setPageSize(pageSize);
 

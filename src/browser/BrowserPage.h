@@ -477,11 +477,6 @@ private:
      */
     bool isBigDoc();
 
-    /**
-     * @brief 加载dpdfpage
-     */
-    void loadPage();
-
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
