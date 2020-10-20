@@ -57,6 +57,8 @@
 #include <QScroller>
 #include <QPainterPath>
 #include <QDebug>
+#include <QTemporaryDir>
+#include <QProcess>
 
 DWIDGET_USE_NAMESPACE
 
@@ -132,7 +134,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     if (Dr::PDF == fileType)
         document = deepin_reader::PDFDocument::loadDocument(filePath, QString());
-    else if (Dr::DjVu == fileType)
+    else if (Dr::DJVU == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == document)
@@ -169,8 +171,29 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
 
     if (Dr::PDF == fileType)
         m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
-    else if (Dr::DjVu == fileType)
+    else if (Dr::DJVU == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
+    else if (Dr::DOCX == fileType) {
+        //以下后期挪到一个转化对话框中，实时打印输出
+        QTemporaryDir dir;
+        QProcess p(this);
+        QString targetDoc = dir.path() + "/temp.docx";
+        QString targetPdf = dir.path() + "/temp.pdf";
+        QFile file(filePath);
+        file.copy(targetDoc);
+        p.setWorkingDirectory(dir.path());
+        p.start("unzip " + targetDoc + " \"word/media/*\" ");
+        p.waitForStarted();
+        p.waitForFinished();
+        p.setWorkingDirectory(dir.path() + "/word");
+        p.start("pandoc " +  targetDoc + " -o " + targetPdf + " --pdf-engine=wkhtmltopdf -V CJKmainfont=\"Noto Sans CJK JP - Bold\"");
+        p.waitForStarted();
+        p.waitForFinished();
+        p.terminate();
+        p.close();
+
+        m_document = deepin_reader::PDFDocument::loadDocument(targetPdf, password);
+    }
 
     if (nullptr == m_document)
         return false;

@@ -39,7 +39,7 @@ void ShortCutShow::setSheet(DocSheet *sheet)
 {
     if (nullptr == sheet)
         initPDF();
-    else if (Dr::DjVu == sheet->fileType())
+    else if (Dr::DJVU == sheet->fileType())
         initDJVU();
     else
         initPDF();

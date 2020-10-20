@@ -503,13 +503,12 @@ private:
     bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
     double  m_pixmapScaleFactor = -1;       //当前图片的缩放
     bool    m_viewportRendered  = false;    //图片初始化加载视图窗口
-
     struct ImagePatch {
         QImage image;
         int pixmapId;
         QRectF rect;
     };
-    QList<ImagePatch> m_imagePatchList;    //当前图片加载成功前行程的补丁
+    QList<ImagePatch> m_imagePatchList;     //当前图片加载成功前形成的补丁
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放

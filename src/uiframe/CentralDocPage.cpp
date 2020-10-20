@@ -94,7 +94,7 @@ CentralDocPage::~CentralDocPage()
 bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
 {
     int fileType = Dr::fileType(filePath);
-    if (Dr::DjVu == fileType) {
+    if (Dr::DJVU == fileType) {
         QImage image = DocSheet::firstThumbnail(filePath);
         if (image.isNull())
             return false;
@@ -151,7 +151,7 @@ void CentralDocPage::openFile(const QString &filePath)
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
-    if (Dr::PDF != fileType && Dr::DjVu != fileType) {
+    if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
         showTips(tr("The format is not supported"), 1);
         return;
     }
@@ -444,7 +444,7 @@ bool CentralDocPage::saveAsCurrent()
             }
         }
         return sheet->saveAsData(saveFilePath);
-    } else if (Dr::DjVu == sheet->fileType()) {
+    } else if (Dr::DJVU == sheet->fileType()) {
         QString saveFilePath;
 
         if (sFilter != "") {

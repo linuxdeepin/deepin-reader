@@ -122,7 +122,7 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         }
         m_pSw->setSheet(m_curSheet);
 
-    } else if (Dr::DjVu == m_curSheet->fileType()) {
+    } else if (Dr::DJVU == m_curSheet->fileType()) {
         m_pThumbnailBtn->setDisabled(false);
         m_pSw->setDisabled(false);
 

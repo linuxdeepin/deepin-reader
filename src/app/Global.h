@@ -27,12 +27,12 @@ namespace Dr {
 
 enum FileType {
     Unknown = 0,
-    PDF = 1,
-    PS = 2,
-    DjVu = 3,
-    DOC = 4,
-    PPT_XLS = 5
-
+    PDF,
+    DJVU,
+    DOCX,
+    PS,
+    DOC,
+    PPT_XLS
 };
 FileType fileType(const QString &filePath);
 
