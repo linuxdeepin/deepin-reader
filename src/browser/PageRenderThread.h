@@ -39,7 +39,7 @@ struct RenderPageTask {
     int type = RenderPageTaskType::Image;
     BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
-    Dr::Rotation rotation = Dr::RotateBy0;
+    int pixmapId = 0;
     QRectF rect = QRectF();
 };
 
@@ -88,7 +88,7 @@ public:
      * @param rotation 旋转
      * @param renderRect 所占区域
      */
-    static void appendTask(BrowserPage *item, double scaleFactor, Dr::Rotation rotation, QRect renderRect);
+    static void appendTask(BrowserPage *item, double scaleFactor, int pixmapId, QRect renderRect);
 
     /**
      * @brief destroyForever
@@ -104,12 +104,12 @@ private:
     void run();
 
 signals:
-    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, double scaleFactor, QRectF rect);
+    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRectF rect);
 
     void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, double scaleFactor, QRectF rect);
+    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRectF rect);
 
     void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 

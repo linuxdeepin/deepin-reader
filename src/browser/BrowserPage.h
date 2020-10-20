@@ -426,7 +426,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect);
+    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect);
 
     /**
      * brief handleWordLoaded
@@ -503,10 +503,18 @@ private:
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 
     QPixmap m_pixmap;                       //当前图片
+    int     m_pixmapId          = 0;        //当前图片的标识
     bool    m_pixmapIsLastest   = false;    //当前图示是否最新
     bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
-    double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
-    bool    m_viewportRendered = false;     //图片初始化加载视图窗口
+    double  m_pixmapScaleFactor = -1;       //当前图片的缩放
+    bool    m_viewportRendered  = false;    //图片初始化加载视图窗口
+
+    struct ImagePatch {
+        QImage image;
+        int pixmapId;
+        QRectF rect;
+    };
+    QList<ImagePatch> m_imagePatchList;    //当前图片加载成功前行程的补丁
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放

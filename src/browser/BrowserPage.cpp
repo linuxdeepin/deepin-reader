@@ -207,7 +207,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         RenderPageTask task;
         task.page = this;
         task.scaleFactor = m_scaleFactor;
-        task.rotation = Dr::RotateBy0;
+        task.pixmapId = ++m_pixmapId;
 
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
@@ -238,6 +238,14 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
     QPainter painter(&m_pixmap);
 
     painter.drawImage(rect, image);
+
+    if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
+        ImagePatch patch;
+        patch.pixmapId = m_pixmapId;
+        patch.image = image;
+        patch.rect = rect;
+        m_imagePatchList.append(patch);
+    }
 
     update();
 }
@@ -274,19 +282,27 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
     m_viewportRendered = true;
 }
 
-void BrowserPage::handleRenderFinished(const double &scaleFactor, const QPixmap &pixmap, const QRectF &rect)
+void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect)
 {
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor) && rect.isEmpty())
-        return;
-
-    if (rect.isEmpty()) {
+    if (pixmapId == m_pixmapId && rect.isEmpty()) {//整体更新
         m_pixmapHasRendered = true;
         m_pixmapIsLastest = true;
         m_pixmap = pixmap;
-    } else {
+
+        for (ImagePatch &patch : m_imagePatchList) {
+
+            if (patch.pixmapId == m_pixmapId) {
+                QPainter painter(&m_pixmap);
+                painter.drawImage(patch.rect, patch.image);
+            }
+        }
+        m_imagePatchList.clear();
+
+    } else if (pixmapId == 0 && !rect.isEmpty()) { //局部
         QPainter painter(&m_pixmap);
         painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
-    }
+    } else
+        return;
 
     emit m_parent->sigPartThumbnailUpdated(m_index);
 
@@ -463,7 +479,10 @@ void BrowserPage::loadWords()
 void BrowserPage::clearPixmap()
 {
     m_pixmap = QPixmap();
+    ++m_pixmapId;
+    m_pixmapIsLastest   = false;
     m_pixmapHasRendered = false;
+    m_viewportRendered  = false;
     m_pixmapScaleFactor = -1;
     PageRenderThread::clearTask(this);
 }
