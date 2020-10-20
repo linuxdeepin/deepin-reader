@@ -52,31 +52,46 @@ public:
     int pageIndex() const;
 
     /**
-     * @brief 获取范围内图片
+     * @brief 获取图片
+     * @param scale 缩放因子
+     * @return
+     */
+    QImage image(qreal scale);
+
+    /**
+     * @brief 获取图片一部分
      * @param scale
      * @return
      */
-    QImage image(qreal xscale = 1, qreal yscale = 1, qreal x = 0, qreal y = 0, qreal width = 0, qreal height = 0);
+    QImage image(qreal xscale, qreal yscale, qreal x = 0, qreal y = 0, qreal width = 0, qreal height = 0);
 
     /**
      * @brief 字符数
      * @return
      */
-    int countChars() const;
+    int countChars();
 
     /**
      * @brief 根据索引获取文本范围
      * @param start
      * @return
      */
-    QVector<QRectF> getTextRect(int start, int charCount = 1) const;
+    bool getTextRect(int start, QRectF &textrect);
+
+    /**
+     * @brief 获取多个字符文本范围
+     * @param start
+     * @param charCount
+     * @return
+     */
+    QVector<QRectF> getTextRects(int start, int charCount);
 
     /**
      * @brief 根据范围获取文本
      * @param rect
      * @return
      */
-    QString text(const QRectF &rect) const;
+    QString text(const QRectF &rect);
 
     /**
      * @brief 根据索引获取文本
@@ -84,13 +99,7 @@ public:
      * @param charCount
      * @return
      */
-    QString text(int start, int charCount = 1) const;
-
-    /**
-     * @brief 获取当前支持操作的所有注释
-     * @return 注释列表，只会列出已支持的注释
-     */
-    QList<DPdfAnnot *> annots();
+    QString text(int start, int charCount = 1);
 
     /**
      * @brief 获取位置所在Link
@@ -122,7 +131,7 @@ public:
      * @param color 高亮颜色
      * @return 添加失败返回nullptr
      */
-    DPdfAnnot *createHightLightAnnot(QList<QRectF> list, QString text, QColor color = QColor());
+    DPdfAnnot *createHightLightAnnot(const QList<QRectF> &list, QString text, QColor color = QColor());
 
     /**
      * @brief 更新高亮注释
@@ -147,7 +156,13 @@ public:
      * @param wholeWords 整个单词
      * @return
      */
-    QVector<QRectF> search(const QString &text, bool matchCase = false, bool wholeWords = false) const;
+    QVector<QRectF> search(const QString &text, bool matchCase = false, bool wholeWords = false);
+
+    /**
+     * @brief 获取当前支持操作的所有注释
+     * @return 注释列表，只会列出已支持的注释
+     */
+    QList<DPdfAnnot *> annots();
 
 signals:
     /**

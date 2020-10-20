@@ -16,15 +16,61 @@
 #include <string.h>
 #include <QTemporaryFile>
 
-DPdfDoc::DPdfDoc(QString filename, QString password)
-    : m_docHandler(nullptr)
-    , m_pageCount(0)
-    , m_status(NOT_LOADED)
+DPdfDoc::Status parseError(int error)
 {
-    loadFile(filename, password);
+    DPdfDoc::Status err_code = DPdfDoc::SUCCESS;
+    // Translate FPDFAPI error code to FPDFVIEW error code
+    switch (error) {
+    case FPDF_ERR_SUCCESS:
+        err_code = DPdfDoc::SUCCESS;
+        break;
+    case FPDF_ERR_FILE:
+        err_code = DPdfDoc::FILE_ERROR;
+        break;
+    case FPDF_ERR_FORMAT:
+        err_code = DPdfDoc::FORMAT_ERROR;
+        break;
+    case FPDF_ERR_PASSWORD:
+        err_code = DPdfDoc::PASSWORD_ERROR;
+        break;
+    case FPDF_ERR_SECURITY:
+        err_code = DPdfDoc::HANDLER_ERROR;
+        break;
+    }
+    return err_code;
 }
 
-DPdfDoc::~DPdfDoc()
+class DPdfDocPrivate
+{
+    friend class DPdfDoc;
+public:
+    DPdfDocPrivate();
+
+    ~DPdfDocPrivate();
+
+public:
+    DPdfDoc::Status loadFile(const QString &filename, const QString &password);
+
+private:
+    DPdfDocHandler *m_docHandler;
+
+    QVector<DPdfPage *> m_pages;
+
+    QString m_filename;
+
+    int m_pageCount = 0;
+
+    DPdfDoc::Status m_status;
+};
+
+DPdfDocPrivate::DPdfDocPrivate()
+{
+    m_docHandler = nullptr;
+    m_pageCount = 0;
+    m_status = DPdfDoc::NOT_LOADED;
+}
+
+DPdfDocPrivate::~DPdfDocPrivate()
 {
     m_pages.clear();
 
@@ -32,9 +78,47 @@ DPdfDoc::~DPdfDoc()
         FPDF_CloseDocument((FPDF_DOCUMENT)m_docHandler);
 }
 
+DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filename, const QString &password)
+{
+    m_filename = filename;
+
+    m_pages.clear();
+
+    if (!QFile::exists(filename)) {
+        m_status = DPdfDoc::FILE_NOT_FOUND_ERROR;
+        return m_status;
+    }
+
+    void *ptr = FPDF_LoadDocument(m_filename.toUtf8().constData(),
+                                  password.toUtf8().constData());
+
+    m_docHandler = static_cast<DPdfDocHandler *>(ptr);
+
+    m_status = m_docHandler ? DPdfDoc::SUCCESS : parseError(FPDF_GetLastError());
+
+    if (m_docHandler) {
+        m_pageCount = FPDF_GetPageCount((FPDF_DOCUMENT)m_docHandler);
+        m_pages.fill(nullptr, m_pageCount);
+    }
+
+    return m_status;
+}
+
+
+DPdfDoc::DPdfDoc(QString filename, QString password)
+    : d_ptr(new DPdfDocPrivate())
+{
+    d_func()->loadFile(filename, password);
+}
+
+DPdfDoc::~DPdfDoc()
+{
+
+}
+
 bool DPdfDoc::isValid() const
 {
-    return m_docHandler != nullptr;
+    return d_func()->m_docHandler != nullptr;
 }
 
 bool DPdfDoc::isEncrypted() const
@@ -42,7 +126,7 @@ bool DPdfDoc::isEncrypted() const
     if (!isValid())
         return false;
 
-    return FPDF_GetDocPermissions((FPDF_DOCUMENT)m_docHandler) != 0xFFFFFFFF;
+    return FPDF_GetDocPermissions((FPDF_DOCUMENT)d_func()->m_docHandler) != 0xFFFFFFFF;
 }
 
 DPdfDoc::Status DPdfDoc::tryLoadFile(const QString &filename, const QString &password)
@@ -80,12 +164,12 @@ bool DPdfDoc::save()
 
     write.WriteBlock = writeFile;
 
-    saveWriter.setFileName(m_filename);
+    saveWriter.setFileName(d_func()->m_filename);
 
     if (!saveWriter.open(QIODevice::ReadWrite))
         return false;
 
-    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler), &write, FPDF_REMOVE_SECURITY);
+    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_REMOVE_SECURITY);
 
     saveWriter.close();
 
@@ -103,87 +187,38 @@ bool DPdfDoc::saveAs(const QString &filePath)
     if (!saveWriter.open(QIODevice::ReadWrite))
         return false;
 
-    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler), &write, FPDF_INCREMENTAL);
+    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_REMOVE_SECURITY);
 
     saveWriter.close();
 
     return result;
 }
 
-DPdfDoc::Status DPdfDoc::loadFile(const QString &filename, const QString &password)
-{
-    m_filename = filename;
-
-    m_pages.clear();
-
-    if (!QFile::exists(filename)) {
-        m_status = FILE_NOT_FOUND_ERROR;
-        return m_status;
-    }
-
-    void *ptr = FPDF_LoadDocument(m_filename.toUtf8().constData(),
-                                  password.toUtf8().constData());
-
-    m_docHandler = static_cast<DPdfDocHandler *>(ptr);
-
-    m_status = m_docHandler ? SUCCESS : parseError(FPDF_GetLastError());
-
-    if (m_docHandler) {
-        m_pageCount = FPDF_GetPageCount((FPDF_DOCUMENT)m_docHandler);
-        m_pages.fill(nullptr, m_pageCount);
-    }
-
-    return m_status;
-}
-
-DPdfDoc::Status DPdfDoc::parseError(int err)
-{
-    DPdfDoc::Status err_code = DPdfDoc::SUCCESS;
-    // Translate FPDFAPI error code to FPDFVIEW error code
-    switch (err) {
-    case FPDF_ERR_SUCCESS:
-        err_code = DPdfDoc::SUCCESS;
-        break;
-    case FPDF_ERR_FILE:
-        err_code = DPdfDoc::FILE_ERROR;
-        break;
-    case FPDF_ERR_FORMAT:
-        err_code = DPdfDoc::FORMAT_ERROR;
-        break;
-    case FPDF_ERR_PASSWORD:
-        err_code = DPdfDoc::PASSWORD_ERROR;
-        break;
-    case FPDF_ERR_SECURITY:
-        err_code = DPdfDoc::HANDLER_ERROR;
-        break;
-    }
-    return err_code;
-}
-
 QString DPdfDoc::filename() const
 {
-    return m_filename;
+    return d_func()->m_filename;
 }
 
 int DPdfDoc::pageCount() const
 {
-    return m_pageCount;
+    return d_func()->m_pageCount;
 }
 
 DPdfDoc::Status DPdfDoc::status() const
 {
-    return m_status;
+    return d_func()->m_status;
 }
 
 DPdfPage *DPdfDoc::page(int i)
 {
-    if (i < 0 || i >= m_pageCount)
+    if (i < 0 || i >= d_func()->m_pageCount)
         return nullptr;
 
-    if (!m_pages[i])
-        m_pages[i] = new DPdfPage(m_docHandler, i);
+    if (!d_func()->m_pages[i]) {
+        d_func()->m_pages[i] = new DPdfPage(d_func()->m_docHandler, i);
+    }
 
-    return m_pages[i];
+    return d_func()->m_pages[i];
 }
 
 QSizeF DPdfDoc::pageSizeF(int index) const
@@ -191,7 +226,7 @@ QSizeF DPdfDoc::pageSizeF(int index) const
     double width = 0;
     double height = 0;
 
-    FPDF_GetPageSizeByIndex((FPDF_DOCUMENT)m_docHandler, index, &width, &height);
+    FPDF_GetPageSizeByIndex((FPDF_DOCUMENT)d_func()->m_docHandler, index, &width, &height);
     return QSizeF(width, height);
 }
 
@@ -208,16 +243,16 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
     const CPDF_Dest &dest = This.GetDest(tree.GetDocument()).GetArray() ? This.GetDest(tree.GetDocument()) : This.GetAction().GetDest(tree.GetDocument());
     section.nIndex = dest.GetDestPageIndex(tree.GetDocument());
     dest.GetXYZ(&hasx, &hasy, &haszoom, &x, &y, &z);
-    section.offsetPointF = QPointF(x, y);
+    section.offsetPointF = QPointF(static_cast<qreal>(x), static_cast<qreal>(y));
 
     const CPDF_Bookmark &Child = tree.GetFirstChild(&This);
-    if (Child.GetDict() != NULL) {
+    if (Child.GetDict() != nullptr) {
         collectBookmarks(section.children, tree, Child);
     }
     outline << section;
 
     const CPDF_Bookmark &SibChild = tree.GetNextSibling(&This);
-    if (SibChild.GetDict() != NULL) {
+    if (SibChild.GetDict() != nullptr) {
         collectBookmarks(outline, tree, SibChild);
     }
 }
@@ -225,10 +260,10 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
 DPdfDoc::Outline DPdfDoc::outline()
 {
     Outline outline;
-    CPDF_BookmarkTree tree(reinterpret_cast<CPDF_Document *>(m_docHandler));
+    CPDF_BookmarkTree tree(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     CPDF_Bookmark cBookmark;
     const CPDF_Bookmark &firstRootChild = tree.GetFirstChild(&cBookmark);
-    if (firstRootChild.GetDict() != NULL)
+    if (firstRootChild.GetDict() != nullptr)
         collectBookmarks(outline, tree, firstRootChild);
 
     return outline;
@@ -239,17 +274,17 @@ DPdfDoc::Properies DPdfDoc::proeries()
     Properies properies;
     int fileversion = 1;
     properies.insert("Version", "1");
-    if (FPDF_GetFileVersion((FPDF_DOCUMENT)m_docHandler, &fileversion)) {
+    if (FPDF_GetFileVersion((FPDF_DOCUMENT)d_func()->m_docHandler, &fileversion)) {
         properies.insert("Version", QString("%1.%2").arg(fileversion / 10).arg(fileversion % 10));
     }
     properies.insert("Encrypted", isEncrypted());
-    properies.insert("Linearized", FPDF_GetFileLinearized((FPDF_DOCUMENT)m_docHandler));
+    properies.insert("Linearized", FPDF_GetFileLinearized((FPDF_DOCUMENT)d_func()->m_docHandler));
 
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
     properies.insert("Creator", QString());
     properies.insert("Producer", QString());
-    CPDF_Document *pDoc = reinterpret_cast<CPDF_Document *>(m_docHandler);
+    CPDF_Document *pDoc = reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler);
     const CPDF_Dictionary *pInfo = pDoc->GetInfo();
     if (pInfo) {
         const WideString &KeyWords = pInfo->GetUnicodeTextFor("Keywords");
@@ -270,7 +305,7 @@ DPdfDoc::Properies DPdfDoc::proeries()
 
 QString DPdfDoc::label(int index) const
 {
-    CPDF_PageLabel label(reinterpret_cast<CPDF_Document *>(m_docHandler));
+    CPDF_PageLabel label(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     const Optional<WideString> &str = label.GetLabel(index);
     if (str.has_value())
         return QString::fromWCharArray(str.value().c_str(), str.value().GetLength());

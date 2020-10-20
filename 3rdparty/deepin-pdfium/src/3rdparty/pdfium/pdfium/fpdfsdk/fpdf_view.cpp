@@ -406,6 +406,31 @@ FPDF_EXPORT FPDF_PAGE FPDF_CALLCONV FPDF_LoadPage(FPDF_DOCUMENT document,
     return FPDFPageFromIPDFPage(pPage.Leak());
 }
 
+FPDF_EXPORT FPDF_PAGE FPDF_CALLCONV FPDF_LoadNoParsePage(FPDF_DOCUMENT document,
+                                                         int page_index)
+{
+    auto *pDoc = CPDFDocumentFromFPDFDocument(document);
+    if (!pDoc)
+        return nullptr;
+
+    if (page_index < 0 || page_index >= FPDF_GetPageCount(document))
+        return nullptr;
+
+#ifdef PDF_ENABLE_XFA
+    auto *pContext = static_cast<CPDFXFA_Context *>(pDoc->GetExtension());
+    if (pContext)
+        return FPDFPageFromIPDFPage(pContext->GetXFAPage(page_index).Leak());
+#endif  // PDF_ENABLE_XFA
+
+    CPDF_Dictionary *pDict = pDoc->GetPageDictionary(page_index);
+    if (!pDict)
+        return nullptr;
+
+    auto pPage = pdfium::MakeRetain<CPDF_Page>(pDoc, pDict);
+    pPage->SetRenderCache(std::make_unique<CPDF_PageRenderCache>(pPage.Get()));
+    return FPDFPageFromIPDFPage(pPage.Leak());
+}
+
 FPDF_EXPORT float FPDF_CALLCONV FPDF_GetPageWidthF(FPDF_PAGE page)
 {
     IPDF_Page *pPage = IPDFPageFromFPDFPage(page);

@@ -8,12 +8,16 @@
 #include <QVector>
 #include <QPointF>
 #include <QVariant>
+#include <QScopedPointer>
 
 class DPdfPage;
 class DPdfDocHandler;
+class DPdfDocPrivate;
 class DEEPIN_PDFIUM_EXPORT DPdfDoc : public QObject
 {
     Q_OBJECT
+    Q_DECLARE_PRIVATE(DPdfDoc)
+
 public:
     enum Status {
         NOT_LOADED = -1,
@@ -111,14 +115,6 @@ public:
     QSizeF pageSizeF(int index) const;
 
     /**
-     * @brief 尝试加载文档是否成功
-     * @param filename
-     * @param password
-     * @return
-     */
-    static Status tryLoadFile(const QString &filename, const QString &password = QString());
-
-    /**
      * @brief 保存到当前文件
      * @return
      */
@@ -131,23 +127,18 @@ public:
      */
     bool saveAs(const QString &filePath);
 
-private:
+public:
     /**
-     * @brief 加载文档
+     * @brief 尝试加载文档是否成功
      * @param filename
      * @param password
      * @return
      */
-    Status loadFile(const QString &filename, const QString &password = QString());
+    static Status tryLoadFile(const QString &filename, const QString &password = QString());
 
 private:
     Q_DISABLE_COPY(DPdfDoc)
-    DPdfDocHandler *m_docHandler = nullptr;
-    QVector<DPdfPage *> m_pages;
-    QString m_filename;
-    int m_pageCount;
-    Status m_status;
-    static DPdfDoc::Status parseError(int err);
+    QScopedPointer<DPdfDocPrivate> d_ptr;
 };
 
 #endif // DPDFDOC_H
