@@ -11,8 +11,8 @@ type = QT
 
 [deepin-document-viewer.deepin-document-viewer-desktop-ts]
 file_filter = translations/desktop/desktop_<lang>.ts
-source_file = translations/desktop/desktop.ts
 preTranslate_file = src/deepin-reader.desktop
+source_file = translations/desktop/desktop.ts
 source_lang = en
 type = QT
 

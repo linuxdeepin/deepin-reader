@@ -5,11 +5,13 @@
     <name>Application</name>
     <message>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>Document Viewer</translation>
     </message>
     <message>
         <location filename="../src/Application.cpp" line="41"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</translation>
     </message>
