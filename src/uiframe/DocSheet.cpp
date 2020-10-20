@@ -969,3 +969,8 @@ void DocSheet::onExtractPassword(const QString &password)
         m_encryPage->wrongPassWordSlot();
     }
 }
+
+QSizeF DocSheet::pageSizeByIndex(int index)
+{
+    return m_browser->pageSizeByIndex(index);
+}

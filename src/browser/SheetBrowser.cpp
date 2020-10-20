@@ -2004,3 +2004,10 @@ QString SheetBrowser::pageNum2Lable(const int index)
     return  QString();
 }
 
+QSizeF SheetBrowser::pageSizeByIndex(int index)
+{
+    if (nullptr == m_document)
+        return QSizeF();
+
+    return m_document->pageSizeF(index);
+}

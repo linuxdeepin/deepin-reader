@@ -427,6 +427,13 @@ public:
      */
     void hideSubTipsWidget();
 
+    /**
+     * @brief 获取页面真实大小
+     * @param index
+     * @return
+     */
+    QSizeF pageSizeByIndex(int index);
+
 signals:
     void sigPageChanged(int page);
 

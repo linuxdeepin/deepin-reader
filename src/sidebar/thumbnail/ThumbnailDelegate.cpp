@@ -45,11 +45,17 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         QPixmap pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
         pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
 
+        const int borderRadius = 6;
+        QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
+        if (rotate == 90 || rotate == 270)
+            pageSize = QSize(pageSize.height(), pageSize.width());
+
+        pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
+        const QSize &scalePixSize = pageSize / dApp->devicePixelRatio();
+        const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
+
         if (!pixmap.isNull()) {
-            const int borderRadius = 6;
-            const QPixmap &scalePix = pixmap.scaled(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
-            const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
+            const QPixmap &scalePix = pixmap.scaled(pageSize.width(), pageSize.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
             //clipPath pixmap
             painter->save();
@@ -58,22 +64,23 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             painter->setClipPath(clipPath);
             painter->drawPixmap(rect.x(), rect.y(), scalePix);
             painter->restore();
-            //drawText RoundRect
-            painter->save();
-            painter->setBrush(Qt::NoBrush);
-            painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-            if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
-                painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
-                painter->drawRoundedRect(rect, borderRadius, borderRadius);
-            } else {
-                painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
-                painter->drawRoundedRect(rect, borderRadius, borderRadius);
-                painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
-            }
-            painter->drawText(rect.x(), rect.bottom() + 4, rect.width(), option.rect.bottom() - rect.bottom(), Qt::AlignHCenter | Qt::AlignTop, QString::number(index.row() + 1));
-            painter->restore();
-            drawBookMark(painter, rect, bShowBookMark);
         }
+
+        //drawText RoundRect
+        painter->save();
+        painter->setBrush(Qt::NoBrush);
+        painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+        if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
+            painter->drawRoundedRect(rect, borderRadius, borderRadius);
+        } else {
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
+            painter->drawRoundedRect(rect, borderRadius, borderRadius);
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
+        }
+        painter->drawText(rect.x(), rect.bottom() + 4, rect.width(), option.rect.bottom() - rect.bottom(), Qt::AlignHCenter | Qt::AlignTop, QString::number(index.row() + 1));
+        painter->restore();
+        drawBookMark(painter, rect, bShowBookMark);
     }
 }
 

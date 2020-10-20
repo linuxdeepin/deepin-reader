@@ -578,6 +578,13 @@ public:
      */
     QString getPageLabelByIndex(const int &index);
 
+    /**
+     * @brief 获取PAGE真实大小
+     * @param index
+     * @return
+     */
+    QSizeF pageSizeByIndex(int index);
+
 private:
     /**
      * @brief operationRef

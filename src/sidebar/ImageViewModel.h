@@ -42,6 +42,7 @@ typedef enum ImageinfoType_e {
     IMAGE_INDEX_TEXT   = Qt::UserRole + 3,
     IMAGE_CONTENT_TEXT = Qt::UserRole + 4,
     IMAGE_SEARCH_COUNT = Qt::UserRole + 5,
+    IMAGE_PAGE_SIZE    = Qt::UserRole + 6,
 } ImageinfoType_e;
 
 typedef struct ImagePageInfo_t {
