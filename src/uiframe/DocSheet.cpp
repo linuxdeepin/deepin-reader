@@ -907,17 +907,11 @@ void DocSheet::showEncryPage()
 bool DocSheet::needPassword()
 {
     int status = -1;
-    Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath(), QString(), status);
+        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), QString());
 
     if (status == Document::PASSWORD_ERROR)
         return true;
-
-    if (nullptr == document)
-        return false;
-
-    delete document;
 
     return false;
 }
@@ -946,12 +940,10 @@ QString DocSheet::getPageLabelByIndex(const int &index)
 bool DocSheet::tryPassword(QString password)
 {
     int status = -1;
-    Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath(), password, status);
+        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), password);
 
     if (status == Document::SUCCESS) {
-        delete document;
         return true;
     }
     return false;

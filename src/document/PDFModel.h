@@ -73,7 +73,7 @@ public:
 
     QSizeF sizeF() const override;
 
-    QImage render(const qreal & scaleFactor) const override;
+    QImage render(const qreal &scaleFactor) const override;
 
     QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const override;
 
@@ -142,16 +142,18 @@ public:
 
     Properties properties() const override;
 
-    static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password, int &status);
+    static PDFDocument *loadDocument(const QString &filePath, const QString &password);
+
+    static int tryLoadDocument(const QString &filePath, const QString &password);
 
 private:
     Q_DISABLE_COPY(PDFDocument)
 
-    PDFDocument(DPdfDoc *document);
-
-    mutable QMutex m_mutex;
+    explicit PDFDocument(DPdfDoc *document);
 
     DPdfDoc *m_document = nullptr;
+
+    mutable QMutex m_mutex;
 
     mutable Properties m_fileProperties;
 

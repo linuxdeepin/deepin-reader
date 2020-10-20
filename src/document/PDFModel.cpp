@@ -290,8 +290,8 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 }
 
 PDFDocument::PDFDocument(DPdfDoc *document) :
-    m_mutex(),
-    m_document(document)
+    m_document(document),
+    m_mutex()
 {
 }
 
@@ -382,14 +382,20 @@ Properties PDFDocument::properties() const
     return m_fileProperties;
 }
 
-PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password, int &status)
+PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
 {
-    status = DPdfDoc::tryLoadFile(filePath, password);
-    if (status == DPdfDoc::SUCCESS) {
-        DPdfDoc *document = new DPdfDoc(filePath, password);
+    DPdfDoc *document = new DPdfDoc(filePath, password);
+    if (document->status() == DPdfDoc::SUCCESS)
         return new deepin_reader::PDFDocument(document);
+    else {
+        delete document;
+        return nullptr;
     }
-    return nullptr;
+}
+
+int PDFDocument::tryLoadDocument(const QString &filePath, const QString &password)
+{
+    return DPdfDoc::tryLoadFile(filePath, password);
 }
 
 }

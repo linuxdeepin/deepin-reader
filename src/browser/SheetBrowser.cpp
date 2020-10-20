@@ -130,9 +130,8 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
-    int status = -1;
     if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath, QString(), status);
+        document = deepin_reader::PDFDocument::loadDocument(filePath, QString());
     else if (Dr::DjVu == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
@@ -168,9 +167,8 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
 {
     m_filePassword = password;
 
-    int status = -1;
     if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password, status);
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
     else if (Dr::DjVu == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
 

@@ -176,8 +176,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
-    if (m_page == nullptr)
-        m_page = m_parent->page(itemIndex());
+    loadPage();
 
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
