@@ -141,6 +141,8 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
 {
+    LOCK_PAGE
+
     Link link;
     DPdfPage::Link dlInk = m_page->getLinkAtPoint(point.x(), point.y());
     if (dlInk.isValid()) {
@@ -162,6 +164,8 @@ QList<Word> PDFPage::words()
 {
     if (m_words.size() > 0)
         return m_words;
+
+    LOCK_PAGE
 
     int charCount = m_page->countChars();
     QPointF lastOffset(0, 0);
