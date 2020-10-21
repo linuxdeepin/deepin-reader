@@ -34,10 +34,7 @@ PDFAnnotation::PDFAnnotation(DPdfAnnot *annotation) : Annotation(),
 
 PDFAnnotation::~PDFAnnotation()
 {
-    if (m_annotation) {
-        delete m_annotation;
-        m_annotation = nullptr;
-    }
+    m_annotation = nullptr;
 }
 
 QList<QRectF> PDFAnnotation::boundary() const
