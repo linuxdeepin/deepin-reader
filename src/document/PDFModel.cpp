@@ -146,9 +146,6 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
 {
-    LOCK_PAGE
-    LOCK_DOCUMENT
-
     Link link;
     const QList<DPdfAnnot *> &dlinkAnnots = m_page->links();
     if (dlinkAnnots.size() > 0) {
@@ -168,9 +165,6 @@ Link PDFPage::getLinkAtPoint(const QPointF &point) const
 
 QString PDFPage::text(const QRectF &rect) const
 {
-    LOCK_PAGE
-    LOCK_DOCUMENT
-
     return m_page->text(rect).simplified();
 }
 
@@ -216,7 +210,10 @@ QList<Word> PDFPage::words()
 }
 
 QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
-{            
+{
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     QVector<QRectF> results;
 
     results = m_page->search(text, matchCase, wholeWords);
