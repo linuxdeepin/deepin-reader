@@ -23,13 +23,12 @@
 
 #include <QDebug>
 
-#define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
-#define LOCK_PAGE QMutexLocker mutexLocker(m_mutex);
+#define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
+#define LOCK_PAGE QMutexLocker pageMutexLocker(m_pageMutex);
 
 namespace deepin_reader {
 
-PDFAnnotation::PDFAnnotation(QMutex *mutex, DPdfAnnot *annotation) : Annotation(),
-    m_mutex(mutex),
+PDFAnnotation::PDFAnnotation(DPdfAnnot *annotation) : Annotation(),
     m_annotation(annotation)
 {
 }
@@ -74,7 +73,7 @@ DPdfAnnot *PDFAnnotation::ownAnnotation()
 }
 
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
-    m_mutex(mutex),
+    m_pageMutex(new QMutex), m_docMutex(mutex),
     m_page(page)
 {
     m_pageSizef = QSizeF(page->width(), page->height());
@@ -83,6 +82,9 @@ PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
 PDFPage::~PDFPage()
 {
     LOCK_PAGE
+    LOCK_DOCUMENT
+
+    delete m_pageMutex;
 
     delete m_page;
 
@@ -97,6 +99,7 @@ QSizeF PDFPage::sizeF() const
 QImage PDFPage::render(const qreal &scaleFactor) const
 {
     LOCK_PAGE
+    LOCK_DOCUMENT
 
     if (m_page == nullptr)
         return QImage();
@@ -120,6 +123,7 @@ QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRectF boundingRect) const
 {
     LOCK_PAGE
+    LOCK_DOCUMENT
 
     if (m_page == nullptr)
         return QImage();
@@ -141,8 +145,6 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
 {
-    LOCK_PAGE
-
     Link link;
     DPdfPage::Link dlInk = m_page->getLinkAtPoint(point.x(), point.y());
     if (dlInk.isValid()) {
@@ -164,8 +166,6 @@ QList<Word> PDFPage::words()
 {
     if (m_words.size() > 0)
         return m_words;
-
-    LOCK_PAGE
 
     int charCount = m_page->countChars();
     QPointF lastOffset(0, 0);
@@ -211,13 +211,11 @@ QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeW
 
 QList< Annotation * > PDFPage::annotations() const
 {
-    LOCK_PAGE
-
     QList< Annotation * > annotations;
 
     foreach (DPdfAnnot *annotation, m_page->annots()) {
         if (annotation->type() == DPdfAnnot::AText || annotation->type() == DPdfAnnot::AHighlight) {
-            annotations.append(new PDFAnnotation(m_mutex, annotation));
+            annotations.append(new PDFAnnotation(annotation));
             continue;
         }
 
@@ -229,7 +227,7 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
-    return new PDFAnnotation(m_mutex, m_page->createHightLightAnnot(boundarys, text, color));
+    return new PDFAnnotation(m_page->createHightLightAnnot(boundarys, text, color));
 }
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
@@ -280,7 +278,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
     if (nullptr == m_page)
         return nullptr;
 
-    return new PDFAnnotation(m_mutex, m_page->createTextAnnot(rect.center(), text));
+    return new PDFAnnotation(m_page->createTextAnnot(rect.center(), text));
 }
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
@@ -296,26 +294,34 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 }
 
 PDFDocument::PDFDocument(DPdfDoc *document) :
-    m_document(document),
-    m_mutex()
+    m_document(document)
 {
+    m_docMutex = new QMutex;
 }
 
 PDFDocument::~PDFDocument()
 {
+    //需要确保pages先被析构完成
+    LOCK_DOCUMENT
+
+    delete m_docMutex;
     delete m_document;
     m_document = nullptr;
 }
 
 int PDFDocument::numberOfPages() const
 {
+    LOCK_DOCUMENT
+
     return m_document->pageCount();
 }
 
 Page *PDFDocument::page(int index) const
 {
+    LOCK_DOCUMENT
+
     if (DPdfPage *page = m_document->page(index)) {
-        return new PDFPage(&m_mutex, page);
+        return new PDFPage(m_docMutex, page);
     }
 
     return nullptr;
@@ -323,11 +329,15 @@ Page *PDFDocument::page(int index) const
 
 QString PDFDocument::label(int index) const
 {
+    LOCK_DOCUMENT
+
     return m_document->label(index);
 }
 
 QSizeF PDFDocument::pageSizeF(int index) const
 {
+    LOCK_DOCUMENT
+
     return m_document->pageSizeF(index);
 }
 

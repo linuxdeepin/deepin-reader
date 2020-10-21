@@ -54,9 +54,7 @@ public:
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
-    PDFAnnotation(QMutex *mutex, DPdfAnnot *annotation);
-
-    mutable QMutex *m_mutex;
+    PDFAnnotation(DPdfAnnot *annotation);
 
     DPdfAnnot *m_annotation;
 
@@ -108,7 +106,9 @@ private:
 
     PDFPage(QMutex *mutex, DPdfPage *page);
 
-    mutable QMutex *m_mutex;
+    QMutex *m_pageMutex = nullptr;
+
+    QMutex *m_docMutex = nullptr;
 
     DPdfPage *m_page;
 
@@ -153,7 +153,7 @@ private:
 
     DPdfDoc *m_document = nullptr;
 
-    mutable QMutex m_mutex;
+    QMutex *m_docMutex;
 
     mutable Properties m_fileProperties;
 
