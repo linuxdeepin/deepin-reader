@@ -24,7 +24,6 @@
 #include <QDebug>
 
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
-#define LOCK_PAGE QMutexLocker pageMutexLocker(m_pageMutex);
 
 namespace deepin_reader {
 
@@ -73,23 +72,14 @@ DPdfAnnot *PDFAnnotation::ownAnnotation()
 }
 
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
-    m_pageMutex(new QMutex), m_docMutex(mutex),
-    m_page(page)
+    m_docMutex(mutex), m_page(page)
 {
     m_pageSizef = QSizeF(page->width(), page->height());
 }
 
 PDFPage::~PDFPage()
 {
-    m_pageMutex->lock();
 
-    delete m_page;
-
-    m_page = nullptr;
-
-    m_pageMutex->unlock();
-
-    delete m_pageMutex;
 }
 
 QSizeF PDFPage::sizeF() const
@@ -99,7 +89,6 @@ QSizeF PDFPage::sizeF() const
 
 QImage PDFPage::render(const qreal &scaleFactor) const
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (m_page == nullptr)
@@ -123,7 +112,6 @@ QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
 
 QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRectF boundingRect) const
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (m_page == nullptr)
@@ -170,7 +158,6 @@ QString PDFPage::text(const QRectF &rect) const
 
 QList<Word> PDFPage::words()
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (m_words.size() > 0)
@@ -211,7 +198,6 @@ QList<Word> PDFPage::words()
 
 QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     QVector<QRectF> results;
@@ -223,7 +209,6 @@ QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeW
 
 QList< Annotation * > PDFPage::annotations() const
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     QList< Annotation * > annotations;
@@ -237,7 +222,7 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
-    LOCK_PAGE
+
     LOCK_DOCUMENT
 
     return new PDFAnnotation(m_page->createHightLightAnnot(boundarys, text, color));
@@ -245,7 +230,7 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, cons
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-    LOCK_PAGE
+
     LOCK_DOCUMENT
 
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
@@ -264,7 +249,6 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 
 bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, const QColor &color)
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (nullptr == annotation)
@@ -283,7 +267,6 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     foreach (DPdfAnnot *annot, m_page->annots()) {
@@ -297,7 +280,6 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 
 Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (nullptr == m_page)
@@ -308,7 +290,6 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
-    LOCK_PAGE
     LOCK_DOCUMENT
 
     if (nullptr == m_page || nullptr == annot)

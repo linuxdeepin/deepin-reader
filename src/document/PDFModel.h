@@ -106,11 +106,9 @@ private:
 
     PDFPage(QMutex *mutex, DPdfPage *page);
 
-    QMutex *m_pageMutex = nullptr;
-
     QMutex *m_docMutex = nullptr;
 
-    DPdfPage *m_page;
+    DPdfPage *m_page = nullptr;
 
     QList<Word> m_words;
 
