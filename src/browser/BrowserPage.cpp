@@ -227,21 +227,23 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
     if (nullptr == m_parent)
         return;
 
-    QImage image = getImage(scaleFactor, Dr::RotateBy0, rect);
+    QRectF normalReccf = boundingRect().intersected(rect);
 
-    QPainter painter(&m_pixmap);
-
-    painter.drawImage(rect, image);
+    const QImage &image = getImage(scaleFactor, Dr::RotateBy0, normalReccf);
 
     if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
         ImagePatch patch;
         patch.pixmapId = m_pixmapId;
         patch.image = image;
-        patch.rect = rect;
+        patch.rect = normalReccf;
         m_imagePatchList.append(patch);
-    }
+    } else {
+        QPainter painter(&m_pixmap);
 
-    update();
+        painter.drawImage(normalReccf, image);
+
+        update();
+    }
 }
 
 void BrowserPage::renderViewPort(const qreal &scaleFactor)
