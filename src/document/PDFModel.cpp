@@ -146,25 +146,39 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const
 {
-    Link link;
-    DPdfPage::Link dlInk = m_page->getLinkAtPoint(point.x(), point.y());
-    if (dlInk.isValid()) {
-        link.page = dlInk.nIndex + 1;
-        link.urlOrFileName = dlInk.urlpath;
-        link.left = dlInk.left;
-        link.top = dlInk.top;
-    }
+    LOCK_PAGE
+    LOCK_DOCUMENT
 
+    Link link;
+    const QList<DPdfAnnot *> &dlinkAnnots = m_page->links();
+    if (dlinkAnnots.size() > 0) {
+        for (DPdfAnnot *annot : dlinkAnnots) {
+            DPdfLinkAnnot *linkAnnot = dynamic_cast<DPdfLinkAnnot *>(annot);
+            if (linkAnnot && linkAnnot->pointIn(point)) {
+                link.page = linkAnnot->pageIndex() + 1;
+                link.urlOrFileName = linkAnnot->url().isEmpty() ? linkAnnot->filePath() : linkAnnot->url();
+                link.left = linkAnnot->offset().x();
+                link.top = linkAnnot->offset().y();
+                return link;
+            }
+        }
+    }
     return link;
 }
 
 QString PDFPage::text(const QRectF &rect) const
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     return m_page->text(rect).simplified();
 }
 
 QList<Word> PDFPage::words()
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     if (m_words.size() > 0)
         return m_words;
 
@@ -202,7 +216,7 @@ QList<Word> PDFPage::words()
 }
 
 QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
-{
+{            
     QVector<QRectF> results;
 
     results = m_page->search(text, matchCase, wholeWords);
@@ -212,15 +226,13 @@ QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeW
 
 QList< Annotation * > PDFPage::annotations() const
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     QList< Annotation * > annotations;
 
     foreach (DPdfAnnot *annotation, m_page->annots()) {
-        if (annotation->type() == DPdfAnnot::AText || annotation->type() == DPdfAnnot::AHighlight) {
-            annotations.append(new PDFAnnotation(annotation));
-            continue;
-        }
-
-        delete annotation;
+        annotations.append(new PDFAnnotation(annotation));
     }
 
     return annotations;
@@ -228,11 +240,17 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     return new PDFAnnotation(m_page->createHightLightAnnot(boundarys, text, color));
 }
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
 
     if (PDFAnnotation == nullptr)
@@ -249,6 +267,9 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 
 bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, const QColor &color)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     if (nullptr == annotation)
         return false;
 
@@ -265,6 +286,9 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     foreach (DPdfAnnot *annot, m_page->annots()) {
         if (annot && annot->pointIn(clickPoint)) {
             return true;
@@ -276,6 +300,9 @@ bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
 
 Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     if (nullptr == m_page)
         return nullptr;
 
@@ -284,6 +311,9 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
+    LOCK_PAGE
+    LOCK_DOCUMENT
+
     if (nullptr == m_page || nullptr == annot)
         return nullptr;
 
