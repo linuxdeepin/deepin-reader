@@ -229,7 +229,7 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     QRectF normalReccf = boundingRect().intersected(rect);
 
-    const QImage &image = getImage(scaleFactor, Dr::RotateBy0, normalReccf);
+    QImage image = getImage(scaleFactor, Dr::RotateBy0, normalReccf);
 
     if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
         ImagePatch patch;
@@ -237,7 +237,9 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
         patch.image = image;
         patch.rect = normalReccf;
         m_imagePatchList.append(patch);
-    } else {
+    }
+
+    if (!m_pixmap.isNull()) {
         QPainter painter(&m_pixmap);
 
         painter.drawImage(normalReccf, image);
