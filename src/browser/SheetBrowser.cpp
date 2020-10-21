@@ -214,11 +214,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     int allPageCnt = m_document->numberOfPages();
 
     for (int i = 0; i < allPageCnt; ++i) {
-        const QSizeF &pageSize = m_document->pageSizeF(i);
-
         BrowserPage *item = new BrowserPage(this, m_document->page(i));
-
-        item->setPageSize(pageSize);
 
         item->setItemIndex(i);
 
@@ -233,11 +229,11 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
             m_lable2Page.insert(labelPage, i);
         }
 
-        if (pageSize.width() > m_maxWidth)
-            m_maxWidth = pageSize.width();
+        if (item->pageSize().width() > m_maxWidth)
+            m_maxWidth = item->pageSize().width();
 
-        if (pageSize.height() > m_maxHeight)
-            m_maxHeight = pageSize.height();
+        if (item->pageSize().height() > m_maxHeight)
+            m_maxHeight = item->pageSize().height();
     }
 
     for (int i = 0; i < m_items.count(); ++i) {

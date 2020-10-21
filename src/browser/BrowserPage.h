@@ -56,6 +56,12 @@ public:
     virtual ~BrowserPage() override;
 
     /**
+     * @brief 文档原始大小
+     * @return
+     */
+    QSizeF pageSize();
+
+    /**
      * @brief 文档页缩放后的原区域 不受旋转影响
      * @return
      */
@@ -175,12 +181,6 @@ public:
      * @param itemIndex 编号
      */
     void setItemIndex(int itemIndex);
-
-    /**
-     * @brief 页面大小
-     * @param pagesize
-     */
-    void setPageSize(const QSizeF &pagesize);
 
     /**
      * @brief itemIndex

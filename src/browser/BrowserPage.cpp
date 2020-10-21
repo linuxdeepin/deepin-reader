@@ -55,6 +55,7 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
+    m_pageSizeF = m_page->sizeF();
 }
 
 BrowserPage::~BrowserPage()
@@ -69,6 +70,11 @@ BrowserPage::~BrowserPage()
 
     if (nullptr != m_page)
         delete m_page;
+}
+
+QSizeF BrowserPage::pageSize()
+{
+    return m_pageSizeF;
 }
 
 QRectF BrowserPage::boundingRect() const
@@ -393,11 +399,6 @@ bool BrowserPage::existInstance(BrowserPage *item)
 void BrowserPage::setItemIndex(int itemIndex)
 {
     m_index = itemIndex;
-}
-
-void BrowserPage::setPageSize(const QSizeF &pagesize)
-{
-    m_pageSizeF = pagesize;
 }
 
 int BrowserPage::itemIndex()

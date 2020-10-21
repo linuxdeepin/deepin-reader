@@ -206,8 +206,6 @@ QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeW
 
 QList< Annotation * > PDFPage::annotations() const
 {
-    LOCK_DOCUMENT
-
     QList< Annotation * > annotations;
 
     foreach (DPdfAnnot *annotation, m_page->annots()) {
@@ -347,8 +345,6 @@ QString PDFDocument::label(int index) const
 
 QSizeF PDFDocument::pageSizeF(int index) const
 {
-    LOCK_DOCUMENT
-
     return m_document->pageSizeF(index);
 }
 
