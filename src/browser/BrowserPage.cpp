@@ -559,7 +559,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -617,7 +617,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
-        renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
     }
 
     return highLightAnnot;
@@ -714,7 +714,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
-        renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
     }
 
     return true;
@@ -761,7 +761,7 @@ bool BrowserPage::removeAllAnnotation()
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -835,7 +835,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -870,7 +870,7 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRect(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return annot;
 }

@@ -81,14 +81,15 @@ PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
 
 PDFPage::~PDFPage()
 {
-    LOCK_PAGE
-    LOCK_DOCUMENT
-
-    delete m_pageMutex;
+    m_pageMutex->lock();
 
     delete m_page;
 
     m_page = nullptr;
+
+    m_pageMutex->unlock();
+
+    delete m_pageMutex;
 }
 
 QSizeF PDFPage::sizeF() const
@@ -302,11 +303,16 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
 PDFDocument::~PDFDocument()
 {
     //需要确保pages先被析构完成
-    LOCK_DOCUMENT
+
+    m_docMutex->lock();
+
+    delete m_document;
+
+    m_document = nullptr;
+
+    m_docMutex->unlock();
 
     delete m_docMutex;
-    delete m_document;
-    m_document = nullptr;
 }
 
 int PDFDocument::numberOfPages() const
