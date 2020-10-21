@@ -90,15 +90,13 @@ public:
     void renderRect(const qreal &scaleFactor, const QRectF &rect);
 
     /**
-     * @brief renderViewPort
-     * 优先显示当前窗口
-     * @param force
+     * @brief 加载当前视图区域
+     * @param scaleFactor 缩放因子
      */
     void renderViewPort(const qreal &scaleFactor);
 
     /**
-     * @brief updateBookmarkState
-     * 更新书签状态
+     * @brief 更新书签状态
      */
     void updateBookmarkState();
 
@@ -225,13 +223,13 @@ public:
 
     /**
      * @brief clearPixmap
-     * 删除缓存图片
+     * 删除缓存图片,当距离当前页较远的时候需要被清除以节省内存空间占用
      */
     void clearPixmap();
 
     /**
      * @brief clearWords
-     *  清除文字 被选中除外
+     *  清除文字,,当距离当前页较远的时候需要被清除以节省内存空间占用,如果有文字被选中则不做任何事
      */
     void clearWords();
 
