@@ -27,6 +27,14 @@
 
 namespace Dr {
 
+/**
+启动时间                POINT-01
+关闭时间                POINT-02
+打开文档响应时间         POINT-03    文档名，文档大小
+保存文档响应时间         POINT-04    文档名，文档大小
+文管中双击文件打开文档时间 POINT-05    文档名，文档大小
+**/
+
 #ifdef PERF_ON
 #define PERF_PRINT_BEGIN(point, desc) DebugTimeManager::getInstance()->beginPointLinux(point, desc)
 #define PERF_PRINT_END(point, desc) DebugTimeManager::getInstance()->endPointLinux(point, desc)
