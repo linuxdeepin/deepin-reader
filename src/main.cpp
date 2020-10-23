@@ -14,6 +14,7 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    PERF_PRINT_BEGIN("POINT-01", "");
     // Init DTK.
     Application a(argc, argv);
     if (Utils::isWayland()) {
@@ -53,6 +54,8 @@ int main(int argc, char *argv[])
     }
 
     QStringList arguments = parser.positionalArguments();
+    if (arguments.size() > 0)
+        PERF_PRINT_BEGIN("POINT-05", "");
 
     //=======通知已经打开的进程
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -79,5 +82,10 @@ int main(int argc, char *argv[])
 
     w->show();
 
-    return a.exec();
+    PERF_PRINT_END("POINT-01", "");
+
+    int result = a.exec();
+
+    PERF_PRINT_END("POINT-02", "");
+    return result;
 }

@@ -10,6 +10,8 @@ CONFIG += c++11 link_pkgconfig
 
 PKGCONFIG += ddjvuapi dtkwidget
 
+DEFINES += PERF_ON
+
 CONFIG(debug, debug|release): DEFINES += THIRDPARTYDEV  #调试第三方库时打开
 
 SRCPWD=$$PWD    #用于被单元测试方便的复用

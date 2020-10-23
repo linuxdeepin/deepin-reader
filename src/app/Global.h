@@ -21,9 +21,19 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#include "DebugTimeManager.h"
+
 #include <QString>
 
 namespace Dr {
+
+#ifdef PERF_ON
+#define PERF_PRINT_BEGIN(point, desc) DebugTimeManager::getInstance()->beginPointLinux(point, desc)
+#define PERF_PRINT_END(point, desc) DebugTimeManager::getInstance()->endPointLinux(point, desc)
+#else
+#define PERF_PRINT_BEGIN(point,desc)
+#define PERF_PRINT_END(point)
+#endif
 
 enum FileType {
     Unknown = 0,

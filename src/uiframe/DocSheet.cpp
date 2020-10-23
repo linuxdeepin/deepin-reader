@@ -363,6 +363,7 @@ bool DocSheet::fileChanged()
 
 bool DocSheet::saveData()
 {
+    PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
     if (m_documentChanged && !m_browser->save(filePath()))
         return false;
 
@@ -376,6 +377,8 @@ bool DocSheet::saveData()
     m_sidebar->changeResetModelData();
 
     dApp->unBlockShutdown();
+
+    PERF_PRINT_END("POINT-04", "");
 
     return true;
 }

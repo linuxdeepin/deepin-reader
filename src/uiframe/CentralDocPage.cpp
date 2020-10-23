@@ -156,6 +156,8 @@ void CentralDocPage::openFile(const QString &filePath)
         return;
     }
 
+    PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
+
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
     if (sheet->needPassword()) {
@@ -184,6 +186,9 @@ void CentralDocPage::openFile(const QString &filePath)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
     onOpened(sheet, true);
+
+    PERF_PRINT_END("POINT-03", "");
+    PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 }
 
 void CentralDocPage::addSheet(DocSheet *sheet)
