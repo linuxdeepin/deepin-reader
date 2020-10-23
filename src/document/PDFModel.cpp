@@ -99,7 +99,7 @@ QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QR
     return render(scaleFactor, scaleFactor, rotation, boundingRect);
 }
 
-QImage PDFPage::render(int width, int height, Qt::AspectRatioMode) const
+QImage PDFPage::render(qreal width, qreal height, Qt::AspectRatioMode) const
 {
     qreal horizontalResolution = 1.0 * width / m_page->width();
     qreal verticalResolution = 1.0 * height / m_page->height();

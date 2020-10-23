@@ -75,7 +75,7 @@ public:
 
     QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const override;
 
-    QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
+    QImage render(qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
 
     QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRectF boundingRect) const;
 
