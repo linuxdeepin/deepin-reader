@@ -252,6 +252,14 @@
     </message>
 </context>
 <context>
+    <name>Central</name>
+    <message>
+        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <source>Documents</source>
+        <translation>文件</translation>
+    </message>
+</context>
+<context>
     <name>CentralDocPage</name>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
@@ -577,7 +585,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Exit</source>
-        <translation>退出</translation>
+        <translation>離開</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="195"/>
@@ -585,7 +593,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Help</source>
-        <translation>幫助</translation>
+        <translation>說明</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>

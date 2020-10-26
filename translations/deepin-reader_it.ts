@@ -253,6 +253,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>Central</name>
+    <message>
+        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CentralDocPage</name>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>

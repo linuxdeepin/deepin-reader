@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
-        <translation>Dokumentum megjelenítő</translation>
+        <translation>Dokumentum Megjelenítő</translation>
     </message>
     <message>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
-        <translation>A Dokumentum megjelenítő egy eszköz dokumentumfájlok olvasásához, mely támogatja a PDF, DJVU, stb. fájlformátumokat.</translation>
+        <translation>A Dokumentum Megjelenítő egy eszköz dokumentumfájlok olvasásához, mely támogatja a PDF, DJVU, stb. fájlformátumokat.</translation>
     </message>
 </context>
 <context>
@@ -188,7 +188,7 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="95"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="143"/>
         <source>Exit fullscreen</source>
-        <translation>Kilépés a teljes képernyős megjelenítésből</translation>
+        <translation>Kilépés a teljes képernyőből</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="97"/>
@@ -248,7 +248,15 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="124"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="172"/>
         <source>Document info</source>
-        <translation>Dokumentum információ</translation>
+        <translation>Dokumentum információi</translation>
+    </message>
+</context>
+<context>
+    <name>Central</name>
+    <message>
+        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -262,17 +270,17 @@
         <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
         <source>Please check if the file is damaged</source>
-        <translation>Kérem ellenőrizze, hogy a fájl megsérült-e</translation>
+        <translation>Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
         <source>Save failed</source>
-        <translation>Mentés sikertelen</translation>
+        <translation>A mentés sikertelen</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
         <source>Saved successfully</source>
-        <translation>Mentés sikeres</translation>
+        <translation>A mentés sikeres</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
@@ -323,7 +331,7 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
-        <translation>Kérem jelölje ki a szöveget</translation>
+        <translation>Kérjük jelölje ki a szöveget</translation>
     </message>
     <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="495"/>
@@ -378,7 +386,7 @@
     <message>
         <location filename="../src/widgets/HandleMenu.cpp" line="45"/>
         <source>Hand Tool</source>
-        <translation>Kéz</translation>
+        <translation>Kéz eszköz</translation>
     </message>
 </context>
 <context>
@@ -448,7 +456,7 @@
     <message>
         <location filename="../src/Application.cpp" line="60"/>
         <source>Document not saved</source>
-        <translation>Dokumentum nem került mentésre</translation>
+        <translation>A  dokumentum nem került mentésre</translation>
     </message>
 </context>
 <context>
@@ -811,7 +819,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Display shortcuts</source>
-        <translation>Parancsikonok megjelenítése</translation>
+        <translation>Gyorsbillentyűk megjelenítése</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="207"/>
@@ -900,18 +908,18 @@
     <message>
         <location filename="../src/main.cpp" line="28"/>
         <source>Document File Path.</source>
-        <translation>Dokumentum fájl elérési út</translation>
+        <translation>Dokumentum fájl elérési útja</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="29"/>
         <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
-        <translation>Fájl elérési út</translation>
+        <translation>Fájl elérési útja</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
-        <translation>Bélyegkép elérési útja.</translation>
+        <translation>Bélyegkép elérési útja</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="37"/>
