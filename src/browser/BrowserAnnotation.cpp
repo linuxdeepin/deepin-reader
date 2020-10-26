@@ -41,12 +41,6 @@ BrowserAnnotation::~BrowserAnnotation()
     m_annotation = nullptr;
 }
 
-void BrowserAnnotation::setScaleFactorAndRotation(Dr::Rotation rotation)
-{
-    m_rotation = rotation;
-    update();
-}
-
 int BrowserAnnotation::annotationType()
 {
     if (nullptr == m_annotation)

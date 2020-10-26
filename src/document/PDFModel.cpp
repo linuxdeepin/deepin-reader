@@ -27,45 +27,45 @@
 
 namespace deepin_reader {
 
-PDFAnnotation::PDFAnnotation(DPdfAnnot *annotation) : Annotation(),
-    m_annotation(annotation)
+PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
+    m_dannotation(dannotation)
 {
 }
 
 PDFAnnotation::~PDFAnnotation()
 {
-    m_annotation = nullptr;
+    m_dannotation = nullptr;
 }
 
 QList<QRectF> PDFAnnotation::boundary() const
 {
     QList<QRectF> rectFList;
 
-    if (m_annotation->type() == DPdfAnnot::AText || m_annotation->type() == DPdfAnnot::AHighlight) {
-        rectFList.append(m_annotation->boundaries());
+    if (m_dannotation->type() == DPdfAnnot::AText || m_dannotation->type() == DPdfAnnot::AHighlight) {
+        rectFList.append(m_dannotation->boundaries());
     }
     return rectFList;
 }
 
 QString PDFAnnotation::contents() const
 {
-    if (nullptr == m_annotation)
+    if (nullptr == m_dannotation)
         return QString();
 
-    return m_annotation->text();
+    return m_dannotation->text();
 }
 
 int PDFAnnotation::type()
 {
-    if (nullptr == m_annotation)
+    if (nullptr == m_dannotation)
         return -1;
 
-    return m_annotation->type();
+    return m_dannotation->type();
 }
 
 DPdfAnnot *PDFAnnotation::ownAnnotation()
 {
-    return m_annotation;
+    return m_dannotation;
 }
 
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
@@ -208,8 +208,8 @@ QList< Annotation * > PDFPage::annotations() const
 {
     QList< Annotation * > annotations;
 
-    foreach (DPdfAnnot *annotation, m_page->annots()) {
-        annotations.append(new PDFAnnotation(annotation));
+    foreach (DPdfAnnot *dannotation, m_page->annots()) {
+        annotations.append(new PDFAnnotation(dannotation));
     }
 
     return annotations;
@@ -233,9 +233,9 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
     if (PDFAnnotation == nullptr)
         return false;
 
-    m_page->removeAnnot(PDFAnnotation->m_annotation);
+    m_page->removeAnnot(PDFAnnotation->m_dannotation);
 
-    PDFAnnotation->m_annotation = nullptr;
+    PDFAnnotation->m_dannotation = nullptr;
     delete PDFAnnotation;
     PDFAnnotation = nullptr;
 

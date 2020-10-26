@@ -54,9 +54,9 @@ public:
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
-    PDFAnnotation(DPdfAnnot *annotation);
+    PDFAnnotation(DPdfAnnot *dannotation);
 
-    DPdfAnnot *m_annotation;
+    DPdfAnnot *m_dannotation;
 
 };
 

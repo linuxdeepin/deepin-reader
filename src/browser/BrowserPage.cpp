@@ -225,6 +225,9 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         loadAnnotations();
     }
 
+    scaleWords();
+    scaleAnnots();
+
     update();
 }
 
@@ -494,6 +497,21 @@ void BrowserPage::clearWords()
         word->setParentItem(nullptr);
         scene()->removeItem(word);
         delete word;
+    }
+}
+
+void BrowserPage::scaleAnnots(bool force)
+{
+    if (m_annotationItems.count() <= 0)
+        return;
+
+    prepareGeometryChange();
+
+    if (force || !qFuzzyCompare(m_annotScaleFactor, m_scaleFactor)) {
+        m_wordScaleFactor = m_scaleFactor;
+        foreach (BrowserAnnotation *annot, m_annotationItems) {
+            annot->setScaleFactor(m_scaleFactor);
+        }
     }
 }
 

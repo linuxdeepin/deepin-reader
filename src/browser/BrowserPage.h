@@ -216,6 +216,12 @@ public:
     void loadAnnotations();     //如果加载过则不加载
 
     /**
+     * @brief scaleAnnots
+     *  更改缩放如果存在注释
+     */
+    void scaleAnnots(bool force = false);
+
+    /**
      * @brief scaleWords
      *  更改缩放如果存在文字
      */
@@ -516,6 +522,7 @@ private:
     bool m_wordSelectable  = false;                         //当前文字是否可以选取
 
     QList<BrowserAnnotation *> m_annotationItems;           //一个deepin_reader::Annotation可能对应多个annotationItems
+    double m_annotScaleFactor = -1;                         //当前注释的缩放
     BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
     bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框

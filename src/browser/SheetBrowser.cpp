@@ -985,8 +985,6 @@ void SheetBrowser::deform(SheetOperation &operation)
                 m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
 
             maxHeight += m_items.at(i)->rect().height() + space;
-
-            m_items[i]->scaleWords();
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -1022,9 +1020,6 @@ void SheetBrowser::deform(SheetOperation &operation)
             else
                 maxHeight += m_items.at(i)->rect().height() + space;
 
-            m_items[i]->scaleWords();
-            if (m_items.count() > i + 1)
-                m_items[i + 1]->scaleWords();
         }
         maxWidth += space;
     }
