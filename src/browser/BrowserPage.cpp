@@ -46,7 +46,6 @@
 #include <QMutexLocker>
 #include <QTimer>
 #include <QUuid>
-#include <QPainterPath>
 #include <QDesktopServices>
 #include <QDebug>
 
