@@ -42,7 +42,6 @@
 #include "MsgHeader.h"
 #include "document/DjVuModel.h"
 #include "Utils.h"
-#include "PageViewportThread.h"
 #include "PageSearchThread.h"
 
 #include <QGraphicsItem>
@@ -58,6 +57,8 @@
 #include <QScroller>
 #include <QPainterPath>
 #include <QDebug>
+#include <QTemporaryDir>
+#include <QProcess>
 
 DWIDGET_USE_NAMESPACE
 
@@ -131,10 +132,9 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
-    int status = -1;
     if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath, QString(), status);
-    else if (Dr::DjVu == fileType)
+        document = deepin_reader::PDFDocument::loadDocument(filePath, QString());
+    else if (Dr::DJVU == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
 
     if (nullptr == document)
@@ -169,11 +169,31 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
 {
     m_filePassword = password;
 
-    int status = -1;
     if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password, status);
-    else if (Dr::DjVu == fileType)
+        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
+    else if (Dr::DJVU == fileType)
         m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
+    else if (Dr::DOCX == fileType) {
+        //以下后期挪到一个转化对话框中，实时打印输出
+        QTemporaryDir dir;
+        QProcess p(this);
+        QString targetDoc = dir.path() + "/temp.docx";
+        QString targetPdf = dir.path() + "/temp.pdf";
+        QFile file(filePath);
+        file.copy(targetDoc);
+        p.setWorkingDirectory(dir.path());
+        p.start("unzip " + targetDoc + " \"word/media/*\" ");
+        p.waitForStarted();
+        p.waitForFinished();
+        p.setWorkingDirectory(dir.path() + "/word");
+        p.start("pandoc " +  targetDoc + " -o " + targetPdf + " --pdf-engine=wkhtmltopdf -V CJKmainfont=\"Noto Sans CJK JP - Bold\"");
+        p.waitForStarted();
+        p.waitForFinished();
+        p.terminate();
+        p.close();
+
+        m_document = deepin_reader::PDFDocument::loadDocument(targetPdf, password);
+    }
 
     if (nullptr == m_document)
         return false;
@@ -182,14 +202,6 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     m_filePath = filePath;
 
     return true;
-}
-
-Page *SheetBrowser::page(int index)
-{
-    if (nullptr == m_document)
-        return nullptr;
-
-    return m_document->page(index);
 }
 
 bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
@@ -202,11 +214,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     int allPageCnt = m_document->numberOfPages();
 
     for (int i = 0; i < allPageCnt; ++i) {
-        const QSizeF &pageSize = m_document->pageSizeF(i);
-
-        BrowserPage *item = new BrowserPage(this, nullptr);
-
-        item->setPageSize(pageSize);
+        BrowserPage *item = new BrowserPage(this, m_document->page(i));
 
         item->setItemIndex(i);
 
@@ -221,11 +229,11 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
             m_lable2Page.insert(labelPage, i);
         }
 
-        if (pageSize.width() > m_maxWidth)
-            m_maxWidth = pageSize.width();
+        if (item->pageSize().width() > m_maxWidth)
+            m_maxWidth = item->pageSize().width();
 
-        if (pageSize.height() > m_maxHeight)
-            m_maxHeight = pageSize.height();
+        if (item->pageSize().height() > m_maxHeight)
+            m_maxHeight = item->pageSize().height();
     }
 
     for (int i = 0; i < m_items.count(); ++i) {
@@ -334,9 +342,6 @@ void SheetBrowser::onViewportChanged()
             item->clearPixmap();
             item->clearWords();
         }
-
-        if (item->boundingRect().width() > 1000 || item->boundingRect().height() > 1000)
-            item->renderViewPort();
     }
 }
 
@@ -654,10 +659,6 @@ void SheetBrowser::onRemoveIconAnnotSelect()
     clearSelectIconAnnotAfterMenu();
 }
 
-/**
- * @brief SheetBrowser::onInit
- * 重新渲染当前页
- */
 void SheetBrowser::onInit()
 {
     if (1 != m_initPage) {
@@ -742,13 +743,9 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
             return;
 
         if (event->delta() > 0) {
-            QTimer::singleShot(50, this, [ = ] {
-                m_sheet->zoomin();
-            });
+            m_sheet->zoomin();
         } else {
-            QTimer::singleShot(50, this, [ = ] {
-                m_sheet->zoomout();
-            });
+            m_sheet->zoomout();
         }
 
         return;
@@ -789,8 +786,8 @@ bool SheetBrowser::event(QEvent *event)
         m_touchBegin = touchEvent->timestamp();
         m_gestureAction = GA_touch;
         m_bTouch = true;
-    default:
         break;
+    default: break;
     }
 
     return QGraphicsView::event(event);
@@ -988,8 +985,6 @@ void SheetBrowser::deform(SheetOperation &operation)
                 m_items.at(i)->setPos(x, maxHeight + m_items.at(i)->boundingRect().width());
 
             maxHeight += m_items.at(i)->rect().height() + space;
-
-            m_items[i]->scaleWords();
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
@@ -1025,9 +1020,6 @@ void SheetBrowser::deform(SheetOperation &operation)
             else
                 maxHeight += m_items.at(i)->rect().height() + space;
 
-            m_items[i]->scaleWords();
-            if (m_items.count() > i + 1)
-                m_items[i + 1]->scaleWords();
         }
         maxWidth += space;
     }
@@ -2026,3 +2018,10 @@ QString SheetBrowser::pageNum2Lable(const int index)
     return  QString();
 }
 
+QSizeF SheetBrowser::pageSizeByIndex(int index)
+{
+    if (nullptr == m_document)
+        return QSizeF();
+
+    return m_document->pageSizeF(index);
+}

@@ -670,6 +670,9 @@ FPDF_EXPORT int FPDF_CALLCONV FPDF_GetPageCount(FPDF_DOCUMENT document);
 FPDF_EXPORT FPDF_PAGE FPDF_CALLCONV FPDF_LoadPage(FPDF_DOCUMENT document,
                                                   int page_index);
 
+FPDF_EXPORT FPDF_PAGE FPDF_CALLCONV FPDF_LoadNoParsePage(FPDF_DOCUMENT document,
+                                                         int page_index);
+
 // Experimental API
 // Function: FPDF_GetPageWidthF
 //          Get page width.

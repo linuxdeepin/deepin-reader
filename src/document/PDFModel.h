@@ -54,11 +54,9 @@ public:
 private:
     Q_DISABLE_COPY(PDFAnnotation)
 
-    PDFAnnotation(QMutex *mutex, DPdfAnnot *annotation);
+    PDFAnnotation(DPdfAnnot *dannotation);
 
-    mutable QMutex *m_mutex;
-
-    DPdfAnnot *m_annotation;
+    DPdfAnnot *m_dannotation;
 
 };
 
@@ -73,17 +71,19 @@ public:
 
     QSizeF sizeF() const override;
 
-    QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const override;
+    QImage render(const qreal &scaleFactor) const override;
 
-    QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
+    QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const override;
 
-    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRect boundingRect) const;
+    QImage render(qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
+
+    QImage render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation rotation, QRectF boundingRect) const;
 
     Link getLinkAtPoint(const QPointF &point) const override;
 
     QString text(const QRectF &rect) const override;
 
-    QList<Word> words(Dr::Rotation rotation) override;
+    QList<Word> words() override;
 
     QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
@@ -106,11 +106,9 @@ private:
 
     PDFPage(QMutex *mutex, DPdfPage *page);
 
-    mutable QMutex *m_mutex;
+    QMutex *m_docMutex = nullptr;
 
-    DPdfPage *m_page;
-
-    Dr::Rotation m_wordRotation = Dr::NumberOfRotations;
+    DPdfPage *m_page = nullptr;
 
     QList<Word> m_words;
 
@@ -122,7 +120,7 @@ class PDFDocument : public Document
     Q_DECLARE_TR_FUNCTIONS(Model::PDFDocument)
 
 public:
-    virtual ~PDFDocument();
+    virtual ~PDFDocument() override;
 
     int numberOfPages() const override;
 
@@ -142,16 +140,18 @@ public:
 
     Properties properties() const override;
 
-    static deepin_reader::PDFDocument *loadDocument(const QString &filePath, const QString &password, int &status);
+    static PDFDocument *loadDocument(const QString &filePath, const QString &password);
+
+    static int tryLoadDocument(const QString &filePath, const QString &password);
 
 private:
     Q_DISABLE_COPY(PDFDocument)
 
-    PDFDocument(DPdfDoc *document);
-
-    mutable QMutex m_mutex;
+    explicit PDFDocument(DPdfDoc *document);
 
     DPdfDoc *m_document = nullptr;
+
+    QMutex *m_docMutex;
 
     mutable Properties m_fileProperties;
 

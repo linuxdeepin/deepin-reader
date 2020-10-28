@@ -172,6 +172,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
         this->deleteLater();
 
+        PERF_PRINT_BEGIN("POINT-02", "");
+
     } else
         event->ignore();
 }

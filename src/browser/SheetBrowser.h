@@ -119,13 +119,6 @@ public:
     bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
-     * @brief 获取指定页面
-     * @param index
-     * @return
-     */
-    Page *page(int index);
-
-    /**
      * @brief setMouseShape
      * 根据鼠标样式,设置文字是否可选
      * @param shape 鼠标样式
@@ -434,6 +427,13 @@ public:
      */
     void hideSubTipsWidget();
 
+    /**
+     * @brief 获取页面真实大小
+     * @param index
+     * @return
+     */
+    QSizeF pageSizeByIndex(int index);
+
 signals:
     void sigPageChanged(int page);
 
@@ -731,6 +731,8 @@ private:
     deepin_reader::Document *m_document = nullptr;
 
     DocSheet *m_sheet = nullptr;
+
+    QMutex m_pageMutex;     //取页数的锁
 
     BrowserMagniFier *m_magnifierLabel = nullptr;
     TipsWidget *m_tipsWidget = nullptr;

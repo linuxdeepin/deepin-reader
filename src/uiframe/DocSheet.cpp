@@ -47,6 +47,7 @@
 #include <QFileInfo>
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 
@@ -67,7 +68,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
 
     if (Dr::PDF == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
-    else if (Dr::DjVu == fileType)
+    else if (Dr::DJVU == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
     else
         m_sidebar = new SheetSidebar(this, nullptr);
@@ -361,6 +362,7 @@ bool DocSheet::fileChanged()
 
 bool DocSheet::saveData()
 {
+    PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
     if (m_documentChanged && !m_browser->save(filePath()))
         return false;
 
@@ -374,6 +376,8 @@ bool DocSheet::saveData()
     m_sidebar->changeResetModelData();
 
     dApp->unBlockShutdown();
+
+    PERF_PRINT_END("POINT-04", "");
 
     return true;
 }
@@ -533,7 +537,7 @@ QString DocSheet::filter()
 {
     if (Dr::PDF == m_fileType)
         return  "Pdf File (*.pdf)";
-    else if (Dr::DjVu == m_fileType)
+    else if (Dr::DJVU == m_fileType)
         return "Djvu files (*.djvu)";
 
     return "";
@@ -544,7 +548,7 @@ QString DocSheet::format()
     if (Dr::PDF == m_fileType) {
         const Properties &propertys = m_browser->properties();
         return QString("PDF %1").arg(propertys.value("Version").toString());
-    } else if (Dr::DjVu == m_fileType) {
+    } else if (Dr::DJVU == m_fileType) {
         return QString("DJVU");
     }
     return "";
@@ -905,17 +909,11 @@ void DocSheet::showEncryPage()
 bool DocSheet::needPassword()
 {
     int status = -1;
-    Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath(), QString(), status);
+        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), QString());
 
     if (status == Document::PASSWORD_ERROR)
         return true;
-
-    if (nullptr == document)
-        return false;
-
-    delete document;
 
     return false;
 }
@@ -944,12 +942,10 @@ QString DocSheet::getPageLabelByIndex(const int &index)
 bool DocSheet::tryPassword(QString password)
 {
     int status = -1;
-    Document *document = nullptr;
     if (Dr::PDF == m_fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath(), password, status);
+        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), password);
 
     if (status == Document::SUCCESS) {
-        delete document;
         return true;
     }
     return false;
@@ -974,4 +970,9 @@ void DocSheet::onExtractPassword(const QString &password)
     } else {
         m_encryPage->wrongPassWordSlot();
     }
+}
+
+QSizeF DocSheet::pageSizeByIndex(int index)
+{
+    return m_browser->pageSizeByIndex(index);
 }

@@ -43,11 +43,10 @@ public:
     ~BrowserAnnotation() override;
 
     /**
-     * @brief setScaleFactorAndRotation
-     * 设置注释缩放和旋转参数
-     * @param rotation
+     * @brief 为了让注释占比固定,视图改变时需要设置缩放因子
+     * @param scaleFactor 缩放因子
      */
-    void setScaleFactorAndRotation(Dr::Rotation rotation);
+    void setScaleFactor(qreal scaleFactor);
 
     /**
      * @brief annotationType
@@ -98,20 +97,11 @@ public:
      */
     void setDrawSelectRect(const bool draw);
 
-    /**
-     * @brief setScaleFactor
-     * 设置缩放系数
-     * @param scale
-     */
-    void setScaleFactor(const double scale);
-
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:
     deepin_reader::Annotation *m_annotation;
-
-    Dr::Rotation m_rotation = Dr::RotateBy0;
 
     QRectF m_rect;
 

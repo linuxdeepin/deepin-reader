@@ -56,13 +56,19 @@ public:
     virtual ~BrowserPage() override;
 
     /**
-     * @brief 文档页原矩形 不受旋转影响
+     * @brief 文档原始大小
+     * @return
+     */
+    QSizeF pageSize();
+
+    /**
+     * @brief 文档页缩放后的原区域 不受旋转影响
      * @return
      */
     QRectF boundingRect()const override;
 
     /**
-     * @brief 文档页实际矩形
+     * @brief 文档页实际区域
      * @return
      */
     QRectF rect();  //
@@ -83,8 +89,20 @@ public:
     void render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater = false, const bool &force = false);
 
     /**
-     * @brief updateBookmarkState
-     * 更新书签状态
+     * @brief 加载局部区域
+     * @param scaleFactor 缩放系数
+     * @param rect 需要被局部加载的文档区域
+     */
+    void renderRect(const qreal &scaleFactor, const QRectF &rect);
+
+    /**
+     * @brief 加载当前视图区域
+     * @param scaleFactor 缩放因子
+     */
+    void renderViewPort(const qreal &scaleFactor);
+
+    /**
+     * @brief 更新书签状态
      */
     void updateBookmarkState();
 
@@ -97,11 +115,11 @@ public:
     static bool existInstance(BrowserPage *item);
 
     /**
-     * @brief renderViewPort
-     * 优先显示当前窗口
-     * @param force
+     * @brief 获取缩放图片
+     * @param scaleFactor 缩放因子
+     * @return
      */
-    void renderViewPort(bool force = false);
+    QImage getImage(double scaleFactor = 1);
 
     /**
      * @brief getImage
@@ -111,7 +129,7 @@ public:
      * @param boundingRect 范围 默认为获取全部
      * @return
      */
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect = QRect());
+    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect = QRectF());
 
     /**
      * @brief getImage
@@ -165,12 +183,6 @@ public:
     void setItemIndex(int itemIndex);
 
     /**
-     * @brief 页面大小
-     * @param pagesize
-     */
-    void setPageSize(const QSizeF &pagesize);
-
-    /**
      * @brief itemIndex
      * 当前页的编号(从0开始)
      * @return
@@ -204,6 +216,12 @@ public:
     void loadAnnotations();     //如果加载过则不加载
 
     /**
+     * @brief scaleAnnots
+     *  更改缩放如果存在注释
+     */
+    void scaleAnnots(bool force = false);
+
+    /**
      * @brief scaleWords
      *  更改缩放如果存在文字
      */
@@ -211,13 +229,13 @@ public:
 
     /**
      * @brief clearPixmap
-     * 删除缓存图片
+     * 删除缓存图片,当距离当前页较远的时候需要被清除以节省内存空间占用
      */
     void clearPixmap();
 
     /**
      * @brief clearWords
-     *  清除文字 被选中除外
+     *  清除文字,,当距离当前页较远的时候需要被清除以节省内存空间占用,如果有文字被选中则不做任何事
      */
     void clearWords();
 
@@ -236,7 +254,7 @@ public:
      * @param color 注释高亮颜色
      * @return true:更新成功  false:更新失败
      */
-    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString, const QColor);
+    bool updateAnnotation(deepin_reader::Annotation *annotation, const QString &, const QColor &);
 
     /**
      * @brief addHighlightAnnotation
@@ -412,9 +430,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
-
-    void handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect = QRect());
+    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect);
 
     /**
      * brief handleWordLoaded
@@ -444,12 +460,6 @@ private:
     QRectF bookmarkMouseRect();
 
     /**
-     * @brief updatePageFull
-     * 更新整页
-     */
-    void updatePageFull();
-
-    /**
      * @brief 搜索
      * @param text
      * @param matchCase
@@ -464,6 +474,12 @@ private:
      * @return
      */
     QString text(const QRectF &rect);
+
+    /**
+     * @brief 是否属于超大文档
+     * @return
+     */
+    bool isBigDoc();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -486,14 +502,17 @@ private:
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 
     QPixmap m_pixmap;                       //当前图片
-    bool    m_pixmapHasRendered = false;    //当前图片是否已经开始加载
-    double  m_pixmapScaleFactor   = -1;     //当前图片的缩放
-    QRect   m_pixmapRenderedRect;           //当前图片已经加载的rect
-
-    bool    m_viewportTryRender = false;    //视图区域绘制尝试过调用
-    double  m_viewportScaleFactor = -1;     //视图区域的缩放
-    QImage m_viewportImage;               //视图区域的图片
-    QRect   m_viewportRenderedRect;         //试图区域
+    int     m_pixmapId          = 0;        //当前图片的标识
+    bool    m_pixmapIsLastest   = false;    //当前图示是否最新
+    bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
+    double  m_pixmapScaleFactor = -1;       //当前图片的缩放
+    bool    m_viewportRendered  = false;    //图片初始化加载视图窗口
+    struct ImagePatch {
+        QImage image;
+        int pixmapId;
+        QRectF rect;
+    };
+    QList<ImagePatch> m_imagePatchList;     //当前图片加载成功前形成的补丁
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放
@@ -503,6 +522,7 @@ private:
     bool m_wordSelectable  = false;                         //当前文字是否可以选取
 
     QList<BrowserAnnotation *> m_annotationItems;           //一个deepin_reader::Annotation可能对应多个annotationItems
+    double m_annotScaleFactor = -1;                         //当前注释的缩放
     BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
     bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框

@@ -33,7 +33,6 @@
 #include "BrowserWord.h"
 #include "BrowserAnnotation.h"
 #include "Application.h"
-#include "PageViewportThread.h"
 #include "Utils.h"
 
 #include <DApplicationHelper>
@@ -56,6 +55,7 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
+    m_pageSizeF = m_page->sizeF();
 }
 
 BrowserPage::~BrowserPage()
@@ -70,6 +70,11 @@ BrowserPage::~BrowserPage()
 
     if (nullptr != m_page)
         delete m_page;
+}
+
+QSizeF BrowserPage::pageSize()
+{
+    return m_pageSizeF;
 }
 
 QRectF BrowserPage::boundingRect() const
@@ -123,20 +128,14 @@ void BrowserPage::updateBookmarkState()
 
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    if (m_page == nullptr)
-        m_page = m_parent->page(itemIndex());
-
-    if (!m_viewportTryRender)
-        renderViewPort(false);
-
-    if (!m_pixmapHasRendered) {
+    if (!m_pixmapIsLastest) {
         render(m_scaleFactor, m_rotation);
     }
 
-    painter->drawPixmap(option->rect, m_pixmap);
+    if (!m_viewportRendered && !m_pixmapHasRendered && isBigDoc())
+        renderViewPort(m_scaleFactor);
 
-    if (m_viewportRenderedRect.isValid() && qFuzzyCompare(m_viewportScaleFactor, m_scaleFactor))
-        painter->drawImage(m_viewportRenderedRect, m_viewportImage);
+    painter->drawPixmap(option->rect, m_pixmap);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -154,6 +153,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 
     painter->setBrush(QColor(59, 148, 1, 100));
+
     if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
         painter->drawRect(getNorotateRect(m_searchSelectLighRectf));
 
@@ -174,6 +174,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
         painter->drawRect(rect);
     }
+
 }
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
@@ -181,15 +182,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
-    m_pixmapHasRendered = false;
-
     if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem))
         m_lastClickIconAnnotationItem->setScaleFactor(scaleFactor);
 
-    if (m_viewportRenderedRect.isValid()) {
-        m_viewportRenderedRect = QRect();
-        m_viewportImage = QImage();
-    }
+    m_pixmapIsLastest = false;
 
     m_scaleFactor = scaleFactor;
 
@@ -205,62 +201,63 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             this->setRotation(270);
     }
 
-//    if (m_wordHasRendered && !m_wordIsHide)
-//        loadWords(false);
-
     if (!renderLater && !qFuzzyCompare(m_pixmapScaleFactor, m_scaleFactor)) {
         m_pixmapScaleFactor = m_scaleFactor;
 
-        m_pixmapRenderedRect = QRect(0, 0, static_cast<int>(boundingRect().width()), 0);
-
-        m_pixmapHasRendered = true;
+        RenderPageTask task;
+        task.page = this;
+        task.scaleFactor = m_scaleFactor;
+        task.pixmapId = ++m_pixmapId;
 
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
             m_pixmap.fill(Qt::white);
-        } else
-            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
 
-        PageRenderThread::clearTask(this);
+        } else {
+            PageRenderThread::clearTask(this);
+        }
 
-        RenderPageTask task;
-        task.item = this;
-        task.scaleFactor = m_scaleFactor;
-        task.rotation = Dr::RotateBy0;
-        task.renderRect = boundingRect().toRect();
-        PageRenderThread::appendTask(task);
+        if (!isBigDoc())
+            PageRenderThread::appendTask(task); //小文档取消延时
+        else
+            PageRenderThread::appendDelayTask(task);
 
         loadAnnotations();
     }
-}
 
-void BrowserPage::handleRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)
-{
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
-        return;
-
-    if (rect.height() == static_cast<int>(boundingRect().height())) {
-        m_pixmap = QPixmap::fromImage(image);
-    } else {
-        QPainter painter(&m_pixmap);
-        painter.drawImage(rect, image);
-    }
-
-    m_pixmapRenderedRect.setHeight(rect.y() + rect.height());
-
-    emit m_parent->sigPartThumbnailUpdated(m_index);
+    scaleWords();
+    scaleAnnots();
 
     update();
 }
 
-void BrowserPage::renderViewPort(bool force)
+void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 {
-    m_viewportTryRender = true;
-
     if (nullptr == m_parent)
         return;
 
-    if (!force && boundingRect().width() < 2000 && boundingRect().height() < 2000)
+    QRect validRect = boundingRect().intersected(rect).toRect();
+
+    QImage image = getImage(scaleFactor, Dr::RotateBy0, validRect);
+
+    if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
+        ImagePatch patch;
+        patch.pixmapId = m_pixmapId;
+        patch.image = image;
+        patch.rect = validRect;
+        m_imagePatchList.append(patch);
+    }
+
+    if (!m_pixmap.isNull()) {//如果当前图已被清除，无需绘制
+        QPainter painter(&m_pixmap);
+        painter.drawImage(validRect, image);
+        update();
+    }
+}
+
+void BrowserPage::renderViewPort(const qreal &scaleFactor)
+{
+    if (nullptr == m_parent)
         return;
 
     QRect viewPortRect = QRect(0, 0, m_parent->size().width(), m_parent->size().height());
@@ -278,43 +275,48 @@ void BrowserPage::renderViewPort(bool force)
     QRect viewRenderRect = QRect(static_cast<int>(viewRenderRectF.x()), static_cast<int>(viewRenderRectF.y()),
                                  static_cast<int>(viewRenderRectF.width()), static_cast<int>(viewRenderRectF.height()));
 
-    //如果现在已经加载的rect包含viewRender 就不加入任务
-    if (!force && m_pixmapRenderedRect.contains(viewRenderRect))
-        return;
+    //扩大加载的视图窗口范围 防止小范围的拖动
+    int expand = 200;
+    viewRenderRect.setX(viewRenderRect.x() - expand < 0 ? 0 : viewRenderRect.x() - expand);
+    viewRenderRect.setY(viewRenderRect.y() - expand < 0 ? 0 : viewRenderRect.y() - expand);
+    viewRenderRect.setWidth(viewRenderRect.x() + viewRenderRect.width() + expand * 2 > boundingRect().width() ? viewRenderRect.width() :  viewRenderRect.width() + expand * 2);
+    viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
-    //如果只是当前视图区域变小则不加载
-//    if (!force && m_viewportRenderedRect.contains(viewRenderRect))
-//        return;
+    renderRect(scaleFactor, viewRenderRect);
 
-    RenderViewportTask task;
-
-    task.page = this;
-
-    task.scaleFactor = m_scaleFactor;
-
-    task.rotation = Dr::RotateBy0;
-
-    task.renderRect = viewRenderRect;
-
-    PageViewportThread::appendTask(task);
+    m_viewportRendered = true;
 }
 
-void BrowserPage::handleViewportRenderFinished(const double &scaleFactor, const QImage &image, const QRect &rect)
+void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect)
 {
-    if (!qFuzzyCompare(scaleFactor, m_pixmapScaleFactor))
+    if (pixmapId == m_pixmapId && rect.isEmpty()) {//整体更新
+        m_pixmapHasRendered = true;
+        m_pixmapIsLastest = true;
+        m_pixmap = pixmap;
+
+        for (ImagePatch &patch : m_imagePatchList) {
+
+            if (patch.pixmapId == m_pixmapId) {
+                QPainter painter(&m_pixmap);
+                painter.drawImage(patch.rect, patch.image);
+            }
+        }
+        m_imagePatchList.clear();
+
+    } else if (pixmapId == 0 && !rect.isEmpty()) { //局部
+        QPainter painter(&m_pixmap);
+        painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
+    } else
         return;
 
-    m_viewportScaleFactor = scaleFactor;
-
-    m_viewportImage = image;
-
-    m_viewportRenderedRect = rect;
-
-    QPainter painter(&m_pixmap);
-
-    painter.drawImage(rect, image);
+    emit m_parent->sigPartThumbnailUpdated(m_index);
 
     update();
+}
+
+QImage BrowserPage::getImage(double scaleFactor)
+{
+    return m_page->render(scaleFactor);
 }
 
 void BrowserPage::handleWordLoaded(const QList<Word> &words)
@@ -336,21 +338,13 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 }
 
-QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRect &boundingRect)
+QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     return m_page->render(rotation, scaleFactor, boundingRect);
 }
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     if (bSrc) {
         if (m_pixmap.isNull())
             return QImage();
@@ -371,19 +365,11 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     return m_page->render(m_rotation, scaleFactor, rect);
 }
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     QTransform transform;
     transform.rotate(m_rotation * 90);
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
@@ -403,11 +389,7 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
 
 QList<Word> BrowserPage::getWords()
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
-    return m_page->words(Dr::RotateBy0);
+    return m_page->words();
 }
 
 bool BrowserPage::existInstance(BrowserPage *item)
@@ -418,11 +400,6 @@ bool BrowserPage::existInstance(BrowserPage *item)
 void BrowserPage::setItemIndex(int itemIndex)
 {
     m_index = itemIndex;
-}
-
-void BrowserPage::setPageSize(const QSizeF &pagesize)
-{
-    m_pageSizeF = pagesize;
 }
 
 int BrowserPage::itemIndex()
@@ -481,7 +458,7 @@ void BrowserPage::loadWords()
 
     RenderPageTask task;
     task.type = RenderPageTask::word;
-    task.item = this;
+    task.page = this;
     PageRenderThread::appendTask(task);
 
     m_wordIsRendering = true;
@@ -490,14 +467,11 @@ void BrowserPage::loadWords()
 void BrowserPage::clearPixmap()
 {
     m_pixmap = QPixmap();
+    ++m_pixmapId;
+    m_pixmapIsLastest   = false;
     m_pixmapHasRendered = false;
+    m_viewportRendered  = false;
     m_pixmapScaleFactor = -1;
-    m_pixmapRenderedRect = QRect();
-
-    m_viewportImage = QImage();
-    m_viewportRenderedRect = QRect();
-    m_viewportScaleFactor = -1;
-
     PageRenderThread::clearTask(this);
 }
 
@@ -526,6 +500,21 @@ void BrowserPage::clearWords()
     }
 }
 
+void BrowserPage::scaleAnnots(bool force)
+{
+    if (m_annotationItems.count() <= 0)
+        return;
+
+    prepareGeometryChange();
+
+    if (force || !qFuzzyCompare(m_annotScaleFactor, m_scaleFactor)) {
+        m_wordScaleFactor = m_scaleFactor;
+        foreach (BrowserAnnotation *annot, m_annotationItems) {
+            annot->setScaleFactor(m_scaleFactor);
+        }
+    }
+}
+
 void BrowserPage::scaleWords(bool force)
 {
     if (!m_wordHasRendered || m_words.count() <= 0)
@@ -543,10 +532,6 @@ void BrowserPage::scaleWords(bool force)
 
 void BrowserPage::reloadAnnotations()
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     //在reload之前将上一次选中去掉,避免操作野指针
     if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
         m_lastClickIconAnnotationItem->setDrawSelectRect(false);
@@ -577,7 +562,7 @@ QList<deepin_reader::Annotation *> BrowserPage::annotations()
     return m_annotations;
 }
 
-bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString text, const QColor color)
+bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, const QColor &color)
 {
     if (nullptr == annotation)
         return false;
@@ -585,37 +570,52 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     if (!m_page->updateAnnotation(annotation, text, color))
         return false;
 
-    updatePageFull();
+    QRectF renderBoundary;
+    const QList<QRectF> &annoBoundarys = annotation->boundary();
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     Annotation *highLightAnnot = nullptr;
     QList<QRectF> boundarys;
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
-    const QList<deepin_reader::Word> &twords = m_page->words(Dr::RotateBy0);
+    const QList<deepin_reader::Word> &twords = m_page->words();
     int wordCnt = twords.size();
+
+    QRectF selectBoundRectF;
+    bool bresetSelectRect = true;
 
     for (int index = 0; index < wordCnt; index++) {
         if (m_words.at(index) && m_words.at(index)->isSelected()) {
             m_words.at(index)->setSelected(false);
-            boundarys << twords[index].wordBoundingRect();
+
+            const QRectF &textRectf = twords[index].wordBoundingRect();
+            if (bresetSelectRect) {
+                bresetSelectRect = false;
+                selectBoundRectF = textRectf;
+            } else {
+                if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
+                    selectBoundRectF = selectBoundRectF.united(textRectf);
+                } else {
+                    boundarys << selectBoundRectF;
+                    selectBoundRectF = textRectf;
+                }
+            }
         }
     }
+    boundarys << selectBoundRectF;
 
     if (boundarys.count() > 0) {
         loadAnnotations();
@@ -631,9 +631,15 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, highLightAnnot, m_scaleFactor);
             m_annotationItems.append(annotationItem);
         }
-    }
 
-    updatePageFull();
+        QRectF renderBoundary;
+        for (int i = 0; i < boundarys.size(); i++) {
+            renderBoundary = renderBoundary | boundarys.at(i);
+        }
+
+        renderBoundary.adjust(-10, -10, 10, 10);
+        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    }
 
     return highLightAnnot;
 }
@@ -697,13 +703,13 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
     if (nullptr == m_lastClickIconAnnotationItem)
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    QList<QRectF> annoBoundarys;
 
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
+    annoBoundarys << m_lastClickIconAnnotationItem->annotation()->boundary();
+    annoBoundarys << moveRect;
     Annotation *annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
 
     if (annot && m_annotations.contains(annot)) {
@@ -722,9 +728,15 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
                 m_lastClickIconAnnotationItem->setDrawSelectRect(true);
             }
         }
-    }
 
-    updatePageFull();
+        QRectF renderBoundary;
+        for (int i = 0; i < annoBoundarys.size(); i++) {
+            renderBoundary = renderBoundary | annoBoundarys.at(i);
+        }
+
+        renderBoundary.adjust(-10, -10, 10, 10);
+        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    }
 
     return true;
 }
@@ -736,14 +748,14 @@ bool BrowserPage::removeAllAnnotation()
     if (m_annotations.isEmpty())
         return false;
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    QList<QRectF> annoBoundarys;
 
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
         if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
+
+        annoBoundarys << annota->boundary();
 
         if (!m_page->removeAnnotation(annota))
             continue;
@@ -764,17 +776,19 @@ bool BrowserPage::removeAllAnnotation()
 
     m_hasLoadedAnnotation = false;
 
-    updatePageFull();
+    QRectF renderBoundary;
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
 
 bool BrowserPage::jump2Link(const QPointF point)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     Link link = m_page->getLinkAtPoint(point);
     if (link.page > 0) {
         m_parent->setCurrentPage(link.page);
@@ -790,10 +804,6 @@ bool BrowserPage::jump2Link(const QPointF point)
 
 bool BrowserPage::inLink(const QPointF pos)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     Link link = m_page->getLinkAtPoint(pos);
     return link.isValid();
 }
@@ -825,9 +835,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     m_annotations.removeAll(annota);
 
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
+    const QList<QRectF> &annoBoundarys = annota->boundary();
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -842,17 +850,19 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
         }
     }
 
-    updatePageFull();
+    QRectF renderBoundary;
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     Annotation *annot = m_page->addIconAnnotation(rect, text);
 
     if (annot) {
@@ -874,7 +884,14 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
         }
     }
 
-    updatePageFull();
+    QRectF renderBoundary;
+    const QList<QRectF> &annoBoundarys = annot->boundary();
+    for (int i = 0; i < annoBoundarys.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    }
+
+    renderBoundary.adjust(-10, -10, 10, 10);
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
 
     return annot;
 }
@@ -1009,29 +1026,20 @@ BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
     return nullptr;
 }
 
-void BrowserPage::updatePageFull()
-{
-    m_pixmapScaleFactor = -1;
-
-    render(m_scaleFactor, m_rotation, true, true);
-
-    renderViewPort(false);
-}
-
 QVector<QRectF> BrowserPage::search(const QString &text, bool matchCase, bool wholeWords)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     return m_page->search(text, matchCase, wholeWords);
 }
 
 QString BrowserPage::text(const QRectF &rect)
 {
-    if (nullptr == m_page) {
-        m_page = m_parent->page(itemIndex());
-    }
-
     return m_page->text(rect);
+}
+
+bool BrowserPage::isBigDoc()
+{
+    if (boundingRect().width() > 1000 && boundingRect().height() > 1000)
+        return true;
+
+    return false;
 }

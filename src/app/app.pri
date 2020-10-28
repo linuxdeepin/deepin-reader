@@ -1,4 +1,5 @@
 HEADERS += \
+    $$PWD/DebugTimeManager.h \
     $$PWD/Global.h \
     $$PWD/Json.h \
     $$PWD/Database.h \
@@ -9,6 +10,7 @@ HEADERS += \
     $$PWD/accessible.h
 
 SOURCES += \
+    $$PWD/DebugTimeManager.cpp \
     $$PWD/Global.cpp \
     $$PWD/Json.cpp \
     $$PWD/Database.cpp \

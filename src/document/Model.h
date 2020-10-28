@@ -85,7 +85,7 @@ struct Word {
 
     QRectF wordBoundingRect() const
     {
-        return QRectF(this->boundingBox.x(), this->boundingBox.y(), this->boundingBox.width(), this->boundingBox.height());
+        return boundingBox;
     }
 
     Word()
@@ -179,8 +179,9 @@ public:
     virtual ~Page() {}
 
     virtual QSizeF sizeF() const = 0;
-    virtual QImage render(Dr::Rotation rotation = Dr::RotateBy0, const double scaleFactor = 1.00, const QRect &boundingRect = QRect()) const = 0;
-    virtual QImage render(int width, int height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
+    virtual QImage render(const qreal &scaleFactor) const { Q_UNUSED(scaleFactor) return QImage();}
+    virtual QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const = 0;
+    virtual QImage render(qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
     virtual Link getLinkAtPoint(const QPointF &) const { return Link(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
@@ -190,9 +191,9 @@ public:
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) { Q_UNUSED(boundarys) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
-    virtual QList<Word> words(Dr::Rotation rotation) {Q_UNUSED(rotation) return QList<Word>();}
+    virtual QList<Word> words() {return QList<Word>();}
     virtual bool mouseClickIconAnnot(QPointF &) {return false;}
-    virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;};
+    virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
     virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
 };
