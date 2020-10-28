@@ -60,7 +60,7 @@ public:
      * @brief 文档路径
      * @return
      */
-    QString filename() const;
+    QString filePath() const;
 
     /**
      * @brief 文档页数

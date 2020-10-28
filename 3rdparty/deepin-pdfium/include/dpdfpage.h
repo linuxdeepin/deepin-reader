@@ -18,19 +18,6 @@ class DEEPIN_PDFIUM_EXPORT DPdfPage : public QObject
     friend class DPdfDoc;
 
 public:
-    struct Link {
-        int nIndex = -1;
-        qreal left = 0.0;
-        qreal top = 0.0;
-        QString urlpath;
-
-        bool isValid()
-        {
-            return nIndex >= 0 || !urlpath.isEmpty();
-        }
-    };
-
-public:
     ~DPdfPage();
 
     /**
@@ -102,12 +89,6 @@ public:
     QString text(int start, int charCount = 1);
 
     /**
-     * @brief 获取位置所在Link
-     * @return
-     */
-    Link getLinkAtPoint(qreal x, qreal y);
-
-    /**
      * @brief 添加文字注释
      * @param point 点击的位置 基于原尺寸
      * @param text 注释内容
@@ -163,6 +144,12 @@ public:
      * @return 注释列表，只会列出已支持的注释
      */
     QList<DPdfAnnot *> annots();
+
+    /**
+     * @brief 获取当前支持操作的所有链接
+     * @return
+     */
+    QList<DPdfAnnot *> links();
 
 signals:
     /**

@@ -30,6 +30,7 @@ bool DPdfTextAnnot::pointIn(QPointF pos)
 QList<QRectF> DPdfTextAnnot::boundaries()
 {
     QList<QRectF> list;
+
     list << m_rect;
 
     return list;
@@ -94,4 +95,81 @@ bool DPdfUnknownAnnot::pointIn(QPointF pos)
 QList<QRectF> DPdfUnknownAnnot::boundaries()
 {
     return QList<QRectF>();
+}
+
+DPdfLinkAnnot::DPdfLinkAnnot()
+{
+    m_type = ALink;
+}
+
+bool DPdfLinkAnnot::pointIn(QPointF pos)
+{
+    if (m_rect.contains(pos))
+        return true;
+
+    return false;
+}
+
+QList<QRectF> DPdfLinkAnnot::boundaries()
+{
+    QList<QRectF> list;
+
+    list << m_rect;
+
+    return list;
+}
+
+void DPdfLinkAnnot::setRectF(const QRectF &rect)
+{
+    m_rect = rect;
+}
+
+void DPdfLinkAnnot::setUrl(QString url)
+{
+    m_url = url;
+
+    if (!m_url.contains("http://") && !m_url.contains("https://"))
+        m_url.prepend("http://");
+}
+
+QString DPdfLinkAnnot::url() const
+{
+    return m_url;
+}
+
+void DPdfLinkAnnot::setFilePath(QString filePath)
+{
+    m_filePath = filePath;
+}
+
+QString DPdfLinkAnnot::filePath() const
+{
+    return m_filePath;
+}
+
+void DPdfLinkAnnot::setPage(int index, float left, float top)
+{
+    m_index = index;
+    m_left = left;
+    m_top = top;
+}
+
+int DPdfLinkAnnot::pageIndex() const
+{
+    return m_index;
+}
+
+QPointF DPdfLinkAnnot::offset() const
+{
+    return QPointF(m_left, m_top);
+}
+
+void DPdfLinkAnnot::setLinkType(int type)
+{
+    m_linkType = type;
+}
+
+int DPdfLinkAnnot::linkType() const
+{
+    return m_linkType;
 }

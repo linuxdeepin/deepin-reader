@@ -6,10 +6,12 @@
 #include "public/fpdf_text.h"
 #include "public/fpdf_annot.h"
 #include "public/fpdf_doc.h"
+#include "public/fpdf_edit.h"
 
 #include "core/fpdfapi/page/cpdf_page.h"
 #include "core/fpdftext/cpdf_textpage.h"
 #include "core/fpdfdoc/cpdf_linklist.h"
+#include "fpdfsdk/cpdfsdk_helpers.h"
 
 #include <QDebug>
 
@@ -26,14 +28,40 @@ public:
 
     void loadTextPage();
 
+    /**
+     * @brief 文档自身旋转
+     * @return
+     */
+    int oriRotation();
+
+private:
+    /**
+     * @brief 加载注释,无需初始化，注释的坐标取值不受页自身旋转影响
+     */
+    void loadAnnots();
+
+    /**
+     * @brief 视图坐标转化为文档坐标
+     * @param rotation 文档自身旋转
+     * @param rect
+     * @return
+     */
+    FS_RECTF transRect(const int &rotation, const QRectF &rect);
+
+    /**
+     * @brief 文档坐标转化视图坐标
+     * @param rotation 文档自身旋转
+     * @param rect
+     * @return
+     */
+    QRectF transRect(const int &rotation, const FS_RECTF &rect);
+
 private:
     FPDF_DOCUMENT m_doc = nullptr;
 
-    bool m_annotInit = false;
-
     int m_index = -1;
 
-    double m_width = 0;
+    qreal m_width = 0;
 
     qreal m_height = 0;
 
@@ -50,7 +78,10 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
 
     m_index = index;
 
+    //宽高会受自身旋转值影响
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width, &m_height);
+
+    loadAnnots();
 }
 
 DPdfPagePrivate::~DPdfPagePrivate()
@@ -60,12 +91,15 @@ DPdfPagePrivate::~DPdfPagePrivate()
 
     if (m_page)
         FPDF_ClosePage(m_page);
+
+    qDeleteAll(m_dAnnots);
 }
 
 void DPdfPagePrivate::loadPage()
 {
-    if (nullptr == m_page)
+    if (nullptr == m_page) {
         m_page = FPDF_LoadPage(m_doc, m_index);
+    }
 }
 
 void DPdfPagePrivate::loadTextPage()
@@ -74,6 +108,249 @@ void DPdfPagePrivate::loadTextPage()
 
     if (nullptr == m_textPage)
         m_textPage = FPDFText_LoadPage(m_page);
+}
+
+int DPdfPagePrivate::oriRotation()
+{
+    if (nullptr == m_page) {
+        FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
+
+        CPDF_Page *pPage = CPDFPageFromFPDFPage(page);
+
+        int rotation = pPage->GetPageRotation();
+
+        FPDF_ClosePage(page);
+
+        return rotation;
+    }
+
+    return FPDFPage_GetRotation(m_page);
+
+}
+
+void DPdfPagePrivate::loadAnnots()
+{
+    //使用临时page，不完全加载,防止刚开始消耗时间过长
+    FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
+
+    CPDF_Page *pPage = CPDFPageFromFPDFPage(page);
+
+    int rotation = pPage->GetPageRotation();
+
+    //获取当前注释
+    int annotCount = FPDFPage_GetAnnotCount(page);
+
+    for (int i = 0; i < annotCount; ++i) {
+        FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, i);
+
+        FPDF_ANNOTATION_SUBTYPE subType = FPDFAnnot_GetSubtype(annot);
+
+        DPdfAnnot::AnnotType type = DPdfAnnot::AUnknown;
+
+        if (FPDF_ANNOT_TEXT == subType)
+            type = DPdfAnnot::AText;
+        else if (FPDF_ANNOT_HIGHLIGHT == subType)
+            type = DPdfAnnot::AHighlight;
+        else if (FPDF_ANNOT_LINK == subType)
+            type = DPdfAnnot::ALink;
+
+        //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width/m_height 为受旋转影响后的宽高
+        qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+        if (DPdfAnnot::AText == type) {
+            DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
+
+            //获取位置
+            FS_RECTF rectF;
+            if (FPDFAnnot_GetRect(annot, &rectF)) { //注释图标默认为20x20
+                QRectF annorectF = transRect(rotation, rectF);
+                dAnnot->setRectF(annorectF);
+
+//                FS_RECTF newrectf;
+//                newrectf.left = static_cast<float>(annorectF.left());
+//                newrectf.top = static_cast<float>(actualHeight - annorectF.top());
+//                newrectf.right = static_cast<float>(annorectF.right());
+//                newrectf.bottom = static_cast<float>(actualHeight - annorectF.bottom());
+//                FPDFAnnot_SetRect(annot, &newrectf);
+            }
+
+            //获取文本
+            FPDF_WCHAR buffer[1024];
+            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            dAnnot->m_text = QString::fromUtf16(buffer);
+
+            m_dAnnots.append(dAnnot);
+        } else if (DPdfAnnot::AHighlight == type) {
+            DPdfHightLightAnnot *dAnnot = new DPdfHightLightAnnot;
+            //获取颜色
+            unsigned int r = 0;
+            unsigned int g = 0;
+            unsigned int b = 0;
+            unsigned int a = 255;
+            if (FPDFAnnot_GetColor(annot, FPDFANNOT_COLORTYPE_Color, &r, &g, &b, &a)) {
+                dAnnot->setColor(QColor(static_cast<int>(r), static_cast<int>(g), static_cast<int>(b), static_cast<int>(a)));
+            }
+
+            //获取区域
+            ulong quadCount = FPDFAnnot_CountAttachmentPoints(annot);
+            QList<QRectF> list;
+            for (ulong i = 0; i < quadCount; ++i) {
+                FS_QUADPOINTSF quad;
+                if (!FPDFAnnot_GetAttachmentPoints(annot, i, &quad))
+                    continue;
+
+                QRectF rectF;
+                rectF.setX(static_cast<double>(quad.x1));
+                rectF.setY(actualHeight - static_cast<double>(quad.y1));
+                rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
+                rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
+
+                list.append(rectF);
+            }
+            dAnnot->setBoundaries(list);
+
+            //获取文本
+            FPDF_WCHAR buffer[1024];
+            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            dAnnot->m_text = QString::fromUtf16(buffer);
+
+            m_dAnnots.append(dAnnot);
+        } else if (DPdfAnnot::ALink == type) {
+            DPdfLinkAnnot *dAnnot = new DPdfLinkAnnot;
+
+            FPDF_LINK link = FPDFAnnot_GetLink(annot);
+
+            FPDF_ACTION action = FPDFLink_GetAction(link);
+
+            unsigned long type = FPDFAction_GetType(action);
+
+            //获取位置
+            FS_RECTF rectF;
+            if (FPDFAnnot_GetRect(annot, &rectF)) {
+                QRectF annorectF = transRect(rotation, rectF);
+                dAnnot->setRectF(annorectF);
+            }
+
+            //获取类型
+            if (PDFACTION_URI == type) {
+                char uri[256] = {0};
+                unsigned long lenth = FPDFAction_GetURIPath(m_doc, action, uri, 256);
+                if (0 != lenth) {
+                    dAnnot->setUrl(uri);
+                }
+                dAnnot->setLinkType(DPdfLinkAnnot::Uri);
+
+            } else if (PDFACTION_REMOTEGOTO == type) {
+                char filePath[256] = {0};
+                unsigned long lenth = FPDFAction_GetFilePath(action, filePath, 256);
+                if (0 != lenth) {
+                    dAnnot->setFilePath(filePath);
+                }
+
+                dAnnot->setLinkType(DPdfLinkAnnot::RemoteGoTo);
+            } else if (PDFACTION_GOTO == type || PDFACTION_UNSUPPORTED == type) { //跳转到文档某处
+                FPDF_DEST dest = FPDFAction_GetDest(m_doc, action);
+
+                int index = FPDFDest_GetDestPageIndex(m_doc, dest);
+
+                FPDF_BOOL hasX = false;
+                FPDF_BOOL hasY = false;
+                FPDF_BOOL hasZ = false;
+                FS_FLOAT x = 0;
+                FS_FLOAT y = 0;
+                FS_FLOAT z = 0;
+
+                bool result = FPDFDest_GetLocationInPage(dest, &hasX, &hasY, &hasZ, &x, &y, &z);
+
+                if (result)
+                    dAnnot->setPage(index, hasX ? x : 0, hasY ? y : 0);
+
+                dAnnot->setLinkType(DPdfLinkAnnot::Goto);
+            }
+
+            m_dAnnots.append(dAnnot);
+        } else {
+            //其他类型 用于占位 对应索引
+            DPdfUnknownAnnot *dAnnot = new DPdfUnknownAnnot;
+
+            m_dAnnots.append(dAnnot);
+        }
+        FPDFPage_CloseAnnot(annot);
+    }
+
+    FPDF_ClosePage(page);
+}
+
+FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
+{
+    qreal actualWidth  = (rotation % 2 == 0) ? m_width : m_height;
+    qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+
+    FS_RECTF fs_rect;
+
+    if (1 == rotation) {
+        fs_rect.left = rect.y();
+        fs_rect.top = rect.x() + rect.width();
+        fs_rect.right = rect.y() + rect.height();
+        fs_rect.bottom = rect.x();
+    } else if (2 == rotation) {
+        fs_rect.left = actualWidth - rect.x() - rect.width();
+        fs_rect.top = rect.y() + rect.height();
+        fs_rect.right = actualWidth - rect.x();
+        fs_rect.bottom = rect.y();
+    } else if (3 == rotation) {
+        fs_rect.left = actualHeight - rect.y() - rect.height();
+        fs_rect.top = actualWidth - rect.x();
+        fs_rect.right = actualHeight - rect.y();
+        fs_rect.bottom = actualWidth - rect.x() - rect.width();
+    } else {
+        fs_rect.left = rect.x();
+        fs_rect.top = actualHeight - rect.y();
+        fs_rect.right = rect.x() + rect.width();
+        fs_rect.bottom = actualHeight - rect.y() - rect.height();
+    }
+
+    return fs_rect;
+}
+
+QRectF DPdfPagePrivate::transRect(const int &rotation, const FS_RECTF &fs_rect)
+{
+//    qreal actualwidth  = (rotation % 2 == 0) ? m_width : m_height;
+//    qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+
+    //    rotation:0
+    //                 actualWidth
+    //    |----------------------------------|
+    //    |--------right-------              |
+    //    |                                  |
+    //    |----left----........              |
+    //    |            |      .          actualHeight
+    //    |            |. . . .              |
+    //    |           top     |bottom        |
+    //    |            |      |              |
+    //   圆心---------------------------------|
+
+    if (1 == rotation) {    //90
+        return QRectF(static_cast<qreal>(fs_rect.bottom),
+                      static_cast<qreal>(fs_rect.left),
+                      static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom),
+                      static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left));
+    } else if (2 == rotation) { //180
+        return QRectF(m_width - static_cast<qreal>(fs_rect.right),
+                      static_cast<qreal>(fs_rect.bottom),
+                      static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left),
+                      static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom));
+
+    } else if (3 == rotation) { //270
+        return QRectF(m_height - static_cast<qreal>(fs_rect.top),
+                      m_width - static_cast<qreal>(fs_rect.right),
+                      static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom),
+                      static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left));
+    }
+
+    return QRectF(static_cast<qreal>(fs_rect.left),
+                  m_height - static_cast<qreal>(fs_rect.top),
+                  static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left),
+                  static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom));
 }
 
 DPdfPage::DPdfPage(DPdfDocHandler *handler, int pageIndex)
@@ -237,39 +514,6 @@ QString DPdfPage::text(int start, int charCount)
     return QString::fromWCharArray(text.c_str(), text.GetLength());
 }
 
-DPdfPage::Link DPdfPage::getLinkAtPoint(qreal x, qreal y)
-{
-    d_func()->loadPage();
-
-    Link link;
-    const FPDF_LINK &flink = FPDFLink_GetLinkAtPoint(d_func()->m_page, x, height() - y);
-    CPDF_Link cLink(reinterpret_cast<CPDF_Dictionary *>(flink));
-    if (cLink.GetDict() == nullptr)
-        return link;
-
-    CPDF_Document *pDoc = reinterpret_cast<CPDF_Document *>(d_func()->m_doc);
-    const CPDF_Action &cAction = cLink.GetAction();
-    const CPDF_Dest &dest = cAction.GetDest(pDoc);
-
-    bool hasx = false, hasy = false, haszoom = false;
-    float offsetx = 0.0, offsety = 0.0, z = 0.0;
-    dest.GetXYZ(&hasx, &hasy, &haszoom, &offsetx, &offsety, &z);
-    link.left = offsetx;
-    link.top = offsety;
-
-    link.nIndex = dest.GetDestPageIndex(pDoc);
-    if (cAction.GetType() == CPDF_Action::URI) {
-        const ByteString &bUrl = cAction.GetURI(pDoc);
-        link.urlpath = QString::fromUtf8(bUrl.c_str(), bUrl.GetLength());
-        if (!link.urlpath.contains("http://") && !link.urlpath.contains("https://"))
-            link.urlpath.prepend("http://");
-    } else {
-        const WideString &wFilepath = cAction.GetFilePath();
-        link.urlpath = QString::fromWCharArray(wFilepath.c_str(), wFilepath.GetLength());
-    }
-    return link;
-}
-
 DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
 {
     d_func()->loadPage();
@@ -283,13 +527,9 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
         return nullptr;
     }
 
-    FS_RECTF rectF;
-    rectF.left = point.x() - 10;
-    rectF.top = height() - point.y() + 10;
-    rectF.right = point.x() + 10;
-    rectF.bottom = rectF.top - 20;
+    FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(point.x() - 10, point.y() - 10, 20, 20));
 
-    if (!FPDFAnnot_SetRect(annot, &rectF)) {
+    if (!FPDFAnnot_SetRect(annot, &fs_rect)) {
         FPDFPage_CloseAnnot(annot);
         return nullptr;
     }
@@ -329,13 +569,9 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point)
     textAnnot->setText(text);
 
     if (!point.isNull()) {
-        FS_RECTF rectF;
-        rectF.left = point.x() - 10;
-        rectF.top = height() - point.y() + 10;
-        rectF.right = point.x() + 10;
-        rectF.bottom = rectF.top - 20;
+        FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(point.x() - 10, point.y() - 10, 20, 20));
 
-        if (!FPDFAnnot_SetRect(annot, &rectF)) {
+        if (!FPDFAnnot_SetRect(annot, &fs_rect)) {
             FPDFPage_CloseAnnot(annot);
             return false;
         }
@@ -358,21 +594,25 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &list, QString te
 
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
-    if (color.isValid() && !FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_Color, color.red(), color.green(), color.blue(), color.alpha())) {
+    if (color.isValid() && !FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_Color,
+                                               static_cast<unsigned int>(color.red()),
+                                               static_cast<unsigned int>(color.green()),
+                                               static_cast<unsigned int>(color.blue()),
+                                               static_cast<unsigned int>(color.alpha()))) {
         FPDFPage_CloseAnnot(annot);
         return nullptr;
     }
 
     for (const QRectF &rect : list) {
         FS_QUADPOINTSF quad;
-        quad.x1 = rect.x();
-        quad.y1 = d_func()->m_height - rect.y();
-        quad.x2 = rect.x() + rect.width();
-        quad.y2 = d_func()->m_height - rect.y();
-        quad.x3 = rect.x();
-        quad.y3 = d_func()->m_height - rect.y() - rect.height();
-        quad.x4 = rect.x() + rect.width();
-        quad.y4 = d_func()->m_height - rect.y() - rect.height();
+        quad.x1 = static_cast<float>(rect.x());
+        quad.y1 = static_cast<float>(d_func()->m_height - rect.y());
+        quad.x2 = static_cast<float>(rect.x() + rect.width());
+        quad.y2 = static_cast<float>(d_func()->m_height - rect.y());
+        quad.x3 = static_cast<float>(rect.x());
+        quad.y3 = static_cast<float>(d_func()->m_height - rect.y() - rect.height());
+        quad.x4 = static_cast<float>(rect.x() + rect.width());
+        quad.y4 = static_cast<float>(d_func()->m_height - rect.y() - rect.height());
 
         if (!FPDFAnnot_AppendAttachmentPoints(annot, &quad))
             continue;
@@ -414,7 +654,11 @@ bool DPdfPage::updateHightLightAnnot(DPdfAnnot *dAnnot, QColor color, QString te
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(d_func()->m_page, index);
 
     if (color.isValid()) {
-        if (!FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_Color, color.red(), color.green(), color.blue(), color.alpha())) {
+        if (!FPDFAnnot_SetColor(annot, FPDFANNOT_COLORTYPE_Color,
+                                static_cast<unsigned int>(color.red()),
+                                static_cast<unsigned int>(color.green()),
+                                static_cast<unsigned int>(color.blue()),
+                                static_cast<unsigned int>(color.alpha()))) {
             FPDFPage_CloseAnnot(annot);
             return false;
         }
@@ -460,7 +704,7 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
     d_func()->loadTextPage();
 
     QVector<QRectF> rectfs;
-    int flags = 0x00000000;
+    unsigned long flags = 0x00000000;
 
     if (matchCase)
         flags |= FPDF_MATCHCASE;
@@ -485,131 +729,28 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
 
 QList<DPdfAnnot *> DPdfPage::annots()
 {
-    if (d_func()->m_annotInit)
-        return d_func()->m_dAnnots;
+    QList<DPdfAnnot *> dannots;
 
-    FPDF_PAGE page = FPDF_LoadNoParsePage(d_func()->m_doc, pageIndex());
-
-    //获取当前注释
-    int annotCount = FPDFPage_GetAnnotCount(page);
-
-    for (int i = 0; i < annotCount; ++i) {
-        FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, i);
-
-        FPDF_ANNOTATION_SUBTYPE subType = FPDFAnnot_GetSubtype(annot);
-
-        DPdfAnnot::AnnotType type = DPdfAnnot::AUnknown;
-
-        if (FPDF_ANNOT_TEXT == subType)
-            type = DPdfAnnot::AText;
-        else if (FPDF_ANNOT_HIGHLIGHT == subType)
-            type = DPdfAnnot::AHighlight;
-
-//        @@@@@@@@  "Border"
-//        @@@@@@@@  "C"
-//        @@@@@@@@  "CA"
-//        @@@@@@@@  "Contents"
-//        @@@@@@@@  "F"
-//        @@@@@@@@  "M"
-//        @@@@@@@@  "NM"
-//        @@@@@@@@  "P"
-//        @@@@@@@@  "Rect"
-//        @@@@@@@@  "Subtype"
-//        @@@@@@@@  "T"
-//        @@@@@@@@  "Type"
-
-//    |----------------------------------|
-//    |--------right-------              |
-//    |                                  |
-//    |----left----........              |
-//    |            |.     .              |
-//    |            |. . . .              |
-//    |           top     |bottom        |
-//    |            |      |              |
-//    |----------------------------------|
-
-        int pageHeight = height();
-        if (DPdfAnnot::AText == type) {
-            DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
-
-            //获取位置
-            FS_RECTF rectF;
-            if (FPDFAnnot_GetRect(annot, &rectF)) {//注释图标为20x20
-                QRectF annorectF(rectF.left, pageHeight - rectF.top, 20, 20);
-                dAnnot->setRectF(annorectF);
-
-                FS_RECTF newrectf;
-                newrectf.left = annorectF.left();
-                newrectf.top = pageHeight - annorectF.top();
-                newrectf.right = annorectF.right();
-                newrectf.bottom = pageHeight - annorectF.bottom();
-                FPDFAnnot_SetRect(annot, &newrectf);
-            }
-
-            ulong quadCount = FPDFAnnot_CountAttachmentPoints(annot);
-            QList<QRectF> list;
-            for (ulong i = 0; i < quadCount; ++i) {
-                FS_QUADPOINTSF quad;
-                if (!FPDFAnnot_GetAttachmentPoints(annot, i, &quad))
-                    continue;
-
-                QRectF rectF;
-                rectF.setX(static_cast<double>(quad.x1));
-                rectF.setY(pageHeight - static_cast<double>(quad.y1));
-                rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
-                rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
-                list.append(rectF);
-            }
-
-            //获取文本
-            FPDF_WCHAR buffer[1024];
-            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
-            dAnnot->m_text = QString::fromUtf16(buffer);
-
-            d_func()->m_dAnnots.append(dAnnot);
-        } else if (DPdfAnnot::AHighlight == type) {
-            DPdfHightLightAnnot *dAnnot = new DPdfHightLightAnnot;
-            //获取颜色
-            unsigned int r = 0;
-            unsigned int g = 0;
-            unsigned int b = 0;
-            unsigned int a = 255;
-            if (FPDFAnnot_GetColor(annot, FPDFANNOT_COLORTYPE_Color, &r, &g, &b, &a)) {
-                dAnnot->setColor(QColor(static_cast<int>(r), static_cast<int>(g), static_cast<int>(b), static_cast<int>(a)));
-            }
-
-            //获取区域
-            ulong quadCount = FPDFAnnot_CountAttachmentPoints(annot);
-            QList<QRectF> list;
-            for (ulong i = 0; i < quadCount; ++i) {
-                FS_QUADPOINTSF quad;
-                if (!FPDFAnnot_GetAttachmentPoints(annot, i, &quad))
-                    continue;
-
-                QRectF rectF;
-                rectF.setX(static_cast<double>(quad.x1));
-                rectF.setY(pageHeight - static_cast<double>(quad.y1));
-                rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
-                rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
-
-                list.append(rectF);
-            }
-            dAnnot->setBoundaries(list);
-
-            //获取文本
-            FPDF_WCHAR buffer[1024];
-            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
-            dAnnot->m_text = QString::fromUtf16(buffer);
-
-            d_func()->m_dAnnots.append(dAnnot);
-        } else {
-            //其他类型 用于占位 对应索引
-            DPdfUnknownAnnot *dAnnot = new DPdfUnknownAnnot;
-            d_func()->m_dAnnots.append(dAnnot);
+    foreach (DPdfAnnot *dannot, d_func()->m_dAnnots) {
+        if (dannot->type() == DPdfAnnot::AText || dannot->type() == DPdfAnnot::AHighlight) {
+            dannots.append(dannot);
+            continue;
         }
-        FPDFPage_CloseAnnot(annot);
     }
 
-    FPDF_ClosePage(page);
-    return d_func()->m_dAnnots;
+    return dannots;
+}
+
+QList<DPdfAnnot *> DPdfPage::links()
+{
+    QList<DPdfAnnot *> links;
+
+    foreach (DPdfAnnot *annot, d_func()->m_dAnnots) {
+        if (annot->type() == DPdfAnnot::ALink) {
+            links.append(annot);
+            continue;
+        }
+    }
+
+    return links;
 }

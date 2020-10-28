@@ -78,6 +78,53 @@ private:
     QColor m_color;
 };
 
+class DEEPIN_PDFIUM_EXPORT DPdfLinkAnnot : public DPdfAnnot
+{
+public:
+    DPdfLinkAnnot();
+
+    enum LinkType {
+        Unknown = 0,
+        Uri,        //URI, including web pages and other Internet resources
+        RemoteGoTo, //Go to a destination within another document.
+        Goto        //Go to a destination within current document.
+    };
+
+    bool pointIn(QPointF pos) override;
+
+    QList<QRectF> boundaries() override;
+
+    void setRectF(const QRectF &rect);
+
+    void setUrl(QString url);
+
+    QString url() const;
+
+    void setFilePath(QString filePath);
+
+    QString filePath() const;
+
+    void setPage(int index, float left, float top);
+
+    int pageIndex() const;
+
+    QPointF offset() const;
+
+    void setLinkType(int type);
+
+    int linkType() const;
+
+private:
+    QRectF m_rect;
+    QString m_url;
+    QString m_filePath;
+
+    int m_linkType = Unknown;
+    int m_index = -1;
+    float m_left = 0;
+    float m_top = 0;
+};
+
 class DEEPIN_PDFIUM_EXPORT DPdfUnknownAnnot : public DPdfAnnot
 {
 public:

@@ -12,9 +12,8 @@
 #include "core/fpdfdoc/cpdf_pagelabel.h"
 
 #include <QFile>
-#include <iostream>
-#include <string.h>
-#include <QTemporaryFile>
+#include <QTemporaryDir>
+#include <QUuid>
 
 DPdfDoc::Status parseError(int error)
 {
@@ -49,14 +48,14 @@ public:
     ~DPdfDocPrivate();
 
 public:
-    DPdfDoc::Status loadFile(const QString &filename, const QString &password);
+    DPdfDoc::Status loadFile(const QString &filePath, const QString &password);
 
 private:
     DPdfDocHandler *m_docHandler;
 
     QVector<DPdfPage *> m_pages;
 
-    QString m_filename;
+    QString m_filePath;
 
     int m_pageCount = 0;
 
@@ -72,24 +71,24 @@ DPdfDocPrivate::DPdfDocPrivate()
 
 DPdfDocPrivate::~DPdfDocPrivate()
 {
-    m_pages.clear();
+    qDeleteAll(m_pages);
 
     if (nullptr != m_docHandler)
         FPDF_CloseDocument((FPDF_DOCUMENT)m_docHandler);
 }
 
-DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filename, const QString &password)
+DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString &password)
 {
-    m_filename = filename;
+    m_filePath = filePath;
 
     m_pages.clear();
 
-    if (!QFile::exists(filename)) {
+    if (!QFile::exists(m_filePath)) {
         m_status = DPdfDoc::FILE_NOT_FOUND_ERROR;
         return m_status;
     }
 
-    void *ptr = FPDF_LoadDocument(m_filename.toUtf8().constData(),
+    void *ptr = FPDF_LoadDocument(m_filePath.toUtf8().constData(),
                                   password.toUtf8().constData());
 
     m_docHandler = static_cast<DPdfDocHandler *>(ptr);
@@ -164,14 +163,39 @@ bool DPdfDoc::save()
 
     write.WriteBlock = writeFile;
 
-    saveWriter.setFileName(d_func()->m_filename);
+    QTemporaryDir tempDir;
 
-    if (!saveWriter.open(QIODevice::ReadWrite))
+    QString tempFilePath = tempDir.path() + "/" + QUuid::createUuid().toString();
+
+    saveWriter.setFileName(tempFilePath);
+
+    if (!saveWriter.open(QIODevice::WriteOnly))
         return false;
 
-    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_REMOVE_SECURITY);
+    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
 
     saveWriter.close();
+
+    QFile tempFile(tempFilePath);
+
+    if (!tempFile.open(QIODevice::ReadOnly))
+        return false;
+
+    QByteArray array = tempFile.readAll();
+
+    tempFile.close();
+
+    QFile file(d_func()->m_filePath);
+
+    file.remove();          //不remove会出现第二次导出丢失数据问题 (保存动作完成之后，如果当前文档是当初打开那个，下一次导出会出错)
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+
+    if (array.size() != file.write(array))
+        result = false;
+
+    file.close();
 
     return result;
 }
@@ -187,16 +211,16 @@ bool DPdfDoc::saveAs(const QString &filePath)
     if (!saveWriter.open(QIODevice::ReadWrite))
         return false;
 
-    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_REMOVE_SECURITY);
+    bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
 
     saveWriter.close();
 
     return result;
 }
 
-QString DPdfDoc::filename() const
+QString DPdfDoc::filePath() const
 {
-    return d_func()->m_filename;
+    return d_func()->m_filePath;
 }
 
 int DPdfDoc::pageCount() const

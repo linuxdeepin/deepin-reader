@@ -4,7 +4,7 @@
 #include "dpdfglobal.h"
 #include "public/fpdfview.h"
 
-bool initialized = false;
+static bool initialized = false;
 
 const static DPDFGlobal instance = DPDFGlobal();
 
