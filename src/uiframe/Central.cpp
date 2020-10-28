@@ -113,7 +113,7 @@ void Central::openFilesExec()
 {
     DFileDialog dialog;
     dialog.setFileMode(DFileDialog::ExistingFiles);
-    dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu)");
+    dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu *.docx)");
     dialog.setDirectory(QDir::homePath());
 
     if (QDialog::Accepted != dialog.exec()) {

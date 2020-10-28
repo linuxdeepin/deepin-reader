@@ -1,7 +1,6 @@
 #include "DebugTimeManager.h"
 #include <QDateTime>
 #include <QDebug>
-
 #include <sys/time.h>
 
 DebugTimeManager    *DebugTimeManager::s_Instance = nullptr;
@@ -27,7 +26,7 @@ void DebugTimeManager::endPointQt(const QString &point)
 {
     if (m_MapPoint.find(point) != m_MapPoint.end()) {
         m_MapPoint[point].time = QDateTime::currentMSecsSinceEpoch() - m_MapPoint[point].time;
-        qDebug() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
+        qInfo() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
     }
 }
 
@@ -49,6 +48,6 @@ void DebugTimeManager::endPointLinux(const QString &point,  const QString &statu
         m_MapPoint[point].time = tv.tv_sec * 1000 + tv.tv_usec / 1000 - m_MapPoint[point].time;
         if (!status.isEmpty())
             m_MapPoint[point].desc = status;
-        qDebug() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
+        qInfo() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
     }
 }

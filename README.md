@@ -1,4 +1,4 @@
-# deepin_reader
+# deepin-reader
 
 deepin-reader is a small, fast and full-featured tool for viewing documents,supporting PDF and DJVU formats, multi-window and multi-tab management,thumbnail viewing, adding bookmarks and notes, magnifying, slide show,searching texts, rotation, etc.
 
