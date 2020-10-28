@@ -3,11 +3,13 @@
     <name>Application</name>
     <message>
         <location filename="../src/Application.cpp" line="39"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>Pelihat Dokumen</translation>
     </message>
     <message>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation type="unfinished"/>
     </message>
@@ -15,92 +17,92 @@
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Location</source>
         <translation>Lokasi</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
         <translation>Subjek</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Author</source>
         <translation>Pengarang</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Keywords</source>
         <translation>Kata Kunci</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
         <translation>Pengeluar</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
         <translation>Pencipta</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Time created</source>
         <translation>Waktu dicipta</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
         <translation>Waktu diubah suai</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Pages</source>
         <translation>Halaman</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Optimized</source>
         <translation>Dioptimum</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="58"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Security</source>
         <translation>Keselamatan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="59"/>
         <source>Page size</source>
         <translation>Saiz halaman</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="61"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>File size</source>
         <translation>Saiz fail</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="66"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
         <translation>Maklumat asas</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="86"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="85"/>
         <source>Unknown</source>
         <translation>Tidak diketahui</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>Yes</source>
         <translation>Ya</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>No</source>
         <translation>Tidak</translation>
     </message>
@@ -108,12 +110,12 @@
 <context>
     <name>BookMarkMenu</name>
     <message>
-        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="33"/>
+        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="31"/>
         <source>Remove bookmark</source>
         <translation>Buang tanda buku</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="36"/>
+        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="34"/>
         <source>Remove all</source>
         <translation type="unfinished"/>
     </message>
@@ -121,12 +123,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="58"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
         <translation>Tambah tanda buku</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="203"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation type="unfinished"/>
     </message>
@@ -252,43 +254,51 @@
     </message>
 </context>
 <context>
+    <name>Central</name>
+    <message>
+        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="141"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
         <source>The format is not supported</source>
         <translation>Format tidak disokong</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="152"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="199"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="168"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="218"/>
         <source>Please check if the file is damaged</source>
         <translation>Sila periksa sekiranya fail telah rosak</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="394"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="413"/>
         <source>Save failed</source>
         <translation>Gagal disimpan</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="400"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="419"/>
         <source>Saved successfully</source>
         <translation>Berjaya disimpan</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="420"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="423"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="461"/>
         <source>Invalid file name</source>
         <translation>Nama fail tidak sah</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="425"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="444"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="463"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -301,12 +311,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="40"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="45"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Pilih Fail</translation>
     </message>
@@ -314,20 +324,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="234"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="262"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
         <translation>Tanda buku telah dibuang</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="429"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="443"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="435"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="449"/>
         <source>Please select the text</source>
         <translation>Sila pilih teks</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="492"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="501"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="498"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="507"/>
         <source>The annotation has been removed</source>
         <translation>Catatan telah dibuang</translation>
     </message>
@@ -350,7 +360,7 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
         <translation type="unfinished"/>
     </message>
@@ -358,12 +368,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="134"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="133"/>
         <source>Previous</source>
         <translation>Terdahulu</translation>
     </message>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="141"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="140"/>
         <source>Next</source>
         <translation>Berikutnya</translation>
     </message>
@@ -371,12 +381,12 @@
 <context>
     <name>HandleMenu</name>
     <message>
-        <location filename="../src/widgets/HandleMenu.cpp" line="37"/>
+        <location filename="../src/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
         <translation>Pilih Teks</translation>
     </message>
     <message>
-        <location filename="../src/widgets/HandleMenu.cpp" line="45"/>
+        <location filename="../src/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
         <translation>Alat Tangan</translation>
     </message>
@@ -384,24 +394,9 @@
 <context>
     <name>ImageViewModel</name>
     <message>
-        <location filename="../src/sidebar/ImageViewModel.cpp" line="102"/>
+        <location filename="../src/sidebar/ImageViewModel.cpp" line="100"/>
         <source>Page %1</source>
         <translation>Halaman %1</translation>
-    </message>
-</context>
-<context>
-    <name>Model::PDFDocument</name>
-    <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
-        <source>Yes</source>
-        <translation>Ya</translation>
-    </message>
-    <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
-        <source>No</source>
-        <translation>Tidak</translation>
     </message>
 </context>
 <context>
@@ -425,12 +420,12 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="64"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
         <translation>Tambah catatan</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="153"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation type="unfinished"/>
     </message>
@@ -439,7 +434,6 @@
     <name>PagingWidget</name>
     <message>
         <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="200"/>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="215"/>
         <source>Invalid page number</source>
         <translation>Nombor halaman tidak sah</translation>
     </message>
@@ -512,12 +506,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="59"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
         <translation>Tiada keputusan gelintar</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="99"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>%1 item ditemui</translation>
     </message>
@@ -666,7 +660,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Thumbnails</source>
-        <translation>Lakaran kenit</translation>
+        <translation>Lakaran Kenit</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -839,38 +833,38 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="33"/>
         <source>New window</source>
         <translation>Tetingkap baharu</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="33"/>
         <source>New tab</source>
         <translation>Tab baharu</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="43"/>
         <location filename="../src/uiframe/TitleMenu.cpp" line="105"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="43"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="48"/>
         <source>Display in file manager</source>
         <translation>Papar dalam pengurus fail</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="48"/>
         <source>Magnifer</source>
         <translation>Pembesar</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="55"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="54"/>
         <source>Tools</source>
         <translation>Alat</translation>
     </message>
@@ -883,7 +877,7 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/uiframe/TitleWidget.cpp" line="77"/>
+        <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
         <translation>Lakaran kenit</translation>
     </message>
@@ -899,23 +893,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="25"/>
+        <location filename="../src/main.cpp" line="30"/>
         <source>Document File Path.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="26"/>
-        <location filename="../src/main.cpp" line="30"/>
+        <location filename="../src/main.cpp" line="31"/>
+        <location filename="../src/main.cpp" line="35"/>
         <source>FilePath</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="34"/>
         <source>ThumbnailPath Path.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="34"/>
+        <location filename="../src/main.cpp" line="39"/>
         <source>Generate thumbnail.</source>
         <translation type="unfinished"/>
     </message>

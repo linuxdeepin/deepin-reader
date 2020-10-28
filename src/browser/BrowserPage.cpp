@@ -383,7 +383,6 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
     QTransform transform;
     transform.rotate(m_rotation * 90);
     QImage image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
     return image;
 }
 

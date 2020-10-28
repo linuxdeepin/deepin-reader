@@ -52,7 +52,7 @@ TitleMenu::TitleMenu(DWidget *parent)
     m_handleMenu = new HandleMenu(this);
     m_handleMenu->setDisabled(true);
     m_handleMenu->setTitle(tr("Tools"));
-    m_handleMenu->setAccessibleName(tr("Menu_Hand"));
+    m_handleMenu->setAccessibleName("Menu_Hand");
     this->addMenu(m_handleMenu);
 
     QStringList fourActionList = QStringList() << tr("Search");

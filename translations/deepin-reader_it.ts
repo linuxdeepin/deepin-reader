@@ -3,11 +3,13 @@
     <name>Application</name>
     <message>
         <location filename="../src/Application.cpp" line="39"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>Lettore documenti</translation>
     </message>
     <message>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>Document Viewer è uno strumento per leggere documenti, supportare PDF, DJVU, ecc.
 Localizzazione italiana a cura di Massimo A. Carofano.</translation>
@@ -16,92 +18,92 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Location</source>
         <translation>Posizione</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
         <translation>Soggetto</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Author</source>
         <translation>Autore</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Keywords</source>
         <translation>Parole chiave</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
         <translation>Produttore</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
         <translation>Creatore</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Time created</source>
         <translation>Data creazione</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
         <translation>Data modifica</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Format</source>
         <translation>Formato</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Pages</source>
         <translation>Pagine</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Optimized</source>
         <translation>Ottimizzato</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="58"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Security</source>
         <translation>Sicurezza</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="59"/>
         <source>Page size</source>
         <translation>Dimensione pagina</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="61"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>File size</source>
         <translation>Dimensione file</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="66"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
         <translation>Info base</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="86"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="85"/>
         <source>Unknown</source>
         <translation>Sconosciuto</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
+        <location filename="../src/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -109,12 +111,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>BookMarkMenu</name>
     <message>
-        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="33"/>
+        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="31"/>
         <source>Remove bookmark</source>
         <translation>Rimuovi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="36"/>
+        <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="34"/>
         <source>Remove all</source>
         <translation>Rimuovi tutti</translation>
     </message>
@@ -122,12 +124,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="58"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
         <translation>Aggiungi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="203"/>
+        <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>Sicuro di voler eliminare tutti i segnalibri?</translation>
     </message>
@@ -253,43 +255,51 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>Central</name>
+    <message>
+        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="141"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
         <source>The format is not supported</source>
         <translation>Il formato non è supportato</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="152"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="199"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="168"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="218"/>
         <source>Please check if the file is damaged</source>
         <translation>Verifica se il file è danneggiato</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="394"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="413"/>
         <source>Save failed</source>
         <translation>Salvataggio fallito</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="400"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="419"/>
         <source>Saved successfully</source>
         <translation>Salvataggio riuscito</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="420"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="423"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="461"/>
         <source>Invalid file name</source>
         <translation>Nome file non valido</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="425"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="444"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="463"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -302,12 +312,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Trascina i documenti qui</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="40"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>Formato supportato: %1</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralNavPage.cpp" line="45"/>
+        <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Seleziona file</translation>
     </message>
@@ -315,20 +325,20 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="234"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="262"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
         <translation>Il segnalibro è stato rimosso</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="429"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="443"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="435"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="449"/>
         <source>Please select the text</source>
         <translation>Seleziona il testo</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/DocSheet.cpp" line="492"/>
-        <location filename="../src/uiframe/DocSheet.cpp" line="501"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="498"/>
+        <location filename="../src/uiframe/DocSheet.cpp" line="507"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotazione è stata rimossa</translation>
     </message>
@@ -351,7 +361,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/widgets/EncryptionPage.cpp" line="103"/>
+        <location filename="../src/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
         <translation>Password errata</translation>
     </message>
@@ -359,12 +369,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="134"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="133"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="141"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="140"/>
         <source>Next</source>
         <translation>Prossima</translation>
     </message>
@@ -372,12 +382,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>HandleMenu</name>
     <message>
-        <location filename="../src/widgets/HandleMenu.cpp" line="37"/>
+        <location filename="../src/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
         <translation>Seleziona testo</translation>
     </message>
     <message>
-        <location filename="../src/widgets/HandleMenu.cpp" line="45"/>
+        <location filename="../src/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
         <translation>Strumenti manuali</translation>
     </message>
@@ -385,24 +395,9 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>ImageViewModel</name>
     <message>
-        <location filename="../src/sidebar/ImageViewModel.cpp" line="102"/>
+        <location filename="../src/sidebar/ImageViewModel.cpp" line="100"/>
         <source>Page %1</source>
         <translation>Pagina %1</translation>
-    </message>
-</context>
-<context>
-    <name>Model::PDFDocument</name>
-    <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
-        <source>Yes</source>
-        <translation>Si</translation>
-    </message>
-    <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
-        <source>No</source>
-        <translation>No</translation>
     </message>
 </context>
 <context>
@@ -426,12 +421,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="64"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
         <translation>Aggiungi nota</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/note/NotesWidget.cpp" line="153"/>
+        <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Sicuro di voler eliminare tutte le annotazioni?</translation>
     </message>
@@ -440,7 +435,6 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>PagingWidget</name>
     <message>
         <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="200"/>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="215"/>
         <source>Invalid page number</source>
         <translation>Numero pagine non valido</translation>
     </message>
@@ -513,12 +507,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="59"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
         <translation>Nessun risultato</translation>
     </message>
     <message>
-        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="99"/>
+        <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>%1 elementi trovati</translation>
     </message>
@@ -840,38 +834,38 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="33"/>
         <source>New window</source>
         <translation>Nuova Finestra</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="33"/>
         <source>New tab</source>
         <translation>Nuova Tab</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="43"/>
         <location filename="../src/uiframe/TitleMenu.cpp" line="105"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="43"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="48"/>
         <source>Display in file manager</source>
         <translation>Visualizza nel file manager</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="48"/>
         <source>Magnifer</source>
         <translation>Ingrandimento</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/TitleMenu.cpp" line="55"/>
+        <location filename="../src/uiframe/TitleMenu.cpp" line="54"/>
         <source>Tools</source>
         <translation>Strumenti</translation>
     </message>
@@ -884,7 +878,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/uiframe/TitleWidget.cpp" line="77"/>
+        <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
         <translation>Miniature</translation>
     </message>
@@ -900,23 +894,23 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="25"/>
+        <location filename="../src/main.cpp" line="30"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="26"/>
-        <location filename="../src/main.cpp" line="30"/>
+        <location filename="../src/main.cpp" line="31"/>
+        <location filename="../src/main.cpp" line="35"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="29"/>
+        <location filename="../src/main.cpp" line="34"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="34"/>
+        <location filename="../src/main.cpp" line="39"/>
         <source>Generate thumbnail.</source>
         <translation>Genera miniatura.</translation>
     </message>
