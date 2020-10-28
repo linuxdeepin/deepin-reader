@@ -215,12 +215,12 @@ QList< Annotation * > PDFPage::annotations() const
     return annotations;
 }
 
-Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
+Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color)
 {
 
     LOCK_DOCUMENT
 
-    return new PDFAnnotation(m_page->createHightLightAnnot(boundarys, text, color));
+    return new PDFAnnotation(m_page->createHightLightAnnot(boundaries, text, color));
 }
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)

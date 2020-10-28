@@ -572,9 +572,9 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
         return false;
 
     QRectF renderBoundary;
-    const QList<QRectF> &annoBoundarys = annotation->boundary();
-    for (int i = 0; i < annoBoundarys.size(); i++) {
-        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    const QList<QRectF> &annoBoundaries = annotation->boundary();
+    for (int i = 0; i < annoBoundaries.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
@@ -586,7 +586,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
     Annotation *highLightAnnot = nullptr;
-    QList<QRectF> boundarys;
+    QList<QRectF> boundaries;
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
     const QList<deepin_reader::Word> &twords = m_page->words();
@@ -607,18 +607,18 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
                 if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
                     selectBoundRectF = selectBoundRectF.united(textRectf);
                 } else {
-                    boundarys << selectBoundRectF;
+                    boundaries << selectBoundRectF;
                     selectBoundRectF = textRectf;
                 }
             }
         }
     }
-    boundarys << selectBoundRectF;
+    boundaries << selectBoundRectF;
 
-    if (boundarys.count() > 0) {
+    if (boundaries.count() > 0) {
         loadAnnotations();
 
-        highLightAnnot = m_page->addHighlightAnnotation(boundarys, text, color);
+        highLightAnnot = m_page->addHighlightAnnotation(boundaries, text, color);
         if (highLightAnnot == nullptr)
             return nullptr;
 
@@ -631,8 +631,8 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
 
         QRectF renderBoundary;
-        for (int i = 0; i < boundarys.size(); i++) {
-            renderBoundary = renderBoundary | boundarys.at(i);
+        for (int i = 0; i < boundaries.size(); i++) {
+            renderBoundary = renderBoundary | boundaries.at(i);
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
@@ -701,13 +701,13 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
     if (nullptr == m_lastClickIconAnnotationItem)
         return false;
 
-    QList<QRectF> annoBoundarys;
+    QList<QRectF> annoBoundaries;
 
     QString containtStr = m_lastClickIconAnnotationItem->annotationText();
 
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
-    annoBoundarys << m_lastClickIconAnnotationItem->annotation()->boundary();
-    annoBoundarys << moveRect;
+    annoBoundaries << m_lastClickIconAnnotationItem->annotation()->boundary();
+    annoBoundaries << moveRect;
     Annotation *annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
 
     if (annot && m_annotations.contains(annot)) {
@@ -728,8 +728,8 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
         }
 
         QRectF renderBoundary;
-        for (int i = 0; i < annoBoundarys.size(); i++) {
-            renderBoundary = renderBoundary | annoBoundarys.at(i);
+        for (int i = 0; i < annoBoundaries.size(); i++) {
+            renderBoundary = renderBoundary | annoBoundaries.at(i);
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
@@ -746,14 +746,14 @@ bool BrowserPage::removeAllAnnotation()
     if (m_annotations.isEmpty())
         return false;
 
-    QList<QRectF> annoBoundarys;
+    QList<QRectF> annoBoundaries;
 
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
         if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
 
-        annoBoundarys << annota->boundary();
+        annoBoundaries << annota->boundary();
 
         if (!m_page->removeAnnotation(annota))
             continue;
@@ -775,8 +775,8 @@ bool BrowserPage::removeAllAnnotation()
     m_hasLoadedAnnotation = false;
 
     QRectF renderBoundary;
-    for (int i = 0; i < annoBoundarys.size(); i++) {
-        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    for (int i = 0; i < annoBoundaries.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
@@ -833,7 +833,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     m_annotations.removeAll(annota);
 
-    const QList<QRectF> &annoBoundarys = annota->boundary();
+    const QList<QRectF> &annoBoundaries = annota->boundary();
 
     if (!m_page->removeAnnotation(annota))
         return false;
@@ -849,8 +849,8 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     }
 
     QRectF renderBoundary;
-    for (int i = 0; i < annoBoundarys.size(); i++) {
-        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    for (int i = 0; i < annoBoundaries.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
@@ -883,9 +883,9 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
     }
 
     QRectF renderBoundary;
-    const QList<QRectF> &annoBoundarys = annot->boundary();
-    for (int i = 0; i < annoBoundarys.size(); i++) {
-        renderBoundary = renderBoundary | annoBoundarys.at(i);
+    const QList<QRectF> &annoBoundaries = annot->boundary();
+    for (int i = 0; i < annoBoundaries.size(); i++) {
+        renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
