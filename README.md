@@ -1,19 +1,18 @@
 # deepin_reader
 
-Deepin Document Viewer is a simple PDF reader, supporting bookmarks, highlights and annotations.
+deepin-reader is a small, fast and full-featured tool for viewing documents,supporting PDF and DJVU formats, multi-window and multi-tab management,thumbnail viewing, adding bookmarks and notes, magnifying, slide show,searching texts, rotation, etc.
 
 ## Dependencies
 
 In debian, use below command to install compile dependencies:
 
-`sudo apt install debhelper (>= 11),pkg-config, libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default,libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libjpeg-dev`
+`sudo apt install debhelper (>= 11),pkg-config,libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default,libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libjpeg-dev,libicu-dev,libpng-dev,zlib1g-dev`
 
 ## Install
 
 ```sh
 git clone <url>
 cd deepin-reader
-git submodule update
 qmake
 make
 sudo make install
