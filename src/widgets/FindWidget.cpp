@@ -31,11 +31,10 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    int tW = 414;
-    int tH = 60;
-
     setAttribute(Qt::WA_DeleteOnClose);
-    setMinimumSize(QSize(tW, tH));
+
+    setMinimumSize(QSize(414, 60));
+
     setBlurBackgroundEnabled(true);
 
     initWidget();
@@ -54,9 +53,10 @@ void FindWidget::setDocSheet(DocSheet *sheet)
 
 void FindWidget::showPosition(const int &nParentWidth)
 {
-    int nWidget = this->width();
-    this->move(nParentWidth - nWidget - 20, 20);
+    this->move(nParentWidth - this->width() - 20, 20);
+
     this->show();
+
     this->raise();
 }
 
@@ -72,9 +72,12 @@ void FindWidget::stopSearch()
 
 void FindWidget::findCancel()
 {
-    m_pSearchEdit->setText("");
+    m_pSearchEdit->clear();
+
     slotEditAborted();
+
     m_strLastFindText = "";
+
     this->close();
 }
 
@@ -83,7 +86,9 @@ void FindWidget::handleContentChanged()
     QString strFind = m_pSearchEdit->text().trimmed();
     if ((strFind != "") && (m_strLastFindText != strFind)) {
         m_strLastFindText = strFind;
+
         setEditAlert(0);
+
         m_docSheet->handleFindContent(strFind);
     }
 }
@@ -100,20 +105,21 @@ void FindWidget::slotFindPrevBtnClicked()
         m_docSheet->handleFindPrev();
 }
 
-//  文本内容变化, 为空, 则取消红色提示
 void FindWidget::slotClearContent()
 {
     QString strNewFind = m_pSearchEdit->text();
-    if (strNewFind == "") {
+
+    if (strNewFind.isEmpty()) {
         setEditAlert(0);
     }
 }
 
-//  点击 搜索框 里面 的 x
 void FindWidget::slotEditAborted()
 {
-    m_strLastFindText = "";
+    m_strLastFindText.clear();
+
     setEditAlert(0);
+
     if (m_docSheet)
         m_docSheet->handleFindExit();
 }
@@ -163,9 +169,11 @@ void FindWidget::initWidget()
 void FindWidget::setEditAlert(const int &iFlag)
 {
     if (m_pSearchEdit) {
-        bool bAlert = iFlag == 1 ? true : false;
+        bool bAlert = (iFlag == 1 ? true : false);
+
         if (m_pSearchEdit->text().isEmpty())
             bAlert = false;
+
         m_pSearchEdit->setAlert(bAlert);
     }
 }
@@ -176,5 +184,6 @@ void FindWidget::keyPressEvent(QKeyEvent *event)
         //这里不过滤掉的话,事件会跑到Browser上
         return;
     }
+
     DFloatingWidget::keyPressEvent(event);
 }
