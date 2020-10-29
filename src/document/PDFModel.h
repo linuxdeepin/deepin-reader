@@ -89,7 +89,7 @@ public:
 
     QList< Annotation * > annotations() const override;
 
-    Annotation *addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color) override;
+    Annotation *addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color) override;
 
     bool removeAnnotation(deepin_reader::Annotation *annotation) override;
 
