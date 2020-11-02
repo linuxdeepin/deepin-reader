@@ -39,8 +39,8 @@ namespace Dr {
 #define PERF_PRINT_BEGIN(point, desc) DebugTimeManager::getInstance()->beginPointLinux(point, desc)
 #define PERF_PRINT_END(point, desc) DebugTimeManager::getInstance()->endPointLinux(point, desc)
 #else
-#define PERF_PRINT_BEGIN(point,desc)
-#define PERF_PRINT_END(point)
+#define PERF_PRINT_BEGIN(point, desc)
+#define PERF_PRINT_END(point, desc)
 #endif
 
 enum FileType {
