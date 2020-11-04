@@ -63,6 +63,12 @@ void SlidePlayWidget::initControl()
     connect(pbtnplay, &DIconButton::clicked, this, &SlidePlayWidget::onPlayClicked);
     connect(pbtnnext, &DIconButton::clicked, this, &SlidePlayWidget::onNextClicked);
     connect(pbtnexit, &DIconButton::clicked, this, &SlidePlayWidget::onExitClicked);
+
+    setFocusPolicy(Qt::NoFocus);
+    pbtnpre->setFocusPolicy(Qt::NoFocus);
+    pbtnplay->setFocusPolicy(Qt::NoFocus);
+    pbtnnext->setFocusPolicy(Qt::NoFocus);
+    pbtnexit->setFocusPolicy(Qt::NoFocus);
 }
 
 void SlidePlayWidget::showControl()

@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "PDFModel.h"
+#include "Application.h"
 
 #include <QCache>
 #include <QFormLayout>
@@ -473,7 +474,9 @@ QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr:
         h = boundingRect.height();
     }
 
-    return m_page->renderToImage(horizontalResolution, verticalResolution, x, y, w, h, rotate);
+    QImage image = m_page->renderToImage(horizontalResolution * dApp->devicePixelRatio(), verticalResolution * dApp->devicePixelRatio(), x * dApp->devicePixelRatio(), y * dApp->devicePixelRatio(), w * dApp->devicePixelRatio(), h * dApp->devicePixelRatio(), rotate);
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    return image;
 }
 
 QImage PDFPage::thumbnail() const

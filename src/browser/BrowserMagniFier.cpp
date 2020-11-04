@@ -21,6 +21,7 @@
 #include "BrowserMagniFier.h"
 #include "SheetBrowser.h"
 #include "BrowserPage.h"
+#include "Application.h"
 
 #include <QPainter>
 #include <QIcon>
@@ -128,7 +129,8 @@ void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const
 
 void BrowserMagniFier::setMagniFierImage(const QImage &image)
 {
-    QPixmap pix(this->width(), this->height());
+    QPixmap pix(this->width() * dApp->devicePixelRatio(), this->height() * dApp->devicePixelRatio());
+    pix.setDevicePixelRatio(dApp->devicePixelRatio());
     pix.fill(Qt::transparent);
 
     QPainter painter(&pix);
@@ -138,7 +140,7 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
     clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
     painter.setClipPath(clippath);
     if (!image.isNull()) {
-        painter.drawImage(0, 0, image.scaled(240, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        painter.drawImage(this->rect(), image);
     } else {
         painter.fillRect(this->rect(), Qt::white);
     }

@@ -569,8 +569,8 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
         break;
     }
 
-    pagerect.w = static_cast<unsigned int>(pagerect.w * scaleFactor);
-    pagerect.h = static_cast<unsigned int>(pagerect.h * scaleFactor);
+    pagerect.w = static_cast<unsigned int>(pagerect.w * scaleFactor * dApp->devicePixelRatio());
+    pagerect.h = static_cast<unsigned int>(pagerect.h * scaleFactor * dApp->devicePixelRatio());
 
     ddjvu_rect_t renderrect;
 
@@ -580,10 +580,10 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
-        renderrect.x = boundingRect.x() < 0 ? 0 : boundingRect.x() ;
-        renderrect.y = boundingRect.y() < 0 ? 0 : boundingRect.y() ;
-        renderrect.w = static_cast<unsigned int>(boundingRect.width());
-        renderrect.h =  static_cast<unsigned int>(boundingRect.height());
+        renderrect.x = boundingRect.x() < 0 ? 0 : boundingRect.x() * dApp->devicePixelRatio();
+        renderrect.y = boundingRect.y() < 0 ? 0 : boundingRect.y() * dApp->devicePixelRatio();
+        renderrect.w = static_cast<unsigned int>(boundingRect.width() * dApp->devicePixelRatio());
+        renderrect.h =  static_cast<unsigned int>(boundingRect.height() * dApp->devicePixelRatio());
     }
 
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
@@ -595,6 +595,8 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
     clearMessageQueue(m_parent->m_context, false);
 
     ddjvu_page_release(page);
+
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     return image;
 }

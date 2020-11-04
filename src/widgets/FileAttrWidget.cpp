@@ -62,8 +62,7 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 {
     DWidget::paintEvent(event);
     QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.drawPixmap((this->width() - m_pixmap.width()) / 2, (this->height() - m_pixmap.height()) / 2, m_pixmap);
+    painter.drawPixmap(this->width() * 0.5 - m_pixmap.width() * 0.5 / m_pixmap.devicePixelRatioF(), this->height() * 0.5 - m_pixmap.height() * 0.5 / m_pixmap.devicePixelRatioF(), m_pixmap);
 }
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)

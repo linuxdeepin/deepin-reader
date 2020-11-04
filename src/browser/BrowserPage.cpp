@@ -262,10 +262,11 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         m_pixmapHasRendered = true;
 
         if (m_pixmap.isNull()) {
-            m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+            m_pixmap = QPixmap(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+            m_pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
             m_pixmap.fill(Qt::white);
         } else
-            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()), Qt::IgnoreAspectRatio);
+            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
         PageRenderThread::clearTask(this);
 
@@ -446,17 +447,12 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
             return QImage();
 
         QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode, Qt::SmoothTransformation);
-        image.setDevicePixelRatio(dApp->devicePixelRatio());
         return image;
     }
 
-    QSizeF size = page->sizeF().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QSizeF size = page->sizeF().scaled(width, height, mode);
 
-    QImage image = page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
-
-    return image;
+    return page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
 }
 
 QImage BrowserPage::thumbnail()
@@ -479,10 +475,10 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 
 QImage BrowserPage::getCurImagePoint(QPoint point)
 {
-    int ds = 122;
+    int ds = 122 * dApp->devicePixelRatio();
     QTransform transform;
     transform.rotate(m_rotation * 90);
-    QImage image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
+    QImage image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() * dApp->devicePixelRatio() - ds / 2.0), qRound(point.y() * dApp->devicePixelRatio()  - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
     return image;
 }
 
