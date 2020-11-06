@@ -53,12 +53,9 @@ DWIDGET_USE_NAMESPACE
 
 QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
-    : DSplitter(parent), m_filePath(filePath), m_fileType(fileType),m_uuid(QUuid::createUuid().toString())
+    : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
-    g_map[m_uuid] = this;
-
-    Database::instance()->readOperation(this);
-    Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+    setAlive(true);
 
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
@@ -91,9 +88,7 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
 
 DocSheet::~DocSheet()
 {
-    stopSearch();
-    Database::instance()->saveOperation(this);
-    g_map.remove(m_uuid);
+    setAlive(false);
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
@@ -890,6 +885,27 @@ void DocSheet::childEvent(QChildEvent *event)
     }
 }
 
+void DocSheet::setAlive(bool alive)
+{
+    if (alive) {
+        if (!m_uuid.isEmpty())
+            setAlive(false);
+
+        m_uuid = QUuid::createUuid().toString();
+        g_map[m_uuid] = this;
+        Database::instance()->readOperation(this);
+        Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+    } else {
+        if (m_uuid.isEmpty())
+            return;
+
+        stopSearch();
+        Database::instance()->saveOperation(this);
+        g_map.remove(m_uuid);
+        m_uuid.clear();
+    }
+}
+
 void DocSheet::showEncryPage()
 {
     if (m_encryPage == nullptr) {
@@ -970,6 +986,12 @@ void DocSheet::onExtractPassword(const QString &password)
     } else {
         m_encryPage->wrongPassWordSlot();
     }
+}
+
+void DocSheet::deadDeleteLater()
+{
+    setAlive(false);
+    DSplitter::deleteLater();
 }
 
 QSizeF DocSheet::pageSizeByIndex(int index)

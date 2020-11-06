@@ -3,7 +3,7 @@
 
 #include <QtCore/qglobal.h>
 
-#ifndef QT_STATIC
+#ifndef BUILD_DEEPIN_PDFIUM_STATIC
 #    if defined(BUILD_DEEPIN_PDFIUM_LIB)
 #      define DEEPIN_PDFIUM_EXPORT Q_DECL_EXPORT
 #    else

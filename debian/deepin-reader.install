@@ -1,0 +1,4 @@
+usr/bin/deepin-reader
+usr/lib
+usr/share/applications/deepin-reader.desktop
+usr/share/deepin-reader/translations/*.qm

@@ -12,29 +12,22 @@ PKGCONFIG += ddjvuapi dtkwidget
 
 DEFINES += PERF_ON
 
-CONFIG(debug, debug|release): DEFINES += THIRDPARTYDEV  #调试第三方库时打开
-
 SRCPWD=$$PWD    #用于被单元测试方便的复用
-
-THIRDRDPARTYPATH = $$SRCPWD/../3rdparty
-
-contains(DEFINES,THIRDPARTYDEV){
-    THIRDRDPARTYPATH = $$SRCPWD/../..
-}
 
 INCLUDEPATH += $$SRCPWD/uiframe
 
+THIRDRDPARTYPATH = $$PWD/../3rdparty
+
+CONFIG(debug,debug|release):THIRDRDPARTYPATH = $$PWD/../3rdpartyd
+
 INCLUDEPATH += $${THIRDRDPARTYPATH}/deepin-pdfium/include
 
-LIBS += -L"$${THIRDRDPARTYPATH}/deepin-pdfium/lib" -ldpdf
+LIBS += -L"$${THIRDRDPARTYPATH}/deepin-pdfium/lib" -ldeepin-pdfium
 
-!contains( DEFINES,THIRDPARTYDEV){
-!system(cd $${THIRDRDPARTYPATH}/deepin-pdfium && qmake && make -j16 && make clean){
-    error("Build deepin-pdfium library failed.")
-}
-}
+LIBS += -lopenjp2 -llcms2 -lfreetype
 
 QMAKE_CXXFLAGS += -fPIE
+
 QMAKE_LFLAGS += -pie
 
 contains(QMAKE_HOST.arch, mips64):{
@@ -81,13 +74,10 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
-deepin-pdfium.path = /usr/lib
-deepin-pdfium.files = $${THIRDRDPARTYPATH}/deepin-pdfium/lib/*.so*
-
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon deepin-pdfium
+INSTALLS += target desktop icon
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件

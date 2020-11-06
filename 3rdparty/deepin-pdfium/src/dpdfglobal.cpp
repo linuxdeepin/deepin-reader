@@ -24,7 +24,6 @@ void DPDFGlobal::shutdownPdfium()
     }
 }
 
-
 DPDFGlobal::DPDFGlobal()
 {
     initPdfium();

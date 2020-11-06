@@ -585,6 +585,11 @@ public:
      */
     QSizeF pageSizeByIndex(int index);
 
+    /**
+     * @brief 先死亡后再删除,防止加载时删除、关闭时卡顿和正在删除时被调用
+     */
+    void deadDeleteLater();
+
 private:
     /**
      * @brief operationRef
@@ -722,6 +727,8 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
     void childEvent(QChildEvent *c) override;
+
+    void setAlive(bool alive);
 
 private:
     SheetOperation  m_operation;

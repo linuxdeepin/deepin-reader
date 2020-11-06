@@ -274,7 +274,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    delete sheet;   //确保删除
+    sheet->deadDeleteLater();
 
 }
 

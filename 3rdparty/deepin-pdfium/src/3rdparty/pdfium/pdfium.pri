@@ -2,17 +2,30 @@ SOURCE_DIR = $$PWD/pdfium
 
 INCLUDEPATH += $$SOURCE_DIR
 
+#OPJ_STATIC
+#FT2_BUILD_LIBRARY
+
 DEFINES += __QT__ \
-    OPJ_STATIC \
     PNG_PREFIX \
     PNG_USE_READ_MACROS \
     BUILD_DEEPIN_PDFIUM_LIB \
-    FT2_BUILD_LIBRARY
+    DEFINE_PS_TABLES_DATA \
+    FT_CONFIG_OPTION_ADOBE_GLYPH_LIST
 
 DEFINES +=  USE_SYSTEM_LIBJPEG \
             USE_SYSTEM_ZLIB \
             USE_SYSTEM_LIBPNG \
-            USE_SYSTEM_ICUUC
+            USE_SYSTEM_ICUUC \
+            USE_SYSTEM_LCMS2 \
+            USE_SYSTEM_LIBOPENJPEG2 \
+            USE_SYSTEM_FREETYPE
+
+INCLUDEPATH += /usr/include/openjpeg-2.3 \
+               /usr/include/freetype2 \
+               /usr/include/freetype2/freetype \
+               /usr/include/freetype2/freetype/config
+
+LIBS += -lopenjp2 -llcms2 -lfreetype
 
 #QMAKE_CXXFLAGS += "-Wc++11-narrowing"  #is_clang
 #QMAKE_CXXFLAGS += "-Wno-inconsistent-missing-override"  #is_clang Suppress no override warning for overridden functions.
@@ -32,10 +45,10 @@ contains(QMAKE_HOST.arch, mips64):{
 include(fx_freetype.pri)
 include(fpdfsdk.pri)
 include(core.pri)
-include(fx_libopenjpeg.pri)
+#include(fx_libopenjpeg.pri)
 include(fx_agg.pri)
 include(fxjs.pri)
-include(fx_lcms2.pri)
+#include(fx_lcms2.pri)
 include(fx_skia.pri)
 include(fx_base.pri)
 

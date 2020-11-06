@@ -53,7 +53,6 @@ SOURCES += \
     $$PWD/pdfium/third_party/libopenjpeg20/pi.c \
     $$PWD/pdfium/third_party/libopenjpeg20/sparse_array.c \
     $$PWD/pdfium/third_party/libopenjpeg20/t1.c \
-    $$PWD/pdfium/third_party/libopenjpeg20/t1_generate_luts.c \
     $$PWD/pdfium/third_party/libopenjpeg20/t2.c \
     $$PWD/pdfium/third_party/libopenjpeg20/tcd.c \
     $$PWD/pdfium/third_party/libopenjpeg20/tgt.c \

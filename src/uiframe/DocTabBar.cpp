@@ -306,6 +306,6 @@ void DocTabBar::onTabCloseRequested(int index)
 
     emit sigTabClosed(sheet);
 
-    m_intervalTimer->start(10);    //100ms内的重复点击将被过滤
+    m_intervalTimer->start(100);    //100ms内的重复点击将被过滤
 }
 
