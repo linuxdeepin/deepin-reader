@@ -785,7 +785,7 @@ bool BrowserPage::removeAllAnnotation()
     return true;
 }
 
-bool BrowserPage::jump2Link(const QPointF point)
+bool BrowserPage::jump2Link(const QPointF &point)
 {
     Link link = m_page->getLinkAtPoint(point);
     if (link.page > 0) {
@@ -800,7 +800,7 @@ bool BrowserPage::jump2Link(const QPointF point)
     return false;
 }
 
-bool BrowserPage::inLink(const QPointF pos)
+bool BrowserPage::inLink(const QPointF &pos)
 {
     Link link = m_page->getLinkAtPoint(pos);
     return link.isValid();

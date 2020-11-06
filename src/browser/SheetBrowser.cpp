@@ -59,9 +59,11 @@
 #include <QDebug>
 #include <QTemporaryDir>
 #include <QProcess>
+#include <QTimerEvent>
 
 DWIDGET_USE_NAMESPACE
 
+#define REPEAT_MOVE_DELAY 500
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setMouseTracking(true);
@@ -80,7 +82,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     grabGesture(Qt::PinchGesture);//捏合缩放
 
-    QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+    m_scroller = QScroller::scroller(this);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
 
@@ -480,7 +482,6 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
 
     m_selectStartWord = nullptr;
     m_selectEndWord = nullptr;
-    m_touchScreenSelectWord = false;
 
     return highLightAnnot;
 }
@@ -646,12 +647,12 @@ void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, con
 
 void SheetBrowser::onSetDocSlideGesture()
 {
-    QScroller::grabGesture(this, QScroller::TouchGesture);//文档滑动
+    m_scroller->stop();
 }
 
 void SheetBrowser::onRemoveDocSlideGesture()
 {
-    QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);//文档不滑动
+    m_scroller->stop();
 }
 
 void SheetBrowser::onRemoveIconAnnotSelect()
@@ -738,6 +739,8 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
+    m_scroller->stop();
+
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
         if (nullptr == m_sheet)
             return;
@@ -780,14 +783,9 @@ bool SheetBrowser::event(QEvent *event)
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
-    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-        m_touchBegin = touchEvent->timestamp();
+    if (event->type() == QEvent::TouchBegin) {
         m_gestureAction = GA_touch;
         m_bTouch = true;
-        break;
-    default: break;
     }
 
     return QGraphicsView::event(event);
@@ -799,8 +797,6 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
-//    if (QGesture *tap = event->gesture(Qt::TapGesture))
-//        tapGestureTriggered(static_cast<QTapGesture *>(tap));
 
     return true;
 }
@@ -1063,45 +1059,30 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
-    //处理触摸屏单指事件(包括点触,长按)
     QPointF point = event->pos();
     BrowserPage *page = getBrowserPageForPoint(point);
+
+    m_scroller->stop();
 
     if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         Qt::MouseButton btn = event->button();
         m_iconAnnot = nullptr;
 
         if (btn == Qt::LeftButton) {
+
             //清除上一次选中
             clearSelectIconAnnotAfterMenu();
-            QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+            m_scroller->handleInput(QScroller::InputPress, event->pos(), event->timestamp());
 
-            if (mousePressWord(mapToScene(event->pos()))) {
-                if (event->source() == Qt::MouseEventSynthesizedByQt) {
-                    QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
-                }
-            }
+            m_canTouchScreen = false;
+            scene()->setSelectionArea(QPainterPath());
+            m_selectStartWord = nullptr;
+            m_selectEndWord = nullptr;
 
-            if (event->source() == Qt::MouseEventSynthesizedByQt) {
-                //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
-                setDocTapGestrue(event->pos());
-
-                QList<QGraphicsItem *> beginItemList = scene()->items(event->pos());
-                BrowserWord *beginWord = nullptr;
-                foreach (QGraphicsItem *item, beginItemList) {
-                    if (item && !item->isPanel()) {
-                        beginWord = qgraphicsitem_cast<BrowserWord *>(item);
-                        if (beginWord && beginWord->isSelected()) {
-                            m_touchScreenSelectWord = true;
-                            return DGraphicsView::mousePressEvent(event);
-                        }
-                    }
-                }
-            } else {
-                m_touchScreenSelectWord = false;
-                scene()->setSelectionArea(QPainterPath());
-                m_selectStartWord = nullptr;
-                m_selectEndWord = nullptr;
+            //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
+            if (event->source() == Qt::MouseEventSynthesizedByQt && setDocTapGestrue(event->pos())) {
+                m_canTouchScreen = true;
+                m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
             }
 
             m_selectEndPos = QPointF();
@@ -1121,13 +1102,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
                 m_iconAnnot = clickAnno;
-                QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
                 return DGraphicsView::mousePressEvent(event);
             }
-
-            if (jump2Link(event->pos()))
-                return DGraphicsView::mousePressEvent(event);
-
         } else if (btn == Qt::RightButton) {
             closeMagnifier();
 
@@ -1273,11 +1249,18 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_touchScreenSelectWord) {
-        return DGraphicsView::mouseMoveEvent(event);
-    }
-
     QPoint mousePos = event->pos();
+
+
+    if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
+        QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
+        if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
+            m_repeatTimer.stop();
+            m_scroller->handleInput(QScroller::InputMove, event->pos(), event->timestamp());
+        }
+
+        return QGraphicsView::mouseMoveEvent(event);
+    }
 
     if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
         m_iconAnnotationMovePos = mapToScene(mousePos);
@@ -1286,7 +1269,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         setCursor(QCursor(Qt::PointingHandCursor));
         if (m_tipsWidget)
             m_tipsWidget->hide();
-        return;
+        return QGraphicsView::mouseMoveEvent(event);
     }
 
     if (!m_magnifierLabel && this->isLink(mousePos)) {
@@ -1449,6 +1432,12 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
     Qt::MouseButton btn = event->button();
     if (btn == Qt::LeftButton) {
+        if (m_canTouchScreen) {
+            m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());
+        } else {
+            m_scroller->stop();
+        }
+
         const QPointF &mousepoint = mapToScene(event->pos());
         m_selectEndPos = mousepoint;
 
@@ -1487,9 +1476,20 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
         m_selectPressedPos = QPointF();
         m_selectIndex = -1;
         m_selectIconAnnotation = false;
+
+        jump2Link(event->pos());
     }
 
     QGraphicsView::mouseReleaseEvent(event);
+}
+
+void SheetBrowser::timerEvent(QTimerEvent *event)
+{
+    QGraphicsView::timerEvent(event);
+    if (event->timerId() == m_repeatTimer.timerId()) {
+        m_repeatTimer.stop();
+        m_canTouchScreen = false;
+    }
 }
 
 int SheetBrowser::allPages()
@@ -1837,27 +1837,20 @@ void SheetBrowser::setIconAnnotSelect(const bool select)
     m_lastSelectIconAnnotPage = nullptr;
 }
 
-void SheetBrowser::slideGesture(const qreal diff)
-{
-    static qreal delta = 0.0;
-    int step = static_cast<int>(diff + delta);
-    delta = diff + delta - step;
-
-    this->verticalScrollBar()->setValue(this->verticalScrollBar()->value() + step);
-}
-
-void SheetBrowser::setDocTapGestrue(QPoint mousePos)
+bool SheetBrowser::setDocTapGestrue(QPoint mousePos)
 {
     QPointF viewpoint = mousePos;
     BrowserPage *page = getBrowserPageForPoint(viewpoint);
     if (nullptr == page)
-        return;
+        return true;
 
     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(viewpoint);
 
-    if (browserAnno || !m_magnifierLabel || this->isLink(mousePos)) {
-        QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
+    if ((browserAnno && browserAnno->annotationType() == deepin_reader::Annotation::AText) || m_magnifierLabel || this->isLink(mousePos)) {
+        return false;
     }
+
+    return true;
 }
 
 void SheetBrowser::clearSelectIconAnnotAfterMenu()
@@ -1869,21 +1862,6 @@ void SheetBrowser::clearSelectIconAnnotAfterMenu()
     }
 }
 
-bool SheetBrowser::mousePressWord(const QPointF pressPos)
-{
-    if (pressPos.isNull())
-        return false;
-
-    QList<QGraphicsItem *> itemList = scene()->items(pressPos);
-    foreach (QGraphicsItem *item, itemList) {
-        if (!item->isPanel()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool SheetBrowser::jump2Link(QPointF point)
 {
     BrowserPage *page = getBrowserPageForPoint(point);
@@ -1893,7 +1871,6 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     point = translate2Local(point);
 
-    //跳转到相应link
     return page->jump2Link(point);
 }
 

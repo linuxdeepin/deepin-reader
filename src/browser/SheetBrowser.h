@@ -41,6 +41,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
+#include <QBasicTimer>
 
 #include <math.h>
 
@@ -59,6 +60,7 @@ class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
 class PageSearchThread;
+class QScroller;
 
 /**
  * @brief 浏览文档内容区域,使用视图框架
@@ -511,6 +513,12 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     /**
+     * @brief 计时器事件
+     * @param event
+     */
+    void timerEvent(QTimerEvent *event) override;
+
+    /**
      * @brief dragEnterEvent
      * 忽略拖拽事件
      * @param event
@@ -553,6 +561,11 @@ protected:
      */
     void tapGestureTriggered(QTapGesture *);
 
+    /**
+     * @brief 获取坐标下对应Page
+     * @param viewPoint
+     * @return
+     */
     BrowserPage *getBrowserPageForPoint(QPointF &viewPoint);
 
 private slots:
@@ -706,26 +719,17 @@ private:
      */
     void setIconAnnotSelect(const bool);
 
-    void slideGesture(const qreal diff);
-
     /**
      * @brief setDocTapGestrue
      * 根据手势点击位置设置文档滑动方式
      */
-    void setDocTapGestrue(QPoint);
+    bool setDocTapGestrue(QPoint);
 
     /**
      * @brief clearSelectIconAnnotAfterMenu
      * 图标注释消失之后清除图标注释的选中状态
      */
     void clearSelectIconAnnotAfterMenu();
-
-    /**
-     * @brief mousePressWord
-     * 判断当前鼠标或者手指点击位置是否有文字
-     * @return
-     */
-    bool mousePressWord(const QPointF);
 
 private:
     deepin_reader::Document *m_document = nullptr;
@@ -777,21 +781,24 @@ private:
     bool m_bNeedNotifyCurPageChanged = true;
     bool m_bTouch = false;
     GestureAction m_gestureAction = GA_null;
-    ulong m_touchBegin = 0;
+
     ulong m_touchStop = 0;
     QPoint m_lastTouchBeginPos;
     Qt::GestureState m_tapStatus = Qt::NoGesture;
 
     //tap
     qint64 m_tapBeginTime = 0;
-    bool m_slideContinue = false;
-//    FlashTween m_tween;
+    //FlashTween m_tween;
     qreal change = 0.0;
     qreal duration = 0.0;
     ulong m_lastMouseTime;
     int m_lastMouseYpos;
     qreal m_stepSpeed = 0;
-    bool m_touchScreenSelectWord = false; // 触摸屏触摸
+
+    QBasicTimer m_repeatTimer;
+    bool m_slideContinue = false;
+    bool m_canTouchScreen = false;
+    QScroller *m_scroller = nullptr;
 };
 
 #endif // SheetBrowser_H

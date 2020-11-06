@@ -405,7 +405,7 @@ public:
      * @param point 当前鼠标点
      * @return true:跳转成功    false:跳转失败
      */
-    bool jump2Link(const QPointF);
+    bool jump2Link(const QPointF &);
 
     /**
      * @brief inLink
@@ -413,7 +413,7 @@ public:
      * @param pos 当前鼠标位置
      * @return true:有  false:没有
      */
-    bool inLink(const QPointF);
+    bool inLink(const QPointF &);
 
     /**
      * @brief setPageBookMark
