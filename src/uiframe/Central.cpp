@@ -112,6 +112,7 @@ void Central::zoomOut()
 void Central::openFilesExec()
 {
     DFileDialog dialog;
+    dialog.setModal(true);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu)");
     dialog.setDirectory(QDir::homePath());
