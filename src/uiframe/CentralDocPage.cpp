@@ -698,10 +698,11 @@ bool CentralDocPage::quitFullScreen(bool force)
 
 void CentralDocPage::onSheetCountChanged(int count)
 {
-    if (count == 1) {
-        if (m_pTabBar->count() <= 0)
-            return;
+    count = m_pTabBar->count();
+    if (count <= 0)
+        return;
 
+    if (count == 1) {
         m_pDocTabLabel->setText(m_pTabBar->tabText(0));
         m_pTabBar->setVisible(false);
     } else {
