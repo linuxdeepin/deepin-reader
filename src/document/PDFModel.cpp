@@ -19,7 +19,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "PDFModel.h"
-#include "deepin-pdfium"
+#include "dpdfannot.h"
+#include "dpdfpage.h"
+#include "dpdfdoc.h"
 
 #include <QDebug>
 

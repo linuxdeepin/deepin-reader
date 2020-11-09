@@ -7,11 +7,10 @@
 
 #include "dpdfglobal.h"
 
-class DPdfium;
 class DPdfAnnot;
 class DPdfPagePrivate;
 class DPdfDocHandler;
-class DEEPIN_PDFIUM_EXPORT DPdfPage : public QObject
+class DEEPDF_EXPORT DPdfPage : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(DPdfPage)

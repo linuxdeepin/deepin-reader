@@ -71,13 +71,9 @@ Makefile*
 
 target_wrapper.*
 
-
-
 # QtCreator
 
 *.autosave
-
-
 
 # QtCreator Qml
 
@@ -104,4 +100,6 @@ compile_commands.json
 *creator.user*
 
 # 3rdparty
-3rdpartyd
+3rdparty/deepin-pdfium/lib
+
+3rdparty/deepdf

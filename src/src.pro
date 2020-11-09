@@ -16,15 +16,18 @@ SRCPWD=$$PWD    #用于被单元测试方便的复用
 
 INCLUDEPATH += $$SRCPWD/uiframe
 
-THIRDRDPARTYPATH = $$PWD/../3rdparty
-
-CONFIG(debug,debug|release):THIRDRDPARTYPATH = $$PWD/../3rdpartyd
-
-INCLUDEPATH += $${THIRDRDPARTYPATH}/deepin-pdfium/include
-
-LIBS += -L"$${THIRDRDPARTYPATH}/deepin-pdfium/lib" -ldeepin-pdfium
-
 LIBS += -lopenjp2 -llcms2 -lfreetype
+
+#由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
+CONFIG(release, debug|release) {
+INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
+LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeein-pdfium
+}
+
+CONFIG(debug, debug|release) {
+INCLUDEPATH += $$PWD/../3rdparty/deepdf/include
+LIBS += -L$$PWD/../3rdparty/deepdf/lib -ldeepdf
+}
 
 QMAKE_CXXFLAGS += -fPIE
 

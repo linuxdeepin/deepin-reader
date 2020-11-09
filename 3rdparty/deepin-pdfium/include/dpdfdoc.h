@@ -13,7 +13,7 @@
 class DPdfPage;
 class DPdfDocHandler;
 class DPdfDocPrivate;
-class DEEPIN_PDFIUM_EXPORT DPdfDoc : public QObject
+class DEEPDF_EXPORT DPdfDoc : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(DPdfDoc)

@@ -1,6 +1,7 @@
 
 #include <QtCore>
 #include <QString>
+
 #include "dpdfglobal.h"
 #include "public/fpdfview.h"
 
@@ -8,7 +9,7 @@ static bool initialized = false;
 
 const static DPDFGlobal instance = DPDFGlobal();
 
-void DPDFGlobal::initPdfium()
+void DPDFGlobal::init()
 {
     if (!initialized) {
         FPDF_InitLibrary();
@@ -16,7 +17,7 @@ void DPDFGlobal::initPdfium()
     }
 }
 
-void DPDFGlobal::shutdownPdfium()
+void DPDFGlobal::destory()
 {
     if (initialized) {
         FPDF_DestroyLibrary();
@@ -26,11 +27,11 @@ void DPDFGlobal::shutdownPdfium()
 
 DPDFGlobal::DPDFGlobal()
 {
-    initPdfium();
+    init();
 }
 
 DPDFGlobal::~DPDFGlobal()
 {
-    shutdownPdfium();
+    destory();
 }
 

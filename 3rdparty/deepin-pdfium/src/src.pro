@@ -1,8 +1,12 @@
-TARGET = $$PWD/../lib/deepin-pdfium
+TARGET = $$PWD/../lib/deein-pdfium
+
+VERSION = 1.0.0.0
 
 TEMPLATE = lib
 
 CONFIG += c++14
+
+DEFINES += BUILD_DEEPDF_LIB
 
 QT = core-private core gui
 

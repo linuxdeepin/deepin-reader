@@ -747,8 +747,6 @@ private:
     BrowserPage *m_lastSelectIconAnnotPage = nullptr;   // 最后选中图标注释所在页
     QTimer *m_viewportChangeTimer = nullptr;            //用于延时进行视图区域更新 防止高频率调用
 
-    Dr::FileType m_fileType;
-    QString m_filePath;
     QString m_filePassword;
     QList<BrowserPage *> m_items;
 

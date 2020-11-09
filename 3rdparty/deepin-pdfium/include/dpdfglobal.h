@@ -3,25 +3,27 @@
 
 #include <QtCore/qglobal.h>
 
-#ifndef BUILD_DEEPIN_PDFIUM_STATIC
-#    if defined(BUILD_DEEPIN_PDFIUM_LIB)
-#      define DEEPIN_PDFIUM_EXPORT Q_DECL_EXPORT
+#ifndef BUILD_DEEPDF_STATIC
+#    if defined(BUILD_DEEPDF_LIB)
+#      define DEEPDF_EXPORT Q_DECL_EXPORT
 #    else
-#      define DEEPIN_PDFIUM_EXPORT Q_DECL_IMPORT
+#      define DEEPDF_EXPORT Q_DECL_IMPORT
 #    endif
 #else
-#    define DEEPIN_PDFium_EXPORT
+#    define DEEPDF_EXPORT
 #endif
 
 class DPDFGlobal
 {
 public:
     DPDFGlobal();
+
     ~DPDFGlobal();
 
 private:
-    void initPdfium();
-    void shutdownPdfium();
+    void init();
+
+    void destory();
 };
 
 #endif // DPDFGLOBAL_H

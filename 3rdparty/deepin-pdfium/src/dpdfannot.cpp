@@ -41,6 +41,26 @@ void DPdfTextAnnot::setRectF(const QRectF &rectf)
     m_rect = rectf;
 }
 
+DPdfSquareAnnot::DPdfSquareAnnot()
+{
+    m_type = ASQUARE;
+}
+
+bool DPdfSquareAnnot::pointIn(QPointF pos)
+{
+    return m_rect.contains(pos);
+}
+
+QList<QRectF> DPdfSquareAnnot::boundaries()
+{
+    return QList<QRectF>() << m_rect;
+}
+
+void DPdfSquareAnnot::setRectF(const QRectF &rectf)
+{
+    m_rect = rectf;
+}
+
 DPdfHightLightAnnot::DPdfHightLightAnnot()
 {
     m_type = AHighlight;
@@ -173,3 +193,4 @@ int DPdfLinkAnnot::linkType() const
 {
     return m_linkType;
 }
+

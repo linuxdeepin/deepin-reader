@@ -200,9 +200,6 @@ bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, c
     if (nullptr == m_document)
         return false;
 
-    m_fileType = fileType;
-    m_filePath = filePath;
-
     return true;
 }
 
