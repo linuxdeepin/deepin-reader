@@ -21,7 +21,7 @@ LIBS += -lopenjp2 -llcms2 -lfreetype
 #由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
 CONFIG(release, debug|release) {
 INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
-LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeein-pdfium
+LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium
 }
 
 CONFIG(debug, debug|release) {

@@ -71,16 +71,8 @@ void PrintManager::slotPrintPreview(DPrinter *printer)
     if (printer->fromPage() == 0 && printer->toPage() == 0) {
         for (int iIndex = 0; iIndex < nPageSize; iIndex++) {
             QImage image;
-
-            if (nPageSize > 100 && ImageRect.width() > 800) {
-                //当页数过多时，处理一下
-                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(ImageRect.height()) / static_cast<double>(ImageRect.width()))) {
-                    painter.drawImage(paintRect, image);
-                }
-            } else {
-                if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height())) {
-                    painter.drawImage(paintRect, image);
-                }
+            if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height())) {
+                painter.drawImage(paintRect, image);
             }
 
             if (iIndex < nPageSize - 1)
