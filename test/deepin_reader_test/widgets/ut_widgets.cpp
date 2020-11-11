@@ -34,7 +34,6 @@
 #include "widgets/SlidePlayWidget.h"
 #include "widgets/SlideWidget.h"
 #include "widgets/ScaleWidget.h"
-#include "widgets/PrintManager.h"
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/SpinnerWidget.h"
@@ -115,7 +114,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
     }
 
     //PrintManager
-    PrintManager printManager(sheet);
+    //PrintManager printManager(sheet);
 
     //SlideWidget
     {

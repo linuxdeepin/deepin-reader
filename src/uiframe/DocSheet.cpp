@@ -657,7 +657,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     int fromIndex = printer->fromPage() == 0 ? 0 : printer->fromPage() - 1;
 
-    int toIndex   = printer->toPage() == 0 ? pagesCount - 1 : printer->toPage() - 1;
+    int toIndex = printer->toPage() == 0 ? pagesCount - 1 : printer->toPage() - 1;
 
     for (int index = fromIndex; index <= toIndex; index++) {
         QImage image;
