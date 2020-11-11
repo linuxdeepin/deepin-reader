@@ -95,6 +95,14 @@ DocSheet::~DocSheet()
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
 {
+    for (auto iter = g_map.begin(); iter != g_map.end(); iter++) {
+        if(iter.value()->filePath() == filePath){
+            QImage image;
+            iter.value()->getImage(0, image, 100, 100, Qt::KeepAspectRatio);
+            return image;
+        }
+    }
+
     return SheetBrowser::firstThumbnail(filePath);
 }
 

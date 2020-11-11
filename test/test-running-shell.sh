@@ -2,7 +2,7 @@
 
 #workdir=$(cd ../../$(dirname $0)/build-filemanager-unknown-Debug/test; pwd)
 
-workdir=./build-deepin_reader_case-unknown-Debug
+workdir=./build-deepin_reader_test-unknown-Debug
 
 executable=deepin-reader
 
