@@ -11,7 +11,6 @@ HEADERS += \
     $$PWD/SpinnerWidget.h \
     $$PWD/ScaleWidget.h \
     $$PWD/SaveDialog.h \
-    $$PWD/PrintManager.h \
     $$PWD/ShortCutShow.h \
     $$PWD/CustomMenu.h \
     $$PWD/CustomWidget.h \
@@ -32,7 +31,6 @@ SOURCES += \
     $$PWD/SpinnerWidget.cpp \
     $$PWD/ScaleWidget.cpp \
     $$PWD/SaveDialog.cpp \
-    $$PWD/PrintManager.cpp \
     $$PWD/ShortCutShow.cpp \
     $$PWD/CustomMenu.cpp \
     $$PWD/CustomWidget.cpp \

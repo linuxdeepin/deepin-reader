@@ -153,12 +153,6 @@ public:
     void zoomOut();
 
     /**
-     * @brief printCurrent
-     * 调用打印模块打印当前文档
-     */
-    void printCurrent();
-
-    /**
      * @brief handleShortcut
      * 处理快捷键
      * @param 快捷键名称

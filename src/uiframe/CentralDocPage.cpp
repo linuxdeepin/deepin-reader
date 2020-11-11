@@ -23,7 +23,6 @@
 #include "DocTabBar.h"
 #include "MainWindow.h"
 #include "SaveDialog.h"
-#include "PrintManager.h"
 #include "SlideWidget.h"
 #include "FileAttrWidget.h"
 
@@ -473,16 +472,6 @@ bool CentralDocPage::saveAsCurrent()
     return false;
 }
 
-void CentralDocPage::printCurrent()
-{
-    DocSheet *sheet = getCurSheet();
-    if (nullptr == sheet || !sheet->isUnLocked())
-        return;
-
-    PrintManager p(sheet);
-    p.showPrintDialog(sheet);
-}
-
 DocSheet *CentralDocPage::getCurSheet()
 {
     if (m_pStackedLayout != nullptr) {
@@ -548,7 +537,8 @@ void CentralDocPage::handleShortcut(const QString &s)
     } else if (s == Dr::key_alt_z) {
         openMagnifer();
     } else if (s == Dr::key_ctrl_p) {
-        printCurrent();
+        if (getCurSheet())
+            getCurSheet()->popPrintDialog();
     } else if (s == Dr::key_alt_1) {
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeNormal);

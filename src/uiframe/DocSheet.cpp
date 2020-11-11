@@ -34,6 +34,7 @@
 #include "MsgHeader.h"
 #include "widgets/EncryptionPage.h"
 #include "document/PDFModel.h"
+#include "DPrintPreviewDialog"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -48,6 +49,7 @@
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <DPrintPreviewDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -617,6 +619,49 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
+void DocSheet::onPrintRequested(DPrinter *printer)
+{
+    printer->setDocName(QFileInfo(filePath()).fileName());
+
+    qreal left = 0;
+
+    qreal top = 0;
+
+    qreal right = 0;
+
+    qreal bottom = 0;
+
+    printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::DevicePixel);
+
+    QPainter painter(printer);
+
+    const QRect rect = printer->pageRect(QPrinter::DevicePixel).toRect();
+
+    QRect paintRect = QRect(static_cast<int>(left), static_cast<int>(top), static_cast<int>(rect.width() - left - right), static_cast<int>(rect.height() - bottom - top));
+
+    painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+
+    int pagesCount = this->pagesNumber();
+
+    double scaleX = printer->resolution() / 72.0;
+
+    double scaleY = printer->resolution() / 72.0;
+
+    int fromIndex = printer->fromPage() == 0 ? 0 : printer->fromPage() - 1;
+
+    int toIndex   = printer->toPage() == 0 ? pagesCount - 1 : printer->toPage() - 1;
+
+    for (int index = fromIndex; index <= toIndex; index++) {
+        QImage image;
+        if (getImage(index, image, rect.width() * scaleX, rect.height() * scaleY)) {
+            painter.drawImage(paintRect, image);
+        }
+
+        if (index < pagesCount - 1)
+            printer->newPage();
+    }
+}
+
 void DocSheet::openSlide()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -992,6 +1037,13 @@ void DocSheet::deadDeleteLater()
 {
     setAlive(false);
     DSplitter::deleteLater();
+}
+
+void DocSheet::popPrintDialog()
+{
+    DPrintPreviewDialog preview(this);
+    connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
+    preview.exec();
 }
 
 QSizeF DocSheet::pageSizeByIndex(int index)

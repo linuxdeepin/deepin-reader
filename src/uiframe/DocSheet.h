@@ -41,6 +41,10 @@ struct SheetOperation {
     int  currentPage            = 1;
 };
 
+DWIDGET_BEGIN_NAMESPACE
+class DPrinter;
+DWIDGET_END_NAMESPACE
+
 class SheetBrowser;
 /**
  * @brief The DocSheet class
@@ -590,6 +594,11 @@ public:
      */
     void deadDeleteLater();
 
+    /**
+     * @brief 阻塞打印
+     */
+    void popPrintDialog();
+
 private:
     /**
      * @brief operationRef
@@ -606,6 +615,12 @@ public slots:
      * @param iconIndex 图片索引
      */
     void showTips(const QString &tips, int iconIndex = 0);
+
+    /**
+     * @brief 打印
+     * @param printer 打印机设备
+     */
+    void onPrintRequested(Dtk::Widget::DPrinter *printer);
 
 private slots:
     /**

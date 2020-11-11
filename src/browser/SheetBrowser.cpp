@@ -33,7 +33,6 @@
 #include "BrowserAnnotation.h"
 #include "widgets/TipsWidget.h"
 #include "BrowserMenu.h"
-#include "widgets/PrintManager.h"
 #include "widgets/FileAttrWidget.h"
 #include "Application.h"
 #include "sidebar/note/NoteViewWidget.h"
@@ -1206,8 +1205,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RotateRight") {
                     m_sheet->rotateRight();
                 } else if (objectname == "Print") {
-                    PrintManager p(m_sheet);
-                    p.showPrintDialog(m_sheet);
+                    m_sheet->popPrintDialog();
                 } else if (objectname == "DocumentInfo") {
                     FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
                     pFileAttrWidget->setFileAttr(m_sheet);
@@ -1929,8 +1927,7 @@ void SheetBrowser::showMenu()
         } else if (objectname == "RotateRight") {
             m_sheet->rotateRight();
         } else if (objectname == "Print") {
-            PrintManager p(m_sheet);
-            p.showPrintDialog(m_sheet);
+            m_sheet->popPrintDialog();
         } else if (objectname == "DocumentInfo") {
             FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
             pFileAttrWidget->setFileAttr(m_sheet);
