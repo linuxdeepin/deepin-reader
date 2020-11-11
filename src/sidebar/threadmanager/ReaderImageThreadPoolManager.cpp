@@ -89,7 +89,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
         }
     }
 
-    connect(readImageParam.receiver, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onReceiverDestroyed, Qt::UniqueConnection);
+    connect(readImageParam.receiver, &QObject::destroyed, this, &ReaderImageThreadPoolManager::onReceiverDestroyed);
     ReaderImageParam_t tParam = readImageParam;
     ReadImageTask *task = new ReadImageTask;
     tParam.task = task;

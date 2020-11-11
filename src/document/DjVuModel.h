@@ -47,7 +47,7 @@ public:
 
     QImage render(qreal width, qreal height, Qt::AspectRatioMode mode)const;     //按大小获取
 
-    QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const;//按缩放比例获取; boundingRect:取其中某一区域图片
+    QImage render(Dr::Rotation rotation, const double scaleFactor = 1.0, const QRectF &boundingRect = QRectF()) const;//按缩放比例获取; boundingRect:取其中某一区域图片
 
     QString label() const;
 

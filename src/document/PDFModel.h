@@ -73,7 +73,7 @@ public:
 
     QImage render(const qreal &scaleFactor) const override;
 
-    QImage render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect = QRectF()) const override;
+    QImage render(Dr::Rotation rotation, const double scaleFactor = 1.0, const QRectF &boundingRect = QRectF()) const override;
 
     QImage render(qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
 

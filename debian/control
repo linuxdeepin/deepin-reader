@@ -2,7 +2,7 @@ Source: deepin-reader
 Section: graphics
 Priority: optional
 Maintainer: deepin <packages@deepin.com>
-Build-Depends: debhelper (>= 11),pkg-config,qtbase5-dev,qtchooser,qttools5-dev-tools,libdtkwidget-dev,libspectre-dev, libdjvulibre-dev, libtiff-dev, libkf5archive-dev, libjpeg-dev,libicu-dev,libpng-dev,zlib1g-dev,liblcms2-dev,libopenjp2-7-dev,libfreetype6-dev
+Build-Depends: debhelper (>= 11),pkg-config,qtbase5-dev,qtchooser,qttools5-dev-tools,libdtkwidget-dev,libspectre-dev, libdjvulibre-dev, libtiff-dev, libkf5archive-dev, libjpeg-dev,libicu-dev,libpng-dev,zlib1g-dev,liblcms2-dev,libopenjp2-7-dev,libfreetype6-dev, libgtest-dev
 Standards-Version: 5.8.0.1
 
 Package: deepin-reader
