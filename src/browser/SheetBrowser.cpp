@@ -1071,14 +1071,15 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             m_scroller->handleInput(QScroller::InputPress, event->pos(), event->timestamp());
 
             m_canTouchScreen = false;
-            scene()->setSelectionArea(QPainterPath());
-            m_selectStartWord = nullptr;
-            m_selectEndWord = nullptr;
-
             //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
             if (event->source() == Qt::MouseEventSynthesizedByQt && setDocTapGestrue(event->pos())) {
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
+            }
+            else {
+                m_selectStartWord = nullptr;
+                m_selectEndWord = nullptr;
+                scene()->setSelectionArea(QPainterPath());
             }
 
             m_selectEndPos = QPointF();
