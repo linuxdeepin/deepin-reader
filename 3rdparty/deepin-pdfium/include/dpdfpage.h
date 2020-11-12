@@ -20,6 +20,12 @@ public:
     ~DPdfPage();
 
     /**
+     * @brief 是否有效
+     * @return
+     */
+    bool isValid() const;
+
+    /**
      * @brief 图片宽
      * @return
      */

@@ -332,7 +332,8 @@ Page *PDFDocument::page(int index) const
     LOCK_DOCUMENT
 
     if (DPdfPage *page = m_document->page(index)) {
-        return new PDFPage(m_docMutex, page);
+        if (page->isValid())
+            return new PDFPage(m_docMutex, page);
     }
 
     return nullptr;

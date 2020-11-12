@@ -12,7 +12,7 @@ PKGCONFIG += ddjvuapi dtkwidget
 
 SRCPWD=$$PWD/../../src    #用于被单元测试方便的复用
 
-3RDPARTTPATH = $$SRCPWD/../3rdparty
+3RDPARTTPATH = $${SRCPWD}/../3rdparty
 
 INCLUDEPATH += $${SRCPWD}
 INCLUDEPATH += $${SRCPWD}/uiframe

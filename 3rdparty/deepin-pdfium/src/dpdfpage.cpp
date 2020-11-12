@@ -37,8 +37,9 @@ public:
 private:
     /**
      * @brief 加载注释,无需初始化，注释的坐标取值不受页自身旋转影响
+     * @return 加载失败说明该页存在问题
      */
-    void loadAnnots();
+    bool loadAnnots();
 
     /**
      * @brief 视图坐标转化为文档坐标
@@ -70,6 +71,8 @@ private:
     FPDF_TEXTPAGE m_textPage = nullptr;
 
     QList<DPdfAnnot *> m_dAnnots;
+
+    bool m_isValid = false;
 };
 
 DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
@@ -81,7 +84,7 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
     //宽高会受自身旋转值影响
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width, &m_height);
 
-    loadAnnots();
+    m_isValid = loadAnnots();
 }
 
 DPdfPagePrivate::~DPdfPagePrivate()
@@ -128,10 +131,14 @@ int DPdfPagePrivate::oriRotation()
 
 }
 
-void DPdfPagePrivate::loadAnnots()
+bool DPdfPagePrivate::loadAnnots()
 {
     //使用临时page，不完全加载,防止刚开始消耗时间过长
     FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
+
+    if (nullptr == page) {
+        return false;
+    }
 
     CPDF_Page *pPage = CPDFPageFromFPDFPage(page);
 
@@ -278,6 +285,8 @@ void DPdfPagePrivate::loadAnnots()
     }
 
     FPDF_ClosePage(page);
+
+    return true;
 }
 
 FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
@@ -362,6 +371,11 @@ DPdfPage::DPdfPage(DPdfDocHandler *handler, int pageIndex)
 DPdfPage::~DPdfPage()
 {
 
+}
+
+bool DPdfPage::isValid() const
+{
+    return d_func()->m_isValid;
 }
 
 qreal DPdfPage::width() const

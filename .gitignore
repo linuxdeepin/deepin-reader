@@ -69,7 +69,15 @@ Makefile*
 
 # Qt unit tests
 
-target_wrapper.*
+*.gcda
+
+*.gcno
+
+*.info
+
+*.out
+
+deepin-reader
 
 # QtCreator
 

@@ -209,9 +209,12 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
     m_lable2Page.clear();
 
-    int allPageCnt = m_document->numberOfPages();
+    int pagesNumber = m_document->numberOfPages();
 
-    for (int i = 0; i < allPageCnt; ++i) {
+    for (int i = 0; i < pagesNumber; ++i) {
+        if (!m_document->page(i))
+            return false;
+
         BrowserPage *item = new BrowserPage(this, m_document->page(i));
 
         item->setItemIndex(i);
