@@ -49,5 +49,6 @@ void DebugTimeManager::endPointLinux(const QString &point,  const QString &statu
         if (!status.isEmpty())
             m_MapPoint[point].desc = status;
         qInfo() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
+        m_MapPoint.remove(point);
     }
 }
