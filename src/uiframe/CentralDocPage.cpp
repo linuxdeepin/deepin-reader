@@ -42,6 +42,7 @@
 #include <QMimeDatabase>
 #include <QProcess>
 #include <QUuid>
+#include <QTimer>
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -698,12 +699,14 @@ bool CentralDocPage::quitFullScreen(bool force)
 
 void CentralDocPage::onSheetCountChanged(int count)
 {
-    count = m_pTabBar->count();
-    if (count <= 0)
-        return;
-
     if (count == 1) {
-        m_pDocTabLabel->setText(m_pTabBar->tabText(0));
+        if (m_pTabBar->count() <= 0)
+            return;
+
+        //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
+        QTimer::singleShot(5, [this](){
+            m_pDocTabLabel->setText(m_pTabBar->tabText(0));
+        });
         m_pTabBar->setVisible(false);
     } else {
         m_pDocTabLabel->setText("");
