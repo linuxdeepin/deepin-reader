@@ -1297,8 +1297,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     //update Magnifier Image
-    if (operation.rotation != m_lastrotation) {
-        if (m_magnifierLabel) m_magnifierLabel->updateImage();
+    if (magnifierOpened() && operation.rotation != m_lastrotation) {
+        m_magnifierLabel->updateImage();
     }
     m_lastrotation = operation.rotation;
 
@@ -1556,7 +1556,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-    if (!m_magnifierLabel && this->isLink(mapToScene(mousePos))) {
+    if (!magnifierOpened() && this->isLink(mapToScene(mousePos))) {
         if (m_tipsWidget)
             m_tipsWidget->hide();
         setCursor(QCursor(Qt::PointingHandCursor));
@@ -1571,29 +1571,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         }
     }
 
-    if (m_magnifierLabel) {
-        QPoint magnifierPos = mousePos;
-        if (mousePos.y() < 122) {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
-            magnifierPos.setY(122);
-        }
-
-        if (mousePos.x() < 122) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
-            magnifierPos.setX(122);
-        }
-
-        if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
-            magnifierPos.setY(this->size().height() - 122);
-        }
-
-        if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
-            magnifierPos.setX(this->size().width() - 122);
-        }
-
-        m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
+    if (magnifierOpened()) {
+        showMagnigierImage(mousePos);
     } else {
         BrowserPage *page = getBrowserPageForPoint(mousePos);
         if (page) {
@@ -1906,17 +1885,20 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
-        setDragMode(QGraphicsView::NoDrag);
-        setCursor(QCursor(Qt::BlankCursor));
     }
+    else{
+        m_magnifierLabel->raise();
+        m_magnifierLabel->show();
+    }
+    setDragMode(QGraphicsView::NoDrag);
+    setCursor(QCursor(Qt::BlankCursor));
+    showMagnigierImage(this->mapFromGlobal(QCursor::pos()));
 }
 
 void SheetBrowser::closeMagnifier()
 {
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
-        m_magnifierLabel->close();
-        m_magnifierLabel = nullptr;
 
         setCursor(QCursor(Qt::ArrowCursor));
         if (Dr::MouseShapeHand == m_sheet->operation().mouseShape) {
@@ -1929,7 +1911,7 @@ void SheetBrowser::closeMagnifier()
 
 bool SheetBrowser::magnifierOpened()
 {
-    return (nullptr != m_magnifierLabel) ;
+    return (m_magnifierLabel && m_magnifierLabel->isVisible()) ;
 }
 
 int SheetBrowser::maxWidth()
@@ -2134,7 +2116,7 @@ void SheetBrowser::setDocTapGestrue(const QPoint mousePos)
 
     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousePos);
 
-    if (browserAnno || (!m_magnifierLabel && this->isLink(mapToScene(mousePos)))) {
+    if (browserAnno || (!magnifierOpened() && this->isLink(mapToScene(mousePos)))) {
         QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);
     }
 }
@@ -2302,3 +2284,28 @@ QString SheetBrowser::pageNum2Lable(const int index)
     return  QString();
 }
 
+void SheetBrowser::showMagnigierImage(const QPoint &point)
+{
+    QPoint magnifierPos = point;
+    if (point.y() < 122) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - point.y()));
+        magnifierPos.setY(122);
+    }
+
+    if (point.x() < 122) {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - point.x()));
+        magnifierPos.setX(122);
+    }
+
+    if (point.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() + (point.y() - (this->size().height() - 122)));
+        magnifierPos.setY(this->size().height() - 122);
+    }
+
+    if (point.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (point.x() - (this->size().width() - 122)));
+        magnifierPos.setX(this->size().width() - 122);
+    }
+
+    m_magnifierLabel->showMagnigierImage(point, magnifierPos, m_lastScaleFactor);
+}

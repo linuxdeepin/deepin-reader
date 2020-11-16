@@ -44,7 +44,7 @@ Q_DECLARE_METATYPE(MagnifierInfo_t)
 class ReadMagnifierManager: public QThread
 {
 public:
-    explicit ReadMagnifierManager();
+    explicit ReadMagnifierManager(QWidget *parent);
     ~ReadMagnifierManager() override;
 
 public:
@@ -64,6 +64,7 @@ protected:
 
 private:
     QMutex m_mutex;
+    QWidget *m_parent;
     QList<MagnifierInfo_t> m_tTasklst;
 };
 
@@ -116,7 +117,7 @@ private:
     QPoint m_lastScenePoint;
 
     SheetBrowser *m_brwoser;
-    ReadMagnifierManager m_readManager;
+    ReadMagnifierManager *m_readManager;
 };
 
 #endif // BROWSERMAGNIFIER_H

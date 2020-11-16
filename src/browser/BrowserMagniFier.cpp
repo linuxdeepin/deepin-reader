@@ -30,9 +30,9 @@
 #include <QDebug>
 #include <QPainterPath>
 
-ReadMagnifierManager::ReadMagnifierManager()
+ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread (parent)
 {
-
+    m_parent = parent;
 }
 
 ReadMagnifierManager::~ReadMagnifierManager()
@@ -50,7 +50,7 @@ void ReadMagnifierManager::addTask(const MagnifierInfo_t &task)
 
 void ReadMagnifierManager::run()
 {
-    while (m_tTasklst.size() > 0) {
+    while (m_tTasklst.size() > 0 && m_parent->isVisible()) {
         MagnifierInfo_t task = m_tTasklst.last();
         m_tTasklst.clear();
 
@@ -64,6 +64,7 @@ void ReadMagnifierManager::run()
 BrowserMagniFier::BrowserMagniFier(QWidget *parent)
     : QLabel(parent)
 {
+    m_readManager = new ReadMagnifierManager(this);
     m_brwoser = dynamic_cast<SheetBrowser *>(parent);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -90,7 +91,7 @@ void BrowserMagniFier::updateImage()
     task.slotFun = "onUpdateMagnifierImage";
     task.mousePos = point;
     task.scaleFactor = m_lastScaleFactor;
-    m_readManager.addTask(task);
+    m_readManager->addTask(task);
 
     m_lastPoint = point;
 }
@@ -115,7 +116,7 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
     task.slotFun = "onUpdateMagnifierImage";
     task.mousePos = mousePos;
     task.scaleFactor = scaleFactor;
-    m_readManager.addTask(task);
+    m_readManager->addTask(task);
 
     m_lastPoint = mousePos;
     m_lastScaleFactor = scaleFactor;

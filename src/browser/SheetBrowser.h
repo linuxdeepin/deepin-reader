@@ -748,6 +748,12 @@ private:
      */
     bool mousePressWord(const QPointF);
 
+    /**
+     * @brief 显示放大镜位置图片
+     * @param point
+     */
+    void showMagnigierImage(const QPoint &point);
+
 private:
     deepin_reader::Document *m_document = nullptr;
     QList<deepin_reader::Document *> m_renderDocuments;
