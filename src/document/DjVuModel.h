@@ -43,11 +43,13 @@ public:
 
     QSize size() const;
 
-    QSizeF sizeF() const;
+    QSizeF sizeF() const override;
 
-    QImage render(qreal width, qreal height, Qt::AspectRatioMode mode)const;     //按大小获取
+    QImage render(qreal width, qreal height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio)const override;     //按大小获取
 
-    QImage render(Dr::Rotation rotation, const double scaleFactor = 1.0, const QRectF &boundingRect = QRectF()) const;//按缩放比例获取; boundingRect:取其中某一区域图片
+    QImage render(const double scaleFactor = 1.0, const QRect &slice = QRect()) const override;
+
+    QImage renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const;
 
     QString label() const;
 

@@ -30,6 +30,7 @@ class SheetSidebar;
 class SlideWidget;
 class EncryptionPage;
 class QPropertyAnimation;
+class QPrinter;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -620,7 +621,7 @@ public slots:
      * @brief 打印
      * @param printer 打印机设备
      */
-    void onPrintRequested(Dtk::Widget::DPrinter *printer);
+    void onPrintRequested(QPrinter *printer);
 
 private slots:
     /**

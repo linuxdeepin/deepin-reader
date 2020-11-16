@@ -49,7 +49,7 @@
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
 #include <QDebug>
-#include <DPrintPreviewDialog>
+#include <QPrintPreviewDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -96,7 +96,7 @@ DocSheet::~DocSheet()
 QImage DocSheet::firstThumbnail(const QString &filePath)
 {
     for (auto iter = g_map.begin(); iter != g_map.end(); iter++) {
-        if(iter.value()->filePath() == filePath){
+        if (iter.value()->filePath() == filePath) {
             QImage image;
             iter.value()->getImage(0, image, 100, 100, Qt::KeepAspectRatio);
             return image;
@@ -627,45 +627,51 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
-void DocSheet::onPrintRequested(DPrinter *printer)
+void DocSheet::onPrintRequested(QPrinter *printer)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
 
-    qreal left = 0;
-
-    qreal top = 0;
-
-    qreal right = 0;
-
-    qreal bottom = 0;
-
-    printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::DevicePixel);
+    printer->setFullPage(true);
 
     QPainter painter(printer);
 
-    const QRect rect = printer->pageRect(QPrinter::DevicePixel).toRect();
+    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);
 
-    QRect paintRect = QRect(static_cast<int>(left), static_cast<int>(top), static_cast<int>(rect.width() - left - right), static_cast<int>(rect.height() - bottom - top));
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
-    painter.setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+    int pagesCount = pagesNumber();
 
-    int pagesCount = this->pagesNumber();
+    int fromIndex = printer->fromPage() <= 0 ? 0 : printer->fromPage() - 1;
 
-    double scaleX = printer->resolution() / 72.0;
+    int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
-    double scaleY = printer->resolution() / 72.0;
+    //针对pdf单页大文档单独优化
+    if (toIndex - fromIndex <= 2 && Dr::PDF == m_fileType) {
+        for (int index = fromIndex; index <= toIndex; index++) {
+            if (index >= pagesCount)
+                break;
 
-    int fromIndex = printer->fromPage() == 0 ? 0 : printer->fromPage() - 1;
+            QImage image;
+            if (getImage(index, image, pageRect.width() * 4, pageRect.height() * 4)) {
+                painter.drawImage(QRectF(0, 0, pageRect.width(), pageRect.height()), image);
+            }
 
-    int toIndex = printer->toPage() == 0 ? pagesCount - 1 : printer->toPage() - 1;
+            if (index != toIndex)
+                printer->newPage();
+        }
+        return;
+    }
 
     for (int index = fromIndex; index <= toIndex; index++) {
+        if (index >= pagesCount)
+            break;
+
         QImage image;
-        if (getImage(index, image, rect.width() * scaleX, rect.height() * scaleY)) {
-            painter.drawImage(paintRect, image);
+        if (getImage(index, image, pageRect.width(), pageRect.height())) {
+            painter.drawImage(QRectF(0, 0, pageRect.width(), pageRect.height()), image);
         }
 
-        if (index < pagesCount - 1)
+        if (index != toIndex)
             printer->newPage();
     }
 }
@@ -1049,8 +1055,8 @@ void DocSheet::deadDeleteLater()
 
 void DocSheet::popPrintDialog()
 {
-    DPrintPreviewDialog preview(this);
-    connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
+    QPrintPreviewDialog preview(this);
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
     preview.exec();
 }
 

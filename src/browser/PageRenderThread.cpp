@@ -192,7 +192,7 @@ void PageRenderThread::run()
             if (m_curTask.rect.isEmpty())
                 image = m_curTask.page->getImage(m_curTask.scaleFactor);
             else
-                image = m_curTask.page->getImage(m_curTask.scaleFactor, Dr::RotateBy0, m_curTask.rect);
+                image = m_curTask.page->getImage(m_curTask.scaleFactor, QRect(0, 0, m_curTask.rect.width(), m_curTask.rect.height()));
 
             if (!image.isNull())
                 emit sigImageTaskFinished(m_curTask.page, QPixmap::fromImage(image), m_curTask.pixmapId, m_curTask.rect);

@@ -179,9 +179,8 @@ public:
     virtual ~Page() {}
 
     virtual QSizeF sizeF() const = 0;
-    virtual QImage render(const qreal &scaleFactor) const { Q_UNUSED(scaleFactor) return QImage();}
-    virtual QImage render(Dr::Rotation rotation, const double scaleFactor = 1.0, const QRectF &boundingRect = QRectF()) const = 0;
-    virtual QImage render(qreal width, qreal height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
+    virtual QImage render(const qreal scaleFactor = 1.0, const QRect &slice = QRect()) const = 0;
+    virtual QImage render(qreal width, qreal height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
     virtual Link getLinkAtPoint(const QPointF &) const { return Link(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }

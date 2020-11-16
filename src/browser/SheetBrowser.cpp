@@ -1078,8 +1078,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             if (event->source() == Qt::MouseEventSynthesizedByQt && setDocTapGestrue(event->pos())) {
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
-            }
-            else {
+            } else {
                 m_selectStartWord = nullptr;
                 m_selectEndWord = nullptr;
                 scene()->setSelectionArea(QPainterPath());

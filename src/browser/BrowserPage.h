@@ -115,21 +115,13 @@ public:
     static bool existInstance(BrowserPage *item);
 
     /**
-     * @brief 获取缩放图片
-     * @param scaleFactor 缩放因子
-     * @return
-     */
-    QImage getImage(double scaleFactor = 1);
-
-    /**
      * @brief getImage
      * 获取该缩放后的图片中的一部分
      * @param scaleFactor 缩放因子
-     * @param rotation 旋转
-     * @param boundingRect 范围 默认为获取全部
+     * @param boundingRect 需要取的局部范围 默认为获取全部
      * @return
      */
-    QImage getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect = QRectF());
+    QImage getImage(double scaleFactor, const QRect &slice = QRect());
 
     /**
      * @brief getImage

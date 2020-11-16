@@ -86,49 +86,18 @@ QSizeF PDFPage::sizeF() const
     return m_pageSizef;
 }
 
-QImage PDFPage::render(const qreal &scaleFactor) const
+QImage PDFPage::render(const double scaleFactor, const QRect &slice) const
 {
     LOCK_DOCUMENT
 
-    if (m_page == nullptr)
-        return QImage();
-
-    return m_page->image(scaleFactor);
+    return m_page->imageByScaleFactor(scaleFactor, scaleFactor, slice);
 }
 
-QImage PDFPage::render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect) const
-{
-    return render(scaleFactor, scaleFactor, rotation, boundingRect);
-}
-
-QImage PDFPage::render(qreal width, qreal height, Qt::AspectRatioMode) const
-{
-    qreal horizontalResolution = 1.0 * width / m_page->width();
-    qreal verticalResolution = 1.0 * height / m_page->height();
-
-    return render(horizontalResolution, verticalResolution, Dr::RotateBy0, QRect(0, 0, width, height));
-}
-
-QImage PDFPage::render(qreal horizontalResolution, qreal verticalResolution, Dr::Rotation, QRectF boundingRect) const
+QImage PDFPage::render(qreal width, qreal height, const QRect &slice, Qt::AspectRatioMode) const
 {
     LOCK_DOCUMENT
 
-    if (m_page == nullptr)
-        return QImage();
-
-    qreal x = 0;
-    qreal y = 0;
-    qreal w = m_page->width();
-    qreal h = m_page->height();
-
-    if (!boundingRect.isNull()) {
-        x = boundingRect.x();
-        y = boundingRect.y();
-        w = boundingRect.width();
-        h = boundingRect.height();
-    }
-
-    return m_page->image(horizontalResolution, verticalResolution, x, y, w, h);
+    return m_page->image(static_cast<int>(width), static_cast<int>(height), slice);
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const

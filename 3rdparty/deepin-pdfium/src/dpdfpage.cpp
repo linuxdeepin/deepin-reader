@@ -13,8 +13,6 @@
 #include "core/fpdfdoc/cpdf_linklist.h"
 #include "fpdfsdk/cpdfsdk_helpers.h"
 
-#include <QDebug>
-
 class DPdfPagePrivate
 {
     friend class DPdfPage;
@@ -81,7 +79,7 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
 
     m_index = index;
 
-    //宽高会受自身旋转值影响
+    //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width, &m_height);
 
     m_isValid = loadAnnots();
@@ -393,22 +391,22 @@ int DPdfPage::pageIndex() const
     return d_func()->m_index;
 }
 
-QImage DPdfPage::image(qreal scale)
+QImage DPdfPage::image(int width, int height, QRect slice)
 {
     if (nullptr == d_func()->m_doc)
         return QImage();
 
+    if (!slice.isValid())
+        slice = QRect(0, 0, width, height);
+
     d_func()->loadPage();
 
-    int scaleWidth = static_cast<int>(width() * scale) ;
-    int scaleHeight = static_cast<int>(height() * scale);
-
-    QImage image(scaleWidth, scaleHeight, QImage::Format_RGBA8888);
-
-    image.fill(0xFFFFFFFF);
+    QImage image(slice.width(), slice.height(), QImage::Format_RGBA8888);
 
     if (image.isNull())
         return QImage();
+
+    image.fill(0xFFFFFFFF);
 
     FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(), FPDFBitmap_BGRA, image.scanLine(0), image.bytesPerLine());
 
@@ -416,12 +414,13 @@ QImage DPdfPage::image(qreal scale)
         return QImage();
     }
 
-    FPDF_RenderPageBitmap(bitmap, d_func()->m_page, 0, 0, scaleWidth, scaleHeight, scaleWidth, scaleHeight, 0, FPDF_ANNOT);
+    FPDF_RenderPageBitmap(bitmap, d_func()->m_page, slice.x(), slice.y(), slice.width(), slice.height(), width, height, 0, FPDF_ANNOT);
 
     FPDFBitmap_Destroy(bitmap);
 
     for (int i = 0; i < image.height(); i++) {
         uchar *pixels = image.scanLine(i);
+
         for (int j = 0; j < image.width(); j++) {
             qSwap(pixels[0], pixels[2]);
             pixels += 4;
@@ -431,44 +430,9 @@ QImage DPdfPage::image(qreal scale)
     return image;
 }
 
-QImage DPdfPage::image(qreal xscale, qreal yscale, qreal x, qreal y, qreal width, qreal height)
+QImage DPdfPage::imageByScaleFactor(qreal xScaleFactor, qreal yScaleFactor, QRect slice)
 {
-    if (nullptr == d_func()->m_doc)
-        return QImage();
-
-    d_func()->loadPage();
-
-    QImage image(width, height, QImage::Format_RGBA8888);
-
-    if (image.isNull())
-        return QImage();
-
-    image.fill(0xFFFFFFFF);
-
-    FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(),
-                                             FPDFBitmap_BGRA,
-                                             image.scanLine(0), image.bytesPerLine());
-
-    if (bitmap == nullptr) {
-        return QImage();
-    }
-
-    FPDF_RenderPageBitmap(bitmap, d_func()->m_page,
-                          x, y, width, height,
-                          xscale * this->width(), yscale * this->height(),
-                          0, FPDF_ANNOT);
-    FPDFBitmap_Destroy(bitmap);
-    bitmap = nullptr;
-
-    for (int i = 0; i < image.height(); i++) {
-        uchar *pixels = image.scanLine(i);
-        for (int j = 0; j < image.width(); j++) {
-            qSwap(pixels[0], pixels[2]);
-            pixels += 4;
-        }
-    }
-
-    return image;
+    return image(static_cast<int>(this->width() * xScaleFactor), static_cast<int>(this->height() * yScaleFactor), slice);
 }
 
 int DPdfPage::countChars()

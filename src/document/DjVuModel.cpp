@@ -445,7 +445,7 @@ QSizeF DjVuPage::sizeF() const
     return m_size;
 }
 
-QImage DjVuPage::render(qreal width, qreal height, Qt::AspectRatioMode mode)const
+QImage DjVuPage::render(qreal width, qreal height, const QRect &slice, Qt::AspectRatioMode mode)const
 {
     LOCK_PAGE
 
@@ -486,10 +486,17 @@ QImage DjVuPage::render(qreal width, qreal height, Qt::AspectRatioMode mode)cons
 
     ddjvu_rect_t renderrect;
 
-    renderrect.x = 0;
-    renderrect.y = 0;
-    renderrect.w = pagerect.w;
-    renderrect.h = pagerect.h;
+    if (!slice.isValid()) {
+        renderrect.x = 0;
+        renderrect.y = 0;
+        renderrect.w = pagerect.w;
+        renderrect.h = pagerect.h;
+    } else {
+        renderrect.x = 0;
+        renderrect.y = 0;
+        renderrect.w = static_cast<unsigned int>(slice.width());
+        renderrect.h = static_cast<unsigned int>(slice.height());
+    }
 
     QImage image(static_cast<int>(renderrect.w), static_cast<int>(renderrect.h), QImage::Format_RGB32);
 
@@ -506,7 +513,12 @@ QImage DjVuPage::render(qreal width, qreal height, Qt::AspectRatioMode mode)cons
     return image;
 }
 
-QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const QRectF &boundingRect) const
+QImage DjVuPage::render(const double scaleFactor, const QRect &slice) const
+{
+    return renderWithRotation(Dr::RotateBy0, scaleFactor, slice);
+}
+
+QImage DjVuPage::renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const
 {
     LOCK_PAGE
 
@@ -574,16 +586,16 @@ QImage DjVuPage::render(Dr::Rotation rotation, const double scaleFactor, const Q
 
     ddjvu_rect_t renderrect;
 
-    if (boundingRect.isNull()) {
+    if (slice.isNull()) {
         renderrect.x = pagerect.x;
         renderrect.y = pagerect.y;
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
-        renderrect.x = boundingRect.x() < 0 ? 0 : boundingRect.x() ;
-        renderrect.y = boundingRect.y() < 0 ? 0 : boundingRect.y() ;
-        renderrect.w = static_cast<unsigned int>(boundingRect.width());
-        renderrect.h =  static_cast<unsigned int>(boundingRect.height());
+        renderrect.x = slice.x() < 0 ? 0 : slice.x() ;
+        renderrect.y = slice.y() < 0 ? 0 : slice.y() ;
+        renderrect.w = static_cast<unsigned int>(slice.width());
+        renderrect.h =  static_cast<unsigned int>(slice.height());
     }
 
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);

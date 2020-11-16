@@ -10,7 +10,8 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QAccessible>
-
+#include <QDebug>
+#include <QFontDatabase>
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])

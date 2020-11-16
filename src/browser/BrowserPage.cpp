@@ -237,7 +237,7 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     QRect validRect = boundingRect().intersected(rect).toRect();
 
-    QImage image = getImage(scaleFactor, Dr::RotateBy0, validRect);
+    QImage image = getImage(scaleFactor, validRect);
 
     if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
         ImagePatch patch;
@@ -313,11 +313,6 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
     update();
 }
 
-QImage BrowserPage::getImage(double scaleFactor)
-{
-    return m_page->render(scaleFactor);
-}
-
 void BrowserPage::handleWordLoaded(const QList<Word> &words)
 {
     m_wordIsRendering = false;
@@ -337,9 +332,9 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 }
 
-QImage BrowserPage::getImage(double scaleFactor, Dr::Rotation rotation, const QRectF &boundingRect)
+QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    return m_page->render(rotation, scaleFactor, boundingRect);
+    return m_page->render(scaleFactor, slice);
 }
 
 QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
@@ -355,7 +350,7 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
 
     QSizeF size = m_pageSizeF.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
 
-    QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), mode);
+    QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), QRect(), mode);
 
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
@@ -364,7 +359,7 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
 
 QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
 {
-    return m_page->render(m_rotation, scaleFactor, rect);
+    return m_page->render(scaleFactor, rect);
 }
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
@@ -373,7 +368,7 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
     transform.rotate(m_rotation * 90);
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
     QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
-    return m_page->render(Dr::Rotation::RotateBy0, scaleFactor, rect).transformed(transform, Qt::SmoothTransformation);
+    return m_page->render(scaleFactor, rect).transformed(transform, Qt::SmoothTransformation);
 }
 
 QImage BrowserPage::getCurImagePoint(QPointF point)

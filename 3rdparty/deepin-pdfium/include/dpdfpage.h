@@ -44,18 +44,22 @@ public:
     int pageIndex() const;
 
     /**
-     * @brief 获取图片
-     * @param scale 缩放因子
+     * @brief 按宽高获取原图(in pixels)
+     * @param width
+     * @param height
+     * @param rect 要取的切片,默认为全图
      * @return
      */
-    QImage image(qreal scale);
+    QImage image(int width, int height, QRect slice = QRect());
 
     /**
-     * @brief 获取图片一部分
-     * @param scale
+     * @brief 根据缩放比例获取图片(in pixels),获取一部分速度更快
+     * @param xScaleFactor
+     * @param yScaleFactor
+     * @param rect 要取的切片,默认为全图(in pixels)
      * @return
      */
-    QImage image(qreal xscale, qreal yscale, qreal x = 0, qreal y = 0, qreal width = 0, qreal height = 0);
+    QImage imageByScaleFactor(qreal xScaleFactor, qreal yScaleFactor, QRect slice = QRect());
 
     /**
      * @brief 字符数
