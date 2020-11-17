@@ -22,10 +22,12 @@
 #include "dpdfannot.h"
 #include "dpdfpage.h"
 #include "dpdfdoc.h"
+#include "Application.h"
 
 #include <QDebug>
+#include <QScreen>
 
-#define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
+#define LOCK_DOCUMENT QMutexLocker docMutexLocker(&PDFPage::s_mutex);
 
 namespace deepin_reader {
 
@@ -70,10 +72,11 @@ DPdfAnnot *PDFAnnotation::ownAnnotation()
     return m_dannotation;
 }
 
+QMutex PDFPage::s_mutex;
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
     m_docMutex(mutex), m_page(page)
 {
-    m_pageSizef = QSizeF(page->width(), page->height());
+
 }
 
 PDFPage::~PDFPage()
@@ -83,21 +86,46 @@ PDFPage::~PDFPage()
 
 QSizeF PDFPage::sizeF() const
 {
-    return m_pageSizef;
+    QScreen *srn = QApplication::screens().value(0);
+
+    if (nullptr == srn)
+        return QSizeF(m_page->width(), m_page->height());
+
+    return QSizeF(m_page->width() * srn->logicalDotsPerInchX() / 72, m_page->height() * srn->logicalDotsPerInchY() / 72);
 }
 
 QImage PDFPage::render(const double scaleFactor, const QRect &slice) const
 {
     LOCK_DOCUMENT
 
-    return m_page->imageByScaleFactor(scaleFactor, scaleFactor, slice);
+    QRect ratioRect = slice.isValid() ? QRect(static_cast<int>(slice.x() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.y() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.width() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.height() * dApp->devicePixelRatio())) : QRect();
+
+    QImage image = m_page->image(static_cast<int>(sizeF().width() * scaleFactor * dApp->devicePixelRatio()),
+                                 static_cast<int>(sizeF().height() * scaleFactor * dApp->devicePixelRatio()), ratioRect);
+
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+
+    return image;
 }
 
-QImage PDFPage::render(qreal width, qreal height, const QRect &slice, Qt::AspectRatioMode) const
+QImage PDFPage::render(int width, int height, const QRect &slice, Qt::AspectRatioMode) const
 {
     LOCK_DOCUMENT
 
-    return m_page->image(static_cast<int>(width), static_cast<int>(height), slice);
+    QRect ratioRect = slice.isValid() ? QRect(static_cast<int>(slice.x() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.y() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.width() * dApp->devicePixelRatio()),
+                                              static_cast<int>(slice.height() * dApp->devicePixelRatio())) : QRect();
+
+    QImage image = m_page->image(static_cast<int>(width * dApp->devicePixelRatio()),
+                                 static_cast<int>(height * dApp->devicePixelRatio()), ratioRect);
+
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+
+    return image;
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &point) const

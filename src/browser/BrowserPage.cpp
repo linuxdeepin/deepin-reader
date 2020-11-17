@@ -36,7 +36,6 @@
 #include "Utils.h"
 
 #include <DApplicationHelper>
-
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -54,7 +53,6 @@ BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGra
     items.insert(this);
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
-    m_pageSizeF = m_page->sizeF();
 }
 
 BrowserPage::~BrowserPage()
@@ -71,14 +69,14 @@ BrowserPage::~BrowserPage()
         delete m_page;
 }
 
-QSizeF BrowserPage::pageSize()
+QSizeF BrowserPage::pageSize() const
 {
-    return m_pageSizeF;
+    return m_page->sizeF();
 }
 
 QRectF BrowserPage::boundingRect() const
 {
-    return QRectF(0, 0, static_cast<double>(m_pageSizeF.width() * m_scaleFactor), static_cast<double>(m_pageSizeF.height() * m_scaleFactor));
+    return QRectF(0, 0, pageSize().width() * m_scaleFactor, pageSize().height() * m_scaleFactor);
 }
 
 QRectF BrowserPage::rect()
@@ -86,11 +84,11 @@ QRectF BrowserPage::rect()
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, static_cast<double>(m_pageSizeF.height() * m_scaleFactor), static_cast<double>(m_pageSizeF.width() * m_scaleFactor));
+        return QRectF(0, 0, static_cast<double>(pageSize().height() * m_scaleFactor), static_cast<double>(pageSize().width() * m_scaleFactor));
     default: break;
     }
 
-    return QRectF(0, 0, static_cast<double>(m_pageSizeF.width() * m_scaleFactor), static_cast<double>(m_pageSizeF.height() * m_scaleFactor));
+    return QRectF(0, 0, static_cast<double>(pageSize().width() * m_scaleFactor), static_cast<double>(pageSize().height() * m_scaleFactor));
 }
 
 QRectF BrowserPage::bookmarkRect()
@@ -209,7 +207,9 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         task.pixmapId = ++m_pixmapId;
 
         if (m_pixmap.isNull()) {
-            m_pixmap = QPixmap(static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+            m_pixmap = QPixmap(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                               static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+            m_pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
             m_pixmap.fill(Qt::white);
 
         } else {
@@ -226,7 +226,6 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
     scaleWords();
     scaleAnnots();
-
     update();
 }
 
@@ -249,7 +248,7 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     if (!m_pixmap.isNull()) {//如果当前图已被清除，无需绘制
         QPainter painter(&m_pixmap);
-        painter.drawImage(validRect, image);
+        painter.drawImage(validRect.x(), validRect.y(), image);
         update();
     }
 }
@@ -322,7 +321,9 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
     for (int i = 0; i < words.count(); ++i) {
         BrowserWord *word = new BrowserWord(this, words[i]);
+
         word->setSelectable(m_wordSelectable);
+
         m_words.append(word);
     }
 
@@ -344,15 +345,13 @@ QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bo
             return QImage();
 
         QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode, Qt::SmoothTransformation);
+
         image.setDevicePixelRatio(dApp->devicePixelRatio());
+
         return image;
     }
 
-    QSizeF size = m_pageSizeF.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
-
-    QImage image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), QRect(), mode);
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    QImage image = m_page->render(static_cast<int>(width), static_cast<int>(height), QRect(), mode);
 
     return image;
 }
@@ -965,22 +964,22 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
         break;
     }
     case Dr::RotateBy90: {
-        newrect.setX((m_pageSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((pageSize().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setY(rect.x()*m_scaleFactor);
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy180: {
-        newrect.setX((m_pageSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
-        newrect.setY((m_pageSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((pageSize().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((pageSize().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setWidth(rect.width()*m_scaleFactor);
         newrect.setHeight(rect.height()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy270: {
         newrect.setX(rect.y()*m_scaleFactor);
-        newrect.setY((m_pageSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((pageSize().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;

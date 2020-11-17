@@ -69,11 +69,15 @@ class PDFPage : public Page
 public:
     ~PDFPage() override;
 
+    /**
+     * @brief 获取大小 会根据当前设备的像素密度保持每一页在不同设备上大小相同.
+     * @return
+     */
     QSizeF sizeF() const override;
 
     QImage render(const double scaleFactor = 1.0, const QRect &slice = QRect()) const override;
 
-    QImage render(qreal width, qreal height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
+    QImage render(int width, int height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
 
     Link getLinkAtPoint(const QPointF &point) const override;
 
@@ -104,11 +108,11 @@ private:
 
     QMutex *m_docMutex = nullptr;
 
+    static QMutex s_mutex;
+
     DPdfPage *m_page = nullptr;
 
     QList<Word> m_words;
-
-    QSizeF m_pageSizef;
 };
 
 class PDFDocument : public Document

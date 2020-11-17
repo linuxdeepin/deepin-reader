@@ -180,7 +180,7 @@ public:
 
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(const qreal scaleFactor = 1.0, const QRect &slice = QRect()) const = 0;
-    virtual QImage render(qreal width, qreal height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
+    virtual QImage render(int width, int height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const = 0;
     virtual Link getLinkAtPoint(const QPointF &) const { return Link(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }

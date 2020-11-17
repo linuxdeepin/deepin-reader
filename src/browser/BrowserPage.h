@@ -59,13 +59,13 @@ public:
      * @brief 文档原始大小
      * @return
      */
-    QSizeF pageSize();
+    QSizeF pageSize() const;
 
     /**
      * @brief 文档页缩放后的原区域 不受旋转影响
      * @return
      */
-    QRectF boundingRect()const override;
+    QRectF boundingRect() const override;
 
     /**
      * @brief 文档页实际区域
@@ -486,8 +486,6 @@ private:
     deepin_reader::Page *m_page = nullptr;              //主要操作更新
 
     deepin_reader::AnnotationList m_annotations;
-
-    QSizeF m_pageSizeF;
 
     int     m_index = 0;                                //当前索引
     double  m_scaleFactor = -1;                         //当前被设置的缩放

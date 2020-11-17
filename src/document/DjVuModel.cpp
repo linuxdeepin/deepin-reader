@@ -445,7 +445,7 @@ QSizeF DjVuPage::sizeF() const
     return m_size;
 }
 
-QImage DjVuPage::render(qreal width, qreal height, const QRect &slice, Qt::AspectRatioMode mode)const
+QImage DjVuPage::render(int width, int height, const QRect &slice, Qt::AspectRatioMode mode)const
 {
     LOCK_PAGE
 

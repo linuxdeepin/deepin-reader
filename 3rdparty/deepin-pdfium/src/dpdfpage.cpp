@@ -60,9 +60,9 @@ private:
 
     int m_index = -1;
 
-    qreal m_width = 0;
+    qreal m_width_pt = 0;
 
-    qreal m_height = 0;
+    qreal m_height_pt = 0;
 
     FPDF_PAGE m_page = nullptr;
 
@@ -80,7 +80,7 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
     m_index = index;
 
     //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
-    FPDF_GetPageSizeByIndex(m_doc, index, &m_width, &m_height);
+    FPDF_GetPageSizeByIndex(m_doc, index, &m_width_pt, &m_height_pt);
 
     m_isValid = loadAnnots();
 }
@@ -159,8 +159,8 @@ bool DPdfPagePrivate::loadAnnots()
         else if (FPDF_ANNOT_LINK == subType)
             type = DPdfAnnot::ALink;
 
-        //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width/m_height 为受旋转影响后的宽高
-        qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+        //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width_pt/m_height_pt 为受旋转影响后的宽高
+        qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
         if (DPdfAnnot::AText == type) {
             DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
@@ -289,8 +289,8 @@ bool DPdfPagePrivate::loadAnnots()
 
 FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
 {
-    qreal actualWidth  = (rotation % 2 == 0) ? m_width : m_height;
-    qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+    qreal actualWidth  = (rotation % 2 == 0) ? m_width_pt : m_height_pt;
+    qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
 
     FS_RECTF fs_rect;
 
@@ -321,8 +321,8 @@ FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
 
 QRectF DPdfPagePrivate::transRect(const int &rotation, const FS_RECTF &fs_rect)
 {
-//    qreal actualwidth  = (rotation % 2 == 0) ? m_width : m_height;
-//    qreal actualHeight = (rotation % 2 == 0) ? m_height : m_width;
+//    qreal actualwidth  = (rotation % 2 == 0) ? m_width_pt : m_height_pt;
+//    qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
 
     //    rotation:0
     //                 actualWidth
@@ -342,20 +342,20 @@ QRectF DPdfPagePrivate::transRect(const int &rotation, const FS_RECTF &fs_rect)
                       static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom),
                       static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left));
     } else if (2 == rotation) { //180
-        return QRectF(m_width - static_cast<qreal>(fs_rect.right),
+        return QRectF(m_width_pt - static_cast<qreal>(fs_rect.right),
                       static_cast<qreal>(fs_rect.bottom),
                       static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left),
                       static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom));
 
     } else if (3 == rotation) { //270
-        return QRectF(m_height - static_cast<qreal>(fs_rect.top),
-                      m_width - static_cast<qreal>(fs_rect.right),
+        return QRectF(m_height_pt - static_cast<qreal>(fs_rect.top),
+                      m_width_pt - static_cast<qreal>(fs_rect.right),
                       static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom),
                       static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left));
     }
 
     return QRectF(static_cast<qreal>(fs_rect.left),
-                  m_height - static_cast<qreal>(fs_rect.top),
+                  m_height_pt - static_cast<qreal>(fs_rect.top),
                   static_cast<qreal>(fs_rect.right) - static_cast<qreal>(fs_rect.left),
                   static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom));
 }
@@ -378,12 +378,12 @@ bool DPdfPage::isValid() const
 
 qreal DPdfPage::width() const
 {
-    return d_func()->m_width;
+    return d_func()->m_width_pt;
 }
 
 qreal DPdfPage::height() const
 {
-    return d_func()->m_height;
+    return d_func()->m_height_pt;
 }
 
 int DPdfPage::pageIndex() const
@@ -428,11 +428,6 @@ QImage DPdfPage::image(int width, int height, QRect slice)
     }
 
     return image;
-}
-
-QImage DPdfPage::imageByScaleFactor(qreal xScaleFactor, qreal yScaleFactor, QRect slice)
-{
-    return image(static_cast<int>(this->width() * xScaleFactor), static_cast<int>(this->height() * yScaleFactor), slice);
 }
 
 int DPdfPage::countChars()
@@ -584,13 +579,13 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &list, QString te
     for (const QRectF &rect : list) {
         FS_QUADPOINTSF quad;
         quad.x1 = static_cast<float>(rect.x());
-        quad.y1 = static_cast<float>(d_func()->m_height - rect.y());
+        quad.y1 = static_cast<float>(d_func()->m_height_pt - rect.y());
         quad.x2 = static_cast<float>(rect.x() + rect.width());
-        quad.y2 = static_cast<float>(d_func()->m_height - rect.y());
+        quad.y2 = static_cast<float>(d_func()->m_height_pt - rect.y());
         quad.x3 = static_cast<float>(rect.x());
-        quad.y3 = static_cast<float>(d_func()->m_height - rect.y() - rect.height());
+        quad.y3 = static_cast<float>(d_func()->m_height_pt - rect.y() - rect.height());
         quad.x4 = static_cast<float>(rect.x() + rect.width());
-        quad.y4 = static_cast<float>(d_func()->m_height - rect.y() - rect.height());
+        quad.y4 = static_cast<float>(d_func()->m_height_pt - rect.y() - rect.height());
 
         if (!FPDFAnnot_AppendAttachmentPoints(annot, &quad))
             continue;

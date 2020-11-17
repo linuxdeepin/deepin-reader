@@ -26,13 +26,13 @@ public:
     bool isValid() const;
 
     /**
-     * @brief 图片宽
+     * @brief 图片宽 (in point) 1/72 inch
      * @return
      */
     qreal width() const;
 
     /**
-     * @brief 图片高
+     * @brief 图片高 (in point) 1/72 inch
      * @return
      */
     qreal height() const;
@@ -44,22 +44,13 @@ public:
     int pageIndex() const;
 
     /**
-     * @brief 按宽高获取原图(in pixels)
+     * @brief 按宽高获取原图
      * @param width
      * @param height
      * @param rect 要取的切片,默认为全图
      * @return
      */
     QImage image(int width, int height, QRect slice = QRect());
-
-    /**
-     * @brief 根据缩放比例获取图片(in pixels),获取一部分速度更快
-     * @param xScaleFactor
-     * @param yScaleFactor
-     * @param rect 要取的切片,默认为全图(in pixels)
-     * @return
-     */
-    QImage imageByScaleFactor(qreal xScaleFactor, qreal yScaleFactor, QRect slice = QRect());
 
     /**
      * @brief 字符数
@@ -70,6 +61,7 @@ public:
     /**
      * @brief 根据索引获取文本范围
      * @param start
+     * @param textrect
      * @return
      */
     bool getTextRect(int start, QRectF &textrect);

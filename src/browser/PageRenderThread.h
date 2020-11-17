@@ -75,13 +75,6 @@ public:
 
     /**
      * @brief appendTasks
-     * 批量添加任务
-     * @param list 任务列表
-     */
-    static void appendTasks(QList<RenderPageTask> list);
-
-    /**
-     * @brief appendTasks
      * 根据任务参数添加任务
      * @param item 项指针
      * @param scaleFactor 缩放因子

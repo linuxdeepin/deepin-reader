@@ -118,30 +118,6 @@ void PageRenderThread::appendDelayTask(RenderPageTask task)
     instance->m_delayTimer->start(300);
 }
 
-void PageRenderThread::appendTasks(QList<RenderPageTask> list)
-{
-    if (list.count() <= 0)
-        return;
-
-    if (nullptr == list[0].page)
-        return;
-
-    PageRenderThread *instance  = PageRenderThread::instance(list[0].page->itemIndex());
-    if (nullptr == instance) {
-        return;
-    }
-
-    instance->m_mutex.lock();
-
-    for (int i = list.count() - 1; i >= 0; --i)
-        instance->m_tasks.push_back(list[i]);
-
-    instance->m_mutex.unlock();
-
-    if (!instance->isRunning())
-        instance->start();
-}
-
 void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, int pixmapId, QRect renderRect)
 {
     if (nullptr == item)
