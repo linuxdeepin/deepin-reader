@@ -753,7 +753,8 @@ private:
     QPointF m_selectPressedPos;         //
     QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置(鼠标释放的最后位置)
-    QPointF m_selectWordEndPos;         // 选取文字的结束位置(鼠标移动的最后位置)
+
+    BrowserWord *m_selectWord = nullptr;
     BrowserWord *m_selectStartWord = nullptr;
     BrowserWord *m_selectEndWord = nullptr;
 

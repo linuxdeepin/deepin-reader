@@ -63,6 +63,7 @@
 DWIDGET_USE_NAMESPACE
 
 #define REPEAT_MOVE_DELAY 500
+const qreal deltaManhattanLength = 12.0;
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setMouseTracking(true);
@@ -438,8 +439,6 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     Annotation *highLightAnnot = nullptr;
 
     if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
-        m_selectStartWord = nullptr;
-        m_selectEndWord = nullptr;
         return nullptr;
     }
 
@@ -1084,9 +1083,8 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 scene()->setSelectionArea(QPainterPath());
             }
 
+            m_selectWord = nullptr;
             m_selectEndPos = QPointF();
-            m_selectWordEndPos = QPointF();
-
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
 
             if (page != nullptr) {
@@ -1247,175 +1245,161 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    QPoint mousePos = event->pos();
+    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()){
+        QPoint mousePos = event->pos();
+        if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
+            QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
+            if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
+                m_repeatTimer.stop();
+                m_scroller->handleInput(QScroller::InputMove, event->pos(), event->timestamp());
+            }
 
-
-    if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
-        QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
-        if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
-            m_repeatTimer.stop();
-            m_scroller->handleInput(QScroller::InputMove, event->pos(), event->timestamp());
+            return QGraphicsView::mouseMoveEvent(event);
         }
 
-        return QGraphicsView::mouseMoveEvent(event);
-    }
-
-    if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
-        m_iconAnnotationMovePos = mapToScene(mousePos);
-        m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
-        m_lastSelectIconAnnotPage->setIconMovePos(m_lastSelectIconAnnotPage->mapFromScene(m_iconAnnotationMovePos));
-        setCursor(QCursor(Qt::PointingHandCursor));
-        if (m_tipsWidget)
-            m_tipsWidget->hide();
-        return QGraphicsView::mouseMoveEvent(event);
-    }
-
-    if (!m_magnifierLabel && this->isLink(mousePos)) {
-        if (m_tipsWidget)
-            m_tipsWidget->hide();
-        setCursor(QCursor(Qt::PointingHandCursor));
-        return QGraphicsView::mouseMoveEvent(event);
-    }
-
-    if (m_sheet->isFullScreen() && !m_sheet->operation().sidebarVisible) {
-        if (mousePos.x() <= 0) {
-            m_sheet->setSidebarVisible(true, false);
-        } else {
-            m_sheet->setSidebarVisible(false, false);
-        }
-    }
-
-    if (m_magnifierLabel) {
-        QPoint magnifierPos = mousePos;
-        if (mousePos.y() < 122) {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
-            magnifierPos.setY(122);
-        }
-
-        if (mousePos.x() < 122) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
-            magnifierPos.setX(122);
-        }
-
-        if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
-            verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
-            magnifierPos.setY(this->size().height() - 122);
-        }
-
-        if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
-            magnifierPos.setX(this->size().width() - 122);
-        }
-
-        m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
-    } else {
-        QPointF mousposF = event->pos();
-        BrowserPage *page = getBrowserPageForPoint(mousposF);
-
-        if (page) {
-            page->loadWords();
-
-            if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
-                if (page->itemIndex() - m_selectIndex > 1) {
-                    for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
-                        m_items.at(i)->loadWords();
-                    }
-                } else if (m_selectIndex - page->itemIndex() > 1) {
-                    for (int i = page->itemIndex() + 1; i < m_selectIndex; ++i) {
-                        m_items.at(i)->loadWords();
-                    }
-                }
+        if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
+            const QPointF &curPointF = mapToScene(mousePos);
+            const QPointF &delta = curPointF - m_iconAnnotationMovePos;
+            if(delta.manhattanLength() > deltaManhattanLength){
+                m_iconAnnotationMovePos = QPointF();
+                m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
+                m_lastSelectIconAnnotPage->setIconMovePos(m_lastSelectIconAnnotPage->mapFromScene(curPointF));
+                setCursor(QCursor(Qt::PointingHandCursor));
+                if (m_tipsWidget)
+                    m_tipsWidget->hide();
+                return QGraphicsView::mouseMoveEvent(event);
             }
         }
 
-        if (m_selectPressedPos.isNull()) {
+        if (!m_magnifierLabel && this->isLink(mousePos)) {
+            if (m_tipsWidget)
+                m_tipsWidget->hide();
+            setCursor(QCursor(Qt::PointingHandCursor));
+            return QGraphicsView::mouseMoveEvent(event);
+        }
+
+        if (m_sheet->isFullScreen() && !m_sheet->operation().sidebarVisible) {
+            if (mousePos.x() <= 0) {
+                m_sheet->setSidebarVisible(true, false);
+            } else {
+                m_sheet->setSidebarVisible(false, false);
+            }
+        }
+
+        if (m_magnifierLabel) {
+            QPoint magnifierPos = mousePos;
+            if (mousePos.y() < 122) {
+                verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - mousePos.y()));
+                magnifierPos.setY(122);
+            }
+
+            if (mousePos.x() < 122) {
+                horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - mousePos.x()));
+                magnifierPos.setX(122);
+            }
+
+            if (mousePos.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
+                verticalScrollBar()->setValue(verticalScrollBar()->value() + (mousePos.y() - (this->size().height() - 122)));
+                magnifierPos.setY(this->size().height() - 122);
+            }
+
+            if (mousePos.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
+                horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (mousePos.x() - (this->size().width() - 122)));
+                magnifierPos.setX(this->size().width() - 122);
+            }
+
+            m_magnifierLabel->showMagnigierImage(mousePos, magnifierPos, m_lastScaleFactor);
+        } else {
+            QPointF mousposF = event->pos();
+            BrowserPage *page = getBrowserPageForPoint(mousposF);
+
             if (page) {
-                BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
-                if (browserAnno && !browserAnno->annotationText().isEmpty()) {
-                    m_tipsWidget->setText(browserAnno->annotationText());
-                    QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
-                    m_tipsWidget->move(showRealPos);
-                    m_tipsWidget->show();
-                    setCursor(QCursor(Qt::PointingHandCursor));
-                } else if (page->getBrowserWord(mousposF)) {
-                    m_tipsWidget->hide();
-                    setCursor(QCursor(Qt::IBeamCursor));
+                page->loadWords();
+
+                if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
+                    if (page->itemIndex() - m_selectIndex > 1) {
+                        for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
+                            m_items.at(i)->loadWords();
+                        }
+                    } else if (m_selectIndex - page->itemIndex() > 1) {
+                        for (int i = page->itemIndex() + 1; i < m_selectIndex; ++i) {
+                            m_items.at(i)->loadWords();
+                        }
+                    }
+                }
+            }
+
+            if (m_selectPressedPos.isNull()) {
+                if (page) {
+                    BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
+                    if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
+                        m_tipsWidget->setText(browserAnno->annotationText());
+                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                        m_tipsWidget->move(showRealPos);
+                        m_tipsWidget->show();
+                        setCursor(QCursor(Qt::PointingHandCursor));
+                    } else if (page->getBrowserWord(mousposF)) {
+                        m_tipsWidget->hide();
+                        setCursor(QCursor(Qt::IBeamCursor));
+                    } else {
+                        m_tipsWidget->hide();
+                        setCursor(QCursor(Qt::ArrowCursor));
+                    }
                 } else {
-                    m_tipsWidget->hide();
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
-            } else {
-                setCursor(QCursor(Qt::ArrowCursor));
-            }
-        } else {//按下
-            m_tipsWidget->hide();
-            QPointF beginPos = m_selectPressedPos;
-            QPointF endPos = mapToScene(event->pos());
+            } else {//按下
+                m_tipsWidget->hide();
+                QPointF beginPos = m_selectPressedPos;
+                QPointF endPos = mapToScene(event->pos());
 
-            //开始的word
-            QList<QGraphicsItem *> beginItemList = scene()->items(beginPos);
-            BrowserWord *beginWord = nullptr;
-            foreach (QGraphicsItem *item, beginItemList) {
-                if (!item->isPanel()) {
-                    beginWord = qgraphicsitem_cast<BrowserWord *>(item);
-                    break;
-                }
-            }
-
-            //结束的word
-            QList<QGraphicsItem *> endItemList = scene()->items(endPos);
-            BrowserWord *endWord = nullptr;
-            foreach (QGraphicsItem *item, endItemList) {
-                if (!item->isPanel()) {
-                    endWord = qgraphicsitem_cast<BrowserWord *>(item);
-                    break;
-                }
-            }
-
-            QList<QGraphicsItem *> words;               //应该只存这几页的words 暂时等于所有的
-            words = scene()->items(sceneRect());        //倒序
-
-//            if (endWord == nullptr && m_sheet->operation().rotation == Dr::RotateBy0) {//暂时只考虑0度
-//                if (endPos.y() > beginPos.y()) {
-//                    for (int i = 0; i < words.size(); ++i) {//从后向前检索
-//                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() < endPos.y()) {
-//                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
-//                            break;
-//                        }
-//                    }
-//                } else {
-//                    for (int i = words.size() - 1; i >= 0; i--) {
-//                        if (words[i]->mapToScene(QPointF(words[i]->boundingRect().x(), words[i]->boundingRect().y())).y() > endPos.y()) {
-//                            endWord = qgraphicsitem_cast<BrowserWord *>(words[i]);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-
-            //先考虑字到字的
-            if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
-                //记录选取文字的最后最后位置,如果在选取文字时,鼠标在文档外释放,以此坐标为准
-                m_selectWordEndPos = mapToScene(event->pos());
-                m_selectStartWord = beginWord;
-                m_selectEndWord = endWord;
-
-                scene()->setSelectionArea(QPainterPath());
-                bool between = false;
-                for (int i = words.size() - 1; i >= 0; i--) {
-                    if (words[i]->isPanel())
-                        continue;
-
-                    if (qgraphicsitem_cast<BrowserWord *>(words[i]) == beginWord || qgraphicsitem_cast<BrowserWord *>(words[i]) == endWord) {
-                        if (between) {
-                            words[i]->setSelected(true);
-                            break;
-                        } else
-                            between = true;
+                //开始的word
+                const QList<QGraphicsItem *> &beginItemList = scene()->items(beginPos);
+                BrowserWord *beginWord = nullptr;
+                foreach (QGraphicsItem *item, beginItemList) {
+                    if (!item->isPanel()) {
+                        beginWord = qgraphicsitem_cast<BrowserWord *>(item);
+                        break;
                     }
+                }
 
-                    if (between)
-                        words[i]->setSelected(true);
+                //结束的word
+                const QList<QGraphicsItem *> &endItemList = scene()->items(endPos);
+                BrowserWord *endWord = nullptr;
+                foreach (QGraphicsItem *item, endItemList) {
+                    if (!item->isPanel()) {
+                        endWord = qgraphicsitem_cast<BrowserWord *>(item);
+                        break;
+                    }
+                }
+
+                //应该只存这几页的words 暂时等于所有的
+                const QList<QGraphicsItem *> &words = scene()->items(sceneRect());
+
+                //先考虑字到字的
+                if (beginWord != nullptr && endWord != nullptr && beginWord != endWord) {
+                    //记录选取文字的最后最后位置,如果在选取文字时,鼠标在文档外释放,以此坐标为准
+                    m_selectWord = beginWord;
+                    m_selectStartWord = beginWord;
+                    m_selectEndWord = endWord;
+
+                    scene()->setSelectionArea(QPainterPath());
+                    bool between = false;
+                    for (int i = words.size() - 1; i >= 0; i--) {
+                        if (words[i]->isPanel())
+                            continue;
+
+                        if (qgraphicsitem_cast<BrowserWord *>(words[i]) == beginWord || qgraphicsitem_cast<BrowserWord *>(words[i]) == endWord) {
+                            if (between) {
+                                words[i]->setSelected(true);
+                                break;
+                            } else
+                                between = true;
+                        }
+
+                        if (between)
+                            words[i]->setSelected(true);
+                    }
                 }
             }
         }
@@ -1428,54 +1412,55 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     m_gestureAction = GA_null;
 
-    Qt::MouseButton btn = event->button();
-    if (btn == Qt::LeftButton) {
-        if (m_canTouchScreen) {
-            m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());
-        } else {
-            m_scroller->stop();
-        }
-
-        const QPointF &mousepoint = mapToScene(event->pos());
-        m_selectEndPos = mousepoint;
-
-        QPointF point = event->pos();
-        BrowserPage *page = getBrowserPageForPoint(point);
-        deepin_reader::Annotation *clickAnno = getClickAnnot(page, mousepoint);
-
-        if (m_iconAnnot)
-            clickAnno = m_iconAnnot;
-
-        if (!m_selectIconAnnotation) {
-            if (m_annotationInserting && (nullptr == m_iconAnnot)) {
-                if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
-                    updateAnnotation(clickAnno, clickAnno->contents());
-                } else {
-                    clickAnno = addIconAnnotation(page, m_selectEndPos, "");
-                }
-                if (clickAnno)
-                    showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
-                m_annotationInserting = false;
+    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()){
+        if (event->button() == Qt::LeftButton) {
+            if (m_canTouchScreen) {
+                m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());
             } else {
-                if (clickAnno && m_selectPressedPos == m_selectEndPos)
+                m_scroller->stop();
+            }
+
+            const QPointF &mousepoint = mapToScene(event->pos());
+            m_selectEndPos = mousepoint;
+
+            QPointF point = event->pos();
+            BrowserPage *page = getBrowserPageForPoint(point);
+            deepin_reader::Annotation *clickAnno = getClickAnnot(page, mousepoint);
+
+            if (m_iconAnnot)
+                clickAnno = m_iconAnnot;
+
+            if (!m_selectIconAnnotation) {
+                if (m_annotationInserting && (nullptr == m_iconAnnot)) {
+                    if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
+                        updateAnnotation(clickAnno, clickAnno->contents());
+                    } else {
+                        clickAnno = addIconAnnotation(page, m_selectEndPos, "");
+                    }
+                    if (clickAnno)
+                        showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
+                    m_annotationInserting = false;
+                } else {
+                    if (clickAnno && m_selectWord == nullptr)
+                        showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
+                }
+                m_selectEndPos = mapToScene(event->pos());
+            } else {
+                if (m_lastSelectIconAnnotPage && m_iconAnnotationMovePos.isNull()) {
+                    m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
+                    if (moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos))
+                        emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
+                } else if (clickAnno && m_lastSelectIconAnnotPage) {
                     showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
+                }
             }
-            m_selectEndPos = mapToScene(event->pos());
-        } else {
-            if (m_lastSelectIconAnnotPage && (m_selectPressedPos != m_selectEndPos)) {
-                m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-                if (moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos))
-                    emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
-            } else if (clickAnno && m_lastSelectIconAnnotPage && (m_selectPressedPos == m_selectEndPos)) {
-                showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
-            }
+
+            m_selectPressedPos = QPointF();
+            m_selectIndex = -1;
+            m_selectIconAnnotation = false;
+
+            jump2Link(event->pos());
         }
-
-        m_selectPressedPos = QPointF();
-        m_selectIndex = -1;
-        m_selectIconAnnotation = false;
-
-        jump2Link(event->pos());
     }
 
     QGraphicsView::mouseReleaseEvent(event);
