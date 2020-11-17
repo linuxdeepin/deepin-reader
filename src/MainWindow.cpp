@@ -293,13 +293,12 @@ void MainWindow::onMainWindowFull()
     titlebar()->setGeometry(0, 0, dApp->desktop()->screenGeometry().width(), titlebar()->height());
     m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->desktop()->screenGeometry().width(), 37);
 
+    int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
+    m_FullTitleWidget->setMinimumHeight(fulltitleH);
+    m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
+
     m_FullTitleWidget->setEnabled(false);
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
-
-    QTimer::singleShot(100, [ = ](){
-        int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
-        m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
-    });
 }
 
 void MainWindow::onMainWindowExitFull()
@@ -319,6 +318,7 @@ void MainWindow::resizeFullTitleWidget()
         return;
 
     int fulltitleH = m_docTabWidget->isVisible() ? titlebar()->height() + 37 : titlebar()->height();
+    m_FullTitleWidget->setMinimumHeight(fulltitleH);
     m_FullTitleWidget->resize(dApp->desktop()->screenGeometry().width(), fulltitleH);
 }
 
