@@ -335,39 +335,45 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    return m_page->render(scaleFactor, slice);
+    return m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
+                          static_cast<int>(m_page->sizeF().height() * scaleFactor),
+                          slice);
 }
 
-QImage BrowserPage::getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc)
+QImage BrowserPage::getImage(int width, int height, bool bSrc)
 {
     if (bSrc) {
         if (m_pixmap.isNull())
             return QImage();
 
-        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode, Qt::SmoothTransformation);
+        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),
+                                                 static_cast<int>(height * dApp->devicePixelRatio()),
+                                                 Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         image.setDevicePixelRatio(dApp->devicePixelRatio());
 
         return image;
     }
 
-    QImage image = m_page->render(static_cast<int>(width), static_cast<int>(height), QRect(), mode);
+    QImage image = m_page->render(static_cast<int>(width), static_cast<int>(height), QRect());
 
     return image;
-}
-
-QImage BrowserPage::getImageRect(double scaleFactor, QRect rect)
-{
-    return m_page->render(scaleFactor, rect);
 }
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
     QTransform transform;
+
     transform.rotate(m_rotation * 90);
+
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
-    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0), qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
-    return m_page->render(scaleFactor, rect).transformed(transform, Qt::SmoothTransformation);
+
+    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0),
+                       qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
+
+    return m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
+                          static_cast<int>(m_page->sizeF().height() * scaleFactor),
+                          rect).transformed(transform, Qt::SmoothTransformation);
 }
 
 QImage BrowserPage::getCurImagePoint(QPointF point)

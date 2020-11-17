@@ -196,7 +196,7 @@ public:
      * @param bSrc
      * @return
      */
-    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
+    bool getImage(int index, QImage &image, int width, int height,  bool bSrc = false);
 
     /**
      * @brief openMagnifier
@@ -562,9 +562,9 @@ protected:
     void tapGestureTriggered(QTapGesture *);
 
     /**
-     * @brief 获取坐标下对应Page
-     * @param viewPoint
-     * @return
+     * @brief 根据鼠标点击位置判断在哪一页
+     * @param viewPoint 鼠标点击位置
+     * @return 鼠标点击的页对象
      */
     BrowserPage *getBrowserPageForPoint(QPointF &viewPoint);
 

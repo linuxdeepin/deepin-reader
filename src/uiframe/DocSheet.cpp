@@ -355,9 +355,9 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     setOperationChanged();
 }
 
-bool DocSheet::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
+bool DocSheet::getImage(int index, QImage &image, int width, int height, bool bSrc)
 {
-    return m_browser->getImage(index, image, width, height, mode, bSrc);
+    return m_browser->getImage(index, image, width, height, bSrc);
 }
 
 bool DocSheet::fileChanged()

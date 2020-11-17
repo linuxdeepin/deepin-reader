@@ -342,7 +342,7 @@ public:
      * @param bSrc 使用已有的图缩放
      * @return 是否成功
      */
-    bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
+    bool getImage(int index, QImage &image, int width, int height,  bool bSrc = false);
 
     /**
      * @brief defaultFocus

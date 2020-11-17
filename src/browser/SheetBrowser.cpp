@@ -1245,7 +1245,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()){
+    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         QPoint mousePos = event->pos();
         if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
             QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
@@ -1260,7 +1260,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
             const QPointF &curPointF = mapToScene(mousePos);
             const QPointF &delta = curPointF - m_iconAnnotationMovePos;
-            if(delta.manhattanLength() > deltaManhattanLength){
+            if (delta.manhattanLength() > deltaManhattanLength) {
                 m_iconAnnotationMovePos = QPointF();
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
                 m_lastSelectIconAnnotPage->setIconMovePos(m_lastSelectIconAnnotPage->mapFromScene(curPointF));
@@ -1412,7 +1412,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
     m_gestureAction = GA_null;
 
-    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()){
+    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
         if (event->button() == Qt::LeftButton) {
             if (m_canTouchScreen) {
                 m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());
@@ -1549,22 +1549,16 @@ void SheetBrowser::setCurrentPage(int page)
     curpageChanged(page);
 }
 
-bool SheetBrowser::getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode, bool bSrc)
+bool SheetBrowser::getImage(int index, QImage &image, int width, int height, bool bSrc)
 {
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImage(static_cast<int>(width), static_cast<int>(height), mode, bSrc);
+    image = m_items.at(index)->getImage(width, height, bSrc);
 
     return true;
 }
 
-/**
- * @brief SheetBrowser::getBrowserPageForPoint
- * 根据鼠标点击位置判断在哪一页
- * @param viewPoint 鼠标点击位置
- * @return 鼠标点击的页
- */
 BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
 {
     BrowserPage *item = nullptr;

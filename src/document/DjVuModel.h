@@ -45,9 +45,7 @@ public:
 
     QSizeF sizeF() const override;
 
-    QImage render(int width, int height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio)const override;     //按大小获取
-
-    QImage render(const double scaleFactor = 1.0, const QRect &slice = QRect()) const override;
+    QImage render(int width, int height, const QRect &slice = QRect())const override;
 
     QImage renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const;
 

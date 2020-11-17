@@ -132,16 +132,7 @@ public:
      * @param bSrc 是否可以使用已存在图片缩放
      * @return
      */
-    QImage getImage(int width, int height, Qt::AspectRatioMode mode, bool bSrc);
-
-    /**
-     * @brief getImageRect
-     * 得到文档缩放之后的图
-     * @param scaleFactor 缩放系数
-     * @param rect 范围
-     * @return  文档缩放之后的图
-     */
-    QImage getImageRect(double scaleFactor, QRect rect);//获取缩放后的局部区域图片
+    QImage getImage(int width, int height, bool bSrc);
 
     /**
      * @brief getImagePoint

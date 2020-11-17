@@ -82,7 +82,7 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
         const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
         if (image.isNull()) {
             QImage srcimg;
-            if (m_docSheet->getImage(nRow, srcimg, 174, 174, Qt::KeepAspectRatio, true) && !srcimg.isNull())
+            if (m_docSheet->getImage(nRow, srcimg, 174, 174, true) && !srcimg.isNull())
                 return QVariant::fromValue(srcimg);
             else
                 onFetchImage(nRow);

@@ -445,7 +445,7 @@ QSizeF DjVuPage::sizeF() const
     return m_size;
 }
 
-QImage DjVuPage::render(int width, int height, const QRect &slice, Qt::AspectRatioMode mode)const
+QImage DjVuPage::render(int width, int height, const QRect &slice)const
 {
     LOCK_PAGE
 
@@ -473,7 +473,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice, Qt::AspectRat
         return QImage();
     }
 
-    QSizeF size = m_size.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), mode);
+    QSizeF size = m_size.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio);
 
     ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
 
@@ -511,11 +511,6 @@ QImage DjVuPage::render(int width, int height, const QRect &slice, Qt::AspectRat
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     return image;
-}
-
-QImage DjVuPage::render(const double scaleFactor, const QRect &slice) const
-{
-    return renderWithRotation(Dr::RotateBy0, scaleFactor, slice);
 }
 
 QImage DjVuPage::renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const

@@ -75,9 +75,7 @@ public:
      */
     QSizeF sizeF() const override;
 
-    QImage render(const double scaleFactor = 1.0, const QRect &slice = QRect()) const override;
-
-    QImage render(int width, int height, const QRect &slice = QRect(), Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio) const override;
+    QImage render(int width, int height, const QRect &slice = QRect()) const override;
 
     Link getLinkAtPoint(const QPointF &point) const override;
 

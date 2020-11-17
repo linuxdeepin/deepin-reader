@@ -94,24 +94,7 @@ QSizeF PDFPage::sizeF() const
     return QSizeF(m_page->width() * srn->logicalDotsPerInchX() / 72, m_page->height() * srn->logicalDotsPerInchY() / 72);
 }
 
-QImage PDFPage::render(const double scaleFactor, const QRect &slice) const
-{
-    LOCK_DOCUMENT
-
-    QRect ratioRect = slice.isValid() ? QRect(static_cast<int>(slice.x() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.y() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.width() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.height() * dApp->devicePixelRatio())) : QRect();
-
-    QImage image = m_page->image(static_cast<int>(sizeF().width() * scaleFactor * dApp->devicePixelRatio()),
-                                 static_cast<int>(sizeF().height() * scaleFactor * dApp->devicePixelRatio()), ratioRect);
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
-
-    return image;
-}
-
-QImage PDFPage::render(int width, int height, const QRect &slice, Qt::AspectRatioMode) const
+QImage PDFPage::render(int width, int height, const QRect &slice) const
 {
     LOCK_DOCUMENT
 
