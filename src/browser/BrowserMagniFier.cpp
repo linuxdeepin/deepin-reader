@@ -21,6 +21,7 @@
 #include "BrowserMagniFier.h"
 #include "SheetBrowser.h"
 #include "BrowserPage.h"
+#include "Application.h"
 
 #include <QPainter>
 #include <QIcon>
@@ -28,9 +29,9 @@
 #include <QMetaObject>
 #include <QPainterPath>
 
-ReadMagnifierManager::ReadMagnifierManager()
+ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread (parent)
 {
-
+    m_parent = parent;
 }
 
 ReadMagnifierManager::~ReadMagnifierManager()
@@ -48,7 +49,7 @@ void ReadMagnifierManager::addTask(const MagnifierInfo_t &task)
 
 void ReadMagnifierManager::run()
 {
-    while (m_tTasklst.size() > 0) {
+    while (m_tTasklst.size() > 0 && m_parent->isVisible()) {
         MagnifierInfo_t task = m_tTasklst.last();
         m_tTasklst.clear();
 
@@ -62,6 +63,7 @@ void ReadMagnifierManager::run()
 BrowserMagniFier::BrowserMagniFier(QWidget *parent)
     : QLabel(parent)
 {
+    m_readManager = new ReadMagnifierManager(this);
     m_brwoser = dynamic_cast<SheetBrowser *>(parent);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -88,7 +90,7 @@ void BrowserMagniFier::updateImage()
     task.slotFun = "onUpdateMagnifierImage";
     task.mousePos = point.toPoint();
     task.scaleFactor = m_lastScaleFactor;
-    m_readManager.addTask(task);
+    m_readManager->addTask(task);
 
     m_lastPoint = point.toPoint();
 }
@@ -115,7 +117,7 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
     task.slotFun = "onUpdateMagnifierImage";
     task.mousePos = ponitf.toPoint();
     task.scaleFactor = scaleFactor;
-    m_readManager.addTask(task);
+    m_readManager->addTask(task);
 
     m_lastPoint = ponitf.toPoint();
     m_lastScaleFactor = scaleFactor;
@@ -129,7 +131,8 @@ void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const
 
 void BrowserMagniFier::setMagniFierImage(const QImage &image)
 {
-    QPixmap pix(this->width(), this->height());
+    QPixmap pix(this->width() * dApp->devicePixelRatio(), this->height() * dApp->devicePixelRatio());
+    pix.setDevicePixelRatio(dApp->devicePixelRatio());
     pix.fill(Qt::transparent);
 
     QPainter painter(&pix);
@@ -139,7 +142,7 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
     clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
     painter.setClipPath(clippath);
     if (!image.isNull()) {
-        painter.drawImage(0, 0, image.scaled(240, 240, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        painter.drawImage(0, 0, image.scaled(240 * dApp->devicePixelRatio(), 240 * dApp->devicePixelRatio(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         painter.fillRect(this->rect(), Qt::white);
     }

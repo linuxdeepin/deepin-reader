@@ -42,8 +42,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
         QMatrix matrix;
         matrix.rotate(rotate);
-        QPixmap pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
-        pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
 
         const int borderRadius = 6;
         QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
@@ -55,7 +54,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
-            const QPixmap &scalePix = pixmap.scaled(pageSize.width(), pageSize.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QPixmap &scalePix = pixmap.scaled(pageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
             //clipPath pixmap
             painter->save();

@@ -38,14 +38,15 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 {
     if (index.isValid()) {
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
+        QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
+
+        const int borderRadius = 6;
+        pageSize.scale(static_cast<int>(62 * dApp->devicePixelRatio()), static_cast<int>(62 * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
+        const QSize &scalePixSize = pageSize / dApp->devicePixelRatio();
+        const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
+
         if (!pixmap.isNull()) {
-            const int borderRadius = 6;
-
-            const QPixmap &scalePix = pixmap.scaled(static_cast<int>(62 * dApp->devicePixelRatio()), static_cast<int>(62 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-            const QSize &scalePixSize = scalePix.size() / pixmap.devicePixelRatio();
-            const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
-
+            const QPixmap &scalePix = pixmap.scaled(pageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;
@@ -53,57 +54,58 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             painter->setClipPath(clipPath);
             painter->drawPixmap(rect.x(), rect.y(), scalePix);
             painter->restore();
-            //drawText RoundRect
-            painter->save();
-            painter->setBrush(Qt::NoBrush);
-            painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-            if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
-                painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
-                painter->drawRoundedRect(rect, borderRadius, borderRadius);
-            } else {
-                painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
-                painter->drawRoundedRect(rect, borderRadius, borderRadius);
-            }
-            painter->restore();
-
-            //drawPagetext
-            int margin = 2;
-            int bottomlineHeight = 1;
-            int textStartX = rect.right() + 18;
-            painter->save();
-            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
-            QFont font = painter->font();
-            font = DFontSizeManager::instance()->t8(font);
-            painter->setFont(font);
-            const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
-            int pagetextHeight = painter->fontMetrics().height();
-            painter->drawText(textStartX, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
-            painter->restore();
-
-            //drawPageContenttext
-            painter->save();
-            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().brightText().color()));
-            QFont cfont = painter->font();
-            cfont = DFontSizeManager::instance()->t9(cfont);
-            painter->setFont(cfont);
-            QString contentText = index.data(ImageinfoType_e::IMAGE_CONTENT_TEXT).toString();
-            contentText.replace(QChar('\n'), QString(""));
-            contentText.replace(QChar('\t'), QString(""));
-            QTextOption contentOption;
-            contentOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
-            contentOption.setWrapMode(QTextOption::WrapAnywhere);
-
-            QSize contentSize(option.rect.right() - textStartX, option.rect.height() - pagetextHeight - 2 * margin);
-            const QString &elidedContentText = Utils::getElidedText(painter->fontMetrics(), contentSize, contentText, contentOption.alignment());
-            painter->drawText(QRect(textStartX, option.rect.y() + margin + pagetextHeight, contentSize.width(), contentSize.height()), elidedContentText, contentOption);
-            painter->restore();
-
-            //drawBottomLine
-            painter->save();
-            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameBorder().color(), bottomlineHeight));
-            painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
-            painter->restore();
         }
+
+        //drawText RoundRect
+        painter->save();
+        painter->setBrush(Qt::NoBrush);
+        painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+        if (m_parent->selectionModel()->isRowSelected(index.row(), index.parent())) {
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
+            painter->drawRoundedRect(rect, borderRadius, borderRadius);
+        } else {
+            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
+            painter->drawRoundedRect(rect, borderRadius, borderRadius);
+        }
+        painter->restore();
+
+        //drawPagetext
+        int margin = 2;
+        int bottomlineHeight = 1;
+        int textStartX = rect.right() + 18;
+        painter->save();
+        painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
+        QFont font = painter->font();
+        font = DFontSizeManager::instance()->t8(font);
+        painter->setFont(font);
+        const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
+        int pagetextHeight = painter->fontMetrics().height();
+        painter->drawText(textStartX, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
+        painter->restore();
+
+        //drawPageContenttext
+        painter->save();
+        painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().brightText().color()));
+        QFont cfont = painter->font();
+        cfont = DFontSizeManager::instance()->t9(cfont);
+        painter->setFont(cfont);
+        QString contentText = index.data(ImageinfoType_e::IMAGE_CONTENT_TEXT).toString();
+        contentText.replace(QChar('\n'), QString(""));
+        contentText.replace(QChar('\t'), QString(""));
+        QTextOption contentOption;
+        contentOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        contentOption.setWrapMode(QTextOption::WrapAnywhere);
+
+        QSize contentSize(option.rect.right() - textStartX, option.rect.height() - pagetextHeight - 2 * margin);
+        const QString &elidedContentText = Utils::getElidedText(painter->fontMetrics(), contentSize, contentText, contentOption.alignment());
+        painter->drawText(QRect(textStartX, option.rect.y() + margin + pagetextHeight, contentSize.width(), contentSize.height()), elidedContentText, contentOption);
+        painter->restore();
+
+        //drawBottomLine
+        painter->save();
+        painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameBorder().color(), bottomlineHeight));
+        painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
+        painter->restore();
     }
 }
 

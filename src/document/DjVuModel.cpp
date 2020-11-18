@@ -434,12 +434,6 @@ DjVuPage::~DjVuPage()
 {
 }
 
-
-QSize DjVuPage::size() const
-{
-    return m_size;
-}
-
 QSizeF DjVuPage::sizeF() const
 {
     return m_size;
@@ -473,111 +467,14 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
         return QImage();
     }
 
-    QSizeF size = m_size.scaled(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio);
-
     ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
 
     ddjvu_rect_t pagerect;
 
     pagerect.x = 0;
     pagerect.y = 0;
-    pagerect.w = static_cast<unsigned int>(qRound(size.width()));
-    pagerect.h = static_cast<unsigned int>(qRound(size.height()));
-
-    ddjvu_rect_t renderrect;
-
-    if (!slice.isValid()) {
-        renderrect.x = 0;
-        renderrect.y = 0;
-        renderrect.w = pagerect.w;
-        renderrect.h = pagerect.h;
-    } else {
-        renderrect.x = 0;
-        renderrect.y = 0;
-        renderrect.w = static_cast<unsigned int>(slice.width());
-        renderrect.h = static_cast<unsigned int>(slice.height());
-    }
-
-    QImage image(static_cast<int>(renderrect.w), static_cast<int>(renderrect.h), QImage::Format_RGB32);
-
-    if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
-        image = QImage();
-    }
-
-    clearMessageQueue(m_parent->m_context, false);
-
-    ddjvu_page_release(page);
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
-
-    return image;
-}
-
-QImage DjVuPage::renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const
-{
-    LOCK_PAGE
-
-    ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
-
-    if (page == nullptr) {
-        return QImage();
-    }
-
-    ddjvu_status_t status;
-
-    while (true) {
-        status = ddjvu_page_decoding_status(page);
-
-        if (status < DDJVU_JOB_OK) {
-            clearMessageQueue(m_parent->m_context, true);
-        } else {
-            break;
-        }
-    }
-
-    if (status >= DDJVU_JOB_FAILED) {
-        ddjvu_page_release(page);
-
-        return QImage();
-    }
-
-    switch (rotation) {
-    default:
-    case Dr::RotateBy0:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_0);
-        break;
-    case Dr::RotateBy90:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_270);
-        break;
-    case Dr::RotateBy180:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_180);
-        break;
-    case Dr::RotateBy270:
-        ddjvu_page_set_rotation(page, DDJVU_ROTATE_90);
-        break;
-    }
-
-    ddjvu_rect_t pagerect;
-
-    pagerect.x = 0;
-    pagerect.y = 0;
-
-    switch (rotation) {
-    default:
-    case Dr::RotateBy0:
-    case Dr::RotateBy180:
-        pagerect.w = static_cast<unsigned int>(m_size.width());
-        pagerect.h = static_cast<unsigned int>(m_size.height());
-        break;
-    case Dr::RotateBy90:
-    case Dr::RotateBy270:
-        pagerect.w = static_cast<unsigned int>(m_size.height());
-        pagerect.h = static_cast<unsigned int>(m_size.width());
-        break;
-    }
-
-    pagerect.w = static_cast<unsigned int>(pagerect.w * scaleFactor);
-    pagerect.h = static_cast<unsigned int>(pagerect.h * scaleFactor);
+    pagerect.w = static_cast<unsigned int>(width * dApp->devicePixelRatio());
+    pagerect.h = static_cast<unsigned int>(height * dApp->devicePixelRatio());
 
     ddjvu_rect_t renderrect;
 
@@ -587,13 +484,14 @@ QImage DjVuPage::renderWithRotation(Dr::Rotation rotation, const double scaleFac
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
-        renderrect.x = slice.x() < 0 ? 0 : slice.x() ;
-        renderrect.y = slice.y() < 0 ? 0 : slice.y() ;
-        renderrect.w = static_cast<unsigned int>(slice.width());
-        renderrect.h =  static_cast<unsigned int>(slice.height());
+        renderrect.x = static_cast<int>(slice.x() * dApp->devicePixelRatio());
+        renderrect.y = static_cast<int>(slice.y() * dApp->devicePixelRatio());
+        renderrect.w = static_cast<unsigned int>(slice.width() * dApp->devicePixelRatio());
+        renderrect.h = static_cast<unsigned int>(slice.height() * dApp->devicePixelRatio());
     }
 
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
         image = QImage();
@@ -776,6 +674,34 @@ int DjVuDocument::numberOfPages() const
     return ddjvu_document_get_pagenum(m_document);
 }
 
+QSizeF DjVuDocument::pageSizeF(int index) const
+{
+    LOCK_DOCUMENT
+
+    if(index >=0 && index < m_pages.size()){
+        return m_pages[index]->sizeF();
+    }
+
+    ddjvu_status_t status;
+    ddjvu_pageinfo_t pageinfo;
+
+    while (true) {
+        status = ddjvu_document_get_pageinfo(m_document, index, &pageinfo);
+
+        if (status < DDJVU_JOB_OK) {
+            clearMessageQueue(m_context, true);
+        } else {
+            break;
+        }
+    }
+
+    if (status >= DDJVU_JOB_FAILED) {
+        return QSizeF();
+    }
+
+    return QSizeF(pageinfo.width, pageinfo.height);
+}
+
 Page *DjVuDocument::page(int index) const
 {
     LOCK_DOCUMENT
@@ -797,7 +723,9 @@ Page *DjVuDocument::page(int index) const
         return nullptr;
     }
 
-    return new DjVuPage(this, index, pageinfo);
+    Page *page = new DjVuPage(this, index, pageinfo);
+    m_pages << page;
+    return page;
 }
 
 QStringList DjVuDocument::saveFilter() const

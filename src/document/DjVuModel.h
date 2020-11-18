@@ -41,21 +41,17 @@ class DjVuPage : public Page
 public:
     ~DjVuPage();
 
-    QSize size() const;
-
     QSizeF sizeF() const override;
 
     QImage render(int width, int height, const QRect &slice = QRect())const override;
-
-    QImage renderWithRotation(Dr::Rotation rotation, const double scaleFactor, const QRect &slice) const;
 
     QString label() const;
 
     QList< Link * > links() const;
 
-    QString text(const QRectF &rect) const;
+    QString text(const QRectF &rect) const override;
 
-    QVector< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const;
+    QVector< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const override;
 
 private:
     DjVuPage(const class DjVuDocument *parent, int index, const ddjvu_pageinfo_t &pageinfo);
@@ -80,6 +76,8 @@ public:
 
     QStringList saveFilter() const override;
 
+    QSizeF pageSizeF(int index) const override;
+
     bool save(const QString &filePath) const override;
 
     bool saveAs(const QString &filePath) const override;
@@ -102,6 +100,8 @@ private:
 
     QHash< QString, int > m_pageByName;
     QHash< int, QString > m_titleByIndex;
+
+    mutable QList<Page *> m_pages;
 
     void prepareFileInfo();
 

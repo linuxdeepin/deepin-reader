@@ -213,6 +213,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             m_pixmap.fill(Qt::white);
 
         } else {
+            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             PageRenderThread::clearTask(this);
         }
 
@@ -236,7 +237,7 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     QRect validRect = boundingRect().intersected(rect).toRect();
 
-    QImage image = getImage(scaleFactor, validRect);
+    const QImage &image = getImage(scaleFactor, validRect);
 
     if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
         ImagePatch patch;
@@ -346,17 +347,14 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
         if (m_pixmap.isNull())
             return QImage();
 
-        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),
+        const QImage &image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),
                                                  static_cast<int>(height * dApp->devicePixelRatio()),
                                                  Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        image.setDevicePixelRatio(dApp->devicePixelRatio());
-
         return image;
     }
 
-    QImage image = m_page->render(static_cast<int>(width), static_cast<int>(height), QRect());
-
+    QSizeF size = pageSize().scaled(width, height,  Qt::KeepAspectRatio);
+    const QImage &image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), QRect());
     return image;
 }
 
@@ -378,10 +376,10 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 
 QImage BrowserPage::getCurImagePoint(QPointF point)
 {
-    int ds = 122;
+    int ds = static_cast<int>(122 * dApp->devicePixelRatio());
     QTransform transform;
     transform.rotate(m_rotation * 90);
-    QImage image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() - ds / 2.0), qRound(point.y() - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
+    const QImage &image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() * dApp->devicePixelRatio() - ds / 2.0), qRound(point.y() * dApp->devicePixelRatio()  - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
     return image;
 }
 

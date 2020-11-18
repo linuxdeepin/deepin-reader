@@ -62,8 +62,7 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 {
     DWidget::paintEvent(event);
     QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    painter.drawPixmap((this->width() - m_pixmap.width()) / 2, (this->height() - m_pixmap.height()) / 2, m_pixmap);
+    painter.drawPixmap(this->width() * 0.5 - m_pixmap.width() * 0.5 / m_pixmap.devicePixelRatioF(), this->height() * 0.5 - m_pixmap.height() * 0.5 / m_pixmap.devicePixelRatioF(), m_pixmap);
 }
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
@@ -88,12 +87,11 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
         return;
 
     QImage image;
-    bool rl = sheet->getImage(0, image, 94, 113, Qt::KeepAspectRatio);
-    if (rl) {
-        if (frameImage) {
-            const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);
-            frameImage->setPixmap(pix);
-        }
+    sheet->getImage(0, image, 94, 113);
+
+    if (!image.isNull() && frameImage) {
+        const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);
+        frameImage->setPixmap(pix);
     }
 
     QFileInfo info(sheet->filePath());
