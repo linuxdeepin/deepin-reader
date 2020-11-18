@@ -199,18 +199,6 @@ public:
     bool getImage(int index, QImage &image, int width, int height,  bool bSrc = false);
 
     /**
-     * @brief openMagnifier
-     * 打开放大镜
-     */
-    void openMagnifier();
-
-    /**
-     * @brief closeMagnifier
-     * 关闭放大镜
-     */
-    void closeMagnifier();
-
-    /**
      * @brief magnifierOpened
      * 是否开启了放大镜
      * @return true:开启,false:未开启
@@ -567,6 +555,19 @@ protected:
      * @return 鼠标点击的页对象
      */
     BrowserPage *getBrowserPageForPoint(QPointF &viewPoint);
+
+public slots:
+    /**
+     * @brief openMagnifier
+     * 打开放大镜
+     */
+    void openMagnifier();
+
+    /**
+     * @brief closeMagnifier
+     * 关闭放大镜
+     */
+    void closeMagnifier();
 
 private slots:
     /**

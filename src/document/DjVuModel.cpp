@@ -676,8 +676,6 @@ int DjVuDocument::numberOfPages() const
 
 QSizeF DjVuDocument::pageSizeF(int index) const
 {
-    LOCK_DOCUMENT
-
     if(index >=0 && index < m_pages.size()){
         return m_pages[index]->sizeF();
     }

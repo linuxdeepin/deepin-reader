@@ -1053,6 +1053,10 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     if (m_pFindWidget)
         m_pFindWidget->showPosition(this->width());
 
+    if (magnifierOpened()){
+        QTimer::singleShot(1, this, SLOT(openMagnifier()));
+    }
+
     QGraphicsView::resizeEvent(event);
 }
 
