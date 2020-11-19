@@ -192,9 +192,11 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
         while (query.next()) {
             bookmarks.insert(query.value("bookmarkIndex").toInt());
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
@@ -202,13 +204,14 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
     if (m_database.isOpen()) {
         QSqlQuery query(m_database);
 
-        m_database.transaction();
+        Transaction transaction(m_database);
 
         query.prepare("delete from bookmark where filePath = :filePath");
+
         query.bindValue(":filePath", filePath);
+
         if (!query.exec()) {
             qDebug() << query.lastError().text();
-            m_database.rollback();
             return false;
         }
 
@@ -218,18 +221,21 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
                           " VALUES(:filePath,:bookmarkIndex)");
 
             query.bindValue(":filePath", filePath);
+
             query.bindValue(":bookmarkIndex", index);
 
             if (!query.exec()) {
                 qDebug() << query.lastError().text();
-                m_database.rollback();
                 return false;
             }
         }
+
+        transaction.commit();
+
+        return true;
     }
 
-    m_database.commit();
-    return true;
+    return false;
 }
 
 Database::Database(QObject *parent) : QObject(parent)

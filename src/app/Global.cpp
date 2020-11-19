@@ -35,14 +35,12 @@ FileType fileType(const QString &filePath)
         fileType = PDF;
     } else if (mimeType.name() == QLatin1String("application/postscript")) {
         fileType = PS;
-    } else if (mimeType.name() == QLatin1String("image/vnd.djvu")) {
+    } else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
         fileType = DJVU;
-    } else if (mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
-        fileType = DJVU;
-    } else if (mimeType.name() == QLatin1String("application/msword")) {
+    } else if (mimeType.name() == QLatin1String("application/msword") || mimeType.name() == QLatin1String("application/x-ole-storage")) {
         fileType = DOC;
-    } else if (mimeType.name() == QLatin1String("application/x-ole-storage")) {
-        fileType = PPT_XLS;
+    } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "pptx") {
+        fileType = PPTX;
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "docx") {
         fileType = DOCX;
     }

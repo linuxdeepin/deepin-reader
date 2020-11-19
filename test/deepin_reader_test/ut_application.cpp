@@ -18,24 +18,32 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UT_UTILS_H
-#define UT_UTILS_H
+#include "ut_application.h"
 
-#include "ut_defines.h"
+#define private public
+#define protected public
 
-#include <gtest/gtest.h>
+#include "DocSheet.h"
+#include "Application.h"
 
-class Ut_Utils : public ::testing::Test
+#undef private
+#undef protected
+
+Ut_Application::Ut_Application()
 {
-public:
-    Ut_Utils();
+}
 
-public:
-    //用于做一些初始化操作
-    virtual void SetUp();
+void Ut_Application::SetUp()
+{
+}
 
-    //用于做一些清理操作
-    virtual void TearDown();
-};
+void Ut_Application::TearDown()
+{
+}
 
-#endif // UT_UTILS_H
+TEST_F(Ut_Application, MainWindowTest)
+{
+    dApp->showAnnotTextWidgetSig();
+    dApp->handleFiles(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
+    dApp->quit();
+}

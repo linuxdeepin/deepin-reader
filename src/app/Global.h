@@ -50,7 +50,7 @@ enum FileType {
     DOCX,
     PS,
     DOC,
-    PPT_XLS
+    PPTX
 };
 FileType fileType(const QString &filePath);
 

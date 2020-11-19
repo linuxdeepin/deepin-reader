@@ -77,6 +77,8 @@ Makefile*
 
 *.out
 
+test/deepin_reader_test/coverage
+
 deepin-reader
 
 # QtCreator

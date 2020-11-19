@@ -18,17 +18,17 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UT_JSON_H
-#define UT_JSON_H
+#ifndef UT_APPLICATION_H
+#define UT_APPLICATION_H
 
 #include "ut_defines.h"
 
 #include <gtest/gtest.h>
 
-class Ut_Json : public ::testing::Test
+class Ut_Application : public ::testing::Test
 {
 public:
-    Ut_Json();
+    Ut_Application();
 
 public:
     //用于做一些初始化操作
@@ -36,6 +36,8 @@ public:
 
     //用于做一些清理操作
     virtual void TearDown();
+
+public:
 };
 
-#endif // UT_JSON_H
+#endif // UT_APPLICATION_H

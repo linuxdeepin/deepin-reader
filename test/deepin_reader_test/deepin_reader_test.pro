@@ -42,8 +42,6 @@ include ($$SRCPWD/document/document.pri)
 
 SOURCES += \
     $$SRCPWD/Application.cpp \
-    app/ut_json.cpp \
-    app/ut_utils.cpp \
     document/ut_djvumodel.cpp \
     document/ut_pdfmodel.cpp \
     sidebar/ut_sheetsidebar.cpp \
@@ -58,7 +56,10 @@ SOURCES += \
     $$SRCPWD/uiframe/DocTabBar.cpp \
     $$SRCPWD/uiframe/DocSheet.cpp \
     ut_mainwindow.cpp \
-    widgets/ut_widgets.cpp
+    widgets/ut_widgets.cpp \
+    app/ut_app.cpp \
+    ut_application.cpp \
+    browser/ut_browser.cpp
 
 HEADERS +=\
     $$SRCPWD/Application.h\
@@ -70,15 +71,16 @@ HEADERS +=\
     $$SRCPWD/uiframe/CentralDocPage.h \
     $$SRCPWD/uiframe/DocTabBar.h \
     $$SRCPWD/uiframe/DocSheet.h \
-    app/ut_json.h \
     document/ut_djvumodel.h \
     document/ut_pdfmodel.h \
     sidebar/ut_sheetsidebar.h \
-    app/ut_utils.h \
     uiframe/ut_uiframe.h \
     ut_defines.h \
     ut_mainwindow.h \
-    widgets/ut_widgets.h
+    widgets/ut_widgets.h \
+    app/ut_app.h \
+    ut_application.h \
+    browser/ut_browser.h
 
 RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc
