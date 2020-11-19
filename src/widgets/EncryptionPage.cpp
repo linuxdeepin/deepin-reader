@@ -122,9 +122,8 @@ void EncryptionPage::onPasswordChanged()
 
 void EncryptionPage::onSetPasswdFocus()
 {
-    if (this->isVisible() && m_password) {
+    if (this->isVisible() && m_password)
         m_password->lineEdit()->setFocus(Qt::TabFocusReason);
-    }
 }
 
 void EncryptionPage::onUpdateTheme()

@@ -30,4 +30,4 @@ SOURCES += \
 
 target.path  = /usr/lib
 
-INSTALLS += target header_files
+INSTALLS += target

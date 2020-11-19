@@ -37,7 +37,6 @@
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
 #include "widgets/SpinnerWidget.h"
-#include "widgets/SlideWidget.h"
 #include "widgets/AttrScrollWidget.h"
 
 #undef private
@@ -85,7 +84,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
     //ScaleMenu
     {
         ScaleMenu scaleMenu;
-        scaleMenu.readCurDocParam(0);
+        scaleMenu.readCurDocParam(nullptr);
         scaleMenu.onTwoPage();
         scaleMenu.onFiteH();
         scaleMenu.onFiteW();
@@ -102,15 +101,25 @@ TEST(Ut_Widgets, SheetWidgetTest)
         scaleMenu.onScaleFactor();
     }
 
-    //    //FileAttrWidget
+    //FileAttrWidget
     {
-        FileAttrWidget filewidget;
-        filewidget.setAttribute(Qt::WA_ShowModal, false);
-        filewidget.setFileAttr(0);
-        filewidget.setFileAttr(sheet);
-        filewidget.addTitleFrame("");
-        filewidget.resize(600, 600);
-        filewidget.showScreenCenter();
+        class ImageWidget : public DWidget
+        {
+
+        };
+
+        FileAttrWidget *filewidget = new FileAttrWidget();
+        filewidget->setAttribute(Qt::WA_ShowModal, false);
+        filewidget->setFileAttr(nullptr);
+        filewidget->setFileAttr(sheet);
+        filewidget->addTitleFrame("");
+        filewidget->resize(600, 600);
+        filewidget->showScreenCenter();
+
+        QPaintEvent paintevent(QRect(0, 0, 600, 600));
+        QCoreApplication::sendEvent(reinterpret_cast<QObject *>(filewidget->frameImage), &paintevent);
+
+        delete filewidget;
     }
 
     //PrintManager
@@ -119,6 +128,8 @@ TEST(Ut_Widgets, SheetWidgetTest)
     //SlideWidget
     {
         SlideWidget *slidewidget = new SlideWidget(sheet);
+        slidewidget->resize(600, 400);
+        slidewidget->show();
         slidewidget->playImage();
         slidewidget->drawImage(QPixmap());
 
@@ -132,19 +143,33 @@ TEST(Ut_Widgets, SheetWidgetTest)
         slidewidget->handleKeyPressEvent(Dr::key_left);
         slidewidget->handleKeyPressEvent(Dr::key_right);
 
+        slidewidget->onParentDestroyed();
         slidewidget->onPreBtnClicked();
         slidewidget->onPlayBtnClicked();
         slidewidget->onNextBtnClicked();
         slidewidget->onExitBtnClicked();
 
+        slidewidget->setWidgetState(true);
         slidewidget->onParentDestroyed();
-        slidewidget->close();
+        slidewidget->setWidgetState(false);
+        slidewidget->onImageAniFinished();
+
+        QMouseEvent mousemoveevent(QEvent::MouseMove, QPoint(100, 100), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QCoreApplication::sendEvent(slidewidget, &mousemoveevent);
+
+        QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        QCoreApplication::sendEvent(slidewidget, &mouseLPevent);
+
+        QPaintEvent paintevent(QRect(0, 0, 600, 400));
+        QCoreApplication::sendEvent(slidewidget, &paintevent);
+
+        delete slidewidget;
     }
 
     //HandleMenu
     {
         HandleMenu handleMenu;
-        handleMenu.readCurDocParam(0);
+        handleMenu.readCurDocParam(nullptr);
         handleMenu.onHandTool();
         handleMenu.onSelectText();
 
@@ -156,7 +181,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
     //ScaleWidget
     {
         ScaleWidget scaleWidget;
-        scaleWidget.setSheet(0);
+        scaleWidget.setSheet(nullptr);
         scaleWidget.clear();
         scaleWidget.onPrevScale();
         scaleWidget.onNextScale();
@@ -175,7 +200,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
     //FindWidget
     {
         FindWidget findWidget;
-        findWidget.setDocSheet(0);
+        findWidget.setDocSheet(nullptr);
         findWidget.showPosition(0);
         findWidget.setSearchEditFocus();
         findWidget.setEditAlert(true);
@@ -214,8 +239,11 @@ TEST(Ut_Widgets, BColorWidgetActionTest)
 
 TEST(Ut_Widgets, CustomMenuTest)
 {
-    CustomMenu menu;
-    EXPECT_TRUE(menu.createAction("test", nullptr, true));
+    CustomMenu *menu = new CustomMenu();
+    menu->resize(200, 100);
+    EXPECT_TRUE(menu->createAction("test", "sigClickAction", true));
+    menu->show();
+    delete menu;
 }
 
 TEST(Ut_Widgets, CustomWidgetTest)
@@ -249,21 +277,24 @@ TEST(Ut_Widgets, SaveDialogTest)
 TEST(Ut_Widgets, RoundColorWidgetTest)
 {
     RoundColorWidget roundColorWidget(Qt::red);
+    roundColorWidget.show();
     roundColorWidget.setSelected(false);
     roundColorWidget.setSelected(true);
     roundColorWidget.setAllClickNotify(true);
     roundColorWidget.resize(600, 600);
     roundColorWidget.repaint();
-    roundColorWidget.show();
 
     QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(&roundColorWidget, &mouseLPevent);
+
+    QPaintEvent paintevent(QRect(0, 0, 600, 600));
+    QCoreApplication::sendEvent(&roundColorWidget, &paintevent);
 }
 
 TEST(Ut_Widgets, ShortCutShowTest)
 {
     ShortCutShow shortCutDialog;
-    shortCutDialog.setSheet(0);
+    shortCutDialog.setSheet(nullptr);
     shortCutDialog.initDJVU();
     shortCutDialog.show();
 }
@@ -310,6 +341,7 @@ TEST(Ut_Widgets, TipsWidgetTest)
     TipsWidget tipsWidget;
     tipsWidget.show();
     tipsWidget.setText("test");
+    tipsWidget.resize(200, 100);
     tipsWidget.setAutoChecked(true);
     tipsWidget.setAlignment(Qt::AlignCenter);
     tipsWidget.setLeftRightMargin(-1);
@@ -318,6 +350,15 @@ TEST(Ut_Widgets, TipsWidgetTest)
     tipsWidget.adjustContent("const QString & text");
     tipsWidget.onUpdateTheme();
     tipsWidget.onTimeOut();
+
+    QPaintEvent paintevent(QRect(0, 0, 200, 100));
+    QCoreApplication::sendEvent(&tipsWidget, &paintevent);
+
+    QHideEvent hideEvent;
+    QCoreApplication::sendEvent(&tipsWidget, &hideEvent);
+
+    QShowEvent showEvent;
+    QCoreApplication::sendEvent(&tipsWidget, &showEvent);
 }
 
 TEST(Ut_Widgets, WordWrapLabelTest)
@@ -329,5 +370,8 @@ TEST(Ut_Widgets, WordWrapLabelTest)
     wordLabel.setText("test_111111111111111111111111111111111");
     wordLabel.setMargin(0);
     wordLabel.adjustContent();
+
+    QPaintEvent paintevent(QRect(0, 0, 200, 100));
+    QCoreApplication::sendEvent(&wordLabel, &paintevent);
 }
 #endif

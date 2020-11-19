@@ -40,7 +40,7 @@ typedef struct MenuItem_t {
 
     QList<MenuItem_t> childItems;
 
-    explicit MenuItem_t(const QString &rootitem):rootItem(rootitem)
+    explicit MenuItem_t(const QString &rootitem): rootItem(rootitem)
     {
 
     }

@@ -95,8 +95,15 @@ public:
      */
     void setDocTabBarWidget(QWidget *widget);
 
+    /**
+     * @brief 调整标题控件大小
+     */
     void resizeFullTitleWidget();
 
+    /**
+     * @brief 更新TAB控件顺序
+     * @param orderlst
+     */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
 
 public:
@@ -187,10 +194,19 @@ private slots:
      */
     void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
+    /**
+     * @brief 全屏
+     */
     void onMainWindowFull();
 
+    /**
+     * @brief 退出全屏
+     */
     void onMainWindowExitFull();
 
+    /**
+     * @brief 标题悬浮动画结束
+     */
     void onTitleAniFinished();
 
 private:
@@ -214,7 +230,7 @@ public:
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
 
-    QTimer *m_showMenuTimer{nullptr};
+    QTimer *m_showMenuTimer = nullptr;
 };
 
 #endif // MainWindow_H

@@ -30,6 +30,7 @@ CustomMenu::CustomMenu(DWidget *parent)
 
 CustomMenu::~CustomMenu()
 {
+
 }
 
 QAction *CustomMenu::createAction(const QString &objName, const char *member, bool checkable)

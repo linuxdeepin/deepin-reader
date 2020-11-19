@@ -40,6 +40,7 @@ class ScaleWidget : public Dtk::Widget::DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ScaleWidget)
+
 public:
     explicit ScaleWidget(Dtk::Widget::DWidget *parent = nullptr);
 

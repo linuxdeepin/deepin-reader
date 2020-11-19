@@ -41,6 +41,7 @@ public:
     explicit ImageWidget(DWidget *parent)
         : DWidget(parent)
     {
+
     }
 
     void setPixmap(const QPixmap &pixmap)

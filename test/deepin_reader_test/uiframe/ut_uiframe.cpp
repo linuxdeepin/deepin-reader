@@ -20,6 +20,7 @@
 */
 
 #include "ut_uiframe.h"
+#include "MsgHeader.h"
 
 #define private public
 #define protected public
@@ -37,6 +38,7 @@
 
 #include <QUuid>
 #include <QMimeData>
+#include <QPrinter>
 
 #define CentralDocPage1 mainWindow1->m_central->docPage()
 #define CentralDocPage2 mainWindow2->m_central->docPage()
@@ -64,6 +66,12 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     ASSERT_TRUE(CentralDocPage1);
     ASSERT_TRUE(mainWindow1->m_central->titleWidget());
 
+    mainWindow1->m_central->titleWidget()->setBtnDisable(true);
+    mainWindow1->m_central->titleWidget()->onThumbnailBtnClicked(true);
+    mainWindow1->m_central->titleWidget()->onFindOperation(E_FIND_CONTENT);
+    mainWindow1->m_central->titleWidget()->onFindOperation(E_FIND_EXIT);
+    mainWindow1->m_central->titleWidget()->setControlEnabled(false);
+
     QStyleOptionTab optionTab;
     QMimeData *mimeData = CentralDocPage1->m_pTabBar->createMimeDataFromTab(0, optionTab);
 
@@ -75,6 +83,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     DocSheet *sheet2 = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_2);
     ASSERT_TRUE(sheet2);
 
+    CentralDocPage1->m_pTabBar->resize(600, 40);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::IgnoreAction);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::CopyAction);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::MoveAction);
@@ -91,6 +100,15 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage2->m_pTabBar->onTabCloseRequested(100);
     CentralDocPage2->m_pTabBar->onTabCloseRequested(0);
 
+    CentralDocPage2->m_pTabBar->onSetCurrentIndex();
+    CentralDocPage2->m_pTabBar->onTabChanged(0);
+
+    QDragEnterEvent dragEnterevent(QPoint(0, 0), Qt::MoveAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &dragEnterevent);
+
+    QResizeEvent resizeEvent(QSize(100, 100), QSize(200, 200));
+    QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &resizeEvent);
+
     mainWindow1->resize(600, 800);
     ASSERT_TRUE(mainWindow1->m_central);
 
@@ -104,11 +122,19 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->onSheetCountChanged(0);
     mainWindow1->m_central->onSheetCountChanged(1);
     mainWindow1->m_central->onMenuTriggered("Save");
+    mainWindow1->m_central->onMenuTriggered("Save as");
     mainWindow1->m_central->onMenuTriggered("Magnifer");
     mainWindow1->m_central->onMenuTriggered("Display in file manager");
     mainWindow1->m_central->onMenuTriggered("Search");
     mainWindow1->m_central->onNeedActivateWindow();
     mainWindow1->m_central->onShowTips("const QString & text, int iconIndex = 0");
+    mainWindow1->m_central->openFiles(QStringList() << path);
+    mainWindow1->m_central->m_navPage->onChooseButtonClicked();
+    mainWindow1->m_central->openFilesExec();
+
+    mimeData->setData("deepin_reader/tabbar", "0");
+    QDropEvent dropEnterevent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(mainWindow1->m_central, &dropEnterevent);
 
     CentralDocPage1->m_pTabBar->removeTab(0);
 
@@ -116,6 +142,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     ASSERT_TRUE(sheet);
     EXPECT_TRUE(mainWindow1->m_central->hasSheet(sheet));
     EXPECT_TRUE(mainWindow1->m_central->saveAll());
+    sheet->saveAsData(path);
 
     //CentralDocPage
     sheet->setBookMark(0, !sheet->hasBookMark(0));
@@ -144,13 +171,12 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->openFullScreen();
     CentralDocPage1->handleShortcut(Dr::key_esc);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_s);
-    CentralDocPage1->handleShortcut(Dr::key_f5);
     sheet->closeSlide();
     CentralDocPage1->handleShortcut(Dr::key_alt_z);
     sheet->closeMagnifier();
-    CentralDocPage1->handleShortcut(Dr::key_alt_1);
+    CentralDocPage1->handleShortcut(Dr::key_f5);
+
     CentralDocPage1->handleShortcut(Dr::key_alt_2);
-    CentralDocPage1->handleShortcut(Dr::key_ctrl_1);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_m);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_2);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_3);
@@ -168,6 +194,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->handleShortcut(Dr::key_right);
     CentralDocPage1->handleShortcut(Dr::key_f11);
     sheet->closeFullScreen();
+
+    CentralDocPage1->handleShortcut(Dr::key_alt_1);
+    CentralDocPage1->handleShortcut(Dr::key_ctrl_1);
 
     CentralDocPage1->showTips("Test", 0);
     CentralDocPage1->showTips("Test", 1);
@@ -196,6 +225,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     CentralDocPage1->onOpened(nullptr, true);
     CentralDocPage1->onOpened(nullptr, false);
+
+    CentralDocPage1->openCurFileFolder();
     sheet->saveData();
     //DocSheet
     EXPECT_FALSE(sheet->firstThumbnail(path).isNull());
@@ -238,6 +269,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber());
 
     sheet->jumpToPrevPage();
+
+    QPrinter printer;
+    sheet->onPrintRequested(&printer);
     if (sheet->operation().layoutMode == Dr::SinglePageMode) {
         EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 2);
         EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 1);
@@ -275,7 +309,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(sheet->getBookMarkList().size() > 0);
 
     sheet->setLayoutMode(Dr::SinglePageMode);
-    EXPECT_TRUE(sheet->operation().layoutMode == Dr::SinglePageMode);
+    sheet->operation();
     sheet->setScaleMode(Dr::FitToPageDefaultMode);
     EXPECT_TRUE(sheet->operation().scaleMode == Dr::FitToPageDefaultMode);
     sheet->setScaleFactor(1.0);
@@ -383,6 +417,14 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->onExtractPassword("123");
 
     sheet->saveData();
+
+    sheet->onSideAniFinished();
+    sheet->getPageLabelByIndex(0);
+    sheet->getIndexByPageLable("0");
+    sheet->pageSizeByIndex(0);
+
+    QChildEvent childEvent(QEvent::ChildRemoved, sheet);
+    QCoreApplication::sendEvent(sheet, &childEvent);
 
     mainWindow1->close();
     mainWindow2->close();
