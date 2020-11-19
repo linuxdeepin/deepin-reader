@@ -40,7 +40,7 @@ PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
     m_delayTimer = new QTimer(this);
     m_delayTimer->setSingleShot(true);
     connect(m_delayTimer, &QTimer::timeout, this, &PageRenderThread::onDelayTaskTimeout);
-    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QPixmap, int, QRectF)), this, SLOT(onImageTaskFinished(BrowserPage *, QPixmap, int, QRectF)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QPixmap, int, QRect)), this, SLOT(onImageTaskFinished(BrowserPage *, QPixmap, int, QRect)), Qt::QueuedConnection);
     connect(this, SIGNAL(sigWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), this, SLOT(onWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), Qt::QueuedConnection);
 }
 
@@ -50,7 +50,7 @@ PageRenderThread::~PageRenderThread()
     wait();
 }
 
-bool PageRenderThread::clearTask(BrowserPage *item, int type)
+bool PageRenderThread::clearTask(BrowserPage *item, int pixmapId)
 {
     if (nullptr == item)
         return true;
@@ -66,7 +66,7 @@ bool PageRenderThread::clearTask(BrowserPage *item, int type)
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
-            if (instance->m_tasks[i].page == item && instance->m_tasks[i].type == type && instance->m_tasks[i].rect.isEmpty()) {
+            if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].rect.isEmpty()) {
                 instance->m_tasks.remove(i);
                 exist = true;
                 break;
@@ -155,7 +155,15 @@ void PageRenderThread::run()
 
         m_mutex.lock();
 
-        m_curTask = m_tasks.pop();
+        for (int i = m_tasks.count() - 1; i >= 0; --i) {
+            if (!m_tasks[i].rect.isEmpty()) {
+                m_curTask = m_tasks[i];
+                m_tasks.remove(i);
+                break;
+            }
+            if (i == 0)
+                m_curTask = m_tasks.pop();
+        }
 
         m_mutex.unlock();
 
@@ -168,7 +176,7 @@ void PageRenderThread::run()
             if (m_curTask.rect.isEmpty())
                 image = m_curTask.page->getImage(m_curTask.scaleFactor);
             else
-                image = m_curTask.page->getImage(m_curTask.scaleFactor, QRect(0, 0, m_curTask.rect.width(), m_curTask.rect.height()));
+                image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rect);
 
             if (!image.isNull())
                 emit sigImageTaskFinished(m_curTask.page, QPixmap::fromImage(image), m_curTask.pixmapId, m_curTask.rect);
@@ -197,7 +205,7 @@ void PageRenderThread::destroyForever()
     }
 }
 
-void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId,  QRectF rect)
+void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId,  QRect rect)
 {
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(pixmapId, pixmap, rect);

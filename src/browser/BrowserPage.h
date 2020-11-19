@@ -413,7 +413,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect);
+    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &rect);
 
     /**
      * brief handleWordLoaded
@@ -488,12 +488,6 @@ private:
     bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
     double  m_pixmapScaleFactor = -1;       //当前图片的缩放
     bool    m_viewportRendered  = false;    //图片初始化加载视图窗口
-    struct ImagePatch {
-        QImage image;
-        int pixmapId;
-        QRectF rect;
-    };
-    QList<ImagePatch> m_imagePatchList;     //当前图片加载成功前形成的补丁
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放
@@ -514,6 +508,8 @@ private:
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
+
+    QMutex m_mutex;
 };
 
 #endif // BrowserPage_H

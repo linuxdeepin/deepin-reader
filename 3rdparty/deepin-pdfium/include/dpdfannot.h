@@ -20,13 +20,18 @@ public:
     };
 
     virtual ~DPdfAnnot();
+
     /**
      * @brief 是否在该点上
-     * @param pos
+     * @param pos (in point)
      * @return
      */
     virtual bool pointIn(QPointF pos) = 0;
 
+    /**
+     * @brief boundaries
+     * @return (in point)
+     */
     virtual QList<QRectF> boundaries() = 0;
 
     AnnotType type();

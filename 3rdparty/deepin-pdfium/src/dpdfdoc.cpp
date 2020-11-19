@@ -71,6 +71,8 @@ DPdfDocPrivate::DPdfDocPrivate()
 
 DPdfDocPrivate::~DPdfDocPrivate()
 {
+    DPdfMutexLocker locker;
+
     qDeleteAll(m_pages);
 
     if (nullptr != m_docHandler)
@@ -233,25 +235,16 @@ DPdfDoc::Status DPdfDoc::status() const
     return d_func()->m_status;
 }
 
-DPdfPage *DPdfDoc::page(int i)
+DPdfPage *DPdfDoc::page(int i, qreal xRes, qreal yRes)
 {
     if (i < 0 || i >= d_func()->m_pageCount)
         return nullptr;
 
     if (!d_func()->m_pages[i]) {
-        d_func()->m_pages[i] = new DPdfPage(d_func()->m_docHandler, i);
+        d_func()->m_pages[i] = new DPdfPage(d_func()->m_docHandler, i, xRes, yRes);
     }
 
     return d_func()->m_pages[i];
-}
-
-QSizeF DPdfDoc::pageSizeF(int index) const
-{
-    double width = 0;
-    double height = 0;
-
-    FPDF_GetPageSizeByIndex((FPDF_DOCUMENT)d_func()->m_docHandler, index, &width, &height);
-    return QSizeF(width, height);
 }
 
 void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, CPDF_Bookmark This)

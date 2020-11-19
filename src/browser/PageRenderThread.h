@@ -40,7 +40,7 @@ struct RenderPageTask {
     BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
     int pixmapId = 0;
-    QRectF rect = QRectF();
+    QRect rect = QRect();
 };
 
 /**
@@ -55,15 +55,15 @@ public:
      * @brief clearTask
      * 清除该项和该类型的任务
      * @param item 项指针
-     * @param type 任务类型
+     * @param pixmapId 删除不同的pixmapId,-1为删除所有
      * @return 是否成功
      */
-    static bool clearTask(BrowserPage *item, int type = RenderPageTask::Image);
+    static bool clearTask(BrowserPage *item, int pixmapId = -1);
 
     /**
-     * @brief appendTask
-     * 添加任务
+     * @brief 添加任务
      * @param task 任务
+     * @param beforeFirst 插入到最开始
      */
     static void appendTask(RenderPageTask task);
 
@@ -97,12 +97,12 @@ private:
     void run();
 
 signals:
-    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRectF rect);
+    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect rect);
 
     void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRectF rect);
+    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect rect);
 
     void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
@@ -110,11 +110,15 @@ private slots:
 
 private:
     RenderPageTask m_curTask;
+
     QStack<RenderPageTask> m_tasks;
+
     QMutex m_mutex;
+
     bool m_quit = false;
 
     RenderPageTask m_delayTask;
+
     QTimer *m_delayTimer = nullptr;
 
     static bool quitForever;

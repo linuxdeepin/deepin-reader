@@ -46,6 +46,7 @@
 #include <QUuid>
 #include <QDesktopServices>
 #include <QDebug>
+#include <QMutexLocker>
 
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
@@ -214,7 +215,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         } else {
             m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            PageRenderThread::clearTask(this);
+            PageRenderThread::clearTask(this, m_pixmapId);
         }
 
         if (!isBigDoc())
@@ -237,21 +238,17 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     QRect validRect = boundingRect().intersected(rect).toRect();
 
-    const QImage &image = getImage(scaleFactor, validRect);
+    RenderPageTask task;
 
-    if (!m_pixmapHasRendered) {//如果主图还没加载，先形成补丁
-        ImagePatch patch;
-        patch.pixmapId = m_pixmapId;
-        patch.image = image;
-        patch.rect = validRect;
-        m_imagePatchList.append(patch);
-    }
+    task.page = this;
 
-    if (!m_pixmap.isNull()) {//如果当前图已被清除，无需绘制
-        QPainter painter(&m_pixmap);
-        painter.drawImage(validRect.x(), validRect.y(), image);
-        update();
-    }
+    task.scaleFactor = scaleFactor;
+
+    task.pixmapId = m_pixmapId;
+
+    task.rect = validRect;
+
+    PageRenderThread::appendTask(task);
 }
 
 void BrowserPage::renderViewPort(const qreal &scaleFactor)
@@ -286,27 +283,19 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
     m_viewportRendered = true;
 }
 
-void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRectF &rect)
+void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &rect)
 {
-    if (pixmapId == m_pixmapId && rect.isEmpty()) {//整体更新
+    if (m_pixmapId != pixmapId)
+        return;
+
+    if (rect.isEmpty()) {//整体更新
         m_pixmapHasRendered = true;
         m_pixmapIsLastest = true;
         m_pixmap = pixmap;
-
-        for (ImagePatch &patch : m_imagePatchList) {
-
-            if (patch.pixmapId == m_pixmapId) {
-                QPainter painter(&m_pixmap);
-                painter.drawImage(patch.rect, patch.image);
-            }
-        }
-        m_imagePatchList.clear();
-
-    } else if (pixmapId == 0 && !rect.isEmpty()) { //局部
+    } else { //局部
         QPainter painter(&m_pixmap);
-        painter.drawPixmap(m_pixmap.rect(), pixmap, rect);
-    } else
-        return;
+        painter.drawPixmap(rect, pixmap);
+    }
 
     emit m_parent->sigPartThumbnailUpdated(m_index);
 
@@ -331,14 +320,15 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
     m_wordHasRendered = true;
 
     scaleWords(true);
-
 }
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    return m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
-                          static_cast<int>(m_page->sizeF().height() * scaleFactor),
-                          slice);
+    QMutexLocker docMutexLocker(&m_mutex);
+    QImage image =  m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
+                                   static_cast<int>(m_page->sizeF().height() * scaleFactor),
+                                   slice);
+    return image;
 }
 
 QImage BrowserPage::getImage(int width, int height, bool bSrc)
@@ -348,8 +338,8 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
             return QImage();
 
         const QImage &image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),
-                                                 static_cast<int>(height * dApp->devicePixelRatio()),
-                                                 Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                                                        static_cast<int>(height * dApp->devicePixelRatio()),
+                                                        Qt::KeepAspectRatio, Qt::SmoothTransformation);
         return image;
     }
 
@@ -576,7 +566,10 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor,
+                                     renderBoundary.y() * m_scaleFactor,
+                                     renderBoundary.width() * m_scaleFactor,
+                                     renderBoundary.height() * m_scaleFactor));
 
     return true;
 }
@@ -865,6 +858,9 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
         annot->page = m_index + 1;
 
         m_annotations.append(annot);
+
+        qDebug() << rect;
+        qDebug() << annot->boundary();
 
         foreach (const QRectF &arect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, arect, annot, m_scaleFactor);

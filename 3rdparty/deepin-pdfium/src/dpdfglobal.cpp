@@ -7,9 +7,9 @@
 
 static bool initialized = false;
 
-const static DPDFGlobal instance = DPDFGlobal();
+const static DPdfGlobal instance = DPdfGlobal();
 
-void DPDFGlobal::init()
+void DPdfGlobal::init()
 {
     if (!initialized) {
         FPDF_InitLibrary();
@@ -17,7 +17,7 @@ void DPDFGlobal::init()
     }
 }
 
-void DPDFGlobal::destory()
+void DPdfGlobal::destory()
 {
     if (initialized) {
         FPDF_DestroyLibrary();
@@ -25,13 +25,19 @@ void DPDFGlobal::destory()
     }
 }
 
-DPDFGlobal::DPDFGlobal()
+DPdfGlobal::DPdfGlobal()
 {
     init();
 }
 
-DPDFGlobal::~DPDFGlobal()
+DPdfGlobal::~DPdfGlobal()
 {
     destory();
 }
 
+Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, (QMutex::Recursive));
+
+DPdfMutexLocker::DPdfMutexLocker(): QMutexLocker(pdfMutex())
+{
+
+}

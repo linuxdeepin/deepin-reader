@@ -77,7 +77,7 @@ public:
 
     QImage render(int width, int height, const QRect &slice = QRect()) const override;
 
-    Link getLinkAtPoint(const QPointF &point) const override;
+    Link getLinkAtPoint(const QPointF &point) override;
 
     QString text(const QRectF &rect) const override;
 
@@ -127,8 +127,6 @@ public:
     QStringList saveFilter() const override;
 
     QString label(int index) const override;
-
-    QSizeF pageSizeF(int index) const override;
 
     bool save(const QString &filePath) const override;
 

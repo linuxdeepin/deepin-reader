@@ -75,11 +75,11 @@ public:
     Status status() const;
 
     /**
-     * @brief 返回指定PAGE
+     * @brief 创建新的page返回
      * @param i
      * @return
      */
-    DPdfPage *page(int i);
+    DPdfPage *page(int i, qreal xRes, qreal yRes);
 
     /**
      * @brief 目录
@@ -106,13 +106,6 @@ public:
      * @return
      */
     QString label(int index) const;
-
-    /**
-     * @brief 获取页面大小
-     * @param index
-     * @return
-     */
-    QSizeF pageSizeF(int index) const;
 
     /**
      * @brief 保存到当前文件

@@ -68,7 +68,7 @@ class DjVuDocument : public Document
 {
     friend class DjVuPage;
 public:
-    ~DjVuDocument();
+    ~DjVuDocument() override;
 
     int numberOfPages() const override;
 
@@ -76,7 +76,7 @@ public:
 
     QStringList saveFilter() const override;
 
-    QSizeF pageSizeF(int index) const override;
+    QSizeF pageSizeF(int index) const;
 
     bool save(const QString &filePath) const override;
 

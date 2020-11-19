@@ -181,7 +181,7 @@ int DPdfLinkAnnot::pageIndex() const
 
 QPointF DPdfLinkAnnot::offset() const
 {
-    return QPointF(m_left, m_top);
+    return QPointF(static_cast<qreal>(m_left), static_cast<qreal>(m_top));
 }
 
 void DPdfLinkAnnot::setLinkType(int type)

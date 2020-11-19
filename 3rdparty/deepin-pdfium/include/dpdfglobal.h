@@ -2,6 +2,7 @@
 #define DPDFGLOBAL_H
 
 #include <QtCore/qglobal.h>
+#include <QMutexLocker>
 
 #ifndef BUILD_DEEPDF_STATIC
 #    if defined(BUILD_DEEPDF_LIB)
@@ -13,17 +14,24 @@
 #    define DEEPDF_EXPORT
 #endif
 
-class DPDFGlobal
+class DPdfGlobal
 {
 public:
-    DPDFGlobal();
+    DPdfGlobal();
 
-    ~DPDFGlobal();
+    ~DPdfGlobal();
 
 private:
     void init();
 
     void destory();
+};
+
+//pdfium即使不同文档之间loadpage和renderpage也不是线程安全，需要加锁
+class DPdfMutexLocker : public QMutexLocker
+{
+public:
+    DPdfMutexLocker();
 };
 
 #endif // DPDFGLOBAL_H

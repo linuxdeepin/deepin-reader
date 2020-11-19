@@ -33,6 +33,8 @@
 #include <QPainterPath>
 #include <QPointF>
 #include <QRectF>
+#include <QApplication>
+#include <QScreen>
 
 class QColor;
 class QImage;
@@ -175,12 +177,15 @@ class Page: public QObject
 {
     Q_OBJECT
 public:
-    Page() : QObject() {}
+    Page() : QObject()
+    {
+
+    }
     virtual ~Page() {}
 
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(int width, int height, const QRect &slice = QRect()) const = 0;
-    virtual Link getLinkAtPoint(const QPointF &) const { return Link(); }
+    virtual Link getLinkAtPoint(const QPointF &) { return Link(); }
     virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
     virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text) Q_UNUSED(matchCase) Q_UNUSED(wholeWords) return QVector<QRectF>(); }
@@ -214,9 +219,8 @@ public:
     virtual ~Document() {}
     virtual int numberOfPages() const = 0;
     virtual Page *page(int index) const = 0;
-    virtual QSizeF pageSizeF(int) const { return QSizeF(0, 0); };
     virtual QStringList saveFilter() const { return QStringList(); }
-    virtual QString label(int) const { return QString(); };
+    virtual QString label(int) const { return QString(); }
     virtual bool save(const QString &filePath) const { Q_UNUSED(filePath); return false; }
     virtual bool saveAs(const QString &filePath) const { Q_UNUSED(filePath); return false; }
     virtual bool canBePrintedUsingCUPS() const { return false; }

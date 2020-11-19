@@ -875,7 +875,7 @@ void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
     }
 }
 
-void SheetBrowser::deform(SheetOperation &operation)
+void SheetBrowser:: deform(SheetOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
 
@@ -1960,10 +1960,10 @@ QString SheetBrowser::pageNum2Lable(const int index)
 
 QSizeF SheetBrowser::pageSizeByIndex(int index)
 {
-    if (nullptr == m_document)
+    if (m_items.count() <= index)
         return QSizeF();
 
-    return m_document->pageSizeF(index);
+    return m_items[index]->pageSize();
 }
 
 void SheetBrowser::showMagnigierImage(const QPoint &point)

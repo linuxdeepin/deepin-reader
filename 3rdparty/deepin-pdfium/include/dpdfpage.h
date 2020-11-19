@@ -26,28 +26,22 @@ public:
     bool isValid() const;
 
     /**
-     * @brief 图片宽 (in point) 1/72 inch
-     * @return
-     */
-    qreal width() const;
-
-    /**
-     * @brief 图片高 (in point) 1/72 inch
-     * @return
-     */
-    qreal height() const;
-
-    /**
      * @brief 当页索引
      * @return
      */
-    int pageIndex() const;
+    int index() const;
 
     /**
-     * @brief 按宽高获取原图
-     * @param width
-     * @param height
-     * @param rect 要取的切片,默认为全图
+     * @brief 大小 (根据目标设备dpi算出一个相同物理尺寸对应的像素大小)
+     * @return
+     */
+    QSizeF sizeF() const;
+
+    /**
+     * @brief 按像素宽高获取原图
+     * @param width (in pixel)
+     * @param height (in pixel)
+     * @param rect 要取的切片,默认为全图 (in pixel)
      * @return
      */
     QImage image(int width, int height, QRect slice = QRect());
@@ -60,34 +54,34 @@ public:
 
     /**
      * @brief 根据索引获取文本范围
-     * @param start
-     * @param textrect
+     * @param index
+     * @param textrect (in pixel)
      * @return
      */
-    bool getTextRect(int start, QRectF &textrect);
+    bool getTextRect(int index, QRectF &textrect);
 
     /**
      * @brief 获取多个字符文本范围
-     * @param start
+     * @param index
      * @param charCount
-     * @return
+     * @return (in pixel)
      */
-    QVector<QRectF> getTextRects(int start, int charCount);
+    QVector<QRectF> getTextRects(int index, int charCount);
 
     /**
      * @brief 根据范围获取文本
-     * @param rect
+     * @param rect (in pixel)
      * @return
      */
     QString text(const QRectF &rect);
 
     /**
      * @brief 根据索引获取文本
-     * @param start
+     * @param index
      * @param charCount
      * @return
      */
-    QString text(int start, int charCount = 1);
+    QString text(int index, int charCount = 1);
 
     /**
      * @brief 添加文字注释
@@ -95,7 +89,7 @@ public:
      * @param text 注释内容
      * @return 添加失败返回nullptr
      */
-    DPdfAnnot *createTextAnnot(QPointF point, QString text);
+    DPdfAnnot *createTextAnnot(QPointF pos, QString text);
 
     /**
      * @brief 更新注释
@@ -104,7 +98,7 @@ public:
      * @param point 点击的位置 传空则不更新 基于原尺寸
      * @return
      */
-    bool updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point = QPointF());
+    bool updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos = QPointF());
 
     /**
      * @brief 添加高亮注释
@@ -113,7 +107,7 @@ public:
      * @param color 高亮颜色
      * @return 添加失败返回nullptr
      */
-    DPdfAnnot *createHightLightAnnot(const QList<QRectF> &list, QString text, QColor color = QColor());
+    DPdfAnnot *createHightLightAnnot(const QList<QRectF> &rects, QString text, QColor color = QColor());
 
     /**
      * @brief 更新高亮注释
@@ -172,7 +166,7 @@ signals:
     void annotRemoved(DPdfAnnot *dAnnot);
 
 private:
-    DPdfPage(DPdfDocHandler *handler, int pageIndex);
+    DPdfPage(DPdfDocHandler *handler, int pageIndex, qreal xRes = 72, qreal yRes = 72);
 
     QScopedPointer<DPdfPagePrivate> d_ptr;
 };

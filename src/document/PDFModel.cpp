@@ -27,7 +27,8 @@
 #include <QDebug>
 #include <QScreen>
 
-#define LOCK_DOCUMENT QMutexLocker docMutexLocker(&PDFPage::s_mutex);
+#define LOCK_APPPAGE  QMutexLocker docMutexLocker(&PDFPage::s_mutex);
+#define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
 
 namespace deepin_reader {
 
@@ -46,8 +47,11 @@ QList<QRectF> PDFAnnotation::boundary() const
     QList<QRectF> rectFList;
 
     if (m_dannotation->type() == DPdfAnnot::AText || m_dannotation->type() == DPdfAnnot::AHighlight) {
-        rectFList.append(m_dannotation->boundaries());
+
+        foreach (QRectF rect, m_dannotation->boundaries())
+            rectFList.append(rect);
     }
+
     return rectFList;
 }
 
@@ -86,12 +90,7 @@ PDFPage::~PDFPage()
 
 QSizeF PDFPage::sizeF() const
 {
-    QScreen *srn = QApplication::screens().value(0);
-
-    if (nullptr == srn)
-        return QSizeF(m_page->width(), m_page->height());
-
-    return QSizeF(m_page->width() * srn->logicalDotsPerInchX() / 72, m_page->height() * srn->logicalDotsPerInchY() / 72);
+    return m_page->sizeF();
 }
 
 QImage PDFPage::render(int width, int height, const QRect &slice) const
@@ -111,14 +110,14 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
     return image;
 }
 
-Link PDFPage::getLinkAtPoint(const QPointF &point) const
+Link PDFPage::getLinkAtPoint(const QPointF &pos)
 {
     Link link;
     const QList<DPdfAnnot *> &dlinkAnnots = m_page->links();
     if (dlinkAnnots.size() > 0) {
         for (DPdfAnnot *annot : dlinkAnnots) {
             DPdfLinkAnnot *linkAnnot = dynamic_cast<DPdfLinkAnnot *>(annot);
-            if (linkAnnot && linkAnnot->pointIn(point)) {
+            if (linkAnnot && linkAnnot->pointIn(pos)) {
                 link.page = linkAnnot->pageIndex() + 1;
                 link.urlOrFileName = linkAnnot->url().isEmpty() ? linkAnnot->filePath() : linkAnnot->url();
                 link.left = linkAnnot->offset().x();
@@ -143,6 +142,7 @@ QList<Word> PDFPage::words()
         return m_words;
 
     int charCount = m_page->countChars();
+
     QPointF lastOffset(0, 0);
 
     for (int i = 0; i < charCount; i++) {
@@ -157,15 +157,20 @@ QList<Word> PDFPage::words()
 
             if (rectf.width() > 0) {
                 word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
+
                 lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
 
                 int curWordsSize = m_words.size();
-                if (curWordsSize > 2 && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
+                if (curWordsSize > 2
+                        && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
                         && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
                         && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
                         && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
                     QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
-                    m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(), prevBoundRectF.y(), word.boundingBox.x() - prevBoundRectF.right(), prevBoundRectF.height());
+                    m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(),
+                                                                   prevBoundRectF.y(),
+                                                                   word.boundingBox.x() - prevBoundRectF.right(),
+                                                                   prevBoundRectF.height());
                 }
             }
 
@@ -199,7 +204,6 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color)
 {
-
     LOCK_DOCUMENT
 
     return new PDFAnnotation(m_page->createHightLightAnnot(boundaries, text, color));
@@ -207,7 +211,6 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, con
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-
     LOCK_DOCUMENT
 
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
@@ -218,8 +221,8 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
     m_page->removeAnnot(PDFAnnotation->m_dannotation);
 
     PDFAnnotation->m_dannotation = nullptr;
+
     delete PDFAnnotation;
-    PDFAnnotation = nullptr;
 
     return true;
 }
@@ -242,12 +245,12 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     return false;
 }
 
-bool PDFPage::mouseClickIconAnnot(QPointF &clickPoint)
+bool PDFPage::mouseClickIconAnnot(QPointF &clickPos)
 {
     LOCK_DOCUMENT
 
     foreach (DPdfAnnot *annot, m_page->annots()) {
-        if (annot && annot->pointIn(clickPoint)) {
+        if (annot && annot->pointIn(clickPos)) {
             return true;
         }
     }
@@ -274,6 +277,7 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 
     if (annot->ownAnnotation()) {
         m_page->updateTextAnnot(annot->ownAnnotation(), annot->ownAnnotation()->text(), rect.center());
+
         return annot;
     }
     return nullptr;
@@ -309,9 +313,17 @@ int PDFDocument::numberOfPages() const
 
 Page *PDFDocument::page(int index) const
 {
+    QScreen *srn = QApplication::screens().value(0);
+    qreal xRes = 72;
+    qreal yRes = 72;
+    if (nullptr != srn) {
+        xRes = srn->physicalDotsPerInchX();
+        yRes = srn->physicalDotsPerInchY();
+    }
+
     LOCK_DOCUMENT
 
-    if (DPdfPage *page = m_document->page(index)) {
+    if (DPdfPage *page = m_document->page(index, xRes, yRes)) {
         if (page->isValid())
             return new PDFPage(m_docMutex, page);
     }
@@ -326,11 +338,6 @@ QString PDFDocument::label(int index) const
     return m_document->label(index);
 }
 
-QSizeF PDFDocument::pageSizeF(int index) const
-{
-    return m_document->pageSizeF(index);
-}
-
 QStringList PDFDocument::saveFilter() const
 {
     return QStringList() << "Portable document format (*.pdf)";
@@ -338,8 +345,8 @@ QStringList PDFDocument::saveFilter() const
 
 bool PDFDocument::save(const QString &filePath) const
 {
-    LOCK_DOCUMENT
     Q_UNUSED(filePath)
+    LOCK_DOCUMENT
 
     return m_document->save();
 }

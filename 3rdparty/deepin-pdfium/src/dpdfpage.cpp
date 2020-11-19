@@ -17,7 +17,7 @@ class DPdfPagePrivate
 {
     friend class DPdfPage;
 public:
-    DPdfPagePrivate(DPdfDocHandler *handler, int index);
+    DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes, qreal yRes);
 
     ~DPdfPagePrivate();
 
@@ -31,6 +31,36 @@ public:
      * @return
      */
     int oriRotation();
+
+    QSizeF sizeF() const
+    {
+        return QSizeF(m_width_pt * m_xRes / 72, m_height_pt * m_yRes / 72);
+    }
+
+    QRectF transPointToPixel(const QRectF &rect) const
+    {
+        return QRectF(rect.x() * m_xRes / 72, rect.y() * m_yRes / 72, rect.width() * m_xRes / 72, rect.height() * m_yRes / 72);
+    }
+    QSizeF transPointToPixel(const QSizeF &size) const
+    {
+        return QSizeF(size.width() * m_xRes / 72, size.height() * m_yRes / 72);
+    }
+    float transPointToPixelX(const float &x) const
+    {
+        return x * m_xRes / 72;
+    }
+    float transPointToPixelY(const float &y) const
+    {
+        return y * m_yRes / 72;
+    }
+    QRectF transPixelToPoint(const QRectF &rect) const
+    {
+        return QRectF(rect.x() * 72 / m_xRes, rect.y() * 72 / m_yRes, rect.width() * 72 / m_xRes, rect.height() * 72 / m_yRes);
+    }
+    QPointF transPixelToPoint(const QPointF &pos) const
+    {
+        return QPointF(pos.x() * 72 / m_xRes, pos.y() * 72 / m_yRes);
+    }
 
 private:
     /**
@@ -64,6 +94,10 @@ private:
 
     qreal m_height_pt = 0;
 
+    qreal m_xRes = 72;
+
+    qreal m_yRes = 72;
+
     FPDF_PAGE m_page = nullptr;
 
     FPDF_TEXTPAGE m_textPage = nullptr;
@@ -73,12 +107,9 @@ private:
     bool m_isValid = false;
 };
 
-DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index)
+DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes, qreal yRes):
+    m_doc(reinterpret_cast<FPDF_DOCUMENT>(handler)), m_index(index), m_xRes(xRes), m_yRes(yRes)
 {
-    m_doc = reinterpret_cast<FPDF_DOCUMENT>(handler);
-
-    m_index = index;
-
     //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width_pt, &m_height_pt);
 
@@ -99,6 +130,7 @@ DPdfPagePrivate::~DPdfPagePrivate()
 void DPdfPagePrivate::loadPage()
 {
     if (nullptr == m_page) {
+        DPdfMutexLocker locker;//即使其他文档的page在加载时，多线程调用此函数也会崩溃，非常线程不安全,此处需要加锁
         m_page = FPDF_LoadPage(m_doc, m_index);
     }
 }
@@ -107,8 +139,10 @@ void DPdfPagePrivate::loadTextPage()
 {
     loadPage();
 
-    if (nullptr == m_textPage)
+    if (nullptr == m_textPage) {
+        DPdfMutexLocker locker;
         m_textPage = FPDFText_LoadPage(m_page);
+    }
 }
 
 int DPdfPagePrivate::oriRotation()
@@ -126,13 +160,15 @@ int DPdfPagePrivate::oriRotation()
     }
 
     return FPDFPage_GetRotation(m_page);
-
 }
 
 bool DPdfPagePrivate::loadAnnots()
 {
     //使用临时page，不完全加载,防止刚开始消耗时间过长
-    FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
+    FPDF_PAGE page = m_page;
+
+    if (page == nullptr)
+        page = FPDF_LoadNoParsePage(m_doc, m_index);      //不调用ParseContent，目前观察不会导致多线程崩溃
 
     if (nullptr == page) {
         return false;
@@ -168,7 +204,7 @@ bool DPdfPagePrivate::loadAnnots()
             FS_RECTF rectF;
             if (FPDFAnnot_GetRect(annot, &rectF)) { //注释图标默认为20x20
                 QRectF annorectF = transRect(rotation, rectF);
-                dAnnot->setRectF(annorectF);
+                dAnnot->setRectF(transPointToPixel(annorectF));
 
 //                FS_RECTF newrectf;
 //                newrectf.left = static_cast<float>(annorectF.left());
@@ -209,7 +245,7 @@ bool DPdfPagePrivate::loadAnnots()
                 rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
                 rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
 
-                list.append(rectF);
+                list.append(transPointToPixel(rectF));
             }
             dAnnot->setBoundaries(list);
 
@@ -232,7 +268,8 @@ bool DPdfPagePrivate::loadAnnots()
             FS_RECTF rectF;
             if (FPDFAnnot_GetRect(annot, &rectF)) {
                 QRectF annorectF = transRect(rotation, rectF);
-                dAnnot->setRectF(annorectF);
+
+                dAnnot->setRectF(transPointToPixel(annorectF));
             }
 
             //获取类型
@@ -267,7 +304,7 @@ bool DPdfPagePrivate::loadAnnots()
                 bool result = FPDFDest_GetLocationInPage(dest, &hasX, &hasY, &hasZ, &x, &y, &z);
 
                 if (result)
-                    dAnnot->setPage(index, hasX ? x : 0, hasY ? y : 0);
+                    dAnnot->setPage(index, transPointToPixelX(hasX ? x : 0), transPointToPixelY(hasY ? y : 0));
 
                 dAnnot->setLinkType(DPdfLinkAnnot::Goto);
             }
@@ -295,25 +332,25 @@ FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
     FS_RECTF fs_rect;
 
     if (1 == rotation) {
-        fs_rect.left = rect.y();
-        fs_rect.top = rect.x() + rect.width();
-        fs_rect.right = rect.y() + rect.height();
-        fs_rect.bottom = rect.x();
+        fs_rect.left = static_cast<float>(rect.y());
+        fs_rect.top = static_cast<float>(rect.x() + rect.width());
+        fs_rect.right = static_cast<float>(rect.y() + rect.height());
+        fs_rect.bottom = static_cast<float>(rect.x());
     } else if (2 == rotation) {
-        fs_rect.left = actualWidth - rect.x() - rect.width();
-        fs_rect.top = rect.y() + rect.height();
-        fs_rect.right = actualWidth - rect.x();
-        fs_rect.bottom = rect.y();
+        fs_rect.left = static_cast<float>(actualWidth - rect.x() - rect.width());
+        fs_rect.top = static_cast<float>(rect.y() + rect.height());
+        fs_rect.right = static_cast<float>(actualWidth - rect.x());
+        fs_rect.bottom = static_cast<float>(rect.y());
     } else if (3 == rotation) {
-        fs_rect.left = actualHeight - rect.y() - rect.height();
-        fs_rect.top = actualWidth - rect.x();
-        fs_rect.right = actualHeight - rect.y();
-        fs_rect.bottom = actualWidth - rect.x() - rect.width();
+        fs_rect.left = static_cast<float>(actualHeight - rect.y() - rect.height());
+        fs_rect.top = static_cast<float>(actualWidth - rect.x());
+        fs_rect.right = static_cast<float>(actualHeight - rect.y());
+        fs_rect.bottom = static_cast<float>(actualWidth - rect.x() - rect.width());
     } else {
-        fs_rect.left = rect.x();
-        fs_rect.top = actualHeight - rect.y();
-        fs_rect.right = rect.x() + rect.width();
-        fs_rect.bottom = actualHeight - rect.y() - rect.height();
+        fs_rect.left = static_cast<float>(rect.x());
+        fs_rect.top = static_cast<float>(actualHeight - rect.y());
+        fs_rect.right = static_cast<float>(rect.x() + rect.width());
+        fs_rect.bottom = static_cast<float>(actualHeight - rect.y() - rect.height());
     }
 
     return fs_rect;
@@ -360,8 +397,8 @@ QRectF DPdfPagePrivate::transRect(const int &rotation, const FS_RECTF &fs_rect)
                   static_cast<qreal>(fs_rect.top) - static_cast<qreal>(fs_rect.bottom));
 }
 
-DPdfPage::DPdfPage(DPdfDocHandler *handler, int pageIndex)
-    : d_ptr(new DPdfPagePrivate(handler, pageIndex))
+DPdfPage::DPdfPage(DPdfDocHandler *handler, int pageIndex, qreal xRes, qreal yRes)
+    : d_ptr(new DPdfPagePrivate(handler, pageIndex, xRes, yRes))
 {
 
 }
@@ -376,17 +413,12 @@ bool DPdfPage::isValid() const
     return d_func()->m_isValid;
 }
 
-qreal DPdfPage::width() const
+QSizeF DPdfPage::sizeF() const
 {
-    return d_func()->m_width_pt;
+    return d_func()->sizeF();
 }
 
-qreal DPdfPage::height() const
-{
-    return d_func()->m_height_pt;
-}
-
-int DPdfPage::pageIndex() const
+int DPdfPage::index() const
 {
     return d_func()->m_index;
 }
@@ -401,12 +433,14 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     d_func()->loadPage();
 
-    QImage image(slice.width(), slice.height(), QImage::Format_RGBA8888);
+    QImage image(slice.width(), slice.height(), QImage::Format_ARGB32);
 
     if (image.isNull())
         return QImage();
 
     image.fill(0xFFFFFFFF);
+
+    DPdfMutexLocker locker;
 
     FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(), FPDFBitmap_BGRA, image.scanLine(0), image.bytesPerLine());
 
@@ -442,26 +476,36 @@ QVector<QRectF> DPdfPage::getTextRects(int start, int charCount)
     d_func()->loadTextPage();
 
     QVector<QRectF> result;
+
     const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(start, charCount);
-    result.reserve(pdfiumRects.size());
+
+    result.reserve(static_cast<int>(pdfiumRects.size()));
+
     for (const CFX_FloatRect &rect : pdfiumRects) {
-        result.push_back({rect.left, height() - rect.top, rect.right - rect.left, rect.top - rect.bottom});
+        result.push_back(d_func()->transPointToPixel(QRectF(static_cast<qreal>(rect.left),
+                                                            d_func()->m_height_pt - static_cast<qreal>(rect.top),
+                                                            static_cast<qreal>(rect.right - rect.left),
+                                                            static_cast<qreal>(rect.top - rect.bottom))));
     }
+
     return result;
 }
 
-bool DPdfPage::getTextRect(int start, QRectF &textrect)
+bool DPdfPage::getTextRect(int index, QRectF &textrect)
 {
     d_func()->loadTextPage();
 
-    if (FPDFText_GetUnicode(d_func()->m_textPage, start) == L' ') {
+    if (FPDFText_GetUnicode(d_func()->m_textPage, index) == L' ') {
         textrect = QRectF();
         return true;
     }
 
     FS_RECTF rect;
-    if (FPDFText_GetLooseCharBox(d_func()->m_textPage, start, &rect)) {
-        textrect = QRectF(rect.left, height() - rect.top, rect.right - rect.left, rect.top - rect.bottom);
+    if (FPDFText_GetLooseCharBox(d_func()->m_textPage, index, &rect)) {
+        textrect = d_func()->transPointToPixel(QRectF(static_cast<qreal>(rect.left),
+                                                      d_func()->m_height_pt - static_cast<qreal>(rect.top),
+                                                      static_cast<qreal>(rect.right - rect.left),
+                                                      static_cast<qreal>(rect.top - rect.bottom)));
         return true;
     }
 
@@ -472,24 +516,34 @@ QString DPdfPage::text(const QRectF &rect)
 {
     d_func()->loadTextPage();
 
-    qreal newBottom = height() - rect.bottom();
-    qreal newTop = height() - rect.top();
-    CFX_FloatRect fxRect(rect.left(), std::min(newBottom, newTop), rect.right(), std::max(newBottom, newTop));
+    QRectF pointRect = d_func()->transPixelToPoint(rect);
+
+    qreal newBottom = d_func()->m_height_pt - pointRect.bottom();
+
+    qreal newTop = d_func()->m_height_pt - pointRect.top();
+
+    CFX_FloatRect fxRect(static_cast<float>(pointRect.left()), static_cast<float>(std::min(newBottom, newTop)),
+                         static_cast<float>(pointRect.right()), static_cast<float>(std::max(newBottom, newTop)));
+
     auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetTextByRect(fxRect);
-    return QString::fromWCharArray(text.c_str(), text.GetLength());
+
+    return QString::fromWCharArray(text.c_str(), static_cast<int>(text.GetLength()));
 }
 
-QString DPdfPage::text(int start, int charCount)
+QString DPdfPage::text(int index, int charCount)
 {
     d_func()->loadTextPage();
 
-    auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(start, charCount);
-    return QString::fromWCharArray(text.c_str(), text.GetLength());
+    auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(index, charCount);
+
+    return QString::fromWCharArray(text.c_str(), static_cast<int>(text.GetLength()));
 }
 
-DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
+DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
 {
     d_func()->loadPage();
+
+    QPointF pointPos = d_func()->transPixelToPoint(pos);
 
     FPDF_ANNOTATION_SUBTYPE subType = FPDF_ANNOT_TEXT;
 
@@ -500,7 +554,7 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
         return nullptr;
     }
 
-    FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(point.x() - 10, point.y() - 10, 20, 20));
+    FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(pointPos.x() - 10, pointPos.y() - 10, 20, 20));
 
     if (!FPDFAnnot_SetRect(annot, &fs_rect)) {
         FPDFPage_CloseAnnot(annot);
@@ -511,7 +565,8 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
 
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
-    dAnnot->setRectF(QRectF(point.x() - 10, point.y() - 10, 20, 20));
+    //此处使用pixel坐标
+    dAnnot->setRectF(QRectF(pos.x() - 10, pos.y() - 10, 20, 20));
 
     dAnnot->setText(text);
 
@@ -522,7 +577,7 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF point, QString text)
     return dAnnot;
 }
 
-bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point)
+bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
 {
     d_func()->loadPage();
 
@@ -539,17 +594,21 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point)
         FPDFPage_CloseAnnot(annot);
         return false;
     }
+
     textAnnot->setText(text);
 
-    if (!point.isNull()) {
-        FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(point.x() - 10, point.y() - 10, 20, 20));
+    if (!pos.isNull()) {
+        QPointF pointPos = d_func()->transPixelToPoint(pos);
+
+        FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(pointPos.x() - 10, pointPos.y() - 10, 20, 20));
 
         if (!FPDFAnnot_SetRect(annot, &fs_rect)) {
             FPDFPage_CloseAnnot(annot);
             return false;
         }
 
-        textAnnot->setRectF(QRectF(point.x() - 10, point.y() - 10, 20, 20));
+        //此处使用pixel坐标
+        textAnnot->setRectF(QRectF(pos.x() - 10, pos.y() - 10, 20, 20));
     }
 
     FPDFPage_CloseAnnot(annot);
@@ -559,7 +618,7 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF point)
     return true;
 }
 
-DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &list, QString text, QColor color)
+DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &rects, QString text, QColor color)
 {
     d_func()->loadPage();
 
@@ -576,16 +635,18 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &list, QString te
         return nullptr;
     }
 
-    for (const QRectF &rect : list) {
+    for (const QRectF &rect : rects) {
+        QRectF pointRect = d_func()->transPixelToPoint(rect);
+
         FS_QUADPOINTSF quad;
-        quad.x1 = static_cast<float>(rect.x());
-        quad.y1 = static_cast<float>(d_func()->m_height_pt - rect.y());
-        quad.x2 = static_cast<float>(rect.x() + rect.width());
-        quad.y2 = static_cast<float>(d_func()->m_height_pt - rect.y());
-        quad.x3 = static_cast<float>(rect.x());
-        quad.y3 = static_cast<float>(d_func()->m_height_pt - rect.y() - rect.height());
-        quad.x4 = static_cast<float>(rect.x() + rect.width());
-        quad.y4 = static_cast<float>(d_func()->m_height_pt - rect.y() - rect.height());
+        quad.x1 = static_cast<float>(pointRect.x());
+        quad.y1 = static_cast<float>(d_func()->m_height_pt - pointRect.y());
+        quad.x2 = static_cast<float>(pointRect.x() + pointRect.width());
+        quad.y2 = static_cast<float>(d_func()->m_height_pt - pointRect.y());
+        quad.x3 = static_cast<float>(pointRect.x());
+        quad.y3 = static_cast<float>(d_func()->m_height_pt - pointRect.y() - pointRect.height());
+        quad.x4 = static_cast<float>(pointRect.x() + pointRect.width());
+        quad.y4 = static_cast<float>(d_func()->m_height_pt - pointRect.y() - pointRect.height());
 
         if (!FPDFAnnot_AppendAttachmentPoints(annot, &quad))
             continue;
@@ -600,7 +661,7 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &list, QString te
 
     DPdfHightLightAnnot *dAnnot = new DPdfHightLightAnnot;
 
-    dAnnot->setBoundaries(list);
+    dAnnot->setBoundaries(rects);
 
     dAnnot->setColor(color);
 
@@ -677,6 +738,7 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
     d_func()->loadTextPage();
 
     QVector<QRectF> rectfs;
+
     unsigned long flags = 0x00000000;
 
     if (matchCase)
