@@ -212,18 +212,6 @@ public:
     bool getImage(int index, QImage &image, double width, double height, Qt::AspectRatioMode mode = Qt::IgnoreAspectRatio, bool bSrc = false);
 
     /**
-     * @brief openMagnifier
-     * 打开放大镜
-     */
-    void openMagnifier();
-
-    /**
-     * @brief closeMagnifier
-     * 关闭放大镜
-     */
-    void closeMagnifier();
-
-    /**
      * @brief magnifierOpened
      * 是否开启了放大镜
      * @return true:开启,false:未开启
@@ -436,6 +424,19 @@ public:
      * 全屏时隐藏注释提示框,并设置鼠标为指针样式
      */
     void hideSubTipsWidget();
+
+public slots:
+    /**
+     * @brief openMagnifier
+     * 打开放大镜
+     */
+    void openMagnifier();
+
+    /**
+     * @brief closeMagnifier
+     * 关闭放大镜
+     */
+    void closeMagnifier();
 
 signals:
     void sigPageChanged(int page);
