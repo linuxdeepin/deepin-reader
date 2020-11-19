@@ -35,6 +35,7 @@
 #include "widgets/EncryptionPage.h"
 #include "document/PDFModel.h"
 #include "DPrintPreviewDialog"
+#include "FileAttrWidget.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -1053,11 +1054,18 @@ void DocSheet::deadDeleteLater()
     DSplitter::deleteLater();
 }
 
-void DocSheet::popPrintDialog()
+void DocSheet::onPopPrintDialog()
 {
     QPrintPreviewDialog preview(this);
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
     preview.exec();
+}
+
+void DocSheet::onPopInfoDialog()
+{
+    FileAttrWidget pFileAttrWidget(this);
+    pFileAttrWidget.setFileAttr(this);
+    pFileAttrWidget.exec();
 }
 
 QSizeF DocSheet::pageSizeByIndex(int index)

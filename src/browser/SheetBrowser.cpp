@@ -1053,7 +1053,7 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
     if (m_pFindWidget)
         m_pFindWidget->showPosition(this->width());
 
-    if (magnifierOpened()){
+    if (magnifierOpened()) {
         QTimer::singleShot(1, this, SLOT(openMagnifier()));
     }
 
@@ -1211,11 +1211,9 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 } else if (objectname == "RotateRight") {
                     m_sheet->rotateRight();
                 } else if (objectname == "Print") {
-                    m_sheet->popPrintDialog();
+                    QTimer::singleShot(1, m_sheet, SLOT(onPopPrintDialog()));
                 } else if (objectname == "DocumentInfo") {
-                    FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
-                    pFileAttrWidget->setFileAttr(m_sheet);
-                    pFileAttrWidget->showScreenCenter();
+                    QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
                 }
             });
 
@@ -1592,8 +1590,7 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
-    }
-    else{
+    } else {
         m_magnifierLabel->raise();
         m_magnifierLabel->show();
     }
@@ -1895,12 +1892,10 @@ void SheetBrowser::showMenu()
             m_sheet->rotateLeft();
         } else if (objectname == "RotateRight") {
             m_sheet->rotateRight();
-        } else if (objectname == "Print") {
-            m_sheet->popPrintDialog();
+        }  else if (objectname == "Print") {
+            QTimer::singleShot(1, m_sheet, SLOT(onPopPrintDialog()));
         } else if (objectname == "DocumentInfo") {
-            FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
-            pFileAttrWidget->setFileAttr(m_sheet);
-            pFileAttrWidget->showScreenCenter();
+            QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
         }
     });
 

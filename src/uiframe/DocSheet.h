@@ -595,10 +595,13 @@ public:
      */
     void deadDeleteLater();
 
+public slots:
     /**
      * @brief 阻塞打印
      */
-    void popPrintDialog();
+    void onPopPrintDialog();
+
+    void onPopInfoDialog();
 
 private:
     /**

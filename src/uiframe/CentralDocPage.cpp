@@ -24,7 +24,6 @@
 #include "MainWindow.h"
 #include "SaveDialog.h"
 #include "SlideWidget.h"
-#include "FileAttrWidget.h"
 
 #include <DTitlebar>
 #include <DFileDialog>
@@ -42,6 +41,7 @@
 #include <QProcess>
 #include <QUuid>
 #include <QTimer>
+#include <QDebug>
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : CustomWidget(parent)
@@ -432,9 +432,9 @@ bool CentralDocPage::saveAsCurrent()
 
     if (Dr::PDF == sheet->fileType()) {
         QString saveFilePath;
-
         if (sFilter != "") {
-            QFileDialog dialog;
+            DFileDialog dialog(this);
+            dialog.setWindowModality(Qt::WindowModal);
             dialog.selectFile(sheet->filePath());
             saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
 
@@ -453,7 +453,8 @@ bool CentralDocPage::saveAsCurrent()
         QString saveFilePath;
 
         if (sFilter != "") {
-            QFileDialog dialog;
+            DFileDialog dialog(this);
+            dialog.setWindowModality(Qt::WindowModal);
             dialog.selectFile(sheet->filePath());
             saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
 
@@ -494,17 +495,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     return nullptr;
 }
 
-void CentralDocPage::showFileAttr()
-{
-    auto pFileAttrWidget = new FileAttrWidget;
-
-    pFileAttrWidget->setFileAttr(getCurSheet());
-
-    pFileAttrWidget->setAttribute(Qt::WA_DeleteOnClose);
-
-    pFileAttrWidget->showScreenCenter();
-}
-
 void CentralDocPage::handleShortcut(const QString &s)
 {
     if (s == Dr::key_esc && m_slideWidget) {
@@ -539,7 +529,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         openMagnifer();
     } else if (s == Dr::key_ctrl_p) {
         if (getCurSheet())
-            getCurSheet()->popPrintDialog();
+            QTimer::singleShot(1, getCurSheet(), SLOT(onPopPrintDialog()));
     } else if (s == Dr::key_alt_1) {
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeNormal);
@@ -547,9 +537,8 @@ void CentralDocPage::handleShortcut(const QString &s)
         if (getCurSheet())
             getCurSheet()->setMouseShape(Dr::MouseShapeHand);
     } else if (s == Dr::key_ctrl_1) {
-        if (getCurSheet()) {
+        if (getCurSheet())
             getCurSheet()->setScaleMode(Dr::FitToPageDefaultMode);
-        }
     } else if (s == Dr::key_ctrl_m) {
         if (getCurSheet())
             getCurSheet()->setSidebarVisible(true);
@@ -699,7 +688,7 @@ void CentralDocPage::onSheetCountChanged(int count)
             return;
 
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
-        QTimer::singleShot(5, [this](){
+        QTimer::singleShot(5, [this]() {
             m_pDocTabLabel->setText(m_pTabBar->tabText(0));
         });
         m_pTabBar->setVisible(false);
