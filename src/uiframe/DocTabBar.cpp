@@ -37,8 +37,8 @@ DocTabBar::DocTabBar(QWidget *parent)
     this->setEnabledEmbedStyle(true);//设置直角样式
 
     this->setExpanding(true);//设置平铺窗口模式
-
 #endif
+
     this->setTabsClosable(true);
 
     this->setMovable(true);

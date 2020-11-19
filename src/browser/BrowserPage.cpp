@@ -859,9 +859,6 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
 
         m_annotations.append(annot);
 
-        qDebug() << rect;
-        qDebug() << annot->boundary();
-
         foreach (const QRectF &arect, annot->boundary()) {
             BrowserAnnotation *annotationItem = new BrowserAnnotation(this, arect, annot, m_scaleFactor);
             m_annotationItems.append(annotationItem);

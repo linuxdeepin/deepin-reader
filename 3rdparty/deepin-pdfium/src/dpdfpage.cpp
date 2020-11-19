@@ -433,7 +433,7 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     d_func()->loadPage();
 
-    QImage image(slice.width(), slice.height(), QImage::Format_ARGB32);
+    QImage image(slice.width(), slice.height(), QImage::Format_RGBA8888);
 
     if (image.isNull())
         return QImage();

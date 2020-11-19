@@ -14,7 +14,7 @@ result_report_dir=$build_dir/report/report.xml
 
 #下面二选1进行操作，一种正向操作，一种逆向操作
 
-extract_info="*/deepin_reader/*"
+extract_info="*/deepin-reader/*"
 
 remove_info="*/test/*"
 
