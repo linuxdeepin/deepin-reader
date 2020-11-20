@@ -147,12 +147,12 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     //CentralDocPage
     sheet->setBookMark(0, !sheet->hasBookMark(0));
     EXPECT_FALSE(CentralDocPage1->firstThumbnail(path, "/home/samson/Desktop/1.png"));
-    EXPECT_FALSE(CentralDocPage1->saveCurrent());
-    EXPECT_NE(CentralDocPage1->getCurSheet(), sheet);
     EXPECT_FALSE(CentralDocPage1->isFullScreen());
     EXPECT_FALSE(CentralDocPage1->quitFullScreen());
     EXPECT_TRUE(CentralDocPage1->getTitleLabel());
 
+    CentralDocPage1->getCurSheet();
+    CentralDocPage1->saveCurrent();
     CentralDocPage1->openFile(path);
     CentralDocPage1->saveAll();
     CentralDocPage1->addSheet(nullptr);

@@ -51,7 +51,6 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     MainWindow *mainWindow_empty = MainWindow::createWindow();
     MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
 
-    EXPECT_EQ(mainWindow->hasSheet(nullptr), true);
     EXPECT_EQ(mainWindow_empty->hasSheet(nullptr), false);
     EXPECT_EQ(mainWindow_muti->hasSheet(sheet), false);
 
@@ -59,6 +58,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
     EXPECT_TRUE(mainWindow->windowContainSheet(sheet));
 
+    mainWindow->hasSheet(nullptr);
     mainWindow->updateOrderWidgets(QList<QWidget *>());
     mainWindow->activateSheet(sheet);
     mainWindow_muti->activateSheet(sheet);

@@ -5,17 +5,17 @@
 #include <QStandardPaths>
 #include <QCoreApplication>
 
-#define UT_FILE_TEST_FILE   QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/1.pdf")
+#define UT_FILE_TEST_FILE   QCoreApplication::applicationDirPath() + "/files/1.pdf"
 
-#define UT_FILE_TEST_FILE_2 QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/2.pdf")
+#define UT_FILE_TEST_FILE_2 QCoreApplication::applicationDirPath() + "/files/2.pdf"
 
-#define UT_FILE_TEST_FILE_3 QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/3.pdf")
+#define UT_FILE_TEST_FILE_3 QCoreApplication::applicationDirPath() + "/files/3.pdf"
 
-#define UT_FILE_TEST_FILE_4 QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/4.pdf")
+#define UT_FILE_TEST_FILE_4 QCoreApplication::applicationDirPath() + "/files/4.pdf"
 
-#define UT_FILE_TEST_FILE_5 QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/5_broken.pdf")
+#define UT_FILE_TEST_FILE_5 QCoreApplication::applicationDirPath() + "/files/5_broken.pdf"
 
-#define UT_FILE_TEST_FILE_6 QStandardPaths::writableLocation(QStandardPaths::DesktopLocation).append("/6_djvu.pdf")
+#define UT_FILE_TEST_FILE_6 QCoreApplication::applicationDirPath() + "/files/6_djvu.pdf"
 
 #define UT_FILE_TXT QCoreApplication::applicationDirPath() + "/files/1.txt"
 

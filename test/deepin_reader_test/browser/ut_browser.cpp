@@ -37,7 +37,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet2->openFileExec("");
 
-    EXPECT_FALSE(sheet->m_browser->isUnLocked());
+    EXPECT_TRUE(sheet->m_browser->isUnLocked());
 
     sheet->m_browser->loadPages(sheet->m_operation, sheet->m_bookmarks);
 

@@ -102,9 +102,8 @@ TEST_F(ut_app, UtilsTest)
     EXPECT_EQ(Utils::fileExists("/usr/bin"), false);
 
     QPixmap pixmap(UT_FILE_PNG);
-    EXPECT_EQ(Utils::dropShadow(pixmap, 0, Qt::red), QImage());
     EXPECT_EQ(Utils::dropShadow(QPixmap(), 0, Qt::red), QImage());
-    EXPECT_EQ(Utils::roundQPixmap(pixmap, 0).isNull(), true);
+    EXPECT_EQ(Utils::roundQPixmap(pixmap, 0).isNull(), false);
     EXPECT_EQ(Utils::roundQPixmap(QPixmap(), 0).isNull(), true);
 
     EXPECT_STREQ(Utils::getInputDataSize(0).toStdString().c_str(), "0 B");
@@ -113,7 +112,7 @@ TEST_F(ut_app, UtilsTest)
     EXPECT_STREQ(Utils::getInputDataSize(1024 * 1024 * 1024).toStdString().c_str(), "1.0 GB");
 
     EXPECT_EQ(Utils::getElidedText(QFontMetrics(QFont("Times", 10, QFont::Bold)), QSize(0, 0), "123", Qt::AlignCenter), "...");
-    EXPECT_EQ(Utils::copyFile(UT_FILE_TXT, UT_FILE_COPYTXT), false);
+    EXPECT_EQ(Utils::copyFile(UT_FILE_TXT, UT_FILE_COPYTXT), true);
     Utils::copyText("copyText");
 
     QImage image;
