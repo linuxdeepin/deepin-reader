@@ -430,7 +430,7 @@ bool CentralDocPage::saveAsCurrent()
         QString saveFilePath;
 
         if (sFilter != "") {
-            QFileDialog dialog;
+            DFileDialog dialog(this);
             dialog.selectFile(sheet->filePath());
             saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
 
@@ -449,7 +449,7 @@ bool CentralDocPage::saveAsCurrent()
         QString saveFilePath;
 
         if (sFilter != "") {
-            QFileDialog dialog;
+            DFileDialog dialog(this);
             dialog.selectFile(sheet->filePath());
             saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
 
@@ -704,7 +704,7 @@ void CentralDocPage::onSheetCountChanged(int count)
             return;
 
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
-        QTimer::singleShot(5, [this](){
+        QTimer::singleShot(5, [this]() {
             m_pDocTabLabel->setText(m_pTabBar->tabText(0));
         });
         m_pTabBar->setVisible(false);
