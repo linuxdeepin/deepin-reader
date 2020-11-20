@@ -31,6 +31,7 @@ void ut_app::TearDown()
 {
 }
 
+#ifdef UT_APP_TEST
 TEST_F(ut_app, DatabaseTest)
 {
     Database::instance()->prepareBookmark();
@@ -126,3 +127,4 @@ TEST_F(ut_app, UtilsTest)
     EXPECT_EQ(Utils::isWayland(), false);
     EXPECT_EQ(Utils::getUuid().isEmpty(), false);
 }
+#endif

@@ -38,6 +38,8 @@
 #include "sidebar/catalog/CatalogWidget.h"
 #include "sidebar/catalog/CatalogTreeView.h"
 #include "sidebar/note/TransparentTextEdit.h"
+#include "sidebar/thumbnail/PagingWidget.h"
+#include "sidebar/ImageViewModel.h"
 
 #include "menu/BookMarkMenu.h"
 #include "menu/NoteMenu.h"
@@ -71,6 +73,8 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     QString path = UT_FILE_TEST_FILE;
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
     ASSERT_TRUE(mainWindow->m_central);
+    mainWindow->showDefaultSize();
+    mainWindow->show();
 
     CentralDocPage *docpage = mainWindow->m_central->docPage();
     //Central
@@ -79,7 +83,11 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     DocSheet *sheet = docpage->getSheet(path);
     ASSERT_TRUE(sheet);
 
+    sheet->setSidebarVisible(true);
+    sheet->m_sidebar->onBtnClicked(2);
+
     SheetSidebar sideBar(sheet, PreviewWidgesFlag::PREVIEW_THUMBNAIL | PreviewWidgesFlag::PREVIEW_CATALOG | PreviewWidgesFlag::PREVIEW_BOOKMARK | PreviewWidgesFlag::PREVIEW_NOTE);
+    sideBar.show();
     sideBar.resize(200, 600);
     DToolButton *btn = sideBar.createBtn("test", "test");
     EXPECT_TRUE(btn);
@@ -110,9 +118,9 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     sideBar.handleUpdatePartThumbnail(-1);
     sideBar.handleUpdatePartThumbnail(10000);
 
-    sideBar.handleAnntationMsg(0, -1, 0);
-    sideBar.handleAnntationMsg(1, -1, 0);
-    sideBar.handleAnntationMsg(2, -1, 0);
+    sideBar.handleAnntationMsg(0, -1, nullptr);
+    sideBar.handleAnntationMsg(1, -1, nullptr);
+    sideBar.handleAnntationMsg(2, -1, nullptr);
 
     sideBar.adaptWindowSize(1.0);
     sideBar.onBtnClicked(0);
@@ -125,11 +133,13 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     sideBar.dealWithPressKey(Dr::key_down);
     sideBar.dealWithPressKey(Dr::key_delete);
     sideBar.onJumpToPrevPage();
-    sideBar.onJumpToNextPage();
+    sideBar.onJumpToPageDown();
+    sideBar.onJumpToPageUp();
     sideBar.deleteItemByKey();
+    sideBar.onJumpToNextPage();
 
-    QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&sideBar, &sidekeyLevent);
+    QResizeEvent sidebarresizeEvent(QSize(100, 400), QSize(100, 600));
+    QCoreApplication::sendEvent(&sideBar, &sidebarresizeEvent);
 
     QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
     QCoreApplication::sendEvent(&sideBar, &sideekeyRevent);
@@ -139,8 +149,10 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
 
     //ThumbnailWidget
     ThumbnailWidget thumbnailWidget(sheet);
+    thumbnailWidget.show();
     thumbnailWidget.handleOpenSuccess();
     thumbnailWidget.handleOpenSuccess();
+    thumbnailWidget.m_pImageListView->scrollToIndex(0);
     thumbnailWidget.handlePage(-1);
     thumbnailWidget.handlePage(0);
     thumbnailWidget.handlePage(100000);
@@ -155,12 +167,34 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
 
     thumbnailWidget.prevPage();
     thumbnailWidget.nextPage();
+    thumbnailWidget.pageDown();
+    thumbnailWidget.pageUp();
 
     thumbnailWidget.adaptWindowSize(1.0);
     thumbnailWidget.updateThumbnail(-1);
     thumbnailWidget.updateThumbnail(0);
     thumbnailWidget.updateThumbnail(10000);
     thumbnailWidget.scrollToCurrentPage();
+    thumbnailWidget.repaint();
+
+    QList<QWidget *> tabWidgetlst;
+    thumbnailWidget.setTabOrderWidget(tabWidgetlst);
+
+    thumbnailWidget.m_pPageWidget->slotUpdateTheme();
+    thumbnailWidget.m_pPageWidget->onEditFinished();
+    thumbnailWidget.m_pPageWidget->normalChangePage();
+    thumbnailWidget.m_pPageWidget->pageNumberJump();
+    thumbnailWidget.m_pPageWidget->slotPrePageBtnClicked();
+    thumbnailWidget.m_pPageWidget->slotNextPageBtnClicked();
+    thumbnailWidget.m_pPageWidget->setTabOrderWidget(tabWidgetlst);
+    thumbnailWidget.m_pPageWidget->SlotJumpPageLineEditReturnPressed();
+    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
+    thumbnailWidget.m_pPageWidget->setIndex(0);
+    thumbnailWidget.m_pPageWidget->setBtnState(0, sheet->pagesNumber());
+
+    thumbnailWidget.m_pImageListView->onSetThumbnailListSlideGesture();
+    thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();
+    thumbnailWidget.m_pImageListView->model()->setData(QModelIndex(), "123", Qt::UserRole);
 
     thumbnailWidget.m_sheet = nullptr;
     thumbnailWidget.prevPage();
@@ -175,9 +209,16 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     catalogWidget.handlePage(10000);
     catalogWidget.handlePage(-1);
     catalogWidget.setTitleTheme();
+    catalogWidget.nextPage();
+    catalogWidget.prevPage();
     catalogWidget.m_strTheme = "Test";
     catalogWidget.m_sheet = nullptr;
     catalogWidget.handleOpenSuccess();
+    catalogWidget.pageUp();
+    catalogWidget.pageDown();
+
+    QResizeEvent resizeEvent(QSize(100, 400), QSize(100, 600));
+    QCoreApplication::sendEvent(&catalogWidget, &resizeEvent);
 
     EXPECT_TRUE(catalogWidget.m_pTree);
     catalogWidget.m_pTree->slotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
@@ -186,9 +227,20 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
     QMouseEvent mouseevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(catalogWidget.m_pTree, &mouseevent);
+
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
     QCoreApplication::sendEvent(catalogWidget.m_pTree, &keyevent);
+
     catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
+
+    QCoreApplication::sendEvent(catalogWidget.m_pTree, &resizeEvent);
+
+    catalogWidget.m_pTree->pageDownPage();
+    catalogWidget.m_pTree->prevPage();
+    catalogWidget.m_pTree->nextPage();
+    catalogWidget.m_pTree->pageUpPage();
+    catalogWidget.m_pTree->scrollToIndex(catalogWidget.m_pTree->indexAt(QPoint(0, 0)));
+
     catalogWidget.m_pTree->m_sheet = nullptr;
     catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
     catalogWidget.m_pTree->handleOpenSuccess();
@@ -211,8 +263,12 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     bookwidget.onAddBookMarkClicked();
     bookwidget.onListMenuClick(E_BOOKMARK_DELETE);
     bookwidget.deleteAllItem();
+    bookwidget.pageUp();
+    bookwidget.pageDown();
+    bookwidget.setTabOrderWidget(tabWidgetlst);
     bookwidget.m_sheet = nullptr;
     bookwidget.prevPage();
+    bookwidget.addBtnCheckEnter();
 
     //NotesWidget
     NotesWidget noteWidget(sheet);
@@ -220,10 +276,10 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     noteWidget.nextPage();
     noteWidget.deleteItemByKey();
     noteWidget.handleOpenSuccess();
-    noteWidget.handleAnntationMsg(-1, 0);
-    noteWidget.handleAnntationMsg(0, 0);
-    noteWidget.handleAnntationMsg(1, 0);
-    noteWidget.handleAnntationMsg(2, 0);
+    noteWidget.handleAnntationMsg(-1, nullptr);
+    noteWidget.handleAnntationMsg(0, nullptr);
+    noteWidget.handleAnntationMsg(1, nullptr);
+    noteWidget.handleAnntationMsg(2, nullptr);
     noteWidget.adaptWindowSize(1.0);
     noteWidget.updateThumbnail(-1);
     noteWidget.updateThumbnail(100000);
@@ -236,13 +292,19 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     noteWidget.onListItemClicked(10000);
     noteWidget.onAddAnnotation();
     noteWidget.copyNoteContent();
-    noteWidget.addNoteItem(0);
-    noteWidget.deleteNoteItem(0);
+    noteWidget.addNoteItem(nullptr);
+    noteWidget.deleteNoteItem(nullptr);
     noteWidget.deleteAllItem();
     noteWidget.m_sheet = nullptr;
     noteWidget.prevPage();
     noteWidget.nextPage();
     noteWidget.handleOpenSuccess();
+    noteWidget.pageUp();
+    noteWidget.pageDown();
+    noteWidget.addBtnCheckEnter();
+    noteWidget.setTabOrderWidget(tabWidgetlst);
+    noteWidget.m_pImageListView = nullptr;
+    noteWidget.showMenu();
 
     //SearchResWidget
     SearchResWidget searchWidget(sheet);
@@ -280,7 +342,15 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     QCoreApplication::sendEvent(searchWidget.m_pImageListView, &mouserevent);
 
     sheet->saveData();
-    mainWindow->close();
+
+    ImagePageInfo_t imageInfo1(1);
+    ImagePageInfo_t imageInfo2(2);
+    ImagePageInfo_t imageInfo3(imageInfo1);
+
+    EXPECT_FALSE(imageInfo1 == imageInfo2);
+    EXPECT_TRUE(imageInfo1 == imageInfo3);
+    EXPECT_TRUE(imageInfo1 < imageInfo2);
+    EXPECT_FALSE(imageInfo1 > imageInfo2);
 }
 
 TEST(Ut_BookMarkMenu, BookMarkMenuTest)
@@ -301,6 +371,7 @@ TEST(Ut_NoteMenu, NoteMenuTest)
 TEST(Ut_TransparentTextEdit, TransparentTextEditTest)
 {
     TransparentTextEdit textedit;
+    textedit.show();
     textedit.slotTextEditMaxContantNum();
     textedit.m_nMaxContantLen = 10;
     textedit.setText("1111111111111111111111111111111111");
@@ -308,16 +379,26 @@ TEST(Ut_TransparentTextEdit, TransparentTextEditTest)
     textedit.update();
     QClipboard *data = DApplication::clipboard();
     textedit.insertFromMimeData(data->mimeData());
+    textedit.repaint();
+
+    QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_N, Qt::AltModifier);
+    QCoreApplication::sendEvent(&textedit, &keyevent);
 }
 
 TEST(Ut_NoteViewWidget, NoteViewWidgetTest)
 {
     NoteShadowViewWidget shadowView(nullptr);
-    NoteViewWidget noteviewWidget(&shadowView);
     shadowView.showWidget(QPoint(0, 0));
+    shadowView.getNoteViewWidget()->setEditText("const QString & note");
+    shadowView.getNoteViewWidget()->setEditText("");
+    shadowView.getNoteViewWidget()->setAnnotation(nullptr);
+    shadowView.getNoteViewWidget()->onBlurWindowChanged();
+    shadowView.getNoteViewWidget()->repaint();
 
-    noteviewWidget.setEditText("const QString & note");
-    noteviewWidget.setEditText("");
-    noteviewWidget.setAnnotation(0);
+    QHideEvent hideEvent;
+    QCoreApplication::sendEvent(&shadowView, &hideEvent);
+
+    shadowView.getNoteViewWidget()->hide();
+    shadowView.getNoteViewWidget()->onShowMenu();
 }
 #endif

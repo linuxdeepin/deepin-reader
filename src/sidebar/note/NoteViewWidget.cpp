@@ -74,23 +74,24 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
 
-    connect(dApp, &Application::sigShowAnnotTextWidget, this, [ = ] {
-        if (this->isVisible() && m_pTextEdit)
-        {
-            QMenu *menu =  m_pTextEdit->createStandardContextMenu();
-
-            if (menu) {
-                menu->exec(QCursor::pos());
-                delete  menu;
-                menu = nullptr;
-            }
-        }
-    });
+    connect(dApp, &Application::sigShowAnnotTextWidget, this, &NoteViewWidget::onShowMenu);
 }
 
 NoteViewWidget::~NoteViewWidget()
 {
 
+}
+
+void NoteViewWidget::onShowMenu()
+{
+    if (this->isVisible() && m_pTextEdit) {
+        QMenu *menu =  m_pTextEdit->createStandardContextMenu();
+        if (menu) {
+            menu->exec(QCursor::pos());
+            delete  menu;
+            menu = nullptr;
+        }
+    }
 }
 
 void NoteViewWidget::setEditText(const QString &note)

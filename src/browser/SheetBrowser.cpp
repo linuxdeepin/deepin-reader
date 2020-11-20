@@ -237,10 +237,8 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         if (item->pageSize().height() > m_maxHeight)
             m_maxHeight = item->pageSize().height();
-    }
 
-    for (int i = 0; i < m_items.count(); ++i) {
-        scene()->addItem(m_items[i]);
+        scene()->addItem(item);
     }
 
     setMouseShape(operation.mouseShape);

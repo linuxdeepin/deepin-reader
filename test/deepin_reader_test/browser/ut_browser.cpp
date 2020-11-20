@@ -10,6 +10,7 @@
 #include "CentralDocPage.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
+#include "sidebar/SheetSidebar.h"
 
 #undef private
 #undef protected
@@ -27,11 +28,15 @@ void ut_browser::TearDown()
 {
 }
 
+#ifdef UT_BROWSER_TEST
 TEST_F(ut_browser, SheetBrowserTest)
 {
     MainWindow *window = MainWindow::createWindow(QStringList() << UT_FILE_PDF);
 
     DocSheet *sheet = window->m_central->m_docPage->getSheet(UT_FILE_PDF);
+    EXPECT_TRUE(sheet);
+    sheet->setSidebarVisible(true);
+    sheet->m_sidebar->onBtnClicked(1);
 
     DocSheet *sheet2 = new DocSheet(Dr::PDF, UT_FILE_PDF);
 
@@ -49,4 +54,4 @@ TEST_F(ut_browser, SheetBrowserTest)
 
 
 }
-
+#endif

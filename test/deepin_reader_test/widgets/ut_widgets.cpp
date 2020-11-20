@@ -49,6 +49,8 @@
 #include "widgets/TipsWidget.h"
 #include "widgets/WordWrapLabel.h"
 #include "widgets/FileAttrWidget.h"
+
+#include "sidebar/SheetSidebar.h"
 #undef private
 
 #include "Central.h"
@@ -80,6 +82,9 @@ TEST(Ut_Widgets, SheetWidgetTest)
 
     DocSheet *sheet = docpage->getSheet(path);
     ASSERT_TRUE(sheet);
+    sheet->setSidebarVisible(true);
+    sheet->m_sidebar->onBtnClicked(4);
+    sheet->handleFindContent("12");
 
     //ScaleMenu
     {
@@ -116,14 +121,13 @@ TEST(Ut_Widgets, SheetWidgetTest)
         filewidget->resize(600, 600);
         filewidget->showScreenCenter();
 
-        QPaintEvent paintevent(QRect(0, 0, 600, 600));
-        QCoreApplication::sendEvent(reinterpret_cast<QObject *>(filewidget->frameImage), &paintevent);
+        filewidget->repaint();
 
         delete filewidget;
     }
 
-    //PrintManager
-    //PrintManager printManager(sheet);
+//    //PrintManager
+//    //PrintManager printManager(sheet);
 
     //SlideWidget
     {
@@ -160,8 +164,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
         QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
         QCoreApplication::sendEvent(slidewidget, &mouseLPevent);
 
-        QPaintEvent paintevent(QRect(0, 0, 600, 400));
-        QCoreApplication::sendEvent(slidewidget, &paintevent);
+        slidewidget->repaint();
 
         delete slidewidget;
     }
@@ -241,7 +244,7 @@ TEST(Ut_Widgets, CustomMenuTest)
 {
     CustomMenu *menu = new CustomMenu();
     menu->resize(200, 100);
-    EXPECT_TRUE(menu->createAction("test", "sigClickAction", true));
+    EXPECT_TRUE(menu->createAction("test", "", true));
     menu->show();
     delete menu;
 }
@@ -287,8 +290,7 @@ TEST(Ut_Widgets, RoundColorWidgetTest)
     QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(&roundColorWidget, &mouseLPevent);
 
-    QPaintEvent paintevent(QRect(0, 0, 600, 600));
-    QCoreApplication::sendEvent(&roundColorWidget, &paintevent);
+    roundColorWidget.repaint();
 }
 
 TEST(Ut_Widgets, ShortCutShowTest)
@@ -351,8 +353,7 @@ TEST(Ut_Widgets, TipsWidgetTest)
     tipsWidget.onUpdateTheme();
     tipsWidget.onTimeOut();
 
-    QPaintEvent paintevent(QRect(0, 0, 200, 100));
-    QCoreApplication::sendEvent(&tipsWidget, &paintevent);
+    tipsWidget.repaint();
 
     QHideEvent hideEvent;
     QCoreApplication::sendEvent(&tipsWidget, &hideEvent);
@@ -371,7 +372,6 @@ TEST(Ut_Widgets, WordWrapLabelTest)
     wordLabel.setMargin(0);
     wordLabel.adjustContent();
 
-    QPaintEvent paintevent(QRect(0, 0, 200, 100));
-    QCoreApplication::sendEvent(&wordLabel, &paintevent);
+    wordLabel.repaint();
 }
 #endif

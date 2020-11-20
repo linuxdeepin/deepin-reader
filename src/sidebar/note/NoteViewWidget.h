@@ -96,6 +96,9 @@ public slots:
      */
     void onBlurWindowChanged();
 
+private slots:
+    void onShowMenu();
+
 protected:
     /**
      * @brief initWidget

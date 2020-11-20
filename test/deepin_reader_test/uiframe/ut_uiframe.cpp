@@ -83,6 +83,25 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     DocSheet *sheet2 = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_2);
     ASSERT_TRUE(sheet2);
 
+    DocSheet *sheet3 = CentralDocPage2->getSheet(UT_FILE_TEST_FILE_5);
+    ASSERT_TRUE(sheet3);
+    sheet3->setSidebarVisible(true);
+    sheet3->m_sidebar->onBtnClicked(1);
+
+    DocSheet *sheet4 = CentralDocPage2->getSheet(UT_FILE_TEST_FILE_4);
+    ASSERT_TRUE(sheet4);
+    sheet4->setSidebarVisible(true);
+    sheet4->m_sidebar->onBtnClicked(3);
+
+    DocSheet *sheet5 = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_3);
+    ASSERT_TRUE(sheet5);
+    sheet5->setSidebarVisible(true);
+    sheet5->m_sidebar->onBtnClicked(2);
+
+    sheet2->setSidebarVisible(true);
+    sheet2->m_sidebar->onBtnClicked(4);
+    sheet2->handleFindContent("1");
+
     CentralDocPage1->m_pTabBar->resize(600, 40);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::IgnoreAction);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::CopyAction);
@@ -143,6 +162,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(mainWindow1->m_central->hasSheet(sheet));
     EXPECT_TRUE(mainWindow1->m_central->saveAll());
     sheet->saveAsData(path);
+    sheet->setSidebarVisible(true);
+    sheet->m_sidebar->onBtnClicked(3);
 
     //CentralDocPage
     sheet->setBookMark(0, !sheet->hasBookMark(0));
@@ -414,7 +435,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->onBrowserOperaAnnotation(0, 0, nullptr);
     sheet->onBrowserOperaAnnotation(1, 0, nullptr);
     sheet->onBrowserOperaAnnotation(2, 0, nullptr);
-    sheet->onExtractPassword("123");
 
     sheet->saveData();
 

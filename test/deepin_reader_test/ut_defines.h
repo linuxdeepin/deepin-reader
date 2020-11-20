@@ -55,4 +55,10 @@
 
 #define UT_SHEETSIDEBAR_TEST
 
+#define UT_BROWSER_TEST
+
+#define UT_APP_TEST
+
+#define UT_APPLICATION_TEST
+
 #endif // UT_DEFINES_TEST_H

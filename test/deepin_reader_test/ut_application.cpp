@@ -41,9 +41,11 @@ void Ut_Application::TearDown()
 {
 }
 
+#ifdef UT_APPLICATION_TEST
 TEST_F(Ut_Application, MainWindowTest)
 {
     dApp->showAnnotTextWidgetSig();
     dApp->handleFiles(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
     dApp->quit();
 }
+#endif
