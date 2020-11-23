@@ -19,7 +19,7 @@
 #include "MainWindow.h"
 #include "PageRenderThread.h"
 #include "DocSheet.h"
-#include "widgets/SaveDialog.h"
+#include "SaveDialog.h"
 
 #include <QIcon>
 #include <QDebug>

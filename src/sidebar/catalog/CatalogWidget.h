@@ -21,7 +21,7 @@
 #ifndef PDFCONTROL_CATALOGWIDGET_H
 #define PDFCONTROL_CATALOGWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <DLabel>
 
@@ -32,7 +32,7 @@ class CatalogTreeView;
  */
 
 class DocSheet;
-class CatalogWidget : public CustomWidget
+class CatalogWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CatalogWidget)
@@ -91,7 +91,7 @@ protected:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() override;
+    void initWidget();
 
 protected:
     /**

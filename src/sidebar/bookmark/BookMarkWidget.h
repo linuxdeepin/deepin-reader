@@ -21,18 +21,18 @@
 #ifndef BOOKMARKFORM_H
 #define BOOKMARKFORM_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QPointer>
 
 class DocSheet;
-class ImageListView;
+class SideBarImageListView;
 
 /**
  * @brief The BookMarkWidget class
  * 书签目录控件类
  */
-class BookMarkWidget : public CustomWidget
+class BookMarkWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(BookMarkWidget)
@@ -111,7 +111,7 @@ public:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget();
 
     /**
      * @brief adaptWindowSize
@@ -129,7 +129,7 @@ public:
      * @brief showMenu
      * 显示菜单
      */
-    void showMenu() Q_DECL_OVERRIDE;
+    void showMenu();
 
 private slots:
     /**
@@ -161,7 +161,7 @@ private:
 private:
     QPointer<DocSheet> m_sheet;
     DPushButton       *m_pAddBookMarkBtn = nullptr;
-    ImageListView     *m_pImageListView = nullptr;
+    SideBarImageListView     *m_pImageListView = nullptr;
 };
 
 #endif  // BOOKMARKFORM_H

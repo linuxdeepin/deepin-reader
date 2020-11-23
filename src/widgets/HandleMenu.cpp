@@ -22,7 +22,7 @@
 #include "DocSheet.h"
 
 HandleMenu::HandleMenu(DWidget *parent)
-    : CustomMenu(parent)
+    : DMenu(parent)
 {
     initActions();
 }

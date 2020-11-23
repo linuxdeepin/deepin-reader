@@ -137,6 +137,7 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     sideBar.onJumpToPageUp();
     sideBar.deleteItemByKey();
     sideBar.onJumpToNextPage();
+    sideBar.showMenu();
 
     QResizeEvent sidebarresizeEvent(QSize(100, 400), QSize(100, 600));
     QCoreApplication::sendEvent(&sideBar, &sidebarresizeEvent);

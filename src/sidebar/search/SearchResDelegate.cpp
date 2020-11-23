@@ -18,8 +18,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SearchResDelegate.h"
-#include "sidebar/ImageViewModel.h"
+#include "SideBarImageViewModel.h"
 #include "Utils.h"
+#include "Application.h"
 
 #include <DGuiApplicationHelper>
 

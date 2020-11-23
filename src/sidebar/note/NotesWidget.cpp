@@ -18,12 +18,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "NotesWidget.h"
-#include "sidebar/ImageListview.h"
-#include "sidebar/ImageViewModel.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
 #include "NotesDelegate.h"
-#include "widgets/SaveDialog.h"
+#include "SaveDialog.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
+#include "Utils.h"
 
 #include <DPushButton>
 #include <DHorizontalLine>
@@ -33,7 +34,7 @@
 const int LEFTMINHEIGHT = 80;
 
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent), m_sheet(sheet)
+    : BaseWidget(parent), m_sheet(sheet)
 {
     initWidget();
 }
@@ -50,7 +51,7 @@ void NotesWidget::initWidget()
     pVLayout->setSpacing(0);
     this->setLayout(pVLayout);
 
-    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_NOTE);
     NotesDelegate *imageDelegate = new NotesDelegate(m_pImageListView);

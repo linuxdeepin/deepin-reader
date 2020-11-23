@@ -19,13 +19,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "TitleMenu.h"
-#include "widgets/HandleMenu.h"
+#include "HandleMenu.h"
 #include "DocSheet.h"
 
 #include <QSignalMapper>
 
 TitleMenu::TitleMenu(DWidget *parent)
-    : CustomMenu(parent)
+    : DMenu(parent)
 {
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SIGNAL(sigActionTriggered(const QString &)));

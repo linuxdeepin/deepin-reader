@@ -20,20 +20,20 @@
 #ifndef SEARCHRESWIDGET_H
 #define SEARCHRESWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 namespace deepin_reader {
 struct SearchResult;
 }
 class DocSheet;
-class ImageListView;
+class SideBarImageListView;
 class QStackedLayout;
 
 /**
  * @brief The SearchResWidget class
  * 搜索目录控件
  */
-class SearchResWidget : public CustomWidget
+class SearchResWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SearchResWidget)
@@ -86,7 +86,7 @@ protected:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget();
 
 private:
     /**
@@ -102,7 +102,7 @@ private:
     DocSheet *m_sheet = nullptr;
     QString m_searchKey;
     QStackedLayout *m_stackLayout = nullptr;
-    ImageListView *m_pImageListView = nullptr;
+    SideBarImageListView *m_pImageListView = nullptr;
 };
 
 #endif  // NOTESFORM_H

@@ -27,6 +27,7 @@
 
 class BrowserPage;
 class SheetBrowser;
+
 typedef struct MagnifierInfo_t {
     QObject *target = nullptr;
     QString slotFun = "";
@@ -38,8 +39,7 @@ typedef struct MagnifierInfo_t {
 Q_DECLARE_METATYPE(MagnifierInfo_t)
 
 /**
- * @brief The ReadMagnifierManager class
- * 放大镜任务线程
+ * @brief 放大镜任务线程
  */
 class ReadMagnifierManager: public QThread
 {
@@ -69,8 +69,7 @@ private:
 };
 
 /**
- * @brief The BrowserMagniFier class
- * 放大镜控件
+ * @brief 放大镜控件
  */
 class BrowserMagniFier : public QLabel
 {
@@ -80,8 +79,7 @@ public:
     BrowserMagniFier(QWidget *parent);
 
     /**
-     * @brief showMagnigierImage
-     * 显示放大区域的图片
+     * @brief 显示放大区域的图片
      * @param viewPoint
      * @param magnifierPos
      * @param scaleFactor
@@ -89,23 +87,20 @@ public:
     void showMagnigierImage(QPoint viewPoint, QPoint magnifierPos, double scaleFactor);
 
     /**
-     * @brief updateImage
-     * 更新显示的图片
+     * @brief 更新显示的图片
      */
     void updateImage();
 
 private:
     /**
-     * @brief setMagniFierImage
-     * 设置要显示的图片
+     * @brief 设置要显示的图片
      * @param image
      */
     void setMagniFierImage(const QImage &image);
 
 private slots:
     /**
-     * @brief onUpdateMagnifierImage
-     * 更新放大镜区域内的图片
+     * @brief 更新放大镜区域内的图片
      * @param task
      * @param image
      */

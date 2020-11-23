@@ -21,7 +21,7 @@
 #ifndef PAGINGWIDGET_H
 #define PAGINGWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <DIconButton>
 #include <DLineEdit>
@@ -33,7 +33,7 @@ class DocSheet;
  * @brief The PagingWidget class
  * 缩略图目录底部控件
  */
-class PagingWidget : public CustomWidget
+class PagingWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(PagingWidget)
@@ -98,7 +98,7 @@ private:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() override;
+    void initWidget();
 
     /**
      * @brief setBtnState

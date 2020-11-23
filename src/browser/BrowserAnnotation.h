@@ -21,12 +21,10 @@
 #ifndef BrowserAnnotation_H
 #define BrowserAnnotation_H
 
-#include "document/Model.h"
+#include "Model.h"
 
 #include <QGraphicsItem>
 #include <QRectF>
-
-const int ICON_SIZE = 23;
 
 class BrowserPage;
 

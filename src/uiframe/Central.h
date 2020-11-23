@@ -29,7 +29,7 @@
 #ifndef CENTRAL_H
 #define CENTRAL_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QDragEnterEvent>
 
@@ -41,10 +41,10 @@ class DocSheet;
 class QStackedLayout;
 
 /**
- * @brief The CustomWidget class
+ * @brief The BaseWidget class
  * 嵌入mainwindow的中心控件
  */
-class Central : public CustomWidget
+class Central : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(Central)

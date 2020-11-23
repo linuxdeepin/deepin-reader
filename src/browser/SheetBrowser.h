@@ -21,9 +21,8 @@
 #ifndef SheetBrowser_H
 #define SheetBrowser_H
 
-#include "document/Model.h"
+#include "Model.h"
 #include "Global.h"
-#include "BrowserWord.h"
 
 #include <DGraphicsView>
 
@@ -43,8 +42,6 @@
 #include <QDragEnterEvent>
 #include <QBasicTimer>
 
-#include <math.h>
-
 #define CELL_TIME   15
 #define TAP_MOVE_DELAY 300
 
@@ -61,6 +58,7 @@ class BrowserMagniFier;
 class FindWidget;
 class PageSearchThread;
 class QScroller;
+class BrowserWord;
 
 /**
  * @brief 浏览文档内容区域,使用视图框架

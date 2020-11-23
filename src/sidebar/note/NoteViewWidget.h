@@ -19,7 +19,7 @@
 #ifndef NOTEVIEWWIDGET_H
 #define NOTEVIEWWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QTimer>
 
@@ -33,7 +33,7 @@ class TransparentTextEdit;
  * @brief The NoteViewWidget class
  * 注释编辑框
  */
-class NoteViewWidget : public CustomWidget
+class NoteViewWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(NoteViewWidget)
@@ -104,7 +104,7 @@ protected:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() override;
+    void initWidget();
 
     /**
      * @brief hideEvent

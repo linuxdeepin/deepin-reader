@@ -32,10 +32,12 @@
 #include "Database.h"
 #include "CentralDocPage.h"
 #include "MsgHeader.h"
-#include "widgets/EncryptionPage.h"
-#include "document/PDFModel.h"
+#include "EncryptionPage.h"
+#include "PDFModel.h"
 #include "DPrintPreviewDialog"
 #include "FileAttrWidget.h"
+#include "Application.h"
+#include "Utils.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>

@@ -21,7 +21,7 @@
 #ifndef BrowserWord_H
 #define BrowserWord_H
 
-#include "document/Model.h"
+#include "Model.h"
 
 #include <QGraphicsItem>
 #include <QRectF>

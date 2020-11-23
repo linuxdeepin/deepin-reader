@@ -29,7 +29,7 @@
 #include <QMetaObject>
 #include <QPainterPath>
 
-ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread (parent)
+ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread(parent)
 {
     m_parent = parent;
 }
@@ -131,7 +131,7 @@ void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const
 
 void BrowserMagniFier::setMagniFierImage(const QImage &image)
 {
-    QPixmap pix(this->width() * dApp->devicePixelRatio(), this->height() * dApp->devicePixelRatio());
+    QPixmap pix(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
     pix.setDevicePixelRatio(dApp->devicePixelRatio());
     pix.fill(Qt::transparent);
 
@@ -142,7 +142,7 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
     clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
     painter.setClipPath(clippath);
     if (!image.isNull()) {
-        painter.drawImage(0, 0, image.scaled(240 * dApp->devicePixelRatio(), 240 * dApp->devicePixelRatio(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        painter.drawImage(0, 0, image.scaled(static_cast<int>(240 * dApp->devicePixelRatio()), static_cast<int>(240 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         painter.fillRect(this->rect(), Qt::white);
     }

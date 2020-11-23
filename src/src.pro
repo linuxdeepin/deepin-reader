@@ -15,19 +15,12 @@ DEFINES += PERF_ON
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 
 INCLUDEPATH += $$SRCPWD/uiframe
+INCLUDEPATH += $$SRCPWD/widgets
+INCLUDEPATH += $$SRCPWD/sidebar
+INCLUDEPATH += $$SRCPWD/browser
+INCLUDEPATH += $$SRCPWD/document
 
 LIBS += -lopenjp2 -llcms2 -lfreetype
-
-#由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
-CONFIG(release, debug|release) {
-INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
-LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium
-}
-
-CONFIG(debug, debug|release) {
-INCLUDEPATH += $$PWD/../3rdparty/deepdf/include
-LIBS += -L$$PWD/../3rdparty/deepdf/lib -ldeepdf
-}
 
 QMAKE_CXXFLAGS += -fPIE
 
@@ -66,11 +59,9 @@ HEADERS +=\
     $$SRCPWD/uiframe/DocTabBar.h \
     $$SRCPWD/uiframe/DocSheet.h
 
-RESOURCES +=         \
-    $$SRCPWD/../resources/resources.qrc
+RESOURCES    += $$SRCPWD/../resources/resources.qrc
 
-TRANSLATIONS += \
-    $$SRCPWD/../translations/deepin-reader.ts
+TRANSLATIONS += $$SRCPWD/../translations/deepin-reader.ts
 
 target.path   = /usr/bin
 
@@ -82,7 +73,16 @@ icon.files = $$SRCPWD/deepin-reader.svg
 
 INSTALLS += target desktop icon
 
+#由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
+CONFIG(debug, debug|release) {
+    INCLUDEPATH += $$PWD/../3rdparty/deepdf/include
+    LIBS += -L$$PWD/../3rdparty/deepdf/lib -ldeepdf
+}
+
 CONFIG(release, debug|release) {
+    INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
+    LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium
+
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
     TRANSLATIONFILES= $$files($$SRCPWD/../translations/*.ts)
     for(tsfile, TRANSLATIONFILES) {

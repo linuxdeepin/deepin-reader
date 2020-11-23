@@ -17,8 +17,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef IMAGEVIEWMODEL_H
-#define IMAGEVIEWMODEL_H
+#ifndef SIDEBARIMAGEVIEWMODEL_H
+#define SIDEBARIMAGEVIEWMODEL_H
 
 #include <QAbstractListModel>
 #include <QMap>
@@ -52,7 +52,7 @@ typedef struct ImagePageInfo_t {
     QString strSearchcount;
     deepin_reader::Annotation *annotation = nullptr;
 
-    ImagePageInfo_t(int index = -1):pageIndex(index)
+    ImagePageInfo_t(int index = -1): pageIndex(index)
     {
 
     }
@@ -76,15 +76,15 @@ Q_DECLARE_METATYPE(ImagePageInfo_t);
 
 class DocSheet;
 /**
- * @brief The ImageViewModel class
+ * @brief The SideBarImageViewModel class
  * ImageVIew Model
  */
-class ImageViewModel : public QAbstractListModel
+class SideBarImageViewModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    explicit  ImageViewModel(QObject *parent = nullptr);
+    explicit  SideBarImageViewModel(QObject *parent = nullptr);
 
 public:
     /**
@@ -250,4 +250,4 @@ private:
     QMap<int, bool> m_cacheBookMarkMap;
 };
 
-#endif // IMAGEVIEWMODEL_H
+#endif // SIDEBARIMAGEVIEWMODEL_H

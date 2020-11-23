@@ -1,6 +1,6 @@
 HEADERS += \
-    $$PWD/ImageListview.h \
-    $$PWD/ImageViewModel.h \
+    $$PWD/SideBarImageListview.h \
+    $$PWD/SideBarImageViewModel.h \
     $$PWD/SheetSidebar.h \
     $$PWD/bookmark/BookMarkDelegate.h \
     $$PWD/bookmark/BookMarkWidget.h \
@@ -15,13 +15,11 @@ HEADERS += \
     $$PWD/threadmanager/ReaderImageThreadPoolManager.h \
     $$PWD/thumbnail/PagingWidget.h \
     $$PWD/thumbnail/ThumbnailDelegate.h \
-    $$PWD/thumbnail/ThumbnailWidget.h \
-    $$PWD/menu/BookMarkMenu.h \
-    $$PWD/menu/NoteMenu.h
+    $$PWD/thumbnail/ThumbnailWidget.h
 
 SOURCES += \
-    $$PWD/ImageListview.cpp \
-    $$PWD/ImageViewModel.cpp \
+    $$PWD/SideBarImageListview.cpp \
+    $$PWD/SideBarImageViewModel.cpp \
     $$PWD/SheetSidebar.cpp \
     $$PWD/bookmark/BookMarkDelegate.cpp \
     $$PWD/bookmark/BookMarkWidget.cpp \
@@ -36,8 +34,6 @@ SOURCES += \
     $$PWD/threadmanager/ReaderImageThreadPoolManager.cpp \
     $$PWD/thumbnail/PagingWidget.cpp \
     $$PWD/thumbnail/ThumbnailDelegate.cpp \
-    $$PWD/thumbnail/ThumbnailWidget.cpp \
-    $$PWD/menu/NoteMenu.cpp \
-    $$PWD/menu/BookMarkMenu.cpp
+    $$PWD/thumbnail/ThumbnailWidget.cpp
 
 INCLUDEPATH += $$PWD

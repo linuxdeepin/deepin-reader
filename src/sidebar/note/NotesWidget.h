@@ -20,7 +20,7 @@
 #ifndef NOTESFORM_H
 #define NOTESFORM_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QPointer>
 
@@ -28,14 +28,14 @@ namespace deepin_reader {
 class Annotation;
 }
 class DocSheet;
-class ImageListView;
+class SideBarImageListView;
 class DocummentProxy;
 
 /**
  * @brief The NotesWidget class
  * 注释缩略图控件
  */
-class NotesWidget : public CustomWidget
+class NotesWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(NotesWidget)
@@ -119,7 +119,7 @@ public:
      * @brief showMenu
      * 显示菜单
      */
-    void showMenu() Q_DECL_OVERRIDE;
+    void showMenu();
 
 public slots:
     /**
@@ -133,7 +133,7 @@ private:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget();
 
 private slots:
     /**
@@ -184,7 +184,7 @@ private:
 
 private:
     QPointer<DocSheet> m_sheet;
-    ImageListView     *m_pImageListView = nullptr;
+    SideBarImageListView     *m_pImageListView = nullptr;
     DPushButton       *m_pAddAnnotationBtn = nullptr;
 };
 

@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "CentralDocPage.h"
 #include "accessible.h"
+#include "Utils.h"
 
 #include <DLog>
 #include <QCommandLineParser>

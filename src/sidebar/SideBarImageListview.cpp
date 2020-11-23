@@ -17,19 +17,18 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ImageListview.h"
+#include "SideBarImageListview.h"
 #include "DocSheet.h"
-#include "ImageViewModel.h"
+#include "SideBarImageViewModel.h"
 #include "Application.h"
-#include "menu/BookMarkMenu.h"
-#include "menu/NoteMenu.h"
+#include "MsgHeader.h"
 
 #include <QScroller>
 #include <QScrollBar>
 #include <QSet>
 #include <QMouseEvent>
 
-ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
+SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
     , m_docSheet(sheet)
 {
@@ -48,27 +47,27 @@ ImageListView::ImageListView(DocSheet *sheet, QWidget *parent)
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 
-    connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &ImageListView::onRemoveThumbnailListSlideGesture);
+    connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &SideBarImageListView::onRemoveThumbnailListSlideGesture);
 
-    connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &ImageListView::onSetThumbnailListSlideGesture);
+    connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &SideBarImageListView::onSetThumbnailListSlideGesture);
 }
 
-void ImageListView::initControl()
+void SideBarImageListView::initControl()
 {
     m_pBookMarkMenu = nullptr;
     m_pNoteMenu = nullptr;
     m_listType = E_SideBar::SIDE_THUMBNIL;
-    m_imageModel = new ImageViewModel(this);
+    m_imageModel = new SideBarImageViewModel(this);
     m_imageModel->setDocSheet(m_docSheet);
     this->setModel(m_imageModel);
 }
 
-ImageViewModel *ImageListView::getImageModel()
+SideBarImageViewModel *SideBarImageListView::getImageModel()
 {
     return m_imageModel;
 }
 
-void ImageListView::showMenu()
+void SideBarImageListView::showMenu()
 {
     if (!this->currentIndex().isValid())
         return;
@@ -76,28 +75,18 @@ void ImageListView::showMenu()
     const QRect &visualRect = this->visualRect(this->currentIndex());
     QPoint point = mapToGlobal(QPoint(this->width() / 2 - 4, visualRect.y() + visualRect.height() / 2 - 4));
     if (m_listType == E_SideBar::SIDE_NOTE) {
-        if (m_pNoteMenu == nullptr) {
-            m_pNoteMenu = new NoteMenu(this);
-            m_pNoteMenu->setAccessibleName("Menu_Note");
-            connect(m_pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
-        }
-        m_pNoteMenu->exec(point);
+        showNoteMenu(point);
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
-        if (m_pBookMarkMenu == nullptr) {
-            m_pBookMarkMenu = new BookMarkMenu(this);
-            m_pBookMarkMenu->setAccessibleName("Menu_BookMark");
-            connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
-        }
-        m_pBookMarkMenu->exec(point);
+        showBookMarkMenu(point);
     }
 }
 
-void ImageListView::setListType(int type)
+void SideBarImageListView::setListType(int type)
 {
     m_listType = type;
 }
 
-void ImageListView::handleOpenSuccess()
+void SideBarImageListView::handleOpenSuccess()
 {
     if (m_listType == E_SideBar::SIDE_THUMBNIL) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
@@ -135,7 +124,7 @@ void ImageListView::handleOpenSuccess()
     }
 }
 
-void ImageListView::onItemClicked(const QModelIndex &index)
+void SideBarImageListView::onItemClicked(const QModelIndex &index)
 {
     if (index.isValid()) {
         m_docSheet->jumpToIndex(m_imageModel->getPageIndexForModelIndex(index.row()));
@@ -143,17 +132,17 @@ void ImageListView::onItemClicked(const QModelIndex &index)
     }
 }
 
-void ImageListView::onSetThumbnailListSlideGesture()
+void SideBarImageListView::onSetThumbnailListSlideGesture()
 {
     QScroller::grabGesture(this, QScroller::TouchGesture);//缩略图列表滑动
 }
 
-void ImageListView::onRemoveThumbnailListSlideGesture()
+void SideBarImageListView::onRemoveThumbnailListSlideGesture()
 {
     QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);//缩略图列表不滑动
 }
 
-bool ImageListView::scrollToIndex(int index, bool scrollTo)
+bool SideBarImageListView::scrollToIndex(int index, bool scrollTo)
 {
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(index);
     if (indexlst.size() > 0) {
@@ -170,7 +159,7 @@ bool ImageListView::scrollToIndex(int index, bool scrollTo)
     }
 }
 
-void ImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
+void SideBarImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
 {
     if (index.isValid()) {
         this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
@@ -179,7 +168,7 @@ void ImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollt
     }
 }
 
-void ImageListView::mousePressEvent(QMouseEvent *event)
+void SideBarImageListView::mousePressEvent(QMouseEvent *event)
 {
     DListView::mousePressEvent(event);
     onItemClicked(this->indexAt(event->pos()));
@@ -188,33 +177,58 @@ void ImageListView::mousePressEvent(QMouseEvent *event)
         const QModelIndex &modelIndex = this->indexAt(event->pos());
         if (modelIndex.isValid()) {
             if (m_listType == E_SideBar::SIDE_NOTE) {
-                showNoteMenu();
+                showNoteMenu(QCursor::pos());
             } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
-                showBookMarkMenu();
+                showBookMarkMenu(QCursor::pos());
             }
         }
     }
 }
 
-void ImageListView::showNoteMenu()
+void SideBarImageListView::showNoteMenu(const QPoint &point)
 {
     if (m_pNoteMenu == nullptr) {
-        m_pNoteMenu = new NoteMenu(this);
-        connect(m_pNoteMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+        m_pNoteMenu = new DMenu(this);
+        m_pNoteMenu->setAccessibleName("Menu_Note");
+
+        QAction *copyAction = m_pNoteMenu->addAction(tr("Copy"));
+        connect(copyAction, &QAction::triggered, [this]() {
+            emit sigListMenuClick(E_NOTE_COPY);
+        });
+
+        QAction *delAction = m_pNoteMenu->addAction(tr("Remove annotation"));
+        connect(delAction, &QAction::triggered, [this]() {
+            emit sigListMenuClick(E_NOTE_DELETE);
+        });
+
+        QAction *delAllAction = m_pNoteMenu->addAction(tr("Remove all"));
+        connect(delAllAction, &QAction::triggered, [this]() {
+            emit sigListMenuClick(E_BOOKMARK_DELETE);
+        });
     }
-    m_pNoteMenu->exec(QCursor::pos());
+    m_pNoteMenu->exec(point);
 }
 
-void ImageListView::showBookMarkMenu()
+void SideBarImageListView::showBookMarkMenu(const QPoint &point)
 {
     if (m_pBookMarkMenu == nullptr) {
-        m_pBookMarkMenu = new BookMarkMenu(this);
-        connect(m_pBookMarkMenu, SIGNAL(sigClickAction(const int &)), this, SIGNAL(sigListMenuClick(const int &)));
+        m_pBookMarkMenu = new DMenu(this);
+        m_pBookMarkMenu->setAccessibleName("Menu_BookMark");
+
+        QAction *dltBookMarkAction = m_pBookMarkMenu->addAction(tr("Remove bookmark"));
+        connect(dltBookMarkAction, &QAction::triggered, [this]() {
+            emit sigListMenuClick(E_BOOKMARK_DELETE);
+        });
+
+        QAction *dltAllBookMarkAction = m_pBookMarkMenu->addAction(tr("Remove all"));
+        connect(dltAllBookMarkAction, &QAction::triggered, [this]() {
+            emit sigListMenuClick(E_BOOKMARK_DELETE_ALL);
+        });
     }
-    m_pBookMarkMenu->exec(QCursor::pos());
+    m_pBookMarkMenu->exec(point);
 }
 
-int  ImageListView::getModelIndexForPageIndex(int pageIndex)
+int  SideBarImageListView::getModelIndexForPageIndex(int pageIndex)
 {
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(pageIndex);
     if (indexlst.size() > 0) {
@@ -223,22 +237,22 @@ int  ImageListView::getModelIndexForPageIndex(int pageIndex)
     return -1;
 }
 
-int  ImageListView::getPageIndexForModelIndex(int row)
+int  SideBarImageListView::getPageIndexForModelIndex(int row)
 {
     return m_imageModel->getPageIndexForModelIndex(row);
 }
 
-void ImageListView::onUpdatePageImage(int pageIndex)
+void SideBarImageListView::onUpdatePageImage(int pageIndex)
 {
     m_imageModel->onUpdatePageImage(pageIndex);
 }
 
-QModelIndex ImageListView::pageUpIndex()
+QModelIndex SideBarImageListView::pageUpIndex()
 {
     return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
 }
 
-QModelIndex ImageListView::pageDownIndex()
+QModelIndex SideBarImageListView::pageDownIndex()
 {
     return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
 }

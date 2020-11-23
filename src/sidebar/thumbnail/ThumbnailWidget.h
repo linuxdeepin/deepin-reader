@@ -20,20 +20,20 @@
 #ifndef THUMBNAILWIDGET_H
 #define THUMBNAILWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QPointer>
 
 class DocSheet;
 class PagingWidget;
-class ImageListView;
+class SideBarImageListView;
 class DocummentProxy;
 
 /**
  * @brief The ThumbnailWidget class
  * 缩略图目录
  */
-class ThumbnailWidget : public CustomWidget
+class ThumbnailWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ThumbnailWidget)
@@ -120,7 +120,7 @@ protected:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget();
 
 private:
     /**
@@ -132,7 +132,7 @@ private:
 private:
     QPointer<DocSheet> m_sheet;
     PagingWidget *m_pPageWidget = nullptr;
-    ImageListView *m_pImageListView = nullptr;
+    SideBarImageListView *m_pImageListView = nullptr;
 };
 
 #endif  // THUMBNAILWIDGET_H

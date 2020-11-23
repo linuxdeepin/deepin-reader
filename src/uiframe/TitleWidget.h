@@ -22,7 +22,7 @@
 #define TITLEWIDGET_H
 
 #include "DocSheet.h"
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <DPushButton>
 #include <DIconButton>
@@ -37,7 +37,7 @@ class DocSheet;
  * @brief The TitleWidget class
  * 窗体自定义标题栏
  */
-class TitleWidget : public CustomWidget
+class TitleWidget : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(TitleWidget)

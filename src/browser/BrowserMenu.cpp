@@ -19,7 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "BrowserMenu.h"
-#include "widgets/ColorWidgetAction.h"
+#include "ColorWidgetAction.h"
 #include "DocSheet.h"
 #include "Utils.h"
 
@@ -84,10 +84,6 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
             createAction(tr("Remove bookmark"), "RemoveBookmark");
         else
             createAction(tr("Add bookmark"), "AddBookmark");
-
-        if (sheet->fileType() == Dr::FileType::PDF) {
-//            createAction(tr("Add annotation"), "AddAnnotationIcon");
-        }
 
         this->addSeparator();
 

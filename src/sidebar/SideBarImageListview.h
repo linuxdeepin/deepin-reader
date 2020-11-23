@@ -17,30 +17,33 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef IMAGELISTVIEW_H
-#define IMAGELISTVIEW_H
+#ifndef SIDEBARIMAGELISTVIEW_H
+#define SIDEBARIMAGELISTVIEW_H
 
 #include <DListView>
+#include <DMenu>
 
 DWIDGET_USE_NAMESPACE
 struct ImagePageInfo_t;
 
 class DocSheet;
-class ImageViewModel;
-class ImageViewDelegate;
+class SideBarImageViewModel;
 class BookMarkMenu;
 class NoteMenu;
+class QMouseEvent;
+
+const int LEFTMINWIDTH = 266;
+const int LEFTMAXWIDTH = 380;
 
 /**
- * @brief The ImageListView class
+ * @brief The SideBarImageListView class
  * 左侧栏缩略图目录VIEW
  */
-class QMouseEvent;
-class ImageListView : public DListView
+class SideBarImageListView : public DListView
 {
     Q_OBJECT
 public:
-    ImageListView(DocSheet *sheet, QWidget *parent = nullptr);
+    SideBarImageListView(DocSheet *sheet, QWidget *parent = nullptr);
 
 signals:
     /**
@@ -108,7 +111,7 @@ public:
      * 获取model
      * @return
      */
-    ImageViewModel *getImageModel();
+    SideBarImageViewModel *getImageModel();
 
     /**
      * @brief showMenu
@@ -141,13 +144,13 @@ private:
      * @brief showNoteMenu
      * 显示注释菜单
      */
-    void showNoteMenu();
+    void showNoteMenu(const QPoint &point);
 
     /**
      * @brief showBookMarkMenu
      * 显示书签菜单
      */
-    void showBookMarkMenu();
+    void showBookMarkMenu(const QPoint &point);
 
 private slots:
     /**
@@ -187,10 +190,10 @@ protected:
 private:
     int m_listType;
     DocSheet *m_docSheet;
-    ImageViewModel *m_imageModel;
+    SideBarImageViewModel *m_imageModel;
 
-    BookMarkMenu *m_pBookMarkMenu;
-    NoteMenu *m_pNoteMenu;
+    DMenu *m_pBookMarkMenu;
+    DMenu *m_pNoteMenu;
 };
 
-#endif // IMAGELISTVIEW_H
+#endif // SIDEBARIMAGELISTVIEW_H

@@ -21,9 +21,9 @@
 #include "DocSheet.h"
 #include "Application.h"
 #include "PagingWidget.h"
-#include "sidebar/ImageListview.h"
-#include "sidebar/thumbnail/ThumbnailDelegate.h"
-#include "sidebar/ImageViewModel.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
+#include "thumbnail/ThumbnailDelegate.h"
 
 #include <DHorizontalLine>
 
@@ -32,7 +32,7 @@
 const int LEFTMINHEIGHT = 220;
 
 ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
     , m_sheet(sheet)
 {
     initWidget();
@@ -45,7 +45,7 @@ ThumbnailWidget::~ThumbnailWidget()
 
 void ThumbnailWidget::initWidget()
 {
-    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);

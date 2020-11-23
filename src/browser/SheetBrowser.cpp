@@ -27,19 +27,20 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "SheetBrowser.h"
-#include "document/PDFModel.h"
+#include "PDFModel.h"
 #include "BrowserPage.h"
+#include "BrowserWord.h"
 #include "DocSheet.h"
 #include "BrowserAnnotation.h"
-#include "widgets/TipsWidget.h"
+#include "TipsWidget.h"
 #include "BrowserMenu.h"
-#include "widgets/FileAttrWidget.h"
+#include "FileAttrWidget.h"
 #include "Application.h"
-#include "sidebar/note/NoteViewWidget.h"
+#include "note/NoteViewWidget.h"
 #include "BrowserMagniFier.h"
-#include "widgets/FindWidget.h"
+#include "FindWidget.h"
 #include "MsgHeader.h"
-#include "document/DjVuModel.h"
+#include "DjVuModel.h"
 #include "Utils.h"
 #include "PageSearchThread.h"
 
@@ -48,7 +49,6 @@
 #include <QTimer>
 #include <QApplication>
 #include <QBitmap>
-#include <DMenu>
 #include <QFileInfo>
 #include <QTemporaryFile>
 #include <QStandardPaths>
@@ -59,6 +59,9 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QTimerEvent>
+
+#include <DMenu>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 

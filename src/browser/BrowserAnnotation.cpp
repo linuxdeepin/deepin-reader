@@ -20,7 +20,6 @@
 */
 #include "BrowserAnnotation.h"
 #include "BrowserPage.h"
-#include "document/Model.h"
 
 #include <DApplicationHelper>
 
@@ -67,7 +66,6 @@ QRectF BrowserAnnotation::boundingRect() const
 
 void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    //notTodo
     if (m_drawSelectRect) {
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         painter->setPen(pen);

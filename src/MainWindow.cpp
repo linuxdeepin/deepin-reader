@@ -31,6 +31,8 @@
 #include "TitleWidget.h"
 #include "Central.h"
 #include "CentralDocPage.h"
+#include "Application.h"
+#include "Utils.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -256,7 +258,7 @@ void MainWindow::onShortCut(const QString &key)
 void MainWindow::setDocTabBarWidget(QWidget *widget)
 {
     if (m_FullTitleWidget == nullptr) {
-        m_FullTitleWidget = new CustomWidget(this);
+        m_FullTitleWidget = new BaseWidget(this);
         this->stackUnder(m_FullTitleWidget);
         m_FullTitleWidget->setFocusPolicy(Qt::NoFocus);
         m_FullTitleWidget->show();
@@ -479,14 +481,6 @@ void MainWindow::onUpdateTitleLabelRect()
     titleLabel->setFixedWidth(this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60);
 }
 
-/**
- * @brief Application::onTouchPadEventSignal
- * 处理触控板手势信号
- * @param name 触控板事件类型(手势或者触摸类型) pinch 捏 tap 敲 swipe 滑 右键单击 单键
- * @param direction 手势方向 触控板上 up 触控板下 down 左 left 右 right 无 none 向内 in 向外 out  触控屏上 top 触摸屏下 bot
- * @param fingers 手指数量 (1,2,3,4,5)
- * 注意libinput接收到触摸板事件后将接收到的数据通过Event广播出去
- */
 void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
 {
     // 当前窗口被激活,且有焦点
@@ -500,6 +494,7 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
                 zoomIn();   // zoom in 放大
             }
         }
+
         if (fingers == 0) {
             if (direction == "up") {
                 m_showMenuTimer->stop();

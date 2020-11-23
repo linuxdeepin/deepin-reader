@@ -21,7 +21,7 @@
 #ifndef MAINTABWIDGETEX_H
 #define MAINTABWIDGETEX_H
 
-#include "CustomWidget.h"
+#include "BaseWidget.h"
 #include "DocSheet.h"
 
 #include <DLabel>
@@ -40,7 +40,7 @@ class QVBoxLayout;
  * @brief The CentralDocPage class
  * 嵌入当前窗体中心控件的文档浏览页面
  */
-class CentralDocPage : public CustomWidget
+class CentralDocPage : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CentralDocPage)

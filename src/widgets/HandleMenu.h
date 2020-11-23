@@ -21,14 +21,15 @@
 #ifndef HANDLEMENU_H
 #define HANDLEMENU_H
 
-#include "widgets/CustomMenu.h"
+#include <DMenu>
 
 class DocSheet;
 /**
  * @brief The HandleMenu class
  * 选择工具菜单
  */
-class HandleMenu : public CustomMenu
+DWIDGET_USE_NAMESPACE
+class HandleMenu : public DMenu
 {
     Q_OBJECT
     Q_DISABLE_COPY(HandleMenu)

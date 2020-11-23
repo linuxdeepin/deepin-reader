@@ -21,8 +21,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "Application.h"
-
 #include <QKeyEvent>
 #include <QObject>
 #include <QPainter>
@@ -48,10 +46,6 @@ public:
      */
     static QString getKeyshortcut(QKeyEvent *keyEvent);
 
-    static bool fileExists(const QString &path);
-
-    static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
-
     /**
      * @brief getInputDataSize
      * 数据单位换算,最大是G
@@ -76,12 +70,13 @@ public:
     static void copyText(const QString &sText);
 
     /**
-     * @brief getUuid
-     * 获取UUID(唯一)
+     * @brief 省略文本
+     * @param fontMetrics
+     * @param size
+     * @param text
+     * @param alignment
      * @return
      */
-    static QString getUuid();
-
     static QString getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment);
 
     /**
@@ -104,15 +99,6 @@ public:
      * @return
      */
     static QImage copyImage(const QImage &srcimg, int x, int y, int w, int h);
-
-    /**
-     * @brief renderSVG
-     * 渲染缩略图
-     * @param filePath
-     * @param size
-     * @return
-     */
-    static QPixmap renderSVG(const QString &filePath, const QSize &size);
 
     /**
      * @brief getHiglightColorList

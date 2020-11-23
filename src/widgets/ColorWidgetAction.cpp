@@ -21,7 +21,7 @@
 #include "ColorWidgetAction.h"
 #include "Application.h"
 #include "Utils.h"
-#include "widgets/RoundColorWidget.h"
+#include "RoundColorWidget.h"
 
 #include <DFontSizeManager>
 

@@ -26,11 +26,13 @@
 #include <DPushButton>
 #include <DSuggestButton>
 #include <DLabel>
+#include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
 #include <QVBoxLayout>
 
 CentralNavPage::CentralNavPage(DWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
 {
     auto tipsLabel = new DLabel(tr("Drag documents here"), this);
     tipsLabel->setAccessibleName("Label_Drag documents here");
@@ -48,7 +50,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     chooseButton->setObjectName("SelectFileBtn");
     chooseButton->setAccessibleName("SelectFile");
     chooseButton->setFocusPolicy(Qt::TabFocus);
-    chooseButton->setFixedSize(302,36);
+    chooseButton->setFixedSize(302, 36);
     connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::onChooseButtonClicked);
 
     auto layout = new QVBoxLayout;
@@ -58,7 +60,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     layout->addStretch();
 
     auto iconSvg = new DLabel(this);
-    iconSvg->setFixedSize(128,128);
+    iconSvg->setFixedSize(128, 128);
     iconSvg->setObjectName("iconSvg");
     iconSvg->setAccessibleName("Label_Icon");
 

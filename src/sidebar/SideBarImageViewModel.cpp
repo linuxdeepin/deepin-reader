@@ -17,25 +17,25 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ImageViewModel.h"
+#include "SideBarImageViewModel.h"
 #include "DocSheet.h"
 #include "threadmanager/ReaderImageThreadPoolManager.h"
 
-ImageViewModel::ImageViewModel(QObject *parent)
+SideBarImageViewModel::SideBarImageViewModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent)
 {
     m_docSheet = nullptr;
 }
 
-void ImageViewModel::resetData()
+void SideBarImageViewModel::resetData()
 {
     beginResetModel();
     m_pagelst.clear();
     endResetModel();
 }
 
-void ImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
+void SideBarImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
     beginResetModel();
     m_pagelst = pagelst;
@@ -43,17 +43,17 @@ void ImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool so
     endResetModel();
 }
 
-void ImageViewModel::changeModelData(const QList<ImagePageInfo_t> &pagelst)
+void SideBarImageViewModel::changeModelData(const QList<ImagePageInfo_t> &pagelst)
 {
     m_pagelst = pagelst;
 }
 
-void ImageViewModel::setDocSheet(DocSheet *sheet)
+void SideBarImageViewModel::setDocSheet(DocSheet *sheet)
 {
     m_docSheet = sheet;
 }
 
-void ImageViewModel::setBookMarkVisible(int index, bool visible, bool updateIndex)
+void SideBarImageViewModel::setBookMarkVisible(int index, bool visible, bool updateIndex)
 {
     m_cacheBookMarkMap.insert(index, visible);
     if (updateIndex) {
@@ -63,17 +63,17 @@ void ImageViewModel::setBookMarkVisible(int index, bool visible, bool updateInde
     }
 }
 
-int ImageViewModel::rowCount(const QModelIndex &) const
+int SideBarImageViewModel::rowCount(const QModelIndex &) const
 {
     return m_pagelst.size();
 }
 
-int ImageViewModel::columnCount(const QModelIndex &) const
+int SideBarImageViewModel::columnCount(const QModelIndex &) const
 {
     return 1;
 }
 
-QVariant ImageViewModel::data(const QModelIndex &index, int role) const
+QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -110,14 +110,14 @@ QVariant ImageViewModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool ImageViewModel::setData(const QModelIndex &index, const QVariant &data, int role)
+bool SideBarImageViewModel::setData(const QModelIndex &index, const QVariant &data, int role)
 {
     if (!index.isValid())
         return false;
     return QAbstractListModel::setData(index, data, role);
 }
 
-QList<QModelIndex> ImageViewModel::getModelIndexForPageIndex(int pageIndex)
+QList<QModelIndex> SideBarImageViewModel::getModelIndexForPageIndex(int pageIndex)
 {
     QList<QModelIndex> modelIndexlst;
     int pageSize = m_pagelst.size();
@@ -128,21 +128,21 @@ QList<QModelIndex> ImageViewModel::getModelIndexForPageIndex(int pageIndex)
     return modelIndexlst;
 }
 
-int ImageViewModel::getPageIndexForModelIndex(int row)
+int SideBarImageViewModel::getPageIndexForModelIndex(int row)
 {
     if (row >= 0 && row < m_pagelst.size())
         return m_pagelst.at(row).pageIndex;
     return -1;
 }
 
-void ImageViewModel::onUpdatePageImage(int pageIndex)
+void SideBarImageViewModel::onUpdatePageImage(int pageIndex)
 {
     const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
     for (const QModelIndex &modelIndex : modelIndexlst)
         emit dataChanged(modelIndex, modelIndex);
 }
 
-void ImageViewModel::onFetchImage(int index, bool force) const
+void SideBarImageViewModel::onFetchImage(int index, bool force) const
 {
     ReaderImageParam_t tParam;
     tParam.maxPixel = 198;
@@ -154,12 +154,12 @@ void ImageViewModel::onFetchImage(int index, bool force) const
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
-void ImageViewModel::updatePageIndex(int index, bool force)
+void SideBarImageViewModel::updatePageIndex(int index, bool force)
 {
     onFetchImage(index, force);
 }
 
-void ImageViewModel::insertPageIndex(int pageIndex)
+void SideBarImageViewModel::insertPageIndex(int pageIndex)
 {
     if (!m_pagelst.contains(pageIndex)) {
         int iterIndex = 0;
@@ -175,7 +175,7 @@ void ImageViewModel::insertPageIndex(int pageIndex)
     }
 }
 
-void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
+void SideBarImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
     int index = -1;
     if (tImagePageInfo.annotation == nullptr) {
@@ -200,7 +200,7 @@ void ImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
     }
 }
 
-void ImageViewModel::removePageIndex(int pageIndex)
+void SideBarImageViewModel::removePageIndex(int pageIndex)
 {
     if (m_pagelst.contains(pageIndex)) {
         beginResetModel();
@@ -209,7 +209,7 @@ void ImageViewModel::removePageIndex(int pageIndex)
     }
 }
 
-void ImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
+void SideBarImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
 {
     int index = findItemForAnno(annotation);
     if (index >= 0) {
@@ -219,14 +219,14 @@ void ImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
     }
 }
 
-void ImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
+void SideBarImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
 {
     if (modelIndex >= 0 && modelIndex < m_pagelst.size()) {
         tImagePageInfo = m_pagelst.at(modelIndex);
     }
 }
 
-int ImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation)
+int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation)
 {
     int count = m_pagelst.size();
     for (int index = 0; index < count; index++) {

@@ -75,7 +75,6 @@ void PageSearchThread::run()
             if (!text.isEmpty()) {
                 searchres.words << Word(text, rec);
             }
-
         }
 
         if (searchres.words.size() > 0)

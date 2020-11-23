@@ -21,7 +21,7 @@
 #ifndef TITLEMENU_H
 #define TITLEMENU_H
 
-#include "widgets/CustomMenu.h"
+#include <DMenu>
 
 class QSignalMapper;
 class DocSheet;
@@ -31,7 +31,8 @@ class HandleMenu;
  * @brief The TitleMenu class
  * 窗体默认菜单
  */
-class TitleMenu : public CustomMenu
+DWIDGET_USE_NAMESPACE
+class TitleMenu : public DMenu
 {
     Q_OBJECT
     Q_DISABLE_COPY(TitleMenu)

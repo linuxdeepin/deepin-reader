@@ -20,7 +20,7 @@
  */
 #include "FileAttrWidget.h"
 #include "AttrScrollWidget.h"
-#include "widgets/WordWrapLabel.h"
+#include "WordWrapLabel.h"
 #include "Application.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"

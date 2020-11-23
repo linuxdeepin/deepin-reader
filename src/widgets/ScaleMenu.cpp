@@ -21,7 +21,7 @@
 #include "ScaleMenu.h"
 #include "DocSheet.h"
 
-ScaleMenu::ScaleMenu(QWidget *parent) : CustomMenu(parent)
+ScaleMenu::ScaleMenu(QWidget *parent) : DMenu(parent)
 {
 
 }
@@ -109,4 +109,14 @@ void ScaleMenu::onScaleFactor()
         m_sheet->setScaleMode(Dr::ScaleFactorMode);
         m_sheet->setScaleFactor(scaleFactorlst.at(index));
     }
+}
+
+QAction *ScaleMenu::createAction(const QString &objName, const char *member, bool checkable)
+{
+    QAction *action = new QAction(objName, this);
+    action->setObjectName(objName);
+    action->setCheckable(checkable);
+    connect(action, SIGNAL(triggered()), this, member);
+    this->addAction(action);
+    return action;
 }

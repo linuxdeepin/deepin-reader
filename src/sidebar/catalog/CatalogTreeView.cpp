@@ -167,7 +167,6 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     return QList<QStandardItem *>() << item << item1;
 }
 
-//  文档打开成功, 加载对应目录
 void CatalogTreeView::handleOpenSuccess()
 {
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
@@ -191,7 +190,6 @@ void CatalogTreeView::handleOpenSuccess()
     resizeCoulumnWidth();
 }
 
-//  折叠 节点处理
 void CatalogTreeView::slotCollapsed(const QModelIndex &index)
 {
     Q_UNUSED(index);
@@ -202,7 +200,6 @@ void CatalogTreeView::slotCollapsed(const QModelIndex &index)
     setIndex(m_index, m_title);
 }
 
-//  展开 节点处理
 void CatalogTreeView::slotExpanded(const QModelIndex &index)
 {
     Q_UNUSED(index);
@@ -213,7 +210,6 @@ void CatalogTreeView::slotExpanded(const QModelIndex &index)
     setIndex(m_index, m_title);
 }
 
-//  实现 上下左键 跳转
 void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
@@ -248,7 +244,6 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
         m_sheet->jumpToOutline(left, top, nIndex);
 }
 
-//  窗口大小变化, 列的宽度随之变化
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
     DTreeView::resizeEvent(event);

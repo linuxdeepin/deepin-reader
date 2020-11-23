@@ -20,19 +20,22 @@
  */
 #include "BookMarkWidget.h"
 #include "DocSheet.h"
-#include "sidebar/ImageListview.h"
-#include "sidebar/ImageViewModel.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
 #include "BookMarkDelegate.h"
-#include "widgets/SaveDialog.h"
+#include "SaveDialog.h"
+#include "MsgHeader.h"
 
 #include <DHorizontalLine>
 #include <DPushButton>
+#include <DGuiApplicationHelper>
+
 #include <QHBoxLayout>
 #include <QSet>
 
 const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent), m_sheet(sheet)
+    : BaseWidget(parent), m_sheet(sheet)
 {
     initWidget();
     onUpdateTheme();
@@ -47,7 +50,7 @@ void BookMarkWidget::initWidget()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
-    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_BOOKMARK);
     BookMarkDelegate *imageDelegate = new BookMarkDelegate(m_pImageListView);
@@ -224,6 +227,7 @@ void BookMarkWidget::onUpdateTheme()
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
+
     m_pAddBookMarkBtn->setPalette(plt);
 }
 

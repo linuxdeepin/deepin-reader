@@ -12,8 +12,7 @@ HEADERS += \
     $$PWD/ScaleWidget.h \
     $$PWD/SaveDialog.h \
     $$PWD/ShortCutShow.h \
-    $$PWD/CustomMenu.h \
-    $$PWD/CustomWidget.h \
+    $$PWD/BaseWidget.h \
     $$PWD/TipsWidget.h \
     $$PWD/WordWrapLabel.h \
     $$PWD/RoundColorWidget.h
@@ -32,8 +31,7 @@ SOURCES += \
     $$PWD/ScaleWidget.cpp \
     $$PWD/SaveDialog.cpp \
     $$PWD/ShortCutShow.cpp \
-    $$PWD/CustomMenu.cpp \
-    $$PWD/CustomWidget.cpp \
+    $$PWD/BaseWidget.cpp \
     $$PWD/TipsWidget.cpp \
     $$PWD/WordWrapLabel.cpp \
     $$PWD/RoundColorWidget.cpp

@@ -24,18 +24,22 @@
 #include "bookmark/BookMarkWidget.h"
 #include "note/NotesWidget.h"
 #include "search/SearchResWidget.h"
-#include "document/Model.h"
+#include "Model.h"
 #include "threadmanager/ReaderImageThreadPoolManager.h"
 #include "MsgHeader.h"
+#include "Utils.h"
 
 #include <DPushButton>
+#include <DGuiApplicationHelper>
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
 #include <QTimer>
 
+const int LEFTMINWIDTH = 266;
+const int LEFTMAXWIDTH = 380;
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
     , m_sheet(parent)
     , m_widgetsFlag(widgesFlag | PREVIEW_SEARCH)
 {
@@ -59,14 +63,10 @@ void SheetSidebar::initWidget()
     m_notesWidget     = nullptr;
     m_searchWidget    = nullptr;
 
-    int tW = LEFTMINWIDTH;
-    setMinimumWidth(tW);
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
 
-    tW = LEFTMAXWIDTH;
-    setMaximumWidth(tW);
-
-    tW = LEFTNORMALWIDTH;
-    resize(tW, this->height());
+    resize(LEFTMINWIDTH, this->height());
 
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -266,7 +266,7 @@ void SheetSidebar::handleRotate()
 
 void SheetSidebar::handleUpdateThumbnail(const int &index)
 {
-    CustomWidget *curWidget = dynamic_cast<CustomWidget *>(m_stackLayout->currentWidget());
+    BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
 
     if (curWidget)
         curWidget->updateThumbnail(index);
@@ -312,13 +312,13 @@ void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
     qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
     adaptWindowSize(scale);
-    CustomWidget::resizeEvent(event);
+    BaseWidget::resizeEvent(event);
 }
 
 void SheetSidebar::adaptWindowSize(const double &scale)
 {
     m_scale = scale;
-    CustomWidget *curWidget = dynamic_cast<CustomWidget *>(m_stackLayout->currentWidget());
+    BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
     if (curWidget) curWidget->adaptWindowSize(scale);
 }
 
@@ -332,22 +332,18 @@ void SheetSidebar::keyPressEvent(QKeyEvent *event)
     if (pFilterList.contains(key)) {
         dealWithPressKey(key);
     }
-    CustomWidget::keyPressEvent(event);
+    BaseWidget::keyPressEvent(event);
 }
 
 void SheetSidebar::showMenu()
 {
     DToolButton *bookmarkbtn = this->findChild<DToolButton *>("bookmark");
-    if (bookmarkbtn && bookmarkbtn->isChecked()) {
-        if (m_bookmarkWidget) {
-            m_bookmarkWidget->showMenu();
-        }
+    if (m_bookmarkWidget && bookmarkbtn && bookmarkbtn->isChecked()) {
+        m_bookmarkWidget->showMenu();
     }
     DToolButton *annotationbtn = this->findChild<DToolButton *>("annotation");
-    if (annotationbtn && annotationbtn->isChecked()) {
-        if (m_notesWidget) {
-            m_notesWidget->showMenu();
-        }
+    if (m_notesWidget && annotationbtn && annotationbtn->isChecked()) {
+        m_notesWidget->showMenu();
     }
 }
 
@@ -435,9 +431,7 @@ void SheetSidebar::deleteItemByKey()
 bool SheetSidebar::event(QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
-        //将事件转化为键盘事件
         QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
-        //按下Tab键执行焦点切换事件
         if (key_event->key() == Qt::Key_Menu && !key_event->isAutoRepeat()) {
             showMenu();
         }
@@ -446,7 +440,7 @@ bool SheetSidebar::event(QEvent *event)
         }
     }
 
-    return CustomWidget::event(event);
+    return BaseWidget::event(event);
 }
 
 void SheetSidebar::onUpdateWidgetTheme()

@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
  *
- * Author:     wangzhixuan<wangzhixuan@uniontech.com>
+ * Author:     duanxiaohui<duanxiaohui@uniontech.com>
  *
- * Maintainer: wangzhixuan<wangzhixuan@uniontech.com>
+ * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "CustomMenu.h"
+#include "BaseWidget.h"
 
-#include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
-CustomMenu::CustomMenu(DWidget *parent)
-    : DMenu(parent)
+BaseWidget::BaseWidget(DWidget *parent)
+    : DWidget(parent)
 {
-    DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
+    setAutoFillBackground(true);
+    setFocusPolicy(Qt::StrongFocus);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
-CustomMenu::~CustomMenu()
+void BaseWidget::updateWidgetTheme()
 {
-
-}
-
-QAction *CustomMenu::createAction(const QString &objName, const char *member, bool checkable)
-{
-    QAction *action = new QAction(objName, this);
-    action->setObjectName(objName);
-    action->setCheckable(checkable);
-    connect(action, SIGNAL(triggered()), this, member);
-    this->addAction(action);
-    return action;
+    Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    setPalette(plt);
 }

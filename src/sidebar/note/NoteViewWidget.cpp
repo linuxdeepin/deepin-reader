@@ -21,18 +21,21 @@
 #include "NoteViewWidget.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
-#include "document/Model.h"
+#include "Model.h"
 #include "TransparentTextEdit.h"
-#include "browser/SheetBrowser.h"
+#include "SheetBrowser.h"
+#include "Application.h"
+
+#include <DPlatformWindowHandle>
+#include <DWindowManagerHelper>
 
 #include <QHBoxLayout>
-#include <DPlatformWindowHandle>
 #include <QPainter>
 #include <QGraphicsDropShadowEffect>
 #include <QLinearGradient>
-#include <DWindowManagerHelper>
 #include <QPainterPath>
 #include <QPointF>
+#include <QMenu>
 
 NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
     : DWidget(nullptr)
@@ -69,7 +72,7 @@ void NoteShadowViewWidget::showWidget(const QPoint &point)
 }
 
 NoteViewWidget::NoteViewWidget(DWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
@@ -112,7 +115,7 @@ void NoteViewWidget::setAnnotation(deepin_reader::Annotation *annotation)
 
 void NoteViewWidget::hideEvent(QHideEvent *event)
 {
-    CustomWidget::hideEvent(event);
+    BaseWidget::hideEvent(event);
     QString sText = m_pTextEdit->toPlainText().trimmed();
 
     if (m_annotation == nullptr)
@@ -166,7 +169,7 @@ void NoteViewWidget::onBlurWindowChanged()
 
 void NoteViewWidget::paintEvent(QPaintEvent *event)
 {
-    CustomWidget::paintEvent(event);
+    BaseWidget::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
     QPainterPath clippath;

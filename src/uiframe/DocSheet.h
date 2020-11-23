@@ -21,7 +21,7 @@
 #ifndef DocSheet_H
 #define DocSheet_H
 
-#include "document/Model.h"
+#include "Model.h"
 
 #include <DSplitter>
 #include <QSet>
@@ -34,7 +34,7 @@ class QPrinter;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
-    Dr::ScaleMode scaleMode = Dr::FitToPageWorHMode;
+    Dr::ScaleMode scaleMode     = Dr::FitToPageWorHMode;
     Dr::Rotation rotation       = Dr::RotateBy0;
     qreal scaleFactor           = 1.0;
     bool sidebarVisible         = false;

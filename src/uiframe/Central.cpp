@@ -41,7 +41,7 @@
 #include <QMimeData>
 
 Central::Central(QWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
 {
     setAcceptDrops(true);
 

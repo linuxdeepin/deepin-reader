@@ -27,7 +27,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "BrowserPage.h"
-#include "document/Model.h"
+#include "Model.h"
 #include "PageRenderThread.h"
 #include "SheetBrowser.h"
 #include "BrowserWord.h"
@@ -48,6 +48,7 @@
 #include <QDebug>
 #include <QMutexLocker>
 
+const int ICON_SIZE = 23;
 QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
 {
@@ -335,6 +336,10 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
 {
     if (bSrc) {
         if (m_pixmap.isNull())
+            return QImage();
+
+        //获取图片比原图大小还大,就不需要原图了
+        if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
             return QImage();
 
         const QImage &image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),

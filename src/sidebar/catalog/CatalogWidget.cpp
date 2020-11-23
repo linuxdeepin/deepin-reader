@@ -24,8 +24,10 @@
 
 #include <QVBoxLayout>
 
+#include <DFontSizeManager>
+
 CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent), m_sheet(sheet)
+    : BaseWidget(parent), m_sheet(sheet)
 {
     initWidget();
 }
@@ -72,7 +74,7 @@ void CatalogWidget::resizeEvent(QResizeEvent *event)
         setTitleTheme();
     }
 
-    CustomWidget::resizeEvent(event);
+    BaseWidget::resizeEvent(event);
 }
 
 void CatalogWidget::setTitleTheme()

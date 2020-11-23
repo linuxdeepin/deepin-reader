@@ -19,10 +19,10 @@
 */
 #include "SearchResWidget.h"
 #include "DocSheet.h"
-#include "sidebar/ImageListview.h"
-#include "sidebar/ImageViewModel.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
 #include "SearchResDelegate.h"
-#include "document/Model.h"
+#include "Model.h"
 
 #include <DLabel>
 
@@ -33,7 +33,7 @@ const int TIPS_INDEX = 1;
 const int LEFTMINHEIGHT = 80;
 
 SearchResWidget::SearchResWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent), m_sheet(sheet)
+    : BaseWidget(parent), m_sheet(sheet)
 {
     initWidget();
 }
@@ -50,7 +50,7 @@ void SearchResWidget::initWidget()
     m_stackLayout->setSpacing(0);
     this->setLayout(m_stackLayout);
 
-    m_pImageListView = new ImageListView(m_sheet, this);
+    m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     m_pImageListView->setListType(E_SideBar::SIDE_SEARCH);
     SearchResDelegate *imageDelegate = new SearchResDelegate(m_pImageListView);

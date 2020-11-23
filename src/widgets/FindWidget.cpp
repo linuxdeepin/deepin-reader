@@ -19,8 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "FindWidget.h"
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 #include "DocSheet.h"
+#include "Utils.h"
 
 #include <DDialogCloseButton>
 #include <DIconButton>

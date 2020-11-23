@@ -21,14 +21,15 @@
 #ifndef SCALEMENU_H
 #define SCALEMENU_H
 
-#include "widgets/CustomMenu.h"
+#include <DMenu>
 
 class DocSheet;
 /**
  * @brief The ScaleMenu class
  * 缩放比菜单
  */
-class ScaleMenu : public CustomMenu
+DWIDGET_USE_NAMESPACE
+class ScaleMenu : public DMenu
 {
     Q_OBJECT
 
@@ -78,6 +79,16 @@ private slots:
      * 百分比
      */
     void onScaleFactor();
+
+private:
+    /**
+     * @brief 创建Aciton
+     * @param objName
+     * @param member
+     * @param checkable
+     * @return
+     */
+    QAction *createAction(const QString &objName, const char *member, bool checkable);
 
 private:
     QAction *m_pTwoPageAction = nullptr;

@@ -20,7 +20,7 @@
 */
 #include "BrowserWord.h"
 #include "BrowserPage.h"
-#include "document/Model.h"
+#include "Model.h"
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>

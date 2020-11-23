@@ -20,7 +20,7 @@
 #ifndef LEFTSIDEBARWIDGET_H
 #define LEFTSIDEBARWIDGET_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 #include <QResizeEvent>
 #include <DToolButton>
@@ -53,7 +53,7 @@ class QButtonGroup;
  * @brief The SheetSidebar class
  * 左侧栏控件
  */
-class SheetSidebar : public CustomWidget
+class SheetSidebar : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SheetSidebar)
@@ -152,7 +152,7 @@ protected:
      * @brief initWidget
      * 初始化控件
      */
-    void initWidget() Q_DECL_OVERRIDE;
+    void initWidget();
 
     /**
      * @brief adaptWindowSize
@@ -179,7 +179,7 @@ protected:
      * @brief showMenu
      * 菜单显示
      */
-    void showMenu() override;
+    void showMenu();
 
 private slots:
     /**

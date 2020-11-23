@@ -23,11 +23,12 @@
 #include "DocSheet.h"
 #include "MsgHeader.h"
 #include "MainWindow.h"
+#include "Application.h"
 
 #include <QHBoxLayout>
 
 TitleWidget::TitleWidget(DWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
 {
     initBtns();
 
@@ -85,7 +86,7 @@ void TitleWidget::initBtns()
 void TitleWidget::keyPressEvent(QKeyEvent *event)
 {
     if (nullptr == m_pSw)
-        return CustomWidget::keyPressEvent(event);
+        return BaseWidget::keyPressEvent(event);
 
     if (event->key() == Qt::Key_Up && !event->isAutoRepeat()) {
         m_pSw->onPrevScale();
@@ -93,7 +94,7 @@ void TitleWidget::keyPressEvent(QKeyEvent *event)
         m_pSw->onNextScale();
     }
 
-    return CustomWidget::keyPressEvent(event);
+    return BaseWidget::keyPressEvent(event);
 }
 
 void TitleWidget::setBtnDisable(const bool &bAble)

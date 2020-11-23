@@ -24,7 +24,7 @@
 #include "DocSheet.h"
 #include "SlidePlayWidget.h"
 #include "Application.h"
-#include "sidebar/threadmanager/ReaderImageThreadPoolManager.h"
+#include "threadmanager/ReaderImageThreadPoolManager.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>

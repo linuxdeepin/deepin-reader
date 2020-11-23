@@ -23,8 +23,10 @@
 
 #include <QValidator>
 
+#include <DGuiApplicationHelper>
+
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
-    : CustomWidget(parent), m_sheet(sheet)
+    : BaseWidget(parent), m_sheet(sheet)
 {
     initWidget();
 
@@ -113,17 +115,17 @@ void PagingWidget::slotUpdateTheme()
 
 void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
 {
-    if (currntPage == 1) {                  //  第一页
+    if (currntPage == 1) {// 第一页
         m_pPrePageBtn->setEnabled(false);
-        if (totalPage == 1) {               //  也是最后一页
+        if (totalPage == 1) {// 也是最后一页
             m_pNextPageBtn->setEnabled(false);
         } else {
             m_pNextPageBtn->setEnabled(true);
         }
-    } else if (currntPage == totalPage) {   //    最后一页
+    } else if (currntPage == totalPage) {// 最后一页
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(false);
-    } else {                                //  中间页
+    } else {// 中间页
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(true);
     }
@@ -149,12 +151,6 @@ void PagingWidget::setIndex(int index)
     }
 }
 
-/**
- * 文档打开成功
- * 1. 进行控件初始化
- * 2.设置总页数 和 当前页码
- *
- */
 void PagingWidget::handleOpenSuccess()
 {
     if (nullptr == m_sheet)
@@ -176,7 +172,6 @@ void PagingWidget::handleOpenSuccess()
     setIndex(currentIndex);
 }
 
-//  输入框  敲回车键 响应
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
     if (m_pCurrentPageLab == nullptr) {

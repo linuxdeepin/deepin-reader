@@ -21,13 +21,13 @@
 #ifndef CentralNavPage_H
 #define CentralNavPage_H
 
-#include "widgets/CustomWidget.h"
+#include "BaseWidget.h"
 
 /**
  * @brief The CentralNavPage class
  * 嵌入当前窗体中心控件的无文档默认页面
  */
-class CentralNavPage : public CustomWidget
+class CentralNavPage : public BaseWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(CentralNavPage)

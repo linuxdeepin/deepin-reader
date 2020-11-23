@@ -21,12 +21,6 @@
 #ifndef MSGHEADER_H
 #define MSGHEADER_H
 
-#include <QString>
-
-/**
- *  消息类型 定义
- */
-
 namespace {
 
 //  搜索框消息
@@ -44,7 +38,16 @@ enum E_NOTE_MSG {
     MSG_NOTE_DELETE,
     MSG_ALL_NOTE_DELETE
 };
+
+enum E_MENU_ACTION {
+    E_HANDLE_SELECT_TEXT,
+    E_HANDLE_HANDLE_TOOL,
+    E_BOOKMARK_DELETE,
+    E_BOOKMARK_DELETE_ALL,
+    E_NOTE_COPY,
+    E_NOTE_DELETE,
+    E_NOTE_DELETE_ALL
+};
+
 }
-
-
 #endif  // MSGHEADER_H

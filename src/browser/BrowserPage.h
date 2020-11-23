@@ -21,7 +21,6 @@
 #ifndef BrowserPage_H
 #define BrowserPage_H
 
-#include "Global.h"
 #include "PDFModel.h"
 
 #include <QGraphicsItem>

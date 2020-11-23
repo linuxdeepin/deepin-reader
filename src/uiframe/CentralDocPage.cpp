@@ -24,6 +24,7 @@
 #include "MainWindow.h"
 #include "SaveDialog.h"
 #include "SlideWidget.h"
+#include "Application.h"
 
 #include <DTitlebar>
 #include <DFileDialog>
@@ -44,7 +45,7 @@
 #include <QDebug>
 
 CentralDocPage::CentralDocPage(DWidget *parent)
-    : CustomWidget(parent)
+    : BaseWidget(parent)
 {
     m_pTabBar = new DocTabBar(this);
     connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));

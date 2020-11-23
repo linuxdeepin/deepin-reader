@@ -18,6 +18,7 @@
 */
 #include "EncryptionPage.h"
 #include "Utils.h"
+#include "Application.h"
 
 #include <DFontSizeManager>
 #include <DApplication>
