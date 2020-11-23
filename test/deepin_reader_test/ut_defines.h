@@ -27,9 +27,27 @@
 
 #define UT_FILE_PDF QCoreApplication::applicationDirPath() + "/files/1.pdf"
 
+#define UT_FILE_PDF_BROKEN QCoreApplication::applicationDirPath() + "/files/broken.pdf"
+
+#define UT_FILE_PDF_SAVE QCoreApplication::applicationDirPath() + "/files/save.pdf"
+
+#define UT_FILE_PDF_SAVEAS QCoreApplication::applicationDirPath() + "/files/saveas.pdf"
+
 #define UT_FILE_DJVU QCoreApplication::applicationDirPath() + "/files/1.djvu"
 
+#define UT_FILE_DJVU_BROKEN QCoreApplication::applicationDirPath() + "/files/broken.djvu"
+
+#define UT_FILE_DJVU_SAVEAS QCoreApplication::applicationDirPath() + "/files/saveas.djvu"
+
+#define UT_FILE_DJVU_SAVE QCoreApplication::applicationDirPath() + "/files/save.djvu"
+
 #define UT_FILE_DOC QCoreApplication::applicationDirPath() + "/files/1.doc"
+
+#define UT_FILE_DOC_BROKEN QCoreApplication::applicationDirPath() + "/files/broken.doc"
+
+#define UT_FILE_DOC_SAVE QCoreApplication::applicationDirPath() + "/files/save.doc"
+
+#define UT_FILE_DOC_SAVEAS QCoreApplication::applicationDirPath() + "/files/saveas.doc"
 
 #define UT_FILE_DOCX QCoreApplication::applicationDirPath() + "/files/1.docx"
 
@@ -37,28 +55,20 @@
 
 #define UT_FILE_NONE QCoreApplication::applicationDirPath() + "/files/none"
 
-#define UT_JSON_TEST
+#define UT_APP_TEST
 
-#define UT_UTILS_TEST
+#define UT_APPLICATION_TEST
+
+#define UT_DOCUMENT_TEST
 
 #define UT_WIDGETS_TEST
 
 #define UT_UIFRAME_TEST
-
-#define UT_DOCSHEET_TEST
-
-#define UT_PDFMODEL_TEST
-
-#define UT_DJVUMODEL_TEST
 
 #define UT_MAINWINDOW_TEST
 
 #define UT_SHEETSIDEBAR_TEST
 
 #define UT_BROWSER_TEST
-
-#define UT_APP_TEST
-
-#define UT_APPLICATION_TEST
 
 #endif // UT_DEFINES_TEST_H

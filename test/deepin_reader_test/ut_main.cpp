@@ -11,16 +11,7 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    Application a(argc, argv);
-
-    Dtk::Core::DLogManager::registerConsoleAppender();
-    Dtk::Core::DLogManager::registerFileAppender();
-
-    DApplicationSettings savetheme;
-    Q_UNUSED(savetheme)
-
-    //test
     ::testing::InitGoogleTest(&argc, argv);
-    qDebug() << RUN_ALL_TESTS();
-    return a.exec();
+
+    return RUN_ALL_TESTS();
 }

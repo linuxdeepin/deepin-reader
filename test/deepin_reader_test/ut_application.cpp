@@ -25,27 +25,64 @@
 
 #include "DocSheet.h"
 #include "Application.h"
+#include "MainWindow.h"
 
 #undef private
 #undef protected
 
-Ut_Application::Ut_Application()
+
+#include <DApplicationSettings>
+#include <DLog>
+#include <QDebug>
+#include <QTimer>
+
+ut_application::ut_application()
+{
+
+}
+
+ut_application::~ut_application()
+{
+
+}
+
+void ut_application::SetUp()
+{
+    Test::SetUp();
+
+    int argc = 0;
+    char arg = ' ';
+    char *argPointer = &arg;
+    char **argPointerPointer = &argPointer;
+    a = new Application(argc, argPointerPointer);
+
+    Dtk::Core::DLogManager::registerConsoleAppender();
+    Dtk::Core::DLogManager::registerFileAppender();
+
+    DApplicationSettings savetheme;
+    Q_UNUSED(savetheme)
+}
+
+void ut_application::TearDown()
 {
 }
 
-void Ut_Application::SetUp()
+void ut_application::exec(int secs)
 {
-}
+    QTimer::singleShot(1000 * secs, [this]() {
+        a->exit();
+    });
 
-void Ut_Application::TearDown()
-{
+    a->exec();
 }
 
 #ifdef UT_APPLICATION_TEST
-TEST_F(Ut_Application, MainWindowTest)
+TEST_F(ut_application, MainWindowTest)
 {
-    dApp->showAnnotTextWidgetSig();
-    dApp->handleFiles(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
-    dApp->quit();
+    a->showAnnotTextWidgetSig();
+    a->handleFiles(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
+
+    exec();
 }
+
 #endif

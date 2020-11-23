@@ -139,7 +139,7 @@ class PDFiumDocument : public Document
 public:
     virtual ~PDFiumDocument();
 
-    int numberOfPages() const;
+    int pageCount() const;
 
     Page *page(int index) const;
 

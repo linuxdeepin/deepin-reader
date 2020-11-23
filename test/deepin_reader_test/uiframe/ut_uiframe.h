@@ -23,9 +23,9 @@
 
 #include "ut_defines.h"
 
-#include <gtest/gtest.h>
+#include "ut_application.h"
 
-class Ut_UiFrame : public ::testing::Test
+class Ut_UiFrame : public ut_application
 {
 public:
     Ut_UiFrame();

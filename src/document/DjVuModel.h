@@ -45,9 +45,9 @@ public:
 
     QImage render(int width, int height, const QRect &slice = QRect())const override;
 
-    QString label() const;
+//    QString label() const;
 
-    QList< Link * > links() const;
+//    QList< Link * > links() const;
 
     QString text(const QRectF &rect) const override;
 
@@ -59,7 +59,9 @@ private:
     const class DjVuDocument *m_parent;
 
     int m_index;
+
     QSize m_size;
+
     int m_resolution;
 
 };
@@ -70,19 +72,17 @@ class DjVuDocument : public Document
 public:
     ~DjVuDocument() override;
 
-    int numberOfPages() const override;
+    int pageCount() const override;
 
     Page *page(int index) const override;
 
     QStringList saveFilter() const override;
 
-    QSizeF pageSizeF(int index) const;
-
-    bool save(const QString &filePath) const override;
+    bool save() const override;
 
     bool saveAs(const QString &filePath) const override;
 
-    Outline outline() const override;
+    //Outline outline() const override;
 
     Properties properties() const override;
 
@@ -102,6 +102,8 @@ private:
     QHash< int, QString > m_titleByIndex;
 
     mutable QList<Page *> m_pages;
+
+    QString m_filePath;
 
     void prepareFileInfo();
 

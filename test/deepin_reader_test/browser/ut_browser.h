@@ -2,10 +2,9 @@
 #define UT_BROWSER_H
 
 #include "ut_defines.h"
+#include "ut_application.h"
 
-#include <gtest/gtest.h>
-
-class ut_browser : public ::testing::Test
+class ut_browser : public ut_application
 {
 public:
     ut_browser();

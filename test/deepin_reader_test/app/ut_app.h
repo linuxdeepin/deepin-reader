@@ -2,10 +2,11 @@
 #define UT_APP_H
 
 #include "ut_defines.h"
+#include "ut_application.h"
 
 #include <gtest/gtest.h>
 
-class ut_app : public ::testing::Test
+class ut_app : public ut_application
 {
 public:
     ut_app();

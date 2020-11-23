@@ -100,7 +100,7 @@ public:
      * @path 保存到路径
      * @return
      */
-    bool save(const QString &path);
+    bool save();
 
     /**
      * @brief 另存为

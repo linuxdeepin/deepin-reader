@@ -22,6 +22,8 @@
 #include "Application.h"
 
 #include <QFile>
+#include <QUuid>
+#include <QTemporaryDir>
 #if defined(Q_OS_WIN) && defined(DJVU_STATIC)
 
 #define DDJVUAPI /**/
@@ -335,56 +337,56 @@ QVector< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform 
     return results;
 }
 
-Outline loadOutline(miniexp_t outlineExp, const QHash< QString, int > &pageByName)
-{
-    Outline outline;
+//Outline loadOutline(miniexp_t outlineExp, const QHash< QString, int > &pageByName)
+//{
+//    Outline outline;
 
-    for (miniexp_t outlineItem = miniexp_nil; miniexp_consp(outlineExp); outlineExp = miniexp_cdr(outlineExp)) {
-        outlineItem = miniexp_car(outlineExp);
+//    for (miniexp_t outlineItem = miniexp_nil; miniexp_consp(outlineExp); outlineExp = miniexp_cdr(outlineExp)) {
+//        outlineItem = miniexp_car(outlineExp);
 
-        if (miniexp_length(outlineItem) < 2 || !miniexp_stringp(miniexp_car(outlineItem)) || !miniexp_stringp(miniexp_cadr(outlineItem))) {
-            continue;
-        }
+//        if (miniexp_length(outlineItem) < 2 || !miniexp_stringp(miniexp_car(outlineItem)) || !miniexp_stringp(miniexp_cadr(outlineItem))) {
+//            continue;
+//        }
 
-        const QString title = QString::fromUtf8(miniexp_to_str(miniexp_car(outlineItem)));
+//        const QString title = QString::fromUtf8(miniexp_to_str(miniexp_car(outlineItem)));
 
-        if (title.isEmpty()) {
-            continue;
-        }
+//        if (title.isEmpty()) {
+//            continue;
+//        }
 
-        outline.push_back(Section());
-        Section &section = outline.back();
-        section.title = title;
+//        outline.push_back(Section());
+//        Section &section = outline.back();
+//        section.title = title;
 
-        QString destination = QString::fromUtf8(miniexp_to_str(miniexp_cadr(outlineItem)));
+//        QString destination = QString::fromUtf8(miniexp_to_str(miniexp_cadr(outlineItem)));
 
-        if (!destination.isEmpty() && destination.at(0) == QLatin1Char('#')) {
-            destination.remove(0, 1);
+//        if (!destination.isEmpty() && destination.at(0) == QLatin1Char('#')) {
+//            destination.remove(0, 1);
 
-            bool ok = false;
-            int page = destination.toInt(&ok);
+//            bool ok = false;
+//            int page = destination.toInt(&ok);
 
-            if (!ok) {
-                const int destinationPage = pageByName.value(destination);
+//            if (!ok) {
+//                const int destinationPage = pageByName.value(destination);
 
-                if (destinationPage != 0) {
-                    ok = true;
-                    page = destinationPage;
-                }
-            }
+//                if (destinationPage != 0) {
+//                    ok = true;
+//                    page = destinationPage;
+//                }
+//            }
 
-            if (ok) {
-                section.nIndex = page - 1;
-            }
-        }
+//            if (ok) {
+//                section.nIndex = page - 1;
+//            }
+//        }
 
-        if (miniexp_length(outlineItem) > 2) {
-            section.children = loadOutline(skip(outlineItem, 2), pageByName);
-        }
-    }
+//        if (miniexp_length(outlineItem) > 2) {
+//            section.children = loadOutline(skip(outlineItem, 2), pageByName);
+//        }
+//    }
 
-    return outline;
-}
+//    return outline;
+//}
 
 Properties loadProperties(miniexp_t annoExp)
 {
@@ -537,44 +539,48 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
         return nullptr;
     }
 
-    return new DjVuDocument(context, document);
+    DjVuDocument *djvuDocument = new DjVuDocument(context, document);
+
+    djvuDocument->m_filePath = filePath;
+
+    return djvuDocument;
 }
 
-QString DjVuPage::label() const
-{
-    return m_parent->m_titleByIndex.value(m_index);
-}
+//QString DjVuPage::label() const
+//{
+//    return m_parent->m_titleByIndex.value(m_index);
+//}
 
-QList< Link * > DjVuPage::links() const
-{
-    LOCK_PAGE
+//QList< Link * > DjVuPage::links() const
+//{
+//    LOCK_PAGE
 
-    miniexp_t pageAnnoExp = miniexp_nil;
+//    miniexp_t pageAnnoExp = miniexp_nil;
 
-    {
-        LOCK_PAGE_GLOBAL
+//    {
+//        LOCK_PAGE_GLOBAL
 
-        while (true) {
-            pageAnnoExp = ddjvu_document_get_pageanno(m_parent->m_document, m_index);
+//        while (true) {
+//            pageAnnoExp = ddjvu_document_get_pageanno(m_parent->m_document, m_index);
 
-            if (pageAnnoExp == miniexp_dummy) {
-                clearMessageQueue(m_parent->m_context, true);
-            } else {
-                break;
-            }
-        }
-    }
+//            if (pageAnnoExp == miniexp_dummy) {
+//                clearMessageQueue(m_parent->m_context, true);
+//            } else {
+//                break;
+//            }
+//        }
+//    }
 
-    const QList< Link * > links = loadLinks(pageAnnoExp, m_size, m_index, m_parent->m_pageByName);
+//    const QList< Link * > links = loadLinks(pageAnnoExp, m_size, m_index, m_parent->m_pageByName);
 
-    {
-        LOCK_PAGE_GLOBAL
+//    {
+//        LOCK_PAGE_GLOBAL
 
-        ddjvu_miniexp_release(m_parent->m_document, pageAnnoExp);
-    }
+//        ddjvu_miniexp_release(m_parent->m_document, pageAnnoExp);
+//    }
 
-    return links;
-}
+//    return links;
+//}
 
 QString DjVuPage::text(const QRectF &rect) const
 {
@@ -630,6 +636,7 @@ QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool who
     }
 
     const QTransform transform = QTransform::fromScale(72.0 / m_resolution, 72.0 / m_resolution);
+
     const QStringList words = text.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
 
     const QVector< QRectF > results = findText(pageTextExp, m_size, transform, words, matchCase, wholeWords);
@@ -667,37 +674,11 @@ DjVuDocument::~DjVuDocument()
     ddjvu_format_release(m_format);
 }
 
-int DjVuDocument::numberOfPages() const
+int DjVuDocument::pageCount() const
 {
     LOCK_DOCUMENT
 
     return ddjvu_document_get_pagenum(m_document);
-}
-
-QSizeF DjVuDocument::pageSizeF(int index) const
-{
-    if(index >=0 && index < m_pages.size()){
-        return m_pages[index]->sizeF();
-    }
-
-    ddjvu_status_t status;
-    ddjvu_pageinfo_t pageinfo;
-
-    while (true) {
-        status = ddjvu_document_get_pageinfo(m_document, index, &pageinfo);
-
-        if (status < DDJVU_JOB_OK) {
-            clearMessageQueue(m_context, true);
-        } else {
-            break;
-        }
-    }
-
-    if (status >= DDJVU_JOB_FAILED) {
-        return QSizeF();
-    }
-
-    return QSizeF(pageinfo.width, pageinfo.height);
 }
 
 Page *DjVuDocument::page(int index) const
@@ -722,7 +703,9 @@ Page *DjVuDocument::page(int index) const
     }
 
     Page *page = new DjVuPage(this, index, pageinfo);
+
     m_pages << page;
+
     return page;
 }
 
@@ -732,11 +715,6 @@ QStringList DjVuDocument::saveFilter() const
 }
 
 bool DjVuDocument::saveAs(const QString &filePath) const
-{
-    return save(filePath);
-}
-
-bool DjVuDocument::save(const QString &filePath) const
 {
     LOCK_DOCUMENT
 
@@ -765,40 +743,75 @@ bool DjVuDocument::save(const QString &filePath) const
     return !ddjvu_job_error(job);
 }
 
-Outline DjVuDocument::outline() const
+bool DjVuDocument::save() const
 {
-    Outline outline;
+    QTemporaryDir tempDir;
 
-    LOCK_DOCUMENT
+    QString tempFilePath = tempDir.path() + "/" + QUuid::createUuid().toString();
 
-    miniexp_t outlineExp = miniexp_nil;
+    if (!saveAs(tempFilePath))
+        return false;
 
-    {
-        LOCK_DOCUMENT_GLOBAL
+    QFile tempFile(tempFilePath);
 
-        while (true) {
-            outlineExp = ddjvu_document_get_outline(m_document);
+    if (!tempFile.open(QIODevice::ReadOnly))
+        return false;
 
-            if (outlineExp == miniexp_dummy) {
-                clearMessageQueue(m_context, true);
-            } else {
-                break;
-            }
-        }
-    }
+    bool result = true;
 
-    if (miniexp_length(outlineExp) > 1 && qstrcmp(miniexp_to_name(miniexp_car(outlineExp)), "bookmarks") == 0) {
-        outline = loadOutline(skip(outlineExp, 1), m_pageByName);
-    }
+    QByteArray array = tempFile.readAll();
 
-    {
-        LOCK_DOCUMENT_GLOBAL
+    tempFile.close();
 
-        ddjvu_miniexp_release(m_document, outlineExp);
-    }
+    QFile file(m_filePath);
 
-    return outline;
+    file.remove();          //不remove会出现第二次导出丢失数据问题 (保存动作完成之后，如果当前文档是当初打开那个，下一次导出会出错)
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+
+    if (array.size() != file.write(array))
+        result = false;
+
+    file.close();
+
+    return result;
 }
+
+//Outline DjVuDocument::outline() const
+//{
+//    Outline outline;
+
+//    LOCK_DOCUMENT
+
+//    miniexp_t outlineExp = miniexp_nil;
+
+//    {
+//        LOCK_DOCUMENT_GLOBAL
+
+//        while (true) {
+//            outlineExp = ddjvu_document_get_outline(m_document);
+
+//            if (outlineExp == miniexp_dummy) {
+//                clearMessageQueue(m_context, true);
+//            } else {
+//                break;
+//            }
+//        }
+//    }
+
+//    if (miniexp_length(outlineExp) > 1 && qstrcmp(miniexp_to_name(miniexp_car(outlineExp)), "bookmarks") == 0) {
+//        outline = loadOutline(skip(outlineExp, 1), m_pageByName);
+//    }
+
+//    {
+//        LOCK_DOCUMENT_GLOBAL
+
+//        ddjvu_miniexp_release(m_document, outlineExp);
+//    }
+
+//    return outline;
+//}
 
 Properties DjVuDocument::properties() const
 {

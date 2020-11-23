@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "SheetSidebar.h"
 #include "CentralDocPage.h"
+#include "Application.h"
 
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
@@ -52,20 +53,21 @@
 #include <DApplication>
 #include <QClipboard>
 
-Ut_SheetSidebar::Ut_SheetSidebar()
+ut_sidebar::ut_sidebar()
 {
 }
 
-void Ut_SheetSidebar::SetUp()
+void ut_sidebar::SetUp()
 {
+    ut_application::SetUp();
 }
 
-void Ut_SheetSidebar::TearDown()
+void ut_sidebar::TearDown()
 {
 }
 
 #ifdef UT_SHEETSIDEBAR_TEST
-TEST_F(Ut_SheetSidebar, SidebarTest)
+TEST_F(ut_sidebar, SidebarTest)
 {
     QString path = UT_FILE_TEST_FILE;
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
@@ -339,8 +341,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(searchWidget.m_pImageListView, &mouserevent);
 
-    sheet->saveData();
-
     ImagePageInfo_t imageInfo1(1);
     ImagePageInfo_t imageInfo2(2);
     ImagePageInfo_t imageInfo3(imageInfo1);
@@ -349,9 +349,13 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     EXPECT_TRUE(imageInfo1 == imageInfo3);
     EXPECT_TRUE(imageInfo1 < imageInfo2);
     EXPECT_FALSE(imageInfo1 > imageInfo2);
+
+    mainWindow->closeWithoutSave();
+
+    a->quit();
 }
 
-TEST(Ut_TransparentTextEdit, TransparentTextEditTest)
+TEST_F(ut_sidebar, TransparentTextEditTest)
 {
     TransparentTextEdit textedit;
     textedit.show();
@@ -368,7 +372,7 @@ TEST(Ut_TransparentTextEdit, TransparentTextEditTest)
     QCoreApplication::sendEvent(&textedit, &keyevent);
 }
 
-TEST(Ut_NoteViewWidget, NoteViewWidgetTest)
+TEST_F(ut_sidebar, NoteViewWidgetTest)
 {
     NoteShadowViewWidget shadowView(nullptr);
     shadowView.showWidget(QPoint(0, 0));
@@ -377,11 +381,16 @@ TEST(Ut_NoteViewWidget, NoteViewWidgetTest)
     shadowView.getNoteViewWidget()->setAnnotation(nullptr);
     shadowView.getNoteViewWidget()->onBlurWindowChanged();
     shadowView.getNoteViewWidget()->repaint();
+    shadowView.getNoteViewWidget()->show();
 
-    QHideEvent hideEvent;
-    QCoreApplication::sendEvent(&shadowView, &hideEvent);
+    QTimer::singleShot(1, [&shadowView]() {
+        QHideEvent hideEvent;
+        QCoreApplication::sendEvent(&shadowView, &hideEvent);
 
-    shadowView.getNoteViewWidget()->hide();
-    shadowView.getNoteViewWidget()->onShowMenu();
+        shadowView.getNoteViewWidget()->hide();
+        shadowView.getNoteViewWidget()->onShowMenu();
+    });
+
+    exec();
 }
 #endif

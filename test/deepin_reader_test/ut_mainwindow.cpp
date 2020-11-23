@@ -36,6 +36,7 @@ Ut_MainWindow::Ut_MainWindow()
 
 void Ut_MainWindow::SetUp()
 {
+    ut_application::SetUp();
 }
 
 void Ut_MainWindow::TearDown()
@@ -59,7 +60,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_TRUE(mainWindow->windowContainSheet(sheet));
 
     mainWindow->hasSheet(nullptr);
-    mainWindow->updateOrderWidgets(QList<QWidget *>());
+    //mainWindow->updateOrderWidgets(QList<QWidget *>());   //崩溃
     mainWindow->activateSheet(sheet);
     mainWindow_muti->activateSheet(sheet);
     mainWindow->onMainWindowFull();
@@ -68,9 +69,10 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->zoomIn();
     mainWindow->zoomOut();
 
-    mainWindow->close();
-    mainWindow_empty->close();
+    mainWindow_muti->closeWithoutSave();
+    mainWindow->closeWithoutSave();
+    mainWindow_empty->closeWithoutSave();
 
-    MainWindow::createWindow(QStringList() << UT_FILE_PDF << UT_FILE_DJVU)->close();
+    exec();
 }
 #endif

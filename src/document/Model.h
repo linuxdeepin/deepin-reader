@@ -57,9 +57,9 @@ struct Link {
     Link(const QPainterPath &boundary, int page, qreal left = 0.0, qreal top = 0.0) : boundary(boundary), page(page), left(left), top(top), urlOrFileName() {}
     Link(const QRectF &boundingRect, int page, qreal left = 0.0, qreal top = 0.0) : boundary(), page(page), left(left), top(top), urlOrFileName() { boundary.addRect(boundingRect); }
     Link(const QPainterPath &boundary, const QString &url) : boundary(boundary), page(-1), left(0.0), top(0.0), urlOrFileName(url) {}
-    Link(const QRectF &boundingRect, const QString &url) : boundary(), page(-1), left(0.0), top(0.0), urlOrFileName(url) { boundary.addRect(boundingRect); }
-    Link(const QPainterPath &boundary, const QString &fileName, int page) : boundary(boundary), page(page), left(0.0), top(0.0), urlOrFileName(fileName) {}
-    Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(), page(page), left(0.0), top(0.0), urlOrFileName(fileName) { boundary.addRect(boundingRect); }
+    //Link(const QRectF &boundingRect, const QString &url) : boundary(), page(-1), left(0.0), top(0.0), urlOrFileName(url) { boundary.addRect(boundingRect); }
+    //Link(const QPainterPath &boundary, const QString &fileName, int page) : boundary(boundary), page(page), left(0.0), top(0.0), urlOrFileName(fileName) {}
+    //Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(), page(page), left(0.0), top(0.0), urlOrFileName(fileName) { boundary.addRect(boundingRect); }
 
     bool isValid()
     {
@@ -139,10 +139,6 @@ public:
 
     virtual DPdfAnnot *ownAnnotation() = 0;
 
-    virtual QString uniqueName() const {return QString();}
-
-    virtual bool setUniqueName(QString uniqueName) const {Q_UNUSED(uniqueName) return false;}
-
     //数值同poppler类型
     enum AnnotationType {
         AUnknown = 0,         ///< 前期支持以外的
@@ -186,16 +182,16 @@ public:
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(int width, int height, const QRect &slice = QRect()) const = 0;
     virtual Link getLinkAtPoint(const QPointF &) { return Link(); }
-    virtual QString text(const QRectF &rect) const { Q_UNUSED(rect) return QString(); }
+    virtual QString text(const QRectF &rect) const = 0;
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
-    virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const { Q_UNUSED(text) Q_UNUSED(matchCase) Q_UNUSED(wholeWords) return QVector<QRectF>(); }
+    virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color) { Q_UNUSED(boundaries) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
     virtual QList<Word> words() {return QList<Word>();}
-    virtual bool mouseClickIconAnnot(QPointF &) {return false;}
+    virtual bool mouseClickIconAnnot(const QPointF &) {return false;}
     virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
     virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
@@ -217,22 +213,14 @@ public:
 
     Document() : QObject() {}
     virtual ~Document() {}
-    virtual int numberOfPages() const = 0;
+    virtual int pageCount() const = 0;
     virtual Page *page(int index) const = 0;
-    virtual QStringList saveFilter() const { return QStringList(); }
+    virtual QStringList saveFilter() const = 0;
     virtual QString label(int) const { return QString(); }
-    virtual bool save(const QString &filePath) const { Q_UNUSED(filePath); return false; }
-    virtual bool saveAs(const QString &filePath) const { Q_UNUSED(filePath); return false; }
-    virtual bool canBePrintedUsingCUPS() const { return false; }
-    virtual void setPaperColor(const QColor &paperColor) { Q_UNUSED(paperColor); }
+    virtual bool save() const = 0;
+    virtual bool saveAs(const QString &filePath) const = 0;
     virtual Outline outline() const { return Outline(); }
-    virtual Properties properties() const { return Properties(); }
-    virtual QAbstractItemModel *fonts() const { return nullptr; }
-    virtual bool wantsContinuousMode() const { return false; }
-    virtual bool wantsSinglePageMode() const { return false; }
-    virtual bool wantsTwoPagesMode() const { return false; }
-    virtual bool wantsTwoPagesWithCoverPageMode() const { return false; }
-    virtual bool wantsRightToLeftMode() const { return false; }
+    virtual Properties properties() const = 0;
 };
 
 } // deepin_reader

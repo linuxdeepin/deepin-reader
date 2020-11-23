@@ -25,10 +25,13 @@
 
 #include <gtest/gtest.h>
 
-class Ut_Application : public ::testing::Test
+class Application;
+class ut_application : public ::testing::Test
 {
 public:
-    Ut_Application();
+    ut_application();
+
+    ~ut_application();
 
 public:
     //用于做一些初始化操作
@@ -37,7 +40,9 @@ public:
     //用于做一些清理操作
     virtual void TearDown();
 
-public:
+    void exec(int secs = 1);
+
+    Application *a = nullptr;
 };
 
 #endif // UT_APPLICATION_H

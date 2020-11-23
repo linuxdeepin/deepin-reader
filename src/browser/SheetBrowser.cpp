@@ -145,7 +145,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     if (nullptr == document)
         return QImage();
 
-    if (document->numberOfPages() <= 0)
+    if (document->pageCount() <= 0)
         return QImage();
 
     deepin_reader::Page *page = document->page(0);
@@ -213,7 +213,7 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
     m_lable2Page.clear();
 
-    int pagesNumber = m_document->numberOfPages();
+    int pagesNumber = m_document->pageCount();
 
     for (int i = 0; i < pagesNumber; ++i) {
         deepin_reader::Page *page = m_document->page(i);
@@ -255,12 +255,9 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
     return true;
 }
 
-bool SheetBrowser::save(const QString &path)
+bool SheetBrowser::save()
 {
-    if (path.isEmpty())
-        return false;
-
-    return m_document->save(path);
+    return m_document->save();
 }
 
 bool SheetBrowser::saveAs(const QString &path)

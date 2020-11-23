@@ -79,6 +79,10 @@ Makefile*
 
 test/deepin_reader_test/coverage
 
+test/deepin_reader_test/files/saveas.pdf
+
+test/deepin_reader_test/files/saveas.djvu
+
 deepin-reader
 
 # QtCreator

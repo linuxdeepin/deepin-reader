@@ -23,10 +23,10 @@
 
 #include "ut_defines.h"
 
-#include <gtest/gtest.h>
+#include "ut_application.h"
 
 class MainWindow;
-class Ut_MainWindow : public ::testing::Test
+class Ut_MainWindow : public ut_application
 {
 public:
     Ut_MainWindow();

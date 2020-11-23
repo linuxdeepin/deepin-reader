@@ -23,6 +23,7 @@ ut_app::ut_app()
 
 void ut_app::SetUp()
 {
+    ut_application::SetUp();
 }
 
 void ut_app::TearDown()

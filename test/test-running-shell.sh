@@ -14,6 +14,8 @@ result_report_dir=$build_dir/report/report.xml
 
 #下面二选1进行操作，一种正向操作，一种逆向操作
 
+#rm deepin_reader_test/coverage -r
+
 extract_info="*/deepin-reader/*"
 
 remove_info="*/test/*"
@@ -35,5 +37,21 @@ nohup x-www-browser $result_coverage_dir/index.html &
 nohup x-www-browser $result_report_dir &
 
 lcov -d $build_dir –z
+
+rm deepin_reader_test/*.gcno -r
+
+rm deepin_reader_test/*.gcda -r
+
+rm deepin_reader_test/*.o -r
+
+rm deepin_reader_test/moc_* -r
+
+rm deepin_reader_test/.qmake.stash
+
+rm deepin_reader_test/Makefile
+
+rm deepin_reader_test/coverage.info
+
+rm deepin_reader_test/deepin-reader
 
 exit 0

@@ -22,10 +22,10 @@
 #define UT_WIDGETS_H
 
 #include "ut_defines.h"
-
+#include "ut_application.h"
 #include <gtest/gtest.h>
 
-class Ut_Widgets : public ::testing::Test
+class Ut_Widgets : public ut_application
 {
 public:
     Ut_Widgets();

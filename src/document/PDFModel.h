@@ -93,7 +93,7 @@ public:
 
     bool updateAnnotation(Annotation *annotation, const QString &, const QColor &) override;
 
-    bool mouseClickIconAnnot(QPointF &) override;
+    bool mouseClickIconAnnot(const QPointF &) override;
 
     Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) override;
 
@@ -120,7 +120,7 @@ class PDFDocument : public Document
 public:
     virtual ~PDFDocument() override;
 
-    int numberOfPages() const override;
+    int pageCount() const override;
 
     Page *page(int index) const override;
 
@@ -128,7 +128,7 @@ public:
 
     QString label(int index) const override;
 
-    bool save(const QString &filePath) const override;
+    bool save() const override;
 
     bool saveAs(const QString &filePath) const override;
 

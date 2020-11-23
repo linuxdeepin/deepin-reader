@@ -586,6 +586,10 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
     const QList<deepin_reader::Word> &twords = m_page->words();
+
+    if (m_words.size() != twords.size())
+        return nullptr;
+
     int wordCnt = twords.size();
 
     QRectF selectBoundRectF;

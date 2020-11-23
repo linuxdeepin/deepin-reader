@@ -245,7 +245,7 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     return false;
 }
 
-bool PDFPage::mouseClickIconAnnot(QPointF &clickPos)
+bool PDFPage::mouseClickIconAnnot(const QPointF &clickPos)
 {
     LOCK_DOCUMENT
 
@@ -304,7 +304,7 @@ PDFDocument::~PDFDocument()
     delete m_docMutex;
 }
 
-int PDFDocument::numberOfPages() const
+int PDFDocument::pageCount() const
 {
     LOCK_DOCUMENT
 
@@ -343,9 +343,8 @@ QStringList PDFDocument::saveFilter() const
     return QStringList() << "Portable document format (*.pdf)";
 }
 
-bool PDFDocument::save(const QString &filePath) const
+bool PDFDocument::save() const
 {
-    Q_UNUSED(filePath)
     LOCK_DOCUMENT
 
     return m_document->save();
@@ -354,6 +353,7 @@ bool PDFDocument::save(const QString &filePath) const
 bool PDFDocument::saveAs(const QString &filePath) const
 {
     LOCK_DOCUMENT
+
     return m_document->saveAs(filePath);
 }
 

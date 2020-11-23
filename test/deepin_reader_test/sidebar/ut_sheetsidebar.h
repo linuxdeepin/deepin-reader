@@ -18,17 +18,16 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UT_SHEETSIDEBAR_H
-#define UT_SHEETSIDEBAR_H
+#ifndef ut_sidebar_H
+#define ut_sidebar_H
 
 #include "ut_defines.h"
+#include "ut_application.h"
 
-#include <gtest/gtest.h>
-
-class Ut_SheetSidebar : public ::testing::Test
+class ut_sidebar : public ut_application
 {
 public:
-    Ut_SheetSidebar();
+    ut_sidebar();
 
 public:
     //用于做一些初始化操作
@@ -37,7 +36,6 @@ public:
     //用于做一些清理操作
     virtual void TearDown();
 
-public:
 };
 
-#endif // UT_SHEETSIDEBAR_H
+#endif // ut_sidebar_H

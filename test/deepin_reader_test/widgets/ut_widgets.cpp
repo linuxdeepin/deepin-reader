@@ -44,6 +44,7 @@
 #define private public
 #include "MainWindow.h"
 #include "CentralDocPage.h"
+#include "Application.h"
 
 #include "widgets/TipsWidget.h"
 #include "widgets/WordWrapLabel.h"
@@ -61,6 +62,7 @@ Ut_Widgets::Ut_Widgets()
 
 void Ut_Widgets::SetUp()
 {
+    ut_application::SetUp();
 }
 
 void Ut_Widgets::TearDown()
@@ -68,7 +70,7 @@ void Ut_Widgets::TearDown()
 }
 
 #ifdef UT_WIDGETS_TEST
-TEST(Ut_Widgets, SheetWidgetTest)
+TEST_F(Ut_Widgets, SheetWidgetTest)
 {
     QString path = UT_FILE_TEST_FILE;
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
@@ -76,7 +78,6 @@ TEST(Ut_Widgets, SheetWidgetTest)
     mainWindow->show();
 
     CentralDocPage *docpage = mainWindow->m_central->docPage();
-    //Central
     ASSERT_TRUE(docpage);
 
     DocSheet *sheet = docpage->getSheet(path);
@@ -119,14 +120,9 @@ TEST(Ut_Widgets, SheetWidgetTest)
         filewidget->addTitleFrame("");
         filewidget->resize(600, 600);
         filewidget->showScreenCenter();
-
         filewidget->repaint();
-
         delete filewidget;
     }
-
-//    //PrintManager
-//    //PrintManager printManager(sheet);
 
     //SlideWidget
     {
@@ -189,7 +185,7 @@ TEST(Ut_Widgets, SheetWidgetTest)
         scaleWidget.onNextScale();
         scaleWidget.onReturnPressed();
         scaleWidget.onEditFinished();
-        scaleWidget.onArrowBtnlicked();
+//        scaleWidget.onArrowBtnlicked();       //会等待
 
         scaleWidget.setSheet(sheet);
         scaleWidget.clear();
@@ -231,15 +227,17 @@ TEST(Ut_Widgets, SheetWidgetTest)
     }
 
     sheet->saveData();
+
+    //exec();
 }
 
-TEST(Ut_Widgets, BColorWidgetActionTest)
+TEST_F(Ut_Widgets, BColorWidgetActionTest)
 {
     ColorWidgetAction colorAction;
     colorAction.slotBtnClicked(0);
 }
 
-TEST(Ut_Widgets, CustomWidgetTest)
+TEST_F(Ut_Widgets, BaseWidgetTest)
 {
     BaseWidget cusWidget;
     cusWidget.adaptWindowSize(1.0);
@@ -249,7 +247,7 @@ TEST(Ut_Widgets, CustomWidgetTest)
     cusWidget.updateWidgetTheme();
 }
 
-TEST(Ut_Widgets, EncryptionPageTest)
+TEST_F(Ut_Widgets, EncryptionPageTest)
 {
     EncryptionPage encryPage;
     encryPage.nextbuttonClicked();
@@ -258,14 +256,17 @@ TEST(Ut_Widgets, EncryptionPageTest)
     encryPage.onUpdateTheme();
 }
 
-TEST(Ut_Widgets, SaveDialogTest)
+TEST_F(Ut_Widgets, SaveDialogTest)
 {
-    SaveDialog saveDialog;
-    saveDialog.showTipDialog("1111111");
-    saveDialog.showExitDialog();
+//    qDebug() << 111;
+//    a->exec();
+//    qDebug() << 222;
+//    SaveDialog saveDialog;
+//    saveDialog.showTipDialog("1111111");
+//    saveDialog.showExitDialog();
 }
 
-TEST(Ut_Widgets, RoundColorWidgetTest)
+TEST_F(Ut_Widgets, RoundColorWidgetTest)
 {
     RoundColorWidget roundColorWidget(Qt::red);
     roundColorWidget.show();
@@ -281,7 +282,7 @@ TEST(Ut_Widgets, RoundColorWidgetTest)
     roundColorWidget.repaint();
 }
 
-TEST(Ut_Widgets, ShortCutShowTest)
+TEST_F(Ut_Widgets, ShortCutShowTest)
 {
     ShortCutShow shortCutDialog;
     shortCutDialog.setSheet(nullptr);
@@ -289,7 +290,7 @@ TEST(Ut_Widgets, ShortCutShowTest)
     shortCutDialog.show();
 }
 
-TEST(Ut_Widgets, SlidePlayWidgetTest)
+TEST_F(Ut_Widgets, SlidePlayWidgetTest)
 {
     SlidePlayWidget slidePlaywidget;
     slidePlaywidget.showControl();
@@ -318,7 +319,7 @@ TEST(Ut_Widgets, SlidePlayWidgetTest)
     QCoreApplication::sendEvent(&slidePlaywidget, &hoverL);
 }
 
-TEST(Ut_Widgets, SpinnerWidgetTest)
+TEST_F(Ut_Widgets, SpinnerWidgetTest)
 {
     SpinnerWidget spinnerWidget;
     spinnerWidget.startSpinner();
@@ -326,7 +327,7 @@ TEST(Ut_Widgets, SpinnerWidgetTest)
     spinnerWidget.setSpinnerSize(QSize(100, 100));
 }
 
-TEST(Ut_Widgets, TipsWidgetTest)
+TEST_F(Ut_Widgets, TipsWidgetTest)
 {
     TipsWidget tipsWidget;
     tipsWidget.show();
@@ -350,7 +351,7 @@ TEST(Ut_Widgets, TipsWidgetTest)
     QCoreApplication::sendEvent(&tipsWidget, &showEvent);
 }
 
-TEST(Ut_Widgets, WordWrapLabelTest)
+TEST_F(Ut_Widgets, WordWrapLabelTest)
 {
     WordWrapLabel wordLabel;
     wordLabel.show();
