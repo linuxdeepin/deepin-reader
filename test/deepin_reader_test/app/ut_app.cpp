@@ -2,7 +2,6 @@
 #define private public
 #define protected public
 
-#include "app/Json.h"
 #include <QStringList>
 #include <QJsonArray>
 #include <QDebug>
@@ -13,7 +12,6 @@
 #include "app/DebugTimeManager.h"
 #include "Database.h"
 #include "DocSheet.h"
-#include "TimeElapsedUtils.h"
 
 #undef private
 #undef protected
@@ -47,11 +45,6 @@ TEST_F(ut_app, DatabaseTest)
     Database::instance()->saveOperation(sheet);
 }
 
-TEST_F(ut_app, TimeElapsedUtilsTest)
-{
-    TimeElapsedUtils te("test te");
-}
-
 TEST_F(ut_app, DebugTimeManagerTest)
 {
     DebugTimeManager::getInstance()->beginPointLinux("0", "1");
@@ -71,39 +64,12 @@ TEST_F(ut_app, GlobalTest)
     EXPECT_EQ(Dr::fileType(UT_FILE_NONE), Dr::Unknown);
 }
 
-TEST_F(ut_app, JsonTest)
-{
-    Json json("{\"test0_key\" : \"test0_value\", \"test1_key\" : 1, \"test2_key\" : true, \"test3_key\" : 520.1314, \"test4_key\" : [\"1\", \"2\",\"3\"], \"test5_key\" : {\"child0\" : 1}}");
-    EXPECT_STREQ(json.getString("test0_key").toStdString().c_str(), "test0_value");
-    EXPECT_EQ(json.getInt("test1_key"), 1);
-    EXPECT_EQ(json.getBool("test2_key"), true);
-    EXPECT_DOUBLE_EQ(json.getDouble("test3_key"), 520.1314);
-    EXPECT_EQ(json.getStringList("test4_key").join(","), "1,2,3");
-    EXPECT_EQ(json.getJsonArray("test4_key"), QJsonArray() << "1" << "2" << "3");
-    EXPECT_EQ(json.getJsonValue("test1_key").toInt(), 1);
-    EXPECT_EQ(json.getJsonObject("test5_key").value("child0"), 1);
-
-    EXPECT_EQ(json.getInt("test5_key.child0"), 1);
-
-    json.set("test0_key", "111");
-    EXPECT_STREQ(json.getString("test0_key").toStdString().c_str(), "111");
-    json.set("test0_key", QStringList() << "1" << "2" << "3");
-    EXPECT_STREQ(json.getStringList("test0_key").join(",").toStdString().c_str(), "1,2,3");
-    json.set("test0_key", "test0_value");
-    EXPECT_STREQ(json.toString(QJsonDocument::Compact).toStdString().c_str(), "{\"test0_key\":\"test0_value\",\"test1_key\":1,\"test2_key\":true,\"test3_key\":520.1314,\"test4_key\":[\"1\",\"2\",\"3\"],\"test5_key\":{\"child0\":1}}");
-}
-
 TEST_F(ut_app, UtilsTest)
 {
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
     EXPECT_STREQ(Utils::getKeyshortcut(&keyevent).toStdString().c_str(), Dr::key_ctrl_1.toStdString().c_str());
 
-    EXPECT_EQ(Utils::fileExists("/usr/bin/deepin-reader"), true);
-    EXPECT_EQ(Utils::fileExists(""), false);
-    EXPECT_EQ(Utils::fileExists("/usr/bin"), false);
-
     QPixmap pixmap(UT_FILE_PNG);
-    EXPECT_EQ(Utils::dropShadow(QPixmap(), 0, Qt::red), QImage());
     EXPECT_EQ(Utils::roundQPixmap(pixmap, 0).isNull(), false);
     EXPECT_EQ(Utils::roundQPixmap(QPixmap(), 0).isNull(), true);
 
@@ -121,10 +87,7 @@ TEST_F(ut_app, UtilsTest)
     image = pixmap.toImage();
     EXPECT_EQ(Utils::copyImage(image, 1, 1, 1, 1).isNull(), false);
 
-    EXPECT_EQ(Utils::renderSVG(UT_FILE_EMPTYPNG, QSize(12, 12)).isNull(), true);
-    EXPECT_EQ(Utils::renderSVG(UT_FILE_PNG, QSize(12, 12)).isNull(), false);
     EXPECT_EQ(Utils::getHiglightColorList().size(), 8);
     EXPECT_EQ(Utils::isWayland(), false);
-    EXPECT_EQ(Utils::getUuid().isEmpty(), false);
 }
 #endif

@@ -28,8 +28,8 @@
 #include "SheetSidebar.h"
 #include "CentralDocPage.h"
 
-#include "ImageListview.h"
-#include "ImageViewModel.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
 #include "sidebar/note/NotesWidget.h"
 #include "sidebar/search/SearchResWidget.h"
 #include "sidebar/bookmark/BookMarkWidget.h"
@@ -39,10 +39,7 @@
 #include "sidebar/catalog/CatalogTreeView.h"
 #include "sidebar/note/TransparentTextEdit.h"
 #include "sidebar/thumbnail/PagingWidget.h"
-#include "sidebar/ImageViewModel.h"
-
-#include "menu/BookMarkMenu.h"
-#include "menu/NoteMenu.h"
+#include "sidebar/SideBarImageViewModel.h"
 
 #undef private
 #undef protected
@@ -352,21 +349,6 @@ TEST_F(Ut_SheetSidebar, SidebarTest)
     EXPECT_TRUE(imageInfo1 == imageInfo3);
     EXPECT_TRUE(imageInfo1 < imageInfo2);
     EXPECT_FALSE(imageInfo1 > imageInfo2);
-}
-
-TEST(Ut_BookMarkMenu, BookMarkMenuTest)
-{
-    BookMarkMenu booksMenu;
-    booksMenu.slotDelete();
-    booksMenu.slotDeleteAll();
-}
-
-TEST(Ut_NoteMenu, NoteMenuTest)
-{
-    NoteMenu noteMenu;
-    noteMenu.slotCopy();
-    noteMenu.slotDelete();
-    noteMenu.slotAllDelete();
 }
 
 TEST(Ut_TransparentTextEdit, TransparentTextEditTest)

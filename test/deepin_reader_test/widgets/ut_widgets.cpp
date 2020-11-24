@@ -24,9 +24,8 @@
 #define protected public
 
 #include "widgets/ScaleMenu.h"
-#include "widgets/CustomMenu.h"
 #include "widgets/FindWidget.h"
-#include "widgets/CustomWidget.h"
+#include "widgets/BaseWidget.h"
 #include "widgets/EncryptionPage.h"
 #include "widgets/ColorWidgetAction.h"
 #include "widgets/HandleMenu.h"
@@ -240,24 +239,13 @@ TEST(Ut_Widgets, BColorWidgetActionTest)
     colorAction.slotBtnClicked(0);
 }
 
-TEST(Ut_Widgets, CustomMenuTest)
-{
-    CustomMenu *menu = new CustomMenu();
-    menu->resize(200, 100);
-    EXPECT_TRUE(menu->createAction("test", "", true));
-    menu->show();
-    delete menu;
-}
-
 TEST(Ut_Widgets, CustomWidgetTest)
 {
-    CustomWidget cusWidget;
+    BaseWidget cusWidget;
     cusWidget.adaptWindowSize(1.0);
     cusWidget.updateThumbnail(-1);
     cusWidget.updateThumbnail(0);
     cusWidget.updateThumbnail(10000);
-    cusWidget.showMenu();
-    cusWidget.initWidget();
     cusWidget.updateWidgetTheme();
 }
 
