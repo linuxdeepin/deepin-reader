@@ -53,6 +53,7 @@ public:
     {
         return y * m_yRes / 72;
     }
+
     QRectF transPixelToPoint(const QRectF &rect) const
     {
         return QRectF(rect.x() * 72 / m_xRes, rect.y() * 72 / m_yRes, rect.width() * 72 / m_xRes, rect.height() * 72 / m_yRes);
@@ -61,7 +62,10 @@ public:
     {
         return QPointF(pos.x() * 72 / m_xRes, pos.y() * 72 / m_yRes);
     }
-
+    QSizeF transPixelToPoint(const QSizeF &size) const
+    {
+        return QSizeF(size.width() * 72 / m_xRes, size.height() * 72 / m_yRes);
+    }
 private:
     /**
      * @brief 加载注释,无需初始化，注释的坐标取值不受页自身旋转影响
@@ -599,8 +603,9 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
 
     if (!pos.isNull()) {
         QPointF pointPos = d_func()->transPixelToPoint(pos);
+        QSizeF pointSize = QSizeF(20, 20);
 
-        FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(pointPos.x() - 10, pointPos.y() - 10, 20, 20));
+        FS_RECTF fs_rect = d_func()->transRect(d_func()->oriRotation(), QRectF(pointPos.x() - pointSize.width() / 2, pointPos.y() - pointSize.height() / 2, pointSize.width(), pointSize.height()));
 
         if (!FPDFAnnot_SetRect(annot, &fs_rect)) {
             FPDFPage_CloseAnnot(annot);
@@ -608,7 +613,8 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
         }
 
         //此处使用pixel坐标
-        textAnnot->setRectF(QRectF(pos.x() - 10, pos.y() - 10, 20, 20));
+        QSizeF pixelSize = d_func()->transPointToPixel(pointSize);
+        textAnnot->setRectF(QRectF(pos.x() - pixelSize.width() / 2, pos.y() - pixelSize.height() / 2, pixelSize.width(), pixelSize.height()));
     }
 
     FPDFPage_CloseAnnot(annot);

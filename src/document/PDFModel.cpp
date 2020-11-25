@@ -287,6 +287,15 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
     m_document(document)
 {
     m_docMutex = new QMutex;
+
+    QScreen *srn = QApplication::screens().value(0);
+    qreal m_xRes = 72;
+    qreal m_yRes = 72;
+    if (nullptr != srn) {
+        m_xRes = srn->physicalDotsPerInchX();
+        m_yRes = srn->physicalDotsPerInchY();
+    }
+
 }
 
 PDFDocument::~PDFDocument()
@@ -313,17 +322,9 @@ int PDFDocument::pageCount() const
 
 Page *PDFDocument::page(int index) const
 {
-    QScreen *srn = QApplication::screens().value(0);
-    qreal xRes = 72;
-    qreal yRes = 72;
-    if (nullptr != srn) {
-        xRes = srn->physicalDotsPerInchX();
-        yRes = srn->physicalDotsPerInchY();
-    }
-
     LOCK_DOCUMENT
 
-    if (DPdfPage *page = m_document->page(index, xRes, yRes)) {
+    if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
         if (page->isValid())
             return new PDFPage(m_docMutex, page);
     }
@@ -378,8 +379,10 @@ Outline PDFDocument::outline() const
     if (m_outline.size() > 0)
         return m_outline;
 
-    const DPdfDoc::Outline &cOutline = m_document->outline();
+    const DPdfDoc::Outline &cOutline = m_document->outline(m_xRes, m_yRes);
+
     collectOuleLine(cOutline, m_outline);
+
     return m_outline;
 }
 

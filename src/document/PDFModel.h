@@ -152,6 +152,9 @@ private:
     mutable Properties m_fileProperties;
 
     mutable Outline m_outline;
+
+    qreal m_xRes = 72;
+    qreal m_yRes = 72;
 };
 }
 

@@ -85,7 +85,7 @@ public:
      * @brief 目录
      * @return
      */
-    Outline outline();
+    Outline outline(qreal xRes, qreal yRes);
 
     /**
      * @brief 文档属性信息

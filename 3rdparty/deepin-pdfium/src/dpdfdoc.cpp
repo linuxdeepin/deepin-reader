@@ -247,12 +247,12 @@ DPdfPage *DPdfDoc::page(int i, qreal xRes, qreal yRes)
     return d_func()->m_pages[i];
 }
 
-void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, CPDF_Bookmark This)
+void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, CPDF_Bookmark This, qreal xRes, qreal yRes)
 {
     DPdfDoc::Section section;
 
     const WideString &title = This.GetTitle();
-    section.title = QString::fromWCharArray(title.c_str(), title.GetLength());
+    section.title = QString::fromWCharArray(title.c_str(), static_cast<int>(title.GetLength()));
 
     bool hasx = false, hasy = false, haszoom = false;
     float x = 0.0, y = 0.0, z = 0.0;
@@ -260,28 +260,28 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
     const CPDF_Dest &dest = This.GetDest(tree.GetDocument()).GetArray() ? This.GetDest(tree.GetDocument()) : This.GetAction().GetDest(tree.GetDocument());
     section.nIndex = dest.GetDestPageIndex(tree.GetDocument());
     dest.GetXYZ(&hasx, &hasy, &haszoom, &x, &y, &z);
-    section.offsetPointF = QPointF(static_cast<qreal>(x), static_cast<qreal>(y));
+    section.offsetPointF = QPointF(static_cast<qreal>(x) * xRes / 72, static_cast<qreal>(y) * yRes / 72);
 
     const CPDF_Bookmark &Child = tree.GetFirstChild(&This);
     if (Child.GetDict() != nullptr) {
-        collectBookmarks(section.children, tree, Child);
+        collectBookmarks(section.children, tree, Child, xRes, yRes);
     }
     outline << section;
 
     const CPDF_Bookmark &SibChild = tree.GetNextSibling(&This);
     if (SibChild.GetDict() != nullptr) {
-        collectBookmarks(outline, tree, SibChild);
+        collectBookmarks(outline, tree, SibChild, xRes, yRes);
     }
 }
 
-DPdfDoc::Outline DPdfDoc::outline()
+DPdfDoc::Outline DPdfDoc::outline(qreal xRes, qreal yRes)
 {
     Outline outline;
     CPDF_BookmarkTree tree(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     CPDF_Bookmark cBookmark;
     const CPDF_Bookmark &firstRootChild = tree.GetFirstChild(&cBookmark);
     if (firstRootChild.GetDict() != nullptr)
-        collectBookmarks(outline, tree, firstRootChild);
+        collectBookmarks(outline, tree, firstRootChild, xRes, yRes);
 
     return outline;
 }
