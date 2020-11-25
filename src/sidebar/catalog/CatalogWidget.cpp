@@ -57,7 +57,7 @@ void CatalogWidget::initWidget()
 
     titleLayout->addWidget(titleLabel);
 
-    auto mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout;
 
     mainLayout->addLayout(titleLayout);
 

@@ -63,13 +63,13 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 {
     DWidget::paintEvent(event);
     QPainter painter(this);
-    painter.drawPixmap(this->width() * 0.5 - m_pixmap.width() * 0.5 / m_pixmap.devicePixelRatioF(), this->height() * 0.5 - m_pixmap.height() * 0.5 / m_pixmap.devicePixelRatioF(), m_pixmap);
+    painter.drawPixmap(static_cast<int>(this->width() * 0.5 - m_pixmap.width() * 0.5 / m_pixmap.devicePixelRatioF()),  static_cast<int>(this->height() * 0.5 - m_pixmap.height() * 0.5 / m_pixmap.devicePixelRatioF()), m_pixmap);
 }
 
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
-    setFixedSize(QSize(300, 642));
+    setFixedSize(QSize(300, 622));
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);
     this->setLayout(m_pVBoxLayout);
@@ -98,7 +98,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
 
     addTitleFrame(szTitle);
 
-    m_pVBoxLayout->addSpacing(40);
+    m_pVBoxLayout->addSpacing(10);
 
     DFrame *infoframe = new DFrame;
     auto frameLayout = new QVBoxLayout;
@@ -134,7 +134,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
     labelText->setMargin(20);
     labelText->setAlignment(Qt::AlignCenter);
     labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    labelText->setText(sData);
+    labelText->setText(labelText->fontMetrics().elidedText(sData, Qt::ElideMiddle, 680));
     m_pVBoxLayout->addWidget(labelText);
 }
 

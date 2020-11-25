@@ -42,20 +42,23 @@ public:
         this->setParent(parent);
     }
 
-    virtual void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
+    ~ActiveProxyStyle();
+
+    void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         QStyleOptionComplex *op = const_cast<QStyleOptionComplex *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawComplexControl(control, op, painter, widget);
     }
-    virtual void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+
+    void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawControl(element, op, painter, widget);
     }
 
-    virtual void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
+    void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         if (element == QStyle::PE_IndicatorBranch)
             painter->setPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color());
@@ -64,6 +67,11 @@ public:
         QProxyStyle::drawPrimitive(element, op, painter, widget);
     }
 };
+
+ActiveProxyStyle::~ActiveProxyStyle()
+{
+    //NotTodo
+}
 
 class CatalogModel: public QStandardItemModel
 {
@@ -108,7 +116,6 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     this->header()->setHidden(true);
     this->header()->setDefaultSectionSize(18);
     this->header()->setMinimumSectionSize(18);
-    this->header()->setStretchLastSection(false);
     this->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     this->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     this->viewport()->setAutoFillBackground(false);
@@ -117,6 +124,8 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(slotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(slotExpanded(const QModelIndex &)));
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
+
+    connect(dApp, &DApplication::fontChanged, this, &CatalogTreeView::onFontChanged);
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 }
@@ -150,13 +159,13 @@ void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStanda
 
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &index, const qreal  &realleft, const qreal &realtop)
 {
-    auto item = new QStandardItem(title);
+    QStandardItem *item = new QStandardItem(title);
     item->setData(index);
     item->setData(realleft, Qt::UserRole + 2);
     item->setData(realtop, Qt::UserRole + 3);
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    auto item1 = new QStandardItem(QString::number(index + 1));
+    QStandardItem *item1 = new QStandardItem(QString::number(index + 1));
     item1->setData(index);
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
@@ -298,7 +307,7 @@ void CatalogTreeView::setIndex(int index, const QString &title)
 void CatalogTreeView::resizeCoulumnWidth()
 {
     if (m_sheet) {
-        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 32;
+        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 34;
         this->setColumnWidth(0, this->width() - maxPageColumnWid);
         this->setColumnWidth(1, maxPageColumnWid);
     }
@@ -336,4 +345,10 @@ void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
         this->selectionModel()->select(newIndex, QItemSelectionModel::SelectCurrent);
         this->setCurrentIndex(newIndex);
     }
+}
+
+void CatalogTreeView::onFontChanged(const QFont &font)
+{
+    Q_UNUSED(font);
+    resizeCoulumnWidth();
 }

@@ -102,7 +102,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QString             m_strTheme = "";
+    QString              m_strTheme = "";
     DLabel              *titleLabel = nullptr;
     CatalogTreeView     *m_pTree = nullptr;
     DocSheet *m_sheet;

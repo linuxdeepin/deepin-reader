@@ -116,7 +116,7 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event) override;
 
-protected slots:
+private slots:
     /**
      * @brief currentChanged
      * 当前节点发生变化
@@ -133,6 +133,12 @@ protected slots:
      * @param current
      */
     void onItemClicked(const QModelIndex &current);
+
+    /**
+     * @brief 字体变化
+     * @param font
+     */
+    void onFontChanged(const QFont &font);
 
 private:
     /**
