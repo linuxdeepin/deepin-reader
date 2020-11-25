@@ -252,6 +252,7 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
     DPdfDoc::Section section;
 
     const WideString &title = This.GetTitle();
+
     section.title = QString::fromWCharArray(title.c_str(), static_cast<int>(title.GetLength()));
 
     bool hasx = false, hasy = false, haszoom = false;
@@ -296,25 +297,25 @@ DPdfDoc::Properies DPdfDoc::proeries()
     }
     properies.insert("Encrypted", isEncrypted());
     properies.insert("Linearized", FPDF_GetFileLinearized((FPDF_DOCUMENT)d_func()->m_docHandler));
-
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
     properies.insert("Creator", QString());
     properies.insert("Producer", QString());
     CPDF_Document *pDoc = reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler);
+
     const CPDF_Dictionary *pInfo = pDoc->GetInfo();
     if (pInfo) {
-        const WideString &KeyWords = pInfo->GetUnicodeTextFor("Keywords");
-        properies.insert("KeyWords", QString::fromWCharArray(KeyWords.c_str(), KeyWords.GetLength()));
+        const ByteString &KeyWords = pInfo->GetStringFor("Keywords");
+        properies.insert("KeyWords", QString::fromUtf8(KeyWords.c_str()));
 
-        const WideString &Title = pInfo->GetUnicodeTextFor("Title");
-        properies.insert("Title", QString::fromWCharArray(Title.c_str(), Title.GetLength()));
+        const ByteString &Title = pInfo->GetStringFor("Title");
+        properies.insert("Title", QString::fromUtf8(Title.c_str()));
 
-        const WideString &Creator = pInfo->GetUnicodeTextFor("Creator");
-        properies.insert("Creator", QString::fromWCharArray(Creator.c_str(), Creator.GetLength()));
+        const ByteString &Creator = pInfo->GetStringFor("Creator");
+        properies.insert("Creator", QString::fromUtf8(Creator.c_str()));
 
-        const WideString &Producer = pInfo->GetUnicodeTextFor("Producer");
-        properies.insert("Producer", QString::fromWCharArray(Producer.c_str(), Producer.GetLength()));
+        const ByteString &Producer = pInfo->GetStringFor("Producer");
+        properies.insert("Producer", QString::fromUtf8(Producer.c_str()));
     }
 
     return properies;
