@@ -67,6 +67,9 @@ Makefile*
 
 *.qmake.stash
 
+deepin-reader
+
+
 # Qt unit tests
 
 *.gcda
@@ -77,13 +80,13 @@ Makefile*
 
 *.out
 
-test/deepin_reader_test/coverage
+test/coverage
 
-test/deepin_reader_test/files/saveas.pdf
+test/files/saveas.pdf
 
-test/deepin_reader_test/files/saveas.djvu
+test/files/saveas.djvu
 
-deepin-reader
+test-deepin-reader
 
 # QtCreator
 
@@ -101,13 +104,9 @@ deepin-reader
 
 CMakeLists.txt.user*
 
-
-
 # QtCreator 4.8< compilation database 
 
 compile_commands.json
-
-
 
 # QtCreator local machine specific files for imported projects
 

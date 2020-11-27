@@ -624,7 +624,7 @@ public slots:
      * @brief 打印
      * @param printer 打印机设备
      */
-    void onPrintRequested(QPrinter *printer);
+    void onPrintRequested(Dtk::Widget::DPrinter *printer);
 
 private slots:
     /**

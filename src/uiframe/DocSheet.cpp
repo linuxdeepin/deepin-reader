@@ -52,7 +52,6 @@
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
 #include <QDebug>
-#include <QPrintPreviewDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -630,7 +629,7 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
-void DocSheet::onPrintRequested(QPrinter *printer)
+void DocSheet::onPrintRequested(DPrinter *printer)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
 
@@ -648,30 +647,13 @@ void DocSheet::onPrintRequested(QPrinter *printer)
 
     int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
-    //针对pdf单页大文档单独优化
-    if (toIndex - fromIndex <= 2 && Dr::PDF == m_fileType) {
-        for (int index = fromIndex; index <= toIndex; index++) {
-            if (index >= pagesCount)
-                break;
-
-            QImage image;
-            if (getImage(index, image, pageRect.width() * 4, pageRect.height() * 4)) {
-                painter.drawImage(QRectF(0, 0, pageRect.width(), pageRect.height()), image);
-            }
-
-            if (index != toIndex)
-                printer->newPage();
-        }
-        return;
-    }
-
     for (int index = fromIndex; index <= toIndex; index++) {
         if (index >= pagesCount)
             break;
 
         QImage image;
-        if (getImage(index, image, pageRect.width(), pageRect.height())) {
-            painter.drawImage(QRectF(0, 0, pageRect.width(), pageRect.height()), image);
+        if (getImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+            painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
         }
 
         if (index != toIndex)
@@ -1058,8 +1040,11 @@ void DocSheet::deadDeleteLater()
 
 void DocSheet::onPopPrintDialog()
 {
-    QPrintPreviewDialog preview(this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
+    DPrintPreviewDialog preview(this);
+#if (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MAJOR == 3 && DTK_VERSION_MINOR == 2 )
+    preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
+#endif
+    connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
     preview.exec();
 }
 

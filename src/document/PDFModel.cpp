@@ -289,13 +289,10 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
     m_docMutex = new QMutex;
 
     QScreen *srn = QApplication::screens().value(0);
-    qreal m_xRes = 72;
-    qreal m_yRes = 72;
     if (nullptr != srn) {
         m_xRes = srn->physicalDotsPerInchX();
         m_yRes = srn->physicalDotsPerInchY();
     }
-
 }
 
 PDFDocument::~PDFDocument()
