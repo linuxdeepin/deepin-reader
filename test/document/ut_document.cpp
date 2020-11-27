@@ -103,7 +103,7 @@ TEST_F(ut_document, DJVUTest)
     QFile(UT_FILE_DJVU_SAVEAS).remove();
     delete saveDoc;
 
-    exec(2);
+    exec(1);
 }
 
 TEST_F(ut_document, PDFTest)
@@ -179,7 +179,7 @@ TEST_F(ut_document, PDFTest)
     QFile(UT_FILE_PDF_SAVEAS).remove();
     delete saveDoc;
 
-    exec(2);
+    exec(1);
 }
 
 #endif

@@ -2,9 +2,9 @@
 
 #workdir=$(cd ../../$(dirname $0)/build-filemanager-unknown-Debug/test; pwd)
 
-workdir=./deepin_reader_test
+workdir=.
 
-executable=deepin-reader
+executable=test-deepin-reader
 
 build_dir=$workdir
 
@@ -14,7 +14,7 @@ result_report_dir=$build_dir/report/report.xml
 
 #下面二选1进行操作，一种正向操作，一种逆向操作
 
-#rm deepin_reader_test/coverage -r
+#rm coverage -r
 
 extract_info="*/deepin-reader/*"
 
@@ -38,20 +38,20 @@ nohup x-www-browser $result_report_dir &
 
 lcov -d $build_dir –z
 
-rm deepin_reader_test/*.gcno -r
+#rm *.gcno -r
 
-rm deepin_reader_test/*.gcda -r
+#rm *.gcda -r
 
-rm deepin_reader_test/*.o -r
+#rm *.o -r
 
-rm deepin_reader_test/moc_* -r
+#rm moc_* -r
 
-rm deepin_reader_test/.qmake.stash
+#rm .qmake.stash
 
-rm deepin_reader_test/Makefile
+#rm Makefile
 
-rm deepin_reader_test/coverage.info
+#rm coverage.info
 
-rm deepin_reader_test/deepin-reader
+#rm deepin-reader
 
 exit 0

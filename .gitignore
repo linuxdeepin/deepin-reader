@@ -88,6 +88,8 @@ test/files/saveas.djvu
 
 test-deepin-reader
 
+test/target_wrapper.sh
+
 # QtCreator
 
 *.autosave

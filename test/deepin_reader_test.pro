@@ -6,7 +6,7 @@ TARGET = test-deepin-reader
 
 TEMPLATE = app
 
-CONFIG += c++11 link_pkgconfig
+CONFIG += c++11 link_pkgconfig testcase no_testcase_install
 
 PKGCONFIG += ddjvuapi dtkwidget
 

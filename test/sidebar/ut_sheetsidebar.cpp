@@ -1,4 +1,3 @@
-
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
@@ -19,16 +18,18 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include "ut_sheetsidebar.h"
 
 #define private public
 #define protected public
+
+#include "Central.h"
+#include "DocSheet.h"
+#include "MsgHeader.h"
 #include "MainWindow.h"
 #include "SheetSidebar.h"
 #include "CentralDocPage.h"
 #include "Application.h"
-
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
 #include "sidebar/note/NotesWidget.h"
@@ -44,10 +45,6 @@
 
 #undef private
 #undef protected
-
-#include "Central.h"
-#include "DocSheet.h"
-#include "MsgHeader.h"
 
 #include <QUuid>
 #include <DApplication>
@@ -69,7 +66,7 @@ void ut_sidebar::TearDown()
 #ifdef UT_SHEETSIDEBAR_TEST
 TEST_F(ut_sidebar, SidebarTest)
 {
-    QString path = UT_FILE_TEST_FILE;
+    QString path = UT_FILE_TEST_FILE_1;
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
     ASSERT_TRUE(mainWindow->m_central);
     mainWindow->showDefaultSize();

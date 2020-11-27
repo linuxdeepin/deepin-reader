@@ -60,7 +60,7 @@ void Ut_UiFrame::TearDown()
 #ifdef UT_UIFRAME_TEST
 TEST_F(Ut_UiFrame, UiFrameTest)
 {
-    MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << UT_FILE_PDF << UT_FILE_TEST_FILE_2 << UT_FILE_TEST_FILE_3);
+    MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE_1 << UT_FILE_TEST_FILE_2 << UT_FILE_TEST_FILE_3);
     MainWindow *mainWindow2 = MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE_4 << UT_FILE_TEST_FILE_5 << UT_FILE_TEST_FILE_6);
 
     //Central
@@ -128,7 +128,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     QResizeEvent resizeEvent(QSize(100, 100), QSize(200, 200));
     QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &resizeEvent);
 
-
     mainWindow1->resize(600, 800);
     ASSERT_TRUE(mainWindow1->m_central);
 
@@ -136,27 +135,26 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->hasSheet(nullptr);
     mainWindow1->m_central->showSheet(nullptr);
     mainWindow1->m_central->handleShortcut(Dr::key_esc);
-    //mainWindow1->m_central->doOpenFile(path);     //崩溃
     mainWindow1->m_central->zoomIn();
     mainWindow1->m_central->zoomOut();
     mainWindow1->m_central->onSheetCountChanged(0);
     mainWindow1->m_central->onSheetCountChanged(1);
     mainWindow1->m_central->onMenuTriggered("Save");
-    //mainWindow1->m_central->onMenuTriggered("Save as");       //阻塞
     mainWindow1->m_central->onMenuTriggered("Magnifer");
-    //mainWindow1->m_central->onMenuTriggered("Display in file manager"); //打开外部文件夹
     mainWindow1->m_central->onMenuTriggered("Search");
     mainWindow1->m_central->onNeedActivateWindow();
     mainWindow1->m_central->onShowTips("const QString & text, int iconIndex = 0");
+
+    //mainWindow1->m_central->doOpenFile(path);     //崩溃
     //mainWindow1->m_central->openFiles(QStringList() << path); //崩溃
     //mainWindow1->m_central->m_navPage->onChooseButtonClicked(); //阻塞
     //mainWindow1->m_central->openFilesExec(); //阻塞
+    //mainWindow1->m_central->onMenuTriggered("Display in file manager"); //打开外部文件夹
+    //mainWindow1->m_central->onMenuTriggered("Save as");       //阻塞
 
     mimeData->setData("deepin_reader/tabbar", "0");
     QDropEvent dropEnterevent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(mainWindow1->m_central, &dropEnterevent);
-
-    //CentralDocPage1->m_pTabBar->removeTab(0);
 
     DocSheet *sheet = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_3);
     ASSERT_TRUE(sheet);
@@ -173,16 +171,18 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_FALSE(CentralDocPage1->quitFullScreen());
     EXPECT_TRUE(CentralDocPage1->getTitleLabel());
 
+    CentralDocPage1->m_pTabBar->removeTab(0);
     CentralDocPage1->getCurSheet();
     CentralDocPage1->saveCurrent();
-//    CentralDocPage1->openFile(UT_FILE_PDF);
-//    CentralDocPage1->saveAll();       //卡住
     CentralDocPage1->addSheet(nullptr);
     CentralDocPage1->enterSheet(nullptr);
     CentralDocPage1->leaveSheet(nullptr);
     CentralDocPage1->hasSheet(nullptr);
     CentralDocPage1->showSheet(nullptr);
     CentralDocPage1->showSheet(sheet);
+    //CentralDocPage1->openFile(UT_FILE_PDF);   //崩溃
+    //CentralDocPage1->openCurFileFolder();     //打开文件夹
+    //CentralDocPage1->saveAll();               //卡住
 
     sheet->openSlide();
     CentralDocPage1->handleShortcut(Dr::key_esc);
@@ -197,7 +197,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->handleShortcut(Dr::key_alt_z);
     sheet->closeMagnifier();
     CentralDocPage1->handleShortcut(Dr::key_f5);
-
     CentralDocPage1->handleShortcut(Dr::key_alt_2);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_m);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_2);
@@ -216,7 +215,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->handleShortcut(Dr::key_right);
     CentralDocPage1->handleShortcut(Dr::key_f11);
     sheet->closeFullScreen();
-
     CentralDocPage1->handleShortcut(Dr::key_alt_1);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_1);
 
@@ -227,28 +225,21 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->openSlide();
     CentralDocPage1->quitSlide();
     CentralDocPage1->handleSearch();
-
     CentralDocPage1->zoomIn();
     CentralDocPage1->zoomOut();
-
     CentralDocPage1->onTabChanged(nullptr);
     CentralDocPage1->onTabChanged(sheet);
     CentralDocPage1->onTabMoveIn(nullptr);
     CentralDocPage1->onTabMoveIn(sheet);
-
     CentralDocPage1->onTabClosed(nullptr);
     CentralDocPage1->onTabMoveOut(nullptr);
     CentralDocPage1->onCentralMoveIn(nullptr);
     CentralDocPage1->onSheetFileChanged(nullptr);
     CentralDocPage1->onSheetOperationChanged(nullptr);
-
     CentralDocPage1->onSheetCountChanged(0);
     CentralDocPage1->onSheetCountChanged(1);
-
     CentralDocPage1->onOpened(nullptr, true);
     CentralDocPage1->onOpened(nullptr, false);
-
-    //CentralDocPage1->openCurFileFolder();     //打开文件夹
 
     sheet->saveData();
 
@@ -387,17 +378,13 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->operation();
     sheet->fileType();
     sheet->filePath();
-
     sheet->hasBookMark(0);
     sheet->hasBookMark(-1);
     sheet->hasBookMark(10000);
-
     sheet->zoomin();
     sheet->zoomout();
-
     sheet->setSidebarVisible(true);
     sheet->setSidebarVisible(false);
-
     sheet->handleOpenSuccess();
     sheet->openSlide();
     sheet->closeSlide();
@@ -406,18 +393,15 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->closeFullScreen();
     sheet->setDocumentChanged(false);
     sheet->setBookmarkChanged(false);
-
     sheet->setOperationChanged();
     sheet->handleFindNext();
     sheet->handleFindPrev();
     sheet->handleFindContent("const QString & strFind");
     sheet->handleFindExit();
-
     sheet->showEncryPage();
     sheet->tryPassword("");
     sheet->needPassword();
     sheet->isUnLocked();
-
     sheet->operationRef();
     sheet->showTips("test", 0);
     sheet->onFindContentComming(deepin_reader::SearchResult());

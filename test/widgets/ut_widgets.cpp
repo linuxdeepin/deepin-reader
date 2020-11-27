@@ -71,7 +71,7 @@ void Ut_Widgets::TearDown()
 #ifdef UT_WIDGETS_TEST
 TEST_F(Ut_Widgets, SheetWidgetTest)
 {
-    QString path = UT_FILE_TEST_FILE;
+    QString path = UT_FILE_TEST_FILE_1;
 
     MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
 

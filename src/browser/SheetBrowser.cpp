@@ -153,7 +153,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     if (page == nullptr)
         return QImage();
 
-    QImage image = page->render(Dr::RotateBy0, 1.0);
+    QImage image = page->render(256, 256);
 
     delete page;
 

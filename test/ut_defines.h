@@ -5,7 +5,7 @@
 #include <QStandardPaths>
 #include <QCoreApplication>
 
-#define UT_FILE_TEST_FILE   QCoreApplication::applicationDirPath() + "/files/1.pdf"
+#define UT_FILE_TEST_FILE_1 QCoreApplication::applicationDirPath() + "/files/1.pdf"
 
 #define UT_FILE_TEST_FILE_2 QCoreApplication::applicationDirPath() + "/files/2.pdf"
 
@@ -17,7 +17,6 @@
 
 #define UT_FILE_TEST_FILE_6 QCoreApplication::applicationDirPath() + "/files/6_djvu.pdf"
 
-
 #define UT_FILE_TXT QCoreApplication::applicationDirPath() + "/files/normal.txt"
 
 #define UT_FILE_COPYTXT QCoreApplication::applicationDirPath() + "/files/copy.txt"
@@ -26,7 +25,7 @@
 
 #define UT_FILE_EMPTYPNG QCoreApplication::applicationDirPath() + "/files/empty.png"
 
-#define UT_FILE_PDF QCoreApplication::applicationDirPath() + "/files/noraml.pdf"
+#define UT_FILE_PDF QCoreApplication::applicationDirPath() + "/files/normal.pdf"
 
 #define UT_FILE_PDF_BROKEN QCoreApplication::applicationDirPath() + "/files/broken.pdf"
 
@@ -56,20 +55,20 @@
 
 #define UT_FILE_NONE QCoreApplication::applicationDirPath() + "/files/none"
 
-//#define UT_APP_TEST
+#define UT_APP_TEST
 
-//#define UT_APPLICATION_TEST
+#define UT_APPLICATION_TEST
 
-//#define UT_DOCUMENT_TEST
+#define UT_DOCUMENT_TEST
 
-//#define UT_WIDGETS_TEST
+#define UT_WIDGETS_TEST
 
 #define UT_UIFRAME_TEST
 
-//#define UT_MAINWINDOW_TEST
+#define UT_MAINWINDOW_TEST
 
-//#define UT_SHEETSIDEBAR_TEST
+#define UT_SHEETSIDEBAR_TEST
 
-//#define UT_BROWSER_TEST
+#define UT_BROWSER_TEST
 
 #endif // UT_DEFINES_TEST_H
