@@ -35,7 +35,6 @@
 #include "widgets/ScaleWidget.h"
 #include "widgets/RoundColorWidget.h"
 #include "widgets/SaveDialog.h"
-#include "widgets/SpinnerWidget.h"
 #include "widgets/AttrScrollWidget.h"
 
 #undef private
@@ -317,14 +316,6 @@ TEST_F(Ut_Widgets, SlidePlayWidgetTest)
 
     QEvent hoverL(QEvent::Leave);
     QCoreApplication::sendEvent(&slidePlaywidget, &hoverL);
-}
-
-TEST_F(Ut_Widgets, SpinnerWidgetTest)
-{
-    SpinnerWidget spinnerWidget;
-    spinnerWidget.startSpinner();
-    spinnerWidget.stopSpinner();
-    spinnerWidget.setSpinnerSize(QSize(100, 100));
 }
 
 TEST_F(Ut_Widgets, TipsWidgetTest)

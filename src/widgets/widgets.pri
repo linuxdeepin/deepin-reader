@@ -8,7 +8,6 @@ HEADERS += \
     $$PWD/ScaleMenu.h \
     $$PWD/SlidePlayWidget.h \
     $$PWD/SlideWidget.h \
-    $$PWD/SpinnerWidget.h \
     $$PWD/ScaleWidget.h \
     $$PWD/SaveDialog.h \
     $$PWD/ShortCutShow.h \
@@ -27,7 +26,6 @@ SOURCES += \
     $$PWD/ScaleMenu.cpp \
     $$PWD/SlidePlayWidget.cpp \
     $$PWD/SlideWidget.cpp \
-    $$PWD/SpinnerWidget.cpp \
     $$PWD/ScaleWidget.cpp \
     $$PWD/SaveDialog.cpp \
     $$PWD/ShortCutShow.cpp \

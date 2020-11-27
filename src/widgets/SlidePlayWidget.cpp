@@ -139,9 +139,9 @@ void SlidePlayWidget::onExitClicked()
 void SlidePlayWidget::playStatusChanged()
 {
     if (m_autoPlay) {
-        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + "suspend_normal"));
+        m_playBtn->setIcon(QIcon::fromTheme(QString("dr_") + "suspend_normal"));
     } else {
-        m_playBtn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + "play_normal"));
+        m_playBtn->setIcon(QIcon::fromTheme(QString("dr_") + "play_normal"));
     }
     emit signalPlayBtnClicked();
 }

@@ -20,8 +20,6 @@ INCLUDEPATH += $$SRCPWD/sidebar
 INCLUDEPATH += $$SRCPWD/browser
 INCLUDEPATH += $$SRCPWD/document
 
-LIBS += -lopenjp2 -llcms2 -lfreetype
-
 QMAKE_CXXFLAGS += -fPIE
 
 QMAKE_LFLAGS += -pie
@@ -74,15 +72,10 @@ icon.files = $$SRCPWD/deepin-reader.svg
 INSTALLS += target desktop icon
 
 #由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
-CONFIG(debug, debug|release) {
-    INCLUDEPATH += $$PWD/../3rdparty/deepdf/include
-    LIBS += -L$$PWD/../3rdparty/deepdf/lib -ldeepdf
-}
+INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
+LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium
 
 CONFIG(release, debug|release) {
-    INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
-    LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium
-
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
     TRANSLATIONFILES= $$files($$SRCPWD/../translations/*.ts)
     for(tsfile, TRANSLATIONFILES) {

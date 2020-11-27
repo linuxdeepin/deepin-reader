@@ -365,10 +365,6 @@ void MainWindow::showDefaultSize()
     }
 }
 
-/**
- * @brief MainWindow::zoomIn
- * 放大
- */
 void MainWindow::zoomIn()
 {
     if (m_central) {
@@ -376,10 +372,6 @@ void MainWindow::zoomIn()
     }
 }
 
-/**
- * @brief MainWindow::zoomOut
- * 缩小
- */
 void MainWindow::zoomOut()
 {
     if (m_central) {
@@ -387,7 +379,6 @@ void MainWindow::zoomOut()
     }
 }
 
-//  初始化 快捷键操作
 void MainWindow::initShortCut()
 {
     QList<QKeySequence> keyList;
