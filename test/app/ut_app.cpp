@@ -37,11 +37,11 @@ TEST_F(ut_app, DatabaseTest)
     Database::instance()->prepareOperation();
 
     QSet<int> bookmarks;
-    Database::instance()->readBookmarks(UT_FILE_PDF, bookmarks);
+    Database::instance()->readBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
     bookmarks << 0;
-    Database::instance()->saveBookmarks(UT_FILE_PDF, bookmarks);
+    Database::instance()->saveBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
 
-    DocSheet *sheet = new DocSheet(Dr::PDF, UT_FILE_PDF, nullptr);
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "DatabaseTest"), nullptr);
     Database::instance()->readOperation(sheet);
     Database::instance()->saveOperation(sheet);
 }
@@ -57,11 +57,11 @@ TEST_F(ut_app, DebugTimeManagerTest)
 
 TEST_F(ut_app, GlobalTest)
 {
-    EXPECT_EQ(Dr::fileType(UT_FILE_PDF), Dr::PDF);
-    EXPECT_EQ(Dr::fileType(UT_FILE_PPTX), Dr::PPTX);
-    EXPECT_EQ(Dr::fileType(UT_FILE_DJVU), Dr::DJVU);
-    EXPECT_EQ(Dr::fileType(UT_FILE_DOC), Dr::DOC);
-    EXPECT_EQ(Dr::fileType(UT_FILE_DOCX), Dr::DOCX);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_PDF, "GlobalTest")), Dr::PDF);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_PPTX, "GlobalTest")), Dr::PPTX);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DJVU, "GlobalTest")), Dr::DJVU);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DOC, "GlobalTest")), Dr::DOC);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DOCX, "GlobalTest")), Dr::DOCX);
     EXPECT_EQ(Dr::fileType(UT_FILE_NONE), Dr::Unknown);
 }
 
@@ -70,7 +70,7 @@ TEST_F(ut_app, UtilsTest)
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
     EXPECT_STREQ(Utils::getKeyshortcut(&keyevent).toStdString().c_str(), Dr::key_ctrl_1.toStdString().c_str());
 
-    QPixmap pixmap(UT_FILE_PNG);
+    QPixmap pixmap(filePath(UT_FILE_PNG, "UtilsTest"));
     EXPECT_EQ(Utils::roundQPixmap(pixmap, 0).isNull(), false);
     EXPECT_EQ(Utils::roundQPixmap(QPixmap(), 0).isNull(), true);
 
@@ -80,7 +80,7 @@ TEST_F(ut_app, UtilsTest)
     EXPECT_STREQ(Utils::getInputDataSize(1024 * 1024 * 1024).toStdString().c_str(), "1.0 GB");
 
     EXPECT_EQ(Utils::getElidedText(QFontMetrics(QFont("Times", 10, QFont::Bold)), QSize(0, 0), "123", Qt::AlignCenter), "...");
-    EXPECT_EQ(Utils::copyFile(UT_FILE_TXT, UT_FILE_COPYTXT), true);
+    EXPECT_EQ(Utils::copyFile(filePath(UT_FILE_TXT, "UtilsTest"), UT_FILE_COPYTXT), true);
     Utils::copyText("copyText");
 
     QImage image;

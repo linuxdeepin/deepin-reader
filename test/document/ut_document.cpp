@@ -57,7 +57,7 @@ void ut_document::TearDown()
 #ifdef UT_DOCUMENT_TEST
 TEST_F(ut_document, DJVUTest)
 {
-    deepin_reader::Document *doc = deepin_reader::DjVuDocument::loadDocument(UT_FILE_DJVU);
+    deepin_reader::Document *doc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU, "DJVUTest"));
     if (nullptr == doc)
         GTEST_FAIL();
 
@@ -91,16 +91,16 @@ TEST_F(ut_document, DJVUTest)
         delete page;
     });
 
-    QFile(UT_FILE_DJVU_SAVE).remove();
-    QFile(UT_FILE_DJVU_SAVEAS).remove();
-    QFile(UT_FILE_DJVU).copy(UT_FILE_DJVU_SAVE);
-    deepin_reader::Document *saveDoc = deepin_reader::DjVuDocument::loadDocument(UT_FILE_DJVU_SAVE);
+    QFile(filePath(UT_FILE_DJVU_SAVE, "DJVUTest")).remove();
+    QFile(filePath(UT_FILE_DJVU_SAVEAS, "DJVUTest")).remove();
+    QFile(filePath(UT_FILE_DJVU, "DJVUTest")).copy(filePath(UT_FILE_DJVU_SAVE, "DJVUTest"));
+    deepin_reader::Document *saveDoc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU_SAVE, "DJVUTest"));
     if (nullptr == saveDoc)
         GTEST_FAIL();
-    saveDoc->saveAs(UT_FILE_DJVU_SAVEAS);
+    saveDoc->saveAs(filePath(UT_FILE_DJVU_SAVEAS, "DJVUTest"));
     saveDoc->save();
-    QFile(UT_FILE_DJVU_SAVE).remove();
-    QFile(UT_FILE_DJVU_SAVEAS).remove();
+    QFile(filePath(UT_FILE_DJVU_SAVE, "DJVUTest")).remove();
+    QFile(filePath(UT_FILE_DJVU_SAVEAS, "DJVUTest")).remove();
     delete saveDoc;
 
     exec(1);
@@ -108,9 +108,9 @@ TEST_F(ut_document, DJVUTest)
 
 TEST_F(ut_document, PDFTest)
 {
-    EXPECT_EQ(deepin_reader::PDFDocument::tryLoadDocument(UT_FILE_PDF, ""), 0);
+    EXPECT_EQ(deepin_reader::PDFDocument::tryLoadDocument(filePath(UT_FILE_PDF, "PDFTest"), ""), 0);
 
-    deepin_reader::Document *doc = deepin_reader::PDFDocument::loadDocument(UT_FILE_PDF, "");
+    deepin_reader::Document *doc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF, "PDFTest"), "");
     if (nullptr == doc) {
         GTEST_FAIL();
     }
@@ -164,19 +164,19 @@ TEST_F(ut_document, PDFTest)
             GTEST_FAIL();
     });
 
-    QFile(UT_FILE_PDF_SAVE).remove();
-    QFile(UT_FILE_PDF_SAVEAS).remove();
-    EXPECT_EQ(QFile(UT_FILE_PDF).copy(UT_FILE_PDF_SAVE), true);
+    QFile(filePath(UT_FILE_PDF_SAVE, "PDFTest")).remove();
+    QFile(filePath(UT_FILE_PDF_SAVEAS, "PDFTest")).remove();
+    EXPECT_EQ(QFile(filePath(UT_FILE_PDF, "PDFTest")).copy(filePath(UT_FILE_PDF_SAVE, "PDFTest")), true);
 
-    deepin_reader::Document *saveDoc = deepin_reader::PDFDocument::loadDocument(UT_FILE_PDF_SAVE, "");
+    deepin_reader::Document *saveDoc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF_SAVE, "PDFTest"), "");
     if (nullptr != saveDoc) {
         saveDoc->save();
-        saveDoc->saveAs(UT_FILE_PDF_SAVEAS);
+        saveDoc->saveAs(filePath(UT_FILE_PDF_SAVEAS, "PDFTest"));
     } else
         GTEST_FAIL();
 
-    QFile(UT_FILE_PDF_SAVE).remove();
-    QFile(UT_FILE_PDF_SAVEAS).remove();
+    QFile(filePath(UT_FILE_PDF_SAVE, "PDFTest")).remove();
+    QFile(filePath(UT_FILE_PDF_SAVEAS, "PDFTest")).remove();
     delete saveDoc;
 
     exec(1);

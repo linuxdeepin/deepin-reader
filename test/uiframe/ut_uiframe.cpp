@@ -60,8 +60,8 @@ void Ut_UiFrame::TearDown()
 #ifdef UT_UIFRAME_TEST
 TEST_F(Ut_UiFrame, UiFrameTest)
 {
-    MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE_1 << UT_FILE_TEST_FILE_2 << UT_FILE_TEST_FILE_3);
-    MainWindow *mainWindow2 = MainWindow::createWindow(QStringList() << UT_FILE_TEST_FILE_4 << UT_FILE_TEST_FILE_5 << UT_FILE_TEST_FILE_6);
+    MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_1, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_2, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
+    MainWindow *mainWindow2 = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_4, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_5, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_6, "UiFrameTest"));
 
     //Central
     ASSERT_TRUE(CentralDocPage1);
@@ -80,20 +80,20 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, new QMimeData);
     CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, mimeData);
 
-    DocSheet *sheet2 = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_2);
+    DocSheet *sheet2 = CentralDocPage1->getSheet(filePath(UT_FILE_TEST_FILE_2, "UiFrameTest"));
     ASSERT_TRUE(sheet2);
 
-    DocSheet *sheet3 = CentralDocPage2->getSheet(UT_FILE_TEST_FILE_5);
+    DocSheet *sheet3 = CentralDocPage2->getSheet(filePath(UT_FILE_TEST_FILE_5, "UiFrameTest"));
     ASSERT_TRUE(sheet3);
     sheet3->setSidebarVisible(true);
     sheet3->m_sidebar->onBtnClicked(1);
 
-    DocSheet *sheet4 = CentralDocPage2->getSheet(UT_FILE_TEST_FILE_4);
+    DocSheet *sheet4 = CentralDocPage2->getSheet(filePath(UT_FILE_TEST_FILE_4, "UiFrameTest"));
     ASSERT_TRUE(sheet4);
     sheet4->setSidebarVisible(true);
     sheet4->m_sidebar->onBtnClicked(3);
 
-    DocSheet *sheet5 = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_3);
+    DocSheet *sheet5 = CentralDocPage1->getSheet(filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
     ASSERT_TRUE(sheet5);
     sheet5->setSidebarVisible(true);
     sheet5->m_sidebar->onBtnClicked(2);
@@ -156,17 +156,17 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     QDropEvent dropEnterevent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(mainWindow1->m_central, &dropEnterevent);
 
-    DocSheet *sheet = CentralDocPage1->getSheet(UT_FILE_TEST_FILE_3);
+    DocSheet *sheet = CentralDocPage1->getSheet(filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
     ASSERT_TRUE(sheet);
     EXPECT_TRUE(mainWindow1->m_central->hasSheet(sheet));
     EXPECT_TRUE(mainWindow1->m_central->saveAll());
-    sheet->saveAsData(UT_FILE_PDF);
+    sheet->saveAsData(filePath(UT_FILE_PDF, "UiFrameTest"));
     sheet->setSidebarVisible(true);
     sheet->m_sidebar->onBtnClicked(3);
 
     //CentralDocPage
     sheet->setBookMark(0, !sheet->hasBookMark(0));
-    EXPECT_FALSE(CentralDocPage1->firstThumbnail(UT_FILE_PDF, "/home/samson/Desktop/1.png"));
+    EXPECT_FALSE(CentralDocPage1->firstThumbnail(filePath(UT_FILE_PDF, "UiFrameTest"), "/home/samson/Desktop/1.png"));
     EXPECT_FALSE(CentralDocPage1->isFullScreen());
     EXPECT_FALSE(CentralDocPage1->quitFullScreen());
     EXPECT_TRUE(CentralDocPage1->getTitleLabel());
@@ -180,7 +180,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->hasSheet(nullptr);
     CentralDocPage1->showSheet(nullptr);
     CentralDocPage1->showSheet(sheet);
-    //CentralDocPage1->openFile(UT_FILE_PDF);   //崩溃
+    //CentralDocPage1->openFile(filePath(UT_FILE_PDF, "UiFrameTest"));   //崩溃
     //CentralDocPage1->openCurFileFolder();     //打开文件夹
     //CentralDocPage1->saveAll();               //卡住
 
@@ -215,9 +215,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->handleShortcut(Dr::key_right);
     CentralDocPage1->handleShortcut(Dr::key_f11);
     sheet->closeFullScreen();
+
     CentralDocPage1->handleShortcut(Dr::key_alt_1);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_1);
-
     CentralDocPage1->showTips("Test", 0);
     CentralDocPage1->showTips("Test", 1);
     CentralDocPage1->openMagnifer();
@@ -242,10 +242,11 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->onOpened(nullptr, false);
 
     sheet->saveData();
+    sheet->existFileChanged();
 
     //DocSheet
-    EXPECT_FALSE(sheet->firstThumbnail(UT_FILE_PDF).isNull());
-    EXPECT_FALSE(sheet->existFileChanged());
+    EXPECT_FALSE(sheet->firstThumbnail(filePath(UT_FILE_PDF, "UiFrameTest")).isNull());
+
     const QString &uuid = DocSheet::getUuid(sheet).toString();
     EXPECT_EQ(DocSheet::getSheet(uuid), sheet);
     EXPECT_TRUE(sheet->pagesNumber() > 0);
@@ -338,7 +339,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(rotation == sheet->operation().rotation);
 
     EXPECT_TRUE(sheet->fileType() == Dr::FileType::PDF);
-    EXPECT_TRUE(sheet->filePath() == UT_FILE_TEST_FILE_3);
+    EXPECT_TRUE(sheet->filePath() == filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
 
     sheet->setBookMark(0, 0);
     EXPECT_FALSE(sheet->hasBookMark(0));

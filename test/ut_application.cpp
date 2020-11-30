@@ -76,11 +76,22 @@ void ut_application::exec(int secs)
     a->exec();
 }
 
+QString ut_application::filePath(QString fileName, QString dirName)
+{
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + dirName + "/" + fileName;
+    if (!QFile(filePath).exists() && QFile(":/files/" + fileName).exists()) {
+        QDir().mkpath(QCoreApplication::applicationDirPath() + "/" + dirName);
+        QFile(":/files/" + fileName).copy(filePath);
+    }
+
+    return filePath;
+}
+
 #ifdef UT_APPLICATION_TEST
-TEST_F(ut_application, MainWindowTest)
+TEST_F(ut_application, ApplicationTest)
 {
     a->showAnnotTextWidgetSig();
-    a->handleFiles(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
+    a->handleFiles(QStringList() << filePath(UT_FILE_PDF, "ApplicationTest") << filePath(UT_FILE_DJVU, "ApplicationTest"));
 
     exec();
 }

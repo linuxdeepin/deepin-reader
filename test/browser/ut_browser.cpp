@@ -43,11 +43,11 @@ void ut_browser::TearDown()
 #ifdef UT_BROWSER_TEST
 TEST_F(ut_browser, SheetBrowserTest)
 {
-    MainWindow *window = MainWindow::createWindow(QStringList() << UT_FILE_PDF);
+    MainWindow *window = MainWindow::createWindow(QStringList() << filePath(UT_FILE_PDF, "SheetBrowserTest"));
 
     window->show();
 
-    DocSheet *sheet = window->m_central->m_docPage->getSheet(UT_FILE_PDF);
+    DocSheet *sheet = window->m_central->m_docPage->getSheet(filePath(UT_FILE_PDF, "SheetBrowserTest"));
 
     EXPECT_TRUE(sheet);
 
@@ -55,7 +55,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_sidebar->onBtnClicked(1);
 
-    DocSheet *sheet2 = new DocSheet(Dr::PDF, UT_FILE_PDF);
+    DocSheet *sheet2 = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetBrowserTest"));
 
     sheet2->openFileExec("");
 

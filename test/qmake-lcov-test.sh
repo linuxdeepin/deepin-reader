@@ -2,6 +2,8 @@
 
 workdir=. #编译路径
 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$workdir/../3rdparty/deepin-pdfium/lib
+
 executable=test-deepin-reader #可执行程序的文件名
 
 build_dir=$workdir

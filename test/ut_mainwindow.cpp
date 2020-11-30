@@ -46,11 +46,11 @@ void Ut_MainWindow::TearDown()
 #ifdef UT_MAINWINDOW_TEST
 TEST_F(Ut_MainWindow, MainWindowTest)
 {
-    DocSheet *sheet = new DocSheet(Dr::PDF, UT_FILE_PDF, nullptr);
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "MainWindowTest"), nullptr);
 
     MainWindow *mainWindow = MainWindow::createWindow(sheet);
     MainWindow *mainWindow_empty = MainWindow::createWindow();
-    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << UT_FILE_PDF << UT_FILE_DJVU);
+    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << filePath(UT_FILE_PDF, "MainWindowTest") << filePath(UT_FILE_DJVU, "MainWindowTest"));
 
     EXPECT_EQ(mainWindow_empty->hasSheet(nullptr), false);
     EXPECT_EQ(mainWindow_muti->hasSheet(sheet), false);

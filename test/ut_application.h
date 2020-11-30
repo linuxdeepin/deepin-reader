@@ -42,6 +42,8 @@ public:
 
     void exec(int secs = 1);
 
+    QString filePath(QString fileName, QString dirName);
+
     Application *a = nullptr;
 };
 

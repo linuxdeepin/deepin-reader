@@ -1,6 +1,10 @@
 TEMPLATE = subdirs
 
-CONFIG += ordered
+CONFIG  += ordered
 
 SUBDIRS += 3rdparty/deepin-pdfium
-SUBDIRS += src
+
+SUBDIRS += reader
+
+SUBDIRS += test
+
