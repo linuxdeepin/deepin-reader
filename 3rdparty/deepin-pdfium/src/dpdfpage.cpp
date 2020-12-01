@@ -114,6 +114,8 @@ private:
 DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes, qreal yRes):
     m_doc(reinterpret_cast<FPDF_DOCUMENT>(handler)), m_index(index), m_xRes(xRes), m_yRes(yRes)
 {
+    DPdfMutexLocker locker;
+
     //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width_pt, &m_height_pt);
 
@@ -472,6 +474,8 @@ int DPdfPage::countChars()
 {
     d_func()->loadTextPage();
 
+    DPdfMutexLocker locker;
+
     return FPDFText_CountChars(d_func()->m_textPage);
 }
 
@@ -480,6 +484,8 @@ QVector<QRectF> DPdfPage::getTextRects(int start, int charCount)
     d_func()->loadTextPage();
 
     QVector<QRectF> result;
+
+    DPdfMutexLocker locker;
 
     const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(start, charCount);
 
@@ -498,6 +504,8 @@ QVector<QRectF> DPdfPage::getTextRects(int start, int charCount)
 bool DPdfPage::getTextRect(int index, QRectF &textrect)
 {
     d_func()->loadTextPage();
+
+    DPdfMutexLocker locker;
 
     if (FPDFText_GetUnicode(d_func()->m_textPage, index) == L' ') {
         textrect = QRectF();
@@ -529,6 +537,8 @@ QString DPdfPage::text(const QRectF &rect)
     CFX_FloatRect fxRect(static_cast<float>(pointRect.left()), static_cast<float>(std::min(newBottom, newTop)),
                          static_cast<float>(pointRect.right()), static_cast<float>(std::max(newBottom, newTop)));
 
+    DPdfMutexLocker locker;
+
     auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetTextByRect(fxRect);
 
     return QString::fromWCharArray(text.c_str(), static_cast<int>(text.GetLength()));
@@ -537,6 +547,8 @@ QString DPdfPage::text(const QRectF &rect)
 QString DPdfPage::text(int index, int charCount)
 {
     d_func()->loadTextPage();
+
+    DPdfMutexLocker locker;
 
     auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(index, charCount);
 
@@ -742,6 +754,8 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
 QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool wholeWords)
 {
     d_func()->loadTextPage();
+
+    DPdfMutexLocker locker;
 
     QVector<QRectF> rectfs;
 

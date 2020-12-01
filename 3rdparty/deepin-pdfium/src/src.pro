@@ -10,6 +10,8 @@ DEFINES += BUILD_DEEPDF_LIB
 
 QT = core-private core gui
 
+QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
+
 include($$PWD/3rdparty/pdfium/pdfium.pri)
 
 INCLUDEPATH += $$PWD/../include
