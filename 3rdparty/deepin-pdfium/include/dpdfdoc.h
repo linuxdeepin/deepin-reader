@@ -33,7 +33,6 @@ public:
     typedef QVector< Section > Outline;
     typedef QMap<QString, QVariant> Properies;
 
-
     struct Section {
         int nIndex;
         QPointF offsetPointF;

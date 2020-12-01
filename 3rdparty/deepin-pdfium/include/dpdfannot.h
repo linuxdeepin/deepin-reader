@@ -135,6 +135,8 @@ public:
 
     int linkType() const;
 
+    bool isValid() const;
+
 private:
     QRectF m_rect;
     QString m_url;

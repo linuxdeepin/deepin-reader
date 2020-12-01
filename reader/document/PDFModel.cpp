@@ -118,6 +118,9 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
         for (DPdfAnnot *annot : dlinkAnnots) {
             DPdfLinkAnnot *linkAnnot = dynamic_cast<DPdfLinkAnnot *>(annot);
             if (linkAnnot && linkAnnot->pointIn(pos)) {
+                if (!linkAnnot->isValid())
+                    m_page->initAnnot(annot);
+
                 link.page = linkAnnot->pageIndex() + 1;
                 link.urlOrFileName = linkAnnot->url().isEmpty() ? linkAnnot->filePath() : linkAnnot->url();
                 link.left = linkAnnot->offset().x();

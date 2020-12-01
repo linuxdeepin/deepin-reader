@@ -146,6 +146,13 @@ public:
      */
     QList<DPdfAnnot *> links();
 
+    /**
+     * @brief 初始化需要延时的注释,如果link中的goto
+     * @param dAnnot
+     * @return
+     */
+    bool initAnnot(DPdfAnnot *dAnnot);
+
 signals:
     /**
      * @brief 添加注释时触发 ，在需要的时候可以重新获取annotations()

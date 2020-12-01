@@ -68,11 +68,17 @@ public:
     }
 private:
     /**
-     * @brief 加载注释,无需初始化，注释的坐标取值不受页自身旋转影响
+     * @brief 加载注释,无需初始化，注释的坐标取值不受页自身旋转影响,goto部分link由于耗时，需要使用时调用initAnnot初始化
      * @return 加载失败说明该页存在问题
      */
     bool loadAnnots();
 
+    /**
+     * @brief 初始化需要延时的注释
+     * @param dAnnot
+     * @return
+     */
+    bool initAnnot(DPdfAnnot *dAnnot);
     /**
      * @brief 视图坐标转化为文档坐标
      * @param rotation 文档自身旋转
@@ -203,12 +209,13 @@ bool DPdfPagePrivate::loadAnnots()
 
         //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width_pt/m_height_pt 为受旋转影响后的宽高
         qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
+
         if (DPdfAnnot::AText == type) {
             DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
             //获取位置
             FS_RECTF rectF;
-            if (FPDFAnnot_GetRect(annot, &rectF)) { //注释图标默认为20x20
+            if (FPDFAnnot_GetRect(annot, &rectF)) {
                 QRectF annorectF = transRect(rotation, rectF);
                 dAnnot->setRectF(transPointToPixel(annorectF));
 
@@ -224,7 +231,6 @@ bool DPdfPagePrivate::loadAnnots()
             FPDF_WCHAR buffer[1024];
             FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
             dAnnot->m_text = QString::fromUtf16(buffer);
-
             m_dAnnots.append(dAnnot);
         } else if (DPdfAnnot::AHighlight == type) {
             DPdfHightLightAnnot *dAnnot = new DPdfHightLightAnnot;
@@ -285,8 +291,8 @@ bool DPdfPagePrivate::loadAnnots()
                 if (0 != lenth) {
                     dAnnot->setUrl(uri);
                 }
-                dAnnot->setLinkType(DPdfLinkAnnot::Uri);
 
+                dAnnot->setLinkType(DPdfLinkAnnot::Uri);
             } else if (PDFACTION_REMOTEGOTO == type) {
                 char filePath[256] = {0};
                 unsigned long lenth = FPDFAction_GetFilePath(action, filePath, 256);
@@ -296,21 +302,21 @@ bool DPdfPagePrivate::loadAnnots()
 
                 dAnnot->setLinkType(DPdfLinkAnnot::RemoteGoTo);
             } else if (PDFACTION_GOTO == type || PDFACTION_UNSUPPORTED == type) { //跳转到文档某处
-                FPDF_DEST dest = FPDFAction_GetDest(m_doc, action);
+//                FPDF_DEST dest = FPDFAction_GetDest(m_doc, action);     //速度慢,暂时延后取值
 
-                int index = FPDFDest_GetDestPageIndex(m_doc, dest);
+//                int index = FPDFDest_GetDestPageIndex(m_doc, dest);
 
-                FPDF_BOOL hasX = false;
-                FPDF_BOOL hasY = false;
-                FPDF_BOOL hasZ = false;
-                FS_FLOAT x = 0;
-                FS_FLOAT y = 0;
-                FS_FLOAT z = 0;
+//                FPDF_BOOL hasX = false;
+//                FPDF_BOOL hasY = false;
+//                FPDF_BOOL hasZ = false;
+//                FS_FLOAT x = 0;
+//                FS_FLOAT y = 0;
+//                FS_FLOAT z = 0;
 
-                bool result = FPDFDest_GetLocationInPage(dest, &hasX, &hasY, &hasZ, &x, &y, &z);
+//                bool result = FPDFDest_GetLocationInPage(dest, &hasX, &hasY, &hasZ, &x, &y, &z);
 
-                if (result)
-                    dAnnot->setPage(index, transPointToPixelX(hasX ? x : 0), transPointToPixelY(hasY ? y : 0));
+//                if (result)
+//                    dAnnot->setPage(index, transPointToPixelX(hasX ? x : 0), transPointToPixelY(hasY ? y : 0));
 
                 dAnnot->setLinkType(DPdfLinkAnnot::Goto);
             }
@@ -328,6 +334,48 @@ bool DPdfPagePrivate::loadAnnots()
     FPDF_ClosePage(page);
 
     return true;
+}
+
+bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
+{
+    if (DPdfAnnot::ALink != dAnnot->type())
+        return true;
+
+    DPdfLinkAnnot *linkAnnot = reinterpret_cast<DPdfLinkAnnot *>(dAnnot);
+
+    //使用临时page，不完全加载,防止刚开始消耗时间过长
+    FPDF_PAGE page = m_page;
+
+    if (page == nullptr)
+        page = FPDF_LoadNoParsePage(m_doc, m_index);      //不调用ParseContent，目前观察不会导致多线程崩溃
+
+    if (nullptr == page) {
+        return false;
+    }
+
+    FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, m_dAnnots.indexOf(dAnnot));
+
+    FPDF_LINK link = FPDFAnnot_GetLink(annot);
+
+    FPDF_ACTION action = FPDFLink_GetAction(link);
+
+    FPDF_DEST dest = FPDFAction_GetDest(m_doc, action);     //速度慢
+
+    int index = FPDFDest_GetDestPageIndex(m_doc, dest);
+
+    FPDF_BOOL hasX = false;
+    FPDF_BOOL hasY = false;
+    FPDF_BOOL hasZ = false;
+    FS_FLOAT x = 0;
+    FS_FLOAT y = 0;
+    FS_FLOAT z = 0;
+
+    bool result = FPDFDest_GetLocationInPage(dest, &hasX, &hasY, &hasZ, &x, &y, &z);
+
+    if (result)
+        linkAnnot->setPage(index, transPointToPixelX(hasX ? x : 0), transPointToPixelY(hasY ? y : 0));
+
+    return result;
 }
 
 FS_RECTF DPdfPagePrivate::transRect(const int &rotation, const QRectF &rect)
@@ -582,7 +630,7 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
     //此处使用pixel坐标
-    dAnnot->setRectF(QRectF(pos.x() - 10, pos.y() - 10, 20, 20));
+    dAnnot->setRectF(d_func()->transPointToPixel(QRectF(pointPos.x() - 10, pointPos.y() - 10, 20, 20)));
 
     dAnnot->setText(text);
 
@@ -808,4 +856,9 @@ QList<DPdfAnnot *> DPdfPage::links()
     }
 
     return links;
+}
+
+bool DPdfPage::initAnnot(DPdfAnnot *dAnnot)
+{
+    return d_func()->initAnnot(dAnnot);
 }

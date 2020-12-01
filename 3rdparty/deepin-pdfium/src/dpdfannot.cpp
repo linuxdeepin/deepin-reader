@@ -194,3 +194,11 @@ int DPdfLinkAnnot::linkType() const
     return m_linkType;
 }
 
+bool DPdfLinkAnnot::isValid() const
+{
+    if (Goto == m_linkType)
+        return m_index != -1;
+
+    return true;
+}
+

@@ -45,6 +45,8 @@ TEST_F(ut_browser, SheetBrowserTest)
 {
     MainWindow *window = MainWindow::createWindow(QStringList() << filePath(UT_FILE_PDF, "SheetBrowserTest"));
 
+    window->activateWindow();
+
     window->show();
 
     DocSheet *sheet = window->m_central->m_docPage->getSheet(filePath(UT_FILE_PDF, "SheetBrowserTest"));
@@ -71,6 +73,8 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->getImage(0, image, 200, 200);
 
+    window->show();
+
     //BrowserPage
     BrowserPage *page = sheet->m_browser->m_items.at(0);
     if (nullptr == page)
@@ -89,6 +93,7 @@ TEST_F(ut_browser, SheetBrowserTest)
     QList<Word> words = page->getWords();
     if (words.count() <= 0)
         GTEST_FAIL();
+
 
     BrowserWord *word = new BrowserWord(page, words[0]);
     word->setScaleFactor(1);

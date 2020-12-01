@@ -436,6 +436,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->closeWithoutSave();
     mainWindow2->closeWithoutSave();
 
-    exec(5);
+    exec();
 }
 #endif

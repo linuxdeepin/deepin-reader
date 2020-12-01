@@ -3,6 +3,10 @@ QT += core gui sql printsupport dbus widgets
 
 CONFIG += c++11 link_pkgconfig testcase no_testcase_installs
 
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
+
+QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
+
 PKGCONFIG += ddjvuapi dtkwidget
 
 LIBS += -lgtest

@@ -14,6 +14,8 @@
 #include <QFile>
 #include <QTemporaryDir>
 #include <QUuid>
+#include <chardet.h>
+#include <version.h>
 
 DPdfDoc::Status parseError(int error)
 {
@@ -76,7 +78,7 @@ DPdfDocPrivate::~DPdfDocPrivate()
     qDeleteAll(m_pages);
 
     if (nullptr != m_docHandler)
-        FPDF_CloseDocument((FPDF_DOCUMENT)m_docHandler);
+        FPDF_CloseDocument(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler));
 }
 
 DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString &password)
@@ -97,10 +99,10 @@ DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString 
 
     m_docHandler = static_cast<DPdfDocHandler *>(ptr);
 
-    m_status = m_docHandler ? DPdfDoc::SUCCESS : parseError(FPDF_GetLastError());
+    m_status = m_docHandler ? DPdfDoc::SUCCESS : parseError(static_cast<int>(FPDF_GetLastError()));
 
     if (m_docHandler) {
-        m_pageCount = FPDF_GetPageCount((FPDF_DOCUMENT)m_docHandler);
+        m_pageCount = FPDF_GetPageCount(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler));
         m_pages.fill(nullptr, m_pageCount);
     }
 
@@ -129,7 +131,7 @@ bool DPdfDoc::isEncrypted() const
     if (!isValid())
         return false;
 
-    return FPDF_GetDocPermissions((FPDF_DOCUMENT)d_func()->m_docHandler) != 0xFFFFFFFF;
+    return FPDF_GetDocPermissions(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)) != 0xFFFFFFFF;
 }
 
 DPdfDoc::Status DPdfDoc::tryLoadFile(const QString &filename, const QString &password)
@@ -146,10 +148,10 @@ DPdfDoc::Status DPdfDoc::tryLoadFile(const QString &filename, const QString &pas
                                   password.toUtf8().constData());
 
     DPdfDocHandler *docHandler = static_cast<DPdfDocHandler *>(ptr);
-    status = docHandler ? SUCCESS : parseError(FPDF_GetLastError());
+    status = docHandler ? SUCCESS : parseError(static_cast<int>(FPDF_GetLastError()));
 
     if (docHandler) {
-        FPDF_CloseDocument((FPDF_DOCUMENT)docHandler);
+        FPDF_CloseDocument(reinterpret_cast<FPDF_DOCUMENT>(docHandler));
     }
 
     return status;
@@ -298,11 +300,11 @@ DPdfDoc::Properies DPdfDoc::proeries()
     Properies properies;
     int fileversion = 1;
     properies.insert("Version", "1");
-    if (FPDF_GetFileVersion((FPDF_DOCUMENT)d_func()->m_docHandler, &fileversion)) {
+    if (FPDF_GetFileVersion(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &fileversion)) {
         properies.insert("Version", QString("%1.%2").arg(fileversion / 10).arg(fileversion % 10));
     }
     properies.insert("Encrypted", isEncrypted());
-    properies.insert("Linearized", FPDF_GetFileLinearized((FPDF_DOCUMENT)d_func()->m_docHandler));
+    properies.insert("Linearized", FPDF_GetFileLinearized(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)));
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
     properies.insert("Creator", QString());
@@ -311,17 +313,25 @@ DPdfDoc::Properies DPdfDoc::proeries()
 
     const CPDF_Dictionary *pInfo = pDoc->GetInfo();
     if (pInfo) {
-        const ByteString &KeyWords = pInfo->GetStringFor("Keywords");
-        properies.insert("KeyWords", QString::fromUtf8(KeyWords.c_str()));
+        const WideString &KeyWords = pInfo->GetUnicodeTextFor("KeyWords");
+        properies.insert("KeyWords", QString::fromWCharArray(KeyWords.c_str()));
 
+        //windows和mac上生成的pdf此处编码格式不同,需要嗅探查找
         const ByteString &Title = pInfo->GetStringFor("Title");
-        properies.insert("Title", QString::fromUtf8(Title.c_str()));
+        DetectObj *obj = detect_obj_init();
+        detect(Title.c_str(), &obj);
+        if ("utf-8" == QString(obj->encoding).toLower()) {
+            properies.insert("Title", QString::fromUtf8(Title.c_str()));
+        } else {
+            const WideString &WTitle = pInfo->GetUnicodeTextFor("Title");
+            properies.insert("Title", QString::fromWCharArray(WTitle.c_str()));
+        }
 
-        const ByteString &Creator = pInfo->GetStringFor("Creator");
-        properies.insert("Creator", QString::fromUtf8(Creator.c_str()));
+        const WideString &Creator = pInfo->GetUnicodeTextFor("Creator");
+        properies.insert("Creator", QString::fromWCharArray(Creator.c_str()));
 
-        const ByteString &Producer = pInfo->GetStringFor("Producer");
-        properies.insert("Producer", QString::fromUtf8(Producer.c_str()));
+        const WideString &Producer = pInfo->GetUnicodeTextFor("Producer");
+        properies.insert("Producer", QString::fromWCharArray(Producer.c_str()));
     }
 
     return properies;
@@ -334,6 +344,6 @@ QString DPdfDoc::label(int index) const
     CPDF_PageLabel label(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     const Optional<WideString> &str = label.GetLabel(index);
     if (str.has_value())
-        return QString::fromWCharArray(str.value().c_str(), str.value().GetLength());
+        return QString::fromWCharArray(str.value().c_str(), static_cast<int>(str.value().GetLength()));
     return QString();
 }

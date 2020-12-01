@@ -16,6 +16,10 @@ include($$PWD/3rdparty/pdfium/pdfium.pri)
 
 INCLUDEPATH += $$PWD/../include
 
+INCLUDEPATH += /usr/include/chardet
+
+LIBS += -lchardet
+
 public_headers += \
     $$PWD/../include/dpdfglobal.h \
     $$PWD/../include/dpdfdoc.h \
@@ -32,4 +36,4 @@ SOURCES += \
 
 target.path  = /usr/lib
 
-INSTALLS += target
+INSTALLS += target header_files
