@@ -1,13 +1,21 @@
 #config
-QT += core gui sql printsupport dbus widgets
+QT += core gui sql printsupport dbus
+QT += testlib
 
-CONFIG += c++11 link_pkgconfig testcase no_testcase_installs
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11 link_pkgconfig
+CONFIG += testcase no_testcase_installs
 
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
-
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
 PKGCONFIG += ddjvuapi dtkwidget
+
+
+CONFIG -= app_bundle
+DEFINES += QT_DEPRECATED_WARNINGS
 
 LIBS += -lgtest
 
