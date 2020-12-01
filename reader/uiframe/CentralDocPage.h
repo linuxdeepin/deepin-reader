@@ -279,8 +279,7 @@ signals:
 
 public slots:
     /**
-     * @brief onOpened
-     * 文档被打开后进行处理
+     * @brief 文档被打开后进行处理
      * @param sheet 被打开的文档
      * @param result 打开结果
      */

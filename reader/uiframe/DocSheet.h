@@ -546,16 +546,14 @@ public:
     void showEncryPage();
 
     /**
-     * @brief tryPassword
-     * 尝试密码是否正确
+     * @brief 尝试密码是否正确
      * @param password 密码
      * @return
      */
     bool tryPassword(QString password);
 
     /**
-     * @brief needPassword
-     * 获取是否需要密码
+     * @brief 获取是否需要密码
      * @return
      */
     bool needPassword();
@@ -664,13 +662,6 @@ signals:
      * @param operation 查找操作
      */
     void sigFindOperation(const int &operation);
-
-    /**
-     * @brief sigOpened
-     * 文档打开结果通知
-     * @param sheet 被打开的文档
-     */
-    void sigOpened(DocSheet *, bool);
 
     /**
      * @brief sigFileChanged

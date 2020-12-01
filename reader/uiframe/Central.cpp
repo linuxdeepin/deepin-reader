@@ -39,6 +39,7 @@
 
 #include <QStackedLayout>
 #include <QMimeData>
+#include <QTimer>
 
 Central::Central(QWidget *parent)
     : BaseWidget(parent)
@@ -278,7 +279,9 @@ void Central::dropEvent(QDropEvent *event)
         }
 
         if (filePathList.count() > 0) {
-            openFiles(filePathList);
+            QTimer::singleShot(1, [ = ]() {
+                openFiles(filePathList);
+            });
         }
     }
 }

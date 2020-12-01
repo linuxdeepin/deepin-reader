@@ -161,19 +161,8 @@ void CentralDocPage::openFile(const QString &filePath)
 
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
-    if (sheet->needPassword()) {
-        sheet->showEncryPage();
-    } else {
-        if (!sheet->openFileExec("")) {
-            sheet->deleteLater();
-            showTips(tr("Please check if the file is damaged"), 1);
-            return;
-        }
-    }
-
     connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
-    connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     m_pStackedLayout->addWidget(sheet);
@@ -187,6 +176,15 @@ void CentralDocPage::openFile(const QString &filePath)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
     onOpened(sheet, true);
+
+    if (sheet->needPassword()) {
+        sheet->showEncryPage();
+    } else {
+        if (!sheet->openFileExec("")) {
+            onOpened(sheet, false);
+            return;
+        }
+    }
 
     PERF_PRINT_END("POINT-03", "");
     PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
@@ -213,8 +211,7 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 
         emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-        if (nullptr != sheet)
-            sheet->deleteLater();
+        sheet->deleteLater();
 
         showTips(tr("Please check if the file is damaged"), 1);
 
@@ -317,7 +314,6 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
 
     disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
-    disconnect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     emit sigSheetCountChanged(m_pStackedLayout->count());
@@ -334,7 +330,6 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
 
     connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
-    connect(sheet, SIGNAL(sigOpened(DocSheet *, bool)), this, SLOT(onOpened(DocSheet *, bool)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
     m_pStackedLayout->addWidget(sheet);

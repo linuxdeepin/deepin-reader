@@ -118,6 +118,10 @@ class PDFDocument : public Document
     Q_DECLARE_TR_FUNCTIONS(Model::PDFDocument)
 
 public:
+    Q_DISABLE_COPY(PDFDocument)
+
+    explicit PDFDocument(DPdfDoc *document);
+
     virtual ~PDFDocument() override;
 
     int pageCount() const override;
@@ -141,10 +145,6 @@ public:
     static int tryLoadDocument(const QString &filePath, const QString &password);
 
 private:
-    Q_DISABLE_COPY(PDFDocument)
-
-    explicit PDFDocument(DPdfDoc *document);
-
     DPdfDoc *m_document = nullptr;
 
     QMutex *m_docMutex;

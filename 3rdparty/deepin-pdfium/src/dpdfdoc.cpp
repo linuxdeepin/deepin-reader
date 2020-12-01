@@ -131,6 +131,8 @@ bool DPdfDoc::isEncrypted() const
     if (!isValid())
         return false;
 
+    DPdfMutexLocker locker;
+
     return FPDF_GetDocPermissions(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)) != 0xFFFFFFFF;
 }
 

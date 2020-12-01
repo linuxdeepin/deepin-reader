@@ -172,8 +172,7 @@ TEST_F(ut_document, PDFTest)
     if (nullptr != saveDoc) {
         saveDoc->save();
         saveDoc->saveAs(filePath(UT_FILE_PDF_SAVEAS, "PDFTest"));
-    } else
-        GTEST_FAIL();
+    }
 
     QFile(filePath(UT_FILE_PDF_SAVE, "PDFTest")).remove();
     QFile(filePath(UT_FILE_PDF_SAVEAS, "PDFTest")).remove();

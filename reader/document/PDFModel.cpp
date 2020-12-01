@@ -26,11 +26,52 @@
 
 #include <QDebug>
 #include <QScreen>
+#include <QThread>
 
 #define LOCK_APPPAGE  QMutexLocker docMutexLocker(&PDFPage::s_mutex);
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
 
 namespace deepin_reader {
+
+class LoadThread: public QThread
+{
+public:
+    void startown()
+    {
+        this->start();
+        QEventLoop loop;
+        connect(this, &QThread::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+    }
+
+    void run();
+
+public:
+    bool bTryLoadDocument = false;
+
+    int loadStatus = 0;
+
+    QString filePath;
+    QString password;
+
+    deepin_reader::PDFDocument *pdfDocument = nullptr;
+};
+
+void LoadThread::run()
+{
+    if (bTryLoadDocument) {
+        loadStatus = DPdfDoc::tryLoadFile(filePath, password);
+    } else {
+        DPdfDoc *document = new DPdfDoc(filePath, password);
+        loadStatus = document->status();
+        if (loadStatus == DPdfDoc::SUCCESS) {
+            pdfDocument = new deepin_reader::PDFDocument(document);
+        } else {
+            delete document;
+            pdfDocument = nullptr;
+        }
+    }
+}
 
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
     m_dannotation(dannotation)
@@ -400,18 +441,21 @@ Properties PDFDocument::properties() const
 
 PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
 {
-    DPdfDoc *document = new DPdfDoc(filePath, password);
-    if (document->status() == DPdfDoc::SUCCESS)
-        return new deepin_reader::PDFDocument(document);
-    else {
-        delete document;
-        return nullptr;
-    }
+    LoadThread loadThread;
+    loadThread.filePath = filePath;
+    loadThread.password = password;
+    loadThread.startown();
+    return loadThread.pdfDocument;
 }
 
 int PDFDocument::tryLoadDocument(const QString &filePath, const QString &password)
 {
-    return DPdfDoc::tryLoadFile(filePath, password);
+    LoadThread loadThread;
+    loadThread.bTryLoadDocument = true;
+    loadThread.filePath = filePath;
+    loadThread.password = password;
+    loadThread.startown();
+    return loadThread.loadStatus;
 }
 
 }

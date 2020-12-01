@@ -307,7 +307,8 @@ void MainWindow::onMainWindowExitFull()
 {
     if (m_lastWindowState == Qt::WindowFullScreen) {
         m_lastWindowState = static_cast<int>(this->windowState());
-        m_central->docPage()->getCurSheet()->closeFullScreen(true);
+        if (m_central->docPage()->getCurSheet())
+            m_central->docPage()->getCurSheet()->closeFullScreen(true);
         this->setMenuWidget(titlebar());
         m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height());
         updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
