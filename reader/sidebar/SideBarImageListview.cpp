@@ -203,7 +203,7 @@ void SideBarImageListView::showNoteMenu(const QPoint &point)
 
         QAction *delAllAction = m_pNoteMenu->addAction(tr("Remove all"));
         connect(delAllAction, &QAction::triggered, [this]() {
-            emit sigListMenuClick(E_BOOKMARK_DELETE);
+            emit sigListMenuClick(E_NOTE_DELETE_ALL);
         });
     }
     m_pNoteMenu->exec(point);
