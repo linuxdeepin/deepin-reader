@@ -1,7 +1,5 @@
 #include "dpdfannot.h"
 
-#include "public/fpdf_annot.h"
-
 DPdfAnnot::AnnotType DPdfAnnot::type()
 {
     return m_type;

@@ -124,8 +124,11 @@ SheetBrowser::~SheetBrowser()
 
     qDeleteAll(m_items);
 
-    if (nullptr != m_document)
+    if (nullptr != m_document) {
         delete m_document;
+        m_document = nullptr;
+    }
+
 
     if (nullptr != m_noteEditWidget)
         delete m_noteEditWidget;
@@ -257,12 +260,15 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
 bool SheetBrowser::save()
 {
+    if (m_document == nullptr)
+        return false;
+
     return m_document->save();
 }
 
 bool SheetBrowser::saveAs(const QString &path)
 {
-    if (path.isEmpty())
+    if (path.isEmpty() || m_document == nullptr)
         return false;
 
     return m_document->saveAs(path);;
@@ -669,11 +675,17 @@ void SheetBrowser::onInit()
 
 deepin_reader::Outline SheetBrowser::outline()
 {
+    if (m_document == nullptr)
+        return deepin_reader::Outline();
+
     return m_document->outline();
 }
 
 Properties SheetBrowser::properties() const
 {
+    if (m_document == nullptr)
+        return Properties();
+
     return m_document->properties();
 }
 

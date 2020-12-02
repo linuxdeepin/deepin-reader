@@ -160,6 +160,8 @@ void DPdfPagePrivate::loadTextPage()
 int DPdfPagePrivate::oriRotation()
 {
     if (nullptr == m_page) {
+        DPdfMutexLocker locker;
+
         FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
 
         CPDF_Page *pPage = CPDFPageFromFPDFPage(page);
@@ -346,6 +348,8 @@ bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
     //使用临时page，不完全加载,防止刚开始消耗时间过长
     FPDF_PAGE page = m_page;
 
+    DPdfMutexLocker locker;
+
     if (page == nullptr)
         page = FPDF_LoadNoParsePage(m_doc, m_index);      //不调用ParseContent，目前观察不会导致多线程崩溃
 
@@ -506,6 +510,8 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     FPDFBitmap_Destroy(bitmap);
 
+    locker.unlock();
+
     for (int i = 0; i < image.height(); i++) {
         uchar *pixels = image.scanLine(i);
 
@@ -611,6 +617,8 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
 
     FPDF_ANNOTATION_SUBTYPE subType = FPDF_ANNOT_TEXT;
 
+    DPdfMutexLocker locker;
+
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
     if (!FPDFAnnot_SetStringValue(annot, "Contents", text.utf16())) {
@@ -626,6 +634,8 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
     }
 
     FPDFPage_CloseAnnot(annot);
+
+    locker.unlock();
 
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 
@@ -651,6 +661,8 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
         return false;
 
     int index = d_func()->m_dAnnots.indexOf(dAnnot);
+
+    DPdfMutexLocker locker;
 
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(d_func()->m_page, index);
 
@@ -689,6 +701,8 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &rects, QString t
     d_func()->loadPage();
 
     FPDF_ANNOTATION_SUBTYPE subType = FPDF_ANNOT_HIGHLIGHT;
+
+    DPdfMutexLocker locker;
 
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
@@ -751,6 +765,8 @@ bool DPdfPage::updateHightLightAnnot(DPdfAnnot *dAnnot, QColor color, QString te
 
     int index = d_func()->m_dAnnots.indexOf(dAnnot);
 
+    DPdfMutexLocker locker;
+
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(d_func()->m_page, index);
 
     if (color.isValid()) {
@@ -786,6 +802,8 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
 
     if (index < 0)
         return false;
+
+    DPdfMutexLocker locker;
 
     if (!FPDFPage_RemoveAnnot(d_func()->m_page, index))
         return false;

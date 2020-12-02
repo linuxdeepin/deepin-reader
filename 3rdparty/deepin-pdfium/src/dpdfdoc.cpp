@@ -182,7 +182,9 @@ bool DPdfDoc::save()
     if (!saveWriter.open(QIODevice::WriteOnly))
         return false;
 
+    DPdfMutexLocker locker;
     bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
+    locker.unlock();
 
     saveWriter.close();
 
@@ -221,7 +223,9 @@ bool DPdfDoc::saveAs(const QString &filePath)
     if (!saveWriter.open(QIODevice::ReadWrite))
         return false;
 
+    DPdfMutexLocker locker;
     bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
+    locker.unlock();
 
     saveWriter.close();
 
@@ -285,6 +289,8 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
 
 DPdfDoc::Outline DPdfDoc::outline(qreal xRes, qreal yRes)
 {
+    DPdfMutexLocker locker;
+
     Outline outline;
     CPDF_BookmarkTree tree(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     CPDF_Bookmark cBookmark;
