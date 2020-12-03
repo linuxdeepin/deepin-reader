@@ -5,16 +5,16 @@ QT += testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11 link_pkgconfig
-CONFIG += testcase no_testcase_installs
+CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
+
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
 PKGCONFIG += ddjvuapi dtkwidget
 
-
 CONFIG -= app_bundle
+
 DEFINES += QT_DEPRECATED_WARNINGS
 
 LIBS += -lgtest
