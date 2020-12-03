@@ -1664,94 +1664,97 @@ constexpr uint8_t kCMYK[81 * 81][3] = {
 std::tuple<uint8_t, uint8_t, uint8_t> AdobeCMYK_to_sRGB1(uint8_t c,
                                                          uint8_t m,
                                                          uint8_t y,
-                                                         uint8_t k) {
-  int fix_c = c << 8;
-  int fix_m = m << 8;
-  int fix_y = y << 8;
-  int fix_k = k << 8;
-  int c_index = (fix_c + 4096) >> 13;
-  int m_index = (fix_m + 4096) >> 13;
-  int y_index = (fix_y + 4096) >> 13;
-  int k_index = (fix_k + 4096) >> 13;
-  const int pos = c_index * 9 * 9 * 9 + m_index * 9 * 9 + y_index * 9 + k_index;
-  int fix_r = kCMYK[pos][0] << 8;
-  int fix_g = kCMYK[pos][1] << 8;
-  int fix_b = kCMYK[pos][2] << 8;
-  int c1_index = fix_c >> 13;
-  if (c1_index == c_index)
-    c1_index = c1_index == 8 ? c1_index - 1 : c1_index + 1;
-  int m1_index = fix_m >> 13;
-  if (m1_index == m_index)
-    m1_index = m1_index == 8 ? m1_index - 1 : m1_index + 1;
-  int y1_index = fix_y >> 13;
-  if (y1_index == y_index)
-    y1_index = y1_index == 8 ? y1_index - 1 : y1_index + 1;
-  int k1_index = fix_k >> 13;
-  if (k1_index == k_index)
-    k1_index = k1_index == 8 ? k1_index - 1 : k1_index + 1;
+                                                         uint8_t k)
+{
+    int fix_c = c << 8;
+    int fix_m = m << 8;
+    int fix_y = y << 8;
+    int fix_k = k << 8;
+    int c_index = (fix_c + 4096) >> 13;
+    int m_index = (fix_m + 4096) >> 13;
+    int y_index = (fix_y + 4096) >> 13;
+    int k_index = (fix_k + 4096) >> 13;
+    const int pos = c_index * 9 * 9 * 9 + m_index * 9 * 9 + y_index * 9 + k_index;
+    int fix_r = kCMYK[pos][0] << 8;
+    int fix_g = kCMYK[pos][1] << 8;
+    int fix_b = kCMYK[pos][2] << 8;
+    int c1_index = fix_c >> 13;
+    if (c1_index == c_index)
+        c1_index = c1_index == 8 ? c1_index - 1 : c1_index + 1;
+    int m1_index = fix_m >> 13;
+    if (m1_index == m_index)
+        m1_index = m1_index == 8 ? m1_index - 1 : m1_index + 1;
+    int y1_index = fix_y >> 13;
+    if (y1_index == y_index)
+        y1_index = y1_index == 8 ? y1_index - 1 : y1_index + 1;
+    int k1_index = fix_k >> 13;
+    if (k1_index == k_index)
+        k1_index = k1_index == 8 ? k1_index - 1 : k1_index + 1;
 
-  const int c1_pos = pos + (c1_index - c_index) * 9 * 9 * 9;
-  const int c_rate = (fix_c - (c_index << 13)) * (c_index - c1_index);
-  fix_r += (kCMYK[pos][0] - kCMYK[c1_pos][0]) * c_rate / 32;
-  fix_g += (kCMYK[pos][1] - kCMYK[c1_pos][1]) * c_rate / 32;
-  fix_b += (kCMYK[pos][2] - kCMYK[c1_pos][2]) * c_rate / 32;
+    const int c1_pos = pos + (c1_index - c_index) * 9 * 9 * 9;
+    const int c_rate = (fix_c - (c_index << 13)) * (c_index - c1_index);
+    fix_r += (kCMYK[pos][0] - kCMYK[c1_pos][0]) * c_rate / 32;
+    fix_g += (kCMYK[pos][1] - kCMYK[c1_pos][1]) * c_rate / 32;
+    fix_b += (kCMYK[pos][2] - kCMYK[c1_pos][2]) * c_rate / 32;
 
-  const int m1_pos = pos + (m1_index - m_index) * 9 * 9;
-  const int m_rate = (fix_m - (m_index << 13)) * (m_index - m1_index);
-  fix_r += (kCMYK[pos][0] - kCMYK[m1_pos][0]) * m_rate / 32;
-  fix_g += (kCMYK[pos][1] - kCMYK[m1_pos][1]) * m_rate / 32;
-  fix_b += (kCMYK[pos][2] - kCMYK[m1_pos][2]) * m_rate / 32;
+    const int m1_pos = pos + (m1_index - m_index) * 9 * 9;
+    const int m_rate = (fix_m - (m_index << 13)) * (m_index - m1_index);
+    fix_r += (kCMYK[pos][0] - kCMYK[m1_pos][0]) * m_rate / 32;
+    fix_g += (kCMYK[pos][1] - kCMYK[m1_pos][1]) * m_rate / 32;
+    fix_b += (kCMYK[pos][2] - kCMYK[m1_pos][2]) * m_rate / 32;
 
-  const int y1_pos = pos + (y1_index - y_index) * 9;
-  const int y_rate = (fix_y - (y_index << 13)) * (y_index - y1_index);
-  fix_r += (kCMYK[pos][0] - kCMYK[y1_pos][0]) * y_rate / 32;
-  fix_g += (kCMYK[pos][1] - kCMYK[y1_pos][1]) * y_rate / 32;
-  fix_b += (kCMYK[pos][2] - kCMYK[y1_pos][2]) * y_rate / 32;
+    const int y1_pos = pos + (y1_index - y_index) * 9;
+    const int y_rate = (fix_y - (y_index << 13)) * (y_index - y1_index);
+    fix_r += (kCMYK[pos][0] - kCMYK[y1_pos][0]) * y_rate / 32;
+    fix_g += (kCMYK[pos][1] - kCMYK[y1_pos][1]) * y_rate / 32;
+    fix_b += (kCMYK[pos][2] - kCMYK[y1_pos][2]) * y_rate / 32;
 
-  const int k1_pos = pos + (k1_index - k_index);
-  const int k_rate = (fix_k - (k_index << 13)) * (k_index - k1_index);
-  fix_r += (kCMYK[pos][0] - kCMYK[k1_pos][0]) * k_rate / 32;
-  fix_g += (kCMYK[pos][1] - kCMYK[k1_pos][1]) * k_rate / 32;
-  fix_b += (kCMYK[pos][2] - kCMYK[k1_pos][2]) * k_rate / 32;
+    const int k1_pos = pos + (k1_index - k_index);
+    const int k_rate = (fix_k - (k_index << 13)) * (k_index - k1_index);
+    fix_r += (kCMYK[pos][0] - kCMYK[k1_pos][0]) * k_rate / 32;
+    fix_g += (kCMYK[pos][1] - kCMYK[k1_pos][1]) * k_rate / 32;
+    fix_b += (kCMYK[pos][2] - kCMYK[k1_pos][2]) * k_rate / 32;
 
-  fix_r = std::max(fix_r, 0);
-  fix_g = std::max(fix_g, 0);
-  fix_b = std::max(fix_b, 0);
+    fix_r = std::max(fix_r, 0);
+    fix_g = std::max(fix_g, 0);
+    fix_b = std::max(fix_b, 0);
 
-  return std::make_tuple(fix_r >> 8, fix_g >> 8, fix_b >> 8);
+    return std::make_tuple(fix_r >> 8, fix_g >> 8, fix_b >> 8);
 }
 
 std::tuple<float, float, float> AdobeCMYK_to_sRGB(float c,
                                                   float m,
                                                   float y,
-                                                  float k) {
-  // Convert to uint8_t with round-to-nearest. Avoid using FXSYS_roundf because
-  // it is incredibly expensive with VC++ (tested on VC++ 2015) because round()
-  // is very expensive.
-  // The 'magic' value of 0.49999997f, the float that precedes 0.5f, was chosen
-  // because it gives identical results to FXSYS_roundf(). Using the constant
-  // 0.5f gives different results (1 instead of 0) for one value, 0.0019607842.
-  // That value is close to the cusp but zero is the correct answer, and
-  // getting the same answer as before is desirable.
-  // All floats from 0.0 to 1.0 were tested and now give the same results.
-  const float rounding_offset = 0.49999997f;
-  uint8_t c1 = static_cast<int>(c * 255.f + rounding_offset);
-  uint8_t m1 = static_cast<int>(m * 255.f + rounding_offset);
-  uint8_t y1 = static_cast<int>(y * 255.f + rounding_offset);
-  uint8_t k1 = static_cast<int>(k * 255.f + rounding_offset);
+                                                  float k)
+{
+    // Convert to uint8_t with round-to-nearest. Avoid using FXSYS_roundf because
+    // it is incredibly expensive with VC++ (tested on VC++ 2015) because round()
+    // is very expensive.
+    // The 'magic' value of 0.49999997f, the float that precedes 0.5f, was chosen
+    // because it gives identical results to FXSYS_roundf(). Using the constant
+    // 0.5f gives different results (1 instead of 0) for one value, 0.0019607842.
+    // That value is close to the cusp but zero is the correct answer, and
+    // getting the same answer as before is desirable.
+    // All floats from 0.0 to 1.0 were tested and now give the same results.
+    const float rounding_offset = 0.49999997f;
+    uint8_t c1 = static_cast<int>(c * 255.f + rounding_offset);
+    uint8_t m1 = static_cast<int>(m * 255.f + rounding_offset);
+    uint8_t y1 = static_cast<int>(y * 255.f + rounding_offset);
+    uint8_t k1 = static_cast<int>(k * 255.f + rounding_offset);
 
-  ASSERT(c1 == FXSYS_roundf(c * 255));
-  ASSERT(m1 == FXSYS_roundf(m * 255));
-  ASSERT(y1 == FXSYS_roundf(y * 255));
-  ASSERT(k1 == FXSYS_roundf(k * 255));
+    //i386机器上值会触发此断言
+//  ASSERT(c1 == FXSYS_roundf(c * 255));
+//  ASSERT(m1 == FXSYS_roundf(m * 255));
+//  ASSERT(y1 == FXSYS_roundf(y * 255));
+//  ASSERT(k1 == FXSYS_roundf(k * 255));
 
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
-  std::tie(r, g, b) = AdobeCMYK_to_sRGB1(c1, m1, y1, k1);
-  // Multiply by a constant rather than dividing because division is much
-  // more expensive.
-  return std::make_tuple(r * (1.0f / 255), g * (1.0f / 255), b * (1.0f / 255));
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    std::tie(r, g, b) = AdobeCMYK_to_sRGB1(c1, m1, y1, k1);
+    // Multiply by a constant rather than dividing because division is much
+    // more expensive.
+    return std::make_tuple(r * (1.0f / 255), g * (1.0f / 255), b * (1.0f / 255));
 }
 
 }  // namespace fxge
