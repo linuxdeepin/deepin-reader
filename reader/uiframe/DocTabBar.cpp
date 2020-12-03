@@ -34,7 +34,7 @@ DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
 {
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 2 ))
-    this->setEnabledEmbedStyle(true);//设置直角样式
+    //this->setEnabledEmbedStyle(true);//设置直角样式
 
     this->setExpanding(true);//设置平铺窗口模式
 #endif
