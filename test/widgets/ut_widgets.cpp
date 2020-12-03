@@ -288,7 +288,7 @@ TEST_F(Ut_Widgets, ShortCutShowTest)
     ShortCutShow shortCutDialog;
     shortCutDialog.setSheet(nullptr);
     shortCutDialog.initDJVU();
-    shortCutDialog.show();
+    //shortCutDialog.show();
 }
 
 TEST_F(Ut_Widgets, SlidePlayWidgetTest)
