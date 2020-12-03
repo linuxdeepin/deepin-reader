@@ -349,7 +349,9 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
     }
 
     QSizeF size = pageSize().scaled(width, height,  Qt::KeepAspectRatio);
+
     const QImage &image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), QRect());
+
     return image;
 }
 

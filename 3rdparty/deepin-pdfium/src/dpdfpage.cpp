@@ -533,7 +533,7 @@ int DPdfPage::countChars()
     return FPDFText_CountChars(d_func()->m_textPage);
 }
 
-QVector<QRectF> DPdfPage::getTextRects(int start, int charCount)
+QVector<QRectF> DPdfPage::textRects(int start, int charCount)
 {
     d_func()->loadTextPage();
 
@@ -555,7 +555,36 @@ QVector<QRectF> DPdfPage::getTextRects(int start, int charCount)
     return result;
 }
 
-bool DPdfPage::getTextRect(int index, QRectF &textrect)
+void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> &rects)
+{
+    d_func()->loadTextPage();
+
+    DPdfMutexLocker locker;
+
+    charCount = FPDFText_CountChars(d_func()->m_textPage);
+
+    const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(0, charCount);
+
+    rects.clear();
+
+    rects.reserve(static_cast<int>(pdfiumRects.size()));
+
+    for (int i = 0; i < charCount; ++i) {
+        FS_RECTF rect;
+        if (FPDFText_GetLooseCharBox(d_func()->m_textPage, i, &rect)) {
+            rects.push_back(d_func()->transPointToPixel(QRectF(static_cast<qreal>(rect.left),
+                                                               d_func()->m_height_pt - static_cast<qreal>(rect.top),
+                                                               static_cast<qreal>(rect.right - rect.left),
+                                                               static_cast<qreal>(rect.top - rect.bottom))));
+
+            auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(i, 1);
+
+            texts.append(QString::fromWCharArray(text.c_str(), static_cast<int>(text.GetLength())));
+        }
+    }
+}
+
+bool DPdfPage::textRect(int index, QRectF &textrect)
 {
     d_func()->loadTextPage();
 
@@ -838,7 +867,7 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
         while (FPDFText_FindNext(schandle)) {
             int curSchIndex = FPDFText_GetSchResultIndex(schandle);
             if (curSchIndex >= 0) {
-                const QVector<QRectF> &textrectfs = getTextRects(curSchIndex, text.length());
+                const QVector<QRectF> &textrectfs = textRects(curSchIndex, text.length());
                 rectfs << textrectfs;
             }
         };

@@ -58,7 +58,7 @@ public:
      * @param textrect (in pixel)
      * @return
      */
-    bool getTextRect(int index, QRectF &textrect);
+    bool textRect(int index, QRectF &textrect);
 
     /**
      * @brief 获取多个字符文本范围
@@ -66,7 +66,14 @@ public:
      * @param charCount
      * @return (in pixel)
      */
-    QVector<QRectF> getTextRects(int index, int charCount);
+    QVector<QRectF> textRects(int index, int charCount);
+
+    /**
+     * @brief 获取本页所有文本和范围
+     * @param charCount 文本字符数
+     * @param rects
+     */
+    void allTextRects(int &charCount, QStringList &texts, QVector<QRectF> &rects);
 
     /**
      * @brief 根据范围获取文本

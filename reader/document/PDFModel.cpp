@@ -180,47 +180,53 @@ QString PDFPage::text(const QRectF &rect) const
 
 QList<Word> PDFPage::words()
 {
-    LOCK_DOCUMENT
-
     if (m_words.size() > 0)
         return m_words;
 
-    int charCount = m_page->countChars();
+    int charCount = 0;
 
     QPointF lastOffset(0, 0);
 
+    QStringList texts;
+
+    QVector<QRectF> rects;
+
+    m_page->allTextRects(charCount, texts, rects);
+
     for (int i = 0; i < charCount; i++) {
+        if (texts.count() <= i || rects.count() <= i)
+            break;
+
         Word word;
-        word.text = m_page->text(i);
+        word.text = texts[i];
+        QRectF rectf = rects[i];
 
-        QRectF rectf;
-        if (m_page->getTextRect(i, rectf)) {
-            //换行
-            if (rectf.top() > lastOffset.y() || lastOffset.y() > rectf.bottom())
-                lastOffset = QPointF(rectf.x(), rectf.center().y());
+        //换行
+        if (rectf.top() > lastOffset.y() || lastOffset.y() > rectf.bottom())
+            lastOffset = QPointF(rectf.x(), rectf.center().y());
 
-            if (rectf.width() > 0) {
-                word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
+        if (rectf.width() > 0) {
+            word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
 
-                lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
+            lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
 
-                int curWordsSize = m_words.size();
-                if (curWordsSize > 2
-                        && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
-                        && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
-                        && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
-                        && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
-                    QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
-                    m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(),
-                                                                   prevBoundRectF.y(),
-                                                                   word.boundingBox.x() - prevBoundRectF.right(),
-                                                                   prevBoundRectF.height());
-                }
+            int curWordsSize = m_words.size();
+            if (curWordsSize > 2
+                    && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
+                    && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
+                    && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
+                    && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
+                QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
+                m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(),
+                                                               prevBoundRectF.y(),
+                                                               word.boundingBox.x() - prevBoundRectF.right(),
+                                                               prevBoundRectF.height());
             }
-
-            m_words.append(word);
         }
+
+        m_words.append(word);
     }
+
     return m_words;
 }
 
