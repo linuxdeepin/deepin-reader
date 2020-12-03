@@ -5,6 +5,8 @@
 #include "dpdfglobal.h"
 #include "public/fpdfview.h"
 
+#include <chardet.h>
+
 static bool initialized = false;
 
 const static DPdfGlobal instance = DPdfGlobal();
@@ -33,6 +35,15 @@ DPdfGlobal::DPdfGlobal()
 DPdfGlobal::~DPdfGlobal()
 {
     destory();
+}
+
+QString DPdfGlobal::textCodeType(const char *text)
+{
+    DetectObj *obj = detect_obj_init();
+    detect(text, &obj);
+    const QString &encodeind = QString(obj->encoding).toLower();
+    detect_obj_free(&obj);
+    return encodeind;
 }
 
 Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, (QMutex::Recursive));

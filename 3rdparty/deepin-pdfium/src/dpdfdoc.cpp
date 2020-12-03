@@ -14,8 +14,6 @@
 #include <QFile>
 #include <QTemporaryDir>
 #include <QUuid>
-#include <chardet.h>
-#include <version.h>
 
 DPdfDoc::Status parseError(int error)
 {
@@ -326,9 +324,7 @@ DPdfDoc::Properies DPdfDoc::proeries()
 
         //windows和mac上生成的pdf此处编码格式不同,需要嗅探查找
         const ByteString &Title = pInfo->GetStringFor("Title");
-        DetectObj *obj = detect_obj_init();
-        detect(Title.c_str(), &obj);
-        if ("utf-8" == QString(obj->encoding).toLower()) {
+        if ("utf-8" == DPdfGlobal::textCodeType(Title.c_str())) {
             properies.insert("Title", QString::fromUtf8(Title.c_str()));
         } else {
             const WideString &WTitle = pInfo->GetUnicodeTextFor("Title");

@@ -21,6 +21,8 @@ public:
 
     ~DPdfGlobal();
 
+    static QString textCodeType(const char *text);
+
 private:
     void init();
 
