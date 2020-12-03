@@ -1,9 +1,5 @@
 #config
-QT += core gui sql printsupport dbus
-QT += testlib
-
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui sql printsupport dbus testlib widgets
 
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
