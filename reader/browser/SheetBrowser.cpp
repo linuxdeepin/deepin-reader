@@ -348,6 +348,8 @@ void SheetBrowser::onViewportChanged()
         if (item->itemIndex() < fromIndex - 2 || item->itemIndex() > toIndex + 2) {//上下多2个浮动
             item->clearPixmap();
             item->clearWords();
+        } else {
+            item->loadWords();
         }
     }
 }
@@ -885,7 +887,7 @@ void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
     }
 }
 
-void SheetBrowser:: deform(SheetOperation &operation)
+void SheetBrowser::deform(SheetOperation &operation)
 {
     m_lastScaleFactor = operation.scaleFactor;
 

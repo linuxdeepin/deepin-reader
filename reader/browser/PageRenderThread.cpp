@@ -50,12 +50,13 @@ PageRenderThread::~PageRenderThread()
     wait();
 }
 
-bool PageRenderThread::clearTask(BrowserPage *item, int pixmapId)
+bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
 {
     if (nullptr == item)
         return true;
 
     PageRenderThread *instance  = PageRenderThread::instance(item->itemIndex());
+
     if (nullptr == instance) {
         return false;
     }
@@ -66,6 +67,9 @@ bool PageRenderThread::clearTask(BrowserPage *item, int pixmapId)
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
+            if (instance->m_tasks[i].type == RenderPageTask::word)
+                continue;
+
             if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].rect.isEmpty()) {
                 instance->m_tasks.remove(i);
                 exist = true;
@@ -91,6 +95,9 @@ void PageRenderThread::appendTask(RenderPageTask task)
     }
 
     instance->m_mutex.lock();
+
+    if (task.type == RenderPageTask::word)
+        qDebug() << "append:" << task.page->itemIndex();
 
     instance->m_tasks.push_back(task);
 
@@ -154,17 +161,9 @@ void PageRenderThread::run()
         }
 
         m_mutex.lock();
-
-        for (int i = m_tasks.count() - 1; i >= 0; --i) {
-            if (!m_tasks[i].rect.isEmpty()) {
-                m_curTask = m_tasks[i];
-                m_tasks.remove(i);
-                break;
-            }
-            if (i == 0)
-                m_curTask = m_tasks.pop();
-        }
-
+        m_curTask = m_tasks.pop();
+        if (m_curTask.type == RenderPageTask::word)
+            qDebug() << "pop:" << m_curTask.page->itemIndex();
         m_mutex.unlock();
 
         if (!BrowserPage::existInstance(m_curTask.page))
@@ -214,6 +213,7 @@ void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, in
 
 void PageRenderThread::onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words)
 {
+    qDebug() << "onWordTaskFinished:" << item->itemIndex();
     if (BrowserPage::existInstance(item)) {
         item->handleWordLoaded(words);
     }

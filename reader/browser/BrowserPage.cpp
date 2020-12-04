@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
 * Author:     zhangsong<zhangsong@uniontech.com>
@@ -216,7 +216,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         } else {
             m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            PageRenderThread::clearTask(this, m_pixmapId);
+            PageRenderThread::clearImageTask(this, m_pixmapId);
         }
 
         if (!isBigDoc())
@@ -307,18 +307,19 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 {
     m_wordIsRendering = false;
 
+    if (!m_wordNeeded)
+        return;
+
     if (m_wordHasRendered)
         return;
 
+    m_wordHasRendered = true;
+
     for (int i = 0; i < words.count(); ++i) {
         BrowserWord *word = new BrowserWord(this, words[i]);
-
         word->setSelectable(m_wordSelectable);
-
         m_words.append(word);
     }
-
-    m_wordHasRendered = true;
 
     scaleWords(true);
 }
@@ -434,6 +435,7 @@ void BrowserPage::loadWords()
 
     if (m_wordHasRendered) {
         //如果已经加载则取消隐藏和改变大小
+
         if (m_words.count() <= 0)
             return;
 
@@ -445,6 +447,7 @@ void BrowserPage::loadWords()
                 word->setScaleFactor(m_scaleFactor);
             }
         }
+
         return;
     }
 
@@ -453,22 +456,29 @@ void BrowserPage::loadWords()
     task.page = this;
     PageRenderThread::appendTask(task);
 
+    m_wordHasRendered = false;
     m_wordIsRendering = true;
 }
 
 void BrowserPage::clearPixmap()
 {
+    if (m_pixmapScaleFactor < -0.0001)
+        return;
+
     m_pixmap = QPixmap();
     ++m_pixmapId;
     m_pixmapIsLastest   = false;
     m_pixmapHasRendered = false;
     m_viewportRendered  = false;
     m_pixmapScaleFactor = -1;
-    PageRenderThread::clearTask(this);
+    PageRenderThread::clearImageTask(this);
 }
 
 void BrowserPage::clearWords()
 {
+    if (!m_wordNeeded)
+        return;
+
     if (!m_wordHasRendered)
         return;
 
@@ -477,13 +487,11 @@ void BrowserPage::clearWords()
             return;
     }
 
-    prepareGeometryChange();
+    QList<BrowserWord *> t_word = m_words;
+    m_words.clear();
 
     m_wordHasRendered = false;
     m_wordNeeded = false;
-
-    QList<BrowserWord *> t_word = m_words;
-    m_words.clear();
 
     foreach (BrowserWord *word, t_word) {
         word->setParentItem(nullptr);

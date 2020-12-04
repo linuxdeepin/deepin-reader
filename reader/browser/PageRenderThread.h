@@ -58,7 +58,7 @@ public:
      * @param pixmapId 删除不同的pixmapId,-1为删除所有
      * @return 是否成功
      */
-    static bool clearTask(BrowserPage *item, int pixmapId = -1);
+    static bool clearImageTask(BrowserPage *item, int pixmapId = -1);
 
     /**
      * @brief 添加任务
