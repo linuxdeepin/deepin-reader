@@ -106,8 +106,6 @@ private:
 
     QMutex *m_docMutex = nullptr;
 
-    static QMutex s_mutex;
-
     DPdfPage *m_page = nullptr;
 
     QList<Word> m_words;

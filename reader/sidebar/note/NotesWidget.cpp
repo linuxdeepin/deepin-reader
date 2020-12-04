@@ -174,6 +174,7 @@ void NotesWidget::handleOpenSuccess()
 {
     if (bIshandOpenSuccess)
         return;
+
     bIshandOpenSuccess = true;
     m_pImageListView->handleOpenSuccess();
 }
@@ -248,9 +249,9 @@ void NotesWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }
 
-void NotesWidget::updateThumbnail(const int &pageIndex)
+void NotesWidget::updateThumbnail(const int &pageIndex, bool bSrc)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(pageIndex, true);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex, true, bSrc);
 }
 
 void NotesWidget::showMenu()

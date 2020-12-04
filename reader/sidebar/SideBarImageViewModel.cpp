@@ -82,7 +82,7 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
         const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
         if (image.isNull()) {
             QImage srcimg;
-            if (m_docSheet->getImage(nRow, srcimg, 174, 174, true) && !srcimg.isNull())
+            if (m_docSheet->getImage(nRow, srcimg, 198, 198, true) && !srcimg.isNull())
                 return QVariant::fromValue(srcimg);
             else
                 onFetchImage(nRow);
@@ -154,9 +154,19 @@ void SideBarImageViewModel::onFetchImage(int index, bool force) const
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
-void SideBarImageViewModel::updatePageIndex(int index, bool force)
+void SideBarImageViewModel::updatePageIndex(int index, bool force, bool bSrc)
 {
-    onFetchImage(index, force);
+    if (bSrc) {
+        QImage img;
+        if (m_docSheet->getImage(index, img, 198, 198, bSrc) && !img.isNull()) {
+            ReaderImageThreadPoolManager::getInstance()->setImageForDocSheet(m_docSheet, index, QPixmap::fromImage(img));
+            onUpdatePageImage(index);
+        } else {
+            onFetchImage(index, force);
+        }
+    } else {
+        onFetchImage(index, force);
+    }
 }
 
 void SideBarImageViewModel::insertPageIndex(int pageIndex)

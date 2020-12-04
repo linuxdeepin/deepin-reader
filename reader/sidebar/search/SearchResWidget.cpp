@@ -122,7 +122,7 @@ void SearchResWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToModelInexPage(curModelIndex, false);
 }
 
-void SearchResWidget::updateThumbnail(const int &pageIndex)
+void SearchResWidget::updateThumbnail(const int &pageIndex, bool bSrc)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(pageIndex);
+    m_pImageListView->getImageModel()->updatePageIndex(pageIndex, false, bSrc);
 }

@@ -119,6 +119,14 @@ public:
      */
     QPixmap getImageForDocSheet(DocSheet *sheet, int pageIndex);
 
+    /**
+     * @brief 设置Sheet对应缩略图缓存Index图片
+     * @param sheet
+     * @param pageIndex
+     * @param pixmap
+     */
+    void setImageForDocSheet(DocSheet *sheet, int pageIndex, const QPixmap &pixmap);
+
 private slots:
     /**
      * @brief onTaskFinished

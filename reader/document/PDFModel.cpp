@@ -28,7 +28,6 @@
 #include <QScreen>
 #include <QThread>
 
-#define LOCK_APPPAGE  QMutexLocker docMutexLocker(&PDFPage::s_mutex);
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
 
 namespace deepin_reader {
@@ -117,7 +116,6 @@ DPdfAnnot *PDFAnnotation::ownAnnotation()
     return m_dannotation;
 }
 
-QMutex PDFPage::s_mutex;
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
     m_docMutex(mutex), m_page(page)
 {

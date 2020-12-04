@@ -118,12 +118,11 @@ public:
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);
 
     /**
-     * @brief updatePageIndex
-     * 更新指定页数
+     * @brief 更新指定页数
      * @param pageIndex 页数
      * @param force 是否强制刷新
      */
-    void updatePageIndex(int pageIndex, bool force = false);
+    void updatePageIndex(int pageIndex, bool force = false, bool bSrc = false);
 
     /**
      * @brief insertPageIndex

@@ -106,7 +106,7 @@ public:
      * 刷新指定页数
      * @param index
      */
-    void updateThumbnail(const int &index) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &index, bool bSrc = false) Q_DECL_OVERRIDE;
 
     /**
      * @brief setTabOrderWidget

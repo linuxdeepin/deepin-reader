@@ -210,9 +210,9 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), false);
 }
 
-void BookMarkWidget::updateThumbnail(const int &index)
+void BookMarkWidget::updateThumbnail(const int &index, bool bSrc)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(index);
+    m_pImageListView->getImageModel()->updatePageIndex(index, false, bSrc);
 }
 
 void BookMarkWidget::showMenu()

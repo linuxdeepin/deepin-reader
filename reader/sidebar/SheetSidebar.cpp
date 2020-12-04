@@ -269,7 +269,7 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
     BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
 
     if (curWidget)
-        curWidget->updateThumbnail(index);
+        curWidget->updateThumbnail(index, false);
 }
 
 void SheetSidebar::handleUpdatePartThumbnail(const int &index)
@@ -277,10 +277,10 @@ void SheetSidebar::handleUpdatePartThumbnail(const int &index)
     if (index < 0 || index >= m_sheet->pagesNumber())
         return;
 
-    const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_sheet, index);
-    if (image.isNull()) {
-        handleUpdateThumbnail(index);
-    }
+    BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
+
+    if (curWidget)
+        curWidget->updateThumbnail(index, true);
 }
 
 void SheetSidebar::handleAnntationMsg(const int &msg, int index, deepin_reader::Annotation *anno)
@@ -288,8 +288,7 @@ void SheetSidebar::handleAnntationMsg(const int &msg, int index, deepin_reader::
     if (m_notesWidget)
         m_notesWidget->handleAnntationMsg(msg, anno);
 
-    if (anno)
-        handleUpdateThumbnail(index);
+    Q_UNUSED(index);
 }
 
 DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objName)

@@ -123,7 +123,7 @@ public:
      * @brief updateThumbnail
      * 刷新指定节点
      */
-    void updateThumbnail(const int &) Q_DECL_OVERRIDE;
+    void updateThumbnail(const int &, bool bSrc = false) Q_DECL_OVERRIDE;
 
     /**
      * @brief showMenu

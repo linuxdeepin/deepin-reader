@@ -325,7 +325,6 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    QMutexLocker docMutexLocker(&m_mutex);
     QImage image =  m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
                                    static_cast<int>(m_page->sizeF().height() * scaleFactor),
                                    slice);

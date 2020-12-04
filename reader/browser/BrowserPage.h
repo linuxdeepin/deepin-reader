@@ -507,8 +507,6 @@ private:
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
-
-    QMutex m_mutex;
 };
 
 #endif // BrowserPage_H

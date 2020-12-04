@@ -102,8 +102,9 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
 void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task, const QImage &image)
 {
     QMutexLocker mutext(&m_runMutex);
-    if (m_docSheetImgMap.contains(task.sheet))
-        m_docSheetImgMap[task.sheet][task.pageIndex] = QPixmap::fromImage(image);
+
+    setImageForDocSheet(task.sheet, task.pageIndex, QPixmap::fromImage(image));
+
     if (m_taskList.contains(task)) {
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
         m_taskList.removeAll(task);
@@ -116,6 +117,13 @@ QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int p
         return m_docSheetImgMap[sheet][pageIndex];
     }
     return QPixmap();
+}
+
+void ReaderImageThreadPoolManager::setImageForDocSheet(DocSheet *sheet, int pageIndex, const QPixmap &pixmap)
+{
+    if (pageIndex >= 0 && m_docSheetImgMap.contains(sheet) && m_docSheetImgMap[sheet].size() > pageIndex) {
+        m_docSheetImgMap[sheet][pageIndex] = pixmap;
+    }
 }
 
 void ReaderImageThreadPoolManager::onDocProxyDestroyed(QObject *obj)

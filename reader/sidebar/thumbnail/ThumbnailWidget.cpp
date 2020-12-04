@@ -136,9 +136,9 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
     scrollToCurrentPage();
 }
 
-void ThumbnailWidget::updateThumbnail(const int &index)
+void ThumbnailWidget::updateThumbnail(const int &index, bool bSrc)
 {
-    m_pImageListView->getImageModel()->updatePageIndex(index);
+    m_pImageListView->getImageModel()->updatePageIndex(index, false, bSrc);
 }
 
 void ThumbnailWidget::scrollToCurrentPage()
