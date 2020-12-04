@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     PERF_PRINT_BEGIN("POINT-01", "");
     // Init DTK.
     Application a(argc, argv);
+
     if (Utils::isWayland()) {
         qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     }

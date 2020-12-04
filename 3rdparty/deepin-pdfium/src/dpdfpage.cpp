@@ -577,9 +577,12 @@ void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> 
                                                                static_cast<qreal>(rect.right - rect.left),
                                                                static_cast<qreal>(rect.top - rect.bottom))));
 
-            auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(i, 1);
+            QVector<ushort> result(1);
 
-            texts.append(QString::fromWCharArray(text.c_str(), static_cast<int>(text.GetLength())));
+            //此处windows上注释乱码,嗅探为windows-1252
+            FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());
+
+            texts.append(QString::fromUtf16(result.data()));
         }
     }
 }

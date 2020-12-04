@@ -444,6 +444,7 @@ void DocSheet::highlightSelectedText()
     }
 
     QPoint ponintend;
+
     m_browser->addHighLightAnnotation("", Utils::getCurHiglightColor(), ponintend);
 }
 

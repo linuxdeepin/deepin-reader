@@ -3,6 +3,7 @@
 
 #include <QtCore/qglobal.h>
 #include <QMutexLocker>
+#include <QDebug>
 
 #ifndef BUILD_DEEPDF_STATIC
 #    if defined(BUILD_DEEPDF_LIB)

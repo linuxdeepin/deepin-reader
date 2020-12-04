@@ -1,7 +1,5 @@
 TARGET = $$PWD/../lib/deepin-pdfium
 
-VERSION = 1.0.0.0
-
 TEMPLATE = lib
 
 CONFIG += c++14
