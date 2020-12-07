@@ -192,6 +192,11 @@ public:
     void quitSlide();
 
     /**
+     * @brief 是否是幻灯片状态
+     */
+    bool isSlide();
+
+    /**
      * @brief isFullScreen
      * 当前窗口是否是全屏模式
      * @return

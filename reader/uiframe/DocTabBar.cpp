@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QUuid>
 #include <QWindow>
+#include <QLayout>
 
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
@@ -126,8 +127,9 @@ void DocTabBar::showSheet(DocSheet *sheet)
 
 void DocTabBar::updateTabWidth()
 {
-    if (count() != 0) {
-        int tabWidth = (this->width() - 40) / count();
+    int tabCount = count();
+    if (tabCount != 0) {
+        int tabWidth = (this->width() - 40) / tabCount - (tabCount - 1) * 10;
         for (int i = 0; i < count(); i++) {
             if (tabWidth <= 140) {
                 setUsesScrollButtons(true);
@@ -287,13 +289,11 @@ void DocTabBar::onSetCurrentIndex()
     setCurrentIndex(m_delayIndex);
 }
 
-//  新增
 void DocTabBar::onTabAddRequested()
 {
     emit sigNeedOpenFilesExec();
 }
 
-//  关闭
 void DocTabBar::onTabCloseRequested(int index)
 {
     if (m_intervalTimer->isActive())

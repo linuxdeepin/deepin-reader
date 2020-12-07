@@ -181,7 +181,7 @@ void PageRenderThread::run()
                 emit sigImageTaskFinished(m_curTask.page, QPixmap::fromImage(image), m_curTask.pixmapId, m_curTask.rect);
 
         } else if (RenderPageTask::word == m_curTask.type) {
-            QList<Word> words = m_curTask.page->getWords();
+            const QList<Word> &words = m_curTask.page->getWords();
             if (words.count() > 0)
                 emit sigWordTaskFinished(m_curTask.page, words);
         }
