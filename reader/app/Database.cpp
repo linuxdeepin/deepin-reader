@@ -99,7 +99,7 @@ bool Database::prepareOperation()
                ",currentPage INTEGER)");
 
     if (!query.isActive()) {
-        qDebug() << query.lastError();
+        qInfo() << query.lastError();
         return false;
     }
 
@@ -115,7 +115,7 @@ bool Database::readOperation(DocSheet *sheet)
         query.prepare(" select * from operation where filePath = :filePath");
         query.bindValue(":filePath", sheet->filePath());
         if (!query.exec()) {
-            qDebug() << query.lastError().text();
+            qInfo() << query.lastError().text();
             return false;
         }
 
@@ -154,7 +154,7 @@ bool Database::saveOperation(DocSheet *sheet)
         query.bindValue(":currentPage", sheet->m_operation.currentPage);
 
         if (!query.exec())
-            qDebug() << query.lastError().text();
+            qInfo() << query.lastError().text();
         return false;
     }
     return true;
@@ -168,7 +168,7 @@ bool Database::prepareBookmark()
     query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)");
 
     if (!query.isActive()) {
-        qDebug() << query.lastError();
+        qInfo() << query.lastError();
         return false;
     }
 
@@ -185,7 +185,7 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
-            qDebug() << query.lastError().text();
+            qInfo() << query.lastError().text();
             return false;
         }
 
@@ -211,7 +211,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
-            qDebug() << query.lastError().text();
+            qInfo() << query.lastError().text();
             return false;
         }
 
@@ -225,7 +225,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
             query.bindValue(":bookmarkIndex", index);
 
             if (!query.exec()) {
-                qDebug() << query.lastError().text();
+                qInfo() << query.lastError().text();
                 return false;
             }
         }
@@ -265,6 +265,6 @@ Database::Database(QObject *parent) : QObject(parent)
             prepareBookmark();
         }
     } else {
-        qDebug() << m_database.lastError();
+        qInfo() << m_database.lastError();
     }
 }

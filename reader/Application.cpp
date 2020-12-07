@@ -64,7 +64,7 @@ void Application::blockShutdown()
         blockShutdownReply.value().fileDescriptor();
         isBlockShutdown = true;
     } else {
-        qDebug() << blockShutdownReply.error();
+        qInfo() << blockShutdownReply.error();
     }
 }
 
