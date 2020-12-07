@@ -120,7 +120,7 @@ private:
 DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes, qreal yRes):
     m_doc(reinterpret_cast<FPDF_DOCUMENT>(handler)), m_index(index), m_xRes(xRes), m_yRes(yRes)
 {
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPagePrivate::DPdfPagePrivate index = " + QString::number(index));
 
     //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width_pt, &m_height_pt);
@@ -142,7 +142,7 @@ DPdfPagePrivate::~DPdfPagePrivate()
 void DPdfPagePrivate::loadPage()
 {
     if (nullptr == m_page) {
-        DPdfMutexLocker locker;//即使其他文档的page在加载时，多线程调用此函数也会崩溃，非常线程不安全,此处需要加锁
+        DPdfMutexLocker locker("DPdfPagePrivate::loadPage() index = " + QString::number(m_index));//即使其他文档的page在加载时，多线程调用此函数也会崩溃，非常线程不安全,此处需要加锁
         m_page = FPDF_LoadPage(m_doc, m_index);
     }
 }
@@ -152,7 +152,7 @@ void DPdfPagePrivate::loadTextPage()
     loadPage();
 
     if (nullptr == m_textPage) {
-        DPdfMutexLocker locker;
+        DPdfMutexLocker locker("DPdfPagePrivate::loadTextPage() index = " + QString::number(m_index));
         m_textPage = FPDFText_LoadPage(m_page);
     }
 }
@@ -160,7 +160,7 @@ void DPdfPagePrivate::loadTextPage()
 int DPdfPagePrivate::oriRotation()
 {
     if (nullptr == m_page) {
-        DPdfMutexLocker locker;
+        DPdfMutexLocker locker("DPdfPagePrivate::oriRotation() index = " + QString::number(m_index));
 
         FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
 
@@ -348,7 +348,7 @@ bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
     //使用临时page，不完全加载,防止刚开始消耗时间过长
     FPDF_PAGE page = m_page;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPagePrivate::initAnnot index = " + QString::number(m_index));
 
     if (page == nullptr)
         page = FPDF_LoadNoParsePage(m_doc, m_index);      //不调用ParseContent，目前观察不会导致多线程崩溃
@@ -498,7 +498,7 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     image.fill(0xFFFFFFFF);
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::image index = " + QString::number(index()));
 
     FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(), FPDFBitmap_BGRA, image.scanLine(0), image.bytesPerLine());
 
@@ -528,7 +528,7 @@ int DPdfPage::countChars()
 {
     d_func()->loadTextPage();
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::countChars index = " + QString::number(index()));
 
     return FPDFText_CountChars(d_func()->m_textPage);
 }
@@ -539,7 +539,7 @@ QVector<QRectF> DPdfPage::textRects(int start, int charCount)
 
     QVector<QRectF> result;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::textRects index = " + QString::number(index()));
 
     const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(start, charCount);
 
@@ -559,7 +559,7 @@ void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> 
 {
     d_func()->loadTextPage();
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::allTextRects index = " + QString::number(index()));
 
     charCount = FPDFText_CountChars(d_func()->m_textPage);
 
@@ -591,7 +591,7 @@ bool DPdfPage::textRect(int index, QRectF &textrect)
 {
     d_func()->loadTextPage();
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::textRect(int index, QRectF &textrect) index = " + QString::number(this->index()));
 
     if (FPDFText_GetUnicode(d_func()->m_textPage, index) == L' ') {
         textrect = QRectF();
@@ -623,7 +623,7 @@ QString DPdfPage::text(const QRectF &rect)
     CFX_FloatRect fxRect(static_cast<float>(pointRect.left()), static_cast<float>(std::min(newBottom, newTop)),
                          static_cast<float>(pointRect.right()), static_cast<float>(std::max(newBottom, newTop)));
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::text(const QRectF &rect) index = " + QString::number(this->index()));
 
     auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetTextByRect(fxRect);
 
@@ -634,7 +634,7 @@ QString DPdfPage::text(int index, int charCount)
 {
     d_func()->loadTextPage();
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::text(int index, int charCount) index = " + QString::number(this->index()));
 
     auto text = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetPageText(index, charCount);
 
@@ -649,7 +649,7 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
 
     FPDF_ANNOTATION_SUBTYPE subType = FPDF_ANNOT_TEXT;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::createTextAnnot(QPointF pos, QString text) index = " + QString::number(this->index()));
 
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
@@ -694,7 +694,7 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
 
     int index = d_func()->m_dAnnots.indexOf(dAnnot);
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::updateTextAnnot index = " + QString::number(this->index()));
 
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(d_func()->m_page, index);
 
@@ -734,7 +734,7 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &rects, QString t
 
     FPDF_ANNOTATION_SUBTYPE subType = FPDF_ANNOT_HIGHLIGHT;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::createHightLightAnnot index = " + QString::number(this->index()));
 
     FPDF_ANNOTATION annot = FPDFPage_CreateAnnot(d_func()->m_page, subType);
 
@@ -797,7 +797,7 @@ bool DPdfPage::updateHightLightAnnot(DPdfAnnot *dAnnot, QColor color, QString te
 
     int index = d_func()->m_dAnnots.indexOf(dAnnot);
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::updateHightLightAnnot index = " + QString::number(this->index()));
 
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(d_func()->m_page, index);
 
@@ -835,7 +835,7 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
     if (index < 0)
         return false;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::removeAnnot index = " + QString::number(this->index()));
 
     if (!FPDFPage_RemoveAnnot(d_func()->m_page, index))
         return false;
@@ -853,7 +853,7 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
 {
     d_func()->loadTextPage();
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfPage::search index = " + QString::number(this->index()));
 
     QVector<QRectF> rectfs;
 

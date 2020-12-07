@@ -4,6 +4,7 @@
 #include <QtCore/qglobal.h>
 #include <QMutexLocker>
 #include <QDebug>
+#include <QTime>
 
 #ifndef BUILD_DEEPDF_STATIC
 #    if defined(BUILD_DEEPDF_LIB)
@@ -34,7 +35,11 @@ private:
 class DPdfMutexLocker : public QMutexLocker
 {
 public:
-    DPdfMutexLocker();
+    DPdfMutexLocker(const QString &tmpLog);
+    ~DPdfMutexLocker();
+
+    QString m_log;
+    QTime m_time;
 };
 
 #endif // DPDFGLOBAL_H

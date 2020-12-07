@@ -48,7 +48,14 @@ QString DPdfGlobal::textCodeType(const char *text)
 
 Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, (QMutex::Recursive));
 
-DPdfMutexLocker::DPdfMutexLocker(): QMutexLocker(pdfMutex())
+DPdfMutexLocker::DPdfMutexLocker(const QString &tmpLog): QMutexLocker(pdfMutex())
 {
+    m_log = tmpLog;
+    qDebug() << m_log + " begin ";
+    m_time.start();
+}
 
+DPdfMutexLocker::~DPdfMutexLocker()
+{
+    qDebug() << m_log + " end time = " << m_time.elapsed();
 }

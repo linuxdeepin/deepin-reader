@@ -218,6 +218,10 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
     int pagesNumber = m_document->pageCount();
 
+    QTime time;
+    time.start();
+    qDebug() << "@@@@@@@@@@@SheetBrowser::loadPages@@@@@@@@@@@@ begin";
+
     for (int i = 0; i < pagesNumber; ++i) {
         deepin_reader::Page *page = m_document->page(i);
         if (page == nullptr)
@@ -246,6 +250,8 @@ bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmar
 
         scene()->addItem(item);
     }
+
+    qDebug() << "@@@@@@@@@@@SheetBrowser::loadPages@@@@@@@@@@@@ end time = " << time.elapsed();
 
     setMouseShape(operation.mouseShape);
 

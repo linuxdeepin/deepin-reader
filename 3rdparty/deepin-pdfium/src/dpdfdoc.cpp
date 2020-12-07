@@ -71,7 +71,7 @@ DPdfDocPrivate::DPdfDocPrivate()
 
 DPdfDocPrivate::~DPdfDocPrivate()
 {
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDocPrivate::~DPdfDocPrivate()");
 
     qDeleteAll(m_pages);
 
@@ -90,7 +90,7 @@ DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString 
         return m_status;
     }
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDocPrivate::loadFile");
 
     void *ptr = FPDF_LoadDocument(m_filePath.toUtf8().constData(),
                                   password.toUtf8().constData());
@@ -129,7 +129,7 @@ bool DPdfDoc::isEncrypted() const
     if (!isValid())
         return false;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::isEncrypted()");
 
     return FPDF_GetDocPermissions(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)) != 0xFFFFFFFF;
 }
@@ -142,7 +142,7 @@ DPdfDoc::Status DPdfDoc::tryLoadFile(const QString &filename, const QString &pas
         return status;
     }
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::tryLoadFile");
 
     void *ptr = FPDF_LoadDocument(filename.toUtf8().constData(),
                                   password.toUtf8().constData());
@@ -180,7 +180,7 @@ bool DPdfDoc::save()
     if (!saveWriter.open(QIODevice::WriteOnly))
         return false;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::save");
     bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
     locker.unlock();
 
@@ -221,7 +221,7 @@ bool DPdfDoc::saveAs(const QString &filePath)
     if (!saveWriter.open(QIODevice::ReadWrite))
         return false;
 
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::saveAs");
     bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
     locker.unlock();
 
@@ -287,7 +287,7 @@ void collectBookmarks(DPdfDoc::Outline &outline, const CPDF_BookmarkTree &tree, 
 
 DPdfDoc::Outline DPdfDoc::outline(qreal xRes, qreal yRes)
 {
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::outline");
 
     Outline outline;
     CPDF_BookmarkTree tree(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
@@ -301,7 +301,7 @@ DPdfDoc::Outline DPdfDoc::outline(qreal xRes, qreal yRes)
 
 DPdfDoc::Properies DPdfDoc::proeries()
 {
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::proeries");
 
     Properies properies;
     int fileversion = 1;
@@ -343,7 +343,7 @@ DPdfDoc::Properies DPdfDoc::proeries()
 
 QString DPdfDoc::label(int index) const
 {
-    DPdfMutexLocker locker;
+    DPdfMutexLocker locker("DPdfDoc::label index = " + QString::number(index));
 
     CPDF_PageLabel label(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     const Optional<WideString> &str = label.GetLabel(index);
