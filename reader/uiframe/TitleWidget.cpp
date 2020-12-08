@@ -68,6 +68,10 @@ TitleWidget::TitleWidget(DWidget *parent)
     orderlst << maxBtn;
     orderlst << closeBtn;
     parent->setProperty("orderlist", QVariant::fromValue(orderlst));
+
+    for (QWidget *widget : orderlst) {
+        if (widget) widget->setFocusPolicy(Qt::TabFocus);
+    }
 }
 
 TitleWidget::~TitleWidget()
