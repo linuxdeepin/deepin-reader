@@ -243,7 +243,8 @@ QList< Annotation * > PDFPage::annotations() const
 {
     QList< Annotation * > annotations;
 
-    foreach (DPdfAnnot *dannotation, m_page->annots()) {
+    const QList<DPdfAnnot *> &annos = m_page->annots();
+    foreach (DPdfAnnot *dannotation, annos) {
         annotations.append(new PDFAnnotation(dannotation));
     }
 
@@ -297,7 +298,8 @@ bool PDFPage::mouseClickIconAnnot(const QPointF &clickPos)
 {
     LOCK_DOCUMENT
 
-    foreach (DPdfAnnot *annot, m_page->annots()) {
+    const QList<DPdfAnnot *> &annos = m_page->annots();
+    foreach (DPdfAnnot *annot, annos) {
         if (annot && annot->pointIn(clickPos)) {
             return true;
         }

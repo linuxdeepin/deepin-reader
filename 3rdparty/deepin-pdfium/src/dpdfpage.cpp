@@ -74,6 +74,12 @@ private:
     bool loadAnnots();
 
     /**
+     * @brief 获取所有注释
+     * @return
+     */
+    QList<DPdfAnnot *> allAnnots();
+
+    /**
      * @brief 初始化需要延时的注释
      * @param dAnnot
      * @return
@@ -115,6 +121,8 @@ private:
     QList<DPdfAnnot *> m_dAnnots;
 
     bool m_isValid = false;
+
+    bool m_isLoadAnnots = false;
 };
 
 DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes, qreal yRes):
@@ -125,7 +133,9 @@ DPdfPagePrivate::DPdfPagePrivate(DPdfDocHandler *handler, int index, qreal xRes,
     //宽高会受自身旋转值影响 单位:point 1/72inch 高分屏上要乘以系数
     FPDF_GetPageSizeByIndex(m_doc, index, &m_width_pt, &m_height_pt);
 
-    m_isValid = loadAnnots();
+    FPDF_PAGE page = FPDF_LoadNoParsePage(m_doc, m_index);
+    m_isValid = (page != nullptr);
+    FPDF_ClosePage(page);
 }
 
 DPdfPagePrivate::~DPdfPagePrivate()
@@ -137,6 +147,16 @@ DPdfPagePrivate::~DPdfPagePrivate()
         FPDF_ClosePage(m_page);
 
     qDeleteAll(m_dAnnots);
+}
+
+QList<DPdfAnnot *> DPdfPagePrivate::allAnnots()
+{
+    if (m_isLoadAnnots)
+        return m_dAnnots;
+
+    loadAnnots();
+
+    return m_dAnnots;
 }
 
 void DPdfPagePrivate::loadPage()
@@ -178,6 +198,8 @@ int DPdfPagePrivate::oriRotation()
 
 bool DPdfPagePrivate::loadAnnots()
 {
+    DPdfMutexLocker locker("DPdfPagePrivate::allAnnots");
+
     //使用临时page，不完全加载,防止刚开始消耗时间过长
     FPDF_PAGE page = m_page;
 
@@ -333,7 +355,10 @@ bool DPdfPagePrivate::loadAnnots()
         FPDFPage_CloseAnnot(annot);
     }
 
-    FPDF_ClosePage(page);
+    if (m_page == nullptr)
+        FPDF_ClosePage(page);
+
+    m_isLoadAnnots = true;
 
     return true;
 }
@@ -357,7 +382,7 @@ bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
         return false;
     }
 
-    FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, m_dAnnots.indexOf(dAnnot));
+    FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, allAnnots().indexOf(dAnnot));
 
     FPDF_LINK link = FPDFAnnot_GetLink(annot);
 
@@ -676,6 +701,8 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
 
     dAnnot->setText(text);
 
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots(); //only Load
+    Q_UNUSED(dAnnots);
     d_func()->m_dAnnots.append(dAnnot);
 
     emit annotAdded(dAnnot);
@@ -692,7 +719,7 @@ bool DPdfPage::updateTextAnnot(DPdfAnnot *dAnnot, QString text, QPointF pos)
     if (nullptr == textAnnot)
         return false;
 
-    int index = d_func()->m_dAnnots.indexOf(dAnnot);
+    int index = d_func()->allAnnots().indexOf(dAnnot);
 
     DPdfMutexLocker locker("DPdfPage::updateTextAnnot index = " + QString::number(this->index()));
 
@@ -779,6 +806,8 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &rects, QString t
 
     dAnnot->setText(text);
 
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots(); //only Load
+    Q_UNUSED(dAnnots);
     d_func()->m_dAnnots.append(dAnnot);
 
     emit annotAdded(dAnnot);
@@ -795,7 +824,7 @@ bool DPdfPage::updateHightLightAnnot(DPdfAnnot *dAnnot, QColor color, QString te
     if (nullptr == hightLightAnnot)
         return false;
 
-    int index = d_func()->m_dAnnots.indexOf(dAnnot);
+    int index = d_func()->allAnnots().indexOf(dAnnot);
 
     DPdfMutexLocker locker("DPdfPage::updateHightLightAnnot index = " + QString::number(this->index()));
 
@@ -830,7 +859,7 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
 {
     d_func()->loadPage();
 
-    int index = d_func()->m_dAnnots.indexOf(dAnnot);
+    int index = d_func()->allAnnots().indexOf(dAnnot);
 
     if (index < 0)
         return false;
@@ -840,6 +869,8 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
     if (!FPDFPage_RemoveAnnot(d_func()->m_page, index))
         return false;
 
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots(); //only Load
+    Q_UNUSED(dAnnots);
     d_func()->m_dAnnots.removeAll(dAnnot);
 
     emit annotRemoved(dAnnot);
@@ -884,7 +915,8 @@ QList<DPdfAnnot *> DPdfPage::annots()
 {
     QList<DPdfAnnot *> dannots;
 
-    foreach (DPdfAnnot *dannot, d_func()->m_dAnnots) {
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots();
+    foreach (DPdfAnnot *dannot, dAnnots) {
         if (dannot->type() == DPdfAnnot::AText || dannot->type() == DPdfAnnot::AHighlight) {
             dannots.append(dannot);
             continue;
@@ -898,7 +930,8 @@ QList<DPdfAnnot *> DPdfPage::links()
 {
     QList<DPdfAnnot *> links;
 
-    foreach (DPdfAnnot *annot, d_func()->m_dAnnots) {
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots();
+    foreach (DPdfAnnot *annot, dAnnots) {
         if (annot->type() == DPdfAnnot::ALink) {
             links.append(annot);
             continue;
