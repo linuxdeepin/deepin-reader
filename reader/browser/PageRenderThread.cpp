@@ -96,9 +96,6 @@ void PageRenderThread::appendTask(RenderPageTask task)
 
     instance->m_mutex.lock();
 
-    if (task.type == RenderPageTask::word)
-        qInfo() << "append:" << task.page->itemIndex();
-
     instance->m_tasks.push_back(task);
 
     instance->m_mutex.unlock();
@@ -162,8 +159,6 @@ void PageRenderThread::run()
 
         m_mutex.lock();
         m_curTask = m_tasks.pop();
-        if (m_curTask.type == RenderPageTask::word)
-            qInfo() << "pop:" << m_curTask.page->itemIndex();
         m_mutex.unlock();
 
         if (!BrowserPage::existInstance(m_curTask.page))
@@ -206,7 +201,6 @@ void PageRenderThread::destroyForever()
 
 void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId,  QRect rect)
 {
-    qInfo() << "onImageTaskFinished:" << item->itemIndex();
     if (BrowserPage::existInstance(item)) {
         item->handleRenderFinished(pixmapId, pixmap, rect);
     }
@@ -214,7 +208,6 @@ void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, in
 
 void PageRenderThread::onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words)
 {
-    qInfo() << "onWordTaskFinished:" << item->itemIndex();
     if (BrowserPage::existInstance(item)) {
         item->handleWordLoaded(words);
     }

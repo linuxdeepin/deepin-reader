@@ -67,11 +67,6 @@ TitleWidget *Central::titleWidget()
     return m_widget;
 }
 
-void Central::doOpenFile(QString filePath)
-{
-    docPage()->openFile(filePath);
-}
-
 CentralDocPage *Central::docPage()
 {
     if (nullptr == m_docPage) {
@@ -110,7 +105,7 @@ void Central::zoomOut()
     }
 }
 
-void Central::openFilesExec()
+void Central::addFilesWithDialog()
 {
     DFileDialog dialog(this);
     dialog.setWindowModality(Qt::WindowModal);
@@ -128,32 +123,15 @@ void Central::openFilesExec()
         return;
     }
 
-    openFiles(filePathList);
+    foreach (QString filePath, filePathList) {
+        if (!MainWindow::activateSheetIfExist(filePath))
+            addFile(filePath);
+    }
 }
 
-void Central::openFiles(QStringList filePathList)
+void Central::addFile(const QString &filePath)
 {
-    QList<DocSheet *> sheets = DocSheet::g_map.values();
-
-    foreach (QString filePath, filePathList) {
-        //如果存在则活跃该窗口
-        bool hasFind = false;
-
-        foreach (DocSheet *sheet, sheets) {
-            if (sheet->filePath() == filePath) {
-                MainWindow *window = MainWindow::windowContainSheet(sheet);
-                if (nullptr != window) {
-                    window->activateSheet(sheet);
-                    hasFind = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasFind) {
-            doOpenFile(filePath);
-        }
-    }
+    docPage()->addFileAsync(filePath);
 }
 
 void Central::addSheet(DocSheet *sheet)
@@ -179,7 +157,7 @@ bool Central::saveAll()
 void Central::handleShortcut(QString shortcut)
 {
     if (shortcut == Dr::key_ctrl_o) {
-        openFilesExec();
+        addFilesWithDialog();
     } if (shortcut == Dr::key_ctrl_shift_slash) { //  显示快捷键预览
         ShortCutShow show;
         show.setSheet(docPage()->getCurSheet());
@@ -205,7 +183,7 @@ void Central::onMenuTriggered(const QString &action)
         if (MainWindow::allowCreateWindow())
             MainWindow::createWindow()->show();
     } else if (action == "New tab") {
-        openFilesExec();
+        addFilesWithDialog();
     } else if (action == "Save") { //  保存当前显示文件
         docPage()->saveCurrent();
     } else if (action == "Save as") {
@@ -221,7 +199,7 @@ void Central::onMenuTriggered(const QString &action)
 
 void Central::onOpenFilesExec()
 {
-    openFilesExec();
+    addFilesWithDialog();
 }
 
 void Central::onNeedActivateWindow()
@@ -271,17 +249,10 @@ void Central::dropEvent(QDropEvent *event)
             docPage()->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
-        QStringList filePathList;
-
         for (auto url : mimeData->urls()) {
             QString filePath = url.toLocalFile();
-            filePathList.append(filePath);
-        }
-
-        if (filePathList.count() > 0) {
-            QTimer::singleShot(1, [ = ]() {
-                openFiles(filePathList);
-            });
+            if (!MainWindow::activateSheetIfExist(filePath))
+                addFile(filePath);
         }
     }
 }

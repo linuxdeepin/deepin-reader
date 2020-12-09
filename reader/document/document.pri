@@ -5,6 +5,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/PDFModel.cpp \
-    $$PWD/DjVuModel.cpp
+    $$PWD/DjVuModel.cpp \
+    $$PWD/Model.cpp
 
 INCLUDEPATH += $$PWD

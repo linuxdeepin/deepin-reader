@@ -38,6 +38,7 @@
 #include "FileAttrWidget.h"
 #include "Application.h"
 #include "Utils.h"
+#include "DocThread.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -93,6 +94,15 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
 DocSheet::~DocSheet()
 {
     setAlive(false);
+
+    delete m_browser;
+
+    delete m_sidebar;
+
+    qDeleteAll(m_pages);
+
+    if (nullptr != m_document)
+        delete m_document;
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
@@ -134,6 +144,28 @@ DocSheet *DocSheet::getSheet(QString uuid)
         return g_map[uuid];
 
     return nullptr;
+}
+
+bool DocSheet::openFileExec(const QString &password, QString &error)
+{
+    QEventLoop loop;
+    connect(this, &DocSheet::sigFileOpened, &loop, &QEventLoop::quit);
+    openFileAsync(password);
+    loop.exec();
+
+    error = m_lastError;
+    return error.isEmpty();
+}
+
+void DocSheet::openFileAsync(const QString &password)
+{
+    m_password = password;
+
+    DocOpenThreadTask task;
+
+    task.sheet = this;
+
+    DocThread::appendTask(task);
 }
 
 void DocSheet::jumpToPage(int page)
@@ -221,18 +253,6 @@ void DocSheet::rotateRight()
     setOperationChanged();
 }
 
-bool DocSheet::openFileExec(const QString &password)
-{
-    if (m_browser->open(m_fileType, filePath(), password)) {
-        if (!m_browser->loadPages(m_operation, m_bookmarks))
-            return false;
-        handleOpenSuccess();
-        setOperationChanged();
-        return true;
-    }
-
-    return false;
-}
 void DocSheet::setBookMark(int index, int state)
 {
     if (index < 0 || index >= pagesNumber())
@@ -406,6 +426,22 @@ bool DocSheet::saveAsData(QString filePath)
     m_sidebar->changeResetModelData();
 
     return true;
+}
+
+void DocSheet::handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
+{
+    m_lastError = error;
+    m_document = document;
+    m_pages = pages;
+
+    if (!m_browser->init(document, pages, m_operation, m_bookmarks))
+        emit sigFileOpened(this, false, tr("Please check if the file is damaged"));
+
+    m_sidebar->handleOpenSuccess();
+
+    emit sigFileOpened(this, result, error);
+
+    emit sigOperationChanged(this);
 }
 
 void DocSheet::handleSearch()
@@ -587,6 +623,11 @@ QString DocSheet::filePath()
     return m_filePath;
 }
 
+QString DocSheet::password()
+{
+    return m_password;
+}
+
 bool DocSheet::hasBookMark(int index)
 {
     return m_bookmarks.contains(index);
@@ -614,11 +655,6 @@ void DocSheet::zoomout()
             return;
         }
     }
-}
-
-void DocSheet::handleOpenSuccess()
-{
-    m_sidebar->handleOpenSuccess();
 }
 
 void DocSheet::showTips(const QString &tips, int iconIndex)
@@ -740,6 +776,11 @@ void DocSheet::onSideAniFinished()
     }
 }
 
+void DocSheet::onOpenFileAsyncFinished(bool result, QString error)
+{
+
+}
+
 bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -807,7 +848,7 @@ void DocSheet::setBookmarkChanged(bool changed)
 
 void DocSheet::setOperationChanged()
 {
-    emit sigOperationChanged(this);
+
 }
 
 bool DocSheet::haslabel()
@@ -973,7 +1014,7 @@ bool DocSheet::needPassword()
     if (Dr::PDF == m_fileType)
         status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), QString());
 
-    if (status == Document::PASSWORD_ERROR)
+    if (status == deepin_reader::Document::PASSWORD_ERROR)
         return true;
 
     return false;
@@ -1006,7 +1047,7 @@ bool DocSheet::tryPassword(QString password)
     if (Dr::PDF == m_fileType)
         status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), password);
 
-    if (status == Document::SUCCESS) {
+    if (status == deepin_reader::Document::SUCCESS) {
         return true;
     }
     return false;
@@ -1019,7 +1060,7 @@ void DocSheet::onExtractPassword(const QString &password)
         m_browser->setFocusPolicy(Qt::StrongFocus);
         m_encryPage->hide();
 
-        this->openFileExec(password);
+        this->openFileAsync(password);
         this->defaultFocus();
 
         m_encryPage->close();
@@ -1060,3 +1101,4 @@ QSizeF DocSheet::pageSizeByIndex(int index)
 {
     return m_browser->pageSizeByIndex(index);
 }
+

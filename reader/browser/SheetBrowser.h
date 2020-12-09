@@ -86,6 +86,9 @@ public:
      */
     bool isUnLocked();
 
+
+    bool init(deepin_reader::Document *document, QList<deepin_reader::Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks);
+
     /**
      * brief 打开文档
      * @param fileType 文档格式类型

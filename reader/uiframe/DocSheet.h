@@ -25,6 +25,7 @@
 
 #include <DSplitter>
 #include <QSet>
+#include <QThread>
 
 class SheetSidebar;
 class SlideWidget;
@@ -107,12 +108,17 @@ public:
 
 public:
     /**
-     * @brief openFileExec
-     * 阻塞式打开文档
+     * @brief 阻塞式打开文档
+     * @param password
+     */
+    bool openFileExec(const QString &password, QString &error);
+
+    /**
+     * @brief 异步式打开文档，完成后会发出sigFileOpened
      * @param password 文档密码
      * @return
      */
-    bool openFileExec(const QString &password);
+    void openFileAsync(const QString &password);
 
     /**
      * @brief pagesNumber
@@ -302,6 +308,13 @@ public:
     bool saveAsData(QString filePath);
 
     /**
+     * @brief 处理打开
+     * @param result
+     * @param error
+     */
+    void handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
+
+    /**
      * @brief handleSearch
      * 通知browser进入搜索模式
      */
@@ -430,6 +443,12 @@ public:
     QString filePath();
 
     /**
+     * @brief 用户输入的password
+     * @return
+     */
+    QString password();
+
+    /**
      * @brief hasBookMark
      * 查看是否含有对应页书签
      * @return
@@ -448,7 +467,6 @@ public:
      */
     void zoomout();
 
-
     /**
      * @brief setSidebarVisible
      * 设置左侧栏显示
@@ -456,12 +474,6 @@ public:
      * @param notify 是否通知操作变化
      */
     void setSidebarVisible(bool isVisible, bool notify = true);
-
-    /**
-     * @brief handleOpenSuccess
-     * 打开成功后处理
-     */
-    void handleOpenSuccess();
 
     /**
      * @brief openSlide
@@ -640,6 +652,8 @@ private slots:
 
     void onSideAniFinished();
 
+    void onOpenFileAsyncFinished(bool result, QString error);
+
 public:
     /**
      * @brief haslabel
@@ -662,6 +676,13 @@ signals:
      * @param operation 查找操作
      */
     void sigFindOperation(const int &operation);
+
+    /**
+     * @brief 文档被打开
+     * @param result 结果
+     * @param error 错误
+     */
+    void sigFileOpened(DocSheet *sheet, bool result, QString error);
 
     /**
      * @brief sigFileChanged
@@ -744,10 +765,16 @@ private:
     SheetOperation  m_operation;
     QSet<int>       m_bookmarks;
 
+    //document
+    deepin_reader::Document *m_document = nullptr;
+    QList<deepin_reader::Page *> m_pages;
+
     SheetSidebar   *m_sidebar = nullptr;
     SheetBrowser   *m_browser = nullptr;
 
     QString         m_filePath;
+    QString         m_password;
+    QString         m_lastError;
     Dr::FileType    m_fileType;
     QString         m_uuid;
 

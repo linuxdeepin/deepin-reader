@@ -108,18 +108,10 @@ public:
 
 public:
     /**
-     * @brief openfiles
-     * 打开多个文件
-     * @param filepaths 多个文件路径
+     * @brief 当前窗口打开文件
+     * @param filePath 文件路径
      */
-    void openfiles(const QStringList &filepaths);
-
-    /**
-     * @brief doOpenFile
-     * 打开单个文件
-     * @param filePath 文件全路径
-     */
-    void doOpenFile(const QString &filePath);
+    void addFile(const QString &filePath);
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -213,23 +205,19 @@ private:
     QWidget *m_FullTitleWidget = nullptr;
     QWidget *m_docTabWidget = nullptr;
     QPropertyAnimation *m_TitleAnimation = nullptr;
-
     TitleMenu *m_menu = nullptr;
-
     Central *m_central = nullptr;
-
     bool m_needSave = true;
     int m_lastWindowState = Qt::WindowNoState;
-
     QStringList m_initFilePathList;
 
 public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();
+    static bool activateSheetIfExist(const QString &filePath);
     static MainWindow *createWindow(QStringList filePathList = QStringList());
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
-
     QTimer *m_showMenuTimer = nullptr;
 };
 

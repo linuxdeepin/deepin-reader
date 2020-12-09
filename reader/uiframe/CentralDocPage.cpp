@@ -140,7 +140,7 @@ void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
     emit sigCurSheetChanged(sheet);
 }
 
-void CentralDocPage::openFile(const QString &filePath)
+void CentralDocPage::addFileAsync(const QString &filePath)
 {
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_pTabBar) {
@@ -152,18 +152,18 @@ void CentralDocPage::openFile(const QString &filePath)
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
+
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
         showTips(tr("The format is not supported"), 1);
         return;
     }
-
-    PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 
     DocSheet *sheet = new DocSheet(fileType, filePath, this);
 
     connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+    connect(sheet, &DocSheet::sigFileOpened, this, &CentralDocPage::onOpened);
 
     m_pStackedLayout->addWidget(sheet);
 
@@ -175,19 +175,11 @@ void CentralDocPage::openFile(const QString &filePath)
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    onOpened(sheet, true);
-
     if (sheet->needPassword()) {
         sheet->showEncryPage();
     } else {
-        if (!sheet->openFileExec("")) {
-            onOpened(sheet, false);
-            return;
-        }
+        sheet->openFileAsync("");
     }
-
-    PERF_PRINT_END("POINT-03", "");
-    PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 }
 
 void CentralDocPage::addSheet(DocSheet *sheet)
@@ -197,7 +189,7 @@ void CentralDocPage::addSheet(DocSheet *sheet)
     enterSheet(sheet);
 }
 
-void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
+void CentralDocPage::onOpened(DocSheet *sheet, bool ret, QString error)
 {
     if (sheet == nullptr)
         return;
@@ -213,7 +205,7 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret)
 
         sheet->deleteLater();
 
-        showTips(tr("Please check if the file is damaged"), 1);
+        showTips(error, 1);
 
         return;
     }

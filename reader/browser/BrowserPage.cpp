@@ -66,9 +66,6 @@ BrowserPage::~BrowserPage()
     qDeleteAll(m_annotationItems);
 
     qDeleteAll(m_words);
-
-    if (nullptr != m_page)
-        delete m_page;
 }
 
 QSizeF BrowserPage::pageSize() const

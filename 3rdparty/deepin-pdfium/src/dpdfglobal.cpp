@@ -51,11 +51,11 @@ Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, (QMutex::Recursive));
 DPdfMutexLocker::DPdfMutexLocker(const QString &tmpLog): QMutexLocker(pdfMutex())
 {
     m_log = tmpLog;
-    qInfo() << m_log + " begin ";
+    //qInfo() << m_log + " begin ";
     m_time.start();
 }
 
 DPdfMutexLocker::~DPdfMutexLocker()
 {
-    qInfo() << m_log + " end time = " << m_time.elapsed();
+    //qInfo() << m_log + " end time = " << m_time.elapsed();
 }

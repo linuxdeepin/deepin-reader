@@ -124,12 +124,6 @@ SheetBrowser::~SheetBrowser()
 
     qDeleteAll(m_items);
 
-    if (nullptr != m_document) {
-        delete m_document;
-        m_document = nullptr;
-    }
-
-
     if (nullptr != m_noteEditWidget)
         delete m_noteEditWidget;
 }
@@ -169,6 +163,55 @@ bool SheetBrowser::isUnLocked()
 {
     if (m_document == nullptr)
         return false;
+
+    return true;
+}
+
+bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks)
+{
+    m_document = document;
+
+    m_lable2Page.clear();
+
+    int pagesNumber = m_document->pageCount();
+
+    for (int i = 0; i < pagesNumber; ++i) {
+        deepin_reader::Page *page = pages.value(i);
+
+        if (page == nullptr)
+            return false;
+
+        BrowserPage *item = new BrowserPage(this, page);
+
+        item->setItemIndex(i);
+
+        if (bookmarks.contains(i))
+            item->setBookmark(true);
+
+        m_items.append(item);
+
+        const QString &labelPage = m_document->label(i);
+
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
+        }
+
+        if (item->pageSize().width() > m_maxWidth)
+            m_maxWidth = item->pageSize().width();
+
+        if (item->pageSize().height() > m_maxHeight)
+            m_maxHeight = item->pageSize().height();
+
+        scene()->addItem(item);
+    }
+
+    setMouseShape(operation.mouseShape);
+
+    deform(operation);
+
+    m_initPage = operation.currentPage;
+
+    m_hasLoaded = true;
 
     return true;
 }

@@ -55,25 +55,24 @@ public:
     ~Central() override;
 
     /**
-     * @brief openFilesExec
-     * 阻塞式打开文件选择对话框选择文件并打开
+     * @brief addFilesWithDialog
+     * 打开文件选择对话框选择文件并打开(会进行判断文件是否已经存在在其他窗口)
      * @return
      */
-    void openFilesExec();
+    void addFilesWithDialog();
 
     /**
-     * @brief openFiles
-     * 批量打开文件 会进行是否已存在判断
-     * @param filePathList 文件路径列表
-     */
-    void openFiles(QStringList filePathList);
-
-    /**
-     * @brief doOpenFile
-     * 直接打开文件 不进行判断
+     * @brief 直接当前窗口打开文件
      * @param filePath 文件路径
      */
-    void doOpenFile(QString filePath);
+    void addFile(const QString &filePath);
+
+    /**
+     * @brief addSheet
+     * 直接添加一个文档页
+     * @param sheet
+     */
+    void addSheet(DocSheet *sheet);
 
     /**
      * @brief zoomIn
@@ -86,13 +85,6 @@ public:
      * 文档缩小
      */
     void zoomOut();
-
-    /**
-     * @brief addSheet
-     * 直接添加一个文档页
-     * @param sheet
-     */
-    void addSheet(DocSheet *sheet);
 
     /**
      * @brief hasSheet

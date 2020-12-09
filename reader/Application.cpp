@@ -18,6 +18,7 @@
 #include "Utils.h"
 #include "MainWindow.h"
 #include "PageRenderThread.h"
+#include "DocThread.h"
 #include "DocSheet.h"
 #include "SaveDialog.h"
 
@@ -34,7 +35,7 @@ Application::Application(int &argc, char **argv)
     setApplicationName("deepin-reader");
     setOrganizationName("deepin");
     //setWindowIcon(QIcon::fromTheme("deepin-reader"));     //耗时40ms
-    setApplicationVersion(DApplication::buildVersion("1.0"));
+    setApplicationVersion(DApplication::buildVersion("1.0.0"));
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc."));
@@ -97,26 +98,14 @@ void Application::handleFiles(QStringList filePathList)
 
     foreach (QString filePath, filePathList) {
         //如果存在则活跃该窗口
-        bool hasFind = false;
-        foreach (DocSheet *sheet, sheets) {
-            if (sheet->filePath() == filePath) {
-                MainWindow *window = MainWindow::windowContainSheet(sheet);
-                if (nullptr != window) {
-                    window->activateSheet(sheet);
-                    hasFind = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasFind) {
+        if (!MainWindow::activateSheetIfExist(filePath)) {
             //如果不存在则打开
             if (MainWindow::m_list.count() > 0) {
                 MainWindow::m_list[0]->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-                MainWindow::m_list[0]->doOpenFile(filePath);
+                MainWindow::m_list[0]->addFile(filePath);
                 continue;
             } else {
-                MainWindow::createWindow()->doOpenFile(filePath);
+                MainWindow::createWindow()->addFile(filePath);
             }
         }
     }
@@ -149,6 +138,7 @@ void Application::handleQuitAction()
 
     //线程退出
     PageRenderThread::destroyForever();
+    DocThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list) {
         window->closeWithoutSave();

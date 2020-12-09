@@ -33,6 +33,7 @@
 #include "CentralDocPage.h"
 #include "Application.h"
 #include "Utils.h"
+#include "DocSheet.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -65,7 +66,7 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
 
         foreach (const QString &filePath, m_initFilePathList) {
             if (QFile(filePath).exists())       //过滤不存在的文件,需求中不含有提示文件不存在的文案
-                doOpenFile(filePath);
+                addFile(filePath);
         }
     }
 
@@ -144,20 +145,12 @@ void MainWindow::closeWithoutSave()
     this->close();
 }
 
-void MainWindow::openfiles(const QStringList &filepaths)
+void MainWindow::addFile(const QString &filePath)
 {
     if (nullptr == m_central)
         return;
 
-    m_central->openFiles(filepaths);
-}
-
-void MainWindow::doOpenFile(const QString &filePath)
-{
-    if (nullptr == m_central)
-        return;
-
-    m_central->doOpenFile(filePath);
+    m_central->addFile(filePath);
 }
 
 //  窗口关闭
@@ -341,6 +334,23 @@ bool MainWindow::allowCreateWindow()
     return m_list.count() < 20;
 }
 
+bool MainWindow::activateSheetIfExist(const QString &filePath)
+{
+    QList<DocSheet *> sheets = DocSheet::g_map.values();
+
+    foreach (DocSheet *sheet, sheets) {
+        if (sheet->filePath() == filePath) {
+            MainWindow *window = MainWindow::windowContainSheet(sheet);
+            if (nullptr != window) {
+                window->activateSheet(sheet);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
     return new MainWindow(filePathList);
@@ -351,7 +361,6 @@ MainWindow *MainWindow::createWindow(DocSheet *sheet)
     return new MainWindow(sheet);
 }
 
-//  窗口显示默认大小
 void MainWindow::showDefaultSize()
 {
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);

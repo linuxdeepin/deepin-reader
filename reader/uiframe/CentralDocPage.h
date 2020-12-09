@@ -62,11 +62,10 @@ public:
     static bool firstThumbnail(QString filePath, QString thumbnailPath);     //生成第一页的缩略图
 
     /**
-     * @brief openFile
-     * 在当前窗口直接打开该路径文档
-     * @param filePath 需要打开的文档路径
+     * @brief 根据路径增加一个sheet页后异步进行读取，成功保留，不成功删除,如果路径已经存在则切换到对应的页面
+     * @param filePath 需要添加的文档路径
      */
-    void openFile(const QString &filePath);
+    void addFileAsync(const QString &filePath);
 
     /**
      * @brief saveAll
@@ -288,7 +287,7 @@ public slots:
      * @param sheet 被打开的文档
      * @param result 打开结果
      */
-    void onOpened(DocSheet *sheet, bool result);
+    void onOpened(DocSheet *sheet, bool result, QString error);
 
     /**
      * @brief onTabChanged

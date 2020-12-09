@@ -223,6 +223,13 @@ public:
     virtual Properties properties() const = 0;
 };
 
+class DocumentFactory
+{
+public:
+    static Document *getDocument(const int &fileType, const QString &filePath, const QString &password);
+};
+
+
 } // deepin_reader
 
 
