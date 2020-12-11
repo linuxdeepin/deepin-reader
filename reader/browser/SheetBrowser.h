@@ -90,15 +90,6 @@ public:
     bool init(deepin_reader::Document *document, QList<deepin_reader::Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
-     * brief 打开文档
-     * @param fileType 文档格式类型
-     * @param filePath 文档所在路径
-     * @param password 文档密码
-     * @return
-     */
-    bool open(const Dr::FileType &fileType, const QString &filePath, const QString &password);
-
-    /**
      * @brief 保存
      * @path 保存到路径
      * @return
@@ -111,15 +102,6 @@ public:
      * @return
      */
     bool saveAs(const QString &filePath);
-
-    /**
-     * @brief loadPages
-     * 加载文档信息
-     * @param operation
-     * @param bookmarks
-     * @return
-     */
-    bool loadPages(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
      * @brief setMouseShape
@@ -390,6 +372,11 @@ public:
      * @return 文档页编号
      */
     int pageLableIndex(const QString);
+
+    /**
+     * @brief 加载页面LABLE
+     */
+    void loadPageLable();
 
     /**
      * @brief pageHasLable
@@ -774,6 +761,7 @@ private:
     int m_searchPageTextIndex = 0;
     int m_selectIndex = -1;              // 选取文字开始的index
 
+    bool m_isLoadPageLabel = false;
     bool m_annotationInserting = false;     //正在插入注释状态
     bool m_selectIconAnnotation = false; // 当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置

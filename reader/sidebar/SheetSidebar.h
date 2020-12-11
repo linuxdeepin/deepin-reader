@@ -176,6 +176,12 @@ protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
     /**
+     * @brief 显示事件
+     * @param event
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /**
      * @brief showMenu
      * 菜单显示
      */

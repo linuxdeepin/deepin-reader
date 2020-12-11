@@ -201,7 +201,8 @@ void SheetSidebar::handleOpenSuccess()
     this->setVisible(m_sheet->operation().sidebarVisible);
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
     onBtnClicked(nId);
-    onHandleOpenSuccessDelay();
+
+    if (m_sheet->operation().sidebarVisible) onHandleOpenSuccessDelay();
 }
 
 void SheetSidebar::onHandleOpenSuccessDelay()
@@ -332,6 +333,12 @@ void SheetSidebar::keyPressEvent(QKeyEvent *event)
         dealWithPressKey(key);
     }
     BaseWidget::keyPressEvent(event);
+}
+
+void SheetSidebar::showEvent(QShowEvent *event)
+{
+    BaseWidget::showEvent(event);
+    onHandleOpenSuccessDelay();
 }
 
 void SheetSidebar::showMenu()

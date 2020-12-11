@@ -448,10 +448,13 @@ void BrowserPage::loadWords()
         return;
     }
 
-    RenderPageTask task;
-    task.type = RenderPageTask::word;
-    task.page = this;
-    PageRenderThread::appendTask(task);
+    //优先级慢点,先等下取图片接口
+    QTimer::singleShot(10, [this]() {
+        RenderPageTask task;
+        task.type = RenderPageTask::word;
+        task.page = this;
+        PageRenderThread::appendTask(task);
+    });
 
     m_wordHasRendered = false;
     m_wordIsRendering = true;

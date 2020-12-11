@@ -171,10 +171,10 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
 {
     m_document = document;
 
-    m_lable2Page.clear();
-
     int pagesNumber = m_document->pageCount();
 
+    QTime time;
+    time.start();
     for (int i = 0; i < pagesNumber; ++i) {
         deepin_reader::Page *page = pages.value(i);
 
@@ -190,12 +190,6 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
 
         m_items.append(item);
 
-        const QString &labelPage = m_document->label(i);
-
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-
         if (item->pageSize().width() > m_maxWidth)
             m_maxWidth = item->pageSize().width();
 
@@ -204,97 +198,6 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
 
         scene()->addItem(item);
     }
-
-    setMouseShape(operation.mouseShape);
-
-    deform(operation);
-
-    m_initPage = operation.currentPage;
-
-    m_hasLoaded = true;
-
-    return true;
-}
-
-bool SheetBrowser::open(const Dr::FileType &fileType, const QString &filePath, const QString &password)
-{
-    m_filePassword = password;
-
-    if (Dr::PDF == fileType)
-        m_document = deepin_reader::PDFDocument::loadDocument(filePath, password);
-    else if (Dr::DJVU == fileType)
-        m_document = deepin_reader::DjVuDocument::loadDocument(filePath);
-    else if (Dr::DOCX == fileType) {
-        //以下后期挪到一个转化对话框中，实时打印输出
-        QTemporaryDir dir;
-        QProcess p(this);
-        QString targetDoc = dir.path() + "/temp.docx";
-        QString targetPdf = dir.path() + "/temp.pdf";
-        QFile file(filePath);
-        file.copy(targetDoc);
-        p.setWorkingDirectory(dir.path());
-        p.start("unzip " + targetDoc + " \"word/media/*\" ");
-        p.waitForStarted();
-        p.waitForFinished();
-        p.setWorkingDirectory(dir.path() + "/word");
-        p.start("pandoc " +  targetDoc + " -o " + targetPdf + " --pdf-engine=wkhtmltopdf -V CJKmainfont=\"Noto Sans CJK JP - Bold\"");
-        p.waitForStarted();
-        p.waitForFinished();
-        p.terminate();
-        p.close();
-
-        m_document = deepin_reader::PDFDocument::loadDocument(targetPdf, password);
-    }
-
-    if (nullptr == m_document)
-        return false;
-
-    return true;
-}
-
-bool SheetBrowser::loadPages(SheetOperation &operation, const QSet<int> &bookmarks)
-{
-    if (nullptr == m_document)
-        return false;
-
-    m_lable2Page.clear();
-
-    int pagesNumber = m_document->pageCount();
-
-    QTime time;
-    time.start();
-    qInfo() << "@@@@@@@@@@@SheetBrowser::loadPages@@@@@@@@@@@@ begin";
-
-    for (int i = 0; i < pagesNumber; ++i) {
-        deepin_reader::Page *page = m_document->page(i);
-        if (page == nullptr)
-            return false;
-
-        BrowserPage *item = new BrowserPage(this, page);
-
-        item->setItemIndex(i);
-
-        if (bookmarks.contains(i))
-            item->setBookmark(true);
-
-        m_items.append(item);
-
-        const QString &labelPage = m_document->label(i);
-
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-
-        if (item->pageSize().width() > m_maxWidth)
-            m_maxWidth = item->pageSize().width();
-
-        if (item->pageSize().height() > m_maxHeight)
-            m_maxHeight = item->pageSize().height();
-
-        scene()->addItem(item);
-    }
-
-    qInfo() << "@@@@@@@@@@@SheetBrowser::loadPages@@@@@@@@@@@@ end time = " << time.elapsed();
 
     setMouseShape(operation.mouseShape);
 
@@ -1986,8 +1889,26 @@ void SheetBrowser::showMenu()
     clearSelectIconAnnotAfterMenu();
 }
 
+void SheetBrowser::loadPageLable()
+{
+    if (m_isLoadPageLabel || m_document == nullptr)
+        return;
+
+    m_isLoadPageLabel = true;
+    m_lable2Page.clear();
+    int pageCount = m_document->pageCount();
+    for (int i = 0; i < pageCount; i++) {
+        const QString &labelPage = m_document->label(i);
+
+        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
+            m_lable2Page.insert(labelPage, i);
+        }
+    }
+}
+
 int SheetBrowser::pageLableIndex(const QString pageLable)
 {
+    loadPageLable();
     if (m_lable2Page.count() <= 0 || !m_lable2Page.contains(pageLable))
         return -1;
 
@@ -1996,6 +1917,7 @@ int SheetBrowser::pageLableIndex(const QString pageLable)
 
 bool SheetBrowser::pageHasLable()
 {
+    loadPageLable();
     if (m_lable2Page.count() > 0) {
         return true;
     }
@@ -2005,6 +1927,7 @@ bool SheetBrowser::pageHasLable()
 
 QString SheetBrowser::pageNum2Lable(const int index)
 {
+    loadPageLable();
     QMap<QString, int>::const_iterator iter;
     for (iter = m_lable2Page.constBegin(); iter != m_lable2Page.constEnd(); ++iter) {
         if (iter.value() == index)

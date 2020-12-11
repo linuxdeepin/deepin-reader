@@ -63,8 +63,6 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     //EXPECT_TRUE(sheet->m_browser->isUnLocked());  //暂时报错
 
-    sheet->m_browser->loadPages(sheet->m_operation, sheet->m_bookmarks);
-
     sheet->m_browser->getClickAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0), false);
 
     sheet->m_browser->moveIconAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0));

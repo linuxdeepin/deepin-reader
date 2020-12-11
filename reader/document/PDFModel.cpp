@@ -28,6 +28,8 @@
 #include <QScreen>
 #include <QThread>
 
+#include <functional>
+
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
 
 namespace deepin_reader {
@@ -35,6 +37,11 @@ namespace deepin_reader {
 class LoadThread: public QThread
 {
 public:
+    ~LoadThread()
+    {
+        this->wait();
+    }
+
     void startown()
     {
         this->start();
@@ -70,6 +77,36 @@ void LoadThread::run()
             pdfDocument = nullptr;
         }
     }
+}
+
+typedef std::function<QVariant(void)> FNTemplate;
+
+class FunctionExecThread: public QThread
+{
+public:
+    ~FunctionExecThread()
+    {
+        this->wait();
+    }
+
+    void startown()
+    {
+        this->start();
+        QEventLoop loop;
+        connect(this, &QThread::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+    }
+
+    void run();
+
+public:
+    FNTemplate func;
+    QVariant result;
+};
+
+void FunctionExecThread::run()
+{
+    result = func();
 }
 
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
@@ -253,15 +290,11 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color)
 {
-    LOCK_DOCUMENT
-
     return new PDFAnnotation(m_page->createHightLightAnnot(boundaries, text, color));
 }
 
 bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-    LOCK_DOCUMENT
-
     deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
 
     if (PDFAnnotation == nullptr)
@@ -278,8 +311,6 @@ bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
 
 bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, const QColor &color)
 {
-    LOCK_DOCUMENT
-
     if (nullptr == annotation)
         return false;
 
@@ -296,8 +327,6 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 bool PDFPage::mouseClickIconAnnot(const QPointF &clickPos)
 {
-    LOCK_DOCUMENT
-
     const QList<DPdfAnnot *> &annos = m_page->annots();
     foreach (DPdfAnnot *annot, annos) {
         if (annot && annot->pointIn(clickPos)) {
@@ -310,8 +339,6 @@ bool PDFPage::mouseClickIconAnnot(const QPointF &clickPos)
 
 Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    LOCK_DOCUMENT
-
     if (nullptr == m_page)
         return nullptr;
 
@@ -320,8 +347,6 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
-    LOCK_DOCUMENT
-
     if (nullptr == m_page || nullptr == annot)
         return nullptr;
 
@@ -362,15 +387,17 @@ PDFDocument::~PDFDocument()
 
 int PDFDocument::pageCount() const
 {
-    LOCK_DOCUMENT
+//    FunctionExecThread funThread;
+//    funThread.docMutex = m_docMutex;
+//    funThread.func = std::bind(&DPdfDoc::pageCount, m_document);
+//    funThread.startown();
+//    return funThread.result.toInt();
 
     return m_document->pageCount();
 }
 
 Page *PDFDocument::page(int index) const
 {
-    LOCK_DOCUMENT
-
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
         if (page->isValid())
             return new PDFPage(m_docMutex, page);
@@ -381,7 +408,11 @@ Page *PDFDocument::page(int index) const
 
 QString PDFDocument::label(int index) const
 {
-    LOCK_DOCUMENT
+//    FunctionExecThread funThread;
+//    funThread.docMutex = m_docMutex;
+//    funThread.func = std::bind(&DPdfDoc::label, m_document, index);
+//    funThread.startown();
+//    return funThread.result.toString();
 
     return m_document->label(index);
 }
@@ -393,15 +424,21 @@ QStringList PDFDocument::saveFilter() const
 
 bool PDFDocument::save() const
 {
-    LOCK_DOCUMENT
-
+//    FunctionExecThread funThread;
+//    funThread.docMutex = m_docMutex;
+//    funThread.func = std::bind(&DPdfDoc::save, m_document);
+//    funThread.startown();
+//    return funThread.result.toBool();
     return m_document->save();
 }
 
 bool PDFDocument::saveAs(const QString &filePath) const
 {
-    LOCK_DOCUMENT
-
+//    FunctionExecThread funThread;
+//    funThread.docMutex = m_docMutex;
+//    funThread.func = std::bind(&DPdfDoc::saveAs, m_document, filePath);
+//    funThread.startown();
+//    return funThread.result.toBool();
     return m_document->saveAs(filePath);
 }
 
@@ -421,8 +458,6 @@ void collectOuleLine(const DPdfDoc::Outline &cOutline, deepin_reader::Outline &o
 
 Outline PDFDocument::outline() const
 {
-    LOCK_DOCUMENT
-
     if (m_outline.size() > 0)
         return m_outline;
 
@@ -435,10 +470,14 @@ Outline PDFDocument::outline() const
 
 Properties PDFDocument::properties() const
 {
-    LOCK_DOCUMENT
-
     if (m_fileProperties.size() > 0)
         return m_fileProperties;
+
+//    FunctionExecThread funThread;
+//    funThread.docMutex = m_docMutex;
+//    funThread.func = std::bind(&DPdfDoc::proeries, m_document);
+//    funThread.startown();
+//    m_fileProperties = funThread.result.toMap();
 
     m_fileProperties = m_document->proeries();
 
