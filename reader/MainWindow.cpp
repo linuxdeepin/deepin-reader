@@ -150,7 +150,7 @@ void MainWindow::addFile(const QString &filePath)
     if (nullptr == m_central)
         return;
 
-    m_central->addFile(filePath);
+    m_central->signalAddFile(filePath);
 }
 
 //  窗口关闭

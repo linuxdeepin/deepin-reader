@@ -62,12 +62,6 @@ public:
     void addFilesWithDialog();
 
     /**
-     * @brief 直接当前窗口打开文件
-     * @param filePath 文件路径
-     */
-    void addFile(const QString &filePath);
-
-    /**
      * @brief addSheet
      * 直接添加一个文档页
      * @param sheet
@@ -143,6 +137,12 @@ signals:
      */
     void sigNeedClose();
 
+    /**
+     * @brief 添加文件
+     * @param filepath
+     */
+    void signalAddFile(const QString &filepath);
+
 public slots:
     /**
      * @brief onSheetCountChanged
@@ -177,6 +177,12 @@ public slots:
      * @param iconIndex 请求显示图标索引
      */
     void onShowTips(const QString &text, int iconIndex = 0);
+
+    /**
+     * @brief 添加文件
+     * @param filepath
+     */
+    void onAddFile(const QString &filepath);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

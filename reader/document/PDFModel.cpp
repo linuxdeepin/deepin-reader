@@ -215,6 +215,8 @@ QString PDFPage::text(const QRectF &rect) const
 
 QList<Word> PDFPage::words()
 {
+    LOCK_DOCUMENT
+
     if (m_words.size() > 0)
         return m_words;
 

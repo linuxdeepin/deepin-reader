@@ -61,6 +61,9 @@ void DocThread::run()
         DocOpenThreadTask task = m_tasks.pop();
         m_mutex.unlock();
 
+        if (!DocSheet::existSheet(task.sheet))
+            continue;
+
         int fileType = task.sheet->fileType();
         QString filePath = task.sheet->filePath();
         QString password = task.sheet->password();

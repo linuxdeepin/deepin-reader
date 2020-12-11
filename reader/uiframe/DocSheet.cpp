@@ -99,10 +99,10 @@ DocSheet::~DocSheet()
 
     delete m_sidebar;
 
-    qDeleteAll(m_pages);
-
     if (nullptr != m_document)
         delete m_document;
+
+    qDeleteAll(m_pages);
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)

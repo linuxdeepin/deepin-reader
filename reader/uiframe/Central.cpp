@@ -56,6 +56,8 @@ Central::Central(QWidget *parent)
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
     setLayout(m_layout);
+
+    connect(this, &Central::signalAddFile, this, &Central::onAddFile);
 }
 
 Central::~Central()
@@ -125,15 +127,14 @@ void Central::addFilesWithDialog()
 
     foreach (QString filePath, filePathList) {
         if (!MainWindow::activateSheetIfExist(filePath))
-            addFile(filePath);
+            emit signalAddFile(filePath);
     }
 }
 
-void Central::addFile(const QString &filePath)
+void Central::onAddFile(const QString &filePath)
 {
     docPage()->addFileAsync(filePath);
 }
-
 void Central::addSheet(DocSheet *sheet)
 {
     docPage()->addSheet(sheet);
@@ -252,7 +253,7 @@ void Central::dropEvent(QDropEvent *event)
         for (auto url : mimeData->urls()) {
             QString filePath = url.toLocalFile();
             if (!MainWindow::activateSheetIfExist(filePath))
-                addFile(filePath);
+                emit signalAddFile(filePath);
         }
     }
 }

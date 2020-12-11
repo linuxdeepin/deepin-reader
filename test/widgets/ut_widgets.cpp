@@ -261,9 +261,7 @@ TEST_F(Ut_Widgets, EncryptionPageTest)
 
 TEST_F(Ut_Widgets, SaveDialogTest)
 {
-//    qDebug() << 111;
 //    a->exec();
-//    qDebug() << 222;
 //    SaveDialog saveDialog;
 //    saveDialog.showTipDialog("1111111");
 //    saveDialog.showExitDialog();
