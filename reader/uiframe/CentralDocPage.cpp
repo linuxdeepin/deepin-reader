@@ -416,50 +416,31 @@ bool CentralDocPage::saveAsCurrent()
     if (nullptr == sheet)
         return false;
 
-    QString sFilter = sheet->filter();
+    QString saveFilePath = DFileDialog::getSaveFileName(this, tr("Save as"), sheet->filePath(), sheet->filter());
 
     if (Dr::PDF == sheet->fileType()) {
-        QString saveFilePath;
-        if (sFilter != "") {
-            DFileDialog dialog(this);
-            dialog.setWindowModality(Qt::WindowModal);
-            dialog.selectFile(sheet->filePath());
-            saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
-
-            if (saveFilePath.endsWith("/.pdf")) {
-                DDialog dlg("", tr("Invalid file name"));
-                dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
-                dlg.addButtons(QStringList() << tr("OK"));
-                QMargins mar(0, 0, 0, 30);
-                dlg.setContentLayoutContentsMargins(mar);
-                dlg.exec();
-                return false;
-            }
+        if (saveFilePath.endsWith("/.pdf")) {
+            DDialog dlg("", tr("Invalid file name"));
+            dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
+            dlg.addButtons(QStringList() << tr("OK"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            return false;
         }
-        return sheet->saveAsData(saveFilePath);
     } else if (Dr::DJVU == sheet->fileType()) {
-        QString saveFilePath;
-
-        if (sFilter != "") {
-            DFileDialog dialog(this);
-            dialog.setWindowModality(Qt::WindowModal);
-            dialog.selectFile(sheet->filePath());
-            saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
-
-            if (saveFilePath.endsWith("/.djvu")) {
-                DDialog dlg("", tr("Invalid file name"));
-                dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
-                dlg.addButtons(QStringList() << tr("OK"));
-                QMargins mar(0, 0, 0, 30);
-                dlg.setContentLayoutContentsMargins(mar);
-                dlg.exec();
-                return false;
-            }
+        if (saveFilePath.endsWith("/.djvu")) {
+            DDialog dlg("", tr("Invalid file name"));
+            dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
+            dlg.addButtons(QStringList() << tr("OK"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            return false;
         }
-        return sheet->saveAsData(saveFilePath);
     }
 
-    return false;
+    return sheet->saveAsData(saveFilePath);
 }
 
 DocSheet *CentralDocPage::getCurSheet()
