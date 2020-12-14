@@ -1,6 +1,8 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
+include /usr/share/dpkg/default.mk
+
 export QT_SELECT := 5
 
 override_dh_auto_configure:
