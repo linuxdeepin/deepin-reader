@@ -104,6 +104,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     m_tipsWidget->setAutoChecked(true);
 
     m_searchTask = new PageSearchThread(this);
+    this->setProperty("pinchgetsturing", false);
 
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
@@ -743,12 +744,8 @@ bool SheetBrowser::event(QEvent *event)
         }
     }
 
-    if (event->type() == QEvent::Gesture)
+    if (event->type() == QEvent::Gesture) {
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
-
-    if (event->type() == QEvent::TouchBegin) {
-        m_gestureAction = GA_touch;
-        m_bTouch = true;
     }
 
     return QGraphicsView::event(event);
@@ -756,8 +753,6 @@ bool SheetBrowser::event(QEvent *event)
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
-    m_gestureAction = GA_null;
-
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
 
@@ -766,77 +761,48 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
-    static qreal currentStepScaleFactor = 0.0;
-    m_gestureAction = GA_pinch;
+    static bool  canRotate = false;
+    static qreal currentStepScaleFactor = 1.0;
+    static qreal tempScalefactor = 1.0;
+
+    if (gesture->state() == Qt::GestureStarted) {
+        m_startPinch = true;
+        canRotate = true;
+        tempScalefactor = m_lastScaleFactor;
+        this->setProperty("pinchgetsturing", true);
+        scene()->setSelectionArea(QPainterPath());
+    }
 
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
-        if (m_bTouch && qAbs(gesture->rotationAngle()) > 25.0) {
+        if (canRotate && qAbs(gesture->rotationAngle()) > 35.0) {
             if (gesture->rotationAngle() < 0.0) {
                 m_sheet->rotateLeft();
             } else {
                 m_sheet->rotateRight();
             }
-            m_bTouch = false;
+            canRotate = false;
             return;
         }
     }
 
-    if (m_bTouch)
-        currentStepScaleFactor = 1.0;
-
-    qreal nowStepScaleFactor = 0.0;
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
-        nowStepScaleFactor = gesture->totalScaleFactor();
-        //经过验证,阀值是0.7时,交互是比较好的
-        if (!qFuzzyCompare(nowStepScaleFactor, currentStepScaleFactor)
-                && qAbs(currentStepScaleFactor - nowStepScaleFactor) > 0.7) {
-            if (currentStepScaleFactor < nowStepScaleFactor) {
-                m_sheet->zoomin();
-            } else {
-                m_sheet->zoomout();
-            }
-            m_bTouch = false;
-            currentStepScaleFactor = nowStepScaleFactor;
-            return;
-        }
+        currentStepScaleFactor = gesture->totalScaleFactor();
     }
-}
 
-void SheetBrowser::tapGestureTriggered(QTapGesture *tapGesture)
-{
-    if (m_gestureAction != GA_null)
-        return;
+    qreal curscalfactor = currentStepScaleFactor * tempScalefactor;
+    if (gesture->state() == Qt::GestureFinished) {
+        this->setProperty("pinchgetsturing", false);
+        QTimer::singleShot(10, [this]() {
+            //稍微延迟下,不然还是会引起mouse事件触发
+            m_startPinch = false;
+        });
+        canRotate = false;
+        currentStepScaleFactor = 1.0;
+        tempScalefactor = m_lastScaleFactor;
+    }
 
-    switch (tapGesture->state()) {
-    case Qt::GestureStarted: {
-        m_gestureAction = GA_tap;
-        m_tapBeginTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-        break;
-    }
-    case Qt::GestureUpdated: {
-        break;
-    }
-    case Qt::GestureCanceled: {
-        //根据时间长短区分轻触滑动
-        qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
-        if (timeSpace < TAP_MOVE_DELAY || m_slideContinue) {
-            m_slideContinue = false;
-            m_gestureAction = GA_slide;
-        } else {
-            m_gestureAction = GA_null;
-        }
-        break;
-    }
-    case Qt::GestureFinished: {
-        m_gestureAction = GA_null;
-        break;
-    }
-    default: {
-        Q_ASSERT(false);
-        break;
-    }
-    }
+    m_sheet->setScaleFactor(curscalfactor);
 }
 
 void SheetBrowser::deform(SheetOperation &operation)
@@ -1031,7 +997,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
     m_scroller->stop();
 
-    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
+    if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         Qt::MouseButton btn = event->button();
         m_iconAnnot = nullptr;
 
@@ -1039,13 +1005,13 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             //清除上一次选中
             clearSelectIconAnnotAfterMenu();
-            m_scroller->handleInput(QScroller::InputPress, event->pos(), event->timestamp());
 
             m_canTouchScreen = false;
             //点击文字,链接,图标注释,手势滑动时,不滑动文档页面
             if (event->source() == Qt::MouseEventSynthesizedByQt && setDocTapGestrue(event->pos())) {
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
+                m_scroller->handleInput(QScroller::InputPress, event->pos(), event->timestamp());
             } else {
                 m_selectStartWord = nullptr;
                 m_selectEndWord = nullptr;
@@ -1212,7 +1178,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
+    if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         QPoint mousePos = event->pos();
         if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
             QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
@@ -1356,9 +1322,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_gestureAction = GA_null;
-
-    if (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) {
+    if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         if (event->button() == Qt::LeftButton) {
             if (m_canTouchScreen) {
                 m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());

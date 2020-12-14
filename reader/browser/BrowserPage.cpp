@@ -224,8 +224,12 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         loadAnnotations();
     }
 
-    scaleWords();
-    scaleAnnots();
+    if (!m_parent->property("pinchgetsturing").toBool()) {
+        //在触摸屏捏合状态时,不要进行word缩放,不然会被卡的
+        scaleWords();
+        scaleAnnots();
+    }
+
     update();
 }
 

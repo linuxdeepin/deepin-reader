@@ -531,13 +531,6 @@ protected:
     void pinchTriggered(QPinchGesture *);
 
     /**
-     * @brief tapGestureTriggered
-     * 单指点击手势
-     * @param tapGesture
-     */
-    void tapGestureTriggered(QTapGesture *);
-
-    /**
      * @brief 根据鼠标点击位置判断在哪一页
      * @param viewPoint 鼠标点击位置
      * @return 鼠标点击的页对象
@@ -772,24 +765,9 @@ private:
     int m_currentPage = 0;
     int m_lastrotation = 0;
     bool m_bNeedNotifyCurPageChanged = true;
-    bool m_bTouch = false;
-    GestureAction m_gestureAction = GA_null;
-
-    ulong m_touchStop = 0;
-    QPoint m_lastTouchBeginPos;
-    Qt::GestureState m_tapStatus = Qt::NoGesture;
-
-    //tap
-    qint64 m_tapBeginTime = 0;
-    //FlashTween m_tween;
-    qreal change = 0.0;
-    qreal duration = 0.0;
-    ulong m_lastMouseTime;
-    int m_lastMouseYpos;
-    qreal m_stepSpeed = 0;
 
     QBasicTimer m_repeatTimer;
-    bool m_slideContinue = false;
+    bool m_startPinch = false;
     bool m_canTouchScreen = false;
     QScroller *m_scroller = nullptr;
 };

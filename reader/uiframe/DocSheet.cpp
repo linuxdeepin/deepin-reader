@@ -365,8 +365,7 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     if (Dr::ScaleFactorMode == m_operation.scaleMode && qFuzzyCompare(scaleFactor, m_operation.scaleFactor))
         return;
 
-    if (scaleFactor > maxScaleFactor())
-        scaleFactor = maxScaleFactor();
+    scaleFactor = qBound(0.1, scaleFactor, maxScaleFactor());
 
     m_operation.scaleMode = Dr::ScaleFactorMode;
 
