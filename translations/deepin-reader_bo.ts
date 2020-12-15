@@ -329,7 +329,7 @@
     <name>DocThread</name>
     <message>
         <location filename="../reader/uiframe/DocThread.cpp" line="76"/>
-        <source>open failed</source>
+        <source>Open failed</source>
         <translation type="unfinished"/>
     </message>
     <message>

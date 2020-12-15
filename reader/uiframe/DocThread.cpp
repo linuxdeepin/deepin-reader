@@ -73,7 +73,7 @@ void DocThread::run()
         deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(fileType, filePath, password);
 
         if (nullptr == document) {
-            emit sigTaskFinished(task.sheet, false, tr("open failed"), nullptr, QList<deepin_reader::Page *>());
+            emit sigTaskFinished(task.sheet, false, tr("Open failed"), nullptr, QList<deepin_reader::Page *>());
             PERF_PRINT_END("POINT-03", "");
             PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
             continue;

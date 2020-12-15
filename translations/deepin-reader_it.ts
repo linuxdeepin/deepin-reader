@@ -244,7 +244,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="115"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documenti</translation>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>DocThread</name>
     <message>
         <location filename="../reader/uiframe/DocThread.cpp" line="76"/>
-        <source>open failed</source>
+        <source>Open failed</source>
         <translation type="unfinished"/>
     </message>
     <message>

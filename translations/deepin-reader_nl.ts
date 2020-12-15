@@ -256,7 +256,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="401"/>
         <source>Save failed</source>
-        <translation>Het opslaan is mislukt</translation>
+        <translation>Het document kan niet worden opgeslagen</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="407"/>
@@ -329,7 +329,7 @@
     <name>DocThread</name>
     <message>
         <location filename="../reader/uiframe/DocThread.cpp" line="76"/>
-        <source>open failed</source>
+        <source>Open failed</source>
         <translation type="unfinished"/>
     </message>
     <message>

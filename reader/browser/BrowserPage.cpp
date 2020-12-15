@@ -131,7 +131,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if (!m_viewportRendered && !m_pixmapHasRendered && isBigDoc())
         renderViewPort(m_scaleFactor);
 
-    painter->drawPixmap(option->rect, m_pixmap);
+    painter->drawPixmap(option->rect, m_renderPixmap);
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -210,9 +210,9 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
                                static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
             m_pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
             m_pixmap.fill(Qt::white);
-
+            m_renderPixmap = m_pixmap;
         } else {
-            m_pixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            m_renderPixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             PageRenderThread::clearImageTask(this, m_pixmapId);
         }
 
@@ -299,6 +299,8 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
         painter.drawPixmap(rect, pixmap);
     }
 
+    m_renderPixmap = m_pixmap;
+
     emit m_parent->sigPartThumbnailUpdated(m_index);
 
     update();
@@ -377,7 +379,7 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
     int ds = static_cast<int>(122 * dApp->devicePixelRatio());
     QTransform transform;
     transform.rotate(m_rotation * 90);
-    const QImage &image = Utils::copyImage(m_pixmap.toImage(), qRound(point.x() * dApp->devicePixelRatio() - ds / 2.0), qRound(point.y() * dApp->devicePixelRatio()  - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
+    const QImage &image = Utils::copyImage(m_renderPixmap.toImage(), qRound(point.x() * dApp->devicePixelRatio() - ds / 2.0), qRound(point.y() * dApp->devicePixelRatio()  - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
     return image;
 }
 
@@ -470,6 +472,7 @@ void BrowserPage::clearPixmap()
         return;
 
     m_pixmap = QPixmap();
+    m_renderPixmap = m_pixmap;
     ++m_pixmapId;
     m_pixmapIsLastest   = false;
     m_pixmapHasRendered = false;

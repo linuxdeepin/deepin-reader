@@ -482,6 +482,7 @@ private:
     Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
 
     QPixmap m_pixmap;                       //当前图片
+    QPixmap m_renderPixmap;                 //当前被绘制图片
     int     m_pixmapId          = 0;        //当前图片的标识
     bool    m_pixmapIsLastest   = false;    //当前图示是否最新
     bool    m_pixmapHasRendered = false;    //当前图片是否已经加载

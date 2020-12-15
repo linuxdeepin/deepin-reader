@@ -329,8 +329,8 @@
     <name>DocThread</name>
     <message>
         <location filename="../reader/uiframe/DocThread.cpp" line="76"/>
-        <source>open failed</source>
-        <translation>open failed</translation>
+        <source>Open failed</source>
+        <translation>Open failed</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocThread.cpp" line="97"/>
