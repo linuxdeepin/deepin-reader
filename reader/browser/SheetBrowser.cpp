@@ -170,12 +170,12 @@ bool SheetBrowser::isUnLocked()
 
 bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks)
 {
+    Q_ASSERT(nullptr == m_document);
+
     m_document = document;
 
     int pagesNumber = m_document->pageCount();
 
-    QTime time;
-    time.start();
     for (int i = 0; i < pagesNumber; ++i) {
         deepin_reader::Page *page = pages.value(i);
 

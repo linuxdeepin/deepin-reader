@@ -430,17 +430,21 @@ bool DocSheet::saveAsData(QString filePath)
 void DocSheet::handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
     m_lastError = error;
+
     m_document = document;
+
     m_pages = pages;
 
-    if (!m_browser->init(document, pages, m_operation, m_bookmarks))
-        emit sigFileOpened(this, false, tr("Please check if the file is damaged"));
+    if (result) {
+        if (!m_browser->init(document, pages, m_operation, m_bookmarks))
+            emit sigFileOpened(this, false, tr("Please check if the file is damaged"));
 
-    m_sidebar->handleOpenSuccess();
+        m_sidebar->handleOpenSuccess();
+
+        emit sigOperationChanged(this);
+    }
 
     emit sigFileOpened(this, result, error);
-
-    emit sigOperationChanged(this);
 }
 
 void DocSheet::handleSearch()
