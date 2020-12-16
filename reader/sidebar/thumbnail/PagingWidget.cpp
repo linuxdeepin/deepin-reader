@@ -49,7 +49,7 @@ PagingWidget::~PagingWidget()
  */
 void PagingWidget::initWidget()
 {
-    m_pTotalPagesLab = new DLabel(QString("/xxx"));
+    m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
     QFont font = m_pTotalPagesLab->font();
     font.setPixelSize(14);
@@ -57,7 +57,7 @@ void PagingWidget::initWidget()
     m_pTotalPagesLab->setFont(font);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
-    m_pJumpPageLineEdit = new DLineEdit();
+    m_pJumpPageLineEdit = new DLineEdit(this);
     m_pJumpPageLineEdit->setAccessibleName("Page");
     m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
     m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
@@ -84,7 +84,7 @@ void PagingWidget::initWidget()
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
-    m_pCurrentPageLab = new DLabel("");
+    m_pCurrentPageLab = new DLabel(this);
     m_pCurrentPageLab->setAccessibleName("CurrentPage");
     font = m_pCurrentPageLab->font();
     font.setPixelSize(14);
