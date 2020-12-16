@@ -108,7 +108,6 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     this->header()->setHidden(true);
     this->header()->setDefaultSectionSize(18);
     this->header()->setMinimumSectionSize(18);
-    this->header()->setStretchLastSection(false);
     this->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     this->header()->setSectionResizeMode(1, QHeaderView::Fixed);
     this->viewport()->setAutoFillBackground(false);
@@ -117,6 +116,7 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(slotCollapsed(const QModelIndex &)));
     connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(slotExpanded(const QModelIndex &)));
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(onItemClicked(QModelIndex)));
+    connect(dApp, &DApplication::fontChanged, this, &CatalogTreeView::onFontChanged);
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
 }
@@ -303,7 +303,7 @@ void CatalogTreeView::setIndex(int index, const QString &title)
 void CatalogTreeView::resizeCoulumnWidth()
 {
     if (m_sheet) {
-        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 32;
+        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 34;
         this->setColumnWidth(0, this->width() - maxPageColumnWid);
         this->setColumnWidth(1, maxPageColumnWid);
     }
@@ -341,4 +341,10 @@ void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
         this->selectionModel()->select(newIndex, QItemSelectionModel::SelectCurrent);
         this->setCurrentIndex(newIndex);
     }
+}
+
+void CatalogTreeView::onFontChanged(const QFont &font)
+{
+    Q_UNUSED(font);
+    resizeCoulumnWidth();
 }
