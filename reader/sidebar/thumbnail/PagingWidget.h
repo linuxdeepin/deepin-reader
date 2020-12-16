@@ -135,6 +135,7 @@ private:
     DocSheet            *m_sheet = nullptr;
     int                  m_curIndex = 0;
 
+    bool                 m_bHasLabel = false;
     TMFunctionThread    *m_tmFuncThread;
 };
 

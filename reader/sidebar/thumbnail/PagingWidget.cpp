@@ -147,7 +147,7 @@ void PagingWidget::setIndex(int index)
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
 
-    if (m_pCurrentPageLab->isVisible()) {
+    if (m_bHasLabel) {
         m_pCurrentPageLab->setText(QString::number(currntPage));
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(sPage);
@@ -174,7 +174,7 @@ void PagingWidget::handleOpenSuccess()
 
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
-    if (m_pCurrentPageLab->isVisible()) {
+    if (m_bHasLabel) {
         pageNumberJump();
     } else {
         normalChangePage();
@@ -230,8 +230,8 @@ void PagingWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 
 void PagingWidget::onFuncThreadFinished()
 {
-    bool isHasLabel = m_tmFuncThread->result.toBool();
-    m_pCurrentPageLab->setVisible(isHasLabel);
+    m_bHasLabel = m_tmFuncThread->result.toBool();
+    m_pCurrentPageLab->setVisible(m_bHasLabel);
 
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);

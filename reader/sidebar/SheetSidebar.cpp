@@ -201,19 +201,20 @@ void SheetSidebar::handleOpenSuccess()
     this->setVisible(m_sheet->operation().sidebarVisible);
     int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 2);
     onBtnClicked(nId);
-
-    if (m_sheet->operation().sidebarVisible) onHandleOpenSuccessDelay();
 }
 
 void SheetSidebar::onHandleOpenSuccessDelay()
 {
     if (m_bOpenDocOpenSuccess) {
-        QTimer::singleShot(10, this, SLOT(onHandWidgetDocOpenSuccess()));
+        QTimer::singleShot(100, this, SLOT(onHandWidgetDocOpenSuccess()));
     }
 }
 
 void SheetSidebar::onHandWidgetDocOpenSuccess()
 {
+    if (!this->isVisible())
+        return;
+
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
         m_thumbnailWidget->handleOpenSuccess();
