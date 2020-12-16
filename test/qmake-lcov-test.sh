@@ -11,9 +11,9 @@ result_coverage_dir=$build_dir/coverage
 result_report_dir=$build_dir/report/report.xml
 
 #下面是覆盖率目录操作，一种正向操作，一种逆向操作
-extract_info="*/deepin_reader/reader/*"  #针对当前目录进行覆盖率操作
+extract_info="*/reader/*"  #针对当前目录进行覆盖率操作
 
-remove_info="*/deepin_reader/test/*" #排除当前目录进行覆盖率操作
+remove_info="*/test/*" #排除当前目录进行覆盖率操作
 
 $build_dir/$executable --gtest_output=xml:$result_report_dir
 

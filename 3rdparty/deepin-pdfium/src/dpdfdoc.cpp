@@ -343,7 +343,7 @@ DPdfDoc::Properies DPdfDoc::proeries()
 
 QString DPdfDoc::label(int index) const
 {
-    //DPdfMutexLocker locker("DPdfDoc::label index = " + QString::number(index));
+    DPdfMutexLocker locker("DPdfDoc::label index = " + QString::number(index));
 
     CPDF_PageLabel label(reinterpret_cast<CPDF_Document *>(d_func()->m_docHandler));
     const Optional<WideString> &str = label.GetLabel(index);

@@ -1870,7 +1870,6 @@ void SheetBrowser::loadPageLable()
 
 int SheetBrowser::pageLableIndex(const QString pageLable)
 {
-    loadPageLable();
     if (m_lable2Page.count() <= 0 || !m_lable2Page.contains(pageLable))
         return -1;
 
@@ -1889,14 +1888,13 @@ bool SheetBrowser::pageHasLable()
 
 QString SheetBrowser::pageNum2Lable(const int index)
 {
-    loadPageLable();
     QMap<QString, int>::const_iterator iter;
     for (iter = m_lable2Page.constBegin(); iter != m_lable2Page.constEnd(); ++iter) {
         if (iter.value() == index)
             return iter.key();
     }
 
-    return  QString();
+    return  QString::number(index + 1);
 }
 
 QSizeF SheetBrowser::pageSizeByIndex(int index)

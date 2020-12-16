@@ -79,39 +79,10 @@ void LoadThread::run()
     }
 }
 
-typedef std::function<QVariant(void)> FNTemplate;
-
-class FunctionExecThread: public QThread
-{
-public:
-    ~FunctionExecThread()
-    {
-        this->wait();
-    }
-
-    void startown()
-    {
-        this->start();
-        QEventLoop loop;
-        connect(this, &QThread::finished, &loop, &QEventLoop::quit);
-        loop.exec();
-    }
-
-    void run();
-
-public:
-    FNTemplate func;
-    QVariant result;
-};
-
-void FunctionExecThread::run()
-{
-    result = func();
-}
-
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
     m_dannotation(dannotation)
 {
+
 }
 
 PDFAnnotation::~PDFAnnotation()

@@ -27,6 +27,7 @@
 #include <DLineEdit>
 #include <DLabel>
 
+class TMFunctionThread;
 class DocSheet;
 
 /**
@@ -93,6 +94,11 @@ private slots:
      */
     void onEditFinished();
 
+    /**
+     * @brief FUNC任务执行完毕
+     */
+    void onFuncThreadFinished();
+
 private:
     /**
      * @brief initWidget
@@ -128,6 +134,8 @@ private:
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
     DocSheet            *m_sheet = nullptr;
     int                  m_curIndex = 0;
+
+    TMFunctionThread    *m_tmFuncThread;
 };
 
 #endif // PAGINGWIDGET_H

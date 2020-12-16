@@ -20,6 +20,7 @@
  */
 #include "PagingWidget.h"
 #include "DocSheet.h"
+#include "TMFunctionThread.h"
 
 #include <QValidator>
 
@@ -32,6 +33,9 @@ PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
 
     slotUpdateTheme();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &PagingWidget::slotUpdateTheme);
+
+    m_tmFuncThread = new TMFunctionThread(this);
+    connect(m_tmFuncThread, &TMFunctionThread::finished, this, &PagingWidget::onFuncThreadFinished);
 }
 
 PagingWidget::~PagingWidget()
@@ -87,6 +91,7 @@ void PagingWidget::initWidget()
 
     m_pCurrentPageLab->setFont(font);
     m_pCurrentPageLab->setForegroundRole(DPalette::Text);
+    m_pCurrentPageLab->setVisible(false);
 
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 6, 10, 6);
@@ -142,7 +147,7 @@ void PagingWidget::setIndex(int index)
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
 
-    if (m_pCurrentPageLab) {
+    if (m_pCurrentPageLab->isVisible()) {
         m_pCurrentPageLab->setText(QString::number(currntPage));
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(sPage);
@@ -156,17 +161,12 @@ void PagingWidget::handleOpenSuccess()
     if (nullptr == m_sheet)
         return;
 
-    bool isHasLabel = m_sheet->haslabel();
-    if (!isHasLabel) {
-        delete m_pCurrentPageLab;
-        m_pCurrentPageLab =  nullptr;
-    }
+    m_tmFuncThread->func = [ this ]()->bool{
+        return m_sheet->haslabel();
+    };
+    m_tmFuncThread->start();
 
     int totalPage = m_sheet->pagesNumber();
-    if (m_pCurrentPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
-        //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
-    }
-
     m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);
@@ -174,10 +174,10 @@ void PagingWidget::handleOpenSuccess()
 
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
-    if (m_pCurrentPageLab == nullptr) {
-        normalChangePage();
-    } else {
+    if (m_pCurrentPageLab->isVisible()) {
         pageNumberJump();
+    } else {
+        normalChangePage();
     }
 }
 
@@ -226,4 +226,13 @@ void PagingWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
     tabWidgetlst << m_pJumpPageLineEdit;
     tabWidgetlst << m_pPrePageBtn;
     tabWidgetlst << m_pNextPageBtn;
+}
+
+void PagingWidget::onFuncThreadFinished()
+{
+    bool isHasLabel = m_tmFuncThread->result.toBool();
+    m_pCurrentPageLab->setVisible(isHasLabel);
+
+    int currentIndex = m_sheet->currentIndex();
+    setIndex(currentIndex);
 }
