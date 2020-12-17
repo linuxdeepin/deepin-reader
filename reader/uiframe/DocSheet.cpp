@@ -149,11 +149,15 @@ DocSheet *DocSheet::getSheet(QString uuid)
 bool DocSheet::openFileExec(const QString &password, QString &error)
 {
     QEventLoop loop;
+
     connect(this, &DocSheet::sigFileOpened, &loop, &QEventLoop::quit);
+
     openFileAsync(password);
+
     loop.exec();
 
     error = m_lastError;
+
     return error.isEmpty();
 }
 
