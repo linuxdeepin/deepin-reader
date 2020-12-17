@@ -12,6 +12,8 @@
 #include "app/DebugTimeManager.h"
 #include "Database.h"
 #include "DocSheet.h"
+#include <QDir>
+#include <QSqlQuery>
 
 #undef private
 #undef protected
@@ -33,17 +35,52 @@ void ut_app::TearDown()
 #ifdef UT_APP_TEST
 TEST_F(ut_app, DatabaseTest)
 {
-    Database::instance()->prepareBookmark();
-    Database::instance()->prepareOperation();
+    Database *db = new Database;
+
+    const QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    QSqlDatabase tempDatabase;
+
+    QDir().mkpath(path);
+
+    db->m_database = tempDatabase;
+
+    tempDatabase = QSqlDatabase::addDatabase("QSQLITE");
+    tempDatabase.setDatabaseName(QDir(path).filePath("test.db"));
+    tempDatabase.open();
+
+    if (tempDatabase.isOpen()) {
+        {
+            QSqlQuery query(tempDatabase);
+            query.exec("PRAGMA synchronous = OFF");
+            query.exec("PRAGMA journal_mode = MEMORY");
+        }
+
+        const QStringList tables = tempDatabase.tables();
+
+        if (!tables.contains("operation")) {
+            db->prepareOperation();
+        }
+
+        if (!tables.contains("bookmark")) {
+            db->prepareBookmark();
+        }
+    }
 
     QSet<int> bookmarks;
-    Database::instance()->readBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
+    db->readBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
     bookmarks << 0;
-    Database::instance()->saveBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
+    db->saveBookmarks(filePath(UT_FILE_PDF, "DatabaseTest"), bookmarks);
 
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "DatabaseTest"), nullptr);
     Database::instance()->readOperation(sheet);
     Database::instance()->saveOperation(sheet);
+
+    tempDatabase.close();
+
+    delete db;
+
+    QFile::remove(QDir(path).filePath("test.db"));
 }
 
 TEST_F(ut_app, DebugTimeManagerTest)

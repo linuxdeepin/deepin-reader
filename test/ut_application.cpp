@@ -92,8 +92,6 @@ TEST_F(ut_application, ApplicationTest)
 {
     a->showAnnotTextWidgetSig();
     a->handleFiles(QStringList() << filePath(UT_FILE_PDF, "ApplicationTest") << filePath(UT_FILE_DJVU, "ApplicationTest"));
-
     exec();
 }
-
 #endif

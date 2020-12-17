@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ut_defines.h"
+#include "Application.h"
 
 #include <gtest/gtest.h>
 

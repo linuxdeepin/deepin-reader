@@ -24,7 +24,8 @@
 #include <DApplicationSettings>
 #include <DLog>
 #include <QDebug>
-
+#include <QGraphicsSceneMouseEvent>
+#include <QRectF>
 ut_browser::ut_browser()
 {
 
@@ -73,6 +74,36 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->moveIconAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0));
 
+    QRectF iconRect =  QRectF(0, 0, 1, 1.0);
+
+    sheet->m_browser->calcIconAnnotRect(sheet->m_browser->m_items.at(0), QPointF(0, 0), iconRect);
+
+    QPoint showPoint = QPoint(1, 1);
+
+    Annotation *hightLightAnnot = sheet->m_browser->addHighLightAnnotation("123", QColor(Qt::red), showPoint);
+
+    sheet->m_browser->onRemoveAnnotation(hightLightAnnot, true);
+
+    sheet->m_browser->onSetDocSlideGesture();
+
+    sheet->m_browser->onRemoveIconAnnotSelect();
+
+    sheet->m_browser->outline();
+
+    sheet->m_browser->deform(sheet->m_operation);
+
+    QEvent *event = new QEvent(QEvent::Timer);
+
+    sheet->m_browser->event(event);
+
+    QMouseEvent *pressMouseEvent = new QMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    sheet->m_browser->mousePressEvent(pressMouseEvent);
+
+    QMouseEvent *releaseMouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    sheet->m_browser->mouseReleaseEvent(releaseMouseEvent);
+
     QImage image;
 
     sheet->getImage(0, image, 200, 200);
@@ -106,11 +137,19 @@ TEST_F(ut_browser, SheetBrowserTest)
     word->textBoundingRect();
     word->getWord();
 
+    QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
+
+    word->mousePressEvent(gsMouseEvent);
+
+    word->mouseReleaseEvent(gsMouseEvent);
+
     ///BrowserMenu
     BrowserMenu *menu = new BrowserMenu;
     menu->initActions(sheet, 0, SheetMenuType_e::DOC_MENU_DEFAULT);
     menu->createAction("test displayname", "test object");
     menu->onSetHighLight();
+    menu->show();
+    menu->hide();
     //    menu->onItemClicked();
     delete menu;
 

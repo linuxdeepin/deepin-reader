@@ -59,7 +59,9 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
     EXPECT_TRUE(mainWindow->windowContainSheet(sheet));
 
+    mainWindow->showDefaultSize();
     mainWindow->hasSheet(nullptr);
+    mainWindow->activateSheetIfExist(filePath(UT_FILE_PDF, "MainWindowTest"));
     //mainWindow->updateOrderWidgets(QList<QWidget *>());   //崩溃
     mainWindow->activateSheet(sheet);
     mainWindow_muti->activateSheet(sheet);

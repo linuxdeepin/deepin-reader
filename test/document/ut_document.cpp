@@ -176,9 +176,12 @@ TEST_F(ut_document, PDFTest)
 
     QFile(filePath(UT_FILE_PDF_SAVE, "PDFTest")).remove();
     QFile(filePath(UT_FILE_PDF_SAVEAS, "PDFTest")).remove();
+
     delete saveDoc;
 
-    exec(1);
+    a->handleQuitAction();      //次数需要最后一个case调用，提前调用会导致线程永久性关闭
+
+    exec();
 }
 
 #endif

@@ -79,6 +79,7 @@ Database *Database::instance()
 
 Database::~Database()
 {
+    m_database.close();
     s_instance = nullptr;
 }
 
