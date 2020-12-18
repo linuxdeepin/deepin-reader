@@ -191,10 +191,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                     int duration = 200 * (50 + m_FullTitleWidget->pos().y()) / 50;
                     duration = duration <= 0 ? 200 : duration;
                     m_TitleAnimation->setDuration(duration);
-                    m_TitleAnimation->setStartValue(QRect(0, m_FullTitleWidget->pos().y(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+                    m_TitleAnimation->setStartValue(QRect(0, m_FullTitleWidget->pos().y(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
 
                     if (m_FullTitleWidget->pos().y() >= 0 && mouseEvent->pos().y() > m_FullTitleWidget->height()) {
-                        m_TitleAnimation->setEndValue(QRect(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+                        m_TitleAnimation->setEndValue(QRect(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
                         m_TitleAnimation->start();
                     } else if (m_FullTitleWidget->pos().y() < 0 && mouseEvent->pos().y() < 2) {
                         m_FullTitleWidget->setEnabled(true);
@@ -203,7 +203,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                         else if (m_docTabWidget && m_FullTitleWidget->height() <= titlebar()->height())
                             m_docTabWidget->setVisible(false);
 
-                        m_TitleAnimation->setEndValue(QRect(0, 0, dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height()));
+                        m_TitleAnimation->setEndValue(QRect(0, 0, dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
                         m_TitleAnimation->start();
                     }
                 }
@@ -285,12 +285,12 @@ void MainWindow::onMainWindowFull()
     titlebar()->show();
     m_docTabWidget->setVisible(tabbarVisible);
 
-    titlebar()->setGeometry(0, 0, dApp->desktop()->screenGeometry().width(), titlebar()->height());
-    m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->desktop()->screenGeometry().width(), 37);
+    titlebar()->setGeometry(0, 0, dApp->primaryScreen()->size().width(), titlebar()->height());
+    m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->primaryScreen()->size().width(), 37);
 
     int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
-    m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
+    m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->primaryScreen()->size().width(), fulltitleH);
 
     m_FullTitleWidget->setEnabled(false);
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
@@ -303,7 +303,7 @@ void MainWindow::onMainWindowExitFull()
         if (m_central->docPage()->getCurSheet())
             m_central->docPage()->getCurSheet()->closeFullScreen(true);
         this->setMenuWidget(titlebar());
-        m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->desktop()->screenGeometry().width(), m_FullTitleWidget->height());
+        m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height());
         updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
     }
 }
@@ -315,7 +315,7 @@ void MainWindow::resizeFullTitleWidget()
 
     int fulltitleH = m_docTabWidget->isVisible() ? titlebar()->height() + 37 : titlebar()->height();
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
-    m_FullTitleWidget->resize(dApp->desktop()->screenGeometry().width(), fulltitleH);
+    m_FullTitleWidget->resize(dApp->primaryScreen()->size().width(), fulltitleH);
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)

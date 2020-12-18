@@ -58,8 +58,12 @@ void SideBarImageViewModel::resetData()
 void SideBarImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
     beginResetModel();
+
     m_pagelst = pagelst;
-    if (sort) qSort(m_pagelst.begin(), m_pagelst.end());
+
+    if (sort)
+        std::sort(m_pagelst.begin(), m_pagelst.end());
+
     endResetModel();
 }
 

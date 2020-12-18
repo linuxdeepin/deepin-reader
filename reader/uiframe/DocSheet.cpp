@@ -735,7 +735,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             m_sidebar->setParent(nullptr);
             m_sidebar->setParent(this);
 
-            m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+            m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
             m_sidebar->setVisible(false);
         }
@@ -754,7 +754,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             m_sidebar->setParent(nullptr);
             m_sidebar->setParent(this);
 
-            m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+            m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
             m_sidebar->setVisible(false);
         }
@@ -802,7 +802,7 @@ void DocSheet::openFullScreen()
     m_sidebar->setParent(nullptr);
     m_sidebar->setParent(this);
 
-    m_sidebar->resize(m_sidebar->width(), dApp->desktop()->screenGeometry().height());
+    m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
     m_sidebar->move(-m_sidebar->width(), 0);
     m_sidebar->setVisible(false);
 

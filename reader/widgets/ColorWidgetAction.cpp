@@ -63,7 +63,6 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
 
     auto sigMap = new QSignalMapper(this);
 
-
     int tW = 25;
     int tH = 25;
 
