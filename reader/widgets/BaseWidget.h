@@ -31,7 +31,7 @@ class BaseWidget : public DWidget
 
 public:
     explicit BaseWidget(DWidget *parent = nullptr);
-    virtual ~BaseWidget() {}
+    virtual ~BaseWidget();
 
 public:
     /**
@@ -39,14 +39,14 @@ public:
      * 缩略图列表自适应视窗大小
      * @param scale  缩放因子 大于0的数
      */
-    virtual void adaptWindowSize(const double &) {}
+    virtual void adaptWindowSize(const double &);
 
     /**
      * @brief CustomWidget::updateThumbnail
      * 刷新相应的缩略图
      * @param index 页码数，从0开始
      */
-    virtual void updateThumbnail(const int &, bool clear = false) {}
+    virtual void updateThumbnail(const int &, bool clear = false);
 
 protected:
     /**

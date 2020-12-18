@@ -21,6 +21,26 @@
 #include "DocSheet.h"
 #include "threadmanager/ReaderImageThreadPoolManager.h"
 
+ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
+{
+
+}
+
+bool ImagePageInfo_t::operator == (const ImagePageInfo_t &other) const
+{
+    return (this->pageIndex == other.pageIndex);
+}
+
+bool ImagePageInfo_t::operator < (const ImagePageInfo_t &other) const
+{
+    return (this->pageIndex < other.pageIndex);
+}
+
+bool ImagePageInfo_t::operator > (const ImagePageInfo_t &other) const
+{
+    return (this->pageIndex > other.pageIndex);
+}
+
 SideBarImageViewModel::SideBarImageViewModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent)

@@ -41,6 +41,7 @@
 #undef protected
 
 #define private public
+#define protected public
 #include "MainWindow.h"
 #include "CentralDocPage.h"
 #include "Application.h"
@@ -51,6 +52,7 @@
 
 #include "sidebar/SheetSidebar.h"
 #undef private
+#undef protected
 
 #include "Central.h"
 #include "DocSheet.h"
@@ -133,7 +135,10 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
         filewidget->addTitleFrame("");
         filewidget->resize(600, 600);
         filewidget->showScreenCenter();
-        filewidget->repaint();
+
+        QPaintEvent paintevent(QRect(0, 0, 100, 100));
+        filewidget->paintEvent(&paintevent);
+
         delete filewidget;
     }
 
@@ -252,7 +257,7 @@ TEST_F(Ut_Widgets, BColorWidgetActionTest)
 
 TEST_F(Ut_Widgets, BaseWidgetTest)
 {
-    BaseWidget cusWidget;
+    BaseWidget cusWidget(nullptr);
     cusWidget.adaptWindowSize(1.0);
     cusWidget.updateThumbnail(-1);
     cusWidget.updateThumbnail(0);
@@ -272,7 +277,7 @@ TEST_F(Ut_Widgets, EncryptionPageTest)
 TEST_F(Ut_Widgets, SaveDialogTest)
 {
 //    a->exec();
-//    SaveDialog saveDialog;
+    SaveDialog saveDialog;
 //    saveDialog.showTipDialog("1111111");
 //    saveDialog.showExitDialog();
 }
@@ -287,8 +292,10 @@ TEST_F(Ut_Widgets, RoundColorWidgetTest)
     roundColorWidget.resize(600, 600);
     roundColorWidget.repaint();
     QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(&roundColorWidget, &mouseLPevent);
-    roundColorWidget.repaint();
+    roundColorWidget.mousePressEvent(&mouseLPevent);
+
+    QPaintEvent paintevent(QRect(0, 0, 100, 100));
+    roundColorWidget.paintEvent(&paintevent);
 }
 
 TEST_F(Ut_Widgets, ShortCutShowTest)
@@ -343,7 +350,8 @@ TEST_F(Ut_Widgets, TipsWidgetTest)
     tipsWidget.onUpdateTheme();
     tipsWidget.onTimeOut();
 
-    tipsWidget.repaint();
+    QPaintEvent paintevent(QRect(0, 0, 100, 100));
+    tipsWidget.paintEvent(&paintevent);
 
     QHideEvent hideEvent;
     QCoreApplication::sendEvent(&tipsWidget, &hideEvent);
@@ -362,6 +370,7 @@ TEST_F(Ut_Widgets, WordWrapLabelTest)
     wordLabel.setMargin(0);
     wordLabel.adjustContent();
 
-    wordLabel.repaint();
+    QPaintEvent paintevent(QRect(0, 0, 100, 100));
+    wordLabel.paintEvent(&paintevent);
 }
 #endif

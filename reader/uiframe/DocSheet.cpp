@@ -783,11 +783,6 @@ void DocSheet::onSideAniFinished()
     }
 }
 
-void DocSheet::onOpenFileAsyncFinished(bool result, QString error)
-{
-
-}
-
 bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());

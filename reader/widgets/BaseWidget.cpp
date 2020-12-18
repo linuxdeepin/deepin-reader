@@ -30,9 +30,24 @@ BaseWidget::BaseWidget(DWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
+BaseWidget::~BaseWidget()
+{
+
+}
+
 void BaseWidget::updateWidgetTheme()
 {
     Dtk::Gui::DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
+}
+
+void BaseWidget::adaptWindowSize(const double &)
+{
+
+}
+
+void BaseWidget::updateThumbnail(const int &, bool)
+{
+
 }

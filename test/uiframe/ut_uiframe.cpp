@@ -73,6 +73,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->titleWidget()->onFindOperation(E_FIND_EXIT);
     mainWindow1->m_central->titleWidget()->setControlEnabled(false);
 
+    QKeyEvent keyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
+    mainWindow1->m_central->titleWidget()->keyPressEvent(&keyLevent);
+
     QStyleOptionTab optionTab;
     QMimeData *mimeData = CentralDocPage1->m_pTabBar->createMimeDataFromTab(0, optionTab);
 
@@ -145,7 +148,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &dragEnterevent);
 
     QResizeEvent resizeEvent(QSize(100, 100), QSize(200, 200));
-    QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &resizeEvent);
+    CentralDocPage1->m_pTabBar->resizeEvent(&resizeEvent);
 
     mainWindow1->resize(600, 800);
     ASSERT_TRUE(mainWindow1->m_central);
@@ -256,6 +259,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->onSheetOperationChanged(nullptr);
     CentralDocPage1->onSheetCountChanged(0);
     CentralDocPage1->onSheetCountChanged(1);
+    CentralDocPage1->onOpened(nullptr, false, "Error");
 
     sheet->saveData();
     sheet->existFileChanged();
@@ -450,6 +454,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     mainWindow1->closeWithoutSave();
     mainWindow2->closeWithoutSave();
+
+    CentralNavPage centralPage;
+    centralPage.onChooseButtonClicked();
 
     exec();
 }

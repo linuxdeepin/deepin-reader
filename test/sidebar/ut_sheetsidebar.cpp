@@ -124,6 +124,7 @@ TEST_F(ut_sidebar, SidebarTest)
 
     sideBar.onHandWidgetDocOpenSuccess();
     sideBar.onHandleOpenSuccessDelay();
+    sideBar.handleOpenSuccess();
 
     sideBar.dealWithPressKey(Dr::key_up);
     sideBar.dealWithPressKey(Dr::key_down);
@@ -136,19 +137,24 @@ TEST_F(ut_sidebar, SidebarTest)
     sideBar.showMenu();
 
     QResizeEvent sidebarresizeEvent(QSize(100, 400), QSize(100, 600));
-    QCoreApplication::sendEvent(&sideBar, &sidebarresizeEvent);
+    sideBar.resizeEvent(&sidebarresizeEvent);
 
     QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&sideBar, &sideekeyRevent);
+    sideBar.keyPressEvent(&sideekeyRevent);
 
     QKeyEvent sideekeyDevent(QEvent::KeyPress, Qt::Key_Delete, Qt::ControlModifier);
-    QCoreApplication::sendEvent(&sideBar, &sideekeyDevent);
+    sideBar.keyPressEvent(&sideekeyDevent);
+
+    QShowEvent showevent;
+    sideBar.showEvent(&showevent);
+
+    sideBar.event(&sideekeyDevent);
 
     //ThumbnailWidget
     ThumbnailWidget thumbnailWidget(sheet);
     thumbnailWidget.show();
     thumbnailWidget.handleOpenSuccess();
-    thumbnailWidget.handleOpenSuccess();
+    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
     thumbnailWidget.m_pImageListView->scrollToIndex(0);
     thumbnailWidget.handlePage(-1);
     thumbnailWidget.handlePage(0);
@@ -193,9 +199,26 @@ TEST_F(ut_sidebar, SidebarTest)
     thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();
     thumbnailWidget.m_pImageListView->model()->setData(QModelIndex(), "123", Qt::UserRole);
 
+    QTimer::singleShot(5, [ & ] {
+        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pNoteMenu, &keyevent);
+    });
+    thumbnailWidget.m_pImageListView->showNoteMenu(QPoint(0, 0));
+
+    QTimer::singleShot(5, [ & ] {
+        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pBookMarkMenu, &keyevent);
+    });
+
+    thumbnailWidget.m_pImageListView->showBookMarkMenu(QPoint(0, 0));
+
     thumbnailWidget.m_sheet = nullptr;
     thumbnailWidget.prevPage();
     thumbnailWidget.nextPage();
+
+    SideBarImageListView imageListView(sheet);
+    QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    imageListView.mousePressEvent(&mouserevent);
 
     //CatalogWidget
     CatalogWidget catalogWidget(sheet);
@@ -216,6 +239,9 @@ TEST_F(ut_sidebar, SidebarTest)
 
     QResizeEvent resizeEvent(QSize(100, 400), QSize(100, 600));
     QCoreApplication::sendEvent(&catalogWidget, &resizeEvent);
+
+    QPaintEvent paintevent(QRect(0, 0, 100, 100));
+    catalogWidget.m_pTree->paintEvent(&paintevent);
 
     EXPECT_TRUE(catalogWidget.m_pTree);
     catalogWidget.m_pTree->slotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
@@ -300,6 +326,8 @@ TEST_F(ut_sidebar, SidebarTest)
     noteWidget.pageDown();
     noteWidget.addBtnCheckEnter();
     noteWidget.setTabOrderWidget(tabWidgetlst);
+    noteWidget.m_pImageListView->setCurrentIndex(QModelIndex());
+    noteWidget.m_pImageListView->showMenu();
     noteWidget.m_pImageListView = nullptr;
     noteWidget.showMenu();
 
@@ -335,8 +363,9 @@ TEST_F(ut_sidebar, SidebarTest)
     searchWidget.m_pImageListView->onUpdatePageImage(-1);
     searchWidget.m_pImageListView->onItemClicked(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
     searchWidget.m_pImageListView->onItemClicked(QModelIndex());
-    QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(searchWidget.m_pImageListView, &mouserevent);
+
+    ImageinfoType_e imageInfo;
+    Q_UNUSED(imageInfo);
 
     ImagePageInfo_t imageInfo1(1);
     ImagePageInfo_t imageInfo2(2);

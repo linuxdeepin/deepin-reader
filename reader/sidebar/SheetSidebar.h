@@ -64,75 +64,64 @@ public :
     ~SheetSidebar() override;
 
     /**
-     * @brief setBookMark
-     * 设置书签状态
+     * @brief 设置书签状态
      * @param index
      * @param state
      */
     void setBookMark(int index, int state);
 
     /**
-     * @brief setCurrentPage
-     * 设置当前页
+     * @brief 设置当前页
      * @param page
      */
     void setCurrentPage(int page);
 
     /**
-     * @brief handleOpenSuccess
-     * 文档打开成功
+     * @brief 文档打开成功
      */
     void handleOpenSuccess();
 
     /**
-     * @brief handleFindOperation
-     * 搜索状态
+     * @brief 搜索状态
      */
     void handleFindOperation(int, const QString &strFind = "");
 
     /**
-     * @brief handleFindContentComming
-     * 搜索节点处理
+     * @brief 搜索节点处理
      */
     void handleFindContentComming(const deepin_reader::SearchResult &);
 
     /**
-     * @brief handleFindFinished
-     * 搜索结束
+     * @brief 搜索结束
      * @return
      */
     int  handleFindFinished();
 
     /**
-     * @brief handleRotate
-     * 文档旋转
+     * @brief 文档旋转
      */
     void handleRotate();
 
     /**
-     * @brief changeResetModelData
-     * 重置模型数据
+     * @brief 重置模型数据
      */
     void changeResetModelData();
 
 public slots:
     /**
-     * @brief handleUpdateThumbnail
-     * 刷新指定页码数据
+     * @brief 刷新指定页码数据
      * @param index
      */
     void handleUpdateThumbnail(const int &index);
 
     /**
-     * @brief handleUpdatePartThumbnail
-     * 缓存中无缩略图数据,进行刷新
+     * @brief 缓存中无缩略图数据,进行刷新
      * @param index
      */
     void handleUpdatePartThumbnail(const int &index);
 
     /**
-     * @brief handleAnntationMsg
-     * 注释操作类型处理
+     * @brief 注释操作类型处理
      * @param anno
      */
     void handleAnntationMsg(const int &, int, deepin_reader::Annotation *anno);
@@ -140,8 +129,7 @@ public slots:
     // QObject interface
 public:
     /**
-    * @brief event
-    * 事件处理
+    * @brief 事件处理
     * @param event
     * @return
     */
@@ -149,28 +137,24 @@ public:
 
 protected:
     /**
-     * @brief initWidget
-     * 初始化控件
+     * @brief 初始化控件
      */
     void initWidget();
 
     /**
-     * @brief adaptWindowSize
-     * 窗口大小变化
+     * @brief 窗口大小变化
      */
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 
 protected:
     /**
-     * @brief resizeEvent
-     * 窗口大小变化事件
+     * @brief 窗口大小变化事件
      * @param event
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
     /**
-     * @brief keyPressEvent
-     * 键盘按键事件
+     * @brief 键盘按键事件
      * @param event
      */
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -182,41 +166,35 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /**
-     * @brief showMenu
-     * 菜单显示
+     * @brief 菜单显示
      */
     void showMenu();
 
 private slots:
     /**
-     * @brief onBtnClicked
-     * 缩略图,目录,书签,注释分页按钮切换
+     * @brief 缩略图,目录,书签,注释分页按钮切换
      * @param index
      */
     void onBtnClicked(int index);
 
     /**
-     * @brief onUpdateWidgetTheme
-     * 主题变化刷新
+     * @brief 主题变化刷新
      */
     void onUpdateWidgetTheme();
 
     /**
-     * @brief onHandWidgetDocOpenSuccess
-     * 文档打开成功处理
+     * @brief 文档打开成功处理
      */
     void onHandWidgetDocOpenSuccess();
 
     /**
-     * @brief onHandleOpenSuccessDelay
-     * 文档打开成功延迟处理
+     * @brief 文档打开成功延迟处理
      */
     void onHandleOpenSuccessDelay();
 
 private:
     /**
-     * @brief createBtn
-     * 分页按钮创建
+     * @brief 分页按钮创建
      * @param btnName
      * @param objName
      * @return
@@ -224,39 +202,33 @@ private:
     DToolButton *createBtn(const QString &btnName, const QString &objName);
 
     /**
-     * @brief dealWithPressKey
-     * 键盘按键处理
+     * @brief 键盘按键处理
      * @param sKey
      */
     void dealWithPressKey(const QString &sKey);
 
     /**
-     * @brief onJumpToPrevPage
-     * 上一页跳转
+     * @brief 上一页跳转
      */
     void onJumpToPrevPage();
 
     /**
-     * @brief onJumpToPageUp
-     * 上一翻页
+     * @brief 上一翻页
      */
     void onJumpToPageUp();
 
     /**
-     * @brief onJumpToNextPage
-     * 下一页跳转
+     * @brief 下一页跳转
      */
     void onJumpToNextPage();
 
     /**
-     * @brief onJumpToPageDown
-     * 下一翻页
+     * @brief 下一翻页
      */
     void onJumpToPageDown();
 
     /**
-     * @brief deleteItemByKey
-     * 删除按键处理
+     * @brief 删除按键处理
      */
     void deleteItemByKey();
 

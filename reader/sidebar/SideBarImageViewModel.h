@@ -52,25 +52,13 @@ typedef struct ImagePageInfo_t {
     QString strSearchcount;
     deepin_reader::Annotation *annotation = nullptr;
 
-    ImagePageInfo_t(int index = -1): pageIndex(index)
-    {
+    ImagePageInfo_t(int index = -1);
 
-    }
+    bool operator == (const ImagePageInfo_t &other) const;
 
-    bool operator == (const ImagePageInfo_t &other) const
-    {
-        return (this->pageIndex == other.pageIndex);
-    }
+    bool operator < (const ImagePageInfo_t &other) const;
 
-    bool operator < (const ImagePageInfo_t &other) const
-    {
-        return (this->pageIndex < other.pageIndex);
-    }
-
-    bool operator > (const ImagePageInfo_t &other) const
-    {
-        return (this->pageIndex > other.pageIndex);
-    }
+    bool operator > (const ImagePageInfo_t &other) const;
 } ImagePageInfo_t;
 Q_DECLARE_METATYPE(ImagePageInfo_t);
 
@@ -81,8 +69,6 @@ class DocSheet;
  */
 class SideBarImageViewModel : public QAbstractListModel
 {
-    Q_OBJECT
-
 public:
     explicit  SideBarImageViewModel(QObject *parent = nullptr);
 

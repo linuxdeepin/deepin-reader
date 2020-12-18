@@ -652,8 +652,6 @@ private slots:
 
     void onSideAniFinished();
 
-    void onOpenFileAsyncFinished(bool result, QString error);
-
 public:
     /**
      * @brief haslabel

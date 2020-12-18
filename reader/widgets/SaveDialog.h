@@ -29,7 +29,6 @@
  */
 class SaveDialog : public QObject
 {
-    Q_OBJECT
     Q_DISABLE_COPY(SaveDialog)
 
 public:
