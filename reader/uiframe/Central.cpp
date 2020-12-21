@@ -125,16 +125,23 @@ void Central::addFilesWithDialog()
         return;
     }
 
+    QWidget *topLevelwidget = this->topLevelWidget();
+    topLevelwidget->setProperty("checkLoadPdfStatus", true);
     foreach (QString filePath, filePathList) {
+        if (topLevelwidget->property("windowClosed").toBool())
+            break;
+
         if (!MainWindow::activateSheetIfExist(filePath))
             emit signalAddFile(filePath);
     }
+    topLevelwidget->setProperty("checkLoadPdfStatus", false);
 }
 
 void Central::onAddFile(const QString &filePath)
 {
     docPage()->addFileAsync(filePath);
 }
+
 void Central::addSheet(DocSheet *sheet)
 {
     docPage()->addSheet(sheet);
@@ -250,10 +257,17 @@ void Central::dropEvent(QDropEvent *event)
             docPage()->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
+        QWidget *topLevelwidget = topLevelWidget();
+        topLevelwidget->setProperty("checkLoadPdfStatus", true);
         for (auto url : mimeData->urls()) {
+            if (topLevelwidget->property("windowClosed").toBool())
+                break;
+
             QString filePath = url.toLocalFile();
-            if (!MainWindow::activateSheetIfExist(filePath))
+            if (!MainWindow::activateSheetIfExist(filePath)) {
                 emit signalAddFile(filePath);
+            }
         }
+        topLevelwidget->setProperty("checkLoadPdfStatus", false);
     }
 }

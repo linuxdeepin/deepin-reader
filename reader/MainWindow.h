@@ -40,6 +40,7 @@ class MainWindow : public Dtk::Widget::DMainWindow
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)
     Q_PROPERTY(QList<QWidget *> orderWidgets WRITE updateOrderWidgets)
+    Q_PROPERTY(bool checkLoadPdfStatus WRITE setCheckLoadPdfStatus)
 
 public:
     /**
@@ -105,6 +106,8 @@ public:
      * @param orderlst
      */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
+
+    void setCheckLoadPdfStatus(bool loadPdfStatus);
 
 public:
     /**
@@ -219,6 +222,8 @@ public:
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
     QTimer *m_showMenuTimer = nullptr;
+
+    bool m_checkLoadPdfStatus = false;
 };
 
 #endif // MainWindow_H

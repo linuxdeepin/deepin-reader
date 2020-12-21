@@ -96,19 +96,20 @@ void Application::handleFiles(QStringList filePathList)
         return;
     }
 
+    MainWindow *mainwindow = MainWindow::m_list.count() > 0 ? MainWindow::m_list[0] : MainWindow::createWindow();
+    mainwindow->setProperty("checkLoadPdfStatus", true);
     foreach (QString filePath, filePathList) {
+        if (mainwindow->property("windowClosed").toBool())
+            break;
+
         //如果存在则活跃该窗口
         if (!MainWindow::activateSheetIfExist(filePath)) {
-            //如果不存在则打开
-            if (MainWindow::m_list.count() > 0) {
-                MainWindow::m_list[0]->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-                MainWindow::m_list[0]->addFile(filePath);
-                continue;
-            } else {
-                MainWindow::createWindow()->addFile(filePath);
-            }
+            mainwindow->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+            mainwindow->addFile(filePath);
         }
     }
+
+    mainwindow->setProperty("checkLoadPdfStatus", false);
 }
 
 void Application::handleQuitAction()

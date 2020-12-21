@@ -150,12 +150,21 @@ void MainWindow::addFile(const QString &filePath)
     if (nullptr == m_central)
         return;
 
-    m_central->signalAddFile(filePath);
+    emit m_central->signalAddFile(filePath);
 }
 
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    this->setProperty("windowClosed", false);
+    //如果文档还在加载中，必须得等加载完毕，才能真正关闭窗口，不然要挂
+    if (m_checkLoadPdfStatus) {
+        this->hide();
+        event->ignore();
+        this->setProperty("windowClosed", true);
+        return;
+    }
+
     if (!m_needSave || (m_central && m_central->saveAll())) {
         QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
@@ -466,6 +475,10 @@ void MainWindow::initBase()
 
     this->installEventFilter(this);
 
+    this->setProperty("checkLoadPdfStatus", false);
+
+    this->setProperty("windowClosed", false);
+
     m_menu = new TitleMenu(this);
 
     m_menu->setAccessibleName("Menu_Title");
@@ -512,5 +525,13 @@ void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
 {
     for (int i = 0; i < orderlst.size() - 1; i++) {
         QWidget::setTabOrder(orderlst.at(i), orderlst.at(i + 1));
+    }
+}
+
+void MainWindow::setCheckLoadPdfStatus(bool loadPdfStatus)
+{
+    m_checkLoadPdfStatus = loadPdfStatus;
+    if (this->property("windowClosed").toBool()) {
+        this->close();
     }
 }
