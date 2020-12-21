@@ -37,11 +37,6 @@ namespace deepin_reader {
 class LoadThread: public QThread
 {
 public:
-    ~LoadThread()
-    {
-        this->wait();
-    }
-
     void startown()
     {
         this->start();
@@ -53,30 +48,15 @@ public:
     void run();
 
 public:
-    bool bTryLoadDocument = false;
-
     int loadStatus = 0;
 
     QString filePath;
     QString password;
-
-    deepin_reader::PDFDocument *pdfDocument = nullptr;
 };
 
 void LoadThread::run()
 {
-    if (bTryLoadDocument) {
-        loadStatus = DPdfDoc::tryLoadFile(filePath, password);
-    } else {
-        DPdfDoc *document = new DPdfDoc(filePath, password);
-        loadStatus = document->status();
-        if (loadStatus == DPdfDoc::SUCCESS) {
-            pdfDocument = new deepin_reader::PDFDocument(document);
-        } else {
-            delete document;
-            pdfDocument = nullptr;
-        }
-    }
+    loadStatus = DPdfDoc::tryLoadFile(filePath, password);
 }
 
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
@@ -360,12 +340,6 @@ PDFDocument::~PDFDocument()
 
 int PDFDocument::pageCount() const
 {
-//    FunctionExecThread funThread;
-//    funThread.docMutex = m_docMutex;
-//    funThread.func = std::bind(&DPdfDoc::pageCount, m_document);
-//    funThread.startown();
-//    return funThread.result.toInt();
-
     return m_document->pageCount();
 }
 
@@ -381,12 +355,6 @@ Page *PDFDocument::page(int index) const
 
 QString PDFDocument::label(int index) const
 {
-//    FunctionExecThread funThread;
-//    funThread.docMutex = m_docMutex;
-//    funThread.func = std::bind(&DPdfDoc::label, m_document, index);
-//    funThread.startown();
-//    return funThread.result.toString();
-
     return m_document->label(index);
 }
 
@@ -397,21 +365,11 @@ QStringList PDFDocument::saveFilter() const
 
 bool PDFDocument::save() const
 {
-//    FunctionExecThread funThread;
-//    funThread.docMutex = m_docMutex;
-//    funThread.func = std::bind(&DPdfDoc::save, m_document);
-//    funThread.startown();
-//    return funThread.result.toBool();
     return m_document->save();
 }
 
 bool PDFDocument::saveAs(const QString &filePath) const
 {
-//    FunctionExecThread funThread;
-//    funThread.docMutex = m_docMutex;
-//    funThread.func = std::bind(&DPdfDoc::saveAs, m_document, filePath);
-//    funThread.startown();
-//    return funThread.result.toBool();
     return m_document->saveAs(filePath);
 }
 
@@ -446,12 +404,6 @@ Properties PDFDocument::properties() const
     if (m_fileProperties.size() > 0)
         return m_fileProperties;
 
-//    FunctionExecThread funThread;
-//    funThread.docMutex = m_docMutex;
-//    funThread.func = std::bind(&DPdfDoc::proeries, m_document);
-//    funThread.startown();
-//    m_fileProperties = funThread.result.toMap();
-
     m_fileProperties = m_document->proeries();
 
     return m_fileProperties;
@@ -459,17 +411,18 @@ Properties PDFDocument::properties() const
 
 PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
 {
-    LoadThread loadThread;
-    loadThread.filePath = filePath;
-    loadThread.password = password;
-    loadThread.startown();
-    return loadThread.pdfDocument;
+    DPdfDoc *document = new DPdfDoc(filePath, password);
+    if (document->status() == DPdfDoc::SUCCESS) {
+        return new deepin_reader::PDFDocument(document);
+    } else {
+        delete document;
+    }
+    return nullptr;
 }
 
 int PDFDocument::tryLoadDocument(const QString &filePath, const QString &password)
 {
     LoadThread loadThread;
-    loadThread.bTryLoadDocument = true;
     loadThread.filePath = filePath;
     loadThread.password = password;
     loadThread.startown();
