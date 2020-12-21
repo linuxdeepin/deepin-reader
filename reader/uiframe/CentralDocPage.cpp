@@ -657,17 +657,16 @@ bool CentralDocPage::quitFullScreen(bool force)
 
 void CentralDocPage::onSheetCountChanged(int count)
 {
-    if (count == 1) {
-        if (m_pTabBar->count() <= 0)
-            return;
+    if (count == 0)
+        return;
 
+    if (count == 1) {
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
-        QTimer::singleShot(5, [this]() {
-            m_pDocTabLabel->setText(m_pTabBar->tabText(0));
-        });
+        QTimer::singleShot(10, this, SLOT(onUpdateTabLabelText()));
+        m_pDocTabLabel->setVisible(true);
         m_pTabBar->setVisible(false);
     } else {
-        m_pDocTabLabel->setText("");
+        m_pDocTabLabel->setVisible(false);
         m_pTabBar->setVisible(true);
     }
 
@@ -679,6 +678,12 @@ void CentralDocPage::onSheetCountChanged(int count)
         m_mainLayout->insertWidget(0, m_pTabBar);
         m_pTabBar->setVisible(count > 1);
     }
+}
+
+void CentralDocPage::onUpdateTabLabelText()
+{
+    if (m_pTabBar->count() > 0)
+        m_pDocTabLabel->setText(m_pTabBar->tabText(0));
 }
 
 QWidget *CentralDocPage::getTitleLabel()

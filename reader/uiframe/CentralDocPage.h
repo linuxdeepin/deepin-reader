@@ -352,6 +352,11 @@ public slots:
      */
     void onSheetCountChanged(int count);
 
+    /**
+     * @brief 刷新tabLabel文本
+     */
+    void onUpdateTabLabelText();
+
 private:
     QPointer<DocSheet>  m_magniferSheet = nullptr;
     DLabel              *m_pDocTabLabel = nullptr;

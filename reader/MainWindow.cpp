@@ -245,7 +245,7 @@ void MainWindow::initUI()
     titlebar()->setAutoHideOnFullscreen(false);
 
     Utils::setObjectNoFocusPolicy(this);
-    QTimer::singleShot(10, this, SLOT(onUpdateTitleLabelRect()));
+    QTimer::singleShot(20, this, SLOT(onUpdateTitleLabelRect()));
 }
 
 //  快捷键 实现
