@@ -1085,7 +1085,7 @@ void DocSheet::deadDeleteLater()
 void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
-#if (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 3 && DTK_VERSION_PATCH == 2)
+#if (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 3 && DTK_VERSION_PATCH == 0)
     preview.setDocName(QFileInfo(filePath()).fileName());
     preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
 #endif
