@@ -228,6 +228,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
+    if (event->type() == QEvent::Resize) {
+        onUpdateTitleLabelRect();
+    }
     return DMainWindow::eventFilter(obj, event);
 }
 
@@ -245,7 +248,10 @@ void MainWindow::initUI()
     titlebar()->setAutoHideOnFullscreen(false);
 
     Utils::setObjectNoFocusPolicy(this);
-    QTimer::singleShot(20, this, SLOT(onUpdateTitleLabelRect()));
+    QTimer::singleShot(100, this, SLOT(onUpdateTitleLabelRect()));
+
+    titlebar()->installEventFilter(this);
+    m_central->titleWidget()->installEventFilter(this);
 }
 
 //  快捷键 实现
@@ -452,13 +458,6 @@ void MainWindow::onDelayInit()
     initUI();
 
     initShortCut();
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    DMainWindow::resizeEvent(event);
-
-    onUpdateTitleLabelRect();
 }
 
 void MainWindow::initBase()
