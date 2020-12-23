@@ -20,7 +20,7 @@ TARGET = deepin-reader
 
 TEMPLATE = app
 
-DEFINES += PERF_ON
+#DEFINES += PERF_ON
 
 #Install
 target.path   = /usr/bin

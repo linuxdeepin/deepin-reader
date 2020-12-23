@@ -410,6 +410,14 @@ private:
      * 渲染缩略图
      * @param scaleFactor 缩放系数
      * @param image 缩略图
+     */
+    void handleBigImageFinished(const int &pixmapId, const QPixmap &pixmap);
+
+    /**
+     * @brief handleRenderFinished
+     * 渲染缩略图
+     * @param scaleFactor 缩放系数
+     * @param image 缩略图
      * @param rect 范围
      */
     void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &rect);

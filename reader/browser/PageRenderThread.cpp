@@ -29,6 +29,7 @@
 #include "PageRenderThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
+#include "Application.h"
 
 #include <QTime>
 #include <QDebug>
@@ -67,11 +68,11 @@ bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
-            if (instance->m_tasks[i].type == RenderPageTask::word)
+            if (instance->m_tasks[i].type == RenderPageTask::Word || instance->m_tasks[i].type == RenderPageTask::ImageSlice)
                 continue;
 
             if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].rect.isEmpty()) {
-                instance->m_tasks.remove(i);
+                instance->m_tasks.removeAt(i);
                 exist = true;
                 break;
             }
@@ -96,7 +97,7 @@ void PageRenderThread::appendTask(RenderPageTask task)
 
     instance->m_mutex.lock();
 
-    instance->m_tasks.push_back(task);
+    instance->m_tasks.append(task);
 
     instance->m_mutex.unlock();
 
@@ -110,6 +111,7 @@ void PageRenderThread::appendDelayTask(RenderPageTask task)
         return;
 
     PageRenderThread *instance  = PageRenderThread::instance(task.page->itemIndex());
+
     if (nullptr == instance) {
         return;
     }
@@ -139,7 +141,7 @@ void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, int pix
     task.scaleFactor = scaleFactor;
     task.pixmapId = pixmapId;
     task.rect = renderRect;
-    instance->m_tasks.push(task);
+    instance->m_tasks.append(task);
 
     instance->m_mutex.unlock();
 
@@ -157,32 +159,143 @@ void PageRenderThread::run()
             continue;
         }
 
-        m_mutex.lock();
-        m_curTask = m_tasks.pop();
-        m_mutex.unlock();
-
-        if (!BrowserPage::existInstance(m_curTask.page))
+        if (execNextImageTask())
             continue;
 
-        if (RenderPageTask::Image == m_curTask.type) {
-            QImage image;
+        if (execNextImageSliceTask())
+            continue;
 
-            if (m_curTask.rect.isEmpty())
-                image = m_curTask.page->getImage(m_curTask.scaleFactor);
-            else
-                image = m_curTask.page->getImage(m_curTask.scaleFactor, m_curTask.rect);
+        if (execNextWordTask())
+            continue;
 
-            if (!image.isNull())
-                emit sigImageTaskFinished(m_curTask.page, QPixmap::fromImage(image), m_curTask.pixmapId, m_curTask.rect);
+        RenderPageTask task;
 
-        } else if (RenderPageTask::word == m_curTask.type) {
-            const QList<Word> &words = m_curTask.page->getWords();
-            if (words.count() > 0)
-                emit sigWordTaskFinished(m_curTask.page, words);
+        if (!getNextTask(RenderPageTask::BigImage, task))
+            continue;
+
+        QList<QRect> renderRects;
+
+        int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
+        int hCount = task.rect.height() % 1000 == 0 ? (task.rect.height() / 1000) : (task.rect.height() / 1000 + 1);
+
+        for (int h = 0; h < hCount; ++h) {
+            for (int w = 0; w < wCount; ++w) {
+                bool hIsLast = (h == hCount - 1);
+                bool wIsLast = (w == wCount - 1);
+                QRect rect = QRect(w * 1000, h * 1000, wIsLast ? (task.rect.width() - w * 1000) : 1000, hIsLast ? (task.rect.height() - h * 1000) : 1000);
+                renderRects.append(rect);
+            }
+        };
+
+        QPixmap pixmap = QPixmap(static_cast<int>(task.rect.width() * dApp->devicePixelRatio()),
+                                 static_cast<int>(task.rect.height() * dApp->devicePixelRatio()));
+
+        pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+
+        pixmap.fill(Qt::white);
+
+        QPainter painter(&pixmap);
+
+        for (QRect rect : renderRects) {
+            if (m_quit)
+                break;
+
+            QImage image = task.page->getImage(task.scaleFactor, QRect(rect.x() * dApp->devicePixelRatio(), rect.y() * dApp->devicePixelRatio(),
+                                                                       rect.width() * dApp->devicePixelRatio(), rect.height() * dApp->devicePixelRatio()));
+
+            painter.drawImage(rect, image);
+
+            //优先进行其他图片加载
+            while (execNextImageTask())
+            {}
+
+            //优先进行其他图片部分加载
+            while (execNextImageSliceTask())
+            {}
+
+            //优先进行其他文字加载
+            while (execNextWordTask())
+            {}
         }
 
-        m_curTask = RenderPageTask();
+        if (m_quit)
+            break;
+
+        emit sigImageTaskFinished(task.page, pixmap, task.pixmapId, QRect());
     }
+}
+
+bool PageRenderThread::execNextImageTask()
+{
+    if (m_quit)
+        return false;
+
+    RenderPageTask task;
+
+    if (!getNextTask(RenderPageTask::Image, task))
+        return false;
+
+    QImage image = task.page->getImage(task.scaleFactor * dApp->devicePixelRatio());
+
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
+
+    if (!image.isNull())
+        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, QRect());
+
+    return true;
+}
+
+bool PageRenderThread::execNextImageSliceTask()
+{
+    if (m_quit)
+        return false;
+
+    RenderPageTask task;
+
+    if (!getNextTask(RenderPageTask::ImageSlice, task))
+        return false;
+
+    QImage image = task.page->getImage(task.scaleFactor, task.rect);
+
+    if (!image.isNull())
+        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, task.rect);
+
+    return true;
+}
+
+bool PageRenderThread::execNextWordTask()
+{
+    if (m_quit)
+        return false;
+
+    RenderPageTask task;
+
+    if (!getNextTask(RenderPageTask::Word, task))
+        return false;
+
+    const QList<Word> &words = task.page->getWords();
+
+    emit sigWordTaskFinished(task.page, words);
+
+    return true;
+}
+
+bool PageRenderThread::getNextTask(RenderPageTask::RenderPageTaskType type, RenderPageTask &task)
+{
+    m_mutex.lock();
+
+    for (int i = 0; i < m_tasks.count(); ++i) {
+        if (type == m_tasks[i].type) {
+            task = m_tasks[i];
+            m_tasks.removeAt(i);
+            m_mutex.unlock();
+            return true;
+        }
+    }
+
+    m_mutex.unlock();
+
+    return false;
 }
 
 void PageRenderThread::destroyForever()
@@ -217,7 +330,7 @@ void PageRenderThread::onDelayTaskTimeout()
 {
     m_mutex.lock();
 
-    m_tasks.push_back(m_delayTask);
+    m_tasks.append(m_delayTask);
 
     m_mutex.unlock();
 

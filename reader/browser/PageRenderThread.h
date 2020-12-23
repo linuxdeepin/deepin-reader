@@ -34,8 +34,11 @@ class BrowserPage;
 struct RenderPageTask {
     enum RenderPageTaskType {
         Image = 1,
-        word = 2
+        Word = 2,
+        BigImage = 3,
+        ImageSlice = 4
     };
+
     int type = RenderPageTaskType::Image;
     BrowserPage *page = nullptr;
     double scaleFactor = 1.0;
@@ -96,6 +99,14 @@ private:
 
     void run();
 
+    bool execNextImageTask();
+
+    bool execNextImageSliceTask();
+
+    bool execNextWordTask();
+
+    bool getNextTask(RenderPageTask::RenderPageTaskType type, RenderPageTask &task);
+
 signals:
     void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect rect);
 
@@ -109,9 +120,7 @@ private slots:
     void onDelayTaskTimeout();
 
 private:
-    RenderPageTask m_curTask;
-
-    QStack<RenderPageTask> m_tasks;
+    QList<RenderPageTask> m_tasks;
 
     QMutex m_mutex;
 
@@ -122,7 +131,9 @@ private:
     QTimer *m_delayTimer = nullptr;
 
     static bool quitForever;
+
     static QList<PageRenderThread *> instances;
+
     static PageRenderThread *instance(int itemIndex = -1);
 };
 

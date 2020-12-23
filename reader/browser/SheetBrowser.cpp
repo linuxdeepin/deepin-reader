@@ -859,7 +859,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
-        m_items[i]->clearWords();
+        //m_items[i]->clearWords();     //忘记为什么要删除，暂时注释
 
         if (i % 2 == 1)
             continue;

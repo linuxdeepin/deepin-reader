@@ -201,9 +201,14 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
         m_pixmapScaleFactor = m_scaleFactor;
 
         RenderPageTask task;
+
         task.page = this;
+
         task.scaleFactor = m_scaleFactor;
+
         task.pixmapId = ++m_pixmapId;
+
+        task.rect = QRect(0, 0, static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
 
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
@@ -216,10 +221,13 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             PageRenderThread::clearImageTask(this, m_pixmapId);
         }
 
-        if (!isBigDoc())
+        if (!isBigDoc()) {
+            task.type = RenderPageTask::Image;
             PageRenderThread::appendTask(task); //小文档取消延时
-        else
-            PageRenderThread::appendDelayTask(task);
+        } else {
+            task.type = RenderPageTask::BigImage;
+            PageRenderThread::appendTask(task);
+        }
 
         loadAnnotations();
     }
@@ -241,6 +249,8 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
     QRect validRect = boundingRect().intersected(rect).toRect();
 
     RenderPageTask task;
+
+    task.type = RenderPageTask::ImageSlice;
 
     task.page = this;
 
@@ -275,9 +285,13 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
 
     //扩大加载的视图窗口范围 防止小范围的拖动
     int expand = 200;
+
     viewRenderRect.setX(viewRenderRect.x() - expand < 0 ? 0 : viewRenderRect.x() - expand);
+
     viewRenderRect.setY(viewRenderRect.y() - expand < 0 ? 0 : viewRenderRect.y() - expand);
+
     viewRenderRect.setWidth(viewRenderRect.x() + viewRenderRect.width() + expand * 2 > boundingRect().width() ? viewRenderRect.width() :  viewRenderRect.width() + expand * 2);
+
     viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
     renderRect(scaleFactor, viewRenderRect);
@@ -290,7 +304,7 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
     if (m_pixmapId != pixmapId)
         return;
 
-    if (rect.isEmpty()) {//整体更新
+    if (!rect.isValid()) {//整体更新
         m_pixmapHasRendered = true;
         m_pixmapIsLastest = true;
         m_pixmap = pixmap;
@@ -329,8 +343,8 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    QImage image =  m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
-                                   static_cast<int>(m_page->sizeF().height() * scaleFactor),
+    QImage image =  m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
+                                   static_cast<int>(pageSize().height() * scaleFactor),
                                    slice);
     return image;
 }
@@ -369,8 +383,8 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
     QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0),
                        qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
 
-    return m_page->render(static_cast<int>(m_page->sizeF().width() * scaleFactor),
-                          static_cast<int>(m_page->sizeF().height() * scaleFactor),
+    return m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
+                          static_cast<int>(pageSize().height() * scaleFactor),
                           rect).transformed(transform, Qt::SmoothTransformation);
 }
 
@@ -457,7 +471,7 @@ void BrowserPage::loadWords()
     //优先级慢点,先等下取图片接口
     QTimer::singleShot(10, [this]() {
         RenderPageTask task;
-        task.type = RenderPageTask::word;
+        task.type = RenderPageTask::Word;
         task.page = this;
         PageRenderThread::appendTask(task);
     });
@@ -837,6 +851,24 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
         }
         update();
     }
+}
+
+void BrowserPage::handleBigImageFinished(const int &pixmapId, const QPixmap &pixmap)
+{
+    if (m_pixmapId != pixmapId)
+        return;
+
+    m_pixmapHasRendered = true;
+
+    m_pixmapIsLastest = true;
+
+    m_pixmap = pixmap;
+
+    m_renderPixmap = m_pixmap;
+
+    emit m_parent->sigPartThumbnailUpdated(m_index);
+
+    update();
 }
 
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
