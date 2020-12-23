@@ -133,7 +133,7 @@ void CPDF_ToUnicodeMap::Load(const CPDF_Stream* pStream) {
       cid_set = CIDSET_JAPAN1;
     else if (word == "/Adobe-CNS1-UCS2")
       cid_set = CIDSET_CNS1;
-    else if (word == "/Adobe-GB1-UCS2")
+    else if (word == "/Adobe-GB1-UCS2" || word == "/Adobe-Identity-UCS")
       cid_set = CIDSET_GB1;
   }
   if (cid_set) {
