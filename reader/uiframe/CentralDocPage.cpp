@@ -89,7 +89,6 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
 CentralDocPage::~CentralDocPage()
 {
-
 }
 
 bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
@@ -243,7 +242,6 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         return;
 
     if (sheet->fileChanged()) {
-
         int ret = SaveDialog::showExitDialog();
 
         if (ret < 1)
@@ -265,7 +263,6 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
     sheet->deadDeleteLater();
-
 }
 
 void CentralDocPage::onTabMoveOut(DocSheet *sheet)
@@ -369,7 +366,7 @@ bool CentralDocPage::saveAll()
             changedList.append(sheet);
     }
 
-    if (changedList.size() > 0) {   //需要提示保存
+    if (changedList.size() > 0) { //需要提示保存
         int nRes = SaveDialog::showExitDialog();
 
         if (nRes <= 0) {
@@ -471,7 +468,7 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
-    if (s == Dr::key_f11 && m_slideWidget) {    //幻灯片时 f11设置为不起作    用
+    if (s == Dr::key_f11 && m_slideWidget) { //幻灯片时 f11设置为不起作    用
         return;
     }
 
@@ -496,66 +493,49 @@ void CentralDocPage::handleShortcut(const QString &s)
         openSlide();
     } else if (s == Dr::key_alt_z) {
         openMagnifer();
-    } else if (s == Dr::key_ctrl_p) {
-        if (getCurSheet())
-            QTimer::singleShot(1, getCurSheet(), SLOT(onPopPrintDialog()));
-    } else if (s == Dr::key_alt_1) {
-        if (getCurSheet())
-            getCurSheet()->setMouseShape(Dr::MouseShapeNormal);
-    } else if (s == Dr::key_alt_2) {
-        if (getCurSheet())
-            getCurSheet()->setMouseShape(Dr::MouseShapeHand);
-    } else if (s == Dr::key_ctrl_1) {
-        if (getCurSheet())
-            getCurSheet()->setScaleMode(Dr::FitToPageDefaultMode);
-    } else if (s == Dr::key_ctrl_m) {
-        if (getCurSheet())
-            getCurSheet()->setSidebarVisible(true);
-    } else if (s == Dr::key_ctrl_2) {
-        if (getCurSheet())
-            getCurSheet()->setScaleMode(Dr::FitToPageHeightMode);
-    } else if (s == Dr::key_ctrl_3) {
-        if (getCurSheet())
-            getCurSheet()->setScaleMode(Dr::FitToPageWidthMode);
-    } else if (s == Dr::key_ctrl_r) {
-        if (getCurSheet())
-            getCurSheet()->rotateLeft();
-    } else if (s == Dr::key_ctrl_shift_r) {
-        if (getCurSheet())
-            getCurSheet()->rotateRight();
-    }  else if (s == Dr::key_alt_harger) {
-        if (getCurSheet())
-            getCurSheet()->zoomin();
-    } else if (s == Dr::key_ctrl_equal) {
-        if (getCurSheet())
-            getCurSheet()->zoomin();
-    } else if (s == Dr::key_ctrl_smaller) {
-        if (getCurSheet())
-            getCurSheet()->zoomout();
-    } else if (s == Dr::key_ctrl_d) {
-        if (getCurSheet())
-            getCurSheet()->setBookMark(getCurSheet()->currentIndex(), true);
-    } else if (s == Dr::key_ctrl_f) {
-        if (getCurSheet())
-            getCurSheet()->handleSearch();
-    } else if (s == Dr::key_ctrl_c) {
-        if (getCurSheet())
-            getCurSheet()->copySelectedText();
-    } else if (s == Dr::key_alt_h) {
-        if (getCurSheet())
-            getCurSheet()->highlightSelectedText();
-    } else if (s == Dr::key_alt_a) {
-        if (getCurSheet())
-            getCurSheet()->addSelectedTextHightlightAnnotation();
-    } else if (s == Dr::key_left) {
-        if (getCurSheet())
-            getCurSheet()->jumpToPrevPage();
-    } else if (s == Dr::key_right) {
-        if (getCurSheet())
-            getCurSheet()->jumpToNextPage();
-    } else if (s == Dr::key_f11) {
-        if (getCurSheet())
-            getCurSheet()->openFullScreen();
+    } else { //  以下都是需要 CurSheet 不为空的操作
+        auto sheet = getCurSheet();
+        if (sheet) {
+            if (s == Dr::key_ctrl_p) {
+                QTimer::singleShot(1, sheet, SLOT(onPopPrintDialog()));
+            } else if (s == Dr::key_alt_1) {
+                sheet->setMouseShape(Dr::MouseShapeNormal);
+            } else if (s == Dr::key_alt_2) {
+                sheet->setMouseShape(Dr::MouseShapeHand);
+            } else if (s == Dr::key_ctrl_1) {
+                sheet->setScaleMode(Dr::FitToPageDefaultMode);
+            } else if (s == Dr::key_ctrl_m) {
+                sheet->setSidebarVisible(true);
+            } else if (s == Dr::key_ctrl_2) {
+                sheet->setScaleMode(Dr::FitToPageHeightMode);
+            } else if (s == Dr::key_ctrl_3) {
+                sheet->setScaleMode(Dr::FitToPageWidthMode);
+            } else if (s == Dr::key_ctrl_r) {
+                sheet->rotateLeft();
+            } else if (s == Dr::key_ctrl_shift_r) {
+                sheet->rotateRight();
+            } else if (s == Dr::key_alt_harger || s == Dr::key_ctrl_equal) {
+                sheet->zoomin();
+            } else if (s == Dr::key_ctrl_smaller) {
+                sheet->zoomout();
+            } else if (s == Dr::key_ctrl_d) {
+                sheet->setBookMark(sheet->currentIndex(), true);
+            } else if (s == Dr::key_ctrl_f) {
+                sheet->handleSearch();
+            } else if (s == Dr::key_ctrl_c) {
+                sheet->copySelectedText();
+            } else if (s == Dr::key_alt_h) {
+                sheet->highlightSelectedText();
+            } else if (s == Dr::key_alt_a) {
+                sheet->addSelectedTextHightlightAnnotation();
+            } else if (s == Dr::key_left) {
+                sheet->jumpToPrevPage();
+            } else if (s == Dr::key_right) {
+                sheet->jumpToNextPage();
+            } else if (s == Dr::key_f11) {
+                sheet->openFullScreen();
+            }
+        }
     }
 }
 
@@ -572,7 +552,6 @@ void CentralDocPage::openMagnifer()
 
     if (!m_magniferSheet.isNull())
         m_magniferSheet->openMagnifier();
-
 }
 
 //  取消放大镜
