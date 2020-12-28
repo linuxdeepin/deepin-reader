@@ -677,8 +677,6 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
 
-    printer->setFullPage(true);
-
     QPainter painter(printer);
 
     const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);

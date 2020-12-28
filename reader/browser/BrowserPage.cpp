@@ -61,6 +61,8 @@ BrowserPage::~BrowserPage()
 {
     items.remove(this);
 
+    PageRenderThread::clearImageTask(this);
+
     qDeleteAll(m_annotations);
 
     qDeleteAll(m_annotationItems);
@@ -343,9 +345,9 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
-    QImage image =  m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
-                                   static_cast<int>(pageSize().height() * scaleFactor),
-                                   slice);
+    QImage image = m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
+                                  static_cast<int>(pageSize().height() * scaleFactor),
+                                  slice);
     return image;
 }
 

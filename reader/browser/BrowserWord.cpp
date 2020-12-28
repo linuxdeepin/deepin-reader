@@ -30,11 +30,6 @@ BrowserWord::BrowserWord(QGraphicsItem *parent, deepin_reader::Word word) : QGra
     setZValue(deepin_reader::Z_ORDER_SELECT_TEXT);
 }
 
-BrowserWord::~BrowserWord()
-{
-
-}
-
 void BrowserWord::setScaleFactor(qreal scaleFactor)
 {
     m_scaleFactor = scaleFactor;
@@ -49,6 +44,7 @@ QString BrowserWord::text()
 void BrowserWord::setSelectable(bool enable)
 {
     m_selectable = enable;
+
     setFlag(QGraphicsItem::ItemIsSelectable, enable);
 }
 

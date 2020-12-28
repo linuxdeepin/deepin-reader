@@ -36,8 +36,6 @@ class BrowserWord : public QGraphicsItem
 public:
     explicit BrowserWord(QGraphicsItem *parent, deepin_reader::Word word);
 
-    ~BrowserWord() override;
-
     QRectF boundingRect()const override;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
