@@ -14,7 +14,10 @@ HEADERS += \
     $$PWD/BaseWidget.h \
     $$PWD/TipsWidget.h \
     $$PWD/WordWrapLabel.h \
-    $$PWD/RoundColorWidget.h
+    $$PWD/RoundColorWidget.h \
+    $$PWD/TransparentTextEdit.h \
+    $$PWD/TextEditWidget.h \
+    $$PWD/PagingWidget.h
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
@@ -32,6 +35,9 @@ SOURCES += \
     $$PWD/BaseWidget.cpp \
     $$PWD/TipsWidget.cpp \
     $$PWD/WordWrapLabel.cpp \
-    $$PWD/RoundColorWidget.cpp
+    $$PWD/RoundColorWidget.cpp \
+    $$PWD/TransparentTextEdit.cpp \
+    $$PWD/TextEditWidget.cpp \
+    $$PWD/PagingWidget.cpp
 
 INCLUDEPATH += $$PWD

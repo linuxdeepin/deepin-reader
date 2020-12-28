@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "NoteViewWidget.h"
+#include "TextEditWidget.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
 #include "Model.h"
@@ -37,17 +37,17 @@
 #include <QPointF>
 #include <QMenu>
 
-NoteShadowViewWidget::NoteShadowViewWidget(QWidget *parent)
+TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     : DWidget(nullptr)
 {
     setWindowFlag(Qt::Popup);
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
-    m_noteViewWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
-    this->setObjectName("NoteShadowViewWidget");
+    m_TextEditWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
+    this->setObjectName("TextEditShadowWidget");
 }
 
-void NoteShadowViewWidget::initWidget()
+void TextEditShadowWidget::initWidget()
 {
     setMaximumSize(QSize(278, 344));
 
@@ -55,37 +55,37 @@ void NoteShadowViewWidget::initWidget()
     pHLayoutContant->setMargin(12);
     this->setLayout(pHLayoutContant);
 
-    m_noteViewWidget = new NoteViewWidget(this);
-    pHLayoutContant->addWidget(m_noteViewWidget);
+    m_TextEditWidget = new TextEditWidget(this);
+    pHLayoutContant->addWidget(m_TextEditWidget);
 }
 
-NoteViewWidget *NoteShadowViewWidget::getNoteViewWidget()
+TextEditWidget *TextEditShadowWidget::getTextEditWidget()
 {
-    return m_noteViewWidget;
+    return m_TextEditWidget;
 }
 
-void NoteShadowViewWidget::showWidget(const QPoint &point)
+void TextEditShadowWidget::showWidget(const QPoint &point)
 {
     move(point - QPoint(this->layout()->margin(), this->layout()->margin()));
     raise();
     show();
 }
 
-NoteViewWidget::NoteViewWidget(DWidget *parent)
+TextEditWidget::TextEditWidget(DWidget *parent)
     : BaseWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     initWidget();
 
-    connect(dApp, &Application::sigShowAnnotTextWidget, this, &NoteViewWidget::onShowMenu);
+    connect(dApp, &Application::sigShowAnnotTextWidget, this, &TextEditWidget::onShowMenu);
 }
 
-NoteViewWidget::~NoteViewWidget()
+TextEditWidget::~TextEditWidget()
 {
 
 }
 
-void NoteViewWidget::onShowMenu()
+void TextEditWidget::onShowMenu()
 {
     if (this->isVisible() && m_pTextEdit) {
         QMenu *menu =  m_pTextEdit->createStandardContextMenu();
@@ -97,7 +97,7 @@ void NoteViewWidget::onShowMenu()
     }
 }
 
-void NoteViewWidget::setEditText(const QString &note)
+void TextEditWidget::setEditText(const QString &note)
 {
     m_pTextEdit->clear();
     m_pTextEdit->setPlainText(note);
@@ -108,12 +108,12 @@ void NoteViewWidget::setEditText(const QString &note)
     m_pTextEdit->setTextCursor(cursor);
 }
 
-void NoteViewWidget::setAnnotation(deepin_reader::Annotation *annotation)
+void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 {
     m_annotation = annotation;
 }
 
-void NoteViewWidget::hideEvent(QHideEvent *event)
+void TextEditWidget::hideEvent(QHideEvent *event)
 {
     BaseWidget::hideEvent(event);
     QString sText = m_pTextEdit->toPlainText().trimmed();
@@ -130,7 +130,7 @@ void NoteViewWidget::hideEvent(QHideEvent *event)
     emit sigHide();
 }
 
-void NoteViewWidget::initWidget()
+void TextEditWidget::initWidget()
 {
     setFixedSize(QSize(254, 320));
     setMinimumHeight(310);
@@ -152,10 +152,10 @@ void NoteViewWidget::initWidget()
     setGraphicsEffect(shadowEffect);
 
     onBlurWindowChanged();
-    QObject::connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &NoteViewWidget::onBlurWindowChanged);
+    QObject::connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &TextEditWidget::onBlurWindowChanged);
 }
 
-void NoteViewWidget::onBlurWindowChanged()
+void TextEditWidget::onBlurWindowChanged()
 {
     if (DWindowManagerHelper::instance()->hasComposite()) {
         this->graphicsEffect()->setEnabled(true);
@@ -167,7 +167,7 @@ void NoteViewWidget::onBlurWindowChanged()
     }
 }
 
-void NoteViewWidget::paintEvent(QPaintEvent *event)
+void TextEditWidget::paintEvent(QPaintEvent *event)
 {
     BaseWidget::paintEvent(event);
     QPainter painter(this);

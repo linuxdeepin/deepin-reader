@@ -23,7 +23,7 @@
 #include "PagingWidget.h"
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
-#include "thumbnail/ThumbnailDelegate.h"
+#include "ThumbnailDelegate.h"
 
 #include <DHorizontalLine>
 

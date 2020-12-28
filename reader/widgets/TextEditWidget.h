@@ -16,8 +16,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NOTEVIEWWIDGET_H
-#define NOTEVIEWWIDGET_H
+#ifndef TextEditWidget_H
+#define TextEditWidget_H
 
 #include "BaseWidget.h"
 
@@ -30,18 +30,18 @@ class SheetBrowser;
 class TransparentTextEdit;
 
 /**
- * @brief The NoteViewWidget class
+ * @brief The TextEditWidget class
  * 注释编辑框
  */
-class NoteViewWidget : public BaseWidget
+class TextEditWidget : public BaseWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(NoteViewWidget)
-    friend class NoteShadowViewWidget;
+    Q_DISABLE_COPY(TextEditWidget)
+    friend class TextEditShadowWidget;
 
 public:
-    explicit NoteViewWidget(DWidget *parent = nullptr);
-    ~NoteViewWidget() override;
+    explicit TextEditWidget(DWidget *parent = nullptr);
+    ~TextEditWidget() override;
 
 signals:
     /**
@@ -127,12 +127,12 @@ private:
     SheetBrowser *m_brower;
 };
 
-class NoteShadowViewWidget : public DWidget
+class TextEditShadowWidget : public DWidget
 {
 public:
-    explicit NoteShadowViewWidget(QWidget *parent);
+    explicit TextEditShadowWidget(QWidget *parent);
 
-    NoteViewWidget *getNoteViewWidget();
+    TextEditWidget *getTextEditWidget();
 
     /**
      * @brief showWidget
@@ -148,7 +148,7 @@ private:
     void initWidget();
 
 private:
-    NoteViewWidget *m_noteViewWidget = nullptr;
+    TextEditWidget *m_TextEditWidget = nullptr;
 };
 
-#endif  // NOTEVIEWWIDGET_H
+#endif  // TextEditWidget_H

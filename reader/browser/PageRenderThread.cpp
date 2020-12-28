@@ -200,6 +200,8 @@ void PageRenderThread::run()
             if (m_quit)
                 break;
 
+            //外部删除了此处暂时不知道，导致崩溃
+
             QImage image = task.page->getImage(task.scaleFactor, QRect(rect.x() * dApp->devicePixelRatio(), rect.y() * dApp->devicePixelRatio(),
                                                                        rect.width() * dApp->devicePixelRatio(), rect.height() * dApp->devicePixelRatio()));
 

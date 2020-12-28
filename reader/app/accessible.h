@@ -14,11 +14,11 @@
 #include "BrowserMagniFier.h"
 #include "SheetBrowser.h"
 #include "SheetSidebar.h"
-#include "thumbnail/ThumbnailWidget.h"
-#include "catalog/CatalogWidget.h"
-#include "bookmark/BookMarkWidget.h"
-#include "note/NotesWidget.h"
-#include "search/SearchResWidget.h"
+#include "ThumbnailWidget.h"
+#include "CatalogWidget.h"
+#include "BookMarkWidget.h"
+#include "NotesWidget.h"
+#include "SearchResWidget.h"
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>

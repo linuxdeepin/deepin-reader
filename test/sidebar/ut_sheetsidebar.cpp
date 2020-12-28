@@ -32,16 +32,16 @@
 #include "Application.h"
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
-#include "sidebar/note/NotesWidget.h"
-#include "sidebar/search/SearchResWidget.h"
-#include "sidebar/bookmark/BookMarkWidget.h"
-#include "sidebar/note/NoteViewWidget.h"
-#include "sidebar/thumbnail/ThumbnailWidget.h"
-#include "sidebar/catalog/CatalogWidget.h"
-#include "sidebar/catalog/CatalogTreeView.h"
-#include "sidebar/note/TransparentTextEdit.h"
-#include "sidebar/thumbnail/PagingWidget.h"
-#include "sidebar/SideBarImageViewModel.h"
+#include "NotesWidget.h"
+#include "SearchResWidget.h"
+#include "BookMarkWidget.h"
+#include "TextEditWidget.h"
+#include "TransparentTextEdit.h"
+#include "ThumbnailWidget.h"
+#include "CatalogWidget.h"
+#include "CatalogTreeView.h"
+#include "PagingWidget.h"
+#include "SideBarImageViewModel.h"
 
 #undef private
 #undef protected
@@ -401,23 +401,23 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
     exec();
 }
 
-TEST_F(ut_sidebar, NoteViewWidgetTest)
+TEST_F(ut_sidebar, TextEditWidgetTest)
 {
-    NoteShadowViewWidget shadowView(nullptr);
+    TextEditShadowWidget shadowView(nullptr);
     shadowView.showWidget(QPoint(0, 0));
-    shadowView.getNoteViewWidget()->setEditText("const QString & note");
-    shadowView.getNoteViewWidget()->setEditText("");
-    shadowView.getNoteViewWidget()->setAnnotation(nullptr);
-    shadowView.getNoteViewWidget()->onBlurWindowChanged();
-    shadowView.getNoteViewWidget()->repaint();
-    shadowView.getNoteViewWidget()->show();
+    shadowView.getTextEditWidget()->setEditText("const QString & note");
+    shadowView.getTextEditWidget()->setEditText("");
+    shadowView.getTextEditWidget()->setAnnotation(nullptr);
+    shadowView.getTextEditWidget()->onBlurWindowChanged();
+    shadowView.getTextEditWidget()->repaint();
+    shadowView.getTextEditWidget()->show();
 
     QTimer::singleShot(1, [&shadowView]() {
         QHideEvent hideEvent;
         QCoreApplication::sendEvent(&shadowView, &hideEvent);
 
-        shadowView.getNoteViewWidget()->hide();
-        shadowView.getNoteViewWidget()->onShowMenu();
+        shadowView.getTextEditWidget()->hide();
+        shadowView.getTextEditWidget()->onShowMenu();
     });
 
     exec();

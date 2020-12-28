@@ -52,7 +52,7 @@ class BrowserPage;
 class DocSheet;
 class TipsWidget;
 class BrowserAnnotation;
-class NoteShadowViewWidget;
+class TextEditShadowWidget;
 class RenderViewportThread;
 class BrowserMagniFier;
 class FindWidget;
@@ -726,7 +726,7 @@ private:
 
     BrowserMagniFier *m_magnifierLabel = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
-    NoteShadowViewWidget *m_noteEditWidget = nullptr;
+    TextEditShadowWidget *m_noteEditWidget = nullptr;
     FindWidget *m_pFindWidget = nullptr;
     PageSearchThread *m_searchTask = nullptr;
     BrowserPage *m_lastFindPage = nullptr;

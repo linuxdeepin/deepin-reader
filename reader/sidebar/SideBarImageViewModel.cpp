@@ -19,7 +19,7 @@
 */
 #include "SideBarImageViewModel.h"
 #include "DocSheet.h"
-#include "threadmanager/ReaderImageThreadPoolManager.h"
+#include "ReaderImageThreadPoolManager.h"
 
 ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
 {

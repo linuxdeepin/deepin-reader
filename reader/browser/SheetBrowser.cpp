@@ -36,7 +36,7 @@
 #include "BrowserMenu.h"
 #include "FileAttrWidget.h"
 #include "Application.h"
-#include "note/NoteViewWidget.h"
+#include "TextEditWidget.h"
 #include "BrowserMagniFier.h"
 #include "FindWidget.h"
 #include "MsgHeader.h"
@@ -327,16 +327,16 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
 
     m_tipsWidget->hide();
     if (m_noteEditWidget == nullptr) {
-        m_noteEditWidget = new NoteShadowViewWidget(this);
-        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
-        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigRemoveAnnotation, this, &SheetBrowser::onRemoveAnnotation);
-        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigUpdateAnnotation, this, &SheetBrowser::onUpdateAnnotation);
-        connect(m_noteEditWidget->getNoteViewWidget(), &NoteViewWidget::sigHide, this, [ = ] {
+        m_noteEditWidget = new TextEditShadowWidget(this);
+        connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
+        connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigRemoveAnnotation, this, &SheetBrowser::onRemoveAnnotation);
+        connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigUpdateAnnotation, this, &SheetBrowser::onUpdateAnnotation);
+        connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigHide, this, [ = ] {
             setIconAnnotSelect(false);
         });
     }
-    m_noteEditWidget->getNoteViewWidget()->setEditText(annotation->contents());
-    m_noteEditWidget->getNoteViewWidget()->setAnnotation(annotation);
+    m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
+    m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
     m_noteEditWidget->showWidget(point);
 }
 

@@ -1,39 +1,33 @@
 HEADERS += \
+    $$PWD/BookMarkDelegate.h \
+    $$PWD/BookMarkWidget.h \
+    $$PWD/CatalogTreeView.h \
+    $$PWD/CatalogWidget.h \
+    $$PWD/NotesDelegate.h \
+    $$PWD/NotesWidget.h \
+    $$PWD/ReaderImageThreadPoolManager.h \
+    $$PWD/SearchResDelegate.h \
+    $$PWD/SearchResWidget.h \
+    $$PWD/SheetSidebar.h \
     $$PWD/SideBarImageListview.h \
     $$PWD/SideBarImageViewModel.h \
-    $$PWD/SheetSidebar.h \
-    $$PWD/bookmark/BookMarkDelegate.h \
-    $$PWD/bookmark/BookMarkWidget.h \
-    $$PWD/catalog/CatalogTreeView.h \
-    $$PWD/catalog/CatalogWidget.h \
-    $$PWD/note/NoteViewWidget.h \
-    $$PWD/note/NotesDelegate.h \
-    $$PWD/note/NotesWidget.h \
-    $$PWD/note/TransparentTextEdit.h \
-    $$PWD/search/SearchResDelegate.h \
-    $$PWD/search/SearchResWidget.h \
-    $$PWD/threadmanager/ReaderImageThreadPoolManager.h \
-    $$PWD/thumbnail/PagingWidget.h \
-    $$PWD/thumbnail/ThumbnailDelegate.h \
-    $$PWD/thumbnail/ThumbnailWidget.h
+    $$PWD/ThumbnailDelegate.h \
+    $$PWD/ThumbnailWidget.h
 
 SOURCES += \
+    $$PWD/BookMarkDelegate.cpp \
+    $$PWD/BookMarkWidget.cpp \
+    $$PWD/CatalogTreeView.cpp \
+    $$PWD/CatalogWidget.cpp \
+    $$PWD/NotesDelegate.cpp \
+    $$PWD/NotesWidget.cpp \
+    $$PWD/ReaderImageThreadPoolManager.cpp \
+    $$PWD/SearchResDelegate.cpp \
+    $$PWD/SearchResWidget.cpp \
+    $$PWD/SheetSidebar.cpp \
     $$PWD/SideBarImageListview.cpp \
     $$PWD/SideBarImageViewModel.cpp \
-    $$PWD/SheetSidebar.cpp \
-    $$PWD/bookmark/BookMarkDelegate.cpp \
-    $$PWD/bookmark/BookMarkWidget.cpp \
-    $$PWD/catalog/CatalogTreeView.cpp \
-    $$PWD/catalog/CatalogWidget.cpp \
-    $$PWD/note/NoteViewWidget.cpp \
-    $$PWD/note/NotesDelegate.cpp \
-    $$PWD/note/NotesWidget.cpp \
-    $$PWD/note/TransparentTextEdit.cpp \
-    $$PWD/search/SearchResDelegate.cpp \
-    $$PWD/search/SearchResWidget.cpp \
-    $$PWD/threadmanager/ReaderImageThreadPoolManager.cpp \
-    $$PWD/thumbnail/PagingWidget.cpp \
-    $$PWD/thumbnail/ThumbnailDelegate.cpp \
-    $$PWD/thumbnail/ThumbnailWidget.cpp
+    $$PWD/ThumbnailDelegate.cpp \
+    $$PWD/ThumbnailWidget.cpp
 
 INCLUDEPATH += $$PWD
