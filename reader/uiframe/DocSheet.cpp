@@ -87,8 +87,9 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigPartThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
     connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdateThumbnail(int)));
 
-    this->addWidget(m_sidebar);
-    this->addWidget(m_browser);
+    resetChildParent();
+    this->insertWidget(0, m_browser);
+    this->insertWidget(0, m_sidebar);
 }
 
 DocSheet::~DocSheet()
@@ -730,8 +731,8 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
         if (isVisible) {
             this->insertWidget(0, m_sidebar);
         } else if (isFullScreen()) {
-            m_sidebar->setParent(nullptr);
-            m_sidebar->setParent(this);
+            resetChildParent();
+            this->insertWidget(0, m_browser);
 
             m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
@@ -749,8 +750,8 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             return;
 
         if (isFullScreen() && this->indexOf(m_sidebar) >= 0) {
-            m_sidebar->setParent(nullptr);
-            m_sidebar->setParent(this);
+            resetChildParent();
+            this->insertWidget(0, m_browser);
 
             m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
@@ -797,8 +798,9 @@ void DocSheet::openFullScreen()
         return;
 
     setSidebarVisible(false);
-    m_sidebar->setParent(nullptr);
-    m_sidebar->setParent(this);
+
+    resetChildParent();
+    this->insertWidget(0, m_browser);
 
     m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
     m_sidebar->move(-m_sidebar->width(), 0);
@@ -1103,3 +1105,11 @@ QSizeF DocSheet::pageSizeByIndex(int index)
     return m_browser->pageSizeByIndex(index);
 }
 
+void DocSheet::resetChildParent()
+{
+    m_sidebar->setParent(nullptr);
+    m_sidebar->setParent(this);
+
+    m_browser->setParent(nullptr);
+    m_browser->setParent(this);
+}

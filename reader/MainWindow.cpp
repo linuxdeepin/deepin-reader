@@ -252,6 +252,10 @@ void MainWindow::initUI()
 
     titlebar()->installEventFilter(this);
     m_central->titleWidget()->installEventFilter(this);
+    DIconButton *optBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    if (optBtn && optBtn->parentWidget()) {
+        optBtn->parentWidget()->installEventFilter(this);
+    }
 }
 
 //  快捷键 实现

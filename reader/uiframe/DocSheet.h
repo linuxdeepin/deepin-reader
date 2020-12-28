@@ -621,6 +621,11 @@ private:
      */
     SheetOperation &operationRef();
 
+    /**
+     * @brief 重置sidebar,browser的parent
+     */
+    void resetChildParent();
+
 public slots:
     /**
      * @brief showTips
