@@ -200,10 +200,14 @@ void PageRenderThread::run()
             if (m_quit)
                 break;
 
-            //外部删除了此处暂时不知道，导致崩溃
+            //外部删除了此处不判断会导致崩溃
+            if (!BrowserPage::existInstance(task.page))
+                break;
 
-            QImage image = task.page->getImage(task.scaleFactor, QRect(rect.x() * dApp->devicePixelRatio(), rect.y() * dApp->devicePixelRatio(),
-                                                                       rect.width() * dApp->devicePixelRatio(), rect.height() * dApp->devicePixelRatio()));
+            QImage image = task.page->getImage(task.scaleFactor, QRect(static_cast<int>(rect.x() * dApp->devicePixelRatio()),
+                                                                       static_cast<int>(rect.y() * dApp->devicePixelRatio()),
+                                                                       static_cast<int>(rect.width() * dApp->devicePixelRatio()),
+                                                                       static_cast<int>(rect.height() * dApp->devicePixelRatio())));
 
             painter.drawImage(rect, image);
 

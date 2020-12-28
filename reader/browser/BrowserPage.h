@@ -477,25 +477,27 @@ protected:
     bool sceneEvent(QEvent *event) override;
 
 private:
-    static QSet<BrowserPage *> items;                   //用于记录多少个自己
+    static QMutex mutex;
+
+    static QSet<BrowserPage *> items;                       //用于记录多少个自己
 
     SheetBrowser *m_parent = nullptr;
 
-    deepin_reader::Page *m_page = nullptr;              //主要操作更新
+    deepin_reader::Page *m_page = nullptr;                  //主要操作更新
 
     deepin_reader::AnnotationList m_annotations;
 
-    int     m_index = 0;                                //当前索引
-    double  m_scaleFactor = -1;                         //当前被设置的缩放
-    Dr::Rotation m_rotation = Dr::NumberOfRotations;    //当前被设置的旋转
+    int     m_index = 0;                                    //当前索引
+    double  m_scaleFactor = -1;                             //当前被设置的缩放
+    Dr::Rotation m_rotation = Dr::NumberOfRotations;        //当前被设置的旋转
 
-    QPixmap m_pixmap;                       //当前图片
-    QPixmap m_renderPixmap;                 //当前被绘制图片
-    int     m_pixmapId          = 0;        //当前图片的标识
-    bool    m_pixmapIsLastest   = false;    //当前图示是否最新
-    bool    m_pixmapHasRendered = false;    //当前图片是否已经加载
-    double  m_pixmapScaleFactor = -1;       //当前图片的缩放
-    bool    m_viewportRendered  = false;    //图片初始化加载视图窗口
+    QPixmap m_pixmap;                                       //当前图片
+    QPixmap m_renderPixmap;                                 //当前被绘制图片
+    int     m_pixmapId          = 0;                        //当前图片的标识
+    bool    m_pixmapIsLastest   = false;                    //当前图示是否最新
+    bool    m_pixmapHasRendered = false;                    //当前图片是否已经加载
+    double  m_pixmapScaleFactor = -1;                       //当前图片的缩放
+    bool    m_viewportRendered  = false;                    //图片初始化加载视图窗口
 
     QList<BrowserWord *> m_words;                           //当前文字
     double m_wordScaleFactor = -1;                          //当前文字的缩放
@@ -511,7 +513,7 @@ private:
     bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
     QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 
-    QVector<QRectF> m_searchLightrectLst;                     //搜索结果
+    QVector<QRectF> m_searchLightrectLst;                   //搜索结果
     QRectF m_searchSelectLighRectf;
 
     bool m_bookmark = false;                                // 当前是否有书签

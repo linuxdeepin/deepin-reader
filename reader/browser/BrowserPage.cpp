@@ -49,17 +49,23 @@
 #include <QMutexLocker>
 
 const int ICON_SIZE = 23;
+QMutex BrowserPage::mutex;
 QSet<BrowserPage *> BrowserPage::items;
-BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)
+BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(),  m_parent(parent), m_page(page)
 {
+    mutex.lock();
     items.insert(this);
+    mutex.unlock();
+
     setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsPanel);
 }
 
 BrowserPage::~BrowserPage()
 {
+    mutex.lock();
     items.remove(this);
+    mutex.unlock();
 
     PageRenderThread::clearImageTask(this);
 
@@ -406,6 +412,7 @@ QList<Word> BrowserPage::getWords()
 
 bool BrowserPage::existInstance(BrowserPage *item)
 {
+    QMutexLocker locker(&mutex);
     return items.contains(item);
 }
 
