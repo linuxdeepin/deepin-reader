@@ -495,7 +495,8 @@ void MainWindow::onUpdateTitleLabelRect()
         return;
 
     QWidget *titleLabel = m_central->docPage()->getTitleLabel();
-    titleLabel->setFixedWidth(this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60);
+    int titleWidth = this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60;
+    if (titleWidth > 0) titleLabel->setFixedWidth(titleWidth);
 }
 
 void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
