@@ -74,7 +74,7 @@ public:
      * @param sheet
      * @return
      */
-    bool hasSheet(DocSheet *sheet);
+    bool hasSheet(DocSheet *sheet) ;
 
     /**
      * @brief activateSheet

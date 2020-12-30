@@ -635,11 +635,19 @@ public slots:
      */
     void showTips(const QString &tips, int iconIndex = 0);
 
+#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
     /**
-     * @brief 打印
+     * @brief 打印 1040
+     * @param printer 打印机设备
+     */
+    void onPrintRequested(Dtk::Widget::DPrinter *printer, const QVector<int> &pageRange);
+#else
+    /**
+     * @brief 打印 1030
      * @param printer 打印机设备
      */
     void onPrintRequested(Dtk::Widget::DPrinter *printer);
+#endif
 
 private slots:
     /**

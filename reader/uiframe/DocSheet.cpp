@@ -674,6 +674,32 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(tips, iconIndex);
 }
 
+#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
+void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
+{
+    printer->setDocName(QFileInfo(filePath()).fileName());
+
+    QPainter painter(printer);
+
+    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);
+
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+
+    for (int i = 0; i < pageRange.count(); ++i) {
+        if (pageRange[i] > pagesNumber())
+            continue;
+
+        QImage image;
+        if (getImage(pageRange[i] - 1, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+            painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
+        }
+
+        if (i != pageRange.count() - 1)
+            printer->newPage();
+    }
+}
+#else
+
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
@@ -703,6 +729,8 @@ void DocSheet::onPrintRequested(DPrinter *printer)
             printer->newPage();
     }
 }
+
+#endif
 
 void DocSheet::openSlide()
 {
@@ -1085,11 +1113,14 @@ void DocSheet::deadDeleteLater()
 void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
-#if (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 3 && DTK_VERSION_PATCH == 0)
+#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
+    preview.setAsynPreview(pagesNumber());
     preview.setDocName(QFileInfo(filePath()).fileName());
     preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
-#endif
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, &DocSheet::onPrintRequested1);
+#else
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
+#endif
     preview.exec();
 }
 
