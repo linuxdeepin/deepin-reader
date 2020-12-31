@@ -142,7 +142,7 @@ void PagingWidget::setIndex(int index)
         return;
 
     m_curIndex = index;
-    int totalPage = m_sheet->pagesNumber();
+    int totalPage = m_sheet->pageCount();
     int inputData = index;
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
@@ -166,7 +166,7 @@ void PagingWidget::handleOpenSuccess()
     };
     m_tmFuncThread->start();
 
-    int totalPage = m_sheet->pagesNumber();
+    int totalPage = m_sheet->pageCount();
     m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);
@@ -191,7 +191,7 @@ void PagingWidget::normalChangePage()
 {
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
-    if (iPage <= 0 || iPage > m_sheet->pagesNumber()) {
+    if (iPage <= 0 || iPage > m_sheet->pageCount()) {
         m_sheet->showTips(tr("Invalid page number"), 1);
     } else {
         m_sheet->jumpToIndex(iPage - 1);
@@ -200,7 +200,7 @@ void PagingWidget::normalChangePage()
 
 void PagingWidget::pageNumberJump()
 {
-    int nPageSum = m_sheet->pagesNumber();
+    int nPageSum = m_sheet->pageCount();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = m_sheet->getIndexByPageLable(sText);
 

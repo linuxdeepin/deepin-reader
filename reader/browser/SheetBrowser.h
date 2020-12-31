@@ -71,7 +71,7 @@ public:
 
     explicit SheetBrowser(DocSheet *parent = nullptr);
 
-    virtual ~SheetBrowser() override;
+    ~SheetBrowser() override;
 
     /**
      * @brief 获取封面缩略图

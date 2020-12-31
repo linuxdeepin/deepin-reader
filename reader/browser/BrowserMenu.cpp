@@ -105,7 +105,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
 
         QAction *pNextPage = createAction(tr("Next page"), "NextPage");
         QAction *pEndPage = createAction(tr("Last page"), "LastPage");
-        if (sheet->currentIndex() == sheet->pagesNumber() - 1) {
+        if (sheet->currentIndex() == sheet->pageCount() - 1) {
             pNextPage->setDisabled(true);
             pEndPage->setDisabled(true);
         }
@@ -153,7 +153,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
 
         QAction *pNextPage = createAction(tr("Next page"), "NextPage");
         QAction *pEndPage = createAction(tr("Last page"), "LastPage");
-        if (sheet->currentIndex() == sheet->pagesNumber() - 1) {
+        if (sheet->currentIndex() == sheet->pageCount() - 1) {
             pNextPage->setDisabled(true);
             pEndPage->setDisabled(true);
         }

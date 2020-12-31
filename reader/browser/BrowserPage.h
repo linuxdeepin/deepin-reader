@@ -52,7 +52,9 @@ class BrowserPage : public QGraphicsItem
 public:
     explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
 
-    virtual ~BrowserPage() override;
+    ~BrowserPage() override;
+
+    QMutex &pageMutex();
 
     /**
      * @brief 文档原始大小
@@ -480,6 +482,8 @@ private:
     static QMutex mutex;
 
     static QSet<BrowserPage *> items;                       //用于记录多少个自己
+
+    QMutex m_mutex;
 
     SheetBrowser *m_parent = nullptr;
 

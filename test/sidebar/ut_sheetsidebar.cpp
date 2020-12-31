@@ -193,7 +193,7 @@ TEST_F(ut_sidebar, SidebarTest)
     thumbnailWidget.m_pPageWidget->SlotJumpPageLineEditReturnPressed();
     thumbnailWidget.m_pPageWidget->handleOpenSuccess();
     thumbnailWidget.m_pPageWidget->setIndex(0);
-    thumbnailWidget.m_pPageWidget->setBtnState(0, sheet->pagesNumber());
+    thumbnailWidget.m_pPageWidget->setBtnState(0, sheet->pageCount());
 
     thumbnailWidget.m_pImageListView->onSetThumbnailListSlideGesture();
     thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();

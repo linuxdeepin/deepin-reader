@@ -176,6 +176,7 @@ void PageRenderThread::run()
         QList<QRect> renderRects;
 
         int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
+
         int hCount = task.rect.height() % 1000 == 0 ? (task.rect.height() / 1000) : (task.rect.height() / 1000 + 1);
 
         for (int h = 0; h < hCount; ++h) {
@@ -204,10 +205,15 @@ void PageRenderThread::run()
             if (!BrowserPage::existInstance(task.page))
                 break;
 
+            //判断page存在之后 使用page之前，也就是此处，如果主线程先一步进入page被删流程，【理论上会导致崩溃】，目前概率非常低，未发现
+
+            task.page->pageMutex().lock();  //防止正在getImage时 page被删除导致崩溃
+
             QImage image = task.page->getImage(task.scaleFactor, QRect(static_cast<int>(rect.x() * dApp->devicePixelRatio()),
                                                                        static_cast<int>(rect.y() * dApp->devicePixelRatio()),
                                                                        static_cast<int>(rect.width() * dApp->devicePixelRatio()),
                                                                        static_cast<int>(rect.height() * dApp->devicePixelRatio())));
+            task.page->pageMutex().unlock();
 
             painter.drawImage(rect, image);
 

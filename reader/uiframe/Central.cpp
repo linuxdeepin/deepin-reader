@@ -249,16 +249,20 @@ void Central::dropEvent(QDropEvent *event)
     if (mimeData->hasFormat("deepin_reader/tabbar")) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
+
         activateWindow();
 
         QString id = mimeData->data("deepin_reader/uuid");
+
         DocSheet *sheet = DocSheet::getSheet(id);
+
         if (nullptr != sheet)
             docPage()->onCentralMoveIn(sheet);
 
     } else if (mimeData->hasUrls()) {
         QWidget *topLevelwidget = topLevelWidget();
         topLevelwidget->setProperty("checkLoadPdfStatus", true);
+
         for (auto url : mimeData->urls()) {
             if (topLevelwidget->property("windowClosed").toBool())
                 break;
@@ -268,6 +272,7 @@ void Central::dropEvent(QDropEvent *event)
                 emit signalAddFile(filePath);
             }
         }
+
         topLevelwidget->setProperty("checkLoadPdfStatus", false);
     }
 }

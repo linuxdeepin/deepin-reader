@@ -95,7 +95,7 @@ void SideBarImageListView::handleOpenSuccess()
         }
 
         QList<ImagePageInfo_t> pageSrclst;
-        int pagesNum = m_docSheet->pagesNumber();
+        int pagesNum = m_docSheet->pageCount();
         for (int index = 0; index < pagesNum; index++)
             pageSrclst << index;
         m_imageModel->initModelLst(pageSrclst);

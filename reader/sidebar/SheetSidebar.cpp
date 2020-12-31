@@ -276,7 +276,7 @@ void SheetSidebar::handleUpdateThumbnail(const int &index)
 
 void SheetSidebar::handleUpdatePartThumbnail(const int &index)
 {
-    if (index < 0 || index >= m_sheet->pagesNumber())
+    if (index < 0 || index >= m_sheet->pageCount())
         return;
 
     BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());

@@ -269,9 +269,9 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     const QString &uuid = DocSheet::getUuid(sheet).toString();
     EXPECT_EQ(DocSheet::getSheet(uuid), sheet);
-    EXPECT_TRUE(sheet->pagesNumber() > 0);
-    EXPECT_TRUE(sheet->currentPage() > 0 && sheet->currentPage() <= sheet->pagesNumber());
-    EXPECT_TRUE(sheet->currentIndex() >= 0 && sheet->currentIndex() < sheet->pagesNumber());
+    EXPECT_TRUE(sheet->pageCount() > 0);
+    EXPECT_TRUE(sheet->currentPage() > 0 && sheet->currentPage() <= sheet->pageCount());
+    EXPECT_TRUE(sheet->currentIndex() >= 0 && sheet->currentIndex() < sheet->pageCount());
 
     sheet->jumpToIndex(0);
     EXPECT_TRUE(sheet->currentIndex() == 0);
@@ -286,8 +286,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(sheet->currentPage() == 1);
 
     sheet->jumpToLastPage();
-    EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 1);
-    EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber());
+    EXPECT_TRUE(sheet->currentIndex() == sheet->pageCount() - 1);
+    EXPECT_TRUE(sheet->currentPage() == sheet->pageCount());
 
     sheet->jumpToIndex(0);
     sheet->jumpToNextPage();
@@ -301,8 +301,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     sheet->jumpToLastPage();
     sheet->jumpToNextPage();
-    EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 1);
-    EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber());
+    EXPECT_TRUE(sheet->currentIndex() == sheet->pageCount() - 1);
+    EXPECT_TRUE(sheet->currentPage() == sheet->pageCount());
 
     sheet->jumpToPrevPage();
 
@@ -310,11 +310,11 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     printer.setOutputFormat(QPrinter::PdfFormat);
     sheet->onPrintRequested(&printer);
     if (sheet->operation().layoutMode == Dr::SinglePageMode) {
-        EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 2);
-        EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 1);
+        EXPECT_TRUE(sheet->currentIndex() == sheet->pageCount() - 2);
+        EXPECT_TRUE(sheet->currentPage() == sheet->pageCount() - 1);
     } else {
-        EXPECT_TRUE(sheet->currentIndex() == sheet->pagesNumber() - 3);
-        EXPECT_TRUE(sheet->currentPage() == sheet->pagesNumber() - 2);
+        EXPECT_TRUE(sheet->currentIndex() == sheet->pageCount() - 3);
+        EXPECT_TRUE(sheet->currentPage() == sheet->pageCount() - 2);
     }
 
     sheet->jumpToIndex(0);

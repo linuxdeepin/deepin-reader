@@ -104,6 +104,9 @@ public:
      */
     static DocSheet *getSheet(QString uuid);
 
+    /**
+     * @brief 全局对象池
+     */
     static QMap<QString, DocSheet *> g_map;
 
 public:
@@ -121,11 +124,10 @@ public:
     void openFileAsync(const QString &password);
 
     /**
-     * @brief pagesNumber
-     * 获取文档总页数
+     * @brief 获取文档总页数
      * @return
      */
-    int pagesNumber();
+    int pageCount();
 
     /**
      * @brief currentPage
@@ -611,6 +613,9 @@ public slots:
      */
     void onPopPrintDialog();
 
+    /**
+     * @brief 阻塞弹出文件信息
+     */
     void onPopInfoDialog();
 
 private:

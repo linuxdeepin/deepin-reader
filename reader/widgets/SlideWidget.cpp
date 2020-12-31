@@ -195,8 +195,8 @@ void SlideWidget::onNextBtnClicked()
 {
     m_preIndex = m_curPageIndex;
     m_curPageIndex++;
-    if (m_curPageIndex >= m_docSheet->pagesNumber()) {
-        m_curPageIndex = m_docSheet->pagesNumber() - 1;
+    if (m_curPageIndex >= m_docSheet->pageCount()) {
+        m_curPageIndex = m_docSheet->pageCount() - 1;
         return;
     }
     playImage();
@@ -232,12 +232,12 @@ void SlideWidget::onImageShowTimeOut()
 {
     m_preIndex = m_curPageIndex;
     m_curPageIndex++;
-    if (m_curPageIndex >= m_docSheet->pagesNumber()) {
+    if (m_curPageIndex >= m_docSheet->pageCount()) {
         if (m_canRestart) {
             m_curPageIndex = 0;
             m_canRestart = false;
         } else {
-            m_curPageIndex = m_docSheet->pagesNumber() - 1;
+            m_curPageIndex = m_docSheet->pageCount() - 1;
             m_slidePlayWidget->setPlayStatus(false);
             return;
         }

@@ -260,7 +260,7 @@ void DocSheet::rotateRight()
 
 void DocSheet::setBookMark(int index, int state)
 {
-    if (index < 0 || index >= pagesNumber())
+    if (index < 0 || index >= pageCount())
         return;
 
     if (state)
@@ -299,7 +299,7 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
     setBookmarkChanged(true);
 }
 
-int DocSheet::pagesNumber()
+int DocSheet::pageCount()
 {
     if (m_browser)
         return m_browser->allPages();
@@ -309,7 +309,7 @@ int DocSheet::pagesNumber()
 
 int DocSheet::currentPage()
 {
-    if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
+    if (m_operation.currentPage < 1 || m_operation.currentPage > pageCount())
         return 1;
 
     return m_operation.currentPage;
@@ -317,7 +317,7 @@ int DocSheet::currentPage()
 
 int DocSheet::currentIndex()
 {
-    if (m_operation.currentPage < 1 || m_operation.currentPage > pagesNumber())
+    if (m_operation.currentPage < 1 || m_operation.currentPage > pageCount())
         return 0;
 
     return m_operation.currentPage - 1;
@@ -686,7 +686,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
     painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
     for (int i = 0; i < pageRange.count(); ++i) {
-        if (pageRange[i] > pagesNumber())
+        if (pageRange[i] > pageCount())
             continue;
 
         QImage image;
@@ -710,7 +710,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
-    int pagesCount = pagesNumber();
+    int pagesCount = pageCount();
 
     int fromIndex = printer->fromPage() <= 0 ? 0 : printer->fromPage() - 1;
 
@@ -1114,10 +1114,10 @@ void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
-    preview.setAsynPreview(pagesNumber());
+    preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
     preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, &DocSheet::onPrintRequested1);
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, &DocSheet::onPrintRequested);
 #else
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
 #endif

@@ -307,7 +307,7 @@ void CatalogTreeView::setIndex(int index, const QString &title)
 void CatalogTreeView::resizeCoulumnWidth()
 {
     if (m_sheet) {
-        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pagesNumber())) + 34;
+        int maxPageColumnWid = this->fontMetrics().width(QString::number(m_sheet->pageCount())) + 34;
         this->setColumnWidth(0, this->width() - maxPageColumnWid);
         this->setColumnWidth(1, maxPageColumnWid);
     }

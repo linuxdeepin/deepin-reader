@@ -54,18 +54,25 @@ QSet<BrowserPage *> BrowserPage::items;
 BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(),  m_parent(parent), m_page(page)
 {
     mutex.lock();
+
     items.insert(this);
+
     mutex.unlock();
 
     setAcceptHoverEvents(true);
+
     setFlag(QGraphicsItem::ItemIsPanel);
 }
 
 BrowserPage::~BrowserPage()
 {
     mutex.lock();
+
     items.remove(this);
+
     mutex.unlock();
+
+    QMutexLocker locker(&m_mutex);
 
     PageRenderThread::clearImageTask(this);
 
@@ -74,6 +81,12 @@ BrowserPage::~BrowserPage()
     qDeleteAll(m_annotationItems);
 
     qDeleteAll(m_words);
+
+}
+
+QMutex &BrowserPage::pageMutex()
+{
+    return m_mutex;
 }
 
 QSizeF BrowserPage::pageSize() const
@@ -413,6 +426,7 @@ QList<Word> BrowserPage::getWords()
 bool BrowserPage::existInstance(BrowserPage *item)
 {
     QMutexLocker locker(&mutex);
+
     return items.contains(item);
 }
 
