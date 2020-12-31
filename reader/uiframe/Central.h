@@ -31,8 +31,6 @@
 
 #include "BaseWidget.h"
 
-#include <QDragEnterEvent>
-
 class CentralDocPage;
 class CentralNavPage;
 class TitleMenu;
@@ -190,11 +188,11 @@ protected:
     void dropEvent(QDropEvent *event) override;
 
 private:
-    QStackedLayout      *m_layout = nullptr;
-    CentralDocPage      *m_docPage = nullptr;
-    CentralNavPage      *m_navPage = nullptr;
-    TitleMenu           *m_menu = nullptr;
-    TitleWidget         *m_widget = nullptr;
+    QStackedLayout  *m_layout = nullptr;
+    CentralDocPage  *m_docPage = nullptr;
+    CentralNavPage  *m_navPage = nullptr;
+    TitleMenu       *m_menu = nullptr;
+    TitleWidget     *m_widget = nullptr;
 };
 
 #endif  // CENTRAL_H

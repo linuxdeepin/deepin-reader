@@ -308,10 +308,11 @@ void MainWindow::onMainWindowFull()
     m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->primaryScreen()->size().width(), 37);
 
     int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
+
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
+
     m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->primaryScreen()->size().width(), fulltitleH);
 
-    m_FullTitleWidget->setEnabled(false);
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
 }
 

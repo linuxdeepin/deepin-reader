@@ -37,6 +37,7 @@
 #include <DMessageManager>
 #include <DFileDialog>
 
+#include <QDragEnterEvent>
 #include <QStackedLayout>
 #include <QMimeData>
 #include <QTimer>
