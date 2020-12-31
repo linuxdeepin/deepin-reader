@@ -26,6 +26,9 @@
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QRectF>
+#include <QGestureEvent>
+#include <QTimerEvent>
+
 ut_browser::ut_browser()
 {
 
@@ -70,6 +73,8 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     //EXPECT_TRUE(sheet->m_browser->isUnLocked());  //暂时报错
 
+    sheet->m_browser->properties();
+
     sheet->m_browser->getClickAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0), false);
 
     sheet->m_browser->moveIconAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0));
@@ -82,13 +87,129 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     Annotation *hightLightAnnot = sheet->m_browser->addHighLightAnnotation("123", QColor(Qt::red), showPoint);
 
+    sheet->m_browser->jumpToHighLight(hightLightAnnot, 0);
+
+    sheet->m_browser->onAddHighLightAnnot(nullptr, "123", QColor(Qt::red));
+
+    //firstThumbnail
+
+    //save
+
+    //aveas
+
+    sheet->m_browser->setMouseShape(Dr::MouseShapeHand);
+
+    sheet->m_browser->setBookMark(0, 1);
+
+    sheet->m_browser->setAnnotationInserting(true);
+
+    sheet->m_browser->onVerticalScrollBarValueChanged(1);
+
+    sheet->m_browser->onHorizontalScrollBarValueChanged(1);
+
+    sheet->m_browser->beginViewportChange();
+
+    sheet->m_browser->hideSubTipsWidget();
+
+    sheet->m_browser->onViewportChanged();
+
+    sheet->m_browser->showNoteEditWidget(hightLightAnnot, QPoint(0, 0));
+
+    sheet->m_browser->jump2PagePos(sheet->m_browser->m_items.at(0), 1, 2);
+
+    sheet->m_browser->jumpToOutline(0, 0, 0);
+
     sheet->m_browser->onRemoveAnnotation(hightLightAnnot, true);
+
+    QShowEvent *showEvent = new QShowEvent;
+
+    sheet->m_browser->showEvent(showEvent);
+
+    QGestureEvent *gestureEvent = new QGestureEvent(QList<QGesture *>());
+
+    sheet->m_browser->gestureEvent(gestureEvent);
+
+    QTimerEvent *timerEvent = new QTimerEvent(123);
+
+    sheet->m_browser->timerEvent(timerEvent);
+
+    sheet->m_browser->hasLoaded();
+
+    sheet->m_browser->openMagnifier();
+
+    sheet->m_browser->magnifierOpened();
+
+    sheet->m_browser->closeMagnifier();
+
+    sheet->m_browser->maxWidth();
+
+    sheet->m_browser->maxHeight();
+
+    sheet->m_browser->needBookmark(0, 1);
+
+    sheet->m_browser->handleSearch();
+
+    sheet->m_browser->handleFindNext();
+
+    sheet->m_browser->handleFindPrev();
+
+    sheet->m_browser->handleFindContent("aaaaaaaaaaaaaaaa");
+
+    sheet->m_browser->handleFindExit();
+
+    sheet->m_browser->handleFindFinished(123);
+
+    sheet->m_browser->stopSearch();
+
+    sheet->m_browser->setDocTapGestrue(QPoint(0, 0));
+
+    sheet->m_browser->clearSelectIconAnnotAfterMenu();
+
+    sheet->m_browser->isLink(QPoint(0, 0));
+
+    sheet->m_browser->setIconAnnotSelect(true);
 
     sheet->m_browser->onSetDocSlideGesture();
 
     sheet->m_browser->onRemoveIconAnnotSelect();
 
+    sheet->m_browser->curpageChanged(0);
+
     sheet->m_browser->outline();
+
+    sheet->m_browser->loadPageLable();
+
+    sheet->m_browser->pageLableIndex("1");
+
+    sheet->m_browser->pageHasLable();
+
+    sheet->m_browser->pageSizeByIndex(0);
+
+    sheet->m_browser->pageNum2Lable(0);
+
+    sheet->m_browser->setCurrentPage(0);
+
+    sheet->m_browser->currentPage();
+
+    sheet->m_browser->allPages();
+
+    sheet->m_browser->translate2Local(QPointF(0, 0));
+
+    QPointF pagePoint = QPointF(0, 0);
+
+    sheet->m_browser->getBrowserPageForPoint(pagePoint);
+
+    sheet->m_browser->viewPointInIndex(QPoint(0, 0));
+
+    sheet->m_browser->currentScrollValueForPage();
+
+    int fromIndex = 0;
+    int toIndex = 1;
+    sheet->m_browser->currentIndexRange(fromIndex, toIndex);
+
+    sheet->m_browser->selectedWordsText();
+
+    //sheet->m_browser->showMenu();     //阻塞
 
     sheet->m_browser->deform(sheet->m_operation);
 
@@ -103,6 +224,26 @@ TEST_F(ut_browser, SheetBrowserTest)
     QMouseEvent *releaseMouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
     sheet->m_browser->mouseReleaseEvent(releaseMouseEvent);
+
+    QMouseEvent *mouseEvent = new QMouseEvent(QEvent::Move, QPointF(0, 0), QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    sheet->m_browser->mouseMoveEvent(mouseEvent);
+
+    QDragEnterEvent *dragEnterEvent = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+
+    sheet->m_browser->dragEnterEvent(dragEnterEvent);
+
+    QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
+
+    sheet->m_browser->resizeEvent(resizeEvent);
+
+    QPinchGesture *pinchGesture = new QPinchGesture;
+
+    sheet->m_browser->pinchTriggered(pinchGesture);
+
+    QWheelEvent *wheelEvent = new QWheelEvent(QPointF(0, 0), 1, Qt::LeftButton, Qt::NoModifier);
+
+    sheet->m_browser->wheelEvent(wheelEvent);
 
     QImage image;
 
@@ -187,6 +328,7 @@ TEST_F(ut_browser, SheetBrowserTest)
     if (nullptr == annotation)
         GTEST_FAIL();
 
+    page->selectedWords();
     page->clearSelectSearchHighlightRects();
     page->getBrowserAnnotation(QPointF(0, 0));
     page->getBrowserWord(QPointF(0, 0));
@@ -200,6 +342,7 @@ TEST_F(ut_browser, SheetBrowserTest)
     page->inLink(QPointF(0, 0));
     page->setPageBookMark(QPointF(0, 0));
     page->removeAnnotation(annotation);
+    page->removeAllAnnotation();
 
     ///BrowserMagniFier
     MagnifierInfo_t info;

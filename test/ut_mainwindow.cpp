@@ -70,11 +70,12 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->resizeFullTitleWidget();
     mainWindow->zoomIn();
     mainWindow->zoomOut();
-
+    mainWindow->setCheckLoadPdfStatus(false);
     mainWindow_muti->closeWithoutSave();
     mainWindow->closeWithoutSave();
     mainWindow_empty->closeWithoutSave();
-
+    mainWindow->onUpdateTitleLabelRect();
+    mainWindow->onTouchPadEventSignal("123", "321", 1);
     exec();
 }
 #endif
