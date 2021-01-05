@@ -858,6 +858,7 @@ bool DocSheet::closeFullScreen(bool force)
         doc->topLevelWidget()->showNormal();
         return true;
     }
+
     return false;
 }
 

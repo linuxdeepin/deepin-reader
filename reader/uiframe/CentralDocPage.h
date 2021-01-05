@@ -363,7 +363,8 @@ private:
     QStackedLayout      *m_pStackedLayout = nullptr;
     DocTabBar           *m_pTabBar = nullptr;
     SlideWidget         *m_slideWidget = nullptr;
-    QVBoxLayout *m_mainLayout = nullptr;
+    QVBoxLayout         *m_mainLayout = nullptr;
+    bool                m_isMaximizedBeforeFullScreen = false;
 };
 
 #endif // MAINTABWIDGETEX_H
