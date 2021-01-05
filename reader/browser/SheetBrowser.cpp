@@ -1462,7 +1462,9 @@ bool SheetBrowser::getImage(int index, QImage &image, int width, int height, boo
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImage(width, height, bSrc);
+    image = m_items.at(index)->getImage(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), bSrc);
+
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     return true;
 }

@@ -140,6 +140,8 @@ void BrowserPage::updateBookmarkState()
 
 void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
+    Q_UNUSED(option)
+
     if (!m_pixmapIsLastest) {
         render(m_scaleFactor, m_rotation);
     }
@@ -371,6 +373,15 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
     scaleWords(true);
 }
 
+QImage BrowserPage::getImage(int width, int height, const QRect &slice)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QImage image = m_page->render(width, height, slice);
+
+    return image;
+}
+
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
     QMutexLocker locker(&m_mutex);
@@ -392,15 +403,14 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
         if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
             return QImage();
 
-        const QImage &image = m_pixmap.toImage().scaled(static_cast<int>(width * dApp->devicePixelRatio()),
-                                                        static_cast<int>(height * dApp->devicePixelRatio()),
-                                                        Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width), static_cast<int>(height));
+
         return image;
     }
 
     QMutexLocker locker(&m_mutex);
 
-    const QImage &image = m_page->render(width, height, QRect());
+    QImage image = m_page->render(width, height, QRect());
 
     return image;
 }
@@ -440,15 +450,6 @@ bool BrowserPage::existInstance(BrowserPage *item)
     QMutexLocker locker(&mutex);
 
     return items.contains(item);
-}
-
-QImage BrowserPage::getImage(int width, int height, const QRect &slice)
-{
-    QMutexLocker locker(&m_mutex);
-
-    QImage image = m_page->render(width, height, slice);
-
-    return image;
 }
 
 void BrowserPage::setItemIndex(int itemIndex)

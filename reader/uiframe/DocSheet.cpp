@@ -110,7 +110,7 @@ QImage DocSheet::firstThumbnail(const QString &filePath)
     for (auto iter = g_map.begin(); iter != g_map.end(); iter++) {
         if (iter.value()->filePath() == filePath) {
             QImage image;
-            iter.value()->getImage(0, image, 100, 100);
+            iter.value()->getImageOnCurrentDeviceRatio(0, image, 100, 100);
             return image;
         }
     }
@@ -380,7 +380,7 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     setOperationChanged();
 }
 
-bool DocSheet::getImage(int index, QImage &image, int width, int height, bool bSrc)
+bool DocSheet::getImageOnCurrentDeviceRatio(int index, QImage &image, int width, int height, bool bSrc)
 {
     return m_browser->getImage(index, image, width, height, bSrc);
 }
@@ -720,7 +720,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
             break;
 
         QImage image;
-        if (getImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+        if (m_browser->getImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
             painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
         }
 

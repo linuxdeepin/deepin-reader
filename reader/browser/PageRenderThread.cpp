@@ -238,7 +238,7 @@ bool PageRenderThread::execNextImageTask()
     if (!BrowserPage::existInstance(task.page))
         return false;;
 
-    QImage image = task.page->getImage(task.scaleFactor);
+    QImage image = task.page->getImage(task.whole.width(), task.whole.height());
 
     if (!image.isNull())
         emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, QRect());

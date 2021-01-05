@@ -247,7 +247,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     QImage image;
 
-    sheet->getImage(0, image, 200, 200);
+    sheet->getImageOnCurrentDeviceRatio(0, image, 200, 200);
 
     window->show();
 

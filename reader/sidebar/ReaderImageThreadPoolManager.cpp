@@ -43,7 +43,7 @@ void ReadImageTask::run()
     if (!DocSheet::getUuid(sheet).isNull() && sheet->isUnLocked()) {
         int totalPage = sheet->pageCount();
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
-        bool bl = sheet->getImage(m_docParam.pageIndex, image, m_docParam.maxPixel, m_docParam.maxPixel);
+        bool bl = sheet->getImageOnCurrentDeviceRatio(m_docParam.pageIndex, image, m_docParam.maxPixel, m_docParam.maxPixel);
         if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
         QThread::sleep(1);
     }
