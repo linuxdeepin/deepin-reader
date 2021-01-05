@@ -40,7 +40,7 @@ class MainWindow : public Dtk::Widget::DMainWindow
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)
     Q_PROPERTY(QList<QWidget *> orderWidgets WRITE updateOrderWidgets)
-    Q_PROPERTY(bool checkLoadPdfStatus WRITE setCheckLoadPdfStatus)
+    Q_PROPERTY(bool loading WRITE setLoading)
 
 public:
     /**
@@ -107,7 +107,7 @@ public:
      */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
 
-    void setCheckLoadPdfStatus(bool loadPdfStatus);
+    void setLoading(bool loading);
 
 public:
     /**
@@ -150,13 +150,13 @@ private:
      * @brief zoomIn
      * 放大
      */
-    void zoomIn();
+    void centralZoomIn();
 
     /**
      * @brief zoomOut
      * 缩小
      */
-    void zoomOut();
+    void centralZoomOut();
 
 private slots:
     /**
@@ -221,7 +221,7 @@ public:
     static QList<MainWindow *> m_list;
     QTimer *m_showMenuTimer = nullptr;
 
-    bool m_checkLoadPdfStatus = false;
+    bool m_loading = false;  //当前正在是否加载 正在加载时不可关闭
 };
 
 #endif // MainWindow_H

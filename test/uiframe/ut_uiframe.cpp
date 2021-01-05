@@ -165,7 +165,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->onMenuTriggered("Magnifer");
     mainWindow1->m_central->onMenuTriggered("Search");
     mainWindow1->m_central->onNeedActivateWindow();
-    mainWindow1->m_central->onShowTips("const QString & text, int iconIndex = 0");
+    mainWindow1->m_central->onShowTips(nullptr, "const QString & text, int iconIndex = 0");
 
     //mainWindow1->m_central->doOpenFile(path);     //崩溃
     //mainWindow1->m_central->openFiles(QStringList() << path); //崩溃
@@ -239,8 +239,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     CentralDocPage1->handleShortcut(Dr::key_alt_1);
     CentralDocPage1->handleShortcut(Dr::key_ctrl_1);
-    CentralDocPage1->showTips("Test", 0);
-    CentralDocPage1->showTips("Test", 1);
+    CentralDocPage1->showTips(nullptr, "Test", 0);
+    CentralDocPage1->showTips(nullptr, "Test", 1);
     CentralDocPage1->openMagnifer();
     CentralDocPage1->quitMagnifer();
     CentralDocPage1->openSlide();

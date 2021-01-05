@@ -41,6 +41,7 @@
 #include <QStackedLayout>
 #include <QMimeData>
 #include <QTimer>
+#include <QDebug>
 
 Central::Central(QWidget *parent)
     : BaseWidget(parent)
@@ -78,7 +79,7 @@ CentralDocPage *Central::docPage()
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
         connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
-        connect(m_docPage, SIGNAL(sigNeedShowTips(const QString &, int)), this, SLOT(onShowTips(const QString &, int)));
+        connect(m_docPage, SIGNAL(sigNeedShowTips(QWidget *, const QString &, int)), this, SLOT(onShowTips(QWidget *, const QString &, int)));
         connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
         connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
         connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
@@ -127,7 +128,7 @@ void Central::addFilesWithDialog()
     }
 
     QWidget *topLevelwidget = this->topLevelWidget();
-    topLevelwidget->setProperty("checkLoadPdfStatus", true);
+    topLevelwidget->setProperty("loading", true);
     foreach (QString filePath, filePathList) {
         if (topLevelwidget->property("windowClosed").toBool())
             break;
@@ -135,7 +136,7 @@ void Central::addFilesWithDialog()
         if (!MainWindow::activateSheetIfExist(filePath))
             emit signalAddFile(filePath);
     }
-    topLevelwidget->setProperty("checkLoadPdfStatus", false);
+    topLevelwidget->setProperty("loading", false);
 }
 
 void Central::onAddFile(const QString &filePath)
@@ -216,13 +217,18 @@ void Central::onNeedActivateWindow()
     activateWindow();
 }
 
-void Central::onShowTips(const QString &text, int iconIndex)
+void Central::onShowTips(QWidget *parent, const QString &text, int iconIndex)
 {
     if (m_layout->currentIndex() == 0) {
         if (0 == iconIndex)
             DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "ok"), text);
         else
             DMessageManager::instance()->sendMessage(m_navPage, QIcon::fromTheme(QString("dr_") + "warning"), text);
+    } else if (parent != nullptr) {
+        if (0 == iconIndex)
+            DMessageManager::instance()->sendMessage(parent, QIcon::fromTheme(QString("dr_") + "ok"), text);
+        else
+            DMessageManager::instance()->sendMessage(parent, QIcon::fromTheme(QString("dr_") + "warning"), text);
     } else {
         if (0 == iconIndex)
             DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "ok"), text);
@@ -249,6 +255,7 @@ void Central::dropEvent(QDropEvent *event)
     auto mimeData = event->mimeData();
     if (mimeData->hasFormat("deepin_reader/tabbar")) {
         event->setDropAction(Qt::MoveAction);
+
         event->accept();
 
         activateWindow();
@@ -262,18 +269,20 @@ void Central::dropEvent(QDropEvent *event)
 
     } else if (mimeData->hasUrls()) {
         QWidget *topLevelwidget = topLevelWidget();
-        topLevelwidget->setProperty("checkLoadPdfStatus", true);
+
+        topLevelwidget->setProperty("loading", true);
 
         for (auto url : mimeData->urls()) {
             if (topLevelwidget->property("windowClosed").toBool())
                 break;
 
             QString filePath = url.toLocalFile();
+
             if (!MainWindow::activateSheetIfExist(filePath)) {
                 emit signalAddFile(filePath);
             }
         }
 
-        topLevelwidget->setProperty("checkLoadPdfStatus", false);
+        topLevelwidget->setProperty("loading", false);
     }
 }

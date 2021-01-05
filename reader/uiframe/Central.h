@@ -174,7 +174,7 @@ public slots:
      * @param text 请求显示文本
      * @param iconIndex 请求显示图标索引
      */
-    void onShowTips(const QString &text, int iconIndex = 0);
+    void onShowTips(QWidget *parent, const QString &text, int iconIndex = 0);
 
     /**
      * @brief 添加文件

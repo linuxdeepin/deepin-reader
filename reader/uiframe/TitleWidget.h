@@ -62,7 +62,6 @@ public slots:
      */
     void onCurSheetChanged(DocSheet *);
 
-private slots:
     /**
      * @brief onFindOperation
      * 搜索列表控制单元

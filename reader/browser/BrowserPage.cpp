@@ -84,11 +84,6 @@ BrowserPage::~BrowserPage()
 
 }
 
-QMutex &BrowserPage::pageMutex()
-{
-    return m_mutex;
-}
-
 QSizeF BrowserPage::pageSize() const
 {
     return m_page->sizeF();
@@ -152,7 +147,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if (!m_viewportRendered && !m_pixmapHasRendered && isBigDoc())
         renderViewPort(m_scaleFactor);
 
-    painter->drawPixmap(option->rect, m_renderPixmap);
+    painter->drawPixmap(0, 0, m_renderPixmap);  //m_renderPixmap的大小存在系统缩放，可能不等于option->rect()，需要按坐标绘制
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));
@@ -229,18 +224,23 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         task.pixmapId = ++m_pixmapId;
 
-        task.rect = QRect(0, 0, static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()));
+        task.whole = QRect(0, 0,
+                           static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                           static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
 
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
                                static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
-            m_pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
             m_pixmap.fill(Qt::white);
             m_renderPixmap = m_pixmap;
         } else {
-            m_renderPixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()), static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            m_renderPixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                                             static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()),
+                                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             PageRenderThread::clearImageTask(this, m_pixmapId);
         }
+
+        m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
 
         if (!isBigDoc()) {
             task.type = RenderPageTask::Image;
@@ -279,7 +279,14 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
 
     task.pixmapId = m_pixmapId;
 
-    task.rect = validRect;
+    task.whole = QRect(0, 0,
+                       static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                       static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+
+    task.slice = QRect(static_cast<int>(validRect.x() * dApp->devicePixelRatio()),
+                       static_cast<int>(validRect.y() * dApp->devicePixelRatio()),
+                       static_cast<int>(validRect.width() * dApp->devicePixelRatio()),
+                       static_cast<int>(validRect.height() * dApp->devicePixelRatio()));
 
     PageRenderThread::appendTask(task);
 }
@@ -320,21 +327,23 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
     m_viewportRendered = true;
 }
 
-void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &rect)
+void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &slice)
 {
     if (m_pixmapId != pixmapId)
         return;
 
-    if (!rect.isValid()) {//整体更新
+    if (!slice.isValid()) { //不是切片，整体更新
         m_pixmapHasRendered = true;
         m_pixmapIsLastest = true;
         m_pixmap = pixmap;
     } else { //局部
         QPainter painter(&m_pixmap);
-        painter.drawPixmap(rect, pixmap);
+        painter.drawPixmap(slice, pixmap);
     }
 
     m_renderPixmap = m_pixmap;
+
+    m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
 
     emit m_parent->sigPartThumbnailUpdated(m_index);
 
@@ -364,9 +373,12 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
 QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
 {
+    QMutexLocker locker(&m_mutex);
+
     QImage image = m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
                                   static_cast<int>(pageSize().height() * scaleFactor),
                                   slice);
+
     return image;
 }
 
@@ -376,7 +388,7 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
         if (m_pixmap.isNull())
             return QImage();
 
-        //获取图片比原图大小还大,就不需要原图了
+        //获取图片比原图还大,就不需要原图了
         if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
             return QImage();
 
@@ -386,9 +398,9 @@ QImage BrowserPage::getImage(int width, int height, bool bSrc)
         return image;
     }
 
-    QSizeF size = pageSize().scaled(width, height,  Qt::KeepAspectRatio);
+    QMutexLocker locker(&m_mutex);
 
-    const QImage &image = m_page->render(static_cast<int>(size.width()), static_cast<int>(size.height()), QRect());
+    const QImage &image = m_page->render(width, height, QRect());
 
     return image;
 }
@@ -428,6 +440,15 @@ bool BrowserPage::existInstance(BrowserPage *item)
     QMutexLocker locker(&mutex);
 
     return items.contains(item);
+}
+
+QImage BrowserPage::getImage(int width, int height, const QRect &slice)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QImage image = m_page->render(width, height, slice);
+
+    return image;
 }
 
 void BrowserPage::setItemIndex(int itemIndex)

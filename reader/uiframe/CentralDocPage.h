@@ -164,7 +164,7 @@ public:
      * @param tips 显示内容
      * @param iconIndex 图片索引
      */
-    void showTips(const QString &tips, int iconIndex = 0);
+    void showTips(QWidget *parent, const QString &tips, int iconIndex = 0);
 
     /**
      * @brief openMagnifer
@@ -267,7 +267,7 @@ signals:
      * @param text 显示内容
      * @param iconIndex 显示图标索引
      */
-    void sigNeedShowTips(const QString &text, int iconIndex);
+    void sigNeedShowTips(QWidget *parent, const QString &text, int iconIndex);
 
     /**
      * @brief sigNeedClose

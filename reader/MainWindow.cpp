@@ -158,7 +158,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     this->setProperty("windowClosed", false);
     //如果文档还在加载中，必须得等加载完毕，才能真正关闭窗口，不然要挂
-    if (m_checkLoadPdfStatus) {
+    if (m_loading) {
         this->hide();
         event->ignore();
         this->setProperty("windowClosed", true);
@@ -395,14 +395,14 @@ void MainWindow::showDefaultSize()
     }
 }
 
-void MainWindow::zoomIn()
+void MainWindow::centralZoomIn()
 {
     if (m_central) {
         m_central->zoomIn();
     }
 }
 
-void MainWindow::zoomOut()
+void MainWindow::centralZoomOut()
 {
     if (m_central) {
         m_central->zoomOut();
@@ -479,7 +479,7 @@ void MainWindow::initBase()
 
     this->installEventFilter(this);
 
-    this->setProperty("checkLoadPdfStatus", false);
+    this->setProperty("loading", false);
 
     this->setProperty("windowClosed", false);
 
@@ -496,8 +496,11 @@ void MainWindow::onUpdateTitleLabelRect()
         return;
 
     QWidget *titleLabel = m_central->docPage()->getTitleLabel();
+
     int titleWidth = this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60;
-    if (titleWidth > 0) titleLabel->setFixedWidth(titleWidth);
+
+    if (titleWidth > 0)
+        titleLabel->setFixedWidth(titleWidth);
 }
 
 void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
@@ -507,10 +510,10 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
         if (name == "pinch" && fingers == 2) {
             if (direction == "in") {
                 // 捏合 in是手指捏合的方向 向内缩小
-                zoomOut();  // zoom out 缩小
+                centralZoomOut();  // zoom out 缩小
             } else if (direction == "out") {
                 // 捏合 out是手指捏合的方向 向外放大
-                zoomIn();   // zoom in 放大
+                centralZoomIn();   // zoom in 放大
             }
         }
 
@@ -533,9 +536,9 @@ void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
     }
 }
 
-void MainWindow::setCheckLoadPdfStatus(bool loadPdfStatus)
+void MainWindow::setLoading(bool loading)
 {
-    m_checkLoadPdfStatus = loadPdfStatus;
+    m_loading = loading;
     if (this->property("windowClosed").toBool()) {
         this->close();
     }

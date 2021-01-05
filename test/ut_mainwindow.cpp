@@ -68,9 +68,9 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->onMainWindowFull();
     mainWindow->onMainWindowExitFull();
     mainWindow->resizeFullTitleWidget();
-    mainWindow->zoomIn();
-    mainWindow->zoomOut();
-    mainWindow->setCheckLoadPdfStatus(false);
+    mainWindow->centralZoomIn();
+    mainWindow->centralZoomOut();
+    mainWindow->setLoading(false);
     mainWindow_muti->closeWithoutSave();
     mainWindow->closeWithoutSave();
     mainWindow_empty->closeWithoutSave();

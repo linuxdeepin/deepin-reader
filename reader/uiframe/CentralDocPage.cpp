@@ -153,7 +153,7 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     Dr::FileType fileType = Dr::fileType(filePath);
 
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
-        showTips(tr("The format is not supported"), 1);
+        showTips(m_pStackedLayout->currentWidget(), tr("The format is not supported"), 1);
         return;
     }
 
@@ -169,6 +169,10 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     m_pStackedLayout->setCurrentWidget(sheet);
 
     m_pTabBar->insertSheet(sheet);
+
+    this->activateWindow();
+
+    sheet->defaultFocus();
 
     emit sigSheetCountChanged(m_pStackedLayout->count());
 
@@ -204,7 +208,7 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret, QString error)
 
         sheet->deleteLater();
 
-        showTips(error, 1);
+        showTips(nullptr, error, 1);
 
         return;
     }
@@ -395,13 +399,13 @@ bool CentralDocPage::saveCurrent()
     }
 
     if (!sheet->saveData()) {
-        showTips(tr("Save failed"), 1);
+        showTips(m_pStackedLayout->currentWidget(), tr("Save failed"), 1);
         return false;
     }
 
     sigCurSheetChanged(sheet);
 
-    showTips(tr("Saved successfully"));
+    showTips(m_pStackedLayout->currentWidget(), tr("Saved successfully"));
 
     return true;
 }
@@ -539,9 +543,9 @@ void CentralDocPage::handleShortcut(const QString &s)
     }
 }
 
-void CentralDocPage::showTips(const QString &tips, int iconIndex)
+void CentralDocPage::showTips(QWidget *parent, const QString &tips, int iconIndex)
 {
-    emit sigNeedShowTips(tips, iconIndex);
+    emit sigNeedShowTips(parent, tips, iconIndex);
 }
 
 void CentralDocPage::openMagnifer()

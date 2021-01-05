@@ -54,8 +54,6 @@ public:
 
     ~BrowserPage() override;
 
-    QMutex &pageMutex();
-
     /**
      * @brief 文档原始大小
      * @return
@@ -114,6 +112,15 @@ public:
      * @return
      */
     static bool existInstance(BrowserPage *item);
+
+    /**
+     * @brief getImage
+     * @param width
+     * @param height
+     * @param slice
+     * @return
+     */
+    QImage getImage(int width, int height, const QRect &slice = QRect());
 
     /**
      * @brief getImage
@@ -422,7 +429,7 @@ private:
      * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &rect);
+    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &slice);
 
     /**
      * brief handleWordLoaded

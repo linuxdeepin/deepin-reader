@@ -170,12 +170,6 @@ DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
     return btn;
 }
 
-
-/**
- * @brief TitleWidget::setControlEnabled
- * 设置TitleWidget中空间的可用或者不可用
- * @param enable  true:可用      false:不可用
- */
 void TitleWidget::setControlEnabled(const bool &enable)
 {
     m_pThumbnailBtn->setChecked(false);

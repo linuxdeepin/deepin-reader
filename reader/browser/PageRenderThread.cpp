@@ -29,13 +29,14 @@
 #include "PageRenderThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
-#include "Application.h"
 
 #include <QTime>
 #include <QDebug>
 
-QList<PageRenderThread *> PageRenderThread::instances;
+PageRenderThread *PageRenderThread::s_instance = nullptr;   //由于pdfium不支持多线程，暂时单线程进行
+
 bool PageRenderThread::quitForever = false;
+
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
     m_delayTimer = new QTimer(this);
@@ -56,7 +57,7 @@ bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
     if (nullptr == item)
         return true;
 
-    PageRenderThread *instance  = PageRenderThread::instance(item->itemIndex());
+    PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
         return false;
@@ -65,13 +66,14 @@ bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
     instance->m_mutex.lock();
 
     bool exist = true;
+
     while (exist) {
         exist = false;
         for (int i = 0; i < instance->m_tasks.count(); ++i) {
             if (instance->m_tasks[i].type == RenderPageTask::Word || instance->m_tasks[i].type == RenderPageTask::ImageSlice)
                 continue;
 
-            if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].rect.isEmpty()) {
+            if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].whole.isEmpty()) {
                 instance->m_tasks.removeAt(i);
                 exist = true;
                 break;
@@ -89,7 +91,7 @@ void PageRenderThread::appendTask(RenderPageTask task)
     if (nullptr == task.page)
         return;
 
-    PageRenderThread *instance  = PageRenderThread::instance(task.page->itemIndex());
+    PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
         return;
@@ -110,7 +112,7 @@ void PageRenderThread::appendDelayTask(RenderPageTask task)
     if (nullptr == task.page)
         return;
 
-    PageRenderThread *instance  = PageRenderThread::instance(task.page->itemIndex());
+    PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
         return;
@@ -124,12 +126,12 @@ void PageRenderThread::appendDelayTask(RenderPageTask task)
     instance->m_delayTimer->start(300);
 }
 
-void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, int pixmapId, QRect renderRect)
+void PageRenderThread::appendTask(BrowserPage *page, int pixmapId, QRect whole, QRect slice)
 {
-    if (nullptr == item)
+    if (nullptr == page)
         return;
 
-    PageRenderThread *instance  = PageRenderThread::instance(item->itemIndex());
+    PageRenderThread *instance  = PageRenderThread::instance();
     if (nullptr == instance) {
         return;
     }
@@ -137,10 +139,10 @@ void PageRenderThread::appendTask(BrowserPage *item, double scaleFactor, int pix
     instance->m_mutex.lock();
 
     RenderPageTask task;
-    task.page = item;
-    task.scaleFactor = scaleFactor;
+    task.page = page;
+    task.whole = whole;
     task.pixmapId = pixmapId;
-    task.rect = renderRect;
+    task.slice = slice;
     instance->m_tasks.append(task);
 
     instance->m_mutex.unlock();
@@ -175,25 +177,13 @@ void PageRenderThread::run()
 
         QList<QRect> renderRects;
 
-        int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
+        int wCount = task.whole.width() % 1000 == 0 ? (task.whole.width() / 1000) : (task.whole.width() / 1000 + 1);
 
-        int hCount = task.rect.height() % 1000 == 0 ? (task.rect.height() / 1000) : (task.rect.height() / 1000 + 1);
-
-        for (int h = 0; h < hCount; ++h) {
-            for (int w = 0; w < wCount; ++w) {
-                bool hIsLast = (h == hCount - 1);
-                bool wIsLast = (w == wCount - 1);
-                QRect rect = QRect(w * 1000, h * 1000, wIsLast ? (task.rect.width() - w * 1000) : 1000, hIsLast ? (task.rect.height() - h * 1000) : 1000);
-                renderRects.append(rect);
-            }
+        for (int i = 0; i < wCount; ++i) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
+            renderRects.append(QRect(i * 1000, 0, 1000, task.whole.height()));
         };
 
-        QPixmap pixmap = QPixmap(static_cast<int>(task.rect.width() * dApp->devicePixelRatio()),
-                                 static_cast<int>(task.rect.height() * dApp->devicePixelRatio()));
-
-        pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
-
-        pixmap.fill(Qt::white);
+        QPixmap pixmap = QPixmap(task.whole.width(), task.whole.height());
 
         QPainter painter(&pixmap);
 
@@ -206,14 +196,11 @@ void PageRenderThread::run()
                 break;
 
             //判断page存在之后 使用page之前，也就是此处，如果主线程先一步进入page被删流程，【理论上会导致崩溃】，目前概率非常低，未发现
-
-            task.page->pageMutex().lock();  //防止正在getImage时 page被删除导致崩溃
-
-            QImage image = task.page->getImage(task.scaleFactor, QRect(static_cast<int>(rect.x() * dApp->devicePixelRatio()),
-                                                                       static_cast<int>(rect.y() * dApp->devicePixelRatio()),
-                                                                       static_cast<int>(rect.width() * dApp->devicePixelRatio()),
-                                                                       static_cast<int>(rect.height() * dApp->devicePixelRatio())));
-            task.page->pageMutex().unlock();
+            QImage image = task.page->getImage(task.whole.width(), task.whole.height(),
+                                               QRect(static_cast<int>(rect.x()),
+                                                     static_cast<int>(rect.y()),
+                                                     static_cast<int>(rect.width()),
+                                                     static_cast<int>(rect.height())));
 
             painter.drawImage(rect, image);
 
@@ -247,9 +234,7 @@ bool PageRenderThread::execNextImageTask()
     if (!getNextTask(RenderPageTask::Image, task))
         return false;
 
-    QImage image = task.page->getImage(task.scaleFactor * dApp->devicePixelRatio());
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    QImage image = task.page->getImage(task.scaleFactor);
 
     if (!image.isNull())
         emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, QRect());
@@ -267,10 +252,10 @@ bool PageRenderThread::execNextImageSliceTask()
     if (!getNextTask(RenderPageTask::ImageSlice, task))
         return false;
 
-    QImage image = task.page->getImage(task.scaleFactor, task.rect);
+    QImage image = task.page->getImage(task.whole.width(), task.whole.height(), task.slice);
 
     if (!image.isNull())
-        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, task.rect);
+        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, task.slice);
 
     return true;
 }
@@ -314,20 +299,14 @@ void PageRenderThread::destroyForever()
 {
     quitForever = true;
 
-    QList<PageRenderThread *> instancesTemp = instances;
-    instances.clear();
-
-    foreach (PageRenderThread *instance, instancesTemp) {
-        if (nullptr != instance) {
-            delete instance;
-        }
-    }
+    if (nullptr != s_instance)
+        delete s_instance;
 }
 
-void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId,  QRect rect)
+void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice)
 {
     if (BrowserPage::existInstance(item)) {
-        item->handleRenderFinished(pixmapId, pixmap, rect);
+        item->handleRenderFinished(pixmapId, pixmap, slice);
     }
 }
 
@@ -350,28 +329,15 @@ void PageRenderThread::onDelayTaskTimeout()
         start();
 }
 
-PageRenderThread *PageRenderThread::instance(int itemIndex)
+PageRenderThread *PageRenderThread::instance()
 {
     if (quitForever)
         return nullptr;
 
-    if (instances.count() <= 0) {
+    if (nullptr == s_instance) {
         qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
-        for (int i = 0; i < 4; ++i) {
-            PageRenderThread *instance = new PageRenderThread;
-            instances.append(instance);
-        }
+        s_instance = new PageRenderThread;
     }
 
-    static int threadCounter = 0;
-
-    int threadIndex = threadCounter++ % 4;
-
-    if (itemIndex != -1)
-        threadIndex = itemIndex % 4;
-
-    if (threadCounter > 1000)
-        threadCounter = 0;
-
-    return instances.value(threadIndex);
+    return s_instance;
 }

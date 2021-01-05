@@ -124,15 +124,9 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
 {
     LOCK_DOCUMENT
 
-    QRect ratioRect = slice.isValid() ? QRect(static_cast<int>(slice.x() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.y() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.width() * dApp->devicePixelRatio()),
-                                              static_cast<int>(slice.height() * dApp->devicePixelRatio())) : QRect();
+    QRect ratioRect = slice.isValid() ? QRect(slice.x(), slice.y(), slice.width(), slice.height()) : QRect();
 
-    QImage image = m_page->image(static_cast<int>(width * dApp->devicePixelRatio()),
-                                 static_cast<int>(height * dApp->devicePixelRatio()), ratioRect);
-
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
+    QImage image = m_page->image(width, height, ratioRect);
 
     return image;
 }

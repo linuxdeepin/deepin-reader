@@ -41,9 +41,10 @@ struct RenderPageTask {
 
     int type = RenderPageTaskType::Image;
     BrowserPage *page = nullptr;
-    double scaleFactor = 1.0;
-    int pixmapId = 0;
-    QRect rect = QRect();
+    double scaleFactor = 1.0;   //暂时不用
+    int pixmapId = 0;           //任务艾迪
+    QRect whole = QRect();      //整个大小
+    QRect slice = QRect();      //切片大小
 };
 
 /**
@@ -84,7 +85,7 @@ public:
      * @param rotation 旋转
      * @param renderRect 所占区域
      */
-    static void appendTask(BrowserPage *item, double scaleFactor, int pixmapId, QRect renderRect);
+    static void appendTask(BrowserPage *page, int pixmapId, QRect whole, QRect slice);
 
     /**
      * @brief destroyForever
@@ -108,12 +109,12 @@ private:
     bool getNextTask(RenderPageTask::RenderPageTaskType type, RenderPageTask &task);
 
 signals:
-    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect rect);
+    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice);
 
     void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
 private slots:
-    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect rect);
+    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice);
 
     void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
 
@@ -132,9 +133,9 @@ private:
 
     static bool quitForever;
 
-    static QList<PageRenderThread *> instances;
+    static PageRenderThread *s_instance;
 
-    static PageRenderThread *instance(int itemIndex = -1);
+    static PageRenderThread *instance();
 };
 
 #endif // PAGERENDERTHREAD_H

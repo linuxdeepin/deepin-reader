@@ -97,7 +97,7 @@ void Application::handleFiles(QStringList filePathList)
     }
 
     MainWindow *mainwindow = MainWindow::m_list.count() > 0 ? MainWindow::m_list[0] : MainWindow::createWindow();
-    mainwindow->setProperty("checkLoadPdfStatus", true);
+    mainwindow->setProperty("loading", true);
     foreach (QString filePath, filePathList) {
         if (mainwindow->property("windowClosed").toBool())
             break;
@@ -109,7 +109,7 @@ void Application::handleFiles(QStringList filePathList)
         }
     }
 
-    mainwindow->setProperty("checkLoadPdfStatus", false);
+    mainwindow->setProperty("loading", false);
 }
 
 void Application::handleQuitAction()

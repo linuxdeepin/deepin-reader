@@ -61,7 +61,6 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
     setAlive(true);
-
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
 
@@ -525,7 +524,7 @@ void DocSheet::closeMagnifier()
 
 void DocSheet::defaultFocus()
 {
-    if (isUnLocked() && m_browser)
+    if (m_browser)
         m_browser->setFocus();
 }
 
@@ -671,7 +670,7 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     if (nullptr == doc)
         return;
 
-    doc->showTips(tips, iconIndex);
+    doc->showTips(this, tips, iconIndex);
 }
 
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
