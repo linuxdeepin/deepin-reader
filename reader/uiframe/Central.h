@@ -60,6 +60,12 @@ public:
     void addFilesWithDialog();
 
     /**
+     * @brief 根据路径增加一个sheet页后异步进行读取，成功保留，不成功删除,如果路径已经存在则切换到对应的页面
+     * @param filePath 需要添加的文档路径
+     */
+    void addFileAsync(const QString &filePath);
+
+    /**
      * @brief addSheet
      * 直接添加一个文档页
      * @param sheet
@@ -135,12 +141,6 @@ signals:
      */
     void sigNeedClose();
 
-    /**
-     * @brief 添加文件
-     * @param filepath
-     */
-    void signalAddFile(const QString &filepath);
-
 public slots:
     /**
      * @brief onSheetCountChanged
@@ -175,12 +175,6 @@ public slots:
      * @param iconIndex 请求显示图标索引
      */
     void onShowTips(QWidget *parent, const QString &text, int iconIndex = 0);
-
-    /**
-     * @brief 添加文件
-     * @param filepath
-     */
-    void onAddFile(const QString &filepath);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

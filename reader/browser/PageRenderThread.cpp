@@ -234,6 +234,10 @@ bool PageRenderThread::execNextImageTask()
     if (!getNextTask(RenderPageTask::Image, task))
         return false;
 
+    //外部删除了此处不判断会导致崩溃
+    if (!BrowserPage::existInstance(task.page))
+        return false;;
+
     QImage image = task.page->getImage(task.scaleFactor);
 
     if (!image.isNull())
@@ -252,6 +256,10 @@ bool PageRenderThread::execNextImageSliceTask()
     if (!getNextTask(RenderPageTask::ImageSlice, task))
         return false;
 
+    //外部删除了此处不判断会导致崩溃
+    if (!BrowserPage::existInstance(task.page))
+        return false;;
+
     QImage image = task.page->getImage(task.whole.width(), task.whole.height(), task.slice);
 
     if (!image.isNull())
@@ -269,6 +277,10 @@ bool PageRenderThread::execNextWordTask()
 
     if (!getNextTask(RenderPageTask::Word, task))
         return false;
+
+    //外部删除了此处不判断会导致崩溃
+    if (!BrowserPage::existInstance(task.page))
+        return false;;
 
     const QList<Word> &words = task.page->getWords();
 

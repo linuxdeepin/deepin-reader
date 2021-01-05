@@ -58,8 +58,6 @@ Central::Central(QWidget *parent)
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
     setLayout(m_layout);
-
-    connect(this, &Central::signalAddFile, this, &Central::onAddFile);
 }
 
 Central::~Central()
@@ -134,12 +132,12 @@ void Central::addFilesWithDialog()
             break;
 
         if (!MainWindow::activateSheetIfExist(filePath))
-            emit signalAddFile(filePath);
+            docPage()->addFileAsync(filePath);
     }
     topLevelwidget->setProperty("loading", false);
 }
 
-void Central::onAddFile(const QString &filePath)
+void Central::addFileAsync(const QString &filePath)
 {
     docPage()->addFileAsync(filePath);
 }
@@ -279,7 +277,7 @@ void Central::dropEvent(QDropEvent *event)
             QString filePath = url.toLocalFile();
 
             if (!MainWindow::activateSheetIfExist(filePath)) {
-                emit signalAddFile(filePath);
+                docPage()->addFileAsync(filePath);
             }
         }
 

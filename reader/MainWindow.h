@@ -107,6 +107,10 @@ public:
      */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
 
+    /**
+     * @brief setLoading
+     * @param loading
+     */
     void setLoading(bool loading);
 
 public:
