@@ -154,13 +154,6 @@ private:
 
 private slots:
     /**
-     * @brief onUpdatePageImage
-     * 更新指定页数缩略图
-     * @param pageIndex
-     */
-    void onUpdatePageImage(int pageIndex);
-
-    /**
      * @brief onItemClicked
      * 节点点击
      * @param index

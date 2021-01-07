@@ -25,7 +25,6 @@
 #include "NotesWidget.h"
 #include "SearchResWidget.h"
 #include "Model.h"
-#include "ReaderImageThreadPoolManager.h"
 #include "MsgHeader.h"
 #include "Utils.h"
 

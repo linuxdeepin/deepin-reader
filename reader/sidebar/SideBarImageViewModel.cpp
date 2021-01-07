@@ -19,7 +19,6 @@
 */
 #include "SideBarImageViewModel.h"
 #include "DocSheet.h"
-#include "ReaderImageThreadPoolManager.h"
 #include "PageRenderThread.h"
 #include "Application.h"
 
@@ -48,7 +47,7 @@ bool ImagePageInfo_t::operator > (const ImagePageInfo_t &other) const
 
 SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
     : QAbstractListModel(parent)
-    , m_sheet(sheet), m_parent(parent)
+    , m_parent(parent), m_sheet(sheet)
 {
     connect(m_sheet, &DocSheet::sigPageModified, this, &SideBarImageViewModel::onUpdateImage);
 }
@@ -165,25 +164,6 @@ int SideBarImageViewModel::getPageIndexForModelIndex(int row)
     return -1;
 }
 
-void SideBarImageViewModel::onUpdatePageImage(int pageIndex)
-{
-    const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
-    for (const QModelIndex &modelIndex : modelIndexlst)
-        emit dataChanged(modelIndex, modelIndex);
-}
-
-void SideBarImageViewModel::onFetchImage(int index, bool force) const
-{
-    ReaderImageParam_t tParam;
-    tParam.maxPixel = 198;
-    tParam.bForceUpdate = force;
-    tParam.pageIndex = index;
-    tParam.sheet = m_sheet;
-    tParam.receiver = m_parent;
-    tParam.slotFun = "onUpdatePageImage";
-    ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
-}
-
 void SideBarImageViewModel::onUpdateImage(int index)
 {
     DocPageThumbnailTask task;
@@ -275,5 +255,8 @@ void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
 {
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     m_sheet->setThumbnail(index, pixmap);
-    onUpdatePageImage(index);
+
+    const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
+    for (const QModelIndex &modelIndex : modelIndexlst)
+        emit dataChanged(modelIndex, modelIndex);
 }

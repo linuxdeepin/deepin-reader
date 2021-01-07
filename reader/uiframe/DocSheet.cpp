@@ -383,19 +383,6 @@ void DocSheet::setThumbnail(int index, QPixmap pixmap)
     m_thumbnailMap[index] = pixmap;
 }
 
-void DocSheet::clearThumbnail(int currentIndex)
-{
-    QMap<int, QPixmap> tempMap;
-    tempMap[currentIndex - 3] = m_thumbnailMap[currentIndex - 3];
-    tempMap[currentIndex - 2] = m_thumbnailMap[currentIndex - 2];
-    tempMap[currentIndex - 1] = m_thumbnailMap[currentIndex - 1];
-    tempMap[currentIndex]     = m_thumbnailMap[currentIndex];
-    tempMap[currentIndex + 3] = m_thumbnailMap[currentIndex + 3];
-    tempMap[currentIndex + 2] = m_thumbnailMap[currentIndex + 2];
-    tempMap[currentIndex + 1] = m_thumbnailMap[currentIndex + 1];
-    m_thumbnailMap = tempMap;
-}
-
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {

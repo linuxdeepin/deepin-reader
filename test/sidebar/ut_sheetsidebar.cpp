@@ -343,8 +343,6 @@ TEST_F(ut_sidebar, SidebarTest)
     searchWidget.m_pImageListView->getPageIndexForModelIndex(0);
     EXPECT_LE(searchWidget.m_pImageListView->getModelIndexForPageIndex(-1), 0);
     EXPECT_TRUE(searchWidget.m_pImageListView->getImageModel());
-    searchWidget.m_pImageListView->onUpdatePageImage(0);
-    searchWidget.m_pImageListView->onUpdatePageImage(-1);
     searchWidget.m_pImageListView->onItemClicked(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
     searchWidget.m_pImageListView->onItemClicked(QModelIndex());
 

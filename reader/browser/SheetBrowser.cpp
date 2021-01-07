@@ -666,17 +666,20 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
         return;
 
     BrowserPage *jumpPage = m_items.at(index);
+
     const QList<QRectF> &anootList = annotation->boundary();
 
     if (nullptr == jumpPage || anootList.count() < 1)
         return;
 
     QRectF rect = anootList.at(0);
+
     if (rect.isNull())
         return;
 
-    int posLeft = rect.left();
-    int posTop = rect.top();
+    qreal posLeft = rect.left();
+
+    qreal posTop = rect.top();
 
     const SheetOperation &operation = m_sheet->operation();
     Dr::Rotation rotation = operation.rotation;
@@ -809,15 +812,15 @@ void SheetBrowser::deform(SheetOperation &operation)
     case Dr::RotateBy0:
     case Dr::RotateBy180:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxWidth) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxHeight);
+            operation.scaleFactor = static_cast<double>(this->height()) / m_maxHeight;
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxWidth) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
             if (scaleFactor * m_maxHeight > this->height())
-                scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxHeight);
+                scaleFactor = static_cast<double>(this->height()) / m_maxHeight;
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;
@@ -825,15 +828,15 @@ void SheetBrowser::deform(SheetOperation &operation)
     case Dr::RotateBy90:
     case Dr::RotateBy270:
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxHeight) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxWidth);
+            operation.scaleFactor = static_cast<double>(this->height()) / m_maxWidth;
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / static_cast<double>(m_maxHeight) / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
             if (scaleFactor * m_maxWidth > this->height())
-                scaleFactor = static_cast<double>(this->height()) / static_cast<double>(m_maxWidth);
+                scaleFactor = static_cast<double>(this->height()) / m_maxWidth;
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;
@@ -850,8 +853,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     //进行render 并算出最宽的一行
-    double maxWidth = 0;           //最宽的一行
-    double maxHeight = 0;          //总高度
+    double maxWidth = 0;        //最宽的一行
+    double maxHeight = 0;       //总高度
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
@@ -1005,7 +1008,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             if (event->source() == Qt::MouseEventSynthesizedByQt && setDocTapGestrue(event->pos())) {
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
-                m_scroller->handleInput(QScroller::InputPress, event->pos(), event->timestamp());
+                m_scroller->handleInput(QScroller::InputPress, event->pos(), static_cast<qint64>(event->timestamp()));
             } else {
                 m_selectStartWord = nullptr;
                 m_selectEndWord = nullptr;
@@ -1186,7 +1189,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
             if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
                 m_repeatTimer.stop();
-                m_scroller->handleInput(QScroller::InputMove, event->pos(), event->timestamp());
+                m_scroller->handleInput(QScroller::InputMove, event->pos(), static_cast<qint64>(event->timestamp()));
             }
 
             return QGraphicsView::mouseMoveEvent(event);
@@ -1348,7 +1351,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         if (event->button() == Qt::LeftButton) {
             if (m_canTouchScreen) {
-                m_scroller->handleInput(QScroller::InputRelease, event->pos(), event->timestamp());
+                m_scroller->handleInput(QScroller::InputRelease, event->pos(), static_cast<qint64>(event->timestamp()));
             } else {
                 m_scroller->stop();
             }
@@ -1500,10 +1503,14 @@ bool SheetBrowser::getExistImage(int index, QImage &image, int width, int height
 BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
 {
     BrowserPage *item = nullptr;
+
     QPoint ponit = viewPoint.toPoint();
+
     const QList<QGraphicsItem *> &itemlst = this->items(ponit);
+
     for (QGraphicsItem *itemIter : itemlst) {
         item = dynamic_cast<BrowserPage *>(itemIter);
+
         if (item != nullptr) {
             const QPointF &itemPoint = item->mapFromScene(mapToScene(ponit));
 
@@ -1534,9 +1541,11 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
 
     if (anno && !contents.isEmpty()) {
         m_selectIconAnnotation = true;
+
         if (m_lastSelectIconAnnotPage) {
             m_lastSelectIconAnnotPage->setSelectIconRect(true);
         }
+
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno->page - 1, anno);
     }
     return anno;
@@ -1548,10 +1557,14 @@ void SheetBrowser::openMagnifier()
         m_magnifierLabel = new BrowserMagniFier(this);
     } else {
         m_magnifierLabel->raise();
+
         m_magnifierLabel->show();
     }
+
     setDragMode(QGraphicsView::NoDrag);
+
     setCursor(QCursor(Qt::BlankCursor));
+
     showMagnigierImage(this->mapFromGlobal(QCursor::pos()));
 }
 
@@ -1574,12 +1587,12 @@ bool SheetBrowser::magnifierOpened()
     return (m_magnifierLabel && m_magnifierLabel->isVisible()) ;
 }
 
-int SheetBrowser::maxWidth()
+qreal SheetBrowser::maxWidth()
 {
     return m_maxWidth;
 }
 
-int SheetBrowser::maxHeight()
+qreal SheetBrowser::maxHeight()
 {
     return m_maxHeight;
 }

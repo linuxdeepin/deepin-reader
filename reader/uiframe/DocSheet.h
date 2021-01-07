@@ -290,13 +290,6 @@ public:
     void setThumbnail(int index, QPixmap pixmap);
 
     /**
-     * @brief clearThumbnail
-     * 移除当前索引远端的缩略图
-     * @param currentIndex
-     */
-    void clearThumbnail(int currentIndex);
-
-    /**
      * @brief openMagnifier
      * 调用browser打开放大镜
      */

@@ -193,14 +193,14 @@ public:
      * 最大一页的宽度
      * @return  宽度值
      */
-    int maxWidth();
+    qreal maxWidth();
 
     /**
      * @brief maxHeight
      *最大一页的高度
      * @return 高度值
      */
-    int maxHeight();
+    qreal maxHeight();
 
     /**
      * @brief 添加标签状态

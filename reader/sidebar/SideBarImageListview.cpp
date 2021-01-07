@@ -241,11 +241,6 @@ int  SideBarImageListView::getPageIndexForModelIndex(int row)
     return m_imageModel->getPageIndexForModelIndex(row);
 }
 
-void SideBarImageListView::onUpdatePageImage(int pageIndex)
-{
-    m_imageModel->onUpdatePageImage(pageIndex);
-}
-
 QModelIndex SideBarImageListView::pageUpIndex()
 {
     return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);

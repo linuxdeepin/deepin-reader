@@ -173,20 +173,10 @@ public:
 
 public slots:
     /**
-     * @brief onUpdatePageImage
+     * @brief onUpdateImage
      * 通知指定页码数据变更
-     * @param pageIndex
+     * @param index
      */
-    void onUpdatePageImage(int pageIndex);
-
-    /**
-     * @brief onFetchImage
-     * 拉取指定页码数据
-     * @param nRow
-     * @param force
-     */
-    void onFetchImage(int nRow, bool force = false) const;
-
     void onUpdateImage(int index);
 
 protected:
