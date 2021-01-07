@@ -126,9 +126,7 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
 
     QRect ratioRect = slice.isValid() ? QRect(slice.x(), slice.y(), slice.width(), slice.height()) : QRect();
 
-    QImage image = m_page->image(width, height, ratioRect);
-
-    return image;
+    return m_page->image(width, height, ratioRect);
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &pos)

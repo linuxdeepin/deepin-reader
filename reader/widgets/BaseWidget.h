@@ -24,6 +24,7 @@
 #include <DWidget>
 
 DWIDGET_USE_NAMESPACE
+
 class BaseWidget : public DWidget
 {
     Q_OBJECT
@@ -40,13 +41,6 @@ public:
      * @param scale  缩放因子 大于0的数
      */
     virtual void adaptWindowSize(const double &);
-
-    /**
-     * @brief CustomWidget::updateThumbnail
-     * 刷新相应的缩略图
-     * @param index 页码数，从0开始
-     */
-    virtual void updateThumbnail(const int &, bool clear = false);
 
 protected:
     /**

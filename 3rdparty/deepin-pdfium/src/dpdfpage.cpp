@@ -514,9 +514,7 @@ QImage DPdfPage::image(int width, int height, QRect slice)
     if (!slice.isValid())
         slice = QRect(0, 0, width, height);
 
-    d_func()->loadPage();
-
-    QImage image(slice.width(), slice.height(), QImage::Format_RGBA8888);
+    QImage image(slice.width(), slice.height(), QImage::Format_ARGB32);
 
     if (image.isNull())
         return QImage();
@@ -525,26 +523,28 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     DPdfMutexLocker locker("DPdfPage::image index = " + QString::number(index()));
 
+    FPDF_PAGE page = FPDF_LoadPage(d_func()->m_doc, d_func()->m_index);
+
     FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(), FPDFBitmap_BGRA, image.scanLine(0), image.bytesPerLine());
 
-    if (bitmap == nullptr) {
-        return QImage();
+    if (bitmap != nullptr) {
+        FPDF_RenderPageBitmap(bitmap, page, slice.x(), slice.y(), slice.width(), slice.height(), width, height, 0, FPDF_ANNOT);
+        FPDFBitmap_Destroy(bitmap);
     }
 
-    FPDF_RenderPageBitmap(bitmap, d_func()->m_page, slice.x(), slice.y(), slice.width(), slice.height(), width, height, 0, FPDF_ANNOT);
-
-    FPDFBitmap_Destroy(bitmap);
+    FPDF_ClosePage(page);
 
     locker.unlock();
 
-    for (int i = 0; i < image.height(); i++) {
-        uchar *pixels = image.scanLine(i);
-
-        for (int j = 0; j < image.width(); j++) {
-            qSwap(pixels[0], pixels[2]);
-            pixels += 4;
-        }
-    }
+    //bgr转rgb 如果image设置成Format_RGB888+FPDFBitmap_BGR则需要进行以下转换,此方法移除Alpha,节省25%的内存.
+    //如果使用Format_RGB32+FPDFBitmap_BGRA 此方法无需以下转换，可以提升部分效率，但是增加内存
+//    for (int i = 0; i < image.height(); i++) {
+//        uchar *pixels = image.scanLine(i);
+//        for (int j = 0; j < image.width(); j++) {
+//            qSwap(pixels[0], pixels[2]);
+//            pixels += 3;
+//        }
+//    }
 
     return image;
 }

@@ -19,6 +19,7 @@
 */
 #include "ReaderImageThreadPoolManager.h"
 #include "DocSheet.h"
+#include "Application.h"
 
 #include <QUuid>
 
@@ -38,13 +39,19 @@ void ReadImageTask::setThreadPoolManager(QObject *object)
 
 void ReadImageTask::run()
 {
-    QImage image;
     DocSheet *sheet = m_docParam.sheet;
     if (!DocSheet::getUuid(sheet).isNull() && sheet->isUnLocked()) {
         int totalPage = sheet->pageCount();
+
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
-        bool bl = sheet->getImageOnCurrentDeviceRatio(m_docParam.pageIndex, image, m_docParam.maxPixel, m_docParam.maxPixel);
-        if (bl) QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
+
+        QImage image = sheet->getImage(m_docParam.pageIndex, m_docParam.maxPixel * dApp->devicePixelRatio(), m_docParam.maxPixel * dApp->devicePixelRatio());
+
+        image.setDevicePixelRatio(dApp->devicePixelRatio());
+
+        if (!image.isNull())
+            QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
+
         QThread::sleep(1);
     }
 }
@@ -122,6 +129,7 @@ QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int p
 void ReaderImageThreadPoolManager::setImageForDocSheet(DocSheet *sheet, int pageIndex, const QPixmap &pixmap)
 {
     if (pageIndex >= 0 && m_docSheetImgMap.contains(sheet) && m_docSheetImgMap[sheet].size() > pageIndex) {
+
         m_docSheetImgMap[sheet][pageIndex] = pixmap;
     }
 }

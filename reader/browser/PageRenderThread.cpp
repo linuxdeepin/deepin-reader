@@ -29,21 +29,33 @@
 #include "PageRenderThread.h"
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
+#include "DocSheet.h"
+#include "SideBarImageViewModel.h"
 
 #include <QTime>
 #include <QDebug>
+#include <QMetaType>
 
 PageRenderThread *PageRenderThread::s_instance = nullptr;   //由于pdfium不支持多线程，暂时单线程进行
 
-bool PageRenderThread::quitForever = false;
+bool PageRenderThread::s_quitForever = false;
 
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
-    m_delayTimer = new QTimer(this);
-    m_delayTimer->setSingleShot(true);
-    connect(m_delayTimer, &QTimer::timeout, this, &PageRenderThread::onDelayTaskTimeout);
-    connect(this, SIGNAL(sigImageTaskFinished(BrowserPage *, QPixmap, int, QRect)), this, SLOT(onImageTaskFinished(BrowserPage *, QPixmap, int, QRect)), Qt::QueuedConnection);
-    connect(this, SIGNAL(sigWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), this, SLOT(onWordTaskFinished(BrowserPage *, QList<deepin_reader::Word>)), Qt::QueuedConnection);
+    qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
+    qRegisterMetaType<DocPageNormalImageTask>("DocPageNormalImageTask");
+    qRegisterMetaType<DocPageSliceImageTask>("DocPageSliceImageTask");
+    qRegisterMetaType<DocPageBigImageTask>("DocPageBigImageTask");
+    qRegisterMetaType<DocPageWordTask>("DocPageWordTask");
+    qRegisterMetaType<DocPageThumbnailTask>("DocPageThumbnailTask");
+    qRegisterMetaType<DocOpenTask>("DocOpenTask");
+
+    connect(this, &PageRenderThread::sigDocPageNormalImageTaskFinished, this, &PageRenderThread::onDocPageNormalImageTaskFinished, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocPageSliceImageTaskFinished, this, &PageRenderThread::onDocPageSliceImageTaskFinished, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocPageBigImageTaskFinished, this, &PageRenderThread::onDocPageBigImageTaskFinished, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocPageWordTaskFinished, this, &PageRenderThread::onDocPageWordTaskFinished, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocPageThumbnailTaskFinished, this, &PageRenderThread::onDocPageThumbnailTask, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocOpenTask, this, &PageRenderThread::onDocOpenTask, Qt::QueuedConnection);
 }
 
 PageRenderThread::~PageRenderThread()
@@ -52,9 +64,9 @@ PageRenderThread::~PageRenderThread()
     wait();
 }
 
-bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
+bool PageRenderThread::clearImageTasks(DocSheet *sheet, BrowserPage *page, int pixmapId)
 {
-    if (nullptr == item)
+    if (nullptr == page)
         return true;
 
     PageRenderThread *instance  = PageRenderThread::instance();
@@ -63,89 +75,169 @@ bool PageRenderThread::clearImageTask(BrowserPage *item, int pixmapId)
         return false;
     }
 
-    instance->m_mutex.lock();
+    instance->m_pageNormalImageMutex.lock();
 
     bool exist = true;
 
     while (exist) {
         exist = false;
-        for (int i = 0; i < instance->m_tasks.count(); ++i) {
-            if (instance->m_tasks[i].type == RenderPageTask::Word || instance->m_tasks[i].type == RenderPageTask::ImageSlice)
-                continue;
-
-            if (instance->m_tasks[i].page == item && (instance->m_tasks[i].pixmapId != pixmapId || -1 == pixmapId) && instance->m_tasks[i].whole.isEmpty()) {
-                instance->m_tasks.removeAt(i);
+        for (int i = 0; i < instance->m_pageNormalImageTasks.count(); ++i) {
+            if (instance->m_pageNormalImageTasks[i].page == page &&
+                    instance->m_pageNormalImageTasks[i].sheet == sheet &&
+                    (instance->m_pageNormalImageTasks[i].pixmapId != pixmapId || -1 == pixmapId)) {
+                instance->m_pageNormalImageTasks.removeAt(i);
                 exist = true;
                 break;
             }
         }
     }
 
-    instance->m_mutex.unlock();
+    instance->m_pageNormalImageMutex.unlock();
+
+    instance->m_pageSliceImageMutex.lock();
+
+    exist = true;
+
+    while (exist) {
+        exist = false;
+        for (int i = 0; i < instance->m_pageSliceImageTasks.count(); ++i) {
+            if (instance->m_pageSliceImageTasks[i].page == page &&
+                    instance->m_pageSliceImageTasks[i].sheet == sheet &&
+                    (instance->m_pageSliceImageTasks[i].pixmapId != pixmapId || -1 == pixmapId)) {
+                instance->m_pageSliceImageTasks.removeAt(i);
+                exist = true;
+                break;
+            }
+        }
+    }
+
+    instance->m_pageSliceImageMutex.unlock();
+
+    instance->m_pageBigImageMutex.lock();
+
+    exist = true;
+
+    while (exist) {
+        exist = false;
+        for (int i = 0; i < instance->m_pageBigImageTasks.count(); ++i) {
+            if (instance->m_pageBigImageTasks[i].page == page &&
+                    instance->m_pageBigImageTasks[i].sheet == sheet &&
+                    (instance->m_pageBigImageTasks[i].pixmapId != pixmapId || -1 == pixmapId)) {
+                instance->m_pageBigImageTasks.removeAt(i);
+                exist = true;
+                break;
+            }
+        }
+    }
+
+    instance->m_pageBigImageMutex.unlock();
 
     return true;
 }
 
-void PageRenderThread::appendTask(RenderPageTask task)
+void PageRenderThread::appendTask(DocPageNormalImageTask task)
 {
-    if (nullptr == task.page)
-        return;
-
     PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
         return;
     }
 
-    instance->m_mutex.lock();
+    instance->m_pageNormalImageMutex.lock();
 
-    instance->m_tasks.append(task);
+    instance->m_pageNormalImageTasks.append(task);
 
-    instance->m_mutex.unlock();
+    instance->m_pageNormalImageMutex.unlock();
 
     if (!instance->isRunning())
         instance->start();
 }
 
-void PageRenderThread::appendDelayTask(RenderPageTask task)
+void PageRenderThread::appendTask(DocPageSliceImageTask task)
 {
-    if (nullptr == task.page)
-        return;
-
     PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
         return;
     }
 
-    instance->m_delayTask = task;
+    instance->m_pageSliceImageMutex.lock();
 
-    if (instance->m_delayTimer->isActive())
-        instance->m_delayTimer->stop();
+    instance->m_pageSliceImageTasks.append(task);
 
-    instance->m_delayTimer->start(300);
+    instance->m_pageSliceImageMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
 }
 
-void PageRenderThread::appendTask(BrowserPage *page, int pixmapId, QRect whole, QRect slice)
+void PageRenderThread::appendTask(DocPageBigImageTask task)
 {
-    if (nullptr == page)
-        return;
-
     PageRenderThread *instance  = PageRenderThread::instance();
+
     if (nullptr == instance) {
         return;
     }
 
-    instance->m_mutex.lock();
+    instance->m_pageBigImageMutex.lock();
 
-    RenderPageTask task;
-    task.page = page;
-    task.whole = whole;
-    task.pixmapId = pixmapId;
-    task.slice = slice;
-    instance->m_tasks.append(task);
+    instance->m_pageBigImageTasks.append(task);
 
-    instance->m_mutex.unlock();
+    instance->m_pageBigImageMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
+void PageRenderThread::appendTask(DocPageWordTask task)
+{
+    PageRenderThread *instance  = PageRenderThread::instance();
+
+    if (nullptr == instance) {
+        return;
+    }
+
+    instance->m_pageWordMutex.lock();
+
+    instance->m_pageWordTasks.append(task);
+
+    instance->m_pageWordMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
+void PageRenderThread::appendTask(DocPageThumbnailTask task)
+{
+    PageRenderThread *instance  = PageRenderThread::instance();
+
+    if (nullptr == instance) {
+        return;
+    }
+
+    instance->m_pageThumbnailMutex.lock();
+
+    instance->m_pageThumbnailTasks.append(task);
+
+    instance->m_pageThumbnailMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
+void PageRenderThread::appendTask(DocOpenTask task)
+{
+    PageRenderThread *instance  = PageRenderThread::instance();
+
+    if (nullptr == instance) {
+        return;
+    }
+
+    instance->m_openMutex.lock();
+
+    instance->m_openTasks.append(task);
+
+    instance->m_openMutex.unlock();
 
     if (!instance->isRunning())
         instance->start();
@@ -156,34 +248,40 @@ void PageRenderThread::run()
     m_quit = false;
 
     while (!m_quit) {
-        if (m_tasks.count() <= 0) {
+        if (!hasNextTask()) {
             msleep(100);
             continue;
         }
 
-        if (execNextImageTask())
-            continue;
+        while (execNextDocOpenTask())
+        {}
 
-        if (execNextImageSliceTask())
-            continue;
+        while (execNextDocPageSliceImageTask())
+        {}
 
-        if (execNextWordTask())
-            continue;
+        while (execNextDocPageNormalImageTask())
+        {}
 
-        RenderPageTask task;
+        while (execNextDocPageWordTask())
+        {}
 
-        if (!getNextTask(RenderPageTask::BigImage, task))
+        while (execNextDocPageThumbnailTask())
+        {}
+
+        DocPageBigImageTask task;
+
+        if (!popNextDocPageBigImageTask(task))
             continue;
 
         QList<QRect> renderRects;
 
-        int wCount = task.whole.width() % 1000 == 0 ? (task.whole.width() / 1000) : (task.whole.width() / 1000 + 1);
+        int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
 
         for (int i = 0; i < wCount; ++i) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
-            renderRects.append(QRect(i * 1000, 0, 1000, task.whole.height()));
+            renderRects.append(QRect(i * 1000, 0, 1000, task.rect.height()));
         };
 
-        QPixmap pixmap = QPixmap(task.whole.width(), task.whole.height());
+        QPixmap pixmap = QPixmap(task.rect.width(), task.rect.height());
 
         QPainter painter(&pixmap);
 
@@ -192,162 +290,280 @@ void PageRenderThread::run()
                 break;
 
             //外部删除了此处不判断会导致崩溃
-            if (!BrowserPage::existInstance(task.page))
+            if (!DocSheet::existSheet(task.sheet))
                 break;
 
             //判断page存在之后 使用page之前，也就是此处，如果主线程先一步进入page被删流程，【理论上会导致崩溃】，目前概率非常低，未发现
-            QImage image = task.page->getImage(task.whole.width(), task.whole.height(),
-                                               QRect(static_cast<int>(rect.x()),
-                                                     static_cast<int>(rect.y()),
-                                                     static_cast<int>(rect.width()),
-                                                     static_cast<int>(rect.height())));
+            QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height(),
+                                                QRect(static_cast<int>(rect.x()),
+                                                      static_cast<int>(rect.y()),
+                                                      static_cast<int>(rect.width()),
+                                                      static_cast<int>(rect.height())));
 
             painter.drawImage(rect, image);
 
-            //优先进行其他图片加载
-            while (execNextImageTask())
+            while (execNextDocOpenTask())
             {}
 
-            //优先进行其他图片部分加载
-            while (execNextImageSliceTask())
+            while (execNextDocPageSliceImageTask())
             {}
 
-            //优先进行其他文字加载
-            while (execNextWordTask())
+            while (execNextDocPageNormalImageTask())
+            {}
+
+            while (execNextDocPageWordTask())
+            {}
+
+            while (execNextDocPageThumbnailTask())
             {}
         }
 
         if (m_quit)
             break;
 
-        emit sigImageTaskFinished(task.page, pixmap, task.pixmapId, QRect());
+        emit sigDocPageBigImageTaskFinished(task, pixmap);
     }
 }
 
-bool PageRenderThread::execNextImageTask()
+bool PageRenderThread::hasNextTask()
 {
-    if (m_quit)
+    QMutexLocker pageNormalImageLocker(&m_pageNormalImageMutex);
+    QMutexLocker pageSliceImageLocker(&m_pageSliceImageMutex);
+    QMutexLocker pageBigImageLocker(&m_pageBigImageMutex);
+    QMutexLocker pageWordLocker(&m_pageWordMutex);
+    QMutexLocker pageThumbnailLocker(&m_pageThumbnailMutex);
+    QMutexLocker pageOpenLocker(&m_openMutex);
+
+    return !m_pageNormalImageTasks.isEmpty() || !m_pageSliceImageTasks.isEmpty() ||
+           !m_pageBigImageTasks.isEmpty() || !m_pageWordTasks.isEmpty() || !m_pageThumbnailTasks.isEmpty() || !m_openTasks.isEmpty();
+}
+
+bool PageRenderThread::popNextDocPageNormalImageTask(DocPageNormalImageTask &task)
+{
+    QMutexLocker locker(&m_pageNormalImageMutex);
+
+    if (m_pageNormalImageTasks.count() <= 0)
         return false;
 
-    RenderPageTask task;
+    task = m_pageNormalImageTasks.value(0);
 
-    if (!getNextTask(RenderPageTask::Image, task))
-        return false;
-
-    //外部删除了此处不判断会导致崩溃
-    if (!BrowserPage::existInstance(task.page))
-        return false;;
-
-    QImage image = task.page->getImage(task.whole.width(), task.whole.height());
-
-    if (!image.isNull())
-        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, QRect());
+    m_pageNormalImageTasks.removeAt(0);
 
     return true;
 }
 
-bool PageRenderThread::execNextImageSliceTask()
+bool PageRenderThread::popNextDocPageSliceImageTask(DocPageSliceImageTask &task)
 {
-    if (m_quit)
+    QMutexLocker locker(&m_pageSliceImageMutex);
+
+    if (m_pageSliceImageTasks.count() <= 0)
         return false;
 
-    RenderPageTask task;
+    task = m_pageSliceImageTasks.value(0);
 
-    if (!getNextTask(RenderPageTask::ImageSlice, task))
-        return false;
-
-    //外部删除了此处不判断会导致崩溃
-    if (!BrowserPage::existInstance(task.page))
-        return false;;
-
-    QImage image = task.page->getImage(task.whole.width(), task.whole.height(), task.slice);
-
-    if (!image.isNull())
-        emit sigImageTaskFinished(task.page, QPixmap::fromImage(image), task.pixmapId, task.slice);
+    m_pageSliceImageTasks.removeAt(0);
 
     return true;
 }
 
-bool PageRenderThread::execNextWordTask()
+bool PageRenderThread::popNextDocPageBigImageTask(DocPageBigImageTask &task)
+{
+    QMutexLocker locker(&m_pageBigImageMutex);
+
+    if (m_pageBigImageTasks.count() <= 0)
+        return false;
+
+    task = m_pageBigImageTasks.value(0);
+
+    m_pageBigImageTasks.removeAt(0);
+
+    return true;
+}
+
+bool PageRenderThread::popNextDocPageWordTask(DocPageWordTask &task)
+{
+    QMutexLocker locker(&m_pageWordMutex);
+
+    if (m_pageWordTasks.count() <= 0)
+        return false;
+
+    task = m_pageWordTasks.value(0);
+
+    m_pageWordTasks.removeAt(0);
+
+    return true;
+}
+
+bool PageRenderThread::popNextDocPageThumbnailTask(DocPageThumbnailTask &task)
+{
+    QMutexLocker locker(&m_pageThumbnailMutex);
+
+    if (m_pageThumbnailTasks.count() <= 0)
+        return false;
+
+    task = m_pageThumbnailTasks.value(0);
+
+    m_pageThumbnailTasks.removeAt(0);
+
+    return true;
+}
+
+bool PageRenderThread::popNextDocOpenTask(DocOpenTask &task)
+{
+    QMutexLocker locker(&m_openMutex);
+
+    if (m_openTasks.count() <= 0)
+        return false;
+
+    task = m_openTasks.value(0);
+
+    m_openTasks.removeAt(0);
+
+    return true;
+}
+
+bool PageRenderThread::execNextDocPageNormalImageTask()
 {
     if (m_quit)
         return false;
 
-    RenderPageTask task;
+    DocPageNormalImageTask task;
 
-    if (!getNextTask(RenderPageTask::Word, task))
+    if (!popNextDocPageNormalImageTask(task))
         return false;
 
-    //外部删除了此处不判断会导致崩溃
-    if (!BrowserPage::existInstance(task.page))
-        return false;;
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
+
+    QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height());
+
+    if (!image.isNull())
+        emit sigDocPageNormalImageTaskFinished(task, QPixmap::fromImage(image));
+
+    return true;
+}
+
+bool PageRenderThread::execNextDocPageSliceImageTask()
+{
+    if (m_quit)
+        return false;
+
+    DocPageSliceImageTask task;
+
+    if (!popNextDocPageSliceImageTask(task))
+        return false;
+
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
+
+    QImage image = task.sheet->getImage(task.page->itemIndex(), task.whole.width(), task.whole.height(), task.slice);
+
+    if (!image.isNull())
+        emit sigDocPageSliceImageTaskFinished(task, QPixmap::fromImage(image));
+
+    return true;
+}
+
+bool PageRenderThread::execNextDocPageWordTask()
+{
+    if (m_quit)
+        return false;
+
+    DocPageWordTask task;
+
+    if (!popNextDocPageWordTask(task))
+        return false;
+
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
 
     const QList<Word> &words = task.page->getWords();
 
-    emit sigWordTaskFinished(task.page, words);
+    emit sigDocPageWordTaskFinished(task, words);
 
     return true;
 }
 
-bool PageRenderThread::getNextTask(RenderPageTask::RenderPageTaskType type, RenderPageTask &task)
+bool PageRenderThread::execNextDocPageThumbnailTask()
 {
-    m_mutex.lock();
+    if (m_quit)
+        return false;
 
-    for (int i = 0; i < m_tasks.count(); ++i) {
-        if (type == m_tasks[i].type) {
-            task = m_tasks[i];
-            m_tasks.removeAt(i);
-            m_mutex.unlock();
-            return true;
-        }
-    }
+    DocPageThumbnailTask task;
 
-    m_mutex.unlock();
+    if (!popNextDocPageThumbnailTask(task))
+        return false;
 
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
+
+    QImage image = task.sheet->getImage(task.index, 174, 174);
+
+    if (!image.isNull())
+        emit sigDocPageThumbnailTaskFinished(task, QPixmap::fromImage(image));
+
+    return true;
+}
+
+bool PageRenderThread::execNextDocOpenTask()
+{
     return false;
+}
+
+void PageRenderThread::onDocPageNormalImageTaskFinished(DocPageNormalImageTask task, QPixmap pixmap)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.page->handleRenderFinished(task.pixmapId, pixmap);
+    }
+}
+
+void PageRenderThread::onDocPageSliceImageTaskFinished(DocPageSliceImageTask task, QPixmap pixmap)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.page->handleRenderFinished(task.pixmapId, pixmap, task.slice);
+    }
+}
+
+void PageRenderThread::onDocPageBigImageTaskFinished(DocPageBigImageTask task, QPixmap pixmap)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.page->handleRenderFinished(task.pixmapId, pixmap);
+    }
+}
+
+void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<Word> words)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.page->handleWordLoaded(words);
+    }
+}
+
+void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.model->handleRenderThumbnail(task.index, pixmap);
+    }
+}
+
+void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result)
+{
+
 }
 
 void PageRenderThread::destroyForever()
 {
-    quitForever = true;
+    s_quitForever = true;
 
     if (nullptr != s_instance)
         delete s_instance;
 }
 
-void PageRenderThread::onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice)
-{
-    if (BrowserPage::existInstance(item)) {
-        item->handleRenderFinished(pixmapId, pixmap, slice);
-    }
-}
-
-void PageRenderThread::onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words)
-{
-    if (BrowserPage::existInstance(item)) {
-        item->handleWordLoaded(words);
-    }
-}
-
-void PageRenderThread::onDelayTaskTimeout()
-{
-    m_mutex.lock();
-
-    m_tasks.append(m_delayTask);
-
-    m_mutex.unlock();
-
-    if (!isRunning())
-        start();
-}
-
 PageRenderThread *PageRenderThread::instance()
 {
-    if (quitForever)
+    if (s_quitForever)
         return nullptr;
 
     if (nullptr == s_instance) {
-        qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
         s_instance = new PageRenderThread;
     }
 

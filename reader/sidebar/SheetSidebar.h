@@ -109,18 +109,6 @@ public :
 
 public slots:
     /**
-     * @brief 刷新指定页码数据
-     * @param index
-     */
-    void handleUpdateThumbnail(const int &index);
-
-    /**
-     * @brief 缓存中无缩略图数据,进行刷新
-     * @param index
-     */
-    void handleUpdatePartThumbnail(const int &index);
-
-    /**
      * @brief 注释操作类型处理
      * @param anno
      */

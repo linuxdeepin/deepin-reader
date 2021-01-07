@@ -56,6 +56,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+QReadWriteLock DocSheet::g_lock;
 QMap<QString, DocSheet *> DocSheet::g_map;
 DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
@@ -83,8 +84,6 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     connect(m_browser, SIGNAL(sigNeedPageLast()), this, SLOT(onBrowserPageLast()));
     connect(m_browser, SIGNAL(sigNeedBookMark(int, bool)), this, SLOT(onBrowserBookmark(int, bool)));
     connect(m_browser, SIGNAL(sigOperaAnnotation(int, int, deepin_reader::Annotation *)), this, SLOT(onBrowserOperaAnnotation(int, int, deepin_reader::Annotation *)));
-    connect(m_browser, SIGNAL(sigPartThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdatePartThumbnail(int)));
-    connect(m_browser, SIGNAL(sigThumbnailUpdated(int)), m_sidebar, SLOT(handleUpdateThumbnail(int)));
 
     resetChildParent();
     this->insertWidget(0, m_browser);
@@ -99,18 +98,17 @@ DocSheet::~DocSheet()
 
     delete m_sidebar;
 
+    qDeleteAll(m_pages);
+
     if (nullptr != m_document)
         delete m_document;
-
-    qDeleteAll(m_pages);
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
 {
     for (auto iter = g_map.begin(); iter != g_map.end(); iter++) {
         if (iter.value()->filePath() == filePath) {
-            QImage image;
-            iter.value()->getImageOnCurrentDeviceRatio(0, image, 100, 100);
+            QImage image = iter.value()->getImage(0, 256, 256);
             return image;
         }
     }
@@ -120,30 +118,53 @@ QImage DocSheet::firstThumbnail(const QString &filePath)
 
 bool DocSheet::existFileChanged()
 {
+    bool changed = false;
+
+    g_lock.lockForRead();
+
     foreach (DocSheet *sheet, g_map.values()) {
-        if (sheet->fileChanged())
-            return true;
+        if (sheet->fileChanged()) {
+            changed = true;
+            break;
+        }
     }
 
-    return false;
+    g_lock.unlock();
+
+    return changed;
 }
 
 QUuid DocSheet::getUuid(DocSheet *sheet)
 {
-    return g_map.key(sheet);
+    g_lock.lockForRead();
+
+    QUuid uuid = g_map.key(sheet);
+
+    g_lock.unlock();
+
+    return uuid;
 }
 
 bool DocSheet::existSheet(DocSheet *sheet)
 {
-    return g_map.values().contains(sheet);
+    g_lock.lockForRead();
+
+    bool result = g_map.values().contains(sheet);
+
+    g_lock.unlock();
+
+    return result;
 }
 
 DocSheet *DocSheet::getSheet(QString uuid)
 {
-    if (g_map.contains(uuid))
-        return g_map[uuid];
+    g_lock.lockForRead();
 
-    return nullptr;
+    DocSheet *sheet = g_map.contains(uuid) ? g_map[uuid] : nullptr;
+
+    g_lock.unlock();
+
+    return sheet;
 }
 
 bool DocSheet::openFileExec(const QString &password, QString &error)
@@ -352,6 +373,29 @@ void DocSheet::setAnnotationInserting(bool inserting)
     m_browser->setAnnotationInserting(inserting);
 }
 
+QPixmap DocSheet::thumbnail(int index)
+{
+    return m_thumbnailMap.value(index);
+}
+
+void DocSheet::setThumbnail(int index, QPixmap pixmap)
+{
+    m_thumbnailMap[index] = pixmap;
+}
+
+void DocSheet::clearThumbnail(int currentIndex)
+{
+    QMap<int, QPixmap> tempMap;
+    tempMap[currentIndex - 3] = m_thumbnailMap[currentIndex - 3];
+    tempMap[currentIndex - 2] = m_thumbnailMap[currentIndex - 2];
+    tempMap[currentIndex - 1] = m_thumbnailMap[currentIndex - 1];
+    tempMap[currentIndex]     = m_thumbnailMap[currentIndex];
+    tempMap[currentIndex + 3] = m_thumbnailMap[currentIndex + 3];
+    tempMap[currentIndex + 2] = m_thumbnailMap[currentIndex + 2];
+    tempMap[currentIndex + 1] = m_thumbnailMap[currentIndex + 1];
+    m_thumbnailMap = tempMap;
+}
+
 void DocSheet::setScaleMode(Dr::ScaleMode mode)
 {
     if (mode >= Dr::ScaleFactorMode && mode <= Dr::FitToPageWorHMode) {
@@ -380,9 +424,14 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
     setOperationChanged();
 }
 
-bool DocSheet::getImageOnCurrentDeviceRatio(int index, QImage &image, int width, int height, bool bSrc)
+QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 {
-    return m_browser->getImage(index, image, width, height, bSrc);
+    if (m_pages.count() <= index)
+        return QImage();
+
+    QImage image = m_pages.value(index)->render(width, height, slice);
+
+    return image;
 }
 
 bool DocSheet::fileChanged()
@@ -449,6 +498,11 @@ void DocSheet::handleOpened(bool result, QString error, deepin_reader::Document 
     }
 
     emit sigFileOpened(this, result, error);
+}
+
+void DocSheet::handlePageModified(int index)
+{
+    emit sigPageModified(index);
 }
 
 void DocSheet::handleSearch()
@@ -720,7 +774,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
             break;
 
         QImage image;
-        if (m_browser->getImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+        if (m_browser->getExistImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
             painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
         }
 
@@ -1008,17 +1062,24 @@ void DocSheet::setAlive(bool alive)
             setAlive(false);
 
         m_uuid = QUuid::createUuid().toString();
+        g_lock.lockForWrite();
         g_map[m_uuid] = this;
+        g_lock.unlock();
+
         Database::instance()->readOperation(this);
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+
     } else {
         if (m_uuid.isEmpty())
             return;
 
         stopSearch();
         Database::instance()->saveOperation(this);
+
+        g_lock.lockForWrite();
         g_map.remove(m_uuid);
         m_uuid.clear();
+        g_lock.unlock();
     }
 }
 

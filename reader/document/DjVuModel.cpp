@@ -475,8 +475,8 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
 
     pagerect.x = 0;
     pagerect.y = 0;
-    pagerect.w = static_cast<unsigned int>(width * dApp->devicePixelRatio());
-    pagerect.h = static_cast<unsigned int>(height * dApp->devicePixelRatio());
+    pagerect.w = static_cast<unsigned int>(width);
+    pagerect.h = static_cast<unsigned int>(height);
 
     ddjvu_rect_t renderrect;
 
@@ -486,14 +486,13 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
-        renderrect.x = static_cast<int>(slice.x() * dApp->devicePixelRatio());
-        renderrect.y = static_cast<int>(slice.y() * dApp->devicePixelRatio());
-        renderrect.w = static_cast<unsigned int>(slice.width() * dApp->devicePixelRatio());
-        renderrect.h = static_cast<unsigned int>(slice.height() * dApp->devicePixelRatio());
+        renderrect.x = static_cast<int>(slice.x());
+        renderrect.y = static_cast<int>(slice.y());
+        renderrect.w = static_cast<unsigned int>(slice.width());
+        renderrect.h = static_cast<unsigned int>(slice.height());
     }
 
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
         image = QImage();

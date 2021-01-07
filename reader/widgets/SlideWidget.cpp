@@ -33,6 +33,7 @@
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QTimer>
+#include <QDebug>
 
 SlideWidget::SlideWidget(DocSheet *docsheet)
     : DWidget(MainWindow::windowContainSheet(docsheet))

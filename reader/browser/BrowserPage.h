@@ -22,6 +22,7 @@
 #define BrowserPage_H
 
 #include "PDFModel.h"
+#include "DocSheet.h"
 
 #include <QGraphicsItem>
 #include <QSet>
@@ -50,7 +51,7 @@ class BrowserPage : public QGraphicsItem
     friend class PageRenderThread;
     friend class PageViewportThread;
 public:
-    explicit BrowserPage(SheetBrowser *parent, deepin_reader::Page *page);
+    explicit BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet, deepin_reader::Page *page);
 
     ~BrowserPage() override;
 
@@ -92,13 +93,13 @@ public:
      * @param scaleFactor 缩放系数
      * @param rect 需要被局部加载的文档区域
      */
-    void renderRect(const qreal &scaleFactor, const QRectF &rect);
+    void renderRect(const QRectF &rect);
 
     /**
      * @brief 加载当前视图区域
      * @param scaleFactor 缩放因子
      */
-    void renderViewPort(const qreal &scaleFactor);
+    void renderViewPort();
 
     /**
      * @brief 更新书签状态
@@ -106,33 +107,7 @@ public:
     void updateBookmarkState();
 
     /**
-     * @brief existInstance
-     * 页是否存在
-     * @param item 哪一页
-     * @return
-     */
-    static bool existInstance(BrowserPage *item);
-
-    /**
-     * @brief getImage
-     * @param width
-     * @param height
-     * @param slice
-     * @return
-     */
-    QImage getImage(int width, int height, const QRect &slice = QRect());
-
-    /**
-     * @brief getImage
-     * 获取该缩放后的图片中的一部分
-     * @param scaleFactor 缩放因子
-     * @param boundingRect 需要取的局部范围 默认为获取全部
-     * @return
-     */
-    QImage getImage(double scaleFactor, const QRect &slice = QRect());
-
-    /**
-     * @brief getImage
+     * @brief currentImage
      * 获取整个图片并转成对应宽高
      * @param width 宽
      * @param height 高
@@ -140,7 +115,7 @@ public:
      * @param bSrc 是否可以使用已存在图片缩放
      * @return
      */
-    QImage getImage(int width, int height, bool bSrc);
+    QImage getCurrentImage(int width, int height);
 
     /**
      * @brief getImagePoint
@@ -165,13 +140,6 @@ public:
      * @return 文字列表
      */
     QList<Word> getWords();
-
-    /**
-     * @brief setItemIndex
-     * 设置文档页的编号
-     * @param itemIndex 编号
-     */
-    void setItemIndex(int itemIndex);
 
     /**
      * @brief itemIndex
@@ -363,6 +331,12 @@ public:
     void setDrawMoveIconRect(const bool draw);
 
     /**
+     * @brief iconMovePos
+     * @return
+     */
+    QPointF iconMovePos();
+
+    /**
      * @brief setIconMovePos
      * 图标注释选择框移动位置
      * @param movePoint 移动位置
@@ -419,17 +393,9 @@ private:
      * 渲染缩略图
      * @param scaleFactor 缩放系数
      * @param image 缩略图
-     */
-    void handleBigImageFinished(const int &pixmapId, const QPixmap &pixmap);
-
-    /**
-     * @brief handleRenderFinished
-     * 渲染缩略图
-     * @param scaleFactor 缩放系数
-     * @param image 缩略图
      * @param rect 范围
      */
-    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &slice);
+    void handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &slice = QRect());
 
     /**
      * brief handleWordLoaded
@@ -486,9 +452,7 @@ protected:
     bool sceneEvent(QEvent *event) override;
 
 private:
-    static QMutex mutex;
-
-    static QSet<BrowserPage *> items;                       //用于记录多少个自己
+    DocSheet *m_sheet = nullptr;
 
     QMutex m_mutex;
 
@@ -507,7 +471,7 @@ private:
     int     m_pixmapId          = 0;                        //当前图片的标识
     bool    m_pixmapIsLastest   = false;                    //当前图示是否最新
     bool    m_pixmapHasRendered = false;                    //当前图片是否已经加载
-    double  m_pixmapScaleFactor = -1;                       //当前图片的缩放
+    double  m_renderPixmapScaleFactor = -1;                       //当前图片的缩放
     bool    m_viewportRendered  = false;                    //图片初始化加载视图窗口
 
     QList<BrowserWord *> m_words;                           //当前文字

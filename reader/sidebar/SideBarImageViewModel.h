@@ -70,7 +70,7 @@ class DocSheet;
 class SideBarImageViewModel : public QAbstractListModel
 {
 public:
-    explicit  SideBarImageViewModel(QObject *parent = nullptr);
+    explicit  SideBarImageViewModel(DocSheet *sheet, QObject *parent = nullptr);
 
 public:
     /**
@@ -88,13 +88,6 @@ public:
     void initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort = false);
 
     /**
-     * @brief setDocSheet
-     * 设置文档操作对象
-     * @param sheet
-     */
-    void setDocSheet(DocSheet *sheet);
-
-    /**
      * @brief setBookMarkVisible
      * 设置书签数据缓存状态
      * @param pageIndex
@@ -102,13 +95,6 @@ public:
      * @param updateIndex
      */
     void setBookMarkVisible(int pageIndex, bool visible, bool updateIndex = true);
-
-    /**
-     * @brief 更新指定页数
-     * @param pageIndex 页数
-     * @param force 是否强制刷新
-     */
-    void updatePageIndex(int pageIndex, bool force = false, bool bSrc = false);
 
     /**
      * @brief insertPageIndex
@@ -177,6 +163,14 @@ public:
      */
     int findItemForAnno(deepin_reader::Annotation *annotation);
 
+    /**
+     * @brief handleThumbnail
+     * 处理缩略图
+     * @param index
+     * @param pixmap
+     */
+    void handleRenderThumbnail(int index, QPixmap pixmap);
+
 public slots:
     /**
      * @brief onUpdatePageImage
@@ -192,6 +186,8 @@ public slots:
      * @param force
      */
     void onFetchImage(int nRow, bool force = false) const;
+
+    void onUpdateImage(int index);
 
 protected:
     /**
@@ -230,9 +226,10 @@ protected:
 
 private:
     QObject *m_parent = nullptr;
-    DocSheet *m_docSheet = nullptr;
+    DocSheet *m_sheet = nullptr;
     QList<ImagePageInfo_t> m_pagelst;
     QMap<int, bool> m_cacheBookMarkMap;
+    static QMap<QObject *, QVector<QPixmap>> g_sheetPixmapMap;
 };
 
 #endif // SIDEBARIMAGEVIEWMODEL_H

@@ -57,8 +57,7 @@ void SideBarImageListView::initControl()
     m_pBookMarkMenu = nullptr;
     m_pNoteMenu = nullptr;
     m_listType = E_SideBar::SIDE_THUMBNIL;
-    m_imageModel = new SideBarImageViewModel(this);
-    m_imageModel->setDocSheet(m_docSheet);
+    m_imageModel = new SideBarImageViewModel(m_docSheet, this);
     this->setModel(m_imageModel);
 }
 

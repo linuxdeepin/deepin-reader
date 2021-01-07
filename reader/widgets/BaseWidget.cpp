@@ -46,8 +46,3 @@ void BaseWidget::adaptWindowSize(const double &)
 {
 
 }
-
-void BaseWidget::updateThumbnail(const int &, bool)
-{
-
-}

@@ -75,12 +75,6 @@ public:
      */
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 
-    /**
-     * @brief updateThumbnail
-     * 刷新指定页数
-     */
-    void updateThumbnail(const int &, bool bSrc = false) Q_DECL_OVERRIDE;
-
 protected:
     /**
      * @brief initWidget

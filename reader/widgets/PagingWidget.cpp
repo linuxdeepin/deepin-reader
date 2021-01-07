@@ -162,6 +162,7 @@ void PagingWidget::handleOpenSuccess()
         return;
 
     m_tmFuncThread->func = [ this ]()->bool{
+        //当快递过快时崩溃
         return m_sheet->haslabel();
     };
     m_tmFuncThread->start();
@@ -232,7 +233,6 @@ void PagingWidget::onFuncThreadFinished()
 {
     m_bHasLabel = m_tmFuncThread->result.toBool();
     m_pCurrentPageLab->setVisible(m_bHasLabel);
-
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);
 }

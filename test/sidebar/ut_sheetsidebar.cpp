@@ -106,13 +106,6 @@ TEST_F(ut_sidebar, SidebarTest)
     sideBar.handleFindFinished();
     sideBar.handleRotate();
     sideBar.changeResetModelData();
-    sideBar.handleUpdateThumbnail(-1);
-    sideBar.handleUpdateThumbnail(0);
-    sideBar.handleUpdateThumbnail(10000);
-
-    sideBar.handleUpdatePartThumbnail(0);
-    sideBar.handleUpdatePartThumbnail(-1);
-    sideBar.handleUpdatePartThumbnail(10000);
 
     sideBar.handleAnntationMsg(0, -1, nullptr);
     sideBar.handleAnntationMsg(1, -1, nullptr);
@@ -174,9 +167,6 @@ TEST_F(ut_sidebar, SidebarTest)
     thumbnailWidget.pageUp();
 
     thumbnailWidget.adaptWindowSize(1.0);
-    thumbnailWidget.updateThumbnail(-1);
-    thumbnailWidget.updateThumbnail(0);
-    thumbnailWidget.updateThumbnail(10000);
     thumbnailWidget.scrollToCurrentPage();
     thumbnailWidget.repaint();
 
@@ -273,8 +263,6 @@ TEST_F(ut_sidebar, SidebarTest)
     bookwidget.initWidget();
     bookwidget.handleOpenSuccess();
     bookwidget.adaptWindowSize(1.0);
-    bookwidget.updateThumbnail(-1);
-    bookwidget.updateThumbnail(10000);
     bookwidget.nextPage();
     bookwidget.deleteItemByKey();
     bookwidget.handlePage(0);
@@ -304,8 +292,6 @@ TEST_F(ut_sidebar, SidebarTest)
     noteWidget.handleAnntationMsg(1, nullptr);
     noteWidget.handleAnntationMsg(2, nullptr);
     noteWidget.adaptWindowSize(1.0);
-    noteWidget.updateThumbnail(-1);
-    noteWidget.updateThumbnail(100000);
     noteWidget.changeResetModelData();
     noteWidget.onListMenuClick(-1);
     noteWidget.onListMenuClick(4);
@@ -335,8 +321,6 @@ TEST_F(ut_sidebar, SidebarTest)
     SearchResWidget searchWidget(sheet);
     searchWidget.clearFindResult();
     searchWidget.adaptWindowSize(1.0);
-    searchWidget.updateThumbnail(-1);
-    searchWidget.updateThumbnail(10000);
     EXPECT_EQ(searchWidget.handleFindFinished(), 0);
     searchWidget.addSearchsItem(0, "test", 5);
     searchWidget.addSearchsItem(-1, "test", -1);

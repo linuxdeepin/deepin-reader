@@ -332,10 +332,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(sheet->fileChanged());
     //EXPECT_TRUE(sheet->saveData());       //阻塞
 
-    QImage imageTest;
-    EXPECT_TRUE(sheet->getImageOnCurrentDeviceRatio(0, imageTest, 100, 100));
-    EXPECT_FALSE(imageTest.isNull());
-
     EXPECT_TRUE(sheet->annotations().size() >= 0);
     EXPECT_TRUE(sheet->scaleFactorList().size() > 0);
 

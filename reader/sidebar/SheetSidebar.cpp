@@ -266,25 +266,6 @@ void SheetSidebar::handleRotate()
         m_thumbnailWidget->handleRotate();
 }
 
-void SheetSidebar::handleUpdateThumbnail(const int &index)
-{
-    BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
-
-    if (curWidget)
-        curWidget->updateThumbnail(index, false);
-}
-
-void SheetSidebar::handleUpdatePartThumbnail(const int &index)
-{
-    if (index < 0 || index >= m_sheet->pageCount())
-        return;
-
-    BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
-
-    if (curWidget)
-        curWidget->updateThumbnail(index, true);
-}
-
 void SheetSidebar::handleAnntationMsg(const int &msg, int index, deepin_reader::Annotation *anno)
 {
     if (m_notesWidget)

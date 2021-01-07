@@ -169,7 +169,7 @@ public:
     void setCurrentPage(int page);
 
     /**
-     * @brief getImage
+     * @brief getExistImage
      * 获取文档页图片
      * @param index 页码编号
      * @param image 页码图片
@@ -179,7 +179,7 @@ public:
      * @param bSrc
      * @return
      */
-    bool getImage(int index, QImage &image, int width, int height,  bool bSrc = false);
+    bool getExistImage(int index, QImage &image, int width, int height);
 
     /**
      * @brief magnifierOpened
@@ -427,19 +427,6 @@ signals:
 
     void sigOperaAnnotation(int type, int index, deepin_reader::Annotation *annotation);
 
-    void sigPartThumbnailUpdated(int index);
-
-    /**
-     * @brief sigThumbnailUpdated
-     * 通知左侧更新相应缩略图
-     * @param index 哪个缩略图
-     */
-    void sigThumbnailUpdated(int index);
-
-    /**
-     * @brief sigAddHighLightAnnot
-     * 添加文本高亮操作
-     */
     void sigAddHighLightAnnot(BrowserPage *, QString, QColor);
 
 protected:
@@ -756,8 +743,8 @@ private:
 
     bool m_isLoadPageLabel = false;
     bool m_annotationInserting = false;     //正在插入注释状态
-    bool m_selectIconAnnotation = false; // 当前是否有选中的图标注释
-    QPointF m_iconAnnotationMovePos;    // 当前选中的图标注释移动位置
+    bool m_selectIconAnnotation = false;    //当前是否有选中的图标注释
+    QPointF m_iconAnnotationMovePos;        //当前选中的图标注释移动位置
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
 
     QMap<QString, int> m_lable2Page;    // 文档下标页码

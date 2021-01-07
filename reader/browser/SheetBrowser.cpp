@@ -182,9 +182,7 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
         if (page == nullptr)
             return false;
 
-        BrowserPage *item = new BrowserPage(this, page);
-
-        item->setItemIndex(i);
+        BrowserPage *item = new BrowserPage(this, i, m_sheet, page);
 
         if (bookmarks.contains(i))
             item->setBookmark(true);
@@ -373,12 +371,8 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
 
     QPointF pagePointF = page->mapFromScene(clickPoint);
 
-    if (drawRect && m_lastSelectIconAnnotPage)
-        m_lastSelectIconAnnotPage->setSelectIconRect(false);
-
-    m_lastSelectIconAnnotPage = page;
-
     pagePointF = translate2Local(pagePointF);
+
     foreach (Annotation *annot, page->annotations()) {
         foreach (const QRectF &rect, annot->boundary()) {
             if (rect.contains(pagePointF)) {
@@ -560,11 +554,11 @@ bool SheetBrowser::removeAllAnnotation()
 {
     foreach (BrowserPage *item, m_items) {
         if (item && item->removeAllAnnotation()) {
-            emit sigThumbnailUpdated(item->itemIndex());
         }
     }
 
     emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, -1, nullptr);
+
     return true;
 }
 
@@ -573,8 +567,10 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     if (nullptr == m_document || nullptr == annotation)
         return false;
 
-    bool ret{false};
+    bool ret = false;
+
     int pageIndex = annotation->page - 1;
+
     foreach (BrowserPage *item, m_items) {
         if (item && item->hasAnnotation(annotation)) {
             ret = item->updateAnnotation(annotation, text, color);
@@ -1027,6 +1023,12 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             }
 
             deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
+
+            if (m_lastSelectIconAnnotPage)
+                m_lastSelectIconAnnotPage->setSelectIconRect(false);
+
+            m_lastSelectIconAnnotPage = page;
+
             if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                 m_selectIconAnnotation = true;
                 m_iconAnnotationMovePos = m_selectPressedPos;
@@ -1178,6 +1180,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         QPoint mousePos = event->pos();
+
+        //触摸
         if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
             QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
             if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
@@ -1188,16 +1192,36 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             return QGraphicsView::mouseMoveEvent(event);
         }
 
+        //处理当前拖放图标注释
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
-            const QPointF &curPointF = mapToScene(mousePos);
+            QPointF curPointF = mapToScene(mousePos);
+
+            if (curPointF.x() < 10)
+                curPointF.setX(10);
+
+            if (curPointF.y() < 10)
+                curPointF.setY(10);
+
+            if (curPointF.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 10)
+                curPointF.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 10);
+
+            if (curPointF.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 10)
+                curPointF.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 10);
+
             const QPointF &delta = curPointF - m_iconAnnotationMovePos;
+
             if (delta.manhattanLength() > deltaManhattanLength) {
                 m_iconAnnotationMovePos = QPointF();
+
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
+
                 m_lastSelectIconAnnotPage->setIconMovePos(m_lastSelectIconAnnotPage->mapFromScene(curPointF));
+
                 setCursor(QCursor(Qt::PointingHandCursor));
+
                 if (m_tipsWidget)
                     m_tipsWidget->hide();
+
                 return QGraphicsView::mouseMoveEvent(event);
             }
         }
@@ -1218,14 +1242,15 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         }
 
         if (magnifierOpened()) {
+            //放大镜
             showMagnigierImage(mousePos);
         } else {
             QPointF mousposF = event->pos();
+
             BrowserPage *page = getBrowserPageForPoint(mousposF);
 
-            if (page) {
+            if (page) { //加载页码内的文字
                 page->loadWords();
-
                 if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
                     if (page->itemIndex() - m_selectIndex > 1) {
                         for (int i = m_selectIndex + 1; i < page->itemIndex(); ++i) {
@@ -1258,7 +1283,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 } else {
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
-            } else {//按下
+            } else {//当前正在被按下
                 m_tipsWidget->hide();
                 QPointF beginPos = m_selectPressedPos;
                 QPointF endPos = mapToScene(event->pos());
@@ -1329,10 +1354,13 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             }
 
             const QPointF &mousepoint = mapToScene(event->pos());
+
             m_selectEndPos = mousepoint;
 
             QPointF point = event->pos();
+
             BrowserPage *page = getBrowserPageForPoint(point);
+
             deepin_reader::Annotation *clickAnno = getClickAnnot(page, mousepoint);
 
             if (m_iconAnnot)
@@ -1356,8 +1384,10 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             } else {
                 if (m_lastSelectIconAnnotPage && m_iconAnnotationMovePos.isNull()) {
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
-                    if (moveIconAnnot(m_lastSelectIconAnnotPage, m_selectEndPos))
+
+                    if (moveIconAnnot(m_lastSelectIconAnnotPage, m_lastSelectIconAnnotPage->iconMovePos()))
                         emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
+
                 } else if (clickAnno && m_lastSelectIconAnnotPage) {
                     showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
                 }
@@ -1457,16 +1487,14 @@ void SheetBrowser::setCurrentPage(int page)
     curpageChanged(page);
 }
 
-bool SheetBrowser::getImage(int index, QImage &image, int width, int height, bool bSrc)
+bool SheetBrowser::getExistImage(int index, QImage &image, int width, int height)
 {
     if (m_items.count() <= index)
         return false;
 
-    image = m_items.at(index)->getImage(static_cast<int>(width * dApp->devicePixelRatio()), static_cast<int>(height * dApp->devicePixelRatio()), bSrc);
+    image = m_items.at(index)->getCurrentImage(width, height);
 
-    image.setDevicePixelRatio(dApp->devicePixelRatio());
-
-    return true;
+    return !image.isNull();
 }
 
 BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
@@ -1859,8 +1887,11 @@ void SheetBrowser::loadPageLable()
         return;
 
     m_isLoadPageLabel = true;
+
     m_lable2Page.clear();
+
     int pageCount = m_document->pageCount();
+
     for (int i = 0; i < pageCount; i++) {
         const QString &labelPage = m_document->label(i);
 
@@ -1881,6 +1912,7 @@ int SheetBrowser::pageLableIndex(const QString pageLable)
 bool SheetBrowser::pageHasLable()
 {
     loadPageLable();
+
     if (m_lable2Page.count() > 0) {
         return true;
     }

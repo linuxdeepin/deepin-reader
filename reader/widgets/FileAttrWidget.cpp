@@ -85,8 +85,8 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     if (sheet == nullptr)
         return;
 
-    QImage image;
-    sheet->getImageOnCurrentDeviceRatio(0, image, 94, 113);
+    QImage image = sheet->getImage(0, 94 * dApp->devicePixelRatio(), 113 * dApp->devicePixelRatio());
+    image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     if (!image.isNull() && frameImage) {
         const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);

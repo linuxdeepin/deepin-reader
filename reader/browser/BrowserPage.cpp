@@ -49,32 +49,19 @@
 #include <QMutexLocker>
 
 const int ICON_SIZE = 23;
-QMutex BrowserPage::mutex;
-QSet<BrowserPage *> BrowserPage::items;
-BrowserPage::BrowserPage(SheetBrowser *parent, deepin_reader::Page *page) : QGraphicsItem(),  m_parent(parent), m_page(page)
+
+BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet, deepin_reader::Page *page) :
+    QGraphicsItem(), m_sheet(sheet), m_parent(parent), m_page(page), m_index(index)
 {
-    mutex.lock();
-
-    items.insert(this);
-
-    mutex.unlock();
-
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsPanel);
+
 }
 
 BrowserPage::~BrowserPage()
 {
-    mutex.lock();
-
-    items.remove(this);
-
-    mutex.unlock();
-
-    QMutexLocker locker(&m_mutex);
-
-    PageRenderThread::clearImageTask(this);
+    PageRenderThread::clearImageTasks(m_sheet, this);
 
     qDeleteAll(m_annotations);
 
@@ -142,12 +129,12 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 {
     Q_UNUSED(option)
 
-    if (!m_pixmapIsLastest) {
+    if (!qFuzzyCompare(m_renderPixmapScaleFactor, m_scaleFactor)) {
         render(m_scaleFactor, m_rotation);
     }
 
     if (!m_viewportRendered && !m_pixmapHasRendered && isBigDoc())
-        renderViewPort(m_scaleFactor);
+        renderViewPort();
 
     painter->drawPixmap(0, 0, m_renderPixmap);  //m_renderPixmap的大小存在系统缩放，可能不等于option->rect()，需要按坐标绘制
 
@@ -159,7 +146,9 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_checked").pixmap(QSize(39, 39)));
 
     painter->setPen(Qt::NoPen);
+
     painter->setBrush(QColor(238, 220, 0, 100));
+
     int lightsize = m_searchLightrectLst.size();
 
     for (int i = 0; i < lightsize; i++) {
@@ -199,8 +188,6 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
     if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem))
         m_lastClickIconAnnotationItem->setScaleFactor(scaleFactor);
 
-    m_pixmapIsLastest = false;
-
     m_scaleFactor = scaleFactor;
 
     if (m_rotation != rotation) {
@@ -215,40 +202,52 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             this->setRotation(270);
     }
 
-    if (!renderLater && !qFuzzyCompare(m_pixmapScaleFactor, m_scaleFactor)) {
-        m_pixmapScaleFactor = m_scaleFactor;
-
-        RenderPageTask task;
-
-        task.page = this;
-
-        task.scaleFactor = m_scaleFactor;
-
-        task.pixmapId = ++m_pixmapId;
-
-        task.whole = QRect(0, 0,
-                           static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
-                           static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+    if (!renderLater && !qFuzzyCompare(m_renderPixmapScaleFactor, m_scaleFactor)) {
+        m_renderPixmapScaleFactor = m_scaleFactor;
 
         if (m_pixmap.isNull()) {
             m_pixmap = QPixmap(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
                                static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
             m_pixmap.fill(Qt::white);
             m_renderPixmap = m_pixmap;
+            m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
         } else {
             m_renderPixmap = m_pixmap.scaled(static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
-                                             static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()),
-                                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            PageRenderThread::clearImageTask(this, m_pixmapId);
+                                             static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+            m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
         }
 
-        m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+        ++m_pixmapId;
 
-        if (!isBigDoc()) {
-            task.type = RenderPageTask::Image;
-            PageRenderThread::appendTask(task); //小文档取消延时
+        PageRenderThread::clearImageTasks(m_sheet, this, m_pixmapId);
+
+        if (isBigDoc()) {
+            DocPageBigImageTask task;
+
+            task.sheet = m_sheet;
+
+            task.page = this;
+
+            task.pixmapId = m_pixmapId;
+
+            task.rect = QRect(0, 0,
+                              static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                              static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+
+            PageRenderThread::appendTask(task);
         } else {
-            task.type = RenderPageTask::BigImage;
+            DocPageNormalImageTask task;
+
+            task.sheet = m_sheet;
+
+            task.page = this;
+
+            task.pixmapId = m_pixmapId;
+
+            task.rect = QRect(0, 0,
+                              static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
+                              static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+
             PageRenderThread::appendTask(task);
         }
 
@@ -264,20 +263,18 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
     update();
 }
 
-void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
+void BrowserPage::renderRect(const QRectF &rect)
 {
     if (nullptr == m_parent)
         return;
 
     QRect validRect = boundingRect().intersected(rect).toRect();
 
-    RenderPageTask task;
+    DocPageSliceImageTask task;
 
-    task.type = RenderPageTask::ImageSlice;
+    task.sheet = m_sheet;
 
     task.page = this;
-
-    task.scaleFactor = scaleFactor;
 
     task.pixmapId = m_pixmapId;
 
@@ -293,7 +290,7 @@ void BrowserPage::renderRect(const qreal &scaleFactor, const QRectF &rect)
     PageRenderThread::appendTask(task);
 }
 
-void BrowserPage::renderViewPort(const qreal &scaleFactor)
+void BrowserPage::renderViewPort()
 {
     if (nullptr == m_parent)
         return;
@@ -324,7 +321,7 @@ void BrowserPage::renderViewPort(const qreal &scaleFactor)
 
     viewRenderRect.setHeight(viewRenderRect.y() + viewRenderRect.height() + expand * 2 > boundingRect().height() ? viewRenderRect.height() :  viewRenderRect.height() + expand * 2);
 
-    renderRect(scaleFactor, viewRenderRect);
+    renderRect(viewRenderRect);
 
     m_viewportRendered = true;
 }
@@ -336,7 +333,6 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
 
     if (!slice.isValid()) { //不是切片，整体更新
         m_pixmapHasRendered = true;
-        m_pixmapIsLastest = true;
         m_pixmap = pixmap;
     } else { //局部
         QPainter painter(&m_pixmap);
@@ -346,8 +342,6 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
     m_renderPixmap = m_pixmap;
 
     m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
-
-    emit m_parent->sigPartThumbnailUpdated(m_index);
 
     update();
 }
@@ -373,44 +367,16 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
     scaleWords(true);
 }
 
-QImage BrowserPage::getImage(int width, int height, const QRect &slice)
+QImage BrowserPage::getCurrentImage(int width, int height)
 {
-    QMutexLocker locker(&m_mutex);
+    if (m_pixmap.isNull())
+        return QImage();
 
-    QImage image = m_page->render(width, height, slice);
+    //获取图片比原图还大,就不需要原图了
+    if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
+        return QImage();
 
-    return image;
-}
-
-QImage BrowserPage::getImage(double scaleFactor, const QRect &slice)
-{
-    QMutexLocker locker(&m_mutex);
-
-    QImage image = m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
-                                  static_cast<int>(pageSize().height() * scaleFactor),
-                                  slice);
-
-    return image;
-}
-
-QImage BrowserPage::getImage(int width, int height, bool bSrc)
-{
-    if (bSrc) {
-        if (m_pixmap.isNull())
-            return QImage();
-
-        //获取图片比原图还大,就不需要原图了
-        if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
-            return QImage();
-
-        QImage image = m_pixmap.toImage().scaled(static_cast<int>(width), static_cast<int>(height));
-
-        return image;
-    }
-
-    QMutexLocker locker(&m_mutex);
-
-    QImage image = m_page->render(width, height, QRect());
+    QImage image = m_pixmap.toImage().scaled(static_cast<int>(width), static_cast<int>(height));
 
     return image;
 }
@@ -443,18 +409,6 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
 QList<Word> BrowserPage::getWords()
 {
     return m_page->words();
-}
-
-bool BrowserPage::existInstance(BrowserPage *item)
-{
-    QMutexLocker locker(&mutex);
-
-    return items.contains(item);
-}
-
-void BrowserPage::setItemIndex(int itemIndex)
-{
-    m_index = itemIndex;
 }
 
 int BrowserPage::itemIndex()
@@ -515,8 +469,8 @@ void BrowserPage::loadWords()
 
     //优先级慢点,先等下取图片接口
     QTimer::singleShot(10, [this]() {
-        RenderPageTask task;
-        task.type = RenderPageTask::Word;
+        DocPageWordTask task;
+        task.sheet = m_sheet;
         task.page = this;
         PageRenderThread::appendTask(task);
     });
@@ -527,17 +481,16 @@ void BrowserPage::loadWords()
 
 void BrowserPage::clearPixmap()
 {
-    if (m_pixmapScaleFactor < -0.0001)
+    if (m_renderPixmapScaleFactor < -0.0001)
         return;
 
     m_pixmap = QPixmap();
     m_renderPixmap = m_pixmap;
     ++m_pixmapId;
-    m_pixmapIsLastest   = false;
     m_pixmapHasRendered = false;
     m_viewportRendered  = false;
-    m_pixmapScaleFactor = -1;
-    PageRenderThread::clearImageTask(this);
+    m_renderPixmapScaleFactor = -1;
+    PageRenderThread::clearImageTasks(m_sheet, this);
 }
 
 void BrowserPage::clearWords()
@@ -646,10 +599,12 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor,
-                                     renderBoundary.y() * m_scaleFactor,
-                                     renderBoundary.width() * m_scaleFactor,
-                                     renderBoundary.height() * m_scaleFactor));
+    renderRect(QRectF(renderBoundary.x() * m_scaleFactor,
+                      renderBoundary.y() * m_scaleFactor,
+                      renderBoundary.width() * m_scaleFactor,
+                      renderBoundary.height() * m_scaleFactor));
+
+    m_sheet->handlePageModified(m_index);
 
     return true;
 }
@@ -711,8 +666,11 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
-        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+        renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor,
+                          renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
     }
+
+    m_sheet->handlePageModified(m_index);
 
     return highLightAnnot;
 }
@@ -748,6 +706,11 @@ void BrowserPage::setDrawMoveIconRect(const bool draw)
     update();
 }
 
+QPointF BrowserPage::iconMovePos()
+{
+    return m_drawMoveIconPoint;
+}
+
 void BrowserPage::setIconMovePos(const QPointF movePoint)
 {
     m_drawMoveIconPoint = movePoint;
@@ -767,6 +730,8 @@ QString BrowserPage::deleteNowSelectIconAnnotation()
     removeAnnotation(m_lastClickIconAnnotationItem->annotation());
 
     m_lastClickIconAnnotationItem = nullptr;
+
+    m_sheet->handlePageModified(m_index);
 
     return iconAnnotationContains;
 }
@@ -808,8 +773,10 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
         }
 
         renderBoundary.adjust(-10, -10, 10, 10);
-        renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+        renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
     }
+
+    m_sheet->handlePageModified(m_index);
 
     return true;
 }
@@ -855,7 +822,10 @@ bool BrowserPage::removeAllAnnotation()
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    m_sheet->handlePageModified(m_index);
 
     return true;
 }
@@ -898,24 +868,6 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
     }
 }
 
-void BrowserPage::handleBigImageFinished(const int &pixmapId, const QPixmap &pixmap)
-{
-    if (m_pixmapId != pixmapId)
-        return;
-
-    m_pixmapHasRendered = true;
-
-    m_pixmapIsLastest = true;
-
-    m_pixmap = pixmap;
-
-    m_renderPixmap = m_pixmap;
-
-    emit m_parent->sigPartThumbnailUpdated(m_index);
-
-    update();
-}
-
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
@@ -942,12 +894,16 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
     }
 
     QRectF renderBoundary;
+
     for (int i = 0; i < annoBoundaries.size(); i++) {
         renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    m_sheet->handlePageModified(m_index);
 
     return true;
 }
@@ -976,13 +932,18 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
     }
 
     QRectF renderBoundary;
+
     const QList<QRectF> &annoBoundaries = annot->boundary();
+
     for (int i = 0; i < annoBoundaries.size(); i++) {
         renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
 
     renderBoundary.adjust(-10, -10, 10, 10);
-    renderRect(m_scaleFactor, QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+    m_sheet->handlePageModified(m_index);
 
     return annot;
 }

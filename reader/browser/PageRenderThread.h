@@ -29,63 +29,81 @@
 #include <QStack>
 #include <QImage>
 
-class SheetBrowser;
+class DocSheet;
 class BrowserPage;
-struct RenderPageTask {
-    enum RenderPageTaskType {
-        Image = 1,
-        Word = 2,
-        BigImage = 3,
-        ImageSlice = 4
-    };
+class SideBarImageViewModel;
 
-    int type = RenderPageTaskType::Image;
+struct DocPageNormalImageTask {//正常取图
+    DocSheet *sheet = nullptr;
     BrowserPage *page = nullptr;
-    double scaleFactor = 1.0;   //暂时不用
+    int pixmapId = 0;           //任务艾迪
+    QRect rect = QRect();       //整个大小
+};
+
+struct DocPageSliceImageTask {//取切片
+    DocSheet *sheet = nullptr;
+    BrowserPage *page = nullptr;
     int pixmapId = 0;           //任务艾迪
     QRect whole = QRect();      //整个大小
     QRect slice = QRect();      //切片大小
 };
 
+struct DocPageBigImageTask {//取大图
+    DocSheet *sheet = nullptr;
+    BrowserPage *page = nullptr;
+    int pixmapId = 0;           //任务艾迪
+    QRect rect = QRect();       //整个大小
+};
+
+struct DocPageWordTask {//取页码文字
+    DocSheet *sheet = nullptr;
+    BrowserPage *page = nullptr;
+};
+
+struct DocPageThumbnailTask {//缩略图
+    DocSheet *sheet = nullptr;
+    SideBarImageViewModel *model = nullptr;
+    int index = -1;
+};
+
+struct DocOpenTask {
+    DocSheet *sheet = nullptr;
+};
+
 /**
  * @brief The PageRenderThread class
- * 执行加载图片和文字等耗时操作的线程
+ * 执行加载图片和文字等耗时操作的线程,由于pdfium非常线程不安全，所有操作都在本线程中进行
  */
 class PageRenderThread : public QThread
 {
     Q_OBJECT
 public:
     /**
-     * @brief clearTask
-     * 清除该项和该类型的任务
+     * @brief clearImageTasks
+     * 清除需要读取图片的任务
+     * @param sheet
      * @param item 项指针
      * @param pixmapId 删除不同的pixmapId,-1为删除所有
      * @return 是否成功
      */
-    static bool clearImageTask(BrowserPage *item, int pixmapId = -1);
+    static bool clearImageTasks(DocSheet *sheet, BrowserPage *page, int pixmapId = -1);
 
     /**
-     * @brief 添加任务
-     * @param task 任务
-     * @param beforeFirst 插入到最开始
+     * @brief appendTask
+     * 添加任务到队列
+     * @param task
      */
-    static void appendTask(RenderPageTask task);
+    static void appendTask(DocPageNormalImageTask task);
 
-    /**
-     * @brief 添加延时任务
-     * @param task 任务
-     */
-    static void appendDelayTask(RenderPageTask task);
+    static void appendTask(DocPageSliceImageTask task);
 
-    /**
-     * @brief appendTasks
-     * 根据任务参数添加任务
-     * @param item 项指针
-     * @param scaleFactor 缩放因子
-     * @param rotation 旋转
-     * @param renderRect 所占区域
-     */
-    static void appendTask(BrowserPage *page, int pixmapId, QRect whole, QRect slice);
+    static void appendTask(DocPageBigImageTask task);
+
+    static void appendTask(DocPageWordTask task);
+
+    static void appendTask(DocPageThumbnailTask task);
+
+    static void appendTask(DocOpenTask task);
 
     /**
      * @brief destroyForever
@@ -100,38 +118,80 @@ private:
 
     void run();
 
-    bool execNextImageTask();
+private:
+    bool hasNextTask();
 
-    bool execNextImageSliceTask();
+    bool popNextDocPageNormalImageTask(DocPageNormalImageTask &task);
 
-    bool execNextWordTask();
+    bool popNextDocPageSliceImageTask(DocPageSliceImageTask &task);
 
-    bool getNextTask(RenderPageTask::RenderPageTaskType type, RenderPageTask &task);
+    bool popNextDocPageBigImageTask(DocPageBigImageTask &task);
 
-signals:
-    void sigImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice);
+    bool popNextDocPageWordTask(DocPageWordTask &task);
 
-    void sigWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
+    bool popNextDocPageThumbnailTask(DocPageThumbnailTask &task);
 
-private slots:
-    void onImageTaskFinished(BrowserPage *item, QPixmap pixmap, int pixmapId, QRect slice);
-
-    void onWordTaskFinished(BrowserPage *item, QList<deepin_reader::Word> words);
-
-    void onDelayTaskTimeout();
+    bool popNextDocOpenTask(DocOpenTask &task);
 
 private:
-    QList<RenderPageTask> m_tasks;
+    bool execNextDocPageNormalImageTask();
 
-    QMutex m_mutex;
+    bool execNextDocPageSliceImageTask();
+
+    bool execNextDocPageWordTask();
+
+    bool execNextDocPageThumbnailTask();
+
+    bool execNextDocOpenTask();
+
+signals:
+    void sigDocPageNormalImageTaskFinished(DocPageNormalImageTask, QPixmap);
+
+    void sigDocPageSliceImageTaskFinished(DocPageSliceImageTask, QPixmap);
+
+    void sigDocPageBigImageTaskFinished(DocPageBigImageTask, QPixmap);
+
+    void sigDocPageWordTaskFinished(DocPageWordTask, QList<deepin_reader::Word>);
+
+    void sigDocPageThumbnailTaskFinished(DocPageThumbnailTask, QPixmap);
+
+    void sigDocOpenTask(DocOpenTask, bool);
+
+private slots:
+    void onDocPageNormalImageTaskFinished(DocPageNormalImageTask task, QPixmap pixmap);
+
+    void onDocPageSliceImageTaskFinished(DocPageSliceImageTask task, QPixmap pixmap);
+
+    void onDocPageBigImageTaskFinished(DocPageBigImageTask task, QPixmap pixmap);
+
+    void onDocPageWordTaskFinished(DocPageWordTask task, QList<deepin_reader::Word> words);
+
+    void onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap);
+
+    void onDocOpenTask(DocOpenTask task, bool result);
+
+private:
+    QMutex m_pageNormalImageMutex;
+    QList<DocPageNormalImageTask> m_pageNormalImageTasks;
+
+    QMutex m_pageSliceImageMutex;
+    QList<DocPageSliceImageTask> m_pageSliceImageTasks;
+
+    QMutex m_pageBigImageMutex;
+    QList<DocPageBigImageTask> m_pageBigImageTasks;
+
+    QMutex m_pageWordMutex;
+    QList<DocPageWordTask> m_pageWordTasks;
+
+    QMutex m_pageThumbnailMutex;
+    QList<DocPageThumbnailTask> m_pageThumbnailTasks;
+
+    QMutex m_openMutex;
+    QList<DocOpenTask> m_openTasks;
 
     bool m_quit = false;
 
-    RenderPageTask m_delayTask;
-
-    QTimer *m_delayTimer = nullptr;
-
-    static bool quitForever;
+    static bool s_quitForever;
 
     static PageRenderThread *s_instance;
 

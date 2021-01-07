@@ -120,12 +120,6 @@ public:
     void adaptWindowSize(const double &) Q_DECL_OVERRIDE;
 
     /**
-     * @brief updateThumbnail
-     * 刷新指定节点
-     */
-    void updateThumbnail(const int &, bool bSrc = false) Q_DECL_OVERRIDE;
-
-    /**
      * @brief showMenu
      * 显示菜单
      */

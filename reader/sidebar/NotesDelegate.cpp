@@ -47,7 +47,7 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
-            const QPixmap &scalePix = pixmap.scaled(pageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QPixmap &scalePix = pixmap.scaled(pageSize);
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;

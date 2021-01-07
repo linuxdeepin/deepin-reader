@@ -259,9 +259,6 @@ TEST_F(Ut_Widgets, BaseWidgetTest)
 {
     BaseWidget cusWidget(nullptr);
     cusWidget.adaptWindowSize(1.0);
-    cusWidget.updateThumbnail(-1);
-    cusWidget.updateThumbnail(0);
-    cusWidget.updateThumbnail(10000);
     cusWidget.updateWidgetTheme();
 }
 

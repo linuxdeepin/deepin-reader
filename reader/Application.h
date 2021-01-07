@@ -51,7 +51,7 @@ public:
      */
     void unBlockShutdown();
 
-    /** 
+    /**
      * @brief showAnnotTextWidgetSig
      * 显示注释编辑框
      */
@@ -72,6 +72,7 @@ signals:
     void sigShowAnnotTextWidget();
 
     void sigSetPasswdFocus();
+
 public slots:
     /**
      * @brief handleFiles

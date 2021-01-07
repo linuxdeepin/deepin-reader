@@ -39,30 +39,37 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 {
     if (index.isValid()) {
         qreal pixscale = m_parent->property("adaptScale").toDouble();
+
         int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
+
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
+
         QMatrix matrix;
+
         matrix.rotate(rotate);
+
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
 
         const int borderRadius = 6;
+
         QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
+
         if (rotate == 90 || rotate == 270)
             pageSize = QSize(pageSize.height(), pageSize.width());
 
         pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
+
         const QSize &scalePixSize = pageSize / dApp->devicePixelRatio();
+
         const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
-            const QPixmap &scalePix = pixmap.scaled(pageSize);
-
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
-            painter->drawPixmap(rect.x(), rect.y(), scalePix);
+            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
             painter->restore();
         }
 

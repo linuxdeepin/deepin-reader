@@ -20,6 +20,11 @@
 #include "SideBarImageViewModel.h"
 #include "DocSheet.h"
 #include "ReaderImageThreadPoolManager.h"
+#include "PageRenderThread.h"
+#include "Application.h"
+
+#include <QTimer>
+#include <QtDebug>
 
 ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
 {
@@ -41,11 +46,11 @@ bool ImagePageInfo_t::operator > (const ImagePageInfo_t &other) const
     return (this->pageIndex > other.pageIndex);
 }
 
-SideBarImageViewModel::SideBarImageViewModel(QObject *parent)
+SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
     : QAbstractListModel(parent)
-    , m_parent(parent)
+    , m_sheet(sheet), m_parent(parent)
 {
-    m_docSheet = nullptr;
+    connect(m_sheet, &DocSheet::sigPageModified, this, &SideBarImageViewModel::onUpdateImage);
 }
 
 void SideBarImageViewModel::resetData()
@@ -72,11 +77,6 @@ void SideBarImageViewModel::changeModelData(const QList<ImagePageInfo_t> &pagels
     m_pagelst = pagelst;
 }
 
-void SideBarImageViewModel::setDocSheet(DocSheet *sheet)
-{
-    m_docSheet = sheet;
-}
-
 void SideBarImageViewModel::setBookMarkVisible(int index, bool visible, bool updateIndex)
 {
     m_cacheBookMarkMap.insert(index, visible);
@@ -101,25 +101,31 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+
     int nRow = m_pagelst.at(index.row()).pageIndex;
+
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
-        const QPixmap &image = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, nRow);
-        if (image.isNull()) {
-            QImage srcimg;
-            if (m_docSheet->getImageOnCurrentDeviceRatio(nRow, srcimg, 174, 174, true) && !srcimg.isNull())
-                return QVariant::fromValue(srcimg);
-            else
-                onFetchImage(nRow);
-        } else {
-            return QVariant::fromValue(image);
+        QPixmap pixmap = m_sheet->thumbnail(nRow);
+        if (pixmap.isNull()) {
+            //使用线程
+            QPixmap pixmap(174, 174);
+            pixmap.fill(Qt::white);
+            m_sheet->setThumbnail(nRow, pixmap);
+
+            DocPageThumbnailTask task;
+            task.sheet = m_sheet;
+            task.index = nRow;
+            task.model = const_cast<SideBarImageViewModel *>(this);
+            PageRenderThread::appendTask(task);
         }
+        return QVariant::fromValue(pixmap);
     } else if (role == ImageinfoType_e::IMAGE_BOOKMARK) {
         if (m_cacheBookMarkMap.contains(nRow)) {
             return QVariant::fromValue(m_cacheBookMarkMap.value(nRow));
         }
         return QVariant::fromValue(false);
     } else if (role == ImageinfoType_e::IMAGE_ROTATE) {
-        return QVariant::fromValue(m_docSheet->operation().rotation * 90);
+        return QVariant::fromValue(m_sheet->operation().rotation * 90);
     } else if (role == ImageinfoType_e::IMAGE_INDEX_TEXT) {
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
     } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {
@@ -129,7 +135,7 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::AccessibleTextRole) {
         return index.row();
     } else if (role == ImageinfoType_e::IMAGE_PAGE_SIZE) {
-        return QVariant::fromValue(m_docSheet->pageSizeByIndex(nRow));
+        return QVariant::fromValue(m_sheet->pageSizeByIndex(nRow));
     }
     return QVariant();
 }
@@ -172,25 +178,19 @@ void SideBarImageViewModel::onFetchImage(int index, bool force) const
     tParam.maxPixel = 198;
     tParam.bForceUpdate = force;
     tParam.pageIndex = index;
-    tParam.sheet = m_docSheet;
+    tParam.sheet = m_sheet;
     tParam.receiver = m_parent;
     tParam.slotFun = "onUpdatePageImage";
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
 
-void SideBarImageViewModel::updatePageIndex(int index, bool force, bool bSrc)
+void SideBarImageViewModel::onUpdateImage(int index)
 {
-    if (bSrc) {
-        QImage img;
-        if (m_docSheet->getImageOnCurrentDeviceRatio(index, img, 198, 198, bSrc) && !img.isNull()) {
-            ReaderImageThreadPoolManager::getInstance()->setImageForDocSheet(m_docSheet, index, QPixmap::fromImage(img));
-            onUpdatePageImage(index);
-        } else {
-            onFetchImage(index, force);
-        }
-    } else {
-        onFetchImage(index, force);
-    }
+    DocPageThumbnailTask task;
+    task.sheet = m_sheet;
+    task.index = index;
+    task.model = const_cast<SideBarImageViewModel *>(this);
+    PageRenderThread::appendTask(task);
 }
 
 void SideBarImageViewModel::insertPageIndex(int pageIndex)
@@ -269,4 +269,11 @@ int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation
         }
     }
     return -1;
+}
+
+void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
+{
+    pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+    m_sheet->setThumbnail(index, pixmap);
+    onUpdatePageImage(index);
 }

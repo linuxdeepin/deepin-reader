@@ -102,13 +102,6 @@ public:
     void adaptWindowSize(const double &scale)  Q_DECL_OVERRIDE;
 
     /**
-     * @brief updateThumbnail
-     * 刷新指定页数
-     * @param index
-     */
-    void updateThumbnail(const int &index, bool bSrc = false) Q_DECL_OVERRIDE;
-
-    /**
      * @brief setTabOrderWidget
      * 设置TAB控件切换顺序
      * @param tabWidgetlst

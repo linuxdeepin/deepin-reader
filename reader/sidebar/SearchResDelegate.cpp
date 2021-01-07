@@ -48,7 +48,7 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
 
         if (!pixmap.isNull()) {
-            const QPixmap &scalePix = pixmap.scaled(pageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QPixmap &scalePix = pixmap.scaled(pageSize);
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;

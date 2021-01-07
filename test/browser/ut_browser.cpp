@@ -245,10 +245,6 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->wheelEvent(wheelEvent);
 
-    QImage image;
-
-    sheet->getImageOnCurrentDeviceRatio(0, image, 200, 200);
-
     window->show();
 
     //BrowserPage
@@ -258,9 +254,8 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     page->bookmarkMouseRect();
     page->updateBookmarkState();
-    page->getImage(1);
-    page->renderRect(1, QRectF(0, 0, 1, 1));
-    page->renderViewPort(1);
+    page->renderRect(QRectF(0, 0, 1, 1));
+    page->renderViewPort();
     page->handleWordLoaded(QList<Word>());
     page->getImagePoint(1, QPoint(0, 0));
     page->loadWords();

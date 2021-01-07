@@ -25,6 +25,7 @@
 
 #include <DSplitter>
 #include <QSet>
+#include <QReadWriteLock>
 #include <QThread>
 
 class SheetSidebar;
@@ -103,6 +104,11 @@ public:
      * @return
      */
     static DocSheet *getSheet(QString uuid);
+
+    /**
+     * @brief 全局对象判断读写锁
+     */
+    static QReadWriteLock g_lock;
 
     /**
      * @brief 全局对象池
@@ -269,6 +275,28 @@ public:
     void setAnnotationInserting(bool inserting);
 
     /**
+     * @brief thumbnail
+     * 获取缩略图(需要先设置)
+     * @param index
+     * @return
+     */
+    QPixmap thumbnail(int index);
+
+    /**
+     * @brief setThumbnail
+     * @param index
+     * @param pixmap
+     */
+    void setThumbnail(int index, QPixmap pixmap);
+
+    /**
+     * @brief clearThumbnail
+     * 移除当前索引远端的缩略图
+     * @param currentIndex
+     */
+    void clearThumbnail(int currentIndex);
+
+    /**
      * @brief openMagnifier
      * 调用browser打开放大镜
      */
@@ -317,6 +345,12 @@ public:
     void handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
 
     /**
+     * @brief handlePageModified
+     * 处理page修改
+     */
+    void handlePageModified(int index);
+
+    /**
      * @brief handleSearch
      * 通知browser进入搜索模式
      */
@@ -348,16 +382,13 @@ public:
 
     /**
      * @brief getImage
-     * 获得对应页的图片
      * @param index 索引
-     * @param image 传出的图片
-     * @param width 需要的宽度
-     * @param height 需要的高度
-     * @param mode 缩放模式
-     * @param bSrc 使用已有的图缩放
-     * @return 是否成功
+     * @param width
+     * @param height
+     * @param slice
+     * @return
      */
-    bool getImageOnCurrentDeviceRatio(int index, QImage &image, int width, int height,  bool bSrc = false);
+    QImage getImage(int index, int width, int height, const QRect &slice = QRect());
 
     /**
      * @brief defaultFocus
@@ -694,6 +725,12 @@ signals:
     void sigFindOperation(const int &operation);
 
     /**
+     * @brief sigPageModified
+     * 页码被修改
+     */
+    void sigPageModified(int index);
+
+    /**
      * @brief 文档被打开
      * @param result 结果
      * @param error 错误
@@ -770,12 +807,18 @@ private slots:
      */
     void onExtractPassword(const QString &password);
 
+private:
+    /**
+     * @brief setAlive
+     * 设置当前sheet是否存活
+     * @param alive
+     */
+    void setAlive(bool alive);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
     void childEvent(QChildEvent *c) override;
-
-    void setAlive(bool alive);
 
 private:
     SheetOperation  m_operation;
@@ -793,6 +836,7 @@ private:
     QString         m_lastError;
     Dr::FileType    m_fileType;
     QString         m_uuid;
+    QMap<int, QPixmap>  m_thumbnailMap;
 
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;
