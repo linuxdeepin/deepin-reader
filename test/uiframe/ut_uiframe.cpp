@@ -202,7 +202,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->showSheet(nullptr);
     CentralDocPage1->showSheet(sheet);
     //CentralDocPage1->openFile(filePath(UT_FILE_PDF, "UiFrameTest"));   //崩溃
-    //CentralDocPage1->openCurFileFolder();     //打开文件夹
+    CentralDocPage1->openCurFileFolder();     //打开文件夹
     //CentralDocPage1->saveAll();               //卡住
 
     sheet->openSlide();

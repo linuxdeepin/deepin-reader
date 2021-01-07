@@ -183,22 +183,19 @@ void ShortCutShow::initDJVU()
     Toolsnames.clear();
     Editnames.clear();
 
-    windowKeymaps << Dr::key_esc  << Dr::key_f1
-                  << Dr::key_pgUp << Dr::key_pgDown << Dr::key_ctrl_o << Dr::key_alt_harger
-                  << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
-                  << Dr::key_ctrl_p << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2
-                  << Dr::key_ctrl_3 << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2
-                  << Dr::key_ctrl_d << Dr::key_delete << Dr::key_alt_z
-                  << Dr::key_f5 << Dr::key_f11
-                  << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
+    windowKeymaps << Dr::key_esc  << Dr::key_f1 << Dr::key_pgUp << Dr::key_pgDown << Dr::key_ctrl_o
+                  << Dr::key_alt_harger << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s << Dr::key_ctrl_p
+                  << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2 << Dr::key_ctrl_3
+                  << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2 << Dr::key_ctrl_d
+                  << Dr::key_delete << Dr::key_alt_z << Dr::key_f5 << Dr::key_f11 << Dr::key_ctrl_c
+                  << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
 
-    shortcutnames << tr("Exit") << tr("Help")
-                  << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")
-                  << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
-                  << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
-                  << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
-                  << tr("Hand tool") << tr("Add bookmark") << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen")
-                  << tr("Copy") << tr("Cut") << tr("Paste") << tr("Undo") << tr("Select all") << tr("Display shortcuts");
+    shortcutnames << tr("Exit") << tr("Help") << tr("Page up") << tr("Page down") << tr("Open")
+                  << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
+                  << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width")
+                  << tr("Rotate left") << tr("Rotate right") << tr("Select text") << tr("Hand tool") << tr("Add bookmark")
+                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen") << tr("Copy")
+                  << tr("Cut") << tr("Paste") << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
     Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
@@ -208,7 +205,20 @@ void ShortCutShow::initDJVU()
                   << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen") ;
     Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
+    if (Dr::isTabletEnvironment()) {//平板模式下移除功能
+        windowKeymaps.removeOne(Dr::key_ctrl_p);
+        windowKeymaps.removeOne(Dr::key_alt_z);
+        windowKeymaps.removeOne(Dr::key_f11);
+        shortcutnames.removeOne(tr("Magnifier"));
+        Toolsnames.removeOne(tr("Magnifier"));
+        shortcutnames.removeOne(tr("Print"));
+        Toolsnames.removeOne(tr("Print"));
+        shortcutnames.removeOne(tr("Fullscreen"));
+        Toolsnames.removeOne(tr("Fullscreen"));
+    }
+
     int index = 0;
+
     foreach (QString strname, shortcutnames) {
         shortcutmap.insert(strname, windowKeymaps.at(index));
         index++;
@@ -225,22 +235,20 @@ void ShortCutShow::initPDF()
     Toolsnames.clear();
     Editnames.clear();
 
-    windowKeymaps << /*Dr::key_f11 << */Dr::key_esc  << Dr::key_f1
-                  << Dr::key_ctrl_f << "PageUp" << "PageDown" << Dr::key_ctrl_o << Dr::key_alt_harger
-                  << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
+    windowKeymaps << Dr::key_esc  << Dr::key_f1 << Dr::key_ctrl_f << Dr::key_pgUp << Dr::key_pgDown
+                  << Dr::key_ctrl_o << Dr::key_alt_harger << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
                   << Dr::key_ctrl_p << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2
                   << Dr::key_ctrl_3 << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2
-                  << Dr::key_ctrl_d << Dr::key_alt_a << Dr::key_alt_h << "Delete" << Dr::key_alt_z
-                  << Dr::key_f5 << Dr::key_f11
-                  << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
+                  << Dr::key_ctrl_d << Dr::key_alt_a << Dr::key_alt_h << Dr::key_delete << Dr::key_alt_z
+                  << Dr::key_f5 << Dr::key_f11 << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v
+                  << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
 
-    shortcutnames << tr("Exit") << tr("Help")
-                  << tr("Search") << tr("Page up") << tr("Page down") << tr("Open") << tr("Zoom in")
-                  << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
-                  << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
-                  << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text")
-                  << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight")
-                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen") << tr("Copy") << tr("Cut") << tr("Paste")
+    shortcutnames << tr("Exit") << tr("Help") << tr("Search") << tr("Page up") << tr("Page down")
+                  << tr("Open") << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as")
+                  << tr("Print") << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
+                  << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text") << tr("Hand tool")
+                  << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete") << tr("Magnifier")
+                  << tr("Slide show") << tr("Fullscreen") << tr("Copy") << tr("Cut") << tr("Paste")
                   << tr("Undo") << tr("Select all") << tr("Display shortcuts");
 
     Settingsnames << tr("Help") << tr("Display shortcuts");
@@ -250,6 +258,18 @@ void ShortCutShow::initPDF()
     Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                   << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen")  ;
     Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+
+    if (Dr::isTabletEnvironment()) {//平板模式下移除功能
+        windowKeymaps.removeOne(Dr::key_ctrl_p);
+        windowKeymaps.removeOne(Dr::key_alt_z);
+        windowKeymaps.removeOne(Dr::key_f11);
+        shortcutnames.removeOne(tr("Magnifier"));
+        Toolsnames.removeOne(tr("Magnifier"));
+        shortcutnames.removeOne(tr("Print"));
+        Toolsnames.removeOne(tr("Print"));
+        shortcutnames.removeOne(tr("Fullscreen"));
+        Toolsnames.removeOne(tr("Fullscreen"));
+    }
 
     int index = 0;
     foreach (QString strname, shortcutnames) {

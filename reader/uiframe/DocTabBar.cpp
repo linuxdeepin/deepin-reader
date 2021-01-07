@@ -21,6 +21,7 @@
 #include "DocTabBar.h"
 #include "DocSheet.h"
 #include "Application.h"
+#include "Global.h"
 
 #include <DPlatformWindowHandle>
 
@@ -48,7 +49,7 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     this->setVisibleAddButton(true);
 
-    this->setDragable(true);
+    this->setDragable(!Dr::isTabletEnvironment());
 
     this->setFocusPolicy(Qt::NoFocus);
 

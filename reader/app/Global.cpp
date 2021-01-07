@@ -23,6 +23,7 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QDebug>
+#include <DGuiApplicationHelper>
 
 namespace Dr {
 FileType fileType(const QString &filePath)
@@ -47,4 +48,11 @@ FileType fileType(const QString &filePath)
 
     return fileType;
 }
+
+bool isTabletEnvironment()
+{
+    return false;
+    //return Dtk::Gui::DGuiApplicationHelper::isTabletEnvironment();
+}
+
 }

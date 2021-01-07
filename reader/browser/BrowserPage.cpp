@@ -34,6 +34,7 @@
 #include "BrowserAnnotation.h"
 #include "Application.h"
 #include "Utils.h"
+#include "Global.h"
 
 #include <DApplicationHelper>
 #include <QPainter>
@@ -56,7 +57,6 @@ BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet, deepi
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsPanel);
-
 }
 
 BrowserPage::~BrowserPage()

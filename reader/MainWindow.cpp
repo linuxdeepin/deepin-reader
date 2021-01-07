@@ -414,7 +414,8 @@ void MainWindow::initShortCut()
     QList<QKeySequence> keyList;
     keyList.append(QKeySequence::Find);
     keyList.append(QKeySequence::Open);
-    keyList.append(QKeySequence::Print);
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence::Print);
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
     keyList.append(QKeySequence(Qt::Key_Left));
@@ -422,12 +423,14 @@ void MainWindow::initShortCut()
     keyList.append(QKeySequence(Qt::Key_Space));
     keyList.append(QKeySequence(Qt::Key_Escape));
     keyList.append(QKeySequence(Qt::Key_F5));
-    keyList.append(QKeySequence(Qt::Key_F11));
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence(Qt::Key_F11));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
-    keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));

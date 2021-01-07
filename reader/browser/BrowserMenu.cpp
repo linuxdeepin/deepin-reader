@@ -22,6 +22,7 @@
 #include "ColorWidgetAction.h"
 #include "DocSheet.h"
 #include "Utils.h"
+#include "Global.h"
 
 #include <DFontSizeManager>
 
@@ -90,7 +91,8 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         if (sheet->isFullScreen()) {
             createAction(tr("Exit fullscreen"), "ExitFullscreen");
         } else {
-            createAction(tr("Fullscreen"), "Fullscreen");
+            if (!Dr::isTabletEnvironment())
+                createAction(tr("Fullscreen"), "Fullscreen");
         }
 
         createAction(tr("Slide show"), "SlideShow");
@@ -116,7 +118,8 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Rotate right"), "RotateRight");
         this->addSeparator();
 
-        createAction(tr("Print"), "Print");
+        if (!Dr::isTabletEnvironment())
+            createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     } else {
         if (sheet->fileType() == Dr::FileType::PDF) {
@@ -138,7 +141,8 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         if (sheet->isFullScreen()) {
             createAction(tr("Exit fullscreen"), "ExitFullscreen");
         } else {
-            createAction(tr("Fullscreen"), "Fullscreen");
+            if (!Dr::isTabletEnvironment())
+                createAction(tr("Fullscreen"), "Fullscreen");
         }
 
         createAction(tr("Slide show"), "SlideShow");
@@ -164,7 +168,8 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Rotate right"), "RotateRight");
         this->addSeparator();
 
-        createAction(tr("Print"), "Print");
+        if (!Dr::isTabletEnvironment())
+            createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     }
 }

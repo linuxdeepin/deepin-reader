@@ -43,6 +43,8 @@ namespace Dr {
 #define PERF_PRINT_END(point, desc)
 #endif
 
+bool isTabletEnvironment();
+
 enum FileType {
     Unknown = 0,
     PDF     = 1,

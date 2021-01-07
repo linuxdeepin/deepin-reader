@@ -21,6 +21,7 @@
 #include "TitleMenu.h"
 #include "HandleMenu.h"
 #include "DocSheet.h"
+#include "Global.h"
 
 #include <QSignalMapper>
 
@@ -30,10 +31,12 @@ TitleMenu::TitleMenu(DWidget *parent)
     auto pSigManager = new QSignalMapper(this);
     connect(pSigManager, SIGNAL(mapped(const QString &)), this, SIGNAL(sigActionTriggered(const QString &)));
 
-    QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
-    QStringList firstActionObjList = QStringList() << "New window" << "New tab";
-    createActionMap(pSigManager, firstActionList, firstActionObjList);
-    this->addSeparator();
+    if (!Dr::isTabletEnvironment()) {
+        QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
+        QStringList firstActionObjList = QStringList() << "New window" << "New tab";
+        createActionMap(pSigManager, firstActionList, firstActionObjList);
+        this->addSeparator();
+    }
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
@@ -45,9 +48,11 @@ TitleMenu::TitleMenu(DWidget *parent)
     createActionMap(pSigManager, secondActionList, secondActionObjList);
     this->addSeparator();
 
-    QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
-    QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
-    createActionMap(pSigManager, thirdActionList, thirdActionObjList);
+    if (!Dr::isTabletEnvironment()) {
+        QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
+        QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
+        createActionMap(pSigManager, thirdActionList, thirdActionObjList);
+    }
 
     m_handleMenu = new HandleMenu(this);
     m_handleMenu->setDisabled(true);
