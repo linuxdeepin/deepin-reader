@@ -48,7 +48,7 @@
 
 #include <QUuid>
 #include <DApplication>
-#include <QClipboard>
+//#include <QClipboard>
 
 ut_sidebar::ut_sidebar()
 {
@@ -189,13 +189,13 @@ TEST_F(ut_sidebar, SidebarTest)
     thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();
     thumbnailWidget.m_pImageListView->model()->setData(QModelIndex(), "123", Qt::UserRole);
 
-    QTimer::singleShot(5, [ & ] {
+    QTimer::singleShot(5, [&] {
         QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
         QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pNoteMenu, &keyevent);
     });
     thumbnailWidget.m_pImageListView->showNoteMenu(QPoint(0, 0));
 
-    QTimer::singleShot(5, [ & ] {
+    QTimer::singleShot(5, [&] {
         QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
         QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pBookMarkMenu, &keyevent);
     });
@@ -371,11 +371,11 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
     textedit.m_nMaxContantLen = 10;
     textedit.setText("1111111111111111111111111111111111");
     textedit.slotTextEditMaxContantNum();
-    textedit.update();
-    QClipboard *data = DApplication::clipboard();
-    if (nullptr != data->mimeData())
-        textedit.insertFromMimeData(data->mimeData());
-    textedit.repaint();
+    //    textedit.update();
+    //    QClipboard *data = DApplication::clipboard();
+    //    if (nullptr != data && nullptr != data->mimeData())
+    //        textedit.insertFromMimeData(data->mimeData());
+    //    textedit.repaint();
 
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_N, Qt::AltModifier);
     QCoreApplication::sendEvent(&textedit, &keyevent);
