@@ -79,10 +79,12 @@ TEST_F(ut_sidebar, SidebarTest)
     DocSheet *sheet = docpage->getSheet(path);
     ASSERT_TRUE(sheet);
 
+
     sheet->setSidebarVisible(true);
     sheet->m_sidebar->onBtnClicked(2);
 
-    SheetSidebar sideBar(sheet, PreviewWidgesFlag::PREVIEW_THUMBNAIL | PreviewWidgesFlag::PREVIEW_CATALOG | PreviewWidgesFlag::PREVIEW_BOOKMARK | PreviewWidgesFlag::PREVIEW_NOTE);
+    SheetSidebar &sideBar = *sheet->m_sidebar;
+
     sideBar.show();
     sideBar.resize(200, 600);
     DToolButton *btn = sideBar.createBtn("test", "test");
@@ -360,7 +362,7 @@ TEST_F(ut_sidebar, SidebarTest)
 
     mainWindow->closeWithoutSave();
 
-    a->quit();
+    exec();
 }
 
 TEST_F(ut_sidebar, TransparentTextEditTest)
@@ -380,7 +382,7 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_N, Qt::AltModifier);
     QCoreApplication::sendEvent(&textedit, &keyevent);
 
-    exec();
+    //exec();
 }
 
 TEST_F(ut_sidebar, TextEditWidgetTest)
