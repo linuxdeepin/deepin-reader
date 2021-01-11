@@ -1199,17 +1199,17 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
             QPointF curPointF = mapToScene(mousePos);
 
-            if (curPointF.x() < 10)
-                curPointF.setX(10);
+            if (curPointF.x() < 15)
+                curPointF.setX(15);
 
-            if (curPointF.y() < 10)
-                curPointF.setY(10);
+            if (curPointF.y() < 15)
+                curPointF.setY(15);
 
-            if (curPointF.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 10)
-                curPointF.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 10);
+            if (curPointF.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 15)
+                curPointF.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 15);
 
-            if (curPointF.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 10)
-                curPointF.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 10);
+            if (curPointF.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 15)
+                curPointF.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 15);
 
             const QPointF &delta = curPointF - m_iconAnnotationMovePos;
 
