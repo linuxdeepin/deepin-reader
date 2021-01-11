@@ -45,7 +45,11 @@ void ReadImageTask::run()
 
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
 
-        QImage image = sheet->getImage(m_docParam.pageIndex, m_docParam.maxPixel * dApp->devicePixelRatio(), m_docParam.maxPixel * dApp->devicePixelRatio());
+        QSizeF size = sheet->pageSizeByIndex(m_docParam.pageIndex);
+
+        size.scale(m_docParam.maxPixel * dApp->devicePixelRatio(), m_docParam.maxPixel * dApp->devicePixelRatio(), Qt::KeepAspectRatio);
+
+        QImage image = sheet->getImage(m_docParam.pageIndex, size.width(), size.height());
 
         image.setDevicePixelRatio(dApp->devicePixelRatio());
 
