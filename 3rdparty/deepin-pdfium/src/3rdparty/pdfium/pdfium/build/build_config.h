@@ -193,7 +193,7 @@
 #define ARCH_CPU_32_BITS 1
 #define ARCH_CPU_BIG_ENDIAN 1
 #endif
-#elif defined(sw_64)
+#elif defined(__sw_64__)
 #define ARCH_CPU_ALPHA21264_FAMILY 1
 #define ARCH_CPU_ALPHA21264 1
 #define ARCH_CPU_64_BITS 1
