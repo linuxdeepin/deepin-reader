@@ -48,7 +48,7 @@
 
 #include <QUuid>
 #include <DApplication>
-//#include <QClipboard>
+#include <QClipboard>
 
 ut_sidebar::ut_sidebar()
 {
@@ -373,16 +373,16 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
     textedit.m_nMaxContantLen = 10;
     textedit.setText("1111111111111111111111111111111111");
     textedit.slotTextEditMaxContantNum();
-    //    textedit.update();
-    //    QClipboard *data = DApplication::clipboard();
-    //    if (nullptr != data && nullptr != data->mimeData())
-    //        textedit.insertFromMimeData(data->mimeData());
-    //    textedit.repaint();
+    textedit.update();
+    QClipboard *data = DApplication::clipboard();
+    if (nullptr != data && nullptr != data->mimeData())
+        textedit.insertFromMimeData(data->mimeData());
+    textedit.repaint();
 
     QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_N, Qt::AltModifier);
     QCoreApplication::sendEvent(&textedit, &keyevent);
 
-    //exec();
+    exec();
 }
 
 TEST_F(ut_sidebar, TextEditWidgetTest)
