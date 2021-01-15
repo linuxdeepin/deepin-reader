@@ -119,10 +119,12 @@ void CentralDocPage::openCurFileFolder()
 
 void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 {
-    if (DocSheet::existFileChanged()) {
-        dApp->blockShutdown();
-    } else {
-        dApp->unBlockShutdown();
+    if (!Dr::isTabletEnvironment()) {   //平板模式不阻塞
+        if (DocSheet::existFileChanged()) {
+            dApp->blockShutdown();
+        } else {
+            dApp->unBlockShutdown();
+        }
     }
 
     if (nullptr == sheet && sheet != getCurSheet())

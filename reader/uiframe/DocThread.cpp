@@ -58,7 +58,9 @@ void DocThread::run()
         }
 
         m_mutex.lock();
+
         DocOpenThreadTask task = m_tasks.pop();
+
         m_mutex.unlock();
 
         if (!DocSheet::existSheet(task.sheet))
