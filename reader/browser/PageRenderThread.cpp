@@ -547,7 +547,8 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
 
 void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result)
 {
-
+    Q_UNUSED(task)
+    Q_UNUSED(result)
 }
 
 void PageRenderThread::destroyForever()

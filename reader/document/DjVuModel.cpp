@@ -109,117 +109,117 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
     }
 }
 
-QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, QSizeF size)
-{
-    QPainterPath boundary;
+//QPainterPath loadLinkBoundary(const QString &type, miniexp_t boundaryExp, QSizeF size)
+//{
+//    QPainterPath boundary;
 
-    const int count = miniexp_length(boundaryExp);
+//    const int count = miniexp_length(boundaryExp);
 
-    if (count == 4 && (type == QLatin1String("rect") || type == QLatin1String("oval"))) {
-        QPoint p(miniexp_to_int(miniexp_car(boundaryExp)), miniexp_to_int(miniexp_cadr(boundaryExp)));
-        QSize s(miniexp_to_int(miniexp_caddr(boundaryExp)), miniexp_to_int(miniexp_cadddr(boundaryExp)));
+//    if (count == 4 && (type == QLatin1String("rect") || type == QLatin1String("oval"))) {
+//        QPoint p(miniexp_to_int(miniexp_car(boundaryExp)), miniexp_to_int(miniexp_cadr(boundaryExp)));
+//        QSize s(miniexp_to_int(miniexp_caddr(boundaryExp)), miniexp_to_int(miniexp_cadddr(boundaryExp)));
 
-        p.setY(static_cast<int>(size.height() - s.height() - p.y()));
+//        p.setY(static_cast<int>(size.height() - s.height() - p.y()));
 
-        const QRectF r(p, s);
+//        const QRectF r(p, s);
 
-        if (type == QLatin1String("rect")) {
-            boundary.addRect(r);
-        } else {
-            boundary.addEllipse(r);
-        }
-    } else if (count > 0 && count % 2 == 0 && type == QLatin1String("poly")) {
-        QPolygon polygon;
+//        if (type == QLatin1String("rect")) {
+//            boundary.addRect(r);
+//        } else {
+//            boundary.addEllipse(r);
+//        }
+//    } else if (count > 0 && count % 2 == 0 && type == QLatin1String("poly")) {
+//        QPolygon polygon;
 
-        for (int index = 0; index < count; index += 2) {
-            QPoint p(miniexp_to_int(miniexp_nth(index, boundaryExp)), miniexp_to_int(miniexp_nth(index + 1, boundaryExp)));
+//        for (int index = 0; index < count; index += 2) {
+//            QPoint p(miniexp_to_int(miniexp_nth(index, boundaryExp)), miniexp_to_int(miniexp_nth(index + 1, boundaryExp)));
 
-            p.setY(static_cast<int>(size.height() - p.y()));
+//            p.setY(static_cast<int>(size.height() - p.y()));
 
-            polygon << p;
-        }
+//            polygon << p;
+//        }
 
-        boundary.addPolygon(polygon);
-    }
+//        boundary.addPolygon(polygon);
+//    }
 
-    return QTransform::fromScale(1.0 / size.width(), 1.0 / size.height()).map(boundary);
-}
+//    return QTransform::fromScale(1.0 / size.width(), 1.0 / size.height()).map(boundary);
+//}
 
-Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int index, const QHash< QString, int > &pageByName)
-{
-    QString target;
+//Link *loadLinkTarget(const QPainterPath &boundary, miniexp_t targetExp, int index, const QHash< QString, int > &pageByName)
+//{
+//    QString target;
 
-    if (miniexp_stringp(targetExp)) {
-        target = QString::fromUtf8(miniexp_to_str(targetExp));
-    } else if (miniexp_length(targetExp) == 3 && qstrcmp(miniexp_to_name(miniexp_car(targetExp)), "url") == 0) {
-        target = QString::fromUtf8(miniexp_to_str(miniexp_cadr(targetExp)));
-    }
+//    if (miniexp_stringp(targetExp)) {
+//        target = QString::fromUtf8(miniexp_to_str(targetExp));
+//    } else if (miniexp_length(targetExp) == 3 && qstrcmp(miniexp_to_name(miniexp_car(targetExp)), "url") == 0) {
+//        target = QString::fromUtf8(miniexp_to_str(miniexp_cadr(targetExp)));
+//    }
 
-    if (target.isEmpty()) {
-        return nullptr;
-    }
+//    if (target.isEmpty()) {
+//        return nullptr;
+//    }
 
-    if (target.at(0) == QLatin1Char('#')) {
-        target.remove(0, 1);
+//    if (target.at(0) == QLatin1Char('#')) {
+//        target.remove(0, 1);
 
-        bool ok = false;
-        int targetPage = target.toInt(&ok);
+//        bool ok = false;
+//        int targetPage = target.toInt(&ok);
 
-        if (!ok) {
-            const int page = pageByName.value(target);
+//        if (!ok) {
+//            const int page = pageByName.value(target);
 
-            if (page != 0) {
-                targetPage = page;
-            } else {
-                return nullptr;
-            }
-        } else {
-            if (target.at(0) == QLatin1Char('+') || target.at(0) == QLatin1Char('-')) {
-                targetPage += index + 1;
-            }
-        }
+//            if (page != 0) {
+//                targetPage = page;
+//            } else {
+//                return nullptr;
+//            }
+//        } else {
+//            if (target.at(0) == QLatin1Char('+') || target.at(0) == QLatin1Char('-')) {
+//                targetPage += index + 1;
+//            }
+//        }
 
-        return new Link(boundary, targetPage);
-    } else {
-        return new Link(boundary, target);
-    }
-}
+//        return new Link(boundary, targetPage);
+//    } else {
+//        return new Link(boundary, target);
+//    }
+//}
 
-QList< Link * > loadLinks(miniexp_t linkExp, QSizeF size, int index, const QHash< QString, int > &pageByName)
-{
-    QList< Link * > links;
+//QList< Link * > loadLinks(miniexp_t linkExp, QSizeF size, int index, const QHash< QString, int > &pageByName)
+//{
+//    QList< Link * > links;
 
-    for (miniexp_t linkItem = miniexp_nil; miniexp_consp(linkExp); linkExp = miniexp_cdr(linkExp)) {
-        linkItem = miniexp_car(linkExp);
+//    for (miniexp_t linkItem = miniexp_nil; miniexp_consp(linkExp); linkExp = miniexp_cdr(linkExp)) {
+//        linkItem = miniexp_car(linkExp);
 
-        if (miniexp_length(linkItem) < 4 || qstrcmp(miniexp_to_name(miniexp_car(linkItem)), "maparea") != 0) {
-            continue;
-        }
+//        if (miniexp_length(linkItem) < 4 || qstrcmp(miniexp_to_name(miniexp_car(linkItem)), "maparea") != 0) {
+//            continue;
+//        }
 
-        miniexp_t targetExp = miniexp_cadr(linkItem);
-        miniexp_t boundaryExp = miniexp_cadddr(linkItem);
+//        miniexp_t targetExp = miniexp_cadr(linkItem);
+//        miniexp_t boundaryExp = miniexp_cadddr(linkItem);
 
-        if (!miniexp_symbolp(miniexp_car(boundaryExp))) {
-            continue;
-        }
+//        if (!miniexp_symbolp(miniexp_car(boundaryExp))) {
+//            continue;
+//        }
 
-        const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(boundaryExp)));
+//        const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(boundaryExp)));
 
-        if (type == QLatin1String("rect") || type == QLatin1String("oval") || type == QLatin1String("poly")) {
-            QPainterPath boundary = loadLinkBoundary(type, miniexp_cdr(boundaryExp), size);
+//        if (type == QLatin1String("rect") || type == QLatin1String("oval") || type == QLatin1String("poly")) {
+//            QPainterPath boundary = loadLinkBoundary(type, miniexp_cdr(boundaryExp), size);
 
-            if (!boundary.isEmpty()) {
-                Link *link = loadLinkTarget(boundary, targetExp, index, pageByName);
+//            if (!boundary.isEmpty()) {
+//                Link *link = loadLinkTarget(boundary, targetExp, index, pageByName);
 
-                if (link != nullptr) {
-                    links.append(link);
-                }
-            }
-        }
-    }
+//                if (link != nullptr) {
+//                    links.append(link);
+//                }
+//            }
+//        }
+//    }
 
-    return links;
-}
+//    return links;
+//}
 
 QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
 {
