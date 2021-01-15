@@ -356,16 +356,16 @@ bool MainWindow::allowCreateWindow()
 
 bool MainWindow::activateSheetIfExist(const QString &filePath)
 {
-    QList<DocSheet *> sheets = DocSheet::g_map.values();
+    DocSheet *sheet = DocSheet::getSheetByFilePath(filePath);
 
-    foreach (DocSheet *sheet, sheets) {
-        if (sheet->filePath() == filePath) {
-            MainWindow *window = MainWindow::windowContainSheet(sheet);
-            if (nullptr != window) {
-                window->activateSheet(sheet);
-                return true;
-            }
-        }
+    if (nullptr == sheet)
+        return false;
+
+    MainWindow *window = MainWindow::windowContainSheet(sheet);
+
+    if (nullptr != window) {
+        window->activateSheet(sheet);
+        return true;
     }
 
     return false;

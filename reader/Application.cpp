@@ -89,8 +89,6 @@ void Application::emitSheetChanged()
 
 void Application::handleFiles(QStringList filePathList)
 {
-    QList<DocSheet *> sheets = DocSheet::g_map.values();
-
     if (filePathList.count() <= 0) {
         MainWindow::createWindow()->show();
         return;
@@ -114,27 +112,18 @@ void Application::handleFiles(QStringList filePathList)
 
 void Application::handleQuitAction()
 {
-    QList<DocSheet *> changedList;
-
-    foreach (auto sheet, DocSheet::g_map.values()) {
-        if (sheet->fileChanged())
-            changedList.append(sheet);
-    }
+    QList<DocSheet *> changedList = DocSheet::getChangedList();
 
     if (changedList.size() > 0) {   //需要提示保存
         SaveDialog sd;
 
         int nRes = sd.showExitDialog();
 
-        if (nRes <= 0) {
+        if (nRes <= 0)
             return;
-        }
 
-        if (nRes == 2) {
-            foreach (auto sheet, changedList) {
-                sheet->saveData();
-            }
-        }
+        if (nRes == 2)
+            DocSheet::saveList(changedList);
     }
 
     //线程退出

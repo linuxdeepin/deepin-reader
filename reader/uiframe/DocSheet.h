@@ -106,6 +106,28 @@ public:
     static DocSheet *getSheet(QString uuid);
 
     /**
+     * @brief getSheet
+     * 根据uuid返回sheet
+     * @param filePath
+     * @return
+     */
+    static DocSheet *getSheetByFilePath(QString filePath);
+
+    /**
+     * @brief getChangedList
+     * 返回所有已变动的列表
+     * @return
+     */
+    static QList<DocSheet *> getChangedList();
+
+    /**
+     * @brief getChangedList
+     * 返回所有已变动的列表
+     * @return
+     */
+    static void saveList(QList<DocSheet *> list);
+
+    /**
      * @brief 全局对象判断读写锁
      */
     static QReadWriteLock g_lock;

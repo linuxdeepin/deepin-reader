@@ -167,6 +167,55 @@ DocSheet *DocSheet::getSheet(QString uuid)
     return sheet;
 }
 
+DocSheet *DocSheet::getSheetByFilePath(QString filePath)
+{
+    g_lock.lockForRead();
+
+    QList<DocSheet *> sheets = DocSheet::g_map.values();
+
+    DocSheet *result = nullptr;
+
+    foreach (DocSheet *sheet, sheets) {
+        if (sheet->filePath() == filePath) {
+            result = sheet;
+            break;
+        }
+    }
+
+    g_lock.unlock();
+
+    return result;
+}
+
+QList<DocSheet *> DocSheet::getChangedList()
+{
+    QList<DocSheet *> changedList;
+
+    g_lock.lockForRead();
+
+    foreach (auto sheet, DocSheet::g_map.values()) {
+        if (sheet->fileChanged())
+            changedList.append(sheet);
+    }
+
+    g_lock.unlock();
+
+    return changedList;
+}
+
+void DocSheet::saveList(QList<DocSheet *> list)
+{
+    g_lock.lockForRead();
+
+    foreach (auto sheet, list) {
+        if (g_map.values().contains(sheet))
+            sheet->saveData();
+    }
+
+    g_lock.unlock();
+
+}
+
 bool DocSheet::openFileExec(const QString &password, QString &error)
 {
     QEventLoop loop;

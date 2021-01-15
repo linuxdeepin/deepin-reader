@@ -344,8 +344,9 @@ bool CentralDocPage::hasSheet(DocSheet *sheet)
     auto sheets = this->findChildren<DocSheet *>();
 
     for (int i = 0; i < sheets.count(); ++i) {
-        if (sheets[i] == sheet)
+        if (sheets[i] == sheet && DocSheet::existSheet(sheet)) {
             return true;
+        }
     }
 
     return false;
