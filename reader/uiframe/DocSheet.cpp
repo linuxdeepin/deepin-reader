@@ -759,7 +759,7 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(this, tips, iconIndex);
 }
 
-#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
+#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=3)))
 void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
@@ -1206,7 +1206,8 @@ void DocSheet::deadDeleteLater()
 void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
-#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
+
+#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=3)))
     preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
     preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
@@ -1214,6 +1215,7 @@ void DocSheet::onPopPrintDialog()
 #else
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
 #endif
+
     preview.exec();
 }
 
