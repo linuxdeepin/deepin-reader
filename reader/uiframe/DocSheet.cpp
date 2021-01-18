@@ -759,7 +759,6 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
     doc->showTips(this, tips, iconIndex);
 }
 
-#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=3)))
 void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
 {
     printer->setDocName(QFileInfo(filePath()).fileName());
@@ -774,8 +773,9 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         if (pageRange[i] > pageCount())
             continue;
 
-        QImage image;
-        if (getImage(pageRange[i] - 1, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+        QImage image = getImage(pageRange[i] - 1, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()));
+
+        if (!image.isNull()) {
             painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
         }
 
@@ -783,7 +783,6 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
             printer->newPage();
     }
 }
-#else
 
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
@@ -814,8 +813,6 @@ void DocSheet::onPrintRequested(DPrinter *printer)
             printer->newPage();
     }
 }
-
-#endif
 
 void DocSheet::openSlide()
 {
@@ -1211,9 +1208,9 @@ void DocSheet::onPopPrintDialog()
     preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
     preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, &DocSheet::onPrintRequested);
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
 #else
-    connect(&preview, &DPrintPreviewDialog::paintRequested, this, &DocSheet::onPrintRequested);
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
 #endif
 
     preview.exec();
