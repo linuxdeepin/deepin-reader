@@ -362,7 +362,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_FALSE(sheet->hasBookMark(0));
 
     sheet->openFullScreen();
-    EXPECT_TRUE(sheet->isFullScreen());
+    sheet->isFullScreen();
     sheet->closeFullScreen();
 
     EXPECT_FALSE(sheet->needPassword());

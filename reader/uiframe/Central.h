@@ -134,6 +134,12 @@ public:
      */
     void setMenu(TitleMenu *menu);
 
+    /**
+     * @brief setUpValue
+     * 设置上移
+     */
+    void setUpValue(int value);
+
 signals:
     /**
      * @brief sigNeedClose
@@ -181,12 +187,16 @@ protected:
 
     void dropEvent(QDropEvent *event) override;
 
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     QStackedLayout  *m_layout = nullptr;
+    QWidget         *m_mainWidget = nullptr;
     CentralDocPage  *m_docPage = nullptr;
     CentralNavPage  *m_navPage = nullptr;
     TitleMenu       *m_menu = nullptr;
     TitleWidget     *m_widget = nullptr;
+    int             m_upValue = 0;
 };
 
 #endif  // CENTRAL_H

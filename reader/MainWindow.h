@@ -192,6 +192,13 @@ private slots:
     void onTouchPadEventSignal(QString name, QString direction, int fingers);
 
     /**
+     * @brief onImActiveChanged
+     * 处理当前虚拟键盘变化
+     * @param actived
+     */
+    void onImActiveChanged(bool actived);
+
+    /**
      * @brief 全屏
      */
     void onMainWindowFull();

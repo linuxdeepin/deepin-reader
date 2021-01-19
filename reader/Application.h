@@ -19,10 +19,6 @@
 
 #include <DApplication>
 
-#include <QDBusInterface>
-#include <QDBusReply>
-#include <QDBusUnixFileDescriptor>
-
 class AppInfo;
 
 #if defined(dApp)
@@ -35,21 +31,10 @@ DWIDGET_USE_NAMESPACE
 class Application : public DApplication
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.deepin.Reader")
 public:
     Application(int &argc, char **argv);
 
-    /**
-     * @brief blockShutdown
-     * 文档变化阻塞关闭
-     */
-    void blockShutdown();
-
-    /**
-     * @brief unBlockShutdown
-     * 文档未变化不阻塞关闭
-     */
-    void unBlockShutdown();
+    ~Application() override;
 
     /**
      * @brief showAnnotTextWidgetSig
@@ -60,38 +45,14 @@ public:
     void emitSheetChanged();
 
 signals:
-    /**
-     * @brief sigTouchPadEventSignal
-     * 触控板事件
-     * @param name  事件名称
-     * @param direction  手势方向
-     * @param fingers  手指个数
-     */
-    void sigTouchPadEventSignal(QString name, QString direction, int fingers);
-
     void sigShowAnnotTextWidget();
 
     void sigSetPasswdFocus();
-
-public slots:
-    /**
-     * @brief handleFiles
-     * 接收DBus打开文件响应接口
-     * @param filePathList
-     */
-    Q_SCRIPTABLE void handleFiles(QStringList filePathList);
 
 protected:
     void handleQuitAction() override;
 
     bool notify(QObject *object, QEvent *event) override;
-
-public:
-    bool isBlockShutdown = false;
-
-    QDBusInterface *blockShutdownInterface = nullptr;
-
-    QDBusReply<QDBusUnixFileDescriptor> blockShutdownReply;
 
 };
 

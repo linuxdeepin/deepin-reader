@@ -25,6 +25,7 @@
 #include "SaveDialog.h"
 #include "SlideWidget.h"
 #include "Application.h"
+#include "DBusObject.h"
 
 #include <DTitlebar>
 #include <DFileDialog>
@@ -121,9 +122,9 @@ void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 {
     if (!Dr::isTabletEnvironment()) {   //平板模式不阻塞
         if (DocSheet::existFileChanged()) {
-            dApp->blockShutdown();
+            DBusObject::instance()->blockShutdown();
         } else {
-            dApp->unBlockShutdown();
+            DBusObject::instance()->unBlockShutdown();
         }
     }
 

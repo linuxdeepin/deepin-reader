@@ -3,13 +3,12 @@
 #include "CentralDocPage.h"
 #include "accessible.h"
 #include "Utils.h"
+#include "DBusObject.h"
 
 #include <DLog>
 #include <QCommandLineParser>
 #include <DApplicationSettings>
 #include <QDesktopWidget>
-#include <QDBusConnection>
-#include <QDBusInterface>
 #include <QAccessible>
 #include <QDebug>
 #include <QFontDatabase>
@@ -59,22 +58,13 @@ int main(int argc, char *argv[])
     }
 
     QStringList arguments = parser.positionalArguments();
+
     if (arguments.size() > 0)
         PERF_PRINT_BEGIN("POINT-05", "");
 
     //=======通知已经打开的进程
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    if (!dbus.registerService("com.deepin.Reader")) {
-        QDBusInterface notification("com.deepin.Reader", "/com/deepin/Reader", "com.deepin.Reader", QDBusConnection::sessionBus());
-        QList<QVariant> args;
-        args.append(arguments);
-        notification.callWithArgumentList(QDBus::Block, "handleFiles", args).errorMessage();
+    if (!DBusObject::instance()->registerOrNotify(arguments))
         return 0;
-    }
-
-    dbus.registerObject("/com/deepin/Reader", &a, QDBusConnection::ExportScriptableSlots);
-
-    QDBusConnection::systemBus().connect(GESTURE_SERVICE, GESTURE_PATH, GESTURE_INTERFACE, GESTURE_SIGNAL, &a, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
     QAccessible::installFactory(accessibleFactory);
     DApplicationSettings savetheme;
@@ -95,5 +85,6 @@ int main(int argc, char *argv[])
     int result = a.exec();
 
     PERF_PRINT_END("POINT-02", "");
+
     return result;
 }

@@ -49,15 +49,15 @@ Central::Central(QWidget *parent)
     setAcceptDrops(true);
 
     m_widget = new TitleWidget(parent);
-
     m_navPage = new CentralNavPage(this);
     connect(m_navPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
 
+    m_mainWidget = new QWidget(this);
     m_layout = new QStackedLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
-    setLayout(m_layout);
+    m_mainWidget->setLayout(m_layout);
 }
 
 Central::~Central()
@@ -91,6 +91,13 @@ void Central::setMenu(TitleMenu *menu)
 {
     m_menu = menu;
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
+}
+
+void Central::setUpValue(int value)
+{
+    m_upValue = value;
+    m_mainWidget->move(0, -m_upValue);
+    m_mainWidget->resize(this->size());
 }
 
 void Central::zoomIn()
@@ -283,4 +290,11 @@ void Central::dropEvent(QDropEvent *event)
 
         topLevelwidget->setProperty("loading", false);
     }
+}
+
+void Central::resizeEvent(QResizeEvent *event)
+{
+    m_mainWidget->move(0, -m_upValue);
+    m_mainWidget->resize(event->size());
+    BaseWidget::resizeEvent(event);
 }

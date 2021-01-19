@@ -34,6 +34,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "DocSheet.h"
+#include "DBusObject.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -43,7 +44,6 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QSettings>
-#include <QDBusConnection>
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
@@ -70,7 +70,8 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
         }
     }
 
-    connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
+    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &MainWindow::onTouchPadEventSignal);
+    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &MainWindow::onImActiveChanged);
 
     m_showMenuTimer = new  QTimer(this);
     m_showMenuTimer->setInterval(1000);
@@ -90,7 +91,8 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
 
     addSheet(sheet);
 
-    connect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
+    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &MainWindow::onTouchPadEventSignal);
+    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &MainWindow::onImActiveChanged);
 
     m_showMenuTimer = new  QTimer(this);
     m_showMenuTimer->setInterval(1000);
@@ -102,12 +104,10 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
 
 MainWindow::~MainWindow()
 {
-    disconnect(dApp, SIGNAL(sigTouchPadEventSignal(QString, QString, int)), this, SLOT(onTouchPadEventSignal(QString, QString, int)));
-
     m_list.removeOne(this);
+
     if (m_list.count() <= 0) {
-        QDBusConnection dbus = QDBusConnection::sessionBus();
-        dbus.unregisterService("com.deepin.Reader");
+        DBusObject::instance()->unRegister();
     }
 }
 
@@ -491,6 +491,10 @@ void MainWindow::initBase()
     m_menu->setAccessibleName("Menu_Title");
 
     titlebar()->setMenu(m_menu);
+
+    if (Dr::isTabletEnvironment()) {
+        showFullScreen();
+    }
 }
 
 void MainWindow::onUpdateTitleLabelRect()
@@ -530,6 +534,17 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
             }
         }
     }
+}
+
+void MainWindow::onImActiveChanged(bool actived)
+{
+    if (focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
+        m_central->setUpValue(this->height() / 2 - titlebar()->height());
+    } else {
+        m_central->setUpValue(0);
+    }
+
+    qInfo() << actived;
 }
 
 void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)

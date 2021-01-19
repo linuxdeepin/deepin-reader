@@ -21,6 +21,7 @@
 #include "DocThread.h"
 #include "DocSheet.h"
 #include "SaveDialog.h"
+#include "DBusObject.h"
 
 #include <QIcon>
 #include <QDebug>
@@ -42,39 +43,9 @@ Application::Application(int &argc, char **argv)
     setProductIcon(QIcon::fromTheme("deepin-reader"));
 }
 
-void Application::blockShutdown()
+Application::~Application()
 {
-    if (isBlockShutdown)
-        return;
-
-    if (blockShutdownReply.value().isValid()) {
-        return;
-    }
-
-    if (blockShutdownInterface == nullptr)
-        blockShutdownInterface = new QDBusInterface("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus());
-
-    QList<QVariant> args;
-    args << QString("shutdown") // what
-         << qApp->applicationDisplayName() // who
-         << QObject::tr("Document not saved") // why
-         << QString("delay"); // mode
-
-    blockShutdownReply = blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
-    if (blockShutdownReply.isValid()) {
-        blockShutdownReply.value().fileDescriptor();
-        isBlockShutdown = true;
-    } else {
-        qInfo() << blockShutdownReply.error();
-    }
-}
-
-void Application::unBlockShutdown()
-{
-    if (blockShutdownReply.isValid()) {
-        blockShutdownReply = QDBusReply<QDBusUnixFileDescriptor>();
-        isBlockShutdown = false;
-    }
+    DBusObject::destory();
 }
 
 void Application::showAnnotTextWidgetSig()
@@ -85,29 +56,6 @@ void Application::showAnnotTextWidgetSig()
 void Application::emitSheetChanged()
 {
     emit sigSetPasswdFocus();
-}
-
-void Application::handleFiles(QStringList filePathList)
-{
-    if (filePathList.count() <= 0) {
-        MainWindow::createWindow()->show();
-        return;
-    }
-
-    MainWindow *mainwindow = MainWindow::m_list.count() > 0 ? MainWindow::m_list[0] : MainWindow::createWindow();
-    mainwindow->setProperty("loading", true);
-    foreach (QString filePath, filePathList) {
-        if (mainwindow->property("windowClosed").toBool())
-            break;
-
-        //如果存在则活跃该窗口
-        if (!MainWindow::activateSheetIfExist(filePath)) {
-            mainwindow->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-            mainwindow->addFile(filePath);
-        }
-    }
-
-    mainwindow->setProperty("loading", false);
 }
 
 void Application::handleQuitAction()
