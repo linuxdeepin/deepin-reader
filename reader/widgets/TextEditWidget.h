@@ -41,7 +41,6 @@ class TextEditWidget : public BaseWidget
 
 public:
     explicit TextEditWidget(DWidget *parent = nullptr);
-    ~TextEditWidget() override;
 
 signals:
     /**
@@ -89,6 +88,8 @@ public:
      */
     void setAnnotation(deepin_reader::Annotation *annotation);
 
+    void setEditFocus();
+
 public slots:
     /**
      * @brief onBlurWindowChanged
@@ -128,6 +129,7 @@ private:
     TransparentTextEdit *m_pTextEdit = nullptr;
     deepin_reader::Annotation *m_annotation = nullptr;
     SheetBrowser *m_brower;
+    QWidget *m_parent;
 };
 
 class TextEditShadowWidget : public DWidget
@@ -142,13 +144,6 @@ public:
      * 显示注释编辑框窗口
      */
     void showWidget(const QPoint &);
-
-private:
-    /**
-     * @brief initWidget
-     * 初始化控件
-     */
-    void initWidget();
 
 private:
     TextEditWidget *m_TextEditWidget = nullptr;

@@ -538,13 +538,13 @@ void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fing
 
 void MainWindow::onImActiveChanged(bool actived)
 {
-    if (focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
+    if (actived && "TransparentTextEdit" == focusWidget()->objectName() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height() > this->height() / 2) {
+        m_central->setUpValue(focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height()  - this->height() / 2);
+    } else if (actived && nullptr != focusWidget() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
         m_central->setUpValue(this->height() / 2 - titlebar()->height());
-    } else {
+    } else if (!actived) {
         m_central->setUpValue(0);
     }
-
-    qInfo() << actived;
 }
 
 void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)

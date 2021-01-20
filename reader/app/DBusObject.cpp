@@ -21,6 +21,7 @@
 #include "DBusObject.h"
 #include "MainWindow.h"
 #include "Application.h"
+#include "Global.h"
 
 #include <QDBusConnection>
 #include <QDebug>
@@ -73,7 +74,7 @@ bool DBusObject::registerOrNotify(QStringList arguments)
 
     dbus.registerObject(DBUS_SERVER_PATH, this, QDBusConnection::ExportScriptableSlots);
 
-    if (nullptr == m_keyboardInterface) {
+    if (Dr::isTabletEnvironment() && nullptr == m_keyboardInterface) {
         m_keyboardInterface = new QDBusInterface(DBUS_IM, DBUS_IM_PATH, DBUS_IM_INTERFACE, dbus);
         if (m_keyboardInterface->isValid()) {
             connect(m_keyboardInterface, SIGNAL(imActiveChanged(bool)), this, SIGNAL(sigImActiveChanged(bool)));

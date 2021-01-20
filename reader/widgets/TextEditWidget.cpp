@@ -25,6 +25,7 @@
 #include "TransparentTextEdit.h"
 #include "SheetBrowser.h"
 #include "Application.h"
+#include "Utils.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -38,25 +39,30 @@
 #include <QMenu>
 
 TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
-    : DWidget(nullptr)
+    : DWidget(parent)
 {
-    setWindowFlag(Qt::Popup);
-    setAttribute(Qt::WA_TranslucentBackground);
-    initWidget();
-    m_TextEditWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
-    this->setObjectName("TextEditShadowWidget");
-}
+    if (Dr::isTabletEnvironment())
+        setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
+    else
+        setWindowFlag(Qt::Popup);
 
-void TextEditShadowWidget::initWidget()
-{
+    setAttribute(Qt::WA_TranslucentBackground);
+
     setMaximumSize(QSize(278, 344));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
+
     pHLayoutContant->setMargin(12);
+
     this->setLayout(pHLayoutContant);
 
     m_TextEditWidget = new TextEditWidget(this);
+
     pHLayoutContant->addWidget(m_TextEditWidget);
+
+    m_TextEditWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
+
+    setObjectName("TextEditShadowWidget");
 }
 
 TextEditWidget *TextEditShadowWidget::getTextEditWidget()
@@ -66,9 +72,21 @@ TextEditWidget *TextEditShadowWidget::getTextEditWidget()
 
 void TextEditShadowWidget::showWidget(const QPoint &point)
 {
-    move(point - QPoint(this->layout()->margin(), this->layout()->margin()));
+    //QPoint pos = point - QPoint(this->layout()->margin(), this->layout()->margin());
+
+    QPoint pos = point;
+
+    //如果下边超出程序则向上移动
+    if (Dr::isTabletEnvironment() && (pos.y() + height() > m_TextEditWidget->m_brower->height()))
+        pos.setY(pos.y() - (pos.y() + height() - m_TextEditWidget->m_brower->height()));
+
+    move(pos);
+
     raise();
+
     show();
+
+    m_TextEditWidget->setEditFocus();
 }
 
 TextEditWidget::TextEditWidget(DWidget *parent)
@@ -78,11 +96,6 @@ TextEditWidget::TextEditWidget(DWidget *parent)
     initWidget();
 
     connect(dApp, &Application::sigShowAnnotTextWidget, this, &TextEditWidget::onShowMenu);
-}
-
-TextEditWidget::~TextEditWidget()
-{
-
 }
 
 void TextEditWidget::onShowMenu()
@@ -111,6 +124,11 @@ void TextEditWidget::setEditText(const QString &note)
 void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 {
     m_annotation = annotation;
+}
+
+void TextEditWidget::setEditFocus()
+{
+    m_pTextEdit->setFocus();
 }
 
 void TextEditWidget::hideEvent(QHideEvent *event)

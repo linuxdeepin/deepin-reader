@@ -335,7 +335,10 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
     }
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
-    m_noteEditWidget->showWidget(point);
+    if (Dr::isTabletEnvironment())
+        m_noteEditWidget->showWidget(mapFromGlobal(point));
+    else
+        m_noteEditWidget->showWidget(point);
 }
 
 bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
@@ -990,9 +993,13 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
     QPointF point = event->pos();
+
     BrowserPage *page = getBrowserPageForPoint(point);
 
     m_scroller->stop();
+
+    if (m_noteEditWidget && Dr::isTabletEnvironment())
+        m_noteEditWidget->hide();
 
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         Qt::MouseButton btn = event->button();
