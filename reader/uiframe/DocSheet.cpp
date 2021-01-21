@@ -38,7 +38,7 @@
 #include "FileAttrWidget.h"
 #include "Application.h"
 #include "Utils.h"
-#include "DocThread.h"
+#include "PageRenderThread.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -232,11 +232,11 @@ void DocSheet::openFileAsync(const QString &password)
 {
     m_password = password;
 
-    DocOpenThreadTask task;
+    DocOpenTask task;
 
     task.sheet = this;
 
-    DocThread::appendTask(task);
+    PageRenderThread::appendTask(task);
 }
 
 void DocSheet::jumpToPage(int page)
@@ -521,8 +521,7 @@ void DocSheet::handleOpened(bool result, QString error, deepin_reader::Document 
     m_pages = pages;
 
     if (result) {
-        if (!m_browser->init(document, pages, m_operation, m_bookmarks))
-            emit sigFileOpened(this, false, tr("Please check if the file is damaged"));
+        m_browser->init(document, pages, m_operation, m_bookmarks);
 
         m_sidebar->handleOpenSuccess();
 

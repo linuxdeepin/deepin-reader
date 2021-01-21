@@ -154,7 +154,7 @@ public:
 signals:
     void wasModified();
 };
-typedef QList<Annotation *>  AnnotationList;
+typedef QList<Annotation *> AnnotationList;
 
 class FormField : public QObject
 {

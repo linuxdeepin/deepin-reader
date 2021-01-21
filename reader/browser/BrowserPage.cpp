@@ -251,7 +251,17 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             PageRenderThread::appendTask(task);
         }
 
-        loadAnnotations();
+        if (!m_hasLoadedAnnotation || !m_annotatinIsRendering) {
+            m_annotatinIsRendering = true;
+
+            DocPageAnnotationTask task;
+
+            task.sheet = m_sheet;
+
+            task.page = this;
+
+            PageRenderThread::appendTask(task);
+        }
     }
 
     if (!m_parent->property("pinchgetsturing").toBool()) {
@@ -367,6 +377,41 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
     scaleWords(true);
 }
 
+void BrowserPage::handleAnnotationLoaded(const QList<Annotation *> &annots)
+{
+    m_annotatinIsRendering = false;
+
+    //如果已经加载了，则过滤本次加载 (存在不通过线程加载的情况)
+    if (m_hasLoadedAnnotation) {
+        qDeleteAll(annots);
+        return;
+    }
+
+    //在reload之前将上一次选中去掉,避免操作野指针
+    if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
+        m_lastClickIconAnnotationItem->setDrawSelectRect(false);
+        m_lastClickIconAnnotationItem = nullptr;
+    }
+
+    qDeleteAll(m_annotations);
+    m_annotations.clear();
+
+    qDeleteAll(m_annotationItems);
+    m_annotationItems.clear();
+
+    m_annotations = annots;
+
+    for (int i = 0; i < m_annotations.count(); ++i) {
+        m_annotations[i]->page = m_index + 1;
+        foreach (const QRectF &rect, m_annotations[i]->boundary()) {
+            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i], m_scaleFactor);
+            m_annotationItems.append(annotationItem);
+        }
+    }
+
+    m_hasLoadedAnnotation = true;
+}
+
 QImage BrowserPage::getCurrentImage(int width, int height)
 {
     if (m_pixmap.isNull())
@@ -411,6 +456,11 @@ QList<Word> BrowserPage::getWords()
     return m_page->words();
 }
 
+QList<Annotation *> BrowserPage::getAnnotations()
+{
+    return m_page->annotations();
+}
+
 int BrowserPage::itemIndex()
 {
     return m_index;
@@ -434,12 +484,6 @@ void BrowserPage::setWordSelectable(bool selectable)
     foreach (BrowserWord *word, m_words) {
         word->setSelectable(selectable);
     }
-}
-
-void BrowserPage::loadAnnotations()
-{
-    if (!m_hasLoadedAnnotation)
-        reloadAnnotations();
 }
 
 void BrowserPage::loadWords()
@@ -521,7 +565,7 @@ void BrowserPage::clearWords()
 
 void BrowserPage::scaleAnnots(bool force)
 {
-    if (m_annotationItems.count() <= 0)
+    if (!m_annotatinIsRendering || m_annotationItems.count() <= 0)
         return;
 
     prepareGeometryChange();
@@ -549,35 +593,13 @@ void BrowserPage::scaleWords(bool force)
     }
 }
 
-void BrowserPage::reloadAnnotations()
-{
-    //在reload之前将上一次选中去掉,避免操作野指针
-    if (m_lastClickIconAnnotationItem && m_annotationItems.contains(m_lastClickIconAnnotationItem)) {
-        m_lastClickIconAnnotationItem->setDrawSelectRect(false);
-        m_lastClickIconAnnotationItem = nullptr;
-    }
-
-    qDeleteAll(m_annotations);
-    m_annotations.clear();
-
-    qDeleteAll(m_annotationItems);
-    m_annotationItems.clear();
-
-    m_annotations = m_page->annotations();
-
-    for (int i = 0; i < m_annotations.count(); ++i) {
-        m_annotations[i]->page = m_index + 1;
-        foreach (const QRectF &rect, m_annotations[i]->boundary()) {
-            BrowserAnnotation *annotationItem = new BrowserAnnotation(this, rect, m_annotations[i], m_scaleFactor);
-            m_annotationItems.append(annotationItem);
-        }
-    }
-
-    m_hasLoadedAnnotation = true;
-}
-
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
+    if (!m_wordHasRendered) {
+        m_annotations = m_page->annotations();
+        m_wordHasRendered = true;
+    }
+
     return m_annotations;
 }
 
@@ -646,7 +668,10 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     boundaries << selectBoundRectF;
 
     if (boundaries.count() > 0) {
-        loadAnnotations();
+        //需要保证已经加载注释
+        if (!m_hasLoadedAnnotation) {
+            handleAnnotationLoaded(getAnnotations());
+        }
 
         highLightAnnot = m_page->addHighlightAnnotation(boundaries, text, color);
         if (highLightAnnot == nullptr)
@@ -783,15 +808,24 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
 
 bool BrowserPage::removeAllAnnotation()
 {
+    //未加载注释时则直接加载 无需添加图元
+    if (!m_hasLoadedAnnotation) {
+        m_annotations = getAnnotations();
+
+        m_hasLoadedAnnotation = true;
+    }
+
     m_lastClickIconAnnotationItem = nullptr;
 
     if (m_annotations.isEmpty())
         return false;
 
+    //所有的注释区域 需要被重新加载界面
     QList<QRectF> annoBoundaries;
 
     for (int index = 0; index < m_annotations.size(); index++) {
         deepin_reader::Annotation *annota = m_annotations.at(index);
+
         if (!m_annotations.contains(annota) || (annota && annota->contents().isEmpty()))
             continue;
 
@@ -801,6 +835,7 @@ bool BrowserPage::removeAllAnnotation()
             continue;
 
         m_annotations.removeAt(index);
+
         index--;
 
         foreach (BrowserAnnotation *annotation, m_annotationItems) {
@@ -814,9 +849,8 @@ bool BrowserPage::removeAllAnnotation()
         }
     }
 
-    m_hasLoadedAnnotation = false;
-
     QRectF renderBoundary;
+
     for (int i = 0; i < annoBoundaries.size(); i++) {
         renderBoundary = renderBoundary | annoBoundaries.at(i);
     }
@@ -853,6 +887,10 @@ bool BrowserPage::inLink(const QPointF &pos)
 
 void BrowserPage::setPageBookMark(const QPointF clickPoint)
 {
+    //平板模式取消状态变化
+    if (Dr::isTabletEnvironment())
+        return;
+
     if (bookmarkMouseRect().contains(clickPoint)) {
         m_bookmarkState = 2;
         if (nullptr != m_parent) {

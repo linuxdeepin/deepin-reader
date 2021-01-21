@@ -20,8 +20,7 @@ SOURCES += \
     $$PWD/uiframe/CentralNavPage.cpp \
     $$PWD/uiframe/CentralDocPage.cpp \
     $$PWD/uiframe/DocTabBar.cpp \
-    $$PWD/uiframe/DocSheet.cpp \
-    $$PWD/uiframe/DocThread.cpp
+    $$PWD/uiframe/DocSheet.cpp
 
 HEADERS +=\
     $$PWD/Application.h\
@@ -32,8 +31,7 @@ HEADERS +=\
     $$PWD/uiframe/CentralNavPage.h \
     $$PWD/uiframe/CentralDocPage.h \
     $$PWD/uiframe/DocTabBar.h \
-    $$PWD/uiframe/DocSheet.h \
-    $$PWD/uiframe/DocThread.h
+    $$PWD/uiframe/DocSheet.h
 
 RESOURCES    += $$PWD/../resources/resources.qrc
 

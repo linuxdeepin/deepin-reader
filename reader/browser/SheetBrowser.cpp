@@ -168,7 +168,7 @@ bool SheetBrowser::isUnLocked()
     return true;
 }
 
-bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks)
+void SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks)
 {
     Q_ASSERT(nullptr == m_document);
 
@@ -177,12 +177,7 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
     int pagesNumber = m_document->pageCount();
 
     for (int i = 0; i < pagesNumber; ++i) {
-        deepin_reader::Page *page = pages.value(i);
-
-        if (page == nullptr)
-            return false;
-
-        BrowserPage *item = new BrowserPage(this, i, m_sheet, page);
+        BrowserPage *item = new BrowserPage(this, i, m_sheet, pages.value(i));
 
         if (bookmarks.contains(i))
             item->setBookmark(true);
@@ -205,8 +200,6 @@ bool SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
     m_initPage = operation.currentPage;
 
     m_hasLoaded = true;
-
-    return true;
 }
 
 bool SheetBrowser::save()
@@ -528,7 +521,6 @@ QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 {
     QList<deepin_reader::Annotation *> list;
     foreach (BrowserPage *item, m_items) {
-        item->loadAnnotations();
         list.append(item->annotations());
     }
 
@@ -1236,6 +1228,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             }
         }
 
+        //处理移动到超链接区域
         if (!magnifierOpened() && this->isLink(mousePos)) {
             if (m_tipsWidget)
                 m_tipsWidget->hide();
@@ -1277,7 +1270,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             if (m_selectPressedPos.isNull()) {
                 if (page) {
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
-                    if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
+                    //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
+                    if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty() && !Dr::isTabletEnvironment()) {
                         m_tipsWidget->setText(browserAnno->annotationText());
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);

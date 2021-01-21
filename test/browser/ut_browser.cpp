@@ -306,7 +306,6 @@ TEST_F(ut_browser, SheetBrowserTest)
     delete menu4;
 
     ///BrowserAnnotation
-    page->reloadAnnotations();
     deepin_reader::Annotation *annotation = page->annotations().at(0);
     if (nullptr == annotation)
         GTEST_FAIL();

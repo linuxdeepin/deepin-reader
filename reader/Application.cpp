@@ -18,7 +18,6 @@
 #include "Utils.h"
 #include "MainWindow.h"
 #include "PageRenderThread.h"
-#include "DocThread.h"
 #include "DocSheet.h"
 #include "SaveDialog.h"
 #include "DBusObject.h"
@@ -76,7 +75,6 @@ void Application::handleQuitAction()
 
     //线程退出
     PageRenderThread::destroyForever();
-    DocThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list) {
         window->closeWithoutSave();

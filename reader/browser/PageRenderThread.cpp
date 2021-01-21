@@ -35,6 +35,7 @@
 #include <QTime>
 #include <QDebug>
 #include <QMetaType>
+#include <QFileInfo>
 
 PageRenderThread *PageRenderThread::s_instance = nullptr;   //由于pdfium不支持多线程，暂时单线程进行
 
@@ -42,11 +43,16 @@ bool PageRenderThread::s_quitForever = false;
 
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
+    qRegisterMetaType<deepin_reader::Document *>("deepin_reader::Document *");
     qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
+    qRegisterMetaType<QList<deepin_reader::Annotation *>>("QList<deepin_reader::Annotation *>");
+    qRegisterMetaType<QList<deepin_reader::Page *>>("QList<deepin_reader::Page *>");
+
     qRegisterMetaType<DocPageNormalImageTask>("DocPageNormalImageTask");
     qRegisterMetaType<DocPageSliceImageTask>("DocPageSliceImageTask");
     qRegisterMetaType<DocPageBigImageTask>("DocPageBigImageTask");
     qRegisterMetaType<DocPageWordTask>("DocPageWordTask");
+    qRegisterMetaType<DocPageAnnotationTask>("DocPageAnnotationTask");
     qRegisterMetaType<DocPageThumbnailTask>("DocPageThumbnailTask");
     qRegisterMetaType<DocOpenTask>("DocOpenTask");
 
@@ -54,6 +60,7 @@ PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
     connect(this, &PageRenderThread::sigDocPageSliceImageTaskFinished, this, &PageRenderThread::onDocPageSliceImageTaskFinished, Qt::QueuedConnection);
     connect(this, &PageRenderThread::sigDocPageBigImageTaskFinished, this, &PageRenderThread::onDocPageBigImageTaskFinished, Qt::QueuedConnection);
     connect(this, &PageRenderThread::sigDocPageWordTaskFinished, this, &PageRenderThread::onDocPageWordTaskFinished, Qt::QueuedConnection);
+    connect(this, &PageRenderThread::sigDocPageAnnotationTaskFinished, this, &PageRenderThread::onDocPageAnnotationTaskFinished, Qt::QueuedConnection);
     connect(this, &PageRenderThread::sigDocPageThumbnailTaskFinished, this, &PageRenderThread::onDocPageThumbnailTask, Qt::QueuedConnection);
     connect(this, &PageRenderThread::sigDocOpenTask, this, &PageRenderThread::onDocOpenTask, Qt::QueuedConnection);
 }
@@ -207,6 +214,24 @@ void PageRenderThread::appendTask(DocPageWordTask task)
         instance->start();
 }
 
+void PageRenderThread::appendTask(DocPageAnnotationTask task)
+{
+    PageRenderThread *instance  = PageRenderThread::instance();
+
+    if (nullptr == instance) {
+        return;
+    }
+
+    instance->m_pageAnnotationMutex.lock();
+
+    instance->m_pageAnnotationTasks.append(task);
+
+    instance->m_pageAnnotationMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
 void PageRenderThread::appendTask(DocPageThumbnailTask task)
 {
     PageRenderThread *instance  = PageRenderThread::instance();
@@ -265,6 +290,9 @@ void PageRenderThread::run()
         while (execNextDocPageWordTask())
         {}
 
+        while (execNextDocPageAnnotationTask())
+        {}
+
         while (execNextDocPageThumbnailTask())
         {}
 
@@ -312,6 +340,9 @@ void PageRenderThread::run()
             {}
 
             while (execNextDocPageWordTask())
+            {}
+
+            while (execNextDocPageAnnotationTask())
             {}
 
             while (execNextDocPageThumbnailTask())
@@ -390,6 +421,20 @@ bool PageRenderThread::popNextDocPageWordTask(DocPageWordTask &task)
     task = m_pageWordTasks.value(0);
 
     m_pageWordTasks.removeAt(0);
+
+    return true;
+}
+
+bool PageRenderThread::popNextDocPageAnnotationTask(DocPageAnnotationTask &task)
+{
+    QMutexLocker locker(&m_pageAnnotationMutex);
+
+    if (m_pageAnnotationTasks.count() <= 0)
+        return false;
+
+    task = m_pageAnnotationTasks.value(0);
+
+    m_pageAnnotationTasks.removeAt(0);
 
     return true;
 }
@@ -484,6 +529,26 @@ bool PageRenderThread::execNextDocPageWordTask()
     return true;
 }
 
+bool PageRenderThread::execNextDocPageAnnotationTask()
+{
+    if (m_quit)
+        return false;
+
+    DocPageAnnotationTask task;
+
+    if (!popNextDocPageAnnotationTask(task))
+        return false;
+
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
+
+    const QList<deepin_reader::Annotation *> annots = task.page->getAnnotations();
+
+    emit sigDocPageAnnotationTaskFinished(task, annots);
+
+    return true;
+}
+
 bool PageRenderThread::execNextDocPageThumbnailTask()
 {
     if (m_quit)
@@ -507,7 +572,57 @@ bool PageRenderThread::execNextDocPageThumbnailTask()
 
 bool PageRenderThread::execNextDocOpenTask()
 {
-    return false;
+    if (m_quit)
+        return false;//false 为不用再继续循环调用
+
+    DocOpenTask task;
+
+    if (!popNextDocOpenTask(task))
+        return false;//false 为不用再继续循环调用
+
+    if (!DocSheet::existSheet(task.sheet))
+        return true;
+
+    int fileType     = task.sheet->fileType();
+    QString filePath = task.sheet->filePath();
+    QString password = task.sheet->password();
+
+    PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
+
+    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(fileType, filePath, password);
+
+    if (nullptr == document) {//打开失败
+        emit sigDocOpenTask(task, false, tr("Open failed"), nullptr, QList<deepin_reader::Page *>());
+    } else {
+        int pagesNumber = document->pageCount();
+
+        QList<deepin_reader::Page *> pages;
+
+        for (int i = 0; i < pagesNumber; ++i) {
+            deepin_reader::Page *page = document->page(i);
+            if (nullptr == page) {
+                break;
+            }
+            pages.append(page);
+        }
+
+        if (pages.count() == pagesNumber) {
+            emit sigDocOpenTask(task, true, "", document, pages);
+        } else {
+            for (deepin_reader::Page *page : pages)
+                delete page;
+
+            pages.clear();
+            delete document;
+
+            emit sigDocOpenTask(task, false, tr("Please check if the file is damaged"), nullptr, QList<deepin_reader::Page *>());
+        }
+    }
+
+    PERF_PRINT_END("POINT-03", "");
+    PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
+
+    return true;
 }
 
 void PageRenderThread::onDocPageNormalImageTaskFinished(DocPageNormalImageTask task, QPixmap pixmap)
@@ -531,10 +646,17 @@ void PageRenderThread::onDocPageBigImageTaskFinished(DocPageBigImageTask task, Q
     }
 }
 
-void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<Word> words)
+void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<deepin_reader::Word> words)
 {
     if (DocSheet::existSheet(task.sheet)) {
         task.page->handleWordLoaded(words);
+    }
+}
+
+void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots)
+{
+    if (DocSheet::existSheet(task.sheet)) {
+        task.page->handleAnnotationLoaded(annots);
     }
 }
 
@@ -545,10 +667,11 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
     }
 }
 
-void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result)
+void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
-    Q_UNUSED(task)
-    Q_UNUSED(result)
+    if (DocSheet::existSheet(task.sheet)) {
+        task.sheet->handleOpened(result, error, document, pages);
+    }
 }
 
 void PageRenderThread::destroyForever()

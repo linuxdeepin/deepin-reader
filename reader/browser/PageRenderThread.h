@@ -60,13 +60,19 @@ struct DocPageWordTask {//取页码文字
     BrowserPage *page = nullptr;
 };
 
+struct DocPageAnnotationTask {//取页码注释
+    DocSheet *sheet = nullptr;
+    BrowserPage *page = nullptr;
+};
+
+
 struct DocPageThumbnailTask {//缩略图
     DocSheet *sheet = nullptr;
     SideBarImageViewModel *model = nullptr;
     int index = -1;
 };
 
-struct DocOpenTask {
+struct DocOpenTask {//打开文档
     DocSheet *sheet = nullptr;
 };
 
@@ -101,6 +107,8 @@ public:
 
     static void appendTask(DocPageWordTask task);
 
+    static void appendTask(DocPageAnnotationTask task);
+
     static void appendTask(DocPageThumbnailTask task);
 
     static void appendTask(DocOpenTask task);
@@ -129,6 +137,8 @@ private:
 
     bool popNextDocPageWordTask(DocPageWordTask &task);
 
+    bool popNextDocPageAnnotationTask(DocPageAnnotationTask &task);
+
     bool popNextDocPageThumbnailTask(DocPageThumbnailTask &task);
 
     bool popNextDocOpenTask(DocOpenTask &task);
@@ -139,6 +149,8 @@ private:
     bool execNextDocPageSliceImageTask();
 
     bool execNextDocPageWordTask();
+
+    bool execNextDocPageAnnotationTask();
 
     bool execNextDocPageThumbnailTask();
 
@@ -153,9 +165,11 @@ signals:
 
     void sigDocPageWordTaskFinished(DocPageWordTask, QList<deepin_reader::Word>);
 
+    void sigDocPageAnnotationTaskFinished(DocPageAnnotationTask, QList<deepin_reader::Annotation *>);
+
     void sigDocPageThumbnailTaskFinished(DocPageThumbnailTask, QPixmap);
 
-    void sigDocOpenTask(DocOpenTask, bool);
+    void sigDocOpenTask(DocOpenTask, bool, QString, deepin_reader::Document *, QList<deepin_reader::Page *>);
 
 private slots:
     void onDocPageNormalImageTaskFinished(DocPageNormalImageTask task, QPixmap pixmap);
@@ -166,9 +180,11 @@ private slots:
 
     void onDocPageWordTaskFinished(DocPageWordTask task, QList<deepin_reader::Word> words);
 
+    void onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots);
+
     void onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap);
 
-    void onDocOpenTask(DocOpenTask task, bool result);
+    void onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *, QList<deepin_reader::Page *> pages);
 
 private:
     QMutex m_pageNormalImageMutex;
@@ -182,6 +198,9 @@ private:
 
     QMutex m_pageWordMutex;
     QList<DocPageWordTask> m_pageWordTasks;
+
+    QMutex m_pageAnnotationMutex;
+    QList<DocPageAnnotationTask> m_pageAnnotationTasks;
 
     QMutex m_pageThumbnailMutex;
     QList<DocPageThumbnailTask> m_pageThumbnailTasks;

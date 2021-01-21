@@ -71,7 +71,7 @@ public:
      * @brief 文档页实际区域
      * @return
      */
-    QRectF rect();  //
+    QRectF rect();
 
     /**
      * @brief 设置书签
@@ -142,6 +142,13 @@ public:
     QList<Word> getWords();
 
     /**
+     * @brief getAnnotations
+     * 得到当前页的注释
+     * @return
+     */
+    QList<Annotation *> getAnnotations();
+
+    /**
      * @brief itemIndex
      * 当前页的编号(从0开始)
      * @return
@@ -167,12 +174,6 @@ public:
      * 加载文字 如果正在加载则不进行操作 如果已经加载过则按当前缩放改变大小
      */
     void loadWords();
-
-    /**
-     * @brief loadAnnotations
-     * 加载注释 如果已经加载则不再加载
-     */
-    void loadAnnotations();     //如果加载过则不加载
 
     /**
      * @brief scaleAnnots
@@ -405,10 +406,11 @@ private:
     void handleWordLoaded(const QList<Word> &words);
 
     /**
-     * @brief reloadAnnotations
-     * 重新加载页中所有注释
+     * brief handleAnnotationLoaded
+     * 加载注释
+     * @param annots 要加载的注释
      */
-    void reloadAnnotations();
+    void handleAnnotationLoaded(const QList<Annotation *> &annots);
 
     /**
      * @brief bookmarkRect
@@ -452,18 +454,15 @@ protected:
     bool sceneEvent(QEvent *event) override;
 
 private:
-    DocSheet *m_sheet = nullptr;
-
     QMutex m_mutex;
+
+    DocSheet *m_sheet = nullptr;
 
     SheetBrowser *m_parent = nullptr;
 
     deepin_reader::Page *m_page = nullptr;                  //主要操作更新
-
-    deepin_reader::AnnotationList m_annotations;
-
-    int     m_index = 0;                                    //当前索引
     double  m_scaleFactor = -1;                             //当前被设置的缩放
+    int     m_index = 0;                                    //当前索引
     Dr::Rotation m_rotation = Dr::NumberOfRotations;        //当前被设置的旋转
 
     QPixmap m_pixmap;                                       //当前图片
@@ -471,7 +470,7 @@ private:
     int     m_pixmapId          = 0;                        //当前图片的标识
     bool    m_pixmapIsLastest   = false;                    //当前图示是否最新
     bool    m_pixmapHasRendered = false;                    //当前图片是否已经加载
-    double  m_renderPixmapScaleFactor = -1;                       //当前图片的缩放
+    double  m_renderPixmapScaleFactor = -1;                 //当前图片的缩放
     bool    m_viewportRendered  = false;                    //图片初始化加载视图窗口
 
     QList<BrowserWord *> m_words;                           //当前文字
@@ -482,11 +481,13 @@ private:
     bool m_wordSelectable  = false;                         //当前文字是否可以选取
 
     QList<BrowserAnnotation *> m_annotationItems;           //一个deepin_reader::Annotation可能对应多个annotationItems
+    QList<Annotation *> m_annotations;                      //当前注释
     double m_annotScaleFactor = -1;                         //当前注释的缩放
-    BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
+    bool m_annotatinIsRendering = false;                    //当前注释是否正在加载
     bool m_hasLoadedAnnotation = false;                     //是否已经加载注释
-    bool m_drawMoveIconRect = false;                        // 绘制移动图标注释边框
-    QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
+    bool m_drawMoveIconRect = false;                        //绘制移动图标注释边框
+    BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
+    QPointF m_drawMoveIconPoint;                            //绘制移动图标注释点
 
     QVector<QRectF> m_searchLightrectLst;                   //搜索结果
     QRectF m_searchSelectLighRectf;
