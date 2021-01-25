@@ -91,6 +91,7 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         cfont = DFontSizeManager::instance()->t9(cfont);
         painter->setFont(cfont);
         QString contentText = index.data(ImageinfoType_e::IMAGE_CONTENT_TEXT).toString();
+
         contentText.replace(QChar('\n'), QString(""));
         contentText.replace(QChar('\t'), QString(""));
         QTextOption contentOption;

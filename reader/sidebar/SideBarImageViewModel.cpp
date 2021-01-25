@@ -103,6 +103,9 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 
     int nRow = m_pagelst.at(index.row()).pageIndex;
 
+    if (-1 == nRow)
+        return QVariant();
+
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
         QPixmap pixmap = m_sheet->thumbnail(nRow);
         if (pixmap.isNull()) {

@@ -119,6 +119,7 @@ void SideBarImageListView::handleOpenSuccess()
                 pageSrclst << tImagePageInfo;
             }
         }
+
         m_imageModel->initModelLst(pageSrclst);
     }
 }

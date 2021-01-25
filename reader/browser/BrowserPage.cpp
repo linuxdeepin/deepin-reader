@@ -595,9 +595,8 @@ void BrowserPage::scaleWords(bool force)
 
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
-    if (!m_wordHasRendered) {
-        m_annotations = m_page->annotations();
-        m_wordHasRendered = true;
+    if (!m_hasLoadedAnnotation) {
+        handleAnnotationLoaded(getAnnotations());
     }
 
     return m_annotations;
