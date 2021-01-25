@@ -108,12 +108,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../reader/sidebar/bookmark/BookMarkWidget.cpp" line="64"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
         <translation>ཤོག་འཛར་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/bookmark/BookMarkWidget.cpp" line="239"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="234"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>ཁྱེད་ཀྱིས་ཤོག་འཛར་ཚང་མ་སུབ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
@@ -121,119 +121,119 @@
 <context>
     <name>BrowserMenu</name>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="38"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="51"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="55"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="52"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
         <translation>པར་སློག</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="42"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
         <source>Remove annotation</source>
         <translation>མཆན་སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="136"/>
         <source>Add annotation</source>
         <translation>མཆན་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="46"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="76"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="84"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="128"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="77"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="85"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Remove bookmark</source>
         <translation>ཤོག་འཛར་སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="48"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="78"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="86"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="130"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
         <source>Add bookmark</source>
         <translation>ཤོག་འཛར་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="59"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
         <source>Highlight</source>
         <translation>ཆེས་གསལ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="68"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="69"/>
         <source>Remove highlight</source>
         <translation>ཆེས་གསལ་འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="80"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="126"/>
         <source>Search</source>
         <translation>འཚོལ་ཞིབ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="139"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Exit fullscreen</source>
         <translation>ཡོལ་གང་ནས་ཕྱིར་འབུད་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="93"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="141"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="95"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Fullscreen</source>
         <translation>ཡོལ་གང་།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="144"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="98"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
         <source>Slide show</source>
         <translation>སྒྲོན་བརྙན་སྤྱིན་ཤོག་གཏོང་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="99"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="147"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="151"/>
         <source>First page</source>
         <translation>ཤོག་ལྷེ་དང་པོ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="102"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="152"/>
         <source>Previous page</source>
         <translation>ཤོག་ལྷེ་གོང་མ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="154"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="158"/>
         <source>Next page</source>
         <translation>ཤོག་ལྷེ་རྗེས་མ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="159"/>
         <source>Last page</source>
         <translation>ཤོག་ལྷེ་མཇུག་ཤོས།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="163"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
         <source>Rotate left</source>
         <translation>གཡོན་དུ་སྐོར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="118"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
         <source>Rotate right</source>
         <translation>གཡས་སུ་སྐོར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="119"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="122"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="172"/>
         <source>Print</source>
         <translation>པར་འདེབས།</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
         <source>Document info</source>
         <translation>ཡིག་ཚགས་ཆ་འཕྲིན།</translation>
     </message>
@@ -241,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="115"/>
+        <location filename="../reader/uiframe/Central.cpp" line="122"/>
         <source>Documents</source>
         <translation>ཡིག་ཚགས་ཡིག་ཆ།</translation>
     </message>
@@ -249,34 +249,34 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="157"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="159"/>
         <source>The format is not supported</source>
         <translation>ཡིག་ཆ་འདིའི་རྣམ་བཞག་ལ་རྒྱབ་སྐྱོར་མི་བྱེད།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="401"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="406"/>
         <source>Save failed</source>
         <translation>ཉར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="407"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="412"/>
         <source>Saved successfully</source>
         <translation>ཉར་ཐུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="419"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
         <source>Save as</source>
         <translation>གཞན་ཉར།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="423"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="433"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="428"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="438"/>
         <source>Invalid file name</source>
         <translation>གོ་ཆོད་པའི་ཡིག་ཆའི་མིང་འཇུག་རོགས།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="425"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="435"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="430"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="440"/>
         <source>OK</source>
         <translation>གཏན་འཁེལ།</translation>
     </message>
@@ -302,25 +302,24 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="264"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="292"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="335"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="363"/>
         <source>The bookmark has been removed</source>
         <translation>ཤོག་འཛར་སུབ་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="438"/>
         <source>Please check if the file is damaged</source>
-        <translation>ཡིག་ཆར་སྐྱོན་ཡོད་མེད་རྟོག་ཞིབ་གནང་རོགས།</translation>
+        <translation type="vanished">ཡིག་ཆར་སྐྱོན་ཡོད་མེད་རྟོག་ཞིབ་གནང་རོགས།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="478"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="493"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="570"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="585"/>
         <source>Please select the text</source>
         <translation>ཡིག་ཆ་འདེམས་རོགས།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="551"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="634"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="643"/>
         <source>The annotation has been removed</source>
         <translation>མཆན་སུབ་ཟིན།</translation>
     </message>
@@ -328,14 +327,12 @@
 <context>
     <name>DocThread</name>
     <message>
-        <location filename="../reader/uiframe/DocThread.cpp" line="76"/>
         <source>Open failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocThread.cpp" line="97"/>
         <source>Please check if the file is damaged</source>
-        <translation>ཡིག་ཆར་སྐྱོན་ཡོད་མེད་རྟོག་ཞིབ་གནང་རོགས།</translation>
+        <translation type="vanished">ཡིག་ཆར་སྐྱོན་ཡོད་མེད་རྟོག་ཞིབ་གནང་རོགས།</translation>
     </message>
 </context>
 <context>
@@ -390,20 +387,33 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../reader/sidebar/note/NotesWidget.cpp" line="67"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
         <source>Add annotation</source>
         <translation>མཆན་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/note/NotesWidget.cpp" line="189"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>ཁྱེད་ཀྱིས་མཆན་ཚང་མ་སུབ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
 </context>
 <context>
+    <name>PageRenderThread</name>
+    <message>
+        <location filename="../reader/browser/PageRenderThread.cpp" line="595"/>
+        <source>Open failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/browser/PageRenderThread.cpp" line="618"/>
+        <source>Please check if the file is damaged</source>
+        <translation>ཡིག་ཆར་སྐྱོན་ཡོད་མེད་རྟོག་ཞིབ་གནང་རོགས།</translation>
+    </message>
+</context>
+<context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/sidebar/thumbnail/PagingWidget.cpp" line="195"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
         <source>Invalid page number</source>
         <translation>གོ་ཆོད་པའི་ཤོག་གྲངས་འཇུག་རོགས།</translation>
     </message>
@@ -411,7 +421,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../reader/Application.cpp" line="60"/>
+        <location filename="../reader/app/DBusObject.cpp" line="113"/>
         <source>Document not saved</source>
         <translation>ཡིག་ཚགས་ཉར་མེད།</translation>
     </message>
@@ -476,12 +486,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../reader/sidebar/search/SearchResWidget.cpp" line="60"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
         <translation>འཚོལ་ཞིབ་བྱས་འབྲས་མེད།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/search/SearchResWidget.cpp" line="109"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>འཚོལ་ཞིབ་བྱས་འབྲས་%1</translation>
     </message>
@@ -489,22 +499,22 @@
 <context>
     <name>SheetSidebar</name>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="85"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
         <source>Thumbnails</source>
         <translation>བསྡུས་རིས།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="100"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
         <source>Catalog</source>
         <translation>དཀར་ཆག</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="113"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
         <source>Bookmarks</source>
         <translation>ཤོག་འཛར།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="128"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
         <source>Annotations</source>
         <translation>མཆན།</translation>
     </message>
@@ -537,265 +547,277 @@
         <translation>རྩོམ་སྒྲིག</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="257"/>
         <source>Exit</source>
         <translation>ཕྱིར་འབུད།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="254"/>
         <source>Help</source>
         <translation>རོགས་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="257"/>
         <source>Page up</source>
         <translation>ཤོག་ངོས་གོང་མ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="257"/>
         <source>Page down</source>
         <translation>ཤོག་ངོས་རྗེས་མ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="255"/>
         <source>Open</source>
         <translation>ཁ་ཕྱེ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="257"/>
         <source>Zoom in</source>
         <translation>ཤོག་ངོས་ཆེར་གཏོང་།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="257"/>
         <source>Zoom out</source>
         <translation>ཤོག་ངོས་ཆུང་གཏོང་།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
         <source>Zoom in/Zoom out</source>
         <translation>ཤོག་ངོས་ཆེར་གཏོང་/ཆུང་གཏོང་། </translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="255"/>
         <source>Save as</source>
         <translation>གཞན་ཉར།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="214"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="215"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="255"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="268"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="269"/>
         <source>Print</source>
         <translation>པར་འདེབས།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="255"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Save</source>
         <translation>ཉར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>Thumbnails</source>
         <translation>དཀར་ཆག་གི་བསྡུས་རིས་ཁ་ཕྱེ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>1:1 size</source>
         <translation>སོར་བཞག་ཆེ་ཆུང་།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>Fit height</source>
         <translation>མཐོ་ཚད་དང་འཚམ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="199"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="241"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>Fit width</source>
         <translation>ཞེང་ཚད་དང་འཚམ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="199"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="241"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>Rotate left</source>
         <translation>གཡོན་དུ་སྐོར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="199"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="241"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="256"/>
         <source>Rotate right</source>
         <translation>གཡས་སུ་སྐོར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="199"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="241"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
         <source>Select text</source>
         <translation>འདེམས་པའི་ཡོ་བྱད།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="249"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
         <source>Hand tool</source>
         <translation>ལག་དབྱིབས་ཡོ་བྱད།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
         <source>Add bookmark</source>
         <translation>ཤོག་འཛར་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Delete</source>
         <translation>སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="208"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="212"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="213"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="259"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="266"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="267"/>
         <source>Magnifier</source>
         <translation>ཆེ་ཤེལ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="208"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="259"/>
         <source>Slide show</source>
         <translation>སྒྲོན་བརྙན་སྤྱིན་ཤོག་དགོང་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="208"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="216"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="217"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="259"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="270"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="271"/>
         <source>Fullscreen</source>
         <translation>ཡོལ་གང་།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Copy</source>
         <translation>པར་སློག</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Cut</source>
         <translation>དྲས་གཏུབ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Paste</source>
         <translation>སྦྱར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Undo</source>
         <translation>མི་བྱེད།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="209"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="260"/>
         <source>Select all</source>
         <translation>ཡོངས་འདེམས།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="252"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="254"/>
         <source>Display shortcuts</source>
         <translation>མྱུར་མཐེབ་འཆར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
         <source>Add annotation</source>
         <translation>མཆན་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="207"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="250"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="258"/>
         <source>Highlight</source>
         <translation>ཆེས་གསལ།</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="208"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="251"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="259"/>
         <source>Search</source>
         <translation>འཚོལ་ཞིབ།</translation>
     </message>
@@ -803,23 +825,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="193"/>
         <source>Copy</source>
         <translation>པར་སློག</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="198"/>
         <source>Remove annotation</source>
         <translation>མཆན་སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="203"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="222"/>
         <source>Remove all</source>
         <translation>ཚང་མ་སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="217"/>
         <source>Remove bookmark</source>
         <translation>ཤོག་འཛར་སུབ་པ།</translation>
     </message>
@@ -827,7 +849,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="100"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="129"/>
         <source>Page %1</source>
         <translation>ཤོག་ལྷེ་%1པ།</translation>
     </message>
@@ -835,43 +857,43 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="33"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
         <source>New window</source>
         <translation>སྒེའུ་ཁུང་གསར་པ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="33"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
         <source>New tab</source>
         <translation>ཁ་བྱང་ངོས་གསར།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="43"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="105"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
         <translation>ཉར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="43"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Save as</source>
         <translation>གཞན་ཉར།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="48"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
         <source>Display in file manager</source>
         <translation>ཡིག་ཆ་དོ་དམ་ཆས་ཁྲོད་དུ་འཆར་བ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="48"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
         <source>Magnifer</source>
         <translation>ཆེ་ཤེལ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="59"/>
         <source>Tools</source>
         <translation>ཡོ་བྱད།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="58"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="63"/>
         <source>Search</source>
         <translation>འཚོལ་ཞིབ།</translation>
     </message>
@@ -887,7 +909,7 @@
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../reader/sidebar/note/TransparentTextEdit.cpp" line="73"/>
+        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="73"/>
         <source>Input limit reached</source>
         <translation>འཇུག་ཚད་མཐོ་ཤོས་ལ་སླེབས་འདུག</translation>
     </message>
@@ -895,23 +917,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
+        <location filename="../reader/main.cpp" line="33"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="35"/>
-        <location filename="../reader/main.cpp" line="39"/>
+        <location filename="../reader/main.cpp" line="34"/>
+        <location filename="../reader/main.cpp" line="38"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="37"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="43"/>
+        <location filename="../reader/main.cpp" line="42"/>
         <source>Generate thumbnail.</source>
         <translation>Generate thumbnail.</translation>
     </message>

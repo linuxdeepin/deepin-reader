@@ -184,7 +184,7 @@ private slots:
 
     void onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap);
 
-    void onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *, QList<deepin_reader::Page *> pages);
+    void onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
 
 private:
     QMutex m_pageNormalImageMutex;
