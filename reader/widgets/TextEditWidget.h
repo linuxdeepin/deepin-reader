@@ -97,6 +97,12 @@ public slots:
      */
     void onBlurWindowChanged();
 
+    /**
+     * @brief onTouchPadEvent
+     * 系统touch事件响应
+     */
+    void onTouchPadEvent(QString name, QString direction, int fingers);
+
 private slots:
     /**
      * @brief 显示菜单
@@ -130,6 +136,7 @@ private:
     deepin_reader::Annotation *m_annotation = nullptr;
     SheetBrowser *m_brower;
     QWidget *m_parent;
+    QTimer *m_showMenuTimer = nullptr;
 };
 
 class TextEditShadowWidget : public DWidget
@@ -147,6 +154,7 @@ public:
 
 private:
     TextEditWidget *m_TextEditWidget = nullptr;
+
 };
 
 #endif  // TextEditWidget_H

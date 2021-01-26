@@ -1199,7 +1199,7 @@ void DocSheet::onExtractPassword(const QString &password)
 void DocSheet::deadDeleteLater()
 {
     setAlive(false);
-    DSplitter::deleteLater();
+    this->deleteLater();
 }
 
 void DocSheet::onPopPrintDialog()

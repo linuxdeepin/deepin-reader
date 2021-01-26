@@ -90,7 +90,6 @@ QString ut_application::filePath(QString fileName, QString dirName)
 #ifdef UT_APPLICATION_TEST
 TEST_F(ut_application, ApplicationTest)
 {
-    a->showAnnotTextWidgetSig();
     exec();
 }
 #endif

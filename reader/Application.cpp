@@ -44,12 +44,8 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
+    PageRenderThread::destroyForever();
     DBusObject::destory();
-}
-
-void Application::showAnnotTextWidgetSig()
-{
-    emit sigShowAnnotTextWidget();
 }
 
 void Application::emitSheetChanged()
@@ -72,9 +68,6 @@ void Application::handleQuitAction()
         if (nRes == 2)
             DocSheet::saveList(changedList);
     }
-
-    //线程退出
-    PageRenderThread::destroyForever();
 
     foreach (MainWindow *window, MainWindow::m_list) {
         window->closeWithoutSave();

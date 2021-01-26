@@ -61,6 +61,7 @@ class SheetSidebar : public BaseWidget
 
 public :
     explicit SheetSidebar(DocSheet *parent = nullptr, PreviewWidgesFlags widgesFlag = PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+
     ~SheetSidebar() override;
 
     /**

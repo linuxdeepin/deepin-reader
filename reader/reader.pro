@@ -33,7 +33,11 @@ icon.path = /usr/share/icons/hicolor/scalable/apps
 
 icon.files = $$PWD/deepin-reader.svg
 
-INSTALLS += target desktop icon
+manual.files = $$PWD/assets/deepin-reader
+
+manual.path= /usr/share/deepin-manual/manual-assets/application/
+
+INSTALLS += target desktop icon manual
 
 #translate
 TRANSLATIONS += $$PWD/../translations/deepin-reader.ts

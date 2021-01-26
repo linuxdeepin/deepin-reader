@@ -26,6 +26,7 @@
 #include "SheetBrowser.h"
 #include "Application.h"
 #include "Utils.h"
+#include "DBusObject.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -93,9 +94,17 @@ TextEditWidget::TextEditWidget(DWidget *parent)
     : BaseWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+
     initWidget();
 
-    connect(dApp, &Application::sigShowAnnotTextWidget, this, &TextEditWidget::onShowMenu);
+    m_showMenuTimer = new  QTimer(this);
+    m_showMenuTimer->setInterval(1000);
+    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
+        m_showMenuTimer->stop();
+        this->onShowMenu();
+    });
+
+    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &TextEditWidget::onTouchPadEvent);
 }
 
 void TextEditWidget::onShowMenu()
@@ -182,6 +191,21 @@ void TextEditWidget::onBlurWindowChanged()
     } else {
         this->graphicsEffect()->setEnabled(false);
         parentWidget()->layout()->setMargin(0);
+    }
+}
+
+void TextEditWidget::onTouchPadEvent(QString name, QString direction, int fingers)
+{
+    Q_UNUSED(name)
+
+    if (fingers == 0) {
+        if (direction == "up") {
+            m_showMenuTimer->stop();
+        } else if (direction == "down") {
+            if (!m_showMenuTimer->isActive()) {
+                m_showMenuTimer->start();
+            }
+        }
     }
 }
 

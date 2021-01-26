@@ -150,18 +150,6 @@ private:
      */
     void showDefaultSize();
 
-    /**
-     * @brief zoomIn
-     * 放大
-     */
-    void centralZoomIn();
-
-    /**
-     * @brief zoomOut
-     * 缩小
-     */
-    void centralZoomOut();
-
 private slots:
     /**
      * @brief onDelayInit
@@ -180,23 +168,6 @@ private slots:
      * 更新提示标签大小
      */
     void onUpdateTitleLabelRect();
-
-    /**
-     * @brief Application::onTouchPadEventSignal
-     * 处理触控板手势信号
-     * @param name 触控板事件类型(手势或者触摸类型) pinch 捏 tap 敲 swipe 滑 右键单击 单键
-     * @param direction 手势方向 触控板上 up 触控板下 down 左 left 右 right 无 none 向内 in 向外 out  触控屏上 top 触摸屏下 bot
-     * @param fingers 手指数量 (1,2,3,4,5)
-     * 注意libinput接收到触摸板事件后将接收到的数据通过Event广播出去
-     */
-    void onTouchPadEventSignal(QString name, QString direction, int fingers);
-
-    /**
-     * @brief onImActiveChanged
-     * 处理当前虚拟键盘变化
-     * @param actived
-     */
-    void onImActiveChanged(bool actived);
 
     /**
      * @brief 全屏

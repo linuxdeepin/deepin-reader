@@ -68,14 +68,11 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->onMainWindowFull();
     mainWindow->onMainWindowExitFull();
     mainWindow->resizeFullTitleWidget();
-    mainWindow->centralZoomIn();
-    mainWindow->centralZoomOut();
     mainWindow->setLoading(false);
     mainWindow_muti->closeWithoutSave();
     mainWindow->closeWithoutSave();
     mainWindow_empty->closeWithoutSave();
     mainWindow->onUpdateTitleLabelRect();
-    mainWindow->onTouchPadEventSignal("123", "321", 1);
     exec();
 }
 #endif

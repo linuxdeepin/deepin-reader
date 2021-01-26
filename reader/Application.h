@@ -36,12 +36,6 @@ public:
 
     ~Application() override;
 
-    /**
-     * @brief showAnnotTextWidgetSig
-     * 显示注释编辑框
-     */
-    void showAnnotTextWidgetSig();
-
     void emitSheetChanged();
 
 signals:
@@ -50,6 +44,10 @@ signals:
     void sigSetPasswdFocus();
 
 protected:
+    /**
+     * @brief handleQuitAction
+     * 通过菜单选项关闭所有
+     */
     void handleQuitAction() override;
 
     bool notify(QObject *object, QEvent *event) override;

@@ -70,15 +70,6 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
         }
     }
 
-    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &MainWindow::onTouchPadEventSignal);
-    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &MainWindow::onImActiveChanged);
-
-    m_showMenuTimer = new  QTimer(this);
-    m_showMenuTimer->setInterval(1000);
-    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
-        m_showMenuTimer->stop();
-        dApp->showAnnotTextWidgetSig();
-    });
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -90,16 +81,6 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     initShortCut();
 
     addSheet(sheet);
-
-    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &MainWindow::onTouchPadEventSignal);
-    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &MainWindow::onImActiveChanged);
-
-    m_showMenuTimer = new  QTimer(this);
-    m_showMenuTimer->setInterval(1000);
-    connect(m_showMenuTimer, &QTimer::timeout, this, [ = ] {
-        m_showMenuTimer->stop();
-        dApp->showAnnotTextWidgetSig();
-    });
 }
 
 MainWindow::~MainWindow()
@@ -156,15 +137,6 @@ void MainWindow::addFile(const QString &filePath)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    this->setProperty("windowClosed", false);
-    //如果文档还在加载中，必须得等加载完毕，才能真正关闭窗口，不然要挂
-    if (m_loading) {
-        this->hide();
-        event->ignore();
-        this->setProperty("windowClosed", true);
-        return;
-    }
-
     if (!m_needSave || (m_central && m_central->saveAll())) {
         QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
@@ -395,20 +367,6 @@ void MainWindow::showDefaultSize()
     }
 }
 
-void MainWindow::centralZoomIn()
-{
-    if (m_central) {
-        m_central->zoomIn();
-    }
-}
-
-void MainWindow::centralZoomOut()
-{
-    if (m_central) {
-        m_central->zoomOut();
-    }
-}
-
 void MainWindow::initShortCut()
 {
     QList<QKeySequence> keyList;
@@ -508,43 +466,6 @@ void MainWindow::onUpdateTitleLabelRect()
 
     if (titleWidth > 0)
         titleLabel->setFixedWidth(titleWidth);
-}
-
-void MainWindow::onTouchPadEventSignal(QString name, QString direction, int fingers)
-{
-    // 当前窗口被激活,且有焦点
-    if (this->isActiveWindow()) {
-        if (name == "pinch" && fingers == 2) {
-            if (direction == "in") {
-                // 捏合 in是手指捏合的方向 向内缩小
-                centralZoomOut();  // zoom out 缩小
-            } else if (direction == "out") {
-                // 捏合 out是手指捏合的方向 向外放大
-                centralZoomIn();   // zoom in 放大
-            }
-        }
-
-        if (fingers == 0) {
-            if (direction == "up") {
-                m_showMenuTimer->stop();
-            } else if (direction == "down") {
-                if (!m_showMenuTimer->isActive()) {
-                    m_showMenuTimer->start();
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::onImActiveChanged(bool actived)
-{
-    if (actived && "TransparentTextEdit" == focusWidget()->objectName() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height() > this->height() / 2) {
-        m_central->setUpValue(focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height()  - this->height() / 2);
-    } else if (actived && nullptr != focusWidget() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
-        m_central->setUpValue(this->height() / 2 - titlebar()->height());
-    } else if (!actived) {
-        m_central->setUpValue(0);
-    }
 }
 
 void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)

@@ -33,6 +33,7 @@
 #include "TitleWidget.h"
 #include "MainWindow.h"
 #include "ShortCutShow.h"
+#include "DBusObject.h"
 
 #include <DMessageManager>
 #include <DFileDialog>
@@ -58,6 +59,9 @@ Central::Central(QWidget *parent)
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
     m_mainWidget->setLayout(m_layout);
+
+    connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
+    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &Central::onImActiveChanged);
 }
 
 Central::~Central()
@@ -239,6 +243,33 @@ void Central::onShowTips(QWidget *parent, const QString &text, int iconIndex)
             DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "ok"), text);
         else
             DMessageManager::instance()->sendMessage(this, QIcon::fromTheme(QString("dr_") + "warning"), text);
+    }
+}
+
+void Central::onTouchPadEvent(QString name, QString direction, int fingers)
+{
+    // 当前窗口被激活,且有焦点
+    if (this->isActiveWindow()) {
+        if (name == "pinch" && fingers == 2) {
+            if (direction == "in") {
+                // 捏合 in是手指捏合的方向 向内缩小
+                zoomOut();
+            } else if (direction == "out") {
+                // 捏合 out是手指捏合的方向 向外放大
+                zoomIn();
+            }
+        }
+    }
+}
+
+void Central::onImActiveChanged(bool actived)
+{
+    if (actived && "TransparentTextEdit" == focusWidget()->objectName() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height() > this->height() / 2) {
+        setUpValue(focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height()  - this->height() / 2 - 60);
+    } else if (actived && nullptr != focusWidget() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
+        setUpValue(this->height() / 2 - 20);
+    } else if (!actived) {
+        setUpValue(0);
     }
 }
 
