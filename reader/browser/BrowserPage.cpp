@@ -370,7 +370,9 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
 
     for (int i = 0; i < words.count(); ++i) {
         BrowserWord *word = new BrowserWord(this, words[i]);
+
         word->setSelectable(m_wordSelectable);
+
         m_words.append(word);
     }
 
@@ -511,15 +513,16 @@ void BrowserPage::loadWords()
         return;
     }
 
-    //优先级慢点,先等下取图片接口
-    QTimer::singleShot(10, [this]() {
-        DocPageWordTask task;
-        task.sheet = m_sheet;
-        task.page = this;
-        PageRenderThread::appendTask(task);
-    });
+    DocPageWordTask task;
+
+    task.sheet = m_sheet;
+
+    task.page = this;
+
+    PageRenderThread::appendTask(task);
 
     m_wordHasRendered = false;
+
     m_wordIsRendering = true;
 }
 
@@ -529,11 +532,17 @@ void BrowserPage::clearPixmap()
         return;
 
     m_pixmap = QPixmap();
+
     m_renderPixmap = m_pixmap;
+
     ++m_pixmapId;
+
     m_pixmapHasRendered = false;
+
     m_viewportRendered  = false;
+
     m_renderPixmapScaleFactor = -1;
+
     PageRenderThread::clearImageTasks(m_sheet, this);
 }
 

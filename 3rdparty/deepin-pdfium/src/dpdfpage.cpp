@@ -580,7 +580,7 @@ QVector<QRectF> DPdfPage::textRects(int start, int charCount)
     return result;
 }
 
-void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> &rects)
+void DPdfPage::allTextLooseRects(int &charCount, QStringList &texts, QVector<QRectF> &rects)
 {
     d_func()->loadTextPage();
 
@@ -601,6 +601,42 @@ void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> 
                                                                d_func()->m_height_pt - static_cast<qreal>(rect.top),
                                                                static_cast<qreal>(rect.right - rect.left),
                                                                static_cast<qreal>(rect.top - rect.bottom))));
+
+            QVector<ushort> result(1);
+
+            //此处windows上注释乱码,嗅探为windows-1252
+            FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());
+
+            texts.append(QString::fromUtf16(result.data()));
+        }
+    }
+}
+
+void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> &rects)
+{
+    d_func()->loadTextPage();
+
+    DPdfMutexLocker locker("DPdfPage::allTextRects index = " + QString::number(index()));
+
+    charCount = FPDFText_CountChars(d_func()->m_textPage);
+
+    const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(0, charCount);
+
+    rects.clear();
+
+    rects.reserve(static_cast<int>(pdfiumRects.size()));
+
+    for (int i = 0; i < charCount; ++i) {
+        double left = 0;
+        double right = 0;
+        double bottom = 0;
+        double top = 0;
+
+        if (FPDFText_GetCharBox(d_func()->m_textPage, i, &left, &right, &bottom, &top)) {
+            rects.push_back(d_func()->transPointToPixel(QRectF(static_cast<qreal>(left),
+                                                               d_func()->m_height_pt - static_cast<qreal>(top),
+                                                               static_cast<qreal>(right - left),
+                                                               static_cast<qreal>(top - bottom))));
 
             QVector<ushort> result(1);
 

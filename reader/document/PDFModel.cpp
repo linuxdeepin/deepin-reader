@@ -160,52 +160,142 @@ QList<Word> PDFPage::words()
 {
     LOCK_DOCUMENT
 
-    if (m_words.size() > 0)
+    if (m_wordLoaded)
         return m_words;
 
     int charCount = 0;
-
-    QPointF lastOffset(0, 0);
 
     QStringList texts;
 
     QVector<QRectF> rects;
 
-    m_page->allTextRects(charCount, texts, rects);
+    m_page->allTextLooseRects(charCount, texts, rects);
 
-    for (int i = 0; i < charCount; i++) {
-        if (texts.count() <= i || rects.count() <= i)
+    m_wordLoaded = true;
+
+    if (charCount <= 0)
+        return m_words;
+
+    int index = 0;
+
+    qreal maxY = rects[0].y();
+
+    qreal maxHeight = rects[0].height();
+
+    QList<Word> rowWords;
+
+    while (1) {
+        if (index == charCount) {
+            m_words.append(rowWords);
             break;
-
-        Word word;
-        word.text = texts[i];
-        QRectF rectf = rects[i];
-
-        //换行
-        if (rectf.top() > lastOffset.y() || lastOffset.y() > rectf.bottom())
-            lastOffset = QPointF(rectf.x(), rectf.center().y());
-
-        if (rectf.width() > 0) {
-            word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
-
-            lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
-
-            int curWordsSize = m_words.size();
-            if (curWordsSize > 2
-                    && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
-                    && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
-                    && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
-                    && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
-                QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
-                m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(),
-                                                               prevBoundRectF.y(),
-                                                               word.boundingBox.x() - prevBoundRectF.right(),
-                                                               prevBoundRectF.height());
-            }
         }
 
-        m_words.append(word);
+        Word word;
+        word.text = texts[index];
+        word.boundingBox = rects[index];
+
+        //不进行优化
+//        m_words.append(word);
+//        ++index;
+//        continue;
+
+        //如果重叠的部分只在三分之一，视为换行
+        if ((word.boundingBox.y() > maxY + maxHeight - (word.boundingBox.height() / 3)) ||
+                (word.boundingBox.y() + word.boundingBox.height() < maxY  + (word.boundingBox.height() / 3))) {
+
+            //最本行所有文字 补齐高和低不符合的 填满宽度
+            for (int i = 0; i < rowWords.count(); ++i) {
+                rowWords[i].boundingBox.setY(maxY);
+                rowWords[i].boundingBox.setHeight(maxHeight);
+
+                //如果是空格类型 且没有宽度
+                if (!rowWords[i].text.isEmpty() && rowWords[i].text.trimmed().isEmpty() && rowWords[i].boundingBox.width() < 0.0001) {
+                    continue;
+                    //                if (i - 1 >= 0 && i + 1 < rowWords.count()) {
+                    //                    if (rowWords[i + 1].boundingBox.x() - (rowWords[i - 1].boundingBox.x() + rowWords[i - 1].boundingBox.width()) < 10) {
+                    //                        rowWords[i].boundingBox.setY(maxY);
+                    //                        rowWords[i].boundingBox.setX(rowWords[i - 1].boundingBox.x() + rowWords[i - 1].boundingBox.width());
+                    //                        rowWords[i].boundingBox.setWidth(rowWords[i + 1].boundingBox.x() - rowWords[i - 1].boundingBox.x() - rowWords[i - 1].boundingBox.width());
+                    //                    }
+                    //                }
+                }
+
+                //找出本行下一个非空的索引
+                int nextIndex = i + 1;
+                while (nextIndex < rowWords.count()) {
+                    if (!rowWords[nextIndex].text.trimmed().isEmpty() || rowWords[nextIndex].boundingBox.width() > 0.0001)
+                        break;
+                    nextIndex++;
+                }
+
+                //将本文字宽度拉长到下一个字/如果和下一个x重合，则稍微减少点自己宽度
+                if (((nextIndex) < rowWords.count()) && !rowWords[nextIndex].text.trimmed().isEmpty() &&
+                        (((rowWords[i].boundingBox.x() + rowWords[i].boundingBox.width() < rowWords[nextIndex].boundingBox.x()) &&
+                          (rowWords[nextIndex].boundingBox.x() - (rowWords[i].boundingBox.x() + rowWords[i].boundingBox.width()) < 10)) ||
+                         ((rowWords[i].boundingBox.x() + rowWords[i].boundingBox.width() > rowWords[nextIndex].boundingBox.x())))
+                   ) {
+                    rowWords[i].boundingBox.setWidth(rowWords[nextIndex].boundingBox.x() - rowWords[i].boundingBox.x());
+                }
+            }
+
+            m_words.append(rowWords);
+            rowWords.clear();
+            maxY = word.boundingBox.y();
+            maxHeight = word.boundingBox.height();
+        }
+
+        //如果上一个是空格 这一个还是空 则只是追加
+//        if (!rowWords.isEmpty() && rowWords[rowWords.count() - 1].text.trimmed().isEmpty() && word.text.trimmed().isEmpty()) {
+//            rowWords[rowWords.count() - 1].text.append(word.text);
+//            ++index;
+//            continue;
+//        }
+
+        //先取出最高和最低
+        if (word.boundingBox.y() < maxY)
+            maxY = word.boundingBox.y();
+
+        if (word.boundingBox.height() + (word.boundingBox.y() - maxY) > maxHeight)
+            maxHeight = word.boundingBox.height() + (word.boundingBox.y() - maxY);
+
+        rowWords.append(word);
+
+        ++index;
     }
+
+//    for (int i = 0; i < charCount; i++) {
+//        if (texts.count() <= i || rects.count() <= i)
+//            break;
+
+//        Word word;
+//        word.text = texts[i];
+//        QRectF rectf = rects[i];
+
+//        //换行
+//        if (rectf.top() > lastOffset.y() || lastOffset.y() > rectf.bottom())
+//            lastOffset = QPointF(rectf.x(), rectf.center().y());
+
+//        if (rectf.width() > 0) {
+//            word.boundingBox = QRectF(lastOffset.x(), rectf.y(), rectf.width() + rectf.x() - lastOffset.x(), rectf.height());
+
+//            lastOffset = QPointF(word.boundingBox.right(), word.boundingBox.center().y());
+
+//            int curWordsSize = m_words.size();
+//            if (curWordsSize > 2
+//                    && static_cast<int>(m_words.at(curWordsSize - 1).wordBoundingRect().width()) == 0
+//                    && m_words.at(curWordsSize - 2).wordBoundingRect().width() > 0
+//                    && word.boundingBox.center().y() <= m_words.at(curWordsSize - 2).wordBoundingRect().bottom()
+//                    && word.boundingBox.center().y() >= m_words.at(curWordsSize - 2).wordBoundingRect().top()) {
+//                QRectF prevBoundRectF = m_words.at(curWordsSize - 2).wordBoundingRect();
+//                m_words[curWordsSize - 1].boundingBox = QRectF(prevBoundRectF.right(),
+//                                                               prevBoundRectF.y(),
+//                                                               word.boundingBox.x() - prevBoundRectF.right(),
+//                                                               prevBoundRectF.height());
+//            }
+//        }
+
+//        m_words.append(word);
+//    }
 
     return m_words;
 }

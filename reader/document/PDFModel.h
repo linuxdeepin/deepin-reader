@@ -108,6 +108,8 @@ private:
 
     DPdfPage *m_page = nullptr;
 
+    bool m_wordLoaded = false;
+
     QList<Word> m_words;
 };
 

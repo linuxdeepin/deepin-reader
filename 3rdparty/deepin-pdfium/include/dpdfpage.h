@@ -69,7 +69,14 @@ public:
     QVector<QRectF> textRects(int index, int charCount);
 
     /**
-     * @brief 获取本页所有文本和范围
+     * @brief 获取本页所有文字和周围空间区域
+     * @param charCount 文本字符数
+     * @param rects
+     */
+    void allTextLooseRects(int &charCount, QStringList &texts, QVector<QRectF> &rects);
+
+    /**
+     * @brief 获取本页所有文字区域
      * @param charCount 文本字符数
      * @param rects
      */
