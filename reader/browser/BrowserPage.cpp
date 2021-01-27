@@ -1136,7 +1136,7 @@ QString BrowserPage::text(const QRectF &rect)
 
 bool BrowserPage::isBigDoc()
 {
-    if (boundingRect().width() > 1000 && boundingRect().height() > 1000)
+    if (Dr::PDF == m_sheet->fileType() && boundingRect().width() > 1000 && boundingRect().height() > 1000)
         return true;
 
     return false;
