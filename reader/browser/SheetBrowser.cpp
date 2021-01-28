@@ -465,11 +465,13 @@ bool SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
         return false;
 
     QRectF iconRect;
+
     bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
         return page->moveIconAnnotation(iconRect);
     }
+
     return false;
 }
 
@@ -1196,19 +1198,21 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         //处理当前拖放图标注释
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
-            QPointF curPointF = mapToScene(mousePos);
+            QPointF posInPage = m_lastSelectIconAnnotPage->mapFromScene(mapToScene(mousePos));
 
-            if (curPointF.x() < 15)
-                curPointF.setX(15);
+            if (posInPage.x() < 15)
+                posInPage.setX(15);
 
-            if (curPointF.y() < 15)
-                curPointF.setY(15);
+            if (posInPage.y() < 15)
+                posInPage.setY(15);
 
-            if (curPointF.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 15)
-                curPointF.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 15);
+            if (posInPage.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 15)
+                posInPage.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 15);
 
-            if (curPointF.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 15)
-                curPointF.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 15);
+            if (posInPage.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 15)
+                posInPage.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 15);
+
+            QPointF curPointF = m_lastSelectIconAnnotPage->mapToScene(posInPage);
 
             const QPointF &delta = curPointF - m_iconAnnotationMovePos;
 
@@ -1386,10 +1390,11 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 }
                 m_selectEndPos = mapToScene(event->pos());
             } else {
+                //存在选中的icon annotation
                 if (m_lastSelectIconAnnotPage && m_iconAnnotationMovePos.isNull()) {
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
 
-                    if (moveIconAnnot(m_lastSelectIconAnnotPage, m_lastSelectIconAnnotPage->iconMovePos()))
+                    if (moveIconAnnot(m_lastSelectIconAnnotPage,  m_lastSelectIconAnnotPage->mapToScene(m_lastSelectIconAnnotPage->iconMovePos())))
                         emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
 
                 } else if (clickAnno && m_lastSelectIconAnnotPage) {

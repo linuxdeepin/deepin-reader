@@ -65,7 +65,6 @@ struct DocPageAnnotationTask {//取页码注释
     BrowserPage *page = nullptr;
 };
 
-
 struct DocPageThumbnailTask {//缩略图
     DocSheet *sheet = nullptr;
     SideBarImageViewModel *model = nullptr;
