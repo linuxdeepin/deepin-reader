@@ -104,6 +104,7 @@ struct Word {
 
 struct SearchResult {
     int page = 0;
+    QVector< QRectF > rects;
     QList<Word> words;
 };
 

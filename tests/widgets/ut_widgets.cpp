@@ -98,7 +98,7 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
 
     sheet->m_sidebar->onBtnClicked(4);
 
-    sheet->handleFindContent("12");
+    sheet->startSearch("12");
 
     //ScaleMenu
     {
@@ -219,21 +219,19 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
         findWidget.setSearchEditFocus();
         findWidget.setEditAlert(true);
         findWidget.setEditAlert(false);
-        findWidget.handleContentChanged();
+        findWidget.onSearchStart();
         findWidget.slotFindNextBtnClicked();
         findWidget.slotFindPrevBtnClicked();
-        findWidget.slotEditAborted();
+        findWidget.onSearchStop();
         findWidget.slotClearContent();
-        findWidget.stopSearch();
-        findWidget.findCancel();
+        findWidget.onCloseBtnClicked();
 
         findWidget.setDocSheet(sheet);
         findWidget.slotFindNextBtnClicked();
         findWidget.slotFindPrevBtnClicked();
-        findWidget.slotEditAborted();
+        findWidget.onSearchStop();
         findWidget.slotClearContent();
-        findWidget.stopSearch();
-        findWidget.findCancel();
+        findWidget.onCloseBtnClicked();
 
         QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
         QCoreApplication::sendEvent(&findWidget, &sidekeyLevent);

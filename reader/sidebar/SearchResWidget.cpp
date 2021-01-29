@@ -66,7 +66,7 @@ void SearchResWidget::initWidget()
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
 }
 
-void SearchResWidget::handFindContentComming(const deepin_reader::SearchResult &search)
+void SearchResWidget::handleSearchResultComming(const deepin_reader::SearchResult &search)
 {
     QString strText;
     for (const deepin_reader::Word &s : search.words) {

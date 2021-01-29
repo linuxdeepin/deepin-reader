@@ -212,7 +212,7 @@ void Central::onMenuTriggered(const QString &action)
     } else if (action == "Display in file manager") {    //  文件浏览器 显示
         docPage()->openCurFileFolder();
     } else if (action == "Search") {
-        docPage()->handleSearch();
+        docPage()->prepareSearch();
     }
 }
 

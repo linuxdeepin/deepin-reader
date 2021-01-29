@@ -226,32 +226,33 @@ void SheetSidebar::onHandWidgetDocOpenSuccess()
     }
 }
 
-void SheetSidebar::handleFindOperation(int type, const QString &strFind)
+void SheetSidebar::handleSearchStart(const QString &text)
 {
-    if (type == E_FIND_CONTENT) {
-        for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
-            iter.value()->setEnabled(false);
-        }
-
-        m_searchWidget->clearFindResult();
-        m_searchWidget->searchKey(strFind);
-        onBtnClicked(m_searchId);
-        this->setVisible(true);
-    } else if (type == E_FIND_EXIT) {
-        for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
-            iter.value()->setEnabled(true);
-        }
-
-        int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
-        onBtnClicked(nId);
-        this->setVisible(m_sheet->operation().sidebarVisible);
-        m_searchWidget->clearFindResult();
+    for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+        iter.value()->setEnabled(false);
     }
+
+    m_searchWidget->clearFindResult();
+    m_searchWidget->searchKey(text);
+    onBtnClicked(m_searchId);
+    this->setVisible(true);
 }
 
-void SheetSidebar::handleFindContentComming(const deepin_reader::SearchResult &res)
+void SheetSidebar::handleSearchStop()
 {
-    m_searchWidget->handFindContentComming(res);
+    for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
+        iter.value()->setEnabled(true);
+    }
+
+    int nId = qBound(0, m_sheet->operation().sidebarIndex, m_stackLayout->count() - 1);
+    onBtnClicked(nId);
+    this->setVisible(m_sheet->operation().sidebarVisible);
+    m_searchWidget->clearFindResult();
+}
+
+void SheetSidebar::handleSearchResultComming(const deepin_reader::SearchResult &res)
+{
+    m_searchWidget->handleSearchResultComming(res);
 }
 
 int SheetSidebar::handleFindFinished()

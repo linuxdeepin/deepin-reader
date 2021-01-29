@@ -65,12 +65,6 @@ public:
     void setSearchEditFocus();
 
     /**
-     * @brief stopSearch
-     * 停止搜索
-     */
-    void stopSearch();
-
-    /**
      * @brief setEditAlert
      * 搜索编辑框提示
      * @param iFlag
@@ -79,16 +73,22 @@ public:
 
 private slots:
     /**
-     * @brief findCancel
-     * 取消搜索
+     * @brief onCloseBtnClicked
+     * 取消搜索并关闭
      */
-    void findCancel();
+    void onCloseBtnClicked();
 
     /**
-     * @brief handleContentChanged
+     * @brief onSearchStop
+     * 取消搜索
+     */
+    void onSearchStop();
+
+    /**
+     * @brief onSearchStart
      * 开始搜索
      */
-    void handleContentChanged();
+    void onSearchStart();
 
     /**
      * @brief slotFindNextBtnClicked
@@ -101,12 +101,6 @@ private slots:
      * 查找上一个
      */
     void slotFindPrevBtnClicked();
-
-    /**
-     * @brief slotEditAborted
-     * 终止搜索
-     */
-    void slotEditAborted();
 
     /**
      * @brief slotClearContent
@@ -132,7 +126,7 @@ protected:
 private:
     DocSheet *m_docSheet = nullptr;
     DSearchEdit *m_pSearchEdit = nullptr;
-    QString m_strLastFindText = ""; //上一次查找内容
+    QString m_lastSearchText; //上一次查找内容
 };
 
 #endif

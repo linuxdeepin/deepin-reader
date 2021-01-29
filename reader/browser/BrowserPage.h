@@ -51,15 +51,9 @@ class BrowserPage : public QGraphicsItem
     friend class PageRenderThread;
     friend class PageViewportThread;
 public:
-    explicit BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet, deepin_reader::Page *page);
+    explicit BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet);
 
     ~BrowserPage() override;
-
-    /**
-     * @brief 文档原始大小
-     * @return
-     */
-    QSizeF pageSize() const;
 
     /**
      * @brief 文档页缩放后的原区域 不受旋转影响
@@ -133,20 +127,6 @@ public:
      * @return 鼠标点周围的片图
      */
     QImage getCurImagePoint(QPointF point);
-
-    /**
-     * @brief getWords
-     * 得到文档无旋转下的左右文字
-     * @return 文字列表
-     */
-    QList<Word> getWords();
-
-    /**
-     * @brief getAnnotations
-     * 得到当前页的注释
-     * @return
-     */
-    QList<Annotation *> getAnnotations();
 
     /**
      * @brief itemIndex
@@ -366,22 +346,6 @@ public:
     bool removeAllAnnotation();
 
     /**
-     * @brief jump2Link
-     * 跳转到相应link处(如果是目录跳到文档正文处,如果是网址会在浏览器中打开)
-     * @param point 当前鼠标点
-     * @return true:跳转成功    false:跳转失败
-     */
-    bool jump2Link(const QPointF &);
-
-    /**
-     * @brief inLink
-     * 当前鼠标位置是否有link
-     * @param pos 当前鼠标位置
-     * @return true:有  false:没有
-     */
-    bool inLink(const QPointF &);
-
-    /**
      * @brief setPageBookMark
      * 在书签附近文字时,有时添加/删除书签无效,特意在brower中先处理
      * @param clickPoint 鼠标点击位置
@@ -427,22 +391,6 @@ private:
     QRectF bookmarkMouseRect();
 
     /**
-     * @brief 搜索
-     * @param text
-     * @param matchCase
-     * @param wholeWords
-     * @return
-     */
-    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords);
-
-    /**
-     * @brief 获取指定范围文本
-     * @param rect
-     * @return
-     */
-    QString text(const QRectF &rect);
-
-    /**
      * @brief 是否属于超大文档
      * @return
      */
@@ -460,7 +408,6 @@ private:
 
     SheetBrowser *m_parent = nullptr;
 
-    deepin_reader::Page *m_page = nullptr;                  //主要操作更新
     double  m_scaleFactor = -1;                             //当前被设置的缩放
     int     m_index = 0;                                    //当前索引
     Dr::Rotation m_rotation = Dr::NumberOfRotations;        //当前被设置的旋转
@@ -494,6 +441,8 @@ private:
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
+
+    QSizeF m_originSizeF;
 };
 
 #endif // BrowserPage_H

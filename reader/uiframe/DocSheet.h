@@ -33,6 +33,7 @@ class SlideWidget;
 class EncryptionPage;
 class QPropertyAnimation;
 class QPrinter;
+class PageSearchThread;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -49,6 +50,7 @@ class DPrinter;
 DWIDGET_END_NAMESPACE
 
 class SheetBrowser;
+class SheetRenderer;
 /**
  * @brief The DocSheet class
  * 嵌入当前窗体中心控件，一个类表示并显示操作一个文档
@@ -353,29 +355,10 @@ public:
     bool saveAsData(QString filePath);
 
     /**
-     * @brief 处理打开
-     * @param result
-     * @param error
-     */
-    void handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
-
-    /**
      * @brief handlePageModified
      * 处理page修改
      */
     void handlePageModified(int index);
-
-    /**
-     * @brief handleSearch
-     * 通知browser进入搜索模式
-     */
-    void handleSearch();
-
-    /**
-     * @brief stopSearch
-     * 通知browser通知搜索
-     */
-    void stopSearch();
 
     /**
      * @brief copySelectedText
@@ -575,29 +558,35 @@ public:
     void setOperationChanged();
 
     /**
-     * @brief handleFindNext
-     * 搜索下一个
+     * @brief prepareSearch
+     * 通知browser进入搜索模式,未开始真正搜索
      */
-    void handleFindNext();
-
-    /**
-     * @brief handleFindPrev
-     * 搜索上一个
-     */
-    void handleFindPrev();
-
-    /**
-     * @brief handleFindExit
-     * 退出搜索
-     */
-    void handleFindExit();
+    void prepareSearch();
 
     /**
      * @brief handleFindContent
-     * 处理搜索文本
+     * 开始搜索
      * @param strFind 被搜索关键词
      */
-    void handleFindContent(const QString &strFind);
+    void startSearch(const QString &strFind);
+
+    /**
+     * @brief handleFindExit
+     * 停止搜索 未退出搜索状态
+     */
+    void stopSearch();
+
+    /**
+     * @brief jumpToNextSearchResult
+     * 跳转下一个搜索结果
+     */
+    void jumpToNextSearchResult();
+
+    /**
+     * @brief jumpToPrevSearchResult
+     * 跳转上一个搜索结果
+     */
+    void jumpToPrevSearchResult();
 
     /**
      * @brief showEncryPage
@@ -653,6 +642,13 @@ public:
      */
     void deadDeleteLater();
 
+    /**
+     * @brief renderer
+     * 获取渲染器
+     * @return
+     */
+    SheetRenderer *renderer();
+
 public slots:
     /**
      * @brief 阻塞打印
@@ -700,19 +696,21 @@ public slots:
 
 private slots:
     /**
-     * @brief onFindContentComming
+     * @brief onSearchResultComming
      * 搜索结果的处理
      * @param searchResult 搜索结果
      */
-    void onFindContentComming(const deepin_reader::SearchResult &searchResult);
+    void onSearchResultComming(const deepin_reader::SearchResult &searchResult);
 
     /**
-     * @brief onFindFinished
+     * @brief onSearchFinished
      * 搜索结束的处理
      */
-    void onFindFinished();
+    void onSearchFinished();
 
     void onSideAniFinished();
+
+    void onOpened(bool result, QString error);
 
 public:
     /**
@@ -839,14 +837,13 @@ private:
 
     //document
     deepin_reader::Document *m_document = nullptr;
-    QList<deepin_reader::Page *> m_pages;
 
-    SheetSidebar   *m_sidebar = nullptr;
-    SheetBrowser   *m_browser = nullptr;
+    SheetSidebar   *m_sidebar  = nullptr;        //操作左侧ui
+    SheetBrowser   *m_browser  = nullptr;        //操作右侧ui
+    SheetRenderer  *m_renderer = nullptr;       //数据渲染器
 
     QString         m_filePath;
     QString         m_password;
-    QString         m_lastError;
     Dr::FileType    m_fileType;
     QString         m_uuid;
     QMap<int, QPixmap>  m_thumbnailMap;
@@ -854,7 +851,7 @@ private:
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;
     bool m_fullSiderBarVisible = false;
-
+    PageSearchThread *m_searchTask = nullptr;
     EncryptionPage  *m_encryPage = nullptr;
     QPropertyAnimation *m_sideAnimation = nullptr;
 };

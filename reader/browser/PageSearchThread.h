@@ -26,6 +26,7 @@
 #include <QThread>
 
 class BrowserPage;
+class DocSheet;
 class PageSearchThread : public QThread
 {
     Q_OBJECT
@@ -35,7 +36,7 @@ public:
     virtual ~PageSearchThread() override;
 
 public:
-    void startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startPage);
+    void startSearch(DocSheet *sheet, QString text);
 
     void stopSearch();
 
@@ -49,7 +50,7 @@ private:
     bool m_quit = false;
     int m_startIndex = 0;
     QString m_searchText;
-    QList<BrowserPage *> m_pagelst;
+    DocSheet *m_sheet = nullptr;
 };
 
 #endif // PAGESEARCHTHREAD_H

@@ -328,9 +328,9 @@ Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, con
     return new PDFAnnotation(m_page->createHightLightAnnot(boundaries, text, color));
 }
 
-bool PDFPage::removeAnnotation(deepin_reader::Annotation *annotation)
+bool PDFPage::removeAnnotation(Annotation *annotation)
 {
-    deepin_reader::PDFAnnotation *PDFAnnotation = static_cast< deepin_reader::PDFAnnotation * >(annotation);
+    PDFAnnotation *PDFAnnotation = static_cast< class PDFAnnotation * >(annotation);
 
     if (PDFAnnotation == nullptr)
         return false;
@@ -455,10 +455,10 @@ bool PDFDocument::saveAs(const QString &filePath) const
     return m_document->saveAs(filePath);
 }
 
-void collectOuleLine(const DPdfDoc::Outline &cOutline, deepin_reader::Outline &outline)
+void collectOuleLine(const DPdfDoc::Outline &cOutline, Outline &outline)
 {
     for (const DPdfDoc::Section &cSection : cOutline) {
-        deepin_reader::Section setction;
+        Section setction;
         setction.nIndex = cSection.nIndex;
         setction.title = cSection.title;
         setction.offsetPointF = cSection.offsetPointF;
@@ -495,7 +495,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
 {
     DPdfDoc *document = new DPdfDoc(filePath, password);
     if (document->status() == DPdfDoc::SUCCESS) {
-        return new deepin_reader::PDFDocument(document);
+        return new PDFDocument(document);
     } else {
         delete document;
     }

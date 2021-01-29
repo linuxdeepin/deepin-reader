@@ -23,6 +23,7 @@
 
 #include "Model.h"
 #include "Global.h"
+#include "FindWidget.h"
 
 #include <DGraphicsView>
 
@@ -80,28 +81,8 @@ public:
      */
     static QImage firstThumbnail(const QString &filePath);
 
-    /**
-     * @brief 文档是否上锁
-     * @return
-     */
-    bool isUnLocked();
 
-
-    void init(deepin_reader::Document *document, QList<deepin_reader::Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks);
-
-    /**
-     * @brief 保存
-     * @path 保存到路径
-     * @return
-     */
-    bool save();
-
-    /**
-     * @brief 另存为
-     * @param filePath
-     * @return
-     */
-    bool saveAs(const QString &filePath);
+    void init(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**
      * @brief setMouseShape
@@ -217,20 +198,6 @@ public:
     QString selectedWordsText();
 
     /**
-     * @brief outline
-     * 文档中的链接
-     * @return
-     */
-    deepin_reader::Outline outline();
-
-    /**
-     * @brief properties
-     * 文档属性
-     * @return
-     */
-    Properties properties() const;
-
-    /**
      * @brief jumpToOutline
      * 点击目录列表中的目录,跳转到文档区域相应位置处
      * @param linkLeft 链接到左侧的距离
@@ -308,41 +275,42 @@ public:
     void showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point);
 
     /**
-     * @brief handleSearch
+     * @brief handlePrepareSearch
      * 搜索操作,弹出搜索框
      */
-    void handleSearch();
+    void handlePrepareSearch();
 
     /**
-     * @brief stopSearch
-     * 停止搜索
-     */
-    void stopSearch();
-
-    /**
-     * @brief handleFindNext
+     * @brief jumpToNextSearchResult
      * 跳到下一个搜索条目中
      */
-    void handleFindNext();
+    void jumpToNextSearchResult();
 
     /**
-     * @brief handleFindPrev
+     * @brief jumpToPrevSearchResult
      * 跳到前一个搜索条目中
      */
-    void handleFindPrev();
+    void jumpToPrevSearchResult();
 
     /**
      * @brief handleFindExit
      * 结束搜索操作,结束搜索任务,清空搜索列表,展示上一次缩略图列表
      */
-    void handleFindExit();
+    void handleSearchStop();
 
     /**
-     * @brief handleFindContent
-     * 搜索操作
-     * @param strFind 要搜索的内容
+     * @brief handleSearchStart
+     * 准备搜索
      */
-    void handleFindContent(const QString &strFind);
+    void handleSearchStart();
+
+    /**
+     * @brief handleSearchResult
+     * 处理搜索结果
+     * @param index
+     * @param rects
+     */
+    void handleSearchResultComming(const deepin_reader::SearchResult &res);
 
     /**
      * @brief handleFindFinished
@@ -366,34 +334,6 @@ public:
     void showMenu();
 
     /**
-     * @brief pageLableIndex
-     * 根据文档页页码得到文档页编号
-     * @param pageLable 文档页页码
-     * @return 文档页编号
-     */
-    int pageLableIndex(const QString);
-
-    /**
-     * @brief 加载页面LABLE
-     */
-    void loadPageLable();
-
-    /**
-     * @brief pageHasLable
-     * 文档是否有文档页页码
-     * @return  如果有返回true,反之返回false
-     */
-    bool pageHasLable();
-
-    /**
-     * @brief pageNum2Lable
-     * 根据文档页编号得到文档页页码
-     * @param index 文档页编号
-     * @return 如果有返回文档页页码,反之返回空字符串
-     */
-    QString pageNum2Lable(const int);
-
-    /**
      * @brief beginViewportChange
      * 延时进行视图更新 过滤高频率调用
      */
@@ -406,11 +346,10 @@ public:
     void hideSubTipsWidget();
 
     /**
-     * @brief 获取页面真实大小
-     * @param index
+     * @brief pages
      * @return
      */
-    QSizeF pageSizeByIndex(int index);
+    QList<BrowserPage *> pages();
 
 signals:
     void sigPageChanged(int page);
@@ -707,15 +646,13 @@ private:
     void showMagnigierImage(const QPoint &point);
 
 private:
-    deepin_reader::Document *m_document = nullptr;
-
     DocSheet *m_sheet = nullptr;
 
     BrowserMagniFier *m_magnifierLabel = nullptr;
     TipsWidget *m_tipsWidget = nullptr;
     TextEditShadowWidget *m_noteEditWidget = nullptr;
-    FindWidget *m_pFindWidget = nullptr;
-    PageSearchThread *m_searchTask = nullptr;
+    QPointer<FindWidget> m_findWidget = nullptr;
+
     BrowserPage *m_lastFindPage = nullptr;
     BrowserPage *m_lastSelectIconAnnotPage = nullptr;   // 最后选中图标注释所在页
     QTimer *m_viewportChangeTimer = nullptr;            //用于延时进行视图区域更新 防止高频率调用
@@ -732,22 +669,23 @@ private:
     BrowserWord *m_selectEndWord = nullptr;
 
     double m_lastScaleFactor = 0;
-    qreal m_maxWidth = 0;                 //最大一页的宽度
-    qreal m_maxHeight = 0;                //最大一页的高度
+    qreal m_maxWidth = 0;               //最大一页的宽度
+    qreal m_maxHeight = 0;              //最大一页的高度
     bool m_changSearchFlag = false;
     bool m_hasLoaded = false;           //是否已经加载过每页的信息
     int m_initPage = 1;                 //用于刚显示跳转的页数
-    int m_searchCurIndex = 0;
-    int m_searchPageTextIndex = 0;
-    int m_selectIndex = -1;              // 选取文字开始的index
 
-    bool m_isLoadPageLabel = false;
+    //搜索
+    int m_searchCurIndex = 0;           //当前搜索所在索引
+    int m_searchPageTextIndex = 0;      //当前搜索索引的索引
+
+    //文字选择
+    int m_selectIndex = -1;             //选取文字开始的index
+
     bool m_annotationInserting = false;     //正在插入注释状态
     bool m_selectIconAnnotation = false;    //当前是否有选中的图标注释
     QPointF m_iconAnnotationMovePos;        //当前选中的图标注释移动位置
     deepin_reader::Annotation *m_iconAnnot = nullptr; // 当前选中的图标注释
-
-    QMap<QString, int> m_lable2Page;    // 文档下标页码
 
     int m_currentPage = 0;
     int m_lastrotation = 0;

@@ -529,7 +529,7 @@ void CentralDocPage::handleShortcut(const QString &s)
             } else if (s == Dr::key_ctrl_d) {
                 sheet->setBookMark(sheet->currentIndex(), true);
             } else if (s == Dr::key_ctrl_f) {
-                sheet->handleSearch();
+                sheet->prepareSearch();
             } else if (s == Dr::key_ctrl_c) {
                 sheet->copySelectedText();
             } else if (s == Dr::key_alt_h) {
@@ -592,11 +592,11 @@ bool CentralDocPage::isSlide()
     return m_slideWidget != nullptr;
 }
 
-void CentralDocPage::handleSearch()
+void CentralDocPage::prepareSearch()
 {
     DocSheet *docSheet = getCurSheet();
     if (docSheet)
-        docSheet->handleSearch();
+        docSheet->prepareSearch();
 }
 
 bool CentralDocPage::isFullScreen()

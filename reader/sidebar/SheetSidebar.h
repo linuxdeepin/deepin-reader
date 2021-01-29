@@ -82,15 +82,14 @@ public :
      */
     void handleOpenSuccess();
 
-    /**
-     * @brief 搜索状态
-     */
-    void handleFindOperation(int, const QString &strFind = "");
+    void handleSearchStart(const QString &text);
+
+    void handleSearchStop();
 
     /**
      * @brief 搜索节点处理
      */
-    void handleFindContentComming(const deepin_reader::SearchResult &);
+    void handleSearchResultComming(const deepin_reader::SearchResult &);
 
     /**
      * @brief 搜索结束

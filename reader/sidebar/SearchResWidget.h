@@ -56,10 +56,10 @@ public:
     int  handleFindFinished();
 
     /**
-     * @brief handFindContentComming
+     * @brief handleSearchResultComming
      *
      */
-    void handFindContentComming(const deepin_reader::SearchResult &);
+    void handleSearchResultComming(const deepin_reader::SearchResult &);
 
     /**
      * @brief searchKey

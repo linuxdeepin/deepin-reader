@@ -35,6 +35,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "Global.h"
+#include "SheetRenderer.h"
 
 #include <DApplicationHelper>
 #include <QPainter>
@@ -51,12 +52,14 @@
 
 const int ICON_SIZE = 23;
 
-BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet, deepin_reader::Page *page) :
-    QGraphicsItem(), m_sheet(sheet), m_parent(parent), m_page(page), m_index(index)
+BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet) :
+    QGraphicsItem(), m_sheet(sheet), m_parent(parent), m_index(index)
 {
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsPanel);
+
+    m_originSizeF = sheet->renderer()->getPageSize(index);
 }
 
 BrowserPage::~BrowserPage()
@@ -71,14 +74,9 @@ BrowserPage::~BrowserPage()
 
 }
 
-QSizeF BrowserPage::pageSize() const
-{
-    return m_page->sizeF();
-}
-
 QRectF BrowserPage::boundingRect() const
 {
-    return QRectF(0, 0, pageSize().width() * m_scaleFactor, pageSize().height() * m_scaleFactor);
+    return QRectF(0, 0, m_originSizeF.width() * m_scaleFactor, m_originSizeF.height() * m_scaleFactor);
 }
 
 QRectF BrowserPage::rect()
@@ -86,11 +84,11 @@ QRectF BrowserPage::rect()
     switch (m_rotation) {
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        return QRectF(0, 0, static_cast<double>(pageSize().height() * m_scaleFactor), static_cast<double>(pageSize().width() * m_scaleFactor));
+        return QRectF(0, 0, static_cast<double>(m_originSizeF.height() * m_scaleFactor), static_cast<double>(m_originSizeF.width() * m_scaleFactor));
     default: break;
     }
 
-    return QRectF(0, 0, static_cast<double>(pageSize().width() * m_scaleFactor), static_cast<double>(pageSize().height() * m_scaleFactor));
+    return QRectF(0, 0, static_cast<double>(m_originSizeF.width() * m_scaleFactor), static_cast<double>(m_originSizeF.height() * m_scaleFactor));
 }
 
 QRectF BrowserPage::bookmarkRect()
@@ -436,9 +434,11 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
     QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0),
                        qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
 
-    return m_page->render(static_cast<int>(pageSize().width() * scaleFactor),
-                          static_cast<int>(pageSize().height() * scaleFactor),
-                          rect).transformed(transform, Qt::SmoothTransformation);
+    return m_sheet->renderer()->getImage(itemIndex(),
+                                         static_cast<int>(m_originSizeF.width() * scaleFactor),
+                                         static_cast<int>(m_originSizeF.height() * scaleFactor),
+                                         rect)
+           .transformed(transform, Qt::SmoothTransformation);
 }
 
 QImage BrowserPage::getCurImagePoint(QPointF point)
@@ -448,16 +448,6 @@ QImage BrowserPage::getCurImagePoint(QPointF point)
     transform.rotate(m_rotation * 90);
     const QImage &image = Utils::copyImage(m_renderPixmap.toImage(), qRound(point.x() * dApp->devicePixelRatio() - ds / 2.0), qRound(point.y() * dApp->devicePixelRatio()  - ds / 2.0), ds, ds).transformed(transform, Qt::SmoothTransformation);
     return image;
-}
-
-QList<Word> BrowserPage::getWords()
-{
-    return m_page->words();
-}
-
-QList<Annotation *> BrowserPage::getAnnotations()
-{
-    return m_page->annotations();
 }
 
 int BrowserPage::itemIndex()
@@ -602,7 +592,7 @@ void BrowserPage::scaleWords(bool force)
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
     if (!m_hasLoadedAnnotation) {
-        handleAnnotationLoaded(getAnnotations());
+        handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()));
     }
 
     return m_annotations;
@@ -616,7 +606,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
     if (!m_annotations.contains(annotation))
         return false;
 
-    if (!m_page->updateAnnotation(annotation, text, color))
+    if (!m_sheet->renderer()->updateAnnotation(itemIndex(), annotation, text, color))
         return false;
 
     QRectF renderBoundary;
@@ -642,7 +632,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     QList<QRectF> boundaries;
 
     //加载文档文字无旋转情况下的文字(即旋转0度时的所有文字)
-    const QList<deepin_reader::Word> &twords = m_page->words();
+    const QList<deepin_reader::Word> &twords = m_sheet->renderer()->getWords(itemIndex());
 
     if (m_words.size() != twords.size())
         return nullptr;
@@ -675,10 +665,10 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     if (boundaries.count() > 0) {
         //需要保证已经加载注释
         if (!m_hasLoadedAnnotation) {
-            handleAnnotationLoaded(getAnnotations());
+            handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()));
         }
 
-        highLightAnnot = m_page->addHighlightAnnotation(boundaries, text, color);
+        highLightAnnot = m_sheet->renderer()->addHighlightAnnotation(itemIndex(), boundaries, text, color);
         if (highLightAnnot == nullptr)
             return nullptr;
 
@@ -778,7 +768,7 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
     annoBoundaries << m_lastClickIconAnnotationItem->annotation()->boundary();
     annoBoundaries << moveRect;
-    Annotation *annot = m_page->moveIconAnnotation(m_lastClickIconAnnotationItem->annotation(), moveRect);
+    Annotation *annot = m_sheet->renderer()->moveIconAnnotation(itemIndex(), m_lastClickIconAnnotationItem->annotation(), moveRect);
 
     if (annot && m_annotations.contains(annot)) {
         delete m_lastClickIconAnnotationItem;
@@ -815,8 +805,7 @@ bool BrowserPage::removeAllAnnotation()
 {
     //未加载注释时则直接加载 无需添加图元
     if (!m_hasLoadedAnnotation) {
-        m_annotations = getAnnotations();
-
+        m_annotations = m_sheet->renderer()->getAnnotations(itemIndex());
         m_hasLoadedAnnotation = true;
     }
 
@@ -836,7 +825,7 @@ bool BrowserPage::removeAllAnnotation()
 
         annoBoundaries << annota->boundary();
 
-        if (!m_page->removeAnnotation(annota))
+        if (!m_sheet->renderer()->removeAnnotation(itemIndex(), annota))
             continue;
 
         m_annotations.removeAt(index);
@@ -867,27 +856,6 @@ bool BrowserPage::removeAllAnnotation()
     m_sheet->handlePageModified(m_index);
 
     return true;
-}
-
-bool BrowserPage::jump2Link(const QPointF &point)
-{
-    Link link = m_page->getLinkAtPoint(point);
-    if (link.page > 0) {
-        m_parent->setCurrentPage(link.page);
-        return true;
-    } else if (!link.urlOrFileName.isEmpty()) {
-        const QUrl &url = QUrl(link.urlOrFileName, QUrl::TolerantMode);
-        QDesktopServices::openUrl(url);
-        return true;
-    }
-
-    return false;
-}
-
-bool BrowserPage::inLink(const QPointF &pos)
-{
-    Link link = m_page->getLinkAtPoint(pos);
-    return link.isValid();
 }
 
 void BrowserPage::setPageBookMark(const QPointF clickPoint)
@@ -923,7 +891,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
     const QList<QRectF> &annoBoundaries = annota->boundary();
 
-    if (!m_page->removeAnnotation(annota))
+    if (!m_sheet->renderer()->removeAnnotation(itemIndex(), annota))
         return false;
 
     foreach (BrowserAnnotation *annotation, m_annotationItems) {
@@ -953,7 +921,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    Annotation *annot = m_page->addIconAnnotation(rect, text);
+    Annotation *annot = m_sheet->renderer()->addIconAnnotation(itemIndex(), rect, text);
 
     if (annot) {
         annot->page = m_index + 1;
@@ -1067,22 +1035,22 @@ QRectF BrowserPage::translateRect(const QRectF &rect)
         break;
     }
     case Dr::RotateBy90: {
-        newrect.setX((pageSize().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((m_originSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setY(rect.x()*m_scaleFactor);
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy180: {
-        newrect.setX((pageSize().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
-        newrect.setY((pageSize().height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
+        newrect.setX((m_originSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((m_originSizeF.height() - rect.y() - rect.height())*m_scaleFactor - boundingRect().height());
         newrect.setWidth(rect.width()*m_scaleFactor);
         newrect.setHeight(rect.height()*m_scaleFactor);
         break;
     }
     case Dr::RotateBy270: {
         newrect.setX(rect.y()*m_scaleFactor);
-        newrect.setY((pageSize().width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
+        newrect.setY((m_originSizeF.width() - rect.x() - rect.width())*m_scaleFactor - boundingRect().width());
         newrect.setWidth(rect.height()*m_scaleFactor);
         newrect.setHeight(rect.width()*m_scaleFactor);
         break;
@@ -1119,16 +1087,6 @@ BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
     }
 
     return nullptr;
-}
-
-QVector<QRectF> BrowserPage::search(const QString &text, bool matchCase, bool wholeWords)
-{
-    return m_page->search(text, matchCase, wholeWords);
-}
-
-QString BrowserPage::text(const QRectF &rect)
-{
-    return m_page->text(rect);
 }
 
 bool BrowserPage::isBigDoc()

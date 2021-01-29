@@ -30,6 +30,7 @@
 #include "BrowserPage.h"
 #include "SheetBrowser.h"
 #include "DocSheet.h"
+#include "SheetRenderer.h"
 #include "SideBarImageViewModel.h"
 
 #include <QTime>
@@ -268,6 +269,24 @@ void PageRenderThread::appendTask(DocOpenTask task)
         instance->start();
 }
 
+void PageRenderThread::appendTask(DocCloseTask task)
+{
+    PageRenderThread *instance  = PageRenderThread::instance();
+
+    if (nullptr == instance) {
+        return;
+    }
+
+    instance->m_closeMutex.lock();
+
+    instance->m_closeTasks.append(task);
+
+    instance->m_closeMutex.unlock();
+
+    if (!instance->isRunning())
+        instance->start();
+}
+
 void PageRenderThread::run()
 {
     m_quit = false;
@@ -294,6 +313,9 @@ void PageRenderThread::run()
         {}
 
         while (execNextDocPageThumbnailTask())
+        {}
+
+        while (execNextDocCloseTask())
         {}
 
         DocPageBigImageTask task;
@@ -346,6 +368,9 @@ void PageRenderThread::run()
             {}
 
             while (execNextDocPageThumbnailTask())
+            {}
+
+            while (execNextDocCloseTask())
             {}
         }
 
@@ -467,6 +492,20 @@ bool PageRenderThread::popNextDocOpenTask(DocOpenTask &task)
     return true;
 }
 
+bool PageRenderThread::popNextDocCloseTask(DocCloseTask &task)
+{
+    QMutexLocker locker(&m_closeMutex);
+
+    if (m_closeTasks.count() <= 0)
+        return false;
+
+    task = m_closeTasks.value(0);
+
+    m_closeTasks.removeAt(0);
+
+    return true;
+}
+
 bool PageRenderThread::execNextDocPageNormalImageTask()
 {
     if (m_quit)
@@ -522,7 +561,7 @@ bool PageRenderThread::execNextDocPageWordTask()
     if (!DocSheet::existSheet(task.sheet))
         return true;
 
-    const QList<Word> &words = task.page->getWords();
+    const QList<Word> &words = task.sheet->renderer()->getWords(task.page->itemIndex());
 
     emit sigDocPageWordTaskFinished(task, words);
 
@@ -542,7 +581,7 @@ bool PageRenderThread::execNextDocPageAnnotationTask()
     if (!DocSheet::existSheet(task.sheet))
         return true;
 
-    const QList<deepin_reader::Annotation *> annots = task.page->getAnnotations();
+    const QList<deepin_reader::Annotation *> annots = task.sheet->renderer()->getAnnotations(task.page->itemIndex());
 
     emit sigDocPageAnnotationTaskFinished(task, annots);
 
@@ -591,8 +630,6 @@ bool PageRenderThread::execNextDocOpenTask()
 
     //转换...
 
-
-
     deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(fileType, filePath, password);
 
     if (nullptr == document) {//打开失败
@@ -625,6 +662,23 @@ bool PageRenderThread::execNextDocOpenTask()
 
     PERF_PRINT_END("POINT-03", "");
     PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
+
+    return true;
+}
+
+bool PageRenderThread::execNextDocCloseTask()
+{
+    if (m_quit)
+        return false;   //false 为不用再继续循环调用
+
+    DocCloseTask task;
+
+    if (!popNextDocCloseTask(task))
+        return false;   //false 为不用再继续循环调用
+
+    qDeleteAll(task.pages);
+
+    delete task.document;
 
     return true;
 }
@@ -674,7 +728,7 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
 void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
     if (DocSheet::existSheet(task.sheet)) {
-        task.sheet->handleOpened(result, error, document, pages);
+        task.renderer->handleOpened(result, error, document, pages);
     }
 }
 

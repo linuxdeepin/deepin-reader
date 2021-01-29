@@ -224,7 +224,7 @@ public:
      * @brief handleSearch
      * 当前文档进入搜索模式
      */
-    void handleSearch();
+    void prepareSearch();
 
     /**
      * @brief getTitleLabel

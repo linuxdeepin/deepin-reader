@@ -32,8 +32,6 @@
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-
     setMinimumSize(QSize(414, 60));
 
     setBlurBackgroundEnabled(true);
@@ -66,44 +64,37 @@ void FindWidget::setSearchEditFocus()
     m_pSearchEdit->lineEdit()->setFocus();
 }
 
-void FindWidget::stopSearch()
+void FindWidget::onSearchStop()
 {
-    findCancel();
+    m_lastSearchText.clear();
+
+    setEditAlert(0);
+
+    if (m_docSheet)
+        m_docSheet->stopSearch();
 }
 
-void FindWidget::findCancel()
+void FindWidget::onSearchStart()
 {
-    m_pSearchEdit->clear();
+    QString searchText = m_pSearchEdit->text().trimmed();
 
-    slotEditAborted();
-
-    m_strLastFindText = "";
-
-    this->close();
-}
-
-void FindWidget::handleContentChanged()
-{
-    QString strFind = m_pSearchEdit->text().trimmed();
-    if ((strFind != "") && (m_strLastFindText != strFind)) {
-        m_strLastFindText = strFind;
-
+    if ((searchText != "") && (m_lastSearchText != searchText)) {
+        m_lastSearchText = searchText;
         setEditAlert(0);
-
-        m_docSheet->handleFindContent(strFind);
+        m_docSheet->startSearch(searchText);
     }
 }
 
 void FindWidget::slotFindNextBtnClicked()
 {
     if (m_docSheet)
-        m_docSheet->handleFindNext();
+        m_docSheet->jumpToNextSearchResult();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
     if (m_docSheet)
-        m_docSheet->handleFindPrev();
+        m_docSheet->jumpToPrevSearchResult();
 }
 
 void FindWidget::slotClearContent()
@@ -115,25 +106,15 @@ void FindWidget::slotClearContent()
     }
 }
 
-void FindWidget::slotEditAborted()
-{
-    m_strLastFindText.clear();
-
-    setEditAlert(0);
-
-    if (m_docSheet)
-        m_docSheet->handleFindExit();
-}
-
 void FindWidget::initWidget()
 {
     m_pSearchEdit = new DSearchEdit(this);
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
     m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
     m_pSearchEdit->setFixedSize(QSize(270, 36));
-    connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::handleContentChanged);
+    connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::onSearchStart);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
-    connect(m_pSearchEdit, &DSearchEdit::searchAborted, this, &FindWidget::slotEditAborted);
+    connect(m_pSearchEdit, &DSearchEdit::searchAborted, this, &FindWidget::onSearchStop);
 
     DIconButton *findPrevButton = new DIconButton(DStyle::SP_ArrowUp, this);
     findPrevButton->setObjectName("SP_ArrowUpBtn");
@@ -153,7 +134,7 @@ void FindWidget::initWidget()
     closeButton->setObjectName("closeButton");
     closeButton->setIconSize(QSize(28, 28));
     closeButton->setFixedSize(QSize(30, 30));
-    connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::findCancel);
+    connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::onCloseBtnClicked);
 
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(8, 0, 6, 0);
@@ -177,6 +158,17 @@ void FindWidget::setEditAlert(const int &iFlag)
 
         m_pSearchEdit->setAlert(bAlert);
     }
+}
+
+void FindWidget::onCloseBtnClicked()
+{
+    onSearchStop();
+
+    m_pSearchEdit->clear();
+
+    this->hide();
+
+    this->deleteLater();
 }
 
 void FindWidget::keyPressEvent(QKeyEvent *event)

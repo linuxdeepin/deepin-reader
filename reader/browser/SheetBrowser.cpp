@@ -42,7 +42,7 @@
 #include "MsgHeader.h"
 #include "DjVuModel.h"
 #include "Utils.h"
-#include "PageSearchThread.h"
+#include "SheetRenderer.h"
 
 #include <QGraphicsItem>
 #include <QScrollBar>
@@ -59,6 +59,7 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QTimerEvent>
+#include <QDesktopServices>
 
 #include <DMenu>
 #include <DGuiApplicationHelper>
@@ -103,12 +104,9 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     m_tipsWidget->setAccessibleName("Tips");
     m_tipsWidget->setAutoChecked(true);
 
-    m_searchTask = new PageSearchThread(this);
     this->setProperty("pinchgetsturing", false);
 
-    qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
-    connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
-    connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
+
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 
     this->verticalScrollBar()->setProperty("_d_slider_spaceUp", 8);
@@ -160,35 +158,23 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     return image;
 }
 
-bool SheetBrowser::isUnLocked()
+void SheetBrowser::init(SheetOperation &operation, const QSet<int> &bookmarks)
 {
-    if (m_document == nullptr)
-        return false;
+    int pageCount = m_sheet->pageCount();
 
-    return true;
-}
-
-void SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation &operation, const QSet<int> &bookmarks)
-{
-    Q_ASSERT(nullptr == m_document);
-
-    m_document = document;
-
-    int pagesNumber = m_document->pageCount();
-
-    for (int i = 0; i < pagesNumber; ++i) {
-        BrowserPage *item = new BrowserPage(this, i, m_sheet, pages.value(i));
+    for (int i = 0; i < pageCount; ++i) {
+        BrowserPage *item = new BrowserPage(this, i, m_sheet);
 
         if (bookmarks.contains(i))
             item->setBookmark(true);
 
         m_items.append(item);
 
-        if (item->pageSize().width() > m_maxWidth)
-            m_maxWidth = item->pageSize().width();
+        if (m_sheet->renderer()->getPageSize(i).width() > m_maxWidth)
+            m_maxWidth = m_sheet->renderer()->getPageSize(i).width();
 
-        if (item->pageSize().height() > m_maxHeight)
-            m_maxHeight = item->pageSize().height();
+        if (m_sheet->renderer()->getPageSize(i).height() > m_maxHeight)
+            m_maxHeight = m_sheet->renderer()->getPageSize(i).height();
 
         scene()->addItem(item);
     }
@@ -200,22 +186,6 @@ void SheetBrowser::init(Document *document, QList<Page *> pages, SheetOperation 
     m_initPage = operation.currentPage;
 
     m_hasLoaded = true;
-}
-
-bool SheetBrowser::save()
-{
-    if (m_document == nullptr)
-        return false;
-
-    return m_document->save();
-}
-
-bool SheetBrowser::saveAs(const QString &path)
-{
-    if (path.isEmpty() || m_document == nullptr)
-        return false;
-
-    return m_document->saveAs(path);;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
@@ -561,7 +531,7 @@ bool SheetBrowser::removeAllAnnotation()
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
 {
-    if (nullptr == m_document || nullptr == annotation)
+    if (nullptr == annotation)
         return false;
 
     bool ret = false;
@@ -617,22 +587,6 @@ void SheetBrowser::onInit()
     }
 
     onViewportChanged();
-}
-
-deepin_reader::Outline SheetBrowser::outline()
-{
-    if (m_document == nullptr)
-        return deepin_reader::Outline();
-
-    return m_document->outline();
-}
-
-Properties SheetBrowser::properties() const
-{
-    if (m_document == nullptr)
-        return Properties();
-
-    return m_document->properties();
 }
 
 void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, int index)
@@ -730,7 +684,7 @@ bool SheetBrowser::event(QEvent *event)
         }
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
             //搜索框
-            if (m_pFindWidget && m_pFindWidget->isVisible() && m_pFindWidget->hasFocus()) {
+            if (m_findWidget && m_findWidget->isVisible() && m_findWidget->hasFocus()) {
                 return DGraphicsView::event(event);
             }
 
@@ -974,8 +928,8 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
         m_sheet->setOperationChanged();
     }
 
-    if (m_pFindWidget)
-        m_pFindWidget->showPosition(this->width());
+    if (!m_findWidget.isNull())
+        m_findWidget->showPosition(this->width());
 
     if (magnifierOpened()) {
         QTimer::singleShot(1, this, SLOT(openMagnifier()));
@@ -1123,7 +1077,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                             showNoteEditWidget(addAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "Search") {
-                    m_sheet->handleSearch();
+                    m_sheet->prepareSearch();
                 } else if (objectname == "RemoveBookmark") {
                     m_sheet->setBookMark(item->itemIndex(), false);
                 } else if (objectname == "Fullscreen") {
@@ -1620,31 +1574,22 @@ void SheetBrowser::showEvent(QShowEvent *event)
     QGraphicsView::showEvent(event);
 }
 
-void SheetBrowser::handleSearch()
+void SheetBrowser::handlePrepareSearch()
 {
     //目前只有PDF开放搜索功能
     if (m_sheet->fileType() != Dr::FileType::PDF)
         return;
 
-    if (m_pFindWidget == nullptr) {
-        m_pFindWidget = new FindWidget(this);
-        connect(m_pFindWidget, &FindWidget::destroyed, [this]() { m_pFindWidget = nullptr; });
-        m_pFindWidget->setDocSheet(m_sheet);
+    if (m_findWidget == nullptr) {
+        m_findWidget = new FindWidget(this);
+        m_findWidget->setDocSheet(m_sheet);
     }
 
-    m_pFindWidget->showPosition(this->width());
-    m_pFindWidget->setSearchEditFocus();
+    m_findWidget->showPosition(this->width());
+    m_findWidget->setSearchEditFocus();
 }
 
-void SheetBrowser::stopSearch()
-{
-    if (!m_pFindWidget)
-        return;
-
-    m_pFindWidget->stopSearch();
-}
-
-void SheetBrowser::handleFindNext()
+void SheetBrowser::jumpToNextSearchResult()
 {
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
@@ -1682,7 +1627,7 @@ void SheetBrowser::handleFindNext()
     }
 }
 
-void SheetBrowser::handleFindPrev()
+void SheetBrowser::jumpToPrevSearchResult()
 {
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
@@ -1720,29 +1665,39 @@ void SheetBrowser::handleFindPrev()
     }
 }
 
-void SheetBrowser::handleFindExit()
+void SheetBrowser::handleSearchStart()
 {
     m_searchCurIndex = 0;
-    m_searchPageTextIndex = 0;
-    m_searchTask->stopSearch();
+    m_searchPageTextIndex = -1;
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
 }
 
-void SheetBrowser::handleFindContent(const QString &strFind)
+void SheetBrowser::handleSearchStop()
 {
-    m_searchCurIndex = m_sheet->currentIndex();
-    m_searchPageTextIndex = 0;
+    m_searchCurIndex = 0;
+    m_searchPageTextIndex = -1;
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
+}
 
-    m_searchTask->startSearch(m_items, strFind, m_searchCurIndex);
+void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &res)
+{
+    if (res.page <= 0)
+        return;
+
+    if (res.page <= m_items.count())
+        m_items[res.page - 1]->setSearchHighlightRectf(res.rects);
+
+    //如果是第一个搜索结果来到，需要高亮第一个
+    if (-1 == m_searchPageTextIndex)
+        jumpToNextSearchResult();
 }
 
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    if (m_pFindWidget)
-        m_pFindWidget->setEditAlert(searchcnt == 0);
+    if (m_findWidget)
+        m_findWidget->setEditAlert(searchcnt == 0);
 }
 
 void SheetBrowser::curpageChanged(int curpage)
@@ -1763,7 +1718,7 @@ bool SheetBrowser::isLink(QPointF viewpoint)
     viewpoint = translate2Local(viewpoint);
 
     //判断当前位置是否有link
-    return page->inLink(viewpoint);
+    return m_sheet->renderer()->inLink(page->itemIndex(), viewpoint);
 }
 
 void SheetBrowser::setIconAnnotSelect(const bool select)
@@ -1807,7 +1762,18 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     point = translate2Local(point);
 
-    return page->jump2Link(point);
+    Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
+
+    if (link.page > 0) {
+        setCurrentPage(link.page);
+        return true;
+    } else if (!link.urlOrFileName.isEmpty()) {
+        const QUrl &url = QUrl(link.urlOrFileName, QUrl::TolerantMode);
+        QDesktopServices::openUrl(url);
+        return true;
+    }
+
+    return false;
 }
 
 void SheetBrowser::showMenu()
@@ -1846,7 +1812,7 @@ void SheetBrowser::showMenu()
             if (addAnnot)
                 showNoteEditWidget(addAnnot, pointEnd);
         } else if (objectname == "Search") {
-            m_sheet->handleSearch();
+            m_sheet->prepareSearch();
         } else if (objectname == "RemoveBookmark") {
             m_sheet->setBookMark(this->currentPage() - 1, false);
         } else if (objectname == "Fullscreen") {
@@ -1900,62 +1866,9 @@ void SheetBrowser::showMenu()
     clearSelectIconAnnotAfterMenu();
 }
 
-void SheetBrowser::loadPageLable()
+QList<BrowserPage *> SheetBrowser::pages()
 {
-    if (m_isLoadPageLabel || m_document == nullptr)
-        return;
-
-    m_isLoadPageLabel = true;
-
-    m_lable2Page.clear();
-
-    int pageCount = m_document->pageCount();
-
-    for (int i = 0; i < pageCount; i++) {
-        const QString &labelPage = m_document->label(i);
-
-        if (!labelPage.isEmpty() && labelPage.toInt() != i + 1) {
-            m_lable2Page.insert(labelPage, i);
-        }
-    }
-}
-
-int SheetBrowser::pageLableIndex(const QString pageLable)
-{
-    if (m_lable2Page.count() <= 0 || !m_lable2Page.contains(pageLable))
-        return -1;
-
-    return m_lable2Page.value(pageLable);
-}
-
-bool SheetBrowser::pageHasLable()
-{
-    loadPageLable();
-
-    if (m_lable2Page.count() > 0) {
-        return true;
-    }
-
-    return false;
-}
-
-QString SheetBrowser::pageNum2Lable(const int index)
-{
-    QMap<QString, int>::const_iterator iter;
-    for (iter = m_lable2Page.constBegin(); iter != m_lable2Page.constEnd(); ++iter) {
-        if (iter.value() == index)
-            return iter.key();
-    }
-
-    return  QString::number(index + 1);
-}
-
-QSizeF SheetBrowser::pageSizeByIndex(int index)
-{
-    if (m_items.count() <= index)
-        return QSizeF();
-
-    return m_items[index]->pageSize();
+    return m_items;
 }
 
 void SheetBrowser::showMagnigierImage(const QPoint &point)

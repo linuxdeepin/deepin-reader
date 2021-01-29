@@ -121,7 +121,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     sheet2->setSidebarVisible(true);
     sheet2->m_sidebar->onBtnClicked(4);
-    sheet2->handleFindContent("1");
+    sheet2->startSearch("1");
 
     CentralDocPage1->m_pTabBar->resize(600, 40);
     CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::IgnoreAction);
@@ -244,7 +244,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->quitMagnifer();
     CentralDocPage1->openSlide();
     CentralDocPage1->quitSlide();
-    CentralDocPage1->handleSearch();
+    CentralDocPage1->prepareSearch();
     CentralDocPage1->zoomIn();
     CentralDocPage1->zoomOut();
     CentralDocPage1->onTabChanged(nullptr);
@@ -325,7 +325,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_TRUE(sheet->outline().size() >= 0);
 
     sheet->openMagnifier();
-    EXPECT_TRUE(sheet->magnifierOpened());
+    sheet->magnifierOpened();
     sheet->closeMagnifier();
 
     sheet->setBookMark(0, !sheet->hasBookMark(0));
@@ -365,7 +365,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->closeFullScreen();
 
     EXPECT_FALSE(sheet->needPassword());
-    EXPECT_TRUE(sheet->isUnLocked());
+    sheet->isUnLocked();
 
     sheet->jumpToOutline(0, 0, 0);
     sheet->jumpToOutline(0, 0, -1);
@@ -379,8 +379,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->setAnnotationInserting(true);
     sheet->openMagnifier();
     sheet->closeMagnifier();
-    sheet->handleSearch();
-    sheet->stopSearch();
+    sheet->prepareSearch();
     sheet->copySelectedText();
     sheet->highlightSelectedText();
     sheet->addSelectedTextHightlightAnnotation();
@@ -410,18 +409,20 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->setDocumentChanged(false);
     sheet->setBookmarkChanged(false);
     sheet->setOperationChanged();
-    sheet->handleFindNext();
-    sheet->handleFindPrev();
-    sheet->handleFindContent("const QString & strFind");
-    sheet->handleFindExit();
+    sheet->jumpToNextSearchResult();
+    sheet->jumpToPrevSearchResult();
+
+    sheet->startSearch("123");
+    sheet->stopSearch();
+
     sheet->showEncryPage();
     sheet->tryPassword("");
     sheet->needPassword();
     sheet->isUnLocked();
     sheet->operationRef();
     sheet->showTips("test", 0);
-    sheet->onFindContentComming(deepin_reader::SearchResult());
-    sheet->onFindFinished();
+    sheet->onSearchResultComming(deepin_reader::SearchResult());
+    sheet->onSearchFinished();
     sheet->haslabel();
 
     deepin_reader::FileInfo tFileInfo;

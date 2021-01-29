@@ -31,6 +31,7 @@
 
 class DocSheet;
 class BrowserPage;
+class SheetRenderer;
 class SideBarImageViewModel;
 
 struct DocPageNormalImageTask {//正常取图
@@ -73,6 +74,12 @@ struct DocPageThumbnailTask {//缩略图
 
 struct DocOpenTask {//打开文档
     DocSheet *sheet = nullptr;
+    SheetRenderer *renderer = nullptr;
+};
+
+struct DocCloseTask {
+    deepin_reader::Document *document = nullptr;
+    QList<deepin_reader::Page *> pages;
 };
 
 /**
@@ -112,6 +119,8 @@ public:
 
     static void appendTask(DocOpenTask task);
 
+    static void appendTask(DocCloseTask task);
+
     /**
      * @brief destroyForever
      * 销毁线程且不会再被创建
@@ -142,6 +151,8 @@ private:
 
     bool popNextDocOpenTask(DocOpenTask &task);
 
+    bool popNextDocCloseTask(DocCloseTask &task);
+
 private:
     bool execNextDocPageNormalImageTask();
 
@@ -154,6 +165,8 @@ private:
     bool execNextDocPageThumbnailTask();
 
     bool execNextDocOpenTask();
+
+    bool execNextDocCloseTask();
 
 signals:
     void sigDocPageNormalImageTaskFinished(DocPageNormalImageTask, QPixmap);
@@ -206,6 +219,9 @@ private:
 
     QMutex m_openMutex;
     QList<DocOpenTask> m_openTasks;
+
+    QMutex m_closeMutex;
+    QList<DocCloseTask> m_closeTasks;
 
     bool m_quit = false;
 

@@ -38,7 +38,9 @@
 #include "FileAttrWidget.h"
 #include "Application.h"
 #include "Utils.h"
+#include "SheetRenderer.h"
 #include "PageRenderThread.h"
+#include "PageSearchThread.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -61,6 +63,14 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
     setAlive(true);
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
+
+    m_searchTask = new PageSearchThread(this);
+    qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
+    connect(m_searchTask, &PageSearchThread::sigSearchReady, this, &DocSheet::onSearchResultComming, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::finished, this, &DocSheet::onSearchFinished, Qt::QueuedConnection);
+
+    m_renderer = new SheetRenderer(this);
+    connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
 
     m_browser = new SheetBrowser(this);
     m_browser->setMinimumWidth(481);
@@ -95,10 +105,7 @@ DocSheet::~DocSheet()
 
     delete m_sidebar;
 
-    qDeleteAll(m_pages);
-
-    if (nullptr != m_document)
-        delete m_document;
+    delete m_renderer;
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
@@ -215,28 +222,16 @@ void DocSheet::saveList(QList<DocSheet *> list)
 
 bool DocSheet::openFileExec(const QString &password, QString &error)
 {
-    QEventLoop loop;
+    m_password = password;
 
-    connect(this, &DocSheet::sigFileOpened, &loop, &QEventLoop::quit);
-
-    openFileAsync(password);
-
-    loop.exec();
-
-    error = m_lastError;
-
-    return error.isEmpty();
+    return m_renderer->openFileExec(password, error);
 }
 
 void DocSheet::openFileAsync(const QString &password)
 {
     m_password = password;
 
-    DocOpenTask task;
-
-    task.sheet = this;
-
-    PageRenderThread::appendTask(task);
+    m_renderer->openFileAsync(m_password);
 }
 
 void DocSheet::jumpToPage(int page)
@@ -279,7 +274,7 @@ void DocSheet::jumpToPrevPage()
 
 deepin_reader::Outline DocSheet::outline()
 {
-    return m_browser->outline();
+    return m_renderer->outline();
 }
 
 void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
@@ -367,10 +362,7 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
 
 int DocSheet::pageCount()
 {
-    if (m_browser)
-        return m_browser->allPages();
-
-    return 0;
+    return m_renderer->getPageCount();
 }
 
 int DocSheet::currentPage()
@@ -459,12 +451,7 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
 
 QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 {
-    if (m_pages.count() <= index)
-        return QImage();
-
-    QImage image = m_pages.value(index)->render(width, height, slice);
-
-    return image;
+    return m_renderer->getImage(index, width, height, slice);;
 }
 
 bool DocSheet::fileChanged()
@@ -476,7 +463,7 @@ bool DocSheet::saveData()
 {
     PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
 
-    if (m_documentChanged && !m_browser->save())
+    if (m_documentChanged && !m_renderer->save())
         return false;
 
     m_documentChanged = false;
@@ -498,7 +485,7 @@ bool DocSheet::saveAsData(QString filePath)
     stopSearch();
 
     if (m_documentChanged) {
-        if (!m_browser->saveAs(filePath))
+        if (!m_renderer->saveAs(filePath))
             return false;
     } else {
         if (!Utils::copyFile(this->filePath(), filePath))
@@ -512,43 +499,9 @@ bool DocSheet::saveAsData(QString filePath)
     return true;
 }
 
-void DocSheet::handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
-{
-    m_lastError = error;
-
-    m_document = document;
-
-    m_pages = pages;
-
-    if (result) {
-        m_browser->init(document, pages, m_operation, m_bookmarks);
-
-        m_sidebar->handleOpenSuccess();
-
-        emit sigOperationChanged(this);
-    }
-
-    emit sigFileOpened(this, result, error);
-}
-
 void DocSheet::handlePageModified(int index)
 {
     emit sigPageModified(index);
-}
-
-void DocSheet::handleSearch()
-{
-    m_browser->handleSearch();
-}
-
-void DocSheet::stopSearch()
-{
-    m_browser->stopSearch();
-}
-
-void DocSheet::onFindContentComming(const deepin_reader::SearchResult &res)
-{
-    m_sidebar->handleFindContentComming(res);
 }
 
 void DocSheet::copySelectedText()
@@ -682,7 +635,7 @@ QString DocSheet::filter()
 QString DocSheet::format()
 {
     if (Dr::PDF == m_fileType) {
-        const Properties &propertys = m_browser->properties();
+        const Properties &propertys = m_renderer->properties();
         return QString("PDF %1").arg(propertys.value("Version").toString());
     } else if (Dr::DJVU == m_fileType) {
         return QString("DJVU");
@@ -894,6 +847,19 @@ void DocSheet::onSideAniFinished()
     }
 }
 
+void DocSheet::onOpened(bool result, QString error)
+{
+    if (result) {
+        m_browser->init(m_operation, m_bookmarks);
+
+        m_sidebar->handleOpenSuccess();
+
+        emit sigOperationChanged(this);
+    }
+
+    emit sigFileOpened(this, result, error);
+}
+
 bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
@@ -968,10 +934,7 @@ void DocSheet::setOperationChanged()
 
 bool DocSheet::haslabel()
 {
-    if (nullptr == m_browser)
-        return false;
-
-    return  m_browser->pageHasLable();
+    return  m_renderer->pageHasLable();
 }
 
 void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
@@ -983,7 +946,7 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
     tFileInfo.auther = fileInfo.owner();
     tFileInfo.filePath = fileInfo.filePath();
 
-    const Properties &propertys = m_browser->properties();
+    const Properties &propertys = m_renderer->properties();
     tFileInfo.format = format();
     tFileInfo.optimization = propertys.value("Linearized").toBool();
     tFileInfo.keyword = propertys.value("KeyWords").toString();
@@ -1036,31 +999,46 @@ void DocSheet::onBrowserOperaAnnotation(int type, int index, deepin_reader::Anno
     setDocumentChanged(true);
 }
 
-void DocSheet::handleFindNext()
+void DocSheet::prepareSearch()
 {
-    m_browser->handleFindNext();
+    m_browser->handlePrepareSearch();
 }
 
-void DocSheet::handleFindPrev()
+void DocSheet::startSearch(const QString &strFind)
 {
-    m_browser->handleFindPrev();
-}
-
-void DocSheet::handleFindExit()
-{
-    m_browser->handleFindExit();
-    m_sidebar->handleFindOperation(E_FIND_EXIT);
-    emit sigFindOperation(E_FIND_EXIT);
-}
-
-void DocSheet::handleFindContent(const QString &strFind)
-{
-    m_browser->handleFindContent(strFind);
-    m_sidebar->handleFindOperation(E_FIND_CONTENT, strFind);
+    m_browser->handleSearchStart();
+    m_sidebar->handleSearchStart(strFind);
+    m_searchTask->startSearch(this, strFind);
     emit sigFindOperation(E_FIND_CONTENT);
 }
 
-void DocSheet::onFindFinished()
+void DocSheet::jumpToNextSearchResult()
+{
+    //m_sidebar->jumpToNextSearchResult();  //左侧应该同时跳转，目前无此需求
+    m_browser->jumpToNextSearchResult();
+}
+
+void DocSheet::jumpToPrevSearchResult()
+{
+    //m_sidebar->jumpToPrevSearchResult();  //左侧应该同时跳转，目前无此需求
+    m_browser->jumpToPrevSearchResult();
+}
+
+void DocSheet::stopSearch()
+{
+    m_searchTask->stopSearch();
+    m_browser->handleSearchStop();
+    m_sidebar->handleSearchStop();
+    emit sigFindOperation(E_FIND_EXIT);
+}
+
+void DocSheet::onSearchResultComming(const deepin_reader::SearchResult &res)
+{
+    m_browser->handleSearchResultComming(res);
+    m_sidebar->handleSearchResultComming(res);
+}
+
+void DocSheet::onSearchFinished()
 {
     int count = m_sidebar->handleFindFinished();
     m_browser->handleFindFinished(count);
@@ -1080,7 +1058,6 @@ void DocSheet::resizeEvent(QResizeEvent *event)
 
 void DocSheet::childEvent(QChildEvent *event)
 {
-    //Not todO;
     if (event->removed()) {
         return DSplitter::childEvent(event);
     }
@@ -1105,6 +1082,7 @@ void DocSheet::setAlive(bool alive)
             return;
 
         stopSearch();
+
         Database::instance()->saveOperation(this);
 
         g_lock.lockForWrite();
@@ -1144,23 +1122,17 @@ bool DocSheet::needPassword()
 
 bool DocSheet::isUnLocked()
 {
-    return m_browser->isUnLocked();
+    return !m_renderer->opened();
 }
 
 int DocSheet::getIndexByPageLable(const QString &pageLable)
 {
-    if (m_browser == nullptr)
-        return -1;
-
-    return m_browser->pageLableIndex(pageLable);
+    return m_renderer->pageLableIndex(pageLable);
 }
 
 QString DocSheet::getPageLabelByIndex(const int &index)
 {
-    if (nullptr == m_browser)
-        return "";
-
-    return m_browser->pageNum2Lable(index);
+    return m_renderer->pageNum2Lable(index);
 }
 
 bool DocSheet::tryPassword(QString password)
@@ -1202,6 +1174,11 @@ void DocSheet::deadDeleteLater()
     this->deleteLater();
 }
 
+SheetRenderer *DocSheet::renderer()
+{
+    return m_renderer;
+}
+
 void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
@@ -1227,7 +1204,7 @@ void DocSheet::onPopInfoDialog()
 
 QSizeF DocSheet::pageSizeByIndex(int index)
 {
-    return m_browser->pageSizeByIndex(index);
+    return m_renderer->getPageSize(index);
 }
 
 void DocSheet::resetChildParent()

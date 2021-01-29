@@ -20,6 +20,7 @@
 */
 #include "PageSearchThread.h"
 #include "BrowserPage.h"
+#include "SheetRenderer.h"
 
 #include <QRectF>
 
@@ -34,44 +35,55 @@ PageSearchThread::~PageSearchThread()
     this->wait();
 }
 
-void PageSearchThread::startSearch(const QList<BrowserPage *> pagelst, const QString &searchText, int startIndex)
+void PageSearchThread::startSearch(DocSheet *sheet, QString text)
 {
     stopSearch();
     m_quit = false;
-    m_startIndex = startIndex;
-    m_searchText = searchText;
-    m_pagelst = pagelst;
+    m_startIndex = 0;
+    m_sheet = sheet;
+    m_searchText = text;
     start();
 }
 
 void PageSearchThread::stopSearch()
 {
     m_quit = true;
-    m_pagelst.clear();
     this->wait();
+    m_sheet = nullptr;
 }
 
 void PageSearchThread::run()
 {
-    int size = m_pagelst.size();
+    if (nullptr == m_sheet)
+        return;
+
+    int size = m_sheet->pageCount();
+
     for (int index = 0; index < size; index++) {
         if (m_quit) return;
 
         SearchResult searchres;
-        int curIndex = (index + m_startIndex) % size;
-        BrowserPage *page = m_pagelst.at(curIndex);
-        searchres.page = page->itemIndex() + 1;
-        const QVector< QRectF > &textrectLst = page->search(m_searchText, false, false);
-        if (textrectLst.size() > 0)
-            page->setSearchHighlightRectf(textrectLst);
-        for (const QRectF &rec : textrectLst) {
-            if (m_quit) return;
+
+        searchres.page = index + 1;
+
+        searchres.rects = m_sheet->renderer()->search(index, m_searchText, false, false);
+
+        //高亮被搜索内容
+//        if (textrectLst.size() > 0)
+//            page->setSearchHighlightRectf(textrectLst);
+
+        //把搜索的范围中周边的文字取出用于左侧展示
+        for (const QRectF &rec : searchres.rects) {
+            if (m_quit)
+                return;
+
             //获取搜索结果附近文字
             QRectF rctext = rec;
             rctext.setX(rctext.x() - 40);
             rctext.setWidth(rctext.width() + 80);
 
-            const QString &text = page->text(rctext);
+            const QString &text = m_sheet->renderer()->getText(index, rctext);
+
             if (!text.isEmpty()) {
                 searchres.words << Word(text, rec);
             }

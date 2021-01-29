@@ -16,6 +16,7 @@
 #include "Application.h"
 #include "BrowserAnnotation.h"
 #include "BrowserMagniFier.h"
+#include "SheetRenderer.h"
 
 #undef private
 #undef protected
@@ -70,7 +71,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     //EXPECT_TRUE(sheet->m_browser->isUnLocked());  //暂时报错
 
-    sheet->m_browser->properties();
+    sheet->m_renderer->properties();
 
     sheet->m_browser->getClickAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0), false);
 
@@ -144,19 +145,17 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->needBookmark(0, 1);
 
-    sheet->m_browser->handleSearch();
+    sheet->m_browser->handleSearchStart();
 
-    sheet->m_browser->handleFindNext();
+    sheet->m_browser->jumpToNextSearchResult();
 
-    sheet->m_browser->handleFindPrev();
+    sheet->m_browser->jumpToPrevSearchResult();
 
-    sheet->m_browser->handleFindContent("aaaaaaaaaaaaaaaa");
-
-    sheet->m_browser->handleFindExit();
+    sheet->m_browser->handleSearchResultComming(deepin_reader::SearchResult());
 
     sheet->m_browser->handleFindFinished(123);
 
-    sheet->m_browser->stopSearch();
+    sheet->m_browser->handleSearchStop();
 
     sheet->m_browser->setDocTapGestrue(QPoint(0, 0));
 
@@ -172,17 +171,15 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->curpageChanged(0);
 
-    sheet->m_browser->outline();
+    sheet->m_renderer->outline();
 
-    sheet->m_browser->loadPageLable();
+    sheet->m_renderer->loadPageLable();
 
-    sheet->m_browser->pageLableIndex("1");
+    sheet->m_renderer->pageLableIndex("1");
 
-    sheet->m_browser->pageHasLable();
+    sheet->m_renderer->pageHasLable();
 
-    sheet->m_browser->pageSizeByIndex(0);
-
-    sheet->m_browser->pageNum2Lable(0);
+    sheet->m_renderer->pageNum2Lable(0);
 
     sheet->m_browser->setCurrentPage(0);
 
@@ -258,7 +255,7 @@ TEST_F(ut_browser, SheetBrowserTest)
     page->loadWords();
     page->setDrawMoveIconRect(true);
 
-    QList<Word> words = page->getWords();
+    QList<Word> words = sheet->renderer()->getWords(page->itemIndex());
     if (words.count() <= 0)
         GTEST_FAIL();
 
@@ -329,8 +326,7 @@ TEST_F(ut_browser, SheetBrowserTest)
     page->updateAnnotation(annotation, "test", QColor(Qt::red));
     page->setSelectIconRect(true, nullptr);
     page->deleteNowSelectIconAnnotation();
-    page->jump2Link(QPointF(0, 0));
-    page->inLink(QPointF(0, 0));
+    sheet->renderer()->inLink(page->itemIndex(), QPointF(0, 0));
     page->setPageBookMark(QPointF(0, 0));
     page->removeAnnotation(annotation);
     page->removeAllAnnotation();

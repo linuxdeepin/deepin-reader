@@ -99,10 +99,10 @@ TEST_F(ut_sidebar, SidebarTest)
     sideBar.setCurrentPage(0);
     sideBar.setCurrentPage(10000);
 
-    sideBar.handleFindOperation(E_FIND_CONTENT);
-    sideBar.handleFindOperation(E_FIND_EXIT);
+    sideBar.handleSearchStart("");
+    sideBar.handleSearchStop();
 
-    sideBar.handleFindContentComming(deepin_reader::SearchResult());
+    sideBar.handleSearchResultComming(deepin_reader::SearchResult());
     sideBar.handleFindFinished();
     sideBar.handleRotate();
     sideBar.changeResetModelData();
@@ -326,7 +326,7 @@ TEST_F(ut_sidebar, SidebarTest)
     searchWidget.addSearchsItem(-1, "test", -1);
     deepin_reader::SearchResult searchRes;
     searchRes.words << deepin_reader::Word();
-    searchWidget.handFindContentComming(searchRes);
+    searchWidget.handleSearchResultComming(searchRes);
     EXPECT_EQ(searchWidget.handleFindFinished(), 2);
 
     searchWidget.m_sheet = nullptr;
