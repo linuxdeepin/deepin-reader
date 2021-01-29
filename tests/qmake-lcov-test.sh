@@ -10,16 +10,12 @@ result_coverage_dir=$build_dir/coverage
 
 result_report_dir=$build_dir/report/report.xml
 
-#下面是覆盖率目录操作，一种正向操作，一种逆向操作
+#下面是覆盖率目录操作，采用正向操作，
 extract_info="*/reader/*"  #针对当前目录进行覆盖率操作
-
-remove_info="*/test/*" #排除当前目录进行覆盖率操作
 
 $build_dir/$executable --gtest_output=xml:$result_report_dir
 
 lcov -d $build_dir -c -o $build_dir/coverage.info
-
-lcov --remove $build_dir/coverage.info $remove_info --output-file $build_dir/coverage.info
 
 lcov --extract $build_dir/coverage.info $extract_info --output-file  $build_dir/coverage.info
 
