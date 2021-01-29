@@ -46,10 +46,13 @@ void Ut_MainWindow::TearDown()
 TEST_F(Ut_MainWindow, MainWindowTest)
 {
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "MainWindowTest"), nullptr);
+    DocSheet *sheet2 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_2, "MainWindowTest"), nullptr);
 
     MainWindow *mainWindow = MainWindow::createWindow(sheet);
     MainWindow *mainWindow_empty = MainWindow::createWindow();
-    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << filePath(UT_FILE_PDF, "MainWindowTest") << filePath(UT_FILE_DJVU, "MainWindowTest"));
+    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_1, "MainWindowTest") << filePath(UT_FILE_DJVU, "MainWindowTest"));
+    mainWindow_muti->addSheet(sheet2);
+    mainWindow_muti->addFile(filePath(UT_FILE_TEST_FILE_3, "MainWindowTest"));
 
     EXPECT_EQ(mainWindow_empty->hasSheet(nullptr), false);
     EXPECT_EQ(mainWindow_muti->hasSheet(sheet), false);
@@ -58,6 +61,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
     EXPECT_TRUE(mainWindow->windowContainSheet(sheet));
 
+    mainWindow->onShortCut(Dr::key_ctrl_shift_slash);
     mainWindow->showDefaultSize();
     mainWindow->hasSheet(nullptr);
     mainWindow->activateSheetIfExist(filePath(UT_FILE_PDF, "MainWindowTest"));
@@ -67,10 +71,13 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->onMainWindowFull();
     mainWindow->onMainWindowExitFull();
     mainWindow->resizeFullTitleWidget();
-    mainWindow->setLoading(false);
     mainWindow_muti->closeWithoutSave();
     mainWindow->closeWithoutSave();
     mainWindow_empty->closeWithoutSave();
     mainWindow->onUpdateTitleLabelRect();
+
+    delete mainWindow;
+    delete mainWindow_empty;
+    delete mainWindow_muti;
     exec();
 }

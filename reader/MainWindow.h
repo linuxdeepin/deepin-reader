@@ -40,7 +40,6 @@ class MainWindow : public Dtk::Widget::DMainWindow
     Q_OBJECT
     Q_DISABLE_COPY(MainWindow)
     Q_PROPERTY(QList<QWidget *> orderWidgets WRITE updateOrderWidgets)
-    Q_PROPERTY(bool loading WRITE setLoading)
 
 public:
     /**
@@ -106,12 +105,6 @@ public:
      * @param orderlst
      */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
-
-    /**
-     * @brief setLoading
-     * @param loading
-     */
-    void setLoading(bool loading);
 
 public:
     /**
@@ -202,8 +195,6 @@ public:
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
     QTimer *m_showMenuTimer = nullptr;
-
-    bool m_loading = false;  //当前正在是否加载 正在加载时不可关闭
 };
 
 #endif // MainWindow_H

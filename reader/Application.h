@@ -49,9 +49,6 @@ protected:
      * 通过菜单选项关闭所有
      */
     void handleQuitAction() override;
-
-    bool notify(QObject *object, QEvent *event) override;
-
 };
 
 #endif  // APPLICATION_H_

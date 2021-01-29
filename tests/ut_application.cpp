@@ -86,5 +86,13 @@ QString ut_application::filePath(QString fileName, QString dirName)
 
 TEST_F(ut_application, ApplicationTest)
 {
+    a->emitSheetChanged();
+
+    a->sigShowAnnotTextWidget();
+
+    a->sigSetPasswdFocus();
+
+    a->handleQuitAction();
+
     exec();
 }

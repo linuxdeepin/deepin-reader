@@ -474,11 +474,3 @@ void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
         QWidget::setTabOrder(orderlst.at(i), orderlst.at(i + 1));
     }
 }
-
-void MainWindow::setLoading(bool loading)
-{
-    m_loading = loading;
-    if (this->property("windowClosed").toBool()) {
-        this->close();
-    }
-}

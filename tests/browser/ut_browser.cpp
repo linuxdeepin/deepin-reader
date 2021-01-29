@@ -198,7 +198,9 @@ TEST_F(ut_browser, SheetBrowserTest)
     sheet->m_browser->currentScrollValueForPage();
 
     int fromIndex = 0;
+
     int toIndex = 1;
+
     sheet->m_browser->currentIndexRange(fromIndex, toIndex);
 
     sheet->m_browser->selectedWordsText();

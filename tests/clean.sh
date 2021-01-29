@@ -1,5 +1,7 @@
 #!/bin/bash
 
+make clean
+
 rm *.gcno -r
 
 rm *.gcda -r
