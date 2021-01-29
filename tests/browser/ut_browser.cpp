@@ -31,7 +31,6 @@
 
 ut_browser::ut_browser()
 {
-
 }
 
 void ut_browser::SetUp()
@@ -41,10 +40,8 @@ void ut_browser::SetUp()
 
 void ut_browser::TearDown()
 {
-
 }
 
-#ifdef UT_BROWSER_TEST
 TEST_F(ut_browser, SheetBrowserTest)
 {
     MainWindow *window = MainWindow::createWindow();
@@ -79,7 +76,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->moveIconAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0));
 
-    QRectF iconRect =  QRectF(0, 0, 1, 1.0);
+    QRectF iconRect = QRectF(0, 0, 1, 1.0);
 
     sheet->m_browser->calcIconAnnotRect(sheet->m_browser->m_items.at(0), QPointF(0, 0), iconRect);
 
@@ -249,7 +246,7 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     //BrowserPage
     BrowserPage *page = sheet->m_browser->m_items.at(0);
-    if (nullptr == page)      //暂时报错
+    if (nullptr == page) //暂时报错
         GTEST_FAIL();
 
     page->bookmarkMouseRect();
@@ -345,4 +342,3 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     exec();
 }
-#endif

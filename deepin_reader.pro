@@ -6,5 +6,5 @@ SUBDIRS += 3rdparty/deepin-pdfium
 
 SUBDIRS += reader
 
-SUBDIRS += test
+SUBDIRS += tests
 

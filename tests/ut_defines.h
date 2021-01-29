@@ -19,7 +19,7 @@
 
 #define UT_FILE_TXT "normal.txt"
 
-#define UT_FILE_COPYTXT "copy.txt"      //不存在
+#define UT_FILE_COPYTXT "copy.txt" //不存在
 
 #define UT_FILE_PNG "normal.png"
 
@@ -52,21 +52,5 @@
 #define UT_FILE_PPTX "normal.pptx"
 
 #define UT_FILE_NONE "none"
-
-#define UT_APP_TEST
-
-#define UT_APPLICATION_TEST
-
-#define UT_DOCUMENT_TEST
-
-#define UT_WIDGETS_TEST
-
-#define UT_UIFRAME_TEST
-
-#define UT_MAINWINDOW_TEST
-
-#define UT_SHEETSIDEBAR_TEST
-
-#define UT_BROWSER_TEST
 
 #endif // UT_DEFINES_TEST_H

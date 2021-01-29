@@ -57,7 +57,6 @@ void Ut_UiFrame::TearDown()
 {
 }
 
-#ifdef UT_UIFRAME_TEST
 TEST_F(Ut_UiFrame, UiFrameTest)
 {
     MainWindow *mainWindow1 = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_1, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_2, "UiFrameTest") << filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
@@ -202,7 +201,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->showSheet(nullptr);
     CentralDocPage1->showSheet(sheet);
     //CentralDocPage1->openFile(filePath(UT_FILE_PDF, "UiFrameTest"));   //崩溃
-    CentralDocPage1->openCurFileFolder();     //打开文件夹
+    CentralDocPage1->openCurFileFolder(); //打开文件夹
     //CentralDocPage1->saveAll();               //卡住
 
     sheet->openSlide();
@@ -457,4 +456,3 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     exec();
 }
-#endif

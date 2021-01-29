@@ -70,7 +70,6 @@ void Ut_Widgets::TearDown()
 {
 }
 
-#ifdef UT_WIDGETS_TEST
 TEST_F(Ut_Widgets, SheetWidgetTest)
 {
     QString path = filePath(UT_FILE_TEST_FILE_1, "SheetWidgetTest");
@@ -125,7 +124,6 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
     {
         class ImageWidget : public DWidget
         {
-
         };
 
         FileAttrWidget *filewidget = new FileAttrWidget();
@@ -203,7 +201,7 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
         scaleWidget.onNextScale();
         scaleWidget.onReturnPressed();
         scaleWidget.onEditFinished();
-//        scaleWidget.onArrowBtnlicked();       //会等待
+        //        scaleWidget.onArrowBtnlicked();       //会等待
 
         scaleWidget.setSheet(sheet);
         scaleWidget.clear();
@@ -273,10 +271,10 @@ TEST_F(Ut_Widgets, EncryptionPageTest)
 
 TEST_F(Ut_Widgets, SaveDialogTest)
 {
-//    a->exec();
+    //    a->exec();
     SaveDialog saveDialog;
-//    saveDialog.showTipDialog("1111111");
-//    saveDialog.showExitDialog();
+    //    saveDialog.showTipDialog("1111111");
+    //    saveDialog.showExitDialog();
 }
 
 TEST_F(Ut_Widgets, RoundColorWidgetTest)
@@ -370,4 +368,3 @@ TEST_F(Ut_Widgets, WordWrapLabelTest)
     QPaintEvent paintevent(QRect(0, 0, 100, 100));
     wordLabel.paintEvent(&paintevent);
 }
-#endif

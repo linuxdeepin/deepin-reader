@@ -30,7 +30,6 @@
 #undef private
 #undef protected
 
-
 #include <DApplicationSettings>
 #include <DLog>
 #include <QDebug>
@@ -38,12 +37,10 @@
 
 ut_application::ut_application()
 {
-
 }
 
 ut_application::~ut_application()
 {
-
 }
 
 void ut_application::SetUp()
@@ -87,9 +84,7 @@ QString ut_application::filePath(QString fileName, QString dirName)
     return filePath;
 }
 
-#ifdef UT_APPLICATION_TEST
 TEST_F(ut_application, ApplicationTest)
 {
     exec();
 }
-#endif

@@ -26,7 +26,7 @@ TEMPLATE = app
 SOURCES += \
     sidebar/ut_sheetsidebar.cpp \
     uiframe/ut_uiframe.cpp \
-    ut_main.cpp \
+    main.cpp \
     ut_mainwindow.cpp \
     widgets/ut_widgets.cpp \
     app/ut_app.cpp \

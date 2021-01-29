@@ -43,7 +43,6 @@ void Ut_MainWindow::TearDown()
 {
 }
 
-#ifdef UT_MAINWINDOW_TEST
 TEST_F(Ut_MainWindow, MainWindowTest)
 {
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "MainWindowTest"), nullptr);
@@ -75,4 +74,3 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->onUpdateTitleLabelRect();
     exec();
 }
-#endif

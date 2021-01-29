@@ -41,7 +41,6 @@ ut_document::ut_document()
 
 ut_document::~ut_document()
 {
-
 }
 
 void ut_document::SetUp()
@@ -51,10 +50,8 @@ void ut_document::SetUp()
 
 void ut_document::TearDown()
 {
-
 }
 
-#ifdef UT_DOCUMENT_TEST
 TEST_F(ut_document, DJVUTest)
 {
     deepin_reader::Document *doc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU, "DJVUTest"));
@@ -144,10 +141,9 @@ TEST_F(ut_document, PDFTest)
         page->formFields();
         page->words();
 
-        QList< deepin_reader::Annotation * > annots = page->annotations();
+        QList<deepin_reader::Annotation *> annots = page->annotations();
         deepin_reader::Annotation *annot = annots.value(0);
-        if (nullptr != annot)
-        {
+        if (nullptr != annot) {
             annot->ownAnnotation();
             annot->contents();
             annot->boundary();
@@ -179,9 +175,7 @@ TEST_F(ut_document, PDFTest)
 
     delete saveDoc;
 
-    a->handleQuitAction();      //次数需要最后一个case调用，提前调用会导致线程永久性关闭
+    a->handleQuitAction(); //次数需要最后一个case调用，提前调用会导致线程永久性关闭
 
     exec();
 }
-
-#endif

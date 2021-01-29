@@ -20,7 +20,6 @@
 
 ut_app::ut_app()
 {
-
 }
 
 void ut_app::SetUp()
@@ -32,7 +31,6 @@ void ut_app::TearDown()
 {
 }
 
-#ifdef UT_APP_TEST
 TEST_F(ut_app, DatabaseTest)
 {
     Database *db = new Database;
@@ -128,4 +126,3 @@ TEST_F(ut_app, UtilsTest)
     EXPECT_EQ(Utils::getHiglightColorList().size(), 8);
     EXPECT_EQ(Utils::isWayland(), false);
 }
-#endif

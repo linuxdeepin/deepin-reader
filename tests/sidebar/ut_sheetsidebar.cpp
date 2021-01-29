@@ -63,7 +63,6 @@ void ut_sidebar::TearDown()
 {
 }
 
-#ifdef UT_SHEETSIDEBAR_TEST
 TEST_F(ut_sidebar, SidebarTest)
 {
     QString path = filePath(UT_FILE_TEST_FILE_1, "SidebarTest");
@@ -78,7 +77,6 @@ TEST_F(ut_sidebar, SidebarTest)
 
     DocSheet *sheet = docpage->getSheet(path);
     ASSERT_TRUE(sheet);
-
 
     sheet->setSidebarVisible(true);
     sheet->m_sidebar->onBtnClicked(2);
@@ -406,4 +404,3 @@ TEST_F(ut_sidebar, TextEditWidgetTest)
 
     exec();
 }
-#endif
