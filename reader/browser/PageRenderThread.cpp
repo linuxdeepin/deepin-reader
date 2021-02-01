@@ -628,8 +628,6 @@ bool PageRenderThread::execNextDocOpenTask()
 
     PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 
-    //转换...
-
     deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(fileType, filePath, password);
 
     if (nullptr == document) {//打开失败

@@ -17,21 +17,24 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     else if (Dr::DOCX == fileType) {
         //以下后期挪到一个转化对话框中，实时打印输出
         QTemporaryDir dir;
-        QProcess p;
         QString targetDoc = dir.path() + "/temp.docx";
         QString targetPdf = dir.path() + "/temp.pdf";
+
         QFile file(filePath);
         file.copy(targetDoc);
-        p.setWorkingDirectory(dir.path());
-        p.start("unzip " + targetDoc + " \"word/media/*\" ");
-        p.waitForStarted();
-        p.waitForFinished();
-        p.setWorkingDirectory(dir.path() + "/word");
-        p.start("pandoc " +  targetDoc + " -o " + targetPdf + " --pdf-engine=wkhtmltopdf -V CJKmainfont=\"Noto Sans CJK JP - Bold\"");
-        p.waitForStarted();
-        p.waitForFinished();
-        p.terminate();
-        p.close();
+
+        QProcess Decompressor;
+        Decompressor.setWorkingDirectory(dir.path());
+        Decompressor.start("unzip " + targetDoc);
+        Decompressor.waitForStarted();
+        Decompressor.waitForFinished();
+
+        QProcess converter;
+        converter.setWorkingDirectory(dir.path() + "/word");
+        converter.start("pandoc " +  targetDoc + " -o " + targetPdf + " --pdf-engine=wkhtmltopdf -V CJKmainfont=\"Noto Sans CJK JP - Bold\"");
+        converter.waitForStarted();
+        converter.waitForFinished();
+
         document = deepin_reader::PDFDocument::loadDocument(targetPdf, password);
     }
 
