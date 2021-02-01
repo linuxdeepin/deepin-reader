@@ -574,7 +574,7 @@ void CentralDocPage::quitMagnifer()
 void CentralDocPage::openSlide()
 {
     DocSheet *docSheet = getCurSheet();
-    if (docSheet && docSheet->isUnLocked() && m_slideWidget == nullptr) {
+    if (docSheet && docSheet->opened() && m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(getCurSheet());
     }
 }

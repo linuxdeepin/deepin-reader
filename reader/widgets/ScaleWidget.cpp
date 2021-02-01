@@ -127,7 +127,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     m_sheet = sheet;
     if (nullptr == sheet)
         return;
-    else if (!sheet->isUnLocked()) {
+    else if (!sheet->opened()) {
         clear();
         return;
     }

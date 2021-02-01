@@ -855,6 +855,8 @@ void DocSheet::onOpened(bool result, QString error)
         m_sidebar->handleOpenSuccess();
 
         emit sigOperationChanged(this);
+
+        emit sigFileChanged(this);
     }
 
     emit sigFileOpened(this, result, error);
@@ -1120,9 +1122,9 @@ bool DocSheet::needPassword()
     return false;
 }
 
-bool DocSheet::isUnLocked()
+bool DocSheet::opened()
 {
-    return !m_renderer->opened();
+    return m_renderer->opened();
 }
 
 int DocSheet::getIndexByPageLable(const QString &pageLable)

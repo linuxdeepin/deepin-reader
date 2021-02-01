@@ -608,11 +608,11 @@ public:
     bool needPassword();
 
     /**
-     * @brief isUnLocked
-     * 获取是否被加锁
+     * @brief opened
+     * 获取是否被打开
      * @return
      */
-    bool isUnLocked();
+    bool opened();
 
     /**
      * @brief getPageLableIndex

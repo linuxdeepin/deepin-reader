@@ -365,7 +365,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->closeFullScreen();
 
     EXPECT_FALSE(sheet->needPassword());
-    sheet->isUnLocked();
+    sheet->opened();
 
     sheet->jumpToOutline(0, 0, 0);
     sheet->jumpToOutline(0, 0, -1);
@@ -418,7 +418,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->showEncryPage();
     sheet->tryPassword("");
     sheet->needPassword();
-    sheet->isUnLocked();
     sheet->operationRef();
     sheet->showTips("test", 0);
     sheet->onSearchResultComming(deepin_reader::SearchResult());

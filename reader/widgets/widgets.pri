@@ -17,7 +17,8 @@ HEADERS += \
     $$PWD/RoundColorWidget.h \
     $$PWD/TransparentTextEdit.h \
     $$PWD/TextEditWidget.h \
-    $$PWD/PagingWidget.h
+    $$PWD/PagingWidget.h \
+    $$PWD/ProgressDialog.h
 
 SOURCES += \
     $$PWD/AttrScrollWidget.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     $$PWD/RoundColorWidget.cpp \
     $$PWD/TransparentTextEdit.cpp \
     $$PWD/TextEditWidget.cpp \
-    $$PWD/PagingWidget.cpp
+    $$PWD/PagingWidget.cpp \
+    $$PWD/ProgressDialog.cpp
 
 INCLUDEPATH += $$PWD

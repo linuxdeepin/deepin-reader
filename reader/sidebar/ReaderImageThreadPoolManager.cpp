@@ -40,7 +40,7 @@ void ReadImageTask::setThreadPoolManager(QObject *object)
 void ReadImageTask::run()
 {
     DocSheet *sheet = m_docParam.sheet;
-    if (!DocSheet::getUuid(sheet).isNull() && sheet->isUnLocked()) {
+    if (!DocSheet::getUuid(sheet).isNull() && sheet->opened()) {
         int totalPage = sheet->pageCount();
 
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);

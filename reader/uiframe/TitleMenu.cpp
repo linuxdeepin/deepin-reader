@@ -68,7 +68,7 @@ TitleMenu::TitleMenu(DWidget *parent)
 
 void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 {
-    if (nullptr == sheet || !sheet->isUnLocked()) {
+    if (nullptr == sheet || !sheet->opened()) {
         disableAllAction();
         return;
     }

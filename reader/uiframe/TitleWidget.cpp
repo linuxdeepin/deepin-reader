@@ -118,7 +118,7 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         return;
 
     } else if (Dr::PDF == m_curSheet->fileType()) {
-        if (m_curSheet->isUnLocked()) {
+        if (m_curSheet->opened()) {
             setBtnDisable(false);
             m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
         } else {
