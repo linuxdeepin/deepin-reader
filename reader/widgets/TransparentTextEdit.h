@@ -48,13 +48,6 @@ signals:
      */
     void sigNeedShowTips(const QString &tips, int);
 
-private:
-    /**
-     * @brief init
-     * 初始化
-     */
-    void init();
-
 private slots:
     /**
      * @brief slotTextEditMaxContantNum
