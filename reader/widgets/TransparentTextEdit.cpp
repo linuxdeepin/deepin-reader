@@ -36,21 +36,23 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
 {
     this->setObjectName("TransparentTextEdit");
 
-    init();
-}
-
-void TransparentTextEdit::init()
-{
     this->setAcceptRichText(false);
+
     this->setWordWrapMode(QTextOption::WrapAnywhere);
+
     this->setViewportMargins(0, 0, 10, 0);
+
     // background color
     QPalette pText = this->palette();
+
     pText.setColor(QPalette::Base, QColor(255, 251, 225, 0));
+
     pText.setColor(QPalette::Text, QColor(0, 0, 0));
+
     this->setPalette(pText);
 
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T8);
+
     this->setFrameStyle(QFrame::NoFrame);
 
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -63,13 +65,20 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
     QString textContent = this->toPlainText();
 
     int length = textContent.count();
+
     if (length > m_nMaxContantLen) {
         int position = this->textCursor().position();
+
         QTextCursor textCursor = this->textCursor();
+
         textContent.remove(position - (length - m_nMaxContantLen), length - m_nMaxContantLen);
+
         this->setText(textContent);
+
         textCursor.setPosition(position - (length - m_nMaxContantLen));
+
         this->setTextCursor(textCursor);
+
         sigNeedShowTips(tr("Input limit reached"), 1);
     }
 }
@@ -77,28 +86,46 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
 void TransparentTextEdit::paintEvent(QPaintEvent *event)
 {
     QTextEdit::paintEvent(event);
+
     QPainter painter(this->viewport());
+
     painter.setRenderHints(QPainter::Antialiasing);
+
     int maxLineHeight = 2;
+
     int totalheight = this->viewport()->height() - maxLineHeight;
-    const QFontMetricsF &fontmetricsf = QFontMetricsF(this->document()->defaultFont());
+
+    const QFontMetricsF &fontmetricsf = QFontMetricsF(this->font());
+
     qreal lineheight = fontmetricsf.height();
+
     painter.setBrush(Qt::NoBrush);
+
     QPen pen(QColor(219, 189, 119), maxLineHeight);
+
     painter.setPen(pen);
+
     int startLine = static_cast<int>(this->document()->documentMargin() - this->verticalScrollBar()->value());
+
     painter.drawLine(2, startLine, this->viewport()->width() - 4, startLine);
+
     pen.setWidth(1);
+
     painter.setPen(pen);
+
     qreal curh;
+
     for (curh = startLine + lineheight; curh <= totalheight; curh += lineheight) {
         painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
     }
 
     if (this->verticalScrollBar()->maximum() - this->verticalScrollBar()->value() < maxLineHeight) {
         pen.setWidth(maxLineHeight);
+
         painter.setPen(pen);
+
         curh -= lineheight;
+
         painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
     }
 }

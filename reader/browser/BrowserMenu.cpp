@@ -39,7 +39,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Copy"), "CopyAnnoText");
         this->addSeparator();
 
-        if (sheet->fileType() == Dr::FileType::PDF) {
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
             createAction(tr("Remove annotation"), "RemoveAnnotation");
             createAction(tr("Add annotation"), "AddAnnotationIcon");
         }
@@ -65,7 +65,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
         this->addAction(m_pColorWidgetAction);
 
-        if (sheet->fileType() == Dr::FileType::PDF) {
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
             QAction *rmHighAct = createAction(tr("Remove highlight"), "RemoveHighlight");
             rmHighAct->setDisabled(true);
             if (type == DOC_MENU_ANNO_HIGHLIGHT) rmHighAct->setDisabled(false);
@@ -122,7 +122,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
             createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     } else {
-        if (sheet->fileType() == Dr::FileType::PDF) {
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
             createAction(tr("Search"), "Search");
             this->addSeparator();
         }
@@ -132,7 +132,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         else
             createAction(tr("Add bookmark"), "AddBookmark");
 
-        if (sheet->fileType() == Dr::FileType::PDF) {
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
             createAction(tr("Add annotation"), "AddAnnotationIcon");
         }
 

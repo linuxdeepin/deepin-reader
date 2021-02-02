@@ -398,6 +398,11 @@ bool CentralDocPage::saveCurrent()
     if (nullptr == sheet)
         return false;
 
+    //docx的保存将会当做另存为处理
+    if (Dr::DOCX == sheet->fileType()) {
+        return saveAsCurrent();
+    }
+
     if (!sheet->fileChanged()) {
         return false;
     }
@@ -423,7 +428,7 @@ bool CentralDocPage::saveAsCurrent()
 
     QString saveFilePath = DFileDialog::getSaveFileName(this, tr("Save as"), sheet->filePath(), sheet->filter());
 
-    if (Dr::PDF == sheet->fileType()) {
+    if (Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()) {
         if (saveFilePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Invalid file name"));
             dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
@@ -611,7 +616,7 @@ bool CentralDocPage::isFullScreen()
 
 void CentralDocPage::openFullScreen()
 {
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
         return;

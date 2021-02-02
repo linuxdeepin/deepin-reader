@@ -79,6 +79,8 @@ DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     else if (Dr::DJVU == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
+    else if (Dr::DOCX == fileType)
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     else
         m_sidebar = new SheetSidebar(this, nullptr);
 
@@ -516,7 +518,7 @@ void DocSheet::copySelectedText()
 
 void DocSheet::highlightSelectedText()
 {
-    if (!m_browser || fileType() != Dr::FileType::PDF)
+    if (!m_browser || (fileType() != Dr::FileType::PDF && fileType() != Dr::FileType::DOCX))
         return;
 
     if (m_browser->selectedWordsText().isEmpty()) {
@@ -531,7 +533,7 @@ void DocSheet::highlightSelectedText()
 
 void DocSheet::addSelectedTextHightlightAnnotation()
 {
-    if (!m_browser || fileType() != Dr::FileType::PDF)
+    if (!m_browser || (fileType() != Dr::FileType::PDF && fileType() != Dr::FileType::DOCX))
         return;
 
     if (m_browser->selectedWordsText().isEmpty()) {
@@ -626,6 +628,8 @@ QString DocSheet::filter()
 {
     if (Dr::PDF == m_fileType)
         return  "Pdf File (*.pdf)";
+    else if (Dr::DOCX == m_fileType)
+        return  "Pdf File (*.pdf)";
     else if (Dr::DJVU == m_fileType)
         return "Djvu files (*.djvu)";
 
@@ -635,6 +639,9 @@ QString DocSheet::filter()
 QString DocSheet::format()
 {
     if (Dr::PDF == m_fileType) {
+        const Properties &propertys = m_renderer->properties();
+        return QString("PDF %1").arg(propertys.value("Version").toString());
+    } else if (Dr::DOCX == m_fileType) {//暂时作为pdf处理
         const Properties &propertys = m_renderer->properties();
         return QString("PDF %1").arg(propertys.value("Version").toString());
     } else if (Dr::DJVU == m_fileType) {
@@ -1140,12 +1147,14 @@ QString DocSheet::getPageLabelByIndex(const int &index)
 bool DocSheet::tryPassword(QString password)
 {
     int status = -1;
+
     if (Dr::PDF == m_fileType)
         status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), password);
 
     if (status == deepin_reader::Document::SUCCESS) {
         return true;
     }
+
     return false;
 }
 

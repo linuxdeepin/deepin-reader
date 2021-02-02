@@ -117,7 +117,7 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
         setBtnDisable(true);
         return;
 
-    } else if (Dr::PDF == m_curSheet->fileType()) {
+    } else if (Dr::PDF == m_curSheet->fileType() || Dr::DOCX == m_curSheet->fileType()) {
         if (m_curSheet->opened()) {
             setBtnDisable(false);
             m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);

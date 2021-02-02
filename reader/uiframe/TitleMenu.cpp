@@ -84,7 +84,7 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 
     QAction *searchAction = this->findChild<QAction *>("Search");
     if (searchAction) {
-        if (sheet->fileType() == Dr::PDF)
+        if (sheet->fileType() == Dr::PDF || sheet->fileType() == Dr::DOCX)
             searchAction->setVisible(true);
         else
             searchAction->setVisible(false);

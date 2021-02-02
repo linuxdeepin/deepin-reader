@@ -133,10 +133,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
-    if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath, QString());
-    else if (Dr::DJVU == fileType)
-        document = deepin_reader::DjVuDocument::loadDocument(filePath);
+    document = DocumentFactory::getDocument(fileType, filePath, "");
 
     if (nullptr == document)
         return QImage();
@@ -1577,7 +1574,7 @@ void SheetBrowser::showEvent(QShowEvent *event)
 void SheetBrowser::handlePrepareSearch()
 {
     //目前只有PDF开放搜索功能
-    if (m_sheet->fileType() != Dr::FileType::PDF)
+    if (m_sheet->fileType() != Dr::FileType::PDF || m_sheet->fileType() == Dr::FileType::DOCX)
         return;
 
     if (m_findWidget == nullptr) {

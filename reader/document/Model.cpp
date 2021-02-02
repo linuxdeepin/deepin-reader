@@ -15,7 +15,6 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     else if (Dr::DJVU == fileType)
         document = deepin_reader::DjVuDocument::loadDocument(filePath);
     else if (Dr::DOCX == fileType) {
-        //以下后期挪到一个转化对话框中，实时打印输出
         QTemporaryDir dir;
         QString targetDoc = dir.path() + "/temp.docx";
         QString targetPdf = dir.path() + "/temp.pdf";
@@ -23,6 +22,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QFile file(filePath);
         file.copy(targetDoc);
 
+        //解压的目的是为了让资源文件可以被转换的时候使用到，防止转换后丢失图片等媒体信息
         QProcess Decompressor;
         Decompressor.setWorkingDirectory(dir.path());
         Decompressor.start("unzip " + targetDoc);
