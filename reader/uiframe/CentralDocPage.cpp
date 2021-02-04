@@ -606,7 +606,7 @@ void CentralDocPage::prepareSearch()
 
 bool CentralDocPage::isFullScreen()
 {
-    DMainWindow *mainWindow = static_cast<DMainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
         return false;
@@ -631,7 +631,7 @@ void CentralDocPage::openFullScreen()
 
 bool CentralDocPage::quitFullScreen(bool force)
 {
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
         return false;
