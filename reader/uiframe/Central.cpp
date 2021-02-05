@@ -104,20 +104,6 @@ void Central::setUpValue(int value)
     m_mainWidget->resize(this->size());
 }
 
-void Central::zoomIn()
-{
-    if (m_docPage) {
-        m_docPage->zoomIn();
-    }
-}
-
-void Central::zoomOut()
-{
-    if (m_docPage) {
-        m_docPage->zoomOut();
-    }
-}
-
 void Central::addFilesWithDialog()
 {
     DFileDialog dialog(this);
@@ -253,10 +239,14 @@ void Central::onTouchPadEvent(QString name, QString direction, int fingers)
         if (name == "pinch" && fingers == 2) {
             if (direction == "in") {
                 // 捏合 in是手指捏合的方向 向内缩小
-                zoomOut();
+                if (m_docPage) {
+                    m_docPage->zoomOut();
+                }
             } else if (direction == "out") {
                 // 捏合 out是手指捏合的方向 向外放大
-                zoomIn();
+                if (m_docPage) {
+                    m_docPage->zoomIn();
+                }
             }
         }
     }

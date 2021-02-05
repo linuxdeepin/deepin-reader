@@ -156,8 +156,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->hasSheet(nullptr);
     mainWindow1->m_central->showSheet(nullptr);
     mainWindow1->m_central->handleShortcut(Dr::key_esc);
-    mainWindow1->m_central->zoomIn();
-    mainWindow1->m_central->zoomOut();
     mainWindow1->m_central->onSheetCountChanged(0);
     mainWindow1->m_central->onSheetCountChanged(1);
     mainWindow1->m_central->onMenuTriggered("Save");

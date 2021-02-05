@@ -73,18 +73,6 @@ public:
     void addSheet(DocSheet *sheet);
 
     /**
-     * @brief zoomIn
-     * 文档放大
-     */
-    void zoomIn();
-
-    /**
-     * @brief zoomOut
-     * 文档缩小
-     */
-    void zoomOut();
-
-    /**
      * @brief hasSheet
      * 本窗口是否含有该文档页
      * @param sheet
