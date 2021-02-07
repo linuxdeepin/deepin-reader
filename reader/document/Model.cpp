@@ -1,20 +1,23 @@
 #include "Model.h"
 #include "PDFModel.h"
 #include "DjVuModel.h"
+#include "dpdfannot.h"
+#include "dpdfpage.h"
+#include "dpdfdoc.h"
 
 #include <QTemporaryDir>
 #include <QProcess>
 
 namespace deepin_reader {
-deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &fileType, const QString &filePath, const QString &password)
+deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &fileType, const QString &filePath, const QString &password, deepin_reader::Document::Error &error)
 {
     deepin_reader::Document *document = nullptr;
 
-    if (Dr::PDF == fileType)
-        document = deepin_reader::PDFDocument::loadDocument(filePath, password);
-    else if (Dr::DJVU == fileType)
-        document = deepin_reader::DjVuDocument::loadDocument(filePath);
-    else if (Dr::DOCX == fileType) {
+    if (Dr::PDF == fileType) {
+        document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
+    } else if (Dr::DJVU == fileType) {
+        document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
+    } else if (Dr::DOCX == fileType) {
         QTemporaryDir dir;
         QString targetDoc = dir.path() + "/temp.docx";
         QString targetPdf = dir.path() + "/temp.pdf";
@@ -35,7 +38,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter.waitForStarted();
         converter.waitForFinished();
 
-        document = deepin_reader::PDFDocument::loadDocument(targetPdf, password);
+        document = deepin_reader::PDFDocument::loadDocument(targetPdf, password, error);
     }
 
     return document;

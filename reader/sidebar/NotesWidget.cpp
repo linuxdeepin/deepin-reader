@@ -217,10 +217,6 @@ void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotati
     }
 }
 
-/**
- * @brief NotesWidget::addBtnCheckEnter
- * 添加注释响应回车事件
- */
 bool NotesWidget::addBtnCheckEnter()
 {
     if (m_pAddAnnotationBtn && m_pAddAnnotationBtn->hasFocus()) {

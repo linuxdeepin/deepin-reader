@@ -161,10 +161,6 @@ void BookMarkWidget::handleBookMark(int index, int state)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
 
-/**
- * @brief BookMarkWidget::addBtnCheckEnter
- * 添加书签响应回车事件
- */
 bool BookMarkWidget::addBtnCheckEnter()
 {
     if (m_pAddBookMarkBtn && m_pAddBookMarkBtn->hasFocus()) {

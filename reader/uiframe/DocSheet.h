@@ -144,7 +144,7 @@ public:
      * @brief 阻塞式打开文档
      * @param password
      */
-    bool openFileExec(const QString &password, QString &error);
+    bool openFileExec(const QString &password);
 
     /**
      * @brief 异步式打开文档，完成后会发出sigFileOpened
@@ -474,12 +474,6 @@ public:
     QString filePath();
 
     /**
-     * @brief 用户输入的password
-     * @return
-     */
-    QString password();
-
-    /**
      * @brief hasBookMark
      * 查看是否含有对应页书签
      * @return
@@ -595,19 +589,6 @@ public:
     void showEncryPage();
 
     /**
-     * @brief 尝试密码是否正确
-     * @param password 密码
-     * @return
-     */
-    bool tryPassword(QString password);
-
-    /**
-     * @brief 获取是否需要密码
-     * @return
-     */
-    bool needPassword();
-
-    /**
      * @brief opened
      * 获取是否被打开
      * @return
@@ -710,7 +691,7 @@ private slots:
 
     void onSideAniFinished();
 
-    void onOpened(bool result, QString error);
+    void onOpened(deepin_reader::Document::Error error);
 
 public:
     /**
@@ -746,7 +727,7 @@ signals:
      * @param result 结果
      * @param error 错误
      */
-    void sigFileOpened(DocSheet *sheet, bool result, QString error);
+    void sigFileOpened(DocSheet *sheet, deepin_reader::Document::Error error);
 
     /**
      * @brief sigFileChanged

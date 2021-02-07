@@ -140,9 +140,7 @@ public:
 
     Properties properties() const override;
 
-    static PDFDocument *loadDocument(const QString &filePath, const QString &password);
-
-    static int tryLoadDocument(const QString &filePath, const QString &password);
+    static PDFDocument *loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error);
 
 private:
     DPdfDoc *m_document = nullptr;

@@ -51,11 +51,9 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     window->show();
 
-    QString error;
-
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetBrowserTest"));
 
-    ASSERT_TRUE(sheet->openFileExec("", error));
+    ASSERT_TRUE(sheet->openFileExec(""));
 
     window->addSheet(sheet);
 

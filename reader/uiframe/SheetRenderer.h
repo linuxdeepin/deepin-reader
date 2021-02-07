@@ -6,6 +6,10 @@
 #include "DocSheet.h"
 #include "Model.h"
 
+/**
+ * @brief The SheetRenderer class
+ * 用于加载文档
+ */
 class SheetRenderer : public QObject
 {
     Q_OBJECT
@@ -19,7 +23,7 @@ public:
      * 阻塞式打开文档
      * @param password
      */
-    bool openFileExec(const QString &password, QString &error);
+    bool openFileExec(const QString &password);
 
     /**
      * @brief openFileAsync
@@ -42,7 +46,7 @@ public:
      * @param result
      * @param error
      */
-    void handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
+    void handleOpened(deepin_reader::Document::Error error,  deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
 
     /**
      * @brief getPage
@@ -178,13 +182,6 @@ public:
     QString pageNum2Lable(const int);
 
     /**
-     * @brief lastError
-     * 最后的错误信息
-     * @return
-     */
-    QString lastError();
-
-    /**
      * @brief 保存
      * @path 保存到路径
      * @return
@@ -192,21 +189,26 @@ public:
     bool save();
 
     /**
-     * @brief 另存为
+     * @brief saveAs
+     * 另存为
      * @param filePath
      * @return
      */
     bool saveAs(const QString &filePath);
 
 signals:
-    void sigOpened(bool result, QString error);
+    /**
+     * @brief sigOpened
+     * 打开完成
+     * @param error
+     */
+    void sigOpened(deepin_reader::Document::Error error);
 
 private:
     DocSheet *m_sheet = nullptr;
-    QString m_password;
-    QString m_error;
-    bool m_pageLabelLoaded = false;         //是否已经加载page label
-    QMap<QString, int> m_lable2Page;    // 文档下标页码
+    deepin_reader::Document::Error m_error = deepin_reader::Document::NoError;
+    bool m_pageLabelLoaded = false;             //是否已经加载page label
+    QMap<QString, int> m_lable2Page;            // 文档下标页码
     deepin_reader::Document *m_document = nullptr;
     QList<deepin_reader::Page *> m_pages;
 };

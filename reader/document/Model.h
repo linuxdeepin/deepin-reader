@@ -202,14 +202,12 @@ class Document: public QObject
 {
     Q_OBJECT
 public:
-    enum DocStatus {
-        NOT_LOADED = -1,
-        SUCCESS = 0,
-        FILE_ERROR,
-        FORMAT_ERROR,
-        PASSWORD_ERROR,
-        HANDLER_ERROR,
-        FILE_NOT_FOUND_ERROR
+    enum Error {
+        NoError = 0,
+        NeedPassword,       //需要密码
+        WrongPassword,      //密码错误
+        FileError,          //打开失败
+        FileDamaged         //打开成功 文件损坏
     };
 
     Document() : QObject() {}
@@ -227,7 +225,7 @@ public:
 class DocumentFactory
 {
 public:
-    static Document *getDocument(const int &fileType, const QString &filePath, const QString &password);
+    static Document *getDocument(const int &fileType, const QString &filePath, const QString &password, deepin_reader::Document::Error &error);
 };
 
 

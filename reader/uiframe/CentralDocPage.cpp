@@ -142,6 +142,13 @@ void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
     emit sigCurSheetChanged(sheet);
 }
 
+void CentralDocPage::addSheet(DocSheet *sheet)
+{
+    m_pTabBar->insertSheet(sheet);
+
+    enterSheet(sheet);
+}
+
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
@@ -181,26 +188,12 @@ void CentralDocPage::addFileAsync(const QString &filePath)
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
 
-    if (sheet->needPassword()) {
-        sheet->showEncryPage();
-    } else {
-        sheet->openFileAsync("");
-    }
+    sheet->openFileAsync("");
 }
 
-void CentralDocPage::addSheet(DocSheet *sheet)
+void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error error)
 {
-    m_pTabBar->insertSheet(sheet);
-
-    enterSheet(sheet);
-}
-
-void CentralDocPage::onOpened(DocSheet *sheet, bool ret, QString error)
-{
-    if (sheet == nullptr)
-        return;
-
-    if (!ret) {
+    if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error) {
         m_pStackedLayout->removeWidget(sheet);
 
         m_pTabBar->removeSheet(sheet);
@@ -211,10 +204,16 @@ void CentralDocPage::onOpened(DocSheet *sheet, bool ret, QString error)
 
         sheet->deleteLater();
 
-        showTips(nullptr, error, 1);
+        if (deepin_reader::Document::FileError == error)
+            showTips(nullptr, tr("Open failed"), 1);
+        else if (deepin_reader::Document::FileDamaged == error)
+            showTips(nullptr, tr("Please check if the file is damaged"), 1);
 
         return;
     }
+
+    if (nullptr == sheet)
+        return;
 
     this->activateWindow();
 
@@ -600,6 +599,7 @@ bool CentralDocPage::isSlide()
 void CentralDocPage::prepareSearch()
 {
     DocSheet *docSheet = getCurSheet();
+
     if (docSheet)
         docSheet->prepareSearch();
 }
@@ -623,8 +623,11 @@ void CentralDocPage::openFullScreen()
 
     if (!mainWindow->isFullScreen()) {
         m_mainLayout->removeWidget(m_pTabBar);
+
         m_isMaximizedBeforeFullScreen = mainWindow->isMaximized();
+
         mainWindow->setDocTabBarWidget(m_pTabBar);
+
         mainWindow->showFullScreen();
     }
 }
@@ -664,19 +667,26 @@ void CentralDocPage::onSheetCountChanged(int count)
     if (count == 1) {
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
         QTimer::singleShot(10, this, SLOT(onUpdateTabLabelText()));
+
         m_pDocTabLabel->setVisible(true);
+
         m_pTabBar->setVisible(false);
     } else {
         m_pDocTabLabel->setVisible(false);
+
         m_pTabBar->setVisible(true);
     }
 
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
+
     if (mainWindow && mainWindow->isFullScreen()) {
         mainWindow->resizeFullTitleWidget();
+
     } else if (m_pTabBar->parent() != this) {
         m_pTabBar->setParent(this);
+
         m_mainLayout->insertWidget(0, m_pTabBar);
+
         m_pTabBar->setVisible(count > 1);
     }
 }

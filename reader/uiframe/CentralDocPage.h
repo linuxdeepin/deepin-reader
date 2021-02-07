@@ -287,7 +287,7 @@ public slots:
      * @param sheet 被打开的文档
      * @param result 打开结果
      */
-    void onOpened(DocSheet *sheet, bool result, QString error);
+    void onOpened(DocSheet *sheet, deepin_reader::Document::Error error);
 
     /**
      * @brief onTabChanged

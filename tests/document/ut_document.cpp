@@ -54,7 +54,8 @@ void ut_document::TearDown()
 
 TEST_F(ut_document, DJVUTest)
 {
-    deepin_reader::Document *doc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU, "DJVUTest"));
+    deepin_reader::Document::Error error;
+    deepin_reader::Document *doc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU, "DJVUTest"), error);
     if (nullptr == doc)
         GTEST_FAIL();
 
@@ -91,9 +92,12 @@ TEST_F(ut_document, DJVUTest)
     QFile(filePath(UT_FILE_DJVU_SAVE, "DJVUTest")).remove();
     QFile(filePath(UT_FILE_DJVU_SAVEAS, "DJVUTest")).remove();
     QFile(filePath(UT_FILE_DJVU, "DJVUTest")).copy(filePath(UT_FILE_DJVU_SAVE, "DJVUTest"));
-    deepin_reader::Document *saveDoc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU_SAVE, "DJVUTest"));
+
+    deepin_reader::Document *saveDoc = deepin_reader::DjVuDocument::loadDocument(filePath(UT_FILE_DJVU_SAVE, "DJVUTest"), error);
+
     if (nullptr == saveDoc)
         GTEST_FAIL();
+
     saveDoc->saveAs(filePath(UT_FILE_DJVU_SAVEAS, "DJVUTest"));
     saveDoc->save();
     QFile(filePath(UT_FILE_DJVU_SAVE, "DJVUTest")).remove();
@@ -105,9 +109,8 @@ TEST_F(ut_document, DJVUTest)
 
 TEST_F(ut_document, PDFTest)
 {
-    EXPECT_EQ(deepin_reader::PDFDocument::tryLoadDocument(filePath(UT_FILE_PDF, "PDFTest"), ""), 0);
-
-    deepin_reader::Document *doc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF, "PDFTest"), "");
+    deepin_reader::Document::Error error;
+    deepin_reader::Document *doc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF, "PDFTest"), "", error);
     if (nullptr == doc) {
         GTEST_FAIL();
     }
@@ -143,7 +146,8 @@ TEST_F(ut_document, PDFTest)
 
         QList<deepin_reader::Annotation *> annots = page->annotations();
         deepin_reader::Annotation *annot = annots.value(0);
-        if (nullptr != annot) {
+        if (nullptr != annot)
+        {
             annot->ownAnnotation();
             annot->contents();
             annot->boundary();
@@ -164,7 +168,8 @@ TEST_F(ut_document, PDFTest)
     QFile(filePath(UT_FILE_PDF_SAVEAS, "PDFTest")).remove();
     EXPECT_EQ(QFile(filePath(UT_FILE_PDF, "PDFTest")).copy(filePath(UT_FILE_PDF_SAVE, "PDFTest")), true);
 
-    deepin_reader::Document *saveDoc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF_SAVE, "PDFTest"), "");
+    deepin_reader::Document *saveDoc = deepin_reader::PDFDocument::loadDocument(filePath(UT_FILE_PDF_SAVE, "PDFTest"), "", error);
+
     if (nullptr != saveDoc) {
         saveDoc->save();
         saveDoc->saveAs(filePath(UT_FILE_PDF_SAVEAS, "PDFTest"));

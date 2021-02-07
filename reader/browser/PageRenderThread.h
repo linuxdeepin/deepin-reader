@@ -74,6 +74,7 @@ struct DocPageThumbnailTask {//缩略图
 
 struct DocOpenTask {//打开文档
     DocSheet *sheet = nullptr;
+    QString password;
     SheetRenderer *renderer = nullptr;
 };
 
@@ -181,7 +182,7 @@ signals:
 
     void sigDocPageThumbnailTaskFinished(DocPageThumbnailTask, QPixmap);
 
-    void sigDocOpenTask(DocOpenTask, bool, QString, deepin_reader::Document *, QList<deepin_reader::Page *>);
+    void sigDocOpenTask(DocOpenTask, deepin_reader::Document::Error, deepin_reader::Document *, QList<deepin_reader::Page *>);
 
 private slots:
     void onDocPageNormalImageTaskFinished(DocPageNormalImageTask task, QPixmap pixmap);
@@ -196,7 +197,7 @@ private slots:
 
     void onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap);
 
-    void onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
+    void onDocOpenTask(DocOpenTask task, deepin_reader::Document::Error error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
 
 private:
     QMutex m_pageNormalImageMutex;

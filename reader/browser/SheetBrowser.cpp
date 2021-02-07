@@ -133,7 +133,9 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     int fileType = Dr::fileType(filePath);
 
-    document = DocumentFactory::getDocument(fileType, filePath, "");
+    deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
+
+    document = DocumentFactory::getDocument(fileType, filePath, "", error);
 
     if (nullptr == document)
         return QImage();

@@ -6,7 +6,7 @@
 
 SheetRenderer::SheetRenderer(DocSheet *parent) : QObject(parent), m_sheet(parent)
 {
-    m_error = "123";
+
 }
 
 SheetRenderer::~SheetRenderer()
@@ -20,7 +20,7 @@ SheetRenderer::~SheetRenderer()
     PageRenderThread::appendTask(task);
 }
 
-bool SheetRenderer::openFileExec(const QString &password, QString &error)
+bool SheetRenderer::openFileExec(const QString &password)
 {
     QEventLoop loop;
 
@@ -30,18 +30,16 @@ bool SheetRenderer::openFileExec(const QString &password, QString &error)
 
     loop.exec();
 
-    error = m_error;
-
-    return error.isEmpty();
+    return deepin_reader::Document::NoError == m_error;
 }
 
 void SheetRenderer::openFileAsync(const QString &password)
 {
-    m_password = password;
-
     DocOpenTask task;
 
     task.sheet = m_sheet;
+
+    task.password = password;
 
     task.renderer = this;
 
@@ -245,11 +243,6 @@ QString SheetRenderer::pageNum2Lable(const int index)
     return  QString::number(index + 1);
 }
 
-QString SheetRenderer::lastError()
-{
-    return m_error;
-}
-
 bool SheetRenderer::saveAs(const QString &filePath)
 {
     if (filePath.isEmpty() || m_document == nullptr)
@@ -258,7 +251,7 @@ bool SheetRenderer::saveAs(const QString &filePath)
     return m_document->saveAs(filePath);;
 }
 
-void SheetRenderer::handleOpened(bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
+void SheetRenderer::handleOpened(deepin_reader::Document::Error error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
     m_error = error;
 
@@ -266,6 +259,6 @@ void SheetRenderer::handleOpened(bool result, QString error, deepin_reader::Docu
 
     m_pages = pages;
 
-    emit sigOpened(result, error);
+    emit sigOpened(error);
 }
 

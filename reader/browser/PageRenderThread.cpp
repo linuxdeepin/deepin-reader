@@ -48,6 +48,7 @@ PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
     qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
     qRegisterMetaType<QList<deepin_reader::Annotation *>>("QList<deepin_reader::Annotation *>");
     qRegisterMetaType<QList<deepin_reader::Page *>>("QList<deepin_reader::Page *>");
+    qRegisterMetaType<deepin_reader::Document::Error>("deepin_reader::Document::Error");
 
     qRegisterMetaType<DocPageNormalImageTask>("DocPageNormalImageTask");
     qRegisterMetaType<DocPageSliceImageTask>("DocPageSliceImageTask");
@@ -624,16 +625,17 @@ bool PageRenderThread::execNextDocOpenTask()
     if (!DocSheet::existSheet(task.sheet))
         return true;
 
-    int fileType     = task.sheet->fileType();
     QString filePath = task.sheet->filePath();
-    QString password = task.sheet->password();
 
     PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 
-    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(fileType, filePath, password);
+    deepin_reader::Document::Error error = deepin_reader::Document::NoError;
 
-    if (nullptr == document) {//打开失败
-        emit sigDocOpenTask(task, false, tr("Open failed"), nullptr, QList<deepin_reader::Page *>());
+    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.sheet->fileType(), filePath, task.password, error);
+
+    if (nullptr == document) {
+        emit sigDocOpenTask(task, error, nullptr, QList<deepin_reader::Page *>());
+
     } else {
         int pagesNumber = document->pageCount();
 
@@ -641,22 +643,24 @@ bool PageRenderThread::execNextDocOpenTask()
 
         for (int i = 0; i < pagesNumber; ++i) {
             deepin_reader::Page *page = document->page(i);
-            if (nullptr == page) {
+
+            if (nullptr == page)
                 break;
-            }
+
             pages.append(page);
         }
 
         if (pages.count() == pagesNumber) {
-            emit sigDocOpenTask(task, true, "", document, pages);
+            emit sigDocOpenTask(task, deepin_reader::Document::NoError, document, pages);
+
         } else {
-            for (deepin_reader::Page *page : pages)
-                delete page;
+            qDeleteAll(pages);
 
             pages.clear();
+
             delete document;
 
-            emit sigDocOpenTask(task, false, tr("Please check if the file is damaged"), nullptr, QList<deepin_reader::Page *>());
+            emit sigDocOpenTask(task, deepin_reader::Document::FileDamaged, nullptr, QList<deepin_reader::Page *>());
         }
     }
 
@@ -725,10 +729,10 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
     }
 }
 
-void PageRenderThread::onDocOpenTask(DocOpenTask task, bool result, QString error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
+void PageRenderThread::onDocOpenTask(DocOpenTask task, deepin_reader::Document::Error error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
     if (DocSheet::existSheet(task.sheet)) {
-        task.renderer->handleOpened(result, error, document, pages);
+        task.renderer->handleOpened(error, document, pages);
     }
 }
 

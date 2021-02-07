@@ -160,6 +160,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         if (event->type() == QEvent::HoverMove) {
             QHoverEvent *mouseEvent = dynamic_cast<QHoverEvent *>(event);
             bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
+
             if (isFullscreen && m_FullTitleWidget && !m_central->docPage()->isSlide()) {
                 if (m_TitleAnimation == nullptr) {
                     m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry");
@@ -243,9 +244,13 @@ void MainWindow::setDocTabBarWidget(QWidget *widget)
 {
     if (m_FullTitleWidget == nullptr) {
         m_FullTitleWidget = new BaseWidget(this);
+
         this->stackUnder(m_FullTitleWidget);
+
         m_FullTitleWidget->setFocusPolicy(Qt::NoFocus);
+
         m_FullTitleWidget->show();
+
         m_FullTitleWidget->setEnabled(false);
     }
 
@@ -270,13 +275,17 @@ void MainWindow::onMainWindowFull()
     }
 
     bool tabbarVisible = m_docTabWidget->isVisible();
+
     titlebar()->setParent(m_FullTitleWidget);
+
     m_docTabWidget->setParent(m_FullTitleWidget);
 
     titlebar()->show();
+
     m_docTabWidget->setVisible(tabbarVisible);
 
     titlebar()->setGeometry(0, 0, dApp->primaryScreen()->size().width(), titlebar()->height());
+
     m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->primaryScreen()->size().width(), 37);
 
     int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
@@ -292,10 +301,14 @@ void MainWindow::onMainWindowExitFull()
 {
     if (m_lastWindowState == Qt::WindowFullScreen) {
         m_lastWindowState = static_cast<int>(this->windowState());
+
         if (m_central->docPage()->getCurSheet())
             m_central->docPage()->getCurSheet()->closeFullScreen(true);
+
         this->setMenuWidget(titlebar());
+
         m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height());
+
         updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
     }
 }
@@ -306,7 +319,9 @@ void MainWindow::resizeFullTitleWidget()
         return;
 
     int fulltitleH = m_docTabWidget->isVisible() ? titlebar()->height() + 37 : titlebar()->height();
+
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
+
     m_FullTitleWidget->resize(dApp->primaryScreen()->size().width(), fulltitleH);
 }
 

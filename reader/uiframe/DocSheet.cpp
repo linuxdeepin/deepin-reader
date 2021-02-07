@@ -222,11 +222,11 @@ void DocSheet::saveList(QList<DocSheet *> list)
 
 }
 
-bool DocSheet::openFileExec(const QString &password, QString &error)
+bool DocSheet::openFileExec(const QString &password)
 {
     m_password = password;
 
-    return m_renderer->openFileExec(password, error);
+    return m_renderer->openFileExec(password);
 }
 
 void DocSheet::openFileAsync(const QString &password)
@@ -675,11 +675,6 @@ QString DocSheet::filePath()
     return m_filePath;
 }
 
-QString DocSheet::password()
-{
-    return m_password;
-}
-
 bool DocSheet::hasBookMark(int index)
 {
     return m_bookmarks.contains(index);
@@ -854,9 +849,27 @@ void DocSheet::onSideAniFinished()
     }
 }
 
-void DocSheet::onOpened(bool result, QString error)
+void DocSheet::onOpened(deepin_reader::Document::Error error)
 {
-    if (result) {
+    if (deepin_reader::Document::NeedPassword == error) {
+        showEncryPage();
+    } else if (deepin_reader::Document::WrongPassword == error) {
+        showEncryPage();
+
+        m_encryPage->wrongPassWordSlot();
+    } else if (deepin_reader::Document::NoError == error) {
+        if (!m_password.isEmpty()) {
+            m_browser->setFocusPolicy(Qt::StrongFocus);
+
+            if (m_encryPage) {
+                m_encryPage->hide();
+                m_encryPage->deleteLater();
+            }
+            m_encryPage = nullptr;
+
+            this->defaultFocus();
+        }
+
         m_browser->init(m_operation, m_bookmarks);
 
         m_sidebar->handleOpenSuccess();
@@ -866,7 +879,8 @@ void DocSheet::onOpened(bool result, QString error)
         emit sigFileChanged(this);
     }
 
-    emit sigFileOpened(this, result, error);
+    //交给父窗口控制自己是否删除
+    emit sigFileOpened(this, error);
 }
 
 bool DocSheet::isFullScreen()
@@ -916,6 +930,7 @@ bool DocSheet::closeFullScreen(bool force)
         return doc->quitFullScreen(force);
     } else if (doc->topLevelWidget()->windowState().testFlag(Qt::WindowFullScreen)) {
         doc->topLevelWidget()->showNormal();
+
         return true;
     }
 
@@ -1117,18 +1132,6 @@ void DocSheet::showEncryPage()
     m_encryPage->show();
 }
 
-bool DocSheet::needPassword()
-{
-    int status = -1;
-    if (Dr::PDF == m_fileType)
-        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), QString());
-
-    if (status == deepin_reader::Document::PASSWORD_ERROR)
-        return true;
-
-    return false;
-}
-
 bool DocSheet::opened()
 {
     return m_renderer->opened();
@@ -1144,39 +1147,11 @@ QString DocSheet::getPageLabelByIndex(const int &index)
     return m_renderer->pageNum2Lable(index);
 }
 
-bool DocSheet::tryPassword(QString password)
-{
-    int status = -1;
-
-    if (Dr::PDF == m_fileType)
-        status = deepin_reader::PDFDocument::tryLoadDocument(filePath(), password);
-
-    if (status == deepin_reader::Document::SUCCESS) {
-        return true;
-    }
-
-    return false;
-}
-
 void DocSheet::onExtractPassword(const QString &password)
 {
-    bool ret = this->tryPassword(password);
-    if (ret) {
-        m_browser->setFocusPolicy(Qt::StrongFocus);
-        m_encryPage->hide();
+    m_password = password;
 
-        this->openFileAsync(password);
-        this->defaultFocus();
-
-        m_encryPage->close();
-        m_encryPage = nullptr;
-
-        CentralDocPage *doc = dynamic_cast<CentralDocPage *>(parent());
-
-        emit doc->sigCurSheetChanged(this);
-    } else {
-        m_encryPage->wrongPassWordSlot();
-    }
+    m_renderer->openFileAsync(m_password);
 }
 
 void DocSheet::deadDeleteLater()
@@ -1194,14 +1169,14 @@ void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
 
-//#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=3)))
-//    preview.setAsynPreview(pageCount());
-//    preview.setDocName(QFileInfo(filePath()).fileName());
-//    preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
-//    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
-//#else
+#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=6)))
+    preview.setAsynPreview(pageCount());
+    preview.setDocName(QFileInfo(filePath()).fileName());
+    preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
+#else
     connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
-//#endif
+#endif
 
     preview.exec();
 }

@@ -33,32 +33,6 @@
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
 
 namespace deepin_reader {
-
-class LoadThread: public QThread
-{
-public:
-    void startown()
-    {
-        this->start();
-        QEventLoop loop;
-        connect(this, &QThread::finished, &loop, &QEventLoop::quit);
-        loop.exec();
-    }
-
-    void run();
-
-public:
-    int loadStatus = 0;
-
-    QString filePath;
-    QString password;
-};
-
-void LoadThread::run()
-{
-    loadStatus = DPdfDoc::tryLoadFile(filePath, password);
-}
-
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
     m_dannotation(dannotation)
 {
@@ -491,25 +465,24 @@ Properties PDFDocument::properties() const
     return m_fileProperties;
 }
 
-PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password)
+PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error)
 {
     DPdfDoc *document = new DPdfDoc(filePath, password);
+
     if (document->status() == DPdfDoc::SUCCESS) {
+        error = Document::NoError;
         return new PDFDocument(document);
-    } else {
-        delete document;
-    }
+    } else if (document->status() == DPdfDoc::PASSWORD_ERROR) {
+        if (password.isEmpty())
+            error = Document::NeedPassword;
+        else
+            error = Document::WrongPassword;
+    } else
+        error = Document::FileError;
+
+    delete document;
+
     return nullptr;
 }
-
-int PDFDocument::tryLoadDocument(const QString &filePath, const QString &password)
-{
-    LoadThread loadThread;
-    loadThread.filePath = filePath;
-    loadThread.password = password;
-    loadThread.startown();
-    return loadThread.loadStatus;
-}
-
 }
 

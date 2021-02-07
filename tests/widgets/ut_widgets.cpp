@@ -80,9 +80,7 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
 
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetWidgetTest"));
 
-    QString error;
-
-    ASSERT_TRUE(sheet->openFileExec("", error));
+    ASSERT_TRUE(sheet->openFileExec(""));
 
     mainWindow->show();
 

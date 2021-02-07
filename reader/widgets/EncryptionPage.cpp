@@ -29,7 +29,6 @@
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)
 {
-    setAttribute(Qt::WA_DeleteOnClose);
     InitUI();
     InitConnection();
 }

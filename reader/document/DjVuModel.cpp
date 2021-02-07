@@ -505,27 +505,26 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     return image;
 }
 
-deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
+deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath, deepin_reader::Document::Error &error)
 {
     ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
 
     if (context == nullptr) {
+
+        error = Document::FileError;
         return nullptr;
     }
 
 #if DDJVUAPI_VERSION >= 19
-
     ddjvu_document_t *document = ddjvu_document_create_by_filename_utf8(context, filePath.toUtf8(), FALSE);
-
 #else
-
     ddjvu_document_t *document = ddjvu_document_create_by_filename(context, QFile::encodeName(filePath), FALSE);
-
 #endif // DDJVUAPI_VERSION
 
     if (document == nullptr) {
         ddjvu_context_release(context);
 
+        error = Document::FileError;
         return nullptr;
     }
 
@@ -535,12 +534,15 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath)
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 
+        error = Document::FileError;
         return nullptr;
     }
 
     DjVuDocument *djvuDocument = new DjVuDocument(context, document);
 
     djvuDocument->m_filePath = filePath;
+
+    error = Document::NoError;
 
     return djvuDocument;
 }

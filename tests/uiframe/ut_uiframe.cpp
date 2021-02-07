@@ -82,30 +82,28 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, new QMimeData);
     CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, mimeData);
 
-    QString error;
-
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_1, "UiFrameTest"));
-    ASSERT_TRUE(sheet->openFileExec("", error));
+    ASSERT_TRUE(sheet->openFileExec(""));
     mainWindow1->addSheet(sheet);
 
     DocSheet *sheet2 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_2, "UiFrameTest"));
-    ASSERT_TRUE(sheet2->openFileExec("", error));
+    ASSERT_TRUE(sheet2->openFileExec(""));
     mainWindow1->addSheet(sheet2);
 
     DocSheet *sheet3 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_3, "UiFrameTest"));
-    ASSERT_TRUE(sheet3->openFileExec("", error));
+    ASSERT_TRUE(sheet3->openFileExec(""));
     mainWindow1->addSheet(sheet3);
 
     DocSheet *sheet4 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_4, "UiFrameTest"));
-    ASSERT_TRUE(sheet4->openFileExec("", error));
+    ASSERT_TRUE(sheet4->openFileExec(""));
     mainWindow2->addSheet(sheet4);
 
     DocSheet *sheet5 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_5, "UiFrameTest"));
-    ASSERT_TRUE(sheet5->openFileExec("", error));
+    ASSERT_TRUE(sheet5->openFileExec(""));
     mainWindow2->addSheet(sheet5);
 
     DocSheet *sheet6 = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_6, "UiFrameTest"));
-    ASSERT_TRUE(sheet6->openFileExec("", error));
+    ASSERT_TRUE(sheet6->openFileExec(""));
     mainWindow2->addSheet(sheet6);
 
     sheet3->setSidebarVisible(true);
@@ -256,7 +254,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage1->onSheetOperationChanged(nullptr);
     CentralDocPage1->onSheetCountChanged(0);
     CentralDocPage1->onSheetCountChanged(1);
-    CentralDocPage1->onOpened(nullptr, false, "Error");
 
     sheet->saveData();
     sheet->existFileChanged();
@@ -361,8 +358,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->openFullScreen();
     sheet->isFullScreen();
     sheet->closeFullScreen();
-
-    EXPECT_FALSE(sheet->needPassword());
     sheet->opened();
 
     sheet->jumpToOutline(0, 0, 0);
@@ -414,8 +409,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet->stopSearch();
 
     sheet->showEncryPage();
-    sheet->tryPassword("");
-    sheet->needPassword();
     sheet->operationRef();
     sheet->showTips("test", 0);
     sheet->onSearchResultComming(deepin_reader::SearchResult());
