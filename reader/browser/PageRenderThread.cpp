@@ -297,6 +297,10 @@ void PageRenderThread::run()
             continue;
         }
 
+        //先完成所有的关闭任务再进行打开
+        while (execNextDocCloseTask())
+        {}
+
         while (execNextDocOpenTask())
         {}
 
@@ -313,9 +317,6 @@ void PageRenderThread::run()
         {}
 
         while (execNextDocPageThumbnailTask())
-        {}
-
-        while (execNextDocCloseTask())
         {}
 
         DocPageBigImageTask task;
@@ -352,6 +353,10 @@ void PageRenderThread::run()
 
             painter.drawImage(rect, image);
 
+            //先完成所有的关闭任务再进行打开
+            while (execNextDocCloseTask())
+            {}
+
             while (execNextDocOpenTask())
             {}
 
@@ -368,9 +373,6 @@ void PageRenderThread::run()
             {}
 
             while (execNextDocPageThumbnailTask())
-            {}
-
-            while (execNextDocCloseTask())
             {}
         }
 
