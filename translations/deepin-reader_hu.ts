@@ -87,7 +87,7 @@
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="66"/>
         <source>Basic info</source>
-        <translation>Alapinformáció</translation>
+        <translation>Alapvető információk</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="86"/>
@@ -254,49 +254,49 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentumok</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
         <translation>A formátum nem támogatott</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
         <translation>Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
         <translation>A mentés sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
         <translation>A mentés sikeres</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
         <translation>Mentés másként</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
         <translation>Érvénytelen fájlnév</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -328,6 +328,10 @@
         <translation>Könyvjelző eltávolítva</translation>
     </message>
     <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
+    </message>
+    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -338,6 +342,17 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>Kommentár eltávolítva</translation>
+    </message>
+</context>
+<context>
+    <name>DocThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">A megnyitás sikertelen</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
 </context>
 <context>
@@ -400,14 +415,14 @@
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
         <translation>Igen</translation>
     </message>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
         <translation>Nem</translation>
     </message>
@@ -441,6 +456,17 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Valóban törölni akarja az összes kommentárt?</translation>
+    </message>
+</context>
+<context>
+    <name>PageRenderThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">A megnyitás sikertelen</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
 </context>
 <context>
@@ -639,7 +665,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <source>Zoom in/Zoom out</source>
-        <translation>Nagyítás/Kicsinyítés</translation>
+        <translation>Nagyítás / Kicsinyítés</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -841,6 +867,32 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Keresés</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageListView</name>
+    <message>
+        <source>Copy</source>
+        <translation type="vanished">Másolás</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="vanished">Kommentár eltávolítása</translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation type="vanished">Összes eltávolítása</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="vanished">Könyvjelző eltávolítása</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="vanished">%1 oldal</translation>
     </message>
 </context>
 <context>

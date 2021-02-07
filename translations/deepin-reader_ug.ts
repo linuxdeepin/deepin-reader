@@ -254,49 +254,49 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ھۆججەتلەر</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
         <translation>بۇ ھۆججەتنىڭ فورماتىنى قوللىمايدۇ</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
         <translation>ھۆججەتنىڭ بۇزۇلغان-بۇزۇلمىغانلىقىنى تەكشۈرۈڭ</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
         <translation>ساقلانمىدى</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
         <translation>ساقلاندى</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
         <translation>باشقا يەرگە ساقلاش</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
         <translation>ئۈنۈملۈك ھۆججەت نامى كىرگۈرۈڭ</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
         <translation>ھەئە</translation>
     </message>
@@ -328,6 +328,10 @@
         <translation>خەتكۈچ ئۆچۈرۈلدى</translation>
     </message>
     <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">ھۆججەتنىڭ بۇزۇلغان-بۇزۇلمىغانلىقىنى تەكشۈرۈڭ</translation>
+    </message>
+    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -338,6 +342,17 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>ئىزاھات ئۆچۈرۈلدى</translation>
+    </message>
+</context>
+<context>
+    <name>DocThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">ئېچىش مەغلۇب بولدى</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">ھۆججەتنىڭ بۇزۇلغان-بۇزۇلمىغانلىقىنى تەكشۈرۈڭ</translation>
     </message>
 </context>
 <context>
@@ -400,14 +415,14 @@
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
         <translation>ھەئە</translation>
     </message>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
         <translation>ياق</translation>
     </message>
@@ -441,6 +456,17 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>ئىزاھاتنى راستلا ئۆچۈرەمسىز؟</translation>
+    </message>
+</context>
+<context>
+    <name>PageRenderThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">ئېچىش مەغلۇب بولدى</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">ھۆججەتنىڭ بۇزۇلغان-بۇزۇلمىغانلىقىنى تەكشۈرۈڭ</translation>
     </message>
 </context>
 <context>
@@ -841,6 +867,32 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>ئىزدەش</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageListView</name>
+    <message>
+        <source>Copy</source>
+        <translation type="vanished">كۆچۈرۈش</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="vanished">ئىزاھاتنى ئۆچۈرۈش</translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation type="vanished">ھەممىنى ئۆچۈرۈش</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="vanished">خەتكۈچنى ئۆچۈرۈش</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="vanished">%1-بەت</translation>
     </message>
 </context>
 <context>

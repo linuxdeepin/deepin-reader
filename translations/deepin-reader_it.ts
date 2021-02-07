@@ -255,49 +255,49 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Central</name>
     <message>
-        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documenti</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
         <translation>Il formato non è supportato</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
         <translation>Verifica se il file è danneggiato</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
         <translation>Salvataggio fallito</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
         <translation>Salvataggio riuscito</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
         <translation>Nome file non valido</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -329,6 +329,10 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Il segnalibro è stato rimosso</translation>
     </message>
     <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Verifica se il file è danneggiato</translation>
+    </message>
+    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -339,6 +343,17 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotazione è stata rimossa</translation>
+    </message>
+</context>
+<context>
+    <name>DocThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">Apertura fallita</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Verifica se il file è danneggiato</translation>
     </message>
 </context>
 <context>
@@ -401,14 +416,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -442,6 +457,17 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Sicuro di voler eliminare tutte le annotazioni?</translation>
+    </message>
+</context>
+<context>
+    <name>PageRenderThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">Apertura fallita</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Verifica se il file è danneggiato</translation>
     </message>
 </context>
 <context>
@@ -842,6 +868,32 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Cerca</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageListView</name>
+    <message>
+        <source>Copy</source>
+        <translation type="vanished">Copia</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="vanished">Rimuovi annotazione</translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation type="vanished">Rimuovi tutti</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="vanished">Rimuovi segnalibro</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="vanished">Pagina %1</translation>
     </message>
 </context>
 <context>

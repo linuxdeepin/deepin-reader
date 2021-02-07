@@ -52,7 +52,7 @@
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Time modified</source>
-        <translation>Heure modifiée</translation>
+        <translation>Heure de modification</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
@@ -254,49 +254,49 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../src/uiframe/Central.cpp" line="116"/>
+        <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documents</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="155"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
         <translation>Le format n&apos;est pas pris en charge</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="166"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="213"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
-        <translation>Veuillez vérifier si le fichier est endommagé</translation>
+        <translation>Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="408"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
         <translation>Échec de la sauvegarde</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="414"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
         <translation>Enregistré avec succès</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="434"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
         <translation>Enregistrer sous</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="437"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="456"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
         <translation>Nom de fichier invalide</translation>
     </message>
     <message>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="439"/>
-        <location filename="../src/uiframe/CentralDocPage.cpp" line="458"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Format supporté: %1</translation>
+        <translation>Format supporté : %1</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
@@ -328,6 +328,10 @@
         <translation>Le signet a été supprimé</translation>
     </message>
     <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
+    </message>
+    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -338,6 +342,17 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotation a été supprimée</translation>
+    </message>
+</context>
+<context>
+    <name>DocThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">Échec de l&apos;ouverture</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
     </message>
 </context>
 <context>
@@ -400,14 +415,14 @@
 <context>
     <name>Model::PDFDocument</name>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../src/document/PDFModel.cpp" line="188"/>
-        <location filename="../src/document/PDFModel.cpp" line="190"/>
+        <location filename="../src/document/PDFModel.cpp" line="189"/>
+        <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
@@ -441,6 +456,17 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Voulez-vous vraiment supprimer toutes les annotations ?</translation>
+    </message>
+</context>
+<context>
+    <name>PageRenderThread</name>
+    <message>
+        <source>Open failed</source>
+        <translation type="vanished">Échec de l&apos;ouverture</translation>
+    </message>
+    <message>
+        <source>Please check if the file is damaged</source>
+        <translation type="vanished">Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
     </message>
 </context>
 <context>
@@ -841,6 +867,32 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Rechercher</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageListView</name>
+    <message>
+        <source>Copy</source>
+        <translation type="vanished">Copier</translation>
+    </message>
+    <message>
+        <source>Remove annotation</source>
+        <translation type="vanished">Supprimer l&apos;annotation</translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation type="vanished">Tout supprimer</translation>
+    </message>
+    <message>
+        <source>Remove bookmark</source>
+        <translation type="vanished">Supprimer le signet</translation>
+    </message>
+</context>
+<context>
+    <name>SideBarImageViewModel</name>
+    <message>
+        <source>Page %1</source>
+        <translation type="vanished">Page %1</translation>
     </message>
 </context>
 <context>
