@@ -75,12 +75,6 @@ public:
     deepin_reader::Annotation *annotation();
 
     /**
-     * @brief deleteMe
-     * 删除该注释
-     */
-    void deleteMe();
-
-    /**
      * @brief isSame
      * 操作注释是否与该注释相同
      * @param annotation

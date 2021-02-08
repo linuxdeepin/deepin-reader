@@ -738,24 +738,6 @@ void BrowserPage::setIconMovePos(const QPointF movePoint)
     update();
 }
 
-QString BrowserPage::deleteNowSelectIconAnnotation()
-{
-    if (nullptr == m_lastClickIconAnnotationItem)
-        return QString();
-
-    m_lastClickIconAnnotationItem->setDrawSelectRect(false);
-
-    const QString &iconAnnotationContains = m_lastClickIconAnnotationItem->annotationText();
-
-    removeAnnotation(m_lastClickIconAnnotationItem->annotation());
-
-    m_lastClickIconAnnotationItem = nullptr;
-
-    m_sheet->handlePageModified(m_index);
-
-    return iconAnnotationContains;
-}
-
 bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
 {
     if (nullptr == m_lastClickIconAnnotationItem)

@@ -191,8 +191,6 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     sheet->m_browser->getBrowserPageForPoint(pagePoint);
 
-    sheet->m_browser->viewPointInIndex(QPoint(0, 0));
-
     sheet->m_browser->currentScrollValueForPage();
 
     int fromIndex = 0;
@@ -265,7 +263,6 @@ TEST_F(ut_browser, SheetBrowserTest)
     word->boundingBox();
     word->boundingRect();
     word->textBoundingRect();
-    word->getWord();
 
     QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
 
@@ -310,7 +307,6 @@ TEST_F(ut_browser, SheetBrowserTest)
     annotationItem->annotationType();
     annotationItem->setDrawSelectRect(true);
     annotationItem->annotation();
-    annotationItem->deleteMe();
 
     annotation = page->annotations().at(1);
     if (nullptr == annotation)
@@ -325,7 +321,6 @@ TEST_F(ut_browser, SheetBrowserTest)
     page->addHighlightAnnotation("text", QColor(Qt::red));
     page->updateAnnotation(annotation, "test", QColor(Qt::red));
     page->setSelectIconRect(true, nullptr);
-    page->deleteNowSelectIconAnnotation();
     sheet->renderer()->inLink(page->itemIndex(), QPointF(0, 0));
     page->setPageBookMark(QPointF(0, 0));
     page->removeAnnotation(annotation);

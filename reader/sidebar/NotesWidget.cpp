@@ -217,16 +217,6 @@ void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotati
     }
 }
 
-bool NotesWidget::addBtnCheckEnter()
-{
-    if (m_pAddAnnotationBtn && m_pAddAnnotationBtn->hasFocus()) {
-        onAddAnnotation();
-        return true;
-    }
-
-    return false;
-}
-
 void NotesWidget::copyNoteContent()
 {
     ImagePageInfo_t tImagePageInfo;

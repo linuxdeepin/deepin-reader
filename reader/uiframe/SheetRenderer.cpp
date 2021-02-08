@@ -51,11 +51,6 @@ bool SheetRenderer::opened()
     return m_document != nullptr;
 }
 
-deepin_reader::Page *SheetRenderer::getPage(int index)
-{
-    return m_pages.value(index);
-}
-
 int SheetRenderer::getPageCount()
 {
     return m_pages.count();

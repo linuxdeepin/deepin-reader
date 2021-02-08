@@ -279,7 +279,6 @@ TEST_F(ut_sidebar, SidebarTest)
     bookwidget.setTabOrderWidget(tabWidgetlst);
     bookwidget.m_sheet = nullptr;
     bookwidget.prevPage();
-    bookwidget.addBtnCheckEnter();
 
     //NotesWidget
     NotesWidget noteWidget(sheet);
@@ -310,7 +309,6 @@ TEST_F(ut_sidebar, SidebarTest)
     noteWidget.handleOpenSuccess();
     noteWidget.pageUp();
     noteWidget.pageDown();
-    noteWidget.addBtnCheckEnter();
     noteWidget.setTabOrderWidget(tabWidgetlst);
     noteWidget.m_pImageListView->setCurrentIndex(QModelIndex());
     noteWidget.m_pImageListView->showMenu();

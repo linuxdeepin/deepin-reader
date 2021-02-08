@@ -78,15 +78,6 @@ deepin_reader::Annotation *BrowserAnnotation::annotation()
     return m_annotation;
 }
 
-void BrowserAnnotation::deleteMe()
-{
-    BrowserPage *item = static_cast<BrowserPage *>(m_parent);
-    if (nullptr == item)
-        return;
-
-    item->removeAnnotation(m_annotation);
-}
-
 bool BrowserAnnotation::isSame(Annotation *annotation)
 {
     return (annotation == m_annotation);

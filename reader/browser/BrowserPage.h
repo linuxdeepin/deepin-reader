@@ -325,13 +325,6 @@ public:
     void setIconMovePos(const QPointF);
 
     /**
-     * @brief deleteNowSelectIconAnnotation
-     * 删除当前选中的图标注释
-     * @return
-     */
-    QString deleteNowSelectIconAnnotation();
-
-    /**
      * @brief moveIconAnnotation
      * 移动注释图标位置
      * @return true:移动成功   false:移动失败

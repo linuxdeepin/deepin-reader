@@ -87,8 +87,3 @@ void BrowserWord::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 
     QGraphicsItem::mouseReleaseEvent(e);
 }
-
-Word BrowserWord::getWord()
-{
-    return m_word;
-}

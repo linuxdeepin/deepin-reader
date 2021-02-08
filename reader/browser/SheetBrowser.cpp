@@ -1416,13 +1416,6 @@ int SheetBrowser::currentScrollValueForPage()
     return index + 1;
 }
 
-int SheetBrowser::viewPointInIndex(QPoint viewPoint)
-{
-    BrowserPage *item  = static_cast<BrowserPage *>(itemAt(viewPoint));
-
-    return m_items.indexOf(item);
-}
-
 void SheetBrowser::setCurrentPage(int page)
 {
     if (page < 1 || page > allPages())

@@ -49,14 +49,6 @@ public:
     void handleOpened(deepin_reader::Document::Error error,  deepin_reader::Document *document, QList<deepin_reader::Page *> pages);
 
     /**
-     * @brief getPage
-     * 获取page 对象
-     * @param index 索引
-     * @return
-     */
-    deepin_reader::Page *getPage(int index);
-
-    /**
      * @brief getPageCount
      * 获取页数量
      * @return

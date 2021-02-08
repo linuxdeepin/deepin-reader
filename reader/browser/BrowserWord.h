@@ -76,14 +76,6 @@ public:
      */
     QRectF boundingBox()const;
 
-    /**
-     * @brief BrowserWord::getWord
-     * 获取文字
-     * @return
-     */
-    deepin_reader::Word getWord();
-
-
 private:
     deepin_reader::Word m_word;
 

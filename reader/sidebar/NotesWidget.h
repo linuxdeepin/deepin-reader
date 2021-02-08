@@ -89,13 +89,6 @@ public:
     void handleAnntationMsg(const int &, deepin_reader::Annotation *anno);
 
     /**
-     * @brief addBtnCheckEnter
-     * 响应添加注释按钮操作
-     * @return
-     */
-    bool addBtnCheckEnter();
-
-    /**
      * @brief setTabOrderWidget
      * 设置TAB顺序
      * @param tabWidgetlst

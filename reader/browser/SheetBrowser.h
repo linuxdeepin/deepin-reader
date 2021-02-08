@@ -135,14 +135,6 @@ public:
     int currentPage();
 
     /**
-     * @brief viewPointInIndex
-     * 根据鼠标点击位置获取鼠标点击文档页的编号
-     * @param viewPoint 鼠标点击位置
-     * @return 文档页的编号,从0开始
-     */
-    int viewPointInIndex(QPoint viewPoint);
-
-    /**
      * @brief setCurrentPage
      * 页码跳转
      * @param page 跳转的页码(base 1)

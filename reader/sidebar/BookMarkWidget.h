@@ -93,13 +93,6 @@ public:
     void handleBookMark(int index, int state);
 
     /**
-     * @brief addBtnCheckEnter
-     * 触发添加书签操作
-     * @return
-     */
-    bool addBtnCheckEnter();
-
-    /**
      * @brief setTabOrderWidget
      * 设置TAB切换顺序控件
      * @param tabWidgetlst

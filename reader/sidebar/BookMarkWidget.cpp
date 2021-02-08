@@ -161,16 +161,6 @@ void BookMarkWidget::handleBookMark(int index, int state)
     m_pImageListView->scrollToIndex(m_sheet->currentIndex(), true);
 }
 
-bool BookMarkWidget::addBtnCheckEnter()
-{
-    if (m_pAddBookMarkBtn && m_pAddBookMarkBtn->hasFocus()) {
-        onAddBookMarkClicked();
-        return true;
-    }
-
-    return false;
-}
-
 void BookMarkWidget::deleteItemByKey()
 {
     int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
