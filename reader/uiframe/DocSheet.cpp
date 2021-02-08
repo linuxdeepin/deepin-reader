@@ -465,7 +465,8 @@ bool DocSheet::saveData()
 {
     PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
 
-    if (m_documentChanged && !m_renderer->save())
+    //文档改变或者原文档被删除 则进行数据保存
+    if ((m_documentChanged || !QFile(m_filePath).exists()) && !m_renderer->save())
         return false;
 
     m_documentChanged = false;
