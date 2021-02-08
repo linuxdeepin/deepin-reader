@@ -310,10 +310,13 @@ void SheetSidebar::keyPressEvent(QKeyEvent *event)
                               << Dr::key_down << Dr::key_up
                               << Dr::key_left << Dr::key_right
                               << Dr::key_delete;
+
     QString key = Utils::getKeyshortcut(event);
+
     if (pFilterList.contains(key)) {
         dealWithPressKey(key);
     }
+
     BaseWidget::keyPressEvent(event);
 }
 

@@ -77,26 +77,11 @@ public slots:
 
 private:
     /**
-     * @brief initBtns
-     * 初始化按钮
-     */
-    void initBtns();
-
-    /**
      * @brief setBtnDisable
      * 设置按钮是否可用
      * @param bAble
      */
     void setBtnDisable(const bool &bAble);
-
-    /**
-     * @brief createBtn
-     * 创建按钮
-     * @param btnName 按钮名字
-     * @param bCheckable 是否checked
-     * @return 返回当前创建的按钮
-     */
-    DPushButton *createBtn(const QString &btnName, bool bCheckable = false);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -105,7 +90,7 @@ private:
     QStringList shortKeyList;
 
     ScaleWidget *m_pSw = nullptr;
-    DPushButton *m_pThumbnailBtn = nullptr;
+    DIconButton *m_pThumbnailBtn = nullptr;
     QPointer<DocSheet> m_curSheet = nullptr;
 };
 

@@ -160,7 +160,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         if (event->type() == QEvent::HoverMove) {
             QHoverEvent *mouseEvent = dynamic_cast<QHoverEvent *>(event);
             bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
-
             if (isFullscreen && m_FullTitleWidget && !m_central->docPage()->isSlide()) {
                 if (m_TitleAnimation == nullptr) {
                     m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry");

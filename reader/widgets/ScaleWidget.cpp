@@ -59,7 +59,7 @@ void ScaleWidget::initWidget()
     connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     connect(arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
 
-    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement, this);
     pPreBtn->setObjectName("SP_DecreaseElement");
     DStyle::setFrameRadius(pPreBtn, 12);
     pPreBtn->setFixedSize(24, 24);

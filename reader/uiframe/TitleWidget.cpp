@@ -30,7 +30,15 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : BaseWidget(parent)
 {
-    initBtns();
+    m_pThumbnailBtn = new DIconButton(this);
+    m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+    m_pThumbnailBtn->setIconSize(QSize(36, 36));
+    m_pThumbnailBtn->setObjectName("Thumbnails");
+    m_pThumbnailBtn->setToolTip(tr("Thumbnails"));
+    m_pThumbnailBtn->setCheckable(true);
+    m_pThumbnailBtn->setDisabled(true);
+    m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
+    connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
 
     QHBoxLayout *hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(6, 0, 6, 0);
@@ -77,14 +85,6 @@ TitleWidget::TitleWidget(DWidget *parent)
 TitleWidget::~TitleWidget()
 {
 
-}
-
-void TitleWidget::initBtns()
-{
-    m_pThumbnailBtn = createBtn(tr("Thumbnails"), true);
-    m_pThumbnailBtn->setObjectName("Thumbnails");
-    m_pThumbnailBtn->setIcon(QIcon::fromTheme(QString("dr_") + "thumbnails"));
-    connect(m_pThumbnailBtn, SIGNAL(clicked(bool)), SLOT(onThumbnailBtnClicked(bool)));
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)
@@ -156,18 +156,6 @@ void TitleWidget::onFindOperation(const int &sAction)
             m_pThumbnailBtn->setChecked(close);
         }
     }
-}
-
-DPushButton *TitleWidget::createBtn(const QString &btnName, bool bCheckable)
-{
-    int tW = 36;
-    DPushButton *btn = new DPushButton(this);
-    btn->setFixedSize(QSize(tW, tW));
-    btn->setIconSize(QSize(tW, tW));
-    btn->setToolTip(btnName);
-    btn->setCheckable(bCheckable);
-    btn->setDisabled(true);
-    return btn;
 }
 
 void TitleWidget::setControlEnabled(const bool &enable)
