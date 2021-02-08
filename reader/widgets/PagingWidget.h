@@ -41,6 +41,7 @@ class PagingWidget : public BaseWidget
 
 public:
     explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~PagingWidget() override;
 
     /**
@@ -136,7 +137,7 @@ private:
     int                  m_curIndex = 0;
 
     bool                 m_bHasLabel = false;
-    TMFunctionThread    *m_tmFuncThread;
+    TMFunctionThread    *m_tmFuncThread = nullptr;
 };
 
 #endif // PAGINGWIDGET_H

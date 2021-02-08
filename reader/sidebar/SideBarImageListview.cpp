@@ -96,13 +96,13 @@ void SideBarImageListView::handleOpenSuccess()
         QList<ImagePageInfo_t> pageSrclst;
         int pagesNum = m_docSheet->pageCount();
         for (int index = 0; index < pagesNum; index++)
-            pageSrclst << index;
+            pageSrclst << ImagePageInfo_t(index);
         m_imageModel->initModelLst(pageSrclst);
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         QList<ImagePageInfo_t> pageSrclst;
         for (int pageIndex : pageList)
-            pageSrclst << pageIndex;
+            pageSrclst << ImagePageInfo_t(pageIndex);
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == E_SideBar::SIDE_NOTE) {
         const QList< deepin_reader::Annotation * > &annotationlst = m_docSheet->annotations();

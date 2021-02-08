@@ -183,8 +183,7 @@ void SlideWidget::onPreBtnClicked()
 
 void SlideWidget::onPlayBtnClicked()
 {
-    bool autoplay = m_slidePlayWidget->getPlayStatus();
-    if (autoplay) {
+    if (m_slidePlayWidget->getPlayStatus()) {
         m_canRestart = true;
         m_imageTimer->start();
     } else {
@@ -232,18 +231,24 @@ void SlideWidget::playImage()
 void SlideWidget::onImageShowTimeOut()
 {
     m_preIndex = m_curPageIndex;
+
     m_curPageIndex++;
+
     if (m_curPageIndex >= m_docSheet->pageCount()) {
         if (m_canRestart) {
             m_curPageIndex = 0;
-            m_canRestart = false;
+
         } else {
             m_curPageIndex = m_docSheet->pageCount() - 1;
+
             m_slidePlayWidget->setPlayStatus(false);
+
             return;
         }
     }
+
     m_canRestart = false;
+
     playImage();
 }
 

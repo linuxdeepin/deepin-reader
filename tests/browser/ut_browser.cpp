@@ -262,7 +262,6 @@ TEST_F(ut_browser, SheetBrowserTest)
     word->setSelectable(true);
     word->boundingBox();
     word->boundingRect();
-    word->textBoundingRect();
 
     QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
 

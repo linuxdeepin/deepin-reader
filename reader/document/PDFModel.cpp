@@ -334,18 +334,6 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     return false;
 }
 
-bool PDFPage::mouseClickIconAnnot(const QPointF &clickPos)
-{
-    const QList<DPdfAnnot *> &annos = m_page->annots();
-    foreach (DPdfAnnot *annot, annos) {
-        if (annot && annot->pointIn(clickPos)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
     if (nullptr == m_page)

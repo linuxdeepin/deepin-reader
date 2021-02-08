@@ -108,18 +108,21 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 
     if (role == ImageinfoType_e::IMAGE_PIXMAP) {
         QPixmap pixmap = m_sheet->thumbnail(nRow);
-        if (pixmap.isNull()) {
-            //使用线程
-            QPixmap pixmap(174, 174);
-            pixmap.fill(Qt::white);
-            m_sheet->setThumbnail(nRow, pixmap);
 
+        if (pixmap.isNull()) {
+            //先填充空白
+            QPixmap emptyPixmap(174, 174);
+            emptyPixmap.fill(Qt::white);
+            m_sheet->setThumbnail(nRow, emptyPixmap);
+
+            //使用线程
             DocPageThumbnailTask task;
             task.sheet = m_sheet;
             task.index = nRow;
             task.model = const_cast<SideBarImageViewModel *>(this);
             PageRenderThread::appendTask(task);
         }
+
         return QVariant::fromValue(pixmap);
     } else if (role == ImageinfoType_e::IMAGE_BOOKMARK) {
         if (m_cacheBookMarkMap.contains(nRow)) {
@@ -152,9 +155,11 @@ bool SideBarImageViewModel::setData(const QModelIndex &index, const QVariant &da
 QList<QModelIndex> SideBarImageViewModel::getModelIndexForPageIndex(int pageIndex)
 {
     QList<QModelIndex> modelIndexlst;
+
     int pageSize = m_pagelst.size();
+
     for (int index = 0; index < pageSize; index++) {
-        if (m_pagelst.at(index) == pageIndex)
+        if (m_pagelst.at(index) == ImagePageInfo_t(pageIndex))
             modelIndexlst << this->index(index);
     }
     return modelIndexlst;
@@ -178,14 +183,14 @@ void SideBarImageViewModel::onUpdateImage(int index)
 
 void SideBarImageViewModel::insertPageIndex(int pageIndex)
 {
-    if (!m_pagelst.contains(pageIndex)) {
+    if (!m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
         int iterIndex = 0;
         int rowCount = m_pagelst.size();
         for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
             if (pageIndex < m_pagelst.at(iterIndex).pageIndex)
                 break;
         }
-        ImagePageInfo_t tImageinfo = pageIndex;
+        ImagePageInfo_t tImageinfo(pageIndex);
         m_pagelst.insert(iterIndex, tImageinfo);
         beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
         endInsertRows();
@@ -219,9 +224,9 @@ void SideBarImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInf
 
 void SideBarImageViewModel::removePageIndex(int pageIndex)
 {
-    if (m_pagelst.contains(pageIndex)) {
+    if (m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
         beginResetModel();
-        m_pagelst.removeAll(pageIndex);
+        m_pagelst.removeAll(ImagePageInfo_t(pageIndex));
         endResetModel();
     }
 }

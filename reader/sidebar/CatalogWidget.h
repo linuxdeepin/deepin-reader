@@ -105,7 +105,7 @@ private:
     QString              m_strTheme = "";
     DLabel              *titleLabel = nullptr;
     CatalogTreeView     *m_pTree = nullptr;
-    DocSheet *m_sheet;
+    DocSheet            *m_sheet = nullptr;
 };
 
 

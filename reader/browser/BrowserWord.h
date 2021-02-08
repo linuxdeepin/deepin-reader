@@ -63,13 +63,6 @@ public:
     void setScaleFactor(qreal scaleFactor);
 
     /**
-     * @brief BrowserWord::textBoundingRect
-     * 文档文字的区域
-     * @return
-     */
-    QRectF textBoundingRect() const;
-
-    /**
      * @brief BrowserWord::boundingBox
      * 文字自身的区域
      * @return

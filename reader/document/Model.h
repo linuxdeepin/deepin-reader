@@ -74,7 +74,7 @@ typedef QVector< Section > Outline;
 typedef QMap<QString, QVariant> Properties;
 
 struct Section {
-    int nIndex;
+    int nIndex = -1;
     QPointF offsetPointF;
     QString title;
     Outline children;
@@ -95,10 +95,9 @@ struct Word {
 
     }
 
-    Word(const QString &text, const QRectF &rectf)
+    Word(const QString &wordText, const QRectF &rectf): text(wordText), boundingBox(rectf)
     {
-        this->text = text;
-        this->boundingBox = rectf;
+
     }
 };
 
@@ -192,7 +191,6 @@ public:
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
     virtual QList<Word> words() {return QList<Word>();}
-    virtual bool mouseClickIconAnnot(const QPointF &) {return false;}
     virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
     virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }

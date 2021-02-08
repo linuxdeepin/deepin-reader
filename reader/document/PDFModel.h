@@ -37,6 +37,7 @@ namespace deepin_reader {
 class PDFAnnotation : public Annotation
 {
     Q_OBJECT
+    Q_DISABLE_COPY(PDFAnnotation)
 
     friend class PDFPage;
 
@@ -52,9 +53,7 @@ public:
     DPdfAnnot *ownAnnotation() override;
 
 private:
-    Q_DISABLE_COPY(PDFAnnotation)
-
-    PDFAnnotation(DPdfAnnot *dannotation);
+    explicit PDFAnnotation(DPdfAnnot *dannotation);
 
     DPdfAnnot *m_dannotation;
 
@@ -62,10 +61,9 @@ private:
 
 class PDFPage : public Page
 {
-    Q_DECLARE_TR_FUNCTIONS(PDFPage)
+    Q_DISABLE_COPY(PDFPage)
 
     friend class PDFDocument;
-
 public:
     ~PDFPage() override;
 
@@ -93,16 +91,12 @@ public:
 
     bool updateAnnotation(Annotation *annotation, const QString &, const QColor &) override;
 
-    bool mouseClickIconAnnot(const QPointF &) override;
-
     Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) override;
 
     Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) override;
 
 private:
-    Q_DISABLE_COPY(PDFPage)
-
-    PDFPage(QMutex *mutex, DPdfPage *page);
+    explicit PDFPage(QMutex *mutex, DPdfPage *page);
 
     QMutex *m_docMutex = nullptr;
 
@@ -115,11 +109,8 @@ private:
 
 class PDFDocument : public Document
 {
-    Q_DECLARE_TR_FUNCTIONS(Model::PDFDocument)
-
-public:
     Q_DISABLE_COPY(PDFDocument)
-
+public:
     explicit PDFDocument(DPdfDoc *document);
 
     virtual ~PDFDocument() override;
@@ -145,13 +136,14 @@ public:
 private:
     DPdfDoc *m_document = nullptr;
 
-    QMutex *m_docMutex;
+    QMutex *m_docMutex = nullptr;
 
     mutable Properties m_fileProperties;
 
     mutable Outline m_outline;
 
     qreal m_xRes = 72;
+
     qreal m_yRes = 72;
 };
 }

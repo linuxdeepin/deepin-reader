@@ -148,10 +148,8 @@ void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStanda
             parentItem->appendRow(itemList);
 
             foreach (auto s1, s.children) { //  3级显示
-                if (s.nIndex >= 0) {
-                    auto itemList1 = getItemList(s1.title, s1.nIndex, s1.offsetPointF.x(), s1.offsetPointF.y());
-                    itemList.at(0)->appendRow(itemList1);
-                }
+                auto itemList1 = getItemList(s1.title, s1.nIndex, s1.offsetPointF.x(), s1.offsetPointF.y());
+                itemList.at(0)->appendRow(itemList1);
             }
         }
     }

@@ -83,7 +83,6 @@ TEST_F(ut_document, DJVUTest)
         page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
         page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
         page->updateAnnotation(nullptr, "test", QColor(Qt::red));
-        page->mouseClickIconAnnot(QPointF(0, 0));
         page->moveIconAnnotation(nullptr, QRectF(0, 0, 100, 100));
         page->removeAnnotation(nullptr);
         delete page;
@@ -155,7 +154,6 @@ TEST_F(ut_document, PDFTest)
             page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
             page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
             page->updateAnnotation(annot, "test", QColor(Qt::red));
-            page->mouseClickIconAnnot(QPointF(0, 0));
             page->moveIconAnnotation(annot, QRectF(0, 0, 100, 100));
 
             //page->removeAnnotation(annot);        //崩溃

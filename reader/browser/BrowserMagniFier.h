@@ -76,7 +76,7 @@ class BrowserMagniFier : public QLabel
     Q_OBJECT
 
 public:
-    BrowserMagniFier(QWidget *parent);
+    explicit BrowserMagniFier(QWidget *parent);
 
     /**
      * @brief 显示放大区域的图片
@@ -110,7 +110,6 @@ private:
     qreal m_lastScaleFactor;
     QPoint m_lastPoint;
     QPoint m_lastScenePoint;
-
     SheetBrowser *m_brwoser;
     ReadMagnifierManager *m_readManager;
 };

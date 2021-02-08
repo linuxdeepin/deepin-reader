@@ -52,7 +52,7 @@ typedef struct ImagePageInfo_t {
     QString strSearchcount;
     deepin_reader::Annotation *annotation = nullptr;
 
-    ImagePageInfo_t(int index = -1);
+    explicit ImagePageInfo_t(int index = -1);
 
     bool operator == (const ImagePageInfo_t &other) const;
 
