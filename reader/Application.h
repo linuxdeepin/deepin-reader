@@ -49,6 +49,15 @@ protected:
      * 通过菜单选项关闭所有
      */
     void handleQuitAction() override;
+
+    /**
+     * @brief notify
+     * 让无法响应的对象强行响应
+     * @param object
+     * @param event
+     * @return
+     */
+    bool notify(QObject *object, QEvent *event) override;
 };
 
 #endif  // APPLICATION_H_

@@ -74,3 +74,33 @@ void Application::handleQuitAction()
     }
 }
 
+bool Application::notify(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        //让所有按钮响应回车 DPushButton不响应回车 DIconButton会默认响应
+        QKeyEvent *keyevent = static_cast<QKeyEvent *>(event);
+        if ((object->inherits("QAbstractButton")) && (keyevent->key() == Qt::Key_Return || keyevent->key() == Qt::Key_Enter)) {
+            QAbstractButton *pushButton = dynamic_cast<QAbstractButton *>(object);
+            if (pushButton) {
+                emit pushButton->clicked(!pushButton->isChecked());
+                return true;
+            }
+        }
+
+        //alt+m 模拟右击菜单
+        if ((keyevent->modifiers() == Qt::AltModifier) && keyevent->key() == Qt::Key_M) {
+            // 光标中心点
+            QPoint pos = QPoint(static_cast<int>(qApp->inputMethod()->cursorRectangle().x() + qApp->inputMethod()->cursorRectangle().width() / 2),
+                                static_cast<int>(qApp->inputMethod()->cursorRectangle().y() + qApp->inputMethod()->cursorRectangle().height() / 2));
+
+            // QPoint(0,0) 表示无法获取光标位置
+            if (pos != QPoint(0, 0)) {
+                QMouseEvent event(QEvent::MouseButtonPress, pos, Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+                QCoreApplication::sendEvent(object, &event);
+            }
+        }
+    }
+
+    return DApplication::notify(object, event);
+}
+
