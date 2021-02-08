@@ -229,12 +229,6 @@ public:
     void handleSearch();
 
     /**
-     * @brief showFileAttr
-     * 弹出对话框显示当前文档的属性
-     */
-    void showFileAttr();
-
-    /**
      * @brief getTitleLabel
      * 获取当前文档名称的控件，用于显示在标题栏或者tab栏
      * @return 对应控件

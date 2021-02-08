@@ -500,17 +500,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
     return nullptr;
 }
 
-void CentralDocPage::showFileAttr()
-{
-    auto pFileAttrWidget = new FileAttrWidget;
-
-    pFileAttrWidget->setFileAttr(getCurSheet());
-
-    pFileAttrWidget->setAttribute(Qt::WA_DeleteOnClose);
-
-    pFileAttrWidget->showScreenCenter();
-}
-
 void CentralDocPage::handleShortcut(const QString &s)
 {
     if (s == Dr::key_esc && m_slideWidget) {

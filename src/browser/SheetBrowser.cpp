@@ -1507,7 +1507,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                     PrintManager p(m_sheet);
                     p.showPrintDialog(m_sheet);
                 } else if (objectname == "DocumentInfo") {
-                    FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
+                    FileAttrWidget *pFileAttrWidget = new FileAttrWidget(parentWidget());
                     pFileAttrWidget->setFileAttr(m_sheet);
                     pFileAttrWidget->showScreenCenter();
                 }
@@ -2227,7 +2227,7 @@ void SheetBrowser::showMenu()
             PrintManager p(m_sheet);
             p.showPrintDialog(m_sheet);
         } else if (objectname == "DocumentInfo") {
-            FileAttrWidget *pFileAttrWidget = new FileAttrWidget;
+            FileAttrWidget *pFileAttrWidget = new FileAttrWidget(parentWidget());
             pFileAttrWidget->setFileAttr(m_sheet);
             pFileAttrWidget->showScreenCenter();
         }
