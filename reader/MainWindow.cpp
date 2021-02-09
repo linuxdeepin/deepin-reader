@@ -245,6 +245,8 @@ void MainWindow::initUI()
 
     Utils::setObjectNoFocusPolicy(this);
 
+    setFocusPolicy(Qt::StrongFocus);
+
     QTimer::singleShot(100, this, SLOT(onUpdateTitleLabelRect()));
 
     titlebar()->installEventFilter(this);
