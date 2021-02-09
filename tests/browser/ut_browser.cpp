@@ -17,6 +17,9 @@
 #include "BrowserAnnotation.h"
 #include "BrowserMagniFier.h"
 #include "SheetRenderer.h"
+#include "PageRenderThread.h"
+#include "SideBarImageViewModel.h"
+#include "PageSearchThread.h"
 
 #undef private
 #undef protected
@@ -43,240 +46,81 @@ void ut_browser::TearDown()
 {
 }
 
-TEST_F(ut_browser, SheetBrowserTest)
+TEST_F(ut_browser, BrowserAnnotationTest)
 {
-    MainWindow *window = MainWindow::createWindow();
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserAnnotationTest"));
 
-    window->activateWindow();
+    EXPECT_TRUE(sheet->openFileExec(""));
 
-    window->show();
+    BrowserPage *page = sheet->m_browser->pages().value(0);
 
-    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetBrowserTest"));
+    EXPECT_TRUE(page);
 
-    ASSERT_TRUE(sheet->openFileExec(""));
+    BrowserAnnotation *annot = new BrowserAnnotation(page, QRectF(20, 20, 20, 20), sheet->annotations().value(0), 1);
 
-    window->addSheet(sheet);
+    annot->setScaleFactor(1);
 
-    EXPECT_TRUE(sheet);
+    annot->annotationText();
 
-    sheet->setSidebarVisible(true);
+    annot->annotationType();
 
-    sheet->m_sidebar->onBtnClicked(1);
+    annot->boundingRect();
 
-    DocSheet *sheet2 = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetBrowserTest"));
+    annot->setDrawSelectRect(true);
 
-    sheet2->openFileAsync("");
+    annot->annotation();
 
-    //EXPECT_TRUE(sheet->m_browser->isUnLocked());  //暂时报错
+    annot->isSame(nullptr);
 
-    sheet->m_renderer->properties();
+    QPixmap pixmap(200, 200);
 
-    sheet->m_browser->getClickAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0), false);
+    QPainter painter(&pixmap);
 
-    sheet->m_browser->moveIconAnnot(sheet->m_browser->m_items.at(0), QPointF(0, 0));
+    QStyleOptionGraphicsItem option;
 
-    QRectF iconRect = QRectF(0, 0, 1, 1.0);
+    annot->paint(&painter, &option, nullptr);
 
-    sheet->m_browser->calcIconAnnotRect(sheet->m_browser->m_items.at(0), QPointF(0, 0), iconRect);
+    delete sheet;
+}
 
-    QPoint showPoint = QPoint(1, 1);
+TEST_F(ut_browser, BrowserMagniFierTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserMagniFierTest"));
 
-    Annotation *hightLightAnnot = sheet->m_browser->addHighLightAnnotation("123", QColor(Qt::red), showPoint);
+    EXPECT_TRUE(sheet->openFileExec(""));
 
-    sheet->m_browser->jumpToHighLight(hightLightAnnot, 0);
+    BrowserMagniFier *magnifier = new BrowserMagniFier(sheet->m_browser);
 
-    sheet->m_browser->onAddHighLightAnnot(nullptr, "123", QColor(Qt::red));
+    magnifier->setMagniFierImage(QImage());
 
-    //firstThumbnail
+    magnifier->showMagnigierImage(QPoint(10, 10), QPoint(20, 20), 1);
 
-    //save
+    magnifier->updateImage();
 
-    //aveas
+    MagnifierInfo_t task;
 
-    sheet->m_browser->setMouseShape(Dr::MouseShapeHand);
+    ReadMagnifierManager *manager = new ReadMagnifierManager(magnifier);
 
-    sheet->m_browser->setBookMark(0, 1);
+    manager->addTask(task);
 
-    sheet->m_browser->setAnnotationInserting(true);
+    manager->wait();
 
-    sheet->m_browser->onVerticalScrollBarValueChanged(1);
+    delete manager;
 
-    sheet->m_browser->onHorizontalScrollBarValueChanged(1);
+    delete magnifier;
 
-    sheet->m_browser->beginViewportChange();
+    delete sheet;
+}
 
-    sheet->m_browser->hideSubTipsWidget();
-
-    sheet->m_browser->onViewportChanged();
-
-    sheet->m_browser->showNoteEditWidget(hightLightAnnot, QPoint(0, 0));
-
-    sheet->m_browser->jump2PagePos(sheet->m_browser->m_items.at(0), 1, 2);
-
-    sheet->m_browser->jumpToOutline(0, 0, 0);
-
-    sheet->m_browser->onRemoveAnnotation(hightLightAnnot, true);
-
-    QShowEvent *showEvent = new QShowEvent;
-
-    sheet->m_browser->showEvent(showEvent);
-
-    QGestureEvent *gestureEvent = new QGestureEvent(QList<QGesture *>());
-
-    sheet->m_browser->gestureEvent(gestureEvent);
-
-    QTimerEvent *timerEvent = new QTimerEvent(123);
-
-    sheet->m_browser->timerEvent(timerEvent);
-
-    sheet->m_browser->hasLoaded();
-
-    sheet->m_browser->openMagnifier();
-
-    sheet->m_browser->magnifierOpened();
-
-    sheet->m_browser->closeMagnifier();
-
-    sheet->m_browser->maxWidth();
-
-    sheet->m_browser->maxHeight();
-
-    sheet->m_browser->needBookmark(0, 1);
-
-    sheet->m_browser->handleSearchStart();
-
-    sheet->m_browser->jumpToNextSearchResult();
-
-    sheet->m_browser->jumpToPrevSearchResult();
-
-    sheet->m_browser->handleSearchResultComming(deepin_reader::SearchResult());
-
-    sheet->m_browser->handleFindFinished(123);
-
-    sheet->m_browser->handleSearchStop();
-
-    sheet->m_browser->setDocTapGestrue(QPoint(0, 0));
-
-    sheet->m_browser->clearSelectIconAnnotAfterMenu();
-
-    sheet->m_browser->isLink(QPoint(0, 0));
-
-    sheet->m_browser->setIconAnnotSelect(true);
-
-    sheet->m_browser->onSetDocSlideGesture();
-
-    sheet->m_browser->onRemoveIconAnnotSelect();
-
-    sheet->m_browser->curpageChanged(0);
-
-    sheet->m_renderer->outline();
-
-    sheet->m_renderer->loadPageLable();
-
-    sheet->m_renderer->pageLableIndex("1");
-
-    sheet->m_renderer->pageHasLable();
-
-    sheet->m_renderer->pageNum2Lable(0);
-
-    sheet->m_browser->setCurrentPage(0);
-
-    sheet->m_browser->currentPage();
-
-    sheet->m_browser->allPages();
-
-    sheet->m_browser->translate2Local(QPointF(0, 0));
-
-    QPointF pagePoint = QPointF(0, 0);
-
-    sheet->m_browser->getBrowserPageForPoint(pagePoint);
-
-    sheet->m_browser->currentScrollValueForPage();
-
-    int fromIndex = 0;
-
-    int toIndex = 1;
-
-    sheet->m_browser->currentIndexRange(fromIndex, toIndex);
-
-    sheet->m_browser->selectedWordsText();
-
-    //sheet->m_browser->showMenu();     //阻塞
-
-    sheet->m_browser->deform(sheet->m_operation);
-
-    QEvent *event = new QEvent(QEvent::Timer);
-
-    sheet->m_browser->event(event);
-
-    QMouseEvent *pressMouseEvent = new QMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-    sheet->m_browser->mousePressEvent(pressMouseEvent);
-
-    QMouseEvent *releaseMouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-    sheet->m_browser->mouseReleaseEvent(releaseMouseEvent);
-
-    QMouseEvent *mouseEvent = new QMouseEvent(QEvent::Move, QPointF(0, 0), QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-    sheet->m_browser->mouseMoveEvent(mouseEvent);
-
-    QDragEnterEvent *dragEnterEvent = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
-
-    sheet->m_browser->dragEnterEvent(dragEnterEvent);
-
-    QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
-
-    sheet->m_browser->resizeEvent(resizeEvent);
-
-    QPinchGesture *pinchGesture = new QPinchGesture;
-
-    sheet->m_browser->pinchTriggered(pinchGesture);
-
-    QWheelEvent *wheelEvent = new QWheelEvent(QPointF(0, 0), 1, Qt::LeftButton, Qt::NoModifier);
-
-    sheet->m_browser->wheelEvent(wheelEvent);
-
-    window->show();
-
-    //BrowserPage
-    BrowserPage *page = sheet->m_browser->m_items.at(0);
-    if (nullptr == page) //暂时报错
-        GTEST_FAIL();
-
-    page->bookmarkMouseRect();
-    page->updateBookmarkState();
-    page->renderRect(QRectF(0, 0, 1, 1));
-    page->renderViewPort();
-    page->handleWordLoaded(QList<Word>());
-    page->getImagePoint(1, QPoint(0, 0));
-    page->loadWords();
-    page->setDrawMoveIconRect(true);
-
-    QList<Word> words = sheet->renderer()->getWords(page->itemIndex());
-    if (words.count() <= 0)
-        GTEST_FAIL();
-
-    BrowserWord *word = new BrowserWord(page, words[0]);
-    word->setScaleFactor(1);
-    word->setSelectable(true);
-    word->boundingBox();
-    word->boundingRect();
-
-    QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
-
-    word->mousePressEvent(gsMouseEvent);
-
-    word->mouseReleaseEvent(gsMouseEvent);
+TEST_F(ut_browser, BrowserMenuTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserMenuTest"));
 
     ///BrowserMenu
     BrowserMenu *menu = new BrowserMenu;
     menu->initActions(sheet, 0, SheetMenuType_e::DOC_MENU_DEFAULT);
     menu->createAction("test displayname", "test object");
     menu->onSetHighLight();
-    menu->show();
-    menu->hide();
-    //    menu->onItemClicked();
     delete menu;
 
     BrowserMenu *menu1 = new BrowserMenu;
@@ -295,40 +139,388 @@ TEST_F(ut_browser, SheetBrowserTest)
     menu4->initActions(sheet, 0, SheetMenuType_e::DOC_MENU_KEY);
     delete menu4;
 
-    ///BrowserAnnotation
-    deepin_reader::Annotation *annotation = page->annotations().at(0);
-    if (nullptr == annotation)
-        GTEST_FAIL();
+    delete sheet;
+}
 
-    BrowserAnnotation *annotationItem = new BrowserAnnotation(page, QRectF(0, 0, 10, 10), annotation, 1);
-    EXPECT_TRUE(annotationItem->isSame(annotation));
-    annotationItem->annotationText();
-    annotationItem->annotationType();
-    annotationItem->setDrawSelectRect(true);
-    annotationItem->annotation();
+TEST_F(ut_browser, BrowserPageTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserPageTest"));
 
-    annotation = page->annotations().at(1);
-    if (nullptr == annotation)
-        GTEST_FAIL();
+    EXPECT_TRUE(sheet->openFileExec(""));
+
+    BrowserPage *page = sheet->m_browser->pages().value(0);
+
+    EXPECT_TRUE(page);
+
+    page->bookmarkMouseRect();
+
+    page->updateBookmarkState();
+
+    page->renderRect(QRectF(0, 0, 1, 1));
+
+    page->renderViewPort();
+
+    page->handleWordLoaded(QList<Word>());
+
+    page->getImagePoint(1, QPoint(0, 0));
+
+    page->loadWords();
+
+    page->setDrawMoveIconRect(true);
 
     page->selectedWords();
+
     page->clearSelectSearchHighlightRects();
+
     page->getBrowserAnnotation(QPointF(0, 0));
+
     page->getBrowserWord(QPointF(0, 0));
+
     page->getNorotateRect(QRectF(0, 0, 1, 1));
-    page->addIconAnnotation(QRectF(0, 0, 1, 1), "test");
-    page->addHighlightAnnotation("text", QColor(Qt::red));
-    page->updateAnnotation(annotation, "test", QColor(Qt::red));
+
     page->setSelectIconRect(true, nullptr);
-    sheet->renderer()->inLink(page->itemIndex(), QPointF(0, 0));
+
     page->setPageBookMark(QPointF(0, 0));
+
+    page->addIconAnnotation(QRectF(0, 0, 1, 1), "test");
+
+    deepin_reader::Annotation *annotation = page->addHighlightAnnotation("text", QColor(Qt::red));
+
+    page->updateAnnotation(annotation, "test", QColor(Qt::red));
+
     page->removeAnnotation(annotation);
+
     page->removeAllAnnotation();
 
-    ///BrowserMagniFier
-    MagnifierInfo_t info;
+    delete sheet;
+}
 
-    window->closeWithoutSave();
+TEST_F(ut_browser, BrowserWordTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserWordTest"));
 
-    exec();
+    EXPECT_TRUE(sheet->openFileExec(""));
+
+    BrowserPage *page = sheet->m_browser->pages().value(0);
+
+    EXPECT_TRUE(page);
+
+    page->loadWords();
+
+    QList<Word> words = sheet->renderer()->getWords(page->itemIndex());
+    if (words.count() <= 0)
+        GTEST_FAIL();
+
+    BrowserWord *word = new BrowserWord(page, words[0]);
+
+    word->setScaleFactor(1);
+
+    word->setSelectable(true);
+
+    word->boundingBox();
+
+    word->boundingRect();
+
+    QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
+
+    word->mousePressEvent(gsMouseEvent);
+
+    word->mouseReleaseEvent(gsMouseEvent);
+}
+
+TEST_F(ut_browser, PageRenderThreadTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "PageRenderThreadTest"));
+
+    EXPECT_TRUE(sheet->openFileExec(""));
+
+    BrowserPage *page = sheet->m_browser->pages().value(0);
+
+    PageRenderThread *thread = new PageRenderThread;
+
+    //DocPageNormalImageTask
+    DocPageNormalImageTask docPageNormalImageTask;
+
+    docPageNormalImageTask.sheet = sheet;
+
+    docPageNormalImageTask.page = page;
+
+    docPageNormalImageTask.rect = QRect(0, 0, 200, 200);
+
+    docPageNormalImageTask.pixmapId = 0;
+
+    thread->appendTask(docPageNormalImageTask);
+
+    //DocPageSliceImageTask
+    DocPageSliceImageTask docPageSliceImageTask;
+
+    docPageSliceImageTask.page = page;
+
+    docPageSliceImageTask.sheet = sheet;
+
+    docPageSliceImageTask.slice = QRect(0, 0, 200, 200);
+
+    docPageSliceImageTask.whole = page->boundingRect().toRect();
+
+    docPageSliceImageTask.pixmapId = 1;
+
+    thread->appendTask(docPageSliceImageTask);
+
+    //DocPageBigImageTask
+    DocPageBigImageTask docPageBigImageTask;
+
+    docPageBigImageTask.page = page;
+
+    docPageBigImageTask.sheet = sheet;
+
+    docPageBigImageTask.rect = page->boundingRect().toRect();
+
+    docPageBigImageTask.pixmapId = 2;
+
+    thread->appendTask(docPageSliceImageTask);
+
+    //DocPageWordTask
+    DocPageWordTask docPageWordTask;
+
+    docPageWordTask.page = page;
+
+    docPageWordTask.sheet = sheet;
+
+    thread->appendTask(docPageWordTask);
+
+    //DocPageAnnotationTask
+    DocPageAnnotationTask docPageAnnotationTask;
+
+    docPageAnnotationTask.page = page;
+
+    docPageAnnotationTask.sheet = sheet;
+
+    thread->appendTask(docPageAnnotationTask);
+
+    //DocPageThumbnailTask
+    DocPageThumbnailTask docPageThumbnailTask;
+
+    docPageThumbnailTask.index = 0;
+
+    docPageThumbnailTask.sheet = sheet;
+
+    SideBarImageViewModel *model = new SideBarImageViewModel(sheet);
+
+    docPageThumbnailTask.model = model;
+
+    thread->appendTask(docPageThumbnailTask);
+
+    //DocOpenTask
+    DocOpenTask docOpenTask;
+
+    docOpenTask.sheet = sheet;
+
+    docOpenTask.password = "";
+
+    SheetRenderer *render = new SheetRenderer(sheet);
+
+    docOpenTask.renderer = render;
+
+    thread->appendTask(docOpenTask);
+
+    //DocCloseTask
+    DocCloseTask docCloseTask;
+
+    docCloseTask.pages = QList<deepin_reader::Page *>();
+
+    docCloseTask.document = nullptr;
+
+    thread->appendTask(docCloseTask);
+
+    delete thread;
+
+    delete render;
+
+    delete model;
+
+    delete sheet;
+}
+
+TEST_F(ut_browser, PageSearchThreadTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "PageSearchThreadTest"));
+
+    EXPECT_TRUE(sheet->openFileExec(""));
+
+    PageSearchThread *thread = new PageSearchThread;
+
+    thread->startSearch(sheet, "test");
+
+    thread->wait();
+
+    thread->stopSearch();
+
+    delete thread;
+
+    delete sheet;
+}
+
+TEST_F(ut_browser, SheetBrowserTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetBrowserTest"));
+
+    ASSERT_TRUE(sheet->openFileExec(""));
+
+    SheetBrowser *browser = new SheetBrowser(sheet);
+
+    browser->init(sheet->m_operation, sheet->m_bookmarks);
+
+    browser->getClickAnnot(browser->m_items.at(0), QPointF(0, 0), false);
+
+    browser->moveIconAnnot(browser->m_items.at(0), QPointF(0, 0));
+
+    QRectF iconRect = QRectF(0, 0, 1, 1.0);
+
+    browser->calcIconAnnotRect(browser->m_items.at(0), QPointF(0, 0), iconRect);
+
+    QPoint showPoint = QPoint(1, 1);
+
+    Annotation *hightLightAnnot = browser->addHighLightAnnotation("123", QColor(Qt::red), showPoint);
+
+    browser->jumpToHighLight(hightLightAnnot, 0);
+
+    browser->onAddHighLightAnnot(nullptr, "123", QColor(Qt::red));
+
+    browser->setMouseShape(Dr::MouseShapeHand);
+
+    browser->setBookMark(0, 1);
+
+    browser->setAnnotationInserting(false);
+
+    browser->onVerticalScrollBarValueChanged(1);
+
+    browser->onHorizontalScrollBarValueChanged(1);
+
+    browser->beginViewportChange();
+
+    browser->hideSubTipsWidget();
+
+    browser->onViewportChanged();
+
+    browser->showNoteEditWidget(hightLightAnnot, QPoint(0, 0));
+
+    browser->jump2PagePos(browser->m_items.at(0), 1, 2);
+
+    browser->jumpToOutline(0, 0, 0);
+
+    browser->onRemoveAnnotation(hightLightAnnot, true);
+
+    browser->hasLoaded();
+
+    browser->openMagnifier();
+
+    browser->magnifierOpened();
+
+    browser->closeMagnifier();
+
+    browser->maxWidth();
+
+    browser->maxHeight();
+
+    browser->needBookmark(0, 1);
+
+    browser->handleSearchStart();
+
+    browser->jumpToNextSearchResult();
+
+    browser->jumpToPrevSearchResult();
+
+    browser->handleSearchResultComming(deepin_reader::SearchResult());
+
+    browser->handleFindFinished(123);
+
+    browser->handleSearchStop();
+
+    browser->setDocTapGestrue(QPoint(0, 0));
+
+    browser->clearSelectIconAnnotAfterMenu();
+
+    browser->isLink(QPoint(0, 0));
+
+    browser->setIconAnnotSelect(true);
+
+    browser->onSetDocSlideGesture();
+
+    browser->onRemoveIconAnnotSelect();
+
+    browser->curpageChanged(0);
+
+    browser->setCurrentPage(0);
+
+    browser->currentPage();
+
+    browser->allPages();
+
+    browser->translate2Local(QPointF(0, 0));
+
+    QPointF pagePoint = QPointF(0, 0);
+
+    browser->getBrowserPageForPoint(pagePoint);
+
+    browser->currentScrollValueForPage();
+
+    int fromIndex = 0;
+
+    int toIndex = 1;
+
+    browser->currentIndexRange(fromIndex, toIndex);
+
+    browser->selectedWordsText();
+
+    //browser->showMenu();     //阻塞
+
+    browser->deform(sheet->m_operation);
+
+    QShowEvent showEvent;
+
+    browser->showEvent(&showEvent);
+
+    QGestureEvent gestureEvent((QList<QGesture *>()));
+
+    browser->gestureEvent(&gestureEvent);
+
+    QTimerEvent timerEvent(5);
+
+    browser->timerEvent(&timerEvent);
+
+    QEvent event(QEvent::Timer);
+
+    browser->event(&event);
+
+    QMouseEvent pressMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    browser->mousePressEvent(&pressMouseEvent);
+
+    QMouseEvent releaseMouseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    browser->mouseReleaseEvent(&releaseMouseEvent);
+
+    QMouseEvent *mouseEvent = new QMouseEvent(QEvent::Move, QPointF(0, 0), QPointF(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    browser->mouseMoveEvent(mouseEvent);
+
+    QDragEnterEvent *dragEnterEvent = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+
+    browser->dragEnterEvent(dragEnterEvent);
+
+    QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
+
+    browser->resizeEvent(resizeEvent);
+
+    QPinchGesture *pinchGesture = new QPinchGesture;
+
+    browser->pinchTriggered(pinchGesture);
+
+    QWheelEvent *wheelEvent = new QWheelEvent(QPointF(0, 0), 1, Qt::LeftButton, Qt::NoModifier);
+
+    browser->wheelEvent(wheelEvent);
+
+    delete browser;
+
+    delete sheet;
 }

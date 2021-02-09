@@ -193,33 +193,9 @@ DocSheet *DocSheet::getSheetByFilePath(QString filePath)
     return result;
 }
 
-QList<DocSheet *> DocSheet::getChangedList()
+QList<DocSheet *> DocSheet::getSheets()
 {
-    QList<DocSheet *> changedList;
-
-    g_lock.lockForRead();
-
-    foreach (auto sheet, DocSheet::g_map.values()) {
-        if (sheet->fileChanged())
-            changedList.append(sheet);
-    }
-
-    g_lock.unlock();
-
-    return changedList;
-}
-
-void DocSheet::saveList(QList<DocSheet *> list)
-{
-    g_lock.lockForRead();
-
-    foreach (auto sheet, list) {
-        if (g_map.values().contains(sheet))
-            sheet->saveData();
-    }
-
-    g_lock.unlock();
-
+    return DocSheet::g_map.values();
 }
 
 bool DocSheet::openFileExec(const QString &password)
@@ -478,8 +454,6 @@ bool DocSheet::saveData()
 
     m_sidebar->changeResetModelData();
 
-    PERF_PRINT_END("POINT-04", "");
-
     return true;
 }
 
@@ -580,6 +554,7 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
 {
     if (nullptr == m_browser)
         return QList< deepin_reader::Annotation * > ();
+
     return m_browser->annotations();
 }
 
@@ -1153,12 +1128,6 @@ void DocSheet::onExtractPassword(const QString &password)
     m_password = password;
 
     m_renderer->openFileAsync(m_password);
-}
-
-void DocSheet::deadDeleteLater()
-{
-    setAlive(false);
-    this->deleteLater();
 }
 
 SheetRenderer *DocSheet::renderer()

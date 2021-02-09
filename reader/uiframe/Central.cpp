@@ -154,9 +154,17 @@ void Central::showSheet(DocSheet *sheet)
     docPage()->showSheet(sheet);
 }
 
-bool Central::saveAll()
+void Central::closeSheet(DocSheet *sheet)
 {
-    return docPage()->saveAll();
+    docPage()->closeSheet(sheet);
+}
+
+QList<DocSheet *> Central::getSheets()
+{
+    if (nullptr == m_docPage)
+        return QList<DocSheet *>();
+
+    return docPage()->getSheets();
 }
 
 void Central::handleShortcut(QString shortcut)

@@ -68,13 +68,6 @@ public:
     void addFileAsync(const QString &filePath);
 
     /**
-     * @brief saveAll
-     * 保存当前窗口内所有文档,如果被改变则提示保存
-     * @return 保存是否成功
-     */
-    bool saveAll();
-
-    /**
      * @brief saveCurrent
      * 保存当前文档,如果被改变则提示保存
      * @return 保存是否成功
@@ -93,21 +86,27 @@ public:
      * 直接添加一个文档页
      * @param sheet
      */
-    void addSheet(DocSheet *);        //直接添加sheet
+    void addSheet(DocSheet *sheet);        //直接添加sheet
 
     /**
      * @brief enterSheet
      * 进入一个文档页，会进行信号父窗口等重新绑定
      * @param sheet
      */
-    void enterSheet(DocSheet *);      //直接添加sheet (tabbar需要自行判断)
+    void enterSheet(DocSheet *sheet);      //直接添加sheet (tabbar需要自行判断)
 
     /**
      * @brief leaveSheet
      * 离开一个文档页，会进行信号父窗口等解绑
      * @param sheet
      */
-    void leaveSheet(DocSheet *);      //直接删除sheet (tabbar需要自行判断)
+    void leaveSheet(DocSheet *sheet);      //直接删除sheet (tabbar需要自行判断)
+
+    /**
+     * @brief closeSheet
+     * 关闭sheet
+     */
+    void closeSheet(DocSheet *sheet);
 
     /**
      * @brief hasSheet
@@ -123,6 +122,13 @@ public:
      * @param sheet
      */
     void showSheet(DocSheet *sheet);  //显示sheet和对应标签
+
+    /**
+     * @brief getSheets
+     * 获取sheet
+     * @return
+     */
+    QList<DocSheet *> getSheets();
 
     /**
      * @brief getCurSheet
@@ -359,9 +365,9 @@ public slots:
 
 private:
     QPointer<DocSheet>  m_magniferSheet = nullptr;
-    DLabel              *m_pDocTabLabel = nullptr;
-    QStackedLayout      *m_pStackedLayout = nullptr;
-    DocTabBar           *m_pTabBar = nullptr;
+    DLabel              *m_tabLabel = nullptr;
+    QStackedLayout      *m_stackedLayout = nullptr;
+    DocTabBar           *m_tabBar = nullptr;
     SlideWidget         *m_slideWidget = nullptr;
     QVBoxLayout         *m_mainLayout = nullptr;
     bool                m_isMaximizedBeforeFullScreen = false;

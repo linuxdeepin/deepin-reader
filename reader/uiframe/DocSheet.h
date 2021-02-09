@@ -116,18 +116,11 @@ public:
     static DocSheet *getSheetByFilePath(QString filePath);
 
     /**
-     * @brief getChangedList
-     * 返回所有已变动的列表
+     * @brief getSheets
+     * 返回所有sheet
      * @return
      */
-    static QList<DocSheet *> getChangedList();
-
-    /**
-     * @brief getChangedList
-     * 返回所有已变动的列表
-     * @return
-     */
-    static void saveList(QList<DocSheet *> list);
+    static QList<DocSheet *> getSheets();
 
     /**
      * @brief 全局对象判断读写锁
@@ -617,11 +610,6 @@ public:
      * @return
      */
     QSizeF pageSizeByIndex(int index);
-
-    /**
-     * @brief 先死亡后再删除,防止加载时删除、关闭时卡顿和正在删除时被调用
-     */
-    void deadDeleteLater();
 
     /**
      * @brief renderer

@@ -83,6 +83,13 @@ public:
     void activateSheet(DocSheet *sheet);
 
     /**
+     * @brief closeWithSave
+     * 保存关闭，如果被用户取消则返回false
+     * @return
+     */
+    bool closeWithSave();
+
+    /**
      * @brief closeWithoutSave
      * 不需要保存的子窗口直接关闭
      */
@@ -183,7 +190,7 @@ private:
     QPropertyAnimation *m_TitleAnimation = nullptr;
     TitleMenu *m_menu = nullptr;
     Central *m_central = nullptr;
-    bool m_needSave = true;
+    bool needToBeSaved = true;
     int m_lastWindowState = Qt::WindowNoState;
     QStringList m_initFilePathList;
 
@@ -191,6 +198,7 @@ public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();
     static bool activateSheetIfExist(const QString &filePath);
+    static bool closeSheet(DocSheet *sheet, bool needToBeSaved);
     static MainWindow *createWindow(QStringList filePathList = QStringList());
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;

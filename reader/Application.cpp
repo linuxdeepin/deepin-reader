@@ -55,22 +55,8 @@ void Application::emitSheetChanged()
 
 void Application::handleQuitAction()
 {
-    QList<DocSheet *> changedList = DocSheet::getChangedList();
-
-    if (changedList.size() > 0) {   //需要提示保存
-        SaveDialog sd;
-
-        int nRes = sd.showExitDialog();
-
-        if (nRes <= 0)
-            return;
-
-        if (nRes == 2)
-            DocSheet::saveList(changedList);
-    }
-
     foreach (MainWindow *window, MainWindow::m_list) {
-        window->closeWithoutSave();
+        window->closeWithSave();
     }
 }
 

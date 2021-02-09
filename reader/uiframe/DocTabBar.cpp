@@ -126,6 +126,19 @@ void DocTabBar::showSheet(DocSheet *sheet)
     }
 }
 
+QList<DocSheet *> DocTabBar::getSheets()
+{
+    QList<DocSheet *> sheets;
+
+    for (int i = 0; i < count(); ++i) {
+        DocSheet *sheet = DocSheet::getSheet(this->tabData(i).toString());
+        if (nullptr != sheet)
+            sheets.append(sheet);
+    }
+
+    return sheets;
+}
+
 void DocTabBar::updateTabWidth()
 {
     int tabCount = count();

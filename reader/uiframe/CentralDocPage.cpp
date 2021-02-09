@@ -48,36 +48,36 @@
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
-    m_pTabBar = new DocTabBar(this);
-    connect(m_pTabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
-    connect(m_pTabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
-    connect(m_pTabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
+    m_tabBar = new DocTabBar(this);
+    connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
+    connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
+    connect(m_tabBar, SIGNAL(sigTabClosed(DocSheet *)), this, SLOT(onTabClosed(DocSheet *)));
+    connect(m_tabBar, SIGNAL(sigTabMoveOut(DocSheet *)), this, SLOT(onTabMoveOut(DocSheet *)));
+    connect(m_tabBar, SIGNAL(sigTabNewWindow(DocSheet *)), this, SLOT(onTabNewWindow(DocSheet *)));
+    connect(m_tabBar, SIGNAL(sigNeedOpenFilesExec()), this, SIGNAL(sigNeedOpenFilesExec()));
+    connect(m_tabBar, SIGNAL(sigNeedActivateWindow()), this, SIGNAL(sigNeedActivateWindow()));
 
-    m_pStackedLayout = new QStackedLayout;
+    m_stackedLayout = new QStackedLayout;
     m_mainLayout = new QVBoxLayout(this);
 
-    m_mainLayout->addWidget(m_pTabBar);
-    m_mainLayout->addItem(m_pStackedLayout);
+    m_mainLayout->addWidget(m_tabBar);
+    m_mainLayout->addItem(m_stackedLayout);
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(0);
 
     this->setLayout(m_mainLayout);
 
-    m_pDocTabLabel = new DLabel(this);
-    m_pDocTabLabel->setElideMode(Qt::ElideMiddle);
-    m_pDocTabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
-    m_pDocTabLabel->setAlignment(Qt::AlignCenter);
+    m_tabLabel = new DLabel(this);
+    m_tabLabel->setElideMode(Qt::ElideMiddle);
+    m_tabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
+    m_tabLabel->setAlignment(Qt::AlignCenter);
     connect(this, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
 
     QWidget *mainwindow = parent->parentWidget();
     if (mainwindow) {
-        DIconButton *leftButton = m_pTabBar->findChild<DIconButton *>("leftButton");
-        DIconButton *rightButton = m_pTabBar->findChild<DIconButton *>("rightButton");
-        DIconButton *addButton = m_pTabBar->findChild<DIconButton *>("AddButton");
+        DIconButton *leftButton = m_tabBar->findChild<DIconButton *>("leftButton");
+        DIconButton *rightButton = m_tabBar->findChild<DIconButton *>("rightButton");
+        DIconButton *addButton = m_tabBar->findChild<DIconButton *>("AddButton");
 
         QList<QWidget *> orderlst = mainwindow->property("orderlist").value<QList<QWidget *>>();
         orderlst << leftButton;
@@ -144,7 +144,7 @@ void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
 
 void CentralDocPage::addSheet(DocSheet *sheet)
 {
-    m_pTabBar->insertSheet(sheet);
+    m_tabBar->insertSheet(sheet);
 
     enterSheet(sheet);
 }
@@ -152,10 +152,10 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
-    if (m_pTabBar) {
-        int index = m_pTabBar->indexOfFilePath(filePath);
-        if (index >= 0 && index < m_pTabBar->count()) {
-            m_pTabBar->setCurrentIndex(index);
+    if (m_tabBar) {
+        int index = m_tabBar->indexOfFilePath(filePath);
+        if (index >= 0 && index < m_tabBar->count()) {
+            m_tabBar->setCurrentIndex(index);
             return;
         }
     }
@@ -163,7 +163,7 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     Dr::FileType fileType = Dr::fileType(filePath);
 
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
-        showTips(m_pStackedLayout->currentWidget(), tr("The format is not supported"), 1);
+        showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
         return;
     }
 
@@ -174,19 +174,19 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
     connect(sheet, &DocSheet::sigFileOpened, this, &CentralDocPage::onOpened);
 
-    m_pStackedLayout->addWidget(sheet);
+    m_stackedLayout->addWidget(sheet);
 
-    m_pStackedLayout->setCurrentWidget(sheet);
+    m_stackedLayout->setCurrentWidget(sheet);
 
-    m_pTabBar->insertSheet(sheet);
+    m_tabBar->insertSheet(sheet);
 
     this->activateWindow();
 
     sheet->defaultFocus();
 
-    emit sigSheetCountChanged(m_pStackedLayout->count());
+    emit sigSheetCountChanged(m_stackedLayout->count());
 
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 
     sheet->openFileAsync("");
 }
@@ -194,13 +194,13 @@ void CentralDocPage::addFileAsync(const QString &filePath)
 void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error error)
 {
     if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error) {
-        m_pStackedLayout->removeWidget(sheet);
+        m_stackedLayout->removeWidget(sheet);
 
-        m_pTabBar->removeSheet(sheet);
+        m_tabBar->removeSheet(sheet);
 
-        emit sigSheetCountChanged(m_pStackedLayout->count());
+        emit sigSheetCountChanged(m_stackedLayout->count());
 
-        emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+        emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 
         sheet->deleteLater();
 
@@ -223,7 +223,7 @@ void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error er
 void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
     if (nullptr != sheet) {
-        m_pStackedLayout->setCurrentWidget(sheet);
+        m_stackedLayout->setCurrentWidget(sheet);
 
         sheet->defaultFocus();
     }
@@ -258,17 +258,7 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         }
     }
 
-    m_pStackedLayout->removeWidget(sheet);
-
-    if (m_pTabBar) {
-        m_pTabBar->removeSheet(sheet);
-    }
-
-    emit sigSheetCountChanged(m_pStackedLayout->count());
-
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
-
-    sheet->deadDeleteLater();
+    closeSheet(sheet);
 }
 
 void CentralDocPage::onTabMoveOut(DocSheet *sheet)
@@ -278,7 +268,7 @@ void CentralDocPage::onTabMoveOut(DocSheet *sheet)
 
     leaveSheet(sheet);
 
-    if (m_pStackedLayout->count() <= 0) {
+    if (m_stackedLayout->count() <= 0) {
         emit sigNeedClose();
         return;
     }
@@ -305,15 +295,36 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    m_pStackedLayout->removeWidget(sheet);
+    m_stackedLayout->removeWidget(sheet);
 
     disconnect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     disconnect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-    emit sigSheetCountChanged(m_pStackedLayout->count());
+    emit sigSheetCountChanged(m_stackedLayout->count());
 
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
+}
+
+void CentralDocPage::closeSheet(DocSheet *sheet)
+{
+    if (nullptr == sheet)
+        return;
+
+    if (!DocSheet::existSheet(sheet))
+        return;
+
+    m_stackedLayout->removeWidget(sheet);
+
+    if (m_tabBar) {
+        m_tabBar->removeSheet(sheet);
+    }
+
+    emit sigSheetCountChanged(m_stackedLayout->count());
+
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
+
+    delete sheet;
 }
 
 void CentralDocPage::enterSheet(DocSheet *sheet)
@@ -327,15 +338,15 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
 
-    m_pStackedLayout->addWidget(sheet);
+    m_stackedLayout->addWidget(sheet);
 
-    m_pStackedLayout->setCurrentWidget(sheet);
+    m_stackedLayout->setCurrentWidget(sheet);
 
     sheet->defaultFocus();
 
-    emit sigSheetCountChanged(m_pStackedLayout->count());
+    emit sigSheetCountChanged(m_stackedLayout->count());
 
-    emit sigCurSheetChanged(static_cast<DocSheet *>(m_pStackedLayout->currentWidget()));
+    emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 }
 
 bool CentralDocPage::hasSheet(DocSheet *sheet)
@@ -359,40 +370,17 @@ void CentralDocPage::showSheet(DocSheet *sheet)
     if (nullptr == sheet)
         return;
 
-    m_pTabBar->showSheet(sheet);
+    m_tabBar->showSheet(sheet);
 }
 
-bool CentralDocPage::saveAll()
+QList<DocSheet *> CentralDocPage::getSheets()
 {
-    QList<DocSheet *> changedList;
-
-    auto sheets = this->findChildren<DocSheet *>();
-
-    foreach (auto sheet, sheets) {
-        if (sheet->fileChanged())
-            changedList.append(sheet);
-    }
-
-    if (changedList.size() > 0) { //需要提示保存
-        int nRes = SaveDialog::showExitDialog();
-
-        if (nRes <= 0) {
-            return false;
-        }
-
-        if (nRes == 2) {
-            foreach (auto sheet, changedList) {
-                sheet->saveData();
-            }
-        }
-    }
-
-    return true;
+    return m_tabBar->getSheets();
 }
 
 bool CentralDocPage::saveCurrent()
 {
-    DocSheet *sheet = static_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    DocSheet *sheet = static_cast<DocSheet *>(m_stackedLayout->currentWidget());
 
     if (nullptr == sheet)
         return false;
@@ -407,13 +395,13 @@ bool CentralDocPage::saveCurrent()
     }
 
     if (!sheet->saveData()) {
-        showTips(m_pStackedLayout->currentWidget(), tr("Save failed"), 1);
+        showTips(m_stackedLayout->currentWidget(), tr("Save failed"), 1);
         return false;
     }
 
     sigCurSheetChanged(sheet);
 
-    showTips(m_pStackedLayout->currentWidget(), tr("Saved successfully"));
+    showTips(m_stackedLayout->currentWidget(), tr("Saved successfully"));
 
     return true;
 }
@@ -454,8 +442,8 @@ bool CentralDocPage::saveAsCurrent()
 
 DocSheet *CentralDocPage::getCurSheet()
 {
-    if (m_pStackedLayout != nullptr) {
-        return dynamic_cast<DocSheet *>(m_pStackedLayout->currentWidget());
+    if (m_stackedLayout != nullptr) {
+        return dynamic_cast<DocSheet *>(m_stackedLayout->currentWidget());
     }
 
     return nullptr;
@@ -622,11 +610,11 @@ void CentralDocPage::openFullScreen()
         return;
 
     if (!mainWindow->isFullScreen()) {
-        m_mainLayout->removeWidget(m_pTabBar);
+        m_mainLayout->removeWidget(m_tabBar);
 
         m_isMaximizedBeforeFullScreen = mainWindow->isMaximized();
 
-        mainWindow->setDocTabBarWidget(m_pTabBar);
+        mainWindow->setDocTabBarWidget(m_tabBar);
 
         mainWindow->showFullScreen();
     }
@@ -640,11 +628,11 @@ bool CentralDocPage::quitFullScreen(bool force)
         return false;
 
     if (mainWindow->isFullScreen() || force) {
-        m_pTabBar->setParent(this);
+        m_tabBar->setParent(this);
 
-        m_mainLayout->insertWidget(0, m_pTabBar);
+        m_mainLayout->insertWidget(0, m_tabBar);
 
-        m_pTabBar->setVisible(m_pTabBar->count() > 1);
+        m_tabBar->setVisible(m_tabBar->count() > 1);
 
         mainWindow->setDocTabBarWidget(nullptr);
 
@@ -668,13 +656,13 @@ void CentralDocPage::onSheetCountChanged(int count)
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
         QTimer::singleShot(10, this, SLOT(onUpdateTabLabelText()));
 
-        m_pDocTabLabel->setVisible(true);
+        m_tabLabel->setVisible(true);
 
-        m_pTabBar->setVisible(false);
+        m_tabBar->setVisible(false);
     } else {
-        m_pDocTabLabel->setVisible(false);
+        m_tabLabel->setVisible(false);
 
-        m_pTabBar->setVisible(true);
+        m_tabBar->setVisible(true);
     }
 
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
@@ -682,24 +670,24 @@ void CentralDocPage::onSheetCountChanged(int count)
     if (mainWindow && mainWindow->isFullScreen()) {
         mainWindow->resizeFullTitleWidget();
 
-    } else if (m_pTabBar->parent() != this) {
-        m_pTabBar->setParent(this);
+    } else if (m_tabBar->parent() != this) {
+        m_tabBar->setParent(this);
 
-        m_mainLayout->insertWidget(0, m_pTabBar);
+        m_mainLayout->insertWidget(0, m_tabBar);
 
-        m_pTabBar->setVisible(count > 1);
+        m_tabBar->setVisible(count > 1);
     }
 }
 
 void CentralDocPage::onUpdateTabLabelText()
 {
-    if (m_pTabBar->count() > 0)
-        m_pDocTabLabel->setText(m_pTabBar->tabText(0));
+    if (m_tabBar->count() > 0)
+        m_tabLabel->setText(m_tabBar->tabText(0));
 }
 
 QWidget *CentralDocPage::getTitleLabel()
 {
-    return m_pDocTabLabel;
+    return m_tabLabel;
 }
 
 void CentralDocPage::zoomIn()

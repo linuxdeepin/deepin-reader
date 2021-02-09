@@ -31,7 +31,6 @@ class SheetBrowser;
 typedef struct MagnifierInfo_t {
     QObject *target = nullptr;
     QString slotFun = "";
-
     QPoint mousePos;
     double scaleFactor;
     BrowserPage *page;
@@ -76,7 +75,9 @@ class BrowserMagniFier : public QLabel
     Q_OBJECT
 
 public:
-    explicit BrowserMagniFier(QWidget *parent);
+    explicit BrowserMagniFier(SheetBrowser *parent);
+
+    ~BrowserMagniFier();
 
     /**
      * @brief 显示放大区域的图片

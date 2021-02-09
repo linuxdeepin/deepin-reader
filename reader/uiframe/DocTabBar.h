@@ -73,6 +73,12 @@ public:
     void showSheet(DocSheet *sheet);
 
     /**
+     * @brief getSheets
+     * @return
+     */
+    QList<DocSheet *> getSheets();
+
+    /**
      * @brief updateTabWidth
      * 更新每个tab的宽度，使得一样大并填满，并有最小值超过了会出现翻页按钮
      */

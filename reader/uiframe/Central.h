@@ -88,11 +88,18 @@ public:
     void showSheet(DocSheet *sheet);
 
     /**
-     * @brief saveAll
-     * 保存本窗口所有文档页
-     * @return 保存成功
+     * @brief closeSheet
+     * 关闭sheet
+     * @param sheet
      */
-    bool saveAll();
+    void closeSheet(DocSheet *sheet);
+
+    /**
+     * @brief getSheets
+     * 获取sheet
+     * @return
+     */
+    QList<DocSheet *> getSheets();
 
     /**
      * @brief handleShortcut

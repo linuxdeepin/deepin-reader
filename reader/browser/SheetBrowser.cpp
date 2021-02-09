@@ -281,7 +281,6 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
     if (annotation == nullptr) {
-        qCritical() << "annotation == nullptr";
         return;
     }
 
@@ -295,8 +294,10 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
             setIconAnnotSelect(false);
         });
     }
+
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
+
     if (Dr::isTabletEnvironment())
         m_noteEditWidget->showWidget(mapFromGlobal(point));
     else
@@ -491,6 +492,7 @@ QString SheetBrowser::selectedWordsText()
 QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 {
     QList<deepin_reader::Annotation *> list;
+
     foreach (BrowserPage *item, m_items) {
         list.append(item->annotations());
     }
@@ -1334,8 +1336,10 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                     } else {
                         clickAnno = addIconAnnotation(page, m_selectEndPos, "");
                     }
+
                     if (clickAnno)
                         showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
+
                     m_annotationInserting = false;
                 } else {
                     if (clickAnno && m_selectWord == nullptr)
@@ -1356,7 +1360,9 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             }
 
             m_selectPressedPos = QPointF();
+
             m_selectIndex = -1;
+
             m_selectIconAnnotation = false;
 
             jump2Link(event->pos());

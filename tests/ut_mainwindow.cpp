@@ -63,7 +63,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
 
     mainWindow->onShortCut(Dr::key_ctrl_shift_slash);
     mainWindow->showDefaultSize();
-    mainWindow->hasSheet(nullptr);
+    EXPECT_TRUE(mainWindow->hasSheet(sheet));
     mainWindow->activateSheetIfExist(filePath(UT_FILE_PDF, "MainWindowTest"));
     mainWindow->updateOrderWidgets(QList<QWidget *>());
     mainWindow->activateSheet(sheet);
@@ -71,13 +71,11 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->onMainWindowFull();
     mainWindow->onMainWindowExitFull();
     mainWindow->resizeFullTitleWidget();
-    mainWindow_muti->closeWithoutSave();
-    mainWindow->closeWithoutSave();
-    mainWindow_empty->closeWithoutSave();
     mainWindow->onUpdateTitleLabelRect();
 
-    delete mainWindow;
-    delete mainWindow_empty;
-    delete mainWindow_muti;
+    EXPECT_TRUE(mainWindow->closeWithSave());
+    EXPECT_TRUE(mainWindow_empty->closeWithSave());
+    EXPECT_TRUE(mainWindow_muti->closeWithSave());
+
     exec();
 }

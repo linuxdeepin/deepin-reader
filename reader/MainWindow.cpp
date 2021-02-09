@@ -35,10 +35,13 @@
 #include "Utils.h"
 #include "DocSheet.h"
 #include "DBusObject.h"
+#include "SaveDialog.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
+#include <DFileDialog>
+#include <DDialog>
 
 #include <QSignalMapper>
 #include <QDir>
@@ -56,7 +59,7 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
 {
     initBase();
 
-    if (filePathList.isEmpty()) {   //不带参启动延时创建所有控件
+    if (filePathList.isEmpty()) {   //不带参启动延时创建所有控件 注意：空窗口在10毫秒前进行addsheet会不生效
         QTimer::singleShot(10, this, SLOT(onDelayInit()));
 
     } else {
@@ -120,10 +123,33 @@ void MainWindow::activateSheet(DocSheet *sheet)
     this->activateWindow();
 }
 
+bool MainWindow::closeWithSave()
+{
+    if (nullptr != m_central) {
+        QList<DocSheet *> sheets = m_central->getSheets();
+
+        //后加入先关闭
+        if (sheets.count() > 0) {
+            for (int i = sheets.count() - 1; i >= 0; --i) {
+                if (!MainWindow::closeSheet(sheets[i], needToBeSaved)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    this->close();
+
+    this->deleteLater();
+
+    return true;
+}
+
 void MainWindow::closeWithoutSave()
 {
-    m_needSave = false;
-    this->close();
+    needToBeSaved = false;
+
+    closeWithSave();
 }
 
 void MainWindow::addFile(const QString &filePath)
@@ -137,21 +163,12 @@ void MainWindow::addFile(const QString &filePath)
 //  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!m_needSave || (m_central && m_central->saveAll())) {
-        QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
-
-        settings.setValue("LASTWIDTH", QString::number(this->width()));
-
-        settings.setValue("LASTHEIGHT", QString::number(this->height()));
-
-        event->accept();
-
-        this->deleteLater();
-
-        PERF_PRINT_BEGIN("POINT-02", "");
-
-    } else
+    if (!closeWithSave()) {
         event->ignore();
+        return;
+    }
+
+    DMainWindow::closeEvent(event);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -209,22 +226,33 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::initUI()
 {
     m_central = new Central(this);
+
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+
     m_central->setMenu(m_menu);
+
     setCentralWidget(m_central);
 
     titlebar()->setIcon(QIcon::fromTheme("deepin-reader"));
+
     titlebar()->setTitle("");
+
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
+
     titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
+
     titlebar()->setAutoHideOnFullscreen(false);
 
     Utils::setObjectNoFocusPolicy(this);
+
     QTimer::singleShot(100, this, SLOT(onUpdateTitleLabelRect()));
 
     titlebar()->installEventFilter(this);
+
     m_central->titleWidget()->installEventFilter(this);
+
     DIconButton *optBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+
     if (optBtn && optBtn->parentWidget()) {
         optBtn->parentWidget()->installEventFilter(this);
     }
@@ -355,6 +383,56 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
     }
 
     return false;
+}
+
+bool MainWindow::closeSheet(DocSheet *sheet, bool needToBeSaved)
+{
+    MainWindow *mainwindow = MainWindow::windowContainSheet(sheet);
+
+    if (nullptr == mainwindow)
+        return false;
+
+    mainwindow->activateSheet(sheet);
+
+    if (sheet->fileChanged() && needToBeSaved) { //需要提示保存
+        int result = SaveDialog::showExitDialog();
+
+        if (result <= 0) {
+            return false;
+        }
+
+        if (result == 2) {
+            //如果是docx则改为另存为
+            if (Dr::DOCX == sheet->fileType()) {
+                QString saveFilePath = DFileDialog::getSaveFileName(mainwindow, tr("Save as"), sheet->filePath(), sheet->filter());
+
+                if (saveFilePath.endsWith("/.pdf")) {
+                    DDialog dlg("", tr("Invalid file name"));
+                    dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
+                    dlg.addButtons(QStringList() << tr("OK"));
+                    QMargins mar(0, 0, 0, 30);
+                    dlg.setContentLayoutContentsMargins(mar);
+                    dlg.exec();
+                    return false;
+                }
+
+                if (!sheet->saveAsData(saveFilePath))
+                    return false;
+
+            } else if (!sheet->saveData())
+                return false;
+        }
+    }
+
+    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, mainwindow);
+
+    settings.setValue("LASTWIDTH", QString::number(mainwindow->width()));
+
+    settings.setValue("LASTHEIGHT", QString::number(mainwindow->height()));
+
+    mainwindow->m_central->closeSheet(sheet);
+
+    return true;
 }
 
 MainWindow *MainWindow::createWindow(QStringList filePathList)

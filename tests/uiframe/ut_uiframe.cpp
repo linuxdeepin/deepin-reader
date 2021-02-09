@@ -76,11 +76,11 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->m_central->titleWidget()->keyPressEvent(&keyLevent);
 
     QStyleOptionTab optionTab;
-    QMimeData *mimeData = CentralDocPage1->m_pTabBar->createMimeDataFromTab(0, optionTab);
+    QMimeData *mimeData = CentralDocPage1->m_tabBar->createMimeDataFromTab(0, optionTab);
 
-    CentralDocPage1->m_pTabBar->insertFromMimeData(0, new QMimeData);
-    CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, new QMimeData);
-    CentralDocPage1->m_pTabBar->insertFromMimeDataOnDragEnter(0, mimeData);
+    CentralDocPage1->m_tabBar->insertFromMimeData(0, new QMimeData);
+    CentralDocPage1->m_tabBar->insertFromMimeDataOnDragEnter(0, new QMimeData);
+    CentralDocPage1->m_tabBar->insertFromMimeDataOnDragEnter(0, mimeData);
 
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_1, "UiFrameTest"));
     ASSERT_TRUE(sheet->openFileExec(""));
@@ -121,31 +121,31 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     sheet2->m_sidebar->onBtnClicked(4);
     sheet2->startSearch("1");
 
-    CentralDocPage1->m_pTabBar->resize(600, 40);
-    CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::IgnoreAction);
-    CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::CopyAction);
-    CentralDocPage1->m_pTabBar->onDragActionChanged(Qt::MoveAction);
+    CentralDocPage1->m_tabBar->resize(600, 40);
+    CentralDocPage1->m_tabBar->onDragActionChanged(Qt::IgnoreAction);
+    CentralDocPage1->m_tabBar->onDragActionChanged(Qt::CopyAction);
+    CentralDocPage1->m_tabBar->onDragActionChanged(Qt::MoveAction);
 
-    CentralDocPage1->m_pTabBar->onTabDroped(100, Qt::MoveAction, mainWindow2);
-    CentralDocPage1->m_pTabBar->onTabDroped(0, Qt::MoveAction, mainWindow2);
+    CentralDocPage1->m_tabBar->onTabDroped(100, Qt::MoveAction, mainWindow2);
+    CentralDocPage1->m_tabBar->onTabDroped(0, Qt::MoveAction, mainWindow2);
 
-    CentralDocPage2->m_pTabBar->canInsertFromMimeData(0, mimeData);
-    CentralDocPage2->m_pTabBar->insertFromMimeData(0, mimeData);
+    CentralDocPage2->m_tabBar->canInsertFromMimeData(0, mimeData);
+    CentralDocPage2->m_tabBar->insertFromMimeData(0, mimeData);
 
-    CentralDocPage2->m_pTabBar->onTabReleased(100);
-    CentralDocPage2->m_pTabBar->onTabReleased(0);
+    CentralDocPage2->m_tabBar->onTabReleased(100);
+    CentralDocPage2->m_tabBar->onTabReleased(0);
 
-    CentralDocPage2->m_pTabBar->onTabCloseRequested(100);
-    CentralDocPage2->m_pTabBar->onTabCloseRequested(0);
+    CentralDocPage2->m_tabBar->onTabCloseRequested(100);
+    CentralDocPage2->m_tabBar->onTabCloseRequested(0);
 
-    CentralDocPage2->m_pTabBar->onSetCurrentIndex();
-    CentralDocPage2->m_pTabBar->onTabChanged(0);
+    CentralDocPage2->m_tabBar->onSetCurrentIndex();
+    CentralDocPage2->m_tabBar->onTabChanged(0);
 
     QDragEnterEvent dragEnterevent(QPoint(0, 0), Qt::MoveAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(CentralDocPage2->m_pTabBar, &dragEnterevent);
+    QCoreApplication::sendEvent(CentralDocPage2->m_tabBar, &dragEnterevent);
 
     QResizeEvent resizeEvent(QSize(100, 100), QSize(200, 200));
-    CentralDocPage1->m_pTabBar->resizeEvent(&resizeEvent);
+    CentralDocPage1->m_tabBar->resizeEvent(&resizeEvent);
 
     mainWindow1->resize(600, 800);
     ASSERT_TRUE(mainWindow1->m_central);
@@ -175,7 +175,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     ASSERT_TRUE(sheet);
     EXPECT_TRUE(mainWindow1->m_central->hasSheet(sheet));
-    EXPECT_TRUE(mainWindow1->m_central->saveAll());
     sheet->saveAsData(filePath(UT_FILE_PDF, "UiFrameTest"));
     sheet->setSidebarVisible(true);
     sheet->m_sidebar->onBtnClicked(3);
@@ -187,7 +186,7 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     EXPECT_FALSE(CentralDocPage1->quitFullScreen());
     EXPECT_TRUE(CentralDocPage1->getTitleLabel());
 
-    CentralDocPage1->m_pTabBar->removeTab(0);
+    CentralDocPage1->m_tabBar->removeTab(0);
     CentralDocPage1->getCurSheet();
     CentralDocPage1->saveCurrent();
     CentralDocPage1->addSheet(nullptr);

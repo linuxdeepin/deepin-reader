@@ -42,6 +42,7 @@ ReadMagnifierManager::~ReadMagnifierManager()
 void ReadMagnifierManager::addTask(const MagnifierInfo_t &task)
 {
     m_tTasklst << task;
+
     if (!this->isRunning()) {
         this->start();
     }
@@ -60,23 +61,37 @@ void ReadMagnifierManager::run()
     }
 }
 
-BrowserMagniFier::BrowserMagniFier(QWidget *parent)
+BrowserMagniFier::BrowserMagniFier(SheetBrowser *parent)
     : QLabel(parent)
 {
     m_readManager = new ReadMagnifierManager(this);
-    m_brwoser = dynamic_cast<SheetBrowser *>(parent);
+
+    m_brwoser = parent;
+
     setAttribute(Qt::WA_TranslucentBackground);
+
     setAttribute(Qt::WA_TransparentForMouseEvents);
+
     setAttribute(Qt::WA_DeleteOnClose);
+
     setAutoFillBackground(false);
+
     resize(244, 244);
+
     show();
+}
+
+BrowserMagniFier::~BrowserMagniFier()
+{
+    m_readManager->wait();
 }
 
 void BrowserMagniFier::updateImage()
 {
     QPointF point = m_lastScenePoint;
+
     BrowserPage *page = m_brwoser->getBrowserPageForPoint(point);
+
     if (page) {
         const QImage &image = page->getCurImagePoint(point);
         setMagniFierImage(image);
@@ -85,11 +100,17 @@ void BrowserMagniFier::updateImage()
     }
 
     MagnifierInfo_t task;
+
     task.page = page;
+
     task.target = this;
+
     task.slotFun = "onUpdateMagnifierImage";
+
     task.mousePos = point.toPoint();
+
     task.scaleFactor = m_lastScaleFactor;
+
     m_readManager->addTask(task);
 
     m_lastPoint = point.toPoint();
@@ -98,28 +119,39 @@ void BrowserMagniFier::updateImage()
 void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, double scaleFactor)
 {
     scaleFactor += 2;
+
     m_lastScenePoint = mousePos;
 
     QPointF ponitf = mousePos;
+
     BrowserPage *page = m_brwoser->getBrowserPageForPoint(ponitf);
 
     if (page) {
         const QImage &image = page->getCurImagePoint(ponitf);
+
         setMagniFierImage(image);
     } else {
         setMagniFierImage(QImage());
     }
+
     move(QPoint(magnifierPos.x() - 122, magnifierPos.y() - 122));
 
     MagnifierInfo_t task;
+
     task.page = page;
+
     task.target = this;
+
     task.slotFun = "onUpdateMagnifierImage";
+
     task.mousePos = ponitf.toPoint();
+
     task.scaleFactor = scaleFactor;
+
     m_readManager->addTask(task);
 
     m_lastPoint = ponitf.toPoint();
+
     m_lastScaleFactor = scaleFactor;
 }
 
