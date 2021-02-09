@@ -192,6 +192,14 @@ TEST_F(ut_browser, BrowserPageTest)
 
     page->removeAllAnnotation();
 
+    page->scaleWords(false);
+
+    page->scaleWords(true);
+
+    page->getCurrentImage(200, 200);
+
+    page->clearSearchHighlightRects();
+
     delete sheet;
 }
 
@@ -208,6 +216,7 @@ TEST_F(ut_browser, BrowserWordTest)
     page->loadWords();
 
     QList<Word> words = sheet->renderer()->getWords(page->itemIndex());
+
     if (words.count() <= 0)
         GTEST_FAIL();
 
@@ -220,6 +229,16 @@ TEST_F(ut_browser, BrowserWordTest)
     word->boundingBox();
 
     word->boundingRect();
+
+    word->text();
+
+    QPixmap pixmap(200, 200);
+
+    QPainter painter(&pixmap);
+
+    QStyleOptionGraphicsItem item;
+
+    word->paint(&painter, &item);
 
     QGraphicsSceneMouseEvent *gsMouseEvent = new QGraphicsSceneMouseEvent;
 
@@ -235,6 +254,10 @@ TEST_F(ut_browser, PageRenderThreadTest)
     EXPECT_TRUE(sheet->openFileExec(""));
 
     BrowserPage *page = sheet->m_browser->pages().value(0);
+
+    EXPECT_TRUE(page);
+
+    PageRenderThread::instance();
 
     PageRenderThread *thread = new PageRenderThread;
 
@@ -370,6 +393,8 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     browser->init(sheet->m_operation, sheet->m_bookmarks);
 
+    browser->onInit();
+
     browser->getClickAnnot(browser->m_items.at(0), QPointF(0, 0), false);
 
     browser->moveIconAnnot(browser->m_items.at(0), QPointF(0, 0));
@@ -451,6 +476,12 @@ TEST_F(ut_browser, SheetBrowserTest)
     browser->curpageChanged(0);
 
     browser->setCurrentPage(0);
+
+    browser->jump2Link(QPoint(0, 0));
+
+    QImage image;
+
+    browser->getExistImage(0, image, 200, 200);
 
     browser->currentPage();
 

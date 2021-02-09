@@ -14,6 +14,7 @@
 #include "DocSheet.h"
 #include <QDir>
 #include <QSqlQuery>
+#include "DBusObject.h"
 
 #undef private
 #undef protected
@@ -79,6 +80,16 @@ TEST_F(ut_app, DatabaseTest)
     delete db;
 
     QFile::remove(QDir(path).filePath("test.db"));
+}
+
+TEST_F(ut_app, DBusObjectTest)
+{
+    DBusObject *dbo = DBusObject::instance();
+    dbo = new DBusObject;
+    dbo->handleFiles(QStringList());
+    dbo->registerOrNotify(QStringList());
+    dbo->unRegister();
+    delete dbo;
 }
 
 TEST_F(ut_app, DebugTimeManagerTest)

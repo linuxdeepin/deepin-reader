@@ -63,6 +63,67 @@ void ut_sidebar::TearDown()
 {
 }
 
+TEST_F(ut_sidebar, CatalogTreeViewTest)
+{
+    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "CatalogTreeViewTest"));
+
+    EXPECT_TRUE(sheet->openFileExec(""));
+
+    CatalogTreeView *treeView = new CatalogTreeView(sheet);
+
+    treeView->handleOpenSuccess();
+
+    treeView->setIndex(0, "1");
+
+    treeView->setRightControl(true);
+
+    treeView->nextPage();
+
+    treeView->pageDownPage();
+
+    treeView->prevPage();
+
+    treeView->pageUpPage();
+
+    QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
+
+    treeView->resizeEvent(resizeEvent);
+
+    QMouseEvent pressMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+    treeView->mousePressEvent(&pressMouseEvent);
+
+    QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
+
+    treeView->keyPressEvent(&sideekeyRevent);
+
+    QModelIndex index = treeView->indexAt(QPoint(0, 0));
+
+    treeView->currentChanged(index, index);
+
+    treeView->onItemClicked(index);
+
+    QFont font;
+
+    treeView->onFontChanged(font);
+
+    deepin_reader::Section section;
+
+    QStandardItem item;
+
+    treeView->parseCatalogData(section, &item);
+
+    treeView->resizeCoulumnWidth();
+
+    treeView->getItemList("123", 0, 5, 5);
+
+    treeView->scrollToIndex(index);
+
+    treeView->slotCollapsed(index);
+
+    treeView->slotExpanded(index);
+}
+
 TEST_F(ut_sidebar, SidebarTest)
 {
     QString path = filePath(UT_FILE_TEST_FILE_1, "SidebarTest");

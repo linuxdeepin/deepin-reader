@@ -93,6 +93,4 @@ TEST_F(ut_application, ApplicationTest)
     a->sigSetPasswdFocus();
 
     a->handleQuitAction();
-
-    exec();
 }
