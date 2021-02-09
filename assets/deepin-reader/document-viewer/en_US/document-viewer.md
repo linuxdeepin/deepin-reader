@@ -25,7 +25,7 @@ You can run, close or create a shortcut of Document Viewer as follows.
 
 ### Exit Document Viewer
 
-- On Document Viewer interface, click![close_icon](../common/close.svg) to exit. 
+- On Document Viewer interface, click![close_icon](../common/close_icon.svg) to exit. 
 - Right-click ![deepin_reader_24](../common/deepin_reader_24.svg) on Dock and select  **Close All** to exit.
 - On Document Viewer interface, click  ![icon_menu](../common/icon_menu.svg) and select  **Exit**.
 
@@ -44,7 +44,7 @@ Document Viewer realizes basic document management such as opening files, saving
 
 ### Open files
 
-Document Viewer supports PDF and DJVU formats. You can open a file by: 
+Document Viewer supports DOCX, PDF and DJVU formats. You can open a file by: 
 
 - Dragging it directly into the interface or onto the icon. You can also drag multiple files at a time, and they will be opened in many tabs in one window.
 - Right-clicking it and selecting **Open with** > **Select default program**, and then selecting Document Viewer from the list.
@@ -132,8 +132,8 @@ On Document Viewer interface, open a file.
    -  Click![menu](../common/thumbnail_normal_light.svg) and the catalog icon ![view](../common/comments_normal_light.svg) on the left and select a note, right-click and select **Copy**. 
    
 - Show note  
-   1.  Hove the cursor over the note icon to show the content. 
-   2.  Click the note icon to pop up a window, you can view and re-edit. 
+   1. Hove the cursor over the note icon to show the content. 
+   2. Click the note icon to pop up a window, you can view and re-edit. 
 
 - Delete note 
    - Right-click the highlighted text to which you have added a note, and select **Remove highlight**. 
@@ -152,15 +152,12 @@ Document Viewer integrates many features to make document management simpler and
 This function is only applicable for the current tab.
 1. On Document Viewer interface, open a file. 
 2. Right-click and select **Search** or press **Ctrl**+**F** to open a searching window. 
-   
-3. In the searching box, you can click ![search](../common/search.svg) to input keywords. 
-   
+3. In the searching box, you can click ![search](../common/search.svg) to input keywords.
 4. Press  **Enter** to locate quickly. 
    - All matching information will be displayed in a list and are highlighted in the document.
    - If searching fails, "No search results" will be displayed. 
    
-5.  When matching results are found, click![search](../common/previous_up.svg) or ![search](../common/next_down.svg) to view results one by one. 
-
+5. When matching results are found, click![search](../common/previousup.svg) or ![search](../common/nextdown.svg) to view results one by one. 
 6. Click one result, you can skip to the page where it's located, and it's highlighted. 
 > ![attention](../common/attention.svg)Attention: Searching fails in case the text is coded in pictures in some PDF files. 
 
@@ -205,9 +202,7 @@ To zoom in or out a page, you can:
 - Press **Ctrl** and scroll the mouse wheel up and down at the same time. 
 - On Document Viewer interface, click "**+**"  or  "**-**". 
 - Manual input is supported here. You can choose display percentage from the drop-down box of the menu bar: 10%, 25%, 50%, 75%, 100%, 125%, 150%, 175%, 200%, 300%, 400%, and 500%, according to which the file is zoomed in and out.
-> ![notes](../common/notes.svg)Notes: If you are using a computer equipped with a touchscreen or a touchpad, you can:
->    - On the touchscreen, pinch two fingers to zoom out on the page; open two fingers to zoom in on the page.
->    -  On the touchpad that supports multiple-point touch, pinch two fingers to zoom out on the page; open two fingers to zoom in on the page.  
+> ![notes](../common/notes.svg)Notes: If you are using a computer equipped with a touchscreen or a touchpad, you can: pinch two fingers to zoom out on the page; open two fingers to zoom in on the page.
 
 ### Adjust view
 
@@ -229,7 +224,7 @@ In the scaling drop-down box of tool bar, you can:
 
 > ![notes](../common/notes.svg)Notes: 
 >
-> - Document Viewer memorizes the color choice of the user, which will be the default color used when the user highlights any text the next time.  You can change the color as you wish. 
+> - Document Viewer memorizes the color choice of the user, which will be the default color used when the user highlights any text the next time.  
 > - You can not highlight in DJVU files.
 
 
@@ -238,9 +233,7 @@ In the scaling drop-down box of tool bar, you can:
 
 1. On Document Viewer interface, open a document. 
 2. Right-click and select **Rotate Left** or **Rotate Right** from the submenu, the page will rotate to the left or right by 90°. 
-> ![notes](../common/notes.svg)Notes:  If you are using a computer equipped with a touchscreen or a touchpad, you can:
->    - On the touchscreen, place two fingers on the picture with a certain distance and rotate the two fingers at the same time to rotate the page.
->    - On the touchpad that supports multiple-point touch, place two fingers on the picture with a certain distance and rotate the two fingers at the same time to rotate the page.
+> ![notes](../common/notes.svg)Notes:  If you are using a computer equipped with a touchscreen or a touchpad, you can place two fingers on the picture with a certain distance and rotate the two fingers at the same time to rotate the page.
 
 ### Document info
 1. On Document Viewer interface, open a document. 

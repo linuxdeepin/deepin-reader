@@ -32,4 +32,6 @@ rm target_wrapper.sh
 
 rm copy.txt
 
+rm clean
+
 exit 0

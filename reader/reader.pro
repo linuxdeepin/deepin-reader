@@ -15,7 +15,6 @@ contains(QMAKE_HOST.arch, mips64):{
 
 CONFIG += c++11 link_pkgconfig
 
-#target
 TARGET = deepin-reader
 
 TEMPLATE = app
@@ -33,9 +32,9 @@ icon.path = /usr/share/icons/hicolor/scalable/apps
 
 icon.files = $$PWD/deepin-reader.svg
 
-manual.files = $$PWD/assets/deepin-reader
+manual.path = /usr/share/deepin-manual/manual-assets/application
 
-manual.path= /usr/share/deepin-manual/manual-assets/application/
+manual.files = $$PWD/../assets/*
 
 INSTALLS += target desktop icon manual
 
