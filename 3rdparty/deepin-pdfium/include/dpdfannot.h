@@ -16,7 +16,8 @@ public:
         AText = 1,            ///< TextAnnotation
         AHighlight = 2,       ///< HighlightAnnotation
         ALink = 3,
-        ASQUARE = 5
+        ASQUARE = 5,
+        AUNDERLINE = 6
     };
 
     virtual ~DPdfAnnot();
@@ -66,6 +67,21 @@ class DEEPDF_EXPORT DPdfSquareAnnot : public DPdfAnnot
 {
 public:
     DPdfSquareAnnot();
+
+    bool pointIn(QPointF pos) override;
+
+    QList<QRectF> boundaries() override;
+
+    void setRectF(const QRectF &rectf);
+
+private:
+    QRectF m_rect;
+};
+
+class DEEPDF_EXPORT DPdfUnderlineAnnot : public DPdfAnnot
+{
+public:
+    DPdfUnderlineAnnot();
 
     bool pointIn(QPointF pos) override;
 

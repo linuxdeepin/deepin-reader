@@ -57,7 +57,7 @@ DWIDGET_USE_NAMESPACE
 
 QReadWriteLock DocSheet::g_lock;
 QMap<QString, DocSheet *> DocSheet::g_map;
-DocSheet::DocSheet(Dr::FileType fileType, QString filePath,  QWidget *parent)
+DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
     setAlive(true);

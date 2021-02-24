@@ -20,7 +20,7 @@ DEFINES +=  USE_SYSTEM_LIBJPEG \
             USE_SYSTEM_LIBOPENJPEG2 \
             USE_SYSTEM_FREETYPE
 
-INCLUDEPATH += /usr/include/openjpeg-2.3 \
+INCLUDEPATH += /usr/include/openjpeg-2.* \
                /usr/include/freetype2 \
                /usr/include/freetype2/freetype \
                /usr/include/freetype2/freetype/config

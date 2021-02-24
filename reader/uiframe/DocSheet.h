@@ -64,7 +64,7 @@ class DocSheet : public Dtk::Widget::DSplitter
     friend class SheetBrowser;
     friend class Database;
 public:
-    explicit DocSheet(Dr::FileType fileType, QString filePath, QWidget *parent = nullptr);
+    explicit DocSheet(const Dr::FileType &fileType, const QString &filePath, QWidget *parent = nullptr);
 
     ~DocSheet() override;
 
