@@ -68,6 +68,13 @@ public:
     QRectF rect();
 
     /**
+     * @brief scaleFactor
+     * 当前缩放因子
+     * @return
+     */
+    qreal scaleFactor();
+
+    /**
      * @brief 设置书签
      * @param hasBookmark 是否存在书签
      */

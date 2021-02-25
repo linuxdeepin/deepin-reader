@@ -1481,8 +1481,9 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
         m_lastSelectIconAnnotPage = page;
 
         QPointF iconPos = getAnnotPosInPage(clickPoint, page);
-        //...有问题这个
+
         QRectF iconRect;
+
         bool isVaild = calcIconAnnotRect(page, iconPos, iconRect);
 
         if (isVaild)
@@ -1891,15 +1892,17 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 {
     QPointF newPos = pos;
 
-    if (newPos.x() < 15)
-        newPos.setX(15);
+    if (newPos.x() < 15 * page->scaleFactor())
+        newPos.setX(15 * page->scaleFactor());
 
-    if (newPos.y() < 15)
-        newPos.setY(15);
+    if (newPos.y() < 15 * page->scaleFactor())
+        newPos.setY(15 * page->scaleFactor());
 
-    if (newPos.x() > page->boundingRect().width() - 15)
-        newPos.setX(page->boundingRect().width() - 15);
+    if (newPos.x() > page->boundingRect().width() - 15 * page->scaleFactor())
+        newPos.setX(page->boundingRect().width() - 15 * page->scaleFactor());
 
-    if (newPos.y() > page->boundingRect().height() - 15)
-        newPos.setY(page->boundingRect().height() - 15);
+    if (newPos.y() > page->boundingRect().height() - 15 * page->scaleFactor())
+        newPos.setY(page->boundingRect().height() - 15 * page->scaleFactor());
+
+    return newPos;
 }

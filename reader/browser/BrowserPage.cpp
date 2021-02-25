@@ -91,6 +91,11 @@ QRectF BrowserPage::rect()
     return QRectF(0, 0, static_cast<double>(m_originSizeF.width() * m_scaleFactor), static_cast<double>(m_originSizeF.height() * m_scaleFactor));
 }
 
+qreal BrowserPage::scaleFactor()
+{
+    return m_scaleFactor;
+}
+
 QRectF BrowserPage::bookmarkRect()
 {
     return QRectF(boundingRect().width() - 40, 1, 39, 39);
