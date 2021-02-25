@@ -248,13 +248,18 @@ void CentralDocPage::onTabClosed(DocSheet *sheet)
         return;
 
     if (sheet->fileChanged()) {
-        int ret = SaveDialog::showExitDialog();
+        int ret = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
 
         if (ret < 1)
             return;
 
         if (2 == ret) {
-            sheet->saveData();
+            //docx的保存将会当做另存为处理
+            if (Dr::DOCX == sheet->fileType()) {
+                if (!saveAsCurrent())
+                    return;
+            } else
+                sheet->saveData();
         }
     }
 
@@ -385,13 +390,13 @@ bool CentralDocPage::saveCurrent()
     if (nullptr == sheet)
         return false;
 
+    if (!sheet->fileChanged()) {
+        return false;
+    }
+
     //docx的保存将会当做另存为处理
     if (Dr::DOCX == sheet->fileType()) {
         return saveAsCurrent();
-    }
-
-    if (!sheet->fileChanged()) {
-        return false;
     }
 
     if (!sheet->saveData()) {
@@ -413,7 +418,11 @@ bool CentralDocPage::saveAsCurrent()
     if (nullptr == sheet)
         return false;
 
-    QString saveFilePath = DFileDialog::getSaveFileName(this, tr("Save as"), sheet->filePath(), sheet->filter());
+    //获取保存的文件路径，其中docx保存时应该以pdf后缀名称来显示
+    QString showFilePath = sheet->filePath();
+    if (Dr::DOCX == sheet->fileType())
+        showFilePath.replace(".docx", ".pdf");
+    QString saveFilePath = DFileDialog::getSaveFileName(this, tr("Save as"), showFilePath, sheet->filter());
 
     if (Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()) {
         if (saveFilePath.endsWith("/.pdf")) {

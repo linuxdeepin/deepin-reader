@@ -39,7 +39,7 @@ public:
      * 退出保存提示窗口
      * @return
      */
-    static int showExitDialog();
+    static int showExitDialog(QString fileName);
 
     /**
      * @brief showTipDialog

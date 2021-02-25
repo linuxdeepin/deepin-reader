@@ -1155,17 +1155,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
             QPointF posInPage = m_lastSelectIconAnnotPage->mapFromScene(mapToScene(mousePos));
 
-            if (posInPage.x() < 15)
-                posInPage.setX(15);
-
-            if (posInPage.y() < 15)
-                posInPage.setY(15);
-
-            if (posInPage.x() > m_lastSelectIconAnnotPage->boundingRect().width() - 15)
-                posInPage.setX(m_lastSelectIconAnnotPage->boundingRect().width() - 15);
-
-            if (posInPage.y() > m_lastSelectIconAnnotPage->boundingRect().height() - 15)
-                posInPage.setY(m_lastSelectIconAnnotPage->boundingRect().height() - 15);
+            posInPage = getAnnotPosInPage(posInPage, m_lastSelectIconAnnotPage);
 
             QPointF curPointF = m_lastSelectIconAnnotPage->mapToScene(posInPage);
 
@@ -1490,8 +1480,10 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
 
         m_lastSelectIconAnnotPage = page;
 
+        QPointF iconPos = getAnnotPosInPage(clickPoint, page);
+        //...有问题这个
         QRectF iconRect;
-        bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
+        bool isVaild = calcIconAnnotRect(page, iconPos, iconRect);
 
         if (isVaild)
             anno = page->addIconAnnotation(iconRect, contents);
@@ -1575,7 +1567,7 @@ void SheetBrowser::showEvent(QShowEvent *event)
 void SheetBrowser::handlePrepareSearch()
 {
     //目前只有PDF开放搜索功能
-    if (m_sheet->fileType() != Dr::FileType::PDF || m_sheet->fileType() == Dr::FileType::DOCX)
+    if (m_sheet->fileType() != Dr::FileType::PDF && m_sheet->fileType() != Dr::FileType::DOCX)
         return;
 
     if (m_findWidget == nullptr) {
@@ -1893,4 +1885,21 @@ void SheetBrowser::showMagnigierImage(const QPoint &point)
     }
 
     m_magnifierLabel->showMagnigierImage(point, magnifierPos, m_lastScaleFactor);
+}
+
+QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
+{
+    QPointF newPos = pos;
+
+    if (newPos.x() < 15)
+        newPos.setX(15);
+
+    if (newPos.y() < 15)
+        newPos.setY(15);
+
+    if (newPos.x() > page->boundingRect().width() - 15)
+        newPos.setX(page->boundingRect().width() - 15);
+
+    if (newPos.y() > page->boundingRect().height() - 15)
+        newPos.setY(page->boundingRect().height() - 15);
 }

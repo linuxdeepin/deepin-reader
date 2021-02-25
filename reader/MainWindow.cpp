@@ -397,7 +397,7 @@ bool MainWindow::closeSheet(DocSheet *sheet, bool needToBeSaved)
     mainwindow->activateSheet(sheet);
 
     if (sheet->fileChanged() && needToBeSaved) { //需要提示保存
-        int result = SaveDialog::showExitDialog();
+        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
 
         if (result <= 0) {
             return false;

@@ -637,6 +637,14 @@ private:
      */
     void showMagnigierImage(const QPoint &point);
 
+    /**
+     * @brief getAnnotPosInPage
+     * 将传入的位置拉回到页面里，返回新的位置
+     * @param pos
+     * @return
+     */
+    QPointF getAnnotPosInPage(const QPointF &pos, BrowserPage *page);
+
 private:
     DocSheet *m_sheet = nullptr;
 

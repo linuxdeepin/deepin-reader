@@ -39,8 +39,8 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
-    auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU"), this);
-    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg("PDF,DJVU"));
+    auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU,DOCX"), this);
+    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg("PDF,DJVU,DOCX"));
     formatLabel->setAlignment(Qt::AlignHCenter);
     formatLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);

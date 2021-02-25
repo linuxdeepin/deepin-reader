@@ -809,7 +809,7 @@ private:
 
     SheetSidebar   *m_sidebar  = nullptr;        //操作左侧ui
     SheetBrowser   *m_browser  = nullptr;        //操作右侧ui
-    SheetRenderer  *m_renderer = nullptr;       //数据渲染器
+    SheetRenderer  *m_renderer = nullptr;        //数据渲染器
 
     QString         m_filePath;
     QString         m_password;

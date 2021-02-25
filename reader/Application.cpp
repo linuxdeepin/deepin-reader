@@ -55,9 +55,9 @@ void Application::emitSheetChanged()
 
 void Application::handleQuitAction()
 {
-    foreach (MainWindow *window, MainWindow::m_list) {
-        window->closeWithSave();
-    }
+    //倒序退出
+    for (int i = MainWindow::m_list.count() - 1; i >= 0; --i)
+        MainWindow::m_list[i]->closeWithSave();
 }
 
 bool Application::notify(QObject *object, QEvent *event)

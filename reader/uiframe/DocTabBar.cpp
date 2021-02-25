@@ -136,7 +136,18 @@ QList<DocSheet *> DocTabBar::getSheets()
             sheets.append(sheet);
     }
 
-    return sheets;
+    if (sheets.isEmpty())
+        return sheets;
+
+    //需要按倒序排列
+    QList<DocSheet *> orderSheets;
+    QList<DocSheet *> allSheets = DocSheet::getSheets();
+    for (int i = allSheets.count() - 1; i >= 0; --i) {
+        if (sheets.contains(allSheets[i]))
+            orderSheets.append(allSheets[i]);
+    }
+
+    return orderSheets;
 }
 
 void DocTabBar::updateTabWidth()

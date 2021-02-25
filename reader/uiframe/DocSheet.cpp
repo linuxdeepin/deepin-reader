@@ -1070,6 +1070,7 @@ void DocSheet::setAlive(bool alive)
             setAlive(false);
 
         m_uuid = QUuid::createUuid().toString();
+
         g_lock.lockForWrite();
         g_map[m_uuid] = this;
         g_lock.unlock();
