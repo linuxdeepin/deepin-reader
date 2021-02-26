@@ -16,8 +16,9 @@ public:
         AText = 1,            ///< TextAnnotation
         AHighlight = 2,       ///< HighlightAnnotation
         ALink = 3,
+        AUNDERLINE = 4,
         ASQUARE = 5,
-        AUNDERLINE = 6
+        ACIRCLE = 6
     };
 
     virtual ~DPdfAnnot();
@@ -78,10 +79,12 @@ private:
     QRectF m_rect;
 };
 
-class DEEPDF_EXPORT DPdfUnderlineAnnot : public DPdfAnnot
+class DEEPDF_EXPORT DPdfCIRCLEAnnot : public DPdfAnnot
 {
+    friend class DPdfPage;
+    friend class DPdfPagePrivate;
 public:
-    DPdfUnderlineAnnot();
+    DPdfCIRCLEAnnot();
 
     bool pointIn(QPointF pos) override;
 
@@ -89,7 +92,10 @@ public:
 
     void setRectF(const QRectF &rectf);
 
+    void setBoundaries(QList<QRectF> rectList);
+
 private:
+    QList<QRectF> m_rectList;
     QRectF m_rect;
 };
 
@@ -173,5 +179,20 @@ public:
 
     QList<QRectF> boundaries() override;
 
+};
+
+class DEEPDF_EXPORT DPdfUnderlineAnnot : public DPdfAnnot
+{
+public:
+    DPdfUnderlineAnnot();
+
+    bool pointIn(QPointF pos) override;
+
+    QList<QRectF> boundaries() override;
+
+    void setRectF(const QRectF &rectf);
+
+private:
+    QRectF m_rect;
 };
 #endif // DPDFANNOT_H

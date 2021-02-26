@@ -230,7 +230,9 @@ bool DPdfPagePrivate::loadAnnots()
             type = DPdfAnnot::AHighlight;
         else if (FPDF_ANNOT_LINK == subType)
             type = DPdfAnnot::ALink;
-
+        else if (FPDF_ANNOT_CIRCLE==subType){
+            type = DPdfAnnot::ACIRCLE;
+        }
         //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width_pt/m_height_pt 为受旋转影响后的宽高
         qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
 
@@ -346,7 +348,50 @@ bool DPdfPagePrivate::loadAnnots()
             }
 
             m_dAnnots.append(dAnnot);
-        } else {
+            }else if (DPdfAnnot::ACIRCLE == type) {
+
+            DPdfCIRCLEAnnot *dAnnot = new DPdfCIRCLEAnnot;
+
+            //获取位置
+            FS_RECTF rectF;
+            if (FPDFAnnot_GetRect(annot, &rectF)) {
+                QRectF annorectF = transRect(rotation, rectF);
+                dAnnot->setRectF(transPointToPixel(annorectF));
+
+//                FS_RECTF newrectf;
+//                newrectf.left = static_cast<float>(annorectF.left());
+//                newrectf.top = static_cast<float>(actualHeight - annorectF.top());
+//                newrectf.right = static_cast<float>(annorectF.right());
+//                newrectf.bottom = static_cast<float>(actualHeight - annorectF.bottom());
+//                FPDFAnnot_SetRect(annot, &newrectf);
+            }
+
+            //获取区域
+            ulong quadCount = FPDFAnnot_CountAttachmentPoints(annot);
+            QList<QRectF> list;
+            for (ulong i = 0; i < quadCount; ++i) {
+                FS_QUADPOINTSF quad;
+                if (!FPDFAnnot_GetAttachmentPoints(annot, i, &quad))
+                    continue;
+
+                QRectF rectF;
+                rectF.setX(static_cast<double>(quad.x1));
+                rectF.setY(actualHeight - static_cast<double>(quad.y1));
+                rectF.setWidth(static_cast<double>(quad.x2 - quad.x1));
+                rectF.setHeight(static_cast<double>(quad.y1 - quad.y3));
+
+                list.append(transPointToPixel(rectF));
+            }
+            dAnnot->setBoundaries(list);
+
+            //获取文本
+            FPDF_WCHAR buffer[1024];
+            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            dAnnot->m_text = QString::fromUtf16(buffer);
+
+            m_dAnnots.append(dAnnot);
+
+            }else {
             //其他类型 用于占位 对应索引
             DPdfUnknownAnnot *dAnnot = new DPdfUnknownAnnot;
 

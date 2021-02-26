@@ -201,6 +201,31 @@ bool DPdfLinkAnnot::isValid() const
 }
 
 
+DPdfCIRCLEAnnot::DPdfCIRCLEAnnot()
+{
+    m_type = ACIRCLE;
+}
+
+bool DPdfCIRCLEAnnot::pointIn(QPointF pos)
+{
+    return m_rect.contains(pos);
+}
+
+QList<QRectF> DPdfCIRCLEAnnot::boundaries()
+{
+    return QList<QRectF>() << m_rect;
+}
+
+void DPdfCIRCLEAnnot::setRectF(const QRectF &rectf)
+{
+    m_rect = rectf;
+}
+
+void DPdfCIRCLEAnnot::setBoundaries(QList<QRectF> rectList)
+{
+    m_rectList = rectList;
+}
+
 DPdfUnderlineAnnot::DPdfUnderlineAnnot()
 {
     m_type = AUNDERLINE;
