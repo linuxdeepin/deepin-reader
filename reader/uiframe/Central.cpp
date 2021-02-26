@@ -62,6 +62,46 @@ Central::Central(QWidget *parent)
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
     connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &Central::onImActiveChanged);
+
+    QList<QKeySequence> keyList;
+    keyList.append(QKeySequence::Find);
+    keyList.append(QKeySequence::Open);
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence::Print);
+    keyList.append(QKeySequence::Save);
+    keyList.append(QKeySequence::Copy);
+    keyList.append(QKeySequence(Qt::Key_Left));
+    keyList.append(QKeySequence(Qt::Key_Right));
+    keyList.append(QKeySequence(Qt::Key_Space));
+    keyList.append(QKeySequence(Qt::Key_Escape));
+    keyList.append(QKeySequence(Qt::Key_F5));
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence(Qt::Key_F11));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
+    if (!Dr::isTabletEnvironment())
+        keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_D));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_M));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
+
+    foreach (auto key, keyList) {
+        auto action = new QAction(this);
+        action->setShortcut(key);
+        this->addAction(action);
+        connect(action, SIGNAL(triggered()), this, SLOT(onKeyTriggered()));
+    }
 }
 
 Central::~Central()
@@ -269,6 +309,15 @@ void Central::onImActiveChanged(bool actived)
     } else if (!actived) {
         setUpValue(0);
     }
+}
+
+void Central::onKeyTriggered()
+{
+    QAction *action = static_cast<QAction *>(sender());
+    if (nullptr == action)
+        return;
+
+    handleShortcut(action->shortcut().toString());
 }
 
 void Central::dragEnterEvent(QDragEnterEvent *event)

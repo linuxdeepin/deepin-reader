@@ -23,7 +23,6 @@
 
 #include <DMenu>
 
-class QSignalMapper;
 class DocSheet;
 class HandleMenu;
 
@@ -55,6 +54,12 @@ public slots:
      */
     void onCurSheetChanged(DocSheet *);
 
+    /**
+     * @brief onActionTriggered
+     * 触发
+     */
+    void onActionTriggered();
+
 public:
     /**
      * @brief disableAllAction
@@ -74,11 +79,10 @@ private:
     /**
      * @brief createActionMap
      * 创建菜单事件集合
-     * @param pSigManager
      * @param actionList
      * @param actionObjList
      */
-    void createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList);
+    void createActionMap(const QStringList &actionList, const QStringList &actionObjList);
 
     /**
      * @brief createAction

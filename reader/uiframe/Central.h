@@ -194,6 +194,12 @@ public slots:
      */
     void onImActiveChanged(bool actived);
 
+    /**
+     * @brief onKeyTriggered
+     * 快捷键触发
+     */
+    void onKeyTriggered();
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
 

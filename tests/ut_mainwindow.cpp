@@ -61,7 +61,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
     EXPECT_TRUE(mainWindow->windowContainSheet(sheet));
 
-    mainWindow->onShortCut(Dr::key_ctrl_shift_slash);
+    //mainWindow->onShortCut(Dr::key_ctrl_shift_slash);
     mainWindow->showDefaultSize();
     EXPECT_TRUE(mainWindow->hasSheet(sheet));
     mainWindow->activateSheetIfExist(filePath(UT_FILE_PDF, "MainWindowTest"));

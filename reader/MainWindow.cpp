@@ -43,7 +43,6 @@
 #include <DFileDialog>
 #include <DDialog>
 
-#include <QSignalMapper>
 #include <QDir>
 #include <QStandardPaths>
 #include <QSettings>
@@ -65,8 +64,6 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
     } else {
         initUI();
 
-        initShortCut();
-
         foreach (const QString &filePath, m_initFilePathList) {
             if (QFile(filePath).exists())       //过滤不存在的文件,需求中不含有提示文件不存在的文案
                 addFile(filePath);
@@ -80,8 +77,6 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     initBase();
 
     initUI();
-
-    initShortCut();
 
     addSheet(sheet);
 }
@@ -258,15 +253,6 @@ void MainWindow::initUI()
     if (optBtn && optBtn->parentWidget()) {
         optBtn->parentWidget()->installEventFilter(this);
     }
-}
-
-//  快捷键 实现
-void MainWindow::onShortCut(const QString &key)
-{
-    if (nullptr == m_central)
-        return;
-
-    m_central->handleShortcut(key);
 }
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
@@ -461,63 +447,9 @@ void MainWindow::showDefaultSize()
     }
 }
 
-void MainWindow::initShortCut()
-{
-    QList<QKeySequence> keyList;
-    keyList.append(QKeySequence::Find);
-    keyList.append(QKeySequence::Open);
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence::Print);
-    keyList.append(QKeySequence::Save);
-    keyList.append(QKeySequence::Copy);
-    keyList.append(QKeySequence(Qt::Key_Left));
-    keyList.append(QKeySequence(Qt::Key_Right));
-    keyList.append(QKeySequence(Qt::Key_Space));
-    keyList.append(QKeySequence(Qt::Key_Escape));
-    keyList.append(QKeySequence(Qt::Key_F5));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::Key_F11));
-    keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
-    keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
-    keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
-    keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_D));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_M));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_R));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
-    keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
-
-    auto pSigManager = new QSignalMapper(this);
-
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SLOT(onShortCut(const QString &)));
-
-    foreach (auto key, keyList) {
-        auto action = new QAction(this);
-
-        action->setShortcut(key);
-
-        this->addAction(action);
-
-        connect(action, SIGNAL(triggered()), pSigManager, SLOT(map()));
-
-        pSigManager->setMapping(action, key.toString());
-    }
-}
-
 void MainWindow::onDelayInit()
 {
     initUI();
-
-    initShortCut();
 }
 
 void MainWindow::initBase()

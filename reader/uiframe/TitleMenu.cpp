@@ -23,18 +23,13 @@
 #include "DocSheet.h"
 #include "Global.h"
 
-#include <QSignalMapper>
-
 TitleMenu::TitleMenu(DWidget *parent)
     : DMenu(parent)
 {
-    auto pSigManager = new QSignalMapper(this);
-    connect(pSigManager, SIGNAL(mapped(const QString &)), this, SIGNAL(sigActionTriggered(const QString &)));
-
     if (!Dr::isTabletEnvironment()) {
         QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
         QStringList firstActionObjList = QStringList() << "New window" << "New tab";
-        createActionMap(pSigManager, firstActionList, firstActionObjList);
+        createActionMap(firstActionList, firstActionObjList);
         this->addSeparator();
     }
 
@@ -45,13 +40,13 @@ TitleMenu::TitleMenu(DWidget *parent)
 
     QStringList secondActionList = QStringList() << tr("Save") << tr("Save as");
     QStringList secondActionObjList = QStringList() << "Save" << "Save as";
-    createActionMap(pSigManager, secondActionList, secondActionObjList);
+    createActionMap(secondActionList, secondActionObjList);
     this->addSeparator();
 
     if (!Dr::isTabletEnvironment()) {
         QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
         QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
-        createActionMap(pSigManager, thirdActionList, thirdActionObjList);
+        createActionMap(thirdActionList, thirdActionObjList);
     }
 
     m_handleMenu = new HandleMenu(this);
@@ -62,7 +57,7 @@ TitleMenu::TitleMenu(DWidget *parent)
 
     QStringList fourActionList = QStringList() << tr("Search");
     QStringList fourActionObjList = QStringList() << "Search";
-    createActionMap(pSigManager, fourActionList, fourActionObjList);
+    createActionMap(fourActionList, fourActionObjList);
     this->addSeparator();
 }
 
@@ -91,6 +86,15 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
     }
 }
 
+void TitleMenu::onActionTriggered()
+{
+    QAction *action = static_cast<QAction *>(sender());
+    if (nullptr == action)
+        return;
+
+    emit sigActionTriggered(action->objectName());
+}
+
 void TitleMenu::disableAllAction()
 {
     QStringList actiontextlist;
@@ -114,16 +118,15 @@ void TitleMenu::disableSaveButton(bool disable)
     }
 }
 
-void TitleMenu::createActionMap(QSignalMapper *pSigManager, const QStringList &actionList, const QStringList &actionObjList)
+void TitleMenu::createActionMap(const QStringList &actionList, const QStringList &actionObjList)
 {
     int nFirstSize = actionList.size();
     for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
         QString sActionName = actionList.at(iLoop);
         QString sObjName = actionObjList.at(iLoop);
 
-        QAction *_action = createAction(sActionName, sObjName);
-        connect(_action, SIGNAL(triggered()), pSigManager, SLOT(map()));
-        pSigManager->setMapping(_action, sObjName);
+        QAction *action = createAction(sActionName, sObjName);
+        connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
     }
 }
 

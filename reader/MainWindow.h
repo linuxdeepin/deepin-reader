@@ -139,12 +139,6 @@ private:
     void initUI();
 
     /**
-     * @brief initShortCut
-     * 初始化响应快捷键接口
-     */
-    void initShortCut();
-
-    /**
      * @brief showDefaultSize
      * 显示默认大小
      */
@@ -156,12 +150,6 @@ private slots:
      * 延时初始化
      */
     void onDelayInit();
-
-    /**
-     * @brief onShortCut
-     * 处理快捷键事件
-     */
-    void onShortCut(const QString &);
 
     /**
      * @brief onUpdateTitleLabelRect
