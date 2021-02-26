@@ -656,7 +656,9 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
                 bresetSelectRect = false;
                 selectBoundRectF = textRectf;
             } else {
-                if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
+                if (qFuzzyCompare(selectBoundRectF.height(), textRectf.height()) && qFuzzyCompare(selectBoundRectF.y(), textRectf.y()) && selectBoundRectF.right() > textRectf.x()) {
+                    selectBoundRectF = selectBoundRectF.united(textRectf);
+                } else if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
                     selectBoundRectF = selectBoundRectF.united(textRectf);
                 } else {
                     boundaries << selectBoundRectF;
@@ -666,6 +668,9 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
         }
     }
     boundaries << selectBoundRectF;
+
+    //...高粱注释bug解决中
+    qInfo() << boundaries;
 
     if (boundaries.count() > 0) {
         //需要保证已经加载注释
