@@ -19,7 +19,6 @@
 #include "MainWindow.h"
 #include "PageRenderThread.h"
 #include "DocSheet.h"
-#include "SaveDialog.h"
 #include "DBusObject.h"
 
 #include <QIcon>

@@ -669,9 +669,6 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     }
     boundaries << selectBoundRectF;
 
-    //...高粱注释bug解决中
-    qInfo() << boundaries;
-
     if (boundaries.count() > 0) {
         //需要保证已经加载注释
         if (!m_hasLoadedAnnotation) {

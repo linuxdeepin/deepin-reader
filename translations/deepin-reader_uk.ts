@@ -2,14 +2,14 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../reader/Application.cpp" line="40"/>
+        <location filename="../reader/Application.cpp" line="39"/>
         <source>Document Viewer</source>
         <translation>Переглядач документів</translation>
     </message>
     <message>
-        <location filename="../reader/Application.cpp" line="41"/>
-        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
-        <translation>«Переглядач документів» — програма для читання файлів документів, у якій передбачено підтримку форматів PDF, DJVU тощо.</translation>
+        <location filename="../reader/Application.cpp" line="40"/>
+        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -113,7 +113,7 @@
         <translation>Додати закладку</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="234"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>Ви справді хочете вилучити усі закладки?</translation>
     </message>
@@ -241,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="122"/>
+        <location filename="../reader/uiframe/Central.cpp" line="152"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
@@ -249,34 +249,44 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="159"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Підтримки формату не передбачено</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="406"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <source>Open failed</source>
+        <translation>Не вдалося відкрити</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <source>Please check if the file is damaged</source>
+        <translation>Будь ласка, перевірте, чи не пошкоджено файл</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="403"/>
         <source>Save failed</source>
         <translation>Не вдалося зберегти</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="412"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Saved successfully</source>
         <translation>Успішно збережено</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="425"/>
         <source>Save as</source>
         <translation>Зберегти як</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="428"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="429"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="439"/>
         <source>Invalid file name</source>
         <translation>Некоректна назва файла</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="430"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="431"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
         <source>OK</source>
         <translation>Гаразд</translation>
     </message>
@@ -302,58 +312,43 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="335"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="363"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="308"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="336"/>
         <source>The bookmark has been removed</source>
         <translation>Закладку вилучено</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Будь ласка, перевірте, чи не пошкоджено файл</translation>
-    </message>
-    <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="570"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="585"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="500"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="515"/>
         <source>Please select the text</source>
         <translation>Будь ласка, позначте текст</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="634"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="643"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="565"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="574"/>
         <source>The annotation has been removed</source>
         <translation>Анотацію вилучено</translation>
     </message>
 </context>
 <context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Не вдалося відкрити</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Будь ласка, перевірте, чи не пошкоджено файл</translation>
-    </message>
-</context>
-<context>
     <name>EncryptionPage</name>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="51"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
         <translation>Зашифрований файл. Будь ласка, введіть пароль</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="57"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="62"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <translation>Гаразд</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="106"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
         <translation>Помилковий пароль</translation>
     </message>
@@ -361,12 +356,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="140"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="121"/>
         <source>Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="147"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
         <source>Next</source>
         <translation>Далі</translation>
     </message>
@@ -385,6 +380,24 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="395"/>
+        <source>Save as</source>
+        <translation>Зберегти як</translation>
+    </message>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="398"/>
+        <source>Invalid file name</source>
+        <translation>Некоректна назва файла</translation>
+    </message>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="400"/>
+        <source>OK</source>
+        <translation>Гаразд</translation>
+    </message>
+</context>
+<context>
     <name>NotesWidget</name>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
@@ -398,24 +411,19 @@
     </message>
 </context>
 <context>
-    <name>PageRenderThread</name>
-    <message>
-        <location filename="../reader/browser/PageRenderThread.cpp" line="595"/>
-        <source>Open failed</source>
-        <translation>Не вдалося відкрити</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/PageRenderThread.cpp" line="618"/>
-        <source>Please check if the file is damaged</source>
-        <translation>Будь ласка, перевірте, чи не пошкоджено файл</translation>
-    </message>
-</context>
-<context>
     <name>PagingWidget</name>
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
         <source>Invalid page number</source>
         <translation>Некоректний номер сторінки</translation>
+    </message>
+</context>
+<context>
+    <name>ProgressDialog</name>
+    <message>
+        <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
+        <source>Converting</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -430,8 +438,8 @@
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Do you want to save the changes?</source>
-        <translation>Зберегти зміни?</translation>
+        <source>Save the changes to %1?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -825,23 +833,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="193"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="198"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Remove annotation</source>
         <translation>Вилучити анотацію</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="203"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="222"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>Вилучити усе</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="217"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
         <translation>Вилучити закладку</translation>
     </message>
@@ -849,7 +857,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="129"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
         <translation>Сторінка %1</translation>
     </message>
@@ -857,43 +865,43 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="30"/>
         <source>New window</source>
         <translation>Нове вікно</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="30"/>
         <source>New tab</source>
         <translation>Нова вкладка</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="114"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
         <source>Save as</source>
         <translation>Зберегти як</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="47"/>
         <source>Display in file manager</source>
         <translation>Показати у менеджері файлів</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="47"/>
         <source>Magnifer</source>
         <translation>Збільшувальне скло</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="59"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Tools</source>
         <translation>Інструменти</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="63"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="58"/>
         <source>Search</source>
         <translation>Пошук</translation>
     </message>
@@ -901,7 +909,7 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../reader/uiframe/TitleWidget.cpp" line="84"/>
+        <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
         <translation>Мініатюри</translation>
     </message>
@@ -909,7 +917,7 @@
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="73"/>
+        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
         <translation>Досягнуто межі вхідних даних</translation>
     </message>

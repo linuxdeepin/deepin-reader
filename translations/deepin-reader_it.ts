@@ -2,15 +2,14 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../reader/Application.cpp" line="40"/>
+        <location filename="../reader/Application.cpp" line="39"/>
         <source>Document Viewer</source>
         <translation>Lettore documenti</translation>
     </message>
     <message>
-        <location filename="../reader/Application.cpp" line="41"/>
-        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
-        <translation>Document Viewer è uno strumento per leggere documenti, supportare PDF, DJVU, ecc.
-Localizzazione italiana a cura di Massimo A. Carofano.</translation>
+        <location filename="../reader/Application.cpp" line="40"/>
+        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -114,7 +113,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Aggiungi segnalibro</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="234"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>Sicuro di voler eliminare tutti i segnalibri?</translation>
     </message>
@@ -242,7 +241,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="122"/>
+        <location filename="../reader/uiframe/Central.cpp" line="152"/>
         <source>Documents</source>
         <translation>Documenti</translation>
     </message>
@@ -250,34 +249,44 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="159"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Il formato non è supportato</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="406"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <source>Open failed</source>
+        <translation>Apertura fallita</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <source>Please check if the file is damaged</source>
+        <translation>Verifica se il file è danneggiato</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="403"/>
         <source>Save failed</source>
         <translation>Salvataggio fallito</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="412"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Saved successfully</source>
         <translation>Salvataggio riuscito</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="425"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="428"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="438"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="429"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="439"/>
         <source>Invalid file name</source>
         <translation>Nome file non valido</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="430"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="440"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="431"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -303,58 +312,43 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="335"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="363"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="308"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="336"/>
         <source>The bookmark has been removed</source>
         <translation>Il segnalibro è stato rimosso</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Verifica se il file è danneggiato</translation>
-    </message>
-    <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="570"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="585"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="500"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="515"/>
         <source>Please select the text</source>
         <translation>Seleziona il testo</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="634"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="643"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="565"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="574"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotazione è stata rimossa</translation>
     </message>
 </context>
 <context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Apertura fallita</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Verifica se il file è danneggiato</translation>
-    </message>
-</context>
-<context>
     <name>EncryptionPage</name>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="51"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
         <translation>File crittografato, inserisci la password</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="57"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="62"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="106"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
         <translation>Password errata</translation>
     </message>
@@ -362,12 +356,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="140"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="121"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="147"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
         <source>Next</source>
         <translation>Prossima</translation>
     </message>
@@ -386,6 +380,24 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="395"/>
+        <source>Save as</source>
+        <translation>Salva come</translation>
+    </message>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="398"/>
+        <source>Invalid file name</source>
+        <translation>Nome file non valido</translation>
+    </message>
+    <message>
+        <location filename="../reader/MainWindow.cpp" line="400"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+</context>
+<context>
     <name>NotesWidget</name>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
@@ -399,24 +411,19 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
-    <name>PageRenderThread</name>
-    <message>
-        <location filename="../reader/browser/PageRenderThread.cpp" line="595"/>
-        <source>Open failed</source>
-        <translation>Apertura fallita</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/PageRenderThread.cpp" line="618"/>
-        <source>Please check if the file is damaged</source>
-        <translation>Verifica se il file è danneggiato</translation>
-    </message>
-</context>
-<context>
     <name>PagingWidget</name>
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
         <source>Invalid page number</source>
         <translation>Numero pagine non valido</translation>
+    </message>
+</context>
+<context>
+    <name>ProgressDialog</name>
+    <message>
+        <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
+        <source>Converting</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -431,8 +438,8 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Do you want to save the changes?</source>
-        <translation>Desideri salvare le variazioni?</translation>
+        <source>Save the changes to %1?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -826,23 +833,23 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="193"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="198"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Remove annotation</source>
         <translation>Rimuovi annotazione</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="203"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="222"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>Rimuovi tutti</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="217"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
         <translation>Rimuovi segnalibro</translation>
     </message>
@@ -850,7 +857,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="129"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
         <translation>Pagina %1</translation>
     </message>
@@ -858,43 +865,43 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="30"/>
         <source>New window</source>
         <translation>Nuova Finestra</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="35"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="30"/>
         <source>New tab</source>
         <translation>Nuova Tab</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="114"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="47"/>
         <source>Display in file manager</source>
         <translation>Visualizza nel file manager</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="52"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="47"/>
         <source>Magnifer</source>
         <translation>Ingrandimento</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="59"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Tools</source>
         <translation>Strumenti</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="63"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="58"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
@@ -902,7 +909,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../reader/uiframe/TitleWidget.cpp" line="84"/>
+        <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
         <translation>Miniature</translation>
     </message>
@@ -910,7 +917,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="73"/>
+        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
         <translation>Limite inserimento raggiunto</translation>
     </message>

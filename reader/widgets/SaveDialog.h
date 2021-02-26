@@ -30,7 +30,7 @@
 class SaveDialog : public QObject
 {
     Q_DISABLE_COPY(SaveDialog)
-
+    Q_OBJECT
 public:
     explicit SaveDialog(QObject *parent = nullptr);
 

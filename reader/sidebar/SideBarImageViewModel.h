@@ -69,8 +69,9 @@ class DocSheet;
  */
 class SideBarImageViewModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
-    explicit  SideBarImageViewModel(DocSheet *sheet, QObject *parent = nullptr);
+    explicit SideBarImageViewModel(DocSheet *sheet, QObject *parent = nullptr);
 
 public:
     /**
