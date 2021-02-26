@@ -640,7 +640,7 @@ private:
     /**
      * @brief getAnnotPosInPage
      * 将传入的位置拉回到页面里，返回新的位置
-     * @param pos
+     * @param pos 需要是page中的位置，全局的位置需要先使用page->mapFromScene
      * @return
      */
     QPointF getAnnotPosInPage(const QPointF &pos, BrowserPage *page);

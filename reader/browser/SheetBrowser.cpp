@@ -310,13 +310,18 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QR
         return false;
 
     const SheetOperation  &operation = m_sheet->operation();
+
     qreal scaleFactor = operation.scaleFactor;
 
     QPointF clickPoint = page->mapFromScene(point);
+
+    clickPoint = getAnnotPosInPage(clickPoint, page);
+
     if (clickPoint.x() < 0 || clickPoint.y() < 0)
         return false;
 
     iconRect = QRectF(clickPoint.x() / scaleFactor - 10, clickPoint.y() / scaleFactor - 10, 20, 20);
+
     return true;
 }
 
@@ -1480,11 +1485,9 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
 
         m_lastSelectIconAnnotPage = page;
 
-        QPointF iconPos = getAnnotPosInPage(clickPoint, page);
-
         QRectF iconRect;
 
-        bool isVaild = calcIconAnnotRect(page, iconPos, iconRect);
+        bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
         if (isVaild)
             anno = page->addIconAnnotation(iconRect, contents);
@@ -1898,11 +1901,11 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
     if (newPos.y() < 15 * page->scaleFactor())
         newPos.setY(15 * page->scaleFactor());
 
-    if (newPos.x() > page->boundingRect().width() - 15 * page->scaleFactor())
-        newPos.setX(page->boundingRect().width() - 15 * page->scaleFactor());
+    if (newPos.x() > page->rect().width() - 15 * page->scaleFactor())
+        newPos.setX(page->rect().width() - 15 * page->scaleFactor());
 
-    if (newPos.y() > page->boundingRect().height() - 15 * page->scaleFactor())
-        newPos.setY(page->boundingRect().height() - 15 * page->scaleFactor());
+    if (newPos.y() > page->rect().height() - 15 * page->scaleFactor())
+        newPos.setY(page->rect().height() - 15 * page->scaleFactor());
 
     return newPos;
 }

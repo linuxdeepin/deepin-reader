@@ -752,8 +752,6 @@ bool BrowserPage::moveIconAnnotation(const QRectF &moveRect)
 
     QList<QRectF> annoBoundaries;
 
-    QString containtStr = m_lastClickIconAnnotationItem->annotationText();
-
     m_annotationItems.removeAll(m_lastClickIconAnnotationItem);
     annoBoundaries << m_lastClickIconAnnotationItem->annotation()->boundary();
     annoBoundaries << moveRect;
