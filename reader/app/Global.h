@@ -45,6 +45,10 @@ namespace Dr {
 
 bool isTabletEnvironment();
 
+/**
+ * @brief The FileType enum
+ * 支持文档类型
+ */
 enum FileType {
     Unknown = 0,
     PDF     = 1,
@@ -56,6 +60,10 @@ enum FileType {
 };
 FileType fileType(const QString &filePath);
 
+/**
+ * @brief The Rotation enum
+ * 文档旋转角度
+ */
 enum Rotation {
     RotateBy0           = 0,
     RotateBy90          = 1,
@@ -64,12 +72,20 @@ enum Rotation {
     NumberOfRotations   = 4
 };
 
+/**
+ * @brief The MouseShape enum
+ * 光标形状
+ */
 enum MouseShape {
     MouseShapeNormal    = 0,
     MouseShapeHand      = 1,
     NumberOfMouseShapes = 2
 };
 
+/**
+ * @brief The ShowMode enum
+ * 显示模式
+ */
 enum ShowMode {
     DefaultMode         = 0,
     SliderMode          = 1,
@@ -78,12 +94,20 @@ enum ShowMode {
     NumberOfShowModes   = 4
 };
 
+/**
+ * @brief The LayoutMode enum
+ * 布局模式
+ */
 enum LayoutMode {
     SinglePageMode      = 0,
     TwoPagesMode        = 1,
     NumberOfLayoutModes = 2
 };
 
+/**
+ * @brief The ScaleMode enum
+ * 缩放模式
+ */
 enum ScaleMode {
     ScaleFactorMode      = 0,
     FitToPageWidthMode   = 1,

@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>Belge Görüntüleyici, belgeleri okuyan bir araçtır, PDF, DJVU, DOCX vb. türleri destekler.</translation>
     </message>
 </context>
 <context>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Dönüştürülüyor</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Değişiklikler %1&apos;e kaydedilsin mi?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

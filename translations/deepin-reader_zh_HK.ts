@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>文檔查看器是一款支持PDF、DJVU、DOCX等多種格式的文檔閱讀工具。</translation>
     </message>
 </context>
 <context>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>正在轉換</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to %1?</source>
-        <translation type="unfinished"/>
+        <translation>是否保存對%1的編輯？</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

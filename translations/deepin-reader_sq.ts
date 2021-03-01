@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>Parësi i Dokumenteve është një mjet për lexim kartelash dokument, që mbulon PDF, DJVU, DOCX, etj.</translation>
     </message>
 </context>
 <context>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Po shndërrohet</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Të ruhen ndryshimet te %1?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

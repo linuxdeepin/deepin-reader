@@ -86,6 +86,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     grabGesture(Qt::PinchGesture);//捏合缩放
 
+    setProperty("pinchgetsturing", false);
+
     m_scroller = QScroller::scroller(this);
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
@@ -103,9 +105,6 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     m_tipsWidget = new TipsWidget(this);
     m_tipsWidget->setAccessibleName("Tips");
     m_tipsWidget->setAutoChecked(true);
-
-    this->setProperty("pinchgetsturing", false);
-
 
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 

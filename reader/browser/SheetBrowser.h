@@ -81,7 +81,12 @@ public:
      */
     static QImage firstThumbnail(const QString &filePath);
 
-
+    /**
+     * @brief init
+     * 按历史记录初始化，只可调用一次
+     * @param operation 操作记录
+     * @param bookmarks 书签记录
+     */
     void init(SheetOperation &operation, const QSet<int> &bookmarks);
 
     /**

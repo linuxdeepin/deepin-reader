@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>O Visualizador de Documentos é uma ferramenta para leitura de documentos PDF, DJVU, DOCX e etc.</translation>
     </message>
 </context>
 <context>
@@ -389,7 +389,7 @@
     <message>
         <location filename="../reader/MainWindow.cpp" line="398"/>
         <source>Invalid file name</source>
-        <translation>Nome do arquivo inválido</translation>
+        <translation>Nome de arquivo inválido</translation>
     </message>
     <message>
         <location filename="../reader/MainWindow.cpp" line="400"/>
@@ -423,7 +423,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Convertendo</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Salvar as alterações em %1?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
