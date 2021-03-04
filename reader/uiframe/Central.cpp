@@ -194,11 +194,6 @@ void Central::showSheet(DocSheet *sheet)
     docPage()->showSheet(sheet);
 }
 
-void Central::closeSheet(DocSheet *sheet)
-{
-    docPage()->closeSheet(sheet);
-}
-
 QList<DocSheet *> Central::getSheets()
 {
     if (nullptr == m_docPage)
@@ -217,6 +212,22 @@ void Central::handleShortcut(QString shortcut)
         show.show();
     } else
         docPage()->handleShortcut(shortcut);
+}
+
+bool Central::handleClose(bool needToBeSaved)
+{
+    if (nullptr != m_docPage) {
+        QList<DocSheet *> sheets = docPage()->getSheets();
+
+        if (sheets.count() > 0) {
+            for (int i = 0; i < sheets.count(); ++i) {
+                if (!docPage()->closeSheet(sheets[i], needToBeSaved))
+                    return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void Central::onSheetCountChanged(int count)

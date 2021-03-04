@@ -82,8 +82,17 @@ public :
      */
     void handleOpenSuccess();
 
+    /**
+     * @brief handleSearchStart
+     * 开始搜索
+     * @param text
+     */
     void handleSearchStart(const QString &text);
 
+    /**
+     * @brief handleSearchStop
+     * 停止搜索
+     */
     void handleSearchStop();
 
     /**

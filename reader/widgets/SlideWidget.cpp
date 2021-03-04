@@ -116,11 +116,15 @@ void SlideWidget::onParentDestroyed()
 void SlideWidget::paintEvent(QPaintEvent *event)
 {
     DWidget::paintEvent(event);
+
     QPainter painter(this);
+
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
     painter.fillRect(this->rect(), Qt::black);
 
     int roffset = 0;
+
     if (m_blefttoright) {
         roffset = m_offset - width();
         painter.drawPixmap(m_offset, 0, m_lpixmap);
@@ -261,11 +265,8 @@ QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
     painter.setRenderHints(QPainter::SmoothPixmapTransform);
     qreal iwidth = srcImage.width();
     qreal iheight = srcImage.height();
-    painter.drawPixmap(QRect(static_cast<int>((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio()),
-                             static_cast<int>((pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio()),
-                             static_cast<int>(iwidth / dApp->devicePixelRatio()),
-                             static_cast<int>(iheight / dApp->devicePixelRatio())), srcImage);
-
+    painter.drawPixmap(static_cast<int>((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio()),
+                       static_cast<int>((pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio()), srcImage);
     return pixmap;
 }
 

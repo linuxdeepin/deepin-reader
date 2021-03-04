@@ -631,7 +631,7 @@ bool PageRenderThread::execNextDocOpenTask()
 
     deepin_reader::Document::Error error = deepin_reader::Document::NoError;
 
-    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.sheet->fileType(), filePath, task.password, error);
+    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.sheet->fileType(), filePath, task.sheet->convertedFileDir(), task.password, error);
 
     if (nullptr == document) {
         emit sigDocOpenTask(task, error, nullptr, QList<deepin_reader::Page *>());

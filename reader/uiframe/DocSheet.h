@@ -49,6 +49,7 @@ DWIDGET_BEGIN_NAMESPACE
 class DPrinter;
 DWIDGET_END_NAMESPACE
 
+class QTemporaryDir;
 class SheetBrowser;
 class SheetRenderer;
 /**
@@ -461,10 +462,24 @@ public:
 
     /**
      * @brief filePath
-     * 获取文件路径
+     * 用户想要打开的文档路径
      * @return
      */
     QString filePath();
+
+    /**
+     * @brief realOpenedFilePath
+     * 实际打开的文档路径(因为存在文档需要被转换的情况)
+     * @return
+     */
+    QString openedFilePath();
+
+    /**
+     * @brief convertedFileDir
+     * 转换后打开的文档目录
+     * @return
+     */
+    QString convertedFileDir();
 
     /**
      * @brief hasBookMark
@@ -815,6 +830,7 @@ private:
     QString         m_password;
     Dr::FileType    m_fileType;
     QString         m_uuid;
+    QTemporaryDir  *m_tempDir = nullptr;        //存放临时数据
     QMap<int, QPixmap>  m_thumbnailMap;
 
     bool m_documentChanged = false;

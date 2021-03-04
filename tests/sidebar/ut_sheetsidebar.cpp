@@ -417,7 +417,7 @@ TEST_F(ut_sidebar, SidebarTest)
     EXPECT_TRUE(imageInfo1 < imageInfo2);
     EXPECT_FALSE(imageInfo1 > imageInfo2);
 
-    mainWindow->closeWithoutSave();
+    mainWindow->handleClose(false);
 
     exec();
 }

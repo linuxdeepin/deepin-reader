@@ -73,9 +73,9 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->resizeFullTitleWidget();
     mainWindow->onUpdateTitleLabelRect();
 
-    EXPECT_TRUE(mainWindow->closeWithSave());
-    EXPECT_TRUE(mainWindow_empty->closeWithSave());
-    EXPECT_TRUE(mainWindow_muti->closeWithSave());
+    EXPECT_TRUE(mainWindow->handleClose(false));
+    EXPECT_TRUE(mainWindow_empty->handleClose(true));
+    EXPECT_TRUE(mainWindow_muti->handleClose(false));
 
     exec();
 }

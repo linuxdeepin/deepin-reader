@@ -104,9 +104,20 @@ public:
 
     /**
      * @brief closeSheet
-     * 关闭sheet
+     * 关闭sheet,成功返回true，失败或者取消返回false。
+     * @param sheet (关闭成功后会被删除)
+     * @param needToBeSaved
+     * @return
      */
-    void closeSheet(DocSheet *sheet);
+    bool closeSheet(DocSheet *sheet, bool needToBeSaved);
+
+    /**
+     * @brief closeAllSheets
+     * 进行关闭，会逐个关闭每个sheet，全部关闭完成返回成功
+     * @param needToBeSaved 是否需要提示保存
+     * @return
+     */
+    bool closeAllSheets(bool needToBeSaved);
 
     /**
      * @brief hasSheet

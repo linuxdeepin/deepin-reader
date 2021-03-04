@@ -118,33 +118,17 @@ void MainWindow::activateSheet(DocSheet *sheet)
     this->activateWindow();
 }
 
-bool MainWindow::closeWithSave()
+bool MainWindow::handleClose(bool needToBeSaved)
 {
-    if (nullptr != m_central) {
-        QList<DocSheet *> sheets = m_central->getSheets();
-
-        //后加入先关闭
-        if (sheets.count() > 0) {
-            for (int i = sheets.count() - 1; i >= 0; --i) {
-                if (!MainWindow::closeSheet(sheets[i], needToBeSaved)) {
-                    return false;
-                }
-            }
-        }
-    }
+    if (m_central)
+        if (!m_central->handleClose(needToBeSaved))
+            return false;
 
     this->close();
 
     this->deleteLater();
 
     return true;
-}
-
-void MainWindow::closeWithoutSave()
-{
-    needToBeSaved = false;
-
-    closeWithSave();
 }
 
 void MainWindow::addFile(const QString &filePath)
@@ -155,13 +139,18 @@ void MainWindow::addFile(const QString &filePath)
     m_central->addFileAsync(filePath);
 }
 
-//  窗口关闭
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (!closeWithSave()) {
+    if (m_central && !m_central->handleClose(true)) {
         event->ignore();
         return;
     }
+
+    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
+
+    settings.setValue("LASTWIDTH", QString::number(width()));
+
+    settings.setValue("LASTHEIGHT", QString::number(height()));
 
     DMainWindow::closeEvent(event);
 }
@@ -371,56 +360,6 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
     }
 
     return false;
-}
-
-bool MainWindow::closeSheet(DocSheet *sheet, bool needToBeSaved)
-{
-    MainWindow *mainwindow = MainWindow::windowContainSheet(sheet);
-
-    if (nullptr == mainwindow)
-        return false;
-
-    mainwindow->activateSheet(sheet);
-
-    if (sheet->fileChanged() && needToBeSaved) { //需要提示保存
-        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
-
-        if (result <= 0) {
-            return false;
-        }
-
-        if (result == 2) {
-            //如果是docx则改为另存为
-            if (Dr::DOCX == sheet->fileType()) {
-                QString saveFilePath = DFileDialog::getSaveFileName(mainwindow, tr("Save as"), sheet->filePath(), sheet->filter());
-
-                if (saveFilePath.endsWith("/.pdf")) {
-                    DDialog dlg("", tr("Invalid file name"));
-                    dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
-                    dlg.addButtons(QStringList() << tr("OK"));
-                    QMargins mar(0, 0, 0, 30);
-                    dlg.setContentLayoutContentsMargins(mar);
-                    dlg.exec();
-                    return false;
-                }
-
-                if (!sheet->saveAsData(saveFilePath))
-                    return false;
-
-            } else if (!sheet->saveData())
-                return false;
-        }
-    }
-
-    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, mainwindow);
-
-    settings.setValue("LASTWIDTH", QString::number(mainwindow->width()));
-
-    settings.setValue("LASTHEIGHT", QString::number(mainwindow->height()));
-
-    mainwindow->m_central->closeSheet(sheet);
-
-    return true;
 }
 
 MainWindow *MainWindow::createWindow(QStringList filePathList)

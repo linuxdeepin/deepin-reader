@@ -47,9 +47,9 @@ void ReadImageTask::run()
 
         QSizeF size = sheet->pageSizeByIndex(m_docParam.pageIndex);
 
-        size.scale(m_docParam.maxPixel * dApp->devicePixelRatio(), m_docParam.maxPixel * dApp->devicePixelRatio(), Qt::KeepAspectRatio);
+        size.scale(m_docParam.maxPixel, m_docParam.maxPixel, Qt::KeepAspectRatio);
 
-        QImage image = sheet->getImage(m_docParam.pageIndex, size.width(), size.height());
+        QImage image = sheet->getImage(m_docParam.pageIndex, size.width() * dApp->devicePixelRatio(), size.height() * dApp->devicePixelRatio());
 
         image.setDevicePixelRatio(dApp->devicePixelRatio());
 
@@ -114,7 +114,9 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
 {
     QMutexLocker mutext(&m_runMutex);
 
-    setImageForDocSheet(task.sheet, task.pageIndex, QPixmap::fromImage(image));
+    QPixmap pixmap =  QPixmap::fromImage(image);
+
+    setImageForDocSheet(task.sheet, task.pageIndex, pixmap);
 
     if (m_taskList.contains(task)) {
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
@@ -132,10 +134,8 @@ QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int p
 
 void ReaderImageThreadPoolManager::setImageForDocSheet(DocSheet *sheet, int pageIndex, const QPixmap &pixmap)
 {
-    if (pageIndex >= 0 && m_docSheetImgMap.contains(sheet) && m_docSheetImgMap[sheet].size() > pageIndex) {
-
+    if (pageIndex >= 0 && m_docSheetImgMap.contains(sheet) && m_docSheetImgMap[sheet].size() > pageIndex)
         m_docSheetImgMap[sheet][pageIndex] = pixmap;
-    }
 }
 
 void ReaderImageThreadPoolManager::onDocProxyDestroyed(QObject *obj)

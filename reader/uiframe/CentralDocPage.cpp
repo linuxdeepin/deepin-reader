@@ -27,9 +27,9 @@
 #include "Application.h"
 #include "DBusObject.h"
 
+#include <DDialog>
 #include <DTitlebar>
 #include <DFileDialog>
-#include <DDialog>
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -241,29 +241,7 @@ void CentralDocPage::onTabMoveIn(DocSheet *sheet)
 
 void CentralDocPage::onTabClosed(DocSheet *sheet)
 {
-    if (nullptr == sheet)
-        return;
-
-    if (!DocSheet::existSheet(sheet))
-        return;
-
-    if (sheet->fileChanged()) {
-        int ret = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
-
-        if (ret < 1)
-            return;
-
-        if (2 == ret) {
-            //docx的保存将会当做另存为处理
-            if (Dr::DOCX == sheet->fileType()) {
-                if (!saveAsCurrent())
-                    return;
-            } else
-                sheet->saveData();
-        }
-    }
-
-    closeSheet(sheet);
+    closeSheet(sheet, true);
 }
 
 void CentralDocPage::onTabMoveOut(DocSheet *sheet)
@@ -311,13 +289,33 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 }
 
-void CentralDocPage::closeSheet(DocSheet *sheet)
+bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 {
     if (nullptr == sheet)
-        return;
+        return false;
 
     if (!DocSheet::existSheet(sheet))
-        return;
+        return false;
+
+    //如果文档有变动且需要保存
+    if (sheet->fileChanged() && needToBeSaved) {
+        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
+
+        if (result <= 0) {
+            return false;
+        }
+
+        if (result == 2) {
+            //docx的保存将会当做另存为处理
+            if (Dr::DOCX == sheet->fileType()) {
+                if (!saveAsCurrent())
+                    return false;
+            } else {
+                if (!sheet->saveData())
+                    return false;
+            }
+        }
+    }
 
     m_stackedLayout->removeWidget(sheet);
 
@@ -330,6 +328,22 @@ void CentralDocPage::closeSheet(DocSheet *sheet)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 
     delete sheet;
+
+    return true;
+}
+
+bool CentralDocPage::closeAllSheets(bool needToBeSaved)
+{
+    QList<DocSheet *> sheets = m_tabBar->getSheets();
+
+    if (sheets.count() > 0) {
+        for (int i = 0; i < sheets.count(); ++i) {
+            if (!closeSheet(sheets[i], needToBeSaved))
+                return false;
+        }
+    }
+
+    return true;
 }
 
 void CentralDocPage::enterSheet(DocSheet *sheet)
@@ -420,10 +434,17 @@ bool CentralDocPage::saveAsCurrent()
 
     //获取保存的文件路径，其中docx保存时应该以pdf后缀名称来显示
     QString showFilePath = sheet->filePath();
+
     if (Dr::DOCX == sheet->fileType())
         showFilePath.replace(".docx", ".pdf");
+
     QString saveFilePath = DFileDialog::getSaveFileName(this, tr("Save as"), showFilePath, sheet->filter());
 
+    //被用户取消
+    if (saveFilePath.isEmpty())
+        return false;
+
+    //文件名合法性判断
     if (Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()) {
         if (saveFilePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Invalid file name"));

@@ -54,9 +54,13 @@ void Application::emitSheetChanged()
 
 void Application::handleQuitAction()
 {
-    //倒序退出
-    for (int i = MainWindow::m_list.count() - 1; i >= 0; --i)
-        MainWindow::m_list[i]->closeWithSave();
+    QList<MainWindow *> list = MainWindow::m_list;
+
+    //倒序退出,如果取消了则停止
+    for (int i = list.count() - 1; i >= 0; --i) {
+        if (!list[i]->handleClose(true))
+            break;
+    }
 }
 
 bool Application::notify(QObject *object, QEvent *event)

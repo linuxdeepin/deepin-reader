@@ -438,8 +438,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     QChildEvent childEvent(QEvent::ChildRemoved, sheet);
     QCoreApplication::sendEvent(sheet, &childEvent);
 
-    mainWindow1->closeWithoutSave();
-    mainWindow2->closeWithoutSave();
+    mainWindow1->handleClose(false);
+    mainWindow2->handleClose(false);
 
     CentralNavPage centralPage;
     centralPage.onChooseButtonClicked();

@@ -52,6 +52,7 @@
 #include <QPropertyAnimation>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QTemporaryDir>
 
 DWIDGET_USE_NAMESPACE
 
@@ -108,6 +109,9 @@ DocSheet::~DocSheet()
     delete m_sidebar;
 
     delete m_renderer;
+
+    if (nullptr != m_tempDir)
+        delete m_tempDir;
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
@@ -461,11 +465,11 @@ bool DocSheet::saveAsData(QString filePath)
 {
     stopSearch();
 
-    if (m_documentChanged) {
+    if (m_documentChanged && Dr::DOCX != fileType()) {
         if (!m_renderer->saveAs(filePath))
             return false;
     } else {
-        if (!Utils::copyFile(this->filePath(), filePath))
+        if (!Utils::copyFile(openedFilePath(), filePath))
             return false;
     }
 
@@ -649,6 +653,22 @@ Dr::FileType DocSheet::fileType()
 QString DocSheet::filePath()
 {
     return m_filePath;
+}
+
+QString DocSheet::openedFilePath()
+{
+    if (Dr::DOCX == m_fileType)
+        return convertedFileDir() + "/temp.pdf";
+
+    return m_filePath;
+}
+
+QString DocSheet::convertedFileDir()
+{
+    if (m_tempDir == nullptr)
+        m_tempDir = new QTemporaryDir;
+
+    return m_tempDir->path();
 }
 
 bool DocSheet::hasBookMark(int index)
@@ -1140,10 +1160,10 @@ void DocSheet::onPopPrintDialog()
 {
     DPrintPreviewDialog preview(this);
 
-#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=7)))
+#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=10)))
     preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
-    preview.setPrintFromPath(m_filePath);       //旧版本和最新版本使用新接口，解决打印模糊问题
+    preview.setPrintFromPath(openedFilePath());       //旧版本和最新版本使用新接口，解决打印模糊问题
     connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
 #else
     connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));

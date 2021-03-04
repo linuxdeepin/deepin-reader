@@ -74,6 +74,7 @@ public:
 
     /**
      * @brief getSheets
+     * 获取包含的所有的sheet(会按打开的倒序排列)
      * @return
      */
     QList<DocSheet *> getSheets();

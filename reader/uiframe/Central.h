@@ -88,13 +88,6 @@ public:
     void showSheet(DocSheet *sheet);
 
     /**
-     * @brief closeSheet
-     * 关闭sheet
-     * @param sheet
-     */
-    void closeSheet(DocSheet *sheet);
-
-    /**
      * @brief getSheets
      * 获取sheet
      * @return
@@ -107,6 +100,14 @@ public:
      * @param shortcut 快捷键字符串
      */
     void handleShortcut(QString shortcut);
+
+    /**
+     * @brief handleClose
+     * 进行关闭，会逐个关闭每个sheet，全部关闭完成返回成功
+     * @param needToBeSaved 是否需要提示保存
+     * @return
+     */
+    bool handleClose(bool needToBeSaved);
 
     /**
      * @brief titleWidget

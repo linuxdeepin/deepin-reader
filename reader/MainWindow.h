@@ -83,19 +83,6 @@ public:
     void activateSheet(DocSheet *sheet);
 
     /**
-     * @brief closeWithSave
-     * 保存关闭，如果被用户取消则返回false
-     * @return
-     */
-    bool closeWithSave();
-
-    /**
-     * @brief closeWithoutSave
-     * 不需要保存的子窗口直接关闭
-     */
-    void closeWithoutSave();
-
-    /**
      * @brief setDocTabBarWidget
      * 全屏时设置tabbar
      * @param widget tabbar
@@ -112,6 +99,14 @@ public:
      * @param orderlst
      */
     void updateOrderWidgets(const QList<QWidget *> &orderlst);
+
+    /**
+     * @brief handleClose
+     * 进行关闭，成功会关闭并释放自己
+     * @param needToBeSaved
+     * @return
+     */
+    bool handleClose(bool needToBeSaved);
 
 public:
     /**
@@ -186,7 +181,6 @@ public:
     static MainWindow *windowContainSheet(DocSheet *sheet);
     static bool allowCreateWindow();
     static bool activateSheetIfExist(const QString &filePath);
-    static bool closeSheet(DocSheet *sheet, bool needToBeSaved);
     static MainWindow *createWindow(QStringList filePathList = QStringList());
     static MainWindow *createWindow(DocSheet *sheet);
     static QList<MainWindow *> m_list;
