@@ -656,7 +656,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
                 bresetSelectRect = false;
                 selectBoundRectF = textRectf;
             } else {
-                if (qFuzzyCompare(selectBoundRectF.height(), textRectf.height()) && qFuzzyCompare(selectBoundRectF.y(), textRectf.y()) && selectBoundRectF.right() > textRectf.x()) {
+                if (qFuzzyCompare(selectBoundRectF.height(), textRectf.height()) && qFuzzyCompare(selectBoundRectF.y(), textRectf.y()) && selectBoundRectF.right() > (textRectf.x() - 1)) {
                     selectBoundRectF = selectBoundRectF.united(textRectf);
                 } else if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
                     selectBoundRectF = selectBoundRectF.united(textRectf);
