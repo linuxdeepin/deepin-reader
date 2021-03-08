@@ -205,7 +205,8 @@ public:
         NeedPassword,       //需要密码
         WrongPassword,      //密码错误
         FileError,          //打开失败
-        FileDamaged         //打开成功 文件损坏
+        FileDamaged,        //打开成功 文件损坏
+        ConvertFailed       //转换失败
     };
 
     Document() : QObject() {}

@@ -193,7 +193,7 @@ void CentralDocPage::addFileAsync(const QString &filePath)
 
 void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error error)
 {
-    if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error) {
+    if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error || deepin_reader::Document::ConvertFailed == error) {
         m_stackedLayout->removeWidget(sheet);
 
         m_tabBar->removeSheet(sheet);
@@ -208,6 +208,8 @@ void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error er
             showTips(nullptr, tr("Open failed"), 1);
         else if (deepin_reader::Document::FileDamaged == error)
             showTips(nullptr, tr("Please check if the file is damaged"), 1);
+        else if (deepin_reader::Document::ConvertFailed == error)
+            showTips(nullptr, tr("Conversion failed, please check if the file is damaged"), 1);
 
         return;
     }

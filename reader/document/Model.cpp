@@ -37,6 +37,13 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter.waitForStarted();
         converter.waitForFinished();
 
+        QFile realFile(realFilePath);
+
+        if (!realFile.exists()) {
+            error = deepin_reader::Document::ConvertFailed;
+            return nullptr;
+        }
+
         document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
     }
 

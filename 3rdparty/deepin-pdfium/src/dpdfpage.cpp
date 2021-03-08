@@ -570,9 +570,12 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     FPDF_PAGE page = FPDF_LoadPage(d_func()->m_doc, d_func()->m_index);
 
+    if (nullptr == page)
+        return QImage();
+
     FPDF_BITMAP bitmap = FPDFBitmap_CreateEx(image.width(), image.height(), FPDFBitmap_BGRA, image.scanLine(0), image.bytesPerLine());
 
-    if (bitmap != nullptr) {
+    if (nullptr != bitmap) {
         FPDF_RenderPageBitmap(bitmap, page, slice.x(), slice.y(), slice.width(), slice.height(), width, height, 0, FPDF_ANNOT);
         FPDFBitmap_Destroy(bitmap);
     }
