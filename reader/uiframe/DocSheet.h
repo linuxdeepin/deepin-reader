@@ -468,13 +468,6 @@ public:
     QString filePath();
 
     /**
-     * @brief realOpenedFilePath
-     * 实际打开的文档路径(因为存在文档需要被转换的情况)
-     * @return
-     */
-    QString openedFilePath();
-
-    /**
      * @brief convertedFileDir
      * 转换后打开的文档目录
      * @return

@@ -264,29 +264,29 @@
         <translation>Ju lutemi, kontrolloni se mos kartela është e dëmtuar</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="403"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="417"/>
         <source>Save failed</source>
         <translation>Ruajtja dështoi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="409"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="423"/>
         <source>Saved successfully</source>
         <translation>U ruajt me sukses</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="425"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
         <source>Save as</source>
         <translation>Ruaje si</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="429"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="450"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="460"/>
         <source>Invalid file name</source>
         <translation>Emër i pavlefshëm kartele</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="431"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="452"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="462"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -312,20 +312,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="308"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="336"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
         <source>The bookmark has been removed</source>
         <translation>Faqerojtësi u hoq</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="500"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="515"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
         <source>Please select the text</source>
         <translation>Ju lutemi, përzgjidhni tekstin</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="565"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="574"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
         <source>The annotation has been removed</source>
         <translation>Shënimi u hoq</translation>
     </message>
@@ -377,24 +377,6 @@
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
         <translation>Mjeti Dorë</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="395"/>
-        <source>Save as</source>
-        <translation>Ruaje si</translation>
-    </message>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="398"/>
-        <source>Invalid file name</source>
-        <translation>Emër i pavlefshëm kartele</translation>
-    </message>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="400"/>
-        <source>OK</source>
-        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -851,7 +833,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
-        <translation>Hiq faqerojtës</translation>
+        <translation>Hiqe faqerojtësin</translation>
     </message>
 </context>
 <context>

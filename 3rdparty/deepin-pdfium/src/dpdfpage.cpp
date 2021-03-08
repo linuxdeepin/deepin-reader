@@ -230,7 +230,7 @@ bool DPdfPagePrivate::loadAnnots()
             type = DPdfAnnot::AHighlight;
         else if (FPDF_ANNOT_LINK == subType)
             type = DPdfAnnot::ALink;
-        else if (FPDF_ANNOT_CIRCLE==subType){
+        else if (FPDF_ANNOT_CIRCLE == subType) {
             type = DPdfAnnot::ACIRCLE;
         }
         //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width_pt/m_height_pt 为受旋转影响后的宽高
@@ -348,7 +348,7 @@ bool DPdfPagePrivate::loadAnnots()
             }
 
             m_dAnnots.append(dAnnot);
-            }else if (DPdfAnnot::ACIRCLE == type) {
+        } else if (DPdfAnnot::ACIRCLE == type) {
 
             DPdfCIRCLEAnnot *dAnnot = new DPdfCIRCLEAnnot;
 
@@ -391,7 +391,7 @@ bool DPdfPagePrivate::loadAnnots()
 
             m_dAnnots.append(dAnnot);
 
-            }else {
+        } else {
             //其他类型 用于占位 对应索引
             DPdfUnknownAnnot *dAnnot = new DPdfUnknownAnnot;
 
@@ -888,7 +888,9 @@ DPdfAnnot *DPdfPage::createHightLightAnnot(const QList<QRectF> &rects, QString t
     dAnnot->setText(text);
 
     const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots(); //only Load
+
     Q_UNUSED(dAnnots);
+
     d_func()->m_dAnnots.append(dAnnot);
 
     emit annotAdded(dAnnot);

@@ -264,29 +264,29 @@
         <translation>Проверите да ли је датотека оштећена</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="403"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="417"/>
         <source>Save failed</source>
         <translation>Није сачувано</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="409"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="423"/>
         <source>Saved successfully</source>
         <translation>Успешно сачувано</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="425"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
         <source>Save as</source>
         <translation>Сачувај као</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="429"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="439"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="450"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="460"/>
         <source>Invalid file name</source>
         <translation>Неважећи назив датотеке</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="431"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="452"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="462"/>
         <source>OK</source>
         <translation>У реду</translation>
     </message>
@@ -312,20 +312,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="308"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="336"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
         <source>The bookmark has been removed</source>
         <translation>Забелешка је уклоњена</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="500"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="515"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
         <source>Please select the text</source>
         <translation>Молимо изаберите текст</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="565"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="574"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
         <source>The annotation has been removed</source>
         <translation>Напомена је уклоњена</translation>
     </message>
@@ -377,24 +377,6 @@
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
         <translation>Ручни алат</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="395"/>
-        <source>Save as</source>
-        <translation>Сачувај као</translation>
-    </message>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="398"/>
-        <source>Invalid file name</source>
-        <translation>Неважећи назив датотеке</translation>
-    </message>
-    <message>
-        <location filename="../reader/MainWindow.cpp" line="400"/>
-        <source>OK</source>
-        <translation>У реду</translation>
     </message>
 </context>
 <context>

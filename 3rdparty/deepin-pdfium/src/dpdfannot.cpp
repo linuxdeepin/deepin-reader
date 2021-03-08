@@ -200,7 +200,6 @@ bool DPdfLinkAnnot::isValid() const
     return true;
 }
 
-
 DPdfCIRCLEAnnot::DPdfCIRCLEAnnot()
 {
     m_type = ACIRCLE;

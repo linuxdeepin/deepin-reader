@@ -469,7 +469,16 @@ bool DocSheet::saveAsData(QString filePath)
         if (!m_renderer->saveAs(filePath))
             return false;
     } else {
-        if (!Utils::copyFile(openedFilePath(), filePath))
+        //如果是需要转换的格式，则先转换再拷贝
+        QString saveAsTemp = convertedFileDir() + "/temp.pdf";
+
+        if (m_documentChanged) {
+            saveAsTemp = convertedFileDir() + "/saveAsTemp.pdf";
+            if (!m_renderer->saveAs(saveAsTemp))
+                return false;
+        }
+
+        if (!Utils::copyFile(saveAsTemp, filePath))
             return false;
     }
 
@@ -652,14 +661,6 @@ Dr::FileType DocSheet::fileType()
 
 QString DocSheet::filePath()
 {
-    return m_filePath;
-}
-
-QString DocSheet::openedFilePath()
-{
-    if (Dr::DOCX == m_fileType)
-        return convertedFileDir() + "/temp.pdf";
-
     return m_filePath;
 }
 
