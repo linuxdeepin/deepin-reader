@@ -2,11 +2,13 @@
 <context>
     <name>Application</name>
     <message>
+        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>문서 보기도구</translation>
     </message>
     <message>
+        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>문서 뷰어는 문서 파일을 읽고 PDF, DJVU 등을 지원하는 도구입니다.</translation>
@@ -328,10 +330,6 @@
         <translation>북마크가 제거되었습니다</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">파일이 손상되었는지 확인하십시오</translation>
-    </message>
-    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -342,17 +340,6 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>주석이 제거되었습니다</translation>
-    </message>
-</context>
-<context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">파일이 손상되었는지 확인하십시오</translation>
     </message>
 </context>
 <context>
@@ -456,17 +443,6 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>PageRenderThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">파일이 손상되었는지 확인하십시오</translation>
     </message>
 </context>
 <context>
@@ -867,32 +843,6 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>검색</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageListView</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">복사</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">주석 제거</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">북마크 제거</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageViewModel</name>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">페이지 %1</translation>
     </message>
 </context>
 <context>

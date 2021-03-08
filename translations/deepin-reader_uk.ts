@@ -2,11 +2,13 @@
 <context>
     <name>Application</name>
     <message>
+        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>Переглядач документів</translation>
     </message>
     <message>
+        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>«Переглядач документів» — програма для читання файлів документів, у якій передбачено підтримку форматів PDF, DJVU тощо.</translation>
@@ -328,10 +330,6 @@
         <translation>Закладку вилучено</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Будь ласка, перевірте, чи не пошкоджено файл</translation>
-    </message>
-    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -342,17 +340,6 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>Анотацію вилучено</translation>
-    </message>
-</context>
-<context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Не вдалося відкрити</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Будь ласка, перевірте, чи не пошкоджено файл</translation>
     </message>
 </context>
 <context>
@@ -418,13 +405,13 @@
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
-        <translation>Так</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
-        <translation>Ні</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -456,17 +443,6 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Ви справді хочете вилучити усі анотації?</translation>
-    </message>
-</context>
-<context>
-    <name>PageRenderThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Не вдалося відкрити</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Будь ласка, перевірте, чи не пошкоджено файл</translation>
     </message>
 </context>
 <context>
@@ -867,32 +843,6 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Пошук</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageListView</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">Копіювати</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">Вилучити анотацію</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="vanished">Вилучити усе</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Вилучити закладку</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageViewModel</name>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">Сторінка %1</translation>
     </message>
 </context>
 <context>

@@ -1,17 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
 <context>
     <name>Application</name>
     <message>
         <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
-        <translation>Visionneuse de documents</translation>
+        <translation>प्रलेख प्रदर्शक</translation>
     </message>
     <message>
         <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
-        <translation>Visionneur de documents est un outil pour lire des documents PDF, DJVU, etc.</translation>
+        <translation>प्रलेख प्रदर्शक - PDF, DJVU इत्यादि प्रलेख फाइलें देखने हेतु साधन है।</translation>
     </message>
 </context>
 <context>
@@ -19,92 +19,92 @@
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Location</source>
-        <translation>Emplacement</translation>
+        <translation>स्थान</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Subject</source>
-        <translation>Sujet</translation>
+        <translation>विषय</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Author</source>
-        <translation>Auteur</translation>
+        <translation>रचयिता</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Keywords</source>
-        <translation>Mots clés</translation>
+        <translation>वर्गीकरण शब्द</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Producer</source>
-        <translation>Producteur</translation>
+        <translation>उत्पादक</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Creator</source>
-        <translation>Créateur</translation>
+        <translation>निर्माता</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time created</source>
-        <translation>Heure de création</translation>
+        <translation>निर्माण समय</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Time modified</source>
-        <translation>Heure de modification</translation>
+        <translation>परिवर्तन समय</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>प्रारूप</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Pages</source>
-        <translation>Pages</translation>
+        <translation>पृष्ठ</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Optimized</source>
-        <translation>Optimisé</translation>
+        <translation>अनुकूलित</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="58"/>
         <source>Security</source>
-        <translation>Sécurité</translation>
+        <translation>सुरक्षा</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>Page size</source>
-        <translation>Taille de la page</translation>
+        <translation>पृष्ठ आकार</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>File size</source>
-        <translation>Taille du fichier</translation>
+        <translation>पूर्ण आकार</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="66"/>
         <source>Basic info</source>
-        <translation>Informations de base</translation>
+        <translation>सामान्य जानकारी</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="86"/>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation>अज्ञात</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation>हाँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation>नहीं</translation>
     </message>
 </context>
 <context>
@@ -112,12 +112,12 @@
     <message>
         <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="33"/>
         <source>Remove bookmark</source>
-        <translation>Supprimer le signet</translation>
+        <translation>पृष्ठ-स्मृति हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="36"/>
         <source>Remove all</source>
-        <translation>Tout supprimer</translation>
+        <translation>सभी हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>पृष्ठ-स्मृति जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation>Voulez-vous vraiment supprimer tous les signets ?</translation>
+        <translation>क्या आप निश्चित ही सभी पृष्ठ-स्मृति हटाना चाहते हैं?</translation>
     </message>
 </context>
 <context>
@@ -140,19 +140,19 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="51"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="55"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>कॉपी करें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="42"/>
         <source>Remove annotation</source>
-        <translation>Supprimer l&apos;annotation</translation>
+        <translation>व्याख्या हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="43"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="72"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="137"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>व्याख्या जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="46"/>
@@ -160,7 +160,7 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="84"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="132"/>
         <source>Remove bookmark</source>
-        <translation>Supprimer le signet</translation>
+        <translation>पृष्ठ-स्मृति हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="48"/>
@@ -168,89 +168,89 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="86"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="134"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>पृष्ठ-स्मृति जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="59"/>
         <source>Highlight</source>
-        <translation>Mettre en évidence</translation>
+        <translation>चिन्हित करें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="68"/>
         <source>Remove highlight</source>
-        <translation>Supprimer la surbrillance</translation>
+        <translation>अचिन्हित करें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="80"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="127"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>खोजें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="95"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="143"/>
         <source>Exit fullscreen</source>
-        <translation>Quitter le plein écran</translation>
+        <translation>पूर्ण स्क्रीन निरस्त</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="97"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="145"/>
         <source>Fullscreen</source>
-        <translation>Plein écran</translation>
+        <translation>पूर्ण स्क्रीन</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="100"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="148"/>
         <source>Slide show</source>
-        <translation>Diaporama</translation>
+        <translation>स्लाइड शो</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="103"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="151"/>
         <source>First page</source>
-        <translation>Première page</translation>
+        <translation>प्रथम पृष्ठ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="104"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="152"/>
         <source>Previous page</source>
-        <translation>Page précédente</translation>
+        <translation>पिछला पृष्ठ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="110"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="158"/>
         <source>Next page</source>
-        <translation>Page suivante</translation>
+        <translation>अगला पृष्ठ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="111"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="159"/>
         <source>Last page</source>
-        <translation>Dernière page</translation>
+        <translation>अंतिम पृष्ठ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="119"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="167"/>
         <source>Rotate left</source>
-        <translation>Rotation à gauche</translation>
+        <translation>बाएं घुमाएँ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="120"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="168"/>
         <source>Rotate right</source>
-        <translation>Rotation à droite</translation>
+        <translation>दाएं घुमाएँ</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="123"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="171"/>
         <source>Print</source>
-        <translation>Imprimer</translation>
+        <translation>प्रिंट करें</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="124"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="172"/>
         <source>Document info</source>
-        <translation>Informations sur le document</translation>
+        <translation>प्रलेख जानकारी</translation>
     </message>
 </context>
 <context>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation>Documents</translation>
+        <translation>प्रलेख</translation>
     </message>
 </context>
 <context>
@@ -266,41 +266,41 @@
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
-        <translation>Le format n&apos;est pas pris en charge</translation>
+        <translation>असमर्थित प्रारूप</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
-        <translation>Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
+        <translation>सुनिश्चित करें कि फाइल उचित है</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
-        <translation>Échec de la sauvegarde</translation>
+        <translation>संचित करना विफल</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
-        <translation>Enregistré avec succès</translation>
+        <translation>संचित करना सफल</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>ऐसे संचित करें</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
-        <translation>Nom de fichier invalide</translation>
+        <translation>अमान्य फाइल नाम</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>ठीक है</translation>
     </message>
 </context>
 <context>
@@ -308,17 +308,17 @@
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation>Faites glisser des documents ici</translation>
+        <translation>माउस द्वारा यहाँ प्रलेख ड्रैग करें</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Format supporté : %1</translation>
+        <translation>समर्थित प्रारूप : %1</translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation>Sélectionner un fichier</translation>
+        <translation>फाइल चयन</translation>
     </message>
 </context>
 <context>
@@ -327,19 +327,19 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
-        <translation>Le signet a été supprimé</translation>
+        <translation>पृष्ठ-स्मृति हटाई गई</translation>
     </message>
     <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
-        <translation>Veuillez sélectionner le texte</translation>
+        <translation>कृपया लेख चुनें</translation>
     </message>
     <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="495"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
-        <translation>L&apos;annotation a été supprimée</translation>
+        <translation>व्याख्या हटाई गई</translation>
     </message>
 </context>
 <context>
@@ -347,22 +347,22 @@
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="51"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Fichier crypté, veuillez saisir le mot de passe</translation>
+        <translation>एन्क्रिप्टेड फाइल, कूटशब्द दर्ज करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="57"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation>कूटशब्द</translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="62"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>ठीक है</translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="106"/>
         <source>Wrong password</source>
-        <translation>Mauvais mot de passe</translation>
+        <translation>गलत कूटशब्द</translation>
     </message>
 </context>
 <context>
@@ -370,12 +370,12 @@
     <message>
         <location filename="../src/widgets/FindWidget.cpp" line="134"/>
         <source>Previous</source>
-        <translation>Précédent</translation>
+        <translation>पिछला</translation>
     </message>
     <message>
         <location filename="../src/widgets/FindWidget.cpp" line="141"/>
         <source>Next</source>
-        <translation>Suivant</translation>
+        <translation>अगला</translation>
     </message>
 </context>
 <context>
@@ -383,12 +383,12 @@
     <message>
         <location filename="../src/widgets/HandleMenu.cpp" line="37"/>
         <source>Select Text</source>
-        <translation>Sélectionner le texte</translation>
+        <translation>लेख चयन</translation>
     </message>
     <message>
         <location filename="../src/widgets/HandleMenu.cpp" line="45"/>
         <source>Hand Tool</source>
-        <translation>Outil main</translation>
+        <translation>हस्त साधन</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../src/sidebar/ImageViewModel.cpp" line="102"/>
         <source>Page %1</source>
-        <translation>Page %1</translation>
+        <translation>पृष्ठ %1</translation>
     </message>
 </context>
 <context>
@@ -405,13 +405,13 @@
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>हाँ</translation>
     </message>
     <message>
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>नहीं</translation>
     </message>
 </context>
 <context>
@@ -419,17 +419,17 @@
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="31"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>कॉपी करें</translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="34"/>
         <source>Remove annotation</source>
-        <translation>Supprimer l&apos;annotation</translation>
+        <translation>व्याख्या हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="37"/>
         <source>Remove all</source>
-        <translation>Tout supprimer</translation>
+        <translation>सभी हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -437,12 +437,12 @@
     <message>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>व्याख्या जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation>Voulez-vous vraiment supprimer toutes les annotations ?</translation>
+        <translation>क्या आप निश्चित ही सभी व्याख्यान हटाना चाहते हैं?</translation>
     </message>
 </context>
 <context>
@@ -450,7 +450,7 @@
     <message>
         <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
         <source>Invalid page number</source>
-        <translation>Numéro de page invalide</translation>
+        <translation>अमान्य पृष्ठ संख्या</translation>
     </message>
 </context>
 <context>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../src/Application.cpp" line="60"/>
         <source>Document not saved</source>
-        <translation>Document non sauvegardé</translation>
+        <translation>प्रलेख संचित करना विफल</translation>
     </message>
 </context>
 <context>
@@ -466,28 +466,28 @@
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="35"/>
         <source>Do you want to save the changes?</source>
-        <translation>Voulez-vous enregistrer les modifications ?</translation>
+        <translation>क्या आप परिवर्तन संचित करना चाहते हैं?</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="37"/>
         <location filename="../src/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
-        <translation>Ignorer</translation>
+        <translation>निरस्त करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="38"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>संचित करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="50"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation>हटाएँ</translation>
     </message>
 </context>
 <context>
@@ -495,27 +495,27 @@
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="35"/>
         <source>Two-Page View</source>
-        <translation>Affichage sur deux pages</translation>
+        <translation>द्वि-पृष्ठ दृश्य</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation>Taille 1:1</translation>
+        <translation>1:1 अनुपात</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation>Ajuster la page</translation>
+        <translation>पृष्ठ अनुरूप</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="38"/>
         <source>Fit Height</source>
-        <translation>Ajuster la hauteur</translation>
+        <translation>ऊँचाई अनुरूप</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="39"/>
         <source>Fit Width</source>
-        <translation>Ajuster la largeur</translation>
+        <translation>चौड़ाई अनुरूप</translation>
     </message>
 </context>
 <context>
@@ -523,12 +523,12 @@
     <message>
         <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
-        <translation>Aucun résultat trouvé</translation>
+        <translation>कोई परिणाम नहीं</translation>
     </message>
     <message>
         <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
-        <translation>%1 éléments trouvés</translation>
+        <translation>%1 वस्तुएँ मिली</translation>
     </message>
 </context>
 <context>
@@ -536,22 +536,22 @@
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="85"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>लघुछवि</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="100"/>
         <source>Catalog</source>
-        <translation>Catalogue</translation>
+        <translation>सूची</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="113"/>
         <source>Bookmarks</source>
-        <translation>Signets</translation>
+        <translation>पृष्ठ-स्मृति</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="128"/>
         <source>Annotations</source>
-        <translation>Annotations</translation>
+        <translation>व्याख्या</translation>
     </message>
 </context>
 <context>
@@ -559,27 +559,27 @@
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="58"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation>सेटिंग्स</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="79"/>
         <source>Files</source>
-        <translation>Fichiers</translation>
+        <translation>फाइलें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="100"/>
         <source>Display</source>
-        <translation>Afficher</translation>
+        <translation>दृश्य</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="120"/>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation>साधन</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="142"/>
         <source>Edit</source>
-        <translation>Modifier</translation>
+        <translation>संपादन</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="195"/>
@@ -587,7 +587,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Exit</source>
-        <translation>Quitter</translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="195"/>
@@ -595,7 +595,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -603,7 +603,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Page up</source>
-        <translation>Page précédente</translation>
+        <translation>पृष्ठ ऊपर करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -611,7 +611,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Page down</source>
-        <translation>Page suivante</translation>
+        <translation>पृष्ठ नीचे करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -619,7 +619,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation>खोलें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -627,7 +627,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>आकार बढ़ाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -635,13 +635,13 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>आकार घटाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <source>Zoom in/Zoom out</source>
-        <translation>Zoom avant/Zoom arrière</translation>
+        <translation>आकार बढ़ाएँ/घटाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -649,7 +649,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>ऐसे संचित करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -657,7 +657,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Print</source>
-        <translation>Imprimer</translation>
+        <translation>प्रिंट करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -667,7 +667,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>संचित करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -675,7 +675,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>लघुछवि</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -683,7 +683,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>1:1 size</source>
-        <translation>Taille 1:1</translation>
+        <translation>1:1 अनुपात</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -691,7 +691,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Fit height</source>
-        <translation>Ajuster la hauteur</translation>
+        <translation>ऊँचाई अनुरूप</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -699,7 +699,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Fit width</source>
-        <translation>Ajuster la largeur</translation>
+        <translation>चौड़ाई अनुरूप</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -707,7 +707,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Rotate left</source>
-        <translation>Rotation à gauche</translation>
+        <translation>बाएं घुमाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -715,7 +715,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Rotate right</source>
-        <translation>Rotation à droite</translation>
+        <translation>दाएं घुमाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -723,7 +723,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Select text</source>
-        <translation>Sélectionner du texte</translation>
+        <translation>लेख चयन</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -731,7 +731,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Hand tool</source>
-        <translation>Outil main</translation>
+        <translation>हस्त साधन</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -739,7 +739,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>पृष्ठ-स्मृति जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -749,7 +749,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation>हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -757,7 +757,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Magnifier</source>
-        <translation>Loupe</translation>
+        <translation>आवर्धक</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -765,7 +765,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Slide show</source>
-        <translation>Diaporama</translation>
+        <translation>स्लाइड शो</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -773,7 +773,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Fullscreen</source>
-        <translation>Plein écran</translation>
+        <translation>पूर्ण स्क्रीन</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -781,7 +781,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>कॉपी करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -789,7 +789,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation>कट करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -797,7 +797,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation>पेस्ट करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -805,7 +805,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation>पूर्ववत करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -813,7 +813,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <translation>सारा चयनित</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -821,28 +821,28 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Display shortcuts</source>
-        <translation>Afficher les raccourcis</translation>
+        <translation>शॉर्टकट दिखाएँ</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="207"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>व्याख्या जोड़ें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="207"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Highlight</source>
-        <translation>Mettre en évidence</translation>
+        <translation>चिन्हित करें</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="208"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>खोजें</translation>
     </message>
 </context>
 <context>
@@ -850,43 +850,43 @@
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
         <source>New window</source>
-        <translation>Nouvel fenêtre</translation>
+        <translation>नई विंडो</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
         <source>New tab</source>
-        <translation>Nouvel onglet</translation>
+        <translation>नया टैब</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
         <location filename="../src/uiframe/TitleMenu.cpp" line="106"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>संचित करें</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>ऐसे संचित करें</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
         <source>Display in file manager</source>
-        <translation>Afficher dans le gestionnaire de fichiers</translation>
+        <translation>फाइल प्रबंधक में दिखाएँ</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
         <source>Magnifer</source>
-        <translation>Loupe</translation>
+        <translation>आवर्धक</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="55"/>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation>साधन</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="59"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>खोजें</translation>
     </message>
 </context>
 <context>
@@ -894,7 +894,7 @@
     <message>
         <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>लघुछवि</translation>
     </message>
 </context>
 <context>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
-        <translation>Limite d&apos;entrée atteinte</translation>
+        <translation>इनपुट सीमा समाप्त</translation>
     </message>
 </context>
 <context>
@@ -916,17 +916,17 @@
         <location filename="../src/main.cpp" line="29"/>
         <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
-        <translation>Chemin du fichier</translation>
+        <translation>FilePath</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
-        <translation>Chemin de la vignette.</translation>
+        <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="37"/>
         <source>Generate thumbnail.</source>
-        <translation>Générer une vignette.</translation>
+        <translation>Generate thumbnail.</translation>
     </message>
 </context>
 </TS>

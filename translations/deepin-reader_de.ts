@@ -2,11 +2,13 @@
 <context>
     <name>Application</name>
     <message>
+        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>Dokumentbetrachter</translation>
     </message>
     <message>
+        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>Dokumentbetrachter ist ein Werkzeug zum Lesen von Dokumentdateien, das PDF, DJVU usw. unterstützt.</translation>
@@ -328,10 +330,6 @@
         <translation>Das Lesezeichen wurde entfernt</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Bitte prüfen Sie, ob die Datei beschädigt ist</translation>
-    </message>
-    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -342,17 +340,6 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>Die Anmerkung wurde entfernt</translation>
-    </message>
-</context>
-<context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Öffnen fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Bitte prüfen Sie, ob die Datei beschädigt ist</translation>
     </message>
 </context>
 <context>
@@ -456,17 +443,6 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Sind Sie sicher, dass Sie alle Lesezeichen löschen möchten?</translation>
-    </message>
-</context>
-<context>
-    <name>PageRenderThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">Öffnen fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Bitte prüfen Sie, ob die Datei beschädigt ist</translation>
     </message>
 </context>
 <context>
@@ -867,32 +843,6 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Suchen</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageListView</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">Kopieren</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">Anmerkung entfernen</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="vanished">Alle entfernen</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Lesezeichen entfernen</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageViewModel</name>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">Seite %1</translation>
     </message>
 </context>
 <context>

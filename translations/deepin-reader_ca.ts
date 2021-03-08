@@ -2,11 +2,13 @@
 <context>
     <name>Application</name>
     <message>
+        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>Visualitzador de documents</translation>
     </message>
     <message>
+        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>El Visualitzador de documents és una eina per llegir fitxers de documents que admet PDF, DJVU, etc.</translation>
@@ -328,10 +330,6 @@
         <translation>S&apos;ha eliminat el punt de lectura.</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Si us plau, comproveu si el fitxer està malmès.</translation>
-    </message>
-    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -342,17 +340,6 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>S&apos;ha eliminat l&apos;anotació.</translation>
-    </message>
-</context>
-<context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">N&apos;ha fallat l&apos;obertura.</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Si us plau, comproveu si el fitxer està malmès.</translation>
     </message>
 </context>
 <context>
@@ -418,13 +405,13 @@
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
-        <translation>Sí</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -456,17 +443,6 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>Segur que voleu eliminar totes les anotacions?</translation>
-    </message>
-</context>
-<context>
-    <name>PageRenderThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">N&apos;ha fallat l&apos;obertura.</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">Si us plau, comproveu si el fitxer està malmès.</translation>
     </message>
 </context>
 <context>
@@ -867,32 +843,6 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>Cerca</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageListView</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">Copia-ho</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">Elimina l&apos;anotació</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="vanished">Elimina-ho tot</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">Elimina&apos;n el punt de lectura</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageViewModel</name>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">Pàgina %1</translation>
     </message>
 </context>
 <context>

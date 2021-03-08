@@ -1,17 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
 <context>
     <name>Application</name>
     <message>
         <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
-        <translation>Visionneuse de documents</translation>
+        <translation>Vizualizator de Documente </translation>
     </message>
     <message>
         <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
-        <translation>Visionneur de documents est un outil pour lire des documents PDF, DJVU, etc.</translation>
+        <translation>Vizualizator de Documente - este un instrument destinat pentru citire documentelor în format PDF, DJVU ș.a.</translation>
     </message>
 </context>
 <context>
@@ -19,92 +19,92 @@
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Location</source>
-        <translation>Emplacement</translation>
+        <translation>Amplasare </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Subject</source>
-        <translation>Sujet</translation>
+        <translation>Subiect </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Author</source>
-        <translation>Auteur</translation>
+        <translation>Autor </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Keywords</source>
-        <translation>Mots clés</translation>
+        <translation>Cuvintele cheie </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Producer</source>
-        <translation>Producteur</translation>
+        <translation>Producător </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Creator</source>
-        <translation>Créateur</translation>
+        <translation>Compilator </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time created</source>
-        <translation>Heure de création</translation>
+        <translation>Perioada creării</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Time modified</source>
-        <translation>Heure de modification</translation>
+        <translation>Perioada modificării</translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>Format </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Pages</source>
-        <translation>Pages</translation>
+        <translation>Paginile </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Optimized</source>
-        <translation>Optimisé</translation>
+        <translation>Optimizat </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="58"/>
         <source>Security</source>
-        <translation>Sécurité</translation>
+        <translation>Securitate </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>Page size</source>
-        <translation>Taille de la page</translation>
+        <translation>Mărimea paginii </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>File size</source>
-        <translation>Taille du fichier</translation>
+        <translation>Mărimea fișierului </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="66"/>
         <source>Basic info</source>
-        <translation>Informations de base</translation>
+        <translation>Informații de bază </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="86"/>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation>Necunoscut </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
         <source>Yes</source>
-        <translation>Oui</translation>
+        <translation>Da </translation>
     </message>
     <message>
         <location filename="../src/widgets/AttrScrollWidget.cpp" line="128"/>
         <source>No</source>
-        <translation>Non</translation>
+        <translation>Nu </translation>
     </message>
 </context>
 <context>
@@ -112,12 +112,12 @@
     <message>
         <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="33"/>
         <source>Remove bookmark</source>
-        <translation>Supprimer le signet</translation>
+        <translation>Eliminarea marcajului</translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="36"/>
         <source>Remove all</source>
-        <translation>Tout supprimer</translation>
+        <translation>Eliminare tot</translation>
     </message>
 </context>
 <context>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="61"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>Adăugarea marcaj </translation>
     </message>
     <message>
         <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation>Voulez-vous vraiment supprimer tous les signets ?</translation>
+        <translation>Doriți să ștergeți toate marcajele? </translation>
     </message>
 </context>
 <context>
@@ -140,19 +140,19 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="51"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="55"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>Copiere </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="42"/>
         <source>Remove annotation</source>
-        <translation>Supprimer l&apos;annotation</translation>
+        <translation>Eliminarea adnotare</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="43"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="72"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="137"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>Adăugarea adnotare</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="46"/>
@@ -160,7 +160,7 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="84"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="132"/>
         <source>Remove bookmark</source>
-        <translation>Supprimer le signet</translation>
+        <translation>Eliminarea marcajului</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="48"/>
@@ -168,89 +168,89 @@
         <location filename="../src/browser/BrowserMenu.cpp" line="86"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="134"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>Adăugarea marcajului</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="59"/>
         <source>Highlight</source>
-        <translation>Mettre en évidence</translation>
+        <translation>Evidențiere </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="68"/>
         <source>Remove highlight</source>
-        <translation>Supprimer la surbrillance</translation>
+        <translation>Scoatere evidențiere</translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="80"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="127"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>Căutare </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="95"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="143"/>
         <source>Exit fullscreen</source>
-        <translation>Quitter le plein écran</translation>
+        <translation> Ieșire ecran complet </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="97"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="145"/>
         <source>Fullscreen</source>
-        <translation>Plein écran</translation>
+        <translation>Ecran complet </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="100"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="148"/>
         <source>Slide show</source>
-        <translation>Diaporama</translation>
+        <translation>Prezentare </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="103"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="151"/>
         <source>First page</source>
-        <translation>Première page</translation>
+        <translation>Prima pagină </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="104"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="152"/>
         <source>Previous page</source>
-        <translation>Page précédente</translation>
+        <translation>Pagina precedentă </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="110"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="158"/>
         <source>Next page</source>
-        <translation>Page suivante</translation>
+        <translation>Pagina următoare </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="111"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="159"/>
         <source>Last page</source>
-        <translation>Dernière page</translation>
+        <translation>Ultima pagină </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="119"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="167"/>
         <source>Rotate left</source>
-        <translation>Rotation à gauche</translation>
+        <translation>Rotire stânga </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="120"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="168"/>
         <source>Rotate right</source>
-        <translation>Rotation à droite</translation>
+        <translation>Rotire dreapta </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="123"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="171"/>
         <source>Print</source>
-        <translation>Imprimer</translation>
+        <translation>Printare </translation>
     </message>
     <message>
         <location filename="../src/browser/BrowserMenu.cpp" line="124"/>
         <location filename="../src/browser/BrowserMenu.cpp" line="172"/>
         <source>Document info</source>
-        <translation>Informations sur le document</translation>
+        <translation>Informație document </translation>
     </message>
 </context>
 <context>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation>Documents</translation>
+        <translation>Documente</translation>
     </message>
 </context>
 <context>
@@ -266,41 +266,41 @@
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="156"/>
         <source>The format is not supported</source>
-        <translation>Le format n&apos;est pas pris en charge</translation>
+        <translation>Formatul dat nu este acceptat </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="167"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="214"/>
         <source>Please check if the file is damaged</source>
-        <translation>Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
+        <translation>Vă rugăm să vă asigurați dacă fișierul nu este deteriorat </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="409"/>
         <source>Save failed</source>
-        <translation>Échec de la sauvegarde</translation>
+        <translation>Salvare eșuată </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="415"/>
         <source>Saved successfully</source>
-        <translation>Enregistré avec succès</translation>
+        <translation>Salvare cu succes </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="435"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="454"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>Salvează ca </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="438"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="457"/>
         <source>Invalid file name</source>
-        <translation>Nom de fichier invalide</translation>
+        <translation>Nume de fișier inacceptabil </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="440"/>
         <location filename="../src/uiframe/CentralDocPage.cpp" line="459"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>OK </translation>
     </message>
 </context>
 <context>
@@ -308,17 +308,17 @@
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation>Faites glisser des documents ici</translation>
+        <translation>Trageți documentele aici </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Format supporté : %1</translation>
+        <translation>Formatul acceptat: %1 </translation>
     </message>
     <message>
         <location filename="../src/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation>Sélectionner un fichier</translation>
+        <translation>Selectați Fișierul</translation>
     </message>
 </context>
 <context>
@@ -327,19 +327,19 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="237"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="265"/>
         <source>The bookmark has been removed</source>
-        <translation>Le signet a été supprimé</translation>
+        <translation>Marcajul a fost eliminat</translation>
     </message>
     <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
-        <translation>Veuillez sélectionner le texte</translation>
+        <translation>Vă rugăm să selectați textul</translation>
     </message>
     <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="495"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
-        <translation>L&apos;annotation a été supprimée</translation>
+        <translation>Adnotare a fost eliminată</translation>
     </message>
 </context>
 <context>
@@ -347,12 +347,12 @@
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="51"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Fichier crypté, veuillez saisir le mot de passe</translation>
+        <translation>Fișierul criptat, introduceți vă rog parola</translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="57"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="62"/>
@@ -362,7 +362,7 @@
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="106"/>
         <source>Wrong password</source>
-        <translation>Mauvais mot de passe</translation>
+        <translation>Parola incorectă</translation>
     </message>
 </context>
 <context>
@@ -370,12 +370,12 @@
     <message>
         <location filename="../src/widgets/FindWidget.cpp" line="134"/>
         <source>Previous</source>
-        <translation>Précédent</translation>
+        <translation>Precedent</translation>
     </message>
     <message>
         <location filename="../src/widgets/FindWidget.cpp" line="141"/>
         <source>Next</source>
-        <translation>Suivant</translation>
+        <translation>Următor</translation>
     </message>
 </context>
 <context>
@@ -383,12 +383,12 @@
     <message>
         <location filename="../src/widgets/HandleMenu.cpp" line="37"/>
         <source>Select Text</source>
-        <translation>Sélectionner le texte</translation>
+        <translation>Selectați textul</translation>
     </message>
     <message>
         <location filename="../src/widgets/HandleMenu.cpp" line="45"/>
         <source>Hand Tool</source>
-        <translation>Outil main</translation>
+        <translation>Instrumentul ”Mâna”</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../src/sidebar/ImageViewModel.cpp" line="102"/>
         <source>Page %1</source>
-        <translation>Page %1</translation>
+        <translation>Pagina %1</translation>
     </message>
 </context>
 <context>
@@ -405,13 +405,13 @@
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>Da </translation>
     </message>
     <message>
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>Nu </translation>
     </message>
 </context>
 <context>
@@ -419,17 +419,17 @@
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="31"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>Copiere </translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="34"/>
         <source>Remove annotation</source>
-        <translation>Supprimer l&apos;annotation</translation>
+        <translation>Eliminarea adnotare</translation>
     </message>
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="37"/>
         <source>Remove all</source>
-        <translation>Tout supprimer</translation>
+        <translation>Eliminare tot</translation>
     </message>
 </context>
 <context>
@@ -437,12 +437,12 @@
     <message>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="66"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>Adăugarea adnotării</translation>
     </message>
     <message>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation>Voulez-vous vraiment supprimer toutes les annotations ?</translation>
+        <translation>Doriți să ștergeți toate adnotările?</translation>
     </message>
 </context>
 <context>
@@ -450,7 +450,7 @@
     <message>
         <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
         <source>Invalid page number</source>
-        <translation>Numéro de page invalide</translation>
+        <translation>Numărul de pagină nevalabil</translation>
     </message>
 </context>
 <context>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../src/Application.cpp" line="60"/>
         <source>Document not saved</source>
-        <translation>Document non sauvegardé</translation>
+        <translation>Documentul nu a fost salvat</translation>
     </message>
 </context>
 <context>
@@ -466,28 +466,28 @@
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="35"/>
         <source>Do you want to save the changes?</source>
-        <translation>Voulez-vous enregistrer les modifications ?</translation>
+        <translation>Doriți să salvați modificările?</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="37"/>
         <location filename="../src/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Anulare</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
-        <translation>Ignorer</translation>
+        <translation>Renunțare</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="38"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>Salvare</translation>
     </message>
     <message>
         <location filename="../src/widgets/SaveDialog.cpp" line="50"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -495,27 +495,27 @@
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="35"/>
         <source>Two-Page View</source>
-        <translation>Affichage sur deux pages</translation>
+        <translation>Afișare două pagini</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation>Taille 1:1</translation>
+        <translation>1:1 mărime</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation>Ajuster la page</translation>
+        <translation>Potrivire pagină</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="38"/>
         <source>Fit Height</source>
-        <translation>Ajuster la hauteur</translation>
+        <translation>Potrivire înălțime</translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="39"/>
         <source>Fit Width</source>
-        <translation>Ajuster la largeur</translation>
+        <translation>Potrivire lățime</translation>
     </message>
 </context>
 <context>
@@ -523,12 +523,12 @@
     <message>
         <location filename="../src/sidebar/search/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
-        <translation>Aucun résultat trouvé</translation>
+        <translation>Nici-un rezultat</translation>
     </message>
     <message>
         <location filename="../src/sidebar/search/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
-        <translation>%1 éléments trouvés</translation>
+        <translation>%1  obiecte găsite</translation>
     </message>
 </context>
 <context>
@@ -536,22 +536,22 @@
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="85"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>Miniaturi</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="100"/>
         <source>Catalog</source>
-        <translation>Catalogue</translation>
+        <translation>Catalog</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="113"/>
         <source>Bookmarks</source>
-        <translation>Signets</translation>
+        <translation>Marcaje</translation>
     </message>
     <message>
         <location filename="../src/sidebar/SheetSidebar.cpp" line="128"/>
         <source>Annotations</source>
-        <translation>Annotations</translation>
+        <translation>Adnotări</translation>
     </message>
 </context>
 <context>
@@ -559,27 +559,27 @@
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="58"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation>Setări</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="79"/>
         <source>Files</source>
-        <translation>Fichiers</translation>
+        <translation>Fișiere</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="100"/>
         <source>Display</source>
-        <translation>Afficher</translation>
+        <translation>Afișaj</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="120"/>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation>Instrumente</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="142"/>
         <source>Edit</source>
-        <translation>Modifier</translation>
+        <translation>Editare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="195"/>
@@ -587,7 +587,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Exit</source>
-        <translation>Quitter</translation>
+        <translation>Ieșire</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="195"/>
@@ -595,7 +595,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation>Ajutor</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -603,7 +603,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Page up</source>
-        <translation>Page précédente</translation>
+        <translation>Pagină sus</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -611,7 +611,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Page down</source>
-        <translation>Page suivante</translation>
+        <translation>Pagină jos</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -619,7 +619,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation>Accesa</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="196"/>
@@ -627,7 +627,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>A mări</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -635,13 +635,13 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="249"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>A Micșora</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <source>Zoom in/Zoom out</source>
-        <translation>Zoom avant/Zoom arrière</translation>
+        <translation>Mărește/Micșorează</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -649,7 +649,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>Salvează ca</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="197"/>
@@ -657,7 +657,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <source>Print</source>
-        <translation>Imprimer</translation>
+        <translation>Printare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -667,7 +667,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="247"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>Salvare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -675,7 +675,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>Miniaturi</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -683,7 +683,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>1:1 size</source>
-        <translation>Taille 1:1</translation>
+        <translation>1:1 mărime</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="198"/>
@@ -691,7 +691,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="240"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Fit height</source>
-        <translation>Ajuster la hauteur</translation>
+        <translation>Potrivire înălțime</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -699,7 +699,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Fit width</source>
-        <translation>Ajuster la largeur</translation>
+        <translation>Potrivire lățime</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -707,7 +707,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Rotate left</source>
-        <translation>Rotation à gauche</translation>
+        <translation>Rotire stânga</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -715,7 +715,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="248"/>
         <source>Rotate right</source>
-        <translation>Rotation à droite</translation>
+        <translation>Rotire dreapta</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="199"/>
@@ -723,7 +723,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="241"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Select text</source>
-        <translation>Sélectionner du texte</translation>
+        <translation>Selectați textul</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -731,7 +731,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Hand tool</source>
-        <translation>Outil main</translation>
+        <translation>Instrumentul ”Mâna”</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -739,7 +739,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Add bookmark</source>
-        <translation>Ajouter un signet</translation>
+        <translation>Adăugarea marcaj</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -749,7 +749,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation>Șterge</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -757,7 +757,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Magnifier</source>
-        <translation>Loupe</translation>
+        <translation>Lupă</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -765,7 +765,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Slide show</source>
-        <translation>Diaporama</translation>
+        <translation>Prezentare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="200"/>
@@ -773,7 +773,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Fullscreen</source>
-        <translation>Plein écran</translation>
+        <translation>Ecran complet</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -781,7 +781,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>Copiere</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -789,7 +789,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation>Decupare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -797,7 +797,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="243"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation>Lipire</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -805,7 +805,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation>Anulare</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -813,7 +813,7 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="252"/>
         <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <translation>Selectați tot</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="201"/>
@@ -821,28 +821,28 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="244"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="246"/>
         <source>Display shortcuts</source>
-        <translation>Afficher les raccourcis</translation>
+        <translation>Afișare comenzi rapide</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="207"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Add annotation</source>
-        <translation>Ajouter une annotation</translation>
+        <translation>Adăugarea adnotării</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="207"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="242"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="250"/>
         <source>Highlight</source>
-        <translation>Mettre en évidence</translation>
+        <translation>Evidențiere</translation>
     </message>
     <message>
         <location filename="../src/widgets/ShortCutShow.cpp" line="208"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="238"/>
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>Căutare</translation>
     </message>
 </context>
 <context>
@@ -850,43 +850,43 @@
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
         <source>New window</source>
-        <translation>Nouvel fenêtre</translation>
+        <translation>Fereastră nouă</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="34"/>
         <source>New tab</source>
-        <translation>Nouvel onglet</translation>
+        <translation>Filă nouă</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
         <location filename="../src/uiframe/TitleMenu.cpp" line="106"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>Salvare</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="44"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>Salvează ca</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
         <source>Display in file manager</source>
-        <translation>Afficher dans le gestionnaire de fichiers</translation>
+        <translation>Afișare manager de fișiere</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="49"/>
         <source>Magnifer</source>
-        <translation>Loupe</translation>
+        <translation>Lupă</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="55"/>
         <source>Tools</source>
-        <translation>Outils</translation>
+        <translation>Instrumente</translation>
     </message>
     <message>
         <location filename="../src/uiframe/TitleMenu.cpp" line="59"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation>Căutare</translation>
     </message>
 </context>
 <context>
@@ -894,7 +894,7 @@
     <message>
         <location filename="../src/uiframe/TitleWidget.cpp" line="79"/>
         <source>Thumbnails</source>
-        <translation>Vignettes</translation>
+        <translation>Miniaturi</translation>
     </message>
 </context>
 <context>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../src/sidebar/note/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
-        <translation>Limite d&apos;entrée atteinte</translation>
+        <translation>Limită de intrare atinsă</translation>
     </message>
 </context>
 <context>
@@ -910,23 +910,23 @@
     <message>
         <location filename="../src/main.cpp" line="28"/>
         <source>Document File Path.</source>
-        <translation>Document File Path.</translation>
+        <translation>Cale Fișierului de Document</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="29"/>
         <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
-        <translation>Chemin du fichier</translation>
+        <translation>Cale Fișierului</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
-        <translation>Chemin de la vignette.</translation>
+        <translation>Cale ThumbnailPath </translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="37"/>
         <source>Generate thumbnail.</source>
-        <translation>Générer une vignette.</translation>
+        <translation>Generează miniatură</translation>
     </message>
 </context>
 </TS>

@@ -2,11 +2,13 @@
 <context>
     <name>Application</name>
     <message>
+        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
         <source>Document Viewer</source>
         <translation>文檔查看器</translation>
     </message>
     <message>
+        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>文檔查看器是一款支持PDF，DJVU等多種格式的文檔閱讀工具。</translation>
@@ -328,10 +330,6 @@
         <translation>已刪除書籤</translation>
     </message>
     <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">請檢查文件是否損壞</translation>
-    </message>
-    <message>
         <location filename="../src/uiframe/DocSheet.cpp" line="432"/>
         <location filename="../src/uiframe/DocSheet.cpp" line="446"/>
         <source>Please select the text</source>
@@ -342,17 +340,6 @@
         <location filename="../src/uiframe/DocSheet.cpp" line="504"/>
         <source>The annotation has been removed</source>
         <translation>已刪除注釋</translation>
-    </message>
-</context>
-<context>
-    <name>DocThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">打開失敗</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">請檢查文件是否損壞</translation>
     </message>
 </context>
 <context>
@@ -456,17 +443,6 @@
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>您確定要刪除所有注釋嗎？</translation>
-    </message>
-</context>
-<context>
-    <name>PageRenderThread</name>
-    <message>
-        <source>Open failed</source>
-        <translation type="vanished">打開失敗</translation>
-    </message>
-    <message>
-        <source>Please check if the file is damaged</source>
-        <translation type="vanished">請檢查文件是否損壞</translation>
     </message>
 </context>
 <context>
@@ -867,32 +843,6 @@
         <location filename="../src/widgets/ShortCutShow.cpp" line="251"/>
         <source>Search</source>
         <translation>搜索</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageListView</name>
-    <message>
-        <source>Copy</source>
-        <translation type="vanished">複製</translation>
-    </message>
-    <message>
-        <source>Remove annotation</source>
-        <translation type="vanished">刪除注釋</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="vanished">全部刪除</translation>
-    </message>
-    <message>
-        <source>Remove bookmark</source>
-        <translation type="vanished">刪除書籤</translation>
-    </message>
-</context>
-<context>
-    <name>SideBarImageViewModel</name>
-    <message>
-        <source>Page %1</source>
-        <translation type="vanished">第%1頁</translation>
     </message>
 </context>
 <context>
