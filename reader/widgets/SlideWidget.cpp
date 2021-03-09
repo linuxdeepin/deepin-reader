@@ -177,11 +177,15 @@ void SlideWidget::setWidgetState(bool full)
 void SlideWidget::onPreBtnClicked()
 {
     m_preIndex = m_curPageIndex;
+
     m_curPageIndex--;
-    if (m_curPageIndex < 0) {
+
+    if (m_curPageIndex >= m_docSheet->pageCount()) {
         m_curPageIndex = 0;
-        return;
+    } else if (m_curPageIndex < 0) {
+        m_curPageIndex = m_docSheet->pageCount() - 1;
     }
+
     playImage();
 }
 
@@ -198,11 +202,15 @@ void SlideWidget::onPlayBtnClicked()
 void SlideWidget::onNextBtnClicked()
 {
     m_preIndex = m_curPageIndex;
+
     m_curPageIndex++;
+
     if (m_curPageIndex >= m_docSheet->pageCount()) {
+        m_curPageIndex = 0;
+    } else if (m_curPageIndex < 0) {
         m_curPageIndex = m_docSheet->pageCount() - 1;
-        return;
     }
+
     playImage();
 }
 
@@ -214,7 +222,12 @@ void SlideWidget::onExitBtnClicked()
 void SlideWidget::playImage()
 {
     m_imageAnimation->stop();
-    if (m_preIndex < m_curPageIndex) {
+
+    if (m_preIndex == 0 && m_curPageIndex == m_docSheet->pageCount() - 1) {
+        m_blefttoright = true;
+        m_imageAnimation->setStartValue(0);
+        m_imageAnimation->setEndValue(width());
+    } else if (m_preIndex < m_curPageIndex || (m_preIndex == m_docSheet->pageCount() - 1 && m_curPageIndex == 0)) {
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
@@ -273,9 +286,10 @@ QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
 void SlideWidget::mousePressEvent(QMouseEvent *event)
 {
     DWidget::mousePressEvent(event);
-    if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton)
         onExitBtnClicked();
-    }
+    else if (event->button() == Qt::LeftButton)
+        m_slidePlayWidget->showControl();
 }
 
 void SlideWidget::handleKeyPressEvent(const QString &sKey)
@@ -293,6 +307,7 @@ void SlideWidget::handleKeyPressEvent(const QString &sKey)
 void SlideWidget::onFetchImage(int index)
 {
     const QPixmap &pix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, index);
+
     if (!pix.isNull() && qMax(pix.width(), pix.height()) == qMin(this->width() - 40, this->height() - 20)) {
         onUpdatePageImage(index);
         return;
