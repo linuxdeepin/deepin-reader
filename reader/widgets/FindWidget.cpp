@@ -68,6 +68,9 @@ void FindWidget::onSearchStop()
 {
     m_lastSearchText.clear();
 
+    m_findPrevButton->setDisabled(true);
+    m_findNextButton->setDisabled(true);
+
     setEditAlert(0);
 
     if (m_docSheet)
@@ -82,6 +85,8 @@ void FindWidget::onSearchStart()
         m_lastSearchText = searchText;
         setEditAlert(0);
         m_docSheet->startSearch(searchText);
+        m_findPrevButton->setDisabled(false);
+        m_findNextButton->setDisabled(false);
     }
 }
 
@@ -97,11 +102,9 @@ void FindWidget::slotFindPrevBtnClicked()
         m_docSheet->jumpToPrevSearchResult();
 }
 
-void FindWidget::slotClearContent()
+void FindWidget::onTextChanged()
 {
-    QString strNewFind = m_pSearchEdit->text();
-
-    if (strNewFind.isEmpty()) {
+    if (m_pSearchEdit->text().isEmpty()) {
         setEditAlert(0);
     }
 }
@@ -113,22 +116,24 @@ void FindWidget::initWidget()
     m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
     m_pSearchEdit->setFixedSize(QSize(270, 36));
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::onSearchStart);
-    connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::slotClearContent);
+    connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::onTextChanged);
     connect(m_pSearchEdit, &DSearchEdit::searchAborted, this, &FindWidget::onSearchStop);
 
-    DIconButton *findPrevButton = new DIconButton(DStyle::SP_ArrowUp, this);
-    findPrevButton->setObjectName("SP_ArrowUpBtn");
-    findPrevButton->setToolTip(tr("Previous"));
-    findPrevButton->setFixedSize(QSize(36, 36));
-    findPrevButton->setIconSize(QSize(12, 12));
-    connect(findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
+    m_findPrevButton = new DIconButton(DStyle::SP_ArrowUp, this);
+    m_findPrevButton->setObjectName("SP_ArrowUpBtn");
+    m_findPrevButton->setToolTip(tr("Previous"));
+    m_findPrevButton->setFixedSize(QSize(36, 36));
+    m_findPrevButton->setIconSize(QSize(12, 12));
+    m_findPrevButton->setDisabled(true);
+    connect(m_findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
 
-    DIconButton *findNextButton = new DIconButton(DStyle::SP_ArrowDown, this);
-    findNextButton->setObjectName("SP_ArrowDownBtn");
-    findNextButton->setToolTip(tr("Next"));
-    findNextButton->setFixedSize(QSize(36, 36));
-    findNextButton->setIconSize(QSize(12, 12));
-    connect(findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
+    m_findNextButton = new DIconButton(DStyle::SP_ArrowDown, this);
+    m_findNextButton->setObjectName("SP_ArrowDownBtn");
+    m_findNextButton->setToolTip(tr("Next"));
+    m_findNextButton->setFixedSize(QSize(36, 36));
+    m_findNextButton->setIconSize(QSize(12, 12));
+    m_findNextButton->setDisabled(true);
+    connect(m_findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     DDialogCloseButton *closeButton = new DDialogCloseButton(this);
     closeButton->setObjectName("closeButton");
@@ -139,15 +144,14 @@ void FindWidget::initWidget()
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(8, 0, 6, 0);
     layout->addWidget(m_pSearchEdit);
-    layout->addWidget(findPrevButton);
-    layout->addWidget(findNextButton);
+    layout->addWidget(m_findPrevButton);
+    layout->addWidget(m_findNextButton);
     layout->addWidget(closeButton);
     this->setLayout(layout);
 
     Utils::setObjectNoFocusPolicy(this);
 }
 
-//  设置 提醒红色
 void FindWidget::setEditAlert(const int &iFlag)
 {
     if (m_pSearchEdit) {

@@ -221,14 +221,14 @@ TEST_F(Ut_Widgets, SheetWidgetTest)
         findWidget.slotFindNextBtnClicked();
         findWidget.slotFindPrevBtnClicked();
         findWidget.onSearchStop();
-        findWidget.slotClearContent();
+        findWidget.onTextChanged();
         findWidget.onCloseBtnClicked();
 
         findWidget.setDocSheet(sheet);
         findWidget.slotFindNextBtnClicked();
         findWidget.slotFindPrevBtnClicked();
         findWidget.onSearchStop();
-        findWidget.slotClearContent();
+        findWidget.onTextChanged();
         findWidget.onCloseBtnClicked();
 
         QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);

@@ -26,6 +26,7 @@
 #include <DWidget>
 #include <DFloatingWidget>
 #include <DSearchEdit>
+#include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -103,10 +104,10 @@ private slots:
     void slotFindPrevBtnClicked();
 
     /**
-     * @brief slotClearContent
-     * 清空搜索内容
+     * @brief onTextChanged
+     * 文本内容变化，如果空的时候需要设置提示
      */
-    void slotClearContent();
+    void onTextChanged();
 
 private:
     /**
@@ -127,6 +128,8 @@ private:
     DocSheet *m_docSheet = nullptr;
     DSearchEdit *m_pSearchEdit = nullptr;
     QString m_lastSearchText; //上一次查找内容
+    DIconButton *m_findPrevButton = nullptr;
+    DIconButton *m_findNextButton = nullptr;
 };
 
 #endif
