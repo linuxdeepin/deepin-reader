@@ -32,7 +32,7 @@ SaveDialog::SaveDialog(QObject *parent)
 
 int SaveDialog::showExitDialog(QString fileName)
 {
-    DDialog dlg(tr("Save the changes to %1?").arg(fileName), "");
+    DDialog dlg(tr("Save the changes to \"%1\"?").arg(fileName), "");
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
     dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);

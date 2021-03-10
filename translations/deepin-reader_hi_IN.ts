@@ -264,29 +264,34 @@
         <translation>सुनिश्चित करें कि फाइल उचित है</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="417"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
+        <source>Conversion failed, please check if the file is damaged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>संचित करना विफल</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="423"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>संचित करना सफल</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>ऐसे संचित करें</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="450"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="460"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>अमान्य फाइल नाम</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="452"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="462"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <translation>ठीक है</translation>
     </message>
@@ -312,20 +317,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="311"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="339"/>
         <source>The bookmark has been removed</source>
         <translation>पृष्ठ-स्मृति हटाई गई</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="512"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
         <source>Please select the text</source>
         <translation>कृपया लेख चुनें</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="577"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="586"/>
         <source>The annotation has been removed</source>
         <translation>व्याख्या हटाई गई</translation>
     </message>
@@ -356,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="121"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
         <source>Previous</source>
         <translation>पिछला</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
         <source>Next</source>
         <translation>अगला</translation>
     </message>
@@ -420,7 +425,7 @@
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to %1?</source>
+        <source>Save the changes to &quot;%1&quot;?</source>
         <translation type="unfinished"/>
     </message>
     <message>

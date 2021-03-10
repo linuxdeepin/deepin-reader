@@ -275,7 +275,7 @@ public:
      * 批量缩放因子;base 1;设置后自动取消自适应
      * @param scaleFactor
      */
-    void setScaleFactor(qreal scaleFactor);     //
+    void setScaleFactor(qreal scaleFactor);
 
     /**
      * @brief setMouseShape
@@ -684,8 +684,17 @@ private slots:
      */
     void onSearchFinished();
 
+    /**
+     * @brief onSideAniFinished
+     * 左侧动画结束
+     */
     void onSideAniFinished();
 
+    /**
+     * @brief onOpened
+     * 打开结果
+     * @param error
+     */
     void onOpened(deepin_reader::Document::Error error);
 
 public:

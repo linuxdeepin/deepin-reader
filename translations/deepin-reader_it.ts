@@ -265,29 +265,34 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Verifica se il file è danneggiato</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="417"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
+        <source>Conversion failed, please check if the file is damaged</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>Salvataggio fallito</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="423"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>Salvataggio riuscito</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="441"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>Salva come</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="450"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="460"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Nome file non valido</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="452"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="462"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -313,20 +318,20 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="311"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="339"/>
         <source>The bookmark has been removed</source>
         <translation>Il segnalibro è stato rimosso</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="512"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
         <source>Please select the text</source>
         <translation>Seleziona il testo</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="577"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="586"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotazione è stata rimossa</translation>
     </message>
@@ -357,12 +362,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="121"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
         <source>Previous</source>
         <translation>Precedente</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
         <source>Next</source>
         <translation>Prossima</translation>
     </message>
@@ -421,8 +426,8 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to %1?</source>
-        <translation>Salvare le modifiche a %1?</translation>
+        <source>Save the changes to &quot;%1&quot;?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
