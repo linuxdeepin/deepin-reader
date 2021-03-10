@@ -340,6 +340,7 @@ bool CentralDocPage::closeAllSheets(bool needToBeSaved)
 
     if (sheets.count() > 0) {
         for (int i = 0; i < sheets.count(); ++i) {
+            showSheet(sheets[i]);
             if (!closeSheet(sheets[i], needToBeSaved))
                 return false;
         }

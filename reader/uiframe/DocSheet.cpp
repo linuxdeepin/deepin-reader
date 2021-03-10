@@ -57,7 +57,8 @@
 DWIDGET_USE_NAMESPACE
 
 QReadWriteLock DocSheet::g_lock;
-QMap<QString, DocSheet *> DocSheet::g_map;
+QStringList DocSheet::g_uuidList;
+QList<DocSheet *> DocSheet::g_sheetList;
 DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
@@ -116,9 +117,9 @@ DocSheet::~DocSheet()
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
 {
-    for (auto iter = g_map.begin(); iter != g_map.end(); iter++) {
-        if (iter.value()->filePath() == filePath) {
-            QImage image = iter.value()->getImage(0, 256, 256);
+    foreach (DocSheet *sheet, g_sheetList) {
+        if (sheet->filePath() == filePath) {
+            QImage image = sheet->getImage(0, 256, 256);
             return image;
         }
     }
@@ -132,7 +133,7 @@ bool DocSheet::existFileChanged()
 
     g_lock.lockForRead();
 
-    foreach (DocSheet *sheet, g_map.values()) {
+    foreach (DocSheet *sheet, g_sheetList) {
         if (sheet->fileChanged()) {
             changed = true;
             break;
@@ -148,7 +149,7 @@ QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     g_lock.lockForRead();
 
-    QUuid uuid = g_map.key(sheet);
+    QUuid uuid = g_uuidList.value(g_sheetList.indexOf(sheet));
 
     g_lock.unlock();
 
@@ -159,7 +160,7 @@ bool DocSheet::existSheet(DocSheet *sheet)
 {
     g_lock.lockForRead();
 
-    bool result = g_map.values().contains(sheet);
+    bool result = g_sheetList.contains(sheet);
 
     g_lock.unlock();
 
@@ -170,7 +171,7 @@ DocSheet *DocSheet::getSheet(QString uuid)
 {
     g_lock.lockForRead();
 
-    DocSheet *sheet = g_map.contains(uuid) ? g_map[uuid] : nullptr;
+    DocSheet *sheet = g_sheetList.value(g_uuidList.indexOf(uuid));
 
     g_lock.unlock();
 
@@ -181,11 +182,9 @@ DocSheet *DocSheet::getSheetByFilePath(QString filePath)
 {
     g_lock.lockForRead();
 
-    QList<DocSheet *> sheets = DocSheet::g_map.values();
-
     DocSheet *result = nullptr;
 
-    foreach (DocSheet *sheet, sheets) {
+    foreach (DocSheet *sheet, g_sheetList) {
         if (sheet->filePath() == filePath) {
             result = sheet;
             break;
@@ -199,7 +198,7 @@ DocSheet *DocSheet::getSheetByFilePath(QString filePath)
 
 QList<DocSheet *> DocSheet::getSheets()
 {
-    return DocSheet::g_map.values();
+    return DocSheet::g_sheetList;
 }
 
 bool DocSheet::openFileExec(const QString &password)
@@ -1093,10 +1092,15 @@ void DocSheet::setAlive(bool alive)
         m_uuid = QUuid::createUuid().toString();
 
         g_lock.lockForWrite();
-        g_map[m_uuid] = this;
+
+        g_uuidList.append(m_uuid);
+
+        g_sheetList.append(this);
+
         g_lock.unlock();
 
         Database::instance()->readOperation(this);
+
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
 
     } else {
@@ -1108,8 +1112,15 @@ void DocSheet::setAlive(bool alive)
         Database::instance()->saveOperation(this);
 
         g_lock.lockForWrite();
-        g_map.remove(m_uuid);
+
+        int index = g_uuidList.indexOf(m_uuid);
+
+        g_sheetList.removeAt(index);
+
+        g_uuidList.removeAt(index);
+
         m_uuid.clear();
+
         g_lock.unlock();
     }
 }
@@ -1124,7 +1135,6 @@ void DocSheet::showEncryPage()
 
     //bugid:46645 密码输入框在的时候,先暂时屏蔽掉browser的焦点
     m_browser->setFocusPolicy(Qt::NoFocus);
-
     m_encryPage->setGeometry(0, 0, this->width(), this->height());
     m_encryPage->raise();
     m_encryPage->show();

@@ -128,10 +128,9 @@ public:
      */
     static QReadWriteLock g_lock;
 
-    /**
-     * @brief 全局对象池
-     */
-    static QMap<QString, DocSheet *> g_map;
+    static QStringList g_uuidList;
+
+    static QList<DocSheet *> g_sheetList;
 
 public:
     /**
