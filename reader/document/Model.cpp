@@ -6,6 +6,7 @@
 #include "dpdfdoc.h"
 
 #include <QProcess>
+#include <QFile>
 
 namespace deepin_reader {
 deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &fileType, const QString &filePath, const QString &convertedFileDir,  const QString &password,
