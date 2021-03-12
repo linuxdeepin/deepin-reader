@@ -342,10 +342,10 @@ public:
     /**
      * @brief saveData
      * 另存为文档
-     * @param 另存为路径
+     * @param targetFilePath 另存为路径
      * @return 是否成功
      */
-    bool saveAsData(QString filePath);
+    bool saveAsData(QString targetFilePath);
 
     /**
      * @brief handlePageModified
@@ -465,6 +465,13 @@ public:
      * @return
      */
     QString filePath();
+
+    /**
+     * @brief openedFilePath
+     * 实际打开的文档路径
+     * @return
+     */
+    QString openedFilePath();
 
     /**
      * @brief convertedFileDir

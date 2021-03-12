@@ -460,28 +460,28 @@ bool DocSheet::saveData()
     return true;
 }
 
-bool DocSheet::saveAsData(QString filePath)
+bool DocSheet::saveAsData(QString targetFilePath)
 {
     stopSearch();
 
     if (m_documentChanged && Dr::DOCX != fileType()) {
-        if (!m_renderer->saveAs(filePath))
+        if (!m_renderer->saveAs(targetFilePath))
             return false;
     } else {
         //如果是需要转换的格式，则先转换再拷贝
-        QString saveAsTemp = convertedFileDir() + "/temp.pdf";
+        QString saveAsSourceFilePath = openedFilePath();
 
         if (m_documentChanged) {
-            saveAsTemp = convertedFileDir() + "/saveAsTemp.pdf";
-            if (!m_renderer->saveAs(saveAsTemp))
+            saveAsSourceFilePath = convertedFileDir() + "/saveAsTemp.pdf";
+            if (!m_renderer->saveAs(saveAsSourceFilePath))
                 return false;
         }
 
-        if (!Utils::copyFile(saveAsTemp, filePath))
+        if (!Utils::copyFile(saveAsSourceFilePath, targetFilePath))
             return false;
     }
 
-    Database::instance()->saveBookmarks(filePath, m_bookmarks);
+    Database::instance()->saveBookmarks(targetFilePath, m_bookmarks);
 
     m_sidebar->changeResetModelData();
 
@@ -661,6 +661,14 @@ Dr::FileType DocSheet::fileType()
 QString DocSheet::filePath()
 {
     return m_filePath;
+}
+
+QString DocSheet::openedFilePath()
+{
+    if (Dr::DOCX == fileType())
+        return convertedFileDir() + "/temp.pdf";
+
+    return filePath();
 }
 
 QString DocSheet::convertedFileDir()
