@@ -661,13 +661,16 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
                 } else if (qFuzzyCompare(selectBoundRectF.right(), textRectf.x())) {
                     selectBoundRectF = selectBoundRectF.united(textRectf);
                 } else {
-                    boundaries << selectBoundRectF;
+                    if (selectBoundRectF.width() > 0.00001 && selectBoundRectF.height() > 0.00001)
+                        boundaries << selectBoundRectF;
                     selectBoundRectF = textRectf;
                 }
             }
         }
     }
-    boundaries << selectBoundRectF;
+
+    if (selectBoundRectF.width() > 0.00001 && selectBoundRectF.height() > 0.00001)
+        boundaries << selectBoundRectF;
 
     if (boundaries.count() > 0) {
         //需要保证已经加载注释
