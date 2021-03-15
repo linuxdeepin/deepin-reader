@@ -106,7 +106,7 @@ TEST_F(ut_app, GlobalTest)
     EXPECT_EQ(Dr::fileType(filePath(UT_FILE_PDF, "GlobalTest")), Dr::PDF);
     EXPECT_EQ(Dr::fileType(filePath(UT_FILE_PPTX, "GlobalTest")), Dr::PPTX);
     EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DJVU, "GlobalTest")), Dr::DJVU);
-    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DOC, "GlobalTest")), Dr::DOC);
+    EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DOC, "GlobalTest")), Dr::Unknown);
     EXPECT_EQ(Dr::fileType(filePath(UT_FILE_DOCX, "GlobalTest")), Dr::DOCX);
     EXPECT_EQ(Dr::fileType(UT_FILE_NONE), Dr::Unknown);
 }

@@ -38,11 +38,11 @@ FileType fileType(const QString &filePath)
         fileType = PS;
     } else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
         fileType = DJVU;
-    } else if (mimeType.name() == QLatin1String("application/msword") || mimeType.name() == QLatin1String("application/x-ole-storage")) {
-        fileType = DOC;
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "pptx") {
         fileType = PPTX;
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "docx") {
+        fileType = DOCX;
+    } else if (mimeType.name() == QLatin1String("application/x-ole-storage") && filePath.right(4) == "docx") {
         fileType = DOCX;
     }
 
