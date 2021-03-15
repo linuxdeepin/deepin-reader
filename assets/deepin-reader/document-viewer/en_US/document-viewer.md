@@ -1,4 +1,4 @@
-# Document Viewer|../common/deepin_reader_96.svg|
+# Document Viewer|deepin-reader|
 
 ## Overview
 
@@ -20,7 +20,7 @@ You can run, close or create a shortcut of Document Viewer as follows.
  - Select **Send to dock** to fix it onto the dock.
  - Select **Add to startup** to add it to startup. When the computer starts up, it runs automatically.
 
-> ![tips](../common/tips.svg)Tips: You can set Document Viewer as the default application to view documents in Control Center, refer to  [Default Applications](dman:///dde#Default Application Settings) for details. 
+
 
 
 ### Exit Document Viewer
@@ -49,7 +49,7 @@ Document Viewer supports DOCX, PDF and DJVU formats. You can open a file by:
 - Dragging it directly into the interface or onto the icon. You can also drag multiple files at a time, and they will be opened in many tabs in one window.
 - Right-clicking it and selecting **Open with** > **Select default program**, and then selecting Document Viewer from the list.
 
-   > ![tips](../common/tips.svg)Tips: Document will be opened by default program by directly double clicking on it. You can right-click it and select a default program by clicking on **Properties** > **Open with**. Or you can set a default program for this type of documents in [Default Applications](dman:///dde#Default Application Settings) from Control Center. 
+   > ![tips](../common/tips.svg)Tips: Document will be opened by default program by directly double clicking on it. You can right-click it and select a default program by clicking on **Properties** > **Open with**. 
 
 - Clicking **Select File** and selecting a file on Document Viewer interface.
 - On Document Viewer interface, pressing **Ctrl+O** and selecting the file you want to open. 
@@ -122,14 +122,13 @@ On Document Viewer interface, open a file.
    - Right-click at any blank area or the place you want to add an annotation and select **Add annotation**. After a note is successfully added, a highlighted note icon appears.
      
       > ![notes](../common/notes.svg)Notes: 
-      >
       > - Click in any blank area outside the window without inputing any content, then the note is not added successfully or is deleted automatically. 
       > - Click in any blank area outside the window after inputing some content, the content will be saved automatically. 
 
 - Copy note
-   -  Right-click the highlighted text to which a note is successfully added and select **Copy**.
-   -  Right-click the note icon, select **Copy**.
-   -  Click![menu](../common/thumbnail_normal_light.svg) and the catalog icon ![view](../common/comments_normal_light.svg) on the left and select a note, right-click and select **Copy**. 
+   - Right-click the highlighted text to which a note is successfully added and select **Copy**.
+   - Right-click the note icon, select **Copy**.
+   - Click![menu](../common/thumbnail_normal_light.svg) and the catalog icon ![view](../common/comments_normal_light.svg) on the left and select a note, right-click and select **Copy**. 
    
 - Show note  
    1. Hove the cursor over the note icon to show the content. 
@@ -152,12 +151,15 @@ Document Viewer integrates many features to make document management simpler and
 This function is only applicable for the current tab.
 1. On Document Viewer interface, open a file. 
 2. Right-click and select **Search** or press **Ctrl**+**F** to open a searching window. 
-3. In the searching box, you can click ![search](../common/search.svg) to input keywords.
+   
+3. In the searching box, you can click ![search](../common/search.svg) to input keywords. 
+   
 4. Press  **Enter** to locate quickly. 
    - All matching information will be displayed in a list and are highlighted in the document.
    - If searching fails, "No search results" will be displayed. 
    
-5. When matching results are found, click![search](../common/previousup.svg) or ![search](../common/nextdown.svg) to view results one by one. 
+5.  When matching results are found, click![search](../common/previousup.svg) or ![search](../common/nextdown.svg) to view results one by one. 
+
 6. Click one result, you can skip to the page where it's located, and it's highlighted. 
 > ![attention](../common/attention.svg)Attention: Searching fails in case the text is coded in pictures in some PDF files. 
 
