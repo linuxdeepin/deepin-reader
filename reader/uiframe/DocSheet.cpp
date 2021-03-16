@@ -1177,12 +1177,15 @@ SheetRenderer *DocSheet::renderer()
 
 void DocSheet::onPopPrintDialog()
 {
+    if (!this->opened())
+        return;
+
     DPrintPreviewDialog preview(this);
 
 #if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=10)))
     preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::PDF == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
+    if (Dr::PDF == fileType() || Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
         preview.setPrintFromPath(openedFilePath());
     }
     connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
