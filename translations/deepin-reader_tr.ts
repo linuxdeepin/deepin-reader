@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Dönüştürme başarısız oldu, lütfen dosyanın zarar görüp görmediğini kontrol edin</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -361,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
         <source>Previous</source>
         <translation>Önceki</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
         <translation>Sonraki</translation>
     </message>
@@ -400,7 +400,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
         <source>Invalid page number</source>
         <translation>Geçersiz dosya adı</translation>
     </message>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Değişiklikler &quot;%1&quot; olarak kaydedilsin mi?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

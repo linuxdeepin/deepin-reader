@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>El Visor de documentos es una herramienta para lectura de archivos de texto, con soporte para PDF, DJVU, DOCX etc.</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Conversor fallido, por favor verifique si el archivo esta dañado</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -332,7 +332,7 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="577"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="586"/>
         <source>The annotation has been removed</source>
-        <translation>La anotación fue eliminada</translation>
+        <translation>La anotación fue borrada</translation>
     </message>
 </context>
 <context>
@@ -361,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
         <source>Previous</source>
         <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
@@ -400,7 +400,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
         <source>Invalid page number</source>
         <translation>Número de página inválido</translation>
     </message>
@@ -410,7 +410,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Convirtiendo</translation>
     </message>
 </context>
 <context>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>¿Desea guardar los cambios a &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

@@ -361,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
@@ -400,7 +400,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
         <source>Invalid page number</source>
         <translation>잘못된 페이지 번호</translation>
     </message>

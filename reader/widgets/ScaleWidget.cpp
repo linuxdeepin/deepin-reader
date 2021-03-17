@@ -42,6 +42,7 @@ void ScaleWidget::initWidget()
     setLayout(m_layout);
 
     m_lineEdit = new DLineEdit(this);
+    m_lineEdit->setObjectName("scaleEdit_P");
     m_lineEdit->lineEdit()->setObjectName("scaleEdit");
     QFont font = m_lineEdit->font();
     font.setPixelSize(14);

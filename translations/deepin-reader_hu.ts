@@ -361,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
         <source>Previous</source>
         <translation>Előző</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
         <translation>Következő</translation>
     </message>
@@ -400,7 +400,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
         <source>Invalid page number</source>
         <translation>Érvénytelen oldalszám</translation>
     </message>

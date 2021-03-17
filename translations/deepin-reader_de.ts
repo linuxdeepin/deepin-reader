@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentbetrachter ist ein Werkzeug zum Lesen von Dokumentdateien, das PDF, DJVU, DOCX, usw. unterstützt.</translation>
     </message>
 </context>
 <context>
@@ -361,12 +361,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="124"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
         <source>Previous</source>
         <translation>Vorherige</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
         <translation>Nächste</translation>
     </message>
@@ -400,7 +400,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="196"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
         <source>Invalid page number</source>
         <translation>Ungültige Seitennummer</translation>
     </message>
@@ -410,7 +410,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Wird konvertiert</translation>
     </message>
 </context>
 <context>
