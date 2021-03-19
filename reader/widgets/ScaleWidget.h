@@ -102,6 +102,9 @@ private:
     QPointer<DocSheet> m_sheet;
     Dtk::Widget::DLineEdit *m_lineEdit = nullptr;
     ScaleMenu *m_ScaleMenu = nullptr;
+    DIconButton *m_arrowBtn;
+
+
 };
 
 #endif // SCALEWIDGET_H

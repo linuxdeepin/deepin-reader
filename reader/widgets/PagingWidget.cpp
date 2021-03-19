@@ -25,6 +25,10 @@
 #include <QValidator>
 
 #include <DGuiApplicationHelper>
+#include <DApplication>
+#include <DFontSizeManager>
+
+#define LineEditSpacing  24
 
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
@@ -51,10 +55,11 @@ void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
-    QFont font = m_pTotalPagesLab->font();
-    font.setPixelSize(14);
+    //QFont font = m_pTotalPagesLab->font();
+    //font.setPixelSize(14);
+    //m_pTotalPagesLab->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pTotalPagesLab, Dtk::Widget::DFontSizeManager::T6, true);
 
-    m_pTotalPagesLab->setFont(font);
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
     m_pJumpPageLineEdit = new DLineEdit(this);
@@ -68,9 +73,14 @@ void PagingWidget::initWidget()
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
 
-    font = m_pJumpPageLineEdit->font();
-    font.setPixelSize(14);
-    m_pJumpPageLineEdit->setFont(font);
+    //font = m_pJumpPageLineEdit->font();
+    //font.setPixelSize(14);
+    //m_pJumpPageLineEdit->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pJumpPageLineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &PagingWidget::onEditFinished);
+
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
@@ -87,10 +97,11 @@ void PagingWidget::initWidget()
 
     m_pCurrentPageLab = new DLabel(this);
     m_pCurrentPageLab->setAccessibleName("CurrentPage");
-    font = m_pCurrentPageLab->font();
-    font.setPixelSize(14);
+    //font = m_pCurrentPageLab->font();
+    //font.setPixelSize(14);
+    //m_pCurrentPageLab->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pCurrentPageLab, Dtk::Widget::DFontSizeManager::T6, true);
 
-    m_pCurrentPageLab->setFont(font);
     m_pCurrentPageLab->setForegroundRole(DPalette::Text);
     m_pCurrentPageLab->setVisible(false);
 
@@ -149,11 +160,11 @@ void PagingWidget::setIndex(int index)
     setBtnState(currntPage, totalPage);
 
     if (m_bHasLabel) {
-        m_pCurrentPageLab->setText(QString::number(currntPage));
+        m_pCurrentPageLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, m_pCurrentPageLab->width()));
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
-        m_pJumpPageLineEdit->setText(sPage);
+        m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(sPage, Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     } else {
-        m_pJumpPageLineEdit->setText(QString::number(currntPage));
+        m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     }
 }
 
