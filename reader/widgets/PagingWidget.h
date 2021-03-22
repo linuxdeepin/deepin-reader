@@ -42,6 +42,8 @@ class PagingWidget : public BaseWidget
 public:
     explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
 
+    virtual void resizeEvent(QResizeEvent *event) override;
+
     ~PagingWidget() override;
 
     /**

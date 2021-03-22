@@ -48,9 +48,6 @@ void ScaleWidget::initWidget()
     m_lineEdit = new DLineEdit(this);
     m_lineEdit->setObjectName("scaleEdit_P");
     m_lineEdit->lineEdit()->setObjectName("scaleEdit");
-    //QFont font = m_lineEdit->font();
-    //font.setPixelSize(14);
-    //m_lineEdit->setFont(font);
     Dtk::Widget::DFontSizeManager::instance()->bind(m_lineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
 
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -129,9 +126,7 @@ void ScaleWidget::onEditFinished()
         return;
 
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-
     m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, m_lineEdit->width() - m_arrowBtn->width() - 2 - LineEditSpacing));
-    // m_lineEdit->setText(text);
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)
@@ -146,8 +141,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
     m_lineEdit->clear();
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-    m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, 52));
-    //m_lineEdit->setText(text);
+    m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, m_lineEdit->width() - m_arrowBtn->width() - 2 - LineEditSpacing));
     m_lineEdit->lineEdit()->setCursorPosition(0);
 }
 

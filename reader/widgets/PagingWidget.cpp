@@ -55,9 +55,7 @@ void PagingWidget::initWidget()
 {
     m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
-    //QFont font = m_pTotalPagesLab->font();
-    //font.setPixelSize(14);
-    //m_pTotalPagesLab->setFont(font);
+
     Dtk::Widget::DFontSizeManager::instance()->bind(m_pTotalPagesLab, Dtk::Widget::DFontSizeManager::T6, true);
 
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
@@ -73,9 +71,6 @@ void PagingWidget::initWidget()
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
 
-    //font = m_pJumpPageLineEdit->font();
-    //font.setPixelSize(14);
-    //m_pJumpPageLineEdit->setFont(font);
     Dtk::Widget::DFontSizeManager::instance()->bind(m_pJumpPageLineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
 
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
@@ -97,9 +92,6 @@ void PagingWidget::initWidget()
 
     m_pCurrentPageLab = new DLabel(this);
     m_pCurrentPageLab->setAccessibleName("CurrentPage");
-    //font = m_pCurrentPageLab->font();
-    //font.setPixelSize(14);
-    //m_pCurrentPageLab->setFont(font);
     Dtk::Widget::DFontSizeManager::instance()->bind(m_pCurrentPageLab, Dtk::Widget::DFontSizeManager::T6, true);
 
     m_pCurrentPageLab->setForegroundRole(DPalette::Text);
@@ -148,6 +140,14 @@ void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
     }
 }
 
+void PagingWidget::resizeEvent(QResizeEvent *event)
+{
+    if (m_curIndex >= 0)
+        setIndex(m_curIndex);
+
+    this->QWidget::resizeEvent(event);
+}
+
 void PagingWidget::setIndex(int index)
 {
     if (nullptr == m_sheet)
@@ -159,8 +159,14 @@ void PagingWidget::setIndex(int index)
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
 
+    int iControlMaxWidth = (this->width() - m_pJumpPageLineEdit->width() - m_pPrePageBtn->width() - m_pNextPageBtn->width() - (10 + 6) * 2) / 2;
+    m_pTotalPagesLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString("/ %1").arg(totalPage), Qt::ElideRight, iControlMaxWidth));
+    m_pTotalPagesLab->setToolTip(QString("%1").arg(totalPage));
+
     if (m_bHasLabel) {
-        m_pCurrentPageLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, m_pCurrentPageLab->width()));
+        m_pCurrentPageLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, iControlMaxWidth));
+        m_pCurrentPageLab->setToolTip(QString::number(currntPage));
+
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(sPage, Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     } else {
@@ -179,8 +185,6 @@ void PagingWidget::handleOpenSuccess()
     };
     m_tmFuncThread->start();
 
-    int totalPage = m_sheet->pageCount();
-    m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);
 }
