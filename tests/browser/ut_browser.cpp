@@ -374,8 +374,6 @@ TEST_F(ut_browser, PageSearchThreadTest)
 
     thread->startSearch(sheet, "test");
 
-    thread->wait();
-
     thread->stopSearch();
 
     delete thread;
