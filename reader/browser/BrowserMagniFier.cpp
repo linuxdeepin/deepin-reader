@@ -164,21 +164,37 @@ void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const
 void BrowserMagniFier::setMagniFierImage(const QImage &image)
 {
     QPixmap pix(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
-    pix.setDevicePixelRatio(dApp->devicePixelRatio());
+
     pix.fill(Qt::transparent);
 
     QPainter painter(&pix);
+
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
     painter.save();
+
     QPainterPath clippath;
+
     clippath.addRoundedRect(17, 17, 210, 210, 105, 105);
+
     painter.setClipPath(clippath);
+
     if (!image.isNull()) {
-        painter.drawImage(0, 0, image.scaled(static_cast<int>(240 * dApp->devicePixelRatio()), static_cast<int>(240 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QImage im = image;
+
+        pix.setDevicePixelRatio(1);
+
+        im.setDevicePixelRatio(1);
+
+        painter.drawImage(0, 0, im.scaled(static_cast<int>(240 * dApp->devicePixelRatio()), static_cast<int>(240 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         painter.fillRect(this->rect(), Qt::white);
     }
     painter.restore();
+
     painter.drawPixmap(this->rect(), QIcon::fromTheme(QString("dr_") + "maganifier").pixmap(QSize(this->width(), this->height())));
+
+    pix.setDevicePixelRatio(dApp->devicePixelRatio());
+
     setPixmap(pix);
 }
