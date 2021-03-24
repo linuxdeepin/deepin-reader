@@ -613,7 +613,10 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, in
     if (nullptr == jumpPage)
         return;
 
-    jump2PagePos(jumpPage, linkLeft, jumpPage->boundingRect().height() / operation.scaleFactor - linkTop);
+    if (linkTop > 0)
+        jump2PagePos(jumpPage, linkLeft, jumpPage->boundingRect().height() / operation.scaleFactor - linkTop);
+    else
+        jump2PagePos(jumpPage, linkLeft, 0);
 }
 
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
