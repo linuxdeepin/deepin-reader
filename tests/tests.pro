@@ -7,7 +7,7 @@ QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
 
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
-PKGCONFIG += ddjvuapi dtkwidget
+PKGCONFIG += ddjvuapi dtkwidget5.5
 
 CONFIG -= app_bundle
 

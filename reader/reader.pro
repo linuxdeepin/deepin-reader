@@ -1,7 +1,7 @@
 #config
 QT += core gui sql printsupport dbus widgets
 
-PKGCONFIG += ddjvuapi dtkwidget
+PKGCONFIG += ddjvuapi dtkwidget5.5
 
 QMAKE_CXXFLAGS += -fPIE
 
