@@ -126,8 +126,6 @@ bool MainWindow::handleClose(bool needToBeSaved)
 
     this->close();
 
-    this->deleteLater();
-
     return true;
 }
 
@@ -418,6 +416,8 @@ void MainWindow::initBase()
     if (Dr::isTabletEnvironment()) {
         showFullScreen();
     }
+
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void MainWindow::onUpdateTitleLabelRect()
