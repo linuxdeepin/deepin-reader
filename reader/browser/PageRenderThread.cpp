@@ -382,6 +382,10 @@ void PageRenderThread::run()
 
         emit sigDocPageBigImageTaskFinished(task, pixmap);
     }
+
+    //处理关闭所有文档
+    while (execNextDocCloseTask())
+    {}
 }
 
 bool PageRenderThread::hasNextTask()
@@ -672,9 +676,6 @@ bool PageRenderThread::execNextDocOpenTask()
 
 bool PageRenderThread::execNextDocCloseTask()
 {
-    if (m_quit)
-        return false;   //false 为不用再继续循环调用
-
     DocCloseTask task;
 
     if (!popNextDocCloseTask(task))

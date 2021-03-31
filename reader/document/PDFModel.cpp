@@ -371,6 +371,8 @@ PDFDocument::~PDFDocument()
 {
     //需要确保pages先被析构完成
 
+    qInfo() << "~PDfDocument";
+
     m_docMutex->lock();
 
     delete m_document;
