@@ -191,9 +191,8 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
     closeMagnifier();
     if (Dr::MouseShapeHand == shape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
-        foreach (BrowserPage *item, m_items) {
+        foreach (BrowserPage *item, m_items)
             item->setWordSelectable(false);
-        }
     } else if (Dr::MouseShapeNormal == shape) {
         setDragMode(QGraphicsView::NoDrag);
         foreach (BrowserPage *item, m_items)
@@ -203,9 +202,8 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 
 void SheetBrowser::setBookMark(int index, int state)
 {
-    if (index >= 0 && index < m_items.count()) {
+    if (index >= 0 && index < m_items.count())
         m_items.at(index)->setBookmark(state);
-    }
 }
 
 void SheetBrowser::setAnnotationInserting(bool inserting)
@@ -247,6 +245,7 @@ void SheetBrowser::hideSubTipsWidget()
 {
     if (m_tipsWidget)
         m_tipsWidget->hide();
+
     setCursor(QCursor(Qt::ArrowCursor));
 }
 
@@ -271,17 +270,16 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
 
         highLightAnnot = page->addHighlightAnnotation(text, color);
 
-        if (highLightAnnot) {
+        if (highLightAnnot)
             emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
-        }
+
     }
 }
 
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
-    if (annotation == nullptr) {
+    if (annotation == nullptr)
         return;
-    }
 
     m_tipsWidget->hide();
     if (m_noteEditWidget == nullptr) {
@@ -328,10 +326,7 @@ QPointF SheetBrowser::translate2Local(QPointF clickPoint)
 {
     const SheetOperation  &operation = m_sheet->operation();
 
-    clickPoint = QPointF(clickPoint.x() / operation.scaleFactor,
-                         clickPoint.y() / operation.scaleFactor);
-
-    return clickPoint;
+    return QPointF(clickPoint.x() / operation.scaleFactor, clickPoint.y() / operation.scaleFactor);
 }
 
 Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPoint, bool drawRect)

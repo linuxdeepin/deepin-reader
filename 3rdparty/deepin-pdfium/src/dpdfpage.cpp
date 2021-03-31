@@ -85,6 +85,7 @@ private:
      * @return
      */
     bool initAnnot(DPdfAnnot *dAnnot);
+
     /**
      * @brief 视图坐标转化为文档坐标
      * @param rotation 文档自身旋转
@@ -430,6 +431,8 @@ bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
     FPDF_ANNOTATION annot = FPDFPage_GetAnnot(page, allAnnots().indexOf(dAnnot));
 
     FPDF_LINK link = FPDFAnnot_GetLink(annot);
+
+    FPDFPage_CloseAnnot(annot);
 
     FPDF_ACTION action = FPDFLink_GetAction(link);
 

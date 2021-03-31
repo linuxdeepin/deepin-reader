@@ -371,8 +371,6 @@ PDFDocument::~PDFDocument()
 {
     //需要确保pages先被析构完成
 
-    qInfo() << "~PDfDocument";
-
     m_docMutex->lock();
 
     delete m_document;
@@ -392,6 +390,7 @@ int PDFDocument::pageCount() const
 Page *PDFDocument::page(int index) const
 {
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
+
         if (page->isValid())
             return new PDFPage(m_docMutex, page);
     }
