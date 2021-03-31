@@ -650,7 +650,7 @@ void DPdfPage::allTextLooseRects(int &charCount, QStringList &texts, QVector<QRe
                                                                static_cast<qreal>(rect.right - rect.left),
                                                                static_cast<qreal>(rect.top - rect.bottom))));
 
-            QVector<ushort> result(1);
+            QVector<ushort> result(2);
 
             //此处windows上注释乱码,嗅探为windows-1252
             FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());
@@ -686,7 +686,7 @@ void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> 
                                                                static_cast<qreal>(right - left),
                                                                static_cast<qreal>(top - bottom))));
 
-            QVector<ushort> result(1);
+            QVector<ushort> result(2);
 
             //此处windows上注释乱码,嗅探为windows-1252
             FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());
