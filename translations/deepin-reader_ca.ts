@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Ha fallat la conversió. Si us plau, comproveu si el fitxer està malmès.</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Voleu desar els canvis a %1?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>

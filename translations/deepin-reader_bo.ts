@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>ཡིག་ཚགས་ལྟ་ཆས་ནི་PDFདང་DJVU   DOCXསོགས་རྣམ་གཞག་སྣ་ཚོགས་ལ་རྒྱབ་སྐྱོར་ཐུབ་པའི་ཡིག་ཚགས་ལྟ་ཀློག་ཡོ་བྱད་ཞིག་རེད།</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>བརྗེ་ཐུབ་མ་སོང་། ཡིག་ཆར་སྐྱོན་ཤོར་ཡོད་མེད་ཞིབ་བཤེར་བྱོས།</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -410,7 +410,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>བརྗེ་བཞིན་པ།</translation>
     </message>
 </context>
 <context>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>“%1”ལ་རྩོམ་སྒྲིག་བྱས་པ་ཉར་ཚགས་བྱ་དགོས་སམ།</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
