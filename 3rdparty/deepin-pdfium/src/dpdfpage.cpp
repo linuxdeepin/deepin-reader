@@ -85,6 +85,7 @@ private:
      * @return
      */
     bool initAnnot(DPdfAnnot *dAnnot);
+
     /**
      * @brief 视图坐标转化为文档坐标
      * @param rotation 文档自身旋转
@@ -431,6 +432,8 @@ bool DPdfPagePrivate::initAnnot(DPdfAnnot *dAnnot)
 
     FPDF_LINK link = FPDFAnnot_GetLink(annot);
 
+    FPDFPage_CloseAnnot(annot);
+
     FPDF_ACTION action = FPDFLink_GetAction(link);
 
     FPDF_DEST dest = FPDFAction_GetDest(m_doc, action);     //速度慢
@@ -650,7 +653,7 @@ void DPdfPage::allTextLooseRects(int &charCount, QStringList &texts, QVector<QRe
                                                                static_cast<qreal>(rect.right - rect.left),
                                                                static_cast<qreal>(rect.top - rect.bottom))));
 
-            QVector<ushort> result(1);
+            QVector<ushort> result(2);
 
             //此处windows上注释乱码,嗅探为windows-1252
             FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());
@@ -686,7 +689,7 @@ void DPdfPage::allTextRects(int &charCount, QStringList &texts, QVector<QRectF> 
                                                                static_cast<qreal>(right - left),
                                                                static_cast<qreal>(top - bottom))));
 
-            QVector<ushort> result(1);
+            QVector<ushort> result(2);
 
             //此处windows上注释乱码,嗅探为windows-1252
             FPDFText_GetText(d_func()->m_textPage, i, 1, result.data());

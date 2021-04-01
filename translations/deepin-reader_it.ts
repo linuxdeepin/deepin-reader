@@ -401,7 +401,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="197"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
         <translation>Numero pagine non valido</translation>
     </message>
