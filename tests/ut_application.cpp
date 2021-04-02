@@ -62,6 +62,7 @@ void ut_application::SetUp()
 
 void ut_application::TearDown()
 {
+
 }
 
 void ut_application::exec(int secs)

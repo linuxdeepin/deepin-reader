@@ -83,6 +83,7 @@ TEST_F(ut_browser, BrowserAnnotationTest)
     delete sheet;
 }
 
+
 TEST_F(ut_browser, BrowserMagniFierTest)
 {
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "BrowserMagniFierTest"));
@@ -111,6 +112,7 @@ TEST_F(ut_browser, BrowserMagniFierTest)
 
     delete sheet;
 }
+
 
 TEST_F(ut_browser, BrowserMenuTest)
 {
@@ -182,7 +184,8 @@ TEST_F(ut_browser, BrowserPageTest)
 
     page->setPageBookMark(QPointF(0, 0));
 
-    page->addIconAnnotation(QRectF(0, 0, 1, 1), "test");
+    Annotation *anno = page->addIconAnnotation(QRectF(0, 0, 1, 1), "test");
+    if (anno) delete anno;
 
     deepin_reader::Annotation *annotation = page->addHighlightAnnotation("text", QColor(Qt::red));
 
@@ -200,7 +203,11 @@ TEST_F(ut_browser, BrowserPageTest)
 
     page->clearSearchHighlightRects();
 
-    delete sheet;
+    QTimer::singleShot(10, [ = ]() {
+        delete sheet;
+    });
+
+    exec();
 }
 
 TEST_F(ut_browser, BrowserWordTest)
@@ -245,7 +252,16 @@ TEST_F(ut_browser, BrowserWordTest)
     word->mousePressEvent(gsMouseEvent);
 
     word->mouseReleaseEvent(gsMouseEvent);
+
+    delete gsMouseEvent;
+
+    QTimer::singleShot(10, [ = ]() {
+        delete sheet;
+    });
+
+    exec();
 }
+
 
 TEST_F(ut_browser, PageRenderThreadTest)
 {
@@ -361,7 +377,11 @@ TEST_F(ut_browser, PageRenderThreadTest)
 
     delete model;
 
-    delete sheet;
+    QTimer::singleShot(10, [ = ]() {
+        delete sheet;
+    });
+
+    exec();
 }
 
 TEST_F(ut_browser, PageSearchThreadTest)
@@ -378,7 +398,11 @@ TEST_F(ut_browser, PageSearchThreadTest)
 
     delete thread;
 
-    delete sheet;
+    QTimer::singleShot(10, [ = ]() {
+        delete sheet;
+    });
+
+    exec();
 }
 
 TEST_F(ut_browser, SheetBrowserTest)
@@ -533,17 +557,15 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     browser->mouseMoveEvent(mouseEvent);
 
-    QDragEnterEvent *dragEnterEvent = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+    delete mouseEvent;
 
-    browser->dragEnterEvent(dragEnterEvent);
+    QDragEnterEvent dragEnterEvent(QPoint(0, 0), Qt::CopyAction, nullptr, Qt::LeftButton, Qt::NoModifier);
 
-    delete dragEnterEvent;
+    browser->dragEnterEvent(&dragEnterEvent);
 
-    QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
+    QResizeEvent resizeEvent(QSize(800, 600), QSize(400, 300));
 
-    browser->resizeEvent(resizeEvent);
-
-    delete resizeEvent;
+    browser->resizeEvent(&resizeEvent);
 
     QPinchGesture *pinchGesture = new QPinchGesture;
 
@@ -559,5 +581,9 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     delete browser;
 
-    delete sheet;
+    QTimer::singleShot(10, [ = ]() {
+        delete sheet;
+    });
+
+    exec();
 }

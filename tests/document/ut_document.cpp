@@ -70,7 +70,7 @@ TEST_F(ut_document, DJVUTest)
 
     page->sizeF();
 
-    QTimer::singleShot(1, [page] {
+    QTimer::singleShot(1, [page, doc] {
         page->render(500, 500);
         page->getLinkAtPoint(QPointF(0, 0));
         page->text(QRectF(0, 0, 100, 100));
@@ -79,13 +79,19 @@ TEST_F(ut_document, DJVUTest)
         page->formFields();
         page->words();
         page->canAddAndRemoveAnnotations();
-        page->annotations();
-        page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
-        page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
+        qDeleteAll(page->annotations());
+        auto iconAnno = page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
+        if (iconAnno) delete  iconAnno;
+
+        auto hightAnno = page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
+        if (hightAnno) delete hightAnno;
+
         page->updateAnnotation(nullptr, "test", QColor(Qt::red));
         page->moveIconAnnotation(nullptr, QRectF(0, 0, 100, 100));
         page->removeAnnotation(nullptr);
         delete page;
+
+        delete doc;
     });
 
     QFile(filePath(UT_FILE_DJVU_SAVE, "DJVUTest")).remove();
@@ -151,8 +157,12 @@ TEST_F(ut_document, PDFTest)
             annot->contents();
             annot->boundary();
 
-            page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
-            page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
+            auto iconAnno = page->addIconAnnotation(QRectF(0, 0, 10, 10), "test");
+            if (iconAnno) delete  iconAnno;
+
+            auto hightAnno = page->addHighlightAnnotation(QList<QRectF>() << QRectF(0, 0, 20, 20), "test", QColor(Qt::red));
+            if (hightAnno) delete hightAnno;
+
             page->updateAnnotation(annot, "test", QColor(Qt::red));
             page->moveIconAnnotation(annot, QRectF(0, 0, 100, 100));
 
@@ -160,6 +170,8 @@ TEST_F(ut_document, PDFTest)
             delete page;
         } else
             GTEST_FAIL();
+
+        qDeleteAll(annots);
 
         delete doc;
     });
@@ -180,7 +192,9 @@ TEST_F(ut_document, PDFTest)
 
     delete saveDoc;
 
-    a->handleQuitAction(); //次数需要最后一个case调用，提前调用会导致线程永久性关闭
+    QTimer::singleShot(1, [ = ]() {
+        a->handleQuitAction(); //次数需要最后一个case调用，提前调用会导致线程永久性关闭
+    });
 
     exec(2);
 }
