@@ -122,6 +122,8 @@ TEST_F(ut_sidebar, CatalogTreeViewTest)
     treeView->slotCollapsed(index);
 
     treeView->slotExpanded(index);
+
+    delete sheet;
 }
 
 TEST_F(ut_sidebar, SidebarTest)

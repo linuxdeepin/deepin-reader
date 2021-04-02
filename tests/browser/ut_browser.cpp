@@ -537,17 +537,25 @@ TEST_F(ut_browser, SheetBrowserTest)
 
     browser->dragEnterEvent(dragEnterEvent);
 
+    delete dragEnterEvent;
+
     QResizeEvent *resizeEvent = new QResizeEvent(QSize(800, 600), QSize(400, 300));
 
     browser->resizeEvent(resizeEvent);
+
+    delete resizeEvent;
 
     QPinchGesture *pinchGesture = new QPinchGesture;
 
     browser->pinchTriggered(pinchGesture);
 
+    delete pinchGesture;
+
     QWheelEvent *wheelEvent = new QWheelEvent(QPointF(0, 0), 1, Qt::LeftButton, Qt::NoModifier);
 
     browser->wheelEvent(wheelEvent);
+
+    delete wheelEvent;
 
     delete browser;
 

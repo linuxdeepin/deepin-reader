@@ -160,6 +160,8 @@ TEST_F(ut_document, PDFTest)
             delete page;
         } else
             GTEST_FAIL();
+
+        delete doc;
     });
 
     QFile(filePath(UT_FILE_PDF_SAVE, "PDFTest")).remove();
@@ -180,5 +182,5 @@ TEST_F(ut_document, PDFTest)
 
     a->handleQuitAction(); //次数需要最后一个case调用，提前调用会导致线程永久性关闭
 
-    exec();
+    exec(2);
 }

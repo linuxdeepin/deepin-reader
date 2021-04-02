@@ -78,8 +78,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     QStyleOptionTab optionTab;
     QMimeData *mimeData = CentralDocPage1->m_tabBar->createMimeDataFromTab(0, optionTab);
 
-    CentralDocPage1->m_tabBar->insertFromMimeData(0, new QMimeData);
-    CentralDocPage1->m_tabBar->insertFromMimeDataOnDragEnter(0, new QMimeData);
+    CentralDocPage1->m_tabBar->insertFromMimeData(0, mimeData);
+    CentralDocPage1->m_tabBar->insertFromMimeDataOnDragEnter(0, mimeData);
     CentralDocPage1->m_tabBar->insertFromMimeDataOnDragEnter(0, mimeData);
 
     DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_TEST_FILE_1, "UiFrameTest"));
@@ -141,7 +141,8 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     CentralDocPage2->m_tabBar->onSetCurrentIndex();
     CentralDocPage2->m_tabBar->onTabChanged(0);
 
-    QDragEnterEvent dragEnterevent(QPoint(0, 0), Qt::MoveAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+    QMimeData mimeData2;
+    QDragEnterEvent dragEnterevent(QPoint(0, 0), Qt::MoveAction, &mimeData2, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(CentralDocPage2->m_tabBar, &dragEnterevent);
 
     QResizeEvent resizeEvent(QSize(100, 100), QSize(200, 200));
@@ -443,6 +444,10 @@ TEST_F(Ut_UiFrame, UiFrameTest)
 
     CentralNavPage centralPage;
     centralPage.onChooseButtonClicked();
+
+    delete mimeData;
+    delete mainWindow1;
+    delete mainWindow2;
 
     exec();
 }
