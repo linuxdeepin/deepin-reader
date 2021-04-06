@@ -55,7 +55,7 @@ void Ut_UiFrame::SetUp()
 
 void Ut_UiFrame::TearDown()
 {
-    ut_application::TearDown();
+
 }
 
 TEST_F(Ut_UiFrame, UiFrameTest)
