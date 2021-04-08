@@ -38,7 +38,7 @@ static constexpr size_t kSystemPageSize = 65536;
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static constexpr size_t kSystemPageSize = 16384;
 #else
-static constexpr size_t kSystemPageSize = 4096;
+static constexpr size_t kSystemPageSize = 65536;
 #endif
 static constexpr size_t kSystemPageOffsetMask = kSystemPageSize - 1;
 static_assert((kSystemPageSize & (kSystemPageSize - 1)) == 0,
