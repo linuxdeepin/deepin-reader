@@ -18,7 +18,7 @@ static constexpr size_t kPageAllocationGranularityShift = 14;  // 16KB
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static constexpr size_t kPageAllocationGranularityShift = 14;  // 16KB
 #else
-static constexpr size_t kPageAllocationGranularityShift = 12;  // 4KB
+static constexpr size_t kPageAllocationGranularityShift = 16;  // 64KB
 #endif
 static constexpr size_t kPageAllocationGranularity =
     1 << kPageAllocationGranularityShift;
@@ -38,7 +38,10 @@ static constexpr size_t kSystemPageSize = 65536;
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static constexpr size_t kSystemPageSize = 16384;
 #else
-static constexpr size_t kSystemPageSize = 4096;
+//default page size changed to 64k.
+//binaries compiled for 64KB are likely to work on 4KB systems,
+//64KB is a good choice here.
+static constexpr size_t kSystemPageSize = 65536;
 #endif
 static constexpr size_t kSystemPageOffsetMask = kSystemPageSize - 1;
 static_assert((kSystemPageSize & (kSystemPageSize - 1)) == 0,
