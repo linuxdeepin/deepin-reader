@@ -291,7 +291,7 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 }
 
-bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
+bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved, bool needSavetip)
 {
     if (nullptr == sheet)
         return false;
@@ -301,7 +301,11 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     //如果文档有变动且需要保存
     if (sheet->fileChanged() && needToBeSaved) {
-        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
+
+        int result = 2;
+        if (needSavetip) {
+            result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
+        }
 
         if (result <= 0) {
             return false;
@@ -334,14 +338,14 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     return true;
 }
 
-bool CentralDocPage::closeAllSheets(bool needToBeSaved)
+bool CentralDocPage::closeAllSheets(bool needToBeSaved, bool needSavetip)
 {
     QList<DocSheet *> sheets = m_tabBar->getSheets();
 
     if (sheets.count() > 0) {
         for (int i = 0; i < sheets.count(); ++i) {
             showSheet(sheets[i]);
-            if (!closeSheet(sheets[i], needToBeSaved))
+            if (!closeSheet(sheets[i], needToBeSaved, needSavetip))
                 return false;
         }
     }

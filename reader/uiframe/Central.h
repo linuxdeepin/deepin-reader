@@ -107,7 +107,7 @@ public:
      * @param needToBeSaved 是否需要提示保存
      * @return
      */
-    bool handleClose(bool needToBeSaved);
+    bool handleClose(bool needToBeSaved, bool needSavetip = true);
 
     /**
      * @brief titleWidget

@@ -109,15 +109,16 @@ public:
      * @param needToBeSaved
      * @return
      */
-    bool closeSheet(DocSheet *sheet, bool needToBeSaved);
+    bool closeSheet(DocSheet *sheet, bool needToBeSaved, bool needSavetip = true);
 
     /**
      * @brief closeAllSheets
      * 进行关闭，会逐个关闭每个sheet，全部关闭完成返回成功
-     * @param needToBeSaved 是否需要提示保存
+     * @param needToBeSaved 是否需要保存
+     * @param needSavetip 是否需要提示保存
      * @return
      */
-    bool closeAllSheets(bool needToBeSaved);
+    bool closeAllSheets(bool needToBeSaved, bool needSavetip = true);
 
     /**
      * @brief hasSheet

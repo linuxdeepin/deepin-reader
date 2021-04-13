@@ -118,11 +118,10 @@ void MainWindow::activateSheet(DocSheet *sheet)
     this->activateWindow();
 }
 
-bool MainWindow::handleClose(bool needToBeSaved)
+bool MainWindow::handleClose(bool needToBeSaved, bool needSavetip)
 {
-    if (m_central)
-        if (!m_central->handleClose(needToBeSaved))
-            return false;
+    if (m_central && !m_central->handleClose(needToBeSaved, needSavetip))
+        return false;
 
     this->close();
 

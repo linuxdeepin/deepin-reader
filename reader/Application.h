@@ -38,6 +38,8 @@ public:
 
     void emitSheetChanged();
 
+    void saveAllData(bool needSavetip = true) const;
+
 signals:
     void sigShowAnnotTextWidget();
 

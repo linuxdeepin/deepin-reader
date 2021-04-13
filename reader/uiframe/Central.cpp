@@ -214,10 +214,10 @@ void Central::handleShortcut(QString shortcut)
         docPage()->handleShortcut(shortcut);
 }
 
-bool Central::handleClose(bool needToBeSaved)
+bool Central::handleClose(bool needToBeSaved, bool needSavetip)
 {
     if (nullptr != m_docPage) {
-        return docPage()->closeAllSheets(needToBeSaved);
+        return docPage()->closeAllSheets(needToBeSaved, needSavetip);
     }
 
     return true;

@@ -104,9 +104,10 @@ public:
      * @brief handleClose
      * 进行关闭，成功会关闭并释放自己
      * @param needToBeSaved
+     * @param needSavetip
      * @return
      */
-    bool handleClose(bool needToBeSaved);
+    bool handleClose(bool needToBeSaved, bool needSavetip = true);
 
 public:
     /**

@@ -21,10 +21,22 @@
 #include "DocSheet.h"
 #include "DBusObject.h"
 
+#include <signal.h>
+
 #include <QIcon>
 #include <QDebug>
 #include <QDir>
 #include <QMouseEvent>
+
+const Application *gapp = nullptr;
+void signalHander(int signo)
+{
+    if (signo == SIGTERM) {
+        if (gapp)
+            gapp->saveAllData(false);
+        dApp->quit();
+    }
+}
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -39,6 +51,9 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc."));
     setProductIcon(QIcon::fromTheme("deepin-reader"));
+
+    gapp = this;
+    signal(SIGTERM, signalHander);
 }
 
 Application::~Application()
@@ -52,15 +67,20 @@ void Application::emitSheetChanged()
     emit sigSetPasswdFocus();
 }
 
-void Application::handleQuitAction()
+void Application::saveAllData(bool needSavetip) const
 {
     QList<MainWindow *> list = MainWindow::m_list;
 
     //倒序退出,如果取消了则停止
     for (int i = list.count() - 1; i >= 0; --i) {
-        if (!list[i]->handleClose(true))
+        if (!list[i]->handleClose(true, needSavetip))
             break;
     }
+}
+
+void Application::handleQuitAction()
+{
+    saveAllData();
 }
 
 bool Application::notify(QObject *object, QEvent *event)
