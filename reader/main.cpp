@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     if (arguments.size() > 0)
         PERF_PRINT_BEGIN("POINT-05", "");
 
-    //=======通知已经打开的进程
+    // =======通知已经打开的进程
     if (!DBusObject::instance()->registerOrNotify(arguments))
         return 0;
 
