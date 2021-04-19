@@ -46,15 +46,11 @@ Document Viewer realizes basic document management such as opening files, saving
 
 Document Viewer supports DOCX, PDF and DJVU formats. You can open a file by: 
 
-- Dragging it directly into the interface or onto the icon. You can also drag multiple files at a time, and they will be opened in many tabs in one window.
-- Right-clicking it and selecting **Open with** > **Select default program**, and then selecting Document Viewer from the list.
-
-   > ![tips](../common/tips.svg)Tips: Document will be opened by default program by directly double clicking on it. You can right-click it and select a default program by clicking on **Properties** > **Open with**. 
+- Dragging it directly into the interface or onto the icon. 
+- Right-clicking it and selecting **Open with** > **Document Viewer**. After setting Document Viewer as the default program, you can open it by double-clicking it directly.
 
 - Clicking **Select File** and selecting a file on Document Viewer interface.
 - On Document Viewer interface, pressing **Ctrl+O** and selecting the file you want to open. 
-
->![notes](../common/notes.svg)Notes: when there are many windows, the file will be opened in the one which was opened first, and one file could only be opened once.
 
 ### Save documents
 
@@ -105,10 +101,10 @@ On Document Viewer interface, open a file.
 
 - Add bookmark:
    - Right-click any page in Document Viewer, select **Add bookmark** to mark this page. 
-   - Move the cursor to the top right corner of the page until ![view](../common/bookmark.svg) appears, click this icon to add a bookmark for this page, and this icon will be filled in blue.
+   - Move the cursor to the top right corner of the page until ![view](../common/bookmark.svg) appears, click this icon to add a bookmark for this page, and this icon will be filled in blue ![view](../common/bookmarkbig_checked_light.svg).
 - Delete bookmark:
    - Right-click the bookmark and select **Remove bookmark**. 
-   - Click the colored bookmark icon to cancel/delete the bookmark.
+   - Click the colored bookmark icon ![view](../common/bookmarkbig_checked_light.svg) to cancel/delete the bookmark.
 
 > ![notes](../common/notes.svg)Notes: The bookmark icon appears only when the cursor moves to the bookmark area, and it disappears when the cursor moves out of the area. When a bookmark is added successfully, the icon would be displayed always.
 
@@ -204,7 +200,8 @@ To zoom in or out a page, you can:
 - Press **Ctrl** and scroll the mouse wheel up and down at the same time. 
 - On Document Viewer interface, click "**+**"  or  "**-**". 
 - Manual input is supported here. You can choose display percentage from the drop-down box of the menu bar: 10%, 25%, 50%, 75%, 100%, 125%, 150%, 175%, 200%, 300%, 400%, and 500%, according to which the file is zoomed in and out.
-> ![notes](../common/notes.svg)Notes: If you are using a computer equipped with a touchscreen or a touchpad, you can: pinch two fingers to zoom out on the page; open two fingers to zoom in on the page.
+
+
 
 ### Adjust view
 
@@ -235,7 +232,8 @@ In the scaling drop-down box of tool bar, you can:
 
 1. On Document Viewer interface, open a document. 
 2. Right-click and select **Rotate Left** or **Rotate Right** from the submenu, the page will rotate to the left or right by 90°. 
-> ![notes](../common/notes.svg)Notes:  If you are using a computer equipped with a touchscreen or a touchpad, you can place two fingers on the picture with a certain distance and rotate the two fingers at the same time to rotate the page.
+
+
 
 ### Document info
 1. On Document Viewer interface, open a document. 
