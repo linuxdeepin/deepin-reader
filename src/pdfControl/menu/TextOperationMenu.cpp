@@ -6,6 +6,7 @@
 #include "utils/utils.h"
 #include "DocSheet.h"
 #include <QDebug>
+#include <QSet>
 
 TextOperationMenu::TextOperationMenu(DWidget *parent)
     : CustomMenu(parent)

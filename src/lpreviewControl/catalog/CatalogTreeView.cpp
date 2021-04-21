@@ -33,6 +33,7 @@
 #include <QProxyStyle>
 #include <QPainter>
 #include <QStylePainter>
+#include <QMouseEvent>
 
 class ActiveProxyStyle : public QProxyStyle
 {

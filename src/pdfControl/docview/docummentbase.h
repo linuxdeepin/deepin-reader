@@ -13,6 +13,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QTimer>
+#include <QRectF>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE

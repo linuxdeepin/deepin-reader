@@ -31,6 +31,7 @@
 
 #include <QGraphicsItem>
 #include <QSet>
+#include <QRectF>
 
 #include "global.h"
 

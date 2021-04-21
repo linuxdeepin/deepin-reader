@@ -25,6 +25,7 @@
 #include "bookmarkdelegate.h"
 
 #include <DHorizontalLine>
+#include <QSet>
 
 const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)

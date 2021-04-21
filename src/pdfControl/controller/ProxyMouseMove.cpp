@@ -28,6 +28,7 @@
 #include <QDesktopServices>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QMouseEvent>
 
 ProxyMouseMove::ProxyMouseMove(QObject *parent) : QObject(parent)
 {

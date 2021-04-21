@@ -4,7 +4,7 @@
 #include "pdfControl/DocSheetPDF.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
-
+#include <QSet>
 DefaultOperationMenu::DefaultOperationMenu(DWidget *parent)
     : CustomMenu(parent)
 {

@@ -23,6 +23,7 @@
 
 #include <DSplitter>
 #include <QMap>
+#include <QSet>
 
 #include "global.h"
 #include "pdfControl/docview/commonstruct.h"

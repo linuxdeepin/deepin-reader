@@ -6,6 +6,7 @@
 #include<QPoint>
 #include<QPainter>
 #include <DApplicationHelper>
+#include <QMouseEvent>
 
 BookMarkButton::BookMarkButton(DWidget *parent)
     : DPushButton(parent),

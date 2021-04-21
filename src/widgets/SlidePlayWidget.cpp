@@ -22,6 +22,7 @@
 #include <DWidget>
 
 #include <QHBoxLayout>
+#include <QMouseEvent>
 
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {

@@ -28,6 +28,7 @@
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QTimer>
+#include <QMouseEvent>
 
 SlideWidget::SlideWidget(DocSheet *docsheet)
     : DWidget(MainWindow::windowContainSheet(docsheet))

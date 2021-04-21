@@ -9,6 +9,9 @@
 #include <QDebug>
 #include <QMutex>
 #include <QRunnable>
+#include <QPointF>
+#include <QRectF>
+
 #include "commonstruct.h"
 #include "widgets/bookmarkbutton.h"
 

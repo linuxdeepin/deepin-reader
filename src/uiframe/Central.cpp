@@ -42,6 +42,7 @@
 #include <DMessageManager>
 #include <QStackedLayout>
 #include <DFileDialog>
+#include <QDragEnterEvent>
 
 Central::Central(QWidget *parent)
     : CustomWidget(parent)

@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <QObject>
 #include <QSet>
+#include <QPointF>
 
 //class PagePdf;
 class PagePdfPrivate;

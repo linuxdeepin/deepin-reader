@@ -16,6 +16,9 @@
 
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <QSet>
+#include <QWheelEvent>
+#include <QMouseEvent>
 
 SheetBrowserPDFPrivate::SheetBrowserPDFPrivate(DocSheetPDF *sheet, SheetBrowserPDF *parent)
     : m_sheet(sheet), q_ptr(parent)

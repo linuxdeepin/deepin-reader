@@ -36,6 +36,7 @@
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
+#include <QSet>
 
 QSet<SheetBrowserDJVUItem *> SheetBrowserDJVUItem::items;
 SheetBrowserDJVUItem::SheetBrowserDJVUItem(SheetBrowserDJVU *parent, deepin_reader::Page *page) : QGraphicsItem(), m_parent(parent), m_page(page)

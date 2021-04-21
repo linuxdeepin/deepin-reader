@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QThreadPool>
 #include <QDebug>
+#include <QPointF>
 
 const double D_MINUS_DIFF = 0.000001;
 

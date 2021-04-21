@@ -5,6 +5,7 @@
 
 #include <QHash>
 #include <QMutex>
+#include <QRectF>
 
 typedef struct ddjvu_context_s ddjvu_context_t;
 typedef struct ddjvu_format_s ddjvu_format_t;

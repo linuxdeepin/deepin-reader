@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QSemaphore>
+#include <QRectF>
 
 #include "RenderThreadPdf.h"
 //#include "RenderThreadPoolManagerPdf.h"

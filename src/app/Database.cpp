@@ -38,6 +38,7 @@
 #include <QStandardPaths>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QSet>
 
 class Transaction
 {

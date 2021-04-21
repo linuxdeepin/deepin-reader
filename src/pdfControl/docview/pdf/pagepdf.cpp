@@ -4,6 +4,9 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QPointF>
+#include <QSet>
+#include <QRectF>
 
 #include <exception>
 

@@ -13,7 +13,7 @@
 #include <poppler-qt5.h>
 #include <qglobal.h>
 #include "pdf/RenderThreadPdf.h"
-
+#include <QWheelEvent>
 #include <QTimer>
 
 static QMutex mutexlockloaddata;
