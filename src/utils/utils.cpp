@@ -21,6 +21,7 @@
  */
 
 #include "utils.h"
+#include "ModuleHeader.h"
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -42,9 +43,10 @@
 #include <QProcess>
 #include <QPixmap>
 #include <QBitmap>
+#include <QPainterPath>
 #include <QClipboard>
+
 #include <DApplication>
-#include "ModuleHeader.h"
 //#include <KEncodingProber>
 
 QT_BEGIN_NAMESPACE

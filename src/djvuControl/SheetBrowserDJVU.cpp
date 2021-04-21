@@ -39,6 +39,7 @@
 #include <QBitmap>
 #include <DMenu>
 #include <DGuiApplicationHelper>
+#include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
 
