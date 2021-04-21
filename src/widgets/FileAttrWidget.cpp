@@ -111,8 +111,8 @@ void FileAttrWidget::initCloseBtn()
     layout->addStretch(0);
 
     auto closeButton = new DWindowCloseButton(this);
-    closeButton->setFixedSize(QSize(50, 50));
-    closeButton->setIconSize(QSize(50, 50));
+    closeButton->setFixedSize(QSize(0, 50));
+    closeButton->setIconSize(QSize(1, 50));
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
     layout->addWidget(closeButton);
