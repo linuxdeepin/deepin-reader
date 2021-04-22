@@ -120,14 +120,6 @@ void CentralDocPage::openCurFileFolder()
 
 void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 {
-    if (!Dr::isTabletEnvironment()) {   //平板模式不阻塞
-        if (DocSheet::existFileChanged()) {
-            DBusObject::instance()->blockShutdown();
-        } else {
-            DBusObject::instance()->unBlockShutdown();
-        }
-    }
-
     if (nullptr == sheet && sheet != getCurSheet())
         return;
 

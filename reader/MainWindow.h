@@ -168,6 +168,17 @@ private slots:
      */
     void onTitleAniFinished();
 
+    /**
+     * @brief 虚拟键盘激活状态
+     * @param visible 虚拟键盘是否可见
+     */
+    void onImActiveChanged(bool visible);
+
+    /**
+     * @brief 重置窗口大小
+     */
+    void onDelayResizeHeight();
+
 private:
     QWidget *m_FullTitleWidget = nullptr;
     QWidget *m_docTabWidget = nullptr;

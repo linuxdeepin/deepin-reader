@@ -61,6 +61,12 @@ public:
      */
     void unBlockShutdown();
 
+    /**
+     * @brief 获取虚拟键盘大小
+     * @return QRect
+     */
+    QRect virtualKeyboardGeometry();
+
 signals:
     /**
      * @brief sigTouchPadEventSignal

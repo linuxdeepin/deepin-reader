@@ -851,8 +851,7 @@ bool BrowserPage::removeAllAnnotation()
 void BrowserPage::setPageBookMark(const QPointF clickPoint)
 {
     //平板模式取消状态变化
-    if (Dr::isTabletEnvironment())
-        return;
+    return;
 
     if (bookmarkMouseRect().contains(clickPoint)) {
         m_bookmarkState = 2;

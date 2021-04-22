@@ -90,9 +90,6 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
 
         if (sheet->isFullScreen()) {
             createAction(tr("Exit fullscreen"), "ExitFullscreen");
-        } else {
-            if (!Dr::isTabletEnvironment())
-                createAction(tr("Fullscreen"), "Fullscreen");
         }
 
         createAction(tr("Slide show"), "SlideShow");
@@ -118,8 +115,6 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Rotate right"), "RotateRight");
         this->addSeparator();
 
-        if (!Dr::isTabletEnvironment())
-            createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     } else {
         if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
@@ -140,9 +135,6 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
 
         if (sheet->isFullScreen()) {
             createAction(tr("Exit fullscreen"), "ExitFullscreen");
-        } else {
-            if (!Dr::isTabletEnvironment())
-                createAction(tr("Fullscreen"), "Fullscreen");
         }
 
         createAction(tr("Slide show"), "SlideShow");
@@ -168,8 +160,6 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Rotate right"), "RotateRight");
         this->addSeparator();
 
-        if (!Dr::isTabletEnvironment())
-            createAction(tr("Print"), "Print");
         createAction(tr("Document info"), "DocumentInfo");
     }
 }

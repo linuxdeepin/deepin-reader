@@ -47,7 +47,7 @@
 Central::Central(QWidget *parent)
     : BaseWidget(parent)
 {
-    setAcceptDrops(true);
+    setAcceptDrops(false);
 
     m_widget = new TitleWidget(parent);
     m_navPage = new CentralNavPage(this);
@@ -66,8 +66,7 @@ Central::Central(QWidget *parent)
     QList<QKeySequence> keyList;
     keyList.append(QKeySequence::Find);
     keyList.append(QKeySequence::Open);
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence::Print);
+
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
     keyList.append(QKeySequence(Qt::Key_Left));
@@ -75,14 +74,12 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence(Qt::Key_Space));
     keyList.append(QKeySequence(Qt::Key_Escape));
     keyList.append(QKeySequence(Qt::Key_F5));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::Key_F11));
+
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
+
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
@@ -306,13 +303,17 @@ void Central::onTouchPadEvent(QString name, QString direction, int fingers)
 
 void Central::onImActiveChanged(bool actived)
 {
-    if (actived && "TransparentTextEdit" == focusWidget()->objectName() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height() > this->height() / 2) {
-        setUpValue(focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height()  - this->height() / 2 - 60);
-    } else if (actived && nullptr != focusWidget() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
-        setUpValue(this->height() / 2 - 20);
-    } else if (!actived) {
-        setUpValue(0);
-    }
+    QTimer::singleShot(100, this, [=](){
+        QWidget* transparentTextWidget = focusWidget();
+        if (actived && transparentTextWidget && "TransparentTextEdit" == transparentTextWidget->objectName()) {
+            int upValue = qMin(transparentTextWidget->mapToGlobal(transparentTextWidget->pos()).y() - m_widget->height() - 68, DBusObject::instance()->virtualKeyboardGeometry().height());
+            setUpValue(upValue);
+        } else if (actived) {
+            setUpValue(DBusObject::instance()->virtualKeyboardGeometry().height());
+        } else if (!actived) {
+            setUpValue(0);
+        }
+    });
 }
 
 void Central::onKeyTriggered()

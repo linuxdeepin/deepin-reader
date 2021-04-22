@@ -26,12 +26,10 @@
 TitleMenu::TitleMenu(DWidget *parent)
     : DMenu(parent)
 {
-    if (!Dr::isTabletEnvironment()) {
-        QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
-        QStringList firstActionObjList = QStringList() << "New window" << "New tab";
-        createActionMap(firstActionList, firstActionObjList);
-        this->addSeparator();
-    }
+    QStringList firstActionList = QStringList() << tr("New tab");
+    QStringList firstActionObjList = QStringList() << "New tab";
+    createActionMap(firstActionList, firstActionObjList);
+    this->addSeparator();
 
     auto actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
@@ -43,11 +41,9 @@ TitleMenu::TitleMenu(DWidget *parent)
     createActionMap(secondActionList, secondActionObjList);
     this->addSeparator();
 
-    if (!Dr::isTabletEnvironment()) {
-        QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
-        QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
-        createActionMap(thirdActionList, thirdActionObjList);
-    }
+    QStringList thirdActionList = QStringList() << tr("Display in file manager");
+    QStringList thirdActionObjList = QStringList() << "Display in file manager";
+    createActionMap(thirdActionList, thirdActionObjList);
 
     m_handleMenu = new HandleMenu(this);
     m_handleMenu->setDisabled(true);

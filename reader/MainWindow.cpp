@@ -412,11 +412,29 @@ void MainWindow::initBase()
 
     titlebar()->setMenu(m_menu);
 
-    if (Dr::isTabletEnvironment()) {
-        showFullScreen();
-    }
-
     setAttribute(Qt::WA_DeleteOnClose);
+
+    this->setEnableSystemMove(false);
+    this->setEnableSystemResize(false);
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowMaximizeButtonHint);
+
+    this->move(0, 0);
+    this->setFixedSize(QApplication::desktop()->availableGeometry().size());
+}
+
+void MainWindow::onImActiveChanged(bool visible)
+{
+    if (visible) {
+        QTimer::singleShot(300, this, SLOT(onDelayResizeHeight()));
+    } else {
+        this->setFixedHeight(QApplication::desktop()->availableGeometry().height());
+    }
+}
+
+void MainWindow::onDelayResizeHeight()
+{
+    QRect rc = DBusObject::instance()->virtualKeyboardGeometry();
+    this->setFixedHeight(QApplication::desktop()->geometry().height() - rc.height());
 }
 
 void MainWindow::onUpdateTitleLabelRect()

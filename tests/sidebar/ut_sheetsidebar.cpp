@@ -445,7 +445,6 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
 TEST_F(ut_sidebar, TextEditWidgetTest)
 {
     TextEditShadowWidget shadowView(nullptr);
-    shadowView.showWidget(QPoint(0, 0));
     shadowView.getTextEditWidget()->setEditText("const QString & note");
     shadowView.getTextEditWidget()->setEditText("");
     shadowView.getTextEditWidget()->setAnnotation(nullptr);

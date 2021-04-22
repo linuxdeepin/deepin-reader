@@ -49,12 +49,4 @@ FileType fileType(const QString &filePath)
     return fileType;
 }
 
-bool isTabletEnvironment()
-{
-#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 5 ))
-    return Dtk::Gui::DGuiApplicationHelper::isTabletEnvironment();
-#endif
-    return false;
-}
-
 }
