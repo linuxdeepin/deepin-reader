@@ -49,3 +49,11 @@ include($$PWD/../reader/src.pri)
 
 RESOURCES += \
     files.qrc
+
+
+#安全测试选项
+if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
+    QMAKE_CFLAGS += -g -fsanitize=address -O2
+    QMAKE_LFLAGS += -g -fsanitize=address -O2
+    QMAKE_CXXFLAGS += -g -fsanitize=address -O2
+}
