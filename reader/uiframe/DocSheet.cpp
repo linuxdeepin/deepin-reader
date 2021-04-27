@@ -249,7 +249,7 @@ void DocSheet::jumpToPrevPage()
 {
     int page = m_browser->currentPage() - (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
-    page = qMin(1, page);
+    page = qMax(1, page);
 
     jumpToPage(page);
 }
@@ -758,7 +758,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     int pagesCount = pageCount();
 
-    int fromIndex = qMin(0, printer->fromPage() - 1);
+    int fromIndex = qMax(0, printer->fromPage() - 1);
 
     int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
