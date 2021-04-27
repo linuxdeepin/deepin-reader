@@ -130,12 +130,6 @@ public:
      */
     void setMenu(TitleMenu *menu);
 
-    /**
-     * @brief setUpValue
-     * 设置上移
-     */
-    void setUpValue(int value);
-
 signals:
     /**
      * @brief sigNeedClose
@@ -189,13 +183,6 @@ public slots:
     void onTouchPadEvent(QString name, QString direction, int fingers);
 
     /**
-     * @brief onImActiveChanged
-     * 处理当前虚拟键盘变化
-     * @param actived
-     */
-    void onImActiveChanged(bool actived);
-
-    /**
      * @brief onKeyTriggered
      * 快捷键触发
      */
@@ -215,7 +202,6 @@ private:
     CentralNavPage  *m_navPage = nullptr;
     TitleMenu       *m_menu = nullptr;
     TitleWidget     *m_widget = nullptr;
-    int             m_upValue = 0;
 };
 
 #endif  // CENTRAL_H

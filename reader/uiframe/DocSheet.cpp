@@ -117,6 +117,7 @@ DocSheet::~DocSheet()
 
 QImage DocSheet::firstThumbnail(const QString &filePath)
 {
+    //获取首页缩略图
     foreach (DocSheet *sheet, g_sheetList) {
         if (sheet->filePath() == filePath) {
             QImage image = sheet->getImage(0, 256, 256);
@@ -248,7 +249,7 @@ void DocSheet::jumpToPrevPage()
 {
     int page = m_browser->currentPage() - (m_operation.layoutMode == Dr::TwoPagesMode ? 2 : 1);
 
-    page = page < 1 ? 1 : page;
+    page = qMin(1, page);
 
     jumpToPage(page);
 }
@@ -573,8 +574,8 @@ QList<deepin_reader::Annotation *> DocSheet::annotations()
 bool DocSheet::removeAnnotation(deepin_reader::Annotation *annotation, bool tips)
 {
     int ret = m_browser->removeAnnotation(annotation);
-    if (ret) {
-        if (tips) this->showTips(tr("The annotation has been removed"));
+    if (ret && tips) {
+        this->showTips(tr("The annotation has been removed"));
     }
     return ret;
 }
@@ -757,7 +758,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     int pagesCount = pageCount();
 
-    int fromIndex = printer->fromPage() <= 0 ? 0 : printer->fromPage() - 1;
+    int fromIndex = qMin(0, printer->fromPage() - 1);
 
     int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
@@ -796,6 +797,7 @@ void DocSheet::closeSlide()
 void DocSheet::setSidebarVisible(bool isVisible, bool notify)
 {
     if (notify) {
+        //左侧栏是否需要隐藏
         m_sidebar->setVisible(isVisible);
         m_operation.sidebarVisible = isVisible;
 
@@ -890,9 +892,10 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
 bool DocSheet::isFullScreen()
 {
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
-    if (nullptr == doc)
 
+    if (nullptr == doc)
         return false;
+
     return doc->isFullScreen();
 }
 

@@ -51,7 +51,7 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     this->setVisibleAddButton(true);
 
-    this->setDragable(!Dr::isTabletEnvironment());
+    this->setDragable(true);
 
     this->setFocusPolicy(Qt::NoFocus);
 

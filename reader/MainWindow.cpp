@@ -413,10 +413,6 @@ void MainWindow::initBase()
 
     titlebar()->setMenu(m_menu);
 
-    if (Dr::isTabletEnvironment()) {
-        showFullScreen();
-    }
-
     setAttribute(Qt::WA_DeleteOnClose);
 }
 

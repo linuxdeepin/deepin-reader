@@ -61,13 +61,11 @@ Central::Central(QWidget *parent)
     m_mainWidget->setLayout(m_layout);
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
-    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &Central::onImActiveChanged);
 
     QList<QKeySequence> keyList;
     keyList.append(QKeySequence::Find);
     keyList.append(QKeySequence::Open);
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence::Print);
+    keyList.append(QKeySequence::Print);
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
     keyList.append(QKeySequence(Qt::Key_Left));
@@ -75,14 +73,12 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence(Qt::Key_Space));
     keyList.append(QKeySequence(Qt::Key_Escape));
     keyList.append(QKeySequence(Qt::Key_F5));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::Key_F11));
+    keyList.append(QKeySequence(Qt::Key_F11));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_1));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_2));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_A));
     keyList.append(QKeySequence(Qt::ALT | Qt::Key_H));
-    if (!Dr::isTabletEnvironment())
-        keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
+    keyList.append(QKeySequence(Qt::ALT | Qt::Key_Z));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_1));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_2));
     keyList.append(QKeySequence(Qt::CTRL | Qt::Key_3));
@@ -135,13 +131,6 @@ void Central::setMenu(TitleMenu *menu)
 {
     m_menu = menu;
     connect(m_menu, SIGNAL(sigActionTriggered(QString)), this, SLOT(onMenuTriggered(QString)));
-}
-
-void Central::setUpValue(int value)
-{
-    m_upValue = value;
-    m_mainWidget->move(0, -m_upValue);
-    m_mainWidget->resize(this->size());
 }
 
 void Central::addFilesWithDialog()
@@ -304,17 +293,6 @@ void Central::onTouchPadEvent(QString name, QString direction, int fingers)
     }
 }
 
-void Central::onImActiveChanged(bool actived)
-{
-    if (actived && "TransparentTextEdit" == focusWidget()->objectName() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height() > this->height() / 2) {
-        setUpValue(focusWidget()->mapToGlobal(focusWidget()->pos()).y() + focusWidget()->height()  - this->height() / 2 - 60);
-    } else if (actived && nullptr != focusWidget() && focusWidget()->mapToGlobal(focusWidget()->pos()).y() > this->height() / 2) {
-        setUpValue(this->height() / 2 - 20);
-    } else if (!actived) {
-        setUpValue(0);
-    }
-}
-
 void Central::onKeyTriggered()
 {
     QAction *action = static_cast<QAction *>(sender());
@@ -376,7 +354,7 @@ void Central::dropEvent(QDropEvent *event)
 
 void Central::resizeEvent(QResizeEvent *event)
 {
-    m_mainWidget->move(0, -m_upValue);
+    m_mainWidget->move(0, 0);
     m_mainWidget->resize(event->size());
     BaseWidget::resizeEvent(event);
 }

@@ -205,18 +205,6 @@ void ShortCutShow::initDJVU()
                   << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen") ;
     Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
 
-    if (Dr::isTabletEnvironment()) {//平板模式下移除功能
-        windowKeymaps.removeOne(Dr::key_ctrl_p);
-        windowKeymaps.removeOne(Dr::key_alt_z);
-        windowKeymaps.removeOne(Dr::key_f11);
-        shortcutnames.removeOne(tr("Magnifier"));
-        Toolsnames.removeOne(tr("Magnifier"));
-        shortcutnames.removeOne(tr("Print"));
-        Toolsnames.removeOne(tr("Print"));
-        shortcutnames.removeOne(tr("Fullscreen"));
-        Toolsnames.removeOne(tr("Fullscreen"));
-    }
-
     int index = 0;
 
     foreach (QString strname, shortcutnames) {
@@ -258,18 +246,6 @@ void ShortCutShow::initPDF()
     Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
                   << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen")  ;
     Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
-
-    if (Dr::isTabletEnvironment()) {//平板模式下移除功能
-        windowKeymaps.removeOne(Dr::key_ctrl_p);
-        windowKeymaps.removeOne(Dr::key_alt_z);
-        windowKeymaps.removeOne(Dr::key_f11);
-        shortcutnames.removeOne(tr("Magnifier"));
-        Toolsnames.removeOne(tr("Magnifier"));
-        shortcutnames.removeOne(tr("Print"));
-        Toolsnames.removeOne(tr("Print"));
-        shortcutnames.removeOne(tr("Fullscreen"));
-        Toolsnames.removeOne(tr("Fullscreen"));
-    }
 
     int index = 0;
     foreach (QString strname, shortcutnames) {

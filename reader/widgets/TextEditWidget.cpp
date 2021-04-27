@@ -42,10 +42,7 @@
 TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     : DWidget(parent)
 {
-    if (Dr::isTabletEnvironment())
-        setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
-    else
-        setWindowFlag(Qt::Popup);
+    setWindowFlag(Qt::Popup);
 
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -73,13 +70,7 @@ TextEditWidget *TextEditShadowWidget::getTextEditWidget()
 
 void TextEditShadowWidget::showWidget(const QPoint &point)
 {
-    //QPoint pos = point - QPoint(this->layout()->margin(), this->layout()->margin());
-
     QPoint pos = point;
-
-    //如果下边超出程序则向上移动
-    if (Dr::isTabletEnvironment() && (pos.y() + height() > m_TextEditWidget->m_brower->height()))
-        pos.setY(pos.y() - (pos.y() + height() - m_TextEditWidget->m_brower->height()));
 
     move(pos);
 

@@ -294,11 +294,7 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
 
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
-
-    if (Dr::isTabletEnvironment())
-        m_noteEditWidget->showWidget(mapFromGlobal(point));
-    else
-        m_noteEditWidget->showWidget(point);
+    m_noteEditWidget->showWidget(point);
 }
 
 bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
@@ -949,9 +945,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
     m_scroller->stop();
 
-    if (m_noteEditWidget && Dr::isTabletEnvironment())
-        m_noteEditWidget->hide();
-
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
         Qt::MouseButton btn = event->button();
         m_iconAnnot = nullptr;
@@ -1222,7 +1215,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 if (page) {
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
                     //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
-                    if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty() && !Dr::isTabletEnvironment()) {
+                    if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
                         m_tipsWidget->setText(browserAnno->annotationText());
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);

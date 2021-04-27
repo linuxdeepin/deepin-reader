@@ -71,12 +71,6 @@ signals:
      */
     void sigTouchPadEventSignal(QString name, QString direction, int fingers);
 
-    /**
-     * @brief sigImActiveChanged
-     * 系统分发的虚拟键盘状态信号
-     */
-    void sigImActiveChanged(bool);
-
 public slots:
     /**
      * @brief handleFiles
@@ -97,8 +91,6 @@ private:
     bool m_isBlockShutdown = false;
 
     QDBusInterface *m_blockShutdownInterface = nullptr;
-
-    QDBusInterface *m_keyboardInterface = nullptr;
 
     QDBusReply<QDBusUnixFileDescriptor> m_blockShutdownReply;
 };

@@ -74,16 +74,6 @@ bool DBusObject::registerOrNotify(QStringList arguments)
 
     dbus.registerObject(DBUS_SERVER_PATH, this, QDBusConnection::ExportScriptableSlots);
 
-    if (Dr::isTabletEnvironment() && nullptr == m_keyboardInterface) {
-        m_keyboardInterface = new QDBusInterface(DBUS_IM, DBUS_IM_PATH, DBUS_IM_INTERFACE, dbus);
-        if (m_keyboardInterface->isValid()) {
-            connect(m_keyboardInterface, SIGNAL(imActiveChanged(bool)), this, SIGNAL(sigImActiveChanged(bool)));
-        } else {
-            delete m_keyboardInterface;
-            m_keyboardInterface = nullptr;
-        }
-    }
-
     QDBusConnection::systemBus().connect(DBUS_GESTURE, DBUS_GESTURE_PATH, DBUS_GESTURE_INTERFACE, DBUS_GESTURE_SIGNAL, this, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
     return true;
@@ -165,7 +155,4 @@ DBusObject::~DBusObject()
 
     if (nullptr != m_blockShutdownInterface)
         delete m_blockShutdownInterface;
-
-    if (nullptr != m_keyboardInterface)
-        delete m_keyboardInterface;
 }

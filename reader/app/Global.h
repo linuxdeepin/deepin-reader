@@ -43,8 +43,6 @@ namespace Dr {
 #define PERF_PRINT_END(point, desc) Q_UNUSED(point) Q_UNUSED(desc)
 #endif
 
-bool isTabletEnvironment();
-
 /**
  * @brief The FileType enum
  * 支持文档类型
