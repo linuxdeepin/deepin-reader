@@ -636,6 +636,11 @@ void CentralDocPage::quitSlide()
     }
 }
 
+bool CentralDocPage::isSlide()
+{
+    return m_slideWidget != nullptr;
+}
+
 void CentralDocPage::handleSearch()
 {
     DocSheet *docSheet = getCurSheet();
