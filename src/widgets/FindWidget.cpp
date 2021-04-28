@@ -122,6 +122,7 @@ void FindWidget::slotEditAborted()
 void FindWidget::initWidget()
 {
     m_pSearchEdit = new DSearchEdit(this);
+    m_pSearchEdit->setObjectName("findSearchEdit_P");
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
     m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
     m_pSearchEdit->setFixedSize(QSize(270, 36));

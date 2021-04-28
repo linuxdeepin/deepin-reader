@@ -56,6 +56,7 @@ void PagingWidget::initWidget()
 
     m_pJumpPageLineEdit = new DLineEdit();
     m_pJumpPageLineEdit->setAccessibleName("Page");
+    m_pJumpPageLineEdit->setObjectName("Edit_Page_P");
     m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
     m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
     tW = 60;
