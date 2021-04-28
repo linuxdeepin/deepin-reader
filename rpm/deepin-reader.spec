@@ -63,8 +63,8 @@ popd
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/%{name}/translations/*.qm
 %{_datadir}/applications/%{name}.desktop
-/usr/lib/libdeepin-pdfium.*
-%{_datadir}/deepin-manual/manual-assets/application/deepin-reader/document-viewer/*
+# /usr/lib/libdeepin-pdfium.*
+# %{_datadir}/deepin-manual/manual-assets/application/deepin-reader/document-viewer/*
 
 %changelog
 * Thu Apr 16 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.9.0.26-1
