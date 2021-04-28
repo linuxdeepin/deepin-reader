@@ -65,6 +65,7 @@ popd
 %{_datadir}/applications/%{name}.desktop
 # /usr/lib/libdeepin-pdfium.*
 # %{_datadir}/deepin-manual/manual-assets/application/deepin-reader/document-viewer/*
+/usr/lib/deepin-reader/libdeepin-poppler*
 
 %changelog
 * Thu Apr 16 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.9.0.26-1
