@@ -666,6 +666,7 @@ void CentralDocPage::openFullScreen()
         return;
 
     if (!mainWindow->isFullScreen()) {
+        m_isMaximizedBeforeFullScreen = mainWindow->isMaximized();
         m_mainLayout->removeWidget(m_pTabBar);
         mainWindow->setDocTabBarWidget(m_pTabBar);
         mainWindow->showFullScreen();
@@ -683,7 +684,10 @@ bool CentralDocPage::quitFullScreen(bool force)
         m_mainLayout->insertWidget(0, m_pTabBar);
         m_pTabBar->setVisible(m_pTabBar->count() > 1);
         mainWindow->setDocTabBarWidget(nullptr);
-        if (mainWindow->isFullScreen())
+
+        if (m_isMaximizedBeforeFullScreen)
+            mainWindow->showMaximized();
+        else
             mainWindow->showNormal();
         return true;
     }
