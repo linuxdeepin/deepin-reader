@@ -295,7 +295,6 @@ void MainWindow::onMainWindowFull()
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
     m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->desktop()->screenGeometry().width(), fulltitleH);
 
-    m_FullTitleWidget->setEnabled(false);
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
 }
 
