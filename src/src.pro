@@ -73,7 +73,10 @@ poppler.files = $${3RDPARTTPATH}/lib/*.so*
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
 
-INSTALLS += target desktop icon poppler
+manual.path = /usr/share/deepin-manual/manual-assets/application
+manual.files = $$PWD/../assets/*
+
+INSTALLS += target desktop icon poppler manual
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
