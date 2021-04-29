@@ -432,7 +432,7 @@ bool CentralDocPage::saveAsCurrent()
         if (sFilter != "") {
             DFileDialog dialog(this);
             dialog.selectFile(sheet->filePath());
-            saveFilePath = dialog.getSaveFileName(nullptr, tr("Save as"), sheet->filePath(), sFilter);
+            saveFilePath = dialog.getSaveFileName(this, tr("Save as"), sheet->filePath(), sFilter);
 
             if (saveFilePath.endsWith("/.pdf")) {
                 DDialog dlg("", tr("Invalid file name"));
