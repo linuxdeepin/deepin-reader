@@ -926,21 +926,21 @@ Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &te
                 m_lastClickIconAnnotationItem->setDrawSelectRect(true);
             }
         }
+
+        QRectF renderBoundary;
+
+        const QList<QRectF> &annoBoundaries = annot->boundary();
+
+        for (int i = 0; i < annoBoundaries.size(); i++) {
+            renderBoundary = renderBoundary | annoBoundaries.at(i);
+        }
+
+        renderBoundary.adjust(-10, -10, 10, 10);
+
+        renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
+
+        m_sheet->handlePageModified(m_index);
     }
-
-    QRectF renderBoundary;
-
-    const QList<QRectF> &annoBoundaries = annot->boundary();
-
-    for (int i = 0; i < annoBoundaries.size(); i++) {
-        renderBoundary = renderBoundary | annoBoundaries.at(i);
-    }
-
-    renderBoundary.adjust(-10, -10, 10, 10);
-
-    renderRect(QRectF(renderBoundary.x() * m_scaleFactor, renderBoundary.y() * m_scaleFactor, renderBoundary.width() * m_scaleFactor, renderBoundary.height() * m_scaleFactor));
-
-    m_sheet->handlePageModified(m_index);
 
     return annot;
 }
