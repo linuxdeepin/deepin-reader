@@ -991,7 +991,12 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
             int curSchIndex = FPDFText_GetSchResultIndex(schandle);
             if (curSchIndex >= 0) {
                 const QVector<QRectF> &textrectfs = textRects(curSchIndex, text.length());
-                rectfs << textrectfs;
+                QRectF textRect;
+                for (const QRectF& rect : textrectfs) {
+                    textRect = textRect.united(rect);
+                }
+                rectfs << textRect;
+
             }
         };
     }
