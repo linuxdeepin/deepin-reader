@@ -3,12 +3,12 @@ Categories=Office;
 Exec=deepin-reader %F
 GenericName=Document Viewer
 Icon=deepin-reader
-MimeType=application/pdf;
+MimeType=application/pdf;image/vnd.djvu;image/vnd.djvu+multipage;application/wps-office.docx;
 Name=Document Viewer
 StartupNotify=true
 TryExec=deepin-reader
 Type=Application
-X-Deepin-Vendor=user-custom
+X-Deepin-Vendor=deepin
 
 # Translations:
 # Do not manually modify!
