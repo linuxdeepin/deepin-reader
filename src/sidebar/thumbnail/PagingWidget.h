@@ -40,6 +40,7 @@ class PagingWidget : public CustomWidget
 
 public:
     explicit PagingWidget(DocSheet *sheet, DWidget *parent = nullptr);
+
     ~PagingWidget() override;
 
     /**
@@ -120,14 +121,19 @@ private:
      */
     void pageNumberJump();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     DLabel              *m_pTotalPagesLab = nullptr;        // 当前文档总页数标签
     DLabel              *m_pCurrentPageLab = nullptr;       // 当前文档当前页码
     DIconButton         *m_pPrePageBtn = nullptr;           // 按钮 前一页
     DIconButton         *m_pNextPageBtn = nullptr;          // 按钮 后一页
     DLineEdit           *m_pJumpPageLineEdit = nullptr;     // 输入框 跳转页码
-    DocSheet            *m_sheet;
+    DocSheet            *m_sheet = nullptr;
     int                  m_curIndex = 0;
+
+    bool                 m_bHasLabel = false;
 };
 
 #endif // PAGINGWIDGET_H

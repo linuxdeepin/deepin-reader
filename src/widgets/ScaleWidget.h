@@ -40,8 +40,10 @@ class ScaleWidget : public Dtk::Widget::DWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(ScaleWidget)
+
 public:
     explicit ScaleWidget(Dtk::Widget::DWidget *parent = nullptr);
+
     ~ScaleWidget();
 
     /**
@@ -98,8 +100,11 @@ private slots:
 
 private:
     QPointer<DocSheet> m_sheet;
-    Dtk::Widget::DLineEdit *m_lineEdit;
+    Dtk::Widget::DLineEdit *m_lineEdit = nullptr;
     ScaleMenu *m_ScaleMenu = nullptr;
+    DIconButton *m_arrowBtn;
+
+
 };
 
 #endif // SCALEWIDGET_H

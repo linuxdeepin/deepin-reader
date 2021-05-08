@@ -23,6 +23,12 @@
 
 #include <QValidator>
 
+#include <DGuiApplicationHelper>
+#include <DApplication>
+#include <DFontSizeManager>
+
+#define LineEditSpacing  24
+
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : CustomWidget(parent), m_sheet(sheet)
 {
@@ -43,55 +49,49 @@ PagingWidget::~PagingWidget()
  */
 void PagingWidget::initWidget()
 {
-    m_pTotalPagesLab = new DLabel(QString("/xxx"));
+    m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
-    QFont font = m_pTotalPagesLab->font();
-    font.setPixelSize(14);
 
-    m_pTotalPagesLab->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pTotalPagesLab, Dtk::Widget::DFontSizeManager::T6, true);
+
     m_pTotalPagesLab->setForegroundRole(DPalette::Text);
 
-    int tW = 36;
-    int tH = 36;
-
-    m_pJumpPageLineEdit = new DLineEdit();
+    m_pJumpPageLineEdit = new DLineEdit(this);
     m_pJumpPageLineEdit->setAccessibleName("Page");
     m_pJumpPageLineEdit->setObjectName("Edit_Page_P");
     m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
     m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
-    tW = 60;
-    tH = 36;
-
-    m_pJumpPageLineEdit->setFixedSize(tW, tH);
+    m_pJumpPageLineEdit->setFixedSize(60, 36);
     m_pJumpPageLineEdit->setFocusPolicy(Qt::StrongFocus);
+    m_pJumpPageLineEdit->setClearButtonEnabled(false);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
-    m_pJumpPageLineEdit->setClearButtonEnabled(false);
-    font = m_pJumpPageLineEdit->font();
-    font.setPixelSize(14);
 
-    m_pJumpPageLineEdit->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pJumpPageLineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &PagingWidget::onEditFinished);
+
     m_pJumpPageLineEdit->setForegroundRole(DPalette::Text);
 
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setAccessibleName("Button_ThumbnailPre");
     m_pPrePageBtn->setObjectName("thumbnailPreBtn");
-    m_pPrePageBtn->setFixedSize(QSize(tW, tH));
+    m_pPrePageBtn->setFixedSize(QSize(36, 36));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(tW, tH));
+    m_pNextPageBtn->setFixedSize(QSize(36, 36));
     m_pNextPageBtn->setAccessibleName("Button_ThumbnailNext");
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
 
-    m_pCurrentPageLab = new DLabel("");
+    m_pCurrentPageLab = new DLabel(this);
     m_pCurrentPageLab->setAccessibleName("CurrentPage");
-    font = m_pCurrentPageLab->font();
-    font.setPixelSize(14);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_pCurrentPageLab, Dtk::Widget::DFontSizeManager::T6, true);
 
-    m_pCurrentPageLab->setFont(font);
     m_pCurrentPageLab->setForegroundRole(DPalette::Text);
+    m_pCurrentPageLab->setVisible(false);
 
     auto hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(10, 6, 10, 6);
@@ -120,20 +120,28 @@ void PagingWidget::slotUpdateTheme()
 
 void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
 {
-    if (currntPage == 1) {                  //  第一页
+    if (currntPage == 1) {// 第一页
         m_pPrePageBtn->setEnabled(false);
-        if (totalPage == 1) {               //  也是最后一页
+        if (totalPage == 1) {// 也是最后一页
             m_pNextPageBtn->setEnabled(false);
         } else {
             m_pNextPageBtn->setEnabled(true);
         }
-    } else if (currntPage == totalPage) {   //    最后一页
+    } else if (currntPage == totalPage) {// 最后一页
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(false);
-    } else {                                //  中间页
+    } else {// 中间页
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(true);
     }
+}
+
+void PagingWidget::resizeEvent(QResizeEvent *event)
+{
+    if (m_curIndex >= 0)
+        setIndex(m_curIndex);
+
+    QWidget::resizeEvent(event);
 }
 
 void PagingWidget::setIndex(int index)
@@ -147,49 +155,43 @@ void PagingWidget::setIndex(int index)
     int currntPage = inputData + 1;     //  + 1 是为了 数字 从1 开始显示
     setBtnState(currntPage, totalPage);
 
-    if (m_pCurrentPageLab) {
-        m_pCurrentPageLab->setText(QString::number(currntPage));
+    int iControlMaxWidth = (this->width() - m_pJumpPageLineEdit->width() - m_pPrePageBtn->width() - m_pNextPageBtn->width() - (10 + 6) * 2) / 2;
+    m_pTotalPagesLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString("/ %1").arg(totalPage), Qt::ElideRight, iControlMaxWidth));
+    m_pTotalPagesLab->setToolTip(QString("%1").arg(totalPage));
+
+    if (m_bHasLabel) {
+        m_pCurrentPageLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, iControlMaxWidth));
+        m_pCurrentPageLab->setToolTip(QString::number(currntPage));
+
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
-        m_pJumpPageLineEdit->setText(sPage);
+        m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(sPage, Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     } else {
-        m_pJumpPageLineEdit->setText(QString::number(currntPage));
+        m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     }
 }
 
-/**
- * 文档打开成功
- * 1. 进行控件初始化
- * 2.设置总页数 和 当前页码
- *
- */
 void PagingWidget::handleOpenSuccess()
 {
     if (nullptr == m_sheet)
         return;
 
-    bool isHasLabel = m_sheet->haslabel();
-    if (!isHasLabel) {
-        delete m_pCurrentPageLab;
-        m_pCurrentPageLab =  nullptr;
-    }
+    m_bHasLabel = m_sheet->haslabel();
+    m_pCurrentPageLab->setVisible(m_bHasLabel);
 
     int totalPage = m_sheet->pagesNumber();
-    if (m_pCurrentPageLab == nullptr) {   //  不可读取页码, 则设置只能输入大于 0 的数字
-        //  m_pJumpPageLineEdit->lineEdit()->setValidator(new QIntValidator(1, totalPage, this));
-    }
+
 
     m_pTotalPagesLab->setText(QString("/ %1").arg(totalPage));
     int currentIndex = m_sheet->currentIndex();
     setIndex(currentIndex);
 }
 
-//  输入框  敲回车键 响应
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
-    if (m_pCurrentPageLab == nullptr) {
-        normalChangePage();
-    } else {
+    if (m_bHasLabel) {
         pageNumberJump();
+    } else {
+        normalChangePage();
     }
 }
 

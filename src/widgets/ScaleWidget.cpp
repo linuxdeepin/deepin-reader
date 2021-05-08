@@ -22,6 +22,10 @@
 
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <DApplication>
+#include <DFontSizeManager>
+
+#define LineEditSpacing 24
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
@@ -44,23 +48,25 @@ void ScaleWidget::initWidget()
     m_lineEdit = new DLineEdit(this);
     m_lineEdit->setObjectName("scaleEdit_P");
     m_lineEdit->lineEdit()->setObjectName("scaleEdit");
-    QFont font = m_lineEdit->font();
-    font.setPixelSize(14);
-    m_lineEdit->setFont(font);
+    Dtk::Widget::DFontSizeManager::instance()->bind(m_lineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
+
+    connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
+                this, &ScaleWidget::onEditFinished);
+
     m_lineEdit->setFixedSize(120, 36);
 
-    DIconButton *arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
-    arrowBtn->setObjectName("editArrowBtn");
-    arrowBtn->setFixedSize(32, 32);
-    arrowBtn->move(m_lineEdit->width() - arrowBtn->width() - 2, 2);
-    m_lineEdit->lineEdit()->setTextMargins(0, 0, arrowBtn->width(), 0);
+    m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
+    m_arrowBtn->setObjectName("editArrowBtn");
+    m_arrowBtn->setFixedSize(32, 32);
+    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, 2);
+    m_lineEdit->lineEdit()->setTextMargins(0, 0, m_arrowBtn->width(), 0);
     m_lineEdit->setClearButtonEnabled(false);
 
     connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
     connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
-    connect(arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
+    connect(m_arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
 
-    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement);
+    DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement, this);
     pPreBtn->setObjectName("SP_DecreaseElement");
     DStyle::setFrameRadius(pPreBtn, 12);
     pPreBtn->setFixedSize(24, 24);
@@ -120,7 +126,7 @@ void ScaleWidget::onEditFinished()
         return;
 
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-    m_lineEdit->setText(text);
+    m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, m_lineEdit->width() - m_arrowBtn->width() - 2 - LineEditSpacing));
 }
 
 void ScaleWidget::setSheet(DocSheet *sheet)
@@ -135,7 +141,7 @@ void ScaleWidget::setSheet(DocSheet *sheet)
 
     m_lineEdit->clear();
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
-    m_lineEdit->setText(text);
+    m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, m_lineEdit->width() - m_arrowBtn->width() - 2 - LineEditSpacing));
     m_lineEdit->lineEdit()->setCursorPosition(0);
 }
 
