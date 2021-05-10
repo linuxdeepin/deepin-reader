@@ -416,7 +416,7 @@ void MainWindow::initBase()
 
     this->setEnableSystemMove(false);
     this->setEnableSystemResize(false);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowMaximizeButtonHint);
+    this->setWindowFlags(windowFlags() & ~(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint));
 
     this->move(0, 0);
     this->setFixedSize(QApplication::desktop()->availableGeometry().size());
