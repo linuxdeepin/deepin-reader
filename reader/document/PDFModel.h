@@ -77,6 +77,8 @@ public:
 
     Link getLinkAtPoint(const QPointF &point) override;
 
+    bool hasWidgetAnnots() const override;
+
     QString text(const QRectF &rect) const override;
 
     QList<Word> words() override;

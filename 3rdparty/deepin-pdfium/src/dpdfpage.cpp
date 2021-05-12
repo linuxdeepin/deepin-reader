@@ -231,9 +231,11 @@ bool DPdfPagePrivate::loadAnnots()
             type = DPdfAnnot::AHighlight;
         else if (FPDF_ANNOT_LINK == subType)
             type = DPdfAnnot::ALink;
-        else if (FPDF_ANNOT_CIRCLE == subType) {
+        else if (FPDF_ANNOT_CIRCLE == subType)
             type = DPdfAnnot::ACIRCLE;
-        }
+        else if (FPDF_ANNOT_WIDGET == subType)
+            type = DPdfAnnot::AWIDGET;
+
         //取出的rect为基于自身旋转前，现将转成基于旋转后的 m_width_pt/m_height_pt 为受旋转影响后的宽高
         qreal actualHeight = (rotation % 2 == 0) ? m_height_pt : m_width_pt;
 
@@ -392,12 +394,19 @@ bool DPdfPagePrivate::loadAnnots()
 
             m_dAnnots.append(dAnnot);
 
+        } else if (DPdfAnnot::AWIDGET == type) {
+            //has WIDGET annot
+            DPdfWidgetAnnot *dAnnot = new DPdfWidgetAnnot;
+
+            m_dAnnots.append(dAnnot);
+
         } else {
             //其他类型 用于占位 对应索引
             DPdfUnknownAnnot *dAnnot = new DPdfUnknownAnnot;
 
             m_dAnnots.append(dAnnot);
         }
+
         FPDFPage_CloseAnnot(annot);
     }
 
@@ -580,6 +589,17 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     if (nullptr != bitmap) {
         FPDF_RenderPageBitmap(bitmap, page, slice.x(), slice.y(), slice.width(), slice.height(), width, height, 0, FPDF_ANNOT);
+
+        if (slice.width() == width && slice.height() == height) {
+            FPDF_FORMFILLINFO info;
+
+            info.version = 1;
+
+            FPDF_FORMHANDLE firmHandle = FPDFDOC_InitFormFillEnvironment(d_func()->m_doc, &info);
+
+            FPDF_FFLDraw(firmHandle, bitmap, page, 0, 0,  width, height, 0, FPDF_ANNOT);
+        }
+
         FPDFBitmap_Destroy(bitmap);
     }
 
@@ -1010,6 +1030,7 @@ QList<DPdfAnnot *> DPdfPage::annots()
     QList<DPdfAnnot *> dannots;
 
     const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots();
+
     foreach (DPdfAnnot *dannot, dAnnots) {
         if (dannot->type() == DPdfAnnot::AText || dannot->type() == DPdfAnnot::AHighlight) {
             dannots.append(dannot);
@@ -1033,6 +1054,21 @@ QList<DPdfAnnot *> DPdfPage::links()
     }
 
     return links;
+}
+
+QList<DPdfAnnot *> DPdfPage::widgets()
+{
+    QList<DPdfAnnot *> widgets;
+
+    const QList<DPdfAnnot *> &dAnnots = d_func()->allAnnots();
+    foreach (DPdfAnnot *annot, dAnnots) {
+        if (annot->type() == DPdfAnnot::AWIDGET) {
+            widgets.append(annot);
+            continue;
+        }
+    }
+
+    return widgets;
 }
 
 bool DPdfPage::initAnnot(DPdfAnnot *dAnnot)

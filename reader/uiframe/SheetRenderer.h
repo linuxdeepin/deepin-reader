@@ -132,6 +132,13 @@ public:
     bool inLink(int index, const QPointF &pos);
 
     /**
+     * @brief hasWidgets
+     * @param index
+     * @return
+     */
+    bool hasWidgetAnnots(int index);
+
+    /**
      * @brief outline
      * 文档中的链接
      * @return

@@ -590,7 +590,9 @@ bool PageRenderThread::execNextDocPageAnnotationTask()
 
     const QList<deepin_reader::Annotation *> annots = task.sheet->renderer()->getAnnotations(task.page->itemIndex());
 
-    emit sigDocPageAnnotationTaskFinished(task, annots);
+    const bool hasWidgetAnnots = task.sheet->renderer()->hasWidgetAnnots(task.page->itemIndex());
+
+    emit sigDocPageAnnotationTaskFinished(task, annots, hasWidgetAnnots);
 
     return true;
 }
@@ -716,10 +718,10 @@ void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<dee
     }
 }
 
-void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots)
+void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots, bool hasWidgetAnnots)
 {
     if (DocSheet::existSheet(task.sheet)) {
-        task.page->handleAnnotationLoaded(annots);
+        task.page->handleAnnotationLoaded(annots, hasWidgetAnnots);
     }
 }
 

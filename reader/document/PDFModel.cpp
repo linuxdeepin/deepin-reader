@@ -125,6 +125,11 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
     return link;
 }
 
+bool PDFPage::hasWidgetAnnots() const
+{
+    return m_page->widgets().count() > 0;
+}
+
 QString PDFPage::text(const QRectF &rect) const
 {
     return m_page->text(rect).simplified();
@@ -290,6 +295,7 @@ QList< Annotation * > PDFPage::annotations() const
     QList< Annotation * > annotations;
 
     const QList<DPdfAnnot *> &annos = m_page->annots();
+
     foreach (DPdfAnnot *dannotation, annos) {
         annotations.append(new PDFAnnotation(dannotation));
     }

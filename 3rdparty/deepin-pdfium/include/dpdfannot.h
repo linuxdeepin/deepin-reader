@@ -18,7 +18,8 @@ public:
         ALink = 3,
         AUNDERLINE = 4,
         ASQUARE = 5,
-        ACIRCLE = 6
+        ACIRCLE = 6,
+        AWIDGET = 7
     };
 
     virtual ~DPdfAnnot();
@@ -168,6 +169,17 @@ private:
     int m_index = -1;
     float m_left = 0;
     float m_top = 0;
+};
+
+class DEEPDF_EXPORT DPdfWidgetAnnot : public DPdfAnnot
+{
+public:
+    DPdfWidgetAnnot();
+
+    bool pointIn(QPointF pos) override;
+
+    QList<QRectF> boundaries() override;
+
 };
 
 class DEEPDF_EXPORT DPdfUnknownAnnot : public DPdfAnnot

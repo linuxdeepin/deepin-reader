@@ -139,12 +139,16 @@ public:
 
     virtual DPdfAnnot *ownAnnotation() = 0;
 
-    //数值同poppler类型
+    //数值同dpdf类型
     enum AnnotationType {
         AUnknown = 0,         ///< 前期支持以外的
         AText = 1,            ///< TextAnnotation
         AHighlight = 2,       ///< HighlightAnnotation
-        ALink = 3
+        ALink = 3,
+        AUNDERLINE = 4,
+        ASQUARE = 5,
+        ACIRCLE = 6,
+        AWIDGET = 7
     };
 
     virtual int type() = 0;
@@ -187,6 +191,7 @@ public:
     virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
+    virtual bool hasWidgetAnnots() const { return false; }
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color) { Q_UNUSED(boundaries) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
