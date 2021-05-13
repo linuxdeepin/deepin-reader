@@ -58,6 +58,8 @@ void ReadMagnifierManager::run()
             const QImage &image = task.page->getImagePoint(task.scaleFactor, task.mousePos);
             QMetaObject::invokeMethod(task.target, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(const MagnifierInfo_t &, task), Q_ARG(const QImage &, image));
         }
+
+        msleep(100);
     }
 }
 
