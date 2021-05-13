@@ -221,8 +221,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
         PageRenderThread::clearImageTasks(m_sheet, this, m_pixmapId);
 
-        //此处有个遗留问题，当被加载的是一个大文当且有签名，此处加载时还未取到m_hasWidgetAnnot，导致进入到大文当加载逻辑，而大文当加载会不加载签章
-        if (isBigDoc() && !m_hasWidgetAnnot) {
+        if (isBigDoc()) {
             DocPageBigImageTask task;
 
             task.sheet = m_sheet;
@@ -380,7 +379,7 @@ void BrowserPage::handleWordLoaded(const QList<Word> &words)
     scaleWords(true);
 }
 
-void BrowserPage::handleAnnotationLoaded(const QList<Annotation *> &annots, bool hasWidgetAnnots)
+void BrowserPage::handleAnnotationLoaded(const QList<Annotation *> &annots)
 {
     m_annotatinIsRendering = false;
 
@@ -401,8 +400,6 @@ void BrowserPage::handleAnnotationLoaded(const QList<Annotation *> &annots, bool
 
     qDeleteAll(m_annotationItems);
     m_annotationItems.clear();
-
-    m_hasWidgetAnnot = hasWidgetAnnots;
 
     m_annotations = annots;
 
@@ -600,7 +597,7 @@ void BrowserPage::scaleWords(bool force)
 QList<deepin_reader::Annotation *> BrowserPage::annotations()
 {
     if (!m_hasLoadedAnnotation) {
-        handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()), m_sheet->renderer()->hasWidgetAnnots(itemIndex()));
+        handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()));
     }
 
     return m_annotations;
@@ -678,7 +675,7 @@ Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
     if (boundaries.count() > 0) {
         //需要保证已经加载注释
         if (!m_hasLoadedAnnotation) {
-            handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()), m_sheet->renderer()->hasWidgetAnnots(itemIndex()));
+            handleAnnotationLoaded(m_sheet->renderer()->getAnnotations(itemIndex()));
         }
 
         highLightAnnot = m_sheet->renderer()->addHighlightAnnotation(itemIndex(), boundaries, text, color);

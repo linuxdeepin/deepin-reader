@@ -374,7 +374,7 @@ private:
      * 加载注释
      * @param annots 要加载的注释
      */
-    void handleAnnotationLoaded(const QList<Annotation *> &annots, bool hasWidgetAnnots);
+    void handleAnnotationLoaded(const QList<Annotation *> &annots);
 
     /**
      * @brief bookmarkRect
@@ -442,7 +442,6 @@ private:
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
 
-    bool m_hasWidgetAnnot = false;                          //是否含有widget类型注释
     QSizeF m_originSizeF;
 };
 

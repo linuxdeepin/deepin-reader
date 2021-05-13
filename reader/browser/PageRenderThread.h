@@ -178,7 +178,7 @@ signals:
 
     void sigDocPageWordTaskFinished(DocPageWordTask, QList<deepin_reader::Word>);
 
-    void sigDocPageAnnotationTaskFinished(DocPageAnnotationTask, QList<deepin_reader::Annotation *>, bool hasWidgetAnnots);
+    void sigDocPageAnnotationTaskFinished(DocPageAnnotationTask, QList<deepin_reader::Annotation *>);
 
     void sigDocPageThumbnailTaskFinished(DocPageThumbnailTask, QPixmap);
 
@@ -193,7 +193,7 @@ private slots:
 
     void onDocPageWordTaskFinished(DocPageWordTask task, QList<deepin_reader::Word> words);
 
-    void onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots, bool hasWidgetAnnots);
+    void onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots);
 
     void onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap pixmap);
 

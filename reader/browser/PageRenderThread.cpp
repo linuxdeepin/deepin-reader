@@ -327,11 +327,15 @@ void PageRenderThread::run()
 
         QList<QRect> renderRects;
 
-        int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
-
-        for (int i = 0; i < wCount; ++i) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
-            renderRects.append(QRect(i * 1000, 0, 1000, task.rect.height()));
-        };
+        if (task.sheet->renderer()->hasWidgetAnnots(task.page->itemIndex())) {
+            //if has signature,render whole rect
+            renderRects.append(task.rect);
+        } else {
+            int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
+            for (int i = 0; i < wCount; ++i) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
+                renderRects.append(QRect(i * 1000, 0, 1000, task.rect.height()));
+            };
+        }
 
         QPixmap pixmap = QPixmap(task.rect.width(), task.rect.height());
 
@@ -590,9 +594,7 @@ bool PageRenderThread::execNextDocPageAnnotationTask()
 
     const QList<deepin_reader::Annotation *> annots = task.sheet->renderer()->getAnnotations(task.page->itemIndex());
 
-    const bool hasWidgetAnnots = task.sheet->renderer()->hasWidgetAnnots(task.page->itemIndex());
-
-    emit sigDocPageAnnotationTaskFinished(task, annots, hasWidgetAnnots);
+    emit sigDocPageAnnotationTaskFinished(task, annots);
 
     return true;
 }
@@ -718,10 +720,10 @@ void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<dee
     }
 }
 
-void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots, bool hasWidgetAnnots)
+void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask task, QList<deepin_reader::Annotation *> annots)
 {
     if (DocSheet::existSheet(task.sheet)) {
-        task.page->handleAnnotationLoaded(annots, hasWidgetAnnots);
+        task.page->handleAnnotationLoaded(annots);
     }
 }
 
