@@ -302,8 +302,8 @@ void Central::onTouchPadEvent(QString name, QString direction, int fingers)
 
 void Central::onImActiveChanged(bool actived)
 {
-    QTimer::singleShot(100, this, [=](){
-        QWidget* transparentTextWidget = focusWidget();
+    QTimer::singleShot(100, this, [ = ]() {
+        QWidget *transparentTextWidget = focusWidget();
         if (actived && transparentTextWidget && "TransparentTextEdit" == transparentTextWidget->objectName()) {
             int upValue = qMin(transparentTextWidget->mapToGlobal(transparentTextWidget->pos()).y() - m_widget->height() - 68, DBusObject::instance()->virtualKeyboardGeometry().height());
             setUpValue(upValue);

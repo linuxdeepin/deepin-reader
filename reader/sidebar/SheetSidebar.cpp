@@ -74,7 +74,15 @@ void SheetSidebar::initWidget()
 
     m_stackLayout = new QStackedLayout;
     QHBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->setContentsMargins(15, 0, 15, 0);
+
+    if (m_widgetsFlag.testFlag(PREVIEW_THUMBNAIL)
+            && m_widgetsFlag.testFlag(PREVIEW_CATALOG)
+            && m_widgetsFlag.testFlag(PREVIEW_BOOKMARK)
+            && m_widgetsFlag.testFlag(PREVIEW_NOTE)) {
+        hLayout->setContentsMargins(15, 0, 15, 0); // 显示所有DToolButton，pdf,docx
+    } else {
+        hLayout->setContentsMargins(49, 0, 48, 0); // 显示部分DToolButton，如DjVu
+    }
 
     QList<QWidget *> tabWidgetlst;
 
