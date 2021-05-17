@@ -144,7 +144,6 @@ void Central::setUpValue(int value)
 void Central::addFilesWithDialog()
 {
     DFileDialog dialog(this);
-    dialog.setWindowModality(Qt::WindowModal);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu *.docx)");
     dialog.setDirectory(QDir::homePath());
