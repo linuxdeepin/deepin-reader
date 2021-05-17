@@ -145,7 +145,7 @@ void TextEditWidget::hideEvent(QHideEvent *event)
     if (m_annotation == nullptr)
         return;
 
-    if (m_annotation->type() == deepin_reader::Annotation::AText &&  sText.isEmpty()) {
+    if (m_annotation->type() == deepin_reader::Annotation::AText && sText.isEmpty() && !event->spontaneous()) {
         emit sigRemoveAnnotation(m_annotation, !m_annotation->contents().isEmpty());
     } else if (m_annotation->contents() != sText) {
         emit sigUpdateAnnotation(m_annotation, sText);
