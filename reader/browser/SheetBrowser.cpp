@@ -982,9 +982,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
             deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
 
-            if (m_lastSelectIconAnnotPage)
-                m_lastSelectIconAnnotPage->setSelectIconRect(false);
-
             m_lastSelectIconAnnotPage = page;
 
             if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
