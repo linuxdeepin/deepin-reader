@@ -8,17 +8,17 @@ TEMPLATE = app
 
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += ddjvuapi dtkwidget poppler-qt5
+PKGCONFIG += ddjvuapi dtkwidget
 SRCPWD=$$PWD    #用于被单元测试方便的复用
 3RDPARTTPATH = $$SRCPWD/../3rdparty
 INCLUDEPATH += $$SRCPWD/uiframe
-#INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
+INCLUDEPATH += $${3RDPARTTPATH}/poppler-0.89.0/qt5/src
 
-#LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
-#!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
-#    error("Build deepin-poppler library failed.")
-#}
-#QMAKE_RPATHDIR += /usr/lib/deepin-reader
+LIBS += -L"$${3RDPARTTPATH}/lib" -ldeepin-poppler-qt -ldeepin-poppler
+!system(mkdir -p $${3RDPARTTPATH}/output && cd $${3RDPARTTPATH}/output && cmake $${3RDPARTTPATH}/poppler-0.89.0 && make){
+    error("Build deepin-poppler library failed.")
+}
+QMAKE_RPATHDIR += /usr/lib/deepin-reader
 
 QMAKE_CXXFLAGS += "-Wl,--as-needed -fPIE"
 QMAKE_LFLAGS += -pie
@@ -66,8 +66,8 @@ target.path   = /usr/bin
 desktop.path  = /usr/share/applications
 desktop.files = $$SRCPWD/deepin-reader.desktop
 
-#poppler.path = /usr/lib/deepin-reader
-#poppler.files = $${3RDPARTTPATH}/lib/*.so*
+poppler.path = /usr/lib/deepin-reader
+poppler.files = $${3RDPARTTPATH}/lib/*.so*
 
 icon.path = /usr/share/icons/hicolor/scalable/apps
 icon.files = $$SRCPWD/deepin-reader.svg
@@ -75,7 +75,7 @@ icon.files = $$SRCPWD/deepin-reader.svg
 manual.path = /usr/share/deepin-manual/manual-assets/application
 manual.files = $$PWD/../assets/*
 
-INSTALLS += target desktop icon manual
+INSTALLS += target desktop poppler icon manual
 
 CONFIG(release, debug|release) {
     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
