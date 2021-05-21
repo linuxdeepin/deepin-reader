@@ -43,8 +43,8 @@ static const size_t kPartitionPageShift = 18;  // 256 KiB
 static const size_t kPartitionPageShift = 16;  // 64 KiB
 #else
 //default page size changed to 64k
-static const size_t kPartitionPageShift = 18;  // 256 KiB
-//static const size_t kPartitionPageShift = 14;  // 16 KiB
+//static const size_t kPartitionPageShift = 18;  // 256 KiB
+static const size_t kPartitionPageShift = 14;  // 16 KiB
 #endif
 static const size_t kPartitionPageSize = 1 << kPartitionPageShift;
 static const size_t kPartitionPageOffsetMask = kPartitionPageSize - 1;
