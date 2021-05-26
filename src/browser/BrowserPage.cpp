@@ -1148,7 +1148,7 @@ void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
         if (m_parent->currentPage() == this->itemIndex() + 1)
             m_searchSelectLighRectf = rectflst.first();
         m_searchLightrectLst = rectflst;
-        update();
+//       update(); // 服务器欧拉版会出现搜索不显示、无法选中文字，需要注释
     }
 }
 
