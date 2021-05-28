@@ -58,7 +58,7 @@ void EncryptionPage::InitUI()
     m_nextbutton = new DPushButton(this);
     m_nextbutton->setObjectName("ensureBtn");
     m_nextbutton->setFixedSize(360, 36);
-    m_nextbutton->setText(tr("OK"));
+    m_nextbutton->setText(tr("OK", "button"));
     m_nextbutton->setDisabled(true);
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);

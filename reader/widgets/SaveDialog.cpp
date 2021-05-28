@@ -34,8 +34,8 @@ int SaveDialog::showExitDialog(QString fileName)
 {
     DDialog dlg(tr("Save the changes to \"%1\"?").arg(fileName), "");
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
-    dlg.addButtons(QStringList() <<  tr("Cancel") << tr("Discard"));
-    dlg.addButton(tr("Save"), true, DDialog::ButtonRecommend);
+    dlg.addButtons(QStringList() <<  tr("Cancel", "button") << tr("Discard", "button"));
+    dlg.addButton(tr("Save", "button"), true, DDialog::ButtonRecommend);
     QMargins mar(12, 12, 12, 12);
     dlg.setContentLayoutContentsMargins(mar);
     int nRes = dlg.exec();
