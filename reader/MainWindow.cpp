@@ -417,9 +417,8 @@ void MainWindow::initBase()
     this->setEnableSystemMove(false);
     this->setEnableSystemResize(false);
     this->setWindowFlags(windowFlags() & ~(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint));
-
-    this->move(0, 0);
-    this->setFixedSize(QApplication::desktop()->availableGeometry().size());
+    setWindowRadius(0); //移除圆角
+    this->showMaximized(); //最大化
 }
 
 void MainWindow::onImActiveChanged(bool visible)
