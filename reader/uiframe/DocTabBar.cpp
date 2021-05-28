@@ -57,7 +57,7 @@ DocTabBar::DocTabBar(QWidget *parent)
 
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(onTabCloseRequested(int)));
 
-    connect(this, SIGNAL(tabAddRequested()), SLOT(onTabAddRequested()));
+    connect(this, SIGNAL(tabAddRequested()), SIGNAL(sigNeedOpenFilesExec()));
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(onTabChanged(int)));
 
@@ -314,11 +314,6 @@ void DocTabBar::onTabDroped(int, Qt::DropAction da, QObject *target)
 void DocTabBar::onSetCurrentIndex()
 {
     setCurrentIndex(m_delayIndex);
-}
-
-void DocTabBar::onTabAddRequested()
-{
-    emit sigNeedOpenFilesExec();
 }
 
 void DocTabBar::onTabCloseRequested(int index)

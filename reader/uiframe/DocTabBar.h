@@ -172,13 +172,6 @@ private slots:
     void onTabChanged(int);
 
     /**
-     * @brief onTabAddRequested
-     * 请求增加新的tab
-     * @param index
-     */
-    void onTabAddRequested();
-
-    /**
      * @brief onTabCloseRequested
      * 关闭哪个文档
      * @param index

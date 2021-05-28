@@ -24,7 +24,6 @@
 #include <DLabel>
 #include <DPushButton>
 #include <DSuggestButton>
-#include <DLabel>
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 
@@ -50,7 +49,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     chooseButton->setAccessibleName("SelectFile");
     chooseButton->setFocusPolicy(Qt::TabFocus);
     chooseButton->setFixedSize(302, 36);
-    connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::onChooseButtonClicked);
+    connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::sigNeedOpenFilesExec);
 
     auto layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -78,10 +77,10 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CentralNavPage::onThemeChanged);
 }
 
-void CentralNavPage::onChooseButtonClicked()
-{
-    emit sigNeedOpenFilesExec();
-}
+//void CentralNavPage::onChooseButtonClicked()
+//{
+//    emit sigNeedOpenFilesExec();
+//}
 
 //  主题切换
 void CentralNavPage::onThemeChanged()

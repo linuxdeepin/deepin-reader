@@ -44,12 +44,6 @@ signals:
 
 private slots:
     /**
-     * @brief onChooseButtonClicked
-     * 选择文档按钮被点击处理
-     */
-    void onChooseButtonClicked();
-
-    /**
      * @brief onThemeChanged
      * 主题变化时处理
      */

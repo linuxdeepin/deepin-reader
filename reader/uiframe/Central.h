@@ -99,7 +99,7 @@ public:
      * 本窗口处理快捷键
      * @param shortcut 快捷键字符串
      */
-    void handleShortcut(QString shortcut);
+    void handleShortcut(const QString &shortcut);
 
     /**
      * @brief handleClose
@@ -180,7 +180,7 @@ public slots:
      * @param fingers 手指数量 (1,2,3,4,5)
      * 注意libinput接收到触摸板事件后将接收到的数据通过Event广播出去
      */
-    void onTouchPadEvent(QString name, QString direction, int fingers);
+    void onTouchPadEvent(const QString &name, const QString &direction, int fingers);
 
     /**
      * @brief onKeyTriggered

@@ -178,8 +178,22 @@ private:
     QStringList m_initFilePathList;
 
 public:
+    /**
+     * @brief windowContainSheet 返回包含指定sheet的mainwindow
+     * @param sheet
+     * @return
+     */
     static MainWindow *windowContainSheet(DocSheet *sheet);
+    /**
+     * @brief allowCreateWindow 是否允许生成新窗口
+     * @return
+     */
     static bool allowCreateWindow();
+    /**
+     * @brief activateSheetIfExist 激活已打开的文档窗口
+     * @param filePath 文档路径
+     * @return
+     */
     static bool activateSheetIfExist(const QString &filePath);
     static MainWindow *createWindow(QStringList filePathList = QStringList());
     static MainWindow *createWindow(DocSheet *sheet);

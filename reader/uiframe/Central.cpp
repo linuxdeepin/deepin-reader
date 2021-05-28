@@ -191,7 +191,7 @@ QList<DocSheet *> Central::getSheets()
     return docPage()->getSheets();
 }
 
-void Central::handleShortcut(QString shortcut)
+void Central::handleShortcut(const QString &shortcut)
 {
     if (shortcut == Dr::key_ctrl_o) {
         addFilesWithDialog();
@@ -273,17 +273,17 @@ void Central::onShowTips(QWidget *parent, const QString &text, int iconIndex)
     }
 }
 
-void Central::onTouchPadEvent(QString name, QString direction, int fingers)
+void Central::onTouchPadEvent(const QString &name, const QString &direction, int fingers)
 {
     // 当前窗口被激活,且有焦点
     if (this->isActiveWindow()) {
-        if (name == "pinch" && fingers == 2) {
-            if (direction == "in") {
+        if ("pinch" == name && 2 == fingers) {
+            if ("in" == direction) {
                 // 捏合 in是手指捏合的方向 向内缩小
                 if (m_docPage) {
                     m_docPage->zoomOut();
                 }
-            } else if (direction == "out") {
+            } else if ("out" == direction) {
                 // 捏合 out是手指捏合的方向 向外放大
                 if (m_docPage) {
                     m_docPage->zoomIn();

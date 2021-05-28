@@ -439,9 +439,6 @@ TEST_F(Ut_UiFrame, UiFrameTest)
     mainWindow1->handleClose(false);
     mainWindow2->handleClose(false);
 
-    CentralNavPage centralPage;
-    centralPage.onChooseButtonClicked();
-
     delete mimeData;
     delete mainWindow1;
     delete mainWindow2;

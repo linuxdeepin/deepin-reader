@@ -78,7 +78,8 @@ TitleWidget::TitleWidget(DWidget *parent)
     parent->setProperty("orderlist", QVariant::fromValue(orderlst));
 
     for (QWidget *widget : orderlst) {
-        if (widget) widget->setFocusPolicy(Qt::TabFocus);
+        if (widget)
+            widget->setFocusPolicy(Qt::TabFocus);
     }
 }
 

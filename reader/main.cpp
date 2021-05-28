@@ -6,8 +6,9 @@
 #include "DBusObject.h"
 
 #include <DLog>
-#include <QCommandLineParser>
 #include <DApplicationSettings>
+
+#include <QCommandLineParser>
 #include <QDesktopWidget>
 #include <QAccessible>
 #include <QDebug>

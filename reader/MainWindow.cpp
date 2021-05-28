@@ -120,9 +120,8 @@ void MainWindow::activateSheet(DocSheet *sheet)
 
 bool MainWindow::handleClose(bool needToBeSaved)
 {
-    if (m_central)
-        if (!m_central->handleClose(needToBeSaved))
-            return false;
+    if ((nullptr != m_central) && (!m_central->handleClose(needToBeSaved)))
+        return false;
 
     this->close();
 
