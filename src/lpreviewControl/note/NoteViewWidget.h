@@ -46,6 +46,13 @@ signals:
 
     void sigNeedShowTips(const QString &tips, int index);
 
+private slots:
+    /**
+     * @brief slotCloseNoteWidget 关闭注释编辑框窗口
+     * @param isEsc 是否Esc键触发注释编辑框窗关闭
+     */
+    void slotCloseNoteWidget(bool isEsc = false);
+
 public:
     void showWidget(const QPoint &);
 
@@ -63,6 +70,10 @@ protected:
     void hideEvent(QHideEvent *event) override;
 
     void initWidget() override;
+
+    void focusOutEvent(QFocusEvent *event) override;
+
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     void initConnections();

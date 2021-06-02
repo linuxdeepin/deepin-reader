@@ -17,12 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "TransparentTextEdit.h"
-
-#include <DFontSizeManager>
-
 #include "application.h"
 #include "ModuleHeader.h"
 #include "MsgHeader.h"
+
+#include <DFontSizeManager>
+
+#include <QKeyEvent>
 
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
@@ -85,4 +86,21 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
         this->setTextCursor(textCursor);
         sigNeedShowTips(tr("Input limit reached"), 1);
     }
+}
+
+void TransparentTextEdit::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Escape == event->key()) {
+        Q_EMIT sigCloseNoteWidget(true);
+        return;
+    }
+
+    QTextEdit::keyPressEvent(event);
+}
+
+void TransparentTextEdit::focusOutEvent(QFocusEvent *event)
+{
+    QTextEdit::focusOutEvent(event);
+
+    Q_EMIT sigCloseNoteWidget();
 }

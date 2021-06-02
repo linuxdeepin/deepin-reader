@@ -31,8 +31,7 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
 {
 
     m_nWidgetType = NOTE_HIGHLIGHT;
-
-    setWindowFlag(Qt::Popup);
+    setWindowFlags(windowFlags() | Qt::Dialog);
     int tW = 250;
     int tH = 320;
 
@@ -46,11 +45,22 @@ NoteViewWidget::NoteViewWidget(DWidget *parent)
     slotUpdateTheme();
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &NoteViewWidget::slotUpdateTheme);
+    connect(m_pTextEdit, &TransparentTextEdit::sigCloseNoteWidget, this, &NoteViewWidget::slotCloseNoteWidget);
 }
 
 NoteViewWidget::~NoteViewWidget()
 {
 
+}
+
+void NoteViewWidget::slotCloseNoteWidget(bool isEsc)
+{
+    if (isEsc) {
+        close();
+    } else if (nullptr != m_pTextEdit && !m_pTextEdit->hasFocus()
+               && !hasFocus()) {
+        close();
+    }
 }
 
 void NoteViewWidget::setEditText(const QString &note)
@@ -117,6 +127,23 @@ void NoteViewWidget::initWidget()
     m_pVLayout->addItem(m_pHLayoutContant);
 
     this->setLayout(m_pVLayout);
+}
+
+void NoteViewWidget::focusOutEvent(QFocusEvent *event)
+{
+    CustomWidget::focusOutEvent(event);
+
+    slotCloseNoteWidget();
+}
+
+void NoteViewWidget::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Escape == event->key()) {
+        slotCloseNoteWidget(true);
+        return;
+    }
+
+    CustomWidget::keyPressEvent(event);
 }
 
 void NoteViewWidget::initConnections()
