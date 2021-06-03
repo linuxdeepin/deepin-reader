@@ -3,7 +3,8 @@ QT += core gui sql printsupport dbus testlib widgets
 
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
-QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0
+#访问私有方法 -fno-access-control
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -fno-access-control -O0
 
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
@@ -32,6 +33,7 @@ SOURCES += \
     widgets/ut_widgets.cpp \
     sidebar/ut_sheetsidebar.cpp \
     browser/ut_browser.cpp \
+    browser/ut_sheetbrowser.cpp \
     document/ut_document.cpp
 
 HEADERS +=\
@@ -50,6 +52,8 @@ include($$PWD/../reader/src.pri)
 RESOURCES += \
     files.qrc
 
+#stub头文件路径
+INCLUDEPATH += $$PWD/include/gtest
 
 #安全测试选项
 if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
