@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
         return 0;
 
     QAccessible::installFactory(accessibleFactory);
+
+    //Dtk自动保存主题
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
 

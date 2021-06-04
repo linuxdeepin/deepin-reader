@@ -108,11 +108,11 @@ private slots:
     void onUpdateMagnifierImage(const MagnifierInfo_t &task, const QImage &image);
 
 private:
-    qreal m_lastScaleFactor;
+    qreal m_lastScaleFactor = 0.0;
     QPoint m_lastPoint;
     QPoint m_lastScenePoint;
-    SheetBrowser *m_brwoser;
-    ReadMagnifierManager *m_readManager;
+    SheetBrowser *m_brwoser = nullptr;
+    ReadMagnifierManager *m_readManager = nullptr;
 };
 
 #endif // BROWSERMAGNIFIER_H

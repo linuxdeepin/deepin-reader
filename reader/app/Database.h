@@ -29,6 +29,20 @@ class DocSheet;
 class Sheet;
 class QDateTime;
 class DocumentView;
+
+class Transaction
+{
+public:
+    explicit Transaction(QSqlDatabase &database);
+    ~Transaction();
+    void commit();
+
+private:
+    bool m_committed;
+    QSqlDatabase &m_database;
+
+};
+
 class Database : public QObject
 {
     Q_OBJECT

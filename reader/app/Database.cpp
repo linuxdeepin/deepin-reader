@@ -40,31 +40,28 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-class Transaction
+Transaction::Transaction(QSqlDatabase &database)
+    : m_committed(false), m_database(database)
 {
-public:
-    explicit Transaction(QSqlDatabase &database) :  m_committed(false), m_database(database)
-    {
-        m_database.transaction();
+    if (!m_database.transaction()) {
+        qInfo() << m_database.lastError();
     }
+}
 
-    ~Transaction()
-    {
-        if (!m_committed) {
-            m_database.rollback();
+Transaction::~Transaction()
+{
+    if (!m_committed) {
+        if (!m_database.rollback()) {
+            qInfo() << m_database.lastError();
         }
     }
+}
 
-    void commit()
-    {
-        m_committed = m_database.commit();
-    }
+void Transaction::commit()
+{
+    m_committed = m_database.commit();
+}
 
-private:
-    bool m_committed;
-    QSqlDatabase &m_database;
-
-};
 
 Database *Database::s_instance = nullptr;
 
@@ -88,16 +85,19 @@ bool Database::prepareOperation()
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
-    query.exec("CREATE TABLE operation "
-               "(filePath TEXT primary key"
-               ",layoutMode INTEGER"
-               ",mouseShape INTEGER"
-               ",scaleMode INTEGER"
-               ",rotation INTEGER"
-               ",scaleFactor REAL"
-               ",sidebarVisible INTEGER"
-               ",sidebarIndex INTEGER"
-               ",currentPage INTEGER)");
+    if (!query.exec("CREATE TABLE operation "
+                    "(filePath TEXT primary key"
+                    ",layoutMode INTEGER"
+                    ",mouseShape INTEGER"
+                    ",scaleMode INTEGER"
+                    ",rotation INTEGER"
+                    ",scaleFactor REAL"
+                    ",sidebarVisible INTEGER"
+                    ",sidebarIndex INTEGER"
+                    ",currentPage INTEGER)")) {
+        qInfo() << query.lastError();
+        return false;
+    }
 
     if (!query.isActive()) {
         qInfo() << query.lastError();
@@ -113,7 +113,10 @@ bool Database::readOperation(DocSheet *sheet)
     if (nullptr != sheet && m_database.isOpen()) {
         QSqlQuery query(m_database);
 
-        query.prepare(" select * from operation where filePath = :filePath");
+        if (!query.prepare(" select * from operation where filePath = :filePath")) {
+            qInfo() << query.lastError();
+            return false;
+        }
         query.bindValue(":filePath", sheet->filePath());
         if (!query.exec()) {
             qInfo() << query.lastError().text();
@@ -140,9 +143,12 @@ bool Database::saveOperation(DocSheet *sheet)
     if (nullptr != sheet && m_database.isOpen()) {
         QSqlQuery query(m_database);
 
-        query.prepare(" replace into "
-                      " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,sidebarVisible,sidebarIndex,currentPage)"
-                      " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,:currentPage)");
+        if (!query.prepare(" replace into "
+                           " operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,sidebarVisible,sidebarIndex,currentPage)"
+                           " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,:sidebarVisible,:sidebarIndex,:currentPage)")) {
+            qInfo() << query.lastError();
+            return false;
+        }
 
         query.bindValue(":filePath", sheet->filePath());
         query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
@@ -166,7 +172,10 @@ bool Database::prepareBookmark()
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
-    query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)");
+    if (!query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)")) {
+        qInfo() << query.lastError();
+        return false;
+    }
 
     if (!query.isActive()) {
         qInfo() << query.lastError();
@@ -182,7 +191,10 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
     if (m_database.isOpen()) {
         QSqlQuery query(m_database);
 
-        query.prepare(" select * from bookmark where filePath = :filePath");
+        if (!query.prepare(" select * from bookmark where filePath = :filePath")) {
+            qInfo() << query.lastError();
+            return false;
+        }
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
@@ -207,7 +219,10 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
 
         Transaction transaction(m_database);
 
-        query.prepare("delete from bookmark where filePath = :filePath");
+        if (!query.prepare("delete from bookmark where filePath = :filePath")) {
+            qInfo() << query.lastError();
+            return false;
+        }
 
         query.bindValue(":filePath", filePath);
 
@@ -217,9 +232,12 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
         }
 
         foreach (int index, bookmarks) {
-            query.prepare(" insert into "
-                          " bookmark(filePath,bookmarkIndex)"
-                          " VALUES(:filePath,:bookmarkIndex)");
+            if (!query.prepare(" insert into "
+                               " bookmark(filePath,bookmarkIndex)"
+                               " VALUES(:filePath,:bookmarkIndex)")) {
+                qInfo() << query.lastError();
+                return false;
+            }
 
             query.bindValue(":filePath", filePath);
 
@@ -247,13 +265,19 @@ Database::Database(QObject *parent) : QObject(parent)
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     m_database.setDatabaseName(QDir(path).filePath("user.db"));
-    m_database.open();
+    if (!m_database.open()) {
+        qInfo() << m_database.lastError();
+    }
 
     if (m_database.isOpen()) {
         {
             QSqlQuery query(m_database);
-            query.exec("PRAGMA synchronous = OFF");
-            query.exec("PRAGMA journal_mode = MEMORY");
+            if (!query.exec("PRAGMA synchronous = OFF")) {
+                qInfo() << query.lastError();
+            }
+            if (!query.exec("PRAGMA journal_mode = MEMORY")) {
+                qInfo() << query.lastError();
+            }
         }
 
         const QStringList tables = m_database.tables();
