@@ -147,6 +147,11 @@ private:
     void showDefaultSize();
 
     /**
+     * @brief closeAboutForWindow 关闭“关于”弹窗
+     */
+    void closeAboutForWindow();
+
+    /**
      * @brief zoomIn
      * 放大
      */
