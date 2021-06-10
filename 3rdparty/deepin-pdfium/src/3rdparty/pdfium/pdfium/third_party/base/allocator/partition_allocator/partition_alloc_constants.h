@@ -15,7 +15,7 @@ namespace pdfium {
 namespace base {
 
 // Allocation granularity of sizeof(void*) bytes.
-static const size_t kAllocationGranularity = sizeof(void*);
+static const size_t kAllocationGranularity = sizeof(void *);
 static const size_t kAllocationGranularityMask = kAllocationGranularity - 1;
 static const size_t kBucketShift = (kAllocationGranularity == 8) ? 3 : 2;
 
@@ -42,6 +42,8 @@ static const size_t kPartitionPageShift = 18;  // 256 KiB
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static const size_t kPartitionPageShift = 16;  // 64 KiB
 #else
+//default page size changed to 64k
+//static const size_t kPartitionPageShift = 18;  // 256 KiB
 static const size_t kPartitionPageShift = 14;  // 16 KiB
 #endif
 static const size_t kPartitionPageSize = 1 << kPartitionPageShift;
@@ -161,7 +163,7 @@ static const size_t kGenericMaxBucketed =
 static const size_t kGenericMinDirectMappedDownsize = kGenericMaxBucketed + 1;
 static const size_t kGenericMaxDirectMapped =
     (1UL << 31) + kPageAllocationGranularity;  // 2 GiB plus 1 more page.
-static const size_t kBitsPerSizeT = sizeof(void*) * CHAR_BIT;
+static const size_t kBitsPerSizeT = sizeof(void *) *CHAR_BIT;
 
 // Constant for the memory reclaim logic.
 static const size_t kMaxFreeableSpans = 16;
@@ -179,10 +181,10 @@ static const unsigned char kFreedByte = 0xCD;
 
 // Flags for `PartitionAllocGenericFlags`.
 enum PartitionAllocFlags {
-  PartitionAllocReturnNull = 1 << 0,
-  PartitionAllocZeroFill = 1 << 1,
+    PartitionAllocReturnNull = 1 << 0,
+    PartitionAllocZeroFill = 1 << 1,
 
-  PartitionAllocLastFlag = PartitionAllocZeroFill
+    PartitionAllocLastFlag = PartitionAllocZeroFill
 };
 
 }  // namespace base

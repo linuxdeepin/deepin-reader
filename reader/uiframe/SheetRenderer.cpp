@@ -164,6 +164,14 @@ bool SheetRenderer::inLink(int index, const QPointF &pos)
     return link.isValid();
 }
 
+bool SheetRenderer::hasWidgetAnnots(int index)
+{
+    if (m_pages.count() <= index)
+        return false;
+
+    return m_pages.value(index)->hasWidgetAnnots();
+}
+
 deepin_reader::Outline SheetRenderer::outline()
 {
     if (m_document == nullptr)

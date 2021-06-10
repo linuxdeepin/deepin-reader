@@ -38,7 +38,7 @@ public:
     QSizeF sizeF() const;
 
     /**
-     * @brief 按像素宽高获取原图
+     * @brief 按像素宽高获取原图(如果需要切片，将不会加载widget类型的注释，如一些数字签章)
      * @param width (in pixel)
      * @param height (in pixel)
      * @param rect 要取的切片,默认为全图 (in pixel)
@@ -159,6 +159,12 @@ public:
      * @return
      */
     QList<DPdfAnnot *> links();
+
+    /**
+     * @brief 获取当前widget annots
+     * @return
+     */
+    QList<DPdfAnnot *> widgets();
 
     /**
      * @brief 初始化需要延时的注释,如果link中的goto

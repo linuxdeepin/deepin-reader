@@ -125,6 +125,11 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
     return link;
 }
 
+bool PDFPage::hasWidgetAnnots() const
+{
+    return m_page->widgets().count() > 0;
+}
+
 QString PDFPage::text(const QRectF &rect) const
 {
     return m_page->text(rect).simplified();

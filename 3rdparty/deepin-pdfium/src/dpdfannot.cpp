@@ -244,3 +244,19 @@ void DPdfUnderlineAnnot::setRectF(const QRectF &rectf)
 {
     m_rect = rectf;
 }
+
+DPdfWidgetAnnot::DPdfWidgetAnnot()
+{
+    m_type = AWIDGET;
+}
+
+bool DPdfWidgetAnnot::pointIn(QPointF pos)
+{
+    Q_UNUSED(pos)
+    return false;
+}
+
+QList<QRectF> DPdfWidgetAnnot::boundaries()
+{
+    return QList<QRectF>();
+}

@@ -131,6 +131,8 @@ public:
      */
     bool inLink(int index, const QPointF &pos);
 
+    bool hasWidgetAnnots(int index);
+
     /**
      * @brief outline
      * 文档中的链接

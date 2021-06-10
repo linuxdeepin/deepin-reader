@@ -187,6 +187,7 @@ public:
     virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
+    virtual bool hasWidgetAnnots() const { return false; }
     virtual Annotation *addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color) { Q_UNUSED(boundaries) Q_UNUSED(text) Q_UNUSED(color) return nullptr; }
     virtual bool removeAnnotation(Annotation *annotation) { Q_UNUSED(annotation) return  false;}
     virtual QList< FormField * > formFields() const { return QList< FormField * >(); }
