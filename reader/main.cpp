@@ -19,6 +19,12 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     PERF_PRINT_BEGIN("POINT-01", "");
+
+    // 依赖DTK的程序，如果要在root下或者非deepin/uos环境下运行不会发生异常，就需要加上该环境变量
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1); //setenv改变或添加一个环境变量
+    }
+
     // Init DTK.
     Application a(argc, argv);
 
