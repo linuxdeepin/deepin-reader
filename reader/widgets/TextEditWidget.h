@@ -154,7 +154,8 @@ public:
 
 private:
     TextEditWidget *m_TextEditWidget = nullptr;
-
+    const int m_maxwidth = 278;
+    const int m_maxheight = 344;
 };
 
 #endif  // TextEditWidget_H

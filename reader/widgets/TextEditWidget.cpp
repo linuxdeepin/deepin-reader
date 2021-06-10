@@ -46,7 +46,7 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    setMaximumSize(QSize(278, 344));
+    setMaximumSize(QSize(m_maxwidth, m_maxheight));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
 
@@ -75,8 +75,13 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     QPoint pos = point;
 
     //如果下边超出程序则向上移动
-    if (pos.y() + height() > m_TextEditWidget->m_brower->height())
-        pos.setY(pos.y() - (pos.y() + height() - m_TextEditWidget->m_brower->height()));
+    if (pos.y() + m_maxheight > m_TextEditWidget->m_brower->height()) {
+        pos.setY(pos.y() - (pos.y() + m_maxheight - m_TextEditWidget->m_brower->height()));
+    }
+    //如果右边超出程序则向左移动
+    if (pos.x() + m_maxwidth > m_TextEditWidget->m_brower->width()) {
+        pos.setX(pos.x() - (pos.x() + m_maxwidth - m_TextEditWidget->m_brower->width()));
+    }
 
     move(pos);
 
