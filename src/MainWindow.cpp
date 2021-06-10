@@ -35,6 +35,7 @@
 #include <DTitlebar>
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
+#include <DAboutDialog>
 
 #include <QSignalMapper>
 #include <QDir>
@@ -171,6 +172,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->accept();
 
         this->deleteLater();
+
+        closeAboutForWindow();
 
     } else
         event->ignore();
@@ -357,6 +360,16 @@ void MainWindow::showDefaultSize()
         resize(1000, 680);
     } else {
         resize(width, height);
+    }
+}
+
+void MainWindow::closeAboutForWindow()
+{
+    if (qApp != nullptr) {
+        DAboutDialog *pAboutDialog = qApp->aboutDialog();
+        if (pAboutDialog != nullptr && pAboutDialog->parent() == this) {
+            pAboutDialog->close();
+        }
     }
 }
 
