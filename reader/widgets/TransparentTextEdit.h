@@ -27,8 +27,13 @@
 
 #include <QTimer>
 #include <QContextMenuEvent>
+#include <QGestureEvent>
+
+#include <math.h>
 
 DWIDGET_USE_NAMESPACE
+
+#define TAP_MOVE_DELAY 300
 
 /**
  * @brief The TransparentTextEdit class
@@ -77,8 +82,79 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event) override;
 
+    bool event(QEvent *event) override;
+
+    void mousePressEvent(QMouseEvent *e) override;
+
+    void mouseReleaseEvent(QMouseEvent *e) override;
+
+    void mouseMoveEvent(QMouseEvent *e) override;
+
 private:
+    /**
+     * @brief gestureEvent 手势事件
+     * @param event
+     * @return
+     */
+    bool gestureEvent(QGestureEvent *event);
+
+    /**
+     * @brief tapGestureTriggered 单击手势事件
+     */
+    void tapGestureTriggered(QTapGesture *);
+
+    /**
+     * @brief tapAndHoldGestureTriggered 单指长按事件
+     */
+    void tapAndHoldGestureTriggered(QTapAndHoldGesture *);
+
+    /**
+     * @brief slideGesture 单指滑动手势(通过原生触摸屏事件进行抽象模拟)
+     * @param diff
+     * add for single refers to the sliding
+     */
+    void slideGesture(qreal diff);
+
+    /**
+     * @brief onSelectionArea 滑动选中事件
+     */
+    void onSelectionArea();
+
+private:
+    //触摸屏手势动作
+    enum GestureAction {
+        GA_null, //无动作
+        GA_tap, //点击
+        GA_slide, //滑动
+        GA_hold, //长按
+    };
+
     int m_nMaxContantLen = 1500;  // 允许输入文本最大长度
+
+    GestureAction m_gestureAction = GA_null; //手势动作 默认误动作
+
+    qint64 m_tapBeginTime = 0; //开始点击的时间
+
+    bool m_slideContinue {false}; //是否持续滑动
+
+    //add for single refers to the sliding
+//    FlashTween tween; //滑动惯性
+
+//    qreal change = {0.0}; //滑动变化量
+//    qreal duration = {0.0}; //滑动方向
+
+    //鼠标事件的位置
+    int m_start = 0; //开始时鼠标的位置
+    int m_end = 0; //结束时鼠标的位置
+    qreal m_stepSpeed = 0; //移动的速度
+
+    int m_lastMousepos; //上次移动后鼠标的位置
+
+    ulong m_lastMouseTime; //上次移动鼠标的时间
+
+//    int m_nSelectEndLine; //< 选择结束时后鼠标所在行
+    QPointF m_nSelectStart; //< 选择开始时的鼠标位置
+//    QPointF m_nSelectEnd; //< 选择结束时的鼠标位置
 };
 
 #endif // TRANSPARENTTEXTEDIT_H
