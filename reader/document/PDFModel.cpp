@@ -115,7 +115,14 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                     m_page->initAnnot(annot);
 
                 link.page = linkAnnot->pageIndex() + 1;
-                link.urlOrFileName = linkAnnot->url().isEmpty() ? linkAnnot->filePath() : linkAnnot->url();
+                if (linkAnnot->url().isEmpty()) {
+                    link.urlOrFileName = linkAnnot->filePath();
+                } else {
+                    // 删除邮件或本地文件的前缀"http://"
+                    link.urlOrFileName = (linkAnnot->url().startsWith(QLatin1String("http://mailto:"))
+                                          || linkAnnot->url().startsWith(QLatin1String("http://file://")))
+                                          ? linkAnnot->url().mid(7) : linkAnnot->url();
+                }
                 link.left = linkAnnot->offset().x();
                 link.top = linkAnnot->offset().y();
                 return link;

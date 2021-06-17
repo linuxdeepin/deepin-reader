@@ -61,7 +61,7 @@ struct Link {
     //Link(const QPainterPath &boundary, const QString &fileName, int page) : boundary(boundary), page(page), left(0.0), top(0.0), urlOrFileName(fileName) {}
     //Link(const QRectF &boundingRect, const QString &fileName, int page) : boundary(), page(page), left(0.0), top(0.0), urlOrFileName(fileName) { boundary.addRect(boundingRect); }
 
-    bool isValid()
+    bool isValid() const
     {
         return page >= 1 || !urlOrFileName.isEmpty();
     }

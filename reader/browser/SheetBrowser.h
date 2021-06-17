@@ -618,6 +618,13 @@ private:
     bool isLink(QPointF);
 
     /**
+     * @brief getLinkAtPoint 获取当前位置的链接
+     * @param point
+     * @return
+     */
+    Link getLinkAtPoint(QPointF viewpoint);
+
+    /**
      * @brief setIconAnnotSelect
      * 设置注释图标选择框
      * @param select true:是选择, false:取消选择
@@ -665,7 +672,7 @@ private:
     QString m_filePassword;
     QList<BrowserPage *> m_items;
 
-    QPointF m_selectPressedPos;         //
+    QPointF m_selectPressedPos;         // 鼠标按压的起始位置
     QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置(鼠标释放的最后位置)
 
@@ -697,7 +704,7 @@ private:
     bool m_bNeedNotifyCurPageChanged = true;
 
     QBasicTimer m_repeatTimer;
-    bool m_startPinch = false;
+    bool m_startPinch = false; //开始收缩
     bool m_canTouchScreen = false;
     QScroller *m_scroller = nullptr;
 };

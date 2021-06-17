@@ -43,6 +43,7 @@
 #include "DjVuModel.h"
 #include "Utils.h"
 #include "SheetRenderer.h"
+#include "SecurityDialog.h"
 
 #include <QGraphicsItem>
 #include <QScrollBar>
@@ -1172,14 +1173,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             }
         }
 
-        //处理移动到超链接区域
-        if (!magnifierOpened() && this->isLink(mousePos)) {
-            if (m_tipsWidget)
-                m_tipsWidget->hide();
-            setCursor(QCursor(Qt::PointingHandCursor));
-            return QGraphicsView::mouseMoveEvent(event);
-        }
-
         if (m_sheet->isFullScreen() && !m_sheet->operation().sidebarVisible) {
             if (mousePos.x() <= 0) {
                 m_sheet->setSidebarVisible(true, false);
@@ -1211,8 +1204,9 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 }
             }
 
-            if (m_selectPressedPos.isNull()) {
+            if (m_selectPressedPos.isNull()) { //鼠标处于按压状态
                 if (page) {
+                    const Link &mlink = getLinkAtPoint(mousePos);
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
                     //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
                     if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
@@ -1221,6 +1215,14 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->show();
                         setCursor(QCursor(Qt::PointingHandCursor));
+                    } else if (mlink.isValid() && nullptr == browserAnno) {
+                        //处理移动到超链接区域
+                        //未开启放大镜时，如果超链接文本添加了高亮注释，高亮注释优先显示
+                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                        m_tipsWidget->move(showRealPos);
+                        m_tipsWidget->setText(mlink.urlOrFileName);
+                        m_tipsWidget->show();
+                        setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
                     } else if (page->getBrowserWord(mousposF)) {
                         m_tipsWidget->hide();
                         setCursor(QCursor(Qt::IBeamCursor));
@@ -1350,7 +1352,14 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
             m_selectIconAnnotation = false;
 
-            jump2Link(event->pos());
+            // 点击高亮注释的超链接文本时，注释框优先显示
+            if (m_selectStartPos == m_selectEndPos && nullptr == clickAnno) {
+                // 跳转链接时隐藏tips
+                if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
+                    m_tipsWidget->hide();
+                }
+                jump2Link(event->pos());
+            }
         }
     }
 
@@ -1709,6 +1718,19 @@ bool SheetBrowser::isLink(QPointF viewpoint)
     return m_sheet->renderer()->inLink(page->itemIndex(), viewpoint);
 }
 
+Link SheetBrowser::getLinkAtPoint(QPointF viewpoint)
+{
+    BrowserPage *page = getBrowserPageForPoint(viewpoint);
+
+    if (nullptr == page)
+        return Link();
+
+    viewpoint = translate2Local(viewpoint);
+
+    // 获取当前位置的link
+    return m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), viewpoint);
+}
+
 void SheetBrowser::setIconAnnotSelect(const bool select)
 {
     if (m_lastSelectIconAnnotPage)
@@ -1756,8 +1778,21 @@ bool SheetBrowser::jump2Link(QPointF point)
         setCurrentPage(link.page);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
-        const QUrl &url = QUrl(link.urlOrFileName, QUrl::TolerantMode);
-        QDesktopServices::openUrl(url);
+        QString urlstr;
+        if (link.urlOrFileName.startsWith(QLatin1String("file://"))) {
+            urlstr = link.urlOrFileName.mid(7); //删除前缀"file://"
+            if (!QFileInfo::exists(urlstr)) {
+                qInfo() << urlstr << "文件不存在";
+            }
+        } else {
+            urlstr = link.urlOrFileName;
+        }
+
+        SecurityDialog *sdialog = new SecurityDialog(link.urlOrFileName, this);
+        if (DDialog::Accepted == sdialog->exec()) {
+            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
+            QDesktopServices::openUrl(url);
+        }
         return true;
     }
 
