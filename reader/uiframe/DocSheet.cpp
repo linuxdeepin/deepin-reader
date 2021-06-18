@@ -607,7 +607,7 @@ qreal DocSheet::maxScaleFactor()
 {
     qreal maxScaleFactor = 20000 / (m_browser->maxHeight() * qApp->devicePixelRatio());
 
-    maxScaleFactor = qBound(0.1, maxScaleFactor, 5.0);
+    maxScaleFactor = qBound(0.1, maxScaleFactor, 2.0); // TODO:平板上暂时由5.0改为2.0,规避放大倍数过大偶现闪退
 
     return maxScaleFactor;
 }
