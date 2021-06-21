@@ -602,6 +602,8 @@ void CentralDocPage::openSlide()
 
 void CentralDocPage::quitSlide()
 {
+    quitFullScreen();   // 幻灯片结束之后退出全屏
+
     if (m_slideWidget) {
         m_slideWidget->close();
         m_slideWidget = nullptr;
