@@ -1353,7 +1353,8 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             m_selectIconAnnotation = false;
 
             // 点击高亮注释的超链接文本时，注释框优先显示
-            if (m_selectStartPos == m_selectEndPos && nullptr == clickAnno) {
+            // 点击时鼠标按下和离开时坐标相差两个像素内可以打开链接
+            if ((m_selectStartPos - m_selectEndPos).manhattanLength() <= 2 && nullptr == clickAnno) {
                 // 跳转链接时隐藏tips
                 if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
                     m_tipsWidget->hide();
