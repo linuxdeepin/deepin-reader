@@ -140,6 +140,10 @@ void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 void TextEditWidget::setEditFocus()
 {
     m_pTextEdit->setFocus();
+
+    // 若虚拟键盘未弹出，手动弹出虚拟键盘
+    if (!DApplication::inputMethod()->isVisible())
+        DApplication::inputMethod()->show();
 }
 
 void TextEditWidget::hideEvent(QHideEvent *event)
