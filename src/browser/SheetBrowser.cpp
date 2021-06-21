@@ -1989,8 +1989,11 @@ void SheetBrowser::handleFindNext()
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex + 1;
 
-                if (m_searchCurIndex >= size)
+                if (m_searchCurIndex >= size) { // 全部搜索完，从头搜索
                     m_searchCurIndex = 0;
+                    m_searchPageTextIndex = -1;
+                    index = -1;
+                }
                 continue;
             }
 
@@ -2000,8 +2003,12 @@ void SheetBrowser::handleFindNext()
             break;
         } else {
             m_searchCurIndex++;
-            if (m_searchCurIndex >= size)
+            if (m_searchCurIndex >= size) {
                 m_searchCurIndex = 0;
+                m_searchPageTextIndex = -1;
+                m_lastFindPage = page;
+                index = -1;
+            }
         }
     }
 }
@@ -2022,13 +2029,16 @@ void SheetBrowser::handleFindPrev()
 
             m_searchPageTextIndex--;
             if (m_searchPageTextIndex < 0) {
-                //当前页搜索完了，可以进行下一页
+                //当前页搜索完了，可以进行上一页
                 m_changSearchFlag = true;
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex - 1;
 
-                if (m_searchCurIndex < 0)
+                if (m_searchCurIndex < 0) { // 全部搜索完，从尾搜索
                     m_searchCurIndex = size - 1;
+                    m_searchPageTextIndex = pageHighlightSize;
+                    index = -1;
+                }
                 continue;
             }
 
@@ -2038,8 +2048,12 @@ void SheetBrowser::handleFindPrev()
             break;
         } else {
             m_searchCurIndex--;
-            if (m_searchCurIndex < 0)
+            if (m_searchCurIndex < 0) {
                 m_searchCurIndex = size - 1;
+                m_searchPageTextIndex = pageHighlightSize;
+                m_lastFindPage = page;
+                index = -1;
+            }
         }
     }
 }

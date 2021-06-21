@@ -1145,8 +1145,7 @@ bool BrowserPage::sceneEvent(QEvent *event)
 void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
 {
     if (rectflst.size() > 0) {
-        if (m_parent->currentPage() == this->itemIndex() + 1)
-            m_searchSelectLighRectf = rectflst.first();
+        m_searchSelectLighRectf = rectflst.first();
         m_searchLightrectLst = rectflst;
         update();
     }
