@@ -61,7 +61,7 @@ Central::Central(QWidget *parent)
     m_mainWidget->setLayout(m_layout);
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
-    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &Central::onImActiveChanged);
+//    connect(DBusObject::instance(), &DBusObject::sigImActiveChanged, this, &Central::onImActiveChanged); // 虚拟键盘弹出不做自定义处理，先注释
 
     QList<QKeySequence> keyList;
     keyList.append(QKeySequence::Find);
