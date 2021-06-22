@@ -47,7 +47,12 @@ void ReadImageTask::run()
 
         QSizeF size = sheet->pageSizeByIndex(m_docParam.pageIndex);
 
-        size.scale(m_docParam.maxPixel, m_docParam.maxPixel, Qt::KeepAspectRatio);
+        if (m_docParam.m_bSlideshow) {
+            // 幻灯片播放时根据传入的宽高进行计算（考虑横竖屏影响）
+            size.scale(m_docParam.m_iScaleW, m_docParam.m_iScaleH, Qt::KeepAspectRatio);
+        } else {
+            size.scale(m_docParam.maxPixel, m_docParam.maxPixel, Qt::KeepAspectRatio);
+        }
 
         QImage image = sheet->getImage(m_docParam.pageIndex, size.width() * dApp->devicePixelRatio(), size.height() * dApp->devicePixelRatio());
 

@@ -37,6 +37,10 @@ typedef struct ReaderImageParam_t {
     QObject *receiver = nullptr;
     QString slotFun = "";
 
+    bool m_bSlideshow = false;  // 是否处理幻灯片数据
+    int m_iScaleW = 174;        // 缩放尺寸
+    int m_iScaleH = 174;
+
     bool operator == (const ReaderImageParam_t &other) const
     {
         return (this->pageIndex == other.pageIndex && this->maxPixel == other.maxPixel && this->sheet == other.sheet);

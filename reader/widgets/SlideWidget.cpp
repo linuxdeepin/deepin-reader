@@ -314,10 +314,12 @@ void SlideWidget::onFetchImage(int index)
     }
 
     ReaderImageParam_t tParam;
+    tParam.m_bSlideshow = true;
     tParam.pageIndex = index;
     tParam.sheet = m_docSheet;
     tParam.receiver = this;
-    tParam.maxPixel = qMin(this->width() - 40, this->height() - 20);
+    tParam.m_iScaleW = width();
+    tParam.m_iScaleH = height();
     tParam.slotFun = "onUpdatePageImage";
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }
