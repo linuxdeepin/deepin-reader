@@ -1,15 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ko">
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>문서 보기도구</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>문서 뷰어는 문서 파일을 읽고 PDF, DJVU 등을 지원하는 도구입니다.</translation>
     </message>
@@ -117,7 +119,7 @@
     <message>
         <location filename="../src/sidebar/menu/BookMarkMenu.cpp" line="36"/>
         <source>Remove all</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -130,7 +132,7 @@
     <message>
         <location filename="../src/sidebar/bookmark/BookMarkWidget.cpp" line="235"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -258,7 +260,7 @@
     <message>
         <location filename="../src/uiframe/Central.cpp" line="117"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -347,12 +349,12 @@
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="51"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="57"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="62"/>
@@ -362,18 +364,18 @@
     <message>
         <location filename="../src/widgets/EncryptionPage.cpp" line="106"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="134"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="135"/>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="141"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="142"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
@@ -429,7 +431,7 @@
     <message>
         <location filename="../src/sidebar/menu/NoteMenu.cpp" line="37"/>
         <source>Remove all</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -442,13 +444,13 @@
     <message>
         <location filename="../src/sidebar/note/NotesWidget.cpp" line="187"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
+        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="209"/>
         <source>Invalid page number</source>
         <translation>잘못된 페이지 번호</translation>
     </message>
@@ -505,7 +507,7 @@
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/ScaleMenu.cpp" line="38"/>
@@ -910,23 +912,23 @@
     <message>
         <location filename="../src/main.cpp" line="28"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="29"/>
         <location filename="../src/main.cpp" line="33"/>
         <source>FilePath</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="32"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="37"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

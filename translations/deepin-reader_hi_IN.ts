@@ -1,15 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hi_IN">
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>प्रलेख प्रदर्शक</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>प्रलेख प्रदर्शक - PDF, DJVU इत्यादि प्रलेख फाइलें देखने हेतु साधन है।</translation>
     </message>
@@ -368,12 +370,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="134"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="135"/>
         <source>Previous</source>
         <translation>पिछला</translation>
     </message>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="141"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="142"/>
         <source>Next</source>
         <translation>अगला</translation>
     </message>
@@ -448,7 +450,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
+        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="209"/>
         <source>Invalid page number</source>
         <translation>अमान्य पृष्ठ संख्या</translation>
     </message>

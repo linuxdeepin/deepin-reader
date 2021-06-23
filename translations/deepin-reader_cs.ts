@@ -1,15 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="28"/>
         <location filename="../src/Application.cpp" line="40"/>
+        <location filename="../src/application.cpp" line="28"/>
         <source>Document Viewer</source>
         <translation>Prohlížeč dokumentů</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="29"/>
         <location filename="../src/Application.cpp" line="41"/>
+        <location filename="../src/application.cpp" line="29"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, etc.</source>
         <translation>Prohlížeč dokumentů je nástroj pro čtení soubor s dokumenty, podporující formáty PDF, DJVU, atd.</translation>
     </message>
@@ -368,12 +370,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="134"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="135"/>
         <source>Previous</source>
         <translation>Předchozí</translation>
     </message>
     <message>
-        <location filename="../src/widgets/FindWidget.cpp" line="141"/>
+        <location filename="../src/widgets/FindWidget.cpp" line="142"/>
         <source>Next</source>
         <translation>Další</translation>
     </message>
@@ -405,13 +407,13 @@
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Ano</translation>
     </message>
     <message>
         <location filename="../src/document/PDFModel.cpp" line="189"/>
         <location filename="../src/document/PDFModel.cpp" line="191"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Ne</translation>
     </message>
 </context>
 <context>
@@ -448,7 +450,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="206"/>
+        <location filename="../src/sidebar/thumbnail/PagingWidget.cpp" line="209"/>
         <source>Invalid page number</source>
         <translation>Neplatné číslo stránky</translation>
     </message>
