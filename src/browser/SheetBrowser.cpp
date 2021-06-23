@@ -113,6 +113,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::sigSearchResultNotEmpty, this, &SheetBrowser::onSearchResultNotEmpty, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, this, [&]() {
         this->viewport()->update();
     });
@@ -907,6 +908,11 @@ void SheetBrowser::onRemoveDocSlideGesture()
 void SheetBrowser::onRemoveIconAnnotSelect()
 {
     clearSelectIconAnnotAfterMenu();
+}
+
+void SheetBrowser::onSearchResultNotEmpty()
+{
+    m_isSearchResultNotEmpty = true;
 }
 
 /**
@@ -1973,6 +1979,10 @@ void SheetBrowser::stopSearch()
 
 void SheetBrowser::handleFindNext()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索下一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -2018,6 +2028,10 @@ void SheetBrowser::handleFindNext()
 
 void SheetBrowser::handleFindPrev()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索上一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -2065,6 +2079,7 @@ void SheetBrowser::handleFindExit()
 {
     m_searchCurIndex = 0;
     m_searchPageTextIndex = 0;
+    m_isSearchResultNotEmpty = false;
     m_searchTask->stopSearch();
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
@@ -2082,8 +2097,9 @@ void SheetBrowser::handleFindContent(const QString &strFind)
 
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    if (m_pFindWidget)
+    if (m_pFindWidget) {
         m_pFindWidget->setEditAlert(searchcnt == 0);
+    }
 }
 
 void SheetBrowser::curpageChanged(int curpage)

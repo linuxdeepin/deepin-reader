@@ -629,6 +629,12 @@ private slots:
      */
     void onRemoveIconAnnotSelect();
 
+    /**
+     * @brief onSearchResultNotEmpty
+     * 响应搜索到结果
+     */
+    void onSearchResultNotEmpty();
+
 private:
     /**
      * @brief mouseClickIconAnnot
@@ -791,6 +797,7 @@ private:
     int m_searchCurIndex = 0;
     int m_searchPageTextIndex = 0;
     int m_selectIndex = -1;              // 选取文字开始的index
+    bool m_isSearchResultNotEmpty = false; // true表示搜索到的结果不为空
 
     bool m_annotationInserting = false;     //正在插入注释状态
     bool m_selectIconAnnotation = false; // 当前是否有选中的图标注释

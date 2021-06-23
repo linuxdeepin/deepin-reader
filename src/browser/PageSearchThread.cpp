@@ -55,6 +55,7 @@ void PageSearchThread::stopSearch()
 void PageSearchThread::run()
 {
     int size = m_pagelst.size();
+    bool isSearchResultNotEmpty = false; // 没有搜索结果
     for (int index = 0; index < size; index++) {
         if (m_quit) return;
 
@@ -64,6 +65,11 @@ void PageSearchThread::run()
         searchres.page = page->itemIndex() + 1;
         const QList< QRectF > &textrectLst = page->m_page->search(m_searchText, false, false);
         if (textrectLst.size() > 0) {
+            if (!isSearchResultNotEmpty) {
+                isSearchResultNotEmpty = true;
+                // 只要搜索到结果就emit该信号
+                emit sigSearchResultNotEmpty();
+            }
             page->setSearchHighlightRectf(textrectLst);
         }
         for (const QRectF &rec : textrectLst) {
@@ -80,7 +86,8 @@ void PageSearchThread::run()
 
         }
 
-        if (searchres.words.size() > 0)
+        if (searchres.words.size() > 0) {
             emit sigSearchReady(searchres);
+        }
     }
 }
