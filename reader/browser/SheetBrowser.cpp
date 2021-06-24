@@ -199,6 +199,7 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(true);
     }
+    m_bHandAndLink = false;
 }
 
 void SheetBrowser::setBookMark(int index, int state)
@@ -279,7 +280,8 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
 
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
-    if (annotation == nullptr)
+    // 超链接与高亮区域重合时，手形工具下只响应超链接
+    if (annotation == nullptr || m_bHandAndLink)
         return;
 
     m_tipsWidget->hide();
@@ -1133,7 +1135,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
+    if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) && !m_bHandAndLink) {
         QPoint mousePos = event->pos();
 
         //触摸
@@ -1204,7 +1206,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 }
             }
 
-            if (m_selectPressedPos.isNull()) { //鼠标处于按压状态
+            if (m_selectPressedPos.isNull()) { //鼠标处于非按压状态
                 if (page) {
                     const Link &mlink = getLinkAtPoint(mousePos);
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
@@ -1288,6 +1290,38 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 }
             }
         }
+    } else if (!m_startPinch && (QGraphicsView::ScrollHandDrag == dragMode() || m_bHandAndLink)) {
+        // 切换至手形样式后，也要求可是点击超链接文本并打开
+        if (!magnifierOpened()) {
+            if (Qt::NoButton == event->buttons()) { //鼠标处于非按压状态
+                QPoint mousePos = event->pos();
+                QPointF mousposF = event->pos();
+
+                BrowserPage *page = getBrowserPageForPoint(mousposF);
+                if (page) {
+                    const Link &mlink = getLinkAtPoint(mousePos);
+                    if (mlink.isValid()) {
+                        //处理移动
+                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                        m_tipsWidget->move(showRealPos);
+                        m_tipsWidget->setText(mlink.urlOrFileName);
+                        m_tipsWidget->show();
+                        if (!m_bHandAndLink) {
+                            m_bHandAndLink = true;
+                            setDragMode(QGraphicsView::NoDrag);
+                            setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
+                        }
+                    } else {
+                        // 离开超链接区域，还原为手形工具
+                        if (m_bHandAndLink) {
+                            m_bHandAndLink = false;
+                            m_tipsWidget->hide();
+                            setDragMode(QGraphicsView::ScrollHandDrag);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     QGraphicsView::mouseMoveEvent(event);
@@ -1352,9 +1386,10 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
             m_selectIconAnnotation = false;
 
-            // 点击高亮注释的超链接文本时，注释框优先显示
+            // 选择工具时，点击高亮注释的超链接文本时，注释框优先响应
+            // 手形工具时，点击高亮注释的超链接文本时，只响应超链接
             // 点击时鼠标按下和离开时坐标相差两个像素内可以打开链接
-            if ((m_selectStartPos - m_selectEndPos).manhattanLength() <= 2 && nullptr == clickAnno) {
+            if ((m_selectStartPos - m_selectEndPos).manhattanLength() <= 2 && (nullptr == clickAnno || m_bHandAndLink)) {
                 // 跳转链接时隐藏tips
                 if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
                     m_tipsWidget->hide();
@@ -1365,6 +1400,17 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     }
 
     QGraphicsView::mouseReleaseEvent(event);
+}
+
+void SheetBrowser::focusOutEvent(QFocusEvent *event)
+{
+    // 鼠标为手形工具状态且在超链接处，此时失去焦点恢复成默认手形状态
+    if (m_bHandAndLink) {
+        m_bHandAndLink = false;
+        setDragMode(QGraphicsView::ScrollHandDrag);
+    }
+
+    DGraphicsView::focusOutEvent(event);
 }
 
 void SheetBrowser::timerEvent(QTimerEvent *event)

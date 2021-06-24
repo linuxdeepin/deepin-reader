@@ -412,6 +412,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     /**
+     * @brief focusOutEvent
+     * 失去焦点处理
+     * @param event
+     */
+    void focusOutEvent(QFocusEvent *event) override;
+
+    /**
      * @brief 计时器事件
      * @param event
      */
@@ -675,6 +682,7 @@ private:
     QPointF m_selectPressedPos;         // 鼠标按压的起始位置
     QPointF m_selectStartPos;           // 选取文字的开始位置
     QPointF m_selectEndPos;             // 选取文字的结束位置(鼠标释放的最后位置)
+    bool m_bHandAndLink = false;               // 鼠标是否手形工具且在超链接处
 
     BrowserWord *m_selectWord = nullptr;
     BrowserWord *m_selectStartWord = nullptr;
