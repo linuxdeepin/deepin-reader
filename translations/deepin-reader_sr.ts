@@ -302,17 +302,17 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
         <translation>Превуци документе овде</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>Подржани формат: %1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="48"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Изабери датотеку</translation>
     </message>
@@ -500,6 +500,31 @@
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>Ставки пронађено %1</translation>
+    </message>
+</context>
+<context>
+    <name>SecurityDialog</name>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
+        <source>This document is trying to connect to:</source>
+        <translation>Овај документ покушава да се повеже са:</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
+        <source>If you trust the website, click Allow, otherwise click Block.</source>
+        <translation>Ако верујете овој страници, кликните на Дозволи, у супротном клиикните на Забрани</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
+        <source>Block</source>
+        <comment>button</comment>
+        <translation>Забрани</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <source>Allow</source>
+        <comment>button</comment>
+        <translation>Дозволи</translation>
     </message>
 </context>
 <context>
@@ -911,23 +936,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="33"/>
+        <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>Путања датотеке</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="37"/>
+        <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
         <translation>Путања умањеног приказа.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="42"/>
+        <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
         <translation>Створи умањени приказ.</translation>
     </message>

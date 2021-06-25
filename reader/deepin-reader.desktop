@@ -13,6 +13,8 @@ X-Deepin-Vendor=deepin
 # Translations:
 # Do not manually modify!
 GenericName[ar]=عارض المستندات
+GenericName[ast]=Visor de documentos
+GenericName[az]=Sənədlərə baxış
 GenericName[bo]=ཡིག་ཚགས་ལྟ་ཆས།
 GenericName[ca]=Visualitzador de documents
 GenericName[cs]=Prohlížeč dokumentů
@@ -45,6 +47,8 @@ GenericName[zh_CN]=文档查看器
 GenericName[zh_HK]=文檔查看器
 GenericName[zh_TW]=文件查看器
 Name[ar]=عارض المستندات
+Name[ast]=Visor de documentos
+Name[az]=Sənədlərə baxış
 Name[bo]=ཡིག་ཚགས་ལྟ་ཆས།
 Name[ca]=Visualitzador de documents
 Name[cs]=Prohlížeč dokumentů

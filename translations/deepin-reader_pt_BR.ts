@@ -302,17 +302,17 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
         <translation>Arraste documentos até aqui</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>Formato suportado: %1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="48"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Selecionar Arquivo</translation>
     </message>
@@ -500,6 +500,31 @@
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="109"/>
         <source>%1 items found</source>
         <translation>%1 itens encontrados</translation>
+    </message>
+</context>
+<context>
+    <name>SecurityDialog</name>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
+        <source>This document is trying to connect to:</source>
+        <translation>Este documento está tentando conectar-se à:</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
+        <source>If you trust the website, click Allow, otherwise click Block.</source>
+        <translation>Se você confia neste site, clique em Permitir; caso contrário, clique em Bloquear.</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
+        <source>Block</source>
+        <comment>button</comment>
+        <translation>Bloquear</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <source>Allow</source>
+        <comment>button</comment>
+        <translation>Permitir</translation>
     </message>
 </context>
 <context>
@@ -911,23 +936,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="33"/>
+        <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>Caminho do Arquivo</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="37"/>
+        <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
         <translation>Caminho da Miniatura.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="42"/>
+        <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
         <translation>Gerar miniatura.</translation>
     </message>
