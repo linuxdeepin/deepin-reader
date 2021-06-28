@@ -307,8 +307,9 @@ public:
      * @brief setSearchHighlightRectf
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
+     * @param flag
      */
-    void setSearchHighlightRectf(const QList< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QList< QRectF > &rectflst, bool flag = false);
 
     /**
      * @brief clearSearchHighlightRects
@@ -535,7 +536,7 @@ private:
     QPointF m_drawMoveIconPoint;                            // 绘制移动图标注释点
 
     QList<QRectF> m_searchLightrectLst;                     //搜索结果
-    QRectF m_searchSelectLighRectf;
+    QRectF m_searchSelectLighRectf;                         //当前选中的搜索结果
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show

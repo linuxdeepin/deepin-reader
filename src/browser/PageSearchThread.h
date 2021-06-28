@@ -41,6 +41,11 @@ public:
 
 signals:
     void sigSearchReady(const deepin_reader::SearchResult &res);
+    /**
+     * @brief sigSearchResultNotEmpty
+     * 搜索结果不为空
+     */
+    void sigSearchResultNotEmpty(const QRectF &textrect, BrowserPage *page);
 
 protected:
     void run() override;

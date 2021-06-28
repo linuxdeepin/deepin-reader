@@ -113,8 +113,9 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &PageSearchThread::sigSearchReady, m_sheet, &DocSheet::onFindContentComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::sigSearchResultNotEmpty, this, &SheetBrowser::onSearchResultNotEmpty, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, this, [&]() {
-        this->viewport()->update();
+        this->viewport()->update(); // 修复偶现搜索不显示、无法选中文字
     });
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 }
@@ -907,6 +908,16 @@ void SheetBrowser::onRemoveDocSlideGesture()
 void SheetBrowser::onRemoveIconAnnotSelect()
 {
     clearSelectIconAnnotAfterMenu();
+}
+
+void SheetBrowser::onSearchResultNotEmpty(const QRectF &textrect, BrowserPage *page)
+{
+    if (nullptr != page) {
+        m_isSearchResultNotEmpty = true;
+        m_lastFindPage = page;
+        horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + textrect.x()) - this->width() / 2);
+        verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + textrect.y()) - this->height() / 2);
+    }
 }
 
 /**
@@ -1973,6 +1984,10 @@ void SheetBrowser::stopSearch()
 
 void SheetBrowser::handleFindNext()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索下一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -1992,8 +2007,11 @@ void SheetBrowser::handleFindNext()
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex + 1;
 
-                if (m_searchCurIndex >= size)
+                if (m_searchCurIndex >= size) { // 全部搜索完，从头搜索
                     m_searchCurIndex = 0;
+                    m_searchPageTextIndex = -1;
+                    index = -1;
+                }
                 continue;
             }
 
@@ -2003,14 +2021,22 @@ void SheetBrowser::handleFindNext()
             break;
         } else {
             m_searchCurIndex++;
-            if (m_searchCurIndex >= size)
+            if (m_searchCurIndex >= size) {
                 m_searchCurIndex = 0;
+                m_searchPageTextIndex = -1;
+                m_changSearchFlag = true;
+                index = -1;
+            }
         }
     }
 }
 
 void SheetBrowser::handleFindPrev()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索上一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -2025,13 +2051,16 @@ void SheetBrowser::handleFindPrev()
 
             m_searchPageTextIndex--;
             if (m_searchPageTextIndex < 0) {
-                //当前页搜索完了，可以进行下一页
+                //当前页搜索完了，可以进行上一页
                 m_changSearchFlag = true;
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex - 1;
 
-                if (m_searchCurIndex < 0)
+                if (m_searchCurIndex < 0) { // 全部搜索完，从尾搜索
                     m_searchCurIndex = size - 1;
+                    m_searchPageTextIndex = pageHighlightSize;
+                    index = -1;
+                }
                 continue;
             }
 
@@ -2041,8 +2070,12 @@ void SheetBrowser::handleFindPrev()
             break;
         } else {
             m_searchCurIndex--;
-            if (m_searchCurIndex < 0)
+            if (m_searchCurIndex < 0) {
                 m_searchCurIndex = size - 1;
+                m_searchPageTextIndex = pageHighlightSize;
+                m_changSearchFlag = true;
+                index = -1;
+            }
         }
     }
 }
@@ -2051,6 +2084,7 @@ void SheetBrowser::handleFindExit()
 {
     m_searchCurIndex = 0;
     m_searchPageTextIndex = 0;
+    m_isSearchResultNotEmpty = false;
     m_searchTask->stopSearch();
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
@@ -2068,8 +2102,9 @@ void SheetBrowser::handleFindContent(const QString &strFind)
 
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    if (m_pFindWidget)
+    if (m_pFindWidget) {
         m_pFindWidget->setEditAlert(searchcnt == 0);
+    }
 }
 
 void SheetBrowser::curpageChanged(int curpage)

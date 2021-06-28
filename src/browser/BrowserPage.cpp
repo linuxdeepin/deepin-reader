@@ -1142,13 +1142,14 @@ bool BrowserPage::sceneEvent(QEvent *event)
     return QGraphicsItem::sceneEvent(event);
 }
 
-void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst)
+void BrowserPage::setSearchHighlightRectf(const QList< QRectF > &rectflst, bool flag)
 {
     if (rectflst.size() > 0) {
-        if (m_parent->currentPage() == this->itemIndex() + 1)
+        if (flag) {
             m_searchSelectLighRectf = rectflst.first();
+        }
         m_searchLightrectLst = rectflst;
-//       update(); // 服务器欧拉版会出现搜索不显示、无法选中文字，需要注释
+        update();
     }
 }
 
