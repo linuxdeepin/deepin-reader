@@ -45,7 +45,7 @@ signals:
      * @brief sigSearchResultNotEmpty
      * 搜索结果不为空
      */
-    void sigSearchResultNotEmpty();
+    void sigSearchResultNotEmpty(const QRectF &textrect, BrowserPage *page);
 
 protected:
     void run() override;

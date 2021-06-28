@@ -633,7 +633,7 @@ private slots:
      * @brief onSearchResultNotEmpty
      * 响应搜索到结果
      */
-    void onSearchResultNotEmpty();
+    void onSearchResultNotEmpty(const QRectF &textrect, BrowserPage *page);
 
 private:
     /**

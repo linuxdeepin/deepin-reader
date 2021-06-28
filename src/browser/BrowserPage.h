@@ -307,8 +307,9 @@ public:
      * @brief setSearchHighlightRectf
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
+     * @param flag
      */
-    void setSearchHighlightRectf(const QList< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QList< QRectF > &rectflst, bool flag = false);
 
     /**
      * @brief clearSearchHighlightRects

@@ -115,7 +115,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     connect(m_searchTask, &PageSearchThread::finished, m_sheet, &DocSheet::onFindFinished, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::sigSearchResultNotEmpty, this, &SheetBrowser::onSearchResultNotEmpty, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, this, [&]() {
-        this->viewport()->update();
+        this->viewport()->update(); // 修复偶现搜索不显示、无法选中文字
     });
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 }
@@ -910,9 +910,14 @@ void SheetBrowser::onRemoveIconAnnotSelect()
     clearSelectIconAnnotAfterMenu();
 }
 
-void SheetBrowser::onSearchResultNotEmpty()
+void SheetBrowser::onSearchResultNotEmpty(const QRectF &textrect, BrowserPage *page)
 {
-    m_isSearchResultNotEmpty = true;
+    if (nullptr != page) {
+        m_isSearchResultNotEmpty = true;
+        m_lastFindPage = page;
+        horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + textrect.x()) - this->width() / 2);
+        verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + textrect.y()) - this->height() / 2);
+    }
 }
 
 /**
@@ -2019,7 +2024,7 @@ void SheetBrowser::handleFindNext()
             if (m_searchCurIndex >= size) {
                 m_searchCurIndex = 0;
                 m_searchPageTextIndex = -1;
-                m_lastFindPage = page;
+                m_changSearchFlag = true;
                 index = -1;
             }
         }
@@ -2068,7 +2073,7 @@ void SheetBrowser::handleFindPrev()
             if (m_searchCurIndex < 0) {
                 m_searchCurIndex = size - 1;
                 m_searchPageTextIndex = pageHighlightSize;
-                m_lastFindPage = page;
+                m_changSearchFlag = true;
                 index = -1;
             }
         }
