@@ -232,6 +232,7 @@ void Central::onMenuTriggered(const QString &action)
         addFilesWithDialog();
     } else if (action == "Save") { //  保存当前显示文件
         docPage()->saveCurrent();
+        docPage()->handleBlockShutdown();
     } else if (action == "Save as") {
         docPage()->saveAsCurrent();
     } else if (action == "Magnifer") {   //  开启放大镜
