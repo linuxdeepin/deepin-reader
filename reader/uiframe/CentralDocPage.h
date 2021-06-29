@@ -250,6 +250,11 @@ public:
      */
     QWidget *getTitleLabel();
 
+    /**
+     * @brief handleBlockShutdown   处理是否阻塞关机
+     */
+    void handleBlockShutdown();
+
 signals:
     /**
      * @brief sigSheetCountChanged

@@ -518,6 +518,7 @@ void CentralDocPage::handleShortcut(const QString &s)
 
     if (s == Dr::key_ctrl_s) {
         saveCurrent();
+        handleBlockShutdown();
     } else if (s == Dr::key_ctrl_shift_s) {
         saveAsCurrent();
     } else if (s == Dr::key_f5) {
@@ -719,6 +720,26 @@ void CentralDocPage::onUpdateTabLabelText()
 QWidget *CentralDocPage::getTitleLabel()
 {
     return m_tabLabel;
+}
+
+void CentralDocPage::handleBlockShutdown()
+{
+    bool bBlock = false;
+    QList<DocSheet *> sheets = m_tabBar->getSheets();
+
+    // 判断是否有文档还未保存
+    for (int i = 0; i < sheets.count(); ++i) {
+        if (sheets[i] && sheets[i]->existFileChanged()) {
+            bBlock = true;
+            break;
+        }
+    }
+
+    if (bBlock) {
+        DBusObject::instance()->blockShutdown();    // 存在未保存的文档时阻塞关机
+    } else {
+        DBusObject::instance()->unBlockShutdown();  // 所有文档都保存的情况下不阻塞关机
+    }
 }
 
 void CentralDocPage::zoomIn()
