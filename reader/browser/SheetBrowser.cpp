@@ -45,6 +45,9 @@
 #include "SheetRenderer.h"
 #include "SecurityDialog.h"
 
+#include <DMenu>
+#include <DGuiApplicationHelper>
+
 #include <QGraphicsItem>
 #include <QScrollBar>
 #include <QTimer>
@@ -61,9 +64,6 @@
 #include <QProcess>
 #include <QTimerEvent>
 #include <QDesktopServices>
-
-#include <DMenu>
-#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -145,8 +145,10 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     deepin_reader::Page *page = document->page(0);
 
-    if (page == nullptr)
+    if (nullptr == page) {
+        delete document;
         return QImage();
+    }
 
     QImage image = page->render(256, 256);
 
@@ -313,7 +315,7 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QR
 
     clickPoint = getAnnotPosInPage(clickPoint, page);
 
-    if (clickPoint.x() < 0 || clickPoint.y() < 0)
+    if (clickPoint.x() < 0 || clickPoint.y() < 0 || qFuzzyIsNull(scaleFactor - 10))
         return false;
 
     iconRect = QRectF(clickPoint.x() / scaleFactor - 10, clickPoint.y() / scaleFactor - 10, 20, 20);
@@ -324,6 +326,10 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QR
 QPointF SheetBrowser::translate2Local(QPointF clickPoint)
 {
     const SheetOperation  &operation = m_sheet->operation();
+
+    if (qFuzzyIsNull(operation.scaleFactor)) {
+        return QPointF();
+    }
 
     return QPointF(clickPoint.x() / operation.scaleFactor, clickPoint.y() / operation.scaleFactor);
 }
@@ -453,14 +459,19 @@ void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
     for (int i = 0; i < m_items.count(); ++i) {
         int y = 0;
 
-        if (Dr::RotateBy0 == m_sheet->operation().rotation) {
+        switch (m_sheet->operation().rotation) {
+        case Dr::RotateBy0:
+        case Dr::RotateBy90:
             y = static_cast<int>(m_items[i]->y());
-        } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
-            y = static_cast<int>(m_items[i]->y());
-        } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
+            break;
+        case Dr::RotateBy180:
             y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().height());
-        } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
+            break;
+        case Dr::RotateBy270:
             y = static_cast<int>(m_items[i]->y() - m_items[i]->boundingRect().width());
+            break;
+        default:
+            break;
         }
 
         if (-1 == fromIndex && y + m_items[i]->rect().height() >= value) {
