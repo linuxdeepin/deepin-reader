@@ -1,6 +1,11 @@
 #config
 QT += core gui sql printsupport dbus testlib widgets
 
+###安全漏洞检测
+#QMAKE_CXX += -g -fsanitize=undefined,address -O2
+#QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
+#QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
 QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0

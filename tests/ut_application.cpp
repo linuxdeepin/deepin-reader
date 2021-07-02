@@ -45,21 +45,7 @@ ut_application::~ut_application()
 
 void ut_application::SetUp()
 {
-    if (a == nullptr) {
-        Test::SetUp();
 
-        int argc = 0;
-        char arg = ' ';
-        char *argPointer = &arg;
-        char **argPointerPointer = &argPointer;
-        a = new Application(argc, argPointerPointer);
-
-        Dtk::Core::DLogManager::registerConsoleAppender();
-        Dtk::Core::DLogManager::registerFileAppender();
-
-        DApplicationSettings savetheme;
-        Q_UNUSED(savetheme)
-    }
 }
 
 void ut_application::TearDown()
@@ -69,11 +55,7 @@ void ut_application::TearDown()
 
 void ut_application::exec(int secs)
 {
-    QTimer::singleShot(1000 * secs, [this]() {
-        a->exit();
-    });
 
-    a->exec();
 }
 
 QString ut_application::filePath(QString fileName, QString dirName)
@@ -89,11 +71,5 @@ QString ut_application::filePath(QString fileName, QString dirName)
 
 TEST_F(ut_application, ApplicationTest)
 {
-    a->emitSheetChanged();
 
-    a->sigShowAnnotTextWidget();
-
-    a->sigSetPasswdFocus();
-
-    a->handleQuitAction();
 }
