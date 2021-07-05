@@ -36,6 +36,7 @@
 
 #include <qmath.h>
 #include <cstdio>
+#include <unistd.h>
 
 #define LOCK_PAGE QMutexLocker mutexLocker(&m_parent->m_mutex);
 #define LOCK_DOCUMENT QMutexLocker mutexLocker(&m_mutex);
@@ -774,6 +775,8 @@ bool DjVuDocument::save() const
     if (array.size() != file.write(array))
         result = false;
 
+    file.flush();//函数将用户缓存中的内容写入内核缓冲区
+    fsync(file.handle());//将内核缓冲写入文件(磁盘)
     file.close();
 
     return result;
