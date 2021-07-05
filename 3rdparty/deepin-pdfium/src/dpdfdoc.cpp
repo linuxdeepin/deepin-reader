@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QTemporaryDir>
 #include <QUuid>
+#include <unistd.h>
 
 DPdfDoc::Status parseError(int error)
 {
@@ -205,8 +206,9 @@ bool DPdfDoc::save()
     if (array.size() != file.write(array))
         result = false;
 
+    file.flush();//函数将用户缓存中的内容写入内核缓冲区
+    fsync(file.handle());//将内核缓冲写入文件(磁盘)
     file.close();
-
     return result;
 }
 
