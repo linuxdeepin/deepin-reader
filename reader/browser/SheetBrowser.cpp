@@ -66,7 +66,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-#define REPEAT_MOVE_DELAY 500
+#define REPEAT_MOVE_DELAY 300
 const qreal deltaManhattanLength = 12.0;
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
