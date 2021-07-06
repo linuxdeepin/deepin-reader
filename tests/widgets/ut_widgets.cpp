@@ -70,178 +70,178 @@ void Ut_Widgets::TearDown()
 {
 }
 
-TEST_F(Ut_Widgets, SheetWidgetTest)
-{
-    QString path = filePath(UT_FILE_TEST_FILE_1, "SheetWidgetTest");
+//TEST_F(Ut_Widgets, SheetWidgetTest)
+//{
+//    QString path = filePath(UT_FILE_TEST_FILE_1, "SheetWidgetTest");
 
-    MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
+//    MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
 
-    ASSERT_TRUE(mainWindow->m_central);
+//    ASSERT_TRUE(mainWindow->m_central);
 
-    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetWidgetTest"));
+//    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "SheetWidgetTest"));
 
-    ASSERT_TRUE(sheet->openFileExec(""));
+//    ASSERT_TRUE(sheet->openFileExec(""));
 
-    mainWindow->show();
+//    mainWindow->show();
 
-    mainWindow->addSheet(sheet);
+//    mainWindow->addSheet(sheet);
 
-    CentralDocPage *docpage = mainWindow->m_central->docPage();
+//    CentralDocPage *docpage = mainWindow->m_central->docPage();
 
-    ASSERT_TRUE(docpage);
+//    ASSERT_TRUE(docpage);
 
-    ASSERT_TRUE(sheet);
+//    ASSERT_TRUE(sheet);
 
-    sheet->setSidebarVisible(true);
+//    sheet->setSidebarVisible(true);
 
-    sheet->m_sidebar->onBtnClicked(4);
+//    sheet->m_sidebar->onBtnClicked(4);
 
-    sheet->startSearch("12");
+//    sheet->startSearch("12");
 
-    //ScaleMenu
-    {
-        ScaleMenu scaleMenu;
-        scaleMenu.readCurDocParam(nullptr);
-        scaleMenu.onTwoPage();
-        scaleMenu.onFiteH();
-        scaleMenu.onFiteW();
-        scaleMenu.onDefaultPage();
-        scaleMenu.onFitPage();
-        scaleMenu.onScaleFactor();
+//    //ScaleMenu
+//    {
+//        ScaleMenu scaleMenu;
+//        scaleMenu.readCurDocParam(nullptr);
+//        scaleMenu.onTwoPage();
+//        scaleMenu.onFiteH();
+//        scaleMenu.onFiteW();
+//        scaleMenu.onDefaultPage();
+//        scaleMenu.onFitPage();
+//        scaleMenu.onScaleFactor();
 
-        scaleMenu.readCurDocParam(sheet);
-        scaleMenu.onTwoPage();
-        scaleMenu.onFiteH();
-        scaleMenu.onFiteW();
-        scaleMenu.onDefaultPage();
-        scaleMenu.onFitPage();
-        scaleMenu.onScaleFactor();
-    }
+//        scaleMenu.readCurDocParam(sheet);
+//        scaleMenu.onTwoPage();
+//        scaleMenu.onFiteH();
+//        scaleMenu.onFiteW();
+//        scaleMenu.onDefaultPage();
+//        scaleMenu.onFitPage();
+//        scaleMenu.onScaleFactor();
+//    }
 
-    //FileAttrWidget
-    {
-        class ImageWidget : public DWidget
-        {
-        };
+//    //FileAttrWidget
+//    {
+//        class ImageWidget : public DWidget
+//        {
+//        };
 
-        FileAttrWidget *filewidget = new FileAttrWidget();
-        filewidget->setAttribute(Qt::WA_ShowModal, false);
-        filewidget->setFileAttr(nullptr);
-        filewidget->setFileAttr(sheet);
-        filewidget->addTitleFrame("");
-        filewidget->resize(600, 600);
-        filewidget->showScreenCenter();
+//        FileAttrWidget *filewidget = new FileAttrWidget();
+//        filewidget->setAttribute(Qt::WA_ShowModal, false);
+//        filewidget->setFileAttr(nullptr);
+//        filewidget->setFileAttr(sheet);
+//        filewidget->addTitleFrame("");
+//        filewidget->resize(600, 600);
+//        filewidget->showScreenCenter();
 
-        QPaintEvent paintevent(QRect(0, 0, 100, 100));
-        filewidget->paintEvent(&paintevent);
+//        QPaintEvent paintevent(QRect(0, 0, 100, 100));
+//        filewidget->paintEvent(&paintevent);
 
-        delete filewidget;
-    }
+//        delete filewidget;
+//    }
 
-    //SlideWidget
-    {
-        SlideWidget *slidewidget = new SlideWidget(sheet);
-        slidewidget->resize(600, 400);
-        slidewidget->show();
-        slidewidget->playImage();
-        slidewidget->drawImage(QPixmap());
+//    //SlideWidget
+//    {
+//        SlideWidget *slidewidget = new SlideWidget(sheet);
+//        slidewidget->resize(600, 400);
+//        slidewidget->show();
+//        slidewidget->playImage();
+//        slidewidget->drawImage(QPixmap());
 
-        slidewidget->onImagevalueChanged(0);
-        slidewidget->onImageShowTimeOut();
+//        slidewidget->onImagevalueChanged(0);
+//        slidewidget->onImageShowTimeOut();
 
-        slidewidget->onFetchImage(0);
-        slidewidget->onUpdatePageImage(0);
-        slidewidget->onPlayBtnClicked();
-        slidewidget->handleKeyPressEvent(Dr::key_space);
-        slidewidget->handleKeyPressEvent(Dr::key_left);
-        slidewidget->handleKeyPressEvent(Dr::key_right);
+//        slidewidget->onFetchImage(0);
+//        slidewidget->onUpdatePageImage(0);
+//        slidewidget->onPlayBtnClicked();
+//        slidewidget->handleKeyPressEvent(Dr::key_space);
+//        slidewidget->handleKeyPressEvent(Dr::key_left);
+//        slidewidget->handleKeyPressEvent(Dr::key_right);
 
-        slidewidget->onParentDestroyed();
-        slidewidget->onPreBtnClicked();
-        slidewidget->onPlayBtnClicked();
-        slidewidget->onNextBtnClicked();
-        slidewidget->onExitBtnClicked();
+//        slidewidget->onParentDestroyed();
+//        slidewidget->onPreBtnClicked();
+//        slidewidget->onPlayBtnClicked();
+//        slidewidget->onNextBtnClicked();
+//        slidewidget->onExitBtnClicked();
 
-        slidewidget->setWidgetState(true);
-        slidewidget->onParentDestroyed();
-        slidewidget->setWidgetState(false);
-        slidewidget->onImageAniFinished();
+//        slidewidget->setWidgetState(true);
+//        slidewidget->onParentDestroyed();
+//        slidewidget->setWidgetState(false);
+//        slidewidget->onImageAniFinished();
 
-        QMouseEvent mousemoveevent(QEvent::MouseMove, QPoint(100, 100), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QCoreApplication::sendEvent(slidewidget, &mousemoveevent);
+//        QMouseEvent mousemoveevent(QEvent::MouseMove, QPoint(100, 100), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+//        QCoreApplication::sendEvent(slidewidget, &mousemoveevent);
 
-        QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-        QCoreApplication::sendEvent(slidewidget, &mouseLPevent);
+//        QMouseEvent mouseLPevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+//        QCoreApplication::sendEvent(slidewidget, &mouseLPevent);
 
-        slidewidget->repaint();
+//        slidewidget->repaint();
 
-        delete slidewidget;
-    }
+//        delete slidewidget;
+//    }
 
-    //HandleMenu
-    {
-        HandleMenu handleMenu;
-        handleMenu.readCurDocParam(nullptr);
-        handleMenu.onHandTool();
-        handleMenu.onSelectText();
+//    //HandleMenu
+//    {
+//        HandleMenu handleMenu;
+//        handleMenu.readCurDocParam(nullptr);
+//        handleMenu.onHandTool();
+//        handleMenu.onSelectText();
 
-        handleMenu.readCurDocParam(sheet);
-        handleMenu.onHandTool();
-        handleMenu.onSelectText();
-    }
+//        handleMenu.readCurDocParam(sheet);
+//        handleMenu.onHandTool();
+//        handleMenu.onSelectText();
+//    }
 
-    //ScaleWidget
-    {
-        ScaleWidget scaleWidget;
-        scaleWidget.setSheet(nullptr);
-        scaleWidget.clear();
-        scaleWidget.onPrevScale();
-        scaleWidget.onNextScale();
-        scaleWidget.onReturnPressed();
-        scaleWidget.onEditFinished();
-        //        scaleWidget.onArrowBtnlicked();       //会等待
+//    //ScaleWidget
+//    {
+//        ScaleWidget scaleWidget;
+//        scaleWidget.setSheet(nullptr);
+//        scaleWidget.clear();
+//        scaleWidget.onPrevScale();
+//        scaleWidget.onNextScale();
+//        scaleWidget.onReturnPressed();
+//        scaleWidget.onEditFinished();
+//        //        scaleWidget.onArrowBtnlicked();       //会等待
 
-        scaleWidget.setSheet(sheet);
-        scaleWidget.clear();
-        scaleWidget.onPrevScale();
-        scaleWidget.onNextScale();
-        scaleWidget.onReturnPressed();
-        scaleWidget.onEditFinished();
-    }
+//        scaleWidget.setSheet(sheet);
+//        scaleWidget.clear();
+//        scaleWidget.onPrevScale();
+//        scaleWidget.onNextScale();
+//        scaleWidget.onReturnPressed();
+//        scaleWidget.onEditFinished();
+//    }
 
-    //FindWidget
-    {
-        FindWidget findWidget;
-        findWidget.setDocSheet(nullptr);
-        findWidget.showPosition(0);
-        findWidget.setSearchEditFocus();
-        findWidget.setEditAlert(true);
-        findWidget.setEditAlert(false);
-        findWidget.onSearchStart();
-        findWidget.slotFindNextBtnClicked();
-        findWidget.slotFindPrevBtnClicked();
-        findWidget.onSearchStop();
-        findWidget.onTextChanged();
-        findWidget.onCloseBtnClicked();
+//    //FindWidget
+//    {
+//        FindWidget findWidget;
+//        findWidget.setDocSheet(nullptr);
+//        findWidget.showPosition(0);
+//        findWidget.setSearchEditFocus();
+//        findWidget.setEditAlert(true);
+//        findWidget.setEditAlert(false);
+//        findWidget.onSearchStart();
+//        findWidget.slotFindNextBtnClicked();
+//        findWidget.slotFindPrevBtnClicked();
+//        findWidget.onSearchStop();
+//        findWidget.onTextChanged();
+//        findWidget.onCloseBtnClicked();
 
-        findWidget.setDocSheet(sheet);
-        findWidget.slotFindNextBtnClicked();
-        findWidget.slotFindPrevBtnClicked();
-        findWidget.onSearchStop();
-        findWidget.onTextChanged();
-        findWidget.onCloseBtnClicked();
+//        findWidget.setDocSheet(sheet);
+//        findWidget.slotFindNextBtnClicked();
+//        findWidget.slotFindPrevBtnClicked();
+//        findWidget.onSearchStop();
+//        findWidget.onTextChanged();
+//        findWidget.onCloseBtnClicked();
 
-        QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
-        QCoreApplication::sendEvent(&findWidget, &sidekeyLevent);
+//        QKeyEvent sidekeyLevent(QEvent::KeyPress, Qt::Key_Left, Qt::ControlModifier);
+//        QCoreApplication::sendEvent(&findWidget, &sidekeyLevent);
 
-        QKeyEvent sidekeyUpLevent(QEvent::KeyPress, Qt::Key_Up, Qt::ControlModifier);
-        QCoreApplication::sendEvent(&findWidget, &sidekeyUpLevent);
-    }
+//        QKeyEvent sidekeyUpLevent(QEvent::KeyPress, Qt::Key_Up, Qt::ControlModifier);
+//        QCoreApplication::sendEvent(&findWidget, &sidekeyUpLevent);
+//    }
 
-    sheet->saveData();
+//    sheet->saveData();
 
-    exec();
-}
+//    exec();
+//}
 
 TEST_F(Ut_Widgets, BColorWidgetActionTest)
 {

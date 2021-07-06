@@ -52,12 +52,12 @@ TEST_F(Ut_MainWindow, MainWindowTest)
 
     MainWindow *mainWindow = MainWindow::createWindow(sheet);
     MainWindow *mainWindow_empty = MainWindow::createWindow();
-    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_1, "MainWindowTest") << filePath(UT_FILE_DJVU, "MainWindowTest"));
-    mainWindow_muti->addSheet(sheet2);
-    mainWindow_muti->addFile(filePath(UT_FILE_TEST_FILE_3, "MainWindowTest"));
+//    MainWindow *mainWindow_muti = MainWindow::createWindow(QStringList() << filePath(UT_FILE_TEST_FILE_1, "MainWindowTest") << filePath(UT_FILE_DJVU, "MainWindowTest"));
+//    mainWindow_muti->addSheet(sheet2);
+//    mainWindow_muti->addFile(filePath(UT_FILE_TEST_FILE_3, "MainWindowTest"));
 
     EXPECT_EQ(mainWindow_empty->hasSheet(nullptr), false);
-    EXPECT_EQ(mainWindow_muti->hasSheet(sheet), false);
+//    EXPECT_EQ(mainWindow_muti->hasSheet(sheet), false);
 
     EXPECT_EQ(mainWindow->allowCreateWindow(), true);
     EXPECT_FALSE(mainWindow->windowContainSheet(nullptr));
@@ -69,7 +69,7 @@ TEST_F(Ut_MainWindow, MainWindowTest)
     mainWindow->activateSheetIfExist(filePath(UT_FILE_PDF, "MainWindowTest"));
     mainWindow->updateOrderWidgets(QList<QWidget *>());
     mainWindow->activateSheet(sheet);
-    mainWindow_muti->activateSheet(sheet);
+//    mainWindow_muti->activateSheet(sheet);
     mainWindow->onMainWindowFull();
     mainWindow->onMainWindowExitFull();
     mainWindow->resizeFullTitleWidget();

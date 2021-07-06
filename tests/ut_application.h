@@ -44,7 +44,7 @@ public:
 
     QString filePath(QString fileName, QString dirName);
 
-    Application *a = nullptr;
+//    Application *a = nullptr;
 };
 
 #endif // UT_APPLICATION_H
