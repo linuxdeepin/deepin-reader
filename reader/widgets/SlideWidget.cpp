@@ -85,7 +85,7 @@ void SlideWidget::initImageControl()
     connect(m_imageTimer, &QTimer::timeout, this, &SlideWidget::onImageShowTimeOut);
     m_imageTimer->start();
 
-    m_imageAnimation = new QPropertyAnimation(this, "");
+    m_imageAnimation = new QPropertyAnimation(this, "", this);
     m_imageAnimation->setEasingCurve(QEasingCurve::Linear);
     m_imageAnimation->setDuration(500);
     connect(m_imageAnimation, &QPropertyAnimation::valueChanged, this, &SlideWidget::onImagevalueChanged);

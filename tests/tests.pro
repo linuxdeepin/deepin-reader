@@ -1,6 +1,11 @@
 #config
 QT += core gui sql printsupport dbus testlib widgets
 
+###安全漏洞检测
+#QMAKE_CXX += -g -fsanitize=undefined,address -O2
+#QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
+#QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
 #访问私有方法 -fno-access-control
@@ -57,7 +62,7 @@ INCLUDEPATH += $$PWD/include/gtest
 
 #安全测试选项
 if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
-    QMAKE_CFLAGS += -g -fsanitize=address -O2
-    QMAKE_LFLAGS += -g -fsanitize=address -O2
-    QMAKE_CXXFLAGS += -g -fsanitize=address -O2
+    QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 }
