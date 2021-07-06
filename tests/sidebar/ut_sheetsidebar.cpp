@@ -64,368 +64,368 @@ void ut_sidebar::TearDown()
 
 }
 
-TEST_F(ut_sidebar, CatalogTreeViewTest)
-{
-    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "CatalogTreeViewTest"));
+//TEST_F(ut_sidebar, CatalogTreeViewTest)
+//{
+//    DocSheet *sheet = new DocSheet(Dr::PDF, filePath(UT_FILE_PDF, "CatalogTreeViewTest"));
 
-    EXPECT_TRUE(sheet->openFileExec(""));
+////    EXPECT_TRUE(sheet->openFileExec(""));
 
-    CatalogTreeView *treeView = new CatalogTreeView(sheet);
+//    CatalogTreeView *treeView = new CatalogTreeView(sheet);
 
-    treeView->handleOpenSuccess();
+//    treeView->handleOpenSuccess();
 
-    treeView->setIndex(0, "1");
+//    treeView->setIndex(0, "1");
 
-    treeView->setRightControl(true);
+//    treeView->setRightControl(true);
 
-    treeView->nextPage();
+//    treeView->nextPage();
 
-    treeView->pageDownPage();
+//    treeView->pageDownPage();
 
-    treeView->prevPage();
+//    treeView->prevPage();
 
-    treeView->pageUpPage();
+//    treeView->pageUpPage();
 
-    QResizeEvent resizeEvent(QSize(800, 600), QSize(400, 300));
+//    QResizeEvent resizeEvent(QSize(800, 600), QSize(400, 300));
 
-    treeView->resizeEvent(&resizeEvent);
+//    treeView->resizeEvent(&resizeEvent);
 
-    QMouseEvent pressMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+//    QMouseEvent pressMouseEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
-    treeView->mousePressEvent(&pressMouseEvent);
+//    treeView->mousePressEvent(&pressMouseEvent);
 
-    QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
+//    QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
 
-    treeView->keyPressEvent(&sideekeyRevent);
+//    treeView->keyPressEvent(&sideekeyRevent);
 
-    QModelIndex index = treeView->indexAt(QPoint(0, 0));
+//    QModelIndex index = treeView->indexAt(QPoint(0, 0));
 
-    treeView->currentChanged(index, index);
+//    treeView->currentChanged(index, index);
 
-    treeView->onItemClicked(index);
+//    treeView->onItemClicked(index);
 
-    QFont font;
+//    QFont font;
 
-    treeView->onFontChanged(font);
+//    treeView->onFontChanged(font);
 
-    deepin_reader::Section section;
+//    deepin_reader::Section section;
 
-    QStandardItem item;
+//    QStandardItem item;
 
-    treeView->parseCatalogData(section, &item);
+//    treeView->parseCatalogData(section, &item);
 
-    treeView->resizeCoulumnWidth();
+//    treeView->resizeCoulumnWidth();
 
-    qDeleteAll(treeView->getItemList("123", 0, 5, 5));
+//    qDeleteAll(treeView->getItemList("123", 0, 5, 5));
 
-    treeView->scrollToIndex(index);
+//    treeView->scrollToIndex(index);
 
-    treeView->slotCollapsed(index);
+//    treeView->slotCollapsed(index);
 
-    treeView->slotExpanded(index);
+//    treeView->slotExpanded(index);
 
-    delete  treeView;
+//    delete  treeView;
 
-    delete sheet;
-}
+//    delete sheet;
+//}
 
-TEST_F(ut_sidebar, SidebarTest)
-{
-    QString path = filePath(UT_FILE_TEST_FILE_1, "SidebarTest");
-    MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
-    ASSERT_TRUE(mainWindow->m_central);
-    mainWindow->showDefaultSize();
-    mainWindow->show();
+//TEST_F(ut_sidebar, SidebarTest)
+//{
+//    QString path = filePath(UT_FILE_TEST_FILE_1, "SidebarTest");
+//    MainWindow *mainWindow = MainWindow::createWindow(QStringList() << path);
+//    ASSERT_TRUE(mainWindow->m_central);
+//    mainWindow->showDefaultSize();
+//    mainWindow->show();
 
-    CentralDocPage *docpage = mainWindow->m_central->docPage();
-    //Central
-    ASSERT_TRUE(docpage);
+//    CentralDocPage *docpage = mainWindow->m_central->docPage();
+//    //Central
+//    ASSERT_TRUE(docpage);
 
-    DocSheet *sheet = docpage->getSheet(path);
-    ASSERT_TRUE(sheet);
+//    DocSheet *sheet = docpage->getSheet(path);
+//    ASSERT_TRUE(sheet);
 
-    sheet->setSidebarVisible(true);
-    sheet->m_sidebar->onBtnClicked(2);
+//    sheet->setSidebarVisible(true);
+//    sheet->m_sidebar->onBtnClicked(2);
 
-    SheetSidebar &sideBar = *sheet->m_sidebar;
+//    SheetSidebar &sideBar = *sheet->m_sidebar;
 
-    sideBar.show();
-    sideBar.resize(200, 600);
-    DToolButton *btn = sideBar.createBtn("test", "test");
-    EXPECT_TRUE(btn);
-    sideBar.handleOpenSuccess();
-    sideBar.setBookMark(0, 0);
-    sideBar.setBookMark(-1, 0);
-    sideBar.setBookMark(10000, 0);
-    sideBar.setBookMark(0, 1);
-    sideBar.setBookMark(-1, 1);
-    sideBar.setBookMark(10000, 1);
+//    sideBar.show();
+//    sideBar.resize(200, 600);
+//    DToolButton *btn = sideBar.createBtn("test", "test");
+//    EXPECT_TRUE(btn);
+//    sideBar.handleOpenSuccess();
+//    sideBar.setBookMark(0, 0);
+//    sideBar.setBookMark(-1, 0);
+//    sideBar.setBookMark(10000, 0);
+//    sideBar.setBookMark(0, 1);
+//    sideBar.setBookMark(-1, 1);
+//    sideBar.setBookMark(10000, 1);
 
-    sideBar.setCurrentPage(-1);
-    sideBar.setCurrentPage(0);
-    sideBar.setCurrentPage(10000);
+//    sideBar.setCurrentPage(-1);
+//    sideBar.setCurrentPage(0);
+//    sideBar.setCurrentPage(10000);
 
-    sideBar.handleSearchStart("");
-    sideBar.handleSearchStop();
-
-    sideBar.handleSearchResultComming(deepin_reader::SearchResult());
-    sideBar.handleFindFinished();
-    sideBar.handleRotate();
-    sideBar.changeResetModelData();
-
-    sideBar.handleAnntationMsg(0, -1, nullptr);
-    sideBar.handleAnntationMsg(1, -1, nullptr);
-    sideBar.handleAnntationMsg(2, -1, nullptr);
-
-    sideBar.adaptWindowSize(1.0);
-    sideBar.onBtnClicked(0);
-    sideBar.onUpdateWidgetTheme();
-
-    sideBar.onHandWidgetDocOpenSuccess();
-    sideBar.onHandleOpenSuccessDelay();
-    sideBar.handleOpenSuccess();
-
-    sideBar.dealWithPressKey(Dr::key_up);
-    sideBar.dealWithPressKey(Dr::key_down);
-    sideBar.dealWithPressKey(Dr::key_delete);
-    sideBar.onJumpToPrevPage();
-    sideBar.onJumpToPageDown();
-    sideBar.onJumpToPageUp();
-    sideBar.deleteItemByKey();
-    sideBar.onJumpToNextPage();
-    sideBar.showMenu();
-
-    QResizeEvent sidebarresizeEvent(QSize(100, 400), QSize(100, 600));
-    sideBar.resizeEvent(&sidebarresizeEvent);
-
-    QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
-    sideBar.keyPressEvent(&sideekeyRevent);
-
-    QKeyEvent sideekeyDevent(QEvent::KeyPress, Qt::Key_Delete, Qt::ControlModifier);
-    sideBar.keyPressEvent(&sideekeyDevent);
-
-    QShowEvent showevent;
-    sideBar.showEvent(&showevent);
-
-    sideBar.event(&sideekeyDevent);
-
-    //ThumbnailWidget
-    ThumbnailWidget thumbnailWidget(sheet);
-    thumbnailWidget.show();
-    thumbnailWidget.handleOpenSuccess();
-    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
-    thumbnailWidget.m_pImageListView->scrollToIndex(0);
-    thumbnailWidget.handlePage(-1);
-    thumbnailWidget.handlePage(0);
-    thumbnailWidget.handlePage(100000);
-    thumbnailWidget.handleRotate();
-    thumbnailWidget.setBookMarkState(-1, 0);
-    thumbnailWidget.setBookMarkState(0, 0);
-    thumbnailWidget.setBookMarkState(10000, 0);
-
-    thumbnailWidget.setBookMarkState(-1, 1);
-    thumbnailWidget.setBookMarkState(0, 1);
-    thumbnailWidget.setBookMarkState(10000, 1);
-
-    thumbnailWidget.prevPage();
-    thumbnailWidget.nextPage();
-    thumbnailWidget.pageDown();
-    thumbnailWidget.pageUp();
-
-    thumbnailWidget.adaptWindowSize(1.0);
-    thumbnailWidget.scrollToCurrentPage();
-    thumbnailWidget.repaint();
-
-    QList<QWidget *> tabWidgetlst;
-    thumbnailWidget.setTabOrderWidget(tabWidgetlst);
-
-    thumbnailWidget.m_pPageWidget->slotUpdateTheme();
-    thumbnailWidget.m_pPageWidget->onEditFinished();
-    thumbnailWidget.m_pPageWidget->normalChangePage();
-    thumbnailWidget.m_pPageWidget->pageNumberJump();
-    thumbnailWidget.m_pPageWidget->slotPrePageBtnClicked();
-    thumbnailWidget.m_pPageWidget->slotNextPageBtnClicked();
-    thumbnailWidget.m_pPageWidget->setTabOrderWidget(tabWidgetlst);
-    thumbnailWidget.m_pPageWidget->SlotJumpPageLineEditReturnPressed();
-    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
-    thumbnailWidget.m_pPageWidget->setIndex(0);
-    thumbnailWidget.m_pPageWidget->setBtnState(0, sheet->pageCount());
-
-    thumbnailWidget.m_pImageListView->onSetThumbnailListSlideGesture();
-    thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();
-    thumbnailWidget.m_pImageListView->model()->setData(QModelIndex(), "123", Qt::UserRole);
-
-    QTimer::singleShot(5, [&] {
-        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
-        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pNoteMenu, &keyevent);
-    });
-    thumbnailWidget.m_pImageListView->showNoteMenu(QPoint(0, 0));
-
-    QTimer::singleShot(5, [&] {
-        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
-        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pBookMarkMenu, &keyevent);
-    });
-
-    thumbnailWidget.m_pImageListView->showBookMarkMenu(QPoint(0, 0));
-
-    thumbnailWidget.m_sheet = nullptr;
-    thumbnailWidget.prevPage();
-    thumbnailWidget.nextPage();
-
-    SideBarImageListView imageListView(sheet);
-    QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    imageListView.mousePressEvent(&mouserevent);
-
-    //CatalogWidget
-    CatalogWidget catalogWidget(sheet);
-    catalogWidget.resize(100, 600);
-    catalogWidget.handleOpenSuccess();
-    catalogWidget.handleOpenSuccess();
-    catalogWidget.handlePage(0);
-    catalogWidget.handlePage(10000);
-    catalogWidget.handlePage(-1);
-    catalogWidget.setTitleTheme();
-    catalogWidget.nextPage();
-    catalogWidget.prevPage();
-    catalogWidget.m_strTheme = "Test";
-    catalogWidget.m_sheet = nullptr;
-    catalogWidget.handleOpenSuccess();
-    catalogWidget.pageUp();
-    catalogWidget.pageDown();
-
-    QResizeEvent resizeEvent(QSize(100, 400), QSize(100, 600));
-    QCoreApplication::sendEvent(&catalogWidget, &resizeEvent);
-
-    QPaintEvent paintevent(QRect(0, 0, 100, 100));
-    catalogWidget.m_pTree->paintEvent(&paintevent);
-
-    EXPECT_TRUE(catalogWidget.m_pTree);
-    catalogWidget.m_pTree->slotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
-    catalogWidget.m_pTree->slotCollapsed(catalogWidget.m_pTree->model()->index(0, 0));
-    catalogWidget.m_pTree->onItemClicked(catalogWidget.m_pTree->model()->index(0, 0));
-    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
-    QMouseEvent mouseevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-    QCoreApplication::sendEvent(catalogWidget.m_pTree, &mouseevent);
-
-    QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
-    QCoreApplication::sendEvent(catalogWidget.m_pTree, &keyevent);
-
-    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
-
-    QCoreApplication::sendEvent(catalogWidget.m_pTree, &resizeEvent);
-
-    catalogWidget.m_pTree->pageDownPage();
-    catalogWidget.m_pTree->prevPage();
-    catalogWidget.m_pTree->nextPage();
-    catalogWidget.m_pTree->pageUpPage();
-    catalogWidget.m_pTree->scrollToIndex(catalogWidget.m_pTree->indexAt(QPoint(0, 0)));
-
-    catalogWidget.m_pTree->m_sheet = nullptr;
-    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
-    catalogWidget.m_pTree->handleOpenSuccess();
-
-    //BookMarkWidget
-    BookMarkWidget bookwidget(sheet);
-    bookwidget.handleOpenSuccess();
-    bookwidget.adaptWindowSize(1.0);
-    bookwidget.nextPage();
-    bookwidget.deleteItemByKey();
-    bookwidget.handlePage(0);
-    bookwidget.handleBookMark(0, 1);
-    bookwidget.prevPage();
-    bookwidget.handleBookMark(0, 0);
-    bookwidget.prevPage();
-    bookwidget.onUpdateTheme();
-    bookwidget.onAddBookMarkClicked();
-    bookwidget.onListMenuClick(E_BOOKMARK_DELETE);
-    bookwidget.deleteAllItem();
-    bookwidget.pageUp();
-    bookwidget.pageDown();
-    bookwidget.setTabOrderWidget(tabWidgetlst);
-    bookwidget.m_sheet = nullptr;
-    bookwidget.prevPage();
-
-    //NotesWidget
-    NotesWidget noteWidget(sheet);
-    noteWidget.prevPage();
-    noteWidget.nextPage();
-    noteWidget.deleteItemByKey();
-    noteWidget.handleOpenSuccess();
-    noteWidget.handleAnntationMsg(-1, nullptr);
-    noteWidget.handleAnntationMsg(0, nullptr);
-    noteWidget.handleAnntationMsg(1, nullptr);
-    noteWidget.handleAnntationMsg(2, nullptr);
-    noteWidget.adaptWindowSize(1.0);
-    noteWidget.changeResetModelData();
-    noteWidget.onListMenuClick(-1);
-    noteWidget.onListMenuClick(4);
-    noteWidget.onListMenuClick(5);
-    noteWidget.onListItemClicked(-1);
-    noteWidget.onListItemClicked(0);
-    noteWidget.onListItemClicked(10000);
-    noteWidget.onAddAnnotation();
-    noteWidget.copyNoteContent();
-    noteWidget.addNoteItem(nullptr);
-    noteWidget.deleteNoteItem(nullptr);
-    noteWidget.deleteAllItem();
-    noteWidget.m_sheet = nullptr;
-    noteWidget.prevPage();
-    noteWidget.nextPage();
-    noteWidget.handleOpenSuccess();
-    noteWidget.pageUp();
-    noteWidget.pageDown();
-    noteWidget.setTabOrderWidget(tabWidgetlst);
-    noteWidget.m_pImageListView->setCurrentIndex(QModelIndex());
-    noteWidget.m_pImageListView->showMenu();
-    noteWidget.m_pImageListView = nullptr;
-    noteWidget.showMenu();
-
-    //SearchResWidget
-    SearchResWidget searchWidget(sheet);
-    searchWidget.clearFindResult();
-    searchWidget.adaptWindowSize(1.0);
-    EXPECT_EQ(searchWidget.handleFindFinished(), 0);
-    searchWidget.addSearchsItem(0, "test", 5);
-    searchWidget.addSearchsItem(-1, "test", -1);
-    deepin_reader::SearchResult searchRes;
-    searchRes.words << deepin_reader::Word();
-    searchWidget.handleSearchResultComming(searchRes);
-    EXPECT_EQ(searchWidget.handleFindFinished(), 2);
-
-    searchWidget.m_sheet = nullptr;
-    searchWidget.addSearchsItem(0, "test", 5);
-    EXPECT_EQ(searchWidget.handleFindFinished(), 2);
-
-    EXPECT_TRUE(searchWidget.m_pImageListView);
-    searchWidget.m_pImageListView->handleOpenSuccess();
-    searchWidget.m_pImageListView->scrollToIndex(0);
-    searchWidget.m_pImageListView->scrollToIndex(-1);
-    searchWidget.m_pImageListView->scrollToIndex(10000);
-    searchWidget.m_pImageListView->scrollToModelInexPage(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
-    searchWidget.m_pImageListView->getModelIndexForPageIndex(0);
-    searchWidget.m_pImageListView->getPageIndexForModelIndex(0);
-    EXPECT_LE(searchWidget.m_pImageListView->getModelIndexForPageIndex(-1), 0);
-    EXPECT_TRUE(searchWidget.m_pImageListView->getImageModel());
-    searchWidget.m_pImageListView->onItemClicked(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
-    searchWidget.m_pImageListView->onItemClicked(QModelIndex());
-
-    ImageinfoType_e imageInfo;
-    Q_UNUSED(imageInfo);
-
-    ImagePageInfo_t imageInfo1(1);
-    ImagePageInfo_t imageInfo2(2);
-    ImagePageInfo_t imageInfo3(imageInfo1);
-
-    EXPECT_FALSE(imageInfo1 == imageInfo2);
-    EXPECT_TRUE(imageInfo1 == imageInfo3);
-    EXPECT_TRUE(imageInfo1 < imageInfo2);
-    EXPECT_FALSE(imageInfo1 > imageInfo2);
-
-    //Asan报错
-    //mainWindow->handleClose(false);
-
-    exec();
-}
+//    sideBar.handleSearchStart("");
+//    sideBar.handleSearchStop();
+
+//    sideBar.handleSearchResultComming(deepin_reader::SearchResult());
+//    sideBar.handleFindFinished();
+//    sideBar.handleRotate();
+//    sideBar.changeResetModelData();
+
+//    sideBar.handleAnntationMsg(0, -1, nullptr);
+//    sideBar.handleAnntationMsg(1, -1, nullptr);
+//    sideBar.handleAnntationMsg(2, -1, nullptr);
+
+//    sideBar.adaptWindowSize(1.0);
+//    sideBar.onBtnClicked(0);
+//    sideBar.onUpdateWidgetTheme();
+
+//    sideBar.onHandWidgetDocOpenSuccess();
+//    sideBar.onHandleOpenSuccessDelay();
+//    sideBar.handleOpenSuccess();
+
+//    sideBar.dealWithPressKey(Dr::key_up);
+//    sideBar.dealWithPressKey(Dr::key_down);
+//    sideBar.dealWithPressKey(Dr::key_delete);
+//    sideBar.onJumpToPrevPage();
+//    sideBar.onJumpToPageDown();
+//    sideBar.onJumpToPageUp();
+//    sideBar.deleteItemByKey();
+//    sideBar.onJumpToNextPage();
+//    sideBar.showMenu();
+
+//    QResizeEvent sidebarresizeEvent(QSize(100, 400), QSize(100, 600));
+//    sideBar.resizeEvent(&sidebarresizeEvent);
+
+//    QKeyEvent sideekeyRevent(QEvent::KeyPress, Qt::Key_Right, Qt::ControlModifier);
+//    sideBar.keyPressEvent(&sideekeyRevent);
+
+//    QKeyEvent sideekeyDevent(QEvent::KeyPress, Qt::Key_Delete, Qt::ControlModifier);
+//    sideBar.keyPressEvent(&sideekeyDevent);
+
+//    QShowEvent showevent;
+//    sideBar.showEvent(&showevent);
+
+//    sideBar.event(&sideekeyDevent);
+
+//    //ThumbnailWidget
+//    ThumbnailWidget thumbnailWidget(sheet);
+//    thumbnailWidget.show();
+//    thumbnailWidget.handleOpenSuccess();
+//    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
+//    thumbnailWidget.m_pImageListView->scrollToIndex(0);
+//    thumbnailWidget.handlePage(-1);
+//    thumbnailWidget.handlePage(0);
+//    thumbnailWidget.handlePage(100000);
+//    thumbnailWidget.handleRotate();
+//    thumbnailWidget.setBookMarkState(-1, 0);
+//    thumbnailWidget.setBookMarkState(0, 0);
+//    thumbnailWidget.setBookMarkState(10000, 0);
+
+//    thumbnailWidget.setBookMarkState(-1, 1);
+//    thumbnailWidget.setBookMarkState(0, 1);
+//    thumbnailWidget.setBookMarkState(10000, 1);
+
+//    thumbnailWidget.prevPage();
+//    thumbnailWidget.nextPage();
+//    thumbnailWidget.pageDown();
+//    thumbnailWidget.pageUp();
+
+//    thumbnailWidget.adaptWindowSize(1.0);
+//    thumbnailWidget.scrollToCurrentPage();
+//    thumbnailWidget.repaint();
+
+//    QList<QWidget *> tabWidgetlst;
+//    thumbnailWidget.setTabOrderWidget(tabWidgetlst);
+
+//    thumbnailWidget.m_pPageWidget->slotUpdateTheme();
+//    thumbnailWidget.m_pPageWidget->onEditFinished();
+//    thumbnailWidget.m_pPageWidget->normalChangePage();
+//    thumbnailWidget.m_pPageWidget->pageNumberJump();
+//    thumbnailWidget.m_pPageWidget->slotPrePageBtnClicked();
+//    thumbnailWidget.m_pPageWidget->slotNextPageBtnClicked();
+//    thumbnailWidget.m_pPageWidget->setTabOrderWidget(tabWidgetlst);
+//    thumbnailWidget.m_pPageWidget->SlotJumpPageLineEditReturnPressed();
+//    thumbnailWidget.m_pPageWidget->handleOpenSuccess();
+//    thumbnailWidget.m_pPageWidget->setIndex(0);
+//    thumbnailWidget.m_pPageWidget->setBtnState(0, sheet->pageCount());
+
+//    thumbnailWidget.m_pImageListView->onSetThumbnailListSlideGesture();
+//    thumbnailWidget.m_pImageListView->onRemoveThumbnailListSlideGesture();
+//    thumbnailWidget.m_pImageListView->model()->setData(QModelIndex(), "123", Qt::UserRole);
+
+//    QTimer::singleShot(5, [&] {
+//        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+//        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pNoteMenu, &keyevent);
+//    });
+//    thumbnailWidget.m_pImageListView->showNoteMenu(QPoint(0, 0));
+
+//    QTimer::singleShot(5, [&] {
+//        QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+//        QCoreApplication::sendEvent(thumbnailWidget.m_pImageListView->m_pBookMarkMenu, &keyevent);
+//    });
+
+//    thumbnailWidget.m_pImageListView->showBookMarkMenu(QPoint(0, 0));
+
+//    thumbnailWidget.m_sheet = nullptr;
+//    thumbnailWidget.prevPage();
+//    thumbnailWidget.nextPage();
+
+//    SideBarImageListView imageListView(sheet);
+//    QMouseEvent mouserevent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+//    imageListView.mousePressEvent(&mouserevent);
+
+//    //CatalogWidget
+//    CatalogWidget catalogWidget(sheet);
+//    catalogWidget.resize(100, 600);
+//    catalogWidget.handleOpenSuccess();
+//    catalogWidget.handleOpenSuccess();
+//    catalogWidget.handlePage(0);
+//    catalogWidget.handlePage(10000);
+//    catalogWidget.handlePage(-1);
+//    catalogWidget.setTitleTheme();
+//    catalogWidget.nextPage();
+//    catalogWidget.prevPage();
+//    catalogWidget.m_strTheme = "Test";
+//    catalogWidget.m_sheet = nullptr;
+//    catalogWidget.handleOpenSuccess();
+//    catalogWidget.pageUp();
+//    catalogWidget.pageDown();
+
+//    QResizeEvent resizeEvent(QSize(100, 400), QSize(100, 600));
+//    QCoreApplication::sendEvent(&catalogWidget, &resizeEvent);
+
+//    QPaintEvent paintevent(QRect(0, 0, 100, 100));
+//    catalogWidget.m_pTree->paintEvent(&paintevent);
+
+//    EXPECT_TRUE(catalogWidget.m_pTree);
+//    catalogWidget.m_pTree->slotExpanded(catalogWidget.m_pTree->model()->index(0, 0));
+//    catalogWidget.m_pTree->slotCollapsed(catalogWidget.m_pTree->model()->index(0, 0));
+//    catalogWidget.m_pTree->onItemClicked(catalogWidget.m_pTree->model()->index(0, 0));
+//    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
+//    QMouseEvent mouseevent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+//    QCoreApplication::sendEvent(catalogWidget.m_pTree, &mouseevent);
+
+//    QKeyEvent keyevent(QEvent::KeyPress, Qt::Key_1, Qt::ControlModifier);
+//    QCoreApplication::sendEvent(catalogWidget.m_pTree, &keyevent);
+
+//    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
+
+//    QCoreApplication::sendEvent(catalogWidget.m_pTree, &resizeEvent);
+
+//    catalogWidget.m_pTree->pageDownPage();
+//    catalogWidget.m_pTree->prevPage();
+//    catalogWidget.m_pTree->nextPage();
+//    catalogWidget.m_pTree->pageUpPage();
+//    catalogWidget.m_pTree->scrollToIndex(catalogWidget.m_pTree->indexAt(QPoint(0, 0)));
+
+//    catalogWidget.m_pTree->m_sheet = nullptr;
+//    catalogWidget.m_pTree->currentChanged(catalogWidget.m_pTree->model()->index(0, 0), catalogWidget.m_pTree->model()->index(1, 0));
+//    catalogWidget.m_pTree->handleOpenSuccess();
+
+//    //BookMarkWidget
+//    BookMarkWidget bookwidget(sheet);
+//    bookwidget.handleOpenSuccess();
+//    bookwidget.adaptWindowSize(1.0);
+//    bookwidget.nextPage();
+//    bookwidget.deleteItemByKey();
+//    bookwidget.handlePage(0);
+//    bookwidget.handleBookMark(0, 1);
+//    bookwidget.prevPage();
+//    bookwidget.handleBookMark(0, 0);
+//    bookwidget.prevPage();
+//    bookwidget.onUpdateTheme();
+//    bookwidget.onAddBookMarkClicked();
+//    bookwidget.onListMenuClick(E_BOOKMARK_DELETE);
+//    bookwidget.deleteAllItem();
+//    bookwidget.pageUp();
+//    bookwidget.pageDown();
+//    bookwidget.setTabOrderWidget(tabWidgetlst);
+//    bookwidget.m_sheet = nullptr;
+//    bookwidget.prevPage();
+
+//    //NotesWidget
+//    NotesWidget noteWidget(sheet);
+//    noteWidget.prevPage();
+//    noteWidget.nextPage();
+//    noteWidget.deleteItemByKey();
+//    noteWidget.handleOpenSuccess();
+//    noteWidget.handleAnntationMsg(-1, nullptr);
+//    noteWidget.handleAnntationMsg(0, nullptr);
+//    noteWidget.handleAnntationMsg(1, nullptr);
+//    noteWidget.handleAnntationMsg(2, nullptr);
+//    noteWidget.adaptWindowSize(1.0);
+//    noteWidget.changeResetModelData();
+//    noteWidget.onListMenuClick(-1);
+//    noteWidget.onListMenuClick(4);
+//    noteWidget.onListMenuClick(5);
+//    noteWidget.onListItemClicked(-1);
+//    noteWidget.onListItemClicked(0);
+//    noteWidget.onListItemClicked(10000);
+//    noteWidget.onAddAnnotation();
+//    noteWidget.copyNoteContent();
+//    noteWidget.addNoteItem(nullptr);
+//    noteWidget.deleteNoteItem(nullptr);
+//    noteWidget.deleteAllItem();
+//    noteWidget.m_sheet = nullptr;
+//    noteWidget.prevPage();
+//    noteWidget.nextPage();
+//    noteWidget.handleOpenSuccess();
+//    noteWidget.pageUp();
+//    noteWidget.pageDown();
+//    noteWidget.setTabOrderWidget(tabWidgetlst);
+//    noteWidget.m_pImageListView->setCurrentIndex(QModelIndex());
+//    noteWidget.m_pImageListView->showMenu();
+//    noteWidget.m_pImageListView = nullptr;
+//    noteWidget.showMenu();
+
+//    //SearchResWidget
+//    SearchResWidget searchWidget(sheet);
+//    searchWidget.clearFindResult();
+//    searchWidget.adaptWindowSize(1.0);
+//    EXPECT_EQ(searchWidget.handleFindFinished(), 0);
+//    searchWidget.addSearchsItem(0, "test", 5);
+//    searchWidget.addSearchsItem(-1, "test", -1);
+//    deepin_reader::SearchResult searchRes;
+//    searchRes.words << deepin_reader::Word();
+//    searchWidget.handleSearchResultComming(searchRes);
+//    EXPECT_EQ(searchWidget.handleFindFinished(), 2);
+
+//    searchWidget.m_sheet = nullptr;
+//    searchWidget.addSearchsItem(0, "test", 5);
+//    EXPECT_EQ(searchWidget.handleFindFinished(), 2);
+
+//    EXPECT_TRUE(searchWidget.m_pImageListView);
+//    searchWidget.m_pImageListView->handleOpenSuccess();
+//    searchWidget.m_pImageListView->scrollToIndex(0);
+//    searchWidget.m_pImageListView->scrollToIndex(-1);
+//    searchWidget.m_pImageListView->scrollToIndex(10000);
+//    searchWidget.m_pImageListView->scrollToModelInexPage(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
+//    searchWidget.m_pImageListView->getModelIndexForPageIndex(0);
+//    searchWidget.m_pImageListView->getPageIndexForModelIndex(0);
+//    EXPECT_LE(searchWidget.m_pImageListView->getModelIndexForPageIndex(-1), 0);
+//    EXPECT_TRUE(searchWidget.m_pImageListView->getImageModel());
+//    searchWidget.m_pImageListView->onItemClicked(searchWidget.m_pImageListView->getImageModel()->index(0, 0));
+//    searchWidget.m_pImageListView->onItemClicked(QModelIndex());
+
+//    ImageinfoType_e imageInfo;
+//    Q_UNUSED(imageInfo);
+
+//    ImagePageInfo_t imageInfo1(1);
+//    ImagePageInfo_t imageInfo2(2);
+//    ImagePageInfo_t imageInfo3(imageInfo1);
+
+//    EXPECT_FALSE(imageInfo1 == imageInfo2);
+//    EXPECT_TRUE(imageInfo1 == imageInfo3);
+//    EXPECT_TRUE(imageInfo1 < imageInfo2);
+//    EXPECT_FALSE(imageInfo1 > imageInfo2);
+
+//    //Asan报错
+//    //mainWindow->handleClose(false);
+
+//    exec();
+//}
 
 TEST_F(ut_sidebar, TransparentTextEditTest)
 {
@@ -447,25 +447,25 @@ TEST_F(ut_sidebar, TransparentTextEditTest)
     exec();
 }
 
-TEST_F(ut_sidebar, TextEditWidgetTest)
-{
-    TextEditShadowWidget shadowView(nullptr);
-    shadowView.showWidget(QPoint(0, 0));
-    shadowView.getTextEditWidget()->setEditText("const QString & note");
-    shadowView.getTextEditWidget()->setEditText("");
-    shadowView.getTextEditWidget()->setAnnotation(nullptr);
-    shadowView.getTextEditWidget()->onBlurWindowChanged();
-    shadowView.getTextEditWidget()->repaint();
-    shadowView.getTextEditWidget()->show();
+//TEST_F(ut_sidebar, TextEditWidgetTest)
+//{
+//    TextEditShadowWidget shadowView(nullptr);
+//    shadowView.showWidget(QPoint(0, 0));
+//    shadowView.getTextEditWidget()->setEditText("const QString & note");
+//    shadowView.getTextEditWidget()->setEditText("");
+//    shadowView.getTextEditWidget()->setAnnotation(nullptr);
+//    shadowView.getTextEditWidget()->onBlurWindowChanged();
+//    shadowView.getTextEditWidget()->repaint();
+//    shadowView.getTextEditWidget()->show();
 
-    QTimer::singleShot(1, [&shadowView]() {
-        QHideEvent hideEvent;
-        QCoreApplication::sendEvent(&shadowView, &hideEvent);
+//    QTimer::singleShot(1, [&shadowView]() {
+//        QHideEvent hideEvent;
+//        QCoreApplication::sendEvent(&shadowView, &hideEvent);
 
-        shadowView.getTextEditWidget()->hide();
-        shadowView.getTextEditWidget()->onShowMenu();
-    });
+//        shadowView.getTextEditWidget()->hide();
+//        shadowView.getTextEditWidget()->onShowMenu();
+//    });
 
-    exec();
-}
+//    exec();
+//}
 

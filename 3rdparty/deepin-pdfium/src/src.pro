@@ -4,6 +4,11 @@ TEMPLATE = lib
 
 CONFIG += c++14
 
+###安全漏洞检测
+#QMAKE_CXX += -g -fsanitize=undefined,address -O2
+#QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
+#QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+
 DEFINES += BUILD_DEEPDF_LIB
 
 QT += core-private core gui

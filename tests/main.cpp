@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM", "offscreen");
 
+    Application application(argc, argv);
+
     ::testing::InitGoogleTest(&argc, argv);
 
     int c = RUN_ALL_TESTS();
