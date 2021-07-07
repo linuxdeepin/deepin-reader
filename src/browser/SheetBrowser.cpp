@@ -1054,7 +1054,7 @@ bool SheetBrowser::event(QEvent *event)
     if (event->type() == QEvent::Gesture)
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
 
-    QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
     switch (event->type()) {
     case QEvent::TouchBegin:
         m_touchBegin = touchEvent->timestamp();
