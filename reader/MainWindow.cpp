@@ -239,6 +239,26 @@ void MainWindow::initUI()
     if (optBtn && optBtn->parentWidget()) {
         optBtn->parentWidget()->installEventFilter(this);
     }
+
+    // 适配虚拟键盘弹起，修复工具栏被隐藏
+    adaptiveVirtualKeyboard(m_central->getMainWidget());
+}
+
+void MainWindow::adaptiveVirtualKeyboard(QWidget *widget)
+{
+    if (nullptr != widget) {
+        // 将不会为虚拟键盘做任何自适应操作
+        qApp->ignoreVirtualKeyboard(this);
+
+        // 开启以下属性虚拟键盘弹起是控件不会变形
+        widget->setAttribute(Qt::WA_LayoutOnEntireRect, false);
+        widget->setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
+
+        // 还未考虑好是否对外提供接口，可以先使用该属性 dtkwidget5.5>=5.5.17.17(仓库中版本) 文件夹外lib中包含
+        widget->setProperty("_dtk_NoTopLevelEnabled", true);
+        // 对该容器内的输入控件做自适应虚拟键盘操作
+        qApp->acclimatizeVirtualKeyboard(widget);
+    }
 }
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)

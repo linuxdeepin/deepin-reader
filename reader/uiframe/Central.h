@@ -136,6 +136,12 @@ public:
      */
     void setUpValue(int value);
 
+    /**
+     * @brief getMainWidget
+     * @return
+     */
+    QWidget *getMainWidget() const;
+
 signals:
     /**
      * @brief sigNeedClose

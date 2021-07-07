@@ -380,3 +380,8 @@ void Central::resizeEvent(QResizeEvent *event)
     m_mainWidget->resize(event->size());
     BaseWidget::resizeEvent(event);
 }
+
+QWidget *Central::getMainWidget() const
+{
+    return m_mainWidget;
+}

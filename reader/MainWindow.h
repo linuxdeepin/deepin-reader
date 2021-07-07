@@ -135,6 +135,12 @@ private:
     void initUI();
 
     /**
+     * @brief adaptiveVirtualKeyboard
+     * 适配虚拟键盘弹起，修复工具栏被隐藏
+     */
+    void adaptiveVirtualKeyboard(QWidget *widget);
+
+    /**
      * @brief showDefaultSize
      * 显示默认大小
      */
