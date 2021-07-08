@@ -1545,7 +1545,7 @@ void Annot::invalidateAppearance()
     appearBBox = nullptr;
     appearance.setToNull();
 
-    //modify 20200617 by LeiYu
+    //modify 20200617 by LeiYu  修复部分在mac上添加注释的文档打开偶现闪退
     update("AP", Object(objNull));  // Remove AP
     update("AS", Object(objNull));  // Remove AS
 //  Object obj2 = annotObj.dictLookup("AP");
