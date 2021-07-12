@@ -111,7 +111,7 @@ bool BrowserAnnotation::isSame(Annotation *annotation)
 
 void BrowserAnnotation::setDrawSelectRect(const bool draw)
 {
-    if (nullptr == m_annotation && m_annotation->type() != 1) {
+    if (nullptr != m_annotation && m_annotation->type() != 1) {
         m_drawSelectRect = false;
         update();
         return;

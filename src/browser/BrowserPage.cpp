@@ -952,15 +952,26 @@ bool BrowserPage::jump2Link(const QPointF point)
                     int page = link->page;
                     if (m_parent) {
                         m_parent->setCurrentPage(page);
+
+                        qDeleteAll(linkList);
+                        linkList.clear();
+
                         return true;
                     }
                 } else {
                     QDesktopServices::openUrl(QUrl(urlStr, QUrl::TolerantMode));
+
+                    qDeleteAll(linkList);
+                    linkList.clear();
+
                     return true;
                 }
             }
         }
     }
+
+    qDeleteAll(linkList);
+    linkList.clear();
 
     return false;
 }
@@ -985,10 +996,17 @@ bool BrowserPage::inLink(const QPointF pos)
     foreach (Link *link, linkList) {
         if (link) {
             if (link->boundary.boundingRect().contains(localPoint)) {
+
+                qDeleteAll(linkList);
+                linkList.clear();
+
                 return true;
             }
         }
     }
+
+    qDeleteAll(linkList);
+    linkList.clear();
 
     return false;
 }

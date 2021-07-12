@@ -657,7 +657,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
         setOperationChanged();
     } else {
         if (m_sideAnimation == nullptr) {
-            m_sideAnimation = new QPropertyAnimation(m_sidebar, "movepos");
+            m_sideAnimation = new QPropertyAnimation(m_sidebar, "movepos", this);
             connect(m_sideAnimation, &QPropertyAnimation::finished, this, &DocSheet::onSideAniFinished);
         }
 

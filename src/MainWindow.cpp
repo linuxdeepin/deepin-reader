@@ -31,6 +31,8 @@
 #include "TitleWidget.h"
 #include "Central.h"
 #include "CentralDocPage.h"
+#include "PageRenderThread.h"
+#include "PageViewportThread.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -106,6 +108,10 @@ MainWindow::~MainWindow()
     if (m_list.count() <= 0) {
         QDBusConnection dbus = QDBusConnection::sessionBus();
         dbus.unregisterService("com.deepin.Reader");
+
+        //线程退出
+        PageViewportThread::destroyForever();
+        PageRenderThread::destroyForever();
     }
 }
 
@@ -187,7 +193,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
             if (isFullscreen && m_FullTitleWidget && !m_central->docPage()->isSlide()) {
                 if (m_TitleAnimation == nullptr) {
-                    m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry");
+                    m_TitleAnimation = new QPropertyAnimation(m_FullTitleWidget, "geometry", this);
                     m_TitleAnimation->setEasingCurve(QEasingCurve::OutCubic);
                     connect(m_TitleAnimation, &QPropertyAnimation::finished, this, &MainWindow::onTitleAniFinished);
                 }

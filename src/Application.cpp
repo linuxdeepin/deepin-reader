@@ -148,10 +148,6 @@ void Application::handleQuitAction()
         }
     }
 
-    //线程退出
-    PageViewportThread::destroyForever();
-    PageRenderThread::destroyForever();
-
     foreach (MainWindow *window, MainWindow::m_list) {
         window->closeWithoutSave();
     }
