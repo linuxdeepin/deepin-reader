@@ -551,6 +551,7 @@ QList< Link * > PDFPage::links() const
 QString PDFPage::text(const QRectF &rect) const
 {
     LOCK_PAGE
+    LOCK_LONGTIMEOPERATION
 
     return m_page->text(rect).simplified();
 }
@@ -726,6 +727,7 @@ bool PDFPage::canAddAndRemoveAnnotations() const
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundarys, const QString &text, const QColor &color)
 {
     LOCK_PAGE
+    LOCK_LONGTIMEOPERATION
 
 #ifdef HAS_POPPLER_20
 
@@ -888,6 +890,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF rect, const QString text)
         return nullptr;
 
     LOCK_PAGE
+    LOCK_LONGTIMEOPERATION
 
     QString strtype = "Note";
     Poppler::Annotation::Style style;
