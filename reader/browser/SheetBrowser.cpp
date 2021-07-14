@@ -405,20 +405,20 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
 
     const SheetOperation &operation = m_sheet->operation();
     Dr::Rotation rotation = operation.rotation;
-
+    qreal currentScaleFactor = operation.scaleFactor;
     m_bNeedNotifyCurPageChanged = false;
     if (Dr::RotateBy0 == rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posLeft * m_lastScaleFactor));
-        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posTop * m_lastScaleFactor));
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posLeft * currentScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posTop * currentScaleFactor));
     } else if (Dr::RotateBy90 == rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posTop * m_lastScaleFactor));
-        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posLeft * m_lastScaleFactor));
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posTop * currentScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() + posLeft * currentScaleFactor));
     } else if (Dr::RotateBy180 == rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posLeft * m_lastScaleFactor));
-        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posTop * m_lastScaleFactor));
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() - posLeft * currentScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posTop * currentScaleFactor));
     } else if (Dr::RotateBy270 == rotation) {
-        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posTop * m_lastScaleFactor));
-        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posLeft * m_lastScaleFactor));
+        horizontalScrollBar()->setValue(static_cast<int>(jumpPage->pos().x() + posTop * currentScaleFactor));
+        verticalScrollBar()->setValue(static_cast<int>(jumpPage->pos().y() - posLeft * currentScaleFactor));
     }
     m_bNeedNotifyCurPageChanged = true;
 
