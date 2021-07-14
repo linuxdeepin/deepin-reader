@@ -21,22 +21,10 @@
 #include "DocSheet.h"
 #include "DBusObject.h"
 
-#include <signal.h>
-
 #include <QIcon>
 #include <QDebug>
 #include <QDir>
 #include <QMouseEvent>
-
-const Application *gapp = nullptr;
-void signalHander(int signo)
-{
-    if (signo == SIGTERM) {
-        if (gapp)
-            gapp->saveAllData(false);
-        dApp->quit();
-    }
-}
 
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
@@ -51,9 +39,6 @@ Application::Application(int &argc, char **argv)
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc."));
     setProductIcon(QIcon::fromTheme("deepin-reader"));
-
-    gapp = this;
-    signal(SIGTERM, signalHander);
 }
 
 Application::~Application()
