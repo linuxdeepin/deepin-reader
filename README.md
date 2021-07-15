@@ -6,7 +6,7 @@ deepin-reader is a small, fast and full-featured tool for viewing documents,supp
 
 In debian, use below command to install compile dependencies:
 
-`sudo apt install debhelper (>= 11),pkg-config,libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default,libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libjpeg-dev,libicu-dev,libpng-dev,zlib1g-dev`
+`sudo apt install debhelper (>= 11),pkg-config,libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default,libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libjpeg-dev,libicu-dev,libpng-dev,zlib1g-dev,unzip`
 
 ## Install
 
