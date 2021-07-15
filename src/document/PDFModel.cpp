@@ -646,6 +646,9 @@ QList<Word> PDFPage::words(Dr::Rotation rotation)
         }
     }
 
+    qDeleteAll(textBoxList);
+    textBoxList.clear();
+
     return m_words;
 }
 
