@@ -213,6 +213,10 @@ void SheetBrowser::setAnnotationInserting(bool inserting)
 
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
+    // 页面显示位置变化时，隐藏注释框
+    if (m_noteEditWidget)
+        m_noteEditWidget->hide();
+
     beginViewportChange();
 
     int curScrollPage = currentScrollValueForPage();
@@ -224,6 +228,10 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
 
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 {
+    // 页面显示位置变化时，隐藏注释框
+    if (m_noteEditWidget)
+        m_noteEditWidget->hide();
+
     beginViewportChange();
 }
 
