@@ -560,11 +560,13 @@ void CentralDocPage::handleShortcut(const QString &s)
                 sheet->highlightSelectedText();
             } else if (s == Dr::key_alt_a) {
                 sheet->addSelectedTextHightlightAnnotation();
-            } else if (s == Dr::key_left) {
+            }
+            // 屏蔽右侧区域的切页快捷键，使用默认的滚动效果
+            /*else if (s == Dr::key_left) {
                 sheet->jumpToPrevPage();
             } else if (s == Dr::key_right) {
                 sheet->jumpToNextPage();
-            } else if (s == Dr::key_f11) {
+            } */else if (s == Dr::key_f11) {
                 sheet->openFullScreen();
             }
         }
