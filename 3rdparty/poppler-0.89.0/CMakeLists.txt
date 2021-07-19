@@ -308,7 +308,7 @@ if(POPPLER_DATA_FOUND)
   endif()
 endif()
 if(NOT DEFINED POPPLER_DATADIR)
-  set(POPPLER_DATADIR "${CMAKE_INSTALL_PREFIX}/share/poppler")
+  set(POPPLER_DATADIR "/usr/share/poppler")
 endif()
 
 if(EXTRA_WARN)
