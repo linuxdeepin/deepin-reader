@@ -361,7 +361,17 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
 
 MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
-    return new MainWindow(filePathList);
+    int iCount = MainWindow::m_list.count();    // 获取现有窗口数目
+    MainWindow *pMainWindow = new MainWindow(filePathList);     // 创建文档查看器对话框
+
+    // 现有数目大于0时，新创建的文档查看器对话框按照一定的规律偏移显示，每次向右、向下偏移50个像素，达到错开显示的效果，防止一直显示在桌面中间
+    if (iCount > 0) {
+        int windowOffset = iCount * 50;
+        QRect screenGeometry = qApp->desktop()->screenGeometry(QCursor::pos());
+        pMainWindow->move(screenGeometry.x() + windowOffset, screenGeometry.y() + windowOffset);
+    }
+
+    return pMainWindow;
 }
 
 MainWindow *MainWindow::createWindow(DocSheet *sheet)
