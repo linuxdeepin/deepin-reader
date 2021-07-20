@@ -768,7 +768,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
         QImage image;
         if (m_browser->getExistImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
-            painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
+            painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2, (static_cast<int>(pageRect.height()) - image.height()) / 2, image.width(), image.height()), image);
         }
 
         if (index != toIndex)

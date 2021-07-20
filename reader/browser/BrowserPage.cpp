@@ -423,7 +423,7 @@ QImage BrowserPage::getCurrentImage(int width, int height)
     if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
         return QImage();
 
-    QImage image = m_pixmap.toImage().scaled(static_cast<int>(width), static_cast<int>(height));
+    QImage image = m_pixmap.toImage().scaled(static_cast<int>(width), static_cast<int>(height), Qt::KeepAspectRatio);
 
     return image;
 }
