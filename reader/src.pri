@@ -10,30 +10,15 @@ include ($$PWD/browser/browser.pri)
 include ($$PWD/sidebar/sidebar.pri)
 include ($$PWD/widgets/widgets.pri)
 include ($$PWD/document/document.pri)
+include ($$PWD/uiframe/uiframe.pri)
 
 SOURCES += \
     $$PWD/Application.cpp \
-    $$PWD/MainWindow.cpp \
-    $$PWD/uiframe/TitleMenu.cpp \
-    $$PWD/uiframe/TitleWidget.cpp \
-    $$PWD/uiframe/Central.cpp \
-    $$PWD/uiframe/CentralNavPage.cpp \
-    $$PWD/uiframe/CentralDocPage.cpp \
-    $$PWD/uiframe/DocTabBar.cpp \
-    $$PWD/uiframe/DocSheet.cpp \
-    $$PWD/uiframe/SheetRenderer.cpp
+    $$PWD/MainWindow.cpp
 
 HEADERS +=\
     $$PWD/Application.h\
-    $$PWD/MainWindow.h \
-    $$PWD/uiframe/TitleWidget.h \
-    $$PWD/uiframe/TitleMenu.h \
-    $$PWD/uiframe/Central.h \
-    $$PWD/uiframe/CentralNavPage.h \
-    $$PWD/uiframe/CentralDocPage.h \
-    $$PWD/uiframe/DocTabBar.h \
-    $$PWD/uiframe/DocSheet.h \
-    $$PWD/uiframe/SheetRenderer.h
+    $$PWD/MainWindow.h
 
 RESOURCES    += $$PWD/../resources/resources.qrc
 

@@ -352,6 +352,13 @@ public:
      */
     void setPageBookMark(const QPointF);
 
+    /**
+     * @brief getTopLeftPos
+     * 根据旋转角度和item坐标计算出item的左上角坐标
+     * @return
+     */
+    QPointF getTopLeftPos();
+
 private:
     /**
      * @brief handleRenderFinished
