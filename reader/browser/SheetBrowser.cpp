@@ -794,14 +794,6 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     int page = operation.currentPage;
-    int diffY = 0;
-    int diffX = 0;
-
-    if (page > 0 && page <= m_items.count()) {
-        diffY = qRound((verticalScrollBar()->value() - m_items.at(page - 1)->pos().y()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
-        diffX = qRound((horizontalScrollBar()->value() - m_items.at(page - 1)->pos().x()) * operation.scaleFactor * 1.0 / m_lastScaleFactor);
-    }
-
     //进行render 并算出最宽的一行
     double maxWidth = 0;        //最宽的一行
     double maxHeight = 0;       //总高度
@@ -899,8 +891,8 @@ void SheetBrowser::deform(SheetOperation &operation)
     setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
-        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().y() + diffY));
-        horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->pos().x() + diffX));
+        verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().y()));
+        horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().x()));
     }
 
     //update Magnifier Image
