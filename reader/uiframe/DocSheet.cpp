@@ -41,6 +41,7 @@
 #include "SheetRenderer.h"
 #include "PageRenderThread.h"
 #include "PageSearchThread.h"
+#include "BrowserPage.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -727,19 +728,26 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     QPainter painter(printer);
 
-    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);
+    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel); //打印纸张类型页面大小
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
     for (int i = 0; i < pageRange.count(); ++i) {
-        if (pageRange[i] > pageCount())
+        if (pageRange[i] > pageCount() || pageRange[i] > m_browser->pages().count())
             continue;
 
-        QImage image = getImage(pageRange[i] - 1, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()));
-
-        if (!image.isNull()) {
-            painter.drawImage(QRect(0, 0, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height())), image);
+        const QRectF boundingrect = m_browser->pages().at(pageRange[i] - 1)->boundingRect(); //文档页缩放后的原区域不受旋转影响
+        qreal printWidth = pageRect.width(); //适合打印的图片宽度
+        qreal printHeight = printWidth * boundingrect.height() / boundingrect.width(); //适合打印的图片高度
+        if (printHeight > pageRect.height()) {
+            printHeight = pageRect.height();
+            printWidth = printHeight * boundingrect.width() / boundingrect.height();
         }
+
+        QImage image = getImage(pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
+        painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
+                                (static_cast<int>(pageRect.height()) - image.height()) / 2,
+                                image.width(), image.height()), image);
 
         if (i != pageRange.count() - 1)
             printer->newPage();
@@ -768,7 +776,9 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
         QImage image;
         if (m_browser->getExistImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
-            painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2, (static_cast<int>(pageRect.height()) - image.height()) / 2, image.width(), image.height()), image);
+            painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
+                                    (static_cast<int>(pageRect.height()) - image.height()) / 2,
+                                    image.width(), image.height()), image);
         }
 
         if (index != toIndex)
@@ -1191,9 +1201,11 @@ void DocSheet::onPopPrintDialog()
     if (Dr::PDF == fileType() || Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
         preview.setPrintFromPath(openedFilePath());
     }
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested),
+            this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
 #else
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested), this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
+    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested),
+            this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
 #endif
 
     preview.exec();
