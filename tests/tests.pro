@@ -36,6 +36,20 @@ SOURCES += \
     uiframe/ut_uiframe.cpp \
     ut_mainwindow.cpp \
     widgets/ut_widgets.cpp \
+    widgets/ut_AttrScrollWidget.cpp \
+    widgets/ut_BaseWidget.cpp \
+    widgets/ut_ColorWidgetAction.cpp \
+    widgets/ut_FileAttrWidget.cpp \
+    widgets/ut_FindWidget.cpp \
+    widgets/ut_HandleMenu.cpp \
+    widgets/ut_PagingWidget.cpp \
+    widgets/ut_ProgressDialog.cpp \
+    widgets/ut_SaveDialog.cpp \
+    widgets/ut_ScaleMenu.cpp \
+    widgets/ut_ScaleWidget.cpp \
+    widgets/ut_SecurityDialog.cpp \
+    widgets/ut_ShortCutShow.cpp \
+    widgets/ut_SlideWidget.cpp \
     sidebar/ut_sheetsidebar.cpp \
     browser/ut_browser.cpp \
     browser/ut_sheetbrowser.cpp \

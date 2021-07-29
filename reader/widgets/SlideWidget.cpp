@@ -58,9 +58,12 @@ void SlideWidget::initControl()
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
     setWidgetState(true);
-    parentWidget()->stackUnder(this);
+    if (parentWidget()) {
+        parentWidget()->stackUnder(this);
+        connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
+    }
     this->setGeometry(0, 0, dApp->primaryScreen()->size().width(), dApp->primaryScreen()->size().height());
-    connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
+
 
     m_loadSpinner = new DSpinner(this);
     m_loadSpinner->setFixedSize(40, 40);
@@ -154,7 +157,7 @@ void SlideWidget::mouseMoveEvent(QMouseEvent *event)
 
 void SlideWidget::setWidgetState(bool full)
 {
-    if (m_parentIsDestroyed)
+    if (m_parentIsDestroyed || !parentWidget())
         return;
 
     if (full) {
