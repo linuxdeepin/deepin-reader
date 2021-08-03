@@ -45,7 +45,12 @@ static constexpr size_t kSystemPageSize = 8192;
 //default page size changed to 64k.
 //binaries compiled for 64KB are likely to work on 4KB systems,
 //64KB is a good choice here.
+//根据系统页大小分配
+#if defined(SYSTEMPAGESIZE)
+static constexpr size_t kSystemPageSize = SYSTEMPAGESIZE;
+#else
 static constexpr size_t kSystemPageSize = 4096;
+#endif
 #endif
 static constexpr size_t kSystemPageOffsetMask = kSystemPageSize - 1;
 static_assert((kSystemPageSize & (kSystemPageSize - 1)) == 0,

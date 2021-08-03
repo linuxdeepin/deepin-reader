@@ -9,6 +9,11 @@ CONFIG += c++14
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
 
+#获取当前系统页大小
+PageSize = $$system(getconf PAGESIZE)
+DEFINES += "SYSTEMPAGESIZE=$$PageSize"
+message("DEFINES: "$$DEFINES)
+
 DEFINES += BUILD_DEEPDF_LIB
 
 QT += core-private core gui
