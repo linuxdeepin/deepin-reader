@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>Belgeler</translation>
     </message>
@@ -507,24 +507,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu belge şuraya bağlanmaya çalışıyor:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
+        <translation>İnternet sitesine güveniyorsanız İzin Ver&apos;i, aksi takdirde Engelle&apos;yi tıklayın.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Engelle</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>İzin ver</translation>
     </message>
 </context>
 <context>

@@ -11,7 +11,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Document Viewer - это инструмент для чтения файлов документов, поддерживающий PDF, DJVU, DOCX и т.д.</translation>
     </message>
 </context>
 <context>
@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>Документы</translation>
     </message>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось выполнить преобразование, пожалуйста, проверьте, не поврежден ли файл</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертация</translation>
     </message>
 </context>
 <context>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить изменения в &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -507,24 +507,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Документ пытается присоединиться к:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если Вы доверяете веб-сайту, нажмите &quot;Разрешить&quot;, в противном случае нажмите &quot;Заблокировать&quot;.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Заблокировать</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить</translation>
     </message>
 </context>
 <context>

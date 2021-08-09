@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>文件</translation>
     </message>
@@ -583,7 +583,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
         <source>Exit</source>
-        <translation>離開</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>

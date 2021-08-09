@@ -244,7 +244,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>Documenti</translation>
     </message>
@@ -508,24 +508,24 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo documento sta cercando di connettersi a:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se conosci il sito web, clicca &quot;Permetti&quot;, altrimenti &quot;Blocca&quot;.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Blocca</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Permetti</translation>
     </message>
 </context>
 <context>

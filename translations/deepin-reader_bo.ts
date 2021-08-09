@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>ཡིག་ཚགས་ཡིག་ཆ།</translation>
     </message>
@@ -507,24 +507,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>ཡིག་ཚགས་སྦྲེལ་མཐུད་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
+        <translation>གལ་ཏེ་དྲ་ཚིགས་འདིར་ཡིད་ཆེེས་ཡོད་ན་“ཆོག་”ཅེས་པ་གནོན་རོགས། དེ་ལྟར་མིན་ཚེ་“བཀག་འགོག་”ཅེས་པ་གནོན་རོགས།</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>བཀག་འགོག</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ཆོག</translation>
     </message>
 </context>
 <context>
