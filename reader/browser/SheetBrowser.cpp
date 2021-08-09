@@ -1226,7 +1226,12 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->setText(mlink.urlOrFileName);
-                        m_tipsWidget->show();
+                        // 超链接地址为空时，不显示浮窗
+                        if (!mlink.urlOrFileName.isEmpty()) {
+                            m_tipsWidget->show();
+                        } else {
+                            m_tipsWidget->hide();
+                        }
                         setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
                     } else if (page->getBrowserWord(mousposF)) {
                         m_tipsWidget->hide();
