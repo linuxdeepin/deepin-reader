@@ -43,6 +43,11 @@ contains(QMAKE_HOST.arch, mips64):{
     QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
 }
 
+contains(QMAKE_HOST.arch, sw64):{
+    DEFINES += ARCH_CPU_SW64
+    QMAKE_CXXFLAGS += "-fPIC"
+}
+
 include(fx_freetype.pri)
 include(fpdfsdk.pri)
 include(core.pri)
