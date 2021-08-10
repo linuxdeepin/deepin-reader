@@ -15,6 +15,8 @@ namespace base {
 static constexpr size_t kPageAllocationGranularityShift = 16;  // 64KB
 #elif defined(_MIPS_ARCH_LOONGSON)
 static constexpr size_t kPageAllocationGranularityShift = 14;  // 16KB
+#elif defined(ARCH_CPU_SW64)
+static constexpr size_t kPageAllocationGranularityShift = 13;  // 8KB
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static constexpr size_t kPageAllocationGranularityShift = 14;  // 16KB
 #else
@@ -37,6 +39,8 @@ static constexpr size_t kSystemPageSize = 16384;
 static constexpr size_t kSystemPageSize = 65536;
 #elif defined(OS_APPLE) && defined(ARCH_CPU_ARM64)
 static constexpr size_t kSystemPageSize = 16384;
+#elif defined(ARCH_CPU_SW64)
+static constexpr size_t kSystemPageSize = 8192;
 #else
 //default page size changed to 64k.
 //binaries compiled for 64KB are likely to work on 4KB systems,
