@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
         <source>The bookmark has been removed</source>
         <translation>Əlfəcin silindi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
         <source>Please select the text</source>
         <translation>Lütfən mətn seçin</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
         <source>The annotation has been removed</source>
         <translation>Açıqlamalar silindi</translation>
     </message>
@@ -915,6 +915,11 @@
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Search</source>
         <translation>Axtarış</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <source>Print</source>
+        <translation>Çap</translation>
     </message>
 </context>
 <context>
