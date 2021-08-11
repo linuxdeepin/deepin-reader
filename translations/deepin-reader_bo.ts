@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>ཡིག་ཚགས་ཡིག་ཆ།</translation>
     </message>
@@ -302,17 +302,17 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
         <translation>ཡིག་ཆ་འདི་རུ་སྤོ་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>རྒྱབ་སྐྱོར་རྣམ་བཞག་%1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="48"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>ཡིག་ཆ་འདེམས་པ།</translation>
     </message>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
         <source>The bookmark has been removed</source>
         <translation>ཤོག་འཛར་སུབ་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
         <source>Please select the text</source>
         <translation>ཡིག་ཆ་འདེམས་རོགས།</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
         <source>The annotation has been removed</source>
         <translation>མཆན་སུབ་ཟིན།</translation>
     </message>
@@ -891,6 +891,11 @@
         <source>Search</source>
         <translation>འཚོལ་ཞིབ།</translation>
     </message>
+    <message>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <source>Print</source>
+        <translation>པར་འདེབས།</translation>
+    </message>
 </context>
 <context>
     <name>TitleWidget</name>
@@ -911,23 +916,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="33"/>
+        <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="37"/>
+        <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="42"/>
+        <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
         <translation>Generate thumbnail.</translation>
     </message>

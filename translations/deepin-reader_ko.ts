@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -302,17 +302,17 @@
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
         <translation>문서를 여기로 드래그</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>지원되는 형식: %1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="48"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>파일 선택</translation>
     </message>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
         <source>The bookmark has been removed</source>
         <translation>북마크가 제거되었습니다</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
         <source>Please select the text</source>
         <translation>텍스트를 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
         <source>The annotation has been removed</source>
         <translation>주석이 제거되었습니다</translation>
     </message>
@@ -891,6 +891,11 @@
         <source>Search</source>
         <translation>검색</translation>
     </message>
+    <message>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <source>Print</source>
+        <translation>인쇄</translation>
+    </message>
 </context>
 <context>
     <name>TitleWidget</name>
@@ -911,23 +916,23 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="33"/>
+        <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="37"/>
+        <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="42"/>
+        <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
         <translation type="unfinished"></translation>
     </message>

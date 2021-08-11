@@ -242,6 +242,8 @@ void Central::onMenuTriggered(const QString &action)
         docPage()->openCurFileFolder();
     } else if (action == "Search") {
         docPage()->prepareSearch();
+    } else if (action == "Print") {
+        docPage()->getCurSheet()->onPopPrintDialog();
     }
 }
 

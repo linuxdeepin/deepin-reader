@@ -244,7 +244,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="142"/>
         <source>Documents</source>
         <translation>Documenti</translation>
     </message>
@@ -303,17 +303,17 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
         <translation>Trascina i documenti qui</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
         <translation>Formato supportato: %1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="48"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
         <translation>Seleziona file</translation>
     </message>
@@ -321,20 +321,20 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="312"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="340"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
         <source>The bookmark has been removed</source>
         <translation>Il segnalibro è stato rimosso</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="513"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
         <source>Please select the text</source>
         <translation>Seleziona il testo</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="578"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="587"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotazione è stata rimossa</translation>
     </message>
@@ -892,6 +892,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
+    <message>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <source>Print</source>
+        <translation>Stampa</translation>
+    </message>
 </context>
 <context>
     <name>TitleWidget</name>
@@ -912,23 +917,23 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="33"/>
+        <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="34"/>
-        <location filename="../reader/main.cpp" line="38"/>
+        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="37"/>
+        <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="42"/>
+        <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
         <translation>Genera miniatura.</translation>
     </message>
