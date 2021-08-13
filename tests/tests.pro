@@ -19,6 +19,9 @@ CONFIG -= app_bundle
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+#定义宏定义给UT代码使用（UT工程路径）
+DEFINES += UTSOURCEDIR=\"\\\"$$PWD\\\"\"
+
 LIBS += -lgtest
 
 #target
@@ -36,6 +39,7 @@ SOURCES += \
     uiframe/ut_uiframe.cpp \
     ut_mainwindow.cpp \
     widgets/ut_widgets.cpp \
+    app/ut_Database.cpp \
     widgets/ut_AttrScrollWidget.cpp \
     widgets/ut_BaseWidget.cpp \
     widgets/ut_ColorWidgetAction.cpp \
@@ -52,8 +56,15 @@ SOURCES += \
     widgets/ut_SlideWidget.cpp \
     sidebar/ut_sheetsidebar.cpp \
     browser/ut_browser.cpp \
+    uiframe/ut_Central.cpp \
+    sidebar/ut_BookMarkDelegate.cpp \
+    sidebar/ut_BookMarkWidget.cpp \
+    sidebar/ut_CatalogTreeView.cpp \
+    sidebar/ut_SideBarImageListview.cpp \
+    sidebar/ut_SideBarImageViewModel.cpp \
     browser/ut_sheetbrowser.cpp \
     document/ut_document.cpp
+    ut_common.cpp
 
 HEADERS +=\
     ut_defines.h \
@@ -65,6 +76,7 @@ HEADERS +=\
     sidebar/ut_sheetsidebar.h \
     browser/ut_browser.h \
     document/ut_document.h
+    ut_common.h
 
 include($$PWD/../reader/src.pri)
 
@@ -76,7 +88,7 @@ INCLUDEPATH += $$PWD/include/gtest
 
 #安全测试选项
 if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
-    QMAKE_CFLAGS += -g -fsanitize=address -O2
-    QMAKE_LFLAGS += -g -fsanitize=address -O2
-    QMAKE_CXXFLAGS += -g -fsanitize=address -O2
+    QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 }

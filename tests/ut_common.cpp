@@ -1,9 +1,9 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     leiyu <leiyu@uniontech.com>
+* Author:     gaoxiang <gaoxiang@uniontech.com>
 *
-* Maintainer: leiyu <leiyu@uniontech.com>
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,15 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UT_MAINWINDOW_H
-#define UT_MAINWINDOW_H
 
-#include "ut_defines.h"
+#include "ut_common.h"
 
-#include "ut_application.h"
-
-class MainWindow;
-class Ut_MainWindow : public ut_application
+UTCommon::UTCommon()
 {
-public:
-    Ut_MainWindow();
 
-public:
-    //用于做一些初始化操作
-    virtual void SetUp();
+}
 
-    //用于做一些清理操作
-    virtual void TearDown();
+UTCommon::~UTCommon()
+{
 
-public:
-};
-
-#endif // UT_MAINWINDOW_H
+}
