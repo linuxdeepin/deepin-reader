@@ -375,8 +375,8 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
 
     QScreen *srn = QApplication::screens().value(0);
     if (nullptr != srn) {
-        m_xRes = srn->physicalDotsPerInchX();
-        m_yRes = srn->physicalDotsPerInchY();
+        m_xRes = srn->logicalDotsPerInchX(); // 获取屏幕的横纵向逻辑dpi
+        m_yRes = srn->logicalDotsPerInchY();
     }
 }
 
