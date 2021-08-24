@@ -256,6 +256,9 @@ unsigned long Utf16EncodeMaybeCopyAndReturnLength(const WideString& text,
                                                   void* buffer,
                                                   unsigned long buflen);
 
+unsigned long Utf16EncodeReturnLength(const WideString& text,
+                                      ByteString &encoded_text);
+
 // Returns the length of the raw stream data from |stream|. The raw data is the
 // stream's data as stored in the PDF without applying any filters. If |buffer|
 // is non-nullptr and |buflen| is large enough to contain the raw data, then
