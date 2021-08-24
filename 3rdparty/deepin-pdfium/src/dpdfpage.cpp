@@ -257,10 +257,15 @@ bool DPdfPagePrivate::loadAnnots()
             }
 
             //获取文本
-            FPDF_WCHAR buffer[1024];
-            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            //根据注释长度调整获取注释内容，修复获取注释内容不全
+            FPDF_WCHAR *buffer = nullptr;
+            FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
             m_dAnnots.append(dAnnot);
+            if(!buffer){
+                delete buffer;
+                buffer = nullptr;
+            }
         } else if (DPdfAnnot::AHighlight == type) {
             DPdfHightLightAnnot *dAnnot = new DPdfHightLightAnnot;
             //获取颜色
@@ -291,11 +296,15 @@ bool DPdfPagePrivate::loadAnnots()
             dAnnot->setBoundaries(list);
 
             //获取文本
-            FPDF_WCHAR buffer[1024];
-            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            //根据注释长度调整获取注释内容，修复获取注释内容不全
+            FPDF_WCHAR *buffer = nullptr;
+            FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
-
             m_dAnnots.append(dAnnot);
+            if(!buffer){
+                delete buffer;
+                buffer = nullptr;
+            }
         } else if (DPdfAnnot::ALink == type) {
             DPdfLinkAnnot *dAnnot = new DPdfLinkAnnot;
 
@@ -388,12 +397,15 @@ bool DPdfPagePrivate::loadAnnots()
             dAnnot->setBoundaries(list);
 
             //获取文本
-            FPDF_WCHAR buffer[1024];
-            FPDFAnnot_GetStringValue(annot, "Contents", buffer, 1024);
+            //根据注释长度调整获取注释内容，修复获取注释内容不全
+            FPDF_WCHAR *buffer = nullptr;
+            FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
-
             m_dAnnots.append(dAnnot);
-
+            if(!buffer){
+                delete buffer;
+                buffer = nullptr;
+            }
         } else if (DPdfAnnot::AWIDGET == type) {
             //has WIDGET annot
             DPdfWidgetAnnot *dAnnot = new DPdfWidgetAnnot;

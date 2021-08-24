@@ -451,6 +451,24 @@ FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot,
                          unsigned long buflen);
 
 // Experimental API.
+// Get the string value corresponding to |key| in |annot|'s dictionary. Note that
+// if |key| does not exist in the dictionary or if |key|'s corresponding value
+// in the dictionary is not a string (i.e. the value is not of type
+// FPDF_OBJECT_STRING or FPDF_OBJECT_NAME), then an empty string would be copied
+// to |buffer| and the return value would be 2. On other errors, nothing would
+// be added to |buffer| and the return value would be 0.
+//
+//   annot  - handle to an annotation.
+//   key    - the key to the requested dictionary entry, encoded in UTF-8.
+//   buffer - buffer for holding the value string, encoded in UTF-16LE.
+//
+// Returns the length of the full string value in bytes.
+FPDF_EXPORT unsigned long FPDF_CALLCONV
+FPDFAnnot_GetFullStringValue(FPDF_ANNOTATION annot,
+                         FPDF_BYTESTRING key,
+                         FPDF_WCHAR **buffer);
+
+// Experimental API.
 // Get the float value corresponding to |key| in |annot|'s dictionary. Writes
 // value to |value| and returns True if |key| exists in the dictionary and
 // |key|'s corresponding value is a number (FPDF_OBJECT_NUMBER), False

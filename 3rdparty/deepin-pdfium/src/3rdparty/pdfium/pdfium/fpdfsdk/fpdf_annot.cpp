@@ -886,6 +886,22 @@ FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot,
                                                buffer, buflen);
 }
 
+// 获取注释内容并将其完整复制到buffer
+FPDF_EXPORT unsigned long FPDF_CALLCONV
+FPDFAnnot_GetFullStringValue(FPDF_ANNOTATION annot,
+                         FPDF_BYTESTRING key,
+                         FPDF_WCHAR **buffer)
+{
+    CPDF_Dictionary *pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
+    if (!pAnnotDict)
+        return 0;
+    ByteString encoded_text;
+    unsigned long len = Utf16EncodeReturnLength(pAnnotDict->GetUnicodeTextFor(key), encoded_text);
+    *buffer =new FPDF_WCHAR[len];
+    memcpy(*buffer, encoded_text.c_str(), len);
+    return len;
+}
+
 FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
 FPDFAnnot_GetNumberValue(FPDF_ANNOTATION annot,
                          FPDF_BYTESTRING key,

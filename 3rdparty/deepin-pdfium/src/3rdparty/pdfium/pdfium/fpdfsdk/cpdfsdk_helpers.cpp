@@ -296,6 +296,14 @@ unsigned long Utf16EncodeMaybeCopyAndReturnLength(const WideString& text,
   return len;
 }
 
+// 获取Utf16E编码字符串长度
+unsigned long Utf16EncodeReturnLength(const WideString& text,
+                                      ByteString &encoded_text) {
+  encoded_text = text.ToUTF16LE();
+  unsigned long len = encoded_text.GetLength();
+  return len;
+}
+
 unsigned long GetRawStreamMaybeCopyAndReturnLength(const CPDF_Stream* stream,
                                                    void* buffer,
                                                    unsigned long buflen) {
