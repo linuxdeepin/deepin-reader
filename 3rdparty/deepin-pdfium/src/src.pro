@@ -26,7 +26,7 @@ INCLUDEPATH += $$PWD/../include
 
 INCLUDEPATH += /usr/include/chardet
 
-LIBS += -lchardet
+LIBS += -lchardet -ljpeg -licuuc -lz
 
 public_headers += \
     $$PWD/../include/dpdfglobal.h \
