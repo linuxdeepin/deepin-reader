@@ -199,6 +199,10 @@ Annotation *getClickAnnot_stub(BrowserPage *page, const QPointF clickPoint, bool
     return g_pPDFAnnotation;
 }
 
+void mousePressEvent_stub(DGraphicsView *, QMouseEvent *)
+{
+}
+
 QList<QGraphicsItem *> g_QGraphicsItemList;
 QList<QGraphicsItem *> items_stub(const QPointF &pos, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder, const QTransform &deviceTransform = QTransform())
 {
@@ -609,7 +613,9 @@ TEST_F(TestSheetBrowser, testmousePressEvent001)
     stub.set(ADDR(SheetBrowser, getBrowserPageForPoint), getBrowserPageForPoint_stub);
     stub.set(ADDR(QMouseEvent, source), source_stub);
     stub.set(ADDR(SheetBrowser, getClickAnnot), getClickAnnot_stub);
-
+    typedef void (*fptr)(DGraphicsView *, QMouseEvent *);
+    fptr DGraphicsView_mousePressEvent = (fptr)(&DGraphicsView::mousePressEvent);
+    stub.set(DGraphicsView_mousePressEvent, mousePressEvent_stub);
     DocSheet sheet(Dr::FileType::PDF, "1.pdf", nullptr);
     BrowserPage p1(nullptr, 0, &sheet);
     m_tester->m_lastSelectIconAnnotPage = &p1;

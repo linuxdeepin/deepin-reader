@@ -55,8 +55,3 @@ TEST_F(TestBookMarkDelegate, initTest)
 {
 
 }
-
-TEST_F(TestBookMarkDelegate, testsizeHint)
-{
-    m_tester->sizeHint(QStyleOptionViewItem(), QModelIndex());
-}

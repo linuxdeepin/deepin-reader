@@ -42,14 +42,6 @@ protected:
      * @param index
      */
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    /**
-     * @brief sizeHint
-     * 返回节点大小
-     * @param option
-     * @param index
-     * @return QSize
-     */
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
     QAbstractItemView *m_parent = nullptr;

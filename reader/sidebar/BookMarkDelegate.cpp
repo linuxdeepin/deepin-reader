@@ -89,8 +89,3 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->restore();
     }
 }
-
-QSize BookMarkDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    return DStyledItemDelegate::sizeHint(option, index);
-}
