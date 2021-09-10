@@ -9,6 +9,10 @@ CONFIG += c++14
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
 
+#安全编译参数
+QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+
 #获取当前系统页大小
 PageSize = $$system(getconf PAGESIZE)
 DEFINES += "SYSTEMPAGESIZE=$$PageSize"
