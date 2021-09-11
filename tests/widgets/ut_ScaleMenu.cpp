@@ -23,9 +23,11 @@
 #include "Global.h"
 #include "DocSheet.h"
 #include "ut_defines.h"
+#include "stub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QList>
 
 class TestScaleMenu : public ::testing::Test
 {
@@ -55,6 +57,16 @@ protected:
     ScaleMenu *m_tester;
 };
 
+int indexOf_stub(void *, const QAction &, int)
+{
+    return 1;
+}
+QList<qreal> scaleFactorList_stub()
+{
+    QList<qreal> factorList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
+    return  factorList;
+}
+
 TEST_F(TestScaleMenu, initTest)
 {
 
@@ -62,30 +74,47 @@ TEST_F(TestScaleMenu, initTest)
 
 TEST_F(TestScaleMenu, testonTwoPage)
 {
+    m_tester->m_sheet->m_operation.layoutMode = Dr::TwoPagesMode;
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
     m_tester->onTwoPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.layoutMode == Dr::SinglePageMode);
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWidthMode);
 }
 
 TEST_F(TestScaleMenu, testonFiteH)
 {
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
     m_tester->onFiteH();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageHeightMode);
 }
 
 TEST_F(TestScaleMenu, testonFiteW)
 {
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
     m_tester->onFiteW();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWidthMode);
 }
 
 TEST_F(TestScaleMenu, testonDefaultPage)
 {
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
     m_tester->onDefaultPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageDefaultMode);
 }
 
 TEST_F(TestScaleMenu, testonFitPage)
 {
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
     m_tester->onFitPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWorHMode);
 }
 
 TEST_F(TestScaleMenu, testonScaleFactor)
 {
+    Stub s;
+    s.set(ADDR(QList<QAction *>, indexOf), indexOf_stub);
+    s.set(ADDR(DocSheet, scaleFactorList), scaleFactorList_stub);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
     m_tester->onScaleFactor();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::ScaleFactorMode);
 }

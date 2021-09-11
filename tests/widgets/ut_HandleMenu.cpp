@@ -27,6 +27,7 @@
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QSignalSpy>
 
 class TestHandleMenu : public ::testing::Test
 {
@@ -62,7 +63,10 @@ TEST_F(TestHandleMenu, testonHandTool)
         QFile(":/files/" + QString(UT_FILE_PDF)).copy(filePath);
     }
     m_tester->m_docSheet = new DocSheet(Dr::FileType::PDF, filePath, m_tester);
+    QSignalSpy spy(m_tester->m_docSheet, SIGNAL(sigOperationChanged(DocSheet *)));
     m_tester->onHandTool();
+    EXPECT_TRUE(m_tester->m_docSheet->m_operation.mouseShape == Dr::MouseShapeHand);
+    EXPECT_EQ(spy.count(), 1);
 }
 
 TEST_F(TestHandleMenu, testonSelectText)
@@ -73,7 +77,10 @@ TEST_F(TestHandleMenu, testonSelectText)
         QFile(":/files/" + QString(UT_FILE_PDF)).copy(filePath);
     }
     m_tester->m_docSheet = new DocSheet(Dr::FileType::PDF, filePath, m_tester);
+    QSignalSpy spy(m_tester->m_docSheet, SIGNAL(sigOperationChanged(DocSheet *)));
     m_tester->onSelectText();
+    EXPECT_TRUE(m_tester->m_docSheet->m_operation.mouseShape == Dr::MouseShapeNormal);
+    EXPECT_EQ(spy.count(), 1);
 }
 
 TEST_F(TestHandleMenu, testreadCurDocParam)
@@ -85,5 +92,7 @@ TEST_F(TestHandleMenu, testreadCurDocParam)
     }
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, filePath, m_tester);
     m_tester->readCurDocParam(sheet);
+    EXPECT_TRUE(m_tester->m_docSheet == sheet);
+    EXPECT_TRUE(m_tester->m_textAction->isChecked());
     delete sheet;
 }

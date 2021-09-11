@@ -20,8 +20,9 @@
 */
 
 #include "BaseWidget.h"
-
 #include "stub.h"
+
+#include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -55,6 +56,8 @@ TEST_F(TestBaseWidget, initTest)
 TEST_F(TestBaseWidget, testupdateWidgetTheme)
 {
     m_tester->updateWidgetTheme();
+    Dtk::Gui::DPalette plt = m_tester->palette();
+    EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
 }
 
 TEST_F(TestBaseWidget, testadaptWindowSize)

@@ -28,6 +28,7 @@
 #include <gtest/gtest.h>
 #include <QTest>
 
+namespace {
 class TestShortCutShow : public ::testing::Test
 {
 public:
@@ -49,6 +50,18 @@ protected:
     ShortCutShow *m_tester;
 };
 
+static QString g_funcname;
+void initPDF_stub()
+{
+    g_funcname = __FUNCTION__;
+}
+
+void initDJVU_stub()
+{
+    g_funcname = __FUNCTION__;
+}
+}
+
 TEST_F(TestShortCutShow, initTest)
 {
 
@@ -56,13 +69,22 @@ TEST_F(TestShortCutShow, initTest)
 
 TEST_F(TestShortCutShow, testsetSheet)
 {
+    Stub s;
+    s.set(ADDR(ShortCutShow, initPDF), initPDF_stub);
+    s.set(ADDR(ShortCutShow, initDJVU), initDJVU_stub);
+
     m_tester->setSheet(nullptr);
+    EXPECT_TRUE(g_funcname == "initPDF_stub");
+
     DocSheet *sheet = new DocSheet(Dr::FileType::DJVU, "1.pdf");
     m_tester->setSheet(sheet);
     delete sheet;
+    EXPECT_TRUE(g_funcname == "initDJVU_stub");
+
     sheet = new DocSheet(Dr::FileType::PDF, "1.pdf");
     m_tester->setSheet(sheet);
     delete sheet;
+    EXPECT_TRUE(g_funcname == "initPDF_stub");
 }
 
 TEST_F(TestShortCutShow, testshow)

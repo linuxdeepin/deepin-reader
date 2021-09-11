@@ -28,7 +28,7 @@
 
 #include <gtest/gtest.h>
 #include <QTest>
-
+namespace {
 class TestFindWidget : public ::testing::Test
 {
 public:
@@ -57,9 +57,36 @@ protected:
     FindWidget *m_tester;
 };
 
+static QString g_funcname;
+void jumpToNextSearchResult_stub()
+{
+    g_funcname = __FUNCTION__;
+}
+
+void jumpToPrevSearchResult_stub()
+{
+    g_funcname = __FUNCTION__;
+}
+
+void setEditAlert_stub(const int &)
+{
+    g_funcname = __FUNCTION__;
+}
+
+void keyPressEvent_stub(void *, QKeyEvent *)
+{
+    g_funcname = __FUNCTION__;
+}
+
+void setFocus_stub()
+{
+    g_funcname = __FUNCTION__;
+}
+
 void DocSheet_startSearch_stub(const QString &)
 {
-    return ;
+    g_funcname = __FUNCTION__;
+}
 }
 
 TEST_F(TestFindWidget, initTest)
@@ -69,12 +96,19 @@ TEST_F(TestFindWidget, initTest)
 
 TEST_F(TestFindWidget, testsetSearchEditFocus)
 {
+    Stub s;
+    s.set((void(QWidget::*)())ADDR(QWidget, setFocus), setFocus_stub);
     m_tester->setSearchEditFocus();
+    EXPECT_TRUE(g_funcname == "setFocus_stub");
 }
 
 TEST_F(TestFindWidget, testonSearchStop)
 {
     m_tester->onSearchStop();
+    EXPECT_TRUE(m_tester->m_lastSearchText.isEmpty());
+    EXPECT_FALSE(m_tester->m_findPrevButton->isEnabled());
+    EXPECT_FALSE(m_tester->m_findNextButton->isEnabled());
+
 }
 
 TEST_F(TestFindWidget, testonSearchStart)
@@ -83,35 +117,59 @@ TEST_F(TestFindWidget, testonSearchStart)
     stub.set(ADDR(DocSheet, startSearch), DocSheet_startSearch_stub);
     m_tester->m_pSearchEdit->setText("123");
     m_tester->onSearchStart();
+    EXPECT_TRUE(m_tester->m_lastSearchText == "123");
+    EXPECT_TRUE(m_tester->m_findPrevButton->isEnabled());
+    EXPECT_TRUE(m_tester->m_findNextButton->isEnabled());
 }
 
 TEST_F(TestFindWidget, testslotFindNextBtnClicked)
 {
+    Stub s;
+    s.set(ADDR(DocSheet, jumpToNextSearchResult), jumpToNextSearchResult_stub);
     m_tester->slotFindNextBtnClicked();
+    EXPECT_TRUE(g_funcname == "jumpToNextSearchResult_stub");
 }
 
 TEST_F(TestFindWidget, testslotFindPrevBtnClicked)
 {
+    Stub s;
+    s.set(ADDR(DocSheet, jumpToPrevSearchResult), jumpToPrevSearchResult_stub);
     m_tester->slotFindPrevBtnClicked();
+    EXPECT_TRUE(g_funcname == "jumpToPrevSearchResult_stub");
 }
 
 TEST_F(TestFindWidget, testonTextChanged)
 {
+    Stub s;
+    s.set(ADDR(FindWidget, setEditAlert), jumpToPrevSearchResult_stub);
     m_tester->onTextChanged();
+    EXPECT_TRUE(g_funcname == "jumpToPrevSearchResult_stub");
 }
 
 TEST_F(TestFindWidget, testsetEditAlert)
 {
     m_tester->setEditAlert(1);
+    EXPECT_FALSE(m_tester->m_pSearchEdit->isAlert());
 }
 
 TEST_F(TestFindWidget, testonCloseBtnClicked)
 {
+    m_tester->m_pSearchEdit->setText("123");
     m_tester->onCloseBtnClicked();
+    EXPECT_TRUE(m_tester->m_pSearchEdit->text().isEmpty());
 }
 
 TEST_F(TestFindWidget, testkeyPressEvent)
 {
+    typedef void (*fptr)(DFloatingWidget *, QKeyEvent *);
+    fptr DFloatingWidget_keyPressEvent = (fptr)(&DFloatingWidget::keyPressEvent);   //获取虚函数地址
+    Stub s;
+    s.set(DFloatingWidget_keyPressEvent, keyPressEvent_stub);
+    g_funcname.clear();
+
     QTest::keyPress(m_tester, Qt::Key_Up);
+    EXPECT_TRUE(g_funcname.isEmpty());
+
     QTest::keyPress(m_tester, Qt::Key_Delete);
+    EXPECT_TRUE(g_funcname == "keyPressEvent_stub");
 }

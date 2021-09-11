@@ -22,6 +22,7 @@
 #include "SideBarImageViewModel.h"
 #include "DocSheet.h"
 #include "SideBarImageViewModel.h"
+#include "PageRenderThread.h"
 
 #include "stub.h"
 
@@ -105,51 +106,59 @@ TEST_F(TestSideBarImageViewModel, inittest)
 TEST_F(TestSideBarImageViewModel, testresetData)
 {
     m_tester->resetData();
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 0);
 }
 
 TEST_F(TestSideBarImageViewModel, testinitModelLst)
 {
-    m_tester->initModelLst(QList<ImagePageInfo_t>(), true);
+    m_tester->initModelLst(QList<ImagePageInfo_t>() << ImagePageInfo_t(), true);
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testchangeModelData)
 {
-    m_tester->changeModelData(QList<ImagePageInfo_t>());
+    m_tester->changeModelData(QList<ImagePageInfo_t>() << ImagePageInfo_t());
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testsetBookMarkVisible)
 {
     m_tester->setBookMarkVisible(0, true, true);
+    EXPECT_TRUE(m_tester->m_cacheBookMarkMap.count() == 1);
+    EXPECT_TRUE(m_tester->m_cacheBookMarkMap[0] == true);
 }
 
 TEST_F(TestSideBarImageViewModel, testrowCount)
 {
-    m_tester->rowCount(QModelIndex());
+    m_tester->m_pagelst << ImagePageInfo_t();
+    EXPECT_TRUE(m_tester->rowCount(QModelIndex()) == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testcolumnCount)
 {
-    m_tester->columnCount(QModelIndex());
+    EXPECT_TRUE(m_tester->columnCount(QModelIndex()) == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testdata)
 {
-    m_tester->data(QModelIndex(), Qt::DisplayRole);
+    EXPECT_TRUE(m_tester->data(QModelIndex(), Qt::DisplayRole) == QVariant());
 }
 
 TEST_F(TestSideBarImageViewModel, testsetData)
 {
-    m_tester->setData(QModelIndex(), "", Qt::DisplayRole);
+    EXPECT_TRUE(m_tester->setData(QModelIndex(), "", Qt::DisplayRole) == false);
 }
 
 TEST_F(TestSideBarImageViewModel, testgetModelIndexForPageIndex)
 {
-    m_tester->getModelIndexForPageIndex(0);
+    m_tester->m_pagelst << ImagePageInfo_t(0);
+    EXPECT_TRUE(m_tester->getModelIndexForPageIndex(0).count() == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testgetPageIndexForModelIndex)
 {
-    m_tester->getPageIndexForModelIndex(0);
+    m_tester->m_pagelst << ImagePageInfo_t(0);
+    EXPECT_TRUE(m_tester->getPageIndexForModelIndex(0) == 0);
 }
 
 TEST_F(TestSideBarImageViewModel, testonUpdateImage)
@@ -160,32 +169,39 @@ TEST_F(TestSideBarImageViewModel, testonUpdateImage)
 TEST_F(TestSideBarImageViewModel, testinsertPageIndex)
 {
     m_tester->insertPageIndex(0);
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testinsertPageIndex1)
 {
     m_tester->insertPageIndex(ImagePageInfo_t());
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 1);
 }
 
 TEST_F(TestSideBarImageViewModel, testremovePageIndex)
 {
+    m_tester->m_pagelst << ImagePageInfo_t(0);
     m_tester->removePageIndex(0);
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 0);
 }
 
 TEST_F(TestSideBarImageViewModel, testremoveItemForAnno)
 {
     m_tester->removeItemForAnno(nullptr);
+    EXPECT_TRUE(m_tester->m_pagelst.count() == 0);
 }
 
 TEST_F(TestSideBarImageViewModel, testgetModelIndexImageInfo)
 {
+    m_tester->m_pagelst << ImagePageInfo_t(0);
     ImagePageInfo_t temp;
     m_tester->getModelIndexImageInfo(0, temp);
+    EXPECT_TRUE(temp == ImagePageInfo_t(0));
 }
 
 TEST_F(TestSideBarImageViewModel, testfindItemForAnno)
 {
-    m_tester->findItemForAnno(nullptr);
+    EXPECT_TRUE(m_tester->findItemForAnno(nullptr) == -1);
 }
 
 TEST_F(TestSideBarImageViewModel, testhandleRenderThumbnail)

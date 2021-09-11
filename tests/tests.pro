@@ -9,7 +9,7 @@ QT += core gui sql printsupport dbus testlib widgets
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
 #访问私有方法 -fno-access-control
-QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -fno-access-control -O0
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -fno-access-control -O0 -fno-inline
 
 QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 
@@ -38,11 +38,7 @@ TEMPLATE = app
 #code
 SOURCES += \
     main.cpp \
-    ut_application.cpp \
-    app/ut_app.cpp \
-    uiframe/ut_uiframe.cpp \
     ut_mainwindow.cpp \
-    widgets/ut_widgets.cpp \
     app/ut_Database.cpp \
     widgets/ut_AttrScrollWidget.cpp \
     widgets/ut_BaseWidget.cpp \
@@ -58,8 +54,7 @@ SOURCES += \
     widgets/ut_SecurityDialog.cpp \
     widgets/ut_ShortCutShow.cpp \
     widgets/ut_SlideWidget.cpp \
-    sidebar/ut_sheetsidebar.cpp \
-    browser/ut_browser.cpp \
+    widgets/ut_TipsWidget.cpp \
     uiframe/ut_Central.cpp \
     sidebar/ut_BookMarkDelegate.cpp \
     sidebar/ut_BookMarkWidget.cpp \
@@ -67,19 +62,10 @@ SOURCES += \
     sidebar/ut_SideBarImageListview.cpp \
     sidebar/ut_SideBarImageViewModel.cpp \
     browser/ut_sheetbrowser.cpp \
-    document/ut_document.cpp
     ut_common.cpp
 
 HEADERS +=\
     ut_defines.h \
-    ut_application.h \
-    app/ut_app.h \
-    uiframe/ut_uiframe.h \
-    ut_mainwindow.h \
-    widgets/ut_widgets.h \
-    sidebar/ut_sheetsidebar.h \
-    browser/ut_browser.h \
-    document/ut_document.h
     ut_common.h
 
 include($$PWD/../reader/src.pri)

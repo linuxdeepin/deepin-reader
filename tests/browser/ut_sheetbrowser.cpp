@@ -246,7 +246,12 @@ TEST_F(TestSheetBrowser, initTest)
 
 TEST_F(TestSheetBrowser, testmouseMoveEvent)
 {
-    QTest::mouseMove(m_tester, QPoint(0, 0));
+    m_tester->m_startPinch = false;
+    m_tester->m_bHandAndLink = true;
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    m_tester->mouseMoveEvent(event);
+    delete event;
+    EXPECT_TRUE(m_tester->m_bHandAndLink == true);
 }
 
 TEST_F(TestSheetBrowser, testshowMenu001)
@@ -262,9 +267,9 @@ TEST_F(TestSheetBrowser, testshowMenu001)
     DocSheet *p2 = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
     m_tester->m_sheet = p2;
     m_tester->showMenu();
-
     delete p;
     delete p2;
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
 }
 
 TEST_F(TestSheetBrowser, testshowMenu002)
@@ -286,6 +291,8 @@ TEST_F(TestSheetBrowser, testshowMenu002)
     delete p;
     delete p2;
     delete p3;
+
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
 }
 
 TEST_F(TestSheetBrowser, testshowMenu003)
@@ -305,13 +312,15 @@ TEST_F(TestSheetBrowser, testshowMenu003)
 
     delete p;
     delete p2;
+
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
 }
 
 TEST_F(TestSheetBrowser, testcalcIconAnnotRect001)
 {
     QPointF point;
     QRectF iconRect;
-    m_tester->calcIconAnnotRect(nullptr, point, iconRect);
+    EXPECT_TRUE(m_tester->calcIconAnnotRect(nullptr, point, iconRect) == false);
 }
 
 TEST_F(TestSheetBrowser, testcalcIconAnnotRect002)
@@ -321,7 +330,7 @@ TEST_F(TestSheetBrowser, testcalcIconAnnotRect002)
     DocSheet sheet(Dr::FileType::PDF, "1.pdf", nullptr);
     BrowserPage page(nullptr, 0, &sheet);
     m_tester->m_sheet = &sheet;
-    m_tester->calcIconAnnotRect(&page, point, iconRect);
+    EXPECT_TRUE(m_tester->calcIconAnnotRect(&page, point, iconRect) == true);
 }
 
 TEST_F(TestSheetBrowser, testcalcIconAnnotRect003)
@@ -333,24 +342,32 @@ TEST_F(TestSheetBrowser, testcalcIconAnnotRect003)
     m_tester->m_sheet = &sheet;
     Stub stub;
     stub.set(ADDR(SheetBrowser, getAnnotPosInPage), getAnnotPosInPage_stub);
-    m_tester->calcIconAnnotRect(&page, point, iconRect);
+    EXPECT_TRUE(m_tester->calcIconAnnotRect(&page, point, iconRect) == false);
 }
 
 TEST_F(TestSheetBrowser, testaddHighLightAnnotation001)
 {
     QString contains;
     QPoint showPoint;
-    m_tester->addHighLightAnnotation(contains, QColor(), showPoint);
+    EXPECT_TRUE(m_tester->addHighLightAnnotation(contains, QColor(), showPoint) == nullptr);
 
     BrowserWord *pStart = new BrowserWord(nullptr, Word());
     BrowserWord *pEnd = new BrowserWord(nullptr, Word());
     m_tester->m_selectStartWord = pStart;
     m_tester->m_selectEndWord = pEnd;
-    m_tester->addHighLightAnnotation(contains, QColor(), showPoint);
+    EXPECT_TRUE(m_tester->addHighLightAnnotation(contains, QColor(), showPoint) == nullptr);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndPos == QPointF());
+    EXPECT_TRUE(m_tester->m_selectStartPos == QPointF());
 
     m_tester->m_selectStartWord = pStart;
     m_tester->m_selectEndWord = pEnd;
-    m_tester->addHighLightAnnotation(contains, QColor(), showPoint);
+    EXPECT_TRUE(m_tester->addHighLightAnnotation(contains, QColor(), showPoint) == nullptr);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndPos == QPointF());
+    EXPECT_TRUE(m_tester->m_selectStartPos == QPointF());
 
     delete pStart;
     delete pEnd;
@@ -364,7 +381,11 @@ TEST_F(TestSheetBrowser, testaddHighLightAnnotation002)
     BrowserWord *pEnd = new BrowserWord(nullptr, Word());
     m_tester->m_selectStartWord = pStart;
     m_tester->m_selectEndWord = pEnd;
-    m_tester->addHighLightAnnotation(contains, QColor(), showPoint);
+    EXPECT_TRUE(m_tester->addHighLightAnnotation(contains, QColor(), showPoint) == nullptr);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndPos == QPointF());
+    EXPECT_TRUE(m_tester->m_selectStartPos == QPointF());
 
     delete pStart;
     delete pEnd;
@@ -381,7 +402,11 @@ TEST_F(TestSheetBrowser, testaddHighLightAnnotation003)
     Stub stub;
     stub.set(ADDR(QGraphicsItem, parentItem), parentItem_stub);
     stub.set(ADDR(BrowserPage, addHighlightAnnotation), addHighlightAnnotation_stub);
-    m_tester->addHighLightAnnotation(contains, QColor(), showPoint);
+    EXPECT_TRUE(m_tester->addHighLightAnnotation(contains, QColor(), showPoint) == nullptr);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectEndPos == QPointF());
+    EXPECT_TRUE(m_tester->m_selectStartPos == QPointF());
 
     delete pStart;
     delete pEnd;
@@ -393,7 +418,7 @@ TEST_F(TestSheetBrowser, testaddHighLightAnnotation003)
 TEST_F(TestSheetBrowser, testmoveIconAnnot001)
 {
     QPointF point;
-    m_tester->moveIconAnnot(nullptr, point);
+    EXPECT_TRUE(m_tester->moveIconAnnot(nullptr, point) == false);
 }
 
 TEST_F(TestSheetBrowser, testmoveIconAnnot002)
@@ -403,7 +428,7 @@ TEST_F(TestSheetBrowser, testmoveIconAnnot002)
     BrowserPage page(nullptr, 0, &sheet);
     Stub stub;
     stub.set(ADDR(SheetBrowser, calcIconAnnotRect), calcIconAnnotRect_stub_false);
-    m_tester->moveIconAnnot(&page, point);
+    EXPECT_TRUE(m_tester->moveIconAnnot(&page, point) == false);
 }
 
 TEST_F(TestSheetBrowser, testmoveIconAnnot003)
@@ -413,7 +438,7 @@ TEST_F(TestSheetBrowser, testmoveIconAnnot003)
     BrowserPage page(nullptr, 0, &sheet);
     Stub stub;
     stub.set(ADDR(SheetBrowser, calcIconAnnotRect), calcIconAnnotRect_stub_true);
-    m_tester->moveIconAnnot(&page, point);
+    EXPECT_TRUE(m_tester->moveIconAnnot(&page, point) == false);
 }
 
 TEST_F(TestSheetBrowser, testjumpToPrevSearchResult001)
@@ -422,6 +447,7 @@ TEST_F(TestSheetBrowser, testjumpToPrevSearchResult001)
     stub.set(ADDR(BrowserPage, searchHighlightRectSize), searchHighlightRectSize_stub_0);
 
     m_tester->jumpToPrevSearchResult();
+    EXPECT_TRUE(m_tester->m_searchCurIndex == 0);
 }
 
 TEST_F(TestSheetBrowser, testjumpToPrevSearchResult002)
@@ -433,6 +459,10 @@ TEST_F(TestSheetBrowser, testjumpToPrevSearchResult002)
     stub.set(ADDR(BrowserPage, translateRect), translateRect_stub);
 
     m_tester->jumpToPrevSearchResult();
+    EXPECT_TRUE(m_tester->m_sheet == nullptr);
+    EXPECT_TRUE(m_tester->m_searchCurIndex == 1);
+    EXPECT_TRUE(m_tester->m_changSearchFlag == false);
+    EXPECT_TRUE(m_tester->m_searchPageTextIndex == 0);
 }
 
 TEST_F(TestSheetBrowser, testjumpToNextSearchResult001)
@@ -441,6 +471,10 @@ TEST_F(TestSheetBrowser, testjumpToNextSearchResult001)
     stub.set(ADDR(BrowserPage, searchHighlightRectSize), searchHighlightRectSize_stub_0);
 
     m_tester->jumpToNextSearchResult();
+    EXPECT_TRUE(m_tester->m_searchCurIndex == 0);
+    EXPECT_TRUE(m_tester->m_searchPageTextIndex == 0);
+    EXPECT_TRUE(m_tester->m_changSearchFlag == false);
+    EXPECT_TRUE(m_tester->m_lastFindPage == nullptr);
 }
 
 TEST_F(TestSheetBrowser, testjumpToNextSearchResult002)
@@ -452,6 +486,10 @@ TEST_F(TestSheetBrowser, testjumpToNextSearchResult002)
     stub.set(ADDR(BrowserPage, translateRect), translateRect_stub);
 
     m_tester->jumpToNextSearchResult();
+    EXPECT_TRUE(m_tester->m_searchCurIndex == 1);
+    EXPECT_TRUE(m_tester->m_searchPageTextIndex == 0);
+    EXPECT_TRUE(m_tester->m_changSearchFlag == false);
+    EXPECT_TRUE(m_tester->m_lastFindPage != nullptr);
 }
 
 TEST_F(TestSheetBrowser, testdeform001)
@@ -465,6 +503,10 @@ TEST_F(TestSheetBrowser, testdeform001)
     operation.layoutMode = Dr::SinglePageMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testdeform002)
@@ -478,6 +520,10 @@ TEST_F(TestSheetBrowser, testdeform002)
     operation.layoutMode = Dr::TwoPagesMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testdeform003)
@@ -491,6 +537,10 @@ TEST_F(TestSheetBrowser, testdeform003)
     operation.layoutMode = Dr::SinglePageMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testdeform004)
@@ -505,6 +555,10 @@ TEST_F(TestSheetBrowser, testdeform004)
     operation.rotation = Dr::RotateBy90;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 1);
 }
 
 TEST_F(TestSheetBrowser, testdeform005)
@@ -518,6 +572,10 @@ TEST_F(TestSheetBrowser, testdeform005)
     operation.layoutMode = Dr::SinglePageMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testdeform006)
@@ -531,6 +589,10 @@ TEST_F(TestSheetBrowser, testdeform006)
     operation.layoutMode = Dr::SinglePageMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testdeform007)
@@ -544,11 +606,16 @@ TEST_F(TestSheetBrowser, testdeform007)
     operation.layoutMode = Dr::TwoPagesMode;
 
     m_tester->deform(operation);
+    EXPECT_TRUE(m_tester->m_lastScaleFactor == 1.0);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+    EXPECT_TRUE(m_tester->m_tipsWidget != nullptr);
+    EXPECT_TRUE(m_tester->m_lastrotation == 0);
 }
 
 TEST_F(TestSheetBrowser, testjumpToHighLight001)
 {
     m_tester->jumpToHighLight(nullptr, 0);
+    EXPECT_TRUE(m_tester->m_sheet == nullptr);
 }
 
 TEST_F(TestSheetBrowser, testjumpToHighLight002)
@@ -562,6 +629,7 @@ TEST_F(TestSheetBrowser, testjumpToHighLight002)
     m_tester->m_sheet = &p1;
     PDFAnnotation p2(nullptr);
     m_tester->jumpToHighLight(&p2, 0);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 TEST_F(TestSheetBrowser, testjumpToHighLight003)
@@ -576,6 +644,8 @@ TEST_F(TestSheetBrowser, testjumpToHighLight003)
     m_tester->m_sheet = &p1;
     PDFAnnotation p2(nullptr);
     m_tester->jumpToHighLight(&p2, 0);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
 }
 
 TEST_F(TestSheetBrowser, testjumpToHighLight004)
@@ -590,6 +660,8 @@ TEST_F(TestSheetBrowser, testjumpToHighLight004)
     m_tester->m_sheet = &p1;
     PDFAnnotation p2(nullptr);
     m_tester->jumpToHighLight(&p2, 0);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
 }
 
 TEST_F(TestSheetBrowser, testjumpToHighLight005)
@@ -604,6 +676,8 @@ TEST_F(TestSheetBrowser, testjumpToHighLight005)
     m_tester->m_sheet = &p1;
     PDFAnnotation p2(nullptr);
     m_tester->jumpToHighLight(&p2, 0);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
 }
 
 TEST_F(TestSheetBrowser, testmousePressEvent001)
@@ -626,6 +700,13 @@ TEST_F(TestSheetBrowser, testmousePressEvent001)
     delete g_pBrowserPage2;
     delete g_pPDFAnnotation;
     delete g_pDPdfAnnot;
+
+    EXPECT_TRUE(m_tester->m_annotationInserting == false);
+    EXPECT_TRUE(m_tester->m_canTouchScreen == true);
+    EXPECT_TRUE(m_tester->m_iconAnnot != nullptr);
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == true);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectWord == nullptr);
 }
 
 
@@ -634,6 +715,13 @@ TEST_F(TestSheetBrowser, testmousePressEvent002)
     QPointF localPos;
     QMouseEvent event(QEvent::MouseButtonPress, localPos, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
     m_tester->mousePressEvent(&event);
+
+    EXPECT_TRUE(m_tester->m_annotationInserting == false);
+    EXPECT_TRUE(m_tester->m_canTouchScreen == false);
+    EXPECT_TRUE(m_tester->m_iconAnnot == nullptr);
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
+    EXPECT_TRUE(m_tester->m_selectStartWord == nullptr);
+    EXPECT_TRUE(m_tester->m_selectWord == nullptr);
 }
 
 

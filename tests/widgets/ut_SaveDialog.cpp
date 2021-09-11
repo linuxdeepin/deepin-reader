@@ -50,10 +50,11 @@ public:
 protected:
     SaveDialog *m_tester;
 };
-
+static QString g_funcname;
 int dialog_exec_stub()
 {
-    return false;
+    g_funcname = __FUNCTION__;
+    return 0;
 }
 
 TEST_F(TestSaveDialog, initTest)
@@ -68,7 +69,8 @@ TEST_F(TestSaveDialog, testshowExitDialog)
     fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     stub.set(A_foo, dialog_exec_stub);
 
-    m_tester->showExitDialog("1.pdf");
+    EXPECT_EQ(m_tester->showExitDialog("1.pdf"), 0);
+    EXPECT_TRUE(g_funcname == "dialog_exec_stub");
 }
 
 TEST_F(TestSaveDialog, testshowTipDialog)
@@ -78,5 +80,6 @@ TEST_F(TestSaveDialog, testshowTipDialog)
     fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     stub.set(A_foo, dialog_exec_stub);
 
-    m_tester->showTipDialog("1.pdf");
+    EXPECT_EQ(m_tester->showTipDialog("1.pdf"), 0);
+    EXPECT_TRUE(g_funcname == "dialog_exec_stub");
 }

@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QSignalSpy>
 
 class TestColorWidgetAction : public ::testing::Test
 {
@@ -54,5 +55,7 @@ TEST_F(TestColorWidgetAction, initTest)
 
 TEST_F(TestColorWidgetAction, testslotBtnClicked)
 {
+    QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
     m_tester->slotBtnClicked(0);
+    EXPECT_EQ(spy.count(), 1);
 }
