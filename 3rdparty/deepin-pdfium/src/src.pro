@@ -1,5 +1,10 @@
 TARGET = $$PWD/../lib/deepin-pdfium
 
+isEmpty(LIB_INSTALL_DIR){
+    message("You Don't define LIB_INSTALL_DIR, the library(es) will be installed to /usr/lib by default")
+    LIB_INSTALL_DIR = /usr/lib
+}
+
 TEMPLATE = lib
 
 CONFIG += c++14
@@ -42,6 +47,6 @@ SOURCES += \
     $$PWD/dpdfpage.cpp \
     $$PWD/dpdfannot.cpp
 
-target.path  = /usr/lib
+target.path  = $$LIB_INSTALL_DIR
 
 INSTALLS += target
