@@ -229,7 +229,9 @@ public:
 class DocumentFactory
 {
 public:
-    static Document *getDocument(const int &fileType, const QString &filePath, const QString &convertedFileDir, const QString &password, deepin_reader::Document::Error &error);
+    static Document *getDocument(const int &fileType, const QString &filePath,
+                                 const QString &convertedFileDir, const QString &password,
+                                 deepin_reader::Document::Error &error);
 };
 
 
