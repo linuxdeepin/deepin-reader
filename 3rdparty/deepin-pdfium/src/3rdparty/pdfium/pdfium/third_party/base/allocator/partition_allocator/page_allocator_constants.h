@@ -13,7 +13,7 @@ namespace pdfium {
 namespace base {
 #if defined(OS_WIN) || defined(ARCH_CPU_PPC64)
 static constexpr size_t kPageAllocationGranularityShift = 16;  // 64KB
-#elif defined(_MIPS_ARCH_LOONGSON)
+#elif defined(_MIPS_ARCH_LOONGSON) || defined(ARCH_CPU_LOONGARCH64)
 static constexpr size_t kPageAllocationGranularityShift = 14;  // 16KB
 #elif defined(ARCH_CPU_SW64)
 static constexpr size_t kPageAllocationGranularityShift = 13;  // 8KB
@@ -29,7 +29,7 @@ static constexpr size_t kPageAllocationGranularityOffsetMask =
 static constexpr size_t kPageAllocationGranularityBaseMask =
     ~kPageAllocationGranularityOffsetMask;
 
-#if defined(_MIPS_ARCH_LOONGSON)
+#if defined(_MIPS_ARCH_LOONGSON) || defined(ARCH_CPU_LOONGARCH64)
 static constexpr size_t kSystemPageSize = 16384;
 #elif defined(ARCH_CPU_PPC64)
 // Modern ppc64 systems support 4KB and 64KB page sizes.

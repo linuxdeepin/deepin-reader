@@ -36,7 +36,7 @@ static const size_t kBucketShift = (kAllocationGranularity == 8) ? 3 : 2;
 // other constant values, we pack _all_ `PartitionRootGeneric::Alloc` sizes
 // perfectly up against the end of a system page.
 
-#if defined(_MIPS_ARCH_LOONGSON)
+#if defined(_MIPS_ARCH_LOONGSON) || defined(ARCH_CPU_LOONGARCH64)
 static const size_t kPartitionPageShift = 16;  // 64 KiB
 #elif defined(ARCH_CPU_PPC64)
 static const size_t kPartitionPageShift = 18;  // 256 KiB
