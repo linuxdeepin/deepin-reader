@@ -891,11 +891,6 @@
         <source>Search</source>
         <translation>འཚོལ་ཞིབ།</translation>
     </message>
-    <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
-        <source>Print</source>
-        <translation>པར་འདེབས།</translation>
-    </message>
 </context>
 <context>
     <name>TitleWidget</name>

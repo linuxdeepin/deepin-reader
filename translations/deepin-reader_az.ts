@@ -891,11 +891,6 @@
         <source>Search</source>
         <translation>Axtarış</translation>
     </message>
-    <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
-        <source>Print</source>
-        <translation>Çap</translation>
-    </message>
 </context>
 <context>
     <name>TitleWidget</name>

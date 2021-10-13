@@ -892,11 +892,6 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
-    <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
-        <source>Print</source>
-        <translation>Stampa</translation>
-    </message>
 </context>
 <context>
     <name>TitleWidget</name>

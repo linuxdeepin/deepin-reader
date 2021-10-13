@@ -51,8 +51,8 @@ TitleMenu::TitleMenu(DWidget *parent)
     m_handleMenu->setAccessibleName("Menu_Hand");
     this->addMenu(m_handleMenu);
 
-    QStringList fourActionList = QStringList() << tr("Search") << tr("Print");
-    QStringList fourActionObjList = QStringList() << "Search" << "Print";
+    QStringList fourActionList = QStringList() << tr("Search");
+    QStringList fourActionObjList = QStringList() << "Search";
     createActionMap(fourActionList, fourActionObjList);
     this->addSeparator();
 }
@@ -94,7 +94,7 @@ void TitleMenu::onActionTriggered()
 void TitleMenu::disableAllAction()
 {
     QStringList actiontextlist;
-    actiontextlist << "Save" << "Save as" << "Display in file manager" << "Magnifer" << "Search" << "Print";
+    actiontextlist << "Save" << "Save as" << "Display in file manager" << "Magnifer" << "Search";
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (actiontextlist.indexOf(a->objectName()) != -1)

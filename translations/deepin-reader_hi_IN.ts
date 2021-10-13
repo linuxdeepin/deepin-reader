@@ -891,11 +891,6 @@
         <source>Search</source>
         <translation>खोजें</translation>
     </message>
-    <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
-        <source>Print</source>
-        <translation type="unfinished">प्रिंट करें</translation>
-    </message>
 </context>
 <context>
     <name>TitleWidget</name>

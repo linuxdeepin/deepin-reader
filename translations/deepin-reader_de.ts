@@ -891,11 +891,6 @@
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
-    <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
-        <source>Print</source>
-        <translation>Drucken</translation>
-    </message>
 </context>
 <context>
     <name>TitleWidget</name>
