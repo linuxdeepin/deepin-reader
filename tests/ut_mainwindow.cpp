@@ -24,11 +24,13 @@
 #include "Application.h"
 #include "SheetRenderer.h"
 
-#include "stub.h"
-
-#include <gtest/gtest.h>
-
 #include <QTimer>
+#include <QCloseEvent>
+#include <QHoverEvent>
+#include <QResizeEvent>
+
+#include "stub.h"
+#include <gtest/gtest.h>
 
 void openFileAsync_stub(const QString &)
 {
@@ -38,7 +40,7 @@ void openFileAsync_stub(const QString &)
 class TestMainWindow : public ::testing::Test
 {
 public:
-    TestMainWindow(): m_tester(nullptr) {}
+    TestMainWindow(): m_tester(nullptr), m_tester1(nullptr) {}
 
 public:
     virtual void SetUp()
