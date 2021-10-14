@@ -1,3 +1,5 @@
+QT += webenginewidgets
+
 HEADERS += \
     $$PWD/DebugTimeManager.h \
     $$PWD/Global.h \
@@ -7,7 +9,9 @@ HEADERS += \
     $$PWD/accessibledefine.h \
     $$PWD/accessible.h \
     $$PWD/TMFunctionThread.h \
-    $$PWD/DBusObject.h
+    $$PWD/DBusObject.h \
+    $$PWD/html2pdfconverter.h \
+    $$PWD/mythread.h
 
 SOURCES += \
     $$PWD/DebugTimeManager.cpp \
@@ -15,7 +19,9 @@ SOURCES += \
     $$PWD/Database.cpp \
     $$PWD/Utils.cpp \
     $$PWD/TMFunctionThread.cpp \
-    $$PWD/DBusObject.cpp
+    $$PWD/DBusObject.cpp \
+    $$PWD/html2pdfconverter.cpp \
+    $$PWD/mythread.cpp
 
 INCLUDEPATH += $$PWD
 
