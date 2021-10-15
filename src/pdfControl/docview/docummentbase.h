@@ -38,6 +38,7 @@ public:
         pblankwidget = nullptr;
         m_bModified = false;
         m_currentpageno = 0;
+        m_oldVerticalScrollBarValue = 0;
         m_scale = 1.0;
         m_maxzoomratio = 5.0;
         m_rotate = RotateType_0;
@@ -80,6 +81,7 @@ public:
     int m_lastmagnifierpagenum;
     int m_magnifierpage;
     int m_currentpageno;
+    int m_oldVerticalScrollBarValue; //上一次页面显示的纵向位置
     double m_scale;
     double m_maxzoomratio;//最大放大比例
     mutable bool m_bModified;

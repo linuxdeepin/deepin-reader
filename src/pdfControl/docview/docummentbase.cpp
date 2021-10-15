@@ -1148,12 +1148,22 @@ void DocummentBase::slot_loadPages()
         }
     }
 
-    for (int i = firstpagenum; i <= lastpagenum ; i++) {
-        if (i >= 0 && i < d->m_pages.size()) {
-            RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
-//            d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+    if (verticalScrollBar()->value() >= d->m_oldVerticalScrollBarValue) { // 向下滑动逆序加载
+        for (int i = lastpagenum; i >= firstpagenum ; i--) {
+            if (i >= 0 && i < d->m_pages.size()) {
+                RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+//                d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+            }
+        }
+    } else { // 向上滑动顺序加载
+        for (int i = firstpagenum; i <= lastpagenum ; i++) {
+            if (i >= 0 && i < d->m_pages.size()) {
+                RenderThreadPdf::appendTask(d->m_pages.at(i), d->m_scale, d->m_rotate);//now
+//                d->m_pages.at(i)->showImage(d->m_scale, d->m_rotate);//before
+            }
         }
     }
+    d->m_oldVerticalScrollBarValue = verticalScrollBar()->value();
 
     for (int i = 0; i < d->m_pages.size(); i++) {
         bool bshow = false;
