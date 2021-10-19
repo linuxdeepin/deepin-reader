@@ -663,17 +663,18 @@ void PagePdf::freshPage(Poppler::Page *page)
 bool PagePdf::getrectimage(QImage &image, double destwidth, double scalebase, double magnifierscale, QPoint &pt)
 {
     Q_D(PagePdf);
+    const qreal dprF = devicePixelRatioF();
     QPointF ptimage = pt;
     getImagePoint(ptimage);
-    ptimage.setX(ptimage.x()*magnifierscale * d->m_scale * devicePixelRatioF());
-    ptimage.setY(ptimage.y()*magnifierscale * d->m_scale * devicePixelRatioF());
+    ptimage.setX(ptimage.x()*magnifierscale * d->m_scale * dprF);
+    ptimage.setY(ptimage.y()*magnifierscale * d->m_scale * dprF);
     int xres = 72.0, yres = 72.0;
     if (!d->m_page)
         return false;
     image = d->m_page->renderToImage(xres * scalebase, yres * scalebase,
-                                     static_cast<int>(ptimage.x() - destwidth / 2),
-                                     static_cast<int>(ptimage.y() - destwidth / 2),
-                                     static_cast<int>(destwidth), static_cast<int>(destwidth));
+                                     static_cast<int>(ptimage.x() - destwidth * dprF / 2),
+                                     static_cast<int>(ptimage.y() - destwidth * dprF / 2),
+                                     static_cast<int>(destwidth * dprF), static_cast<int>(destwidth * dprF));
     return true;
 }
 

@@ -102,8 +102,9 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     radius = m_magnifiermapradius;
     int smallcirclex = bigcirclex + m_magnifierringmapwidth;
     int smallcircley = bigcircley + m_magnifierringmapwidth;
+    const qreal ratio = qApp->devicePixelRatio();
     QTransform tr;
-    tr.translate(smallcirclex, smallcircley);
+    tr.translate(smallcirclex * ratio, smallcircley * ratio);
     tr.scale(1.0, 1.0);
     QBrush brush(m_magnifierpixmap);
     brush.setTransform(tr);
@@ -111,7 +112,6 @@ void MagnifierWidget::paintEvent(QPaintEvent *event)
     qpainter.setBrush(brush);
     qpainter.drawEllipse(smallcirclex, smallcircley, m_magnifiermapradius * 2, m_magnifiermapradius * 2);
     QPixmap pix(QIcon::fromTheme("dr_maganifier").pixmap(QSize(244, 244)));
-    const qreal ratio = qApp->devicePixelRatio();
     pix.setDevicePixelRatio(ratio);
     pix = pix.scaled(234, 234, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     qpainter.setRenderHints(QPainter::SmoothPixmapTransform);
