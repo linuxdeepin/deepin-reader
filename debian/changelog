@@ -1,5 +1,5 @@
-deepin-reader (1.0) unstable; urgency=medium
+deepin-reader (1.0) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Autobuild Tag 1.0
 
- -- unknown <zs@zs-PC>  Wed, 16 Oct 2019 16:48:52 +0800
+ -- TagBuilder <tagbuilder@deepin.com>  Fri, 30 oct 2020 18:46:29 +0000
