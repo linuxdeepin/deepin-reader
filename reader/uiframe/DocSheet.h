@@ -847,6 +847,9 @@ private:
     PageSearchThread *m_searchTask = nullptr;
     EncryptionPage  *m_encryPage = nullptr;
     QPropertyAnimation *m_sideAnimation = nullptr;
+
+public:
+    QProcess *m_process = nullptr; //当前调用的命令的进程地址
 };
 
 #endif // DocSheet_H

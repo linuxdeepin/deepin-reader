@@ -40,6 +40,7 @@ class QColor;
 class QImage;
 class QSizeF;
 class DPdfAnnot;
+class QProcess;
 
 namespace deepin_reader {
 
@@ -231,6 +232,7 @@ class DocumentFactory
 public:
     static Document *getDocument(const int &fileType, const QString &filePath,
                                  const QString &convertedFileDir, const QString &password,
+                                 QProcess **pprocess,
                                  deepin_reader::Document::Error &error);
 };
 

@@ -18,42 +18,44 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "html2pdfconverter.h"
+
+#include "htmltopdfconverter.h"
 
 #include <QApplication>
-#include <QWebEnginePage>
 
-Html2PdfConverter::Html2PdfConverter(const QString &inputPath, const QString &outputPath, QObject *parent)
-    : QObject(parent)
-    , m_inputPath(inputPath)
+HtmltoPdfConverter::HtmltoPdfConverter(const QString &inputPath, const QString &outputPath)
+    : m_inputPath(inputPath)
     , m_outputPath(outputPath)
+    , m_page(new QWebEnginePage)
 {
-
+    connect(m_page.data(), &QWebEnginePage::loadFinished,
+            this, &HtmltoPdfConverter::loadFinished);
+    connect(m_page.data(), &QWebEnginePage::pdfPrintingFinished,
+            this, &HtmltoPdfConverter::pdfPrintingFinished);
 }
 
-void Html2PdfConverter::run()
+int HtmltoPdfConverter::run()
 {
-    m_page = new QWebEnginePage(this);
-    connect(m_page, &QWebEnginePage::loadFinished, this, &Html2PdfConverter::loadFinished);
-    connect(m_page, &QWebEnginePage::pdfPrintingFinished, this, &Html2PdfConverter::pdfPrintingFinished);
     m_page->load(QUrl::fromUserInput(m_inputPath));
+    return QCoreApplication::exec();
 }
 
-void Html2PdfConverter::loadFinished(bool ok)
+void HtmltoPdfConverter::loadFinished(bool ok)
 {
     if (!ok) {
         qInfo() << QString("failed to load URL '%1'").arg(m_inputPath);
-        Q_EMIT sigQuit();
-        return;
+        QCoreApplication::exit(1);
     }
 
-    m_page->printToPdf(m_outputPath); //将页面的当前内容呈现为PDF文档，并将其保存在m_outputPath
+    m_page->printToPdf(m_outputPath);
 }
 
-void Html2PdfConverter::pdfPrintingFinished(const QString &filePath, bool success)
+void HtmltoPdfConverter::pdfPrintingFinished(const QString &filePath, bool success)
 {
     if (!success) {
         qInfo() << QString("failed to print to output file '%1'").arg(filePath);
+        QCoreApplication::exit(1);
+    } else {
+        QCoreApplication::quit();
     }
-    Q_EMIT sigQuit();
 }

@@ -11,7 +11,8 @@ CONFIG  += ordered
 
 SUBDIRS += 3rdparty/deepin-pdfium
 
+SUBDIRS += htmltopdf
+
 SUBDIRS += reader
 
 SUBDIRS += tests
-

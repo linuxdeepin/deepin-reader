@@ -54,6 +54,10 @@
 #include <QDesktopWidget>
 #include <QDebug>
 #include <QTemporaryDir>
+#include <QProcess>
+
+#include <signal.h>
+#include <sys/types.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -104,6 +108,14 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
 
 DocSheet::~DocSheet()
 {
+    // 结束正在进行的命令process
+    if (nullptr != m_process) {
+        __pid_t processid = static_cast<__pid_t>(m_process->processId());
+        if (0 < processid) {
+            kill(processid, SIGKILL);
+        }
+    }
+
     setAlive(false);
 
     delete m_browser;

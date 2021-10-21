@@ -21,38 +21,27 @@
 #ifndef HTML2PDFCONVERTER_H
 #define HTML2PDFCONVERTER_H
 
-#include <QObject>
-
-class QWebEnginePage;
+#include <QWebEnginePage>
 
 /**
- * @brief The Html2PdfConverter class
+ * @brief The HtmltoPdfConverter class
  * html文件转换为pdf格式文件功能
  */
-class Html2PdfConverter : public QObject
+class HtmltoPdfConverter : public QObject
 {
     Q_OBJECT
 public:
-    Html2PdfConverter(const QString &inputPath, const QString &outputPath, QObject *parent = nullptr);
-
-public slots:
-    void run();
+    explicit HtmltoPdfConverter(const QString &inputPath, const QString &outputPath);
+    int run();
 
 private slots:
     void loadFinished(bool ok);
     void pdfPrintingFinished(const QString &filePath, bool success);
 
-signals:
-    /**
-     * @brief sigQuit
-     * 发送退出信号，退出事件循环
-     */
-    void sigQuit();
-
 private:
     QString m_inputPath; //输入文件html
     QString m_outputPath; //输出文件pdf
-    QWebEnginePage *m_page = nullptr;
+    QScopedPointer<QWebEnginePage> m_page;
 };
 
 #endif // HTML2PDFCONVERTER_H
