@@ -34,6 +34,8 @@
 #include <QProcessEnvironment>
 #include <QPainterPath>
 
+#include <unistd.h>
+
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
@@ -210,6 +212,8 @@ bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
         }
     } while (size > 0);
 
+    destinationFile.flush();//函数将用户缓存中的内容写入内核缓冲区
+    fsync(destinationFile.handle());//将内核缓冲写入文件(磁盘)
     sourceFile.close();
     destinationFile.close();
     return ret;
