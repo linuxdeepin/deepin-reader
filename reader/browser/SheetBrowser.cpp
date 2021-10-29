@@ -1829,8 +1829,8 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
-    if (link.page > 0) {
-        setCurrentPage(link.page);
+    if (link.page > 0 && link.page <= allPages()) {
+        jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
         QString urlstr;

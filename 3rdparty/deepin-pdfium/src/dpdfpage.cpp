@@ -262,7 +262,7 @@ bool DPdfPagePrivate::loadAnnots()
             FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
             m_dAnnots.append(dAnnot);
-            if(!buffer){
+            if (!buffer) {
                 delete buffer;
                 buffer = nullptr;
             }
@@ -301,7 +301,7 @@ bool DPdfPagePrivate::loadAnnots()
             FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
             m_dAnnots.append(dAnnot);
-            if(!buffer){
+            if (!buffer) {
                 delete buffer;
                 buffer = nullptr;
             }
@@ -402,7 +402,7 @@ bool DPdfPagePrivate::loadAnnots()
             FPDFAnnot_GetFullStringValue(annot, "Contents", &buffer);
             dAnnot->m_text = QString::fromUtf16(buffer);
             m_dAnnots.append(dAnnot);
-            if(!buffer){
+            if (!buffer) {
                 delete buffer;
                 buffer = nullptr;
             }
@@ -1024,7 +1024,7 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
             if (curSchIndex >= 0) {
                 const QVector<QRectF> &textrectfs = textRects(curSchIndex, text.length());
                 QRectF textRect;
-                for (const QRectF& rect : textrectfs) {
+                for (const QRectF &rect : textrectfs) {
                     textRect = textRect.united(rect);
                 }
                 rectfs << textRect;
@@ -1061,7 +1061,6 @@ QList<DPdfAnnot *> DPdfPage::links()
     foreach (DPdfAnnot *annot, dAnnots) {
         if (annot->type() == DPdfAnnot::ALink) {
             links.append(annot);
-            continue;
         }
     }
 
