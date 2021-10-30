@@ -1223,14 +1223,11 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                     } else if (mlink.isValid() && nullptr == browserAnno) {
                         //处理移动到超链接区域
                         //未开启放大镜时，如果超链接文本添加了高亮注释，高亮注释优先显示
-                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
-                        m_tipsWidget->move(showRealPos);
-                        m_tipsWidget->setText(mlink.urlOrFileName);
-                        // 超链接地址为空时，不显示浮窗
-                        if (!mlink.urlOrFileName.isEmpty()) {
+                        if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
+                            QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                            m_tipsWidget->move(showRealPos);
+                            m_tipsWidget->setText(mlink.urlOrFileName);
                             m_tipsWidget->show();
-                        } else {
-                            m_tipsWidget->hide();
                         }
                         setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
                     } else if (page->getBrowserWord(mousposF)) {
@@ -1310,10 +1307,12 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                     const Link &mlink = getLinkAtPoint(mousePos);
                     if (mlink.isValid()) {
                         //处理移动
-                        QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
-                        m_tipsWidget->move(showRealPos);
-                        m_tipsWidget->setText(mlink.urlOrFileName);
-                        m_tipsWidget->show();
+                        if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
+                            QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
+                            m_tipsWidget->move(showRealPos);
+                            m_tipsWidget->setText(mlink.urlOrFileName);
+                            m_tipsWidget->show();
+                        }
                         if (!m_bHandAndLink) {
                             m_bHandAndLink = true;
                             setDragMode(QGraphicsView::NoDrag);
