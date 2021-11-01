@@ -320,10 +320,13 @@ void PageRenderThread::run()
         while (execNextDocPageThumbnailTask())
         {}
 
-        DocPageBigImageTask task;
+        if (m_quit)
+            break;
 
-        if (!popNextDocPageBigImageTask(task))
+        DocPageBigImageTask task;
+        if (!popNextDocPageBigImageTask(task)) {
             continue;
+        }
 
         QList<QRect> renderRects;
 
@@ -643,7 +646,6 @@ bool PageRenderThread::execNextDocOpenTask()
 
     if (nullptr == document) {
         emit sigDocOpenTask(task, error, nullptr, QList<deepin_reader::Page *>());
-
     } else {
         int pagesNumber = document->pageCount();
 
@@ -660,18 +662,15 @@ bool PageRenderThread::execNextDocOpenTask()
 
         if (pages.count() == pagesNumber) {
             emit sigDocOpenTask(task, deepin_reader::Document::NoError, document, pages);
-
         } else {
             qDeleteAll(pages);
 
             pages.clear();
 
             delete document;
-
             emit sigDocOpenTask(task, deepin_reader::Document::FileDamaged, nullptr, QList<deepin_reader::Page *>());
         }
     }
-
     PERF_PRINT_END("POINT-03", "");
     PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 
@@ -745,8 +744,11 @@ void PageRenderThread::destroyForever()
 {
     s_quitForever = true;
 
-    if (nullptr != s_instance)
+    if (nullptr != s_instance) {
+        s_instance->m_quit = true;
+        s_instance->wait();
         delete s_instance;
+    }
 }
 
 PageRenderThread *PageRenderThread::instance()

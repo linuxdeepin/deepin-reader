@@ -48,11 +48,21 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         if (!decompressor.waitForStarted()) {
             qInfo() << "start unzip failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
         if (!decompressor.waitForFinished()) {
             qInfo() << "unzip failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
+            return nullptr;
+        }
+        if (!QDir(convertedFileDir + "/word").exists()) {
+            qInfo() << "unzip failed";
+            error = deepin_reader::Document::ConvertFailed;
+            if (!(QProcess::CrashExit == decompressor.exitStatus() && 9 == decompressor.exitCode())) {
+                *pprocess = nullptr;
+            }
             return nullptr;
         }
 
@@ -64,16 +74,22 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
         if (!converter.waitForFinished()) {
             qInfo() << "pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
         if (!QFile::exists(tmpHtmlFilePath)) {
             qInfo() << "temp.html doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
+            // 转换过程中关闭应用，docsheet被释放，对应的*pprocess已不存在
+            if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
+                *pprocess = nullptr;
+            }
             return nullptr;
         }
 
@@ -85,24 +101,27 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
         if (!converter2.waitForFinished()) {
             qInfo() << "htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
 
-        *pprocess = nullptr; //
-
         QFile realFile(realFilePath);
-
         if (!realFile.exists()) {
             qInfo() << "temp.pdf doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
+            if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
+                *pprocess = nullptr;
+            }
             return nullptr;
         }
 
+        *pprocess = nullptr;
         document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
     }
 
