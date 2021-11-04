@@ -22,8 +22,7 @@
 
 #include <DFontSizeManager>
 #include <DLabel>
-#include <DPlatformWindowHandle>
-#include <DGuiApplicationHelper>
+#include <DApplicationHelper>
 
 #include <QTextOption>
 #include <QPainter>
@@ -68,81 +67,81 @@ SecurityDialog::SecurityDialog(const QString &urlstr, QWidget *parent)
     : DDialog(parent)
 {
     setFixedWidth(380);
+    setMinimumHeight(180);
     setIcon(QIcon::fromTheme("deepin-reader"));
     QString str1(tr("This document is trying to connect to:"));
-    QString str2(tr("If you trust the website, click Allow, otherwise click Block."));
+    QString str2(urlstr + QLatin1String(" ") + tr("If you trust the website, click Allow, otherwise click Block."));
+    m_strDesText = str2;
 
     addButton(tr("Block", "button"));
     addButton(tr("Allow", "button"), true, ButtonRecommend);
 
+    // 标题
+    NameLabel = new DLabel(this);
+    NameLabel->setFixedWidth(340);
+    NameLabel->setAlignment(Qt::AlignCenter);
+    NameLabel->setText(str1);
+    NameLabel->setWordWrap(true);
+    DFontSizeManager::instance()->bind(NameLabel, DFontSizeManager::T6, QFont::Medium);
+    setLabelColor(NameLabel, 1.0);
 
-    DLabel *strlabel = new DLabel;
-    strlabel->setObjectName("NameLabel1");
-    strlabel->setFixedWidth(340);
-    strlabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    strlabel->setText(str1);
-    strlabel->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
-    strlabel->setForegroundRole(DPalette::ToolTipText);
+    // 提示
+    ContentLabel = new DLabel(this);
+    ContentLabel->setFixedWidth(340);
+    ContentLabel->setAlignment(Qt::AlignCenter);
+    ContentLabel->setText(str2);
+    DFontSizeManager::instance()->bind(ContentLabel, DFontSizeManager::T6, QFont::Normal);
+    setLabelColor(ContentLabel, 0.7);
 
-    m_strDesText = urlstr;
-    DLabel *strlabel2 = new DLabel;
-    strlabel2->setObjectName("ContentLabel");
-    strlabel2->setFixedWidth(340);
-    strlabel2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    strlabel2->setText(urlstr);
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
+    addContent(NameLabel, Qt::AlignHCenter);
+    addContent(ContentLabel, Qt::AlignHCenter);
 
-    DLabel *strlabel3 = new DLabel;
-    strlabel3->setObjectName("NameLabel3");
-    strlabel3->setFixedWidth(340);
-    strlabel3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    strlabel3->setText(str2);
-    strlabel3->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel3, DFontSizeManager::T6, QFont::Normal);
-    strlabel3->setForegroundRole(DPalette::ToolTipText);
-
-    addContent(strlabel, Qt::AlignHCenter);
-    addContent(strlabel2, Qt::AlignHCenter);
-    addContent(strlabel3, Qt::AlignHCenter);
-
-    autoFeed(strlabel, strlabel2, strlabel3);
+    autoFeed();
 }
 
-void SecurityDialog::autoFeed(DLabel *label1, DLabel *label2, DLabel *label3)
+void SecurityDialog::autoFeed()
 {
-    NewStr newstr = autoCutText(m_strDesText, label2);
-    label2->setText(newstr.resultStr);
+    if (nullptr == NameLabel || nullptr == ContentLabel) {
+        return;
+    }
+
+    NewStr newstr = autoCutText(m_strDesText, ContentLabel);
+    ContentLabel->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
-    label2->setFixedHeight(height_lable);
+    ContentLabel->setFixedHeight(height_lable);
 
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
         adjustSize();
     } else {
-        setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height - m_iLabel3Old1Height
-                       + height_lable + label1->height() + label3->height()); //字号变化后自适应调整
+        m_iDialogOldHeight = height();
+        m_iLabelOld1Height = NameLabel->height();
+        setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height
+                       + height_lable + NameLabel->height()); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
-    m_iLabelOld1Height = /*newstr.fontHeifht*/label1->height();
-    m_iLabel3Old1Height = /*newstr.fontHeifht*/label3->height();
-    qInfo() << m_iDialogOldHeight << m_iLabelOldHeight << m_iLabelOld1Height << m_iLabel3Old1Height;
-    m_iDialogOldHeight = height();
+}
+
+void SecurityDialog::setLabelColor(DLabel *label, qreal alphaF)
+{
+    if (nullptr == label) {
+        return;
+    }
+
+    // 根据UI要求使用对应的颜色并设置透明度
+    DPalette pamessageDetail = DApplicationHelper::instance()->palette(label);
+    QColor pamessageDetailColor = pamessageDetail.color(DPalette::Active, DPalette::BrightText);
+    pamessageDetailColor.setAlphaF(alphaF);
+    pamessageDetail.setColor(DPalette::Active, DPalette::WindowText, pamessageDetailColor);
+    DApplicationHelper::instance()->setPalette(label, pamessageDetail);
 }
 
 void SecurityDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
-        qInfo() << children();
-        Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
-        if (nullptr != p) {
-            Dtk::Widget::DLabel *pNameLabel = findChild<Dtk::Widget::DLabel *>("NameLabel1");
-            if (nullptr != pNameLabel) {
-                Dtk::Widget::DLabel *pNameLabel3 = findChild<Dtk::Widget::DLabel *>("NameLabel3");
-                if (nullptr != pNameLabel3) {
-                    autoFeed(pNameLabel, p, pNameLabel3);
-                }
-            }
-        }
+        autoFeed();
+    } else if (QEvent::ThemeChange == event->type()) { // 根据主题变化重新设置颜色
+        setLabelColor(NameLabel, 1.0);
+        setLabelColor(ContentLabel, 0.7);
     }
 
     DDialog::changeEvent(event);

@@ -45,17 +45,21 @@ protected:
 private:
     /**
      * @brief autoFeed 自动换行
-     * @param label1
-     * @param label2
-     * @param label3
      */
-    void autoFeed(DLabel *label1, DLabel *label2, DLabel *label3);
+    void autoFeed();
+    /**
+     * @brief setLabelColor 设置label颜色
+     * @param label
+     * @param alphaF 透明度
+     */
+    void setLabelColor(DLabel *label, qreal alphaF);
 
 private:
+    DLabel *NameLabel = nullptr;
+    DLabel *ContentLabel = nullptr;
     QString m_strDesText;
     int m_iLabelOldHeight = 0;
     int m_iLabelOld1Height = 0;
-    int m_iLabel3Old1Height = 0;
     int m_iDialogOldHeight = 0;
 };
 
