@@ -30,9 +30,9 @@ SaveDialog::SaveDialog(QObject *parent)
 
 }
 
-int SaveDialog::showExitDialog(QString fileName)
+int SaveDialog::showExitDialog(QString fileName, QWidget  *parent)
 {
-    DDialog dlg(tr("Save the changes to \"%1\"?").arg(fileName), "");
+    DDialog dlg(tr("Save the changes to \"%1\"?").arg(fileName), "", parent);
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel", "button") << tr("Discard", "button"));
     dlg.addButton(tr("Save", "button"), true, DDialog::ButtonRecommend);
@@ -42,9 +42,9 @@ int SaveDialog::showExitDialog(QString fileName)
     return nRes;
 }
 
-int SaveDialog::showTipDialog(const QString &content)
+int SaveDialog::showTipDialog(const QString &content, QWidget *parent)
 {
-    DDialog dlg(content, "");
+    DDialog dlg(content, "", parent);
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel"));
     dlg.addButton(tr("Delete"), true, DDialog::ButtonRecommend);

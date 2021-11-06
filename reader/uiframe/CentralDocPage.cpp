@@ -299,7 +299,7 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     //如果文档有变动且需要保存
     if (sheet->fileChanged() && needToBeSaved) {
-        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName());
+        int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName(), this);
 
         if (result <= 0) {
             return false;

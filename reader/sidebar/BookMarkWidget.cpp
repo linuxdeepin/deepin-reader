@@ -217,7 +217,7 @@ void BookMarkWidget::onListMenuClick(const int &iType)
     if (iType == E_BOOKMARK_DELETE) {
         deleteItemByKey();
     } else if (iType == E_BOOKMARK_DELETE_ALL) {
-        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?"));
+        int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?") ,this);
         if (result == 1) {
             deleteAllItem();
         }

@@ -39,7 +39,7 @@ public:
      * 退出保存提示窗口
      * @return
      */
-    static int showExitDialog(QString fileName);
+    static int showExitDialog(QString fileName, QWidget *parent = nullptr);
 
     /**
      * @brief showTipDialog
@@ -47,7 +47,7 @@ public:
      * @param content
      * @return
      */
-    static int showTipDialog(const QString &content);
+    static int showTipDialog(const QString &content, QWidget *parent = nullptr);
 };
 
 #endif // SAVEDIALOG_H
