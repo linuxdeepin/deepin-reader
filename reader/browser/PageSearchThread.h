@@ -47,10 +47,19 @@ protected:
     void run() override;
 
 private:
+    /**
+     * @brief initCJKtoKangxi
+     * 由于docx转换工具会将部分CJK字体转为康熙字典部首字体，需要在搜索时再搜索一遍这些康熙字典部首字体
+     * 该函数会根据CJK与康熙字典部首匹配文件初始化m_cjktokangximap
+     */
+    void initCJKtoKangxi();
+
+private:
     bool m_quit = false;
     int m_startIndex = 0;
     QString m_searchText;
     DocSheet *m_sheet = nullptr;
+    static QMap<QChar, QChar> m_cjktokangximap;
 };
 
 #endif // PAGESEARCHTHREAD_H

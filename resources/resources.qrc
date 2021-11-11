@@ -64,4 +64,7 @@
         <file>builtin/light/texts/dr_button_add_12px.svg</file>
         <file>builtin/dark/texts/dr_button_add_12px.svg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>CJK2Kangxi.dict</file>
+    </qresource>
 </RCC>
