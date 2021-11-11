@@ -30,6 +30,11 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("html2pdf");
     QApplication::setApplicationVersion("v1.0");
 
+    // 解决__sw_64__平台使用QWebEnginePage崩溃的问题
+#ifdef __sw_64__
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox");
+#endif
+
     QCommandLineParser parser;
     parser.setApplicationDescription(
         QCoreApplication::translate("main", "Converts the web page INPUT into the PDF file OUTPUT."));
