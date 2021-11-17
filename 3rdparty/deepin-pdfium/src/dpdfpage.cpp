@@ -649,7 +649,7 @@ QVector<QRectF> DPdfPage::textRects(int start, int charCount)
 
     DPdfMutexLocker locker("DPdfPage::textRects index = " + QString::number(index()));
 
-    const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArray(start, charCount);
+    const std::vector<CFX_FloatRect> &pdfiumRects = reinterpret_cast<CPDF_TextPage *>(d_func()->m_textPage)->GetRectArraykSkipGenerated(start, charCount);
 
     result.reserve(static_cast<int>(pdfiumRects.size()));
 

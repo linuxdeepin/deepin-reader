@@ -353,6 +353,57 @@ std::vector<CFX_FloatRect> CPDF_TextPage::GetRectArray(int start,
   return rects;
 }
 
+std::vector<CFX_FloatRect> CPDF_TextPage::GetRectArraykSkipGenerated(int start,
+                                                                     int nCount) const
+{
+    std::vector<CFX_FloatRect> rects;
+    if (start < 0 || nCount == 0)
+        return rects;
+
+    const int nCharListSize = CountChars();
+    if (start >= nCharListSize)
+        return rects;
+
+    if (nCount < 0 || start + nCount > nCharListSize)
+        nCount = nCharListSize - start;
+    ASSERT(nCount > 0);
+
+    CPDF_TextObject *pCurObj = nullptr;
+    CFX_FloatRect rect;
+    int curPos = start;
+    bool bFlagNewRect = true;
+    while (nCount--) {
+        if (nCharListSize <= curPos) {
+            break;
+        }
+        const CharInfo &info_curchar = m_CharList[curPos++];
+        if (info_curchar.m_CharType == CPDF_TextPage::CharType::kGenerated) {
+            nCount++;
+            continue;
+        }
+        if (info_curchar.m_CharBox.Width() < kSizeEpsilon ||
+                info_curchar.m_CharBox.Height() < kSizeEpsilon) {
+            continue;
+        }
+        if (!pCurObj)
+            pCurObj = info_curchar.m_pTextObj.Get();
+        if (pCurObj != info_curchar.m_pTextObj) {
+            rects.push_back(rect);
+            pCurObj = info_curchar.m_pTextObj.Get();
+            bFlagNewRect = true;
+        }
+        if (bFlagNewRect) {
+            bFlagNewRect = false;
+            rect = info_curchar.m_CharBox;
+            rect.Normalize();
+            continue;
+        }
+        rect.Union(info_curchar.m_CharBox);
+    }
+    rects.push_back(rect);
+    return rects;
+}
+
 int CPDF_TextPage::GetIndexAtPos(const CFX_PointF& point,
                                  const CFX_SizeF& tolerance) const {
   int pos;
