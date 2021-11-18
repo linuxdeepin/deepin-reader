@@ -48,6 +48,12 @@ signals:
      */
     void sigNeedShowTips(const QString &tips, int);
 
+    /**
+     * @brief sigCloseNoteWidget 关闭注释编辑框窗口
+     * @param isEsc 是否Esc键触发注释编辑框窗关闭
+     */
+    void sigCloseNoteWidget(bool isEsc = false);
+
 private slots:
     /**
      * @brief slotTextEditMaxContantNum
@@ -76,6 +82,13 @@ protected:
      * @param event
      */
     void keyPressEvent(QKeyEvent *event) override;
+
+    /**
+     * @brief focusOutEvent
+     * 焦点丢失事件
+     * @param event
+     */
+    void focusOutEvent(QFocusEvent *event) override;
 
 private:
     int m_nMaxContantLen = 1500;  // 允许输入文本最大长度

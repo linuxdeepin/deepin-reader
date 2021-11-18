@@ -348,6 +348,12 @@ public:
      */
     QList<BrowserPage *> pages();
 
+    /**
+     * @brief getNoteEditWidget
+     * 获取注释窗口对象
+     */
+    TextEditShadowWidget *getNoteEditWidget() const;
+
 signals:
     void sigPageChanged(int page);
 

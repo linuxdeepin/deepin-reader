@@ -1116,6 +1116,11 @@ void DocSheet::childEvent(QChildEvent *event)
     }
 }
 
+SheetBrowser *DocSheet::getSheetBrowser() const
+{
+    return m_browser;
+}
+
 void DocSheet::setAlive(bool alive)
 {
     if (alive) {

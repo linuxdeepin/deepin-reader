@@ -719,6 +719,12 @@ public:
      */
     void docBasicInfo(deepin_reader::FileInfo &fileInfo);
 
+    /**
+     * @brief getSheetBrowser
+     * 获取右侧内容视图对象指针
+     */
+    SheetBrowser *getSheetBrowser() const;
+
 signals:
     /**
      * @brief sigFindOperation

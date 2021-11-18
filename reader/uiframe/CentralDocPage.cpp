@@ -26,6 +26,8 @@
 #include "SlideWidget.h"
 #include "Application.h"
 #include "DBusObject.h"
+#include "SheetBrowser.h"
+#include "TextEditWidget.h"
 
 #include <DDialog>
 #include <DTitlebar>
@@ -510,6 +512,16 @@ void CentralDocPage::handleShortcut(const QString &s)
 
     if ((s == Dr::key_esc || s == Dr::key_f11) && getCurSheet() && getCurSheet()->closeFullScreen())
         return;
+
+    // 注释框显示时，按Esc键关闭注释框
+    if ((s == Dr::key_esc)
+            && getCurSheet()
+            && getCurSheet()->getSheetBrowser()
+            && getCurSheet()->getSheetBrowser()->getNoteEditWidget()
+            && getCurSheet()->getSheetBrowser()->getNoteEditWidget()->isVisible()) {
+        getCurSheet()->getSheetBrowser()->getNoteEditWidget()->close();
+        return;
+    }
 
     if (m_slideWidget) {
         m_slideWidget->handleKeyPressEvent(s);

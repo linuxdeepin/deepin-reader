@@ -664,6 +664,11 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
+    // 当注释窗口弹出时，屏蔽鼠标滚动
+    if (nullptr != m_noteEditWidget && !m_noteEditWidget->isHidden()) {
+        return;
+    }
+
     m_scroller->stop();
 
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
@@ -1991,4 +1996,9 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
         newPos.setY(page->rect().height() - 15 * page->scaleFactor());
 
     return newPos;
+}
+
+TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
+{
+    return m_noteEditWidget;
 }

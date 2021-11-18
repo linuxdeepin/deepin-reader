@@ -42,11 +42,11 @@
 TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     : DWidget(parent)
 {
-    setWindowFlag(Qt::Popup);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    setMaximumSize(QSize(278, 344));
+    setMaximumSize(QSize(m_maxwidth, m_maxheight));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
 
@@ -61,6 +61,8 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     m_TextEditWidget->m_brower = dynamic_cast<SheetBrowser *>(parent);
 
     setObjectName("TextEditShadowWidget");
+
+    connect(m_TextEditWidget, &TextEditWidget::sigCloseNoteWidget, this, &TextEditShadowWidget::slotCloseNoteWidget);
 }
 
 TextEditWidget *TextEditShadowWidget::getTextEditWidget()
@@ -70,7 +72,16 @@ TextEditWidget *TextEditShadowWidget::getTextEditWidget()
 
 void TextEditShadowWidget::showWidget(const QPoint &point)
 {
-    QPoint pos = point;
+    QPoint pos = mapToParent(mapFromGlobal(point)); //先转换为相对于父对象的坐标
+
+    //如果下边超出程序则向上移动
+    if (pos.y() + m_maxheight > m_TextEditWidget->m_brower->height()) {
+        pos.setY(pos.y() - (pos.y() + m_maxheight - m_TextEditWidget->m_brower->height()));
+    }
+    //如果右边超出程序则向左移动
+    if (pos.x() + m_maxwidth > m_TextEditWidget->m_brower->width()) {
+        pos.setX(pos.x() - (pos.x() + m_maxwidth - m_TextEditWidget->m_brower->width()));
+    }
 
     move(pos);
 
@@ -79,6 +90,18 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     show();
 
     m_TextEditWidget->setEditFocus();
+}
+
+
+void TextEditShadowWidget::slotCloseNoteWidget(bool isEsc)
+{
+    if (isEsc) {
+        close();
+    } else if (nullptr != m_TextEditWidget->getTextEdit()
+               && !m_TextEditWidget->getTextEdit()->hasFocus()
+               && !m_TextEditWidget->hasFocus()) {
+        close();
+    }
 }
 
 TextEditWidget::TextEditWidget(DWidget *parent)
@@ -96,6 +119,7 @@ TextEditWidget::TextEditWidget(DWidget *parent)
     });
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &TextEditWidget::onTouchPadEvent);
+    connect(m_pTextEdit, &TransparentTextEdit::sigCloseNoteWidget, this, &TextEditWidget::sigCloseNoteWidget);
 }
 
 void TextEditWidget::onShowMenu()
@@ -131,6 +155,11 @@ void TextEditWidget::setEditFocus()
     m_pTextEdit->setFocus();
 }
 
+TransparentTextEdit *TextEditWidget::getTextEdit() const
+{
+    return m_pTextEdit;
+}
+
 void TextEditWidget::hideEvent(QHideEvent *event)
 {
     BaseWidget::hideEvent(event);
@@ -139,7 +168,7 @@ void TextEditWidget::hideEvent(QHideEvent *event)
     if (m_annotation == nullptr)
         return;
 
-    if (m_annotation->type() == deepin_reader::Annotation::AText &&  sText.isEmpty()) {
+    if (m_annotation->type() == deepin_reader::Annotation::AText &&  sText.isEmpty() && !event->spontaneous()) {
         emit sigRemoveAnnotation(m_annotation, !m_annotation->contents().isEmpty());
     } else if (m_annotation->contents() != sText) {
         emit sigUpdateAnnotation(m_annotation, sText);
@@ -238,4 +267,11 @@ void TextEditWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::NoBrush);
     painter.setPen(QColor(0, 0, 0, 51));
     painter.drawPath(clippath);
+}
+
+void TextEditWidget::focusOutEvent(QFocusEvent *event)
+{
+    BaseWidget::focusOutEvent(event);
+
+    Q_EMIT sigCloseNoteWidget();
 }
