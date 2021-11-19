@@ -692,6 +692,12 @@ private slots:
     void onSearchFinished();
 
     /**
+     * @brief onSearchResultNotEmpty
+     * 搜索结果非空的处理
+     */
+    void onSearchResultNotEmpty();
+
+    /**
      * @brief onSideAniFinished
      * 左侧动画结束
      */

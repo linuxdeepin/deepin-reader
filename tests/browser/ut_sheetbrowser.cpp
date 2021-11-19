@@ -457,6 +457,7 @@ TEST_F(TestSheetBrowser, testjumpToPrevSearchResult002)
     stub.set(ADDR(BrowserPage, clearSelectSearchHighlightRects), clearSelectSearchHighlightRects_stub);
     stub.set(ADDR(BrowserPage, findSearchforIndex), findSearchforIndex_stub);
     stub.set(ADDR(BrowserPage, translateRect), translateRect_stub);
+    m_tester->m_isSearchResultNotEmpty = true;
 
     m_tester->jumpToPrevSearchResult();
     EXPECT_TRUE(m_tester->m_sheet == nullptr);
@@ -484,6 +485,7 @@ TEST_F(TestSheetBrowser, testjumpToNextSearchResult002)
     stub.set(ADDR(BrowserPage, clearSelectSearchHighlightRects), clearSelectSearchHighlightRects_stub);
     stub.set(ADDR(BrowserPage, findSearchforIndex), findSearchforIndex_stub);
     stub.set(ADDR(BrowserPage, translateRect), translateRect_stub);
+    m_tester->m_isSearchResultNotEmpty = true;
 
     m_tester->jumpToNextSearchResult();
     EXPECT_TRUE(m_tester->m_searchCurIndex == 1);
