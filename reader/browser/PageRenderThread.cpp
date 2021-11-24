@@ -380,8 +380,12 @@ void PageRenderThread::run()
             while (execNextDocPageAnnotationTask())
             {}
 
-            while (execNextDocPageThumbnailTask())
-            {}
+            int counter = 0;
+            while (execNextDocPageThumbnailTask()) {
+                if (counter++ >= 2) { // 在获取大图期间，每次最多只加载3个缩略图
+                    break;
+                }
+            }
         }
 
         if (m_quit)
@@ -415,9 +419,9 @@ bool PageRenderThread::popNextDocPageNormalImageTask(DocPageNormalImageTask &tas
     if (m_pageNormalImageTasks.count() <= 0)
         return false;
 
-    task = m_pageNormalImageTasks.value(0);
+    task = m_pageNormalImageTasks.last();
 
-    m_pageNormalImageTasks.removeAt(0);
+    m_pageNormalImageTasks.removeLast();
 
     return true;
 }
@@ -429,9 +433,9 @@ bool PageRenderThread::popNextDocPageSliceImageTask(DocPageSliceImageTask &task)
     if (m_pageSliceImageTasks.count() <= 0)
         return false;
 
-    task = m_pageSliceImageTasks.value(0);
+    task = m_pageSliceImageTasks.last();
 
-    m_pageSliceImageTasks.removeAt(0);
+    m_pageSliceImageTasks.removeLast();
 
     return true;
 }
@@ -443,9 +447,9 @@ bool PageRenderThread::popNextDocPageBigImageTask(DocPageBigImageTask &task)
     if (m_pageBigImageTasks.count() <= 0)
         return false;
 
-    task = m_pageBigImageTasks.value(0);
+    task = m_pageBigImageTasks.last();
 
-    m_pageBigImageTasks.removeAt(0);
+    m_pageBigImageTasks.removeLast();
 
     return true;
 }
@@ -482,12 +486,17 @@ bool PageRenderThread::popNextDocPageThumbnailTask(DocPageThumbnailTask &task)
 {
     QMutexLocker locker(&m_pageThumbnailMutex);
 
-    if (m_pageThumbnailTasks.count() <= 0)
+    // 优先显示除缩略图外的图片
+    if (m_pageThumbnailTasks.count() <= 0
+            || m_pageNormalImageTasks.count() > 0
+            || m_pageBigImageTasks.count() > 0
+            || m_pageSliceImageTasks.count() > 0) {
         return false;
+    }
 
-    task = m_pageThumbnailTasks.value(0);
+    task = m_pageThumbnailTasks.last();
 
-    m_pageThumbnailTasks.removeAt(0);
+    m_pageThumbnailTasks.removeLast();
 
     return true;
 }
