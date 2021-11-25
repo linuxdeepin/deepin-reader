@@ -75,12 +75,27 @@ void PrintManager::slotPrintPreview(DPrinter *printer)
 
             if (nPageSize > 100 && ImageRect.width() > 800) {
                 //当页数过多时，处理一下
-                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(ImageRect.height()) / static_cast<double>(ImageRect.width()))) {
-                    painter.drawImage(paintRect, image);
+                if (m_sheet->getImage(iIndex, image, 200, 200.0 * static_cast<double>(ImageRect.height()) / static_cast<double>(ImageRect.width()),
+                                      Qt::KeepAspectRatio)) { // 保持图片的原始横竖比
+
+                    int tmpWidth = paintRect.width();
+                    int tmpHeight = image.height() * tmpWidth / image.width();
+                    if (tmpHeight > paintRect.height()) {
+                        tmpHeight = paintRect.height();
+                        tmpWidth = image.width() * tmpHeight / image.height();
+                    }
+
+                    painter.drawImage(QRect((paintRect.width() - tmpWidth + static_cast<int>(left + right)) / 2,
+                                            (paintRect.height() - tmpHeight + static_cast<int>(top + bottom)) / 2,
+                                            tmpWidth,
+                                            tmpHeight),
+                                      image); // 居中显示
                 }
             } else {
-                if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height())) {
-                    painter.drawImage(paintRect, image);
+                if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height(), Qt::KeepAspectRatio)) { // 保持图片的原始横竖比
+                    painter.drawImage(QPoint((paintRect.width() - image.width() + static_cast<int>(left + right)) / 2,
+                                             (paintRect.height() - image.height() + static_cast<int>(top + bottom)) / 2),
+                                      image); // 居中显示
                 }
             }
 
@@ -93,8 +108,11 @@ void PrintManager::slotPrintPreview(DPrinter *printer)
                 break;
 
             QImage image;
-            if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height()))      //公司只有一台打印机，会发生向右偏移
-                painter.drawImage(paintRect, image);
+            if (m_sheet->getImage(iIndex, image, ImageRect.width(), ImageRect.height(), Qt::KeepAspectRatio)) { // 保持图片的原始横竖比
+                painter.drawImage(QPoint((paintRect.width() - image.width() + static_cast<int>(left + right)) / 2,
+                                         (paintRect.height() - image.height() + static_cast<int>(top + bottom)) / 2),
+                                  image); // 居中显示
+            }
 
             if (iIndex < printer->toPage() - 1)
                 printer->newPage();
