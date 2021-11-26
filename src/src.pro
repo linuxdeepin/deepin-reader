@@ -37,29 +37,16 @@ include ($$SRCPWD/browser/browser.pri)
 include ($$SRCPWD/sidebar/sidebar.pri)
 include ($$SRCPWD/widgets/widgets.pri)
 include ($$SRCPWD/document/document.pri)
+include ($$SRCPWD/uiframe/uiframe.pri)
 
 SOURCES += \
     $$SRCPWD/Application.cpp \
     $$SRCPWD/main.cpp \
-    $$SRCPWD/MainWindow.cpp \
-    $$SRCPWD/uiframe/TitleMenu.cpp \
-    $$SRCPWD/uiframe/TitleWidget.cpp \
-    $$SRCPWD/uiframe/Central.cpp \
-    $$SRCPWD/uiframe/CentralNavPage.cpp \
-    $$SRCPWD/uiframe/CentralDocPage.cpp \
-    $$SRCPWD/uiframe/DocTabBar.cpp \
-    $$SRCPWD/uiframe/DocSheet.cpp
+    $$SRCPWD/MainWindow.cpp
 
 HEADERS +=\
     $$SRCPWD/Application.h\
-    $$SRCPWD/MainWindow.h \
-    $$SRCPWD/uiframe/TitleWidget.h \
-    $$SRCPWD/uiframe/TitleMenu.h \
-    $$SRCPWD/uiframe/Central.h \
-    $$SRCPWD/uiframe/CentralNavPage.h \
-    $$SRCPWD/uiframe/CentralDocPage.h \
-    $$SRCPWD/uiframe/DocTabBar.h \
-    $$SRCPWD/uiframe/DocSheet.h
+    $$SRCPWD/MainWindow.h
 
 RESOURCES +=         \
     $$SRCPWD/../resources/resources.qrc

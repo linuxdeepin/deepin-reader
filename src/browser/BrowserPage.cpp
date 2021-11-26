@@ -1029,6 +1029,30 @@ void BrowserPage::setPageBookMark(const QPointF clickPoint)
     }
 }
 
+QPointF BrowserPage::getTopLeftPos()
+{
+    QPointF p;
+    switch (m_rotation) {
+    default:
+    case Dr::RotateBy0:
+        p = pos();
+        break;
+    case Dr::RotateBy270:
+        p.setX(pos().x());
+        p.setY(pos().y() - rect().height());
+        break;
+    case Dr::RotateBy180:
+        p.setX(pos().x() - rect().width());
+        p.setY(pos().y() - rect().height());
+        break;
+    case Dr::RotateBy90:
+        p.setX(pos().x() - rect().width());
+        p.setY(pos().y());
+        break;
+    }
+    return p;
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
