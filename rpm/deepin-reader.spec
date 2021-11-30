@@ -22,7 +22,6 @@ BuildRequires: pkgconfig(nss)
 BuildRequires: pkgconfig(libjpeg)
 BuildRequires: pkgconfig(cairo)
 BuildRequires: openjpeg2-devel
-BuildRequires: poppler-qt5-devel
 BuildRequires: libspectre-devel
 BuildRequires: kf5-karchive-devel
 BuildRequires: libtiff-devel

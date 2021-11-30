@@ -6,7 +6,7 @@ Deepin Document Viewer is a simple PDF reader, supporting bookmarks, highlights 
 
 In debian, use below command to install compile dependencies:
 
-`sudo apt install debhelper (>= 11),cmake, libfreetype6-dev, libnspr4-dev, libnss3-dev, libcairo-dev, fontconfig, liblcms2-dev, pkg-config, libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default, libx11-dev, libpoppler-qt5-dev,libpoppler-qt5-1, libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libopenjp2-7-dev`
+`sudo apt install debhelper (>= 11),cmake, libfreetype6-dev, libnspr4-dev, libnss3-dev, libcairo-dev, fontconfig, liblcms2-dev, pkg-config, libspectre-dev, libdjvulibre-dev, qt5-qmake, qt5-default, libx11-dev, libtiff-dev, libkf5archive-dev, libdtkwidget-dev,qttools5-dev-tools,qtbase5-private-dev,libopenjp2-7-dev`
 
 ## Getting help
 
