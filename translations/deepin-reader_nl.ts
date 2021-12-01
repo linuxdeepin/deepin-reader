@@ -39,7 +39,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
-        <translation>Producent</translation>
+        <translation>Uitgever</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="142"/>
+        <location filename="../reader/uiframe/Central.cpp" line="141"/>
         <source>Documents</source>
         <translation>Documenten</translation>
     </message>
@@ -251,49 +251,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="164"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Dit formaat wordt niet ondersteund.</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
-        <source>Open failed</source>
-        <translation>Het document kan niet worden geopend</translation>
-    </message>
-    <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
-        <source>Please check if the file is damaged</source>
-        <translation>Controleer of het bestand beschadigd is</translation>
+        <source>Open failed</source>
+        <translation>Het document kan niet worden geopend.</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <source>Please check if the file is damaged</source>
+        <translation>Controleer of het bestand beschadigd is.</translation>
+    </message>
+    <message>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>De conversie is mislukt. Controleer of het bestand beschadigd is.</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Het document kan niet worden opgeslagen</translation>
+        <translation>Het document kan niet worden opgeslagen.</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
-        <translation>Het bestand is opgeslagen</translation>
+        <translation>Het bestand is opgeslagen.</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>Opslaan als</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="451"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="461"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Ongeldige bestandsnaam</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Oké</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
         <source>The bookmark has been removed</source>
         <translation>De bladwijzer is verwijderd</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
         <translation>Selecteer de tekst</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
         <source>The annotation has been removed</source>
         <translation>De aantekening is verwijderd</translation>
     </message>
@@ -380,7 +380,7 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation>Tekst selecteren</translation>
+        <translation>Tekstselectie</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation>Wil je de wijzigingen aan %1 opslaan?</translation>
+        <translation>Wil je de wijzigingen aan ‘%1’ opslaan?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -515,13 +515,13 @@
         <translation>Als je deze website vertrouwt, klik dan op ‘Toestaan’ en anders op ‘Blokkeren’.</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
         <translation>Blokkeren</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
         <translation>Toestaan</translation>
@@ -909,7 +909,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="50"/>
         <source>Tools</source>
-        <translation>Gereedschappen</translation>
+        <translation>Gereedschap</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Afdrukken</translation>
+        <translation type="unfinished">Afdrukken</translation>
     </message>
 </context>
 <context>
@@ -949,7 +949,7 @@
         <location filename="../reader/main.cpp" line="41"/>
         <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation>Bestandspad</translation>
+        <translation>FilePath</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
@@ -959,7 +959,7 @@
     <message>
         <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
-        <translation>Miniatuur samenstellen</translation>
+        <translation>Generate thumbnail.</translation>
     </message>
 </context>
 </TS>

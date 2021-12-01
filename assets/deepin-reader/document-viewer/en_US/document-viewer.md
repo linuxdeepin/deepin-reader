@@ -194,12 +194,12 @@ Using thumbnails you can switch file thumbnails catalog![view](../common/view_no
 
 ### Zoom in and out
 
-To zoom in or out a page, you can:
+On Document Viewer interface, to zoom in or out a page, you can:
 
 - Press **Ctrl +“+”**  or **Ctrl +“-”** .
 - Press **Ctrl** and scroll the mouse wheel up and down at the same time. 
-- On Document Viewer interface, click "**+**"  or  "**-**". 
-- Manual input is supported here. You can choose display percentage from the drop-down box of the menu bar: 10%, 25%, 50%, 75%, 100%, 125%, 150%, 175%, 200%, 300%, 400%, and 500%, according to which the file is zoomed in and out.
+- Click "**+**"  or  "**-**" in the title bar. 
+- Manual input the display percentage in the title bar or select one from the drop-down box of the menu bar, according to which the file is zoomed in and out.
 
 
 
@@ -241,7 +241,7 @@ In the scaling drop-down box of tool bar, you can:
 
 ## Main Menu
 
-In the main menu, you can create new window and new tabs, [save documents](#Save documents), [search](#Search), switch themes, view help to know more about Document Viewer. 
+In the main menu, you can create new window and new tabs, [save documents](#Save documents), [search](#Search), [print documents](#Print documents) switch themes, view help to know more about Document Viewer. 
 
 ### Display in file manager
 

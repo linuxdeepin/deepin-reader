@@ -692,6 +692,12 @@ private slots:
     void onSearchFinished();
 
     /**
+     * @brief onSearchResultNotEmpty
+     * 搜索结果非空的处理
+     */
+    void onSearchResultNotEmpty();
+
+    /**
      * @brief onSideAniFinished
      * 左侧动画结束
      */
@@ -718,6 +724,12 @@ public:
      * @param fileInfo 用于传出的文档信息
      */
     void docBasicInfo(deepin_reader::FileInfo &fileInfo);
+
+    /**
+     * @brief getSheetBrowser
+     * 获取右侧内容视图对象指针
+     */
+    SheetBrowser *getSheetBrowser() const;
 
 signals:
     /**

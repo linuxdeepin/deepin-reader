@@ -75,6 +75,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
     connect(m_searchTask, &PageSearchThread::sigSearchReady, this, &DocSheet::onSearchResultComming, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::finished, this, &DocSheet::onSearchFinished, Qt::QueuedConnection);
+    connect(m_searchTask, &PageSearchThread::sigSearchResultNotEmpty, this, &DocSheet::onSearchResultNotEmpty, Qt::QueuedConnection);
 
     m_renderer = new SheetRenderer(this);
     connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
@@ -1097,6 +1098,13 @@ void DocSheet::onSearchFinished()
     m_browser->handleFindFinished(count);
 }
 
+void DocSheet::onSearchResultNotEmpty()
+{
+    if (nullptr != m_browser) {
+        m_browser->setIsSearchResultNotEmpty(true);
+    }
+}
+
 void DocSheet::resizeEvent(QResizeEvent *event)
 {
     DSplitter::resizeEvent(event);
@@ -1114,6 +1122,11 @@ void DocSheet::childEvent(QChildEvent *event)
     if (event->removed()) {
         return DSplitter::childEvent(event);
     }
+}
+
+SheetBrowser *DocSheet::getSheetBrowser() const
+{
+    return m_browser;
 }
 
 void DocSheet::setAlive(bool alive)

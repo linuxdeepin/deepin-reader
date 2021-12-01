@@ -151,3 +151,10 @@ void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
 
     QTextEdit::keyPressEvent(keyEvent);
 }
+
+void TransparentTextEdit::focusOutEvent(QFocusEvent *event)
+{
+    QTextEdit::focusOutEvent(event);
+
+    Q_EMIT sigCloseNoteWidget();
+}

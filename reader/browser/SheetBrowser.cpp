@@ -664,6 +664,11 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
+    // 当注释窗口弹出时，屏蔽鼠标滚动
+    if (nullptr != m_noteEditWidget && !m_noteEditWidget->isHidden()) {
+        return;
+    }
+
     m_scroller->stop();
 
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
@@ -1638,6 +1643,10 @@ void SheetBrowser::handlePrepareSearch()
 
 void SheetBrowser::jumpToNextSearchResult()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索下一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -1657,10 +1666,12 @@ void SheetBrowser::jumpToNextSearchResult()
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex + 1;
 
-                if (m_searchCurIndex >= size)
+                if (m_searchCurIndex >= size) { // 全部搜索完，从头搜索
                     m_searchCurIndex = 0;
+                    m_searchPageTextIndex = -1;
+                    index = -1;
+                }
 
-                m_searchPageTextIndex = -1;
                 continue;
             }
 
@@ -1670,14 +1681,22 @@ void SheetBrowser::jumpToNextSearchResult()
             break;
         } else {
             m_searchCurIndex++;
-            if (m_searchCurIndex >= size)
+            if (m_searchCurIndex >= size) {
                 m_searchCurIndex = 0;
+                m_searchPageTextIndex = -1;
+                m_lastFindPage = page;
+                index = -1;
+            }
         }
     }
 }
 
 void SheetBrowser::jumpToPrevSearchResult()
 {
+    if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索上一个
+        return;
+    }
+
     int size = m_items.size();
     for (int index = 0; index < size; index++) {
         int curIndex = m_searchCurIndex % size;
@@ -1697,10 +1716,12 @@ void SheetBrowser::jumpToPrevSearchResult()
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex - 1;
 
-                if (m_searchCurIndex < 0)
+                if (m_searchCurIndex < 0) { // 全部搜索完，从尾搜索
                     m_searchCurIndex = size - 1;
+                    m_searchPageTextIndex = pageHighlightSize;
+                    index = -1;
+                }
 
-                m_searchPageTextIndex = pageHighlightSize;
                 continue;
             }
 
@@ -1710,8 +1731,12 @@ void SheetBrowser::jumpToPrevSearchResult()
             break;
         } else {
             m_searchCurIndex--;
-            if (m_searchCurIndex < 0)
+            if (m_searchCurIndex < 0) {
                 m_searchCurIndex = size - 1;
+                m_searchPageTextIndex = pageHighlightSize;
+                m_lastFindPage = page;
+                index = -1;
+            }
         }
     }
 }
@@ -1720,6 +1745,7 @@ void SheetBrowser::handleSearchStart()
 {
     m_searchCurIndex = 0;
     m_searchPageTextIndex = -1;
+    m_isSearchResultNotEmpty = false;
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
 }
@@ -1728,6 +1754,7 @@ void SheetBrowser::handleSearchStop()
 {
     m_searchCurIndex = 0;
     m_searchPageTextIndex = -1;
+    m_isSearchResultNotEmpty = false;
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
 }
@@ -1991,4 +2018,14 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
         newPos.setY(page->rect().height() - 15 * page->scaleFactor());
 
     return newPos;
+}
+
+void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
+{
+    m_isSearchResultNotEmpty = isSearchResultNotEmpty;
+}
+
+TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
+{
+    return m_noteEditWidget;
 }

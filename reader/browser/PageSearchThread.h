@@ -43,6 +43,12 @@ public:
 signals:
     void sigSearchReady(const deepin_reader::SearchResult &res);
 
+    /**
+     * @brief sigSearchResultNotEmpty
+     * 搜索结果不为空信号
+     */
+    void sigSearchResultNotEmpty();
+
 protected:
     void run() override;
 

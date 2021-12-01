@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="142"/>
+        <location filename="../reader/uiframe/Central.cpp" line="141"/>
         <source>Documents</source>
         <translation>Documents</translation>
     </message>
@@ -251,49 +251,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="164"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Le format n&apos;est pas pris en charge</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
         <translation>Échec de l&apos;ouverture</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
         <translation>Veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>Échec de conversion, veuillez vérifier si le fichier a été endommagé ou corrompu</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>Échec de la sauvegarde</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>Enregistré avec succès</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>Enregistrer sous</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="451"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="461"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Nom de fichier invalide</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
         <source>The bookmark has been removed</source>
         <translation>Le signet a été supprimé</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
         <translation>Veuillez sélectionner le texte</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
         <source>The annotation has been removed</source>
         <translation>L&apos;annotation a été supprimée</translation>
     </message>
@@ -515,13 +515,13 @@
         <translation>Si vous avez confiance en ce site, cliquez Autoriser, sinon, cliquez sur Bloquer</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
         <translation>Bloquer</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
         <translation>Autoriser</translation>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Imprimer</translation>
+        <translation type="unfinished">Imprimer</translation>
     </message>
 </context>
 <context>

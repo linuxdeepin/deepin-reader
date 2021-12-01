@@ -348,6 +348,18 @@ public:
      */
     QList<BrowserPage *> pages();
 
+    /**
+     * @brief getNoteEditWidget
+     * 获取注释窗口对象
+     */
+    TextEditShadowWidget *getNoteEditWidget() const;
+
+    /**
+     * @brief setIsSearchResultNotEmpty
+     * 设置m_isSearchResultNotEmpty值
+     */
+    void setIsSearchResultNotEmpty(bool isSearchResultNotEmpty);
+
 signals:
     void sigPageChanged(int page);
 
@@ -701,6 +713,7 @@ private:
 
     //文字选择
     int m_selectIndex = -1;             //选取文字开始的index
+    bool m_isSearchResultNotEmpty = false; // true表示搜索到的结果不为空
 
     bool m_annotationInserting = false;     //正在插入注释状态
     bool m_selectIconAnnotation = false;    //当前是否有选中的图标注释

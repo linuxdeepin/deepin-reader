@@ -62,6 +62,7 @@ void PageSearchThread::run()
 
     initCJKtoKangxi();
 
+    bool isSearchResultNotEmpty = false; // 没有搜索结果
     int size = m_sheet->pageCount();
     QString searchTextKangxi = m_searchText;
     for (int i = 0; i < m_searchText.size(); i++) {
@@ -82,10 +83,6 @@ void PageSearchThread::run()
             searchres.rects.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
         }
 
-        //高亮被搜索内容
-//        if (textrectLst.size() > 0)
-//            page->setSearchHighlightRectf(textrectLst);
-
         //把搜索的范围中周边的文字取出用于左侧展示
         for (const QRectF &rec : searchres.rects) {
             if (m_quit)
@@ -103,8 +100,14 @@ void PageSearchThread::run()
             }
         }
 
-        if (searchres.words.size() > 0)
+        if (searchres.words.size() > 0) {
+            if (!isSearchResultNotEmpty) {
+                isSearchResultNotEmpty = true;
+                // 只要搜索到结果就emit该信号
+                emit sigSearchResultNotEmpty();
+            }
             emit sigSearchReady(searchres);
+        }
     }
 }
 

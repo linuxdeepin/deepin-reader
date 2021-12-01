@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="142"/>
+        <location filename="../reader/uiframe/Central.cpp" line="141"/>
         <source>Documents</source>
         <translation>文件</translation>
     </message>
@@ -251,49 +251,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="164"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>不支援該檔案格式</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
         <translation>打開失敗</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
         <translation>請檢查文件是否損壞</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>轉換失敗，請檢查文件是否損壞</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>儲存失敗</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>儲存成功</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>另存為</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="451"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="461"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>請輸入有效的檔案名</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
         <source>The bookmark has been removed</source>
         <translation>已刪除書籤</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
         <translation>請選擇文字</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
         <source>The annotation has been removed</source>
         <translation>已刪除注釋</translation>
     </message>
@@ -515,13 +515,13 @@
         <translation>如果信任該網站，請點擊“允許”，否則請選擇“阻止”。</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
         <translation>阻止</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
         <translation>允許</translation>

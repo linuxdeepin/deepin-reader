@@ -11,7 +11,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prohlížeč dokumentů je nástroj pro čtení soubor s dokumenty, podporující formáty PDF, DJVU, DOCX atd.</translation>
     </message>
 </context>
 <context>
@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="142"/>
+        <location filename="../reader/uiframe/Central.cpp" line="141"/>
         <source>Documents</source>
         <translation>Dokumenty</translation>
     </message>
@@ -251,49 +251,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="164"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Daný formát není podporován</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
         <translation>Nepodařilo se otevřít</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
         <translation>Zkontrolujte, zda soubor není poškozen</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Převod se nezdařil – zkontrolujte, zda soubor není poškozený</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>Ukládání se nezdařilo</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>Úspěšně uloženo</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>Uložit jako</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="451"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="461"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Neplatný název souboru</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
         <source>The bookmark has been removed</source>
         <translation>Záložka byla odstraněna</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
         <translation>Vyberte text</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
         <source>The annotation has been removed</source>
         <translation>Poznámka byla odstraněna</translation>
     </message>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>Převádí se</translation>
     </message>
 </context>
 <context>
@@ -430,13 +430,13 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit změny do „%1“?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="50"/>
@@ -507,24 +507,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento dokument se pokouší připojit k:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
-        <source>Block</source>
-        <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pokud tomuto webu důvěřujete, klikněte na Povolit. Jinak klikněte na Blokovat.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <source>Block</source>
+        <comment>button</comment>
+        <translation>Blokovat</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Povolit</translation>
     </message>
 </context>
 <context>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Tisk</translation>
+        <translation type="unfinished">Tisk</translation>
     </message>
 </context>
 <context>
@@ -943,18 +943,18 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation>Document File Path.</translation>
+        <translation>Popis umístění souboru s dokumentem.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
         <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation>FilePath</translation>
+        <translation>Popis umístění souboru</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation>ThumbnailPath Path.</translation>
+        <translation>Popis umístění náhledu.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>

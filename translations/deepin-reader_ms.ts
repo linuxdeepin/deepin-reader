@@ -11,7 +11,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pelihat Dokumen ialah sebuah alat untuk membaca fail dokumen, menyokong PDF, DJVU, DOCX dan lain-lain format yang seumpama dengannya.</translation>
     </message>
 </context>
 <context>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda pasti mahu memadam semua tanda buku?</translation>
     </message>
 </context>
 <context>
@@ -183,7 +183,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrin penuh</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
@@ -243,57 +243,57 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="142"/>
+        <location filename="../reader/uiframe/Central.cpp" line="141"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="164"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
         <translation>Format tidak disokong</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="206"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal dibuka</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
         <translation>Sila periksa sekiranya fail telah rosak</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Penukaran format gagal, sila periksa sama ada fail tersebut sudah rosak</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="418"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
         <translation>Gagal disimpan</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="424"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
         <translation>Berjaya disimpan</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="442"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="451"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="461"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Nama fail tidak sah</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -304,12 +304,12 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"></translation>
+        <translation>Seret dokumen di sini</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Format disokong: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="313"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="341"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
         <source>The bookmark has been removed</source>
         <translation>Tanda buku telah dibuang</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="514"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="529"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
         <translation>Sila pilih teks</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="579"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="588"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
         <source>The annotation has been removed</source>
         <translation>Catatan telah dibuang</translation>
     </message>
@@ -343,12 +343,12 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"></translation>
+        <translation>Fail disulitkan, sila masukkan kata laluan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kata laluan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
@@ -359,7 +359,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kata laluan salah</translation>
     </message>
 </context>
 <context>
@@ -398,7 +398,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda pasti mahu memadam semua catatan?</translation>
     </message>
 </context>
 <context>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>Menukar format</translation>
     </message>
 </context>
 <context>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="103"/>
         <source>Document not saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen tidak disimpan</translation>
     </message>
 </context>
 <context>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan perubahan ke dalam &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -471,12 +471,12 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation type="unfinished"></translation>
+        <translation>Saiz 1:1</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Suai Muat Halaman</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="38"/>
@@ -507,24 +507,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen ini cuba bersambung dengan:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="75"/>
-        <source>Block</source>
-        <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Jika anda percaya tapak sesawang ini, klik Benarkan, jika tidak klik Sekat.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <source>Block</source>
+        <comment>button</comment>
+        <translation>Sekat</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Benarkan</translation>
     </message>
 </context>
 <context>
@@ -679,7 +679,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
         <source>1:1 size</source>
-        <translation type="unfinished"></translation>
+        <translation>Saiz 1:1</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
@@ -769,7 +769,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrin penuh</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
@@ -857,7 +857,7 @@
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
-        <translation type="unfinished"></translation>
+        <translation>Buang semua</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Cetak</translation>
+        <translation type="unfinished">Cetak</translation>
     </message>
 </context>
 <context>
@@ -943,23 +943,23 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"></translation>
+        <translation>Document File Path.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
         <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation type="unfinished"></translation>
+        <translation>FilePath</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"></translation>
+        <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"></translation>
+        <translation>Menjana imej kecil.</translation>
     </message>
 </context>
 </TS>
