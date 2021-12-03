@@ -788,7 +788,22 @@ void DocSheet::onPrintRequested(DPrinter *printer)
             break;
 
         QImage image;
-        if (m_browser->getExistImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+        // 有缓存图片时使用缓存图片，没有的话需要获取对应页的图片
+        if (!m_browser->getExistImage(index, image, static_cast<int>(pageRect.width()), static_cast<int>(pageRect.height()))) {
+            QSizeF rect = pageSizeByIndex(index); //根据index获取对应PAGE真实大小
+            qreal aspectRatio = rect.height() / rect.width(); //原始图片的高宽比
+
+            int tmpWidth = static_cast<int>(pageRect.width());
+            int tmpHeight = static_cast<int>(tmpWidth * aspectRatio);
+            if (tmpHeight > static_cast<int>(pageRect.height())) { // 使打印的图片保持原始图片的宽高比
+                tmpHeight = static_cast<int>(pageRect.height());
+                tmpWidth = static_cast<int>(tmpHeight / aspectRatio);
+            }
+
+            image = getImage(index, tmpWidth, tmpHeight);
+        }
+
+        if (!image.isNull()) {
             painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
                                     (static_cast<int>(pageRect.height()) - image.height()) / 2,
                                     image.width(), image.height()), image);
