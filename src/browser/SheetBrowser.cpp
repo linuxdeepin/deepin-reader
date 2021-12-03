@@ -917,6 +917,9 @@ void SheetBrowser::onSearchResultNotEmpty(const QRectF &textrect, BrowserPage *p
         m_lastFindPage = page;
         horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + textrect.x()) - this->width() / 2);
         verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + textrect.y()) - this->height() / 2);
+        if (m_pFindWidget) {
+            m_pFindWidget->setEditAlert(false);
+        }
     }
 }
 
@@ -2086,6 +2089,7 @@ void SheetBrowser::handleFindContent(const QString &strFind)
 {
     m_searchCurIndex = m_sheet->currentIndex();
     m_searchPageTextIndex = 0;
+    m_isSearchResultNotEmpty = false;
     for (BrowserPage *page : m_items)
         page->clearSearchHighlightRects();
 
