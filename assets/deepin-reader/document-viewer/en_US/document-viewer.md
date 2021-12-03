@@ -79,7 +79,7 @@ To print you have to connect and configure a printer.
 New tab
 
 - Click ![icon_menu](../common/icon_menu.svg) > **New tab** to add a tab. 
-- When there are two or more tabs, you will see **+** button. And you can click it to add new tabs.
+- When there are two or more tabs, you will see ![add](../common/add.svg)button. And you can click it to add new tabs.
 
 To switch/adjust tabs, you can:
 
