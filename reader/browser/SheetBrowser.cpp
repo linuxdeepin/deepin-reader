@@ -2023,6 +2023,9 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
 {
     m_isSearchResultNotEmpty = isSearchResultNotEmpty;
+    if (!m_findWidget.isNull()) {
+        m_findWidget->setEditAlert(false);
+    }
 }
 
 TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
