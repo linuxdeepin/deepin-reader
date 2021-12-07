@@ -85,7 +85,15 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     if (sheet == nullptr)
         return;
 
-    QImage image = sheet->getImage(0, 94 * dApp->devicePixelRatio(), 113 * dApp->devicePixelRatio());
+    QSizeF rect = sheet->pageSizeByIndex(0); // 获取首页的真实大小
+    qreal aspectRatio = rect.height() / rect.width(); // 原始图片的高宽比
+    int tmpWidth = static_cast<int>(94 * dApp->devicePixelRatio());
+    int tmpHeight = static_cast<int>(tmpWidth * aspectRatio);
+    if (tmpHeight > static_cast<int>(113 * dApp->devicePixelRatio())) { // 使打印的图片保持原始图片的宽高比
+        tmpHeight = static_cast<int>(113 * dApp->devicePixelRatio());
+        tmpWidth = static_cast<int>(tmpHeight / aspectRatio);
+    }
+    QImage image = sheet->getImage(0, tmpWidth, tmpHeight);
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     if (!image.isNull() && frameImage) {
@@ -164,6 +172,11 @@ void FileAttrWidget::initCloseBtn()
     layout->addWidget(closeButton);
 
     m_pVBoxLayout->addItem(layout);
+
+    // waylandh环境下隐藏关闭按钮
+    if (Utils::isWayland()) {
+        closeButton->setVisible(false);
+    }
 }
 
 void FileAttrWidget::initImageLabel()
