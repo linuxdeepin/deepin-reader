@@ -164,11 +164,11 @@ void SlideWidget::setWidgetState(bool full)
         m_nOldState = parentWidget()->windowState();
         parentWidget()->setWindowState(Qt::WindowFullScreen);
     } else {
-        if (parentWidget()->windowState() == Qt::WindowFullScreen) {
-            if (m_nOldState == Qt::WindowMaximized) {
+        if (parentWidget()->windowState().testFlag(Qt::WindowFullScreen)) {
+            if (m_nOldState.testFlag(Qt::WindowMaximized)) {
                 parentWidget()->showNormal();
                 parentWidget()->showMaximized();
-            } else if (m_nOldState == Qt::WindowFullScreen) {
+            } else if (m_nOldState.testFlag(Qt::WindowFullScreen)) {
                 //notTodo;
             } else {
                 parentWidget()->showNormal();
