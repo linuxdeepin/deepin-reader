@@ -62,8 +62,20 @@ void SlideWidget::initControl()
         parentWidget()->stackUnder(this);
         connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
     }
-    this->setGeometry(0, 0, dApp->primaryScreen()->size().width(), dApp->primaryScreen()->size().height());
-
+    QDesktopWidget *dk = QApplication::desktop();
+    int screenNum = dk->screenNumber(parentWidget()); //该应用在哪块屏幕上显示
+    int width; //幻灯片宽
+    int height; //幻灯片高
+    if (screenNum < dApp->screens().count() && screenNum >= 0) {
+        width = dApp->screens().at(screenNum)->size().width();
+        height = dApp->screens().at(screenNum)->size().height();
+    } else {
+        //若screenNum不合法，默认主屏幕
+        width = dApp->primaryScreen()->size().width();
+        height = dApp->primaryScreen()->size().height();
+    }
+    qInfo() << QString("screenNum:%1 width:%2 height:%3").arg(screenNum).arg(width).arg(height);
+    this->setGeometry(0, 0, width, height);
 
     m_loadSpinner = new DSpinner(this);
     m_loadSpinner->setFixedSize(40, 40);
@@ -75,7 +87,7 @@ void SlideWidget::initControl()
     connect(m_slidePlayWidget, &SlidePlayWidget::signalPlayBtnClicked, this, &SlideWidget::onPlayBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalNextBtnClicked, this, &SlideWidget::onNextBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalExitBtnClicked, this, &SlideWidget::onExitBtnClicked);
-    m_slidePlayWidget->move((dApp->primaryScreen()->size().width() - 270) / 2, dApp->primaryScreen()->size().height() - 100);
+    m_slidePlayWidget->move((width - 270) / 2, height - 100);
 
     onFetchImage(m_curPageIndex);
     onFetchImage(m_preIndex);
