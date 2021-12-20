@@ -196,7 +196,7 @@ TEST_F(TestSlideWidget, testplayImage)
     m_tester->m_blefttoright = false;
     m_tester->m_imageAnimation->setStartValue(10);
     m_tester->playImage();
-    EXPECT_TRUE(m_tester->m_blefttoright);
+    EXPECT_FALSE(m_tester->m_blefttoright);
     EXPECT_EQ(m_tester->m_imageAnimation->startValue(), 0);
 }
 

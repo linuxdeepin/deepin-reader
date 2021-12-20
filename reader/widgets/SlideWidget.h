@@ -186,7 +186,7 @@ private:
 
     int m_offset = 0;
     int m_preIndex = 0;
-    bool m_blefttoright = true;
+    bool m_blefttoright = true; //从左向右移动
     QTimer *m_imageTimer;
     QPropertyAnimation *m_imageAnimation;
 };

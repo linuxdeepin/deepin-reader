@@ -239,15 +239,11 @@ void SlideWidget::playImage()
 {
     m_imageAnimation->stop();
 
-    if (m_preIndex == 0 && m_curPageIndex == m_docSheet->pageCount() - 1) {
-        m_blefttoright = true;
-        m_imageAnimation->setStartValue(0);
-        m_imageAnimation->setEndValue(width());
-    } else if (m_preIndex < m_curPageIndex || (m_preIndex == m_docSheet->pageCount() - 1 && m_curPageIndex == 0)) {
+    if (m_preIndex <= m_curPageIndex) { //正序切换(包括第一页切到最后一页)
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
-    } else {
+    } else { //逆序切换(包括最后一页切到第一页)
         m_blefttoright = true;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(width());
