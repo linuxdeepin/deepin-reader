@@ -88,6 +88,24 @@ bool Application::notify(QObject *object, QEvent *event)
                 QCoreApplication::sendEvent(object, &event);
             }
         }
+    } else if (event->type() == QEvent::FocusIn) {
+        QFocusEvent *fe =  dynamic_cast<QFocusEvent *>(event);
+        QWidget *widget = qobject_cast<QWidget *>(object);
+
+        if (widget && fe && fe->reason() == Qt::ActiveWindowFocusReason && !widget->isTopLevel()
+                && (widget->focusPolicy() & Qt::StrongFocus) != Qt::StrongFocus) {
+            // 针对激活窗口所获得的焦点，为了避免被默认给到窗口内部的控件上，此处将焦点还给主窗口
+            // 并且只设置一次
+#ifndef NON_FIRST_ACTIVE
+#define NON_FIRST_ACTIVE "_d_dtk_non_first_active_focus"
+#endif
+            QWidget *top_window = widget->topLevelWidget();
+
+            if (top_window->isWindow() && !top_window->property(NON_FIRST_ACTIVE).toBool()) {
+                top_window->setFocus();
+                top_window->setProperty(NON_FIRST_ACTIVE, true);
+            }
+        }
     }
 
     return DApplication::notify(object, event);
