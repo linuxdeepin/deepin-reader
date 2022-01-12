@@ -49,12 +49,12 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Time created</source>
-        <translation>Czas utworzenia</translation>
+        <translation>Data utworzenia</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
-        <translation>Czas modyfikacji</translation>
+        <translation>Data modyfikacji</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="54"/>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Optimized</source>
-        <translation>Optymalizacja</translation>
+        <translation>Zoptymalizowany</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="57"/>
@@ -155,7 +155,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Add bookmark</source>
-        <translation>Dodać zakładkę</translation>
+        <translation>Dodaj zakładkę</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Błąd konwersji, sprawdź, czy plik jest uszkodzony</translation>
+        <translation>Konwersja nie powiodła się, sprawdź czy plik jest nieuszkodzony</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -329,7 +329,7 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
         <source>Please select the text</source>
-        <translation>Wybierz tekst</translation>
+        <translation>Zaznacz tekst</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
@@ -380,12 +380,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation>Wybierz tekst</translation>
+        <translation>Zaznacz tekst</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation>Narzędzie ręczne</translation>
+        <translation>Przesuwaj ręką</translation>
     </message>
 </context>
 <context>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation>Konwersja</translation>
+        <translation>Konwertuję</translation>
     </message>
 </context>
 <context>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation>Zapisać zmiany w %1?</translation>
+        <translation>Czy chcesz zapisać zmiany jako %1?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation>Rozmiar 1: 1</translation>
+        <translation>Rozmiar 1:1</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
@@ -512,7 +512,7 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Jeśli ufasz tej witrynie, kliknij Zezwól, jeśli nie, kliknij Blokuj</translation>
+        <translation>Jeśli ufasz tej witrynie, kliknij Zezwól, w innym wypadku kliknij Blokuj</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
@@ -679,7 +679,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
         <source>1:1 size</source>
-        <translation>Rozmiar 1: 1</translation>
+        <translation>Rozmiar 1:1</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
@@ -719,7 +719,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
         <source>Select text</source>
-        <translation>Wybierz tekst</translation>
+        <translation>Zaznacz tekst</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
@@ -727,7 +727,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
         <source>Hand tool</source>
-        <translation>Narzędzie ręczne</translation>
+        <translation>Przesuwaj ręką</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation type="unfinished">Drukuj</translation>
+        <translation>Drukuj</translation>
     </message>
 </context>
 <context>
@@ -943,13 +943,13 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation>Ścieżka do pliku dokumentu.</translation>
+        <translation>Document File Path.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
         <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation>Ścieżka pliku</translation>
+        <translation>Ścieżka Pliku</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
