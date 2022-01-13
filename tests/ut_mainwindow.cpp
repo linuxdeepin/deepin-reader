@@ -32,7 +32,7 @@
 #include "stub.h"
 #include <gtest/gtest.h>
 
-void openFileAsync_stub(const QString &)
+static void openFileAsync_stub(const QString &)
 {
     return;
 }

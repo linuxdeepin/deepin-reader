@@ -160,9 +160,10 @@ bool Database::saveOperation(DocSheet *sheet)
         query.bindValue(":sidebarIndex", sheet->m_operation.sidebarIndex);
         query.bindValue(":currentPage", sheet->m_operation.currentPage);
 
-        if (!query.exec())
+        if (!query.exec()) {
             qInfo() << query.lastError().text();
-        return false;
+            return false;
+        }
     }
     return true;
 }

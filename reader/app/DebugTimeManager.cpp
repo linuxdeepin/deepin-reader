@@ -27,6 +27,7 @@ void DebugTimeManager::endPointQt(const QString &point)
     if (m_MapPoint.find(point) != m_MapPoint.end()) {
         m_MapPoint[point].time = QDateTime::currentMSecsSinceEpoch() - m_MapPoint[point].time;
         qInfo() << QString("[GRABPOINT] %1 %2 time=%3ms").arg(point).arg(m_MapPoint[point].desc).arg(m_MapPoint[point].time);
+        m_MapPoint.remove(point);
     }
 }
 

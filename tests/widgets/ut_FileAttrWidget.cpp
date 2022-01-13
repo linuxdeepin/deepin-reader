@@ -52,7 +52,7 @@ protected:
 };
 
 static QString g_funcname;
-void show_stub()
+static void show_stub()
 {
     g_funcname = __FUNCTION__;
 }

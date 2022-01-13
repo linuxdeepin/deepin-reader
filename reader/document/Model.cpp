@@ -83,7 +83,8 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!QFile::exists(tmpHtmlFilePath)) {
+           QFile tmpHtmlFile(tmpHtmlFilePath);
+           if (!tmpHtmlFile.exists()) {
             qInfo() << "temp.html doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
             // 转换过程中关闭应用，docsheet被释放，对应的*pprocess已不存在

@@ -39,6 +39,8 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     ut_mainwindow.cpp \
+    ut_common.cpp \
+    ut_application.cpp \
     app/ut_Database.cpp \
     widgets/ut_AttrScrollWidget.cpp \
     widgets/ut_BaseWidget.cpp \
@@ -62,7 +64,21 @@ SOURCES += \
     sidebar/ut_SideBarImageListview.cpp \
     sidebar/ut_SideBarImageViewModel.cpp \
     browser/ut_sheetbrowser.cpp \
-    ut_common.cpp
+    document/ut_model.cpp \
+    document/ut_pdfmodel.cpp \
+    document/ut_djvumodel.cpp \
+    browser/ut_browserannotation.cpp \
+    browser/ut_browsermagnifier.cpp \
+    browser/ut_browsermenu.cpp \
+    browser/ut_browserpage.cpp \
+    browser/ut_browserword.cpp \
+    browser/ut_pagerenderthread.cpp \
+    app/ut_dbusobject.cpp \
+    app/ut_global.cpp \
+    app/ut_debugtimemanager.cpp \
+    app/ut_utils.cpp \
+    uiframe/ut_centraldocpage.cpp \
+    uiframe/ut_docsheet.cpp
 
 HEADERS +=\
     ut_defines.h \

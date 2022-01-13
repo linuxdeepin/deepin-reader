@@ -402,7 +402,7 @@ QList<DocSheet *> CentralDocPage::getSheets()
 
 bool CentralDocPage::saveCurrent()
 {
-    DocSheet *sheet = static_cast<DocSheet *>(m_stackedLayout->currentWidget());
+    DocSheet *sheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
 
     if (nullptr == sheet)
         return false;
