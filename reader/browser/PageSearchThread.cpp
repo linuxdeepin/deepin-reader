@@ -24,6 +24,7 @@
 
 #include <QRectF>
 #include <QDebug>
+#include <QFile>
 
 QMap<QChar, QChar> PageSearchThread::m_cjktokangximap;
 
