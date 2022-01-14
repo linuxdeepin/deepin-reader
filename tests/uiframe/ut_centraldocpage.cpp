@@ -255,6 +255,13 @@ QString getSaveFileName_stub(QWidget *, const QString &, const QString &, QStrin
     return "/.pdf";
 }
 
+QString getSaveFileName_stub1(QWidget *, const QString &, const QString &, QString *, QFileDialog::Options)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    return strPath;
+}
+
 QString getSaveFileName_stub2(QWidget *, const QString &, const QString &, QString *, QFileDialog::Options)
 {
     return "/.djvu";
@@ -263,6 +270,11 @@ QString getSaveFileName_stub2(QWidget *, const QString &, const QString &, QStri
 Dr::FileType fileType_stub()
 {
     return Dr::DJVU;
+}
+
+Dr::FileType fileType_stub1()
+{
+    return Dr::DOCX;
 }
 
 void quitSlide_stub()
@@ -348,6 +360,11 @@ void zoomout_stub()
     g_funcName = __FUNCTION__;
 }
 
+bool saveAsData_stub(QString)
+{
+    g_funcName = __FUNCTION__;
+    return true;
+}
 /***********测试用例***********/
 TEST_F(TestCentralDocPage, UT_CentralDocPage_firstThumbnail_001)
 {
@@ -935,6 +952,41 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_002)
 
     EXPECT_FALSE(m_tester->saveAsCurrent());
 
+    delete g_docsheet;
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_003)
+{
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub);
+    s.set(ADDR(CentralDocPage, saveCurrent), saveCurrent_stub);
+    s.set(ADDR(CentralDocPage, handleBlockShutdown), handleBlockShutdown_stub);
+    s.set(ADDR(DocSheet, saveAsData), saveAsData_stub);
+    typedef int (*fptr)(DDialog *);
+    fptr DDialog_exec = (fptr)(&DDialog::exec);
+    s.set(DDialog_exec, exec_stub);
+    s.set(ADDR(QFileDialog, getSaveFileName), getSaveFileName_stub1);
+
+    EXPECT_TRUE(m_tester->saveAsCurrent());
+    EXPECT_TRUE(g_funcName == "handleBlockShutdown_stub");
+    delete g_docsheet;
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_004)
+{
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub);
+    s.set(ADDR(CentralDocPage, saveCurrent), saveCurrent_stub);
+    s.set(ADDR(CentralDocPage, handleBlockShutdown), handleBlockShutdown_stub);
+    s.set(ADDR(DocSheet, saveAsData), saveAsData_stub);
+    typedef int (*fptr)(DDialog *);
+    fptr DDialog_exec = (fptr)(&DDialog::exec);
+    s.set(DDialog_exec, exec_stub);
+    s.set(ADDR(QFileDialog, getSaveFileName), getSaveFileName_stub1);
+    s.set(ADDR(DocSheet, fileType), fileType_stub1);
+
+    EXPECT_TRUE(m_tester->saveAsCurrent());
+    EXPECT_TRUE(g_funcName == "saveAsData_stub");
     delete g_docsheet;
 }
 

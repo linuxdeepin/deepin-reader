@@ -470,7 +470,16 @@ bool CentralDocPage::saveAsCurrent()
         }
     }
 
-    return sheet->saveAsData(saveFilePath);
+    bool ret = false;
+    // 当源文件和目标文件(非docx格式)相同时，走保存的逻辑
+    if (showFilePath == saveFilePath && Dr::DOCX != sheet->fileType()) {
+        ret = saveCurrent();
+        handleBlockShutdown();
+    } else {
+        ret = sheet->saveAsData(saveFilePath);
+    }
+
+    return ret;
 }
 
 DocSheet *CentralDocPage::getCurSheet()
