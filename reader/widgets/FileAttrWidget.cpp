@@ -172,11 +172,6 @@ void FileAttrWidget::initCloseBtn()
     layout->addWidget(closeButton);
 
     m_pVBoxLayout->addItem(layout);
-
-    // waylandh环境下隐藏关闭按钮
-    if (Utils::isWayland()) {
-        closeButton->setVisible(false);
-    }
 }
 
 void FileAttrWidget::initImageLabel()
