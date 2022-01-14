@@ -1,9 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     chendu <chendu@uniontech.com>
+* Author:     gaoxiang <gaoxiang@uniontech.com>
 *
-* Maintainer: chendu <chendu@uniontech.com>
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,86 +20,71 @@
 */
 
 #include "DebugTimeManager.h"
-#include "Global.h"
-#include "stub.h"
-#include "DocSheet.h"
 
 #include <QTest>
-#include <QTimer>
 
 #include <gtest/gtest.h>
 
-/********测试DebugTimeManager***********/
-class TestDebugTimeManager : public ::testing::Test
+
+/*******************************函数打桩************************************/
+
+/*******************************函数打桩************************************/
+
+
+class UT_DebugTimeManager : public ::testing::Test
 {
 public:
-    virtual void SetUp();
+    UT_DebugTimeManager(): m_tester(nullptr) {}
 
-    virtual void TearDown();
+public:
+    virtual void SetUp()
+    {
+        m_tester = new DebugTimeManager;
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
 
 protected:
-    DebugTimeManager *m_tester = nullptr;
+    DebugTimeManager *m_tester;
 };
-void TestDebugTimeManager::SetUp()
-{
-    m_tester = DebugTimeManager::getInstance();
-}
 
-void TestDebugTimeManager::TearDown()
+TEST_F(UT_DebugTimeManager, initTest)
 {
-    delete m_tester;
-    DebugTimeManager::s_Instance = nullptr;
 
 }
 
-/*************测试用例****************/
-TEST_F(TestDebugTimeManager, UT_DebugTimeManager_clear_001)
+TEST_F(UT_DebugTimeManager, UT_DebugTimeManager_clear)
 {
-    m_tester->m_MapPoint.insert("first", {"first", 1000});
+    m_tester->m_MapPoint["1"] = PointInfo();
     m_tester->clear();
-    EXPECT_TRUE(m_tester->m_MapPoint.isEmpty());
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }
 
-TEST_F(TestDebugTimeManager, UT_DebugTimeManager_beginPointQt_001)
+TEST_F(UT_DebugTimeManager, UT_DebugTimeManager_beginPointQt)
 {
-    QString point("first");
-    QString status("first");
-    m_tester->beginPointQt(point, status);
-    EXPECT_TRUE(m_tester->m_MapPoint.size() == 1);
+    m_tester->beginPointQt("1", "status");
+    EXPECT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
 }
 
-TEST_F(TestDebugTimeManager, UT_DebugTimeManager_endPointQt_001)
+TEST_F(UT_DebugTimeManager, UT_DebugTimeManager_endPointQt)
 {
-//    QString point("first");
-//    QString status("first");
-//    m_tester->beginPointQt(point, status);
-
-//    QEventLoop eventloop;
-//    QTimer::singleShot(5, &eventloop, SLOT(quit()));
-//    eventloop.exec();
-
-//    m_tester->endPointQt(point);
-//    EXPECT_TRUE(m_tester->m_MapPoint.isEmpty());
+    m_tester->beginPointQt("1", "status");
+    m_tester->endPointQt("1");
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }
 
-TEST_F(TestDebugTimeManager, UT_DebugTimeManager_beginPointLinux_001)
+TEST_F(UT_DebugTimeManager, UT_DebugTimeManager_beginPointLinux)
 {
-    QString point("first");
-    QString status("first");
-    m_tester->beginPointLinux(point, status);
-    EXPECT_TRUE(m_tester->m_MapPoint.size() == 1);
+    m_tester->beginPointLinux("1", "status");
+    EXPECT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
 }
 
-TEST_F(TestDebugTimeManager, UT_DebugTimeManager_endPointLinux_001)
+TEST_F(UT_DebugTimeManager, UT_DebugTimeManager_endPointLinux)
 {
-//    QString point("first");
-//    QString status("first");
-//    m_tester->beginPointQt(point, status);
-
-//    QEventLoop eventloop;
-//    QTimer::singleShot(5, &eventloop, SLOT(quit()));
-//    eventloop.exec();
-
-//    m_tester->endPointLinux(point);
-//    EXPECT_TRUE(m_tester->m_MapPoint.isEmpty());
+    m_tester->beginPointLinux("1", "status");
+    m_tester->endPointLinux("1");
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }

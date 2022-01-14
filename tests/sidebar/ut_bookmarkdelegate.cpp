@@ -20,23 +20,31 @@
 */
 
 #include "BookMarkDelegate.h"
+#include "DocSheet.h"
+#include "SideBarImageListview.h"
+#include "SideBarImageViewModel.h"
 
 #include "stub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QListView>
+#include <QPainter>
 
-class TestBookMarkDelegate : public ::testing::Test
+class UT_BookMarkDelegate : public ::testing::Test
 {
 public:
-    TestBookMarkDelegate(): m_tester(nullptr) {}
+    UT_BookMarkDelegate(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_pView = new QListView();
+        QString strPath = UTSOURCEDIR;
+        strPath += "/files/1.pdf";
+        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_pView = new SideBarImageListView(sheet);
         m_tester = new BookMarkDelegate(m_pView);
+        m_pView->setItemDelegate(m_tester);
         m_tester->disconnect();
     }
 
@@ -48,10 +56,20 @@ public:
 
 protected:
     BookMarkDelegate *m_tester;
-    QListView *m_pView;
+    SideBarImageListView *m_pView;
 };
 
-TEST_F(TestBookMarkDelegate, initTest)
+TEST_F(UT_BookMarkDelegate, initTest)
 {
 
+}
+
+TEST_F(UT_BookMarkDelegate, UT_BookMarkDelegate_paint)
+{
+    m_pView->getImageModel()->insertPageIndex(1);
+    QPainter *painter = new QPainter;
+    QStyleOptionViewItem option;
+    m_tester->paint(painter, option, m_pView->getImageModel()->index(0, 0));
+    EXPECT_TRUE(m_tester->m_parent == m_pView);
+    delete painter;
 }

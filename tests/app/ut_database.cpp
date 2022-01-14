@@ -28,18 +28,6 @@
 
 #include <gtest/gtest.h>
 
-/********测试Database***********/
-class TestDatabase : public ::testing::Test
-{
-public:
-    virtual void SetUp();
-
-    virtual void TearDown();
-
-protected:
-    Database *m_tester = nullptr;
-};
-
 //class TestTransaction : public ::testing::Test
 //{
 //public:
@@ -66,12 +54,30 @@ protected:
 
 //}
 
-//TEST_F(TestTransaction, testcommit)
+//bool QSqlDatabase_commit_stub()
 //{
-//    m_tester->commit();
+//    return true;
 //}
 
+//TEST_F(TestTransaction, testcommit)
+//{
+//    Stub stub;
+//    stub.set(ADDR(QSqlDatabase, commit), QSqlDatabase_commit_stub);
+//    m_tester->commit();
+//    EXPECT_TRUE(m_tester->m_committed == true);
+//}
 
+/********测试Database***********/
+class TestDatabase : public ::testing::Test
+{
+public:
+    virtual void SetUp();
+
+    virtual void TearDown();
+
+protected:
+    Database *m_tester = nullptr;
+};
 
 void TestDatabase::SetUp()
 {

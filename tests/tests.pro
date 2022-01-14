@@ -41,28 +41,43 @@ SOURCES += \
     ut_mainwindow.cpp \
     ut_common.cpp \
     ut_application.cpp \
-    app/ut_Database.cpp \
-    widgets/ut_AttrScrollWidget.cpp \
-    widgets/ut_BaseWidget.cpp \
-    widgets/ut_ColorWidgetAction.cpp \
-    widgets/ut_FileAttrWidget.cpp \
-    widgets/ut_FindWidget.cpp \
-    widgets/ut_HandleMenu.cpp \
-    widgets/ut_PagingWidget.cpp \
-    widgets/ut_ProgressDialog.cpp \
-    widgets/ut_SaveDialog.cpp \
-    widgets/ut_ScaleMenu.cpp \
-    widgets/ut_ScaleWidget.cpp \
-    widgets/ut_SecurityDialog.cpp \
-    widgets/ut_ShortCutShow.cpp \
-    widgets/ut_SlideWidget.cpp \
-    widgets/ut_TipsWidget.cpp \
-    uiframe/ut_Central.cpp \
-    sidebar/ut_BookMarkDelegate.cpp \
-    sidebar/ut_BookMarkWidget.cpp \
-    sidebar/ut_CatalogTreeView.cpp \
-    sidebar/ut_SideBarImageListview.cpp \
-    sidebar/ut_SideBarImageViewModel.cpp \
+    app/ut_database.cpp \
+    widgets/ut_attrscrollwidget.cpp \
+    widgets/ut_basewidget.cpp \
+    widgets/ut_colorwidgetaction.cpp \
+    widgets/ut_encryptionpage.cpp \
+    widgets/ut_fileattrwidget.cpp \
+    widgets/ut_findwidget.cpp \
+    widgets/ut_handlemenu.cpp \
+    widgets/ut_pagingwidget.cpp \
+    widgets/ut_progressdialog.cpp \
+    widgets/ut_roundcolorwidget.cpp \
+    widgets/ut_savedialog.cpp \
+    widgets/ut_scalemenu.cpp \
+    widgets/ut_scalewidget.cpp \
+    widgets/ut_securitydialog.cpp \
+    widgets/ut_shortcutshow.cpp \
+    widgets/ut_slideplaywidget.cpp \
+    widgets/ut_slidewidget.cpp \
+    widgets/ut_texteditwidget.cpp \
+    widgets/ut_tipswidget.cpp \
+    widgets/ut_transparenttextedit.cpp \
+    widgets/ut_wordwraplabel.cpp \
+    uiframe/ut_central.cpp \
+    sidebar/ut_bookmarkdelegate.cpp \
+    sidebar/ut_bookmarkwidget.cpp \
+    sidebar/ut_catalogtreeview.cpp \
+    sidebar/ut_catalogwidget.cpp \
+    sidebar/ut_notesdelegate.cpp \
+    sidebar/ut_noteswidget.cpp \
+    sidebar/ut_readerimagethreadpoolmanager.cpp \
+    sidebar/ut_searchresdelegate.cpp \
+    sidebar/ut_searchreswidget.cpp \
+    sidebar/ut_sidebarimagelistview.cpp \
+    sidebar/ut_sidebarimageviewmodel.cpp \
+    sidebar/ut_sheetsidebar.cpp \
+    sidebar/ut_thumbnaildelegate.cpp \
+    sidebar/ut_thumbnailwidget.cpp \
     browser/ut_sheetbrowser.cpp \
     document/ut_model.cpp \
     document/ut_pdfmodel.cpp \
@@ -73,12 +88,14 @@ SOURCES += \
     browser/ut_browserpage.cpp \
     browser/ut_browserword.cpp \
     browser/ut_pagerenderthread.cpp \
+    browser/ut_pagesearchthread.cpp \
     app/ut_dbusobject.cpp \
     app/ut_global.cpp \
     app/ut_debugtimemanager.cpp \
     app/ut_utils.cpp \
     uiframe/ut_centraldocpage.cpp \
-    uiframe/ut_docsheet.cpp
+    uiframe/ut_docsheet.cpp \
+    uiframe/ut_doctabbar.cpp
 
 HEADERS +=\
     ut_defines.h \
@@ -93,7 +110,7 @@ RESOURCES += \
 INCLUDEPATH += $$PWD/include/gtest
 
 #安全测试选项
-if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
+if(contains(DEFINES, CmAKE_SAFETYTEST_ARG_ON)){
     QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
     QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
     QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2

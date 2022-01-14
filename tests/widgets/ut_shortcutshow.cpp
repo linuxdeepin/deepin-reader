@@ -24,15 +24,16 @@
 #include "DocSheet.h"
 #include "ut_defines.h"
 #include "stub.h"
+#include "ut_common.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
 
 namespace {
-class TestShortCutShow : public ::testing::Test
+class UT_ShortCutShow : public ::testing::Test
 {
 public:
-    TestShortCutShow(): m_tester(nullptr) {}
+    UT_ShortCutShow(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -62,12 +63,12 @@ void initDJVU_stub()
 }
 }
 
-TEST_F(TestShortCutShow, initTest)
+TEST_F(UT_ShortCutShow, initTest)
 {
 
 }
 
-TEST_F(TestShortCutShow, testsetSheet)
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_setSheet_001)
 {
     Stub s;
     s.set(ADDR(ShortCutShow, initPDF), initPDF_stub);
@@ -75,20 +76,63 @@ TEST_F(TestShortCutShow, testsetSheet)
 
     m_tester->setSheet(nullptr);
     EXPECT_TRUE(g_funcname == "initPDF_stub");
+}
+
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_setSheet_002)
+{
+    Stub s;
+    s.set(ADDR(ShortCutShow, initPDF), initPDF_stub);
+    s.set(ADDR(ShortCutShow, initDJVU), initDJVU_stub);
 
     DocSheet *sheet = new DocSheet(Dr::FileType::DJVU, "1.pdf");
     m_tester->setSheet(sheet);
     delete sheet;
     EXPECT_TRUE(g_funcname == "initDJVU_stub");
+}
 
-    sheet = new DocSheet(Dr::FileType::PDF, "1.pdf");
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_setSheet_003)
+{
+    Stub s;
+    s.set(ADDR(ShortCutShow, initPDF), initPDF_stub);
+    s.set(ADDR(ShortCutShow, initDJVU), initDJVU_stub);
+
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf");
     m_tester->setSheet(sheet);
     delete sheet;
     EXPECT_TRUE(g_funcname == "initPDF_stub");
 }
 
-TEST_F(TestShortCutShow, testshow)
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_show)
 {
+    Stub stub;
+    UTCommon::stub_QProcess_startDetached(stub);
 
+    m_tester->initDJVU();
+    m_tester->show();
+    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+}
+
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_initDJVU)
+{
+    m_tester->initDJVU();
+    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
+    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
+    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
+    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
+    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
+    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+}
+
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_initPDF)
+{
+    m_tester->initPDF();
+    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
+    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
+    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
+    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
+    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
+    EXPECT_TRUE(m_tester->Editnames.count() != 0);
 }
 
