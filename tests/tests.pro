@@ -110,7 +110,7 @@ RESOURCES += \
 INCLUDEPATH += $$PWD/include/gtest
 
 #安全测试选项
-if(contains(DEFINES, CmAKE_SAFETYTEST_ARG_ON)){
+if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
     QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
     QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
     QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
