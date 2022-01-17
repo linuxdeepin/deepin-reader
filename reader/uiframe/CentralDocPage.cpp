@@ -667,11 +667,11 @@ void CentralDocPage::openFullScreen()
     if (!mainWindow->isFullScreen()) {
         m_mainLayout->removeWidget(m_tabBar);
 
-        m_isMaximizedBeforeFullScreen = mainWindow->isMaximized();
-
         mainWindow->setDocTabBarWidget(m_tabBar);
 
-        mainWindow->showFullScreen();
+        if (!mainWindow->windowState().testFlag(Qt::WindowFullScreen)) {
+            mainWindow->setWindowState(mainWindow->windowState() | Qt::WindowFullScreen);
+        }
     }
 }
 
@@ -691,10 +691,10 @@ bool CentralDocPage::quitFullScreen(bool force)
 
         mainWindow->setDocTabBarWidget(nullptr);
 
-        if (m_isMaximizedBeforeFullScreen)
-            mainWindow->showMaximized();
-        else
-            mainWindow->showNormal();
+
+        if (mainWindow->windowState().testFlag(Qt::WindowFullScreen)) {
+            mainWindow->setWindowState(mainWindow->windowState() & ~ Qt::WindowFullScreen);
+        }
 
         return true;
     }

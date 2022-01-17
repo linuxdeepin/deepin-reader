@@ -386,7 +386,6 @@ private:
     DocTabBar           *m_tabBar = nullptr;
     SlideWidget         *m_slideWidget = nullptr;
     QVBoxLayout         *m_mainLayout = nullptr;
-    bool                m_isMaximizedBeforeFullScreen = false;
 };
 
 #endif // MAINTABWIDGETEX_H

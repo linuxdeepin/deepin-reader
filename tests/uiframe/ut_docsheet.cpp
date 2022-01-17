@@ -1168,8 +1168,7 @@ TEST_F(TestDocSheet, UT_DocSheet_closeFullScreen_002)
     s.set(ADDR(QWidget, showNormal), showNormal_stub);
     s.set(ADDR(SheetBrowser, hideSubTipsWidget), hideSubTipsWidget_stub);
 
-    m_tester->closeFullScreen(false);
-    EXPECT_TRUE(g_funcName == "showNormal_stub");
+    EXPECT_TRUE(m_tester->closeFullScreen(false));
 }
 
 TEST_F(TestDocSheet, UT_DocSheet_setDocumentChanged_001)

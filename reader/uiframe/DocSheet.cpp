@@ -974,7 +974,7 @@ bool DocSheet::closeFullScreen(bool force)
 
         return doc->quitFullScreen(force);
     } else if (doc->topLevelWidget()->windowState().testFlag(Qt::WindowFullScreen)) {
-        doc->topLevelWidget()->showNormal();
+        doc->topLevelWidget()->setWindowState(doc->topLevelWidget()->windowState() & ~Qt::WindowFullScreen);
 
         return true;
     }
