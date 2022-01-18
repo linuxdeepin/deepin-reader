@@ -628,6 +628,16 @@ void setSidebarVisible_stub(bool, bool)
 {
     g_funcName = __FUNCTION__;
 }
+
+void mouseMoveEvent_stub(QMouseEvent *)
+{
+    return;
+}
+
+void mouseReleaseEvent_stub(QMouseEvent *)
+{
+    return;
+}
 ///*******************************函数打桩************************************/
 
 
@@ -1690,6 +1700,9 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent001)
     s.set(ADDR(QGraphicsView, dragMode), dragMode_stub);
     s.set(ADDR(QMouseEvent, source), source_stub);
     s.set(ADDR(QScroller, handleInput), handleInput_stub);
+    typedef void (*fptr)(QGraphicsView *, QMouseEvent *);
+    fptr A_foo = (fptr)(&QGraphicsView::mouseMoveEvent);   //获取虚函数地址
+    s.set(A_foo, mouseMoveEvent_stub);
 
     QEvent::Type type = QEvent::MouseMove;
     QPointF localPos(50, 50);
@@ -1880,6 +1893,10 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent006)
     s.set(PDFAnnotation_contents, contents_stub);
     s.set(ADDR(QWidget, show), show_stub);
 
+    typedef void (*fptr1)(QGraphicsView *, QMouseEvent *);
+    fptr1 A_foo = (fptr1)(&QGraphicsView::mouseMoveEvent);   //获取虚函数地址
+    s.set(A_foo, mouseMoveEvent_stub);
+
     QEvent::Type type = QEvent::MouseMove;
     QPointF localPos(-50, -50);
     Qt::MouseButton button = Qt::NoButton;
@@ -1927,6 +1944,10 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent001)
     s.set(ADDR(QWidget, isHidden), isHidden_stub);
     s.set(ADDR(SheetBrowser, getLinkAtPoint), getLinkAtPoint_stub);
 
+    typedef void (*fptr)(QGraphicsView *, QMouseEvent *);
+    fptr A_foo = (fptr)(&QGraphicsView::mouseReleaseEvent);   //获取虚函数地址
+    s.set(A_foo, mouseReleaseEvent_stub);
+
     QEvent::Type type = QEvent::MouseMove;
     QPointF localPos(50, 50);
     Qt::MouseButton button = Qt::LeftButton;
@@ -1960,6 +1981,10 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent002)
     s.set(ADDR(QPointF, manhattanLength), manhattanLength_stub);
     s.set(ADDR(SheetBrowser, jump2Link), jump2Link_stub);
     s.set(ADDR(QWidget, isHidden), isHidden_stub);
+
+    typedef void (*fptr)(QGraphicsView *, QMouseEvent *);
+    fptr A_foo = (fptr)(&QGraphicsView::mouseReleaseEvent);   //获取虚函数地址
+    s.set(A_foo, mouseReleaseEvent_stub);
 
     QEvent::Type type = QEvent::MouseMove;
     QPointF localPos(50, 50);
