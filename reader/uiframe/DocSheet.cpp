@@ -42,6 +42,7 @@
 #include "PageRenderThread.h"
 #include "PageSearchThread.h"
 #include "BrowserPage.h"
+#include "MainWindow.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -974,7 +975,11 @@ bool DocSheet::closeFullScreen(bool force)
 
         return doc->quitFullScreen(force);
     } else if (doc->topLevelWidget()->windowState().testFlag(Qt::WindowFullScreen)) {
-        doc->topLevelWidget()->setWindowState(doc->topLevelWidget()->windowState() & ~Qt::WindowFullScreen);
+        MainWindow *mainWindow = qobject_cast<MainWindow *>(doc->topLevelWidget());
+        if (nullptr != mainWindow) {
+            mainWindow->setWindowState(doc->topLevelWidget()->windowState() & ~Qt::WindowFullScreen);
+            mainWindow->handleMainWindowExitFull();
+        }
 
         return true;
     }

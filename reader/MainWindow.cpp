@@ -187,14 +187,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                     }
                 }
             }
-        } else if (event->type() == QEvent::WindowStateChange) {
-            bool isFullscreen = this->windowState().testFlag(Qt::WindowFullScreen);
-            if (isFullscreen) {
-                onMainWindowFull();
-            } else if (m_FullTitleWidget) {
-                //非本应用控件触发的,需要强制触发一次
-                onMainWindowExitFull();
-            }
         }
     }
 
@@ -264,7 +256,7 @@ void MainWindow::onTitleAniFinished()
         m_FullTitleWidget->setEnabled(false);
 }
 
-void MainWindow::onMainWindowFull()
+void MainWindow::handleMainWindowFull()
 {
     if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
         return;
@@ -298,8 +290,11 @@ void MainWindow::onMainWindowFull()
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
 }
 
-void MainWindow::onMainWindowExitFull()
+void MainWindow::handleMainWindowExitFull()
 {
+    if (m_FullTitleWidget == nullptr)
+        return;
+
     if (m_lastWindowState == Qt::WindowFullScreen) {
         m_lastWindowState = static_cast<int>(this->windowState());
 

@@ -108,12 +108,21 @@ public:
      */
     bool handleClose(bool needToBeSaved);
 
-public:
     /**
      * @brief 当前窗口打开文件
      * @param filePath 文件路径
      */
     void addFile(const QString &filePath);
+
+    /**
+     * @brief 全屏处理
+     */
+    void handleMainWindowFull();
+
+    /**
+     * @brief 退出全屏处理
+     */
+    void handleMainWindowExitFull();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -151,16 +160,6 @@ private slots:
      * 更新提示标签大小
      */
     void onUpdateTitleLabelRect();
-
-    /**
-     * @brief 全屏
-     */
-    void onMainWindowFull();
-
-    /**
-     * @brief 退出全屏
-     */
-    void onMainWindowExitFull();
 
     /**
      * @brief 标题悬浮动画结束

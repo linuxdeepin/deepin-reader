@@ -141,17 +141,22 @@ TEST_F(TestMainWindow, testonTitleAniFinished)
 
 TEST_F(TestMainWindow, testonMainWindowFull)
 {
-    m_tester->onMainWindowFull();
+    m_tester->m_lastWindowState = Qt::WindowNoState;
+
+    m_tester->handleMainWindowFull();
+    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 
     m_tester->setDocTabBarWidget(new QWidget(m_tester));
-    m_tester->onMainWindowFull();
+    m_tester->handleMainWindowFull();
+    EXPECT_TRUE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testonMainWindowExitFull)
 {
     m_tester1->setDocTabBarWidget(nullptr);
     m_tester1->m_lastWindowState = Qt::WindowFullScreen;
-    m_tester1->onMainWindowExitFull();
+    m_tester1->handleMainWindowExitFull();
+    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testresizeFullTitleWidget)

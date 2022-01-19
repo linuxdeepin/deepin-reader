@@ -671,6 +671,7 @@ void CentralDocPage::openFullScreen()
 
         if (!mainWindow->windowState().testFlag(Qt::WindowFullScreen)) {
             mainWindow->setWindowState(mainWindow->windowState() | Qt::WindowFullScreen);
+            mainWindow->handleMainWindowFull();
         }
     }
 }
