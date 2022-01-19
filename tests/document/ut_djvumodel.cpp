@@ -23,6 +23,8 @@
 #include "Model.h"
 #include "stub.h"
 
+#include <QFile>
+
 #include <libdjvu/ddjvuapi.h>
 #include <gtest/gtest.h>
 using namespace deepin_reader;

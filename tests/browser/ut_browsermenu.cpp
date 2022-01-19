@@ -22,8 +22,10 @@
 #include "BrowserPage.h"
 #include "stub.h"
 
+#include <QHideEvent>
 #include <QPainter>
 #include <QSignalSpy>
+
 #include <gtest/gtest.h>
 
 /********测试BrowserMenu***********/
