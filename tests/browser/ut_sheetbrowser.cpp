@@ -30,6 +30,7 @@
 #include "dpdfannot.h"
 #include "dpdfpage.h"
 #include "TipsWidget.h"
+#include "TextEditWidget.h"
 #include "stub.h"
 
 #include <DDialog>
@@ -637,6 +638,11 @@ void mouseMoveEvent_stub(QMouseEvent *)
 void mouseReleaseEvent_stub(QMouseEvent *)
 {
     return;
+}
+
+void showWidget_stub(const QPoint &)
+{
+    g_funcName = __FUNCTION__;
 }
 ///*******************************函数打桩************************************/
 
@@ -1264,6 +1270,9 @@ TEST_F(TestSheetBrowser, testonAddHighLightAnnot001)
 
 TEST_F(TestSheetBrowser, testshowNoteEditWidget001)
 {
+    Stub s;
+    s.set(ADDR(TextEditShadowWidget, showWidget), showWidget_stub);
+
     DPdfTextAnnot *dPdfAnnot = new DPdfTextAnnot();
     Annotation *annotation = new PDFAnnotation(dPdfAnnot);
     QPoint point(0, 0);

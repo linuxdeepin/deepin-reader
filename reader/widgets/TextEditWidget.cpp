@@ -152,6 +152,15 @@ void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 
 void TextEditWidget::setEditFocus()
 {
+    /**
+     * fixbug:111746
+     * wayland上，立即将焦点设置到编辑框内，但是此时会偶现激活窗口，这样焦点就离开了编辑框，触发关闭注释弹框的关闭逻辑
+     * 延时100ms将焦点设置到编辑框内，此时已经出现偶现的激活窗口，这时就保证了焦点设在编辑框内，不会触发关闭注释弹框的关闭逻辑
+     */
+    QEventLoop loop;
+    QTimer::singleShot(100, &loop, &QEventLoop::quit);
+    loop.exec();
+
     m_pTextEdit->setFocus();
 }
 
