@@ -78,24 +78,26 @@ TEST_F(TestImagePageInfo_t, test3)
 class TestSideBarImageViewModel : public ::testing::Test
 {
 public:
-    TestSideBarImageViewModel(): m_tester(nullptr) {}
+    TestSideBarImageViewModel() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new SideBarImageViewModel(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new SideBarImageViewModel(m_sheet);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    SideBarImageViewModel *m_tester;
+    DocSheet *m_sheet = nullptr;
+    SideBarImageViewModel *m_tester = nullptr;
 };
 
 TEST_F(TestSideBarImageViewModel, inittest)

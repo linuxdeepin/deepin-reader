@@ -36,6 +36,7 @@
 
 namespace {
 void ReaderImageThreadPoolManager_addgetDocImageTask_stub(const ReaderImageParam_t &);
+void show_stub();
 class TestSlideWidget : public ::testing::Test
 {
 public:
@@ -46,14 +47,15 @@ public:
     {
         Stub stub;
         stub.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), ReaderImageThreadPoolManager_addgetDocImageTask_stub);
+        stub.set(ADDR(QWidget, show), show_stub);
 
         QString filePath = QCoreApplication::applicationDirPath() + "/" + "files" + "/" + UT_FILE_PDF;
         if (!QFile(filePath).exists() && QFile(":/files/" + QString(UT_FILE_PDF)).exists()) {
             QDir().mkpath(QCoreApplication::applicationDirPath() + "/" + "files");
             QFile(":/files/" + QString(UT_FILE_PDF)).copy(filePath);
         }
-
-        m_tester = new SlideWidget(new DocSheet(Dr::FileType::PDF, filePath, m_tester));
+        m_sheet = new DocSheet(Dr::FileType::PDF, filePath, nullptr);
+        m_tester = new SlideWidget(m_sheet);
         m_tester->disconnect();
 
     }
@@ -61,10 +63,12 @@ public:
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    SlideWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    SlideWidget *m_tester = nullptr;
 };
 
 static QString g_funcname;
@@ -104,6 +108,11 @@ QPixmap getImageForDocSheet_stub(void *, DocSheet *, int pageIndex)
 {
     g_funcname = QString::number(pageIndex);
     return QPixmap();
+}
+
+void show_stub()
+{
+
 }
 }
 

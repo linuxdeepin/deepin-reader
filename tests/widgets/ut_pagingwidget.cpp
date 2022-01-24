@@ -44,17 +44,20 @@ public:
             QFile(":/files/" + QString(UT_FILE_PDF)).copy(filePath);
         }
 
-        m_tester = new PagingWidget(new DocSheet(Dr::FileType::PDF, filePath, m_tester));
+        sheet = new DocSheet(Dr::FileType::PDF, filePath, nullptr);
+        m_tester = new PagingWidget(sheet);
         m_tester->disconnect();
     }
 
     virtual void TearDown()
     {
+        delete sheet;
         delete m_tester;
     }
 
 protected:
-    PagingWidget *m_tester;
+    DocSheet *sheet = nullptr;
+    PagingWidget *m_tester = nullptr;
 };
 
 static QString g_funcname;

@@ -25,6 +25,7 @@
 #include "SaveDialog.h"
 #include "SlideWidget.h"
 #include "ReaderImageThreadPoolManager.h"
+#include "MainWindow.h"
 #include "stub.h"
 
 #include <DDialog>
@@ -69,7 +70,9 @@ static DocSheet *getCurSheet_stub()
 {
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
-    g_docsheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    if (!g_docsheet) {
+        g_docsheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    }
     return g_docsheet;
 }
 
@@ -365,6 +368,13 @@ bool saveAsData_stub(QString)
     g_funcName = __FUNCTION__;
     return true;
 }
+
+static MainWindow *g_mainWindow;
+MainWindow *createWindow_stub(DocSheet *sheet)
+{
+    g_mainWindow = new MainWindow(sheet);
+    return g_mainWindow;
+}
 /***********测试用例***********/
 TEST_F(TestCentralDocPage, UT_CentralDocPage_firstThumbnail_001)
 {
@@ -386,6 +396,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_openCurFileFolder_001)
 
     EXPECT_TRUE(g_funcName == "openUrl_stub");
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_001)
@@ -404,6 +415,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_001)
 
     EXPECT_TRUE(g_funcName == "blockShutdown_stub");
     EXPECT_TRUE(spy.count() == 1);
+    delete sheet;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_002)
@@ -440,6 +452,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_003)
 
     EXPECT_TRUE(spy.count() == 0);
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_001)
@@ -462,6 +475,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_001)
 
     delete sheet;
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_addSheet_001)
@@ -672,6 +686,8 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onTabNewWindow_001)
     Stub s;
     s.set(ADDR(CentralDocPage, leaveSheet), leaveSheet_stub);
     s.set(ADDR(QWidget, show), show_stub);
+    s.set(static_cast<MainWindow*(*)(DocSheet *)>(ADDR(MainWindow, createWindow)), createWindow_stub);
+//    s.set(ADDR(MainWindow, createWindow), createWindow_stub);
 
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
@@ -682,6 +698,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onTabNewWindow_001)
     EXPECT_TRUE(g_funcName == "show_stub");
 
     delete sheet;
+    delete g_mainWindow;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onCentralMoveIn_001)
@@ -907,6 +924,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveCurrent_001)
     EXPECT_FALSE(m_tester->saveCurrent());
     EXPECT_TRUE(g_funcName == "showTips_stub");
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_saveCurrent_002)
@@ -924,6 +942,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveCurrent_002)
     EXPECT_TRUE(g_funcName == "showTips_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_001)
@@ -938,6 +957,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_001)
     EXPECT_FALSE(m_tester->saveAsCurrent());
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_002)
@@ -953,6 +973,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_002)
     EXPECT_FALSE(m_tester->saveAsCurrent());
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_003)
@@ -970,6 +991,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_003)
     EXPECT_TRUE(m_tester->saveAsCurrent());
     EXPECT_TRUE(g_funcName == "handleBlockShutdown_stub");
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_004)
@@ -988,6 +1010,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_saveAsCurrent_004)
     EXPECT_TRUE(m_tester->saveAsCurrent());
     EXPECT_TRUE(g_funcName == "saveAsData_stub");
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_getCurSheet_001)
@@ -1001,6 +1024,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_getCurSheet_001)
     s.set(ADDR(QStackedLayout, currentWidget), currentWidget_stub);
     EXPECT_FALSE(m_tester->getCurSheet() == nullptr);
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 
@@ -1138,6 +1162,8 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_006)
     EXPECT_TRUE(g_funcName == "openFullScreen_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
+
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_showTips_001)
@@ -1161,6 +1187,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_openMagnifer_001)
     EXPECT_TRUE(g_funcName == "openMagnifier_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_quitMagnifer_001)
@@ -1195,7 +1222,9 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_openSlide_001)
     m_tester->openSlide();
     EXPECT_FALSE(m_tester->m_slideWidget == nullptr);
 
+    delete m_tester->m_slideWidget;
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_quitSlide_001)
@@ -1233,6 +1262,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_prepareSearch_001)
     EXPECT_TRUE(g_funcName == "prepareSearch_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onUpdateTabLabelText_001)
@@ -1281,6 +1311,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_zoomIn_001)
     EXPECT_TRUE(g_funcName == "zoomin_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }
 
 
@@ -1294,4 +1325,5 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_zoomOut_001)
     EXPECT_TRUE(g_funcName == "zoomout_stub");
 
     delete g_docsheet;
+    g_docsheet = nullptr;
 }

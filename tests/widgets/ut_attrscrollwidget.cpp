@@ -36,17 +36,20 @@ public:
 public:
     virtual void SetUp()
     {
-        m_tester = new AttrScrollWidget(new DocSheet(Dr::FileType::PDF, "1.pdf", m_tester), m_tester);
+        sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", m_tester);
+        m_tester = new AttrScrollWidget(sheet, m_tester);
         m_tester->disconnect();
     }
 
     virtual void TearDown()
     {
+        delete sheet;
         delete m_tester;
     }
 
 protected:
-    AttrScrollWidget *m_tester;
+    DocSheet *sheet = nullptr;
+    AttrScrollWidget *m_tester = nullptr;
 };
 
 TEST_F(TestAttrScrollWidget, initTest)

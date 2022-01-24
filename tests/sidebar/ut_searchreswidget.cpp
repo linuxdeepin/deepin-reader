@@ -32,24 +32,26 @@
 class UT_SearchResWidget : public ::testing::Test
 {
 public:
-    UT_SearchResWidget(): m_tester(nullptr) {}
+    UT_SearchResWidget() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new SearchResWidget(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new SearchResWidget(m_sheet);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    SearchResWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    SearchResWidget *m_tester = nullptr;
 };
 
 TEST_F(UT_SearchResWidget, initTest)

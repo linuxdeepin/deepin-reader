@@ -34,15 +34,15 @@
 class UT_BookMarkDelegate : public ::testing::Test
 {
 public:
-    UT_BookMarkDelegate(): m_tester(nullptr) {}
+    UT_BookMarkDelegate() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_pView = new SideBarImageListView(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_pView = new SideBarImageListView(m_sheet);
         m_tester = new BookMarkDelegate(m_pView);
         m_pView->setItemDelegate(m_tester);
         m_tester->disconnect();
@@ -52,11 +52,13 @@ public:
     {
         delete m_tester;
         delete m_pView;
+        delete m_sheet;
     }
 
 protected:
-    BookMarkDelegate *m_tester;
-    SideBarImageListView *m_pView;
+    DocSheet *m_sheet = nullptr;
+    BookMarkDelegate *m_tester = nullptr;
+    SideBarImageListView *m_pView = nullptr;
 };
 
 TEST_F(UT_BookMarkDelegate, initTest)

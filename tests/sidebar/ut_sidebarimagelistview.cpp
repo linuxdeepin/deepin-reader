@@ -40,17 +40,19 @@ public:
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        sheet = new DocSheet(Dr::PDF, strPath, nullptr);
         m_tester = new SideBarImageListView(sheet);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete sheet;
     }
 
 protected:
-    SideBarImageListView *m_tester;
+    DocSheet *sheet = nullptr;
+    SideBarImageListView *m_tester = nullptr;
 };
 
 bool isValid_stub()

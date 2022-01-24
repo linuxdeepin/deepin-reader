@@ -36,15 +36,15 @@
 class UT_TextEditShadowWidgetayWidget : public ::testing::Test
 {
 public:
-    UT_TextEditShadowWidgetayWidget(): m_tester(nullptr) {}
+    UT_TextEditShadowWidgetayWidget() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_pBrowser = new SheetBrowser(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_pBrowser = new SheetBrowser(m_sheet);
         m_tester = new TextEditShadowWidget(m_pBrowser);
         m_tester->disconnect();
     }
@@ -52,11 +52,13 @@ public:
     virtual void TearDown()
     {
         delete m_pBrowser;
+        delete m_sheet;
     }
 
 protected:
-    SheetBrowser *m_pBrowser;
-    TextEditShadowWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    SheetBrowser *m_pBrowser = nullptr;
+    TextEditShadowWidget *m_tester = nullptr;
 };
 
 TEST_F(UT_TextEditShadowWidgetayWidget, initTest)
@@ -92,8 +94,8 @@ public:
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_pBrowser = new SheetBrowser(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_pBrowser = new SheetBrowser(m_sheet);
         m_pShadow = new TextEditShadowWidget(m_pBrowser);
         m_tester = new TextEditWidget(m_pShadow);
         m_tester->disconnect();
@@ -102,9 +104,11 @@ public:
     virtual void TearDown()
     {
         delete m_pBrowser;
+        delete m_sheet;
     }
 
 protected:
+    DocSheet *m_sheet;
     SheetBrowser *m_pBrowser;
     TextEditShadowWidget *m_pShadow;
     TextEditWidget *m_tester;

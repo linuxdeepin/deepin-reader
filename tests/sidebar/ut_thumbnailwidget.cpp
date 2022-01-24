@@ -33,24 +33,26 @@
 class UT_ThumbnailWidget : public ::testing::Test
 {
 public:
-    UT_ThumbnailWidget(): m_tester(nullptr) {}
+    UT_ThumbnailWidget() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new ThumbnailWidget(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new ThumbnailWidget(m_sheet);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    ThumbnailWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    ThumbnailWidget *m_tester = nullptr;
 };
 
 TEST_F(UT_ThumbnailWidget, initTest)

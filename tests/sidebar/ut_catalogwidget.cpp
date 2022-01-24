@@ -30,24 +30,26 @@
 class UT_CatalogWidget : public ::testing::Test
 {
 public:
-    UT_CatalogWidget(): m_tester(nullptr) {}
+    UT_CatalogWidget() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new CatalogWidget(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new CatalogWidget(m_sheet);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    CatalogWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    CatalogWidget *m_tester = nullptr;
 };
 
 TEST_F(UT_CatalogWidget, initTest)

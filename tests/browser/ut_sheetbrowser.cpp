@@ -2079,6 +2079,8 @@ TEST_F(TestSheetBrowser, testcurrentScrollValueForPage001)
 
     m_tester->m_sheet->m_operation.rotation = Dr::RotateBy270;
     EXPECT_TRUE(m_tester->currentScrollValueForPage() == 1);
+
+    delete sheet;
 }
 
 TEST_F(TestSheetBrowser, testsetCurrentPage001)
@@ -2105,6 +2107,8 @@ TEST_F(TestSheetBrowser, testsetCurrentPage001)
 
     m_tester->m_sheet->m_operation.rotation = Dr::RotateBy270;
     EXPECT_TRUE(g_funcName == "curpageChanged_stub");
+
+    delete sheet;
 }
 
 TEST_F(TestSheetBrowser, testgetExistImage001)
@@ -2181,6 +2185,9 @@ TEST_F(TestSheetBrowser, testcloseMagnifier001)
     m_tester->m_sheet->m_operation.mouseShape = Dr::MouseShapeNormal;
     m_tester->closeMagnifier();
     EXPECT_TRUE(m_tester->dragMode() == QGraphicsView::NoDrag);
+
+    delete m_tester->m_magnifierLabel;
+    delete sheet;
 }
 
 TEST_F(TestSheetBrowser, testmagnifierOpened001)

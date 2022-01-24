@@ -38,24 +38,26 @@
 class UT_SheetSidebar : public ::testing::Test
 {
 public:
-    UT_SheetSidebar(): m_tester(nullptr) {}
+    UT_SheetSidebar() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new SheetSidebar(sheet, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new SheetSidebar(m_sheet, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    SheetSidebar *m_tester;
+    DocSheet *m_sheet = nullptr;
+    SheetSidebar *m_tester = nullptr;
 };
 
 TEST_F(UT_SheetSidebar, initTest)

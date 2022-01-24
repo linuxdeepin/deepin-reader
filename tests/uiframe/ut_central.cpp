@@ -112,7 +112,7 @@ void setSheet_stub(DocSheet *)
     g_funcName = __FUNCTION__;
 }
 
-void show_stub()
+static void show_stub()
 {
     g_funcName = __FUNCTION__;
 }
@@ -223,6 +223,14 @@ bool hasFormat_stub(const QString &)
 void resizeEvent_stub(QResizeEvent *)
 {
     g_funcName = __FUNCTION__;
+}
+
+static MainWindow *g_mainWindow;
+static MainWindow *createWindow_stub()
+{
+    QStringList filePathList;
+    g_mainWindow = new MainWindow(filePathList);
+    return g_mainWindow;
 }
 
 /***********测试用例***********/
@@ -392,12 +400,14 @@ TEST_F(TestCentral, UT_Central_onMenuTriggered_001)
     s.set(ADDR(CentralDocPage, prepareSearch), prepareSearch_stub);
     s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub);
     s.set(ADDR(DocSheet, onPopPrintDialog), onPopPrintDialog_stub);
+    s.set(static_cast<MainWindow*(*)(QStringList)>(ADDR(MainWindow, createWindow)), createWindow_stub);
 
     QString action;
 
     action = "New window";
     m_tester->onMenuTriggered(action);
     EXPECT_TRUE(g_funcName == "show_stub");
+    delete g_mainWindow;
 
     action = "New tab";
     m_tester->onMenuTriggered(action);

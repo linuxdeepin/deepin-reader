@@ -77,6 +77,7 @@ TEST_F(TestMainWindow, testaddSheet)
     strPath += "/files/1.pdf";
     DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
     m_tester->addSheet(sheet);
+    delete sheet;
 }
 
 TEST_F(TestMainWindow, testhasSheet)
@@ -170,12 +171,12 @@ TEST_F(TestMainWindow, testresizeFullTitleWidget)
 TEST_F(TestMainWindow, testwindowContainSheet)
 {
     MainWindow *pMainwindow = new MainWindow(QStringList());
-    m_tester->m_list << pMainwindow;
-
     QString strPath = UTSOURCEDIR;
     strPath += "/files/1.pdf";
     DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
     m_tester->windowContainSheet(sheet);
+    delete sheet;
+    delete pMainwindow;
 }
 
 TEST_F(TestMainWindow, testallowCreateWindow)
@@ -193,10 +194,11 @@ TEST_F(TestMainWindow, testactivateSheetIfExist)
 
 TEST_F(TestMainWindow, testcreateWindow)
 {
-    MainWindow *pMainwindow = new MainWindow(QStringList());
-    m_tester->m_list << pMainwindow;
+    MainWindow *pMainwindow1 = new MainWindow(QStringList());
+    MainWindow *pMainwindow2 = m_tester->createWindow(QStringList());
 
-    m_tester->createWindow(QStringList());
+    delete pMainwindow1;
+    delete pMainwindow2;
 }
 
 TEST_F(TestMainWindow, testcreateWindow1)
@@ -205,7 +207,10 @@ TEST_F(TestMainWindow, testcreateWindow1)
     strPath += "/files/1.pdf";
     DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
 
-    m_tester->createWindow(sheet);
+    MainWindow *mw = m_tester->createWindow(sheet);
+
+    delete sheet;
+    delete mw;
 }
 
 TEST_F(TestMainWindow, testshowDefaultSize)

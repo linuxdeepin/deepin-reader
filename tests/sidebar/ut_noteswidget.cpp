@@ -40,25 +40,27 @@ DWIDGET_USE_NAMESPACE
 class UT_NotesWidget : public ::testing::Test
 {
 public:
-    UT_NotesWidget(): m_tester(nullptr) {}
+    UT_NotesWidget() {}
 
 public:
     virtual void SetUp()
     {
         QString strPath = UTSOURCEDIR;
         strPath += "/files/1.pdf";
-        DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
-        m_tester = new NotesWidget(sheet);
+        m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+        m_tester = new NotesWidget(m_sheet);
         m_tester->disconnect();
     }
 
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_sheet;
     }
 
 protected:
-    NotesWidget *m_tester;
+    DocSheet *m_sheet = nullptr;
+    NotesWidget *m_tester = nullptr;
 };
 
 TEST_F(UT_NotesWidget, initTest)

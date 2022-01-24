@@ -86,6 +86,18 @@ void addFile_stub(const QString &)
     g_funcName = __FUNCTION__;
 }
 
+static void show_stub()
+{
+    g_funcName = __FUNCTION__;
+}
+
+static MainWindow *g_mainWindow;
+static MainWindow *createWindow_stub()
+{
+    QStringList filePathList;
+    g_mainWindow = new MainWindow(filePathList);
+    return g_mainWindow;
+}
 /***********测试用例***********/
 TEST_F(TestDBusObject, UT_DBusObject_registerOrNotify_001)
 {
@@ -142,17 +154,22 @@ TEST_F(TestDBusObject, UT_DBusObject_handleFiles_001)
 {
     Stub s;
     s.set(ADDR(MainWindow, addFile), addFile_stub);
+    s.set(ADDR(QWidget, show), show_stub);
+    s.set(static_cast<MainWindow*(*)(QStringList)>(ADDR(MainWindow, createWindow)), createWindow_stub);
 
     m_tester->m_isBlockShutdown = true;
     QStringList filePathList;
     m_tester->handleFiles(filePathList);
     EXPECT_FALSE(g_funcName == "addFile_stub");
+    delete g_mainWindow;
 }
 
 TEST_F(TestDBusObject, UT_DBusObject_handleFiles_002)
 {
     Stub s;
     s.set(ADDR(MainWindow, addFile), addFile_stub);
+    s.set(ADDR(QWidget, show), show_stub);
+    s.set(static_cast<MainWindow*(*)(QStringList)>(ADDR(MainWindow, createWindow)), createWindow_stub);
 
     m_tester->m_isBlockShutdown = true;
     QString strPath = UTSOURCEDIR;
@@ -160,5 +177,6 @@ TEST_F(TestDBusObject, UT_DBusObject_handleFiles_002)
     QStringList filePathList = {strPath};
     m_tester->handleFiles(filePathList);
     EXPECT_FALSE(g_funcName == "show_stub");
+    delete g_mainWindow;
 }
 

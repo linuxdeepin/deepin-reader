@@ -479,6 +479,7 @@ TEST_F(TestDocSheet, UT_DocSheet_firstThumbnail_002)
 
 TEST_F(TestDocSheet, UT_DocSheet_existFileChanged_001)
 {
+    m_tester->m_documentChanged = true;
     EXPECT_TRUE(DocSheet::existFileChanged());
 }
 
