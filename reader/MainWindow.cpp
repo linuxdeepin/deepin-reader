@@ -42,6 +42,7 @@
 #include <DGuiApplicationHelper>
 #include <DFileDialog>
 #include <DDialog>
+#include <DWindowQuitFullButton>
 
 #include <QDir>
 #include <QStandardPaths>
@@ -227,9 +228,15 @@ void MainWindow::initUI()
     m_central->titleWidget()->installEventFilter(this);
 
     DIconButton *optBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-
     if (optBtn && optBtn->parentWidget()) {
         optBtn->parentWidget()->installEventFilter(this);
+    }
+
+    DWindowQuitFullButton *quitFullBtn = titlebar()->findChild<DWindowQuitFullButton *>("DTitlebarDWindowQuitFullscreenButton");
+    if (quitFullBtn) {
+        connect(quitFullBtn, &DWindowQuitFullButton::clicked, this, [&]() {
+            handleMainWindowExitFull();
+        });
     }
 }
 
