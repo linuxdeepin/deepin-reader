@@ -42,7 +42,14 @@
 #include <DGuiApplicationHelper>
 #include <DFileDialog>
 #include <DDialog>
+
+#if (DTK_VERSION_MAJOR > 5 \
+    || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 2) \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 2 && DTK_VERSION_PATCH > 2)))
 #include <DWindowQuitFullButton>
+#else
+#include "dwindowquitfullbutton.h" //libdtkwidget=5.2.2.10头文件引用错误，这里直接引用dwindowquitfullbutton.h
+#endif
 
 #include <QDir>
 #include <QStandardPaths>
