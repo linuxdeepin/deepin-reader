@@ -22,6 +22,13 @@ contains(QMAKE_HOST.arch, mips64):{
     QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"
 }
 
+#代码覆盖率开关
+if(contains(DEFINES, CMAKE_COVERAGE_ARG_ON)){
+    QMAKE_CFLAGS += -g -Wall -fprofile-arcs -ftest-coverage
+    QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage
+    QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage
+}
+
 CONFIG += c++11 link_pkgconfig
 
 TARGET = deepin-reader
