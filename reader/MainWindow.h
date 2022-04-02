@@ -124,6 +124,11 @@ public:
      */
     void handleMainWindowExitFull();
 
+    /**
+     * @brief setTitleBarFocusEnable 统一启用或禁用titlebar和其子控件的焦点逻辑
+     */
+    void setTitleBarFocusEnable(bool enable);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 

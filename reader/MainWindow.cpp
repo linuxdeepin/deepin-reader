@@ -184,7 +184,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                         m_TitleAnimation->setEndValue(QRect(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
                         m_TitleAnimation->start();
                     } else if (m_FullTitleWidget->pos().y() < 0 && mouseEvent->pos().y() < 2) {
-                        m_FullTitleWidget->setEnabled(true);
+                        setTitleBarFocusEnable(true);
                         if (m_docTabWidget && m_FullTitleWidget->height() > titlebar()->height())
                             m_docTabWidget->setVisible(true);
                         else if (m_docTabWidget && m_FullTitleWidget->height() <= titlebar()->height())
@@ -258,7 +258,7 @@ void MainWindow::setDocTabBarWidget(QWidget *widget)
 
         m_FullTitleWidget->show();
 
-        m_FullTitleWidget->setEnabled(false);
+        setTitleBarFocusEnable(false);
     }
 
     m_docTabWidget = widget;
@@ -267,7 +267,7 @@ void MainWindow::setDocTabBarWidget(QWidget *widget)
 void MainWindow::onTitleAniFinished()
 {
     if (m_FullTitleWidget->pos().y() < 0)
-        m_FullTitleWidget->setEnabled(false);
+        setTitleBarFocusEnable(false);
 }
 
 void MainWindow::handleMainWindowFull()
@@ -280,6 +280,8 @@ void MainWindow::handleMainWindowFull()
         this->menuWidget()->setParent(nullptr);
         this->setMenuWidget(nullptr);
     }
+
+    setTitleBarFocusEnable(false);
 
     bool tabbarVisible = m_docTabWidget->isVisible();
 
@@ -317,10 +319,36 @@ void MainWindow::handleMainWindowExitFull()
 
         this->setMenuWidget(titlebar());
 
+        setTitleBarFocusEnable(true);
+
         m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height());
 
         updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
     }
+}
+
+void MainWindow::setTitleBarFocusEnable(bool enable)
+{
+    auto updateWidgetFocus = [&](const QString &name, Qt::FocusPolicy policy){
+        if(!this->titlebar())
+            return;
+        QWidget *w = this->titlebar()->findChild<QWidget *>(name);
+        if(!w)
+            return;
+        w->setFocusPolicy(policy);
+    };
+
+    updateWidgetFocus("Thumbnails", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("SP_DecreaseElement", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("scaleEdit", enable ? Qt::StrongFocus : Qt::NoFocus);
+    updateWidgetFocus("editArrowBtn", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("SP_IncreaseElement", enable ? Qt::TabFocus : Qt::NoFocus);
+
+    updateWidgetFocus("DTitlebarDWindowOptionButton", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("DTitlebarDWindowMinButton", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("DTitlebarDWindowQuitFullscreenButton", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("DTitlebarDWindowMaxButton", enable ? Qt::TabFocus : Qt::NoFocus);
+    updateWidgetFocus("DTitlebarDWindowCloseButton", enable ? Qt::TabFocus : Qt::NoFocus);
 }
 
 void MainWindow::resizeFullTitleWidget()
