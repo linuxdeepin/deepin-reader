@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
+class QDBusInterface;
 /**
  * @brief The SlidePlayWidget class
  * 幻灯片播放控件
@@ -58,6 +59,16 @@ public:
      */
     void setPlayStatus(bool play);
 
+    /**
+     * @brief updateProcess 当放映的进度改变时，更新slide的状态
+     */
+    void updateProcess(int cur, int total);
+
+    /**
+     * @brief Notify 弹出顶部消息框
+     * @param text 消息内容
+     */
+    void Notify(const QString &text);
 signals:
     /**
      * @brief signalPreBtnClicked
@@ -158,9 +169,13 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 private:
-    bool m_autoPlay = true;
+    bool m_autoPlay = false;
     QTimer m_timer;
-    DIconButton *m_playBtn;
+    DIconButton *m_playBtn = nullptr;
+    DIconButton *m_preBtn = nullptr;
+    DIconButton *m_nextBtn = nullptr;
+
+    QDBusInterface  *m_dbusNotify = nullptr;
 };
 
 #endif // SLIDEPLAYWIDGET_H

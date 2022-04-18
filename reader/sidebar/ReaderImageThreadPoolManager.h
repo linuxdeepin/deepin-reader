@@ -32,6 +32,7 @@ typedef struct ReaderImageParam_t {
 
     int pageIndex = 0;
     int maxPixel = 174;
+    QSize boundedRect = QSize(0, 0);//幻灯片放映时的boundedRect
     DocSheet *sheet = nullptr;
 
     QObject *receiver = nullptr;
@@ -39,7 +40,11 @@ typedef struct ReaderImageParam_t {
 
     bool operator == (const ReaderImageParam_t &other) const
     {
-        return (this->pageIndex == other.pageIndex && this->maxPixel == other.maxPixel && this->sheet == other.sheet);
+        return this->pageIndex == other.pageIndex
+                && this->maxPixel == other.maxPixel
+                && this->sheet == other.sheet
+                && this->boundedRect == other.boundedRect
+                ;
     }
 
     bool operator < (const ReaderImageParam_t &other) const
