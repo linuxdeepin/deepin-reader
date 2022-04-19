@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>Application</name>
     <message>
@@ -243,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="145"/>
         <source>Documents</source>
         <translation>Dokumente</translation>
     </message>
@@ -320,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="327"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="355"/>
         <source>The bookmark has been removed</source>
         <translation>Faqerojtësi u hoq</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="543"/>
         <source>Please select the text</source>
         <translation>Ju lutemi, përzgjidhni tekstin</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="593"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="602"/>
         <source>The annotation has been removed</source>
         <translation>Shënimi u hoq</translation>
     </message>
@@ -874,6 +872,19 @@
     </message>
 </context>
 <context>
+    <name>SlidePlayWidget</name>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
+        <source>It is the first page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
+        <source>It is the last page</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>TitleMenu</name>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
@@ -919,7 +930,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation type="unfinished">Shtyp</translation>
+        <translation>Shtyp</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>Application</name>
     <message>
@@ -243,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="145"/>
         <source>Documents</source>
         <translation>Dokumenty</translation>
     </message>
@@ -320,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="327"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="355"/>
         <source>The bookmark has been removed</source>
         <translation>Zakładka została usunięta</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="543"/>
         <source>Please select the text</source>
         <translation>Zaznacz tekst</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="593"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="602"/>
         <source>The annotation has been removed</source>
         <translation>Adnotacja została usunięta</translation>
     </message>
@@ -575,7 +573,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Edit</source>
-        <translation>Edycja</translation>
+        <translation>Edytuj</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
@@ -599,7 +597,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
         <source>Page up</source>
-        <translation>Przewiń stronę w górę</translation>
+        <translation>Strona w górę</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
@@ -607,7 +605,7 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
         <source>Page down</source>
-        <translation>Przewiń stronę w dół</translation>
+        <translation>Strona w dół</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
@@ -871,6 +869,19 @@
         <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
         <translation>Strona %1</translation>
+    </message>
+</context>
+<context>
+    <name>SlidePlayWidget</name>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
+        <source>It is the first page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
+        <source>It is the last page</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
