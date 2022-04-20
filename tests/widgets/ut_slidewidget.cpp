@@ -33,6 +33,8 @@
 #include <QTimer>
 #include <QTest>
 #include <QPropertyAnimation>
+#include <QDBusMessage>
+#include <QDBusInterface>
 
 namespace {
 void ReaderImageThreadPoolManager_addgetDocImageTask_stub(const ReaderImageParam_t &);
@@ -110,6 +112,29 @@ QPixmap getImageForDocSheet_stub(void *, DocSheet *, int pageIndex)
     return QPixmap();
 }
 
+QDBusMessage QDBusMessage_call_stub(QDBus::CallMode, const QString &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &)
+{
+    g_funcname = __FUNCTION__;
+    return QDBusMessage();
+}
+typedef QDBusMessage (QDBusInterface::*QDBusMessage_call_Ptr)(QDBus::CallMode , const QString &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &);
+
 void show_stub()
 {
 
@@ -159,6 +184,7 @@ TEST_F(TestSlideWidget, testonPreBtnClicked)
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
     stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
+    //pageCount:2, index:2
     m_tester->m_curPageIndex = 2;
     m_tester->onPreBtnClicked();
     EXPECT_EQ(m_tester->m_preIndex, 2);
@@ -168,6 +194,10 @@ TEST_F(TestSlideWidget, testonPreBtnClicked)
 
 TEST_F(TestSlideWidget, testonPlayBtnClicked)
 {
+    //打桩，否则会有线程异常的问题
+    Stub stub;
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
+
     m_tester->m_canRestart = false;
     m_tester->m_slidePlayWidget->m_autoPlay = true;
     m_tester->onPlayBtnClicked();
@@ -181,12 +211,12 @@ TEST_F(TestSlideWidget, testonNextBtnClicked)
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
     stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
-    m_tester->m_curPageIndex = 2;
-
+    //pageCount:2, index:0
+    m_tester->m_curPageIndex = 0;
     m_tester->onNextBtnClicked();
-//    EXPECT_EQ(m_tester->m_preIndex, 2);
-//    EXPECT_EQ(m_tester->m_curPageIndex, 2);
-//    EXPECT_TRUE(g_funcname == "playImage_stub");
+    EXPECT_EQ(m_tester->m_preIndex, 0);
+    EXPECT_EQ(m_tester->m_curPageIndex, 1);
+    EXPECT_TRUE(g_funcname == "playImage_stub");
 }
 
 TEST_F(TestSlideWidget, testononExitBtnClicked)
@@ -201,6 +231,7 @@ TEST_F(TestSlideWidget, testplayImage)
 {
     Stub stub;
     stub.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), ReaderImageThreadPoolManager_addgetDocImageTask_stub);
+    stub.set((QDBusMessage_call_Ptr)ADDR(QDBusInterface, call), QDBusMessage_call_stub);
 
     m_tester->m_blefttoright = false;
     m_tester->m_imageAnimation->setStartValue(10);
@@ -216,6 +247,7 @@ TEST_F(TestSlideWidget, testonImageShowTimeOut)
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
     stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
+    //pageCount:2, index:2
     m_tester->m_curPageIndex = 2;
     m_tester->m_canRestart = false;
     m_tester->onImageShowTimeOut();
