@@ -51,7 +51,7 @@ public:
 
     QString text(const QRectF &rect) const override;
 
-    QVector< QRectF > search(const QString &text, bool matchCase, bool wholeWords) const override;
+    QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
 private:
     DjVuPage(const class DjVuDocument *parent, int index, const ddjvu_pageinfo_t &pageinfo);

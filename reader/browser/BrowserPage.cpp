@@ -152,16 +152,18 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->setBrush(QColor(238, 220, 0, 100));
 
-    int lightsize = m_searchLightrectLst.size();
-
-    for (int i = 0; i < lightsize; i++) {
-        painter->drawRect(getNorotateRect(m_searchLightrectLst[i]));
+    //search
+    for(const PageSection &section : m_searchLightrectLst) {
+        for(const PageLine &line : section) {
+            painter->drawRect(getNorotateRect(line.rect));
+        }
     }
 
+    //search and Select
     painter->setBrush(QColor(59, 148, 1, 100));
-
-    if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
-        painter->drawRect(getNorotateRect(m_searchSelectLighRectf));
+    for(const PageLine &line : m_searchSelectLighRectf) {
+        painter->drawRect(getNorotateRect(line.rect));
+    }
 
     if (m_drawMoveIconRect) {
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
@@ -984,26 +986,26 @@ bool BrowserPage::sceneEvent(QEvent *event)
     return QGraphicsItem::sceneEvent(event);
 }
 
-void BrowserPage::setSearchHighlightRectf(const QVector< QRectF > &rectflst)
+void BrowserPage::setSearchHighlightRectf(const QVector<PageSection> &sections)
 {
-    if (rectflst.size() > 0) {
+    if (sections.size() > 0) {
         if (m_parent->currentPage() == this->itemIndex() + 1)
-            m_searchSelectLighRectf = rectflst.first();
-        m_searchLightrectLst = rectflst;
+            m_searchSelectLighRectf = sections.first();
+        m_searchLightrectLst = sections;
         update();
     }
 }
 
 void BrowserPage::clearSearchHighlightRects()
 {
-    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
+    m_searchSelectLighRectf.clear();
     m_searchLightrectLst.clear();
     update();
 }
 
 void BrowserPage::clearSelectSearchHighlightRects()
 {
-    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
+    m_searchSelectLighRectf.clear();
     update();
 }
 
@@ -1012,14 +1014,15 @@ int BrowserPage::searchHighlightRectSize()
     return m_searchLightrectLst.size();
 }
 
-QRectF BrowserPage::findSearchforIndex(int index)
+PageSection BrowserPage::findSearchforIndex(int index)
 {
     if (index >= 0 && index < m_searchLightrectLst.size()) {
         m_searchSelectLighRectf = m_searchLightrectLst[index];
         update();
         return m_searchSelectLighRectf;
     }
-    return QRectF(-1, -1, -1, -1);
+
+    return PageSection();
 }
 
 QRectF BrowserPage::getNorotateRect(const QRectF &rect)

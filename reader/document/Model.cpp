@@ -129,4 +129,30 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     return document;
 }
 
+bool SearchResult::setctionsFillText(std::function<QString (int, QRectF)> getText)
+{
+    bool ret = false;
+    for(auto &section : sections) {
+        for(auto &line : section) {
+            //这里的page比index大1
+            int index = page - 1;
+            QString text = getText(index, line.rect);
+            if(!text.isEmpty()) {
+                line.text = text;
+                ret = true;
+            }
+        }
+    }
+    return ret;
+}
+
+QRectF SearchResult::sectionBoundingRect(const PageSection &section)
+{
+    QRectF ret;
+    for(const PageLine &line : section) {
+        ret = ret.united(line.rect);
+    }
+    return ret;
+}
+
 }

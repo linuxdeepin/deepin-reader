@@ -61,10 +61,15 @@ TEST_F(UT_SearchResWidget, initTest)
 
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_handleSearchResultComming)
 {
+    deepin_reader::PageLine line;
+    line.text = "123";
+
+    deepin_reader::PageSection section;
+    section << line;
+
     deepin_reader::SearchResult search;
-    deepin_reader::Word word;
-    word.text = "123";
-    search.words << word;
+    search.sections << section;
+
     m_tester->handleSearchResultComming(search);
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }

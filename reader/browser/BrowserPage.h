@@ -242,7 +242,7 @@ public:
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
      */
-    void setSearchHighlightRectf(const QVector< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QVector<PageSection> &sections);
 
     /**
      * @brief clearSearchHighlightRects
@@ -269,7 +269,7 @@ public:
      * @param index 编号
      * @return 编号对应的rect
      */
-    QRectF findSearchforIndex(int index);
+    PageSection findSearchforIndex(int index);
 
     /**
      * @brief translateRect
@@ -443,8 +443,8 @@ private:
     BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
     QPointF m_drawMoveIconPoint;                            //绘制移动图标注释点
 
-    QVector<QRectF> m_searchLightrectLst;                   //搜索结果
-    QRectF m_searchSelectLighRectf;
+    QVector<PageSection> m_searchLightrectLst;                   //搜索结果
+    PageSection m_searchSelectLighRectf;
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show

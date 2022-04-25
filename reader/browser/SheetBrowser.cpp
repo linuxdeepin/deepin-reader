@@ -1675,7 +1675,8 @@ void SheetBrowser::jumpToNextSearchResult()
                 continue;
             }
 
-            const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+            QRectF pageHigRect = SearchResult::sectionBoundingRect(page->findSearchforIndex(m_searchPageTextIndex));
+            pageHigRect = page->translateRect(pageHigRect);
             horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
@@ -1725,7 +1726,8 @@ void SheetBrowser::jumpToPrevSearchResult()
                 continue;
             }
 
-            const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+            QRectF pageHigRect = SearchResult::sectionBoundingRect(page->findSearchforIndex(m_searchPageTextIndex));
+            pageHigRect = page->translateRect(pageHigRect);
             horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
@@ -1765,7 +1767,7 @@ void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &
         return;
 
     if (res.page <= m_items.count())
-        m_items[res.page - 1]->setSearchHighlightRectf(res.rects);
+        m_items[res.page - 1]->setSearchHighlightRectf(res.sections);
 
     //如果是第一个搜索结果来到，需要高亮第一个
     if (-1 == m_searchPageTextIndex)

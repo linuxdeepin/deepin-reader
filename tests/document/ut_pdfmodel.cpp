@@ -175,10 +175,16 @@ void allTextLooseRects_stub(void *, int &charCount, QStringList &texts, QVector<
     rects.append(QRectF(0, 20, 20, 10));
 }
 
-QVector<QRectF> search_stub(const QString &, bool, bool)
+QVector<PageSection> search_stub(const QString &, bool, bool)
 {
-    QVector<QRectF> results;
-    results.append(QRectF(0, 0, 12.3, 12.3));
+    PageLine line;
+    line.rect = QRectF(0, 0, 12.3, 12.3);
+
+    PageSection section;
+    section.append(line);
+
+    QVector<PageSection> results;
+    results.append(section);
     return results;
 }
 
@@ -312,8 +318,9 @@ TEST_F(TestPDFPage, UT_PDFPage_words_001)
 
 TEST_F(TestPDFPage, UT_PDFPage_search_001)
 {
+    typedef QVector<PageSection> (*searchPtr)(const QString &, bool, bool);
     Stub s;
-    s.set(static_cast<QVector<QRectF>(DPdfPage::*)(const QString &, bool, bool)>(ADDR(DPdfPage, search)), search_stub);
+    s.set((searchPtr)ADDR(DPdfPage, search), search_stub);
 
     EXPECT_TRUE(m_tester->search(QString("test"), false, false).size() == 1);
 }

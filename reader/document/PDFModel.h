@@ -83,7 +83,7 @@ public:
 
     QList<Word> words() override;
 
-    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const override;
+    QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
     QList< Annotation * > annotations() const override;
 

@@ -617,7 +617,7 @@ QString DjVuPage::text(const QRectF &rect) const
     return text.simplified();
 }
 
-QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
+QVector<PageSection> DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
     LOCK_PAGE
 
@@ -649,7 +649,11 @@ QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool who
         ddjvu_miniexp_release(m_parent->m_document, pageTextExp);
     }
 
-    return results;
+    QVector<PageSection> sections;
+    for(const auto &rect : results) {
+        sections << PageSection{PageLine{QString(), rect}};
+    }
+    return sections;
 }
 
 DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document) :

@@ -69,11 +69,13 @@ void SearchResWidget::initWidget()
 void SearchResWidget::handleSearchResultComming(const deepin_reader::SearchResult &search)
 {
     QString strText;
-    for (const deepin_reader::Word &s : search.words) {
-        strText += s.text.trimmed();
-        strText += QString("    ");
+    for (const auto &section : search.sections) {
+        for (const auto &line : section) {
+            strText += line.text.trimmed();
+            strText += QString("    ");//:\t
+        }
     }
-    addSearchsItem(search.page - 1, strText, search.words.size());
+    addSearchsItem(search.page - 1, strText, search.sections.size());
 }
 
 int  SearchResWidget::handleFindFinished()

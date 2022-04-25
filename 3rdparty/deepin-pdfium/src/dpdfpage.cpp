@@ -1001,13 +1001,13 @@ bool DPdfPage::removeAnnot(DPdfAnnot *dAnnot)
     return true;
 }
 
-QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool wholeWords)
+QVector<DPdfGlobal::PageSection> DPdfPage::search(const QString &text, bool matchCase, bool wholeWords)
 {
     d_func()->loadTextPage();
 
     DPdfMutexLocker locker("DPdfPage::search index = " + QString::number(this->index()));
 
-    QVector<QRectF> rectfs;
+    QVector<DPdfGlobal::PageSection> sections;
 
     unsigned long flags = 0x00000000;
 
@@ -1019,22 +1019,43 @@ QVector<QRectF> DPdfPage::search(const QString &text, bool matchCase, bool whole
 
     FPDF_SCHHANDLE schandle = FPDFText_FindStart(d_func()->m_textPage, text.utf16(), flags, 0);
     if (schandle) {
+        int page = d_func()->m_index;
+        FPDF_PAGE pdfPage = FPDF_LoadPage(d_func()->m_doc, page);
+        double pageHeight = FPDF_GetPageHeight(pdfPage);
+        FPDF_TEXTPAGE textPage = d_func()->m_textPage;
         while (FPDFText_FindNext(schandle)) {
-            int curSchIndex = FPDFText_GetSchResultIndex(schandle);
-            if (curSchIndex >= 0) {
-                const QVector<QRectF> &textrectfs = textRects(curSchIndex, text.length());
-                QRectF textRect;
-                for (const QRectF &rect : textrectfs) {
-                    textRect = textRect.united(rect);
-                }
-                rectfs << textRect;
+            FPDF_SCHHANDLE sh = schandle;
+            QVector<QRectF> region;//一个section对应的region
+            int idx = FPDFText_GetSchResultIndex(sh);
+            if(idx < 0)
+                continue;
+            int count = FPDFText_GetSchCount(sh);
+            int rectCount = FPDFText_CountRects(textPage, idx, count);
+            for (int r = 0; r < rectCount; ++r) {
+                double left, top, right, bottom;
+                FPDFText_GetRect(textPage, r, &left, &top, &right, &bottom);
+                QRectF rect = d_func()->transPointToPixel(
+                            QRectF(left, pageHeight - top, right - left, top - bottom));
 
+                //一次查找会有多个rect，若这些rect在同一行需要做合并处理，满足显示效果
+                if(region.count() > 0 && region.last().x() < rect.x()) {
+                    region.last() = region.last().united(rect);
+                    continue;
+                }
+                region << rect;
             }
-        };
+
+            //添加一个section信息
+            DPdfGlobal::PageSection section;
+            for(auto r : region) {
+                section.append(DPdfGlobal::PageLine{QString(), r});
+            }
+            sections.append(section);
+        }
     }
 
     FPDFText_FindClose(schandle);
-    return rectfs;
+    return sections;
 }
 
 QList<DPdfAnnot *> DPdfPage::annots()

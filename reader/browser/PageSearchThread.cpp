@@ -79,29 +79,15 @@ void PageSearchThread::run()
 
         searchres.page = index + 1;
 
-        searchres.rects = m_sheet->renderer()->search(index, m_searchText, false, false);
+        searchres.sections = m_sheet->renderer()->search(index, m_searchText, false, false);
         if (searchTextKangxi != m_searchText) { // 存在康熙字典部首字体
-            searchres.rects.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
+            searchres.sections.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
         }
 
-        //把搜索的范围中周边的文字取出用于左侧展示
-        for (const QRectF &rec : searchres.rects) {
-            if (m_quit)
-                return;
-
-            //获取搜索结果附近文字
-            QRectF rctext = rec;
-            rctext.setX(rctext.x() - 40);
-            rctext.setWidth(rctext.width() + 80);
-
-            const QString &text = m_sheet->renderer()->getText(index, rctext);
-
-            if (!text.isEmpty()) {
-                searchres.words << Word(text, rec);
-            }
-        }
-
-        if (searchres.words.size() > 0) {
+        std::function<QString(int, QRectF)> getText = std::bind(&SheetRenderer::getText, m_sheet->renderer(), std::placeholders::_1, std::placeholders::_2);
+        bool hasWord = searchres.setctionsFillText(getText);
+        //
+        if (hasWord) {
             if (!isSearchResultNotEmpty) {
                 isSearchResultNotEmpty = true;
                 // 只要搜索到结果就emit该信号

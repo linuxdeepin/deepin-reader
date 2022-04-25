@@ -286,15 +286,11 @@ QList<Word> PDFPage::words()
     return m_words;
 }
 
-QVector<QRectF> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
+QVector<PageSection> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
     LOCK_DOCUMENT
 
-    QVector<QRectF> results;
-
-    results = m_page->search(text, matchCase, wholeWords);
-
-    return results;
+    return m_page->search(text, matchCase, wholeWords);
 }
 
 QList< Annotation * > PDFPage::annotations() const

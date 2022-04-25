@@ -146,10 +146,10 @@ QString SheetRenderer::getText(int index, const QRectF &rect)
     return m_pages.value(index)->text(rect);
 }
 
-QVector<QRectF> SheetRenderer::search(int index, const QString &text, bool matchCase, bool wholeWords)
+QVector<deepin_reader::PageSection> SheetRenderer::search(int index, const QString &text, bool matchCase, bool wholeWords)
 {
     if (m_pages.count() <= index)
-        return QVector<QRectF>();
+        return QVector<deepin_reader::PageSection>();
 
     return m_pages.value(index)->search(text, matchCase, wholeWords);
 }

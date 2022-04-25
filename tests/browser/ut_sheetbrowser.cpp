@@ -123,10 +123,15 @@ void clearSelectSearchHighlightRects_stub()
 
 }
 
-QRectF findSearchforIndex_stub(int index)
+PageSection findSearchforIndex_stub(int)
 {
-    Q_UNUSED(index)
-    return QRectF(-1, -1, -1, -1);
+    PageLine line;
+    line.rect = QRectF(-1, -1, -1, -1);
+
+    PageSection section;
+    section.append(line);
+
+    return section;
 }
 
 QRectF translateRect_stub(const QRectF &rect)
