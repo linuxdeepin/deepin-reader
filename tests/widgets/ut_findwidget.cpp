@@ -37,7 +37,8 @@ public:
 public:
     virtual void SetUp()
     {
-        m_tester = new FindWidget();
+        m_mainWidget = new QWidget;
+        m_tester = new FindWidget(m_mainWidget);
         QString filePath = QCoreApplication::applicationDirPath() + "/" + "files" + "/" + UT_FILE_PDF;
         if (!QFile(filePath).exists() && QFile(":/files/" + QString(UT_FILE_PDF)).exists()) {
             QDir().mkpath(QCoreApplication::applicationDirPath() + "/" + "files");
@@ -51,10 +52,12 @@ public:
     virtual void TearDown()
     {
         delete m_tester;
+        delete m_mainWidget;
     }
 
 protected:
     FindWidget *m_tester;
+    QWidget *m_mainWidget;
 };
 
 static QString g_funcname;
@@ -167,9 +170,15 @@ TEST_F(TestFindWidget, testkeyPressEvent)
     s.set(DFloatingWidget_keyPressEvent, keyPressEvent_stub);
     g_funcname.clear();
 
-    QTest::keyPress(m_tester, Qt::Key_Up);
-    EXPECT_TRUE(g_funcname.isEmpty());
+    {
+        QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier);
+        m_tester->keyPressEvent(&keyEvent);
+        EXPECT_TRUE(g_funcname.isEmpty());
+    }
 
-    QTest::keyPress(m_tester, Qt::Key_Delete);
-    EXPECT_TRUE(g_funcname == "keyPressEvent_stub");
+    {
+        QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_Delete, Qt::NoModifier);
+        m_tester->keyPressEvent(&keyEvent);
+        EXPECT_TRUE(g_funcname == "keyPressEvent_stub");
+    }
 }
