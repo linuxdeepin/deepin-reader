@@ -441,7 +441,7 @@ void MainWindow::initBase()
 
     setTitlebarShadowEnabled(true);
 
-    setMinimumSize(752, 360);
+    setMinimumSize(680, 300);
 
     showDefaultSize();
 

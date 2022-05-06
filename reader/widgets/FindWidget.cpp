@@ -31,6 +31,7 @@
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
+    , m_parentWidget(parent)
 {
     setMinimumSize(QSize(414, 60));
 
@@ -38,6 +39,7 @@ FindWidget::FindWidget(DWidget *parent)
 
     initWidget();
 
+    m_parentWidget->installEventFilter(this);
     this->setVisible(false);
 }
 
@@ -50,9 +52,9 @@ void FindWidget::setDocSheet(DocSheet *sheet)
     m_docSheet = sheet;
 }
 
-void FindWidget::showPosition(const int &nParentWidth)
+void FindWidget::updatePosition()
 {
-    this->move(nParentWidth - this->width() - 20, 20);
+    this->move(m_parentWidget->width() - this->width() - 10, m_yOff + 10);
 
     this->show();
 
@@ -165,6 +167,11 @@ void FindWidget::setEditAlert(const int &iFlag)
     }
 }
 
+void FindWidget::setYOff(int yOff)
+{
+    m_yOff = yOff;
+}
+
 void FindWidget::onCloseBtnClicked()
 {
     onSearchStop();
@@ -184,4 +191,12 @@ void FindWidget::keyPressEvent(QKeyEvent *event)
     }
 
     DFloatingWidget::keyPressEvent(event);
+}
+
+bool FindWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == m_parentWidget && event->type() == QEvent::Resize) {
+        updatePosition();
+    }
+    DFloatingWidget::eventFilter(watched, event);
 }

@@ -2250,7 +2250,7 @@ TEST_F(TestSheetBrowser, testshowEvent001)
 TEST_F(TestSheetBrowser, testhandlePrepareSearch001)
 {
     Stub s;
-    s.set(ADDR(FindWidget, showPosition), showPosition_stub);
+    s.set(ADDR(FindWidget, updatePosition), showPosition_stub);
 
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
     sheet->m_fileType = Dr::FileType::PDF;

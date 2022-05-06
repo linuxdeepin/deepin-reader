@@ -938,9 +938,6 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
         m_sheet->setOperationChanged();
     }
 
-    if (!m_findWidget.isNull())
-        m_findWidget->showPosition(this->width());
-
     if (magnifierOpened()) {
         QTimer::singleShot(1, this, SLOT(openMagnifier()));
     }
@@ -1633,11 +1630,13 @@ void SheetBrowser::handlePrepareSearch()
         return;
 
     if (m_findWidget == nullptr) {
-        m_findWidget = new FindWidget(this);
+        m_findWidget = new FindWidget(this->window());
+        int windowY = this->mapTo(this->window(), QPoint(0, 0)).y();
+        m_findWidget->setYOff(windowY);
         m_findWidget->setDocSheet(m_sheet);
     }
 
-    m_findWidget->showPosition(this->width());
+    m_findWidget->updatePosition();
     m_findWidget->setSearchEditFocus();
 }
 
