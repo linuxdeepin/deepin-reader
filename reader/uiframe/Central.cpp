@@ -96,6 +96,8 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Home));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_End));
 
     foreach (auto key, keyList) {
         auto action = new QAction(this);
@@ -203,8 +205,9 @@ void Central::handleShortcut(const QString &shortcut)
         ShortCutShow show;
         show.setSheet(docPage()->getCurSheet());
         show.show();
-    } else
+    } else {
         docPage()->handleShortcut(shortcut);
+    }
 }
 
 bool Central::handleClose(bool needToBeSaved)

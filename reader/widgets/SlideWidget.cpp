@@ -306,6 +306,27 @@ QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
     return pixmap;
 }
 
+void SlideWidget::jumpToFirstPage()
+{
+    if(m_curPageIndex <= 0)
+        return;
+    m_preIndex = m_curPageIndex;
+    m_curPageIndex = 0;
+
+    playImage();
+}
+
+void SlideWidget::jumpToLastPage()
+{
+    if(m_curPageIndex >= m_docSheet->pageCount() - 1)
+        return;
+
+    m_preIndex = m_curPageIndex;
+    m_curPageIndex = m_docSheet->pageCount() - 1;
+
+    playImage();
+}
+
 void SlideWidget::mousePressEvent(QMouseEvent *event)
 {
     DWidget::mousePressEvent(event);
@@ -340,6 +361,10 @@ void SlideWidget::handleKeyPressEvent(const QString &sKey)
         onPreBtnClicked();
     } else if (sKey == Dr::key_right || sKey == Dr::key_down) {
         onNextBtnClicked();
+    } else if(sKey == Dr::key_ctrl_home) {
+        jumpToFirstPage();
+    } else if(sKey == Dr::key_ctrl_end) {
+        jumpToLastPage();
     }
 }
 

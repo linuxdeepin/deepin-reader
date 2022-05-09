@@ -532,6 +532,17 @@ void CentralDocPage::handleShortcut(const QString &s)
         return;
     }
 
+    if(s == Dr::key_ctrl_home) {
+        auto sheet = getCurSheet();
+        if(sheet)
+            sheet->jumpToFirstPage();
+    }
+    if(s == Dr::key_ctrl_end) {
+        auto sheet = getCurSheet();
+        if(sheet)
+            sheet->jumpToLastPage();
+    }
+
     if (m_slideWidget) {
         m_slideWidget->handleKeyPressEvent(s);
         return;

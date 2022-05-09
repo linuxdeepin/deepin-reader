@@ -53,111 +53,23 @@ void ShortCutShow::show()
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
     QString strvalue;
-    //Settings
-    QJsonObject settingsJsonGroup;
-    settingsJsonGroup.insert("groupName", tr("Settings"));
-    QJsonArray settingsJsonItems;
+    QList<ShortCutType> listType{ShortCutType::Settings, ShortCutType::File, ShortCutType::Display, ShortCutType::Tools, ShortCutType::Edit};
+    for(ShortCutType type : listType)
+    {
+        QJsonObject group;
+        group.insert("groupName", tr("Settings"));
+        QJsonArray items;
 
-    for (const QString &shortcutname : Settingsnames) {
-        auto it = shortcutmap.find(shortcutname);
-        if (it != shortcutmap.end())
-            strvalue = *it;
-        else {
-            continue;
+        for (const auto &d : m_shortcutMap[type]) {
+            QJsonObject jsonItem;
+            jsonItem.insert("name", d.second);
+            jsonItem.insert("value", d.first);
+            items.append(jsonItem);
         }
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", strvalue);
-        settingsJsonItems.append(jsonItem);
+
+        group.insert("groupItems", items);
+        jsonGroups.append(group);
     }
-
-    settingsJsonGroup.insert("groupItems", settingsJsonItems);
-    jsonGroups.append(settingsJsonGroup);
-
-    //Files
-    QJsonObject filesJsonGroup;
-    filesJsonGroup.insert("groupName", tr("Files"));
-    QJsonArray filesJsonItems;
-
-    for (const QString &shortcutname : Filesnames) {
-        auto it = shortcutmap.find(shortcutname);
-        if (it != shortcutmap.end())
-            strvalue = *it;
-        else {
-            continue;
-        }
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", strvalue);
-        filesJsonItems.append(jsonItem);
-    }
-
-    filesJsonGroup.insert("groupItems", filesJsonItems);
-    jsonGroups.append(filesJsonGroup);
-
-    //Display
-    QJsonObject displayJsonGroup;
-    displayJsonGroup.insert("groupName", tr("Display"));
-    QJsonArray displayJsonItems;
-    for (const QString &shortcutname : Displaynames) {
-        auto it = shortcutmap.find(shortcutname);
-        if (it != shortcutmap.end())
-            strvalue = *it;
-        else {
-            continue;
-        }
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", strvalue);
-        displayJsonItems.append(jsonItem);
-    }
-
-    displayJsonGroup.insert("groupItems", displayJsonItems);
-    jsonGroups.append(displayJsonGroup);
-
-    //Tools
-    QJsonObject toolJsonGroup;
-    toolJsonGroup.insert("groupName", tr("Tools"));
-    QJsonArray toolJsonItems;
-
-    for (const QString &shortcutname : Toolsnames) {
-
-        auto it = shortcutmap.find(shortcutname);
-        if (it != shortcutmap.end())
-            strvalue = *it;
-        else {
-            continue;
-        }
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", strvalue);
-        toolJsonItems.append(jsonItem);
-    }
-
-    toolJsonGroup.insert("groupItems", toolJsonItems);
-    jsonGroups.append(toolJsonGroup);
-
-    //Edit
-    QJsonObject editorJsonGroup;
-    editorJsonGroup.insert("groupName", tr("Edit"));
-    QJsonArray editorJsonItems;
-    for (const QString &shortcutname : Editnames) {
-
-        auto it = shortcutmap.find(shortcutname);
-        if (it != shortcutmap.end())
-            strvalue = *it;
-        else {
-            continue;
-        }
-        QJsonObject jsonItem;
-        jsonItem.insert("name", shortcutname);
-        jsonItem.insert("value", strvalue);
-        editorJsonItems.append(jsonItem);
-    }
-
-    editorJsonGroup.insert("groupItems", editorJsonItems);
-    jsonGroups.append(editorJsonGroup);
-
 
     shortcutObj.insert("shortcut", jsonGroups);
 
@@ -175,81 +87,61 @@ void ShortCutShow::show()
 
 void ShortCutShow::initDJVU()
 {
-    windowKeymaps.clear();
-    shortcutnames.clear();
-    Settingsnames.clear();
-    Filesnames.clear();
-    Displaynames.clear();
-    Toolsnames.clear();
-    Editnames.clear();
-
-    windowKeymaps << Dr::key_esc  << Dr::key_f1 << Dr::key_pgUp << Dr::key_pgDown << Dr::key_ctrl_o
-                  << Dr::key_alt_harger << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s << Dr::key_ctrl_p
-                  << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2 << Dr::key_ctrl_3
-                  << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2 << Dr::key_ctrl_d
-                  << Dr::key_delete << Dr::key_alt_z << Dr::key_f5 << Dr::key_f11 << Dr::key_ctrl_c
-                  << Dr::key_ctrl_x << Dr::key_ctrl_v << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
-
-    shortcutnames << tr("Exit") << tr("Help") << tr("Page up") << tr("Page down") << tr("Open")
-                  << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as") << tr("Print")
-                  << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width")
-                  << tr("Rotate left") << tr("Rotate right") << tr("Select text") << tr("Hand tool") << tr("Add bookmark")
-                  << tr("Delete") << tr("Magnifier") << tr("Slide show") << tr("Fullscreen") << tr("Copy")
-                  << tr("Cut") << tr("Paste") << tr("Undo") << tr("Select all") << tr("Display shortcuts");
-
-    Settingsnames << tr("Help") << tr("Display shortcuts");
-    Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames  << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                  << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
-    Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-                  << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen") ;
-    Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
-
-    int index = 0;
-
-    foreach (QString strname, shortcutnames) {
-        shortcutmap.insert(strname, windowKeymaps.at(index));
-        index++;
-    }
+    initPDF();
+    //remove Dr::key_ctrl_f
+    m_shortcutMap[ShortCutType::Tools].removeKey(Dr::key_ctrl_f);
 }
 
 void ShortCutShow::initPDF()
 {
-    windowKeymaps.clear();
-    shortcutnames.clear();
-    Settingsnames.clear();
-    Filesnames.clear();
-    Displaynames.clear();
-    Toolsnames.clear();
-    Editnames.clear();
+    m_shortcutMap = {
+        //Settings
+        {ShortCutType::Settings, {
+             {Dr::key_f1              , tr("Help")               },
+             {Dr::key_ctrl_shift_slash, tr("Display shortcuts")  }}},
 
-    windowKeymaps << Dr::key_esc  << Dr::key_f1 << Dr::key_ctrl_f << Dr::key_pgUp << Dr::key_pgDown
-                  << Dr::key_ctrl_o << Dr::key_alt_harger << Dr::key_ctrl_smaller << Dr::key_ctrl_wheel << Dr::key_ctrl_shift_s
-                  << Dr::key_ctrl_p << Dr::key_ctrl_s << Dr::key_ctrl_m << Dr::key_ctrl_1 << Dr::key_ctrl_2
-                  << Dr::key_ctrl_3 << Dr::key_ctrl_r << Dr::key_ctrl_shift_r << Dr::key_alt_1 << Dr::key_alt_2
-                  << Dr::key_ctrl_d << Dr::key_alt_a << Dr::key_alt_h << Dr::key_delete << Dr::key_alt_z
-                  << Dr::key_f5 << Dr::key_f11 << Dr::key_ctrl_c << Dr::key_ctrl_x << Dr::key_ctrl_v
-                  << Dr::key_ctrl_z << Dr::key_ctrl_a << "Ctrl+Shift+?";
+        //File
+        {ShortCutType::File, {
+             {Dr::key_ctrl_o          , tr("Open")               },
+             {Dr::key_ctrl_shift_s    , tr("Save as")            },
+             {Dr::key_ctrl_p          , tr("Print")              },
+             {Dr::key_ctrl_s          , tr("Save")               }}},
 
-    shortcutnames << tr("Exit") << tr("Help") << tr("Search") << tr("Page up") << tr("Page down")
-                  << tr("Open") << tr("Zoom in") << tr("Zoom out") << tr("Zoom in/Zoom out") << tr("Save as")
-                  << tr("Print") << tr("Save") << tr("Thumbnails") << tr("1:1 size") << tr("Fit height")
-                  << tr("Fit width") << tr("Rotate left") << tr("Rotate right") << tr("Select text") << tr("Hand tool")
-                  << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete") << tr("Magnifier")
-                  << tr("Slide show") << tr("Fullscreen") << tr("Copy") << tr("Cut") << tr("Paste")
-                  << tr("Undo") << tr("Select all") << tr("Display shortcuts");
+        //Display
+        {ShortCutType::Display, {
+             {Dr::key_ctrl_m          , tr("Thumbnails")         },
+             {Dr::key_ctrl_1          , tr("1:1 size")           },
+             {Dr::key_ctrl_2          , tr("Fit height")         },
+             {Dr::key_ctrl_3          , tr("Fit width")          },
+             {Dr::key_ctrl_r          , tr("Rotate left")        },
+             {Dr::key_ctrl_shift_r    , tr("Rotate right")       },
+             {Dr::key_alt_harger      , tr("Zoom in")            },
+             {Dr::key_ctrl_smaller    , tr("Zoom out")           },
+             {Dr::key_pgUp            , tr("Page up")            },
+             {Dr::key_pgDown          , tr("Page down")          },
+             {Dr::key_ctrl_home       , tr("It is the first page") },
+             {Dr::key_ctrl_end        , tr("It is the last page")  },
+             {Dr::key_esc             , tr("Exit")               }}},
 
-    Settingsnames << tr("Help") << tr("Display shortcuts");
-    Filesnames    << tr("Open") << tr("Save as") << tr("Print") << tr("Save");
-    Displaynames  << tr("Thumbnails") << tr("1:1 size") << tr("Fit height") << tr("Fit width") << tr("Rotate left") << tr("Rotate right")
-                  << tr("Zoom in") << tr("Zoom out") << tr("Page up") << tr("Page down")  << tr("Exit") ;
-    Toolsnames    << tr("Select text") << tr("Hand tool") << tr("Add bookmark") << tr("Add annotation") << tr("Highlight") << tr("Delete")
-                  << tr("Magnifier") << tr("Search") << tr("Slide show") << tr("Fullscreen")  ;
-    Editnames     << tr("Copy") << tr("Cut") << tr("Paste") << tr("Delete") << tr("Save") << tr("Undo") << tr("Select all");
+        //Tools
+        {ShortCutType::Tools, {
+             {Dr::key_alt_1           , tr("Select text")        },
+             {Dr::key_alt_2           , tr("Hand tool")          },
+             {Dr::key_ctrl_d          , tr("Add bookmark")       },
+             {Dr::key_alt_a           , tr("Add annotation")     },
+             {Dr::key_alt_h           , tr("Highlight")          },
+             {Dr::key_alt_z           , tr("Magnifier")          },
+             {Dr::key_ctrl_f          , tr("Search")             },
+             {Dr::key_f5              , tr("Slide show")         },
+             {Dr::key_f11             , tr("Fullscreen")         }}},
 
-    int index = 0;
-    foreach (QString strname, shortcutnames) {
-        shortcutmap.insert(strname, windowKeymaps.at(index));
-        index++;
-    }
+        //Edit
+        {ShortCutType::Edit, {
+             {Dr::key_ctrl_c          , tr("Copy")               },
+             {Dr::key_ctrl_x          , tr("Cut")                },
+             {Dr::key_ctrl_v          , tr("Paste")              },
+             {Dr::key_delete          , tr("Delete")             },
+             {Dr::key_ctrl_z          , tr("Undo")               },
+             {Dr::key_ctrl_a          , tr("Select all")         }}},
+    };
 }
