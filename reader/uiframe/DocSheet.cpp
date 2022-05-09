@@ -34,7 +34,6 @@
 #include "MsgHeader.h"
 #include "EncryptionPage.h"
 #include "PDFModel.h"
-#include "DPrintPreviewDialog"
 #include "FileAttrWidget.h"
 #include "Application.h"
 #include "Utils.h"
@@ -43,6 +42,9 @@
 #include "PageSearchThread.h"
 #include "BrowserPage.h"
 #include "MainWindow.h"
+
+#include <DSpinner>
+#include <DPrintPreviewDialog>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -784,6 +786,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
+#if 0
     for (int index = fromIndex; index <= toIndex; index++) {
         if (index >= pagesCount)
             break;
@@ -813,6 +816,43 @@ void DocSheet::onPrintRequested(DPrinter *printer)
         if (index != toIndex)
             printer->newPage();
     }
+
+#else
+    //图片打印时，后台加载图片
+    QWidget *parentWidget = qApp->activeWindow();
+    Q_ASSERT(parentWidget);
+
+    parentWidget->setEnabled(false);
+    DSpinner pSpinner(parentWidget);
+    pSpinner.setFixedSize(QSize(80, 80));
+    pSpinner.raise();
+    pSpinner.move(parentWidget->rect().center() - pSpinner.rect().center());
+    pSpinner.start();
+
+    pSpinner.show();
+    for (int index = fromIndex; index <= toIndex; index++) {
+        if (index >= pagesCount)
+            break;
+
+        QImage imageX3;
+        QEventLoop loop;
+        QThread *thread = QThread::create([=, &imageX3]() {
+            imageX3 = getImage(index, pageRect.width() * 3, pageRect.height() * 3);
+        });
+        connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
+        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+        thread->start();
+        loop.exec(QEventLoop::ExcludeUserInputEvents);
+
+        painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
+        if (index != toIndex)
+            printer->newPage();
+    }
+
+    parentWidget->setEnabled(true);
+#endif
+
 }
 
 void DocSheet::openSlide()
@@ -1238,22 +1278,43 @@ void DocSheet::onPopPrintDialog()
     if (!this->opened())
         return;
 
-    DPrintPreviewDialog preview(this);
+    DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
+    preview->setAttribute(Qt::WA_DeleteOnClose);
 
-#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=10)))
-    preview.setAsynPreview(pageCount());
-    preview.setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::PDF == fileType() || Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
-        preview.setPrintFromPath(openedFilePath());
+#if (DTK_VERSION > DTK_VERSION_CHECK(5,4,10,0))
+    //文件打印
+    preview->setAsynPreview(pageCount());
+    preview->setDocName(QFileInfo(filePath()).fileName());
+    if (Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
+        preview->setPrintFromPath(openedFilePath());
     }
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested),
-            this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
-#else
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested),
-            this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
-#endif
 
-    preview.exec();
+    //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
+    if (Dr::PDF == fileType()) {
+        deepin_reader::Document *document = nullptr;
+        deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
+        document = DocumentFactory::getDocument(m_fileType,
+                                                m_filePath,
+                                                convertedFileDir(),
+                                                m_password, nullptr, error);
+
+        QString pdfPath = filePath();
+        qInfo()  << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
+        if(document->properties().value("Linearized").toBool()) {
+           pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
+           if (!m_renderer->saveAs(pdfPath)) {
+               qInfo() << "saveAs failed when print Linearized pdf";
+               return;
+           }
+        }
+        preview->setPrintFromPath(pdfPath);
+    }
+    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
+#else
+    //图片打印
+    connect(preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *>::of(&DocSheet::onPrintRequested));
+#endif
+    preview->open();
 }
 
 void DocSheet::onPopInfoDialog()
