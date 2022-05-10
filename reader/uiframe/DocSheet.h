@@ -862,6 +862,20 @@ private:
 
 public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址
+
+    /**
+     * @brief The LoadingWidget class 打印时的加载窗口
+     */
+    class LoadingWidget : public QWidget {
+    public:
+        explicit LoadingWidget(QWidget *parent);
+
+    protected:
+        void paintEvent(QPaintEvent */*event*/) override;
+
+    private:
+        QWidget *m_parentWidget = nullptr;
+    };
 };
 
 #endif // DocSheet_H

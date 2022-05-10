@@ -45,6 +45,7 @@
 
 #include <DSpinner>
 #include <DPrintPreviewDialog>
+#include <DWidgetUtil>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -58,6 +59,7 @@
 #include <QDebug>
 #include <QTemporaryDir>
 #include <QProcess>
+#include <QGraphicsDropShadowEffect>
 
 #include <signal.h>
 #include <sys/types.h>
@@ -823,13 +825,10 @@ void DocSheet::onPrintRequested(DPrinter *printer)
     Q_ASSERT(parentWidget);
 
     parentWidget->setEnabled(false);
-    DSpinner pSpinner(parentWidget);
-    pSpinner.setFixedSize(QSize(80, 80));
-    pSpinner.raise();
-    pSpinner.move(parentWidget->rect().center() - pSpinner.rect().center());
-    pSpinner.start();
+    LoadingWidget loading(parentWidget);
+    loading.show();
+    loading.raise();
 
-    pSpinner.show();
     for (int index = fromIndex; index <= toIndex; index++) {
         if (index >= pagesCount)
             break;
@@ -837,22 +836,22 @@ void DocSheet::onPrintRequested(DPrinter *printer)
         QImage imageX3;
         QEventLoop loop;
         QThread *thread = QThread::create([=, &imageX3]() {
-            imageX3 = getImage(index, pageRect.width() * 3, pageRect.height() * 3);
+            imageX3 = getImage(index, int(pageRect.width() * 3), int(pageRect.height() * 3));
         });
         connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
         connect(thread, &QThread::finished, thread, &QThread::deleteLater);
 
         thread->start();
-        loop.exec(QEventLoop::ExcludeUserInputEvents);
+
+        //ExcludeSocketNotifiers和setDisabled配合使用，实现功能：禁用【tab键和点击按钮】的后续响应
+        loop.exec(QEventLoop::ExcludeSocketNotifiers);
 
         painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
         if (index != toIndex)
             printer->newPage();
     }
-
     parentWidget->setEnabled(true);
 #endif
-
 }
 
 void DocSheet::openSlide()
@@ -1301,11 +1300,11 @@ void DocSheet::onPopPrintDialog()
         QString pdfPath = filePath();
         qInfo()  << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
         if(document->properties().value("Linearized").toBool()) {
-           pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
-           if (!m_renderer->saveAs(pdfPath)) {
-               qInfo() << "saveAs failed when print Linearized pdf";
-               return;
-           }
+            pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
+            if (!m_renderer->saveAs(pdfPath)) {
+                qInfo() << "saveAs failed when print Linearized pdf";
+                return;
+            }
         }
         preview->setPrintFromPath(pdfPath);
     }
@@ -1336,4 +1335,37 @@ void DocSheet::resetChildParent()
 
     m_browser->setParent(nullptr);
     m_browser->setParent(this);
+}
+
+DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_parentWidget(parent)
+{
+    setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
+
+    DSpinner *spinner = new DSpinner(this);
+    spinner->setFixedSize(32, 32);
+    moveToCenter(spinner);
+    spinner->start();
+}
+
+void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    //整体的背景
+    int type = DGuiApplicationHelper::instance()->themeType();
+    QColor tColor = type == 1 ? "#FFFFFF" : "#000000";
+    tColor.setAlphaF(0.3);
+    painter.fillRect(this->rect(), tColor);
+
+    //进度条的背景
+    QPainterPath path;
+    QRect shadowRect((this->width() - 80) / 2, (this->height() - 80) / 2, 80, 80);
+    path.addRoundedRect(shadowRect, 18, 18);
+    QColor bg = this->palette().color(QPalette::Active, QPalette::Button);
+    painter.setBrush(bg);
+    painter.setPen(QPen(QColor(0, 0, 0, int(255 * 0.05)), 1));
+    painter.drawPath(path);
 }
