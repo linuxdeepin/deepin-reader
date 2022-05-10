@@ -1281,7 +1281,7 @@ void DocSheet::onPopPrintDialog()
     DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
     preview->setAttribute(Qt::WA_DeleteOnClose);
 
-#if (DTK_VERSION > DTK_VERSION_CHECK(5,4,10,0))
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
     //文件打印
     preview->setAsynPreview(pageCount());
     preview->setDocName(QFileInfo(filePath()).fileName());

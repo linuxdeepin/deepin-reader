@@ -92,19 +92,6 @@ private:
      */
     QPixmap drawImage(const QPixmap &srcImage);
 
-    /**
-     * @brief jumpToFirstPage
-     * 跳转到第一页
-     */
-    void jumpToFirstPage();
-
-
-    /**
-     * @brief jumpToLastPage
-     * 跳转到最后一页
-     */
-    void jumpToLastPage();
-
 private slots:
     /**
      * @brief onParentDestroyed

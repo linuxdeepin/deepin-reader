@@ -119,8 +119,8 @@ void ShortCutShow::initPDF()
              {Dr::key_ctrl_smaller    , tr("Zoom out")           },
              {Dr::key_pgUp            , tr("Page up")            },
              {Dr::key_pgDown          , tr("Page down")          },
-             {Dr::key_ctrl_home       , tr("It is the first page") },
-             {Dr::key_ctrl_end        , tr("It is the last page")  },
+             {Dr::key_ctrl_home       , tr("Move to the beginning") },
+             {Dr::key_ctrl_end        , tr("Move to the end")  },
              {Dr::key_esc             , tr("Exit")               }}},
 
         //Tools
