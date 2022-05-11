@@ -69,6 +69,7 @@ DWIDGET_USE_NAMESPACE
 QReadWriteLock DocSheet::g_lock;
 QStringList DocSheet::g_uuidList;
 QList<DocSheet *> DocSheet::g_sheetList;
+QString DocSheet::g_lastOperationFile;
 DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
@@ -1204,7 +1205,13 @@ void DocSheet::setAlive(bool alive)
 
         g_lock.unlock();
 
-        Database::instance()->readOperation(this);
+        if(Database::instance()->readOperation(this)) {
+            qInfo() << "read from database config";
+        } else if(readLastFileOperation()) {
+            qInfo() << "read from last operation file config";
+        } else {
+            qInfo() << "read from default config";
+        }
 
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
 
@@ -1228,6 +1235,27 @@ void DocSheet::setAlive(bool alive)
 
         g_lock.unlock();
     }
+}
+
+bool DocSheet::readLastFileOperation()
+{
+    QString filePath = DocSheet::g_lastOperationFile;
+    if(filePath.isEmpty())
+        return false;
+
+    DocSheet *sheet = nullptr;
+    foreach (sheet, g_sheetList) {
+        if (sheet != this && sheet->filePath() == filePath) {
+            break;
+        }
+    }
+    if(!sheet) {
+        return false;
+    }
+
+    qInfo() << __LINE__ << "read config from last operation file: " << filePath;
+    m_operation = sheet->operationRef();
+    return true;
 }
 
 void DocSheet::showEncryPage()

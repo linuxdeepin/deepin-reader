@@ -132,6 +132,8 @@ public:
 
     static QList<DocSheet *> g_sheetList;
 
+    static QString g_lastOperationFile; //保存最后一次操作的文件
+
 public:
     /**
      * @brief 阻塞式打开文档
@@ -829,6 +831,11 @@ private:
      * @param alive
      */
     void setAlive(bool alive);
+
+    /**
+     * @brief readLastFileOperation 读取最后一次操作文件的配置
+     */
+    bool readLastFileOperation();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

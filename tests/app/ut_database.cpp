@@ -25,6 +25,7 @@
 #include "DocSheet.h"
 
 #include <QTest>
+#include <QSqlQuery>
 
 #include <gtest/gtest.h>
 
@@ -89,6 +90,15 @@ void TestDatabase::TearDown()
     delete m_tester;
 }
 
+static bool ut_sqlquery_next()
+{
+    return true;
+}
+
+static bool ut_sqlquery_exec()
+{
+    return true;
+}
 /*************测试用例****************/
 TEST_F(TestDatabase, UT_Database_prepareOperation_001)
 {
@@ -101,7 +111,10 @@ TEST_F(TestDatabase, UT_Database_readOperation_001)
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
 
+    Stub s;
+    s.set(ADDR(QSqlQuery, next), ut_sqlquery_next);
     EXPECT_TRUE(m_tester->readOperation(sheet));
+    EXPECT_TRUE(!m_tester->readOperation(nullptr));
 
     delete sheet;
 }
@@ -112,7 +125,10 @@ TEST_F(TestDatabase, UT_Database_saveOperation_001)
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
 
+    Stub s;
+    s.set((bool (QSqlQuery::*)())ADDR(QSqlQuery, exec), ut_sqlquery_exec);
     EXPECT_TRUE(m_tester->saveOperation(sheet));
+    EXPECT_TRUE(!m_tester->saveOperation(nullptr));
 
     delete sheet;
 }
