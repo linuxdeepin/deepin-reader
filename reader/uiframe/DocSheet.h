@@ -871,11 +871,22 @@ public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址
 
     /**
-     * @brief The LoadingWidget class 打印时的加载窗口
+     * @brief The LoadingWidget class 打印时的加载窗口和相关功能
+     * 父类parent不能为空，一般为qApp->activeWindow()
+     * 函数getImage会在子线程内获取对应的图片，被loop阻塞
+     * 通过下面方法 停止parent【tab键和点击按钮】的后续响应
+     * 1.阻塞方式ExcludeSocketNotifiers
+     * 2.parent->setEnabled(false)
      */
     class LoadingWidget : public QWidget {
     public:
         explicit LoadingWidget(QWidget *parent);
+        ~LoadingWidget() override;
+
+        /**
+         * @brief getImage 子线程获取image
+         */
+        QImage getImage(DocSheet *doc, int index, int width, int height);
 
     protected:
         void paintEvent(QPaintEvent */*event*/) override;

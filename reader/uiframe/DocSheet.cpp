@@ -743,6 +743,10 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
     if (pageRange.isEmpty())
         return;
 
+    //后台加载动画
+    LoadingWidget loading(qApp->activeWindow());
+    loading.show();
+
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
@@ -763,7 +767,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
             printWidth = printHeight * boundingrect.width() / boundingrect.height();
         }
 
-        QImage image = getImage(pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
+        QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
         painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
                                 (static_cast<int>(pageRect.height()) - image.height()) / 2,
                                 image.width(), image.height()), image);
@@ -821,37 +825,20 @@ void DocSheet::onPrintRequested(DPrinter *printer)
     }
 
 #else
-    //图片打印时，后台加载图片
-    QWidget *parentWidget = qApp->activeWindow();
-    Q_ASSERT(parentWidget);
-
-    parentWidget->setEnabled(false);
-    LoadingWidget loading(parentWidget);
+    //后台加载动画
+    LoadingWidget loading(qApp->activeWindow());
     loading.show();
-    loading.raise();
 
     for (int index = fromIndex; index <= toIndex; index++) {
         if (index >= pagesCount)
             break;
 
-        QImage imageX3;
-        QEventLoop loop;
-        QThread *thread = QThread::create([=, &imageX3]() {
-            imageX3 = getImage(index, int(pageRect.width() * 3), int(pageRect.height() * 3));
-        });
-        connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
-        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-
-        thread->start();
-
-        //ExcludeSocketNotifiers和setDisabled配合使用，实现功能：禁用【tab键和点击按钮】的后续响应
-        loop.exec(QEventLoop::ExcludeSocketNotifiers);
+        QImage imageX3 = loading.getImage(this, index, int(pageRect.width() * 3), int(pageRect.height() * 3));
 
         painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
         if (index != toIndex)
             printer->newPage();
     }
-    parentWidget->setEnabled(true);
 #endif
 }
 
@@ -1369,12 +1356,39 @@ DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
     : QWidget(parent)
     , m_parentWidget(parent)
 {
+    Q_ASSERT(m_parentWidget);
     setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
 
     DSpinner *spinner = new DSpinner(this);
     spinner->setFixedSize(32, 32);
     moveToCenter(spinner);
     spinner->start();
+
+    m_parentWidget->setEnabled(false);
+
+    raise();
+}
+
+DocSheet::LoadingWidget::~LoadingWidget()
+{
+    m_parentWidget->setEnabled(true);
+}
+
+QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, int height)
+{
+    QImage image;
+    QEventLoop loop;
+    QThread *thread = QThread::create([=, &image]() {
+        image = doc->getImage(index, width, height);
+    });
+    QObject::connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+
+    loop.exec(QEventLoop::ExcludeSocketNotifiers);
+
+    return image;
 }
 
 void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
