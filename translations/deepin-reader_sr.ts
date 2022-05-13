@@ -241,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="145"/>
+        <location filename="../reader/uiframe/Central.cpp" line="147"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
@@ -318,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="327"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="355"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="360"/>
         <source>The bookmark has been removed</source>
         <translation>Забелешка је уклоњена</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="528"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="543"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
         <translation>Молимо изаберите текст</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="593"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="602"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="607"/>
         <source>The annotation has been removed</source>
         <translation>Напомена је уклоњена</translation>
     </message>
@@ -363,12 +363,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
         <source>Previous</source>
         <translation>Претходно</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
         <translation>Следеће</translation>
     </message>
@@ -495,7 +495,7 @@
         <translation>Нема резултата претраге</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SearchResWidget.cpp" line="109"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
         <translation>Ставки пронађено %1</translation>
     </message>
@@ -551,290 +551,177 @@
 <context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="58"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="60"/>
         <source>Settings</source>
         <translation>Подешавања</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
-        <source>Files</source>
-        <translation>Датотеке</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
-        <source>Display</source>
-        <translation>Приказ</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
-        <source>Tools</source>
-        <translation>Алати</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
-        <source>Edit</source>
-        <translation>Уреди</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Exit</source>
         <translation>Изађи</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Page up</source>
         <translation>Страница нагоре</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Page down</source>
         <translation>Страница надоле</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
         <source>Open</source>
         <translation>Отвори</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Zoom in</source>
         <translation>Увећај</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>Zoom out</source>
         <translation>Умањи</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <source>Zoom in/Zoom out</source>
-        <translation>Увећај/Умањи</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Save as</source>
         <translation>Сачувај као</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
         <source>Print</source>
         <translation>Штампај</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
         <source>Save</source>
         <translation>Сачувај</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
         <source>Thumbnails</source>
         <translation>Умањени прикази</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
         <source>1:1 size</source>
         <translation>1:1 размера</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
         <source>Fit height</source>
         <translation>Уклопи по висини</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
         <source>Fit width</source>
         <translation>Уклопи по ширини</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
         <translation>Ротирај улево</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Rotate right</source>
         <translation>Ротирај удесно</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
+        <source>Move to the beginning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
+        <source>Move to the end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
         <translation>Изабери текст</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Hand tool</source>
         <translation>Ручни алат</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
         <translation>Додај забелешку</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Delete</source>
         <translation>Обриши</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
         <source>Magnifier</source>
         <translation>Лупа</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
         <translation>Покретни приказ</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Fullscreen</source>
         <translation>Цео екран</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Copy</source>
         <translation>Копирај</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Cut</source>
         <translation>Исеци</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Paste</source>
         <translation>Убаци</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Undo</source>
         <translation>Опозови</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Select all</source>
         <translation>Изабери све</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
         <source>Display shortcuts</source>
         <translation>Прикажи пречице</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
         <translation>Додај напомену</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Highlight</source>
         <translation>Истакни</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Search</source>
         <translation>Претражи</translation>
     </message>
