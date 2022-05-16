@@ -198,5 +198,5 @@ bool FindWidget::eventFilter(QObject *watched, QEvent *event)
     if(watched == m_parentWidget && event->type() == QEvent::Resize) {
         updatePosition();
     }
-    DFloatingWidget::eventFilter(watched, event);
+    return DFloatingWidget::eventFilter(watched, event);
 }
