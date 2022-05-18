@@ -77,29 +77,30 @@ private:
     /**
      * @brief The KeyDataList class 快捷键的数据结构，list<pair<快捷键、描述>>
      */
-    class KeyDataList : public QList<std::pair<QString,QString>>
+    template<class T>
+    class KeyDataList : public QList<std::pair<T,QString>>
     {
     public:
         KeyDataList(){}
-        KeyDataList(std::initializer_list<std::pair<QString,QString> > list) {
+        KeyDataList(std::initializer_list<std::pair<T,QString> > list) {
             for(auto p : list) {
-                append(p);
+                this->append(p);
             }
         }
         /**
          * @brief removeKey 移除快捷键
          */
-        void removeKey(const QString &key){
-            for(int k = 0; k < count(); k ++) {
-                if(at(k).first == key) {
-                    removeAt(k);
+        void removeKey(const T &key){
+            for(int k = 0; k < this->count(); k ++) {
+                if(this->at(k).first == key) {
+                    this->removeAt(k);
                     break;
                 }
             }
         }
 
     };
-    QMap<ShortCutType, KeyDataList> m_shortcutMap;
+    QMap<ShortCutType, KeyDataList<QString> > m_shortcutMap;
 };
 
 #endif // SHORTCUTSHOW_H

@@ -53,11 +53,21 @@ void ShortCutShow::show()
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
     QString strvalue;
-    QList<ShortCutType> listType{ShortCutType::Settings, ShortCutType::File, ShortCutType::Display, ShortCutType::Tools, ShortCutType::Edit};
-    for(ShortCutType type : listType)
+
+    KeyDataList<ShortCutType> listType {
+        {ShortCutType::Settings, tr("Settings")},
+        {ShortCutType::File, tr("Files")},
+        {ShortCutType::Display, tr("Display")},
+        {ShortCutType::Tools, tr("Tools")},
+        {ShortCutType::Edit, tr("Edit")},
+    };
+    for(auto pair : listType)
     {
+        ShortCutType type = pair.first;
+        QString groupName = pair.second;
+
         QJsonObject group;
-        group.insert("groupName", tr("Settings"));
+        group.insert("groupName", groupName);
         QJsonArray items;
 
         for (const auto &d : m_shortcutMap[type]) {
