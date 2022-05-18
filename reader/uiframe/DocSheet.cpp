@@ -60,6 +60,7 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QGraphicsDropShadowEffect>
+#include <QThread>
 
 #include <signal.h>
 #include <sys/types.h>
@@ -740,8 +741,16 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
 
 void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
 {
+    PreviewDialog *preview = dynamic_cast<PreviewDialog *>(sender());
+    if(!preview)
+        return;
+
     if (pageRange.isEmpty())
         return;
+
+    //前页更新时，同步加载图片
+    bool isSync = preview->m_prePageRange == pageRange;
+    preview->m_prePageRange = pageRange;
 
     //后台加载动画
     LoadingWidget loading(qApp->activeWindow());
@@ -767,7 +776,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
             printWidth = printHeight * boundingrect.width() / boundingrect.height();
         }
 
-        QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
+        QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight), isSync);
         painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
                                 (static_cast<int>(pageRect.height()) - image.height()) / 2,
                                 image.width(), image.height()), image);
@@ -779,6 +788,10 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
+    PreviewDialog *preview = dynamic_cast<PreviewDialog *>(sender());
+    if(!preview)
+        return;
+
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
@@ -833,7 +846,9 @@ void DocSheet::onPrintRequested(DPrinter *printer)
         if (index >= pagesCount)
             break;
 
-        QImage imageX3 = loading.getImage(this, index, int(pageRect.width() * 3), int(pageRect.height() * 3));
+        if(!preview->m_images.contains(index))
+            preview->m_images.insert(index, loading.getImage(this, index, int(pageRect.width() * 3), int(pageRect.height() * 3)));
+        QImage imageX3 = preview->m_images[index];
 
         painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
         if (index != toIndex)
@@ -1292,7 +1307,7 @@ void DocSheet::onPopPrintDialog()
     if (!this->opened())
         return;
 
-    DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
+    PreviewDialog *preview = new PreviewDialog(this);
     preview->setAttribute(Qt::WA_DeleteOnClose);
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
@@ -1374,8 +1389,12 @@ DocSheet::LoadingWidget::~LoadingWidget()
     m_parentWidget->setEnabled(true);
 }
 
-QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, int height)
+QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, int height, bool isSync)
 {
+    if(isSync) {
+        //同步生成图片
+        return doc->getImage(index, width, height);
+    }
     QImage image;
     QEventLoop loop;
     QThread *thread = QThread::create([=, &image]() {
@@ -1410,4 +1429,9 @@ void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
     painter.setBrush(bg);
     painter.setPen(QPen(QColor(0, 0, 0, int(255 * 0.05)), 1));
     painter.drawPath(path);
+}
+
+DocSheet::PreviewDialog::PreviewDialog(QWidget *parent) : DPrintPreviewDialog(parent)
+{
+
 }

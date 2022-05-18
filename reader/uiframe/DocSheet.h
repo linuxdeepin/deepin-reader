@@ -24,9 +24,10 @@
 #include "Model.h"
 
 #include <DSplitter>
+#include <DPrintPreviewDialog>
+
 #include <QSet>
 #include <QReadWriteLock>
-#include <QThread>
 
 class SheetSidebar;
 class SlideWidget;
@@ -884,15 +885,28 @@ public:
         ~LoadingWidget() override;
 
         /**
-         * @brief getImage 子线程获取image
+         * @brief getImage 获取image
+         * 和DPrintPreviewDialog::paintRequested信号关联的槽函数，异步加载图片会大概率崩溃：见bug#131803
+         * 这里调整相关逻辑
          */
-        QImage getImage(DocSheet *doc, int index, int width, int height);
+        QImage getImage(DocSheet *doc, int index, int width, int height, bool isSync = false);
 
     protected:
         void paintEvent(QPaintEvent */*event*/) override;
 
     private:
         QWidget *m_parentWidget = nullptr;
+    };
+
+    /**
+     * @brief The PreviewDialog class 打印预览
+     */
+    class PreviewDialog : public Dtk::Widget::DPrintPreviewDialog
+    {
+    public:
+        explicit PreviewDialog(QWidget *parent = nullptr);
+        QMap<int, QImage>   m_images;           //图片打印时，保存已产生的大图
+        QVector<int>        m_prePageRange;     //文件打印时，记录上次的打印范围
     };
 };
 
