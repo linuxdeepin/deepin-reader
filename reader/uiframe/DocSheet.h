@@ -66,6 +66,13 @@ class DocSheet : public Dtk::Widget::DSplitter
     friend class SheetBrowser;
     friend class Database;
 public:
+    static const int WindowMinWidth;    //主界面最小宽度
+    static const int WindowMinHeight;   //主界面最小高度
+    static const int SidebarMinWidth;   //左边缩略图、标签页等的最小宽度
+    static const int SidebarMaxWidth;   //左边缩略图、标签页等的最大宽度
+    static const int BrowserMinWidth;   //pdf浏览界面最小宽度
+    static const int SplitterWidth;     //splitter的宽度
+public:
     explicit DocSheet(const Dr::FileType &fileType, const QString &filePath, QWidget *parent = nullptr);
 
     ~DocSheet() override;
