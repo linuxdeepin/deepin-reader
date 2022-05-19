@@ -104,6 +104,11 @@ void SideBarImageListView::handleOpenSuccess()
         for (int pageIndex : pageList)
             pageSrclst << ImagePageInfo_t(pageIndex);
         m_imageModel->initModelLst(pageSrclst, true);
+        //书签页若没有选中行 且 当前sheet页有书签，则书签页更新选中状态
+        if(this->currentIndex().row() < 0
+                && ImagePageInfo_t::contains(pageSrclst, m_docSheet->currentIndex())) {
+            this->scrollToIndex(m_docSheet->currentIndex());
+        }
     } else if (m_listType == E_SideBar::SIDE_NOTE) {
         const QList< deepin_reader::Annotation * > &annotationlst = m_docSheet->annotations();
         QList<ImagePageInfo_t> pageSrclst;

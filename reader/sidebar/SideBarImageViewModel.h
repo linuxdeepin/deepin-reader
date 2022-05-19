@@ -59,6 +59,9 @@ typedef struct ImagePageInfo_t {
     bool operator < (const ImagePageInfo_t &other) const;
 
     bool operator > (const ImagePageInfo_t &other) const;
+
+    static bool contains(const QList<ImagePageInfo_t> &list, int index);
+
 } ImagePageInfo_t;
 Q_DECLARE_METATYPE(ImagePageInfo_t);
 

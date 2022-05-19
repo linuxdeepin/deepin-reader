@@ -45,6 +45,15 @@ bool ImagePageInfo_t::operator > (const ImagePageInfo_t &other) const
     return (this->pageIndex > other.pageIndex);
 }
 
+bool ImagePageInfo_t::contains(const QList<ImagePageInfo_t> &list, int index)
+{
+    for(const auto &d : list) {
+        if(d.pageIndex == index)
+            return true;
+    }
+    return false;
+}
+
 SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent), m_sheet(sheet)
