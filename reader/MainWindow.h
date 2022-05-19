@@ -161,12 +161,6 @@ private slots:
     void onDelayInit();
 
     /**
-     * @brief onUpdateTitleLabelRect
-     * 更新提示标签大小
-     */
-    void onUpdateTitleLabelRect();
-
-    /**
      * @brief 标题悬浮动画结束
      */
     void onTitleAniFinished();

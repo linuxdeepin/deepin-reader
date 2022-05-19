@@ -223,11 +223,6 @@ TEST_F(TestMainWindow, testonDelayInit)
     m_tester->onDelayInit();
 }
 
-TEST_F(TestMainWindow, testonUpdateTitleLabelRect)
-{
-    m_tester->onUpdateTitleLabelRect();
-}
-
 TEST_F(TestMainWindow, testupdateOrderWidgets)
 {
     m_tester->updateOrderWidgets(QList<QWidget *>());

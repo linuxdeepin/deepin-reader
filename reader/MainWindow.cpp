@@ -197,10 +197,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             }
         }
     }
-
-    if (event->type() == QEvent::Resize) {
-        onUpdateTitleLabelRect();
-    }
     return DMainWindow::eventFilter(obj, event);
 }
 
@@ -220,7 +216,7 @@ void MainWindow::initUI()
 
     titlebar()->addWidget(m_central->titleWidget(), Qt::AlignLeft);
 
-    titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignLeft);
+    titlebar()->addWidget(m_central->docPage()->getTitleLabel(), Qt::AlignCenter);
 
     titlebar()->setAutoHideOnFullscreen(false);
 
@@ -228,11 +224,7 @@ void MainWindow::initUI()
 
     setFocusPolicy(Qt::StrongFocus);
 
-    QTimer::singleShot(100, this, SLOT(onUpdateTitleLabelRect()));
-
     titlebar()->installEventFilter(this);
-
-    m_central->titleWidget()->installEventFilter(this);
 
     DIconButton *optBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
     if (optBtn && optBtn->parentWidget()) {
@@ -460,19 +452,6 @@ void MainWindow::initBase()
     titlebar()->setMenu(m_menu);
 
     setAttribute(Qt::WA_DeleteOnClose);
-}
-
-void MainWindow::onUpdateTitleLabelRect()
-{
-    if (nullptr == m_central)
-        return;
-
-    QWidget *titleLabel = m_central->docPage()->getTitleLabel();
-
-    int titleWidth = this->width() - m_central->titleWidget()->width() - titlebar()->buttonAreaWidth() - 60;
-
-    if (titleWidth > 0)
-        titleLabel->setFixedWidth(titleWidth);
 }
 
 void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
