@@ -248,6 +248,8 @@ void DocSheet::openFileAsync(const QString &password)
 
 void DocSheet::jumpToPage(int page)
 {
+    if(m_browser->currentPage() == page)
+        return;
     m_browser->setCurrentPage(page);
 }
 
@@ -258,7 +260,7 @@ void DocSheet::jumpToIndex(int index)
 
 void DocSheet::jumpToFirstPage()
 {
-    m_browser->setCurrentPage(1);
+    jumpToPage(1);
 }
 
 void DocSheet::jumpToLastPage()

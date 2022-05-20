@@ -204,6 +204,11 @@ void setText_stub(const QString &, QClipboard::Mode)
     g_funcName = __FUNCTION__;
 }
 
+int currentPage0_stub()
+{
+    return 0;
+}
+
 static DPdfTextAnnot *g_dAnnot;
 static Annotation *g_annot;
 Annotation *addHighLightAnnotation_stub(const QString, const QColor, QPoint &)
@@ -528,6 +533,7 @@ TEST_F(TestDocSheet, UT_DocSheet_jumpToPage_001)
 {
     Stub s;
     s.set(ADDR(SheetBrowser, setCurrentPage), setCurrentPage_stub);
+    s.set(ADDR(SheetBrowser, currentPage), currentPage0_stub);
     m_tester->jumpToPage(1);
     EXPECT_TRUE(g_funcName == "setCurrentPage_stub");
 }
@@ -544,6 +550,7 @@ TEST_F(TestDocSheet, UT_DocSheet_jumpToFirstPage_001)
 {
     Stub s;
     s.set(ADDR(SheetBrowser, setCurrentPage), setCurrentPage_stub);
+    s.set(ADDR(SheetBrowser, currentPage), currentPage0_stub);
     m_tester->jumpToFirstPage();
     EXPECT_TRUE(g_funcName == "setCurrentPage_stub");
 }
