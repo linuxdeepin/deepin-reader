@@ -859,9 +859,19 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
         if(!preview->m_images.contains(index))
             preview->m_images.insert(index, loading.getImage(this, index, int(pageRect.width() * 3), int(pageRect.height() * 3)));
-        QImage imageX3 = preview->m_images[index];
 
-        painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
+        //实际图片的size
+        QSizeF imageSize = pageSizeByIndex(index);
+        imageSize.scale(pageRect.size(), Qt::KeepAspectRatio);
+
+        //实际图片的rect，相对于打印页居中
+        QRectF imageRect(QPointF(0, 0), imageSize);
+        imageRect.translate(pageRect.center() - imageRect.center());
+
+        QImage imageX3 = preview->m_images[index];
+        QRectF imageX3Rect(0, 0, imageX3.width(), imageX3.height());
+        //打印
+        painter.drawImage(imageRect, imageX3, imageX3Rect);
         if (index != toIndex)
             printer->newPage();
     }
