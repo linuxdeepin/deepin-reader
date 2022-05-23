@@ -296,6 +296,7 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
             setIconAnnotSelect(false);
         });
     }
+    m_noteEditWidget->updateHeight();
 
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
