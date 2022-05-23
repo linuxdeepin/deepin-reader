@@ -46,11 +46,13 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    setMaximumSize(QSize(m_maxwidth, m_maxheight));
+    const int margin = 12;
+    setFixedWidth(254 + 2 * margin);
+    updateHeight();
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
 
-    pHLayoutContant->setMargin(12);
+    pHLayoutContant->setMargin(margin);
 
     this->setLayout(pHLayoutContant);
 
@@ -75,12 +77,12 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     QPoint pos = mapToParent(mapFromGlobal(point)); //先转换为相对于父对象的坐标
 
     //如果下边超出程序则向上移动
-    if (pos.y() + m_maxheight > m_TextEditWidget->m_brower->height()) {
-        pos.setY(pos.y() - (pos.y() + m_maxheight - m_TextEditWidget->m_brower->height()));
+    if (pos.y() + this->height() > m_TextEditWidget->m_brower->height()) {
+        pos.setY(pos.y() - (pos.y() + this->height() - m_TextEditWidget->m_brower->height()));
     }
     //如果右边超出程序则向左移动
-    if (pos.x() + m_maxwidth > m_TextEditWidget->m_brower->width()) {
-        pos.setX(pos.x() - (pos.x() + m_maxwidth - m_TextEditWidget->m_brower->width()));
+    if (pos.x() + this->width() > m_TextEditWidget->m_brower->width()) {
+        pos.setX(pos.x() - (pos.x() + this->width() - m_TextEditWidget->m_brower->width()));
     }
 
     move(pos);
@@ -92,6 +94,12 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     m_TextEditWidget->setEditFocus();
 }
 
+void TextEditShadowWidget::updateHeight()
+{
+    int h = qMin(320, this->window()->height() - 40);
+    if(this->height() != h)
+        setFixedHeight(h);
+}
 
 void TextEditShadowWidget::slotCloseNoteWidget(bool isEsc)
 {
@@ -188,10 +196,6 @@ void TextEditWidget::hideEvent(QHideEvent *event)
 
 void TextEditWidget::initWidget()
 {
-    setFixedSize(QSize(254, 320));
-    setMinimumHeight(310);
-    setMaximumHeight(320);
-
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
     pHLayoutContant->setContentsMargins(20, 20, 6, 20);
 
