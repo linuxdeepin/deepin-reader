@@ -814,44 +814,41 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     int page = operation.currentPage;
+    /*
+     * 双页显示通用场景如下：
+     * --|-
+     *  -|--
+     *  -|--
+     * --|--
+     * maxWidthR 右边最大宽度
+     * maxWidthL 右边最大宽度
+     * maxWidth  页面最大宽度
+     * maxWidth = maxWidthR + maxWidthL
+     */
     //进行render 并算出最宽的一行
-    double maxWidth = 0;        //最宽的一行
+    double maxWidth  = 0;
+    double maxwidthR = 0;
+    double maxwidthL = 0;
     double maxHeight = 0;       //总高度
-    int space = 5;              //页之间间隙
-
-    for (int i = 0; i < m_items.count(); ++i) {
-        //m_items[i]->clearWords();     //忘记为什么要删除，暂时注释
-
-        if (i % 2 == 1)
-            continue;
-
-        int j = i + 1;
-
-        m_items.at(i)->render(operation.scaleFactor, operation.rotation, true);
-
-        if (j < m_items.count())
-            m_items.at(j)->render(operation.scaleFactor, operation.rotation, true);
-
+    int space        = 5;       //页之间间隙
+    QList<double> itemWidthList;
+    for(int k = 0; k < m_items.count(); ++k) {
+        m_items.at(k)->render(operation.scaleFactor, operation.rotation, true);
+        itemWidthList << m_items.at(k)->rect().width();
+    }
+    if(itemWidthList.count() % 2 != 0)
+        itemWidthList << 0;
+    for(int k = 0, count = itemWidthList.count() / 2; k < count; k ++) {
         if (Dr::SinglePageMode == operation.layoutMode) {
-            if (m_items.at(i)->rect().width() > maxWidth)
-                maxWidth = static_cast<int>(m_items.at(i)->rect().width());
-
-            if (j < m_items.count()) {
-                if (m_items.at(j)->rect().width() > maxWidth)
-                    maxWidth = static_cast<int>(m_items.at(j)->rect().width());
-            }
-
-        } else if (Dr::TwoPagesMode == operation.layoutMode) {
-            if (j < m_items.count()) {
-                if (static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width()) > maxWidth)
-                    maxWidth = static_cast<int>(m_items.at(i)->rect().width() + m_items.at(i + 1)->rect().width());
-            } else {
-                if (static_cast<int>(m_items.at(i)->rect().width()) * 2 > maxWidth) {
-                    maxWidth = static_cast<int>(m_items.at(i)->rect().width()) * 2;
-                }
-            }
+            maxwidthR = qMax(maxwidthR, itemWidthList[2 * k]);
+            maxwidthR = qMax(maxwidthR, itemWidthList[2 * k + 1]);
+        }
+        if (Dr::TwoPagesMode == operation.layoutMode) {
+            maxwidthR = qMax(maxwidthR, itemWidthList[2 * k]);
+            maxwidthL = qMax(maxwidthL, itemWidthList[2 * k + 1]);
         }
     }
+    maxWidth = maxwidthR + maxwidthL;
 
     if (Dr::SinglePageMode == operation.layoutMode) {
         for (int i = 0; i < m_items.count(); ++i) {
