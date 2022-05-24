@@ -55,11 +55,11 @@ void ShortCutShow::show()
     QString strvalue;
 
     KeyDataList<ShortCutType> listType {
-        {ShortCutType::Settings, tr("Settings")},
-        {ShortCutType::File, tr("Files")},
-        {ShortCutType::Display, tr("Display")},
-        {ShortCutType::Tools, tr("Tools")},
-        {ShortCutType::Edit, tr("Edit")},
+        {ShortCutType::Settings,    tr("Settings")},
+        {ShortCutType::File,        tr("Files")},
+        {ShortCutType::Display,     tr("Display")},
+        {ShortCutType::Tools,       tr("Tools")},
+        {ShortCutType::Edit,        tr("Edit")},
     };
     for(auto pair : listType)
     {
