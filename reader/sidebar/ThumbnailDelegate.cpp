@@ -69,7 +69,8 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             QPainterPath clipPath;
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
-            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
+            //加SmoothTransformation是为了更好的显示表格，见：bug#132405
+            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap.scaled(rect.width(), rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             painter->restore();
         }
 
