@@ -1392,7 +1392,9 @@ DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
     : QWidget(parent)
     , m_parentWidget(parent)
 {
-    Q_ASSERT(m_parentWidget);
+    if(!m_parentWidget) 
+        return;
+
     setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
 
     DSpinner *spinner = new DSpinner(this);
@@ -1407,12 +1409,15 @@ DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
 
 DocSheet::LoadingWidget::~LoadingWidget()
 {
+    if(!m_parentWidget)
+        return;
+
     m_parentWidget->setEnabled(true);
 }
 
 QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, int height, bool isSync)
 {
-    if(isSync) {
+    if(isSync || !m_parentWidget) {
         //同步生成图片
         return doc->getImage(index, width, height);
     }
@@ -1429,6 +1434,13 @@ QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, in
     loop.exec(QEventLoop::ExcludeSocketNotifiers);
 
     return image;
+}
+
+void DocSheet::LoadingWidget::show()
+{
+    if(!m_parentWidget)
+        return;
+    QWidget::show();
 }
 
 void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)

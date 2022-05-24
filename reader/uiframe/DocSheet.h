@@ -898,6 +898,10 @@ public:
          */
         QImage getImage(DocSheet *doc, int index, int width, int height, bool isSync = false);
 
+        /**
+         * @brief show 显示界面，若parent为空则不显示
+         */
+        void show();
     protected:
         void paintEvent(QPaintEvent */*event*/) override;
 
