@@ -578,7 +578,7 @@ void CentralDocPage::handleShortcut(const QString &s)
                 sheet->rotateLeft();
             } else if (s == Dr::key_ctrl_shift_r) {
                 sheet->rotateRight();
-            } else if (s == Dr::key_alt_harger || s == Dr::key_ctrl_equal) {
+            } else if (s == Dr::key_ctrl_equal) {
                 sheet->zoomin();
             } else if (s == Dr::key_ctrl_smaller) {
                 sheet->zoomout();

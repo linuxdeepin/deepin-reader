@@ -144,17 +144,19 @@ const QString key_ctrl_v           = "Ctrl+V";
 const QString key_ctrl_z           = "Ctrl+Z";
 const QString key_ctrl_a           = "Ctrl+A";
 const QString key_ctrl_equal       = "Ctrl+=";          // 放大
+const QString val_ctrl_equal       = "Ctrl+'+'";        // 放大
 const QString key_ctrl_smaller     = "Ctrl+-";          // 缩小
+const QString val_ctrl_smaller     = "Ctrl+'-'";        // 缩小
 const QString key_alt_1            = "Alt+1";           // 选择工具
 const QString key_alt_2            = "Alt+2";           // 手型工具
 const QString key_alt_a            = "Alt+A";           // 添加注释
 const QString key_alt_h            = "Alt+H";           // 添加高亮
 const QString key_alt_z            = "Alt+Z";           // 放大镜
 const QString key_alt_f4           = "Alt+F4";          // 退出应用程序
-const QString key_alt_harger       = "Ctrl++";          // 放大
 const QString key_ctrl_shift_r     = "Ctrl+Shift+R";    // 右旋转
 const QString key_ctrl_shift_s     = "Ctrl+Shift+S";    // 另存为
 const QString key_ctrl_shift_slash = "Ctrl+Shift+/";
+const QString val_ctrl_shift_slash = "Ctrl+Shift+?";
 const QString key_ctrl_home        = "Ctrl+Home";       //第一页
 const QString key_ctrl_end         = "Ctrl+End";        //最后一页
 }

@@ -108,7 +108,7 @@ void ShortCutShow::initPDF()
         //Settings
         {ShortCutType::Settings, {
              {Dr::key_f1              , tr("Help")               },
-             {Dr::key_ctrl_shift_slash, tr("Display shortcuts")  }}},
+             {Dr::val_ctrl_shift_slash, tr("Display shortcuts")  }}},
 
         //File
         {ShortCutType::File, {
@@ -125,8 +125,8 @@ void ShortCutShow::initPDF()
              {Dr::key_ctrl_3          , tr("Fit width")          },
              {Dr::key_ctrl_r          , tr("Rotate left")        },
              {Dr::key_ctrl_shift_r    , tr("Rotate right")       },
-             {Dr::key_alt_harger      , tr("Zoom in")            },
-             {Dr::key_ctrl_smaller    , tr("Zoom out")           },
+             {Dr::val_ctrl_equal      , tr("Zoom in")            },
+             {Dr::val_ctrl_smaller    , tr("Zoom out")           },
              {Dr::key_pgUp            , tr("Page up")            },
              {Dr::key_pgDown          , tr("Page down")          },
              {Dr::key_ctrl_home       , tr("Move to the beginning") },
