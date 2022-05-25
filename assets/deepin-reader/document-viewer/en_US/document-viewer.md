@@ -137,7 +137,7 @@ On Document Viewer interface, open a file.
 
    > ![notes](../common/notes.svg)Notes: 
    > + You can move the note icon in the current page.
-   > + You can not add annotations to DJVU files.
+   > + You can not add annotations to DJVU files for now.
 
 ## Common operations
 
@@ -161,7 +161,7 @@ This function is only applicable for the current tab.
 
 7. Clear up words in the searching box to clear up all results. 
 
-> ![notes](../common/notes.svg)Notes: You can not search in DJVU files.
+> ![notes](../common/notes.svg)Notes: You can not search in DJVU files for now.
 
 
 

@@ -135,7 +135,7 @@
 
 > ![notes](../common/notes.svg)说明：
 > + 支持在当前页移动注释图标。
-> + DJVU格式的文件不支持添加注释。
+> + DJVU格式的文件暂不支持添加注释。
 
 ## 常用操作
 
@@ -155,7 +155,7 @@
    > ![attention](../common/attention.svg)注意：不可搜索文档中由文本转换成图片的内容。   
 7.  清除搜索框中的信息，即可清除搜索结果。   
    
-   > ![notes](../common/notes.svg)说明：DJVU格式的文件不支持搜索功能。
+   > ![notes](../common/notes.svg)说明：DJVU格式的文件暂不支持搜索功能。
 
 
 
