@@ -84,8 +84,9 @@ void PageSearchThread::run()
             searchres.sections.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
         }
 
+        //把搜索的范围中周边的文字取出用于左侧展示，会选择大于选区的文本作为显示
         std::function<QString(int, QRectF)> getText = std::bind(&SheetRenderer::getText, m_sheet->renderer(), std::placeholders::_1, std::placeholders::_2);
-        bool hasWord = searchres.setctionsFillText(getText);
+        bool hasWord = searchres.setctionsFillText(getText, -40, 0, 40, 0);
         //
         if (hasWord) {
             if (!isSearchResultNotEmpty) {

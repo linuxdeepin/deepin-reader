@@ -129,14 +129,14 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     return document;
 }
 
-bool SearchResult::setctionsFillText(std::function<QString (int, QRectF)> getText)
+bool SearchResult::setctionsFillText(std::function<QString (int, QRectF)> getText, qreal xp1, qreal yp1, qreal xp2, qreal yp2)
 {
     bool ret = false;
     for(auto &section : sections) {
         for(auto &line : section) {
             //这里的page比index大1
             int index = page - 1;
-            QString text = getText(index, line.rect);
+            QString text = getText(index, line.rect.adjusted(xp1, yp1, xp2, yp2));
             if(!text.isEmpty()) {
                 line.text = text;
                 ret = true;

@@ -112,7 +112,7 @@ struct SearchResult {
     /**
      * @brief setctionsFillText 使用getText，填充sections的text
      */
-    bool setctionsFillText(std::function<QString(int, QRectF)> getText);
+    bool setctionsFillText(std::function<QString(int, QRectF)> getText, qreal xp1, qreal yp1, qreal xp2, qreal yp2);
 
     /**
      * @brief sectionBoundingRect 返回section的boundingRect
