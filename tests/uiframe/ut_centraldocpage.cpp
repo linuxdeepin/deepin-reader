@@ -1103,26 +1103,26 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_003)
     delete sheet;
 }
 
-TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_004)
-{
-    Stub s;
-    s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
-    s.set(ADDR(SlideWidget, handleKeyPressEvent), handleKeyPressEvent_stub);
+//TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_004)
+//{
+//    Stub s;
+//    s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
+//    s.set(ADDR(SlideWidget, handleKeyPressEvent), handleKeyPressEvent_stub);
 
-    QString strPath = UTSOURCEDIR;
-    strPath += "/files/normal.pdf";
-    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, m_tester);
-    SlideWidget *slide = new SlideWidget(sheet);
-    m_tester->m_slideWidget = slide;
+//    QString strPath = UTSOURCEDIR;
+//    strPath += "/files/normal.pdf";
+//    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, m_tester);
+//    SlideWidget *slide = new SlideWidget(sheet);
+//    m_tester->m_slideWidget = slide;
 
-    g_funcName.clear();
-    m_tester->handleShortcut(Dr::key_f5);
+//    g_funcName.clear();
+//    m_tester->handleShortcut(Dr::key_f5);
 
-    EXPECT_TRUE(g_funcName == "handleKeyPressEvent_stub");
+//    EXPECT_TRUE(g_funcName == "handleKeyPressEvent_stub");
 
-    delete sheet;
-    delete slide;
-}
+//    delete sheet;
+//    delete slide;
+//}
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_005)
 {

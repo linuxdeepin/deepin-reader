@@ -233,6 +233,9 @@ void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 
 void SheetBrowser::beginViewportChange()
 {
+    //若水平、垂直滚动条值改变时，隐藏TipsWidget
+    hideSubTipsWidget();
+
     if (nullptr == m_viewportChangeTimer) {
         m_viewportChangeTimer = new QTimer(this);
         connect(m_viewportChangeTimer, &QTimer::timeout, this, &SheetBrowser::onViewportChanged);

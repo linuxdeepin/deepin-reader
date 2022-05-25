@@ -68,14 +68,15 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence::Print);
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
-    // 屏蔽右侧区域的切页快捷键，使用默认的滚动效果
-    // when using slide mode, left & right keys are needed. modify by lz,at 2022.4.18
-    keyList.append(QKeySequence(Qt::Key_Left));
-    keyList.append(QKeySequence(Qt::Key_Right));
 
-    keyList.append(QKeySequence(Qt::Key_Up));
-    keyList.append(QKeySequence(Qt::Key_Down));
-    keyList.append(QKeySequence(Qt::Key_Space));
+    //使用下面5个快捷键会屏蔽主界面对应的功能，故注释
+//    keyList.append(QKeySequence(Qt::Key_Left));
+//    keyList.append(QKeySequence(Qt::Key_Right));
+
+//    keyList.append(QKeySequence(Qt::Key_Up));
+//    keyList.append(QKeySequence(Qt::Key_Down));
+//    keyList.append(QKeySequence(Qt::Key_Space));
+
     keyList.append(QKeySequence(Qt::Key_Escape));
     keyList.append(QKeySequence(Qt::Key_F5));
     keyList.append(QKeySequence(Qt::Key_F11));
