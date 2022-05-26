@@ -65,6 +65,15 @@ DWIDGET_USE_NAMESPACE
 QReadWriteLock DocSheet::g_lock;
 QStringList DocSheet::g_uuidList;
 QList<DocSheet *> DocSheet::g_sheetList;
+
+
+const int DocSheet::WindowMinWidth    = 680;
+const int DocSheet::WindowMinHeight   = 300;
+const int DocSheet::SidebarMinWidth   = 266;
+const int DocSheet::SidebarMaxWidth   = 380;
+const int DocSheet::SplitterWidth     = 5;
+const int DocSheet::BrowserMinWidth   = DocSheet::WindowMinWidth - DocSheet::SidebarMinWidth - DocSheet::SplitterWidth;
+
 DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
@@ -82,7 +91,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
 
     m_browser = new SheetBrowser(this);
-    m_browser->setMinimumWidth(481);
+    m_browser->setMinimumWidth(DocSheet::BrowserMinWidth);
 
     if (Dr::PDF == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
@@ -93,7 +102,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     else
         m_sidebar = new SheetSidebar(this, nullptr);
 
-    m_sidebar->setMinimumWidth(266);
+    m_sidebar->setMinimumWidth(DocSheet::SidebarMinWidth);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));

@@ -35,8 +35,6 @@
 #include <QVBoxLayout>
 #include <QTimer>
 
-const int LEFTMINWIDTH = 266;
-const int LEFTMAXWIDTH = 380;
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     : BaseWidget(parent)
     , m_sheet(parent)
@@ -62,10 +60,10 @@ void SheetSidebar::initWidget()
     m_notesWidget     = nullptr;
     m_searchWidget    = nullptr;
 
-    setMinimumWidth(LEFTMINWIDTH);
-    setMaximumWidth(LEFTMAXWIDTH);
+    setMinimumWidth(DocSheet::SidebarMinWidth);
+    setMaximumWidth(DocSheet::SidebarMaxWidth);
 
-    resize(LEFTMINWIDTH, this->height());
+    resize(DocSheet::SidebarMinWidth, this->height());
 
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -292,7 +290,7 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
 
 void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
-    qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
+    qreal scale = event->size().width() * 1.0 / DocSheet::SidebarMinWidth;
     adaptWindowSize(scale);
     BaseWidget::resizeEvent(event);
 }

@@ -441,7 +441,7 @@ void MainWindow::initBase()
 
     setTitlebarShadowEnabled(true);
 
-    setMinimumSize(680, 300);
+    setMinimumSize(DocSheet::WindowMinWidth, DocSheet::WindowMinHeight);
 
     showDefaultSize();
 
