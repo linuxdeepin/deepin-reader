@@ -27,6 +27,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "DBusObject.h"
+#include "SheetBrowser.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -96,7 +97,11 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
 
 void TextEditShadowWidget::updateHeight()
 {
-    int h = qMin(320, this->window()->height() - 40);
+    //多窗口的对应不同的window
+    SheetBrowser *view = this->window()->findChild<SheetBrowser *>();
+    if(!view)
+        return;
+    int h = qMin(320, view->height());
     if(this->height() != h)
         setFixedHeight(h);
 }
