@@ -1229,11 +1229,11 @@ void DocSheet::setAlive(bool alive)
         g_lock.unlock();
 
         if(Database::instance()->readOperation(this)) {
-            qInfo() << "read from database config";
+            qInfo() << QFileInfo(m_filePath).fileName() << "read from database config";
         } else if(readLastFileOperation()) {
-            qInfo() << "read from last operation file config";
+            qInfo() << QFileInfo(m_filePath).fileName() << "read from last operation file config" << QFileInfo(g_lastOperationFile).fileName();
         } else {
-            qInfo() << "read from default config";
+            qInfo() << QFileInfo(m_filePath).fileName() << "read from default config";
         }
 
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
@@ -1276,7 +1276,6 @@ bool DocSheet::readLastFileOperation()
         return false;
     }
 
-    qInfo() << __LINE__ << "read config from last operation file: " << filePath;
     m_operation = sheet->operationRef();
     return true;
 }

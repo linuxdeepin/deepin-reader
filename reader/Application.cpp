@@ -109,15 +109,18 @@ bool Application::notify(QObject *object, QEvent *event)
     }
 
     //保存最后一次操作的文件
-    //标签页操作触发：ZOrderChange
-    //新窗口操作触发：WindowActivate
-    if(event->type() == QEvent::ZOrderChange ||
-            event->type() == QEvent::WindowActivate) {
+    //新建标签页：ShowToParent
+    //新建窗口：WindowActivate
+    if(event->type() == QEvent::ShowToParent
+            || event->type() == QEvent::WindowActivate) {
         if(DocSheet *doc = qobject_cast<DocSheet *>(object)) {
-            DocSheet::g_lastOperationFile = doc->filePath();
+            if(!doc->filePath().isEmpty()) {
+                DocSheet::g_lastOperationFile = doc->filePath();
+            }
         }
     }
 
     return DApplication::notify(object, event);
 }
+
 
