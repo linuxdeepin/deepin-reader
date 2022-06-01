@@ -2255,11 +2255,13 @@ TEST_F(TestSheetBrowser, testhandlePrepareSearch001)
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
     sheet->m_fileType = Dr::FileType::PDF;
     m_tester->m_sheet = sheet;
+    m_tester->setParent(sheet);
 
     m_tester->handlePrepareSearch();
 
     EXPECT_TRUE(g_funcName == "showPosition_stub");
 
+    m_tester->setParent(nullptr);
     delete sheet;
 }
 

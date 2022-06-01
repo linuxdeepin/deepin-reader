@@ -1631,8 +1631,8 @@ void SheetBrowser::handlePrepareSearch()
         return;
 
     if (m_findWidget == nullptr) {
-        m_findWidget = new FindWidget(this->window());
-        int windowY = this->mapTo(this->window(), QPoint(0, 0)).y();
+        m_findWidget = new FindWidget(this->parentWidget());
+        int windowY = this->mapTo(this->parentWidget(), QPoint(0, 0)).y();
         m_findWidget->setYOff(windowY);
         m_findWidget->setDocSheet(m_sheet);
     }
