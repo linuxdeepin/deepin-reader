@@ -100,6 +100,8 @@ void ShortCutShow::initDJVU()
     initPDF();
     //remove Dr::key_ctrl_f
     m_shortcutMap[ShortCutType::Tools].removeKey(Dr::key_ctrl_f);
+    m_shortcutMap[ShortCutType::Tools].removeKey(Dr::key_alt_h);
+    m_shortcutMap[ShortCutType::Tools].removeKey(Dr::key_alt_a);
 }
 
 void ShortCutShow::initPDF()
