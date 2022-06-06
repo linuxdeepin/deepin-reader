@@ -254,5 +254,18 @@ QModelIndex SideBarImageListView::pageUpIndex()
 
 QModelIndex SideBarImageListView::pageDownIndex()
 {
+    //当listview高度太小，无法完整的显示一个item时，moveCursor会崩溃，详见：bug#136665
+    //这里加了相关的判断
+    QModelIndex index = this->currentIndex();
+    if(!index.isValid())
+        return index;
+
+    const int pageHeight = this->viewport()->height();
+    int off = this->spacing();
+    off += this->rectForIndex(index).height() + this->spacing();
+    if(off > pageHeight) {
+        return index;
+    }
+
     return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
 }
