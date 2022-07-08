@@ -27,7 +27,8 @@
 #include <QDebug>
 #include <QScreen>
 #include <QThread>
-
+#include <QFileInfo>
+#include <QUrl>
 #include <functional>
 
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
@@ -102,7 +103,6 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
 
     return m_page->image(width, height, ratioRect);
 }
-
 Link PDFPage::getLinkAtPoint(const QPointF &pos)
 {
     Link link;
@@ -124,6 +124,21 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                                           ? linkAnnot->url().mid(7) : linkAnnot->url();
                 }
                 link.left = linkAnnot->offset().x();
+                if(!m_tmpPath.isNull() && !m_tmpPath.isEmpty()){
+                    //由于此时超链接的目录已经变成临时目录，需要将其转换成真实目录
+                    if(link.urlOrFileName.contains(m_tmpPath)){
+                        QStringList list =link.urlOrFileName.split(m_tmpPath);
+                        if(list.size()>1 && list[1].startsWith("/word")){
+                            list[1].replace("/word","");
+                            link.urlOrFileName =list[0]+m_filePath+list[1];
+                        }else if(list.size()>1 && !list[1].startsWith("/word")){
+                            QFileInfo fileInfo(m_filePath);
+                            link.urlOrFileName = list[0]+fileInfo.absolutePath()+list[1];
+                        }
+                    }
+                    QUrl url(link.urlOrFileName);
+                    link.urlOrFileName = url.path();
+                }
                 link.top = linkAnnot->offset().y();
                 return link;
             }
@@ -368,6 +383,11 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
     return nullptr;
 }
 
+void PDFPage::setPath(const QString &orgPath, const QString &tmpPath)
+{
+    m_filePath = orgPath;
+    m_tmpPath = tmpPath;
+}
 PDFDocument::PDFDocument(DPdfDoc *document) :
     m_document(document)
 {
@@ -404,8 +424,12 @@ Page *PDFDocument::page(int index) const
 {
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
 
-        if (page->isValid())
-            return new PDFPage(m_docMutex, page);
+        if (page->isValid()){
+            PDFPage* tempPage = nullptr;
+            tempPage = new PDFPage(m_docMutex, page);
+            tempPage->setPath(m_filePath,m_tmpPath);
+            return tempPage;
+        }
     }
 
     return nullptr;
@@ -485,6 +509,12 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
     delete document;
 
     return nullptr;
+}
+
+void PDFDocument::setPath(const QString &orgPath, const QString &tmpPath)
+{
+    m_filePath = orgPath;
+    m_tmpPath = tmpPath;
 }
 }
 

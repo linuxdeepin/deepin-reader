@@ -134,7 +134,14 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         qInfo() << "html -> pdf 已完成";
         *pprocess = nullptr;
-        document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
+        deepin_reader::PDFDocument* pdfDoc = nullptr;
+        pdfDoc = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
+        QFileInfo fileInfo(filePath);
+
+        if(pdfDoc){
+            pdfDoc->setPath(fileInfo.absolutePath(),convertedFileDir);
+        }
+        document = pdfDoc;
     }
 
     return document;

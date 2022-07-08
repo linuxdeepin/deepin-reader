@@ -1871,8 +1871,8 @@ bool SheetBrowser::jump2Link(QPointF point)
 
         SecurityDialog *sdialog = new SecurityDialog(link.urlOrFileName, this);
         if (DDialog::Accepted == sdialog->exec()) {
-            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
-            QDesktopServices::openUrl(url);
+//            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
+            QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
         }
         return true;
     }

@@ -96,6 +96,7 @@ public:
     Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) override;
 
     Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) override;
+    void setPath(const QString &orgPath,const QString& tmpPath);
 
 private:
     explicit PDFPage(QMutex *mutex, DPdfPage *page);
@@ -107,6 +108,9 @@ private:
     bool m_wordLoaded = false;
 
     QList<Word> m_words;
+
+    QString m_filePath = "";
+    QString m_tmpPath = "";
 };
 
 class PDFDocument : public Document
@@ -135,6 +139,7 @@ public:
 
     static PDFDocument *loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error);
 
+    void setPath(const QString &orgPath,const QString& tmpPath);
 private:
     DPdfDoc *m_document = nullptr;
 
@@ -147,6 +152,9 @@ private:
     qreal m_xRes = 72;
 
     qreal m_yRes = 72;
+
+    QString m_filePath = "";
+    QString m_tmpPath = "";
 };
 }
 
