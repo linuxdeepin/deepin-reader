@@ -19,7 +19,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
                                                                      deepin_reader::Document::Error &error)
 {
     deepin_reader::Document *document = nullptr;
-
+    qDebug() << "需要转换的文档: "<< filePath;
     if (Dr::PDF == fileType) {
         document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
     } else if (Dr::DJVU == fileType) {
@@ -29,8 +29,11 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             error = deepin_reader::Document::ConvertFailed;
             return nullptr;
         }
+        //目标文档（需要进行转换的文档）
         QString targetDoc = convertedFileDir + "/temp.docx";
+        //临时文档（通过pandoc转换出来的html文档）
         QString tmpHtmlFilePath = convertedFileDir + "/word/temp.html";
+        //最终文档（文档查看器需要的文档）
         QString realFilePath = convertedFileDir + "/temp.pdf";
 
         QFile file(filePath);
@@ -44,6 +47,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QProcess decompressor;
         *pprocess = &decompressor;
         decompressor.setWorkingDirectory(convertedFileDir);
+        qInfo() << "正在执行 (" << targetDoc << ")文档解压 ...";
         decompressor.start("unzip " + targetDoc);
         if (!decompressor.waitForStarted()) {
             qInfo() << "start unzip failed";
@@ -65,19 +69,23 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
+        qInfo() << "(" << targetDoc << ")文档解压 已完成";
 
         // docx -> html
         QProcess converter;
         *pprocess = &converter;
         converter.setWorkingDirectory(convertedFileDir + "/word");
+        qInfo() << "正在执行 docx -> html ...";
         converter.start("pandoc " +  targetDoc + " -o " + tmpHtmlFilePath);
+        qDebug() << "docx -> html: "<< "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!converter.waitForFinished()) {
+        //由于有些文档执行转换的时间过长，需要延长等待时间
+        if (!converter.waitForFinished(2000000)) {
             qInfo() << "pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
@@ -93,12 +101,14 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
-
+        qInfo() << "docx -> html 已完成";
         // html -> pdf
         QProcess converter2;
         *pprocess = &converter2;
         converter2.setWorkingDirectory(convertedFileDir + "/word");
+        qInfo() << "正在执行 html -> pdf ...";
         converter2.start("/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath);
+        qDebug() << "html -> pdf: "<< "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -122,6 +132,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             return nullptr;
         }
 
+        qInfo() << "html -> pdf 已完成";
         *pprocess = nullptr;
         document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
     }

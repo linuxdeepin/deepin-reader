@@ -36,7 +36,11 @@
 class UT_TextEditShadowWidgetayWidget : public ::testing::Test
 {
 public:
-    UT_TextEditShadowWidgetayWidget() {}
+    UT_TextEditShadowWidgetayWidget() {
+        m_sheet = nullptr;
+        m_pBrowser = nullptr;
+        m_tester = nullptr;
+    }
 
 public:
     virtual void SetUp()
@@ -87,7 +91,11 @@ TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotClos
 class TestTextEditWidget : public ::testing::Test
 {
 public:
-    TestTextEditWidget(): m_tester(nullptr) {}
+    TestTextEditWidget(): m_tester(nullptr) {
+        m_sheet = nullptr;
+        m_pBrowser = nullptr;
+        m_pShadow = nullptr;
+    }
 
 public:
     virtual void SetUp()

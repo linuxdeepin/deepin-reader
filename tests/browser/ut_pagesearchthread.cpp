@@ -60,6 +60,7 @@ TEST_F(UT_PageSearchThread, UT_PageSearchThread_startSearch)
     m_tester->startSearch(sheet, "123");
     EXPECT_TRUE(m_tester->m_sheet == sheet);
     EXPECT_TRUE(m_tester->m_searchText == "123");
+    m_tester->stopSearch();
     delete sheet;
 }
 

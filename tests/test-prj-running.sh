@@ -8,6 +8,7 @@ rm -rf ../$reportdir
 mkdir ../$builddir
 mkdir ../$reportdir
 cd ../$builddir
+export QT_SELECT=qt5
 #编译
 qmake DEFINES+=CMAKE_SAFETYTEST_ARG_ON ../deepin_reader.pro
 make -j8

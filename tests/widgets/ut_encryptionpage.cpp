@@ -62,11 +62,11 @@ TEST_F(UT_EncryptionPage, UT_EncryptionPage_nextbuttonClicked)
     EXPECT_TRUE(spy.count() == 1);
 }
 
-TEST_F(UT_EncryptionPage, UT_EncryptionPage_wrongPassWordSlot)
-{
-    m_tester->wrongPassWordSlot();
-    EXPECT_TRUE(m_tester->m_password->text().isEmpty() == true);
-}
+//TEST_F(UT_EncryptionPage, UT_EncryptionPage_wrongPassWordSlot)
+//{
+//    m_tester->wrongPassWordSlot();
+//    EXPECT_TRUE(m_tester->m_password->text().isEmpty() == true);
+//}
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onPasswordChanged_001)
 {

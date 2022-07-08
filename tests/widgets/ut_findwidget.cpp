@@ -32,7 +32,7 @@ namespace {
 class TestFindWidget : public ::testing::Test
 {
 public:
-    TestFindWidget(): m_tester(nullptr) {}
+    TestFindWidget(): m_tester(nullptr),m_mainWidget(nullptr) {}
 
 public:
     virtual void SetUp()
