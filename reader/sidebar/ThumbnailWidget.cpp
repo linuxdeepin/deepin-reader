@@ -103,11 +103,14 @@ void ThumbnailWidget::pageUp()
     if (m_sheet.isNull())
         return;
 
-    const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
-    if (!pageIndex.isValid())
-        return;
-
-    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
+    if(m_pImageListView->currentIndex().row() != 0){
+        qDebug() <<"向上翻页";
+        const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
+        if (!pageIndex.isValid())
+            return;
+        qDebug() <<"当前项的索引: " << m_pImageListView->currentIndex().row() ;
+        m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
+    }
 }
 
 void ThumbnailWidget::nextPage()
@@ -121,11 +124,15 @@ void ThumbnailWidget::pageDown()
     if (m_sheet.isNull())
         return;
 
-    const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
-    if (!pageIndex.isValid())
-        return;
+    if(m_pImageListView->currentIndex().row() != m_pImageListView->count()-1){
+        const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
+        qDebug() <<"向下翻页";
+        if (!pageIndex.isValid())
+            return;
+        qDebug() <<"当前项的索引: " << m_pImageListView->currentIndex().row() ;
+        m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
+    }
 
-    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)

@@ -244,10 +244,12 @@ int  SideBarImageListView::getPageIndexForModelIndex(int row)
 
 QModelIndex SideBarImageListView::pageUpIndex()
 {
-    return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
+    qDebug()<< "pageUpIndex() !";
+    return DListView::moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
 }
 
 QModelIndex SideBarImageListView::pageDownIndex()
 {
-    return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
+    qDebug()<< "pageDownIndex() !";
+    return DListView::moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
 }

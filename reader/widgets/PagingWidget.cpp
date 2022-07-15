@@ -230,11 +230,13 @@ void PagingWidget::pageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
+    qDebug() << "上一页！";
     m_sheet->jumpToPrevPage();
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
+    qDebug() << "下一页！";
     m_sheet->jumpToNextPage();
 }
 

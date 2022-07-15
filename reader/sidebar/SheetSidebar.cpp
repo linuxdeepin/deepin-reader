@@ -369,12 +369,16 @@ void SheetSidebar::onJumpToPageUp()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
+        qInfo() << "在缩略图页面通过PageUp翻页！";
         m_thumbnailWidget->pageUp();
     } else if (curWidget == m_bookmarkWidget) {
+        qInfo() << "在书签目录通过PageUp翻页！";
         m_bookmarkWidget->pageUp();
     } else if (curWidget == m_notesWidget) {
+        qInfo() << "在注释缩略图页面通过PageUp翻页！";
         m_notesWidget->pageUp();
     } else if (curWidget == m_catalogWidget) {
+        qInfo() << "在目录页面通过PageUp翻页！";
         m_catalogWidget->pageUp();
     }
 }
@@ -397,12 +401,16 @@ void SheetSidebar::onJumpToPageDown()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
+        qInfo() << "在缩略图页面通过PageDown翻页！";
         m_thumbnailWidget->pageDown();
     } else if (curWidget == m_bookmarkWidget) {
+        qInfo() << "在书签目录通过PageDown翻页！";
         m_bookmarkWidget->pageDown();
     } else if (curWidget == m_notesWidget) {
+        qInfo() << "在注释缩略图页面通过PageDown翻页！";
         m_notesWidget->pageDown();
     } else if (curWidget == m_catalogWidget) {
+        qInfo() << "在目录页面通过PageDown翻页！";
         m_catalogWidget->pageDown();
     }
 }
