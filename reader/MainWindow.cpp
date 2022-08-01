@@ -36,6 +36,7 @@
 #include "DocSheet.h"
 #include "DBusObject.h"
 #include "SaveDialog.h"
+#include "eventlogutils.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -57,6 +58,7 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
+#include <QJsonObject>
 
 DWIDGET_USE_NAMESPACE
 
@@ -77,7 +79,12 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
                 addFile(filePath);
         }
     }
-
+    QJsonObject obj{
+        {"tid", EventLogUtils::Start},
+        {"version", QCoreApplication::applicationVersion()},
+        {"mode", 1}
+    };
+    EventLogUtils::get().writeLogs(obj);
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -87,6 +94,13 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     initUI();
 
     addSheet(sheet);
+
+    QJsonObject obj{
+        {"tid", EventLogUtils::Start},
+        {"version", QCoreApplication::applicationVersion()},
+        {"mode", 1}
+    };
+    EventLogUtils::get().writeLogs(obj);
 }
 
 MainWindow::~MainWindow()
