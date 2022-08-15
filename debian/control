@@ -10,3 +10,4 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc, libdtkwidget5 (>= 5.4.11)
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files,supporting PDF, DJVU, DOCX etc
+Recommends: uos-reporter, deepin-event-log
