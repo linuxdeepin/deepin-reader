@@ -163,6 +163,7 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     Dr::FileType fileType = Dr::fileType(filePath);
 
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
+        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
         return;
     }
@@ -505,6 +506,7 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
+    qDebug() << "键盘按下: " << s;
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
@@ -612,6 +614,7 @@ void CentralDocPage::openMagnifer()
 //  取消放大镜
 void CentralDocPage::quitMagnifer()
 {
+    qDebug() << "取消放大镜";
     if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         m_magniferSheet->closeMagnifier();
         m_magniferSheet = nullptr;

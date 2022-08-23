@@ -327,6 +327,7 @@ bool DPdfPagePrivate::loadAnnots()
                 char uri[256] = {0};
                 unsigned long lenth = FPDFAction_GetURIPath(m_doc, action, uri, 256);
                 if (0 != lenth) {
+                    qDebug() << "文档中存在的超链接: " << uri;
                     dAnnot->setUrl(uri);
                 }
 

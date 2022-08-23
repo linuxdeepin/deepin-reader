@@ -91,6 +91,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
 
     m_browser = new SheetBrowser(this);
+    qDebug() << "新建右侧视图";
     m_browser->setMinimumWidth(DocSheet::BrowserMinWidth);
 
     if (Dr::PDF == fileType)
@@ -526,6 +527,7 @@ void DocSheet::copySelectedText()
 
     QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
+    qInfo() << "通过ctrl+c将内容复制到剪切板: " << selectedWordsText;
 }
 
 void DocSheet::highlightSelectedText()

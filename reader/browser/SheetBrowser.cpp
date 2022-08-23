@@ -699,6 +699,7 @@ bool SheetBrowser::event(QEvent *event)
         }
 
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
+            qDebug() << "通过键盘(菜单快捷键)打开右键菜单！";
             this->showMenu();
         }
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
@@ -707,6 +708,7 @@ bool SheetBrowser::event(QEvent *event)
                 return DGraphicsView::event(event);
             }
 
+            qDebug() << "通过键盘(alt+m)打开右键菜单！";
             this->showMenu();
         }
     }
@@ -1113,14 +1115,17 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
             if (annotation && annotation->annotationType() == deepin_reader::Annotation::AText) {
+                qDebug() << "文字注释(图标)";
                 if (m_lastSelectIconAnnotPage)
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON, annotation->annotationText());
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
+                qDebug() << "选择文字";
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
             } else if (annotation && annotation->annotationType() == deepin_reader::Annotation::AHighlight) {
+                qDebug() << "文字高亮注释";
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT, annotation->annotationText());
             } else if (nullptr != item) {
@@ -1565,11 +1570,13 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
+        qDebug() << "新建放大镜!";
     } else {
         m_magnifierLabel->raise();
 
         m_magnifierLabel->show();
     }
+    qDebug() << "打开放大镜！ m_magnifierLabel: " << m_magnifierLabel ;
 
     setDragMode(QGraphicsView::NoDrag);
 
@@ -1580,6 +1587,7 @@ void SheetBrowser::openMagnifier()
 
 void SheetBrowser::closeMagnifier()
 {
+    qDebug() << "关闭放大镜！ m_magnifierLabel: " << m_magnifierLabel;
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
 
@@ -1856,6 +1864,7 @@ bool SheetBrowser::jump2Link(QPointF point)
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {
+        qDebug() << "响应左侧注释列表点击事件,跳到对应文档目录处";
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
@@ -1872,7 +1881,19 @@ bool SheetBrowser::jump2Link(QPointF point)
         SecurityDialog *sdialog = new SecurityDialog(link.urlOrFileName, this);
         if (DDialog::Accepted == sdialog->exec()) {
 //            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
-            QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
+            bool isOpen = false;
+            if (link.urlOrFileName.startsWith(QLatin1String("https"))) {
+                isOpen = QDesktopServices::openUrl(link.urlOrFileName);
+                qDebug() << "当前需要跳转的超链接: " << link.urlOrFileName;
+            } else {
+                isOpen = QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
+                qDebug() << "当前需要跳转的超链接: " << QUrl::fromLocalFile(urlstr);
+            }
+            if (!isOpen) {
+                qWarning() << "警告！超链接无法用对应的web应用打开！" << link.urlOrFileName;
+            } else {
+                qInfo() << "超链接打开成功！" ;
+            }
         }
         return true;
     }

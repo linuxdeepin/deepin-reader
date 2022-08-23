@@ -146,8 +146,9 @@ void DPdfLinkAnnot::setUrl(QString url)
 {
     m_url = url;
 
-    if (!m_url.contains("http://") && !m_url.contains("https://"))
-        m_url.prepend("http://");
+    if (!m_url.contains("http://") && !m_url.contains("https://") && !m_url.contains("file://"))
+        //m_url.prepend("http://");
+        m_url.prepend("unknow://");
 }
 
 QString DPdfLinkAnnot::url() const
