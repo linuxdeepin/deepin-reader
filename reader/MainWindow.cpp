@@ -114,6 +114,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::addSheet(DocSheet *sheet)
 {
+    qDebug() << "新建窗口！！！！";
     if (nullptr == m_central)
         return;
 
@@ -343,11 +344,11 @@ void MainWindow::handleMainWindowExitFull()
 
 void MainWindow::setTitleBarFocusEnable(bool enable)
 {
-    auto updateWidgetFocus = [&](const QString &name, Qt::FocusPolicy policy){
-        if(!this->titlebar())
+    auto updateWidgetFocus = [&](const QString & name, Qt::FocusPolicy policy) {
+        if (!this->titlebar())
             return;
         QWidget *w = this->titlebar()->findChild<QWidget *>(name);
-        if(!w)
+        if (!w)
             return;
         w->setFocusPolicy(policy);
     };

@@ -107,10 +107,15 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
 {
     Link link;
     const QList<DPdfAnnot *> &dlinkAnnots = m_page->links();
+    //qDebug() << "当前页包含超链接的数量:" << dlinkAnnots.size();
     if (dlinkAnnots.size() > 0) {
+        //int i = 0;
         for (DPdfAnnot *annot : dlinkAnnots) {
             DPdfLinkAnnot *linkAnnot = dynamic_cast<DPdfLinkAnnot *>(annot);
+            //i++;
+            //qDebug() << "当前页的超链接" << i << ":" << linkAnnot->url() << " , 是否选中: " << linkAnnot->pointIn(pos);
             if (linkAnnot && linkAnnot->pointIn(pos)) {
+                qDebug()  << "解析前 >>> 当前选中的超链接: " << linkAnnot->url() << linkAnnot->filePath() << " , 当前页包含超链接的数量: " << dlinkAnnots.size();
                 if (!linkAnnot->isValid())
                     m_page->initAnnot(annot);
 
@@ -121,24 +126,68 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                     // 删除邮件或本地文件的前缀"http://"
                     link.urlOrFileName = (linkAnnot->url().startsWith(QLatin1String("http://mailto:"))
                                           || linkAnnot->url().startsWith(QLatin1String("http://file://")))
-                                          ? linkAnnot->url().mid(7) : linkAnnot->url();
+                                         ? linkAnnot->url().mid(7) : linkAnnot->url();
                 }
+//                qDebug() << "link.urlOrFileName111: " << link.urlOrFileName << "m_filePath: " << m_filePath;
                 link.left = linkAnnot->offset().x();
-                if(!m_tmpPath.isNull() && !m_tmpPath.isEmpty()){
-                    //由于此时超链接的目录已经变成临时目录，需要将其转换成真实目录
-                    if(link.urlOrFileName.contains(m_tmpPath)){
-                        QStringList list =link.urlOrFileName.split(m_tmpPath);
-                        if(list.size()>1 && list[1].startsWith("/word")){
-                            list[1].replace("/word","");
-                            link.urlOrFileName =list[0]+m_filePath+list[1];
-                        }else if(list.size()>1 && !list[1].startsWith("/word")){
-                            QFileInfo fileInfo(m_filePath);
-                            link.urlOrFileName = list[0]+fileInfo.absolutePath()+list[1];
+                //此处需要区分处理，直接打开pdf，通过deepin-pdfium获取的超链接路径都不会含有其链接的完整路径，需要自己拼接
+                switch (m_pdfType) {
+                case 0:  //直接打开pdf pdf文档中的超链接路径不全，此处需要补全
+                    if (link.urlOrFileName.startsWith(QLatin1String("unknow://"))) {
+                        //拆分超链接
+                        QStringList list = link.urlOrFileName.split("unknow://");
+                        if (list.size() <= 1) break;
+                        //获取pdf文档的路径
+                        QFileInfo fileInfo(m_filePath);
+                        qDebug() << "link.urlOrFileName.count(..): " << link.urlOrFileName.count("..");
+                        if (link.urlOrFileName.contains("..")) {
+                            //超链接中包含“..”
+                            //拆分pdf文档路径
+                            QStringList dirList = fileInfo.filePath().split("/");
+                            qDebug() << "fileInfo.filePath(): " << fileInfo.filePath() << ",dirList.size(): " << dirList.size();
+                            QString realFilePath = "";
+                            //根据超链接中“..”的数量，拼接超链接的实际路径   “..”表示上级目录
+                            for (int i = 0; i < dirList.size() - link.urlOrFileName.count(".."); i++) {
+                                qDebug() << "dirList[" << i << "]: " << dirList[i];
+                                if (!dirList[i].isEmpty()) {
+                                    realFilePath += "/" + dirList[i];
+                                }
+                            }
+                            QStringList subList = list[1].split("/");
+                            foreach (QString subStr, subList) {
+                                if (!subStr.isEmpty() && subStr != "..") {
+                                    realFilePath += "/" + subStr;
+                                }
+                            }
+                            //qDebug() << "realFilePath: " << realFilePath;
+                            link.urlOrFileName = realFilePath;
+                        } else {
+                            //超链接中不包含“..”
+                            link.urlOrFileName = fileInfo.filePath() + "/" + list[1];
                         }
                     }
-                    QUrl url(link.urlOrFileName);
-                    link.urlOrFileName = url.path();
+                    break;
+                case 1: //通过docx转换而来的pdf，因为打开docx文档时，会进行一次转换，产生的临时文件在/tmp/deepin-reader-XXXX目录里面
+                    if (!m_tmpPath.isNull() && !m_tmpPath.isEmpty() && !linkAnnot->url().startsWith(QLatin1String("https://"))) {
+                        //由于此时超链接的目录已经变成临时目录，需要将其转换成真实目录
+                        if (link.urlOrFileName.contains(m_tmpPath)) {
+                            QStringList list = link.urlOrFileName.split(m_tmpPath);
+                            if (list.size() > 1 && list[1].startsWith("/word")) {
+                                list[1].replace("/word", "");
+                                link.urlOrFileName = list[0] + m_filePath + list[1];
+                            } else if (list.size() > 1 && !list[1].startsWith("/word")) {
+                                QFileInfo fileInfo(m_filePath);
+                                link.urlOrFileName = list[0] + fileInfo.absolutePath() + list[1];
+                            }
+                        }
+                        QUrl url(link.urlOrFileName);
+                        link.urlOrFileName = url.path();
+                    }
+                    break;
+                default:
+                    break;
                 }
+                qDebug() << "解析后 >> 当前选中的超链接: " << link.urlOrFileName;
                 link.top = linkAnnot->offset().y();
                 return link;
             }
@@ -383,10 +432,11 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
     return nullptr;
 }
 
-void PDFPage::setPath(const QString &orgPath, const QString &tmpPath)
+void PDFPage::setPath(const QString &orgPath, const QString &tmpPath, const int &type)
 {
     m_filePath = orgPath;
     m_tmpPath = tmpPath;
+    m_pdfType = type;
 }
 PDFDocument::PDFDocument(DPdfDoc *document) :
     m_document(document)
@@ -424,10 +474,10 @@ Page *PDFDocument::page(int index) const
 {
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
 
-        if (page->isValid()){
-            PDFPage* tempPage = nullptr;
+        if (page->isValid()) {
+            PDFPage *tempPage = nullptr;
             tempPage = new PDFPage(m_docMutex, page);
-            tempPage->setPath(m_filePath,m_tmpPath);
+            tempPage->setPath(m_filePath, m_tmpPath, m_pdfType);
             return tempPage;
         }
     }
@@ -511,10 +561,11 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
     return nullptr;
 }
 
-void PDFDocument::setPath(const QString &orgPath, const QString &tmpPath)
+void PDFDocument::setPath(const QString &orgPath, const QString &tmpPath, const int &type)
 {
     m_filePath = orgPath;
     m_tmpPath = tmpPath;
+    m_pdfType = type;
 }
 }
 

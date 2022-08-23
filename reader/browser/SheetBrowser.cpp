@@ -699,6 +699,7 @@ bool SheetBrowser::event(QEvent *event)
         }
 
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
+            qDebug() << "通过键盘(菜单快捷键)打开右键菜单！";
             this->showMenu();
         }
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
@@ -707,6 +708,7 @@ bool SheetBrowser::event(QEvent *event)
                 return DGraphicsView::event(event);
             }
 
+            qDebug() << "通过键盘(alt+m)打开右键菜单！";
             this->showMenu();
         }
     }
@@ -1856,6 +1858,7 @@ bool SheetBrowser::jump2Link(QPointF point)
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {
+        qDebug() << "响应左侧注释列表点击事件,跳到对应文档目录处";
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
@@ -1872,7 +1875,19 @@ bool SheetBrowser::jump2Link(QPointF point)
         SecurityDialog *sdialog = new SecurityDialog(link.urlOrFileName, this);
         if (DDialog::Accepted == sdialog->exec()) {
 //            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
-            QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
+            bool isOpen = false;
+            if (link.urlOrFileName.startsWith(QLatin1String("https"))) {
+                isOpen = QDesktopServices::openUrl(link.urlOrFileName);
+                qDebug() << "当前需要跳转的超链接: " << link.urlOrFileName;
+            } else {
+                isOpen = QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
+                qDebug() << "当前需要跳转的超链接: " << QUrl::fromLocalFile(urlstr);
+            }
+            if (!isOpen) {
+                qWarning() << "警告！超链接无法用对应的web应用打开！" << link.urlOrFileName;
+            } else {
+                qInfo() << "超链接打开成功！" ;
+            }
         }
         return true;
     }

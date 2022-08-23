@@ -76,6 +76,7 @@ deepin_reader::Link SheetRenderer::getLinkAtPoint(int index, const QPointF &poin
 
 QList<deepin_reader::Word> SheetRenderer::getWords(int index)
 {
+    qInfo() << "获取当前页的所有文本";
     if (m_pages.count() <= index)
         return QList<deepin_reader::Word>();
 
