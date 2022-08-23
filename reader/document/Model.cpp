@@ -19,9 +19,15 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
                                                                      deepin_reader::Document::Error &error)
 {
     deepin_reader::Document *document = nullptr;
-    qDebug() << "需要转换的文档: "<< filePath;
+    qDebug() << "需要转换的文档: " << filePath;
     if (Dr::PDF == fileType) {
-        document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
+        deepin_reader::PDFDocument *pdfDoc = nullptr;
+        pdfDoc = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
+        QFileInfo fileInfo(filePath);
+        if (pdfDoc) {
+            pdfDoc->setPath(fileInfo.absolutePath(), "", 0);
+        }
+        document = pdfDoc;
     } else if (Dr::DJVU == fileType) {
         document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
     } else if (Dr::DOCX == fileType) {
@@ -77,7 +83,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter.setWorkingDirectory(convertedFileDir + "/word");
         qInfo() << "正在执行 docx -> html ...";
         converter.start("pandoc " +  targetDoc + " -o " + tmpHtmlFilePath);
-        qDebug() << "docx -> html: "<< "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
+        qDebug() << "docx -> html: " << "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -91,8 +97,8 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-           QFile tmpHtmlFile(tmpHtmlFilePath);
-           if (!tmpHtmlFile.exists()) {
+        QFile tmpHtmlFile(tmpHtmlFilePath);
+        if (!tmpHtmlFile.exists()) {
             qInfo() << "temp.html doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
             // 转换过程中关闭应用，docsheet被释放，对应的*pprocess已不存在
@@ -108,7 +114,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter2.setWorkingDirectory(convertedFileDir + "/word");
         qInfo() << "正在执行 html -> pdf ...";
         converter2.start("/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath);
-        qDebug() << "html -> pdf: "<< "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+        qDebug() << "html -> pdf: " << "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -134,12 +140,12 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         qInfo() << "html -> pdf 已完成";
         *pprocess = nullptr;
-        deepin_reader::PDFDocument* pdfDoc = nullptr;
+        deepin_reader::PDFDocument *pdfDoc = nullptr;
         pdfDoc = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
         QFileInfo fileInfo(filePath);
 
-        if(pdfDoc){
-            pdfDoc->setPath(fileInfo.absolutePath(),convertedFileDir);
+        if (pdfDoc) {
+            pdfDoc->setPath(fileInfo.absolutePath(), convertedFileDir, 1);
         }
         document = pdfDoc;
     }

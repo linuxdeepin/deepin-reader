@@ -346,6 +346,7 @@ void Central::dropEvent(QDropEvent *event)
 
             QString filePath = url.toLocalFile();
 
+            qDebug() << "拖动打开文档:" <<  filePath;
             if (!MainWindow::activateSheetIfExist(filePath)) {
                 docPage()->addFileAsync(filePath);
             }

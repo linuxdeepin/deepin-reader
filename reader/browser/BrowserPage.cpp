@@ -465,6 +465,7 @@ QString BrowserPage::selectedWords()
     QString text;
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected()) {
+            qDebug() << "word->text(): " <<  word->text();
             text += word->text();
         }
     }
@@ -498,6 +499,7 @@ void BrowserPage::loadWords()
         if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
             m_wordScaleFactor = m_scaleFactor;
             foreach (BrowserWord *word, m_words) {
+                qDebug() << "1111word->text(): " <<  word->text();
                 word->setScaleFactor(m_scaleFactor);
             }
         }

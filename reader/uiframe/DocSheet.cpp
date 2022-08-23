@@ -526,6 +526,7 @@ void DocSheet::copySelectedText()
 
     QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
+    qInfo() << "通过ctrl+c将内容复制到剪切板: " << selectedWordsText;
 }
 
 void DocSheet::highlightSelectedText()
