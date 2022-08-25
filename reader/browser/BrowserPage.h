@@ -359,6 +359,13 @@ public:
      */
     QPointF getTopLeftPos();
 
+    /**
+     * @brief fileType
+     * 获取文件类型
+     * @return
+     */
+    Dr::FileType fileType();
+
 private:
     /**
      * @brief handleRenderFinished

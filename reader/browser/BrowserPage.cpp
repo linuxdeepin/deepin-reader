@@ -891,6 +891,11 @@ QPointF BrowserPage::getTopLeftPos()
     return p;
 }
 
+Dr::FileType BrowserPage::fileType()
+{
+    return m_sheet->fileType();
+}
+
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)

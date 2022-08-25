@@ -34,6 +34,7 @@ BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
 void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, const QString &copytext)
 {
     m_type = type;
+    qDebug() << "打开右键菜单: " << type;
     m_pColorWidgetAction = nullptr;
     if (type == DOC_MENU_ANNO_ICON) {
         createAction(tr("Copy"), "CopyAnnoText");
