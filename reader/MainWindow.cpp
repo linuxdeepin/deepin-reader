@@ -167,6 +167,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
+    qDebug() << "配置文件路径: " << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf");
 
     settings.setValue("LASTWIDTH", QString::number(width()));
 

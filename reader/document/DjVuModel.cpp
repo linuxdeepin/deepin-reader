@@ -496,6 +496,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
 
     if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
+        qDebug() << "DJVU 不能获取到当前位置的图片";
         image = QImage();
     }
 
@@ -532,6 +533,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     waitForMessageTag(context, DDJVU_DOCINFO);
 
     if (ddjvu_document_decoding_error(document)) {
+        qWarning() << "djvu 文件解码失败！";
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 
