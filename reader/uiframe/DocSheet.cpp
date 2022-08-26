@@ -951,6 +951,7 @@ bool DocSheet::isFullScreen()
 
 void DocSheet::openFullScreen()
 {
+    qDebug() << "打开全屏！";
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return;
@@ -972,6 +973,7 @@ void DocSheet::openFullScreen()
 
 bool DocSheet::closeFullScreen(bool force)
 {
+    qDebug() << "关闭全屏！";
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return false;
@@ -1281,9 +1283,10 @@ QSizeF DocSheet::pageSizeByIndex(int index)
 
 void DocSheet::resetChildParent()
 {
+    qDebug() << "重置侧边栏的父对象！";
     m_sidebar->setParent(nullptr);
     m_sidebar->setParent(this);
 
-    m_browser->setParent(nullptr);
-    m_browser->setParent(this);
+//    m_browser->setParent(nullptr);
+//    m_browser->setParent(this);
 }
