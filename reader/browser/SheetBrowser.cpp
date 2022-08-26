@@ -1115,14 +1115,17 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
             if (annotation && annotation->annotationType() == deepin_reader::Annotation::AText) {
+                qDebug() << "文字注释(图标)";
                 if (m_lastSelectIconAnnotPage)
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON, annotation->annotationText());
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
+                qDebug() << "选择文字";
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
             } else if (annotation && annotation->annotationType() == deepin_reader::Annotation::AHighlight) {
+                qDebug() << "文字高亮注释";
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT, annotation->annotationText());
             } else if (nullptr != item) {
@@ -1567,11 +1570,13 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
+        qDebug() << "新建放大镜!";
     } else {
         m_magnifierLabel->raise();
 
         m_magnifierLabel->show();
     }
+    qDebug() << "打开放大镜！ m_magnifierLabel: " << m_magnifierLabel ;
 
     setDragMode(QGraphicsView::NoDrag);
 
@@ -1582,6 +1587,7 @@ void SheetBrowser::openMagnifier()
 
 void SheetBrowser::closeMagnifier()
 {
+    qDebug() << "关闭放大镜！ m_magnifierLabel: " << m_magnifierLabel;
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
 

@@ -506,6 +506,7 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
+    qDebug() << "键盘按下: " << s;
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
@@ -613,6 +614,7 @@ void CentralDocPage::openMagnifer()
 //  取消放大镜
 void CentralDocPage::quitMagnifer()
 {
+    qDebug() << "取消放大镜";
     if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         m_magniferSheet->closeMagnifier();
         m_magniferSheet = nullptr;
