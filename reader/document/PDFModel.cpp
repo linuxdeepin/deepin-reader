@@ -128,7 +128,7 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                                           || linkAnnot->url().startsWith(QLatin1String("http://file://")))
                                          ? linkAnnot->url().mid(7) : linkAnnot->url();
                 }
-//                qDebug() << "link.urlOrFileName111: " << link.urlOrFileName << "m_filePath: " << m_filePath;
+                //qDebug() << "link.urlOrFileName111: " << link.urlOrFileName << "m_filePath: " << m_filePath << m_pdfType << m_tmpPath;
                 link.left = linkAnnot->offset().x();
                 //此处需要区分处理，直接打开pdf，通过deepin-pdfium获取的超链接路径都不会含有其链接的完整路径，需要自己拼接
                 switch (m_pdfType) {
@@ -179,9 +179,23 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                                 QFileInfo fileInfo(m_filePath);
                                 link.urlOrFileName = list[0] + fileInfo.absolutePath() + list[1];
                             }
+                        } else {
+                            //qDebug() << "link.urlOrFileName.left(7): " << link.urlOrFileName.left(7);
+                            //qDebug() << "link.urlOrFileName.left(8): " << link.urlOrFileName.left(8);
+                            //这里有个deepin-pdfium的bug，当文当中存在显示的超链接“file:///home/Desktop/test”时，解析出来的结果“file://home//Desktop//test”
+                            //这里做了一个插值操作
+                            if (link.urlOrFileName.left(7) == "file://" && link.urlOrFileName.left(8) != "file:///") {
+                                link.urlOrFileName.insert(7, "/");
+                            }
                         }
-                        QUrl url(link.urlOrFileName);
-                        link.urlOrFileName = url.path();
+                        //qDebug() << "link.urlOrFileName11111: " << link.urlOrFileName;
+                        //链接中不是“https”且不是“http”时，才会进行QUrl进行包装
+                        if (!link.urlOrFileName.startsWith(QLatin1String("https")) && !link.urlOrFileName.startsWith(QLatin1String("http"))) {
+                            QUrl url(link.urlOrFileName);
+                            //qDebug() << "url.path(): " << url.path();
+                            link.urlOrFileName = url.path();
+                        }
+                        //qDebug() << "link.urlOrFileName22222: " << link.urlOrFileName;
                     }
                     break;
                 default:

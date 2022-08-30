@@ -1882,7 +1882,7 @@ bool SheetBrowser::jump2Link(QPointF point)
         if (DDialog::Accepted == sdialog->exec()) {
 //            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
             bool isOpen = false;
-            if (link.urlOrFileName.startsWith(QLatin1String("https"))) {
+            if (link.urlOrFileName.startsWith(QLatin1String("https")) || link.urlOrFileName.startsWith(QLatin1String("http"))) {
                 isOpen = QDesktopServices::openUrl(link.urlOrFileName);
                 qDebug() << "当前需要跳转的超链接: " << link.urlOrFileName;
             } else {
