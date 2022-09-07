@@ -1,6 +1,7 @@
 // Copyright 2018 PDFium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef PUBLIC_CPP_FPDF_SCOPERS_H_
 #define PUBLIC_CPP_FPDF_SCOPERS_H_

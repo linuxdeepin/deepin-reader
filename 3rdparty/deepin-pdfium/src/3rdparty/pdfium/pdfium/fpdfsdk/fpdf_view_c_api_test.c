@@ -1,6 +1,7 @@
 // Copyright 2015 PDFium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 // This "C" (not "C++") file ensures that the public headers compile
 // and link for "C" (and not just "C++").
