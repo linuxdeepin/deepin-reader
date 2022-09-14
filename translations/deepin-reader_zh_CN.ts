@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -243,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="141"/>
+        <location filename="../reader/uiframe/Central.cpp" line="147"/>
         <source>Documents</source>
         <translation>文档文件</translation>
     </message>
@@ -320,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="326"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="354"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="344"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="372"/>
         <source>The bookmark has been removed</source>
         <translation>已删除书签</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="527"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="542"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="545"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="560"/>
         <source>Please select the text</source>
         <translation>请选择文本</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="592"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="601"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="610"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="619"/>
         <source>The annotation has been removed</source>
         <translation>已删除注释</translation>
     </message>
@@ -365,12 +363,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="125"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
         <source>Previous</source>
         <translation>上一个</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
@@ -497,7 +495,7 @@
         <translation>无搜索结果</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SearchResWidget.cpp" line="109"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
         <translation>%1个搜索结果</translation>
     </message>
@@ -530,22 +528,22 @@
 <context>
     <name>SheetSidebar</name>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="82"/>
         <source>Thumbnails</source>
         <translation>缩略图</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="97"/>
         <source>Catalog</source>
         <translation>目录</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="110"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="125"/>
         <source>Annotations</source>
         <translation>注释</translation>
     </message>
@@ -558,285 +556,192 @@
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
-        <source>Files</source>
-        <translation>文件</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
-        <source>Display</source>
-        <translation>视图</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
-        <source>Tools</source>
-        <translation>工具</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
-        <source>Edit</source>
-        <translation>编辑</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="110"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Page up</source>
         <translation>上一页</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Page down</source>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="193"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Zoom in</source>
         <translation>页面放大</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="203"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="245"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Zoom out</source>
         <translation>页面缩小</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <source>Zoom in/Zoom out</source>
-        <translation>页面放大/缩小</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="235"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="194"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="59"/>
+        <source>Files</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="60"/>
+        <source>Display</source>
+        <translation>视图</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="61"/>
+        <source>Tools</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="62"/>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="201"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="243"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Thumbnails</source>
         <translation>打开目录缩略图</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>1:1 size</source>
         <translation>默认大小</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="236"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Fit height</source>
         <translation>适应高度</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="195"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Fit width</source>
         <translation>适应宽度</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
         <source>Rotate left</source>
         <translation>左旋转</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="202"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="244"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
         <source>Rotate right</source>
         <translation>右旋转</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
+        <source>Move to the beginning</source>
+        <translation>定位至首页</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
+        <source>Move to the end</source>
+        <translation>定位至末尾</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
         <source>Select text</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="237"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
         <source>Hand tool</source>
         <translation>手形工具</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="196"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Add bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="153"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Magnifier</source>
         <translation>放大镜</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Slide show</source>
         <translation>幻灯片放映</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Fullscreen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="197"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="239"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="152"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="154"/>
         <source>Undo</source>
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="206"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="248"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="155"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="198"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="200"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="240"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="242"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
         <source>Display shortcuts</source>
         <translation>显示快捷键</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Add annotation</source>
         <translation>添加注释</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="204"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="238"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="246"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Highlight</source>
         <translation>高亮</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="205"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="234"/>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="247"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
@@ -844,23 +749,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
         <source>Remove annotation</source>
         <translation>删除注释</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="209"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="228"/>
         <source>Remove all</source>
         <translation>全部删除</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove bookmark</source>
         <translation>删除书签</translation>
     </message>
@@ -868,9 +773,22 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="144"/>
         <source>Page %1</source>
         <translation>第%1页</translation>
+    </message>
+</context>
+<context>
+    <name>SlidePlayWidget</name>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
+        <source>It is the first page</source>
+        <translation>已是第一页</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
+        <source>It is the last page</source>
+        <translation>已是最后一页</translation>
     </message>
 </context>
 <context>
