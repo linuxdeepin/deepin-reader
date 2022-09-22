@@ -1,7 +1,6 @@
 // Copyright 2014 PDFium Authors. All rights reserved.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 // Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
 

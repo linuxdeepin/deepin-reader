@@ -1,5 +1,4 @@
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 

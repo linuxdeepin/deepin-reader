@@ -1,7 +1,6 @@
 // Copyright 2019 The PDFium Authors. All rights reserved.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #ifndef CORE_FXCRT_BYTEORDER_H_
 #define CORE_FXCRT_BYTEORDER_H_

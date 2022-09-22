@@ -36,4 +36,4 @@ We encourage you to report issues and contribute changes
 
 ## 证书
 
-Deepin Document Viewer is licensed under [GPLv3](LICENSE).
+Deepin Document Viewer根据[GPL-3.0-only]（许可证）获得许可.
