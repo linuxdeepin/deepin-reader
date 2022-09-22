@@ -1,7 +1,6 @@
 // Copyright 2018 PDFium Authors. All rights reserved.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #ifndef CONSTANTS_STREAM_DICT_COMMON_H_
 #define CONSTANTS_STREAM_DICT_COMMON_H_

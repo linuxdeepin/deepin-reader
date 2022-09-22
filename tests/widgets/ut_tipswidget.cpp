@@ -1,7 +1,6 @@
 // Copyright (C) 2019 ~ 2020 UnionTech Software Technology Co.,Ltd
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #include "TipsWidget.h"
 #include "stub.h"

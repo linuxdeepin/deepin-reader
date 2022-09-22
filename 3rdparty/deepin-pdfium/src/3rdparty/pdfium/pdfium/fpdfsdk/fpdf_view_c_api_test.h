@@ -1,7 +1,6 @@
 // Copyright 2015 PDFium Authors. All rights reserved.
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #ifndef FPDFSDK_FPDF_VIEW_C_API_TEST_H_
 #define FPDFSDK_FPDF_VIEW_C_API_TEST_H_
