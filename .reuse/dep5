@@ -115,7 +115,7 @@ License: GPL-3.0-or-later
 
 # 3rdparty/deepin-pdfium/src
 Files: 3rdparty/deepin-pdfium/src/*
-Copyright: UnionTech Software Technology Co., Ltd.
+Copyright: PDFium Authors. All rights reserved.
 License: BSD-3-Clause  
 
 # htmltopdf
