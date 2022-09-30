@@ -138,7 +138,20 @@ void ThumbnailWidget::pageDown()
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
+//    QList<QModelIndex> indexList = m_pImageListView->getImageModel()->getModelIndexForPageIndex(0);
+//    if (indexList.size() > 0) {
+//        qreal pixscale = m_pImageListView->property("adaptScale").toDouble();
+//        QModelIndex index = m_pImageListView->getImageModel()->getModelIndexForPageIndex(0).first();
+//        QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
+//        qDebug() << pageSize;
+//        int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
+//        if (rotate == 90 || rotate == 270)
+//            pageSize = QSize(pageSize.height(), pageSize.width());
+//        pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
+//        QSize setSize = pageSize/dApp->devicePixelRatio();
+//        m_pImageListView->setItemSize(QSize(setSize.width(), setSize.height() + 32));
+//    }
+//  m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }
