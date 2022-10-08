@@ -109,7 +109,7 @@ void SideBarImageListView::handleOpenSuccess()
                 pageSize = QSize(pageSize.height(), pageSize.width());
             pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
             const QSize &scalePixSize = pageSize / dApp->devicePixelRatio();
-            setItemSize(QSize(scalePixSize.width(), scalePixSize.height() + 32));
+            setItemSize(QSize(scalePixSize.width(), scalePixSize.height() + 35));
         }
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
@@ -257,12 +257,12 @@ int  SideBarImageListView::getPageIndexForModelIndex(int row)
 
 QModelIndex SideBarImageListView::pageUpIndex()
 {
-    qDebug()<< "pageUpIndex() !";
+    qDebug() << "pageUpIndex() !";
     return DListView::moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
 }
 
 QModelIndex SideBarImageListView::pageDownIndex()
 {
-    qDebug()<< "pageDownIndex() !";
+    qDebug() << "pageDownIndex() !";
     return DListView::moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
 }
