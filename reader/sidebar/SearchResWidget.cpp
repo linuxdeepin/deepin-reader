@@ -25,6 +25,7 @@
 #include "Model.h"
 
 #include <DLabel>
+#include <DGuiApplicationHelper>
 
 #include <QStackedLayout>
 
@@ -58,7 +59,20 @@ void SearchResWidget::initWidget()
     m_stackLayout->addWidget(m_pImageListView);
 
     DLabel *tipLab = new DLabel(tr("No search results"));
-    tipLab->setForegroundRole(QPalette::ToolTipText);
+
+    DGuiApplicationHelper::ColorType t_type = DGuiApplicationHelper::instance()->themeType();
+    DGuiApplicationHelper::instance()->setPaletteType(t_type);
+    DPalette pe;
+    QColor color;
+    if (t_type == 1) {
+        color.setRgbF(85, 85, 85, 0.4);
+        pe.setColor(DPalette::PlaceholderText, color);
+    } else {
+        color.setRgbF(0, 0, 0, 0.3);
+        pe.setColor(QPalette::BrightText, color);
+    }
+    tipLab->setPalette(pe);
+    tipLab->setForegroundRole(DPalette::PlaceholderText);
     tipLab->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     m_stackLayout->addWidget(tipLab);
