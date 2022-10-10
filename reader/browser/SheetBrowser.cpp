@@ -1039,19 +1039,25 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
+                qDebug() << "通过鼠标右键打开右键菜单 -> " << objectname;
                 if (objectname == "Copy") {
+                    //右键菜单->复制
                     Utils::copyText(selectWords);
                 } else if (objectname == "CopyAnnoText") {
+                    //右键菜单->复制注释文本
                     if (annotation)
                         Utils::copyText(annotation->annotationText());
                 } else if (objectname == "AddTextHighlight") {
+                    //右键菜单->添加文本高亮（选中一些文本内容进行高亮）
                     QPoint pointEnd;
                     addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
                 } else if (objectname == "ChangeAnnotationColor") {
+                    //右键菜单->改变注释颜色
                     if (annotation) {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                     }
                 } else if (objectname == "RemoveAnnotation") {
+                    //右键菜单->移除注释
                     if (annotation) {
                         m_selectIconAnnotation = false;
                         if (m_lastSelectIconAnnotPage)
@@ -1059,6 +1065,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         m_sheet->removeAnnotation(annotation->annotation());
                     }
                 } else if (objectname == "AddAnnotationIcon") {
+                    //右键菜单->添加注释（不选中文本内容直接添加注释）
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
@@ -1068,11 +1075,14 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                             showNoteEditWidget(iconAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "AddBookmark") {
+                    //右键菜单->添加书签
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
+                    //右键菜单->移除高亮
                     if (annotation)
                         m_sheet->removeAnnotation(annotation->annotation(), !annotation->annotationText().isEmpty());
                 } else if (objectname == "AddAnnotationHighlight") {
+                    //右键菜单->添加注释（不选中文本内容直接添加注释）
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
@@ -1084,30 +1094,44 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                             showNoteEditWidget(addAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "Search") {
+                    //右键菜单->查找
                     m_sheet->prepareSearch();
                 } else if (objectname == "RemoveBookmark") {
+                    //右键菜单->移除书签
                     m_sheet->setBookMark(item->itemIndex(), false);
                 } else if (objectname == "Fullscreen") {
+                    //右键菜单->全屏
                     m_sheet->openFullScreen();
                 } else if (objectname == "ExitFullscreen") {
+                    //右键菜单->退出全屏
                     m_sheet->closeFullScreen();
                 } else if (objectname == "SlideShow") {
+                    //右键菜单->幻灯片放映
                     m_sheet->openSlide();
                 } else if (objectname == "FirstPage") {
+                    //右键菜单->第一页
                     this->emit sigNeedPageFirst();
                 } else if (objectname == "PreviousPage") {
+                    //右键菜单->前一页
                     this->emit sigNeedPagePrev();
                 } else if (objectname == "NextPage") {
+                    //右键菜单->后一页
                     this->emit sigNeedPageNext();
                 } else if (objectname == "LastPage") {
+                    //右键菜单->最后一页
                     this->emit sigNeedPageLast();
                 } else if (objectname == "RotateLeft") {
+                    //右键菜单->左旋转
                     m_sheet->rotateLeft();
                 } else if (objectname == "RotateRight") {
+                    //右键菜单->右旋转
                     m_sheet->rotateRight();
                 } else if (objectname == "Print") {
+                    //右键菜单->打印
                     QTimer::singleShot(1, m_sheet, SLOT(onPopPrintDialog()));
                 } else if (objectname == "DocumentInfo") {
+                    //右键菜单->文档信息
+                    QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
                     QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
                 }
             });
@@ -1907,6 +1931,7 @@ void SheetBrowser::showMenu()
     QString selectWords = selectedWordsText();
     connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
+        qDebug() << "通过快捷键打开右键菜单 -> " << objectname;
         if (objectname == "Copy") {
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {

@@ -96,8 +96,10 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
 
 void TextEditShadowWidget::updateHeight()
 {
-    int h = qMin(320, this->window()->height() - 40);
-    if(this->height() != h)
+    //int h = qMin(320, this->window()->height() - 40);
+    int h = qMin(300, this->window()->height() - 80);
+    qDebug() << "当前注释编辑界面的高度: " << h;
+    if (this->height() != h)
         setFixedHeight(h);
 }
 
