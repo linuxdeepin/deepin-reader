@@ -1257,6 +1257,7 @@ void DocSheet::onPopPrintDialog()
     preview.setAsynPreview(pageCount());
     preview.setDocName(QFileInfo(filePath()).fileName());
     if (Dr::PDF == fileType() || Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
+        qDebug() << "打印预览文件路径: " << openedFilePath();
         preview.setPrintFromPath(openedFilePath());
     }
     connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested),
