@@ -60,7 +60,7 @@ License: GPL-3.0-or-later
 
 # 3rdparty/deepin-pdfium
 Files: 3rdparty/deepin-pdfium/*
-Copyright: UnionTech Software Technology Co., Ltd.
+Copyright: 2014-2019 PDFium Authors.
 License: GPL-3.0-or-later
 
 # reader/app

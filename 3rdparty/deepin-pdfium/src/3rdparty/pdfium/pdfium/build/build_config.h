@@ -1,6 +1,6 @@
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 // This file adds defines about the platform we're currently building on.
 //

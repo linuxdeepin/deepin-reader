@@ -1,6 +1,6 @@
 // Copyright 2019 PDFium Authors. All rights reserved.
-//
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #ifndef CONSTANTS_ANNOTATION_COMMON_H_
 #define CONSTANTS_ANNOTATION_COMMON_H_
