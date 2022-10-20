@@ -37,8 +37,8 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         }
         //目标文档（需要进行转换的文档）
         QString targetDoc = convertedFileDir + "/temp.docx";
-        //临时文档（通过pandoc转换出来的html文档）
-        QString tmpHtmlFilePath = convertedFileDir + "/word/temp.html";
+        //工作目录（unzip解压后的目录）
+        QString tmpWorkDir = convertedFileDir + "/word";
         //最终文档（文档查看器需要的文档）
         QString realFilePath = convertedFileDir + "/temp.pdf";
 
@@ -53,8 +53,9 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QProcess decompressor;
         *pprocess = &decompressor;
         decompressor.setWorkingDirectory(convertedFileDir);
-        qInfo() << "正在执行 (" << targetDoc << ")文档解压 ...";
-        decompressor.start("unzip " + targetDoc);
+        QString command = "unzip " + targetDoc;
+        qInfo() << "正在执行 (" << targetDoc << ")文档解压 ..." << command;
+        decompressor.start(command);
         if (!decompressor.waitForStarted()) {
             qInfo() << "start unzip failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -67,7 +68,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!QDir(convertedFileDir + "/word").exists()) {
+        if (!QDir(tmpWorkDir).exists()) {
             qInfo() << "unzip failed";
             error = deepin_reader::Document::ConvertFailed;
             if (!(QProcess::CrashExit == decompressor.exitStatus() && 9 == decompressor.exitCode())) {
@@ -77,13 +78,26 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         }
         qInfo() << "(" << targetDoc << ")文档解压 已完成";
 
+        QFileInfo tmpWorkDirInfo(tmpWorkDir);
+        qDebug() << "工作目录(" << tmpWorkDir << ")的文件权限(r-w-e): " << tmpWorkDirInfo.isReadable() << tmpWorkDirInfo.isWritable() << tmpWorkDirInfo.isExecutable();
+
+        //碰到unzip后的没有权限的目录，将工作目录重置
+        if (!tmpWorkDirInfo.isReadable() && !tmpWorkDirInfo.isWritable()) {
+            qDebug() << "工作目录没有读写权限,跳过解压缩步骤！";
+            tmpWorkDir = convertedFileDir;
+        }
+
+        //临时文档（通过pandoc转换出来的html文档）
+        QString tmpHtmlFilePath = tmpWorkDir + "/temp.html";
+
         // docx -> html
         QProcess converter;
         *pprocess = &converter;
-        converter.setWorkingDirectory(convertedFileDir + "/word");
+        converter.setWorkingDirectory(tmpWorkDir);
+        command = "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
         qInfo() << "正在执行 docx -> html ...";
-        converter.start("pandoc " +  targetDoc + " -o " + tmpHtmlFilePath);
-        qDebug() << "docx -> html: " << "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
+        converter.start(command);
+        qDebug() << "docx -> html: " << command;
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -111,10 +125,11 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         // html -> pdf
         QProcess converter2;
         *pprocess = &converter2;
-        converter2.setWorkingDirectory(convertedFileDir + "/word");
+        converter2.setWorkingDirectory(tmpWorkDir);
         qInfo() << "正在执行 html -> pdf ...";
-        converter2.start("/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath);
-        qDebug() << "html -> pdf: " << "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+        command = "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+        converter2.start(command);
+        qDebug() << "html -> pdf: " << command;
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
