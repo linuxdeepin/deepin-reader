@@ -465,7 +465,7 @@ QString BrowserPage::selectedWords()
     QString text;
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected()) {
-            qDebug() << "word->text(): " <<  word->text();
+            //qDebug() << "word->text(): " <<  word->text();
             text += word->text();
         }
     }
