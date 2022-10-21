@@ -47,9 +47,11 @@ void ShortCutShow::setSheet(DocSheet *sheet)
 
 void ShortCutShow::show()
 {
-    QRect rect = qApp->desktop()->geometry();
+    //多屏情况下bug修复， 将快捷键预览框显示在主屏中央。
+    QRect rect = QGuiApplication::primaryScreen()->geometry();
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 
+    qDebug() << "快捷键预览框显示位置: " << pos;
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
     QString strvalue;
