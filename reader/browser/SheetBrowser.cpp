@@ -1219,6 +1219,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         }
 
         if (magnifierOpened()) {
+            //qDebug() << "放大镜显示鼠标位置: " << mousePos;
             //放大镜
             showMagnigierImage(mousePos);
         } else {
@@ -1245,6 +1246,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 if (page) {
                     const Link &mlink = getLinkAtPoint(mousePos);
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
+                    //当前光标是否在当前的书签位置
+                    bool isExitBookMark = page->isExitBookMark(mousposF);
                     //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
                     if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
                         m_tipsWidget->setText(browserAnno->annotationText());
@@ -1252,7 +1255,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->show();
                         setCursor(QCursor(Qt::PointingHandCursor));
-                    } else if (mlink.isValid() && nullptr == browserAnno) {
+                    } else if (mlink.isValid() && nullptr == browserAnno && !isExitBookMark) {
                         //处理移动到超链接区域
                         //未开启放大镜时，如果超链接文本添加了高亮注释，高亮注释优先显示
                         if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
@@ -1262,7 +1265,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                             m_tipsWidget->show();
                         }
                         setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
-                    } else if (page->getBrowserWord(mousposF)) {
+                    } else if (page->getBrowserWord(mousposF) && !isExitBookMark) {
                         m_tipsWidget->hide();
                         setCursor(QCursor(Qt::IBeamCursor));
                     } else {
@@ -1433,7 +1436,14 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
                     m_tipsWidget->hide();
                 }
-                jump2Link(event->pos());
+                //需要判断当前鼠标的位置是否在书签里面，如果是书签里面将不响应跳转超链接操作
+                bool isExitBookMark = false;
+                if (page) {
+                    isExitBookMark = page->isExitBookMark(point);
+                }
+                if (!isExitBookMark) {
+                    jump2Link(event->pos());
+                }
             }
         }
     }
@@ -1840,6 +1850,7 @@ Link SheetBrowser::getLinkAtPoint(QPointF viewpoint)
 
     viewpoint = translate2Local(viewpoint);
 
+    //qDebug() << "SheetBrowser::getLinkAtPoint";
     // 获取当前位置的link
     return m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), viewpoint);
 }
@@ -1885,6 +1896,7 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     point = translate2Local(point);
 
+    qDebug() << "跳转超链接!";
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {

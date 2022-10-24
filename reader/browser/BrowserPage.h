@@ -296,6 +296,13 @@ public:
     BrowserAnnotation *getBrowserAnnotation(const QPointF &point);
 
     /**
+     * @brief isExitBookMark 光标的位置是否与书签的位置重合
+     * @param point
+     * @return true:重合 false:不重合
+     */
+    bool isExitBookMark(const QPointF &point);
+
+    /**
      * @brief getBrowserWord
      * 根据坐标点获得当前的文字
      * @param point PageItem坐标系统

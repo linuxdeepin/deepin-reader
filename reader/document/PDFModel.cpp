@@ -115,7 +115,7 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
             //i++;
             //qDebug() << "当前页的超链接" << i << ":" << linkAnnot->url() << " , 是否选中: " << linkAnnot->pointIn(pos);
             if (linkAnnot && linkAnnot->pointIn(pos)) {
-                qDebug()  << "解析前 >>> 当前选中的超链接: " << linkAnnot->url() << linkAnnot->filePath() << " , 当前页包含超链接的数量: " << dlinkAnnots.size();
+                //qDebug()  << "解析前 >>> 当前选中的超链接: " << linkAnnot->url() << linkAnnot->filePath() << " , 当前页包含超链接的数量: " << dlinkAnnots.size();
                 if (!linkAnnot->isValid())
                     m_page->initAnnot(annot);
 
@@ -201,7 +201,7 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
                 default:
                     break;
                 }
-                qDebug() << "解析后 >> 当前选中的超链接: " << link.urlOrFileName;
+                //qDebug() << "解析后 >> 当前选中的超链接: " << link.urlOrFileName;
                 link.top = linkAnnot->offset().y();
                 return link;
             }
