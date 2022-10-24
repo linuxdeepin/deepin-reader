@@ -1092,6 +1092,18 @@ BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPointF &point)
     return nullptr;
 }
 
+bool BrowserPage::isExitBookMark(const QPointF &mousePoint)
+{
+    QRect rect(
+        static_cast<int>(bookmarkRect().x()),
+        static_cast<int>(10),
+        39, 39);
+    //qDebug() << "bookmarkMouseRect(): " << bookmarkMouseRect() << "mousePoint" << mousePoint;
+    //qDebug() << "当前鼠标位置是否存在书签: " << bookmarkMouseRect().contains(mousePoint.toPoint());
+    bool flag = bookmarkMouseRect().contains(mousePoint.toPoint());
+    return flag;
+}
+
 BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
 {
     BrowserWord *item = nullptr;
