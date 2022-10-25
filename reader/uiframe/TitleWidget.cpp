@@ -46,7 +46,7 @@ TitleWidget::TitleWidget(DWidget *parent)
     setLayout(hlayout);
     hlayout->addWidget(m_pThumbnailBtn);
 
-    m_pSw = new ScaleWidget;
+    m_pSw = new ScaleWidget(this);
     m_pSw->setDisabled(true);
     hlayout->addWidget(m_pSw);
     hlayout->addStretch(1);

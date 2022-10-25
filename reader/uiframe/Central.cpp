@@ -206,6 +206,7 @@ void Central::handleShortcut(const QString &shortcut)
 bool Central::handleClose(bool needToBeSaved)
 {
     if (nullptr != m_docPage) {
+        qDebug() << __FUNCTION__ << "正在关闭所有 sheet ...";
         return docPage()->closeAllSheets(needToBeSaved);
     }
 
