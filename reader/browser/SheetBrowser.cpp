@@ -1279,7 +1279,8 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 m_tipsWidget->hide();
                 QPointF beginPos = m_selectPressedPos;
                 QPointF endPos = mapToScene(event->pos());
-
+                //根据鼠标位置移动滚动条
+                moveScrollBar(event->pos());
                 //开始的word
                 const QList<QGraphicsItem *> &beginItemList = scene()->items(beginPos);
                 BrowserWord *beginWord = nullptr;
@@ -1896,7 +1897,6 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     point = translate2Local(point);
 
-    qDebug() << "跳转超链接!";
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {
@@ -1904,6 +1904,7 @@ bool SheetBrowser::jump2Link(QPointF point)
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
+        qDebug() << "跳转超链接!";
         QString urlstr;
         if (link.urlOrFileName.startsWith(QLatin1String("file://"))) {
             urlstr = link.urlOrFileName.mid(7); //删除前缀"file://"
@@ -2059,6 +2060,28 @@ void SheetBrowser::showMagnigierImage(const QPoint &point)
     m_magnifierLabel->showMagnigierImage(point, magnifierPos, m_lastScaleFactor);
 }
 
+void SheetBrowser::moveScrollBar(const QPoint &point)
+{
+    //鼠标靠近显示区域的边距
+    int margin = 20;
+    if (point.y() < margin) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (margin - point.y()));
+    }
+
+    if (point.x() < margin) {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (margin - point.x()));
+    }
+
+    if (point.y() > (this->size().height() - margin) && (this->size().height() - margin > 0)) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() + (point.y() - (this->size().height() - margin)));
+    }
+
+    if (point.x() > (this->size().width() - margin) && (this->size().width() - margin > 0)) {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (point.x() - (this->size().width() - margin)));
+    }
+
+}
+
 QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 {
     QPointF newPos = pos;
@@ -2077,7 +2100,6 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 
     return newPos;
 }
-
 void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
 {
     m_isSearchResultNotEmpty = isSearchResultNotEmpty;

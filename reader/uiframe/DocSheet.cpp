@@ -120,6 +120,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
 
 DocSheet::~DocSheet()
 {
+    qDebug() << "正在释放当前 sheet ...";
     // 结束正在进行的命令process
     if (nullptr != m_process) {
         __pid_t processid = static_cast<__pid_t>(m_process->processId());
@@ -136,8 +137,15 @@ DocSheet::~DocSheet()
 
     delete m_renderer;
 
+    delete m_searchTask;
+
+    delete m_encryPage;
+
+    delete m_sideAnimation;
+
     if (nullptr != m_tempDir)
         delete m_tempDir;
+    qDebug() << "当前 sheet 已释放";
 }
 
 QImage DocSheet::firstThumbnail(const QString &filePath)

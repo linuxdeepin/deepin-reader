@@ -11,6 +11,7 @@ SheetRenderer::SheetRenderer(DocSheet *parent) : QObject(parent), m_sheet(parent
 
 SheetRenderer::~SheetRenderer()
 {
+    qDebug() << "正在添加关闭文档任务...";
     DocCloseTask task;
 
     task.document = m_document;
@@ -18,6 +19,7 @@ SheetRenderer::~SheetRenderer()
     task.pages = m_pages;
 
     PageRenderThread::appendTask(task);
+    qDebug() << "关闭文档任务已添加";
 }
 
 bool SheetRenderer::openFileExec(const QString &password)

@@ -45,6 +45,7 @@ Application::~Application()
 {
     PageRenderThread::destroyForever();
     DBusObject::destory();
+    qDebug() << __FUNCTION__ << "退出应用！";
 }
 
 void Application::emitSheetChanged()

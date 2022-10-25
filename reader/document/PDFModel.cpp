@@ -467,6 +467,7 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
 PDFDocument::~PDFDocument()
 {
     //需要确保pages先被析构完成
+    qDebug() << "正在释放当前 document ...";
 
     m_docMutex->lock();
 
@@ -477,6 +478,7 @@ PDFDocument::~PDFDocument()
     m_docMutex->unlock();
 
     delete m_docMutex;
+    qDebug() << "当前 document 已释放";
 }
 
 int PDFDocument::pageCount() const

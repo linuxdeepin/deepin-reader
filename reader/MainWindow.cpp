@@ -148,6 +148,7 @@ bool MainWindow::handleClose(bool needToBeSaved)
 
     this->close();
 
+    qDebug() << __FUNCTION__ << "关闭文档查看器主窗口！";
     return true;
 }
 
@@ -173,6 +174,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     settings.setValue("LASTHEIGHT", QString::number(height()));
 
+    qDebug() << __FUNCTION__ << "关闭文档查看器主窗口！";
     DMainWindow::closeEvent(event);
 }
 

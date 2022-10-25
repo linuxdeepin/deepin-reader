@@ -284,6 +284,7 @@ void PageRenderThread::appendTask(DocCloseTask task)
 
     instance->m_closeMutex.unlock();
 
+    qDebug() << "当前任务线程运行状态: " << instance->isRunning();
     if (!instance->isRunning())
         instance->start();
 }
@@ -291,9 +292,11 @@ void PageRenderThread::appendTask(DocCloseTask task)
 void PageRenderThread::run()
 {
     m_quit = false;
+    qDebug() << "====开始执行任务====";
 
     while (!m_quit) {
         if (!hasNextTask()) {
+            //qDebug() << "任务池中不存在任务！等待添加任务";
             msleep(100);
             continue;
         }
@@ -397,6 +400,7 @@ void PageRenderThread::run()
     //处理关闭所有文档
     while (execNextDocCloseTask())
     {}
+    qDebug() << "====结束执行任务====";
 }
 
 bool PageRenderThread::hasNextTask()
@@ -407,9 +411,10 @@ bool PageRenderThread::hasNextTask()
     QMutexLocker pageWordLocker(&m_pageWordMutex);
     QMutexLocker pageThumbnailLocker(&m_pageThumbnailMutex);
     QMutexLocker pageOpenLocker(&m_openMutex);
+    QMutexLocker pageCloseLocker(&m_closeMutex);
 
     return !m_pageNormalImageTasks.isEmpty() || !m_pageSliceImageTasks.isEmpty() ||
-           !m_pageBigImageTasks.isEmpty() || !m_pageWordTasks.isEmpty() || !m_pageThumbnailTasks.isEmpty() || !m_openTasks.isEmpty();
+           !m_pageBigImageTasks.isEmpty() || !m_pageWordTasks.isEmpty() || !m_pageThumbnailTasks.isEmpty() || !m_openTasks.isEmpty() || !m_closeTasks.isEmpty();
 }
 
 bool PageRenderThread::popNextDocPageNormalImageTask(DocPageNormalImageTask &task)
@@ -531,119 +536,170 @@ bool PageRenderThread::popNextDocCloseTask(DocCloseTask &task)
 
 bool PageRenderThread::execNextDocPageNormalImageTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行正常取图片任务...";
+
+    if (m_quit) {
+        qDebug() << "正常取图片任务已结束";
         return false;
+    }
+
 
     DocPageNormalImageTask task;
 
-    if (!popNextDocPageNormalImageTask(task))
+    if (!popNextDocPageNormalImageTask(task)) {
+        qDebug() << "任务池不存在正常取图片任务，已结束";
         return false;
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，正常取图片任务已结束";
         return true;
+    }
 
     QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height());
 
     if (!image.isNull())
         emit sigDocPageNormalImageTaskFinished(task, QPixmap::fromImage(image));
 
+    qDebug() << "执行取正常取图片任务已完成";
     return true;
 }
 
 bool PageRenderThread::execNextDocPageSliceImageTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行取切片任务...";
+    if (m_quit) {
+        qDebug() << "取切片任务已结束";
         return false;
+    }
 
     DocPageSliceImageTask task;
 
-    if (!popNextDocPageSliceImageTask(task))
+    if (!popNextDocPageSliceImageTask(task)) {
+        qDebug() << "任务池不存在取切片任务，已结束";
         return false;
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，取切片任务已结束";
         return true;
+    }
 
     QImage image = task.sheet->getImage(task.page->itemIndex(), task.whole.width(), task.whole.height(), task.slice);
 
     if (!image.isNull())
         emit sigDocPageSliceImageTaskFinished(task, QPixmap::fromImage(image));
 
+    qDebug() << "执行取切片文字任务已完成";
     return true;
 }
 
 bool PageRenderThread::execNextDocPageWordTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行取页码文字任务...";
+    if (m_quit) {
+        qDebug() << "取页码文字任务已结束";
         return false;
+    }
 
     DocPageWordTask task;
 
-    if (!popNextDocPageWordTask(task))
+    if (!popNextDocPageWordTask(task)) {
+        qDebug() << "任务池不存在取页码文字任务，已结束";
         return false;
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，取页码文字任务已结束";
         return true;
+    }
+
 
     const QList<Word> &words = task.sheet->renderer()->getWords(task.page->itemIndex());
 
     emit sigDocPageWordTaskFinished(task, words);
 
+    qDebug() << "执行取页码文字任务已完成";
     return true;
 }
 
 bool PageRenderThread::execNextDocPageAnnotationTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行取页码注释任务...";
+    if (m_quit) {
+        qDebug() << "取页码注释任务已结束";
         return false;
+    }
 
     DocPageAnnotationTask task;
 
-    if (!popNextDocPageAnnotationTask(task))
+    if (!popNextDocPageAnnotationTask(task)) {
+        qDebug() << "任务池不存在取页码注释任务，已结束";
         return false;
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，取页码注释任务已结束";
         return true;
+    }
 
     const QList<deepin_reader::Annotation *> annots = task.sheet->renderer()->getAnnotations(task.page->itemIndex());
 
     emit sigDocPageAnnotationTaskFinished(task, annots);
 
+    qDebug() << "执行取页码注释任务已完成";
     return true;
 }
 
 bool PageRenderThread::execNextDocPageThumbnailTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行缩略图任务...";
+    if (m_quit) {
+        qDebug() << "缩略图任务已结束";
         return false;
+    }
 
     DocPageThumbnailTask task;
 
-    if (!popNextDocPageThumbnailTask(task))
+    if (!popNextDocPageThumbnailTask(task)) {
+        qDebug() << "任务池不存在缩略图任务，已结束";
         return false;
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，缩略图任务已结束";
         return true;
+    }
 
     QImage image = task.sheet->getImage(task.index, 174, 174);
 
     if (!image.isNull())
         emit sigDocPageThumbnailTaskFinished(task, QPixmap::fromImage(image));
-
+    qDebug() << "执行缩略图任务已完成";
     return true;
 }
 
 bool PageRenderThread::execNextDocOpenTask()
 {
-    if (m_quit)
+    qDebug() << "正在执行文档打开任务...";
+    if (m_quit) {
+        qDebug() << "文档打开任务已结束";
         return false;//false 为不用再继续循环调用
+    }
 
     DocOpenTask task;
 
-    if (!popNextDocOpenTask(task))
+    if (!popNextDocOpenTask(task)) {
+        qDebug() << "任务池不存在文档打开任务，已结束";
         return false;//false 为不用再继续循环调用
+    }
 
-    if (!DocSheet::existSheet(task.sheet))
+    if (!DocSheet::existSheet(task.sheet)) {
+        qDebug() << "文档不存在，文档打开任务已结束";
         return true;
+    }
 
     QString filePath = task.sheet->filePath();
 
@@ -682,21 +738,26 @@ bool PageRenderThread::execNextDocOpenTask()
     }
     PERF_PRINT_END("POINT-03", "");
     PERF_PRINT_END("POINT-05", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
+    qDebug() << "文档打开任务已完成";
 
     return true;
 }
 
 bool PageRenderThread::execNextDocCloseTask()
 {
+    qDebug() << "正在执行文档关闭任务...";
     DocCloseTask task;
 
-    if (!popNextDocCloseTask(task))
+    if (!popNextDocCloseTask(task)) {
+        qDebug() << "不存在关闭任务，已结束";
         return false;   //false 为不用再继续循环调用
+    }
 
     qDeleteAll(task.pages);
 
     delete task.document;
 
+    qDebug() << "文档关闭任务已完成";
     return true;
 }
 

@@ -669,6 +669,12 @@ private:
     void showMagnigierImage(const QPoint &point);
 
     /**
+     * @brief moveScrollBar 移动滚动条
+     * @param point
+     */
+    void moveScrollBar(const QPoint &point);
+
+    /**
      * @brief getAnnotPosInPage
      * 将传入的位置拉回到页面里，返回新的位置
      * @param pos 需要是page中的位置，全局的位置需要先使用page->mapFromScene

@@ -151,6 +151,7 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
+    qDebug() << "正在打开文档: " << filePath;
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_tabBar) {
         int index = m_tabBar->indexOfFilePath(filePath);
@@ -244,6 +245,7 @@ void CentralDocPage::onTabMoveIn(DocSheet *sheet)
 
 void CentralDocPage::onTabClosed(DocSheet *sheet)
 {
+    qDebug() << "(" << __FUNCTION__ << ") 标题栏点击，关闭当前标签页";
     closeSheet(sheet, true);
 }
 
@@ -294,9 +296,12 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
 
 bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 {
+    qDebug() << "(" << __FUNCTION__ << ") 关闭当前 sheet";
+    qDebug() << "当前 sheet 数量: " <<  DocSheet::g_sheetList.size();
     if (nullptr == sheet)
         return false;
 
+    //是否存在当前标签
     if (!DocSheet::existSheet(sheet))
         return false;
 
@@ -332,11 +337,13 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     delete sheet;
 
+    qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
     return true;
 }
 
 bool CentralDocPage::closeAllSheets(bool needToBeSaved)
 {
+    qDebug() << "正在关闭所有 sheet ...";
     QList<DocSheet *> sheets = m_tabBar->getSheets();
 
     if (sheets.count() > 0) {
@@ -346,7 +353,7 @@ bool CentralDocPage::closeAllSheets(bool needToBeSaved)
                 return false;
         }
     }
-
+    qDebug() << "所有 sheet 已关闭";
     return true;
 }
 

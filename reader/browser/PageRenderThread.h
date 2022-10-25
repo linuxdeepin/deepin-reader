@@ -78,7 +78,7 @@ struct DocOpenTask {//打开文档
     SheetRenderer *renderer = nullptr;
 };
 
-struct DocCloseTask {
+struct DocCloseTask {//关闭文档
     deepin_reader::Document *document = nullptr;
     QList<deepin_reader::Page *> pages;
 };
@@ -136,37 +136,110 @@ private:
     void run();
 
 private:
+    /**
+     * @brief hasNextTask 任务池中是否还存在任务
+     * @return true:存在 false:不存在
+     */
     bool hasNextTask();
 
+    /**
+     * @brief popNextDocPageNormalImageTask 任务池中是否还存在正常取图任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageNormalImageTask(DocPageNormalImageTask &task);
 
+    /**
+     * @brief popNextDocPageSliceImageTask 任务池中是否还存在取切片任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageSliceImageTask(DocPageSliceImageTask &task);
 
+    /**
+     * @brief popNextDocPageBigImageTask 任务池中是否还存在取大图任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageBigImageTask(DocPageBigImageTask &task);
 
+    /**
+     * @brief popNextDocPageWordTask 任务池中是否还存在取页码文字任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageWordTask(DocPageWordTask &task);
 
+    /**
+     * @brief popNextDocPageAnnotationTask 任务池中是否还存在取页码注释任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageAnnotationTask(DocPageAnnotationTask &task);
 
+    /**
+     * @brief popNextDocPageThumbnailTask 任务池中是否还存在缩略图任务
+     * @param task
+     * @return
+     */
     bool popNextDocPageThumbnailTask(DocPageThumbnailTask &task);
 
+    /**
+     * @brief popNextDocOpenTask 任务池中是否还存在打开文档任务
+     * @param task
+     * @return
+     */
     bool popNextDocOpenTask(DocOpenTask &task);
 
+    /**
+     * @brief popNextDocCloseTask 任务池中是否还存在文档关闭任务
+     * @param task
+     * @return true: 是 false:否
+     */
     bool popNextDocCloseTask(DocCloseTask &task);
 
 private:
+
+    /**
+     * @brief execNextDocPageNormalImageTask 执行正常取图任务
+     * @return
+     */
     bool execNextDocPageNormalImageTask();
 
+    /**
+     * @brief execNextDocPageSliceImageTask 执行取切片任务
+     * @return
+     */
     bool execNextDocPageSliceImageTask();
 
+    /**
+     * @brief execNextDocPageWordTask 执行取页码文字
+     * @return
+     */
     bool execNextDocPageWordTask();
 
+    /**
+     * @brief execNextDocPageAnnotationTask 执行取页码注释
+     * @return
+     */
     bool execNextDocPageAnnotationTask();
 
+    /**
+     * @brief execNextDocPageThumbnailTask 执行缩略图
+     * @return
+     */
     bool execNextDocPageThumbnailTask();
 
+    /**
+     * @brief execNextDocOpenTask 执行文档打开任务
+     * @return
+     */
     bool execNextDocOpenTask();
 
+    /**
+     * @brief execNextDocCloseTask 执行文档关闭任务
+     * @return
+     */
     bool execNextDocCloseTask();
 
 signals:
