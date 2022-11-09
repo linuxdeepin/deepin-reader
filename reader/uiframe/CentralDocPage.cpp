@@ -47,9 +47,12 @@
 #include <QTimer>
 #include <QDebug>
 
+#include <malloc.h>
+
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
+    qDebug() << "正在初始化主文档页面...";
     m_tabBar = new DocTabBar(this);
     connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
@@ -88,6 +91,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
         mainwindow->setProperty("orderlist", QVariant::fromValue(orderlst));
         mainwindow->setProperty("orderWidgets", QVariant::fromValue(orderlst));
     }
+    qDebug() << "主文档页面已初始化";
 }
 
 CentralDocPage::~CentralDocPage()
@@ -337,6 +341,7 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     delete sheet;
 
+    malloc_trim(0); //手动回收image所占内存
     qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
     return true;
 }
