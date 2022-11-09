@@ -915,6 +915,7 @@ void DocSheet::onSideAniFinished()
 
 void DocSheet::onOpened(deepin_reader::Document::Error error)
 {
+    qDebug() << "显示文档内容";
     if (deepin_reader::Document::NeedPassword == error) {
         showEncryPage();
     } else if (deepin_reader::Document::WrongPassword == error) {
