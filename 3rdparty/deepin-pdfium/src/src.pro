@@ -12,6 +12,7 @@ CONFIG += c++14
 #安全编译参数
 QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
 QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+QMAKE_LFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
 
 #获取当前系统页大小
 PageSize = $$system(getconf PAGESIZE)
