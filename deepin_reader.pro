@@ -15,4 +15,11 @@ SUBDIRS += htmltopdf
 
 SUBDIRS += reader
 
-SUBDIRS += tests
+###relseas不编译ut
+CONFIG += debug_and_release
+CONFIG(debug, debug|release) {
+    message("debug!!!")
+       SUBDIRS += tests
+}else{
+    message("release!!!")
+}
