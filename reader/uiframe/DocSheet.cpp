@@ -789,6 +789,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
+    qDebug() << "请求打印！";
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
