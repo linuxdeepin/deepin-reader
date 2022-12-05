@@ -129,6 +129,9 @@ public:
      */
     void setTitleBarFocusEnable(bool enable);
 
+private slots:
+    void onSetWindowTitle(QString filePath);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 

@@ -156,6 +156,7 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
     qDebug() << "正在打开文档: " << filePath;
+    emit sigSetWindowTitle(filePath);
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_tabBar) {
         int index = m_tabBar->indexOfFilePath(filePath);
@@ -754,6 +755,13 @@ void CentralDocPage::onUpdateTabLabelText()
 {
     if (m_tabBar->count() > 0)
         m_tabLabel->setText(m_tabBar->tabText(0));
+}
+
+void CentralDocPage::onSetWindowTitle(DocSheet *sheet)
+{
+    if (sheet != nullptr) {
+        emit sigSetWindowTitle(sheet->filePath());
+    }
 }
 
 QWidget *CentralDocPage::getTitleLabel()

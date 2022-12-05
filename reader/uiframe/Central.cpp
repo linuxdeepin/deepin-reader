@@ -117,12 +117,14 @@ CentralDocPage *Central::docPage()
         m_layout->addWidget(m_docPage);
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
+        connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_docPage, SLOT(onSetWindowTitle(DocSheet *)));
         connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
         connect(m_docPage, SIGNAL(sigNeedShowTips(QWidget *, const QString &, int)), this, SLOT(onShowTips(QWidget *, const QString &, int)));
         connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
         connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
         connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
         connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
+        connect(m_docPage, SIGNAL(sigSetWindowTitle(QString)), this, SIGNAL(sigSetWindowTitle(QString)));
     }
 
     return m_docPage;
