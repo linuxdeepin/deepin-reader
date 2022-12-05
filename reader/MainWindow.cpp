@@ -227,6 +227,7 @@ void MainWindow::initUI()
     m_central = new Central(this);
 
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
+    connect(m_central, SIGNAL(sigSetWindowTitle(QString)), this, SLOT(onSetWindowTitle(QString)));
 
     m_central->setMenu(m_menu);
 
@@ -367,6 +368,14 @@ void MainWindow::setTitleBarFocusEnable(bool enable)
     updateWidgetFocus("DTitlebarDWindowQuitFullscreenButton", enable ? Qt::TabFocus : Qt::NoFocus);
     updateWidgetFocus("DTitlebarDWindowMaxButton", enable ? Qt::TabFocus : Qt::NoFocus);
     updateWidgetFocus("DTitlebarDWindowCloseButton", enable ? Qt::TabFocus : Qt::NoFocus);
+}
+
+void MainWindow::onSetWindowTitle(QString filePath)
+{
+    qDebug() << "当前窗口名称： " << filePath;
+    if (!filePath.isNull()) {
+        setWindowTitle(filePath);
+    }
 }
 
 void MainWindow::resizeFullTitleWidget()

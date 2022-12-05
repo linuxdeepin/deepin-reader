@@ -28,7 +28,7 @@ class HandleMenu;
 
 /**
  * @brief The TitleMenu class
- * 窗体默认菜单
+ * 窗体默认菜单（主窗口右上角菜单选项）
  */
 DWIDGET_USE_NAMESPACE
 class TitleMenu : public DMenu
