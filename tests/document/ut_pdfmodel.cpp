@@ -1,7 +1,23 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     chendu <chendu@uniontech.com>
+*
+* Maintainer: chendu <chendu@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "PDFModel.h"
 #include "dpdfannot.h"
 #include "dpdfpage.h"
@@ -159,10 +175,16 @@ void allTextLooseRects_stub(void *, int &charCount, QStringList &texts, QVector<
     rects.append(QRectF(0, 20, 20, 10));
 }
 
-QVector<QRectF> search_stub(const QString &, bool, bool)
+QVector<PageSection> search_stub(const QString &, bool, bool)
 {
-    QVector<QRectF> results;
-    results.append(QRectF(0, 0, 12.3, 12.3));
+    PageLine line;
+    line.rect = QRectF(0, 0, 12.3, 12.3);
+
+    PageSection section;
+    section.append(line);
+
+    QVector<PageSection> results;
+    results.append(section);
     return results;
 }
 
@@ -296,8 +318,9 @@ TEST_F(TestPDFPage, UT_PDFPage_words_001)
 
 TEST_F(TestPDFPage, UT_PDFPage_search_001)
 {
+    typedef QVector<PageSection> (*searchPtr)(const QString &, bool, bool);
     Stub s;
-    s.set(static_cast<QVector<QRectF>(DPdfPage::*)(const QString &, bool, bool)>(ADDR(DPdfPage, search)), search_stub);
+    s.set((searchPtr)ADDR(DPdfPage, search), search_stub);
 
     EXPECT_TRUE(m_tester->search(QString("test"), false, false).size() == 1);
 }

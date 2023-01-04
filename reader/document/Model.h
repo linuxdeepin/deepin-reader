@@ -22,6 +22,7 @@
 #define DOCUMENTMODEL_H
 
 #include "Global.h"
+#include "dpdfpage.h"
 
 #include <QList>
 #include <QtPlugin>
@@ -74,6 +75,8 @@ typedef QVector< Section > Outline;
 
 typedef QMap<QString, QVariant> Properties;
 
+typedef DPdfGlobal::PageSection PageSection;
+typedef DPdfGlobal::PageLine PageLine;
 struct Section {
     int nIndex = -1;
     QPointF offsetPointF;
@@ -104,8 +107,17 @@ struct Word {
 
 struct SearchResult {
     int page = 0;
-    QVector< QRectF > rects;
-    QList<Word> words;
+    QVector<PageSection> sections;
+
+    /**
+     * @brief setctionsFillText 使用getText，填充sections的text
+     */
+    bool setctionsFillText(std::function<QString(int, QRectF)> getText);
+
+    /**
+     * @brief sectionBoundingRect 返回section的boundingRect
+     */
+    static QRectF sectionBoundingRect(const PageSection &section);
 };
 
 struct FileInfo {
@@ -189,7 +201,7 @@ public:
     virtual Link getLinkAtPoint(const QPointF &) { return Link(); }
     virtual QString text(const QRectF &rect) const = 0;
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
-    virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
+    virtual QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
     virtual bool hasWidgetAnnots() const { return false; }

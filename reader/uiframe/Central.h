@@ -137,12 +137,6 @@ signals:
      */
     void sigNeedClose();
 
-    /**
-     * @brief sigSetWindowTitle
-     * 打开文件时，通知主窗口设置windoTitle
-     */
-    void sigSetWindowTitle(QString filePath);
-
 public slots:
     /**
      * @brief onSheetCountChanged

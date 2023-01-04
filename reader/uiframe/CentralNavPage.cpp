@@ -68,7 +68,6 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     layout->addWidget(formatLabel);
     layout->addSpacing(14);
     layout->addWidget(chooseButton, 1, Qt::AlignHCenter);
-    layout->addSpacing(25);
     layout->addStretch();
 
     this->setLayout(layout);

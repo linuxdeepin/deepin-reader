@@ -323,7 +323,6 @@ void DocTabBar::onTabCloseRequested(int index)
     if (nullptr == sheet)
         return;
 
-    qDebug() << "(" << __FUNCTION__ << ") 标题栏点击，关闭当前标签页";
     emit sigTabClosed(sheet);
 
     m_intervalTimer->start(100);    //100ms内的重复点击将被过滤

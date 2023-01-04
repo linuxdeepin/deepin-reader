@@ -78,7 +78,6 @@ deepin_reader::Link SheetRenderer::getLinkAtPoint(int index, const QPointF &poin
 
 QList<deepin_reader::Word> SheetRenderer::getWords(int index)
 {
-    qInfo() << "获取当前页的所有文本";
     if (m_pages.count() <= index)
         return QList<deepin_reader::Word>();
 
@@ -149,10 +148,10 @@ QString SheetRenderer::getText(int index, const QRectF &rect)
     return m_pages.value(index)->text(rect);
 }
 
-QVector<QRectF> SheetRenderer::search(int index, const QString &text, bool matchCase, bool wholeWords)
+QVector<deepin_reader::PageSection> SheetRenderer::search(int index, const QString &text, bool matchCase, bool wholeWords)
 {
     if (m_pages.count() <= index)
-        return QVector<QRectF>();
+        return QVector<deepin_reader::PageSection>();
 
     return m_pages.value(index)->search(text, matchCase, wholeWords);
 }

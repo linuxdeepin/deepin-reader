@@ -1,5 +1,5 @@
-deepin-reader (5.8.0.1) unstable; urgency=low
+deepin-reader (5.10.13) unstable; urgency=medium
 
-  * Autobuild Tag 5.8.0.1
+  * Initial Release.
 
- -- TagBuilder <tagbuilder@deepin.com>  Fri, 30 oct 2020 18:46:29 +0000
+ -- <tagbuilder@deepin.com>  Fri, 30 oct 2020 18:46:29 +0000

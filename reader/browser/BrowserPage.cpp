@@ -152,16 +152,18 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     painter->setBrush(QColor(238, 220, 0, 100));
 
-    int lightsize = m_searchLightrectLst.size();
-
-    for (int i = 0; i < lightsize; i++) {
-        painter->drawRect(getNorotateRect(m_searchLightrectLst[i]));
+    //search
+    for(const PageSection &section : m_searchLightrectLst) {
+        for(const PageLine &line : section) {
+            painter->drawRect(getNorotateRect(line.rect));
+        }
     }
 
+    //search and Select
     painter->setBrush(QColor(59, 148, 1, 100));
-
-    if (m_searchSelectLighRectf.width() > 0 || m_searchSelectLighRectf.height() > 0)
-        painter->drawRect(getNorotateRect(m_searchSelectLighRectf));
+    for(const PageLine &line : m_searchSelectLighRectf) {
+        painter->drawRect(getNorotateRect(line.rect));
+    }
 
     if (m_drawMoveIconRect) {
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
@@ -465,7 +467,6 @@ QString BrowserPage::selectedWords()
     QString text;
     foreach (BrowserWord *word, m_words) {
         if (word->isSelected()) {
-            //qDebug() << "word->text(): " <<  word->text();
             text += word->text();
         }
     }
@@ -499,7 +500,6 @@ void BrowserPage::loadWords()
         if (!qFuzzyCompare(m_wordScaleFactor, m_scaleFactor)) {
             m_wordScaleFactor = m_scaleFactor;
             foreach (BrowserWord *word, m_words) {
-                qDebug() << "1111word->text(): " <<  word->text();
                 word->setScaleFactor(m_scaleFactor);
             }
         }
@@ -891,11 +891,6 @@ QPointF BrowserPage::getTopLeftPos()
     return p;
 }
 
-Dr::FileType BrowserPage::fileType()
-{
-    return m_sheet->fileType();
-}
-
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
     if (nullptr == annota)
@@ -991,26 +986,26 @@ bool BrowserPage::sceneEvent(QEvent *event)
     return QGraphicsItem::sceneEvent(event);
 }
 
-void BrowserPage::setSearchHighlightRectf(const QVector< QRectF > &rectflst)
+void BrowserPage::setSearchHighlightRectf(const QVector<PageSection> &sections)
 {
-    if (rectflst.size() > 0) {
+    if (sections.size() > 0) {
         if (m_parent->currentPage() == this->itemIndex() + 1)
-            m_searchSelectLighRectf = rectflst.first();
-        m_searchLightrectLst = rectflst;
+            m_searchSelectLighRectf = sections.first();
+        m_searchLightrectLst = sections;
         update();
     }
 }
 
 void BrowserPage::clearSearchHighlightRects()
 {
-    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
+    m_searchSelectLighRectf.clear();
     m_searchLightrectLst.clear();
     update();
 }
 
 void BrowserPage::clearSelectSearchHighlightRects()
 {
-    m_searchSelectLighRectf = QRectF(0, 0, 0, 0);
+    m_searchSelectLighRectf.clear();
     update();
 }
 
@@ -1019,14 +1014,15 @@ int BrowserPage::searchHighlightRectSize()
     return m_searchLightrectLst.size();
 }
 
-QRectF BrowserPage::findSearchforIndex(int index)
+PageSection BrowserPage::findSearchforIndex(int index)
 {
     if (index >= 0 && index < m_searchLightrectLst.size()) {
         m_searchSelectLighRectf = m_searchLightrectLst[index];
         update();
         return m_searchSelectLighRectf;
     }
-    return QRectF(-1, -1, -1, -1);
+
+    return PageSection();
 }
 
 QRectF BrowserPage::getNorotateRect(const QRectF &rect)
@@ -1090,18 +1086,6 @@ BrowserAnnotation *BrowserPage::getBrowserAnnotation(const QPointF &point)
     }
 
     return nullptr;
-}
-
-bool BrowserPage::isExitBookMark(const QPointF &mousePoint)
-{
-    QRect rect(
-        static_cast<int>(bookmarkRect().x()),
-        static_cast<int>(10),
-        39, 39);
-    //qDebug() << "bookmarkMouseRect(): " << bookmarkMouseRect() << "mousePoint" << mousePoint;
-    //qDebug() << "当前鼠标位置是否存在书签: " << bookmarkMouseRect().contains(mousePoint.toPoint());
-    bool flag = bookmarkMouseRect().contains(mousePoint.toPoint());
-    return flag;
 }
 
 BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)

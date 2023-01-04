@@ -37,23 +37,23 @@ int main(int argc, char *argv[])
         // 解决klu panguV平台使用QWebEnginePage崩溃的问题，不支持gpu渲染
         qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
     }
-
     // 解决__sw_64__平台使用QWebEnginePage崩溃的问题
 #ifdef __sw_64__
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox");
 #endif
 
+    //需求文案中不涉及，不做翻译
     QCommandLineParser parser;
     parser.setApplicationDescription(
-        QCoreApplication::translate("main", "Converts the web page INPUT into the PDF file OUTPUT."));
+        /*QCoreApplication::translate("main", */("Converts the web page INPUT into the PDF file OUTPUT."));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument(
-        QCoreApplication::translate("main", "INPUT"),
-        QCoreApplication::translate("main", "Input URL for PDF conversion."));
+        /*QCoreApplication::translate("main", */("INPUT"),
+        /*QCoreApplication::translate("main", */("Input URL for PDF conversion."));
     parser.addPositionalArgument(
-        QCoreApplication::translate("main", "OUTPUT"),
-        QCoreApplication::translate("main", "Output file name for PDF conversion."));
+        /*QCoreApplication::translate("main", */("OUTPUT"),
+        /*QCoreApplication::translate("main", */("Output file name for PDF conversion."));
 
     parser.process(QCoreApplication::arguments());
 

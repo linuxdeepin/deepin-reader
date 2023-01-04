@@ -1,15 +1,11 @@
-// Copyright 2014 PDFium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
-
 #include "dpdfdoc.h"
 #include "dpdfpage.h"
 
 #include "public/fpdfview.h"
 #include "public/fpdf_doc.h"
 #include "public/fpdf_save.h"
+#include "public/fpdf_dataavail.h"
+#include "public/fpdf_formfill.h"
 
 #include "core/fpdfdoc/cpdf_bookmark.h"
 #include "core/fpdfdoc/cpdf_bookmarktree.h"
@@ -21,6 +17,38 @@
 #include <QTemporaryDir>
 #include <QUuid>
 #include <unistd.h>
+
+/**
+ * @brief The PDFIumLoader class for FPDF_FILEACCESS
+ */
+class PDFIumLoader
+{
+public:
+    PDFIumLoader() {}
+    PDFIumLoader(const char *pBuf, size_t len);
+    const char *m_pBuf;
+    size_t m_Len;
+};
+
+/**
+ * @brief GetBlock for FPDF_FILEACCESS
+ * @param param 为PDFIumLoader类型
+ */
+static int GetBlock(void *param, unsigned long pos, unsigned char *pBuf, unsigned long size)
+{
+    PDFIumLoader *pLoader = static_cast<PDFIumLoader *>(param);
+    if (pos + size < pos || pos + size > pLoader->m_Len) return 0;
+    memcpy(pBuf, pLoader->m_pBuf + pos, size);
+    return 1;
+}
+
+/**
+ * @brief IsDataAvail for FX_FILEAVAIL
+ */
+static FPDF_BOOL IsDataAvail(FX_FILEAVAIL * /*pThis*/, size_t /*offset*/, size_t /*size*/)
+{
+    return true;
+}
 
 DPdfDoc::Status parseError(int error)
 {
@@ -99,12 +127,14 @@ DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString 
 
     DPdfMutexLocker locker("DPdfDocPrivate::loadFile");
 
+    qDebug() << "deepin-pdfium正在加载PDF文档... 文档名称: " << filePath;
     void *ptr = FPDF_LoadDocument(m_filePath.toUtf8().constData(),
                                   password.toUtf8().constData());
 
     m_docHandler = static_cast<DPdfDocHandler *>(ptr);
 
     m_status = m_docHandler ? DPdfDoc::SUCCESS : parseError(static_cast<int>(FPDF_GetLastError()));
+    qDebug() << "文档（" << filePath << "）文档加载状态: " << m_status;
 
     if (m_docHandler) {
         m_pageCount = FPDF_GetPageCount(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler));
@@ -162,6 +192,37 @@ DPdfDoc::Status DPdfDoc::tryLoadFile(const QString &filename, const QString &pas
     }
 
     return status;
+}
+
+bool DPdfDoc::isLinearized(const QString &fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly)) {
+        qInfo() << "file open failed when isLinearized" << fileName;
+    }
+    QByteArray content = file.readAll();
+    int len = content.length();
+    const char *pBuf = content.data();
+
+    PDFIumLoader m_PDFIumLoader;
+    m_PDFIumLoader.m_pBuf = pBuf;//pdf content
+    m_PDFIumLoader.m_Len = size_t(len);//content len
+
+    FPDF_FILEACCESS m_fileAccess;
+    memset(&m_fileAccess, '\0', sizeof(m_fileAccess));
+    m_fileAccess.m_FileLen = static_cast<unsigned long>(len);
+    m_fileAccess.m_GetBlock = GetBlock;
+    m_fileAccess.m_Param = &m_PDFIumLoader;
+
+    FX_FILEAVAIL m_fileAvail;
+    memset(&m_fileAvail, '\0', sizeof(m_fileAvail));
+    m_fileAvail.version = 1;
+    m_fileAvail.IsDataAvail = IsDataAvail;
+
+    FPDF_AVAIL m_PdfAvail;
+    m_PdfAvail = FPDFAvail_Create(&m_fileAvail, &m_fileAccess);
+
+    return FPDFAvail_IsLinearized(m_PdfAvail) > 0;
 }
 
 static QFile saveWriter;
@@ -318,7 +379,7 @@ DPdfDoc::Properies DPdfDoc::proeries()
         properies.insert("Version", QString("%1.%2").arg(fileversion / 10).arg(fileversion % 10));
     }
     properies.insert("Encrypted", isEncrypted());
-    properies.insert("Linearized", FPDF_GetFileLinearized(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)));
+    properies.insert("Linearized", isLinearized(d_func()->m_filePath));
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
     properies.insert("Creator", QString());

@@ -1,9 +1,4 @@
 #!/bin/bash
-
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 builddir=build
 reportdir=build-ut
 rm -rf $builddir
@@ -13,7 +8,6 @@ rm -rf ../$reportdir
 mkdir ../$builddir
 mkdir ../$reportdir
 cd ../$builddir
-export QT_SELECT=qt5
 #编译
 qmake DEFINES+=CMAKE_SAFETYTEST_ARG_ON ../deepin_reader.pro
 make -j8

@@ -55,16 +55,7 @@ void ReadMagnifierManager::run()
         m_tTasklst.clear();
 
         if (task.page) {
-//            const QImage &image = task.page->getImagePoint(task.scaleFactor, task.mousePos);
-            QImage image;
-            //qDebug() << "task.scaleFactor: " << task.scaleFactor;
-            if (Dr::FileType::DJVU == task.page->fileType()  && task.scaleFactor <= 2.25) {
-                //缩放比例小于30%时，DJVU文档做了一个特殊处理，因为djvu底层在缩放比小的时候无法准确的获取出当前鼠标位置的图片
-                image = task.page->getCurImagePoint(task.mousePos);
-            } else {
-                image = task.page->getImagePoint(task.scaleFactor, task.mousePos);
-            }
-
+            const QImage &image = task.page->getImagePoint(task.scaleFactor, task.mousePos);
             QMetaObject::invokeMethod(task.target, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(const MagnifierInfo_t &, task), Q_ARG(const QImage &, image));
         }
 
@@ -142,7 +133,6 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
 
         setMagniFierImage(image);
     } else {
-        //qDebug() << "放大镜 page 为空！" ;
         setMagniFierImage(QImage());
     }
 
@@ -169,14 +159,12 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
 
 void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const QImage &image)
 {
-    //qDebug() << "更新放大镜画面！";
     if (task.mousePos == m_lastPoint && qFuzzyCompare(task.scaleFactor, m_lastScaleFactor))
         setMagniFierImage(image);
 }
 
 void BrowserMagniFier::setMagniFierImage(const QImage &image)
 {
-    //qDebug() << "开始绘制放大镜画面...";
     QPixmap pix(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
 
     pix.fill(Qt::transparent);
@@ -203,7 +191,6 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
         painter.drawImage(0, 0, im.scaled(static_cast<int>(240 * dApp->devicePixelRatio()), static_cast<int>(240 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         painter.fillRect(this->rect(), Qt::white);
-        //qDebug() << "未获取到需要放大的图片！图片为空！";
     }
     painter.restore();
 
@@ -212,5 +199,4 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
     pix.setDevicePixelRatio(dApp->devicePixelRatio());
 
     setPixmap(pix);
-    //qDebug() << "放大镜画面绘制完成";
 }

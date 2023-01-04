@@ -172,6 +172,10 @@ protected:
      */
     void mousePressEvent(QMouseEvent *event) override;
 
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+    void wheelEvent(QWheelEvent *event) override;
+
 private:
     int m_curPageIndex = 0;
     bool m_canRestart = false;

@@ -34,7 +34,6 @@
 #include "MsgHeader.h"
 #include "EncryptionPage.h"
 #include "PDFModel.h"
-#include "DPrintPreviewDialog"
 #include "FileAttrWidget.h"
 #include "Application.h"
 #include "Utils.h"
@@ -43,6 +42,10 @@
 #include "PageSearchThread.h"
 #include "BrowserPage.h"
 #include "MainWindow.h"
+
+#include <DSpinner>
+#include <DPrintPreviewDialog>
+#include <DWidgetUtil>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -56,6 +59,7 @@
 #include <QDebug>
 #include <QTemporaryDir>
 #include <QProcess>
+#include <QGraphicsDropShadowEffect>
 
 #include <signal.h>
 #include <sys/types.h>
@@ -65,15 +69,7 @@ DWIDGET_USE_NAMESPACE
 QReadWriteLock DocSheet::g_lock;
 QStringList DocSheet::g_uuidList;
 QList<DocSheet *> DocSheet::g_sheetList;
-
-
-const int DocSheet::WindowMinWidth    = 680;
-const int DocSheet::WindowMinHeight   = 300;
-const int DocSheet::SidebarMinWidth   = 266;
-const int DocSheet::SidebarMaxWidth   = 380;
-const int DocSheet::SplitterWidth     = 5;
-const int DocSheet::BrowserMinWidth   = DocSheet::WindowMinWidth - DocSheet::SidebarMinWidth - DocSheet::SplitterWidth;
-
+QString DocSheet::g_lastOperationFile;
 DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
@@ -91,8 +87,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
 
     m_browser = new SheetBrowser(this);
-    qDebug() << "新建右侧视图";
-    m_browser->setMinimumWidth(DocSheet::BrowserMinWidth);
+    m_browser->setMinimumWidth(481);
 
     if (Dr::PDF == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
@@ -103,7 +98,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     else
         m_sidebar = new SheetSidebar(this, nullptr);
 
-    m_sidebar->setMinimumWidth(DocSheet::SidebarMinWidth);
+    m_sidebar->setMinimumWidth(266);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
@@ -246,6 +241,7 @@ void DocSheet::openFileAsync(const QString &password)
 {
     m_password = password;
 
+    qInfo() << "添加异步打开任务...";
     m_renderer->openFileAsync(m_password);
 }
 
@@ -535,7 +531,6 @@ void DocSheet::copySelectedText()
 
     QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
-    qInfo() << "通过ctrl+c将内容复制到剪切板: "/* << selectedWordsText*/;
 }
 
 void DocSheet::highlightSelectedText()
@@ -711,6 +706,7 @@ QString DocSheet::convertedFileDir()
     if (m_tempDir == nullptr)
         m_tempDir = new QTemporaryDir;
 
+    qDebug() << "临时目录: " << m_tempDir->path();
     return m_tempDir->path();
 }
 
@@ -757,6 +753,10 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
     if (pageRange.isEmpty())
         return;
 
+    //后台加载动画
+    LoadingWidget loading(qApp->activeWindow());
+    loading.show();
+
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
@@ -777,7 +777,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
             printWidth = printHeight * boundingrect.width() / boundingrect.height();
         }
 
-        QImage image = getImage(pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
+        QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
         painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
                                 (static_cast<int>(pageRect.height()) - image.height()) / 2,
                                 image.width(), image.height()), image);
@@ -789,7 +789,6 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
-    qDebug() << "请求打印！";
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
@@ -804,6 +803,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     int toIndex = printer->toPage() <= 0 ? pagesCount - 1 : printer->toPage() - 1;
 
+#if 0
     for (int index = fromIndex; index <= toIndex; index++) {
         if (index >= pagesCount)
             break;
@@ -833,6 +833,23 @@ void DocSheet::onPrintRequested(DPrinter *printer)
         if (index != toIndex)
             printer->newPage();
     }
+
+#else
+    //后台加载动画
+    LoadingWidget loading(qApp->activeWindow());
+    loading.show();
+
+    for (int index = fromIndex; index <= toIndex; index++) {
+        if (index >= pagesCount)
+            break;
+
+        QImage imageX3 = loading.getImage(this, index, int(pageRect.width() * 3), int(pageRect.height() * 3));
+
+        painter.drawImage(pageRect, imageX3, QRect(0, 0, imageX3.width(), imageX3.height()));
+        if (index != toIndex)
+            printer->newPage();
+    }
+#endif
 }
 
 void DocSheet::openSlide()
@@ -916,7 +933,6 @@ void DocSheet::onSideAniFinished()
 
 void DocSheet::onOpened(deepin_reader::Document::Error error)
 {
-    qDebug() << "显示文档内容";
     if (deepin_reader::Document::NeedPassword == error) {
         showEncryPage();
     } else if (deepin_reader::Document::WrongPassword == error) {
@@ -961,7 +977,6 @@ bool DocSheet::isFullScreen()
 
 void DocSheet::openFullScreen()
 {
-    qDebug() << "打开全屏！";
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return;
@@ -983,7 +998,6 @@ void DocSheet::openFullScreen()
 
 bool DocSheet::closeFullScreen(bool force)
 {
-    qDebug() << "关闭全屏！";
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
     if (nullptr == doc)
         return false;
@@ -1188,7 +1202,13 @@ void DocSheet::setAlive(bool alive)
 
         g_lock.unlock();
 
-        Database::instance()->readOperation(this);
+        if (Database::instance()->readOperation(this)) {
+            qInfo() << "read from database config";
+        } else if (readLastFileOperation()) {
+            qInfo() << "read from last operation file config";
+        } else {
+            qInfo() << "read from default config";
+        }
 
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
 
@@ -1212,6 +1232,27 @@ void DocSheet::setAlive(bool alive)
 
         g_lock.unlock();
     }
+}
+
+bool DocSheet::readLastFileOperation()
+{
+    QString filePath = DocSheet::g_lastOperationFile;
+    if (filePath.isEmpty())
+        return false;
+
+    DocSheet *sheet = nullptr;
+    foreach (sheet, g_sheetList) {
+        if (sheet != this && sheet->filePath() == filePath) {
+            break;
+        }
+    }
+    if (!sheet) {
+        return false;
+    }
+
+    qInfo() << __LINE__ << "read config from last operation file: " << filePath;
+    m_operation = sheet->operationRef();
+    return true;
 }
 
 void DocSheet::showEncryPage()
@@ -1261,23 +1302,43 @@ void DocSheet::onPopPrintDialog()
     if (!this->opened())
         return;
 
-    DPrintPreviewDialog preview(this);
+    DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
+    preview->setAttribute(Qt::WA_DeleteOnClose);
 
-#if (DTK_VERSION_MAJOR > 5 || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >=10)))
-    preview.setAsynPreview(pageCount());
-    preview.setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::PDF == fileType() || Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
-        qDebug() << "打印预览文件路径: " << openedFilePath();
-        preview.setPrintFromPath(openedFilePath());
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
+    //文件打印
+    preview->setAsynPreview(pageCount());
+    preview->setDocName(QFileInfo(filePath()).fileName());
+    if (Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
+        preview->setPrintFromPath(openedFilePath());
     }
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *, const QVector<int> &)>(&DPrintPreviewDialog::paintRequested),
-            this, static_cast<void(DocSheet::*)(DPrinter *, const QVector<int> &)>(&DocSheet::onPrintRequested));
-#else
-    connect(&preview, static_cast<void(DPrintPreviewDialog::*)(DPrinter *)>(&DPrintPreviewDialog::paintRequested),
-            this, static_cast<void(DocSheet::*)(DPrinter *)>(&DocSheet::onPrintRequested));
-#endif
 
-    preview.exec();
+    //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
+    if (Dr::PDF == fileType()) {
+        deepin_reader::Document *document = nullptr;
+        deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
+        document = DocumentFactory::getDocument(m_fileType,
+                                                m_filePath,
+                                                convertedFileDir(),
+                                                m_password, nullptr, error);
+
+        QString pdfPath = filePath();
+        qInfo()  << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
+        if (document->properties().value("Linearized").toBool()) {
+            pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
+            if (!m_renderer->saveAs(pdfPath)) {
+                qInfo() << "saveAs failed when print Linearized pdf";
+                return;
+            }
+        }
+        preview->setPrintFromPath(pdfPath);
+    }
+    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
+#else
+    //图片打印
+    connect(preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *>::of(&DocSheet::onPrintRequested));
+#endif
+    preview->open();
 }
 
 void DocSheet::onPopInfoDialog()
@@ -1294,10 +1355,69 @@ QSizeF DocSheet::pageSizeByIndex(int index)
 
 void DocSheet::resetChildParent()
 {
-    qDebug() << "重置侧边栏的父对象！";
     m_sidebar->setParent(nullptr);
     m_sidebar->setParent(this);
 
-//    m_browser->setParent(nullptr);
-//    m_browser->setParent(this);
+    m_browser->setParent(nullptr);
+    m_browser->setParent(this);
+}
+
+DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_parentWidget(parent)
+{
+    Q_ASSERT(m_parentWidget);
+    setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
+
+    DSpinner *spinner = new DSpinner(this);
+    spinner->setFixedSize(32, 32);
+    moveToCenter(spinner);
+    spinner->start();
+
+    m_parentWidget->setEnabled(false);
+
+    raise();
+}
+
+DocSheet::LoadingWidget::~LoadingWidget()
+{
+    m_parentWidget->setEnabled(true);
+}
+
+QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, int height)
+{
+    QImage image;
+    QEventLoop loop;
+    QThread *thread = QThread::create([ =, &image]() {
+        image = doc->getImage(index, width, height);
+    });
+    QObject::connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+
+    loop.exec(QEventLoop::ExcludeSocketNotifiers);
+
+    return image;
+}
+
+void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    //整体的背景
+    int type = DGuiApplicationHelper::instance()->themeType();
+    QColor tColor = type == 1 ? "#FFFFFF" : "#000000";
+    tColor.setAlphaF(0.3);
+    painter.fillRect(this->rect(), tColor);
+
+    //进度条的背景
+    QPainterPath path;
+    QRect shadowRect((this->width() - 80) / 2, (this->height() - 80) / 2, 80, 80);
+    path.addRoundedRect(shadowRect, 18, 18);
+    QColor bg = this->palette().color(QPalette::Active, QPalette::Button);
+    painter.setBrush(bg);
+    painter.setPen(QPen(QColor(0, 0, 0, int(255 * 0.05)), 1));
+    painter.drawPath(path);
 }
