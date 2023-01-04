@@ -69,8 +69,12 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence::Save);
     keyList.append(QKeySequence::Copy);
     // 屏蔽右侧区域的切页快捷键，使用默认的滚动效果
-//    keyList.append(QKeySequence(Qt::Key_Left));
-//    keyList.append(QKeySequence(Qt::Key_Right));
+    // when using slide mode, left & right keys are needed. modify by lz,at 2022.4.18
+    keyList.append(QKeySequence(Qt::Key_Left));
+    keyList.append(QKeySequence(Qt::Key_Right));
+
+    keyList.append(QKeySequence(Qt::Key_Up));
+    keyList.append(QKeySequence(Qt::Key_Down));
     keyList.append(QKeySequence(Qt::Key_Space));
     keyList.append(QKeySequence(Qt::Key_Escape));
     keyList.append(QKeySequence(Qt::Key_F5));
@@ -92,6 +96,8 @@ Central::Central(QWidget *parent)
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
     keyList.append(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Slash));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_Home));
+    keyList.append(QKeySequence(Qt::CTRL | Qt::Key_End));
 
     foreach (auto key, keyList) {
         auto action = new QAction(this);
@@ -117,14 +123,12 @@ CentralDocPage *Central::docPage()
         m_layout->addWidget(m_docPage);
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_menu, SLOT(onCurSheetChanged(DocSheet *)));
         connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_widget, SLOT(onCurSheetChanged(DocSheet *)));
-        connect(m_docPage, SIGNAL(sigCurSheetChanged(DocSheet *)), m_docPage, SLOT(onSetWindowTitle(DocSheet *)));
         connect(m_docPage, SIGNAL(sigFindOperation(const int &)), m_widget, SLOT(onFindOperation(const int &)));
         connect(m_docPage, SIGNAL(sigNeedShowTips(QWidget *, const QString &, int)), this, SLOT(onShowTips(QWidget *, const QString &, int)));
         connect(m_docPage, SIGNAL(sigNeedClose()), this, SIGNAL(sigNeedClose()));
         connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
         connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
         connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
-        connect(m_docPage, SIGNAL(sigSetWindowTitle(QString)), this, SIGNAL(sigSetWindowTitle(QString)));
     }
 
     return m_docPage;
@@ -201,8 +205,9 @@ void Central::handleShortcut(const QString &shortcut)
         ShortCutShow show;
         show.setSheet(docPage()->getCurSheet());
         show.show();
-    } else
+    } else {
         docPage()->handleShortcut(shortcut);
+    }
 }
 
 bool Central::handleClose(bool needToBeSaved)
@@ -349,7 +354,7 @@ void Central::dropEvent(QDropEvent *event)
 
             QString filePath = url.toLocalFile();
 
-            qDebug() << "拖动打开文档:" <<  filePath;
+            qInfo() << "拖动打开文档:" <<  filePath;
             if (!MainWindow::activateSheetIfExist(filePath)) {
                 docPage()->addFileAsync(filePath);
             }

@@ -25,7 +25,6 @@
 #include "Model.h"
 
 #include <DLabel>
-#include <DGuiApplicationHelper>
 
 #include <QStackedLayout>
 
@@ -59,20 +58,7 @@ void SearchResWidget::initWidget()
     m_stackLayout->addWidget(m_pImageListView);
 
     DLabel *tipLab = new DLabel(tr("No search results"));
-
-    DGuiApplicationHelper::ColorType t_type = DGuiApplicationHelper::instance()->themeType();
-    DGuiApplicationHelper::instance()->setPaletteType(t_type);
-    DPalette pe;
-    QColor color;
-    if (t_type == 1) {
-        color.setRgbF(85, 85, 85, 0.4);
-        pe.setColor(DPalette::PlaceholderText, color);
-    } else {
-        color.setRgbF(0, 0, 0, 0.3);
-        pe.setColor(QPalette::BrightText, color);
-    }
-    tipLab->setPalette(pe);
-    tipLab->setForegroundRole(DPalette::PlaceholderText);
+    tipLab->setForegroundRole(QPalette::ToolTipText);
     tipLab->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(tipLab, DFontSizeManager::T6);
     m_stackLayout->addWidget(tipLab);
@@ -83,11 +69,13 @@ void SearchResWidget::initWidget()
 void SearchResWidget::handleSearchResultComming(const deepin_reader::SearchResult &search)
 {
     QString strText;
-    for (const deepin_reader::Word &s : search.words) {
-        strText += s.text.trimmed();
-        strText += QString("    ");
+    for (const auto &section : search.sections) {
+        for (const auto &line : section) {
+            strText += line.text.trimmed();
+            strText += QString("    ");//:\t
+        }
     }
-    addSearchsItem(search.page - 1, strText, search.words.size());
+    addSearchsItem(search.page - 1, strText, search.sections.size());
 }
 
 int  SearchResWidget::handleFindFinished()

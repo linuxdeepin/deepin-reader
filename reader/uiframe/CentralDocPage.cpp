@@ -47,12 +47,9 @@
 #include <QTimer>
 #include <QDebug>
 
-#include <malloc.h>
-
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
-    qDebug() << "正在初始化主文档页面...";
     m_tabBar = new DocTabBar(this);
     connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
@@ -91,7 +88,6 @@ CentralDocPage::CentralDocPage(DWidget *parent)
         mainwindow->setProperty("orderlist", QVariant::fromValue(orderlst));
         mainwindow->setProperty("orderWidgets", QVariant::fromValue(orderlst));
     }
-    qDebug() << "主文档页面已初始化";
 }
 
 CentralDocPage::~CentralDocPage()
@@ -118,10 +114,21 @@ void CentralDocPage::openCurFileFolder()
         return;
 
     QString filePath = sheet->filePath();
-    bool result = QProcess::startDetached(QString("dde-file-manager \"%1\" --show-item").arg(filePath));
-    if (!result) {
-        QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
+    QUrl displayUrl = QUrl(filePath);
+    qDebug() << "在文件夹中显示当前文件: " << displayUrl;
+    QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
+                                 QStringLiteral("/org/freedesktop/FileManager1"),
+                                 QStringLiteral("org.freedesktop.FileManager1"));
+    if (interface.isValid()) {
+        QStringList list;
+        list << displayUrl.toString();
+        interface.call("ShowItems", list, "");
     }
+
+//    bool result = QProcess::startDetached(QString("dde-file-manager \"%1\" --show-item").arg(filePath));
+//    if (!result) {
+//        QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
+//    }
 }
 
 void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
@@ -156,11 +163,11 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
     qDebug() << "正在打开文档: " << filePath;
-    emit sigSetWindowTitle(filePath);
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_tabBar) {
         int index = m_tabBar->indexOfFilePath(filePath);
         if (index >= 0 && index < m_tabBar->count()) {
+            qInfo() << "此文档已经被打开，自动跳转到该文档界面";
             m_tabBar->setCurrentIndex(index);
             return;
         }
@@ -169,8 +176,8 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     Dr::FileType fileType = Dr::fileType(filePath);
 
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
-        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
+        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         return;
     }
 
@@ -303,6 +310,7 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 {
     qDebug() << "(" << __FUNCTION__ << ") 关闭当前 sheet";
     qDebug() << "当前 sheet 数量: " <<  DocSheet::g_sheetList.size();
+
     if (nullptr == sheet)
         return false;
 
@@ -342,7 +350,6 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     delete sheet;
 
-    malloc_trim(0); //手动回收image所占内存
     qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
     return true;
 }
@@ -359,6 +366,7 @@ bool CentralDocPage::closeAllSheets(bool needToBeSaved)
                 return false;
         }
     }
+
     qDebug() << "所有 sheet 已关闭";
     return true;
 }
@@ -519,7 +527,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    qDebug() << "键盘按下: " << s;
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
@@ -545,6 +552,17 @@ void CentralDocPage::handleShortcut(const QString &s)
             && getCurSheet()->getSheetBrowser()->getNoteEditWidget()->isVisible()) {
         getCurSheet()->getSheetBrowser()->getNoteEditWidget()->close();
         return;
+    }
+
+    if (s == Dr::key_ctrl_home) {
+        auto sheet = getCurSheet();
+        if (sheet)
+            sheet->jumpToFirstPage();
+    }
+    if (s == Dr::key_ctrl_end) {
+        auto sheet = getCurSheet();
+        if (sheet)
+            sheet->jumpToLastPage();
     }
 
     if (m_slideWidget) {
@@ -627,7 +645,6 @@ void CentralDocPage::openMagnifer()
 //  取消放大镜
 void CentralDocPage::quitMagnifer()
 {
-    qDebug() << "取消放大镜";
     if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         m_magniferSheet->closeMagnifier();
         m_magniferSheet = nullptr;
@@ -755,13 +772,6 @@ void CentralDocPage::onUpdateTabLabelText()
 {
     if (m_tabBar->count() > 0)
         m_tabLabel->setText(m_tabBar->tabText(0));
-}
-
-void CentralDocPage::onSetWindowTitle(DocSheet *sheet)
-{
-    if (sheet != nullptr) {
-        emit sigSetWindowTitle(sheet->filePath());
-    }
 }
 
 QWidget *CentralDocPage::getTitleLabel()

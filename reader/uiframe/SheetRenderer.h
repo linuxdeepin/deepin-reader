@@ -111,7 +111,7 @@ public:
      * @param wholeWords
      * @return
      */
-    QVector<QRectF> search(int index, const QString &text, bool matchCase, bool wholeWords);
+    QVector<deepin_reader::PageSection> search(int index, const QString &text, bool matchCase, bool wholeWords);
 
     deepin_reader::Annotation *addHighlightAnnotation(int index, const QList<QRectF> &boundaries, const QString &text, const QColor &color);
 

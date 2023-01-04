@@ -47,7 +47,7 @@ void ReadImageTask::run()
 
         QSizeF size = sheet->pageSizeByIndex(m_docParam.pageIndex);
 
-        size.scale(m_docParam.maxPixel, m_docParam.maxPixel, Qt::KeepAspectRatio);
+        size.scale(m_docParam.boundedRect, Qt::KeepAspectRatio);
 
         QImage image = sheet->getImage(m_docParam.pageIndex, size.width() * dApp->devicePixelRatio(), size.height() * dApp->devicePixelRatio());
 

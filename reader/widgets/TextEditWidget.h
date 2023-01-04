@@ -173,11 +173,6 @@ public:
      */
     void showWidget(const QPoint &point);
 
-    /**
-     * @brief updateHeight 根据主窗口高度，调整本窗口的高度
-     */
-    void updateHeight();
-
 private slots:
     /**
      * @brief slotCloseNoteWidget 关闭注释编辑框窗口
@@ -187,6 +182,8 @@ private slots:
 
 private:
     TextEditWidget *m_TextEditWidget = nullptr;
+    const int m_maxwidth = 278;
+    const int m_maxheight = 344;
 };
 
 #endif  // TextEditWidget_H

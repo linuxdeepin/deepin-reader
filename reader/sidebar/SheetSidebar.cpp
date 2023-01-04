@@ -35,6 +35,8 @@
 #include <QVBoxLayout>
 #include <QTimer>
 
+const int LEFTMINWIDTH = 266;
+const int LEFTMAXWIDTH = 380;
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     : BaseWidget(parent)
     , m_sheet(parent)
@@ -60,10 +62,10 @@ void SheetSidebar::initWidget()
     m_notesWidget     = nullptr;
     m_searchWidget    = nullptr;
 
-    setMinimumWidth(DocSheet::SidebarMinWidth);
-    setMaximumWidth(DocSheet::SidebarMaxWidth);
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
 
-    resize(DocSheet::SidebarMinWidth, this->height());
+    resize(LEFTMINWIDTH, this->height());
 
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -290,7 +292,7 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
 
 void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
-    qreal scale = event->size().width() * 1.0 / DocSheet::SidebarMinWidth;
+    qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
     adaptWindowSize(scale);
     BaseWidget::resizeEvent(event);
 }
@@ -369,16 +371,12 @@ void SheetSidebar::onJumpToPageUp()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
-        qInfo() << "在缩略图页面通过PageUp翻页！";
         m_thumbnailWidget->pageUp();
     } else if (curWidget == m_bookmarkWidget) {
-        qInfo() << "在书签目录通过PageUp翻页！";
         m_bookmarkWidget->pageUp();
     } else if (curWidget == m_notesWidget) {
-        qInfo() << "在注释缩略图页面通过PageUp翻页！";
         m_notesWidget->pageUp();
     } else if (curWidget == m_catalogWidget) {
-        qInfo() << "在目录页面通过PageUp翻页！";
         m_catalogWidget->pageUp();
     }
 }
@@ -401,16 +399,12 @@ void SheetSidebar::onJumpToPageDown()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
-        qInfo() << "在缩略图页面通过PageDown翻页！";
         m_thumbnailWidget->pageDown();
     } else if (curWidget == m_bookmarkWidget) {
-        qInfo() << "在书签目录通过PageDown翻页！";
         m_bookmarkWidget->pageDown();
     } else if (curWidget == m_notesWidget) {
-        qInfo() << "在注释缩略图页面通过PageDown翻页！";
         m_notesWidget->pageDown();
     } else if (curWidget == m_catalogWidget) {
-        qInfo() << "在目录页面通过PageDown翻页！";
         m_catalogWidget->pageDown();
     }
 }

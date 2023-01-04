@@ -111,7 +111,6 @@ void  Utils::copyText(const QString &sText)
     if (sOldText != sText) {
         clipboard->setText(sText);
     }
-    qInfo() << "将内容复制到剪切板: "/* << sText*/;
 }
 
 QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment)

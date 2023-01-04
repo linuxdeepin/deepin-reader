@@ -1,6 +1,23 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     gaoxiang <gaoxiang@uniontech.com>
+*
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "Database.h"
 #include "Global.h"
@@ -8,6 +25,7 @@
 #include "DocSheet.h"
 
 #include <QTest>
+#include <QSqlQuery>
 
 #include <gtest/gtest.h>
 
@@ -72,6 +90,15 @@ void TestDatabase::TearDown()
     delete m_tester;
 }
 
+static bool ut_sqlquery_next()
+{
+    return true;
+}
+
+static bool ut_sqlquery_exec()
+{
+    return true;
+}
 /*************测试用例****************/
 TEST_F(TestDatabase, UT_Database_prepareOperation_001)
 {
@@ -84,7 +111,10 @@ TEST_F(TestDatabase, UT_Database_readOperation_001)
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
 
+    Stub s;
+    s.set(ADDR(QSqlQuery, next), ut_sqlquery_next);
     EXPECT_TRUE(m_tester->readOperation(sheet));
+    EXPECT_TRUE(!m_tester->readOperation(nullptr));
 
     delete sheet;
 }
@@ -95,7 +125,10 @@ TEST_F(TestDatabase, UT_Database_saveOperation_001)
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
 
+    Stub s;
+    s.set((bool (QSqlQuery::*)())ADDR(QSqlQuery, exec), ut_sqlquery_exec);
     EXPECT_TRUE(m_tester->saveOperation(sheet));
+    EXPECT_TRUE(!m_tester->saveOperation(nullptr));
 
     delete sheet;
 }

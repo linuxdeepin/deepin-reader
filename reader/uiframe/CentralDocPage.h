@@ -303,12 +303,6 @@ signals:
      */
     void sigNeedActivateWindow();
 
-    /**
-     * @brief sigAddFile
-     * 打开文件时，通知主窗口设置windoTitle
-     */
-    void sigSetWindowTitle(QString filePath);
-
 public slots:
     /**
      * @brief 文档被打开后进行处理
@@ -384,12 +378,6 @@ public slots:
      * @brief 刷新tabLabel文本
      */
     void onUpdateTabLabelText();
-
-    /**
-     * @brief onSetWindowTitle
-     * @param filePath
-     */
-    void onSetWindowTitle(DocSheet *sheet);
 
 private:
     QPointer<DocSheet>  m_magniferSheet = nullptr;

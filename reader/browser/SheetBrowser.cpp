@@ -135,6 +135,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
 
+    qDebug() << "SheetBrowser::firstThumbnail";
     document = DocumentFactory::getDocument(fileType, filePath, "", "", nullptr, error);
 
     if (nullptr == document)
@@ -296,7 +297,6 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
             setIconAnnotSelect(false);
         });
     }
-    m_noteEditWidget->updateHeight();
 
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
@@ -699,7 +699,6 @@ bool SheetBrowser::event(QEvent *event)
         }
 
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
-            qDebug() << "通过键盘(菜单快捷键)打开右键菜单！";
             this->showMenu();
         }
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
@@ -708,7 +707,6 @@ bool SheetBrowser::event(QEvent *event)
                 return DGraphicsView::event(event);
             }
 
-            qDebug() << "通过键盘(alt+m)打开右键菜单！";
             this->showMenu();
         }
     }
@@ -1039,25 +1037,19 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             BrowserMenu menu;
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
-                qDebug() << "通过鼠标右键打开右键菜单 -> " << objectname;
                 if (objectname == "Copy") {
-                    //右键菜单->复制
                     Utils::copyText(selectWords);
                 } else if (objectname == "CopyAnnoText") {
-                    //右键菜单->复制注释文本
                     if (annotation)
                         Utils::copyText(annotation->annotationText());
                 } else if (objectname == "AddTextHighlight") {
-                    //右键菜单->添加文本高亮（选中一些文本内容进行高亮）
                     QPoint pointEnd;
                     addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
                 } else if (objectname == "ChangeAnnotationColor") {
-                    //右键菜单->改变注释颜色
                     if (annotation) {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                     }
                 } else if (objectname == "RemoveAnnotation") {
-                    //右键菜单->移除注释
                     if (annotation) {
                         m_selectIconAnnotation = false;
                         if (m_lastSelectIconAnnotPage)
@@ -1065,7 +1057,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                         m_sheet->removeAnnotation(annotation->annotation());
                     }
                 } else if (objectname == "AddAnnotationIcon") {
-                    //右键菜单->添加注释（不选中文本内容直接添加注释）
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), QColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
@@ -1075,14 +1066,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                             showNoteEditWidget(iconAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "AddBookmark") {
-                    //右键菜单->添加书签
                     m_sheet->setBookMark(item->itemIndex(), true);
                 } else if (objectname == "RemoveHighlight") {
-                    //右键菜单->移除高亮
                     if (annotation)
                         m_sheet->removeAnnotation(annotation->annotation(), !annotation->annotationText().isEmpty());
                 } else if (objectname == "AddAnnotationHighlight") {
-                    //右键菜单->添加注释（不选中文本内容直接添加注释）
                     if (annotation)  {
                         updateAnnotation(annotation->annotation(), annotation->annotationText(), Utils::getCurHiglightColor());
                         showNoteEditWidget(annotation->annotation(), mapToGlobal(event->pos()));
@@ -1094,44 +1082,30 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                             showNoteEditWidget(addAnnot, mapToGlobal(event->pos()));
                     }
                 } else if (objectname == "Search") {
-                    //右键菜单->查找
                     m_sheet->prepareSearch();
                 } else if (objectname == "RemoveBookmark") {
-                    //右键菜单->移除书签
                     m_sheet->setBookMark(item->itemIndex(), false);
                 } else if (objectname == "Fullscreen") {
-                    //右键菜单->全屏
                     m_sheet->openFullScreen();
                 } else if (objectname == "ExitFullscreen") {
-                    //右键菜单->退出全屏
                     m_sheet->closeFullScreen();
                 } else if (objectname == "SlideShow") {
-                    //右键菜单->幻灯片放映
                     m_sheet->openSlide();
                 } else if (objectname == "FirstPage") {
-                    //右键菜单->第一页
                     this->emit sigNeedPageFirst();
                 } else if (objectname == "PreviousPage") {
-                    //右键菜单->前一页
                     this->emit sigNeedPagePrev();
                 } else if (objectname == "NextPage") {
-                    //右键菜单->后一页
                     this->emit sigNeedPageNext();
                 } else if (objectname == "LastPage") {
-                    //右键菜单->最后一页
                     this->emit sigNeedPageLast();
                 } else if (objectname == "RotateLeft") {
-                    //右键菜单->左旋转
                     m_sheet->rotateLeft();
                 } else if (objectname == "RotateRight") {
-                    //右键菜单->右旋转
                     m_sheet->rotateRight();
                 } else if (objectname == "Print") {
-                    //右键菜单->打印
                     QTimer::singleShot(1, m_sheet, SLOT(onPopPrintDialog()));
                 } else if (objectname == "DocumentInfo") {
-                    //右键菜单->文档信息
-                    QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
                     QTimer::singleShot(1, m_sheet, SLOT(onPopInfoDialog()));
                 }
             });
@@ -1139,17 +1113,14 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
 
             if (annotation && annotation->annotationType() == deepin_reader::Annotation::AText) {
-                qDebug() << "文字注释(图标)";
                 if (m_lastSelectIconAnnotPage)
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
                 //文字注释(图标)
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_ICON, annotation->annotationText());
             } else if (selectWord && selectWord->isSelected() && !selectWords.isEmpty()) {
-                qDebug() << "选择文字";
                 //选择文字
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_SELECT_TEXT);
             } else if (annotation && annotation->annotationType() == deepin_reader::Annotation::AHighlight) {
-                qDebug() << "文字高亮注释";
                 //文字高亮注释
                 menu.initActions(m_sheet, item->itemIndex(), SheetMenuType_e::DOC_MENU_ANNO_HIGHLIGHT, annotation->annotationText());
             } else if (nullptr != item) {
@@ -1219,7 +1190,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
         }
 
         if (magnifierOpened()) {
-            //qDebug() << "放大镜显示鼠标位置: " << mousePos;
             //放大镜
             showMagnigierImage(mousePos);
         } else {
@@ -1246,8 +1216,6 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 if (page) {
                     const Link &mlink = getLinkAtPoint(mousePos);
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
-                    //当前光标是否在当前的书签位置
-                    bool isExitBookMark = page->isExitBookMark(mousposF);
                     //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
                     if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
                         m_tipsWidget->setText(browserAnno->annotationText());
@@ -1255,7 +1223,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->show();
                         setCursor(QCursor(Qt::PointingHandCursor));
-                    } else if (mlink.isValid() && nullptr == browserAnno && !isExitBookMark) {
+                    } else if (mlink.isValid() && nullptr == browserAnno) {
                         //处理移动到超链接区域
                         //未开启放大镜时，如果超链接文本添加了高亮注释，高亮注释优先显示
                         if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
@@ -1265,7 +1233,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                             m_tipsWidget->show();
                         }
                         setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
-                    } else if (page->getBrowserWord(mousposF) && !isExitBookMark) {
+                    } else if (page->getBrowserWord(mousposF)) {
                         m_tipsWidget->hide();
                         setCursor(QCursor(Qt::IBeamCursor));
                     } else {
@@ -1437,14 +1405,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
                     m_tipsWidget->hide();
                 }
-                //需要判断当前鼠标的位置是否在书签里面，如果是书签里面将不响应跳转超链接操作
-                bool isExitBookMark = false;
-                if (page) {
-                    isExitBookMark = page->isExitBookMark(point);
-                }
-                if (!isExitBookMark) {
-                    jump2Link(event->pos());
-                }
+                jump2Link(event->pos());
             }
         }
     }
@@ -1605,13 +1566,11 @@ void SheetBrowser::openMagnifier()
 {
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
-        qDebug() << "新建放大镜!";
     } else {
         m_magnifierLabel->raise();
 
         m_magnifierLabel->show();
     }
-    qDebug() << "打开放大镜！ m_magnifierLabel: " << m_magnifierLabel ;
 
     setDragMode(QGraphicsView::NoDrag);
 
@@ -1622,7 +1581,6 @@ void SheetBrowser::openMagnifier()
 
 void SheetBrowser::closeMagnifier()
 {
-    qDebug() << "关闭放大镜！ m_magnifierLabel: " << m_magnifierLabel;
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
 
@@ -1718,7 +1676,8 @@ void SheetBrowser::jumpToNextSearchResult()
                 continue;
             }
 
-            const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+            QRectF pageHigRect = SearchResult::sectionBoundingRect(page->findSearchforIndex(m_searchPageTextIndex));
+            pageHigRect = page->translateRect(pageHigRect);
             horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
@@ -1768,7 +1727,8 @@ void SheetBrowser::jumpToPrevSearchResult()
                 continue;
             }
 
-            const QRectF &pageHigRect = page->translateRect(page->findSearchforIndex(m_searchPageTextIndex));
+            QRectF pageHigRect = SearchResult::sectionBoundingRect(page->findSearchforIndex(m_searchPageTextIndex));
+            pageHigRect = page->translateRect(pageHigRect);
             horizontalScrollBar()->setValue(static_cast<int>(page->pos().x() + pageHigRect.x()) - this->width() / 2);
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
@@ -1808,7 +1768,7 @@ void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &
         return;
 
     if (res.page <= m_items.count())
-        m_items[res.page - 1]->setSearchHighlightRectf(res.rects);
+        m_items[res.page - 1]->setSearchHighlightRectf(res.sections);
 
     //如果是第一个搜索结果来到，需要高亮第一个
     if (-1 == m_searchPageTextIndex)
@@ -1851,7 +1811,6 @@ Link SheetBrowser::getLinkAtPoint(QPointF viewpoint)
 
     viewpoint = translate2Local(viewpoint);
 
-    //qDebug() << "SheetBrowser::getLinkAtPoint";
     // 获取当前位置的link
     return m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), viewpoint);
 }
@@ -1900,11 +1859,9 @@ bool SheetBrowser::jump2Link(QPointF point)
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {
-        qDebug() << "响应左侧注释列表点击事件,跳到对应文档目录处";
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
-        qDebug() << "跳转超链接!";
         QString urlstr;
         if (link.urlOrFileName.startsWith(QLatin1String("file://"))) {
             urlstr = link.urlOrFileName.mid(7); //删除前缀"file://"
@@ -1917,20 +1874,8 @@ bool SheetBrowser::jump2Link(QPointF point)
 
         SecurityDialog *sdialog = new SecurityDialog(link.urlOrFileName, this);
         if (DDialog::Accepted == sdialog->exec()) {
-//            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
-            bool isOpen = false;
-            if (link.urlOrFileName.startsWith(QLatin1String("https")) || link.urlOrFileName.startsWith(QLatin1String("http"))) {
-                isOpen = QDesktopServices::openUrl(link.urlOrFileName);
-                qDebug() << "当前需要跳转的超链接: " << link.urlOrFileName;
-            } else {
-                isOpen = QDesktopServices::openUrl(QUrl::fromLocalFile(urlstr));
-                qDebug() << "当前需要跳转的超链接: " << QUrl::fromLocalFile(urlstr);
-            }
-            if (!isOpen) {
-                qWarning() << "警告！超链接无法用对应的web应用打开！" << link.urlOrFileName;
-            } else {
-                qInfo() << "超链接打开成功！" ;
-            }
+            const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
+            QDesktopServices::openUrl(url);
         }
         return true;
     }
@@ -1944,7 +1889,6 @@ void SheetBrowser::showMenu()
     QString selectWords = selectedWordsText();
     connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
-        qDebug() << "通过快捷键打开右键菜单 -> " << objectname;
         if (objectname == "Copy") {
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {
@@ -2060,6 +2004,7 @@ void SheetBrowser::showMagnigierImage(const QPoint &point)
     m_magnifierLabel->showMagnigierImage(point, magnifierPos, m_lastScaleFactor);
 }
 
+
 void SheetBrowser::moveScrollBar(const QPoint &point)
 {
     //鼠标靠近显示区域的边距
@@ -2100,6 +2045,7 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 
     return newPos;
 }
+
 void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
 {
     m_isSearchResultNotEmpty = isSearchResultNotEmpty;

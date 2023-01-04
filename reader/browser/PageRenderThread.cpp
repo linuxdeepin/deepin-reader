@@ -707,6 +707,7 @@ bool PageRenderThread::execNextDocOpenTask()
 
     deepin_reader::Document::Error error = deepin_reader::Document::NoError;
 
+    qDebug() << "PageRenderThread::execNextDocOpenTask" <<  task.sheet->convertedFileDir();
     deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.sheet->fileType(), filePath, task.sheet->convertedFileDir(), task.password, &(task.sheet->m_process), error);
 
     if (nullptr == document) {

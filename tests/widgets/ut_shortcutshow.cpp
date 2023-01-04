@@ -1,6 +1,23 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     gaoxiang <gaoxiang@uniontech.com>
+*
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "ShortCutShow.h"
 #include "Global.h"
@@ -92,30 +109,18 @@ TEST_F(UT_ShortCutShow, UT_ShortCutShow_show)
 
     m_tester->initDJVU();
     m_tester->show();
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initDJVU)
 {
     m_tester->initDJVU();
-    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
-    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
-    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
-    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
-    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initPDF)
 {
     m_tester->initPDF();
-    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
-    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
-    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
-    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
-    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 

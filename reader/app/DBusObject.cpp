@@ -30,9 +30,9 @@
 #define DBUS_SERVER             "com.deepin.Reader"
 #define DBUS_SERVER_PATH        "/com/deepin/Reader"
 
-#define DBUS_GESTURE            "com.deepin.daemon.Gesture"
-#define DBUS_GESTURE_PATH       "/com/deepin/daemon/Gesture"
-#define DBUS_GESTURE_INTERFACE  "com.deepin.daemon.Gesture"
+#define DBUS_GESTURE            "org.deepin.dde.Gesture1"
+#define DBUS_GESTURE_PATH       "/org/deepin/dde/Gesture1"
+#define DBUS_GESTURE_INTERFACE  "org.deepin.dde.Gesture1"
 #define DBUS_GESTURE_SIGNAL     "Event"
 
 #define DBUS_IM                 "com.deepin.im"

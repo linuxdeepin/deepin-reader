@@ -36,7 +36,9 @@ HtmltoPdfConverter::HtmltoPdfConverter(const QString &inputPath, const QString &
 
 int HtmltoPdfConverter::run()
 {
-    m_page->load(QUrl::fromUserInput(m_inputPath));
+    QUrl url = QUrl::fromUserInput(m_inputPath);
+    qDebug() << "htmltoPdf 加载的文件路径: " <<  url;
+    m_page->load(url);
     return QCoreApplication::exec();
 }
 
@@ -46,7 +48,7 @@ void HtmltoPdfConverter::loadFinished(bool ok)
         qInfo() << QString("failed to load URL '%1'").arg(m_inputPath);
         QCoreApplication::exit(1);
     }
-
+    qInfo() << QString("success to load URL '%1'").arg(m_inputPath);
     m_page->printToPdf(m_outputPath);
 }
 

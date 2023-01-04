@@ -36,4 +36,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-deepin-reader Viewer is licensed under [GPL-3.0-or-later](LICENSE).
+Deepin Document Viewer is licensed under [GPLv3](LICENSE).

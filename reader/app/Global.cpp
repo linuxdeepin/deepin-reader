@@ -30,8 +30,10 @@ FileType fileType(const QString &filePath)
 {
     FileType fileType = FileType::Unknown;
 
+    //具体的MIME文件类型可以参考https://baike.baidu.com/item/MIME/2900607?fr=aladdin
     const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filePath, QMimeDatabase::MatchContent);
 
+    qInfo() << "当前文件的MIME类型: " << mimeType.name();
     if (mimeType.name() == QLatin1String("application/pdf")) {
         fileType = PDF;
     } else if (mimeType.name() == QLatin1String("application/postscript")) {

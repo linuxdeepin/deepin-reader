@@ -8,7 +8,6 @@ HEADERS += \
     $$PWD/accessible.h \
     $$PWD/TMFunctionThread.h \
     $$PWD/DBusObject.h \
-    $$PWD/eventlogutils.h \
 
 SOURCES += \
     $$PWD/DebugTimeManager.cpp \
@@ -17,7 +16,6 @@ SOURCES += \
     $$PWD/Utils.cpp \
     $$PWD/TMFunctionThread.cpp \
     $$PWD/DBusObject.cpp \
-    $$PWD/eventlogutils.cpp \
 
 INCLUDEPATH += $$PWD
 

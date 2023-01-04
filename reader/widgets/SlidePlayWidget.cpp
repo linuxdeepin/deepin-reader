@@ -25,6 +25,8 @@
 #include <DWidget>
 
 #include <QHBoxLayout>
+#include <QDBusInterface>
+#include <QDBusConnection>
 
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {
@@ -44,30 +46,30 @@ void SlidePlayWidget::initControl()
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
 
-    DIconButton *pbtnpre  = createBtn(QString("previous_normal"));
-    DIconButton *pbtnplay = createBtn(QString("suspend_normal"));
-    DIconButton *pbtnnext = createBtn(QString("next_normal"));
+    m_preBtn  = createBtn(QString("previous_normal"));
+    DIconButton *pbtnplay = createBtn(QString("play_normal"));
+    m_nextBtn = createBtn(QString("next_normal"));
     DIconButton *pbtnexit = createBtn(QString("exit_normal"));
     m_playBtn = pbtnplay;
 
-    playout->addWidget(pbtnpre);
+    playout->addWidget(m_preBtn);
     playout->addWidget(pbtnplay);
-    playout->addWidget(pbtnnext);
+    playout->addWidget(m_nextBtn);
     playout->addWidget(pbtnexit);
 
     DWidget *pwidget = new DWidget;
     pwidget->setLayout(playout);
     this->setWidget(pwidget);
 
-    connect(pbtnpre,  &DIconButton::clicked, this, &SlidePlayWidget::onPreClicked);
+    connect(m_preBtn,  &DIconButton::clicked, this, &SlidePlayWidget::onPreClicked);
     connect(pbtnplay, &DIconButton::clicked, this, &SlidePlayWidget::onPlayClicked);
-    connect(pbtnnext, &DIconButton::clicked, this, &SlidePlayWidget::onNextClicked);
+    connect(m_nextBtn, &DIconButton::clicked, this, &SlidePlayWidget::onNextClicked);
     connect(pbtnexit, &DIconButton::clicked, this, &SlidePlayWidget::onExitClicked);
 
     setFocusPolicy(Qt::NoFocus);
-    pbtnpre->setFocusPolicy(Qt::NoFocus);
+    m_preBtn->setFocusPolicy(Qt::NoFocus);
     pbtnplay->setFocusPolicy(Qt::NoFocus);
-    pbtnnext->setFocusPolicy(Qt::NoFocus);
+    m_nextBtn->setFocusPolicy(Qt::NoFocus);
     pbtnexit->setFocusPolicy(Qt::NoFocus);
 }
 
@@ -108,6 +110,54 @@ void SlidePlayWidget::setPlayStatus(bool play)
 {
     m_autoPlay = play;
     playStatusChanged();
+}
+
+void SlidePlayWidget::updateProcess(int cur, int total)
+{
+    /* 幻灯片放映时
+     * cur:当前页、total总页数
+     * 当cur:0, total:3
+     * 已到第一页时，再次点击上一页按钮，cur=-1,则设置preBtn为disable
+     *
+     * 当cur:2, total:3
+     * 已到最后一页时，再次点击下一页按钮，cur=3,则设置nextBtn为disable
+     */
+    if(cur <= -1) {
+        if(m_preBtn->isEnabled())
+            Notify(tr("It is the first page"));
+        m_preBtn->setEnabled(false);
+        m_nextBtn->setEnabled(true);
+    } else if(cur >=  total) {
+        if(m_nextBtn->isEnabled())
+            Notify(tr("It is the last page"));
+        m_preBtn->setEnabled(true);
+        m_nextBtn->setEnabled(false);
+        setPlayStatus(false);
+    } else {
+        m_preBtn->setEnabled(true);
+        m_nextBtn->setEnabled(true);
+    }
+}
+
+void SlidePlayWidget::Notify(const QString &text)
+{
+    if(nullptr == m_dbusNotify) {
+        m_dbusNotify = new QDBusInterface("com.deepin.dde.Notification",
+                                          "/com/deepin/dde/Notification",
+                                          "com.deepin.dde.Notification",
+                                          QDBusConnection::sessionBus(),
+                                          this);
+    }
+    //初始化Notify 七个参数
+    QString appname("deepin-reader");
+    uint replaces_id = 0;
+    QString appicon("deepin-reader");
+    QString title = "";
+    QString body = text;
+    QStringList actionlist;
+    QVariantMap hints;
+    int timeout = 3000;
+    m_dbusNotify->call("Notify", appname, replaces_id, appicon, title, body, actionlist, hints, timeout);
 }
 
 bool SlidePlayWidget::getPlayStatus()
