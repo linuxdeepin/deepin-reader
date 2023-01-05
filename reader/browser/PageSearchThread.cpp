@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "PageSearchThread.h"
 #include "BrowserPage.h"
 #include "SheetRenderer.h"
@@ -79,29 +64,15 @@ void PageSearchThread::run()
 
         searchres.page = index + 1;
 
-        searchres.rects = m_sheet->renderer()->search(index, m_searchText, false, false);
+        searchres.sections = m_sheet->renderer()->search(index, m_searchText, false, false);
         if (searchTextKangxi != m_searchText) { // 存在康熙字典部首字体
-            searchres.rects.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
+            searchres.sections.append(m_sheet->renderer()->search(index, searchTextKangxi, false, false));
         }
 
-        //把搜索的范围中周边的文字取出用于左侧展示
-        for (const QRectF &rec : searchres.rects) {
-            if (m_quit)
-                return;
-
-            //获取搜索结果附近文字
-            QRectF rctext = rec;
-            rctext.setX(rctext.x() - 40);
-            rctext.setWidth(rctext.width() + 80);
-
-            const QString &text = m_sheet->renderer()->getText(index, rctext);
-
-            if (!text.isEmpty()) {
-                searchres.words << Word(text, rec);
-            }
-        }
-
-        if (searchres.words.size() > 0) {
+        std::function<QString(int, QRectF)> getText = std::bind(&SheetRenderer::getText, m_sheet->renderer(), std::placeholders::_1, std::placeholders::_2);
+        bool hasWord = searchres.setctionsFillText(getText);
+        //
+        if (hasWord) {
             if (!isSearchResultNotEmpty) {
                 isSearchResultNotEmpty = true;
                 // 只要搜索到结果就emit该信号

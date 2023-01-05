@@ -1,22 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef READERIMAGETHREADPOOLMANAGER_H
 #define READERIMAGETHREADPOOLMANAGER_H
 
@@ -32,6 +18,7 @@ typedef struct ReaderImageParam_t {
 
     int pageIndex = 0;
     int maxPixel = 174;
+    QSize boundedRect = QSize(0, 0);//幻灯片放映时的boundedRect
     DocSheet *sheet = nullptr;
 
     QObject *receiver = nullptr;
@@ -39,7 +26,11 @@ typedef struct ReaderImageParam_t {
 
     bool operator == (const ReaderImageParam_t &other) const
     {
-        return (this->pageIndex == other.pageIndex && this->maxPixel == other.maxPixel && this->sheet == other.sheet);
+        return this->pageIndex == other.pageIndex
+                && this->maxPixel == other.maxPixel
+                && this->sheet == other.sheet
+                && this->boundedRect == other.boundedRect
+                ;
     }
 
     bool operator < (const ReaderImageParam_t &other) const

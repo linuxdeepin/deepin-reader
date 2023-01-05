@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ShortCutShow.h"
 #include "Global.h"
@@ -92,30 +93,18 @@ TEST_F(UT_ShortCutShow, UT_ShortCutShow_show)
 
     m_tester->initDJVU();
     m_tester->show();
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initDJVU)
 {
     m_tester->initDJVU();
-    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
-    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
-    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
-    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
-    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initPDF)
 {
     m_tester->initPDF();
-    EXPECT_TRUE(m_tester->windowKeymaps.count() != 0);
-    EXPECT_TRUE(m_tester->shortcutnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
-    EXPECT_TRUE(m_tester->Filesnames.count() != 0);
-    EXPECT_TRUE(m_tester->Displaynames.count() != 0);
-    EXPECT_TRUE(m_tester->Toolsnames.count() != 0);
-    EXPECT_TRUE(m_tester->Editnames.count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 

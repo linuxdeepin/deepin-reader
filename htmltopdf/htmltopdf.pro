@@ -5,7 +5,12 @@ TARGET = htmltopdf
 
 QT += webenginewidgets
 
-target.path = /usr/lib/deepin-reader
+isEmpty(PREFIX) {
+ PREFIX = /usr
+}
+DEFINES += QMAKE_INSTALL_PREFIX=\"\\\"$$PREFIX\\\"\"
+
+target.path = $$PREFIX/lib/deepin-reader
 
 INSTALLS += target
 

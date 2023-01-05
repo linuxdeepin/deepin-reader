@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef SLIDEPLAYWIDGET_H
 #define SLIDEPLAYWIDGET_H
 
@@ -28,6 +13,7 @@
 #include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
+class QDBusInterface;
 /**
  * @brief The SlidePlayWidget class
  * 幻灯片播放控件
@@ -58,6 +44,16 @@ public:
      */
     void setPlayStatus(bool play);
 
+    /**
+     * @brief updateProcess 当放映的进度改变时，更新slide的状态
+     */
+    void updateProcess(int cur, int total);
+
+    /**
+     * @brief Notify 弹出顶部消息框
+     * @param text 消息内容
+     */
+    void Notify(const QString &text);
 signals:
     /**
      * @brief signalPreBtnClicked
@@ -158,9 +154,13 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 private:
-    bool m_autoPlay = true;
+    bool m_autoPlay = false;
     QTimer m_timer;
-    DIconButton *m_playBtn;
+    DIconButton *m_playBtn = nullptr;
+    DIconButton *m_preBtn = nullptr;
+    DIconButton *m_nextBtn = nullptr;
+
+    QDBusInterface  *m_dbusNotify = nullptr;
 };
 
 #endif // SLIDEPLAYWIDGET_H

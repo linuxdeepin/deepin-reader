@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "PageSearchThread.h"
 #include "DocSheet.h"
@@ -43,7 +44,6 @@ TEST_F(UT_PageSearchThread, UT_PageSearchThread_startSearch)
     m_tester->startSearch(sheet, "123");
     EXPECT_TRUE(m_tester->m_sheet == sheet);
     EXPECT_TRUE(m_tester->m_searchText == "123");
-    m_tester->stopSearch();
     delete sheet;
 }
 
