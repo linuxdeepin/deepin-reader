@@ -20,13 +20,8 @@ DEFINES +=  USE_SYSTEM_LIBJPEG \
             USE_SYSTEM_LIBOPENJPEG2 \
             USE_SYSTEM_FREETYPE
 
-INCLUDEPATH += /usr/include/openjpeg-2.3 \
-               /usr/include/openjpeg-2.4 \
-               /usr/include/freetype2 \
-               /usr/include/freetype2/freetype \
-               /usr/include/freetype2/freetype/config
-
-LIBS += -lopenjp2 -llcms2 -lfreetype
+CONFIG += link_pkgconfig
+PKGCONFIG += libopenjp2 lcms2 freetype2
 
 #QMAKE_CXXFLAGS += "-Wc++11-narrowing"  #is_clang
 #QMAKE_CXXFLAGS += "-Wno-inconsistent-missing-override"  #is_clang Suppress no override warning for overridden functions.

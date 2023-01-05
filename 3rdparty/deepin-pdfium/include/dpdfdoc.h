@@ -130,6 +130,14 @@ public:
     static Status tryLoadFile(const QString &filename, const QString &password = QString());
 
 private:
+    /**
+     * @brief isLinearized 是否是线性化PDF文件(线性化PDF文件是PDF文件的一种特殊格式，可以在互联网上更快地查看)
+     * @param fileName
+     * @return
+     */
+    bool isLinearized(const QString &fileName);
+
+private:
     Q_DISABLE_COPY(DPdfDoc)
     QScopedPointer<DPdfDocPrivate> d_ptr;
 };

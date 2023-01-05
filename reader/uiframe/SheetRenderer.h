@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef SHEETRENDERER_H
 #define SHEETRENDERER_H
 
@@ -111,7 +115,7 @@ public:
      * @param wholeWords
      * @return
      */
-    QVector<QRectF> search(int index, const QString &text, bool matchCase, bool wholeWords);
+    QVector<deepin_reader::PageSection> search(int index, const QString &text, bool matchCase, bool wholeWords);
 
     deepin_reader::Annotation *addHighlightAnnotation(int index, const QList<QRectF> &boundaries, const QString &text, const QColor &color);
 

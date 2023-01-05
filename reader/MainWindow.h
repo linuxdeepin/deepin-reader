@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 ﻿/*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
@@ -128,9 +132,6 @@ public:
      * @brief setTitleBarFocusEnable 统一启用或禁用titlebar和其子控件的焦点逻辑
      */
     void setTitleBarFocusEnable(bool enable);
-
-private slots:
-    void onSetWindowTitle(QString filePath);
 
 protected:
     void closeEvent(QCloseEvent *event) override;

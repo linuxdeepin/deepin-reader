@@ -1,22 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "ThumbnailWidget.h"
 #include "DocSheet.h"
 #include "Application.h"
@@ -103,14 +89,11 @@ void ThumbnailWidget::pageUp()
     if (m_sheet.isNull())
         return;
 
-    if(m_pImageListView->currentIndex().row() != 0){
-        qDebug() <<"向上翻页";
-        const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
-        if (!pageIndex.isValid())
-            return;
-        qDebug() <<"当前项的索引: " << m_pImageListView->currentIndex().row() ;
-        m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
-    }
+    const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
+    if (!pageIndex.isValid())
+        return;
+
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void ThumbnailWidget::nextPage()
@@ -124,34 +107,17 @@ void ThumbnailWidget::pageDown()
     if (m_sheet.isNull())
         return;
 
-    if(m_pImageListView->currentIndex().row() != m_pImageListView->count()-1){
-        const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
-        qDebug() <<"向下翻页";
-        if (!pageIndex.isValid())
-            return;
-        qDebug() <<"当前项的索引: " << m_pImageListView->currentIndex().row() ;
-        m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
-    }
+    const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
+    if (!pageIndex.isValid())
+        return;
 
+    m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(pageIndex.row()));
 }
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
     m_pImageListView->setProperty("adaptScale", scale);
-//    QList<QModelIndex> indexList = m_pImageListView->getImageModel()->getModelIndexForPageIndex(0);
-//    if (indexList.size() > 0) {
-//        qreal pixscale = m_pImageListView->property("adaptScale").toDouble();
-//        QModelIndex index = m_pImageListView->getImageModel()->getModelIndexForPageIndex(0).first();
-//        QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
-//        qDebug() << pageSize;
-//        int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
-//        if (rotate == 90 || rotate == 270)
-//            pageSize = QSize(pageSize.height(), pageSize.width());
-//        pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
-//        QSize setSize = pageSize/dApp->devicePixelRatio();
-//        m_pImageListView->setItemSize(QSize(setSize.width(), setSize.height() + 32));
-//    }
-//  m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
+    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
     m_pImageListView->reset();
     scrollToCurrentPage();
 }

@@ -1,22 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "SideBarImageListview.h"
 #include "DocSheet.h"
 #include "SideBarImageViewModel.h"
@@ -98,19 +84,6 @@ void SideBarImageListView::handleOpenSuccess()
         for (int index = 0; index < pagesNum; index++)
             pageSrclst << ImagePageInfo_t(index);
         m_imageModel->initModelLst(pageSrclst);
-
-        // 计算Item的大小
-        if (m_imageModel->getModelIndexForPageIndex(0).size() > 0) {
-            qreal pixscale = this->property("adaptScale").toDouble();
-            QModelIndex index = m_imageModel->getModelIndexForPageIndex(0).first();
-            QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
-            int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
-            if (rotate == 90 || rotate == 270)
-                pageSize = QSize(pageSize.height(), pageSize.width());
-            pageSize.scale(static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), static_cast<int>(174 * pixscale * dApp->devicePixelRatio()), Qt::KeepAspectRatio);
-            const QSize &scalePixSize = pageSize / dApp->devicePixelRatio();
-            setItemSize(QSize(scalePixSize.width(), scalePixSize.height() + 35));
-        }
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         QList<ImagePageInfo_t> pageSrclst;
@@ -257,12 +230,10 @@ int  SideBarImageListView::getPageIndexForModelIndex(int row)
 
 QModelIndex SideBarImageListView::pageUpIndex()
 {
-    qDebug() << "pageUpIndex() !";
-    return DListView::moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
+    return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
 }
 
 QModelIndex SideBarImageListView::pageDownIndex()
 {
-    qDebug() << "pageDownIndex() !";
-    return DListView::moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
+    return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
 }

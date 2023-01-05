@@ -1,31 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* Central(NaviPage ViewPage)
-*
-* CentralNavPage(openfile)
-*
-* CentralDocPage(DocTabbar DocSheets)
-*
-* DocSheet(SheetSidebar SheetBrowser document)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "MainWindow.h"
 #include "TitleMenu.h"
 #include "TitleWidget.h"
@@ -36,7 +13,6 @@
 #include "DocSheet.h"
 #include "DBusObject.h"
 #include "SaveDialog.h"
-#include "eventlogutils.h"
 
 #include <DTitlebar>
 #include <DWidgetUtil>
@@ -58,7 +34,6 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
-#include <QJsonObject>
 
 DWIDGET_USE_NAMESPACE
 
@@ -79,12 +54,7 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
                 addFile(filePath);
         }
     }
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
-    };
-    EventLogUtils::get().writeLogs(obj);
+
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -94,13 +64,6 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
     initUI();
 
     addSheet(sheet);
-
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
-    };
-    EventLogUtils::get().writeLogs(obj);
 }
 
 MainWindow::~MainWindow()
@@ -114,7 +77,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::addSheet(DocSheet *sheet)
 {
-    qDebug() << "新建窗口！！！！";
     if (nullptr == m_central)
         return;
 
@@ -147,7 +109,6 @@ bool MainWindow::handleClose(bool needToBeSaved)
         return false;
 
     this->close();
-
     qDebug() << __FUNCTION__ << "关闭文档查看器主窗口！";
     return true;
 }
@@ -168,7 +129,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
-    qDebug() << "配置文件路径: " << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf");
 
     settings.setValue("LASTWIDTH", QString::number(width()));
 
@@ -224,10 +184,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::initUI()
 {
+    qDebug() << __FUNCTION__ << "正在初始化UI界面...";
     m_central = new Central(this);
 
     connect(m_central, SIGNAL(sigNeedClose()), this, SLOT(close()));
-    connect(m_central, SIGNAL(sigSetWindowTitle(QString)), this, SLOT(onSetWindowTitle(QString)));
 
     m_central->setMenu(m_menu);
 
@@ -264,6 +224,7 @@ void MainWindow::initUI()
             handleMainWindowExitFull();
         });
     }
+    qDebug() << __FUNCTION__ << "UI界面初始化已完成";
 }
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
@@ -370,14 +331,6 @@ void MainWindow::setTitleBarFocusEnable(bool enable)
     updateWidgetFocus("DTitlebarDWindowCloseButton", enable ? Qt::TabFocus : Qt::NoFocus);
 }
 
-void MainWindow::onSetWindowTitle(QString filePath)
-{
-    qDebug() << "当前窗口名称： " << filePath;
-    if (!filePath.isNull()) {
-        setWindowTitle(filePath);
-    }
-}
-
 void MainWindow::resizeFullTitleWidget()
 {
     if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
@@ -425,6 +378,7 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
 
 MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
+    qDebug() << __FUNCTION__ << "正在创建主窗口...";
     int iCount = MainWindow::m_list.count();    // 获取现有窗口数目
     MainWindow *pMainWindow = new MainWindow(filePathList);     // 创建文档查看器对话框
 
@@ -434,12 +388,13 @@ MainWindow *MainWindow::createWindow(QStringList filePathList)
         QRect screenGeometry = qApp->desktop()->screenGeometry(QCursor::pos());
         pMainWindow->move(screenGeometry.x() + windowOffset, screenGeometry.y() + windowOffset);
     }
-
+    qDebug() << __FUNCTION__ << "主窗口已创建并显示";
     return pMainWindow;
 }
 
 MainWindow *MainWindow::createWindow(DocSheet *sheet)
 {
+    qDebug() << __FUNCTION__ << "创建窗口！";
     return new MainWindow(sheet);
 }
 
@@ -464,11 +419,13 @@ void MainWindow::onDelayInit()
 
 void MainWindow::initBase()
 {
+    qDebug() << __FUNCTION__ << "正在初始化基础资源...";
+
     m_list.append(this);
 
     setTitlebarShadowEnabled(true);
 
-    setMinimumSize(DocSheet::WindowMinWidth, DocSheet::WindowMinHeight);
+    setMinimumSize(680, 300);
 
     showDefaultSize();
 
@@ -487,6 +444,8 @@ void MainWindow::initBase()
     titlebar()->setMenu(m_menu);
 
     setAttribute(Qt::WA_DeleteOnClose);
+
+    qDebug() << __FUNCTION__ << "基础资源已初始化";
 }
 
 void MainWindow::onUpdateTitleLabelRect()

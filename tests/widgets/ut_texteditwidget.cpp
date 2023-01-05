@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TextEditWidget.h"
 #include "DocSheet.h"
@@ -19,11 +20,7 @@
 class UT_TextEditShadowWidgetayWidget : public ::testing::Test
 {
 public:
-    UT_TextEditShadowWidgetayWidget() {
-        m_sheet = nullptr;
-        m_pBrowser = nullptr;
-        m_tester = nullptr;
-    }
+    UT_TextEditShadowWidgetayWidget() {}
 
 public:
     virtual void SetUp()
@@ -74,11 +71,7 @@ TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotClos
 class TestTextEditWidget : public ::testing::Test
 {
 public:
-    TestTextEditWidget(): m_tester(nullptr) {
-        m_sheet = nullptr;
-        m_pBrowser = nullptr;
-        m_pShadow = nullptr;
-    }
+    TestTextEditWidget(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

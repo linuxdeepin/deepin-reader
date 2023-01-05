@@ -1,3 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="da"><context><name>desktop</name><message><location filename="Desktop Entry]GenericName" line="0"/><location filename="Desktop Entry]Name" line="0"/><source>Document Viewer</source><translation>Dokumentfremviser</translation></message></context></TS>
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1"><context><name>desktop</name><message><location filename="Desktop Entry]GenericName" line="0"/><location filename="Desktop Entry]Name" line="0"/><source>Document Viewer</source><translation>Dokumentfremviser</translation></message></context></TS>

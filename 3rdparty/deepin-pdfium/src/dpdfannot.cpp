@@ -1,9 +1,3 @@
-// Copyright 2014 PDFium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Original code copyright 2014 Foxit Software Inc. http://www.foxitsoftware.com
-
 #include "dpdfannot.h"
 
 DPdfAnnot::AnnotType DPdfAnnot::type()
@@ -152,9 +146,8 @@ void DPdfLinkAnnot::setUrl(QString url)
 {
     m_url = url;
 
-    if (!m_url.contains("http://") && !m_url.contains("https://") && !m_url.contains("file://"))
-        //m_url.prepend("http://");
-        m_url.prepend("unknow://");
+    if (!m_url.contains("http://") && !m_url.contains("https://"))
+        m_url.prepend("http://");
 }
 
 QString DPdfLinkAnnot::url() const
