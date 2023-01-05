@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     qpdfview
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "DjVuModel.h"
 #include "Application.h"
 
@@ -496,7 +481,6 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
 
     if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
-        qDebug() << "DJVU 不能获取到当前位置的图片";
         image = QImage();
     }
 
@@ -533,7 +517,6 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     waitForMessageTag(context, DDJVU_DOCINFO);
 
     if (ddjvu_document_decoding_error(document)) {
-        qWarning() << "djvu 文件解码失败！";
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 
@@ -619,7 +602,7 @@ QString DjVuPage::text(const QRectF &rect) const
     return text.simplified();
 }
 
-QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
+QVector<PageSection> DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
     LOCK_PAGE
 
@@ -651,7 +634,11 @@ QVector< QRectF > DjVuPage::search(const QString &text, bool matchCase, bool who
         ddjvu_miniexp_release(m_parent->m_document, pageTextExp);
     }
 
-    return results;
+    QVector<PageSection> sections;
+    for(const auto &rect : results) {
+        sections << PageSection{PageLine{QString(), rect}};
+    }
+    return sections;
 }
 
 DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document) :

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "Model.h"
 #include "PDFModel.h"
 #include "DjVuModel.h"
@@ -19,27 +23,22 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
                                                                      deepin_reader::Document::Error &error)
 {
     deepin_reader::Document *document = nullptr;
+
     qDebug() << "需要转换的文档: " << filePath;
     if (Dr::PDF == fileType) {
-        deepin_reader::PDFDocument *pdfDoc = nullptr;
-        pdfDoc = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
-        QFileInfo fileInfo(filePath);
-        if (pdfDoc) {
-            pdfDoc->setPath(fileInfo.absolutePath(), "", 0);
-        }
-        document = pdfDoc;
+        qDebug() << "当前文档类型为: PDF";
+        document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
     } else if (Dr::DJVU == fileType) {
+        qDebug() << "当前文档类型为: DJVU";
         document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
     } else if (Dr::DOCX == fileType) {
+        qDebug() << "当前文档类型为: DOCX";
         if (nullptr == pprocess) {
             error = deepin_reader::Document::ConvertFailed;
             return nullptr;
         }
-        //目标文档（需要进行转换的文档）
         QString targetDoc = convertedFileDir + "/temp.docx";
-        //工作目录（unzip解压后的目录）
-        QString tmpWorkDir = convertedFileDir + "/word";
-        //最终文档（文档查看器需要的文档）
+        QString tmpHtmlFilePath = convertedFileDir + "/word/temp.html";
         QString realFilePath = convertedFileDir + "/temp.pdf";
 
         QFile file(filePath);
@@ -53,9 +52,10 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QProcess decompressor;
         *pprocess = &decompressor;
         decompressor.setWorkingDirectory(convertedFileDir);
-        QString command = "unzip " + targetDoc;
-        qInfo() << "正在执行 (" << targetDoc << ")文档解压 ..." << command;
-        decompressor.start(command);
+        qDebug() << "正在解压文档..." << targetDoc;
+        QString unzipCommand = "unzip " + targetDoc;
+        qDebug() << "执行命令: " << unzipCommand;
+        decompressor.start(unzipCommand);
         if (!decompressor.waitForStarted()) {
             qInfo() << "start unzip failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -68,44 +68,31 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!QDir(tmpWorkDir).exists()) {
-            qInfo() << "unzip failed";
+        if (!QDir(convertedFileDir + "/word").exists()) {
+            qInfo() << "unzip failed! " << (convertedFileDir + "/word") << "is not exists!";
             error = deepin_reader::Document::ConvertFailed;
             if (!(QProcess::CrashExit == decompressor.exitStatus() && 9 == decompressor.exitCode())) {
                 *pprocess = nullptr;
             }
             return nullptr;
         }
-        qInfo() << "(" << targetDoc << ")文档解压 已完成";
-
-        QFileInfo tmpWorkDirInfo(tmpWorkDir);
-        qDebug() << "工作目录(" << tmpWorkDir << ")的文件权限(r-w-e): " << tmpWorkDirInfo.isReadable() << tmpWorkDirInfo.isWritable() << tmpWorkDirInfo.isExecutable();
-
-        //碰到unzip后的没有权限的目录，将工作目录重置
-        if (!tmpWorkDirInfo.isReadable() && !tmpWorkDirInfo.isWritable()) {
-            qDebug() << "工作目录没有读写权限,跳过解压缩步骤！";
-            tmpWorkDir = convertedFileDir;
-        }
-
-        //临时文档（通过pandoc转换出来的html文档）
-        QString tmpHtmlFilePath = tmpWorkDir + "/temp.html";
+        qDebug() << "文档解压完成";
 
         // docx -> html
         QProcess converter;
         *pprocess = &converter;
-        converter.setWorkingDirectory(tmpWorkDir);
-        command = "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
-        qInfo() << "正在执行 docx -> html ...";
-        converter.start(command);
-        qDebug() << "docx -> html: " << command;
+        converter.setWorkingDirectory(convertedFileDir + "/word");
+        qDebug() << "正在将docx文档转换成html..." << tmpHtmlFilePath;
+        QString pandocCommand = "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
+        qDebug() << "执行命令: " << pandocCommand;
+        converter.start(pandocCommand);
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
-        //由于有些文档执行转换的时间过长，需要延长等待时间
-        if (!converter.waitForFinished(2000000)) {
+        if (!converter.waitForFinished()) {
             qInfo() << "pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
@@ -113,7 +100,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         }
         QFile tmpHtmlFile(tmpHtmlFilePath);
         if (!tmpHtmlFile.exists()) {
-            qInfo() << "temp.html doesn't exist";
+            qInfo() <<  "pandoc failed! " << tmpHtmlFilePath << " doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
             // 转换过程中关闭应用，docsheet被释放，对应的*pprocess已不存在
             if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
@@ -121,15 +108,16 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
-        qInfo() << "docx -> html 已完成";
+        qDebug() << "docx转html完成";
+
         // html -> pdf
         QProcess converter2;
         *pprocess = &converter2;
-        converter2.setWorkingDirectory(tmpWorkDir);
-        qInfo() << "正在执行 html -> pdf ...";
-        command = "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
-        converter2.start(command);
-        qDebug() << "html -> pdf: " << command;
+        converter2.setWorkingDirectory(convertedFileDir + "/word");
+        qDebug() << "正在将html转换成pdf..." << realFilePath;
+        QString htmltopdfCommand = "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+        qDebug() << "执行命令: " << htmltopdfCommand;
+        converter2.start(htmltopdfCommand);
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -145,27 +133,46 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         QFile realFile(realFilePath);
         if (!realFile.exists()) {
-            qInfo() << "temp.pdf doesn't exist";
+            qInfo() <<  "htmltopdf failed! " << realFilePath << " doesn't exist";
             error = deepin_reader::Document::ConvertFailed;
             if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
                 *pprocess = nullptr;
             }
             return nullptr;
         }
+        qDebug() << "html转pdf完成";
 
-        qInfo() << "html -> pdf 已完成";
         *pprocess = nullptr;
-        deepin_reader::PDFDocument *pdfDoc = nullptr;
-        pdfDoc = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
-        QFileInfo fileInfo(filePath);
-
-        if (pdfDoc) {
-            pdfDoc->setPath(fileInfo.absolutePath(), convertedFileDir, 1);
-        }
-        document = pdfDoc;
+        document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
     }
 
     return document;
+}
+
+bool SearchResult::setctionsFillText(std::function<QString(int, QRectF)> getText)
+{
+    bool ret = false;
+    for (auto &section : sections) {
+        for (auto &line : section) {
+            //这里的page比index大1
+            int index = page - 1;
+            QString text = getText(index, line.rect);
+            if (!text.isEmpty()) {
+                line.text = text;
+                ret = true;
+            }
+        }
+    }
+    return ret;
+}
+
+QRectF SearchResult::sectionBoundingRect(const PageSection &section)
+{
+    QRectF ret;
+    for (const PageLine &line : section) {
+        ret = ret.united(line.rect);
+    }
+    return ret;
 }
 
 }

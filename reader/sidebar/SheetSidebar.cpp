@@ -1,22 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "SheetSidebar.h"
 #include "DocSheet.h"
 #include "ThumbnailWidget.h"
@@ -35,6 +21,8 @@
 #include <QVBoxLayout>
 #include <QTimer>
 
+const int LEFTMINWIDTH = 266;
+const int LEFTMAXWIDTH = 380;
 SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     : BaseWidget(parent)
     , m_sheet(parent)
@@ -60,10 +48,10 @@ void SheetSidebar::initWidget()
     m_notesWidget     = nullptr;
     m_searchWidget    = nullptr;
 
-    setMinimumWidth(DocSheet::SidebarMinWidth);
-    setMaximumWidth(DocSheet::SidebarMaxWidth);
+    setMinimumWidth(LEFTMINWIDTH);
+    setMaximumWidth(LEFTMAXWIDTH);
 
-    resize(DocSheet::SidebarMinWidth, this->height());
+    resize(LEFTMINWIDTH, this->height());
 
     QVBoxLayout *pVBoxLayout = new QVBoxLayout;
     pVBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -290,7 +278,7 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
 
 void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
-    qreal scale = event->size().width() * 1.0 / DocSheet::SidebarMinWidth;
+    qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
     adaptWindowSize(scale);
     BaseWidget::resizeEvent(event);
 }
@@ -369,16 +357,12 @@ void SheetSidebar::onJumpToPageUp()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
-        qInfo() << "在缩略图页面通过PageUp翻页！";
         m_thumbnailWidget->pageUp();
     } else if (curWidget == m_bookmarkWidget) {
-        qInfo() << "在书签目录通过PageUp翻页！";
         m_bookmarkWidget->pageUp();
     } else if (curWidget == m_notesWidget) {
-        qInfo() << "在注释缩略图页面通过PageUp翻页！";
         m_notesWidget->pageUp();
     } else if (curWidget == m_catalogWidget) {
-        qInfo() << "在目录页面通过PageUp翻页！";
         m_catalogWidget->pageUp();
     }
 }
@@ -401,16 +385,12 @@ void SheetSidebar::onJumpToPageDown()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
     if (curWidget == m_thumbnailWidget) {
-        qInfo() << "在缩略图页面通过PageDown翻页！";
         m_thumbnailWidget->pageDown();
     } else if (curWidget == m_bookmarkWidget) {
-        qInfo() << "在书签目录通过PageDown翻页！";
         m_bookmarkWidget->pageDown();
     } else if (curWidget == m_notesWidget) {
-        qInfo() << "在注释缩略图页面通过PageDown翻页！";
         m_notesWidget->pageDown();
     } else if (curWidget == m_catalogWidget) {
-        qInfo() << "在目录页面通过PageDown翻页！";
         m_catalogWidget->pageDown();
     }
 }

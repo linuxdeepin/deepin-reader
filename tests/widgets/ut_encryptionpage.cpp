@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "EncryptionPage.h"
 #include "ut_common.h"
@@ -45,11 +46,11 @@ TEST_F(UT_EncryptionPage, UT_EncryptionPage_nextbuttonClicked)
     EXPECT_TRUE(spy.count() == 1);
 }
 
-//TEST_F(UT_EncryptionPage, UT_EncryptionPage_wrongPassWordSlot)
-//{
-//    m_tester->wrongPassWordSlot();
-//    EXPECT_TRUE(m_tester->m_password->text().isEmpty() == true);
-//}
+TEST_F(UT_EncryptionPage, UT_EncryptionPage_wrongPassWordSlot)
+{
+    m_tester->wrongPassWordSlot();
+    EXPECT_TRUE(m_tester->m_password->text().isEmpty() == true);
+}
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onPasswordChanged_001)
 {
