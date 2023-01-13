@@ -5,6 +5,7 @@
 #include "ColorWidgetAction.h"
 
 #include "stub.h"
+#include "addr_pri.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -35,10 +36,11 @@ TEST_F(TestColorWidgetAction, initTest)
 {
 
 }
+ACCESS_PRIVATE_FUN(ColorWidgetAction, void(int index), slotBtnClicked);
 
 TEST_F(TestColorWidgetAction, testslotBtnClicked)
 {
     QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
-    m_tester->slotBtnClicked(0);
+    call_private_fun::ColorWidgetActionslotBtnClicked(*m_tester, 0);
     EXPECT_EQ(spy.count(), 1);
 }

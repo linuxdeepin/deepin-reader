@@ -13,6 +13,7 @@
 #include <QResizeEvent>
 
 #include "stub.h"
+#include "addr_pri.h"
 #include <gtest/gtest.h>
 
 static void openFileAsync_stub(const QString &)
@@ -90,25 +91,27 @@ TEST_F(TestMainWindow, testaddFile)
     m_tester->addFile("");
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, void(QCloseEvent *event), closeEvent);
 TEST_F(TestMainWindow, testcloseEvent)
 {
     QCloseEvent *event = new QCloseEvent;
-    m_tester->closeEvent(event);
+    call_private_fun::MainWindowcloseEvent(*m_tester, event);
     delete event;
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, bool(QObject *obj, QEvent *event), eventFilter);
 TEST_F(TestMainWindow, testeventFilter)
 {
     QHoverEvent *mouseEvent = new QHoverEvent(QEvent::HoverMove, QPointF(100, 100), QPointF(0, 0));
-    m_tester->eventFilter(m_tester, mouseEvent);
+    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, mouseEvent);
     delete mouseEvent;
 
     QEvent *pEvent = new QEvent(QEvent::WindowStateChange);
-    m_tester->eventFilter(m_tester, pEvent);
+    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, pEvent);
     delete pEvent;
 
     QResizeEvent *pResizeEvent = new QResizeEvent(QSize(200, 200), QSize(500, 500));
-    m_tester->eventFilter(m_tester, pResizeEvent);
+    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, pResizeEvent);
     delete pResizeEvent;
 }
 
@@ -117,30 +120,33 @@ TEST_F(TestMainWindow, testsetDocTabBarWidget)
     m_tester->setDocTabBarWidget(nullptr);
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, void(), onTitleAniFinished);
 TEST_F(TestMainWindow, testonTitleAniFinished)
 {
     m_tester->setDocTabBarWidget(nullptr);
-    m_tester->onTitleAniFinished();
+    call_private_fun::MainWindowonTitleAniFinished(*m_tester);
 }
+
+ACCESS_PRIVATE_FIELD(MainWindow, int, m_lastWindowState);
 
 TEST_F(TestMainWindow, testonMainWindowFull)
 {
-    m_tester->m_lastWindowState = Qt::WindowNoState;
+    access_private_field::MainWindowm_lastWindowState(*m_tester) = Qt::WindowNoState;
 
     m_tester->handleMainWindowFull();
-    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
+    EXPECT_FALSE(access_private_field::MainWindowm_lastWindowState(*m_tester) == Qt::WindowFullScreen);
 
     m_tester->setDocTabBarWidget(new QWidget(m_tester));
     m_tester->handleMainWindowFull();
-    EXPECT_TRUE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
+    EXPECT_TRUE(access_private_field::MainWindowm_lastWindowState(*m_tester) == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testonMainWindowExitFull)
 {
     m_tester1->setDocTabBarWidget(nullptr);
-    m_tester1->m_lastWindowState = Qt::WindowFullScreen;
+    access_private_field::MainWindowm_lastWindowState(*m_tester1) = Qt::WindowFullScreen;
     m_tester1->handleMainWindowExitFull();
-    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
+    EXPECT_FALSE(access_private_field::MainWindowm_lastWindowState(*m_tester1) == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testresizeFullTitleWidget)
@@ -196,19 +202,22 @@ TEST_F(TestMainWindow, testcreateWindow1)
     delete mw;
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, void(), showDefaultSize);
 TEST_F(TestMainWindow, testshowDefaultSize)
 {
-    m_tester->showDefaultSize();
+    call_private_fun::MainWindowshowDefaultSize(*m_tester);
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, void(), onDelayInit);
 TEST_F(TestMainWindow, testonDelayInit)
 {
-    m_tester->onDelayInit();
+    call_private_fun::MainWindowonDelayInit(*m_tester);
 }
 
+ACCESS_PRIVATE_FUN(MainWindow, void(), onUpdateTitleLabelRect);
 TEST_F(TestMainWindow, testonUpdateTitleLabelRect)
 {
-    m_tester->onUpdateTitleLabelRect();
+    call_private_fun::MainWindowonUpdateTitleLabelRect(*m_tester);
 }
 
 TEST_F(TestMainWindow, testupdateOrderWidgets)

@@ -7,7 +7,8 @@
 #include <QSignalSpy>
 
 #include <gtest/gtest.h>
-
+#include "stub.h"
+#include "addr_pri.h"
 class UT_RoundColorWidget : public ::testing::Test
 {
 public:
@@ -29,6 +30,8 @@ protected:
     RoundColorWidget *m_tester;
 };
 
+ACCESS_PRIVATE_FIELD(RoundColorWidget, bool, m_isSelected);
+
 TEST_F(UT_RoundColorWidget, initTest)
 {
 
@@ -37,29 +40,33 @@ TEST_F(UT_RoundColorWidget, initTest)
 TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_setSelected_001)
 {
     m_tester->setSelected(true);
-    EXPECT_TRUE(m_tester->m_isSelected == true);
+    bool &RoundColorWidgetm_isSelected = access_private_field::RoundColorWidgetm_isSelected(*m_tester);
+    EXPECT_TRUE(RoundColorWidgetm_isSelected == true);
 }
 
 TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_setSelected_002)
 {
     m_tester->setSelected(false);
-    EXPECT_TRUE(m_tester->m_isSelected == false);
+    bool &RoundColorWidgetm_isSelected = access_private_field::RoundColorWidgetm_isSelected(*m_tester);
+    EXPECT_TRUE(RoundColorWidgetm_isSelected == false);
 }
 
+ACCESS_PRIVATE_FUN(RoundColorWidget, void(QMouseEvent *event), mousePressEvent);
 TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_mousePressEvent)
 {
     QSignalSpy spy(m_tester, SIGNAL(clicked()));
-    m_tester->m_isSelected = false;
+    access_private_field::RoundColorWidgetm_isSelected(*m_tester) = false;
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mousePressEvent(event);
+    call_private_fun::RoundColorWidgetmousePressEvent(*m_tester, event);
     delete event;
     EXPECT_TRUE(spy.count() == 1);
 }
 
+ACCESS_PRIVATE_FUN(RoundColorWidget, void(QPaintEvent *event), paintEvent);
 TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_paintEvent)
 {
-    m_tester->m_isSelected = true;
+    access_private_field::RoundColorWidgetm_isSelected(*m_tester) = true;
     QPaintEvent paint(QRect(m_tester->rect()));
-    m_tester->paintEvent(&paint);
+    call_private_fun::RoundColorWidgetpaintEvent(*m_tester, &paint);
     EXPECT_FALSE(m_tester->grab().isNull());
 }

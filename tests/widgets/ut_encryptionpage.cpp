@@ -4,7 +4,8 @@
 
 #include "EncryptionPage.h"
 #include "ut_common.h"
-
+#include "stub.h"
+#include "addr_pri.h"
 #include <DGuiApplicationHelper>
 
 #include <QSignalSpy>
@@ -32,6 +33,8 @@ public:
 protected:
     EncryptionPage *m_tester;
 };
+ACCESS_PRIVATE_FIELD(EncryptionPage, DPasswordEdit *, m_password);
+ACCESS_PRIVATE_FIELD(EncryptionPage, DPushButton *, m_nextbutton);
 
 TEST_F(UT_EncryptionPage, initTest)
 {
@@ -53,17 +56,17 @@ TEST_F(UT_EncryptionPage, UT_EncryptionPage_nextbuttonClicked)
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onPasswordChanged_001)
 {
-    m_tester->m_password->setAlert(true);
+    access_private_field::EncryptionPagem_password(*m_tester)->setAlert(true);
     m_tester->onPasswordChanged();
-    EXPECT_TRUE(m_tester->m_nextbutton->isEnabled() == false);
+    EXPECT_TRUE(access_private_field::EncryptionPagem_nextbutton(*m_tester)->isEnabled() == false);
 }
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onPasswordChanged_002)
 {
-    m_tester->m_password->setAlert(true);
-    m_tester->m_password->setText("123");
+    access_private_field::EncryptionPagem_password(*m_tester)->setAlert(true);
+    access_private_field::EncryptionPagem_password(*m_tester)->setText("123");
     m_tester->onPasswordChanged();
-    EXPECT_TRUE(m_tester->m_nextbutton->isEnabled() == true);
+    EXPECT_TRUE(access_private_field::EncryptionPagem_nextbutton(*m_tester)->isEnabled() == true);
 }
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onSetPasswdFocus)
@@ -71,13 +74,15 @@ TEST_F(UT_EncryptionPage, UT_EncryptionPage_onSetPasswdFocus)
     Stub stub;
     UTCommon::stub_QWidget_isVisible(stub, true);
     m_tester->onSetPasswdFocus();
-    EXPECT_TRUE(m_tester->m_password != nullptr);
+    EXPECT_TRUE(access_private_field::EncryptionPagem_password(*m_tester) != nullptr);
 }
+
+ACCESS_PRIVATE_FUN(EncryptionPage, void(), onUpdateTheme);
 
 TEST_F(UT_EncryptionPage, UT_EncryptionPage_onUpdateTheme)
 {
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    m_tester->onUpdateTheme();
+    call_private_fun::EncryptionPageonUpdateTheme(*m_tester);
     EXPECT_TRUE(m_tester->palette().color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
 }
 

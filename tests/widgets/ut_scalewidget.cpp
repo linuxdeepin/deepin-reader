@@ -8,6 +8,7 @@
 #include "ut_defines.h"
 
 #include "stub.h"
+#include "addr_pri.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -80,31 +81,38 @@ TEST_F(TestScaleWidget, testonNextScale)
     EXPECT_TRUE(g_funcname == "zoomin_stub");
 }
 
+ACCESS_PRIVATE_FIELD(ScaleWidget, Dtk::Widget::DLineEdit *, m_lineEdit);
+ACCESS_PRIVATE_FIELD(ScaleWidget, QPointer<DocSheet>, m_sheet);
+ACCESS_PRIVATE_FIELD(DocSheet, SheetOperation, m_operation);
+ACCESS_PRIVATE_FUN(ScaleWidget, void(), onReturnPressed);
 TEST_F(TestScaleWidget, testonReturnPressed)
 {
-    m_tester->m_lineEdit->setText("30%");
-    m_tester->onReturnPressed();
-    EXPECT_EQ(m_tester->m_sheet->m_operation.scaleFactor, 0.3);
+    access_private_field::ScaleWidgetm_lineEdit(*m_tester)->setText("30%");
+    call_private_fun::ScaleWidgetonReturnPressed(*m_tester);
+    EXPECT_EQ(access_private_field::DocSheetm_operation(*access_private_field::ScaleWidgetm_sheet(*m_tester)).scaleFactor, 0.3);
 }
 
+ACCESS_PRIVATE_FUN(ScaleWidget, void(), onArrowBtnlicked);
 TEST_F(TestScaleWidget, testonArrowBtnlicked)
 {
     Stub stub;
     stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), menu_exec_stub);
-    m_tester->onArrowBtnlicked();
+    call_private_fun::ScaleWidgetonArrowBtnlicked(*m_tester);
+    stub.reset((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec));
     EXPECT_TRUE(g_funcname == "menu_exec_stub");
 }
 
+ACCESS_PRIVATE_FUN(ScaleWidget, void(), onEditFinished);
 TEST_F(TestScaleWidget, testonEditFinished)
 {
-    m_tester->m_sheet->m_operation.scaleFactor = 0.2;
-    m_tester->onEditFinished();
-    EXPECT_TRUE(m_tester->m_lineEdit->text() == "20%");
+    access_private_field::DocSheetm_operation(*access_private_field::ScaleWidgetm_sheet(*m_tester)).scaleFactor = 0.2;
+    call_private_fun::ScaleWidgetonEditFinished(*m_tester);
+    EXPECT_TRUE(access_private_field::ScaleWidgetm_lineEdit(*m_tester)->text() == "20%");
 }
 
 TEST_F(TestScaleWidget, testclear)
 {
-    m_tester->m_lineEdit->setText("50%");
+    access_private_field::ScaleWidgetm_lineEdit(*m_tester)->setText("50%");
     m_tester->clear();
-    EXPECT_TRUE(m_tester->m_lineEdit->text().isEmpty());
+    EXPECT_TRUE(access_private_field::ScaleWidgetm_lineEdit(*m_tester)->text().isEmpty());
 }

@@ -9,6 +9,7 @@
 #include "ShortCutShow.h"
 #include "TitleWidget.h"
 #include "stub.h"
+#include "addr_pri.h"
 
 #include <QFileDialog>
 #include <QStackedLayout>
@@ -217,9 +218,10 @@ static MainWindow *createWindow_stub()
 }
 
 /***********测试用例***********/
+ACCESS_PRIVATE_FIELD(Central, TitleWidget *, m_widget);
 TEST_F(TestCentral, UT_Central_titleWidget_001)
 {
-    EXPECT_TRUE(m_tester->titleWidget() == m_tester->m_widget);
+    EXPECT_TRUE(m_tester->titleWidget() == access_private_field::Centralm_widget(*m_tester));
 }
 
 TEST_F(TestCentral, UT_Central_docPage_001)
@@ -227,11 +229,13 @@ TEST_F(TestCentral, UT_Central_docPage_001)
     EXPECT_FALSE(m_tester->docPage() == nullptr);
 }
 
+ACCESS_PRIVATE_FIELD(Central, TitleMenu *, m_menu);
+
 TEST_F(TestCentral, UT_Central_setMenu_001)
 {
     TitleMenu *menu = new TitleMenu(m_tester);
     m_tester->setMenu(menu);
-    EXPECT_TRUE(m_tester->m_menu == menu);
+    EXPECT_TRUE(access_private_field::Centralm_menu(*m_tester) == menu);
 }
 
 TEST_F(TestCentral, UT_Central_addFilesWithDialog_001)
@@ -482,7 +486,7 @@ TEST_F(TestCentral, UT_Central_onTouchPadEvent_001)
     m_tester->onTouchPadEvent(name, direction, fingers);
     EXPECT_TRUE(g_funcName == "zoomIn_stub");
 }
-
+ACCESS_PRIVATE_FUN(QObject,  QObject * ()const, sender);
 TEST_F(TestCentral, UT_Central_onKeyTriggered_001)
 {
     Stub s;
@@ -491,12 +495,16 @@ TEST_F(TestCentral, UT_Central_onKeyTriggered_001)
     m_tester->onKeyTriggered();
     EXPECT_FALSE(g_funcName == "handleShortcut_stub");
 
-    s.set(ADDR(QObject, sender), sender_stub);
+    auto sender_temp = get_private_fun::QObjectsender();
+    s.set(sender_temp, sender_stub);
     m_tester->onKeyTriggered();
     EXPECT_TRUE(g_funcName == "handleShortcut_stub");
 
+    s.reset(ADDR(Central, handleShortcut));
+    s.reset(sender_temp);
     delete g_object;
 }
+ACCESS_PRIVATE_FUN(Central, void(QDragEnterEvent *event), dragEnterEvent);
 
 TEST_F(TestCentral, UT_Central_dragEnterEvent_001)
 {
@@ -510,7 +518,7 @@ TEST_F(TestCentral, UT_Central_dragEnterEvent_001)
     Qt::KeyboardModifiers modifiers;
     QDragEnterEvent *event = new QDragEnterEvent(pos, actions, data, buttons, modifiers);
 
-    m_tester->dragEnterEvent(event);
+    call_private_fun::CentraldragEnterEvent(*m_tester, event);
     EXPECT_FALSE(g_funcName == "activateWindow_stub");
     delete data;
     delete event;
@@ -529,7 +537,7 @@ TEST_F(TestCentral, UT_Central_dragEnterEvent_002)
     Qt::KeyboardModifiers modifiers;
     QDragEnterEvent *event = new QDragEnterEvent(pos, actions, data, buttons, modifiers);
 
-    m_tester->dragEnterEvent(event);
+    call_private_fun::CentraldragEnterEvent(*m_tester, event);
     EXPECT_TRUE(g_funcName == "activateWindow_stub");
     delete data;
     delete event;
@@ -550,12 +558,13 @@ TEST_F(TestCentral, UT_Central_dragEnterEvent_003)
     Qt::KeyboardModifiers modifiers;
     QDragEnterEvent *event = new QDragEnterEvent(pos, actions, data, buttons, modifiers);
 
-    m_tester->dragEnterEvent(event);
+    call_private_fun::CentraldragEnterEvent(*m_tester, event);
     EXPECT_TRUE(g_funcName == "activateWindow_stub");
     delete data;
     delete event;
 }
 
+ACCESS_PRIVATE_FUN(Central, void(QDropEvent *event), dropEvent);
 TEST_F(TestCentral, UT_Central_dropEvent_001)
 {
     Stub s;
@@ -571,7 +580,7 @@ TEST_F(TestCentral, UT_Central_dropEvent_001)
     Qt::KeyboardModifiers modifiers;
     QDropEvent *event = new QDropEvent(pos, actions, data, buttons, modifiers);
 
-    m_tester->dropEvent(event);
+    call_private_fun::CentraldropEvent(*m_tester, event);
     EXPECT_TRUE(g_funcName == "activateWindow_stub");
     delete data;
     delete event;
@@ -596,12 +605,13 @@ TEST_F(TestCentral, UT_Central_dropEvent_002)
     QDropEvent *event = new QDropEvent(pos, actions, data, buttons, modifiers);
 
     g_funcName.clear();
-    m_tester->dropEvent(event);
+    call_private_fun::CentraldropEvent(*m_tester, event);
     EXPECT_FALSE(g_funcName == "activateWindow_stub");
     delete data;
     delete event;
 }
 
+ACCESS_PRIVATE_FUN(Central, void(QResizeEvent *event), resizeEvent);
 TEST_F(TestCentral, UT_Central_resizeEvent_001)
 {
     Stub s;
@@ -613,7 +623,7 @@ TEST_F(TestCentral, UT_Central_resizeEvent_001)
     QSize oldSize(30, 30);
     QResizeEvent *event = new QResizeEvent(size, oldSize);
 
-    m_tester->resizeEvent(event);
+    call_private_fun::CentralresizeEvent(*m_tester, event);
     EXPECT_TRUE(g_funcName == "resizeEvent_stub");
     delete event;
 }

@@ -6,7 +6,7 @@
 #include "DocSheet.h"
 
 #include "stub.h"
-
+#include "addr_pri.h"
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QListView>
@@ -41,56 +41,66 @@ TEST_F(TestCatalogTreeView, initTest)
 
 }
 
+ACCESS_PRIVATE_FIELD(CatalogTreeView, bool, rightnotifypagechanged);
 TEST_F(TestCatalogTreeView, testsetRightControl)
 {
     m_tester->setRightControl(true);
-    EXPECT_TRUE(m_tester->rightnotifypagechanged == true);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) == true);
 }
 
+ACCESS_PRIVATE_FIELD(CatalogTreeView, DocSheet *, m_sheet);
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const deepin_reader::Section &, QStandardItem *), parseCatalogData);
 TEST_F(TestCatalogTreeView, testparseCatalogData)
 {
-    m_tester->parseCatalogData(deepin_reader::Section(), nullptr);
-    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+    call_private_fun::CatalogTreeViewparseCatalogData(*m_tester, deepin_reader::Section(), nullptr);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_sheet(*m_tester)  != nullptr);
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, QList<QStandardItem *>(const QString &, const int &, const qreal &, const qreal &), getItemList);
 TEST_F(TestCatalogTreeView, testgetItemList)
 {
-    QList<QStandardItem *> listItem = m_tester->getItemList("1", 0, 1, 1);
+    QList<QStandardItem *> listItem = call_private_fun::CatalogTreeViewgetItemList(*m_tester, "1", 0, 1, 1);
     EXPECT_TRUE(listItem.count() == 2);
     qDeleteAll(listItem);
 }
 
+ACCESS_PRIVATE_FIELD(CatalogTreeView, int, m_index);
 TEST_F(TestCatalogTreeView, testhandleOpenSuccess)
 {
     m_tester->handleOpenSuccess();
-    EXPECT_TRUE(m_tester->m_index == 0);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_index(*m_tester) == 0);
 }
 
+ACCESS_PRIVATE_FIELD(CatalogTreeView, QString, m_title);
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QModelIndex &), slotCollapsed);
 TEST_F(TestCatalogTreeView, testCollapsed)
 {
-    m_tester->slotCollapsed(QModelIndex());
-    EXPECT_TRUE(m_tester->m_index == -1);
-    EXPECT_TRUE(m_tester->m_title == "");
+    call_private_fun::CatalogTreeViewslotCollapsed(*m_tester, QModelIndex());
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_index(*m_tester) == -1);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_title(*m_tester) == "");
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QModelIndex &), slotExpanded);
 TEST_F(TestCatalogTreeView, testslotExpanded)
 {
-    m_tester->slotExpanded(QModelIndex());
-    EXPECT_TRUE(m_tester->m_index == -1);
-    EXPECT_TRUE(m_tester->m_title == "");
+    call_private_fun::CatalogTreeViewslotExpanded(*m_tester, QModelIndex());
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_index(*m_tester) == -1);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_title(*m_tester) == "");
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QModelIndex &, const QModelIndex &), currentChanged);
 TEST_F(TestCatalogTreeView, testcurrentChanged)
 {
-    m_tester->currentChanged(QModelIndex(), QModelIndex());
-    EXPECT_TRUE(m_tester->rightnotifypagechanged == false);
-    EXPECT_TRUE(m_tester->m_title == "");
+    call_private_fun::CatalogTreeViewcurrentChanged(*m_tester, QModelIndex(), QModelIndex());
+    EXPECT_TRUE(access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) == false);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_title(*m_tester) == "");
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QModelIndex &), onItemClicked);
 TEST_F(TestCatalogTreeView, testonItemClicked)
 {
-    m_tester->onItemClicked(QModelIndex());
-    EXPECT_TRUE(m_tester->m_title == "");
+    call_private_fun::CatalogTreeViewonItemClicked(*m_tester, QModelIndex());
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_title(*m_tester) == "");
 }
 
 static QString g_resizeCoulumnWidth_result;
@@ -99,44 +109,50 @@ void resizeCoulumnWidth_stub()
     g_resizeCoulumnWidth_result = __FUNCTION__;
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(), resizeCoulumnWidth);
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(QResizeEvent *), resizeEvent);
 TEST_F(TestCatalogTreeView, testresizeEvent)
 {
+    auto TestCatalogTreeView_resizeCoulumnWidth = get_private_fun::CatalogTreeViewresizeCoulumnWidth();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, resizeCoulumnWidth), resizeCoulumnWidth_stub);
+    stub.set(TestCatalogTreeView_resizeCoulumnWidth, resizeCoulumnWidth_stub);
     QResizeEvent *e = new QResizeEvent(QSize(100, 100), QSize(80, 80));
-    m_tester->resizeEvent(e);
+    call_private_fun::CatalogTreeViewresizeEvent(*m_tester, e);
     delete e;
     EXPECT_TRUE(g_resizeCoulumnWidth_result == "resizeCoulumnWidth_stub");
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(QMouseEvent *), mousePressEvent);
 TEST_F(TestCatalogTreeView, testmousePressEvent)
 {
     QTest::mousePress(m_tester, Qt::LeftButton);
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mousePressEvent(event);
+    call_private_fun::CatalogTreeViewmousePressEvent(*m_tester, event);
     delete event;
-    EXPECT_TRUE(m_tester->rightnotifypagechanged == false);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) == false);
 }
 
 TEST_F(TestCatalogTreeView, testkeyPressEvent)
 {
     QTest::keyRelease(m_tester, Qt::Key_Enter);
-    EXPECT_TRUE(m_tester->rightnotifypagechanged == false);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) == false);
 }
 
 TEST_F(TestCatalogTreeView, testsetIndex)
 {
     m_tester->setIndex(0, "111");
-    EXPECT_TRUE(m_tester->m_index == 0);
-    EXPECT_TRUE(m_tester->m_title == "111");
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_index(*m_tester) == 0);
+    EXPECT_TRUE(access_private_field::CatalogTreeViewm_title(*m_tester) == "111");
 }
 
 TEST_F(TestCatalogTreeView, testresizeCoulumnWidth)
 {
+    auto TestCatalogTreeView_resizeCoulumnWidth = get_private_fun::CatalogTreeViewresizeCoulumnWidth();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, resizeCoulumnWidth), resizeCoulumnWidth_stub);
-    m_tester->resizeCoulumnWidth();
+    stub.set(TestCatalogTreeView_resizeCoulumnWidth, resizeCoulumnWidth_stub);
+    call_private_fun::CatalogTreeViewresizeCoulumnWidth(*m_tester);
     EXPECT_TRUE(g_resizeCoulumnWidth_result == "resizeCoulumnWidth_stub");
+    stub.reset(TestCatalogTreeView_resizeCoulumnWidth);
 }
 
 static QString g_scrollToIndex_result;
@@ -145,49 +161,61 @@ void scrollToIndex_stub()
     g_scrollToIndex_result = __FUNCTION__;
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QModelIndex &), scrollToIndex);
 TEST_F(TestCatalogTreeView, testnextPage)
 {
+    auto TestCatalogTreeView_scrollToIndex = get_private_fun::CatalogTreeViewscrollToIndex();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, scrollToIndex), scrollToIndex_stub);
+    stub.set(TestCatalogTreeView_scrollToIndex, scrollToIndex_stub);
     m_tester->nextPage();
     EXPECT_TRUE(g_scrollToIndex_result == "scrollToIndex_stub");
+    stub.reset(TestCatalogTreeView_scrollToIndex);
 }
 
 TEST_F(TestCatalogTreeView, testpageDownPage)
 {
+    auto TestCatalogTreeView_scrollToIndex = get_private_fun::CatalogTreeViewscrollToIndex();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, scrollToIndex), scrollToIndex_stub);
+    stub.set(TestCatalogTreeView_scrollToIndex, scrollToIndex_stub);
     m_tester->pageDownPage();
     EXPECT_TRUE(g_scrollToIndex_result == "scrollToIndex_stub");
+    stub.reset(TestCatalogTreeView_scrollToIndex);
 }
 
 TEST_F(TestCatalogTreeView, testprevPage)
 {
+    auto TestCatalogTreeView_scrollToIndex = get_private_fun::CatalogTreeViewscrollToIndex();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, scrollToIndex), scrollToIndex_stub);
+    stub.set(TestCatalogTreeView_scrollToIndex, scrollToIndex_stub);
     m_tester->prevPage();
     EXPECT_TRUE(g_scrollToIndex_result == "scrollToIndex_stub");
+    stub.reset(TestCatalogTreeView_scrollToIndex);
 }
 
 TEST_F(TestCatalogTreeView, testpageUpPage)
 {
+    auto TestCatalogTreeView_scrollToIndex = get_private_fun::CatalogTreeViewscrollToIndex();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, scrollToIndex), scrollToIndex_stub);
+    stub.set(TestCatalogTreeView_scrollToIndex, scrollToIndex_stub);
     m_tester->pageUpPage();
     EXPECT_TRUE(g_scrollToIndex_result == "scrollToIndex_stub");
+    stub.reset(TestCatalogTreeView_scrollToIndex);
 }
 
 TEST_F(TestCatalogTreeView, testscrollToIndex)
 {
-    m_tester->rightnotifypagechanged = true;
-    m_tester->scrollToIndex(QModelIndex());
-    EXPECT_TRUE(m_tester->rightnotifypagechanged == true);
+    access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) = true;
+    call_private_fun::CatalogTreeViewscrollToIndex(*m_tester, QModelIndex());
+    EXPECT_TRUE(access_private_field::CatalogTreeViewrightnotifypagechanged(*m_tester) == true);
 }
 
+ACCESS_PRIVATE_FUN(CatalogTreeView, void(const QFont &), onFontChanged);
 TEST_F(TestCatalogTreeView, testonFontChanged)
 {
+    auto TestCatalogTreeView_resizeCoulumnWidth = get_private_fun::CatalogTreeViewresizeCoulumnWidth();
     Stub stub;
-    stub.set(ADDR(CatalogTreeView, resizeCoulumnWidth), resizeCoulumnWidth_stub);
-    m_tester->onFontChanged(QFont());
+    stub.set(TestCatalogTreeView_resizeCoulumnWidth, resizeCoulumnWidth_stub);
+    call_private_fun::CatalogTreeViewonFontChanged(*m_tester, QFont());
     EXPECT_TRUE(g_resizeCoulumnWidth_result == "resizeCoulumnWidth_stub");
+    stub.reset(TestCatalogTreeView_resizeCoulumnWidth);
 }
