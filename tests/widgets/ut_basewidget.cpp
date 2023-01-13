@@ -4,7 +4,7 @@
 
 #include "BaseWidget.h"
 #include "stub.h"
-
+#include "addr_pri.h"
 #include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
@@ -35,10 +35,11 @@ TEST_F(TestBaseWidget, initTest)
 {
 
 }
+ACCESS_PRIVATE_FUN(BaseWidget, void(), updateWidgetTheme);
 
 TEST_F(TestBaseWidget, testupdateWidgetTheme)
 {
-    m_tester->updateWidgetTheme();
+    call_private_fun::BaseWidgetupdateWidgetTheme(*m_tester);
     Dtk::Gui::DPalette plt = m_tester->palette();
     EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
 }

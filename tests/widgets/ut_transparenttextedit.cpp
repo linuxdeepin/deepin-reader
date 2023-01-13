@@ -4,7 +4,8 @@
 
 #include "TransparentTextEdit.h"
 #include "ut_common.h"
-
+#include "stub.h"
+#include "addr_pri.h"
 #include <QSignalSpy>
 #include <QDebug>
 #include <QMimeData>
@@ -38,26 +39,30 @@ TEST_F(UT_TransparentTextEdit, initTest)
 
 }
 
+ACCESS_PRIVATE_FIELD(TransparentTextEdit, int, m_nMaxContantLen);
+ACCESS_PRIVATE_FUN(TransparentTextEdit, void(), slotTextEditMaxContantNum);
 TEST_F(UT_TransparentTextEdit, UT_TransparentTextEdit_slotTextEditMaxContantNum)
 {
-    m_tester->m_nMaxContantLen = 3;
+    access_private_field::TransparentTextEditm_nMaxContantLen(*m_tester) = 3;
     m_tester->setPlainText("123456");
-    m_tester->slotTextEditMaxContantNum();
+    call_private_fun::TransparentTextEditslotTextEditMaxContantNum(*m_tester);
     EXPECT_TRUE(m_tester->toPlainText() == "123");
 }
 
+ACCESS_PRIVATE_FUN(TransparentTextEdit, void(QPaintEvent *event), paintEvent);
 TEST_F(UT_TransparentTextEdit, UT_TransparentTextEdit_paintEvent)
 {
     QPaintEvent paint(QRect(m_tester->rect()));
-    m_tester->paintEvent(&paint);
+    call_private_fun::TransparentTextEditpaintEvent(*m_tester, &paint);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 
+ACCESS_PRIVATE_FUN(TransparentTextEdit, void(const QMimeData *source), insertFromMimeData);
 TEST_F(UT_TransparentTextEdit, UT_TransparentTextEdit_insertFromMimeData)
 {
     QMimeData *source = new QMimeData();
     source->setText("123");
-    m_tester->insertFromMimeData(source);
+    call_private_fun::TransparentTextEditinsertFromMimeData(*m_tester, source);
     EXPECT_TRUE(m_tester->toPlainText() == "123");
     delete source;
 }
@@ -69,11 +74,12 @@ TEST_F(UT_TransparentTextEdit, UT_TransparentTextEdit_keyPressEvent)
     QTest::keyPress(m_tester, Qt::Key_M, Qt::AltModifier);
 }
 
+ACCESS_PRIVATE_FUN(TransparentTextEdit, void(QFocusEvent *event), focusOutEvent);
 TEST_F(UT_TransparentTextEdit, UT_TransparentTextEdit_focusOutEvent)
 {
     QSignalSpy spy(m_tester, SIGNAL(sigCloseNoteWidget(bool)));
     QFocusEvent *event = new QFocusEvent(QEvent::FocusOut);
-    m_tester->focusOutEvent(event);
+    call_private_fun::TransparentTextEditfocusOutEvent(*m_tester, event);
     delete event;
     EXPECT_TRUE(spy.count() == 1);
 }

@@ -6,7 +6,7 @@
 #include "Global.h"
 #include "stub.h"
 #include "DocSheet.h"
-
+#include "addr_pri.h"
 #include <QTest>
 
 #include <gtest/gtest.h>
@@ -73,9 +73,10 @@ void TestDatabase::TearDown()
 }
 
 /*************测试用例****************/
+ACCESS_PRIVATE_FUN(Database, bool(), prepareOperation);
 TEST_F(TestDatabase, UT_Database_prepareOperation_001)
 {
-    EXPECT_FALSE(m_tester->prepareOperation());
+    EXPECT_FALSE(call_private_fun::DatabaseprepareOperation(*m_tester));
 }
 
 TEST_F(TestDatabase, UT_Database_readOperation_001)
@@ -100,9 +101,10 @@ TEST_F(TestDatabase, UT_Database_saveOperation_001)
     delete sheet;
 }
 
+ACCESS_PRIVATE_FUN(Database, bool(), prepareBookmark);
 TEST_F(TestDatabase, UT_Database_prepareBookmark_001)
 {
-    EXPECT_FALSE(m_tester->prepareBookmark());
+    EXPECT_FALSE(call_private_fun::DatabaseprepareBookmark(*m_tester));
 }
 
 //TEST_F(TestDatabase, UT_Database_readBookmarks_001)
