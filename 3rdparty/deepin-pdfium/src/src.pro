@@ -50,6 +50,6 @@ SOURCES += \
     $$PWD/dpdfpage.cpp \
     $$PWD/dpdfannot.cpp
 
-target.path  = $$PREFIX/lib
+target.path  = $$LIB_INSTALL_DIR
 
 INSTALLS += target
