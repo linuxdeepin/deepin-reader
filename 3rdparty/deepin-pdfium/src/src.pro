@@ -4,7 +4,8 @@ TEMPLATE = lib
 
 CONFIG += c++14 link_pkgconfig
 
-PKGCONFIG += chardet
+PKGCONFIG += chardet libopenjp2 icu-uc zlib
+LIBS += -lchardet -ljpeg -licuuc -lz
 
 isEmpty(PREFIX) {
  PREFIX = /usr
