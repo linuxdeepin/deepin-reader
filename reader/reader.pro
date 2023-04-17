@@ -42,6 +42,14 @@ TEMPLATE = app
 
 #DEFINES += PERF_ON
 
+# 判断系统环境
+MAJOR_VERSION=$$system("cat /etc/os-version | grep MajorVersion | grep -o '[0-9]\+'")
+#message("MAJOR_VERSION: " $$MAJOR_VERSION)
+equals(MAJOR_VERSION, 23) {
+    message("----------------- OS_BUILD_V23 on")
+    DEFINES += OS_BUILD_V23
+}
+
 #Install
 target.path   = $$PREFIX/bin
 
