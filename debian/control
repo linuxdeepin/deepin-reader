@@ -7,7 +7,22 @@ Standards-Version: 4.5.0
 
 Package: deepin-reader
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc, libdtkwidget5 (>= 5.4.11)
+Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc, libdtkwidget5 (>= 5.4.11), libdeepin-pdfium
 Recommends: uos-reporter, deepin-event-log
+Conflicts: deepin-reader
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files,supporting PDF, DJVU, DOCX etc
+
+Package: libdeepin-pdfium
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: deepin-reader
+Description: A libaray about PDF.
+ A library for parsing and editing and displaying PDF.
+
+Package: libdeepin-pdfium-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libdeepin-pdfium
+Description: A libaray about PDF dev
+ A libaray that provides for parsing and editing and displaying PDF interface dev.
+ 
