@@ -27,6 +27,7 @@
 #include <DWidget>
 #include <DIconButton>
 #include <DLineEdit>
+#include <DGuiApplicationHelper>
 
 #include <QPointer>
 
@@ -97,6 +98,12 @@ private slots:
      * 缩放下拉菜单按钮点击
      */
     void onArrowBtnlicked();
+
+    /**
+     * @brief onSizeModeChanged
+     * 控制中心>个性化>切换紧凑模式
+     */
+    void onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode);
 
 private:
     QPointer<DocSheet> m_sheet;
