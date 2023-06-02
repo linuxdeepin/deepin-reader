@@ -11,6 +11,8 @@
 #include <DFontSizeManager>
 
 #define LineEditSpacing 24
+#define NormalModeArrowBtnSize 32   //普通模式按钮大小
+#define CompactModeArrowBtnSize 20  //紧凑模式按钮大小
 
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
@@ -42,11 +44,11 @@ void ScaleWidget::initWidget()
 
     m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
     m_arrowBtn->setObjectName("editArrowBtn");
-    m_arrowBtn->setFixedSize(32, 32);
-    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, 2);
+    onSizeModeChanged(DGuiApplicationHelper::instance()->sizeMode());
     m_lineEdit->lineEdit()->setTextMargins(0, 0, m_arrowBtn->width(), 0);
     m_lineEdit->setClearButtonEnabled(false);
 
+    connect(DGuiApplicationHelper::instance(),SIGNAL(sizeModeChanged(DGuiApplicationHelper::SizeMode)),this,SLOT(onSizeModeChanged(DGuiApplicationHelper::SizeMode)));
     connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
     connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     connect(m_arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
@@ -103,6 +105,18 @@ void ScaleWidget::onArrowBtnlicked()
     QPoint point = m_lineEdit->mapToGlobal(QPoint(0, m_lineEdit->height() + 2));
     scaleMenu.readCurDocParam(m_sheet.data());
     scaleMenu.exec(point);
+}
+
+void ScaleWidget::onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode)
+{
+    if(sizeMode == DGuiApplicationHelper::SizeMode::CompactMode){
+        qInfo() << "Size Mode Changed! Current SizeMode is CompactMode";
+        m_arrowBtn->setFixedSize(CompactModeArrowBtnSize, CompactModeArrowBtnSize);
+    }else{
+        qInfo() << "Size Mode Changed! Current SizeMode is " << sizeMode;
+        m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
+    }
+    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height()/2 - m_arrowBtn->height()/2);
 }
 
 void ScaleWidget::onEditFinished()
