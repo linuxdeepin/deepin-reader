@@ -38,17 +38,22 @@ void ScaleWidget::initWidget()
     Dtk::Widget::DFontSizeManager::instance()->bind(m_lineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
 
     connect(dynamic_cast<QGuiApplication *>(DApplication::instance()), &DApplication::fontChanged,
-                this, &ScaleWidget::onEditFinished);
+            this, &ScaleWidget::onEditFinished);
 
     m_lineEdit->setFixedSize(120, 36);
 
     m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
     m_arrowBtn->setObjectName("editArrowBtn");
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    qInfo() << "Compact mode support!!!";
     onSizeModeChanged(DGuiApplicationHelper::instance()->sizeMode());
+    connect(DGuiApplicationHelper::instance(), SIGNAL(sizeModeChanged(DGuiApplicationHelper::SizeMode)), this, SLOT(onSizeModeChanged(DGuiApplicationHelper::SizeMode)));
+#else
+    qInfo() << "Compact mode is not supported!!!";
+#endif
     m_lineEdit->lineEdit()->setTextMargins(0, 0, m_arrowBtn->width(), 0);
     m_lineEdit->setClearButtonEnabled(false);
 
-    connect(DGuiApplicationHelper::instance(),SIGNAL(sizeModeChanged(DGuiApplicationHelper::SizeMode)),this,SLOT(onSizeModeChanged(DGuiApplicationHelper::SizeMode)));
     connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
     connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     connect(m_arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
@@ -107,17 +112,19 @@ void ScaleWidget::onArrowBtnlicked()
     scaleMenu.exec(point);
 }
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
 void ScaleWidget::onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode)
 {
-    if(sizeMode == DGuiApplicationHelper::SizeMode::CompactMode){
+    if (sizeMode == DGuiApplicationHelper::SizeMode::CompactMode) {
         qInfo() << "Size Mode Changed! Current SizeMode is CompactMode";
         m_arrowBtn->setFixedSize(CompactModeArrowBtnSize, CompactModeArrowBtnSize);
-    }else{
+    } else {
         qInfo() << "Size Mode Changed! Current SizeMode is " << sizeMode;
         m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
     }
-    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height()/2 - m_arrowBtn->height()/2);
+    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);
 }
+#endif
 
 void ScaleWidget::onEditFinished()
 {
