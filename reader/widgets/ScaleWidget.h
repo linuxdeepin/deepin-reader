@@ -99,11 +99,13 @@ private slots:
      */
     void onArrowBtnlicked();
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
     /**
      * @brief onSizeModeChanged
      * 控制中心>个性化>切换紧凑模式
      */
     void onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode);
+#endif
 
 private:
     QPointer<DocSheet> m_sheet;
