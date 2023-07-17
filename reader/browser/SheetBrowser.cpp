@@ -1041,12 +1041,15 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 const QPointF &clickPos = mapToScene(event->pos());
                 qDebug() << "通过鼠标右键打开右键菜单 -> " << objectname;
                 if (objectname == "Copy") {
+                    Utils::setCurrentFilePath(m_sheet->filePath());
                     //右键菜单->复制
                     Utils::copyText(selectWords);
                 } else if (objectname == "CopyAnnoText") {
                     //右键菜单->复制注释文本
-                    if (annotation)
+                    if (annotation){
+                        Utils::setCurrentFilePath(m_sheet->filePath());
                         Utils::copyText(annotation->annotationText());
+                    }
                 } else if (objectname == "AddTextHighlight") {
                     //右键菜单->添加文本高亮（选中一些文本内容进行高亮）
                     QPoint pointEnd;
@@ -1946,10 +1949,13 @@ void SheetBrowser::showMenu()
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
         qDebug() << "通过快捷键打开右键菜单 -> " << objectname;
         if (objectname == "Copy") {
+            Utils::setCurrentFilePath(m_sheet->openedFilePath());
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {
-            if (m_iconAnnot)
+            if (m_iconAnnot){
+                Utils::setCurrentFilePath(m_sheet->openedFilePath());
                 Utils::copyText(m_iconAnnot->contents());
+            }
         } else if (objectname == "AddTextHighlight") {
             QPoint pointEnd;
             addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);

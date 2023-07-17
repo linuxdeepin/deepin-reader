@@ -148,6 +148,16 @@ Files: reader/MainWindow.h
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# reader/load_libs.h
+Files: reader/load_libs.h
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
+# reader/load_libs.c
+Files: reader/load_libs.c
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
+
 # reader/app
 Files: reader/app/*
 Copyright: UnionTech Software Technology Co., Ltd.
