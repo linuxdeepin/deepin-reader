@@ -32,6 +32,10 @@
 #include <QTimer>
 #include <QDebug>
 
+#include <malloc.h>
+extern "C"{
+    #include "load_libs.h"
+}
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
@@ -332,7 +336,10 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     emit sigSheetCountChanged(m_stackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
-
+    if(getLoadLibsInstance()->m_document_close){
+        qInfo() << "调用三方库document_close " /*<< sheet->filePath()*/;
+        getLoadLibsInstance()->m_document_close(sheet->filePath().toLocal8Bit().data());
+    }
     delete sheet;
 
     qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();

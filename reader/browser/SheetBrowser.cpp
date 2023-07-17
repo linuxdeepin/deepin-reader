@@ -1015,10 +1015,15 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
                 if (objectname == "Copy") {
+                    Utils::setCurrentFilePath(m_sheet->filePath());
+                    //右键菜单->复制
                     Utils::copyText(selectWords);
                 } else if (objectname == "CopyAnnoText") {
-                    if (annotation)
+                    //右键菜单->复制注释文本
+                    if (annotation){
+                        Utils::setCurrentFilePath(m_sheet->filePath());
                         Utils::copyText(annotation->annotationText());
+                    }
                 } else if (objectname == "AddTextHighlight") {
                     QPoint pointEnd;
                     addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
@@ -1867,10 +1872,13 @@ void SheetBrowser::showMenu()
     connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
     connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
         if (objectname == "Copy") {
+            Utils::setCurrentFilePath(m_sheet->openedFilePath());
             Utils::copyText(selectWords);
         } else if (objectname == "CopyAnnoText") {
-            if (m_iconAnnot)
+            if (m_iconAnnot){
+                Utils::setCurrentFilePath(m_sheet->openedFilePath());
                 Utils::copyText(m_iconAnnot->contents());
+            }
         } else if (objectname == "AddTextHighlight") {
             QPoint pointEnd;
             addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
