@@ -135,8 +135,14 @@ public:
      */
     static bool isWayland();
 
+    /**
+     * @brief 设置当前操作的文档名称
+     * @param currentFilePath
+     */
+    static void setCurrentFilePath(QString currentFilePath);
 private:
     static int m_colorIndex;
+    static QString m_currenFilePath;
 };
 
 #endif // UTILS_H

@@ -156,6 +156,17 @@ private:
      */
     void showDefaultSize();
 
+    /**
+     * @brief initDynamicLibPath 加载动态库
+     */
+    void initDynamicLibPath();
+
+    /**
+     * @brief libPath 动态库路径
+     * @param strlib: 动态库名称
+     */
+    QString libPath(const QString &strlib);
+
 private slots:
     /**
      * @brief onDelayInit

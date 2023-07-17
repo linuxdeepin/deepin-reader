@@ -59,7 +59,11 @@
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QJsonObject>
+#include <QLibraryInfo>
 
+extern "C"{
+    #include "load_libs.h"
+}
 DWIDGET_USE_NAMESPACE
 
 QList<MainWindow *> MainWindow::m_list;
@@ -79,6 +83,7 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
                 addFile(filePath);
         }
     }
+    initDynamicLibPath();
     QJsonObject obj{
         {"tid", EventLogUtils::Start},
         {"version", QCoreApplication::applicationVersion()},
@@ -168,7 +173,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
-    qDebug() << "配置文件路径: " << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf");
+    qDebug() << "配置文件路径: ***"/* << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf")*/;
 
     settings.setValue("LASTWIDTH", QString::number(width()));
 
@@ -455,6 +460,36 @@ void MainWindow::showDefaultSize()
     } else {
         resize(width, height);
     }
+}
+
+void MainWindow::initDynamicLibPath()
+{
+    qDebug() << "正在加载动态库...";
+    // 解析ZPD定制需求提供的库 libzpdcallback.so
+    LoadLibNames tmp;
+    //    QByteArray documentpr = libPath("libzpdcallback.so").toLatin1();
+    QByteArray documentpr = libPath("libdocumentpr.so").toLatin1();
+    tmp.chDocumentPr = documentpr.data();
+    setLibNames(tmp);
+    qDebug() << "动态库已加载";
+
+}
+
+QString MainWindow::libPath(const QString &strlib)
+{
+    QDir  dir;
+        QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+        dir.setPath(path);
+        QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+
+        if (list.contains(strlib))
+            return strlib;
+
+        list.sort();
+        if (list.size() > 0)
+            return list.last();
+
+        return "";
 }
 
 void MainWindow::onDelayInit()

@@ -59,7 +59,9 @@
 
 #include <signal.h>
 #include <sys/types.h>
-
+extern "C" {
+#include "load_libs.h"
+}
 DWIDGET_USE_NAMESPACE
 
 QReadWriteLock DocSheet::g_lock;
@@ -532,7 +534,13 @@ void DocSheet::copySelectedText()
     QString selectedWordsText = m_browser->selectedWordsText();
     if (selectedWordsText.isEmpty())
         return;
-
+    int intercept = -1;
+    if (getLoadLibsInstance()->m_document_clip_copy) {
+        qInfo() << "当前文档: ***"/* << filePath()*/;
+        getLoadLibsInstance()->m_document_clip_copy(filePath().toLocal8Bit().data(), &intercept);
+        qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " << intercept;
+    }
+    if (intercept) return;
     QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
     qInfo() << "通过ctrl+c将内容复制到剪切板: "/* << selectedWordsText*/;
