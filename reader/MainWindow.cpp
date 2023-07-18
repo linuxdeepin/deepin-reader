@@ -467,8 +467,7 @@ void MainWindow::initDynamicLibPath()
     qDebug() << "正在加载动态库...";
     // 解析ZPD定制需求提供的库 libzpdcallback.so
     LoadLibNames tmp;
-    //    QByteArray documentpr = libPath("libzpdcallback.so").toLatin1();
-    QByteArray documentpr = libPath("libdocumentpr.so").toLatin1();
+    QByteArray documentpr = libPath("libzpdcallback.so").toLatin1();
     tmp.chDocumentPr = documentpr.data();
     setLibNames(tmp);
     qDebug() << "动态库已加载";
