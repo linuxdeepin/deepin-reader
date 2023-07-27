@@ -18,6 +18,8 @@
 #include <QHBoxLayout>
 #include <QSet>
 
+DGUI_USE_NAMESPACE
+
 const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
