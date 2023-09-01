@@ -2,7 +2,7 @@ TARGET = $$PWD/../lib/deepin-pdfium
 
 TEMPLATE = lib
 
-CONFIG += c++14
+CONFIG += c++14 link_pkgconfig
 
 ###安全漏洞检测
 #QMAKE_CXX += -g -fsanitize=undefined,address -O2
@@ -47,6 +47,37 @@ SOURCES += \
     $$PWD/dpdfpage.cpp \
     $$PWD/dpdfannot.cpp
 
-target.path  = /usr/lib
+isEmpty(PREFIX): PREFIX = /usr
 
-INSTALLS += target
+isEmpty(LIB_INSTALL_DIR) {
+    target.path = $$PREFIX/lib
+} else {
+    target.path = $$LIB_INSTALL_DIR
+}
+isEmpty(INCLUDE_INSTALL_DIR) {
+    includes.path = $$PREFIX/include/deepin-pdfium
+} else {
+    includes.path = $$INCLUDE_INSTALL_DIR
+}
+includes.files += $$PWD/../include/*.h
+
+INSTALLS += includes target
+#----------This is the configuration for generating the pkg-config file
+CONFIG += create_pc create_prl no_install_prl
+
+# This is our libdir
+QMAKE_PKGCONFIG_LIBDIR = $$target.path
+
+# Usually people take the semver version here
+QMAKE_PKGCONFIG_VERSION = $$VERSION
+
+# This is where our API specific headers are
+QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+QMAKE_PKGCONFIG_INCDIR = $$includes.path
+
+# This fills in the Name property
+QMAKE_PKGCONFIG_NAME = deepin-pdfium
+
+# This fills in the Description property
+QMAKE_PKGCONFIG_DESCRIPTION = deepin-pdfium Library with Qt5
+

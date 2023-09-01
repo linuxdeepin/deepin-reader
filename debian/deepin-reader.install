@@ -1,0 +1,6 @@
+usr/bin/deepin-reader
+usr/lib/deepin-reader/htmltopdf
+usr/share/applications/deepin-reader.desktop
+usr/share/deepin-reader/translations/*.qm
+usr/share/icons/*
+usr/share/deepin-manual/manual-assets/application/*
