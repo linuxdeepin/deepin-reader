@@ -739,7 +739,13 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         return;
 
     //后台加载动画
-    LoadingWidget loading(qApp->activeWindow());
+    QWidget *pCurWgt = nullptr;
+    for(QWidget *pwgt: qApp->topLevelWidgets()) {
+        if(QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt)) {
+            pCurWgt = mwd;
+        }
+    }
+    LoadingWidget loading(pCurWgt);
     loading.show();
 
     printer->setDocName(QFileInfo(filePath()).fileName());
