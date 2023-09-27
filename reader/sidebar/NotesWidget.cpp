@@ -48,7 +48,6 @@ void NotesWidget::initWidget()
     m_pAddAnnotationBtn = new DPushButton(this);
     m_pAddAnnotationBtn->setObjectName("NotesAddBtn");
     m_pAddAnnotationBtn->setAccessibleName("NotesAdd");
-    m_pAddAnnotationBtn->setFixedHeight(36);
     m_pAddAnnotationBtn->setMinimumWidth(170);
     m_pAddAnnotationBtn->setText(tr("Add annotation"));
     DFontSizeManager::instance()->bind(m_pAddAnnotationBtn, DFontSizeManager::T6);

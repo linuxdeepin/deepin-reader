@@ -60,7 +60,7 @@ void SheetSidebar::initWidget()
 
     m_stackLayout = new QStackedLayout;
     QHBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->setContentsMargins(15, 0, 15, 0);
+    hLayout->setContentsMargins(15, 5, 15, 5);
 
     QList<QWidget *> tabWidgetlst;
 
@@ -147,6 +147,44 @@ void SheetSidebar::initWidget()
     for (int i = 0; i < tabWidgetlst.size() - 1; i++) {
         QWidget::setTabOrder(tabWidgetlst.at(i), tabWidgetlst.at(i + 1));
     }
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        setMinimumWidth(LEFTMINWIDTH);
+        setMaximumWidth(LEFTMAXWIDTH);
+        for(DToolButton *btn: m_btnGroupMap.values()) {
+            if(btn) {
+                btn->setFixedSize(QSize(36, 36));
+            }
+        }
+    } else {
+        setMinimumWidth(LEFTMINWIDTH-30);
+        setMaximumWidth(LEFTMAXWIDTH);
+        for(DToolButton *btn: m_btnGroupMap.values()) {
+            if(btn) {
+                btn->setFixedSize(QSize(24, 24));
+            }
+        }
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            setMinimumWidth(LEFTMINWIDTH);
+            setMaximumWidth(LEFTMAXWIDTH);
+            for(DToolButton *btn: m_btnGroupMap.values()) {
+                if(btn) {
+                    btn->setFixedSize(QSize(36, 36));
+                }
+            }
+        } else {
+            setMinimumWidth(LEFTMINWIDTH-30);
+            setMaximumWidth(LEFTMAXWIDTH);
+            for(DToolButton *btn: m_btnGroupMap.values()) {
+                if(btn) {
+                    btn->setFixedSize(QSize(24, 24));
+                }
+            }
+        }
+    });
+#endif
 }
 
 void SheetSidebar::onBtnClicked(int index)

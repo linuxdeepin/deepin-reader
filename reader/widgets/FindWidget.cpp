@@ -13,6 +13,7 @@
 
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <DGuiApplicationHelper>
 
 FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
@@ -102,7 +103,6 @@ void FindWidget::initWidget()
     m_pSearchEdit->setObjectName("findSearchEdit_P");
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
     m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
-    m_pSearchEdit->setFixedSize(QSize(270, 36));
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::onSearchStart);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::onTextChanged);
     connect(m_pSearchEdit, &DSearchEdit::searchAborted, this, &FindWidget::onSearchStop);
@@ -110,7 +110,6 @@ void FindWidget::initWidget()
     m_findPrevButton = new DIconButton(DStyle::SP_ArrowUp, this);
     m_findPrevButton->setObjectName("SP_ArrowUpBtn");
     m_findPrevButton->setToolTip(tr("Previous"));
-    m_findPrevButton->setFixedSize(QSize(36, 36));
     m_findPrevButton->setIconSize(QSize(12, 12));
     m_findPrevButton->setDisabled(true);
     connect(m_findPrevButton, &DIconButton::clicked, this, &FindWidget::slotFindPrevBtnClicked);
@@ -118,15 +117,12 @@ void FindWidget::initWidget()
     m_findNextButton = new DIconButton(DStyle::SP_ArrowDown, this);
     m_findNextButton->setObjectName("SP_ArrowDownBtn");
     m_findNextButton->setToolTip(tr("Next"));
-    m_findNextButton->setFixedSize(QSize(36, 36));
     m_findNextButton->setIconSize(QSize(12, 12));
     m_findNextButton->setDisabled(true);
     connect(m_findNextButton, &DIconButton::clicked, this, &FindWidget::slotFindNextBtnClicked);
 
     DDialogCloseButton *closeButton = new DDialogCloseButton(this);
     closeButton->setObjectName("closeButton");
-    closeButton->setIconSize(QSize(28, 28));
-    closeButton->setFixedSize(QSize(30, 30));
     connect(closeButton, &DDialogCloseButton::clicked, this, &FindWidget::onCloseBtnClicked);
 
     auto layout = new QHBoxLayout;
@@ -136,7 +132,46 @@ void FindWidget::initWidget()
     layout->addWidget(m_findNextButton);
     layout->addWidget(closeButton);
     this->setLayout(layout);
+    closeButton->setIconSize(QSize(28, 28));
+    closeButton->setFixedSize(QSize(30, 30));
+    m_pSearchEdit->setWindowFlag(Qt::FramelessWindowHint);
+    m_findPrevButton->setWindowFlag(Qt::FramelessWindowHint);
+    m_findNextButton->setWindowFlag(Qt::FramelessWindowHint);
+    closeButton->setWindowFlag(Qt::FramelessWindowHint);
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        m_pSearchEdit->setFixedSize(QSize(270, 36));
+        m_findPrevButton->setFixedSize(QSize(36, 36));
+        m_findNextButton->setFixedSize(QSize(36, 36));
+        setFixedSize(422, 60);
+    } else {
+        m_pSearchEdit->setFixedSize(QSize(270, 24));
+        m_findPrevButton->setFixedSize(QSize(24, 24));
+        m_findNextButton->setFixedSize(QSize(24, 24));
+        setFixedSize(398, 45);
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            m_pSearchEdit->setFixedSize(QSize(270, 36));
+            m_findPrevButton->setFixedSize(QSize(36, 36));
+            m_findNextButton->setFixedSize(QSize(36, 36));
+            setFixedSize(422, 60);
+        } else {
+            m_pSearchEdit->setFixedSize(QSize(270, 24));
+            m_findPrevButton->setFixedSize(QSize(24, 24));
+            m_findNextButton->setFixedSize(QSize(24, 24));
+            setFixedSize(398, 45);
+        }
+    });
+#else
+    m_pSearchEdit->setFixedSize(QSize(270, 36));
+    m_findPrevButton->setFixedSize(QSize(36, 36));
+    m_findPrevButton->setIconSize(QSize(12, 12));
+    m_findNextButton->setFixedSize(QSize(36, 36));
+    m_findNextButton->setIconSize(QSize(12, 12));
+    setFixedSize(422, 60);
+#endif
     Utils::setObjectNoFocusPolicy(this);
 }
 

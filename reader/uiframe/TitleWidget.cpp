@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+                                                                                                                                                                               // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -16,8 +16,6 @@ TitleWidget::TitleWidget(DWidget *parent)
     : BaseWidget(parent)
 {
     m_pThumbnailBtn = new DIconButton(this);
-    m_pThumbnailBtn->setFixedSize(QSize(36, 36));
-    m_pThumbnailBtn->setIconSize(QSize(36, 36));
     m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setToolTip(tr("Thumbnails"));
     m_pThumbnailBtn->setCheckable(true);
@@ -66,6 +64,27 @@ TitleWidget::TitleWidget(DWidget *parent)
         if (widget)
             widget->setFocusPolicy(Qt::TabFocus);
     }
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+            m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+            m_pThumbnailBtn->setIconSize(QSize(36, 36));
+    } else {
+            m_pThumbnailBtn->setFixedSize(QSize(24, 24));
+            m_pThumbnailBtn->setIconSize(QSize(36, 36));
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+                m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+                m_pThumbnailBtn->setIconSize(QSize(36, 36));
+        } else {
+                m_pThumbnailBtn->setFixedSize(QSize(24, 24));
+                m_pThumbnailBtn->setIconSize(QSize(36, 36));
+        }
+    });
+#else
+        m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+        m_pThumbnailBtn->setIconSize(QSize(36, 36));
+#endif
 }
 
 TitleWidget::~TitleWidget()

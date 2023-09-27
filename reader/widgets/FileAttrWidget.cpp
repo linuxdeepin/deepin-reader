@@ -19,6 +19,7 @@
 
 #include <QFileInfo>
 #include <QVBoxLayout>
+#include <DGuiApplicationHelper>
 
 class ImageWidget : public DWidget
 {
@@ -155,7 +156,24 @@ void FileAttrWidget::initCloseBtn()
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
     layout->addWidget(closeButton);
-
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        closeButton->setFixedSize(QSize(50, 50));
+        closeButton->setIconSize(QSize(50, 50));
+    } else {
+        closeButton->setFixedSize(QSize(40, 40));
+        closeButton->setIconSize(QSize(40, 40));
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            closeButton->setFixedSize(QSize(50, 50));
+            closeButton->setIconSize(QSize(50, 50));
+        } else {
+            closeButton->setFixedSize(QSize(40, 40));
+            closeButton->setIconSize(QSize(40, 40));
+        }
+    });
+#endif
     m_pVBoxLayout->addItem(layout);
 }
 

@@ -71,8 +71,26 @@ void SlideWidget::initControl()
     connect(m_slidePlayWidget, &SlidePlayWidget::signalPlayBtnClicked, this, &SlideWidget::onPlayBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalNextBtnClicked, this, &SlideWidget::onNextBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalExitBtnClicked, this, &SlideWidget::onExitBtnClicked);
-    m_slidePlayWidget->move((width - 270) / 2, height - 100);
-
+    m_slidePlayWidget->setFixedWidth(250);
+    m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        m_slidePlayWidget->setFixedWidth(250);
+        m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+    } else {
+        m_slidePlayWidget->setFixedWidth(194);
+        m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            m_slidePlayWidget->setFixedWidth(250);
+            m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+        } else {
+            m_slidePlayWidget->setFixedWidth(194);
+            m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+        }
+    });
+#endif
     onFetchImage(m_curPageIndex);
     onFetchImage(m_preIndex);
 }

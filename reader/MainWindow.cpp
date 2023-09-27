@@ -244,6 +244,17 @@ void MainWindow::initUI()
         });
     }
     qDebug() << __FUNCTION__ << "UI界面初始化已完成";
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            titlebar()->setFixedHeight(50);
+            handleMainWindowFull();
+        } else {
+            titlebar()->setFixedHeight(40);
+            handleMainWindowFull();
+        }
+    });
+#endif
 }
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
