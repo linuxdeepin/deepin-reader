@@ -33,7 +33,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     chooseButton->setObjectName("SelectFileBtn");
     chooseButton->setAccessibleName("SelectFile");
     chooseButton->setFocusPolicy(Qt::TabFocus);
-    chooseButton->setFixedSize(302, 36);
+    chooseButton->setFixedWidth(302);
     connect(chooseButton, &DPushButton::clicked, this, &CentralNavPage::sigNeedOpenFilesExec);
 
     auto layout = new QVBoxLayout;

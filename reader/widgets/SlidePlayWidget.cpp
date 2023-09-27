@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include <QDBusInterface>
 #include <QDBusConnection>
+#include <DGuiApplicationHelper>
 
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {
@@ -28,6 +29,7 @@ void SlidePlayWidget::initControl()
     connect(&m_timer, &QTimer::timeout, this, &SlidePlayWidget::onTimerout);
 
     QHBoxLayout *playout = new QHBoxLayout;
+    setContentsMargins(0, 0, 0, 0);
     playout->setContentsMargins(10, 10, 10, 10);
     playout->setSpacing(10);
 
@@ -56,6 +58,52 @@ void SlidePlayWidget::initControl()
     pbtnplay->setFocusPolicy(Qt::NoFocus);
     m_nextBtn->setFocusPolicy(Qt::NoFocus);
     pbtnexit->setFocusPolicy(Qt::NoFocus);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        m_preBtn->setFixedSize(50, 50);
+        m_preBtn->setIconSize(QSize(36, 36));
+        m_playBtn->setFixedSize(50, 50);
+        m_playBtn->setIconSize(QSize(36, 36));
+        m_nextBtn->setFixedSize(50, 50);
+        m_nextBtn->setIconSize(QSize(36, 36));
+        pbtnexit->setFixedSize(50, 50);
+        pbtnexit->setIconSize(QSize(36, 36));
+    } else {
+        m_preBtn->setFixedSize(36, 36);
+        m_preBtn->setIconSize(QSize(24, 24));
+        m_playBtn->setFixedSize(36, 36);
+        m_playBtn->setIconSize(QSize(24, 24));
+        m_nextBtn->setFixedSize(36, 36);
+        m_nextBtn->setIconSize(QSize(24, 24));
+        pbtnexit->setFixedSize(36, 36);
+        pbtnexit->setIconSize(QSize(24, 24));
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            m_preBtn->setFixedSize(50, 50);
+            m_preBtn->setIconSize(QSize(36, 36));
+            m_playBtn->setFixedSize(50, 50);
+            m_playBtn->setIconSize(QSize(36, 36));
+            m_nextBtn->setFixedSize(50, 50);
+            m_nextBtn->setIconSize(QSize(36, 36));
+            pbtnexit->setFixedSize(50, 50);
+            pbtnexit->setIconSize(QSize(36, 36));
+        } else {
+            m_preBtn->setFixedSize(36, 36);
+            m_preBtn->setIconSize(QSize(24, 24));
+            m_playBtn->setFixedSize(36, 36);
+            m_playBtn->setIconSize(QSize(24, 24));
+            m_nextBtn->setFixedSize(36, 36);
+            m_nextBtn->setIconSize(QSize(24, 24));
+            pbtnexit->setFixedSize(36, 36);
+            pbtnexit->setIconSize(QSize(24, 24));
+        }
+        if(isVisible()) {
+            hide();
+            showControl();
+        }
+    });
+#endif
 }
 
 void SlidePlayWidget::showControl()
@@ -88,6 +136,7 @@ DIconButton *SlidePlayWidget::createBtn(const QString &strname)
     btn->setFixedSize(50, 50);
     btn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + strname));
     btn->setIconSize(QSize(36, 36));
+    btn->setWindowFlag(Qt::FramelessWindowHint);
     return  btn;
 }
 

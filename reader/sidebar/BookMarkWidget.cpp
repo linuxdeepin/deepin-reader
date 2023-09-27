@@ -44,7 +44,6 @@ void BookMarkWidget::initWidget()
     m_pAddBookMarkBtn = new DPushButton(this);
     m_pAddBookMarkBtn->setObjectName("BookmarkAddBtn");
     m_pAddBookMarkBtn->setAccessibleName("BookmarkAdd");
-    m_pAddBookMarkBtn->setFixedHeight(36);
     m_pAddBookMarkBtn->setMinimumWidth(170);
     m_pAddBookMarkBtn->setText(tr("Add bookmark"));
     DFontSizeManager::instance()->bind(m_pAddBookMarkBtn, DFontSizeManager::T6);

@@ -1622,6 +1622,13 @@ void SheetBrowser::handlePrepareSearch()
 
     m_findWidget->updatePosition();
     m_findWidget->setSearchEditFocus();
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if(m_findWidget && m_findWidget->isVisible()){
+            m_findWidget->updatePosition();
+        }
+    });
+#endif
 }
 
 void SheetBrowser::jumpToNextSearchResult()
