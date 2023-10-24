@@ -94,13 +94,15 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
 
 void  Utils::copyText(const QString &sText)
 {
-    int intercept = -1;
+    int intercept = 0;
     if(getLoadLibsInstance()->m_document_clip_copy){
         qInfo() << "当前文档: *** "/* <<m_currenFilePath*/;
         getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(),&intercept);
         qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " <<intercept;
     }
-    if(intercept) return;
+    if(intercept > 0)
+        return;
+
     QClipboard *clipboard = DApplication::clipboard();
     QString sOldText = clipboard->text(QClipboard::Clipboard);
     if (sOldText != sText) {
