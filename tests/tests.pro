@@ -17,7 +17,7 @@ QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
 QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
 QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
 
-PKGCONFIG += ddjvuapi dtkwidget
+PKGCONFIG += ddjvuapi dtkwidget deepin-pdfium
 
 CONFIG -= app_bundle
 
@@ -30,8 +30,6 @@ LIBS += -lgtest
 
 #target
 TARGET = test-deepin-reader
-
-QMAKE_RPATHDIR += $$OUT_PWD/../3rdparty/deepin-pdfium/lib
 
 TEMPLATE = app
 

@@ -9,8 +9,6 @@ CONFIG  += ordered
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
 
-SUBDIRS += 3rdparty/deepin-pdfium
-
 SUBDIRS += htmltopdf
 
 SUBDIRS += reader
