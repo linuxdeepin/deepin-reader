@@ -91,9 +91,10 @@ int main(int argc, char *argv[])
         return -1;
 
     qDebug() << __FUNCTION__ << "正在创建主窗口...";
-
+    qApp->setAttribute(Qt::AA_ForceRasterWidgets, true);
     MainWindow *w = MainWindow::createWindow(arguments);
-
+    w->winId();
+    qApp->setAttribute(Qt::AA_ForceRasterWidgets, false);
     w->show();
 
     qDebug() << __FUNCTION__ << "主窗口已创建并显示";

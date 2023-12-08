@@ -60,13 +60,6 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
                 addFile(filePath);
         }
     }
-    initDynamicLibPath();
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
-    };
-    EventLogUtils::get().writeLogs(obj);
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
@@ -255,6 +248,13 @@ void MainWindow::initUI()
         }
     });
 #endif
+    initDynamicLibPath();
+    QJsonObject obj{
+        {"tid", EventLogUtils::Start},
+        {"version", QCoreApplication::applicationVersion()},
+        {"mode", 1}
+    };
+    EventLogUtils::get().writeLogs(obj);
 }
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
