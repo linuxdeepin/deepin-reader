@@ -48,18 +48,13 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
     : DMainWindow(parent), m_initFilePathList(filePathList)
 {
     initBase();
+    initUI();
 
-    if (filePathList.isEmpty()) {   //不带参启动延时创建所有控件 注意：空窗口在10毫秒前进行addsheet会不生效
-        QTimer::singleShot(10, this, SLOT(onDelayInit()));
-
-    } else {
-        initUI();
-
+    if (!filePathList.isEmpty())
         foreach (const QString &filePath, m_initFilePathList) {
             if (QFile(filePath).exists())       //过滤不存在的文件,需求中不含有提示文件不存在的文案
                 addFile(filePath);
         }
-    }
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
