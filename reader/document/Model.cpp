@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QDir>
 #include <QTimer>
+#include <QTemporaryFile>
 
 namespace deepin_reader {
 deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &fileType,
@@ -77,7 +78,10 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             return nullptr;
         }
         qDebug() << "文档解压完成";
-
+        QTemporaryFile tmpFile(convertedFileDir + "/word/" + QCoreApplication::applicationName() + "_XXXXXX.html");
+        if( tmpFile.open()) { //fix 232871
+             tmpHtmlFilePath = tmpFile.fileName(); // returns the unique file name
+         }
         // docx -> html
         QProcess converter;
         *pprocess = &converter;
