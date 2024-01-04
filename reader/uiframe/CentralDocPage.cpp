@@ -36,6 +36,35 @@
 extern "C"{
     #include "load_libs.h"
 }
+
+static bool pathControl(const QString &sPath) noexcept
+{
+    qInfo() << "pathControl";
+    QString docPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first();
+    QString picPath = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
+    QDBusMessage reply;
+    QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1",QDBusConnection::systemBus());
+    if (iface.isValid()) {
+        if(sPath.startsWith(docPath)) {
+            qInfo() << "docPath";
+            reply = iface.call("GetApps", docPath);
+        } else if(sPath.startsWith(picPath)) {
+            qInfo() << "picPath";
+            reply = iface.call("GetApps", picPath);
+        }
+        qInfo() << "iface isValid";
+    }
+    if(reply.type() == QDBusMessage::ReplyMessage) {
+        QList<QString> lValue = reply.arguments().takeFirst().toStringList();
+        QString strApp = QStandardPaths::findExecutable("deepin-reader");
+        qInfo() << "lValue :" << lValue <<" strApp: " << strApp;
+        if(lValue.contains(strApp)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
@@ -163,8 +192,11 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
-
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
+        if (pathControl(filePath)) {
+            qInfo() << "没有权限读取该文件";
+            return;
+        }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
         qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         return;
