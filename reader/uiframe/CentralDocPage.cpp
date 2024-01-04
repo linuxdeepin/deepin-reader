@@ -13,6 +13,7 @@
 #include "DBusObject.h"
 #include "SheetBrowser.h"
 #include "TextEditWidget.h"
+#include "DfmStandardPaths.h"
 
 #include <DDialog>
 #include <DTitlebar>
@@ -36,6 +37,7 @@
 extern "C"{
     #include "load_libs.h"
 }
+
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
@@ -165,6 +167,11 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     Dr::FileType fileType = Dr::fileType(filePath);
 
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
+        //判断读取权限是否被控制中心禁用
+        if (DFMStandardPaths::pathControl(filePath)) {
+            qInfo() << "没有权限读取该文件";
+            return;
+        }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
         qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         return;
