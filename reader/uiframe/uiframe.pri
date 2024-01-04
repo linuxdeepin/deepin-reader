@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/CentralDocPage.h \
     $$PWD/DocTabBar.h \
     $$PWD/DocSheet.h \
-    $$PWD/SheetRenderer.h
+    $$PWD/SheetRenderer.h \
+    $$PWD/DfmStandardPaths.h
 
 SOURCES += \
     $$PWD/TitleMenu.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     $$PWD/CentralDocPage.cpp \
     $$PWD/DocTabBar.cpp \
     $$PWD/DocSheet.cpp \
-    $$PWD/SheetRenderer.cpp
+    $$PWD/SheetRenderer.cpp \
+    $$PWD/DfmStandardPaths.cpp
     
 INCLUDEPATH += $$PWD
