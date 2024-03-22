@@ -44,6 +44,9 @@ void ScaleWidget::initWidget()
 
     m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
     m_arrowBtn->setObjectName("editArrowBtn");
+    //添加显示比例值默认值
+    m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
+    m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);
 #ifdef DTKWIDGET_CLASS_DSizeMode
     qInfo() << "Compact mode support!!!";
     onSizeModeChanged(DGuiApplicationHelper::instance()->sizeMode());
