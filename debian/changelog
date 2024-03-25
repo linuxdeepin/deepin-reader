@@ -1,3 +1,9 @@
+deepin-reader (6.0.9) unstable; urgency=medium
+
+  * Add RISC-V support
+
+ -- Chang Yang <yangchang@deepin.org>  Fri, 02 Feb 2024 10:07:55 +0800
+
 deepin-reader (6.0.8) unstable; urgency=medium
 
   * change log 6.0.8.
