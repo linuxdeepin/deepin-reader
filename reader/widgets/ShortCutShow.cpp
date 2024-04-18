@@ -36,6 +36,7 @@ void ShortCutShow::show()
 {
     QRect rect = qApp->desktop()->geometry();
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 5, 2, 0))
     // 获取当前焦点位置（光标所在屏幕中心）
     QScreen *screen = nullptr;
     if (DGuiApplicationHelper::isTabletEnvironment()) {
@@ -48,7 +49,7 @@ void ShortCutShow::show()
     if (screen) {
         pos = screen->geometry().center();
     }
-
+#endif
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
     QString strvalue;

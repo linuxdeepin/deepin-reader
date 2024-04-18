@@ -7,6 +7,6 @@ Standards-Version: 4.5.0
 
 Package: deepin-reader
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc, libdtkwidget5 (>= 5.4.11)
+Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files,supporting PDF, DJVU, DOCX etc
