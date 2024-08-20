@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
@@ -145,7 +130,6 @@ const QString key_ctrl_z           = "Ctrl+Z";
 const QString key_ctrl_a           = "Ctrl+A";
 const QString key_ctrl_equal       = "Ctrl+=";          // 放大
 const QString key_ctrl_smaller     = "Ctrl+-";          // 缩小
-const QString key_ctrl_wheel       = "Ctrl+wheel";      // ctrl+滚轮放大缩小
 const QString key_alt_1            = "Alt+1";           // 选择工具
 const QString key_alt_2            = "Alt+2";           // 手型工具
 const QString key_alt_a            = "Alt+A";           // 添加注释
@@ -156,5 +140,7 @@ const QString key_alt_harger       = "Ctrl++";          // 放大
 const QString key_ctrl_shift_r     = "Ctrl+Shift+R";    // 右旋转
 const QString key_ctrl_shift_s     = "Ctrl+Shift+S";    // 另存为
 const QString key_ctrl_shift_slash = "Ctrl+Shift+/";
+const QString key_ctrl_home        = "Ctrl+Home";       //第一页
+const QString key_ctrl_end         = "Ctrl+End";        //最后一页
 }
 #endif // GLOBAL_H

@@ -1,10 +1,10 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "BrowserMagniFier.h"
 #include "BrowserPage.h"
-#include "Global.h"
 
 #include <QPainter>
 
@@ -54,17 +54,6 @@ QImage getImagePoint_stub(double, QPoint)
     g_funcName = __FUNCTION__;
     return QImage();
 }
-
-QImage getCurImagePoint_stub(QPointF)
-{
-    g_funcName = __FUNCTION__;
-    return QImage();
-}
-
-Dr::FileType fileType_stub2()
-{
-    return Dr::FileType::PDF;
-}
 /*************测试用例****************/
 TEST_F(TestReadMagnifierManager, UT_TestReadMagnifierManager_addTask_001)
 {
@@ -86,8 +75,6 @@ TEST_F(TestReadMagnifierManager, UT_TestReadMagnifierManager_run_001)
     Stub s;
     s.set(ADDR(QWidget, isVisible), isVisible_stub);
     s.set(ADDR(BrowserPage, getImagePoint), getImagePoint_stub);
-    s.set(ADDR(BrowserPage, getCurImagePoint), getCurImagePoint_stub);
-    s.set(ADDR(BrowserPage, fileType), fileType_stub2);
 
     m_tester->run();
     //EXPECT_TRUE(m_tester->m_tTasklst.size() == 0);

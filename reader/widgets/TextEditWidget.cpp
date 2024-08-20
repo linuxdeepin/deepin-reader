@@ -1,23 +1,8 @@
-/*
- * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
- *
- * Author:     duanxiaohui <wangzhixuan@uniontech.com>
- *
- * Maintainer: duanxiaohui <duanxiaohui@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TextEditWidget.h"
 #include "DocSheet.h"
 #include "MsgHeader.h"
@@ -46,13 +31,11 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    const int margin = 12;
-    setFixedWidth(254 + 2 * margin);
-    updateHeight();
+    setMaximumSize(QSize(m_maxwidth, m_maxheight));
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
 
-    pHLayoutContant->setMargin(margin);
+    pHLayoutContant->setMargin(12);
 
     this->setLayout(pHLayoutContant);
 
@@ -77,12 +60,12 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     QPoint pos = mapToParent(mapFromGlobal(point)); //先转换为相对于父对象的坐标
 
     //如果下边超出程序则向上移动
-    if (pos.y() + this->height() > m_TextEditWidget->m_brower->height()) {
-        pos.setY(pos.y() - (pos.y() + this->height() - m_TextEditWidget->m_brower->height()));
+    if (pos.y() + m_maxheight > m_TextEditWidget->m_brower->height()) {
+        pos.setY(pos.y() - (pos.y() + m_maxheight - m_TextEditWidget->m_brower->height()));
     }
     //如果右边超出程序则向左移动
-    if (pos.x() + this->width() > m_TextEditWidget->m_brower->width()) {
-        pos.setX(pos.x() - (pos.x() + this->width() - m_TextEditWidget->m_brower->width()));
+    if (pos.x() + m_maxwidth > m_TextEditWidget->m_brower->width()) {
+        pos.setX(pos.x() - (pos.x() + m_maxwidth - m_TextEditWidget->m_brower->width()));
     }
 
     move(pos);
@@ -94,14 +77,6 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     m_TextEditWidget->setEditFocus();
 }
 
-void TextEditShadowWidget::updateHeight()
-{
-    //int h = qMin(320, this->window()->height() - 40);
-    int h = qMin(300, this->window()->height() - 80);
-    qDebug() << "当前注释编辑界面的高度: " << h;
-    if (this->height() != h)
-        setFixedHeight(h);
-}
 
 void TextEditShadowWidget::slotCloseNoteWidget(bool isEsc)
 {
@@ -198,6 +173,10 @@ void TextEditWidget::hideEvent(QHideEvent *event)
 
 void TextEditWidget::initWidget()
 {
+    setFixedSize(QSize(254, 320));
+    setMinimumHeight(310);
+    setMaximumHeight(320);
+
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
     pHLayoutContant->setContentsMargins(20, 20, 6, 20);
 

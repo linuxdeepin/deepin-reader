@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SearchResWidget.h"
 #include "DocSheet.h"
@@ -46,10 +47,15 @@ TEST_F(UT_SearchResWidget, initTest)
 ACCESS_PRIVATE_FIELD(SearchResWidget, DocSheet *, m_sheet);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_handleSearchResultComming)
 {
+    deepin_reader::PageLine line;
+    line.text = "123";
+
+    deepin_reader::PageSection section;
+    section << line;
+
     deepin_reader::SearchResult search;
-    deepin_reader::Word word;
-    word.text = "123";
-    search.words << word;
+    search.sections << section;
+
     m_tester->handleSearchResultComming(search);
     EXPECT_TRUE(access_private_field::SearchResWidgetm_sheet(*m_tester) != nullptr);
 }

@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+                                                                                                                                                                               // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "TitleWidget.h"
 #include "ScaleWidget.h"
 #include "DocSheet.h"
@@ -31,8 +16,6 @@ TitleWidget::TitleWidget(DWidget *parent)
     : BaseWidget(parent)
 {
     m_pThumbnailBtn = new DIconButton(this);
-    m_pThumbnailBtn->setFixedSize(QSize(36, 36));
-    m_pThumbnailBtn->setIconSize(QSize(36, 36));
     m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setToolTip(tr("Thumbnails"));
     m_pThumbnailBtn->setCheckable(true);
@@ -81,6 +64,27 @@ TitleWidget::TitleWidget(DWidget *parent)
         if (widget)
             widget->setFocusPolicy(Qt::TabFocus);
     }
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+            m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+            m_pThumbnailBtn->setIconSize(QSize(36, 36));
+    } else {
+            m_pThumbnailBtn->setFixedSize(QSize(24, 24));
+            m_pThumbnailBtn->setIconSize(QSize(36, 36));
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+                m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+                m_pThumbnailBtn->setIconSize(QSize(36, 36));
+        } else {
+                m_pThumbnailBtn->setFixedSize(QSize(24, 24));
+                m_pThumbnailBtn->setIconSize(QSize(36, 36));
+        }
+    });
+#else
+        m_pThumbnailBtn->setFixedSize(QSize(36, 36));
+        m_pThumbnailBtn->setIconSize(QSize(36, 36));
+#endif
 }
 
 TitleWidget::~TitleWidget()

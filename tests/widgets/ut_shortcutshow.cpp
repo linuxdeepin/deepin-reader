@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ShortCutShow.h"
 #include "Global.h"
@@ -114,8 +115,7 @@ TEST_F(UT_ShortCutShow, UT_ShortCutShow_show)
 
     call_private_fun::ShortCutShowinitDJVU(*m_tester);
     m_tester->show();
-
-    EXPECT_TRUE(access_private_field::ShortCutShowEditnames(*m_tester).count() != 0);
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 ACCESS_PRIVATE_FIELD(ShortCutShow, QStringList, windowKeymaps);
@@ -125,23 +125,13 @@ ACCESS_PRIVATE_FIELD(ShortCutShow, QStringList, Displaynames);
 ACCESS_PRIVATE_FIELD(ShortCutShow, QStringList, Toolsnames);
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initDJVU)
 {
-    call_private_fun::ShortCutShowinitDJVU(*m_tester);
-    EXPECT_TRUE(access_private_field::ShortCutShowwindowKeymaps(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowshortcutnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowEditnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowFilesnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowDisplaynames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowToolsnames(*m_tester).count() != 0);
+    m_tester->initDJVU();
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
 TEST_F(UT_ShortCutShow, UT_ShortCutShow_initPDF)
 {
-    call_private_fun::ShortCutShowinitPDF(*m_tester);
-    EXPECT_TRUE(access_private_field::ShortCutShowwindowKeymaps(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowshortcutnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowEditnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowFilesnames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowDisplaynames(*m_tester).count() != 0);
-    EXPECT_TRUE(access_private_field::ShortCutShowToolsnames(*m_tester).count() != 0);
+    m_tester->initPDF();
+    EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 

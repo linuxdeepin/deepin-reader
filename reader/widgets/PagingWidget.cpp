@@ -1,23 +1,8 @@
-/*
- * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
- *
- * Author:     duanxiaohui<duanxiaohui@uniontech.com>
- *
- * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "PagingWidget.h"
 #include "DocSheet.h"
 #include "TMFunctionThread.h"
@@ -65,7 +50,7 @@ void PagingWidget::initWidget()
     m_pJumpPageLineEdit->setObjectName("Edit_Page_P");
     m_pJumpPageLineEdit->lineEdit()->setObjectName("Edit_Page");
     m_pJumpPageLineEdit->lineEdit()->setAccessibleName("pageEdit");
-    m_pJumpPageLineEdit->setFixedSize(60, 36);
+    m_pJumpPageLineEdit->setFixedWidth(60);
     m_pJumpPageLineEdit->setFocusPolicy(Qt::StrongFocus);
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
@@ -81,11 +66,11 @@ void PagingWidget::initWidget()
     m_pPrePageBtn = new DIconButton(DStyle::SP_ArrowLeft);
     m_pPrePageBtn->setAccessibleName("Button_ThumbnailPre");
     m_pPrePageBtn->setObjectName("thumbnailPreBtn");
-    m_pPrePageBtn->setFixedSize(QSize(36, 36));
+    m_pPrePageBtn->setMinimumSize(QSize(24, 24));
     connect(m_pPrePageBtn, SIGNAL(clicked()), SLOT(slotPrePageBtnClicked()));
 
     m_pNextPageBtn = new DIconButton(DStyle::SP_ArrowRight);
-    m_pNextPageBtn->setFixedSize(QSize(36, 36));
+    m_pPrePageBtn->setMinimumSize(QSize(24, 24));
     m_pNextPageBtn->setAccessibleName("Button_ThumbnailNext");
     m_pNextPageBtn->setObjectName("thumbnailNextBtn");
     connect(m_pNextPageBtn, SIGNAL(clicked()), SLOT(slotNextPageBtnClicked()));
@@ -230,13 +215,11 @@ void PagingWidget::pageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
-    qDebug() << "上一页！";
     m_sheet->jumpToPrevPage();
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
-    qDebug() << "下一页！";
     m_sheet->jumpToNextPage();
 }
 
