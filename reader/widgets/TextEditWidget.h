@@ -1,21 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     duanxiaohui<duanxiaohui@uniontech.com>
-*
-* Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef TextEditWidget_H
 #define TextEditWidget_H
 
@@ -173,11 +160,6 @@ public:
      */
     void showWidget(const QPoint &point);
 
-    /**
-     * @brief updateHeight 根据主窗口高度，调整本窗口的高度
-     */
-    void updateHeight();
-
 private slots:
     /**
      * @brief slotCloseNoteWidget 关闭注释编辑框窗口
@@ -187,6 +169,8 @@ private slots:
 
 private:
     TextEditWidget *m_TextEditWidget = nullptr;
+    const int m_maxwidth = 278;
+    const int m_maxheight = 344;
 };
 
 #endif  // TextEditWidget_H

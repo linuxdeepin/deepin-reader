@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef DocSheet_H
 #define DocSheet_H
 
@@ -64,13 +49,6 @@ class DocSheet : public Dtk::Widget::DSplitter
     friend class SheetSidebar;
     friend class SheetBrowser;
     friend class Database;
-public:
-    static const int WindowMinWidth;    //主界面最小宽度
-    static const int WindowMinHeight;   //主界面最小高度
-    static const int SidebarMinWidth;   //左边缩略图、标签页等的最小宽度
-    static const int SidebarMaxWidth;   //左边缩略图、标签页等的最大宽度
-    static const int BrowserMinWidth;   //pdf浏览界面最小宽度
-    static const int SplitterWidth;     //splitter的宽度
 public:
     explicit DocSheet(const Dr::FileType &fileType, const QString &filePath, QWidget *parent = nullptr);
 
@@ -138,6 +116,8 @@ public:
     static QStringList g_uuidList;
 
     static QList<DocSheet *> g_sheetList;
+
+    static QString g_lastOperationFile; //保存最后一次操作的文件
 
 public:
     /**
@@ -837,6 +817,11 @@ private:
      */
     void setAlive(bool alive);
 
+    /**
+     * @brief readLastFileOperation 读取最后一次操作文件的配置
+     */
+    bool readLastFileOperation();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -869,6 +854,31 @@ private:
 
 public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址
+
+    /**
+     * @brief The LoadingWidget class 打印时的加载窗口和相关功能
+     * 父类parent不能为空，一般为qApp->activeWindow()
+     * 函数getImage会在子线程内获取对应的图片，被loop阻塞
+     * 通过下面方法 停止parent【tab键和点击按钮】的后续响应
+     * 1.阻塞方式ExcludeSocketNotifiers
+     * 2.parent->setEnabled(false)
+     */
+    class LoadingWidget : public QWidget {
+    public:
+        explicit LoadingWidget(QWidget *parent);
+        ~LoadingWidget() override;
+
+        /**
+         * @brief getImage 子线程获取image
+         */
+        QImage getImage(DocSheet *doc, int index, int width, int height);
+
+    protected:
+        void paintEvent(QPaintEvent */*event*/) override;
+
+    private:
+        QWidget *m_parentWidget = nullptr;
+    };
 };
 
 #endif // DocSheet_H

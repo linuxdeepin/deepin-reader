@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     qpdfview
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef PDFMODEL_H
 #define PDFMODEL_H
 
@@ -83,7 +68,7 @@ public:
 
     QList<Word> words() override;
 
-    QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const override;
+    QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const override;
 
     QList< Annotation * > annotations() const override;
 
@@ -96,7 +81,6 @@ public:
     Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) override;
 
     Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) override;
-    void setPath(const QString &orgPath, const QString &tmpPath, const int &type);
 
 private:
     explicit PDFPage(QMutex *mutex, DPdfPage *page);
@@ -108,13 +92,6 @@ private:
     bool m_wordLoaded = false;
 
     QList<Word> m_words;
-
-    QString m_filePath = "";
-    QString m_tmpPath = "";
-    /**
-     * @brief 此属性是为了区分真实的pdf文档及docx转换出来的docx文档
-     */
-    int m_pdfType = 0; //0: pdf  1:docx->pdf
 };
 
 class PDFDocument : public Document
@@ -143,7 +120,6 @@ public:
 
     static PDFDocument *loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error);
 
-    void setPath(const QString &orgPath, const QString &tmpPath, const int &type);
 private:
     DPdfDoc *m_document = nullptr;
 
@@ -156,13 +132,6 @@ private:
     qreal m_xRes = 72;
 
     qreal m_yRes = 72;
-
-    QString m_filePath = "";
-    QString m_tmpPath = "";
-    /**
-     * @brief 此属性是为了区分真实的pdf文档及docx转换出来的docx文档
-     */
-    int m_pdfType = 0; //0: pdf  1:docx->pdf
 };
 }
 

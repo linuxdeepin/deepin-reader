@@ -1,23 +1,7 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     leiyu <leiyu@uniontech.com>
-*
-* Maintainer: leiyu <leiyu@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SlideWidget.h"
 #include "MainWindow.h"
@@ -87,8 +71,26 @@ void SlideWidget::initControl()
     connect(m_slidePlayWidget, &SlidePlayWidget::signalPlayBtnClicked, this, &SlideWidget::onPlayBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalNextBtnClicked, this, &SlideWidget::onNextBtnClicked);
     connect(m_slidePlayWidget, &SlidePlayWidget::signalExitBtnClicked, this, &SlideWidget::onExitBtnClicked);
-    m_slidePlayWidget->move((width - 270) / 2, height - 100);
-
+    m_slidePlayWidget->setFixedWidth(250);
+    m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        m_slidePlayWidget->setFixedWidth(250);
+        m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+    } else {
+        m_slidePlayWidget->setFixedWidth(194);
+        m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            m_slidePlayWidget->setFixedWidth(250);
+            m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+        } else {
+            m_slidePlayWidget->setFixedWidth(194);
+            m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
+        }
+    });
+#endif
     onFetchImage(m_curPageIndex);
     onFetchImage(m_preIndex);
 }
@@ -98,7 +100,7 @@ void SlideWidget::initImageControl()
     m_imageTimer = new QTimer(this);
     m_imageTimer->setInterval(3000);
     connect(m_imageTimer, &QTimer::timeout, this, &SlideWidget::onImageShowTimeOut);
-    m_imageTimer->start();
+    //    m_imageTimer->start();
 
     m_imageAnimation = new QPropertyAnimation(this, "", this);
     m_imageAnimation->setEasingCurve(QEasingCurve::Linear);
@@ -185,6 +187,12 @@ void SlideWidget::setWidgetState(bool full)
 
 void SlideWidget::onPreBtnClicked()
 {
+    //已到第一页时，再次点击上一页按钮
+    if(m_curPageIndex <= 0) {
+        m_slidePlayWidget->updateProcess(m_curPageIndex - 1, m_docSheet->pageCount());
+        return;
+    }
+
     m_preIndex = m_curPageIndex;
 
     m_curPageIndex--;
@@ -201,6 +209,12 @@ void SlideWidget::onPreBtnClicked()
 void SlideWidget::onPlayBtnClicked()
 {
     if (m_slidePlayWidget->getPlayStatus()) {
+        //最后一页点播放时，则返回开始播放
+        if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
+            m_curPageIndex = 0;
+            m_preIndex = 0;
+            playImage();
+        }
         m_canRestart = true;
         m_imageTimer->start();
     } else {
@@ -210,6 +224,11 @@ void SlideWidget::onPlayBtnClicked()
 
 void SlideWidget::onNextBtnClicked()
 {
+    //已到最后一页时，再次点击下一页按钮
+    if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
+        m_slidePlayWidget->updateProcess(m_curPageIndex + 1, m_docSheet->pageCount());
+        return;
+    }
     m_preIndex = m_curPageIndex;
 
     m_curPageIndex++;
@@ -245,6 +264,7 @@ void SlideWidget::playImage()
     m_lpixmap = m_rpixmap;
     m_rpixmap = QPixmap();
 
+    m_slidePlayWidget->updateProcess(m_curPageIndex, m_docSheet->pageCount());
     onFetchImage(m_curPageIndex);
     m_imageAnimation->start();
     m_imageTimer->stop();
@@ -297,14 +317,30 @@ void SlideWidget::mousePressEvent(QMouseEvent *event)
         m_slidePlayWidget->showControl();
 }
 
+void SlideWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    DWidget::mouseReleaseEvent(event);
+    onNextBtnClicked();
+}
+
+void SlideWidget::wheelEvent(QWheelEvent *event)
+{
+    DWidget::wheelEvent(event);
+    if (event->delta() > 0) {
+        onPreBtnClicked();
+    } else {
+        onNextBtnClicked();
+    }
+}
+
 void SlideWidget::handleKeyPressEvent(const QString &sKey)
 {
     if (sKey == Dr::key_space) {
         bool autoplay = m_slidePlayWidget->getPlayStatus();
         m_slidePlayWidget->setPlayStatus(!autoplay);
-    } else if (sKey == Dr::key_left) {
+    } else if (sKey == Dr::key_left || sKey == Dr::key_up) {
         onPreBtnClicked();
-    } else if (sKey == Dr::key_right) {
+    } else if (sKey == Dr::key_right || sKey == Dr::key_down) {
         onNextBtnClicked();
     }
 }
@@ -323,6 +359,7 @@ void SlideWidget::onFetchImage(int index)
     tParam.sheet = m_docSheet;
     tParam.receiver = this;
     tParam.maxPixel = qMin(this->width() - 40, this->height() - 20);
+    tParam.boundedRect = QSize(this->width(), this->height());
     tParam.slotFun = "onUpdatePageImage";
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
 }

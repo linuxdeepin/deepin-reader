@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "FindWidget.h"
 #include "Global.h"
@@ -16,7 +17,7 @@ namespace {
 class TestFindWidget : public ::testing::Test
 {
 public:
-    TestFindWidget(): m_tester(nullptr), m_mainWidget(nullptr) {}
+    TestFindWidget(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
