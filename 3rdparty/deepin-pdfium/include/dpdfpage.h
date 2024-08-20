@@ -146,7 +146,7 @@ public:
      * @param wholeWords 整个单词
      * @return
      */
-    QVector<QRectF> search(const QString &text, bool matchCase = false, bool wholeWords = false);
+    QVector<DPdfGlobal::PageSection> search(const QString &text, bool matchCase = false, bool wholeWords = false);
 
     /**
      * @brief 获取当前支持操作的所有注释

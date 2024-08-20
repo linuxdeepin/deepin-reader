@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "MainWindow.h"
 #include "Application.h"
 #include "CentralDocPage.h"
@@ -19,6 +23,7 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     PERF_PRINT_BEGIN("POINT-01", "");
+    qDebug() << __FUNCTION__ << "启动应用！";
 
     // 依赖DTK的程序，如果要在root下或者非deepin/uos环境下运行不会发生异常，就需要加上该环境变量
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
@@ -85,9 +90,14 @@ int main(int argc, char *argv[])
     if (!MainWindow::allowCreateWindow())
         return -1;
 
+    qDebug() << __FUNCTION__ << "正在创建主窗口...";
+    qApp->setAttribute(Qt::AA_ForceRasterWidgets, true);
     MainWindow *w = MainWindow::createWindow(arguments);
-
+    w->winId();
+    qApp->setAttribute(Qt::AA_ForceRasterWidgets, false);
     w->show();
+
+    qDebug() << __FUNCTION__ << "主窗口已创建并显示";
 
     PERF_PRINT_END("POINT-01", "");
 

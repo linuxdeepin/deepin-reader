@@ -1,19 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "Application.h"
 #include "Utils.h"
 #include "MainWindow.h"
@@ -106,6 +95,16 @@ bool Application::notify(QObject *object, QEvent *event)
                 top_window->setFocus();
                 top_window->setProperty(NON_FIRST_ACTIVE, true);
             }
+        }
+    }
+
+    //保存最后一次操作的文件
+    //标签页操作触发：ZOrderChange
+    //新窗口操作触发：WindowActivate
+    if (event->type() == QEvent::ZOrderChange ||
+            event->type() == QEvent::WindowActivate) {
+        if (DocSheet *doc = qobject_cast<DocSheet *>(object)) {
+            DocSheet::g_lastOperationFile = doc->filePath();
         }
     }
 

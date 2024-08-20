@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TextEditWidget.h"
 #include "DocSheet.h"
@@ -10,8 +11,7 @@
 #include "PDFModel.h"
 #include "dpdfannot.h"
 #include "ut_common.h"
-#include "stub.h"
-#include "addr_pri.h"
+
 #include <QSignalSpy>
 #include <QDebug>
 
@@ -20,12 +20,7 @@
 class UT_TextEditShadowWidgetayWidget : public ::testing::Test
 {
 public:
-    UT_TextEditShadowWidgetayWidget()
-    {
-        m_sheet = nullptr;
-        m_pBrowser = nullptr;
-        m_tester = nullptr;
-    }
+    UT_TextEditShadowWidgetayWidget() {}
 
 public:
     virtual void SetUp()
@@ -55,35 +50,28 @@ TEST_F(UT_TextEditShadowWidgetayWidget, initTest)
 
 }
 
-ACCESS_PRIVATE_FIELD(TextEditShadowWidget, TextEditWidget *, m_TextEditWidget);
-
 TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_getTextEditWidget)
 {
-    EXPECT_TRUE(m_tester->getTextEditWidget() == access_private_field::TextEditShadowWidgetm_TextEditWidget(*m_tester));
+    EXPECT_TRUE(m_tester->getTextEditWidget() == m_tester->m_TextEditWidget);
 }
 
 TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_showWidget)
 {
     m_tester->showWidget(QPoint());
-    EXPECT_TRUE(access_private_field::TextEditShadowWidgetm_TextEditWidget(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_TextEditWidget != nullptr);
 }
 
 TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotCloseNoteWidget)
 {
     m_tester->showWidget(QPoint());
-    EXPECT_TRUE(access_private_field::TextEditShadowWidgetm_TextEditWidget(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_TextEditWidget != nullptr);
 }
 
 
 class TestTextEditWidget : public ::testing::Test
 {
 public:
-    TestTextEditWidget(): m_tester(nullptr)
-    {
-        m_sheet = nullptr;
-        m_pBrowser = nullptr;
-        m_pShadow = nullptr;
-    }
+    TestTextEditWidget(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -115,55 +103,48 @@ TEST_F(TestTextEditWidget, initTest)
 
 }
 
-ACCESS_PRIVATE_FUN(TextEditWidget, void(), onShowMenu);
-ACCESS_PRIVATE_FIELD(TextEditWidget, TransparentTextEdit *, m_pTextEdit);
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_onShowMenu)
 {
     Stub stub;
     UTCommon::stub_QWidget_isVisible(stub, true);
     UTCommon::stub_DMenu_exec(stub);
-    call_private_fun::TextEditWidgetonShowMenu(*m_tester);
-    EXPECT_TRUE(access_private_field::TextEditWidgetm_pTextEdit(*m_tester) != nullptr);
+    m_tester->onShowMenu();
+    EXPECT_TRUE(m_tester->m_pTextEdit != nullptr);
 }
 
-ACCESS_PRIVATE_FIELD(TextEditWidget, QString, m_strNote);
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_setEditText)
 {
     m_tester->setEditText("123");
-    EXPECT_TRUE(access_private_field::TextEditWidgetm_pTextEdit(*m_tester)->toPlainText() == "123");
-    EXPECT_TRUE(access_private_field::TextEditWidgetm_strNote(*m_tester) == "123");
+    EXPECT_TRUE(m_tester->m_pTextEdit->toPlainText() == "123");
+    EXPECT_TRUE(m_tester->m_strNote == "123");
 }
 
-ACCESS_PRIVATE_FIELD(TextEditWidget, deepin_reader::Annotation *, m_annotation);
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_setAnnotation)
 {
     m_tester->setAnnotation(nullptr);
-    EXPECT_TRUE(access_private_field::TextEditWidgetm_annotation(*m_tester) == nullptr);
+    EXPECT_TRUE(m_tester->m_annotation == nullptr);
 }
 
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_setEditFocus)
 {
     m_tester->setEditFocus();
-    EXPECT_TRUE(access_private_field::TextEditWidgetm_pTextEdit(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_pTextEdit != nullptr);
 }
 
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_getTextEdit)
 {
-    EXPECT_TRUE(m_tester->getTextEdit() == access_private_field::TextEditWidgetm_pTextEdit(*m_tester));
+    EXPECT_TRUE(m_tester->getTextEdit() == m_tester->m_pTextEdit);
 }
-
-ACCESS_PRIVATE_FUN(TextEditWidget, void(QHideEvent *event), hideEvent);
 
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_hideEvent_001)
 {
     DPdfTextAnnot *pDPdfAnnot  = new DPdfTextAnnot();
     deepin_reader::PDFAnnotation *p = new deepin_reader::PDFAnnotation(pDPdfAnnot);
 
-    access_private_field::TextEditWidgetm_annotation(*m_tester) = p;
+    m_tester->m_annotation = p;
     QHideEvent *event = new QHideEvent();
     QSignalSpy spy(m_tester, SIGNAL(sigRemoveAnnotation(deepin_reader::Annotation *, bool)));
-    call_private_fun::TextEditWidgethideEvent(*m_tester, event);
-
+    m_tester->hideEvent(event);
     EXPECT_TRUE(spy.count() == 1);
     delete p;
     delete pDPdfAnnot;
@@ -175,11 +156,11 @@ TEST_F(TestTextEditWidget, test_TestTextEditWidget_hideEvent_002)
     DPdfTextAnnot *pDPdfAnnot  = new DPdfTextAnnot();
     deepin_reader::PDFAnnotation *p = new deepin_reader::PDFAnnotation(pDPdfAnnot);
 
-    access_private_field::TextEditWidgetm_pTextEdit(*m_tester)->setPlainText("123");
-    access_private_field::TextEditWidgetm_annotation(*m_tester) = p;
+    m_tester->m_pTextEdit->setPlainText("123");
+    m_tester->m_annotation = p;
     QHideEvent *event = new QHideEvent();
     QSignalSpy spy(m_tester, SIGNAL(sigUpdateAnnotation(deepin_reader::Annotation *, const QString &)));
-    call_private_fun::TextEditWidgethideEvent(*m_tester, event);
+    m_tester->hideEvent(event);
     EXPECT_TRUE(spy.count() == 1);
     delete p;
     delete pDPdfAnnot;
@@ -206,20 +187,18 @@ TEST_F(TestTextEditWidget, test_TestTextEditWidget_onTouchPadEvent_002)
     EXPECT_TRUE(g_funcname == "qTimer_start_stub");
 }
 
-ACCESS_PRIVATE_FUN(TextEditWidget, void(QPaintEvent *event), paintEvent);
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_paintEvent)
 {
     QPaintEvent paint(QRect(m_tester->rect()));
-    call_private_fun::TextEditWidgetpaintEvent(*m_tester, &paint);
+    m_tester->paintEvent(&paint);
     EXPECT_FALSE(m_tester->grab().isNull());
 }
 
-ACCESS_PRIVATE_FUN(TextEditWidget, void(QFocusEvent *event), focusOutEvent);
 TEST_F(TestTextEditWidget, test_TestTextEditWidget_focusOutEvent)
 {
     QSignalSpy spy(m_tester, SIGNAL(sigCloseNoteWidget(bool)));
     QFocusEvent *event = new QFocusEvent(QEvent::FocusOut);
-    call_private_fun::TextEditWidgetfocusOutEvent(*m_tester, event);
+    m_tester->focusOutEvent(event);
     delete event;
     EXPECT_TRUE(spy.count() == 1);
 }

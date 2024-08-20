@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "BrowserPage.h"
 #include "PageRenderThread.h"
@@ -274,19 +275,22 @@ TEST_F(TestBrowserPage, UT_BrowserPage_paint_001)
     Stub s;
     s.set(ADDR(BrowserPage, render), render_stub);
     s.set(static_cast<void (QPainter::*)(const QRect &)>(ADDR(QPainter, drawRect)), drawRect_stub);
+
+    PageSection section = PageSection{PageLine{QString(), QRectF(200, 200, 100, 20)}};
+
     m_tester->m_renderPixmapScaleFactor = 1.0;
     m_tester->m_scaleFactor = 2.0;
     m_tester->m_rotation = Dr::RotateBy0;
     m_tester->m_viewportRendered = false;
     m_tester->m_pixmapHasRendered = false;
     m_tester->m_originSizeF = QSizeF(1000, 2000);
-    m_tester->m_searchLightrectLst.append(QRect(200, 200, 100, 20));
-    m_tester->m_searchSelectLighRectf = QRect(200, 200, 100, 20);
+    m_tester->m_searchLightrectLst.append(section);
+    m_tester->m_searchSelectLighRectf = section;
     m_tester->m_drawMoveIconRect = true;
 
     QPainter *painter = new QPainter;
     m_tester->paint(painter, nullptr, nullptr);
-    //EXPECT_TRUE(g_funcName == "drawRect_stub");
+    EXPECT_TRUE(g_funcName == "drawRect_stub");
     delete painter;
 }
 
@@ -706,9 +710,10 @@ TEST_F(TestBrowserPage, UT_BrowserPage_sceneEvent_001)
 
 TEST_F(TestBrowserPage, UT_BrowserPage_setSearchHighlightRectf_001)
 {
-    QVector< QRectF > rectflst{QRectF(0, 0, 20, 10)};
-    m_tester->setSearchHighlightRectf(rectflst);
-    EXPECT_TRUE(qFuzzyCompare(m_tester->m_searchSelectLighRectf.width(), 20));
+    PageSection section = PageSection{PageLine{QString(), QRectF(0, 0, 20, 10)}};
+
+    m_tester->setSearchHighlightRectf(QVector<PageSection>{section});
+    EXPECT_TRUE(qFuzzyCompare(m_tester->m_searchSelectLighRectf.value(0).rect.width(), 20));
     EXPECT_TRUE(m_tester->m_searchLightrectLst.size() == 1);
 }
 
@@ -720,25 +725,30 @@ TEST_F(TestBrowserPage, UT_BrowserPage_clearSearchHighlightRects_001)
 
 TEST_F(TestBrowserPage, UT_BrowserPage_clearSelectSearchHighlightRects_001)
 {
-    m_tester->m_searchSelectLighRectf = QRectF(0, 0, 20, 10);
+    PageSection section = PageSection{PageLine{QString(), QRectF(0, 0, 20, 10)}};
+    m_tester->m_searchSelectLighRectf = section;
     m_tester->clearSelectSearchHighlightRects();
-    EXPECT_FALSE(qFuzzyCompare(m_tester->m_searchSelectLighRectf.width(), 20));
+    EXPECT_FALSE(qFuzzyCompare(m_tester->m_searchSelectLighRectf.value(0).rect.width(), 20));
 }
 
 TEST_F(TestBrowserPage, UT_BrowserPage_searchHighlightRectSize_001)
 {
-    m_tester->m_searchLightrectLst.append(QRectF(0, 0, 20, 10));
+    PageSection section = PageSection{PageLine{QString(), QRectF(0, 0, 20, 10)}};
+
+    m_tester->m_searchLightrectLst.append(section);
     EXPECT_TRUE(m_tester->searchHighlightRectSize() == 1);
 }
 
 TEST_F(TestBrowserPage, UT_BrowserPage_findSearchforIndex_001)
 {
-    m_tester->m_searchLightrectLst.append(QRectF(0, 0, 20, 10));
+    PageSection section = PageSection{PageLine{QString(), QRectF(0, 0, 20, 10)}};
+
+    m_tester->m_searchLightrectLst.append(section);
     m_tester->findSearchforIndex(0);
-    EXPECT_TRUE(qFuzzyCompare(m_tester->findSearchforIndex(0).width(), 20));
+    EXPECT_TRUE(qFuzzyCompare(m_tester->findSearchforIndex(0).value(0).rect.width(), 20));
 
     m_tester->findSearchforIndex(1);
-    EXPECT_TRUE(qFuzzyCompare(m_tester->findSearchforIndex(1).x(), -1));
+    EXPECT_TRUE(m_tester->findSearchforIndex(1).isEmpty());
 }
 
 TEST_F(TestBrowserPage, UT_BrowserPage_getNorotateRect_001)

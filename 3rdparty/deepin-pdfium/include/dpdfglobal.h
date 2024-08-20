@@ -5,6 +5,7 @@
 #include <QMutexLocker>
 #include <QDebug>
 #include <QTime>
+#include <QRectF>
 
 #ifndef BUILD_DEEPDF_STATIC
 #    if defined(BUILD_DEEPDF_LIB)
@@ -24,6 +25,18 @@ public:
     ~DPdfGlobal();
 
     static QString textCodeType(const char *text);
+
+    typedef struct {
+        QString text;
+        QRectF  rect;
+    } PageLine;
+    /**
+     * @brief PageSection 一个选区的集合
+     * page包含多个section
+     * section包含多个line
+     * line包含一个text和一个rect
+     */
+    typedef QList<PageLine> PageSection;
 
 private:
     void init();

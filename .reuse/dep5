@@ -23,6 +23,11 @@ Files: debian/*
 Copyright: None
 License: CC0-1.0
 
+# patches
+Files: patches/*
+Copyright: None
+License: CC0-1.0
+
 # rpm
 Files: rpm/*
 Copyright: None
@@ -61,11 +66,6 @@ License: GPL-3.0-or-later
 # 3rdparty/deepin-pdfium
 Files: 3rdparty/deepin-pdfium/*
 Copyright: 2014-2019 PDFium Authors.
-License: GPL-3.0-or-later
-
-# 3rdparty/stub_linux
-Files: 3rdparty/stub_linux/*
-Copyright: None
 License: GPL-3.0-or-later
 
 # reader/app
@@ -207,3 +207,4 @@ License: GPL-3.0-or-later
 Files: resources/CJK2Kangxi.dict
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
+

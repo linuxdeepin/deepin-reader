@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SheetBrowser.h"
 #include "BrowserPage.h"
@@ -106,10 +107,15 @@ void clearSelectSearchHighlightRects_stub()
 
 }
 
-QRectF findSearchforIndex_stub(int index)
+PageSection findSearchforIndex_stub(int)
 {
-    Q_UNUSED(index)
-    return QRectF(-1, -1, -1, -1);
+    PageLine line;
+    line.rect = QRectF(-1, -1, -1, -1);
+
+    PageSection section;
+    section.append(line);
+
+    return section;
 }
 
 QRectF translateRect_stub(const QRectF &rect)
@@ -1954,7 +1960,7 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent001)
     m_tester->m_bHandAndLink = true;
 
     m_tester->mouseReleaseEvent(event);
-    //EXPECT_TRUE(g_funcName == "jump2Link_stub");
+    EXPECT_TRUE(g_funcName == "jump2Link_stub");
     EXPECT_FALSE(m_tester->m_annotationInserting);
 
     delete event;
@@ -1993,7 +1999,7 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent002)
     m_tester->m_lastSelectIconAnnotPage = m_tester->m_items.first();
 
     m_tester->mouseReleaseEvent(event);
-    //EXPECT_TRUE(g_funcName == "jump2Link_stub");
+    EXPECT_TRUE(g_funcName == "jump2Link_stub");
     EXPECT_FALSE(m_tester->m_selectIconAnnotation);
 
     delete event;
@@ -2203,7 +2209,7 @@ TEST_F(TestSheetBrowser, testdragEnterEvent001)
 
     QDragEnterEvent *event = new QDragEnterEvent(pos, actions, data, buttons, modifiers);
     m_tester->dragEnterEvent(event);
-    //EXPECT_TRUE(g_funcName == "ignore_stub");
+    EXPECT_TRUE(g_funcName == "ignore_stub");
 
     delete event;
 }

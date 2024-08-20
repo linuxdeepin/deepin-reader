@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef BrowserPage_H
 #define BrowserPage_H
 
@@ -242,7 +227,7 @@ public:
      * 设置当前搜索选择框,在搜索列表中
      * @param rectflst
      */
-    void setSearchHighlightRectf(const QVector< QRectF > &rectflst);
+    void setSearchHighlightRectf(const QVector<PageSection> &sections);
 
     /**
      * @brief clearSearchHighlightRects
@@ -269,7 +254,7 @@ public:
      * @param index 编号
      * @return 编号对应的rect
      */
-    QRectF findSearchforIndex(int index);
+    PageSection findSearchforIndex(int index);
 
     /**
      * @brief translateRect
@@ -294,13 +279,6 @@ public:
      * @return 坐标点下的注释
      */
     BrowserAnnotation *getBrowserAnnotation(const QPointF &point);
-
-    /**
-     * @brief isExitBookMark 光标的位置是否与书签的位置重合
-     * @param point
-     * @return true:重合 false:不重合
-     */
-    bool isExitBookMark(const QPointF &point);
 
     /**
      * @brief getBrowserWord
@@ -365,13 +343,6 @@ public:
      * @return
      */
     QPointF getTopLeftPos();
-
-    /**
-     * @brief fileType
-     * 获取文件类型
-     * @return
-     */
-    Dr::FileType fileType();
 
 private:
     /**
@@ -457,8 +428,8 @@ private:
     BrowserAnnotation *m_lastClickIconAnnotationItem = nullptr;
     QPointF m_drawMoveIconPoint;                            //绘制移动图标注释点
 
-    QVector<QRectF> m_searchLightrectLst;                   //搜索结果
-    QRectF m_searchSelectLighRectf;
+    QVector<PageSection> m_searchLightrectLst;                   //搜索结果
+    PageSection m_searchSelectLighRectf;
 
     bool m_bookmark = false;                                // 当前是否有书签
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show

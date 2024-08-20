@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SearchResWidget.h"
 #include "DocSheet.h"
@@ -8,7 +9,6 @@
 #include "SideBarImageListview.h"
 
 #include "stub.h"
-#include "addr_pri.h"
 
 #include <QStackedLayout>
 #include <gtest/gtest.h>
@@ -43,48 +43,48 @@ TEST_F(UT_SearchResWidget, initTest)
 
 }
 
-ACCESS_PRIVATE_FIELD(SearchResWidget, DocSheet *, m_sheet);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_handleSearchResultComming)
 {
+    deepin_reader::PageLine line;
+    line.text = "123";
+
+    deepin_reader::PageSection section;
+    section << line;
+
     deepin_reader::SearchResult search;
-    deepin_reader::Word word;
-    word.text = "123";
-    search.words << word;
+    search.sections << section;
+
     m_tester->handleSearchResultComming(search);
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_sheet(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-ACCESS_PRIVATE_FIELD(SearchResWidget, QStackedLayout *, m_stackLayout);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_handleFindFinished)
 {
     m_tester->handleFindFinished();
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_stackLayout(*m_tester)->currentIndex() == 1);
+    EXPECT_TRUE(m_tester->m_stackLayout->currentIndex() == 1);
 }
 
-ACCESS_PRIVATE_FIELD(SearchResWidget, QString, m_searchKey);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_clearFindResult)
 {
     m_tester->clearFindResult();
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_stackLayout(*m_tester)->currentIndex() == 0);
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_searchKey(*m_tester).count() == 0);
+    EXPECT_TRUE(m_tester->m_stackLayout->currentIndex() == 0);
+    EXPECT_TRUE(m_tester->m_searchKey.count() == 0);
 }
 
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_searchKey)
 {
     m_tester->searchKey("123");
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_searchKey(*m_tester) == "123");
+    EXPECT_TRUE(m_tester->m_searchKey == "123");
 }
 
-ACCESS_PRIVATE_FUN(SearchResWidget, void(const int &pageIndex, const QString &text, const int &resultNum), addSearchsItem);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_addSearchsItem)
 {
-    call_private_fun::SearchResWidgetaddSearchsItem(*m_tester, 0, "123", 1);
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_stackLayout(*m_tester)->currentIndex() == 0);
+    m_tester->addSearchsItem(0, "123", 1);
+    EXPECT_TRUE(m_tester->m_stackLayout->currentIndex() == 0);
 }
 
-ACCESS_PRIVATE_FIELD(SearchResWidget, SideBarImageListView *, m_pImageListView);
 TEST_F(UT_SearchResWidget, UT_SearchResWidget_adaptWindowSize)
 {
     m_tester->adaptWindowSize(1);
-    EXPECT_TRUE(access_private_field::SearchResWidgetm_pImageListView(*m_tester)->property("adaptScale") == 1);
+    EXPECT_TRUE(m_tester->m_pImageListView->property("adaptScale") == 1);
 }

@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "NotesWidget.h"
 #include "SideBarImageListview.h"
@@ -12,7 +13,6 @@
 #include "ut_common.h"
 
 #include "stub.h"
-#include "addr_pri.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -52,64 +52,60 @@ TEST_F(UT_NotesWidget, initTest)
 
 }
 
-ACCESS_PRIVATE_FIELD(NotesWidget, QPointer<DocSheet>, m_sheet);
 TEST_F(UT_NotesWidget, UT_NotesWidget_prevPage)
 {
     m_tester->pageUp();
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_nextPage)
 {
     m_tester->nextPage();
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_pageDown)
 {
     m_tester->pageDown();
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_deleteItemByKey)
 {
     m_tester->deleteItemByKey();
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-ACCESS_PRIVATE_FUN(NotesWidget, void(), deleteAllItem);
 TEST_F(UT_NotesWidget, UT_NotesWidget_deleteAllItem)
 {
-    call_private_fun::NotesWidgetdeleteAllItem(*m_tester);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    m_tester->deleteAllItem();
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-ACCESS_PRIVATE_FIELD(BaseWidget, bool, bIshandOpenSuccess);
 TEST_F(UT_NotesWidget, UT_NotesWidget_handleOpenSuccess_001)
 {
-    access_private_field::BaseWidgetbIshandOpenSuccess(*m_tester) = true;
+    m_tester->bIshandOpenSuccess = true;
     m_tester->handleOpenSuccess();
-    EXPECT_TRUE(access_private_field::BaseWidgetbIshandOpenSuccess(*m_tester) == true);
+    EXPECT_TRUE(m_tester->bIshandOpenSuccess == true);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_handleOpenSuccess_002)
 {
-    access_private_field::BaseWidgetbIshandOpenSuccess(*m_tester) = false;
+    m_tester->bIshandOpenSuccess = false;
     m_tester->handleOpenSuccess();
-    EXPECT_TRUE(access_private_field::BaseWidgetbIshandOpenSuccess(*m_tester) == true);
+    EXPECT_TRUE(m_tester->bIshandOpenSuccess == true);
 }
 
-ACCESS_PRIVATE_FUN(NotesWidget, void(const int &), onListMenuClick);
 TEST_F(UT_NotesWidget, UT_NotesWidget_onListMenuClick_001)
 {
-    call_private_fun::NotesWidgetonListMenuClick(*m_tester, E_NOTE_COPY);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    m_tester->onListMenuClick(E_NOTE_COPY);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_onListMenuClick_002)
 {
-    call_private_fun::NotesWidgetonListMenuClick(*m_tester, E_NOTE_DELETE);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    m_tester->onListMenuClick(E_NOTE_DELETE);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
 static QString g_funcname;
@@ -124,43 +120,32 @@ TEST_F(UT_NotesWidget, UT_NotesWidget_onListMenuClick_003)
     Stub stub;
     stub.set(ADDR(SaveDialog, showTipDialog), saveDialog_showTipDialog_stub);
 
-    call_private_fun::NotesWidgetonListMenuClick(*m_tester, E_NOTE_DELETE_ALL);
+    m_tester->onListMenuClick(E_NOTE_DELETE_ALL);
     EXPECT_TRUE(g_funcname == "saveDialog_showTipDialog_stub");
-    stub.reset(ADDR(SaveDialog, showTipDialog));
 }
 
-ACCESS_PRIVATE_FUN(NotesWidget, void(int), onListItemClicked);
 TEST_F(UT_NotesWidget, UT_NotesWidget_onListItemClicked)
 {
-    call_private_fun::NotesWidgetonListItemClicked(*m_tester, 0);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    m_tester->onListItemClicked(0);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-ACCESS_PRIVATE_FUN(NotesWidget, void(), onAddAnnotation);
-ACCESS_PRIVATE_FIELD(DocSheet, SheetBrowser *, m_browser);
-ACCESS_PRIVATE_FIELD(SheetBrowser, bool, m_annotationInserting);
 TEST_F(UT_NotesWidget, UT_NotesWidget_onAddAnnotation)
 {
-    call_private_fun::NotesWidgetonAddAnnotation(*m_tester);
-    auto sheet = access_private_field::NotesWidgetm_sheet(*m_tester);
-    auto browser = access_private_field::DocSheetm_browser(*sheet);
-    auto annotationInserting = access_private_field::SheetBrowserm_annotationInserting(*browser);
-    EXPECT_TRUE(annotationInserting == true);
+    m_tester->onAddAnnotation();
+    EXPECT_TRUE(m_tester->m_sheet->m_browser->m_annotationInserting == true);
 }
 
-ACCESS_PRIVATE_FUN(NotesWidget, void(), copyNoteContent);
 TEST_F(UT_NotesWidget, UT_NotesWidget_copyNoteContent)
 {
-    call_private_fun::NotesWidgetcopyNoteContent(*m_tester);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_sheet(*m_tester) != nullptr);
+    m_tester->copyNoteContent();
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-ACCESS_PRIVATE_FIELD(NotesWidget, SideBarImageListView *, m_pImageListView);
 TEST_F(UT_NotesWidget, UT_NotesWidget_adaptWindowSize)
 {
     m_tester->adaptWindowSize(20);
-    EXPECT_TRUE(access_private_field::NotesWidgetm_pImageListView(*m_tester)->property("adaptScale") == 20);
-
+    EXPECT_TRUE(m_tester->m_pImageListView->property("adaptScale") == 20);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_showMenu)
@@ -168,7 +153,7 @@ TEST_F(UT_NotesWidget, UT_NotesWidget_showMenu)
     Stub stub;
     UTCommon::stub_DMenu_exec(stub);
     m_tester->showMenu();
-    EXPECT_TRUE(access_private_field::NotesWidgetm_pImageListView(*m_tester) != nullptr);
+    EXPECT_TRUE(m_tester->m_pImageListView != nullptr);
 }
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_setTabOrderWidget)

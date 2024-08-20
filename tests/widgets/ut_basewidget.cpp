@@ -1,10 +1,11 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "BaseWidget.h"
 #include "stub.h"
-#include "addr_pri.h"
+
 #include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
@@ -35,11 +36,10 @@ TEST_F(TestBaseWidget, initTest)
 {
 
 }
-ACCESS_PRIVATE_FUN(BaseWidget, void(), updateWidgetTheme);
 
 TEST_F(TestBaseWidget, testupdateWidgetTheme)
 {
-    call_private_fun::BaseWidgetupdateWidgetTheme(*m_tester);
+    m_tester->updateWidgetTheme();
     Dtk::Gui::DPalette plt = m_tester->palette();
     EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
 }

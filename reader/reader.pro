@@ -3,6 +3,11 @@ QT += core gui sql printsupport dbus widgets
 
 PKGCONFIG += ddjvuapi dtkwidget
 
+isEmpty(PREFIX) {
+ PREFIX = /usr
+}
+DEFINES += QMAKE_INSTALL_PREFIX=\"\\\"$$PREFIX\\\"\"
+
 ###安全漏洞检测
 #QMAKE_CXX += -g -fsanitize=undefined,address -O2
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
@@ -37,18 +42,26 @@ TEMPLATE = app
 
 #DEFINES += PERF_ON
 
-#Install
-target.path   = /usr/bin
+# 判断系统环境
+MAJOR_VERSION=$$system("cat /etc/os-version | grep MajorVersion | grep -o '[0-9]\+'")
+#message("MAJOR_VERSION: " $$MAJOR_VERSION)
+equals(MAJOR_VERSION, 23) {
+    message("----------------- OS_BUILD_V23 on")
+    DEFINES += OS_BUILD_V23
+}
 
-desktop.path  = /usr/share/applications
+#Install
+target.path   = $$PREFIX/bin
+
+desktop.path  = $$PREFIX/share/applications
 
 desktop.files = $$PWD/deepin-reader.desktop
 
-icon.path = /usr/share/icons/hicolor/scalable/apps
+icon.path = $$PREFIX/share/icons/hicolor/scalable/apps
 
 icon.files = $$PWD/deepin-reader.svg
 
-manual.path = /usr/share/deepin-manual/manual-assets/application
+manual.path = $$PREFIX/share/deepin-manual/manual-assets/application
 
 manual.files = $$PWD/../assets/*
 
@@ -65,7 +78,7 @@ CONFIG(release, debug|release) {
         system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
     }
     #将qm文件添加到安装包
-    dtk_translations.path = /usr/share/$$TARGET/translations
+    dtk_translations.path = $$PREFIX/share/$$TARGET/translations
     dtk_translations.files = $$PWD/../translations/*.qm
     INSTALLS += dtk_translations
 }

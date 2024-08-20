@@ -1,13 +1,14 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ScaleMenu.h"
 #include "Global.h"
 #include "DocSheet.h"
 #include "ut_defines.h"
 #include "stub.h"
-#include "addr_pri.h"
+
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QList>
@@ -55,58 +56,49 @@ TEST_F(TestScaleMenu, initTest)
 
 }
 
-ACCESS_PRIVATE_FIELD(ScaleMenu, DocSheet *, m_sheet);
-ACCESS_PRIVATE_FIELD(DocSheet, SheetOperation, m_operation);
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onTwoPage);
-
 TEST_F(TestScaleMenu, testonTwoPage)
 {
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).layoutMode = Dr::TwoPagesMode;
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageDefaultMode;
-    call_private_fun::ScaleMenuonTwoPage(*m_tester);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).layoutMode == Dr::SinglePageMode);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::FitToPageWidthMode);
+    m_tester->m_sheet->m_operation.layoutMode = Dr::TwoPagesMode;
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
+    m_tester->onTwoPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.layoutMode == Dr::SinglePageMode);
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWidthMode);
 }
 
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onFiteH);
 TEST_F(TestScaleMenu, testonFiteH)
 {
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageDefaultMode;
-    call_private_fun::ScaleMenuonFiteH(*m_tester);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::FitToPageHeightMode);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
+    m_tester->onFiteH();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageHeightMode);
 }
 
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onFiteW);
 TEST_F(TestScaleMenu, testonFiteW)
 {
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageDefaultMode;
-    call_private_fun::ScaleMenuonFiteW(*m_tester);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::FitToPageWidthMode);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
+    m_tester->onFiteW();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWidthMode);
 }
 
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onDefaultPage);
 TEST_F(TestScaleMenu, testonDefaultPage)
 {
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageWidthMode;
-    call_private_fun::ScaleMenuonDefaultPage(*m_tester);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::FitToPageDefaultMode);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
+    m_tester->onDefaultPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageDefaultMode);
 }
 
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onFitPage);
 TEST_F(TestScaleMenu, testonFitPage)
 {
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageDefaultMode;
-    call_private_fun::ScaleMenuonFitPage(*m_tester);
-    EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::FitToPageWorHMode);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageDefaultMode;
+    m_tester->onFitPage();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::FitToPageWorHMode);
 }
 
-ACCESS_PRIVATE_FUN(ScaleMenu, void(), onScaleFactor);
 TEST_F(TestScaleMenu, testonScaleFactor)
 {
     Stub s;
     s.set(ADDR(QList<QAction *>, indexOf), indexOf_stub);
     s.set(ADDR(DocSheet, scaleFactorList), scaleFactorList_stub);
-    access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode = Dr::FitToPageWidthMode;
-    call_private_fun::ScaleMenuonScaleFactor(*m_tester);
-    //EXPECT_TRUE(access_private_field::DocSheetm_operation(*access_private_field::ScaleMenum_sheet(*m_tester)).scaleMode == Dr::ScaleFactorMode);
+    m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
+    m_tester->onScaleFactor();
+    EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::ScaleFactorMode);
 }

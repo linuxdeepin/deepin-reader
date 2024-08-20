@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "MainWindow.h"
 #include "DocSheet.h"
@@ -13,7 +14,6 @@
 #include <QResizeEvent>
 
 #include "stub.h"
-#include "addr_pri.h"
 #include <gtest/gtest.h>
 
 static void openFileAsync_stub(const QString &)
@@ -91,27 +91,25 @@ TEST_F(TestMainWindow, testaddFile)
     m_tester->addFile("");
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, void(QCloseEvent *event), closeEvent);
 TEST_F(TestMainWindow, testcloseEvent)
 {
     QCloseEvent *event = new QCloseEvent;
-    call_private_fun::MainWindowcloseEvent(*m_tester, event);
+    m_tester->closeEvent(event);
     delete event;
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, bool(QObject *obj, QEvent *event), eventFilter);
 TEST_F(TestMainWindow, testeventFilter)
 {
     QHoverEvent *mouseEvent = new QHoverEvent(QEvent::HoverMove, QPointF(100, 100), QPointF(0, 0));
-    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, mouseEvent);
+    m_tester->eventFilter(m_tester, mouseEvent);
     delete mouseEvent;
 
     QEvent *pEvent = new QEvent(QEvent::WindowStateChange);
-    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, pEvent);
+    m_tester->eventFilter(m_tester, pEvent);
     delete pEvent;
 
     QResizeEvent *pResizeEvent = new QResizeEvent(QSize(200, 200), QSize(500, 500));
-    call_private_fun::MainWindoweventFilter(*m_tester, m_tester, pResizeEvent);
+    m_tester->eventFilter(m_tester, pResizeEvent);
     delete pResizeEvent;
 }
 
@@ -120,33 +118,30 @@ TEST_F(TestMainWindow, testsetDocTabBarWidget)
     m_tester->setDocTabBarWidget(nullptr);
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, void(), onTitleAniFinished);
 TEST_F(TestMainWindow, testonTitleAniFinished)
 {
     m_tester->setDocTabBarWidget(nullptr);
-    call_private_fun::MainWindowonTitleAniFinished(*m_tester);
+    m_tester->onTitleAniFinished();
 }
-
-ACCESS_PRIVATE_FIELD(MainWindow, int, m_lastWindowState);
 
 TEST_F(TestMainWindow, testonMainWindowFull)
 {
-    access_private_field::MainWindowm_lastWindowState(*m_tester) = Qt::WindowNoState;
+    m_tester->m_lastWindowState = Qt::WindowNoState;
 
     m_tester->handleMainWindowFull();
-    EXPECT_FALSE(access_private_field::MainWindowm_lastWindowState(*m_tester) == Qt::WindowFullScreen);
+    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 
     m_tester->setDocTabBarWidget(new QWidget(m_tester));
     m_tester->handleMainWindowFull();
-    EXPECT_TRUE(access_private_field::MainWindowm_lastWindowState(*m_tester) == Qt::WindowFullScreen);
+    EXPECT_TRUE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testonMainWindowExitFull)
 {
     m_tester1->setDocTabBarWidget(nullptr);
-    access_private_field::MainWindowm_lastWindowState(*m_tester1) = Qt::WindowFullScreen;
+    m_tester1->m_lastWindowState = Qt::WindowFullScreen;
     m_tester1->handleMainWindowExitFull();
-    EXPECT_FALSE(access_private_field::MainWindowm_lastWindowState(*m_tester1) == Qt::WindowFullScreen);
+    EXPECT_FALSE(m_tester->m_lastWindowState == Qt::WindowFullScreen);
 }
 
 TEST_F(TestMainWindow, testresizeFullTitleWidget)
@@ -202,22 +197,19 @@ TEST_F(TestMainWindow, testcreateWindow1)
     delete mw;
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, void(), showDefaultSize);
 TEST_F(TestMainWindow, testshowDefaultSize)
 {
-    call_private_fun::MainWindowshowDefaultSize(*m_tester);
+    m_tester->showDefaultSize();
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, void(), onDelayInit);
 TEST_F(TestMainWindow, testonDelayInit)
 {
-    call_private_fun::MainWindowonDelayInit(*m_tester);
+    m_tester->onDelayInit();
 }
 
-ACCESS_PRIVATE_FUN(MainWindow, void(), onUpdateTitleLabelRect);
 TEST_F(TestMainWindow, testonUpdateTitleLabelRect)
 {
-    call_private_fun::MainWindowonUpdateTitleLabelRect(*m_tester);
+    m_tester->onUpdateTitleLabelRect();
 }
 
 TEST_F(TestMainWindow, testupdateOrderWidgets)

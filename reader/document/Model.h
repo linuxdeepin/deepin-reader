@@ -1,27 +1,13 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     qpdfview
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef DOCUMENTMODEL_H
 #define DOCUMENTMODEL_H
 
 #include "Global.h"
+#include "dpdfpage.h"
 
 #include <QList>
 #include <QtPlugin>
@@ -74,6 +60,8 @@ typedef QVector< Section > Outline;
 
 typedef QMap<QString, QVariant> Properties;
 
+typedef DPdfGlobal::PageSection PageSection;
+typedef DPdfGlobal::PageLine PageLine;
 struct Section {
     int nIndex = -1;
     QPointF offsetPointF;
@@ -104,8 +92,17 @@ struct Word {
 
 struct SearchResult {
     int page = 0;
-    QVector< QRectF > rects;
-    QList<Word> words;
+    QVector<PageSection> sections;
+
+    /**
+     * @brief setctionsFillText 使用getText，填充sections的text
+     */
+    bool setctionsFillText(std::function<QString(int, QRectF)> getText);
+
+    /**
+     * @brief sectionBoundingRect 返回section的boundingRect
+     */
+    static QRectF sectionBoundingRect(const PageSection &section);
 };
 
 struct FileInfo {
@@ -189,7 +186,7 @@ public:
     virtual Link getLinkAtPoint(const QPointF &) { return Link(); }
     virtual QString text(const QRectF &rect) const = 0;
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
-    virtual QVector<QRectF> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
+    virtual QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const = 0;
     virtual QList< Annotation * > annotations() const { return QList< Annotation * >(); }
     virtual bool canAddAndRemoveAnnotations() const { return false; }
     virtual bool hasWidgetAnnots() const { return false; }

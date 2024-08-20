@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "FindWidget.h"
 #include "Global.h"
@@ -8,7 +9,6 @@
 #include "ut_defines.h"
 
 #include "stub.h"
-#include "addr_pri.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -16,7 +16,7 @@ namespace {
 class TestFindWidget : public ::testing::Test
 {
 public:
-    TestFindWidget(): m_tester(nullptr), m_mainWidget(nullptr) {}
+    TestFindWidget(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -67,7 +67,6 @@ void keyPressEvent_stub(void *, QKeyEvent *)
 
 void setFocus_stub()
 {
-    qDebug() << ">>>>>>>>>>>> setFocus_stub";
     g_funcname = __FUNCTION__;
 }
 
@@ -84,22 +83,18 @@ TEST_F(TestFindWidget, initTest)
 
 TEST_F(TestFindWidget, testsetSearchEditFocus)
 {
-//    Stub s;
-//    s.set((void(QWidget::*)())ADDR(QWidget, setFocus), setFocus_stub);
-//    m_tester->setSearchEditFocus();
-//    EXPECT_TRUE(g_funcname == "setFocus_stub");
+    Stub s;
+    s.set((void(QWidget::*)())ADDR(QWidget, setFocus), setFocus_stub);
+    m_tester->setSearchEditFocus();
+    EXPECT_TRUE(g_funcname == "setFocus_stub");
 }
 
-ACCESS_PRIVATE_FIELD(FindWidget, QString, m_lastSearchText);
-ACCESS_PRIVATE_FIELD(FindWidget, DIconButton *, m_findPrevButton);
-ACCESS_PRIVATE_FIELD(FindWidget, DIconButton *, m_findNextButton);
-ACCESS_PRIVATE_FUN(FindWidget, void(), onSearchStop);
 TEST_F(TestFindWidget, testonSearchStop)
 {
-    call_private_fun::FindWidgetonSearchStop(*m_tester);
-    EXPECT_TRUE(access_private_field::FindWidgetm_lastSearchText(*m_tester).isEmpty());
-    EXPECT_FALSE(access_private_field::FindWidgetm_findPrevButton(*m_tester)->isEnabled());
-    EXPECT_FALSE(access_private_field::FindWidgetm_findNextButton(*m_tester)->isEnabled());
+    m_tester->onSearchStop();
+    EXPECT_TRUE(m_tester->m_lastSearchText.isEmpty());
+    EXPECT_FALSE(m_tester->m_findPrevButton->isEnabled());
+    EXPECT_FALSE(m_tester->m_findNextButton->isEnabled());
 
 }
 
@@ -119,7 +114,6 @@ TEST_F(TestFindWidget, testslotFindNextBtnClicked)
     Stub s;
     s.set(ADDR(DocSheet, jumpToNextSearchResult), jumpToNextSearchResult_stub);
     m_tester->slotFindNextBtnClicked();
-    qDebug() << "g_funcname: " << g_funcname;
     EXPECT_TRUE(g_funcname == "jumpToNextSearchResult_stub");
 }
 

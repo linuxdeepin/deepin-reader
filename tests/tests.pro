@@ -8,16 +8,25 @@ QT += core gui sql printsupport dbus testlib widgets
 
 CONFIG += c++11 link_pkgconfig resources_big testcase no_testcase_installs
 
+#访问私有方法 -fno-access-control
+QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -fno-access-control -O0 -fno-inline
+
+QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
+
+#安全编译参数
+QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+
 PKGCONFIG += ddjvuapi dtkwidget
 
 CONFIG -= app_bundle
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-LIBS += -lgtest
-
 #定义宏定义给UT代码使用（UT工程路径）
 DEFINES += UTSOURCEDIR=\"\\\"$$PWD\\\"\"
+
+LIBS += -lgtest
 
 #target
 TARGET = test-deepin-reader
@@ -25,43 +34,6 @@ TARGET = test-deepin-reader
 QMAKE_RPATHDIR += $$OUT_PWD/../3rdparty/deepin-pdfium/lib
 
 TEMPLATE = app
-
-
-##访问私有方法 -fno-access-control
-#QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -fno-access-control -O0 -fno-inline
-#QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
-
-##安全编译参数
-#QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
-#QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
-
-QMAKE_CXXFLAGS += -g
-QMAKE_CXXFLAGS += -Wno-error=deprecated-declarations -Wno-deprecated-declarations
-
-QMAKE_CXXFLAGS += -g -Wall -fprofile-arcs -ftest-coverage -O0 -fno-access-control
-QMAKE_LFLAGS += -g -Wall -fprofile-arcs -ftest-coverage  -O0
-
-#内存检测标签
-TSAN_TOOL_ENABLE = true
-ARCH = $$QMAKE_HOST.arch
-isEqual(ARCH, mips64) {
-    TSAN_TOOL_ENABLE = false
-}
-equals(TSAN_TOOL_ENABLE, true ) {
-    #DEFINES += TSAN_THREAD #互斥
-    DEFINES += ENABLE_TSAN_TOOL
-    message("deepin-reader enabled TSAN function with set: " $$TSAN_TOOL_ENABLE)
-    contains(DEFINES, TSAN_THREAD){
-       QMAKE_CXXFLAGS+="-fsanitize=thread"
-       QMAKE_CFLAGS+="-fsanitize=thread"
-       QMAKE_LFLAGS+="-fsanitize=thread"
-    } else {
-       QMAKE_CXXFLAGS+="-fsanitize=undefined,address,leak -fno-omit-frame-pointer"
-       QMAKE_CFLAGS+="-fsanitize=undefined,address,leak -fno-omit-frame-pointer"
-       QMAKE_LFLAGS+="-fsanitize=undefined,address,leak -fno-omit-frame-pointer"
-    }
-}
-
 
 #code
 SOURCES += \
@@ -137,9 +109,9 @@ RESOURCES += \
 #stub头文件路径
 INCLUDEPATH += $$PWD/include/gtest
 
-##安全测试选项
-#if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
-#    QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
-#    QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
-#    QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
-#}
+#安全测试选项
+if(contains(DEFINES, CMAKE_SAFETYTEST_ARG_ON)){
+    QMAKE_CFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+    QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
+}
