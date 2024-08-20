@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "Utils.h"
 #include "Application.h"
 
@@ -109,19 +94,20 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
 
 void  Utils::copyText(const QString &sText)
 {
-    int intercept = -1;
+    int intercept = 0;
     if(getLoadLibsInstance()->m_document_clip_copy){
         qInfo() << "当前文档: *** "/* <<m_currenFilePath*/;
         getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(),&intercept);
         qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " <<intercept;
     }
-    if(intercept) return;
+    if(intercept > 0)
+        return;
+
     QClipboard *clipboard = DApplication::clipboard();
     QString sOldText = clipboard->text(QClipboard::Clipboard);
     if (sOldText != sText) {
         clipboard->setText(sText);
     }
-    qInfo() << "将内容复制到剪切板: "/* << sText*/;
 }
 
 QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size, const QString &text, Qt::Alignment alignment)

@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SideBarImageListview.h"
 #include "DocSheet.h"
@@ -139,11 +140,11 @@ TEST_F(TestSideBarImageListView, testmousePressEvent)
 
     m_tester->m_listType = E_SideBar::SIDE_NOTE;
     m_tester->mousePressEvent(event);
-    //EXPECT_TRUE(g_showNoteMenu_result == "showNoteMenu_stub");
+    EXPECT_TRUE(g_showNoteMenu_result == "showNoteMenu_stub");
 
     m_tester->m_listType = E_SideBar::SIDE_BOOKMARK;
     m_tester->mousePressEvent(event);
-    //EXPECT_TRUE(g_showBookMarkMenu_result == "showBookMarkMenu_stub");
+    EXPECT_TRUE(g_showBookMarkMenu_result == "showBookMarkMenu_stub");
 
     delete event;
 }

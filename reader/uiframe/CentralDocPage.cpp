@@ -1,23 +1,8 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* Author:     zhangsong<zhangsong@uniontech.com>
-*
-* Maintainer: zhangsong<zhangsong@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "CentralDocPage.h"
 #include "DocSheet.h"
 #include "DocTabBar.h"
@@ -51,10 +36,53 @@
 extern "C"{
     #include "load_libs.h"
 }
+
+/**
+ * @brief pathControl,判断deepin-reader是否被禁止访问sPath。
+ * @param sPath 要访问的目录
+ * @return deepin-reader是否被禁止访问
+ */
+static bool pathControl(const QString &sPath) noexcept
+{
+    qInfo() << "pathControl";
+    /**
+     * docPath: 文档目录
+     * picPath：图片目录
+     */
+    QString docPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first();
+    QString picPath = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
+    /**
+     * 调用debus接口，获取被禁止读取的应用
+     */
+    QDBusMessage reply;
+    QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1",QDBusConnection::systemBus());
+    if (iface.isValid()) {
+        if(sPath.startsWith(docPath)) {
+            qInfo() << "docPath";
+            reply = iface.call("GetApps", docPath);
+        } else if(sPath.startsWith(picPath)) {
+            qInfo() << "picPath";
+            reply = iface.call("GetApps", picPath);
+        }
+        qInfo() << "iface isValid";
+    }
+    if(reply.type() == QDBusMessage::ReplyMessage) {
+        /**
+         * lValue：被禁止读取的应用列表，deepin-reader在列表中返回true
+         */
+        QList<QString> lValue = reply.arguments().takeFirst().toStringList();
+        QString strApp = QStandardPaths::findExecutable("deepin-reader");
+        qInfo() << "lValue :" << lValue <<" strApp: " << strApp;
+        if(lValue.contains(strApp)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
-    qDebug() << "正在初始化主文档页面...";
     m_tabBar = new DocTabBar(this);
     connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
@@ -93,7 +121,6 @@ CentralDocPage::CentralDocPage(DWidget *parent)
         mainwindow->setProperty("orderlist", QVariant::fromValue(orderlst));
         mainwindow->setProperty("orderWidgets", QVariant::fromValue(orderlst));
     }
-    qDebug() << "主文档页面已初始化";
 }
 
 CentralDocPage::~CentralDocPage()
@@ -120,10 +147,21 @@ void CentralDocPage::openCurFileFolder()
         return;
 
     QString filePath = sheet->filePath();
-    bool result = QProcess::startDetached(QString("dde-file-manager \"%1\" --show-item").arg(filePath));
-    if (!result) {
-        QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
+    QUrl displayUrl = QUrl(filePath);
+    qDebug() << "在文件夹中显示当前文件: " << displayUrl;
+    QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
+                                 QStringLiteral("/org/freedesktop/FileManager1"),
+                                 QStringLiteral("org.freedesktop.FileManager1"));
+    if (interface.isValid()) {
+        QStringList list;
+        list << displayUrl.toString();
+        interface.call("ShowItems", list, "");
     }
+
+//    bool result = QProcess::startDetached(QString("dde-file-manager \"%1\" --show-item").arg(filePath));
+//    if (!result) {
+//        QDesktopServices::openUrl(QUrl(QFileInfo(filePath).dir().path()));
+//    }
 }
 
 void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
@@ -158,21 +196,24 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
     qDebug() << "正在打开文档: " << filePath;
-    emit sigSetWindowTitle(filePath);
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_tabBar) {
         int index = m_tabBar->indexOfFilePath(filePath);
         if (index >= 0 && index < m_tabBar->count()) {
+            qInfo() << "此文档已经被打开，自动跳转到该文档界面";
             m_tabBar->setCurrentIndex(index);
             return;
         }
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
-
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
-        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
+        if (pathControl(filePath)) {
+            qInfo() << "没有权限读取该文件";
+            return;
+        }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
+        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
         return;
     }
 
@@ -305,6 +346,7 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 {
     qDebug() << "(" << __FUNCTION__ << ") 关闭当前 sheet";
     qDebug() << "当前 sheet 数量: " <<  DocSheet::g_sheetList.size();
+
     if (nullptr == sheet)
         return false;
 
@@ -347,7 +389,6 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     }
     delete sheet;
 
-    malloc_trim(0); //手动回收image所占内存
     qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
     return true;
 }
@@ -364,6 +405,7 @@ bool CentralDocPage::closeAllSheets(bool needToBeSaved)
                 return false;
         }
     }
+
     qDebug() << "所有 sheet 已关闭";
     return true;
 }
@@ -524,7 +566,6 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    qDebug() << "键盘按下: " << s;
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
@@ -550,6 +591,17 @@ void CentralDocPage::handleShortcut(const QString &s)
             && getCurSheet()->getSheetBrowser()->getNoteEditWidget()->isVisible()) {
         getCurSheet()->getSheetBrowser()->getNoteEditWidget()->close();
         return;
+    }
+
+    if (s == Dr::key_ctrl_home) {
+        auto sheet = getCurSheet();
+        if (sheet)
+            sheet->jumpToFirstPage();
+    }
+    if (s == Dr::key_ctrl_end) {
+        auto sheet = getCurSheet();
+        if (sheet)
+            sheet->jumpToLastPage();
     }
 
     if (m_slideWidget) {
@@ -632,7 +684,6 @@ void CentralDocPage::openMagnifer()
 //  取消放大镜
 void CentralDocPage::quitMagnifer()
 {
-    qDebug() << "取消放大镜";
     if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         m_magniferSheet->closeMagnifier();
         m_magniferSheet = nullptr;
@@ -760,13 +811,6 @@ void CentralDocPage::onUpdateTabLabelText()
 {
     if (m_tabBar->count() > 0)
         m_tabLabel->setText(m_tabBar->tabText(0));
-}
-
-void CentralDocPage::onSetWindowTitle(DocSheet *sheet)
-{
-    if (sheet != nullptr) {
-        emit sigSetWindowTitle(sheet->filePath());
-    }
 }
 
 QWidget *CentralDocPage::getTitleLabel()

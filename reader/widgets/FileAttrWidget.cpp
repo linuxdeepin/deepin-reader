@@ -1,23 +1,8 @@
-/*
- * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
- *
- * Author:     duanxiaohui<duanxiaohui@uniontech.com>
- *
- * Maintainer: duanxiaohui<duanxiaohui@uniontech.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "FileAttrWidget.h"
 #include "AttrScrollWidget.h"
 #include "WordWrapLabel.h"
@@ -34,6 +19,7 @@
 
 #include <QFileInfo>
 #include <QVBoxLayout>
+#include <DGuiApplicationHelper>
 
 class ImageWidget : public DWidget
 {
@@ -170,7 +156,24 @@ void FileAttrWidget::initCloseBtn()
     connect(closeButton, &DWindowCloseButton::clicked, this, &DAbstractDialog::close);
 
     layout->addWidget(closeButton);
-
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        closeButton->setFixedSize(QSize(50, 50));
+        closeButton->setIconSize(QSize(50, 50));
+    } else {
+        closeButton->setFixedSize(QSize(40, 40));
+        closeButton->setIconSize(QSize(40, 40));
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            closeButton->setFixedSize(QSize(50, 50));
+            closeButton->setIconSize(QSize(50, 50));
+        } else {
+            closeButton->setFixedSize(QSize(40, 40));
+            closeButton->setIconSize(QSize(40, 40));
+        }
+    });
+#endif
     m_pVBoxLayout->addItem(layout);
 }
 

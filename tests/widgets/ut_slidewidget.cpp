@@ -1,6 +1,7 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SlideWidget.h"
 #include "SlidePlayWidget.h"
@@ -10,13 +11,14 @@
 #include "MainWindow.h"
 #include "ReaderImageThreadPoolManager.h"
 #include "stub.h"
-#include "addr_pri.h"
 #include "Application.h"
 
 #include <gtest/gtest.h>
 #include <QTimer>
 #include <QTest>
 #include <QPropertyAnimation>
+#include <QDBusMessage>
+#include <QDBusInterface>
 
 namespace {
 void ReaderImageThreadPoolManager_addgetDocImageTask_stub(const ReaderImageParam_t &);
@@ -94,6 +96,29 @@ QPixmap getImageForDocSheet_stub(void *, DocSheet *, int pageIndex)
     return QPixmap();
 }
 
+QDBusMessage QDBusMessage_call_stub(QDBus::CallMode, const QString &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &,
+                                    const QVariant &)
+{
+    g_funcname = __FUNCTION__;
+    return QDBusMessage();
+}
+typedef QDBusMessage (QDBusInterface::*QDBusMessage_call_Ptr)(QDBus::CallMode , const QString &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &,
+                                               const QVariant &);
+
 void show_stub()
 {
 
@@ -107,34 +132,28 @@ TEST_F(TestSlideWidget, initTest)
 
 }
 
-ACCESS_PRIVATE_FIELD(SlideWidget, int, m_offset);
-ACCESS_PRIVATE_FUN(SlideWidget, void(const QVariant &), onImagevalueChanged);
 TEST_F(TestSlideWidget, testonImagevalueChanged)
 {
-    access_private_field::SlideWidgetm_offset(*m_tester) = 0;
-    call_private_fun::SlideWidgetonImagevalueChanged(*m_tester, QVariant(123));
-    EXPECT_EQ(access_private_field::SlideWidgetm_offset(*m_tester), 123);
+    m_tester->m_offset = 0;
+    m_tester->onImagevalueChanged(QVariant(123));
+    EXPECT_EQ(m_tester->m_offset, 123);
 }
 
-ACCESS_PRIVATE_FIELD(SlideWidget, bool, m_parentIsDestroyed);
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onParentDestroyed);
 TEST_F(TestSlideWidget, testonParentDestroyed)
 {
-    access_private_field::SlideWidgetm_parentIsDestroyed(*m_tester) = false;
-    call_private_fun::SlideWidgetonParentDestroyed(*m_tester);
-    EXPECT_TRUE(access_private_field::SlideWidgetm_parentIsDestroyed(*m_tester));
+    m_tester->m_parentIsDestroyed = false;
+    m_tester->onParentDestroyed();
+    EXPECT_TRUE(m_tester->m_parentIsDestroyed);
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(QMouseEvent *), mouseMoveEvent);
 TEST_F(TestSlideWidget, testmouseMoveEvent)
 {
     Stub s;
     s.set(ADDR(SlidePlayWidget, showControl), showControl_stub);
     QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    call_private_fun::SlideWidgetmouseMoveEvent(*m_tester, event);
+    m_tester->mouseMoveEvent(event);
     delete event;
     EXPECT_TRUE(g_funcname == "showControl_stub");
-    s.reset(ADDR(SlidePlayWidget, showControl));
 }
 
 TEST_F(TestSlideWidget, testsetWidgetState)
@@ -143,107 +162,84 @@ TEST_F(TestSlideWidget, testsetWidgetState)
     m_tester->setWidgetState(false);
 }
 
-ACCESS_PRIVATE_FIELD(SlideWidget, int, m_preIndex);
-ACCESS_PRIVATE_FIELD(SlideWidget, int, m_curPageIndex);
-ACCESS_PRIVATE_FUN(SlideWidget, void(), playImage);
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onPreBtnClicked);
 TEST_F(TestSlideWidget, testonPreBtnClicked)
 {
-    auto SlideWidget_playImage = get_private_fun::SlideWidgetplayImage();
     Stub stub;
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
-    stub.set(SlideWidget_playImage, playImage_stub);
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
-    access_private_field::SlideWidgetm_curPageIndex(*m_tester) = 2;
-    call_private_fun::SlideWidgetonPreBtnClicked(*m_tester);
-    EXPECT_EQ(access_private_field::SlideWidgetm_preIndex(*m_tester), 2);
-    EXPECT_EQ(access_private_field::SlideWidgetm_curPageIndex(*m_tester), 1);
+    //pageCount:2, index:2
+    m_tester->m_curPageIndex = 2;
+    m_tester->onPreBtnClicked();
+    EXPECT_EQ(m_tester->m_preIndex, 2);
+    EXPECT_EQ(m_tester->m_curPageIndex, 1);
     EXPECT_TRUE(g_funcname == "playImage_stub");
-
-    stub.reset(ADDR(DocSheet, pageCount));
-    stub.reset(SlideWidget_playImage);
-
 }
 
-ACCESS_PRIVATE_FIELD(SlideWidget, bool, m_canRestart);
-ACCESS_PRIVATE_FIELD(SlideWidget, SlidePlayWidget *, m_slidePlayWidget);
-ACCESS_PRIVATE_FIELD(SlidePlayWidget, bool, m_autoPlay);
-ACCESS_PRIVATE_FIELD(SlideWidget, QTimer *, m_imageTimer);
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onPlayBtnClicked);
 TEST_F(TestSlideWidget, testonPlayBtnClicked)
 {
-    access_private_field::SlideWidgetm_canRestart(*m_tester) = false;
-    access_private_field::SlidePlayWidgetm_autoPlay(*access_private_field::SlideWidgetm_slidePlayWidget(*m_tester)) = true;
-    call_private_fun::SlideWidgetonPlayBtnClicked(*m_tester);
-    access_private_field::SlideWidgetm_imageTimer(*m_tester)->stop();
-    EXPECT_TRUE(access_private_field::SlideWidgetm_canRestart(*m_tester));
+    //打桩，否则会有线程异常的问题
+    Stub stub;
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
+
+    m_tester->m_canRestart = false;
+    m_tester->m_slidePlayWidget->m_autoPlay = true;
+    m_tester->onPlayBtnClicked();
+    m_tester->m_imageTimer->stop();
+    EXPECT_TRUE(m_tester->m_canRestart);
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onNextBtnClicked);
 TEST_F(TestSlideWidget, testonNextBtnClicked)
 {
-    auto SlideWidget_playImage = get_private_fun::SlideWidgetplayImage();
     Stub stub;
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
-    stub.set(SlideWidget_playImage, playImage_stub);
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
-    access_private_field::SlideWidgetm_curPageIndex(*m_tester) = 2;
-
-
-    call_private_fun::SlideWidgetonNextBtnClicked(*m_tester);
-    EXPECT_EQ(access_private_field::SlideWidgetm_preIndex(*m_tester), 2);
-    EXPECT_EQ(access_private_field::SlideWidgetm_curPageIndex(*m_tester), 0);
+    //pageCount:2, index:0
+    m_tester->m_curPageIndex = 0;
+    m_tester->onNextBtnClicked();
+    EXPECT_EQ(m_tester->m_preIndex, 0);
+    EXPECT_EQ(m_tester->m_curPageIndex, 1);
     EXPECT_TRUE(g_funcname == "playImage_stub");
-
-    stub.reset(ADDR(DocSheet, pageCount));
-    stub.reset(SlideWidget_playImage);
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onExitBtnClicked);
 TEST_F(TestSlideWidget, testononExitBtnClicked)
 {
     Stub stub;
     stub.set(ADDR(DocSheet, closeSlide), closeSlide_stub);
-    call_private_fun::SlideWidgetonExitBtnClicked(*m_tester);
+    m_tester->onExitBtnClicked();
     EXPECT_TRUE(g_funcname == "closeSlide_stub");
-    stub.reset(ADDR(DocSheet, closeSlide));
 }
 
-ACCESS_PRIVATE_FIELD(SlideWidget, bool, m_blefttoright);
-ACCESS_PRIVATE_FIELD(SlideWidget, QPropertyAnimation *, m_imageAnimation);
 TEST_F(TestSlideWidget, testplayImage)
 {
     Stub stub;
     stub.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), ReaderImageThreadPoolManager_addgetDocImageTask_stub);
+    stub.set((QDBusMessage_call_Ptr)ADDR(QDBusInterface, call), QDBusMessage_call_stub);
 
-    access_private_field::SlideWidgetm_blefttoright(*m_tester) = false;
-    access_private_field::SlideWidgetm_imageAnimation(*m_tester)->setStartValue(10);
-    call_private_fun::SlideWidgetplayImage(*m_tester);
-    EXPECT_FALSE(access_private_field::SlideWidgetm_blefttoright(*m_tester));
-    EXPECT_EQ(access_private_field::SlideWidgetm_imageAnimation(*m_tester)->startValue(), 0);
+    m_tester->m_blefttoright = false;
+    m_tester->m_imageAnimation->setStartValue(10);
+    m_tester->playImage();
+    EXPECT_FALSE(m_tester->m_blefttoright);
+    EXPECT_EQ(m_tester->m_imageAnimation->startValue(), 0);
 }
-ACCESS_PRIVATE_FUN(SlideWidget, void(), onImageShowTimeOut);
+
 TEST_F(TestSlideWidget, testonImageShowTimeOut)
 {
-    auto SlideWidget_playImage = get_private_fun::SlideWidgetplayImage();
     Stub stub;
     stub.set(ADDR(SlidePlayWidget, setPlayStatus), setPlayStatus_stub);
     stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
-    stub.set(SlideWidget_playImage, playImage_stub);
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
 
-    access_private_field::SlideWidgetm_curPageIndex(*m_tester) = 2;
-    access_private_field::SlideWidgetm_canRestart(*m_tester) = false;
-    call_private_fun::SlideWidgetonImageShowTimeOut(*m_tester);
-    EXPECT_EQ(access_private_field::SlideWidgetm_preIndex(*m_tester), 2);
-    EXPECT_EQ(access_private_field::SlideWidgetm_curPageIndex(*m_tester), 1);
+    //pageCount:2, index:2
+    m_tester->m_curPageIndex = 2;
+    m_tester->m_canRestart = false;
+    m_tester->onImageShowTimeOut();
+    EXPECT_EQ(m_tester->m_preIndex, 2);
+    EXPECT_EQ(m_tester->m_curPageIndex, 1);
     EXPECT_TRUE(g_funcname == "setPlayStatus_stub");
-
-    stub.reset(ADDR(SlidePlayWidget, setPlayStatus));
-    stub.reset(ADDR(DocSheet, pageCount));
-    stub.reset(SlideWidget_playImage);
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, QPixmap(const QPixmap &), drawImage);
 TEST_F(TestSlideWidget, testdrawImage)
 {
     QPixmap srcImage("1.png");
@@ -257,20 +253,18 @@ TEST_F(TestSlideWidget, testdrawImage)
     painter.drawPixmap(static_cast<int>((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio()),
                        static_cast<int>((pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio()), srcImage);
 
-    EXPECT_EQ(call_private_fun::SlideWidgetdrawImage(*m_tester, srcImage).width(), pixmap.width());
+    EXPECT_EQ(m_tester->drawImage(srcImage).width(), pixmap.width());
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(QMouseEvent *), mousePressEvent);
 TEST_F(TestSlideWidget, testmousePressEvent)
 {
     Stub s;
     s.set(ADDR(SlidePlayWidget, showControl), showControl_stub);
 
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    call_private_fun::SlideWidgetmousePressEvent(*m_tester, event);
+    m_tester->mousePressEvent(event);
     delete event;
     EXPECT_TRUE(g_funcname == "showControl_stub");
-    s.reset(ADDR(SlidePlayWidget, showControl));
 }
 
 TEST_F(TestSlideWidget, testhandleKeyPressEvent)
@@ -278,10 +272,8 @@ TEST_F(TestSlideWidget, testhandleKeyPressEvent)
     Stub stub;
     stub.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), ReaderImageThreadPoolManager_addgetDocImageTask_stub);
     stub.set(ADDR(SlidePlayWidget, setPlayStatus), setPlayStatus_stub);
-    auto SlideWidget_onPreBtnClicked = get_private_fun::SlideWidgetonPreBtnClicked();
-    auto SlideWidget_onNextBtnClicked = get_private_fun::SlideWidgetonNextBtnClicked();
-    stub.set(SlideWidget_onPreBtnClicked, onPreBtnClicked_stub);
-    stub.set(SlideWidget_onNextBtnClicked, onNextBtnClicked_stub);
+    stub.set(ADDR(SlideWidget, onPreBtnClicked), onPreBtnClicked_stub);
+    stub.set(ADDR(SlideWidget, onNextBtnClicked), onNextBtnClicked_stub);
 
     m_tester->handleKeyPressEvent(Dr::key_space);
     EXPECT_TRUE(g_funcname == "setPlayStatus_stub");
@@ -289,32 +281,23 @@ TEST_F(TestSlideWidget, testhandleKeyPressEvent)
     EXPECT_TRUE(g_funcname == "onPreBtnClicked_stub");
     m_tester->handleKeyPressEvent(Dr::key_right);
     EXPECT_TRUE(g_funcname == "onNextBtnClicked_stub");
-
-    stub.reset(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask));
-    stub.reset(ADDR(SlidePlayWidget, setPlayStatus));
-    stub.reset(SlideWidget_onPreBtnClicked);
-    stub.reset(SlideWidget_onNextBtnClicked);
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(int), onFetchImage);
 TEST_F(TestSlideWidget, testonFetchImage)
 {
     Stub stub;
     stub.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), ReaderImageThreadPoolManager_addgetDocImageTask_stub);
-    call_private_fun::SlideWidgetonFetchImage(*m_tester, 0);
+    m_tester->onFetchImage(0);
     EXPECT_TRUE(g_funcname == "ReaderImageThreadPoolManager_addgetDocImageTask_stub");
-    stub.reset(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask));
 }
 
-ACCESS_PRIVATE_FUN(SlideWidget, void(int), onUpdatePageImage);
 TEST_F(TestSlideWidget, testonUpdatePageImage)
 {
     Stub stub;
     stub.set(ADDR(ReaderImageThreadPoolManager, getImageForDocSheet), getImageForDocSheet_stub);
-    access_private_field::SlideWidgetm_preIndex(*m_tester) = 1;
-    access_private_field::SlideWidgetm_curPageIndex(*m_tester) = 0;
-    call_private_fun::SlideWidgetonUpdatePageImage(*m_tester, 0);
+    m_tester->m_preIndex = 1;
+    m_tester->m_curPageIndex = 0;
+    m_tester->onUpdatePageImage(0);
     EXPECT_TRUE(g_funcname == "0");
-
 }
 
