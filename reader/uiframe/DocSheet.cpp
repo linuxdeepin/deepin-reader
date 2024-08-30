@@ -507,6 +507,7 @@ void DocSheet::copySelectedText()
     QString selectedWordsText = m_browser->selectedWordsText();
     if (selectedWordsText.isEmpty())
         return;
+#if _ZPD_
     int intercept = -1;
     if (getLoadLibsInstance()->m_document_clip_copy) {
         qInfo() << "当前文档: ***"/* << filePath()*/;
@@ -514,6 +515,7 @@ void DocSheet::copySelectedText()
         qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " << intercept;
     }
     if (intercept) return;
+#endif
     QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
 }
@@ -740,8 +742,8 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     //后台加载动画
     QWidget *pCurWgt = nullptr;
-    for(QWidget *pwgt: qApp->topLevelWidgets()) {
-        if(QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt)) {
+    for (QWidget *pwgt : qApp->topLevelWidgets()) {
+        if (QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt)) {
             pCurWgt = mwd;
         }
     }

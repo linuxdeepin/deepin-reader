@@ -37,11 +37,21 @@ static LoadLibs *pLibs = NULL;
 static LoadLibs *newClass(void)
 {
     pLibs = (LoadLibs *)malloc(sizeof(LoadLibs));
+    pLibs->m_document_clip_copy = NULL;
+    pLibs->m_document_close = NULL;
 //    RTLD_NOW：在dlopen返回前，解析出全部没有定义的符号，解析不出来返回NULL。
 //    RTLD_LAZY：暂缓决定，等有需要时再解出符号
-    void *handle = dlopen(g_ldnames.chDocumentPr/*"libavcodec.so.58"*/,RTLD_LAZY);
-    if (!handle) {
-        PrintError();
+    void *handle = NULL;
+    if (g_ldnames.chDocumentPr != NULL) {
+        handle = dlopen(g_ldnames.chDocumentPr, RTLD_LAZY);
+        if (handle == NULL) {
+            PrintError();
+        }
+    } else {
+        fprintf(stderr, "Error: Library path is NULL\n");
+    }
+    if (handle == NULL) {
+        return pLibs;
     }
 
     pLibs->m_document_clip_copy = (uos_document_clip_copy)dlsym(handle, "document_clip_copy");
@@ -77,7 +87,11 @@ LoadLibs *getLoadLibsInstance()
 
 void setLibNames(LoadLibNames tmp)
 {
-    g_ldnames.chDocumentPr = ( char*)malloc(strlen(tmp.chDocumentPr)+1);
-    strcpy(g_ldnames.chDocumentPr,tmp.chDocumentPr);
+    if(tmp.chDocumentPr == NULL) {
+        g_ldnames.chDocumentPr = NULL;
+    } else {
+        g_ldnames.chDocumentPr = ( char*)malloc(strlen(tmp.chDocumentPr)+1);
+        strcpy(g_ldnames.chDocumentPr,tmp.chDocumentPr);
+    }
 }
 

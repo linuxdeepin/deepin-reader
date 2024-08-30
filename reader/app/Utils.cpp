@@ -19,15 +19,15 @@
 #include <QPainterPath>
 
 #include <unistd.h>
-extern "C"{
-    #include "load_libs.h"
+extern "C" {
+#include "load_libs.h"
 }
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
 int Utils::m_colorIndex = 0;
-QString Utils::m_currenFilePath="";
+QString Utils::m_currenFilePath = "";
 QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
@@ -94,15 +94,16 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
 
 void  Utils::copyText(const QString &sText)
 {
+#if _ZPD_
     int intercept = 0;
-    if(getLoadLibsInstance()->m_document_clip_copy){
+    if (getLoadLibsInstance()->m_document_clip_copy) {
         qInfo() << "当前文档: *** "/* <<m_currenFilePath*/;
-        getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(),&intercept);
-        qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " <<intercept;
+        getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(), &intercept);
+        qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " << intercept;
     }
-    if(intercept > 0)
+    if (intercept > 0)
         return;
-
+#endif
     QClipboard *clipboard = DApplication::clipboard();
     QString sOldText = clipboard->text(QClipboard::Clipboard);
     if (sOldText != sText) {
