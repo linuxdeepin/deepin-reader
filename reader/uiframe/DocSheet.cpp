@@ -49,12 +49,12 @@ QReadWriteLock DocSheet::g_lock;
 QStringList DocSheet::g_uuidList;
 QList<DocSheet *> DocSheet::g_sheetList;
 QString DocSheet::g_lastOperationFile;
-DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
+DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath, QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
     setAlive(true);
     setHandleWidth(5);
-    setChildrenCollapsible(false);  //  子部件不可拉伸到 0
+    setChildrenCollapsible(false);   //  子部件不可拉伸到 0
 
     m_searchTask = new PageSearchThread(this);
     qRegisterMetaType<deepin_reader::SearchResult>("deepin_reader::SearchResult");
@@ -267,7 +267,7 @@ deepin_reader::Outline DocSheet::outline()
     return m_renderer->outline();
 }
 
-void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
+void DocSheet::jumpToOutline(const qreal &left, const qreal &top, int index)
 {
     m_browser->jumpToOutline(left, top, index);
 }
@@ -419,7 +419,6 @@ void DocSheet::setScaleMode(Dr::ScaleMode mode)
         m_browser->deform(m_operation);
 
         setOperationChanged();
-
     }
 }
 
@@ -441,7 +440,8 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
 
 QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 {
-    return m_renderer->getImage(index, width, height, slice);;
+    return m_renderer->getImage(index, width, height, slice);
+    ;
 }
 
 bool DocSheet::fileChanged()
@@ -507,14 +507,16 @@ void DocSheet::copySelectedText()
     QString selectedWordsText = m_browser->selectedWordsText();
     if (selectedWordsText.isEmpty())
         return;
+#if _ZPD_
     int intercept = -1;
     if (getLoadLibsInstance()->m_document_clip_copy) {
-        qInfo() << "当前文档: ***"/* << filePath()*/;
+        qInfo() << "当前文档: ***" /* << filePath()*/;
         getLoadLibsInstance()->m_document_clip_copy(filePath().toLocal8Bit().data(), &intercept);
         qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " << intercept;
     }
     if (intercept) return;
-    QClipboard *clipboard = DApplication::clipboard();  //获取系统剪贴板指针
+#endif
+    QClipboard *clipboard = DApplication::clipboard();   //获取系统剪贴板指针
     clipboard->setText(selectedWordsText);
 }
 
@@ -580,7 +582,7 @@ bool DocSheet::magnifierOpened()
 QList<deepin_reader::Annotation *> DocSheet::annotations()
 {
     if (nullptr == m_browser)
-        return QList< deepin_reader::Annotation * > ();
+        return QList<deepin_reader::Annotation *>();
 
     return m_browser->annotations();
 }
@@ -605,7 +607,7 @@ bool DocSheet::removeAllAnnotation()
 
 QList<qreal> DocSheet::scaleFactorList()
 {
-    QList<qreal> dataList = {0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5};
+    QList<qreal> dataList = { 0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3, 4, 5 };
     QList<qreal> factorList;
 
     qreal maxFactor = maxScaleFactor();
@@ -615,7 +617,7 @@ QList<qreal> DocSheet::scaleFactorList()
             factorList.append(factor);
     }
 
-    return  factorList;
+    return factorList;
 }
 
 qreal DocSheet::maxScaleFactor()
@@ -630,9 +632,9 @@ qreal DocSheet::maxScaleFactor()
 QString DocSheet::filter()
 {
     if (Dr::PDF == m_fileType)
-        return  "Pdf File (*.pdf)";
+        return "Pdf File (*.pdf)";
     else if (Dr::DOCX == m_fileType)
-        return  "Pdf File (*.pdf)";
+        return "Pdf File (*.pdf)";
     else if (Dr::DJVU == m_fileType)
         return "Djvu files (*.djvu)";
 
@@ -644,7 +646,7 @@ QString DocSheet::format()
     if (Dr::PDF == m_fileType) {
         const Properties &propertys = m_renderer->properties();
         return QString("PDF %1").arg(propertys.value("Version").toString());
-    } else if (Dr::DOCX == m_fileType) {//暂时作为pdf处理
+    } else if (Dr::DOCX == m_fileType) {   //暂时作为pdf处理
         const Properties &propertys = m_renderer->properties();
         return QString("PDF %1").arg(propertys.value("Version").toString());
     } else if (Dr::DJVU == m_fileType) {
@@ -740,8 +742,8 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     //后台加载动画
     QWidget *pCurWgt = nullptr;
-    for(QWidget *pwgt: qApp->topLevelWidgets()) {
-        if(QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt)) {
+    for (QWidget *pwgt : qApp->topLevelWidgets()) {
+        if (QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt)) {
             pCurWgt = mwd;
         }
     }
@@ -752,7 +754,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     QPainter painter(printer);
 
-    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel); //打印纸张类型页面大小
+    const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);   //打印纸张类型页面大小
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
@@ -760,9 +762,9 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         if (pageRange[i] > pageCount() || pageRange[i] > m_browser->pages().count())
             continue;
 
-        const QRectF boundingrect = m_browser->pages().at(pageRange[i] - 1)->boundingRect(); //文档页缩放后的原区域不受旋转影响
-        qreal printWidth = pageRect.width(); //适合打印的图片宽度
-        qreal printHeight = printWidth * boundingrect.height() / boundingrect.width(); //适合打印的图片高度
+        const QRectF boundingrect = m_browser->pages().at(pageRange[i] - 1)->boundingRect();   //文档页缩放后的原区域不受旋转影响
+        qreal printWidth = pageRect.width();   //适合打印的图片宽度
+        qreal printHeight = printWidth * boundingrect.height() / boundingrect.width();   //适合打印的图片高度
         if (printHeight > pageRect.height()) {
             printHeight = pageRect.height();
             printWidth = printHeight * boundingrect.width() / boundingrect.height();
@@ -771,7 +773,8 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
         painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
                                 (static_cast<int>(pageRect.height()) - image.height()) / 2,
-                                image.width(), image.height()), image);
+                                image.width(), image.height()),
+                          image);
 
         if (i != pageRange.count() - 1)
             printer->newPage();
@@ -1036,7 +1039,7 @@ void DocSheet::setOperationChanged()
 
 bool DocSheet::haslabel()
 {
-    return  m_renderer->pageHasLable();
+    return m_renderer->pageHasLable();
 }
 
 void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
@@ -1296,11 +1299,11 @@ void DocSheet::onPopPrintDialog()
     DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
     preview->setAttribute(Qt::WA_DeleteOnClose);
 
-#if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 4, 10, 0))
     //文件打印
     preview->setAsynPreview(pageCount());
     preview->setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
+    if (Dr::DOCX == fileType()) {   //旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
         preview->setPrintFromPath(openedFilePath());
     }
 
@@ -1314,7 +1317,7 @@ void DocSheet::onPopPrintDialog()
                                                 m_password, nullptr, error);
 
         QString pdfPath = filePath();
-        qInfo()  << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
+        qInfo() << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
         if (document->properties().value("Linearized").toBool()) {
             pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
             if (!m_renderer->saveAs(pdfPath)) {
@@ -1354,8 +1357,7 @@ void DocSheet::resetChildParent()
 }
 
 DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
-    : QWidget(parent)
-    , m_parentWidget(parent)
+    : QWidget(parent), m_parentWidget(parent)
 {
     Q_ASSERT(m_parentWidget);
     setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
@@ -1379,7 +1381,7 @@ QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, in
 {
     QImage image;
     QEventLoop loop;
-    QThread *thread = QThread::create([ =, &image]() {
+    QThread *thread = QThread::create([=, &image]() {
         image = doc->getImage(index, width, height);
     });
     QObject::connect(thread, &QThread::finished, &loop, &QEventLoop::quit);

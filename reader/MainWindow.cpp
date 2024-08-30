@@ -21,12 +21,12 @@
 #include <DFileDialog>
 #include <DDialog>
 
-#if (DTK_VERSION_MAJOR > 5 \
-    || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 2) \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 2 && DTK_VERSION_PATCH > 2)))
-#include <DWindowQuitFullButton>
+#if (DTK_VERSION_MAJOR > 5                                 \
+     || ((DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 2) \
+         || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 2 && DTK_VERSION_PATCH > 2)))
+#    include <DWindowQuitFullButton>
 #else
-#include "dwindowquitfullbutton.h" //libdtkwidget=5.2.2.10头文件引用错误，这里直接引用dwindowquitfullbutton.h
+#    include "dwindowquitfullbutton.h"   //libdtkwidget=5.2.2.10头文件引用错误，这里直接引用dwindowquitfullbutton.h
 #endif
 
 #include <QDir>
@@ -38,8 +38,8 @@
 #include <QJsonObject>
 #include <QLibraryInfo>
 
-extern "C"{
-    #include "load_libs.h"
+extern "C" {
+#include "load_libs.h"
 }
 DWIDGET_USE_NAMESPACE
 
@@ -52,12 +52,13 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
 
     if (!filePathList.isEmpty())
         foreach (const QString &filePath, m_initFilePathList) {
-            if (QFile(filePath).exists())       //过滤不存在的文件,需求中不含有提示文件不存在的文案
+            if (QFile(filePath).exists())   //过滤不存在的文件,需求中不含有提示文件不存在的文案
                 addFile(filePath);
         }
 }
 
-MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent)
+MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent)
+    : DMainWindow(parent)
 {
     initBase();
 
@@ -65,10 +66,10 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent): DMainWindow(parent
 
     addSheet(sheet);
 
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
+    QJsonObject obj {
+        { "tid", EventLogUtils::Start },
+        { "version", QCoreApplication::applicationVersion() },
+        { "mode", 1 }
     };
     EventLogUtils::get().writeLogs(obj);
 }
@@ -136,7 +137,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
-    qDebug() << "配置文件路径: ***"/* << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf")*/;
+    qDebug() << "配置文件路径: ***" /* << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf")*/;
     settings.setValue("LASTWIDTH", QString::number(width()));
 
     settings.setValue("LASTHEIGHT", QString::number(height()));
@@ -243,11 +244,14 @@ void MainWindow::initUI()
         }
     });
 #endif
+#if _ZPD_
+    //确定移除
     initDynamicLibPath();
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
+#endif
+    QJsonObject obj {
+        { "tid", EventLogUtils::Start },
+        { "version", QCoreApplication::applicationVersion() },
+        { "mode", 1 }
     };
     EventLogUtils::get().writeLogs(obj);
 }
@@ -334,7 +338,7 @@ void MainWindow::handleMainWindowExitFull()
 
 void MainWindow::setTitleBarFocusEnable(bool enable)
 {
-    auto updateWidgetFocus = [&](const QString & name, Qt::FocusPolicy policy) {
+    auto updateWidgetFocus = [&](const QString &name, Qt::FocusPolicy policy) {
         if (!this->titlebar())
             return;
         QWidget *w = this->titlebar()->findChild<QWidget *>(name);
@@ -404,8 +408,8 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
 MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
     qDebug() << __FUNCTION__ << "正在创建主窗口...";
-    int iCount = MainWindow::m_list.count();    // 获取现有窗口数目
-    MainWindow *pMainWindow = new MainWindow(filePathList);     // 创建文档查看器对话框
+    int iCount = MainWindow::m_list.count();   // 获取现有窗口数目
+    MainWindow *pMainWindow = new MainWindow(filePathList);   // 创建文档查看器对话框
 
     // 现有数目大于0时，新创建的文档查看器对话框按照一定的规律偏移显示，每次向右、向下偏移50个像素，达到错开显示的效果，防止一直显示在桌面中间
     if (iCount > 0) {
@@ -427,7 +431,7 @@ void MainWindow::showDefaultSize()
 {
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
-    int width  = settings.value("LASTWIDTH").toInt();
+    int width = settings.value("LASTWIDTH").toInt();
     int height = settings.value("LASTHEIGHT").toInt();
 
     if (width == 0 || height == 0) {
@@ -443,27 +447,30 @@ void MainWindow::initDynamicLibPath()
     // 解析ZPD定制需求提供的库 libzpdcallback.so
     LoadLibNames tmp;
     QByteArray documentpr = libPath("libzpdcallback.so").toLatin1();
-    tmp.chDocumentPr = documentpr.data();
+    if (QFile::exists(documentpr)) {
+        tmp.chDocumentPr = documentpr.data();
+    } else {
+        tmp.chDocumentPr = NULL;
+    }
     setLibNames(tmp);
     qDebug() << "动态库已加载";
-
 }
 
 QString MainWindow::libPath(const QString &strlib)
 {
-    QDir  dir;
-        QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
-        dir.setPath(path);
-        QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+    QDir dir;
+    QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+    dir.setPath(path);
+    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);   //filter name with strlib
 
-        if (list.contains(strlib))
-            return strlib;
+    if (list.contains(strlib))
+        return strlib;
 
-        list.sort();
-        if (list.size() > 0)
-            return list.last();
+    list.sort();
+    if (list.size() > 0)
+        return list.last();
 
-        return "";
+    return "";
 }
 
 void MainWindow::onDelayInit()

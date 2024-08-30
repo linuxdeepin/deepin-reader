@@ -19,15 +19,15 @@
 #include <QPainterPath>
 
 #include <unistd.h>
-extern "C"{
-    #include "load_libs.h"
+extern "C" {
+#include "load_libs.h"
 }
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
 int Utils::m_colorIndex = 0;
-QString Utils::m_currenFilePath="";
+QString Utils::m_currenFilePath = "";
 QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
@@ -92,17 +92,18 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
     return pixmap;
 }
 
-void  Utils::copyText(const QString &sText)
+void Utils::copyText(const QString &sText)
 {
+#if _ZPD_
     int intercept = 0;
-    if(getLoadLibsInstance()->m_document_clip_copy){
-        qInfo() << "当前文档: *** "/* <<m_currenFilePath*/;
-        getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(),&intercept);
-        qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " <<intercept;
+    if (getLoadLibsInstance()->m_document_clip_copy) {
+        qInfo() << "当前文档: *** " /* <<m_currenFilePath*/;
+        getLoadLibsInstance()->m_document_clip_copy(m_currenFilePath.toLocal8Bit().data(), &intercept);
+        qInfo() << "是否拦截不允许复制(1:拦截 0:不拦截): " << intercept;
     }
-    if(intercept > 0)
+    if (intercept > 0)
         return;
-
+#endif
     QClipboard *clipboard = DApplication::clipboard();
     QString sOldText = clipboard->text(QClipboard::Clipboard);
     if (sOldText != sText) {
@@ -145,7 +146,7 @@ bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
     const qint64 maxSize = 4096;
     qint64 size = -1;
 
-    QScopedArrayPointer< char > buffer(new char[maxSize]);
+    QScopedArrayPointer<char> buffer(new char[maxSize]);
 
     int ret = true;
     do {
@@ -162,8 +163,8 @@ bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
 
     sourceFile.close();
 
-    destinationFile.flush();//函数将用户缓存中的内容写入内核缓冲区
-    fsync(destinationFile.handle());//将内核缓冲写入文件(磁盘)
+    destinationFile.flush();   //函数将用户缓存中的内容写入内核缓冲区
+    fsync(destinationFile.handle());   //将内核缓冲写入文件(磁盘)
     destinationFile.close();
     return ret;
 }
@@ -234,7 +235,7 @@ QImage Utils::copyImage(const QImage &srcimg, int x, int y, int w, int h)
             src += srcimg.bytesPerLine();
             dest += image.bytesPerLine();
         }
-    } else { // Format_MonoLSB
+    } else {   // Format_MonoLSB
         Q_ASSERT(format == QImage::Format_MonoLSB);
         const uchar *src = srcimg.bits() + y * srcimg.bytesPerLine();
         uchar *dest = image.bits() + dy * image.bytesPerLine();
@@ -280,7 +281,7 @@ void Utils::setHiglightColorIndex(int index)
 
 QColor Utils::getCurHiglightColor()
 {
-    const QList<QColor> &colorlst =  getHiglightColorList();
+    const QList<QColor> &colorlst = getHiglightColorList();
     int index = qBound(0, m_colorIndex, colorlst.size() - 1);
     return colorlst.at(index);
 }
