@@ -33,8 +33,8 @@
 #include <QDebug>
 
 #include <malloc.h>
-extern "C"{
-    #include "load_libs.h"
+extern "C" {
+#include "load_libs.h"
 }
 
 /**
@@ -55,25 +55,25 @@ static bool pathControl(const QString &sPath) noexcept
      * 调用debus接口，获取被禁止读取的应用
      */
     QDBusMessage reply;
-    QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1",QDBusConnection::systemBus());
+    QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1", QDBusConnection::systemBus());
     if (iface.isValid()) {
-        if(sPath.startsWith(docPath)) {
+        if (sPath.startsWith(docPath)) {
             qInfo() << "docPath";
             reply = iface.call("GetApps", docPath);
-        } else if(sPath.startsWith(picPath)) {
+        } else if (sPath.startsWith(picPath)) {
             qInfo() << "picPath";
             reply = iface.call("GetApps", picPath);
         }
         qInfo() << "iface isValid";
     }
-    if(reply.type() == QDBusMessage::ReplyMessage) {
+    if (reply.type() == QDBusMessage::ReplyMessage) {
         /**
          * lValue：被禁止读取的应用列表，deepin-reader在列表中返回true
          */
         QList<QString> lValue = reply.arguments().takeFirst().toStringList();
         QString strApp = QStandardPaths::findExecutable("deepin-reader");
-        qInfo() << "lValue :" << lValue <<" strApp: " << strApp;
-        if(lValue.contains(strApp)) {
+        qInfo() << "lValue :" << lValue << " strApp: " << strApp;
+        if (lValue.contains(strApp)) {
             return true;
         }
     }
@@ -383,10 +383,12 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     emit sigSheetCountChanged(m_stackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
-    if(getLoadLibsInstance()->m_document_close){
+#if _ZPD_
+    if (getLoadLibsInstance()->m_document_close) {
         qInfo() << "调用三方库document_close " /*<< sheet->filePath()*/;
         getLoadLibsInstance()->m_document_close(sheet->filePath().toLocal8Bit().data());
     }
+#endif
     delete sheet;
 
     qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
