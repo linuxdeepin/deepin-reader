@@ -9,3 +9,5 @@ SOURCES += \
     $$PWD/Model.cpp
 
 INCLUDEPATH += $$PWD
+
+DEFINES += INSTALL_PREFIX=\\\"$$PREFIX\\\"

@@ -23,7 +23,7 @@ Application::Application(int &argc, char **argv)
     setApplicationName("deepin-reader");
     setOrganizationName("deepin");
     //setWindowIcon(QIcon::fromTheme("deepin-reader"));     //耗时40ms
-    setApplicationVersion(DApplication::buildVersion("1.0.0"));
+    setApplicationVersion(DApplication::buildVersion(APP_VERSION));
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc."));
