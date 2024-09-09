@@ -21,7 +21,8 @@ QMAKE_CXXFLAGS += -fPIE
 
 QMAKE_LFLAGS += -pie
 
-VERSION=$(DEB_VERSION_UPSTREAM)
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+message("APP_VERSION: "$$VERSION)
 
 contains(QMAKE_HOST.arch, mips64):{
     QMAKE_CXXFLAGS += "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi"

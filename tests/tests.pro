@@ -28,6 +28,9 @@ DEFINES += UTSOURCEDIR=\"\\\"$$PWD\\\"\"
 
 LIBS += -lgtest
 
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+message("APP_VERSION: "$$VERSION)
+
 #target
 TARGET = test-deepin-reader
 

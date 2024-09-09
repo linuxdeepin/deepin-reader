@@ -42,6 +42,20 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QString tmpHtmlFilePath = convertedFileDir + "/word/temp.html";
         QString realFilePath = convertedFileDir + "/temp.pdf";
 
+        // QDir convertedDir(convertedFileDir);
+        // if (!convertedDir.exists()) {
+        //     bool flag = convertedDir.mkdir(convertedFileDir);
+        //     qDebug() << "创建文件夹" << convertedFileDir << "是否成功？" << flag;
+        // } else {
+        //     qDebug() << "文件夹" << convertedFileDir << "已经存在！";
+        // }
+        // qDebug() << "targetDoc: " << targetDoc;
+        // qDebug() << "tmpHtmlFilePath: " << tmpHtmlFilePath;
+        // qDebug() << "realFilePath: " << realFilePath;
+
+        QString prefix = INSTALL_PREFIX;
+        // qDebug() << "应用安装路径: " << prefix;
+
         QFile file(filePath);
         if (!file.copy(targetDoc)) {
             qInfo() << QString("copy %1 failed.").arg(filePath);
@@ -87,7 +101,15 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         *pprocess = &converter;
         converter.setWorkingDirectory(convertedFileDir + "/word");
         qDebug() << "正在将docx文档转换成html..." << tmpHtmlFilePath;
-        QString pandocCommand = "pandoc " +  targetDoc + " -o " + tmpHtmlFilePath;
+        // QFile targetDocFile(targetDoc);
+        // if (targetDocFile.exists()) {
+        //     qDebug() << "文档" << targetDocFile.fileName() << "存在！";
+        // } else {
+        //     qDebug() << "文档" << targetDocFile.fileName() << "不存在！";
+        // }
+        QString pandocDataDir = prefix + "/share/pandoc/data";
+        QString pandocCommand = QString("pandoc %1 --data-dir=%2 -o %3").arg(targetDoc).arg(pandocDataDir).arg(tmpHtmlFilePath);
+
         qDebug() << "执行命令: " << pandocCommand;
         converter.start(pandocCommand);
         if (!converter.waitForStarted()) {
@@ -119,7 +141,8 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         *pprocess = &converter2;
         converter2.setWorkingDirectory(convertedFileDir + "/word");
         qDebug() << "正在将html转换成pdf..." << realFilePath;
-        QString htmltopdfCommand = "/usr/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+
+        QString htmltopdfCommand = prefix + "/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
         qDebug() << "执行命令: " << htmltopdfCommand;
         converter2.start(htmltopdfCommand);
         if (!converter2.waitForStarted()) {
