@@ -22,3 +22,7 @@ ui_*.h
 
 #else
 *.autosave
+
+#linglong building dir
+linglong
+build
