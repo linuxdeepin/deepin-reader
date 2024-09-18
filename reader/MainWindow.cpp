@@ -465,11 +465,11 @@ QString MainWindow::libPath(const QString &strlib)
     QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);   //filter name with strlib
 
     if (list.contains(strlib))
-        return strlib;
+        return dir.filePath(strlib);
 
     list.sort();
     if (list.size() > 0)
-        return list.last();
+        return dir.filePath(list.last());
 
     return "";
 }
