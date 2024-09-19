@@ -87,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
-        <translation>Podstawowe informacje</translation>
+        <translation>Informacje podstawowe</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="85"/>
@@ -110,7 +110,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation>Dodaj zakładkę</translation>
+        <translation>Dodać zakładkę</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
@@ -175,7 +175,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
-        <translation>Wyłącz tryb pełnoekranowy</translation>
+        <translation>Opuść pełny ekran</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
@@ -266,12 +266,12 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Konwersja nie powiodła się, upewnij się, że plik jest nieuszkodzony</translation>
+        <translation>Konwersja nie powiodła się, upewnij się, że plik nie jest uszkodzony</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Zapisywanie nie powiodło się</translation>
+        <translation>Nie udało się zapisać</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Obsługiwany format: %1</translation>
+        <translation>Obsługiwane formaty: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
@@ -341,7 +341,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Zaszyfrowany plik, wprowadź hasło</translation>
+        <translation>Plik zaszyfrowany, wprowadź hasło</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
-        <translation>Nieprawidłowe hasło</translation>
+        <translation>Błędne hasło</translation>
     </message>
 </context>
 <context>
@@ -497,7 +497,7 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation>Znaleziono %1 elementów</translation>
+        <translation>Znaleziono %1 przedmiotów</translation>
     </message>
 </context>
 <context>
@@ -558,7 +558,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Exit</source>
-        <translation>Wyjście</translation>
+        <translation>Wyjdź</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
@@ -628,7 +628,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Obrót w lewo</translation>
+        <translation>Obróć w lewo</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Przenieś się na początek</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Przenieś się na koniec</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation>Dodać zakładkę</translation>
+        <translation>Dodaj zakładkę</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
@@ -742,7 +742,7 @@
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
-        <translation>Usuń wszystko</translation>
+        <translation>Usuń wszystkie</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
@@ -797,7 +797,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Display in file manager</source>
-        <translation>Wyświetl w menedżerze plików</translation>
+        <translation>Wyświetl w Menedżerze plików</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
