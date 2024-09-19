@@ -825,7 +825,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
-        <translation>縮略圖</translation>
+        <translation>打開目錄縮略圖</translation>
     </message>
 </context>
 <context>
