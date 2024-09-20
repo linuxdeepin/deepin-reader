@@ -1,3 +1,10 @@
+deepin-reader (6.5.2) unstable; urgency=medium
+
+  * fix: shortcut copy text not work(Bug: 234693)(Influence: shortcut-copy)
+  * feat: [translation]add transifex config(Task: 361363)
+
+ -- renbin <renbin@uniontech.com>  Fri, 20 Sep 2024 13:08:18 +0800
+
 deepin-reader (6.5.1) unstable; urgency=medium
 
   * New version 6.5.1
