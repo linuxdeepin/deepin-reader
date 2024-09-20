@@ -4,7 +4,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="39"/>
         <source>Document Viewer</source>
-        <translation>Просмотр документов</translation>
+        <translation>Просмотрщик документов</translation>
     </message>
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
-        <translation>Объект</translation>
+        <translation>Предмет</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
@@ -42,7 +42,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
-        <translation>Создатель</translation>
+        <translation>Составитель</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
@@ -271,7 +271,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Сохранить не удалось</translation>
+        <translation>Сохранение не удалось</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
@@ -302,7 +302,7 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation>Перетащите документы сюда</translation>
+        <translation>Перетащить документы сюда</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
@@ -492,7 +492,7 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
-        <translation>Нет результатов поиска</translation>
+        <translation>Поиск не дал результатов</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
@@ -638,17 +638,17 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Перейти к началу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Перейти в конец</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
-        <translation>Выберите текст</translation>
+        <translation>Выбрать текст</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
@@ -708,12 +708,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
         <source>Display shortcuts</source>
-        <translation>Показать горячие клавиши</translation>
+        <translation>Показать сочетания клавиш</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
-        <translation>Добавить примечание</translation>
+        <translation>Добавить аннотацию</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>Это первая страница</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>Это последняя страница</translation>
     </message>
 </context>
 <context>

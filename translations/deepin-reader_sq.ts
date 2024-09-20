@@ -578,7 +578,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
         <source>Open</source>
-        <translation>Hape</translation>
+        <translation>Hap</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Kalo te fillimi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Kalo te fundi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>Gjendet në faqen e parë</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>Gjendet në faqen e fundit</translation>
     </message>
 </context>
 <context>
@@ -817,7 +817,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Shtyp</translation>
+        <translation>Shtype</translation>
     </message>
 </context>
 <context>
