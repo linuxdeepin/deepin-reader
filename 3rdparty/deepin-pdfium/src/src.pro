@@ -49,6 +49,10 @@ SOURCES += \
     $$PWD/dpdfpage.cpp \
     $$PWD/dpdfannot.cpp
 
-target.path  = $$PREFIX/lib
+isEmpty(LIB_INSTALL_DIR) {
+ target.path  = $$PREFIX/lib
+} else {
+ target.path  = $$LIB_INSTALL_DIR
+}
 
 INSTALLS += target
