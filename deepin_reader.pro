@@ -9,12 +9,14 @@ CONFIG  += ordered
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
 
+message("Build on host arch: $$QMAKE_HOST.arch")
+
 SUBDIRS += 3rdparty/deepin-pdfium
 
 SUBDIRS += htmltopdf
 
 SUBDIRS += reader
 
-!contains(QMAKE_HOST.arch, loong64): {
+contains(QMAKE_HOST.arch, x86_64) | contains(QMAKE_HOST.arch, aarch64): {
     SUBDIRS += tests
 }
