@@ -87,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
-        <translation>Të dhëna elementare</translation>
+        <translation>Hollësi elementare</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="85"/>
@@ -130,7 +130,7 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
         <source>Remove annotation</source>
-        <translation>Hiq shënim</translation>
+        <translation>Hiqe shënimin</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
@@ -175,7 +175,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
-        <translation>Dil nga mënyra krejt ekrani</translation>
+        <translation>Dil nga mënyra “Sa krejt ekrani”</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
@@ -235,7 +235,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Document info</source>
-        <translation>Të dhëna dokumenti</translation>
+        <translation>Hollësi dokumenti</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation>Të ruhen ndryshimet te &quot;%1&quot;?</translation>
+        <translation>Të ruhen ndryshimet te “%1”?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -510,7 +510,7 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Nëse i zini besë sajtit, klikoni mbi Lejoje, përndryshe klikoni Bllokoje.</translation>
+        <translation>Nëse i zini besë sajtit, klikoni mbi “Lejoje”, përndryshe klikoni “Bllokoje”.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
@@ -568,12 +568,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Page up</source>
-        <translation>Tasti Page Up</translation>
+        <translation>Tasti “Page Up”</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Page down</source>
-        <translation>Tasti Page Down</translation>
+        <translation>Tasti “Page Down”</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
@@ -841,7 +841,7 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation>Shteg Kartele Dokumenti</translation>
+        <translation>Shteg Kartele Dokumenti.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
