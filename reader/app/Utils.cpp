@@ -308,11 +308,6 @@ bool Utils::isWayland()
     }
 }
 
-bool Utils::isTreeland()
-{
-    return qEnvironmentVariable("DDE_CURRENT_COMPOSITOR") == QStringLiteral("TreeLand");
-}
-
 void Utils::setCurrentFilePath(QString currentFilePath)
 {
     m_currenFilePath = currentFilePath;

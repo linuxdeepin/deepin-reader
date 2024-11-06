@@ -127,11 +127,6 @@ public:
     static bool isWayland();
 
     /**
-     * @return 返回当前桌面环境是否为 Treeland
-     */
-    static bool isTreeland();
-
-    /**
      * @brief 设置当前操作的文档名称
      * @param currentFilePath
      */
