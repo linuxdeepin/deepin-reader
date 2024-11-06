@@ -1,3 +1,9 @@
+deepin-reader (6.5.4) unstable; urgency=medium
+
+  *remove kwayland-shell env 
+
+ -- Liu zheng <liuzheng@uniontech.com>  Wed, 06 Nov 2024 16:11:13 +0800
+
 deepin-reader (6.5.3) unstable; urgency=medium
 
   * Fix pdf conflict problem

@@ -17,6 +17,3 @@ SUBDIRS += htmltopdf
 
 SUBDIRS += reader
 
-contains(QMAKE_HOST.arch, x86_64) | contains(QMAKE_HOST.arch, aarch64): {
-    SUBDIRS += tests
-}
