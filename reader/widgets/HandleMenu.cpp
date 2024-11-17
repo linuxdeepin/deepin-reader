@@ -5,6 +5,7 @@
 
 #include "HandleMenu.h"
 #include "DocSheet.h"
+#include <QActionGroup>
 
 HandleMenu::HandleMenu(DWidget *parent)
     : DMenu(parent)

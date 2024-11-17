@@ -4,8 +4,9 @@
 #include <QtCore/qglobal.h>
 #include <QMutexLocker>
 #include <QDebug>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QRectF>
+#include <QMutex>
 
 #ifndef BUILD_DEEPDF_STATIC
 #    if defined(BUILD_DEEPDF_LIB)
@@ -45,14 +46,14 @@ private:
 };
 
 //pdfium即使不同文档之间loadpage和renderpage也不是线程安全，需要加锁
-class DPdfMutexLocker : public QMutexLocker
+class DPdfMutexLocker : public QMutexLocker<QMutex>
 {
 public:
-    DPdfMutexLocker(const QString &tmpLog);
+    explicit DPdfMutexLocker(const QString &tmpLog);
     ~DPdfMutexLocker();
 
     QString m_log;
-    QTime m_time;
+    QElapsedTimer m_timer;
 };
 
 #endif // DPDFGLOBAL_H

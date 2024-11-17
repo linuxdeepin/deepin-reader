@@ -14,6 +14,7 @@
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
 #include <QPainterPath>
+#include <QTransform>
 
 ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
@@ -30,11 +31,11 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         bool bShowBookMark = index.data(ImageinfoType_e::IMAGE_BOOKMARK).toBool();
 
-        QMatrix matrix;
+        QTransform transform;
 
-        matrix.rotate(rotate);
+        transform.rotate(rotate);
 
-        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(matrix);
+        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(transform);
 
         const int borderRadius = 6;
 

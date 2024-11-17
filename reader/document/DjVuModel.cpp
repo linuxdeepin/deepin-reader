@@ -18,7 +18,7 @@
 
 #include <libdjvu/ddjvuapi.h>
 #include <libdjvu/miniexp.h>
-
+#include <QRegularExpression>
 #include <qmath.h>
 #include <cstdio>
 #include <unistd.h>
@@ -624,7 +624,8 @@ QVector<PageSection> DjVuPage::search(const QString &text, bool matchCase, bool 
 
     const QTransform transform = QTransform::fromScale(72.0 / m_resolution, 72.0 / m_resolution);
 
-    const QStringList words = text.split(QRegExp(QLatin1String("\\W+")), QString::SkipEmptyParts);
+    QStringList words = text.split(QRegularExpression(QLatin1String("\\W+")));
+    words.removeAll(QString());
 
     const QVector< QRectF > results = findText(pageTextExp, m_size, transform, words, matchCase, wholeWords);
 

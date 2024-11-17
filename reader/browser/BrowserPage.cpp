@@ -13,7 +13,7 @@
 #include "Global.h"
 #include "SheetRenderer.h"
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>

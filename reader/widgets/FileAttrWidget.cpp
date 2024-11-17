@@ -102,7 +102,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
 
     auto scroll = new DScrollArea(this);
     QPalette palette = scroll->viewport()->palette();
-    palette.setBrush(QPalette::Background, Qt::NoBrush);
+    palette.setBrush(QPalette::Window, Qt::NoBrush);
     scroll->viewport()->setPalette(palette);
 
     scroll->setFrameShape(QFrame::NoFrame);
@@ -125,7 +125,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
     WordWrapLabel *labelText = new WordWrapLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
     labelText->setFixedWidth(this->width());
-    labelText->setMargin(20);
+    labelText->setContentsMargins(20, 20, 20, 20);
     labelText->setAlignment(Qt::AlignCenter);
     labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     labelText->setText(labelText->fontMetrics().elidedText(sData, Qt::ElideMiddle, 680));

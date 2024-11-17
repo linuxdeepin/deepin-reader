@@ -117,11 +117,19 @@ void SlidePlayWidget::onTimerout()
     this->hide();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void SlidePlayWidget::enterEvent(QEvent *event)
 {
     m_timer.stop();
     DFloatingWidget::enterEvent(event);
 }
+#else
+void SlidePlayWidget::enterEvent(QEnterEvent *event)
+{
+    m_timer.stop();
+    DFloatingWidget::enterEvent(event);
+}
+#endif
 
 void SlidePlayWidget::leaveEvent(QEvent *event)
 {
