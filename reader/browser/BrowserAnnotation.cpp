@@ -6,7 +6,7 @@
 #include "BrowserAnnotation.h"
 #include "BrowserPage.h"
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>

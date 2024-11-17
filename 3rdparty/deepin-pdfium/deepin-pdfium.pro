@@ -4,5 +4,8 @@ TEMPLATE = subdirs
 #QMAKE_CXX += -g -fsanitize=undefined,address -O2
 #QMAKE_CXXFLAGS += -g -fsanitize=undefined,address -O2
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
+# 添加库
+LIBS += -ldjvulibre -ljpeg 
+
 
 SUBDIRS += src

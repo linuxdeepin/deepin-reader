@@ -12,7 +12,7 @@
 #include <DIconButton>
 
 #include <QHBoxLayout>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <DGuiApplicationHelper>
 
 FindWidget::FindWidget(DWidget *parent)
@@ -40,10 +40,10 @@ void FindWidget::setDocSheet(DocSheet *sheet)
 
 void FindWidget::updatePosition()
 {
-    this->move(m_parentWidget->width() - this->width() - 10, m_yOff + 10);
+    QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
+    this->move(screenGeometry.width() - this->width() - 10, m_yOff + 10);
 
     this->show();
-
     this->raise();
 }
 

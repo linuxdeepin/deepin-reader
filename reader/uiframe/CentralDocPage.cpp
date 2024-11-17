@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 #include <QStackedLayout>
 #include <QDesktopServices>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QStackedLayout>
@@ -31,6 +31,8 @@
 #include <QUuid>
 #include <QTimer>
 #include <QDebug>
+#include <QScreen>
+#include <QStandardPaths>
 
 #include <malloc.h>
 extern "C" {
@@ -97,7 +99,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
     m_mainLayout->addWidget(m_tabBar);
     m_mainLayout->addItem(m_stackedLayout);
-    m_mainLayout->setMargin(0);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
 
     this->setLayout(m_mainLayout);
@@ -697,6 +699,9 @@ void CentralDocPage::openSlide()
     DocSheet *docSheet = getCurSheet();
     if (docSheet && docSheet->opened() && m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(getCurSheet());
+        // Use QScreen instead of QDesktopWidget
+        QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
+        m_slideWidget->move(screenGeometry.center() - m_slideWidget->rect().center());
     }
 }
 

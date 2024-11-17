@@ -14,7 +14,13 @@
 #include <DApplication>
 #include <DTitlebar>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#else
+#include <QScreen>
+#include <QGuiApplication>
+#endif
+
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QDebug>
@@ -46,6 +52,8 @@ void SlideWidget::initControl()
         parentWidget()->stackUnder(this);
         connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
     }
+    
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QDesktopWidget *dk = QApplication::desktop();
     int screenNum = dk->screenNumber(parentWidget()); //该应用在哪块屏幕上显示
     int width; //幻灯片宽
@@ -59,6 +67,12 @@ void SlideWidget::initControl()
         height = dApp->primaryScreen()->size().height();
     }
     qInfo() << QString("screenNum:%1 width:%2 height:%3").arg(screenNum).arg(width).arg(height);
+#else
+    QScreen *screen = QApplication::primaryScreen();
+    int width = screen->size().width();
+    int height = screen->size().height();
+#endif
+
     this->setGeometry(0, 0, width, height);
 
     m_loadSpinner = new DSpinner(this);
@@ -326,7 +340,7 @@ void SlideWidget::mouseReleaseEvent(QMouseEvent *event)
 void SlideWidget::wheelEvent(QWheelEvent *event)
 {
     DWidget::wheelEvent(event);
-    if (event->delta() > 0) {
+    if (event->angleDelta().y() > 0) {
         onPreBtnClicked();
     } else {
         onNextBtnClicked();

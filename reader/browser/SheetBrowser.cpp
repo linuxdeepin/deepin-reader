@@ -653,7 +653,8 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
         if (nullptr == m_sheet)
             return;
 
-        if (event->delta() > 0) {
+        // Use angleDelta() instead of delta()
+        if (event->angleDelta().y() > 0) {
             m_sheet->zoomin();
         } else {
             m_sheet->zoomout();

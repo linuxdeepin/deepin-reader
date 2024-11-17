@@ -1,7 +1,8 @@
-
 #include <QtCore>
 #include <QString>
-
+#include <QMutex>
+#include <QMutexLocker>
+#include <QDebug>
 #include "dpdfglobal.h"
 #include "public/fpdfview.h"
 
@@ -46,16 +47,16 @@ QString DPdfGlobal::textCodeType(const char *text)
     return encodeind;
 }
 
-Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, (QMutex::Recursive));
+Q_GLOBAL_STATIC_WITH_ARGS(QMutex, pdfMutex, ());
 
-DPdfMutexLocker::DPdfMutexLocker(const QString &tmpLog): QMutexLocker(pdfMutex())
+DPdfMutexLocker::DPdfMutexLocker(const QString &tmpLog): QMutexLocker<QMutex>(pdfMutex())
 {
-//    m_log = tmpLog;
-//    qInfo() << m_log + " begin ";
-//    m_time.start();
+    m_log = tmpLog;
+    qInfo() << m_log + " begin ";
+    m_timer.start();
 }
 
 DPdfMutexLocker::~DPdfMutexLocker()
 {
-//    qInfo() << m_log + " end time = " << m_time.elapsed();
+    qInfo() << m_log + " end time = " << m_timer.elapsed();
 }
