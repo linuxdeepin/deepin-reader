@@ -1,3 +1,9 @@
+deepin-reader (6.5.5) unstable; urgency=medium
+
+  * chore: update linglong version
+
+ -- renbin <renbin@uniontech.com>  Sat, 30 Nov 2024 13:44:26 +0800
+
 deepin-reader (6.5.4) unstable; urgency=medium
 
   *remove kwayland-shell env 
