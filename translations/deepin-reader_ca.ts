@@ -110,7 +110,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation>Afegeix-hi un punt de lectura</translation>
+        <translation>Afegeix un marcador</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
@@ -578,7 +578,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
         <source>Open</source>
-        <translation>Obre</translation>
+        <translation>Obre&apos;l</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
@@ -593,17 +593,17 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Save as</source>
-        <translation>Anomena i desa</translation>
+        <translation>Desa-ho com a...</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
         <source>Print</source>
-        <translation>Imprimeix</translation>
+        <translation>Imprimeix-lo</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
         <source>Save</source>
-        <translation>Desa</translation>
+        <translation>Desa-ho</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Mou al principi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Mou fins al final</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -683,7 +683,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Copy</source>
-        <translation>Copia</translation>
+        <translation>Copia-ho</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
@@ -787,12 +787,12 @@
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
-        <translation>Desa&apos;l</translation>
+        <translation>Desa-ho</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save as</source>
-        <translation>Desa&apos;l com a</translation>
+        <translation>Desa-ho com a...</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
