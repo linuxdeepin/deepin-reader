@@ -31,8 +31,6 @@ build: |
   find . -type f -name "deepin_reader.pro" -exec sed -i 's/SUBDIRS += tests/#SUBDIRS += tests/g' {} +
   # 替换安装的Qt webengine 相关库的查找路径
   find ${PREFIX} -name "*.prl" -exec sed -i 's/\$\$\[QT_INSTALL_LIBS\]\/libQt5WebEngineCore.so/\$\$\[APP_INSTALL_LIBS\]\/libQt5WebEngineCore.so/g' {} +
-  find ${PREFIX} -name "*.prl" -exec sed -i 's/\$\$\[QT_INSTALL_LIBS\]\/libQt5WebChannel.so/\$\$\[APP_INSTALL_LIBS\]\/libQt5WebChannel.so/g' {} +
-  find ${PREFIX} -name "*.prl" -exec sed -i 's/\$\$\[QT_INSTALL_LIBS\]\/libQt5Positioning.so/\$\$\[APP_INSTALL_LIBS\]\/libQt5Positioning.so/g' {} +
 
   # 获取版本号
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
