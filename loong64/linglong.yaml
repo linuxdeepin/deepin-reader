@@ -82,6 +82,9 @@ build: |
   # pandoc data 文件添加到 install 文件
   find "${PREFIX}/share/pandoc/" -type f -o -type d >> "${ID_VALUE}.install"
 
+  # 添加帮助手册到 install
+  find $PREFIX/share/deepin-manual/manual-assets/application/deepin-reader >> "${ID_VALUE}.install"
+
 sources:
   # - kind: git
   #   url: https://github.com/linuxdeepin/deepin-reader
