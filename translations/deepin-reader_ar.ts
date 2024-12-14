@@ -130,14 +130,14 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
         <source>Remove annotation</source>
-        <translation>إزالة النص التوضيحي</translation>
+        <translation>إزالة العلامة المرجعية</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
         <source>Add annotation</source>
-        <translation>إضافة نص توضيحي</translation>
+        <translation>إضافة تعليق توضيحي</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
@@ -187,7 +187,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Slide show</source>
-        <translation>عرض الشرائح</translation>
+        <translation>عرض شرائحي</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
@@ -261,7 +261,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation>الرجاء التحقق ما إذا كان الملف تضرر</translation>
+        <translation>نرجوا التحقق ما إذا كان الملف متضرر</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
@@ -294,7 +294,7 @@
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>موافق</translation>
+        <translation>حسناً</translation>
     </message>
 </context>
 <context>
@@ -352,7 +352,7 @@
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>موافق</translation>
+        <translation>حسناً</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
@@ -391,7 +391,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
         <source>Add annotation</source>
-        <translation>إضافة نص توضيحي</translation>
+        <translation>إضافة تعليق توضيحي</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
@@ -497,7 +497,7 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation>تم إيجاد %1 عنصر (عناصر)</translation>
+        <translation>تم إيجاد %1 عنصر</translation>
     </message>
 </context>
 <context>
@@ -673,7 +673,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
-        <translation>عرض شرائح</translation>
+        <translation>عرض شرائحي</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
@@ -713,7 +713,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
-        <translation>إضافة نص توضيحي</translation>
+        <translation>إضافة تعليق توضيحي</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Remove annotation</source>
-        <translation>إزالة النص التوضيحي</translation>
+        <translation>إزالة العلامة المرجعية</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
@@ -755,7 +755,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
-        <translation>صفحة 1%</translation>
+        <translation>صفحة %1</translation>
     </message>
 </context>
 <context>
@@ -768,7 +768,7 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation>إنها الصفحة الأخيرة</translation>
+        <translation>هذه هي الصفحة الأخيرة</translation>
     </message>
 </context>
 <context>
@@ -847,12 +847,12 @@
         <location filename="../reader/main.cpp" line="41"/>
         <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation>مسار الملف</translation>
+        <translation>مسار الملف.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation>مسار الصورة المصغرة</translation>
+        <translation>مسار الصورة المصغرة.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>
