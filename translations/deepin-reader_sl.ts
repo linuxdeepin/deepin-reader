@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Premik na začetek</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Premik na konec</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>To je prva stran</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>To je zadnja stran</translation>
     </message>
 </context>
 <context>
