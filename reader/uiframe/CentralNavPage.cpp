@@ -73,7 +73,7 @@ void CentralNavPage::onThemeChanged()
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-        plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Window));
+        plt.setColor(Dtk::Gui::DPalette::Window, plt.color(Dtk::Gui::DPalette::Window));
         iconSvg->setPalette(plt);
         QIcon importIcon = QIcon::fromTheme(QString("dr_") + "import_photo");
         int tW = 128;

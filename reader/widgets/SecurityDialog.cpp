@@ -7,7 +7,7 @@
 
 #include <DFontSizeManager>
 #include <DLabel>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QTextOption>
 #include <QPainter>
@@ -22,7 +22,7 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
     QFont font; // 应用使用字体对象
     QFontMetrics font_label(font);
     QString strText = text;
-    int titlewidth = font_label.width(strText);
+    int titlewidth = font_label.horizontalAdvance(strText);
     QString str;
     NewStr newstr;
     int width = pDesLbl->width();
@@ -33,7 +33,7 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
         for (int i = 0; i < strText.count(); i++) {
             str += strText.at(i);
 
-            if (font_label.width(str) > width) { //根据label宽度调整每行字符数
+            if (font_label.horizontalAdvance(str) > width) { //根据label宽度调整每行字符数
                 str.remove(str.count() - 1, 1);
                 newstr.strList.append(str);
                 newstr.resultStr += str + "\n";
@@ -111,13 +111,12 @@ void SecurityDialog::setLabelColor(DLabel *label, qreal alphaF)
     if (nullptr == label) {
         return;
     }
-
     // 根据UI要求使用对应的颜色并设置透明度
-    DPalette pamessageDetail = DApplicationHelper::instance()->palette(label);
+    DPalette pamessageDetail = label->palette();
     QColor pamessageDetailColor = pamessageDetail.color(DPalette::Active, DPalette::BrightText);
     pamessageDetailColor.setAlphaF(alphaF);
     pamessageDetail.setColor(DPalette::Active, DPalette::WindowText, pamessageDetailColor);
-    DApplicationHelper::instance()->setPalette(label, pamessageDetail);
+    label->setPalette(pamessageDetail); // 设置调色板
 }
 
 void SecurityDialog::changeEvent(QEvent *event)

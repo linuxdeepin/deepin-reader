@@ -191,8 +191,8 @@ void BookMarkWidget::showMenu()
 
 void BookMarkWidget::onUpdateTheme()
 {
-    DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    QPalette plt = QApplication::palette();
+    plt.setColor(QPalette::Window, plt.color(QPalette::Base));
     setPalette(plt);
 
     m_pAddBookMarkBtn->setPalette(plt);

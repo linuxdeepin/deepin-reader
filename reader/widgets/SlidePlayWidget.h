@@ -137,7 +137,11 @@ protected:
      * 鼠标进入事件
      * @param event
      */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void enterEvent(QEvent *event) override;
+#else
+    void enterEvent(QEnterEvent *event) override;
+#endif
 
     /**
      * @brief leaveEvent

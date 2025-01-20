@@ -33,7 +33,7 @@
 #include <QStandardPaths>
 #include <QSettings>
 #include <QTimer>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QPropertyAnimation>
 #include <QJsonObject>
 #include <QLibraryInfo>
@@ -303,15 +303,15 @@ void MainWindow::handleMainWindowFull()
 
     m_docTabWidget->setVisible(tabbarVisible);
 
-    titlebar()->setGeometry(0, 0, dApp->primaryScreen()->size().width(), titlebar()->height());
+    titlebar()->setGeometry(0, 0, QGuiApplication::primaryScreen()->size().width(), titlebar()->height());
 
-    m_docTabWidget->setGeometry(0, titlebar()->height(), dApp->primaryScreen()->size().width(), 37);
+    m_docTabWidget->setGeometry(0, titlebar()->height(), QGuiApplication::primaryScreen()->size().width(), 37);
 
     int fulltitleH = tabbarVisible ? titlebar()->height() + 37 : titlebar()->height();
 
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
 
-    m_FullTitleWidget->setGeometry(0, -fulltitleH, dApp->primaryScreen()->size().width(), fulltitleH);
+    m_FullTitleWidget->setGeometry(0, -fulltitleH, QGuiApplication::primaryScreen()->size().width(), fulltitleH);
 
     updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
 }
@@ -331,7 +331,7 @@ void MainWindow::handleMainWindowExitFull()
 
         setTitleBarFocusEnable(true);
 
-        m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height());
+        m_FullTitleWidget->setGeometry(0, -m_FullTitleWidget->height(), QGuiApplication::primaryScreen()->size().width(), m_FullTitleWidget->height());
 
         updateOrderWidgets(this->property("orderlist").value<QList<QWidget *>>());
     }
@@ -370,7 +370,7 @@ void MainWindow::resizeFullTitleWidget()
 
     m_FullTitleWidget->setMinimumHeight(fulltitleH);
 
-    m_FullTitleWidget->resize(dApp->primaryScreen()->size().width(), fulltitleH);
+    m_FullTitleWidget->resize(QGuiApplication::primaryScreen()->size().width(), fulltitleH);
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
@@ -415,7 +415,7 @@ MainWindow *MainWindow::createWindow(QStringList filePathList)
     // 现有数目大于0时，新创建的文档查看器对话框按照一定的规律偏移显示，每次向右、向下偏移50个像素，达到错开显示的效果，防止一直显示在桌面中间
     if (iCount > 0) {
         int windowOffset = iCount * 50;
-        QRect screenGeometry = qApp->desktop()->screenGeometry(QCursor::pos());
+        QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
         pMainWindow->move(screenGeometry.x() + windowOffset, screenGeometry.y() + windowOffset);
     }
     qDebug() << __FUNCTION__ << "主窗口已创建并显示";

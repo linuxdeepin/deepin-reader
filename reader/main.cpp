@@ -10,10 +10,13 @@
 #include "DBusObject.h"
 
 #include <DLog>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationSettings>
+#endif
 
 #include <QCommandLineParser>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QAccessible>
 #include <QDebug>
 #include <QFontDatabase>
@@ -76,8 +79,10 @@ int main(int argc, char *argv[])
     QAccessible::installFactory(accessibleFactory);
 
     //Dtk自动保存主题
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationSettings savetheme;
     Q_UNUSED(savetheme)
+#endif
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();

@@ -32,7 +32,7 @@
 #include <QClipboard>
 #include <QFileInfo>
 #include <QPropertyAnimation>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDebug>
 #include <QTemporaryDir>
 #include <QProcess>
@@ -75,7 +75,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     else if (Dr::DOCX == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
     else
-        m_sidebar = new SheetSidebar(this, nullptr);
+        m_sidebar = new SheetSidebar(this);
 
     m_sidebar->setMinimumWidth(266);
 
@@ -157,7 +157,8 @@ QUuid DocSheet::getUuid(DocSheet *sheet)
 {
     g_lock.lockForRead();
 
-    QUuid uuid = g_uuidList.value(g_sheetList.indexOf(sheet));
+    // 将 QString 转换为 QUuid
+    QUuid uuid = QUuid::fromString(g_uuidList.value(g_sheetList.indexOf(sheet)));
 
     g_lock.unlock();
 
@@ -756,7 +757,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel); //打印纸张类型页面大小
 
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     for (int i = 0; i < pageRange.count(); ++i) {
         if (pageRange[i] > pageCount() || pageRange[i] > m_browser->pages().count())
@@ -788,7 +789,7 @@ void DocSheet::onPrintRequested(DPrinter *printer)
 
     const QRectF pageRect = printer->pageRect(QPrinter::DevicePixel);
 
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     int pagesCount = pageCount();
 
@@ -876,7 +877,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             resetChildParent();
             this->insertWidget(0, m_browser);
 
-            m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
+            m_sidebar->resize(m_sidebar->width(), QGuiApplication::primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
             m_sidebar->setVisible(false);
         }
@@ -895,7 +896,7 @@ void DocSheet::setSidebarVisible(bool isVisible, bool notify)
             resetChildParent();
             this->insertWidget(0, m_browser);
 
-            m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
+            m_sidebar->resize(m_sidebar->width(), QGuiApplication::primaryScreen()->size().height());
             m_sidebar->move(-m_sidebar->width(), 0);
             m_sidebar->setVisible(false);
         }
@@ -979,7 +980,7 @@ void DocSheet::openFullScreen()
     resetChildParent();
     this->insertWidget(0, m_browser);
 
-    m_sidebar->resize(m_sidebar->width(), dApp->primaryScreen()->size().height());
+    m_sidebar->resize(m_sidebar->width(), QGuiApplication::primaryScreen()->size().height());
     m_sidebar->move(-m_sidebar->width(), 0);
     m_sidebar->setVisible(false);
 

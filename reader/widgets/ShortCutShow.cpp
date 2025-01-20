@@ -11,7 +11,7 @@
 #include <DGuiApplicationHelper>
 
 #include <QProcess>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -34,7 +34,7 @@ void ShortCutShow::setSheet(DocSheet *sheet)
 
 void ShortCutShow::show()
 {
-    QRect rect = qApp->desktop()->geometry();
+    QRect rect = QGuiApplication::primaryScreen()->geometry();
     QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 #if (DTK_VERSION >= DTK_VERSION_CHECK(5, 5, 2, 0))
     // 获取当前焦点位置（光标所在屏幕中心）

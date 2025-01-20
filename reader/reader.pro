@@ -1,7 +1,36 @@
-#config
-QT += core gui sql printsupport dbus widgets
+include($$PWD/src.pri)
 
-PKGCONFIG += ddjvuapi dtkwidget
+#config
+# 基础 Qt 模块
+equals(QT_MAJOR_VERSION, 6) {
+    QT += core gui widgets network dbus sql svg webchannel webenginewidgets concurrent xml core5compat
+
+    # Qt6 specific configurations
+    PKGCONFIG += dtk6widget dtk6gui dtk6core
+
+    # Qt6 lrelease configuration
+    QMAKE_LRELEASE = /usr/lib/qt6/bin/lrelease
+
+} else {
+    QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
+
+    # Qt5 specific configurations
+    PKGCONFIG += dtkwidget dframeworkdbus poppler-qt5
+
+    QMAKE_LRELEASE = lrelease
+}
+
+# # 检查 Qt 版本
+# greaterThan(QT_MAJOR_VERSION, 5): {
+#     # 如果 Qt 版本是 6
+#     CONFIG += build_with_qt6
+#     DTK_VERSION_MAJOR = 6
+# } else {
+#     # 如果不是 Qt 6
+#     DTK_VERSION_MAJOR = ""
+# }
+
+message("Using Qt version: $$QT_MAJOR_VERSION")
 
 isEmpty(PREFIX) {
  PREFIX = /usr
@@ -45,9 +74,9 @@ TEMPLATE = app
 
 # 判断系统环境
 MAJOR_VERSION=$$system("cat /etc/os-version | grep MajorVersion | grep -o '[0-9]\+'")
-#message("MAJOR_VERSION: " $$MAJOR_VERSION)
-equals(MAJOR_VERSION, 23) {
-    message("----------------- OS_BUILD_V23 on")
+message("MAJOR_VERSION: " $$MAJOR_VERSION)
+equals(MAJOR_VERSION, 25) {
+    message("----------------- OS_BUILD_V25 on")
     DEFINES += OS_BUILD_V23
 }
 
@@ -68,24 +97,24 @@ manual.files = $$PWD/../assets/*
 
 INSTALLS += target desktop icon manual
 
-#translate
-TRANSLATIONS += $$PWD/../translations/deepin-reader.ts
+# #translate
+# TRANSLATIONS += $$PWD/../translations/deepin-reader.ts
 
-CONFIG(release, debug|release) {
-    #遍历目录中的ts文件，调用lrelease将其生成为qm文件
-    TRANSLATIONFILES= $$files($$PWD/../translations/*.ts)
-    for(tsfile, TRANSLATIONFILES) {
-        qmfile = $$replace(tsfile, .ts$, .qm)
-        system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
-    }
-    #将qm文件添加到安装包
-    dtk_translations.path = $$PREFIX/share/$$TARGET/translations
-    dtk_translations.files = $$PWD/../translations/*.qm
-    INSTALLS += dtk_translations
-}
-
+# CONFIG(release, debug|release) {
+#     #遍历目录中的ts文件，调用lrelease将其生成为qm文件
+#     TRANSLATIONFILES= $$files($$PWD/../translations/*.ts)
+#     for(tsfile, TRANSLATIONFILES) {
+#         qmfile = $$replace(tsfile, .ts$, .qm)
+#         system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
+#     }
+#     #将qm文件添加到安装包
+#     dtk_translations.path = $$PREFIX/share/$$TARGET/translations
+#     dtk_translations.files = $$PWD/../translations/*.qm
+#     INSTALLS += dtk_translations
+# }
+# 添加库
+LIBS += -ldjvulibre -ljpeg 
 #code
 SOURCES += \
     $$PWD/main.cpp \
 
-include($$PWD/src.pri)

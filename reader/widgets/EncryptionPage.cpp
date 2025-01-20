@@ -116,6 +116,6 @@ void EncryptionPage::onSetPasswdFocus()
 void EncryptionPage::onUpdateTheme()
 {
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
-    plt.setColor(Dtk::Gui::DPalette::Background, plt.color(Dtk::Gui::DPalette::Base));
+    plt.setColor(Dtk::Gui::DPalette::Window, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
 }

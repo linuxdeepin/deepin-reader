@@ -35,7 +35,7 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
 
     QHBoxLayout *pHLayoutContant = new QHBoxLayout;
 
-    pHLayoutContant->setMargin(12);
+    pHLayoutContant->setContentsMargins(12, 12, 12, 12);
 
     this->setLayout(pHLayoutContant);
 
@@ -200,11 +200,11 @@ void TextEditWidget::onBlurWindowChanged()
 {
     if (DWindowManagerHelper::instance()->hasComposite()) {
         this->graphicsEffect()->setEnabled(true);
-        parentWidget()->layout()->setMargin(12);
+        parentWidget()->layout()->setContentsMargins(12, 12, 12, 12);
 
     } else {
         this->graphicsEffect()->setEnabled(false);
-        parentWidget()->layout()->setMargin(0);
+        parentWidget()->layout()->setContentsMargins(0, 0, 0, 0);
     }
 }
 

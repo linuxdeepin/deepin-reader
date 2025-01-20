@@ -1,6 +1,41 @@
 TEMPLATE = subdirs
 
 #QMAKE_CXX = ccache $$QMAKE_CXX //linux使用ccache加速c++编译速度
+#config
+# 基础 Qt 模块
+equals(QT_MAJOR_VERSION, 6) {
+    QT += core gui widgets network dbus sql svg webchannel webenginewidgets concurrent xml core5compat
+
+    # Qt6 specific configurations
+    PKGCONFIG += dtk6widget dtk6gui dtk6core
+
+    # Qt6 lrelease configuration
+    QMAKE_LRELEASE = /usr/lib/qt6/bin/lrelease
+
+    LIBS += -L$$PREFIX/lib/$$QMAKE_HOST.arch-linux-gnu/ -lKF6GlobalAccel -lKF6I18n
+    INCLUDEPATH += $$PREFIX/include/KF6/KGlobalAccel
+    INCLUDEPATH += $$PREFIX/include/KF6/KI18n
+
+} else {
+    QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
+
+    # Qt5 specific configurations
+    PKGCONFIG += dtkwidget dframeworkdbus poppler-qt5
+
+    QMAKE_LRELEASE = lrelease
+
+    LIBS += -L$$PREFIX/lib/$$QMAKE_HOST.arch-linux-gnu/ -lKF5GlobalAccel -lKF5I18n
+    INCLUDEPATH += $$PREFIX/include/KF5/KGlobalAccel
+    INCLUDEPATH += $$PREFIX/include/KF5/KI18n
+}
+
+# 添加库
+LIBS += `pkg-config --libs libjpeg`
+LIBS += `pkg-config --libs ddjvu`
+
+# 如果需要包含头文件的路径，可以添加
+INCLUDEPATH += `pkg-config --cflags libjpeg`
+INCLUDEPATH += `pkg-config --cflags ddjvu`
 
 CONFIG  += ordered
 
