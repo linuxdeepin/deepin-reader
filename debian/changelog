@@ -1,3 +1,10 @@
+deepin-reader (6.5.12) unstable; urgency=medium
+
+  * Update version to 6.5.12
+  * Update linglong.yaml for qt6.8 runtime
+
+ -- wangrong <wangrong@uniontech.com>  Fri, 24 Jan 2025 13:53:10 +0800
+
 deepin-reader (6.5.11) unstable; urgency=medium
 
   * New tag.
