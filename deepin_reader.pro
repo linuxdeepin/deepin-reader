@@ -2,8 +2,9 @@ TEMPLATE = subdirs
 
 #QMAKE_CXX = ccache $$QMAKE_CXX //linux使用ccache加速c++编译速度
 #config
+
 # 基础 Qt 模块
-equals(QT_MAJOR_VERSION, 6) {
+versionAtLeast(QT_VERSION, 6.0.0) {
     QT += core gui widgets network dbus sql svg webchannel webenginewidgets concurrent xml core5compat
 
     # Qt6 specific configurations
@@ -51,4 +52,16 @@ SUBDIRS += 3rdparty/deepin-pdfium
 SUBDIRS += htmltopdf
 
 SUBDIRS += reader
+
+# Execute translation script with Qt version parameter
+versionAtLeast(QT_VERSION, 6.0.0) {
+    system($$PWD/translate_generation.sh 6)
+} else {
+    system($$PWD/translate_generation.sh 5)
+}
+
+# Install translations
+translations.path = $$PREFIX/share/deepin-reader/translations
+translations.files = $$PWD/translations/*.qm
+INSTALLS += translations
 
