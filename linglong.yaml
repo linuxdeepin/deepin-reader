@@ -25,6 +25,7 @@ build: |
   find . -type f -name "src.pro" -exec sed -i '33i INCLUDEPATH += $$INCPATHS' {} +
   find . -type f -name "htmltopdf.pro" -exec sed -i '35i INCLUDEPATH += $$INCPATHS' {} +
   sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
+  sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
 
   # 构建
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
