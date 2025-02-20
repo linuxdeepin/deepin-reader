@@ -7,7 +7,7 @@ version: "1"
 package:
   id: org.deepin.reader
   name: "deepin-reader"
-  version: 6.5.12.1
+  version: 6.5.13.1
   kind: app
   description: |
     reader for deepin os.
