@@ -70,7 +70,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         qDebug() << "正在解压文档..." << targetDoc;
         QString unzipCommand = "unzip " + targetDoc;
         qDebug() << "执行命令: " << unzipCommand;
-        decompressor.start(unzipCommand);
+        decompressor.startCommand(unzipCommand);
         if (!decompressor.waitForStarted()) {
             qInfo() << "start unzip failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -111,7 +111,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QString pandocCommand = QString("pandoc %1 --data-dir=%2 -o %3").arg(targetDoc).arg(pandocDataDir).arg(tmpHtmlFilePath);
 
         qDebug() << "执行命令: " << pandocCommand;
-        converter.start(pandocCommand);
+        converter.startCommand(pandocCommand);
         if (!converter.waitForStarted()) {
             qInfo() << "start pandoc failed";
             error = deepin_reader::Document::ConvertFailed;
@@ -144,7 +144,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         QString htmltopdfCommand = prefix + "/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
         qDebug() << "执行命令: " << htmltopdfCommand;
-        converter2.start(htmltopdfCommand);
+        converter2.startCommand(htmltopdfCommand);
         if (!converter2.waitForStarted()) {
             qInfo() << "start htmltopdf failed";
             error = deepin_reader::Document::ConvertFailed;
