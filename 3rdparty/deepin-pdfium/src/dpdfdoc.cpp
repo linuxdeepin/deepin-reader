@@ -377,7 +377,12 @@ DPdfDoc::Properies DPdfDoc::proeries()
     if (FPDF_GetFileVersion(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &fileversion)) {
         properies.insert("Version", QString("%1.%2").arg(fileversion / 10).arg(fileversion % 10));
     }
+
+    // Avoid dead lock()
+    locker.unlock();
     properies.insert("Encrypted", isEncrypted());
+    locker.relock();
+
     properies.insert("Linearized", isLinearized(d_func()->m_filePath));
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
