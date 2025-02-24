@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Dönüştürme başarısız oldu, lütfen dosyanın zarar görüp görmediğini kontrol edin</translation>
+        <translation>Dönüştürme başarısız, lütfen dosyanın zarar görüp görmediğini kontrol edin</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -510,7 +510,7 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>İnternet sitesine güveniyorsanız İzin Ver&apos;i, aksi takdirde Engelle&apos;yi tıklayın.</translation>
+        <translation>İnternet sitesine güveniyorsanız İzin Ver&apos;i, güvenmiyorsanız Engelle&apos;yi tıklayın.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Başa git</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Sona git</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation>Yerimi ekle</translation>
+        <translation>Yer imi ekle</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>

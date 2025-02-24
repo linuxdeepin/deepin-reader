@@ -583,7 +583,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Zoom in</source>
-        <translation>頁面放大</translation>
+        <translation>放大</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
@@ -825,7 +825,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
-        <translation>縮圖</translation>
+        <translation>開啟目錄縮圖</translation>
     </message>
 </context>
 <context>

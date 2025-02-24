@@ -175,13 +175,13 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
-        <translation>Beeldvullende modus afsluiten</translation>
+        <translation>Schermvullende weergave verlaten</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
-        <translation>Beeldvullende modus</translation>
+        <translation>Schermvullende weergave</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
@@ -261,12 +261,12 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation>Controleer of het bestand beschadigd is.</translation>
+        <translation>Het bestand is mogelijk beschadigd.</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>De conversie is mislukt. Controleer of het bestand beschadigd is.</translation>
+        <translation>De conversie is mislukt; het bestand is mogelijk beschadigd.</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar begin</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar einde</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -678,7 +678,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Fullscreen</source>
-        <translation>Beeldvullende modus</translation>
+        <translation>Schermvullende weergave</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
@@ -797,7 +797,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Display in file manager</source>
-        <translation>Tonen in bestandsbeheerder</translation>
+        <translation>Tonen in bestandsbeheer</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>

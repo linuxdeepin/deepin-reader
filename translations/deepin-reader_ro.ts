@@ -110,7 +110,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation>Adăugarea marcaj </translation>
+        <translation>Adăugarea marcajului</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
@@ -327,7 +327,7 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
-        <translation>Vă rugăm să selectați textul</translation>
+        <translation>Selectați vă rog textul</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
@@ -391,7 +391,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
         <source>Add annotation</source>
-        <translation>Adăugarea adnotării</translation>
+        <translation>Adăugarea adnotare</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
@@ -404,7 +404,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation>Numărul de pagină nevalabil</translation>
+        <translation>Numărul de pagină inacceptabil</translation>
     </message>
 </context>
 <context>
@@ -588,17 +588,17 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>Zoom out</source>
-        <translation>A Micșora</translation>
+        <translation>A micșora</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Save as</source>
-        <translation>Salvează ca</translation>
+        <translation>Salvează ca </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
         <source>Print</source>
-        <translation>Printare</translation>
+        <translation>Printare </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
@@ -628,12 +628,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Rotire stânga</translation>
+        <translation>Rotire stânga </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation>Rotire dreapta</translation>
+        <translation>Rotire dreapta </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation>Adăugarea marcaj</translation>
+        <translation>Adăugarea marcajului</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
@@ -673,17 +673,17 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
-        <translation>Prezentare</translation>
+        <translation>Prezentare </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Fullscreen</source>
-        <translation>Ecran complet</translation>
+        <translation>Ecran complet </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Copy</source>
-        <translation>Copiere</translation>
+        <translation>Copiere </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
@@ -713,17 +713,17 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
-        <translation>Adăugarea adnotării</translation>
+        <translation>Adăugarea adnotare</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Highlight</source>
-        <translation>Evidențiere</translation>
+        <translation>Evidențiere </translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Search</source>
-        <translation>Căutare</translation>
+        <translation>Căutare </translation>
     </message>
 </context>
 <context>
@@ -792,7 +792,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save as</source>
-        <translation>Salvează ca</translation>
+        <translation>Salvează ca </translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
@@ -812,7 +812,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Search</source>
-        <translation>Căutare</translation>
+        <translation>Căutare </translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
