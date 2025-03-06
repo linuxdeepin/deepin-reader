@@ -1,3 +1,10 @@
+deepin-reader (6.5.15) unstable; urgency=medium
+
+  * chore: New version 6.5.15.
+  * update linglong env
+
+ -- re2zero <yangwu@uniontech.com>  Thu, 06 Mar 2025 13:08:20 +0800
+
 deepin-reader (6.5.14) unstable; urgency=medium
 
   * chore: New version 6.5.14.
