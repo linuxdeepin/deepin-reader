@@ -1,3 +1,10 @@
+deepin-reader (6.5.15) unstable; urgency=medium
+
+  * update version to 6.5.15
+  * chore: update linglong.yaml for translations
+
+ -- wangrong <wangrong@uniontech.com>  Fri, 14 Mar 2025 08:52:56 +0800
+
 deepin-reader (6.5.14) unstable; urgency=medium
 
   * chore: New version 6.5.14.
