@@ -7,7 +7,7 @@ version: "1"
 package:
   id: org.deepin.reader
   name: "deepin-reader"
-  version: 6.5.14.1
+  version: 6.5.15.1
   kind: app
   description: |
     reader for deepin os.
@@ -22,9 +22,10 @@ build: |
   bash ./install_dep linglong/sources "${PREFIX}"
 
   # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
-  find . -type f -name "src.pro" -exec sed -i '33i INCLUDEPATH += $$INCPATHS' {} +
-  find . -type f -name "htmltopdf.pro" -exec sed -i '35i INCLUDEPATH += $$INCPATHS' {} +
+  sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
+  sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
   sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
+  sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
 
   # 构建
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
