@@ -1,13 +1,36 @@
+
 Source: deepin-reader
 Section: graphics
 Priority: optional
 Maintainer: deepin <packages@deepin.com>
-Build-Depends: debhelper (>= 11), pkg-config, qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev
+Build-Depends:
+ debhelper (>= 11),
+ pkg-config,
+ qt6-5compat-dev [amd64 arm64 i386 loong64] | hello,
+ qt6-base-dev [amd64 arm64 i386 loong64] | qtbase5-dev,
+ qt6-tools-dev-tools [amd64 arm64 i386 loong64] | qttools5-dev-tools,
+ qt6-tools-dev [amd64 arm64 i386 loong64] | qttools5-dev,
+ qt6-svg-dev [amd64 arm64 i386 loong64] | libqt5svg5-dev,
+ qt6-webengine-dev [amd64 arm64 i386 loong64] | qtwebengine5-dev,
+ libdtk6widget-dev [amd64 arm64 i386 loong64] | libdtkwidget-dev,
+ libdtk6gui-dev [amd64 arm64 i386 loong64] | libdtkgui-dev,
+ libdtk6core-dev [amd64 arm64 i386 loong64] | libdtkcore-dev,
+ libspectre-dev,
+ libdjvulibre-dev,
+ libtiff-dev,
+ libjpeg-dev,
+ libicu-dev,
+ libpng-dev,
+ zlib1g-dev,
+ liblcms2-dev,
+ libopenjp2-7-dev,
+ libfreetype6-dev,
+ libgtest-dev,
+ libchardet-dev,
 Standards-Version: 4.5.0
 
 Package: deepin-reader
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc
 Description: a tool for reading document files.
- Document Viewer is a tool for reading document files,supporting PDF, DJVU, DOCX etc
-
+ Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.
