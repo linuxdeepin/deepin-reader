@@ -15,7 +15,6 @@ Build-Depends:
  libdtk6widget-dev [amd64 arm64 i386 loong64] | libdtkwidget-dev,
  libdtk6gui-dev [amd64 arm64 i386 loong64] | libdtkgui-dev,
  libdtk6core-dev [amd64 arm64 i386 loong64] | libdtkcore-dev,
- libspectre-dev,
  libdjvulibre-dev,
  libtiff-dev,
  libjpeg-dev,
