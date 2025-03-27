@@ -12,17 +12,6 @@
 #include <QString>
 #include <QIcon>
 
-// gesture 触控板手势
-#ifdef OS_BUILD_V23
-#define GESTURE_SERVICE          "org.deepin.dde.Gesture"
-#define GESTURE_PATH             "/org/deepin/dde/Gesture"
-#define GESTURE_INTERFACE        "org.deepin.dde.Gesture"
-#else
-#define GESTURE_SERVICE          "com.deepin.daemon.Gesture"
-#define GESTURE_PATH             "/com/deepin/daemon/Gesture"
-#define GESTURE_INTERFACE        "com.deepin.daemon.Gesture"
-#endif
-#define GESTURE_SIGNAL           "Event"
 
 class Utils : public QObject
 {

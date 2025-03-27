@@ -15,7 +15,7 @@ equals(QT_MAJOR_VERSION, 6) {
     QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
 
     # Qt5 specific configurations
-    PKGCONFIG += dtkwidget dframeworkdbus
+    PKGCONFIG += dtkwidget dtkgui dtkcore
 
     QMAKE_LRELEASE = lrelease
 }
@@ -71,14 +71,6 @@ TARGET = deepin-reader
 TEMPLATE = app
 
 #DEFINES += PERF_ON
-
-# 判断系统环境
-MAJOR_VERSION=$$system("cat /etc/os-version | grep MajorVersion | grep -o '[0-9]\+'")
-message("MAJOR_VERSION: " $$MAJOR_VERSION)
-equals(MAJOR_VERSION, 25) {
-    message("----------------- OS_BUILD_V25 on")
-    DEFINES += OS_BUILD_V23
-}
 
 #Install
 target.path   = $$PREFIX/bin
