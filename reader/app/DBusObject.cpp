@@ -11,25 +11,18 @@
 #include <QDBusConnection>
 #include <QDebug>
 
+#include <DSysInfo>
+
 // gesture 触控板手势
 #define DBUS_SERVER             "com.deepin.Reader"
 #define DBUS_SERVER_PATH        "/com/deepin/Reader"
-
-#ifdef OS_BUILD_V23
-#define DBUS_GESTURE            "org.deepin.dde.Gesture1"
-#define DBUS_GESTURE_PATH       "/org/deepin/dde/Gesture1"
-#define DBUS_GESTURE_INTERFACE  "org.deepin.dde.Gesture1"
-#else
-#define DBUS_GESTURE            "com.deepin.daemon.Gesture"
-#define DBUS_GESTURE_PATH       "/com/deepin/daemon/Gesture"
-#define DBUS_GESTURE_INTERFACE  "com.deepin.daemon.Gesture"
-#endif
-#define DBUS_GESTURE_SIGNAL     "Event"
 
 #define DBUS_IM                 "com.deepin.im"
 #define DBUS_IM_PATH            "/com/deepin/im"
 #define DBUS_IM_INTERFACE       "com.deepin.im"
 #define DBUS_IM_SIGNAL          "imActiveChanged"
+
+DCORE_USE_NAMESPACE
 
 DBusObject *DBusObject::s_instance = nullptr;
 
@@ -65,7 +58,17 @@ bool DBusObject::registerOrNotify(QStringList arguments)
 
     dbus.registerObject(DBUS_SERVER_PATH, this, QDBusConnection::ExportScriptableSlots);
 
-    QDBusConnection::systemBus().connect(DBUS_GESTURE, DBUS_GESTURE_PATH, DBUS_GESTURE_INTERFACE, DBUS_GESTURE_SIGNAL, this, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
+    const QString gestureSignal = "Event";
+    QString gestureName = "com.deepin.daemon.Gesture";
+    QString gesturePath = "/com/deepin/daemon/Gesture";
+    // check if os edition on v23 or later
+    const int osMajor = DSysInfo::majorVersion().toInt();
+    if (osMajor >= 23) {
+        gestureName = "org.deepin.dde.Gesture1";
+        gesturePath = "/org/deepin/dde/Gesture1";
+    }
+
+    QDBusConnection::systemBus().connect(gestureName, gesturePath, gestureName, gestureSignal, this, SIGNAL(sigTouchPadEventSignal(QString, QString, int)));
 
     return true;
 }

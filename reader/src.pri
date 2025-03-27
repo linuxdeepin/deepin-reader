@@ -43,7 +43,7 @@ equals(QT_MAJOR_VERSION, 6) {
     QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
     
     # Qt5 specific configurations 
-    PKGCONFIG += dtkwidget dframeworkdbus
+    PKGCONFIG += dtkwidget dtkgui dtkcore
     
     QMAKE_LRELEASE = lrelease
 }
