@@ -21,7 +21,7 @@ versionAtLeast(QT_VERSION, 6.0.0) {
     QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
 
     # Qt5 specific configurations
-    PKGCONFIG += dtkwidget dframeworkdbus poppler-qt5
+    PKGCONFIG += dtkwidget dframeworkdbus
 
     QMAKE_LRELEASE = lrelease
 
