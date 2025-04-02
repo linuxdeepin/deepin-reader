@@ -30,6 +30,10 @@ Standards-Version: 4.5.0
 
 Package: deepin-reader
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, pandoc
+Depends: 
+    ${shlibs:Depends}, 
+    ${misc:Depends}, 
+    pandoc,  
+    libqt6webenginecore6-bin [!mipsel !mips64el] | libqt5core5a
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.
