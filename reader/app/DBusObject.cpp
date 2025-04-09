@@ -9,6 +9,7 @@
 #include "Global.h"
 
 #include <QDBusConnection>
+#include <QUrl>
 #include <QDebug>
 
 #include <DSysInfo>
@@ -124,6 +125,11 @@ void DBusObject::handleFiles(QStringList filePathList)
     MainWindow *mainwindow = MainWindow::m_list.count() > 0 ? MainWindow::m_list[0] : MainWindow::createWindow();
     mainwindow->setProperty("loading", true);
     foreach (QString filePath, filePathList) {
+        QUrl url(filePath);
+        if (url.isLocalFile()) {
+            filePath = url.toLocalFile();
+        }
+
         if (mainwindow->property("windowClosed").toBool())
             break;
 
