@@ -50,11 +50,17 @@ MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
     initBase();
     initUI();
 
-    if (!filePathList.isEmpty())
-        foreach (const QString &filePath, m_initFilePathList) {
+    if (!filePathList.isEmpty()) {
+        for (QString &filePath : m_initFilePathList) {
+            QUrl url(filePath);
+            if (url.isLocalFile()) {
+                filePath = url.toLocalFile();
+            }
+
             if (QFile(filePath).exists())   //过滤不存在的文件,需求中不含有提示文件不存在的文案
                 addFile(filePath);
         }
+    }
 }
 
 MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent)
