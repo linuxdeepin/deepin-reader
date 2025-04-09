@@ -47,7 +47,7 @@ build: |
     deepin-reader
     ../lib/deepin-reader/htmltopdf
     pandoc
-    libdeepin-pdfium.so
+    libdeepin-pdfium-reader.so
     # 定制插件不存在
     libzpdcallback.so
   )
