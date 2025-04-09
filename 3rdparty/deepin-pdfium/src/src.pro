@@ -1,4 +1,4 @@
-TARGET = $$PWD/../lib/deepin-pdfium
+TARGET = $$PWD/../lib/deepin-pdfium-reader
 
 TEMPLATE = lib
 
