@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include "dpdfdoc.h"
 #include "dpdfpage.h"
 
@@ -293,6 +297,7 @@ bool DPdfDoc::saveAs(const QString &filePath)
     DPdfMutexLocker locker("DPdfDoc::saveAs");
     bool result = FPDF_SaveAsCopy(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &write, FPDF_NO_INCREMENTAL);
     locker.unlock();
+
     saveWriter.close();
 
     return result;
@@ -377,13 +382,8 @@ DPdfDoc::Properies DPdfDoc::proeries()
     if (FPDF_GetFileVersion(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler), &fileversion)) {
         properies.insert("Version", QString("%1.%2").arg(fileversion / 10).arg(fileversion % 10));
     }
-
-    // Avoid dead lock()
-    locker.unlock();
     properies.insert("Encrypted", isEncrypted());
-    locker.relock();
-
-    properies.insert("Linearized", isLinearized(d_func()->m_filePath));
+    properies.insert("Linearized", FPDF_GetFileLinearized(reinterpret_cast<FPDF_DOCUMENT>(d_func()->m_docHandler)));
     properies.insert("KeyWords", QString());
     properies.insert("Title", QString());
     properies.insert("Creator", QString());

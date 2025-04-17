@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #ifndef DPDFDOC_H
 #define DPDFDOC_H
 
@@ -13,7 +17,7 @@
 class DPdfPage;
 class DPdfDocHandler;
 class DPdfDocPrivate;
-class DEEPDF_EXPORT DPdfDoc : public QObject
+class DPdfDoc : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(DPdfDoc)

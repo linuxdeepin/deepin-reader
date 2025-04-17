@@ -1,7 +1,12 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #ifndef DPDFGLOBAL_H
 #define DPDFGLOBAL_H
 
 #include <QtCore/qglobal.h>
+#include <QMutex>
 #include <QMutexLocker>
 #include <QDebug>
 #include <QElapsedTimer>

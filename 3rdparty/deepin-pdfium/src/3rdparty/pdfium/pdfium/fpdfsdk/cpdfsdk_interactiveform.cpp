@@ -248,8 +248,9 @@ void CPDFSDK_InteractiveForm::OnCalculate(CPDF_FormField* pFormField) {
 
   if (!IsCalculateEnabled())
     return;
-
+#ifdef PDF_ENABLE_JS
   IJS_Runtime* pRuntime = m_pFormFillEnv->GetIJSRuntime();
+#endif
   int nSize = m_pInteractiveForm->CountFieldsInCalculationOrder();
   for (int i = 0; i < nSize; i++) {
     CPDF_FormField* pField = m_pInteractiveForm->GetFieldInCalculationOrder(i);
@@ -275,12 +276,14 @@ void CPDFSDK_InteractiveForm::OnCalculate(CPDF_FormField* pFormField) {
     WideString sOldValue = pField->GetValue();
     WideString sValue = sOldValue;
     bool bRC = true;
+#ifdef PDF_ENABLE_JS
     IJS_Runtime::ScopedEventContext pContext(pRuntime);
     pContext->OnField_Calculate(pFormField, pField, &sValue, &bRC);
 
     Optional<IJS_Runtime::JS_Error> err = pContext->RunScript(csJS);
     if (!err && bRC && sValue.Compare(sOldValue) != 0)
       pField->SetValue(sValue, NotificationOption::kNotify);
+#endif
   }
 }
 
@@ -290,7 +293,9 @@ Optional<WideString> CPDFSDK_InteractiveForm::OnFormat(
     return {};
 
   WideString sValue = pFormField->GetValue();
+#ifdef PDF_ENABLE_JS
   IJS_Runtime* pRuntime = m_pFormFillEnv->GetIJSRuntime();
+#endif
   if (pFormField->GetFieldType() == FormFieldType::kComboBox &&
       pFormField->CountSelectedItems() > 0) {
     int index = pFormField->GetSelectedIndex(0);
@@ -304,10 +309,12 @@ Optional<WideString> CPDFSDK_InteractiveForm::OnFormat(
     if (action.GetDict()) {
       WideString script = action.GetJavaScript();
       if (!script.IsEmpty()) {
+#ifdef PDF_ENABLE_JS
         IJS_Runtime::ScopedEventContext pContext(pRuntime);
         pContext->OnField_Format(pFormField, &sValue);
         Optional<IJS_Runtime::JS_Error> err = pContext->RunScript(script);
         if (!err)
+#endif
           return sValue;
       }
     }

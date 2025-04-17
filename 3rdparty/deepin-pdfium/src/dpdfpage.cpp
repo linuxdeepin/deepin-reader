@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include "dpdfdoc.h"
 #include "dpdfpage.h"
 #include "dpdfannot.h"
@@ -617,6 +621,8 @@ QImage DPdfPage::image(int width, int height, QRect slice)
 
     FPDF_ClosePage(page);
 
+    locker.unlock();
+
     //bgr转rgb 如果image设置成Format_RGB888+FPDFBitmap_BGR则需要进行以下转换,此方法移除Alpha,节省25%的内存.
     //如果使用Format_RGB32+FPDFBitmap_BGRA 此方法无需以下转换，可以提升部分效率，但是增加内存
 //    for (int i = 0; i < image.height(); i++) {
@@ -808,6 +814,8 @@ DPdfAnnot *DPdfPage::createTextAnnot(QPointF pos, QString text)
     }
 
     FPDFPage_CloseAnnot(annot);
+
+    locker.unlock();
 
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
 

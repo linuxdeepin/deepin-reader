@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #ifndef DPDFPAGE_H
 #define DPDFPAGE_H
 
@@ -10,7 +14,7 @@
 class DPdfAnnot;
 class DPdfPagePrivate;
 class DPdfDocHandler;
-class DEEPDF_EXPORT DPdfPage : public QObject
+class DPdfPage : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(DPdfPage)
@@ -178,19 +182,19 @@ signals:
      * @brief 添加注释时触发 ，在需要的时候可以重新获取annotations()
      * @param annot 新增加的annot
      */
-    void annotAdded(DPdfAnnot *dAnnot);
+    void annotAdded(DPdfAnnot *annot);
 
     /**
      * @brief 注释被更新时触发 ，在需要的时候可以重新获取annotations()
      * @param annot 被更新的annot
      */
-    void annotUpdated(DPdfAnnot *dAnnot);
+    void annotUpdated(DPdfAnnot *annot);
 
     /**
      * @brief 注释被删除时触发 ，在需要的时候可以重新获取annotations()
      * @param annot 被移除的annot 注意这个已经是个将要被析构后的地址 只用于做匹配移除
      */
-    void annotRemoved(DPdfAnnot *dAnnot);
+    void annotRemoved(DPdfAnnot *annot);
 
 private:
     DPdfPage(DPdfDocHandler *handler, int pageIndex, qreal xRes = 72, qreal yRes = 72);

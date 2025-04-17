@@ -14,11 +14,7 @@
 #include <cwctype>
 #include <memory>
 
-#if defined(USE_SYSTEM_ICUUC)
 #include <unicode/uchar.h>
-#else
-#include "third_party/icu/source/common/unicode/uchar.h"
-#endif
 
 #define FX_INVALID_OFFSET static_cast<uint32_t>(-1)
 

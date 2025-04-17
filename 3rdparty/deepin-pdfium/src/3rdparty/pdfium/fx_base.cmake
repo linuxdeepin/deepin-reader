@@ -1,0 +1,62 @@
+target_sources(pdfium
+    PRIVATE
+        # Headers
+        pdfium/base/allocator/partition_allocator/address_space_randomization.h
+        pdfium/base/allocator/partition_allocator/oom.h 
+        pdfium/base/allocator/partition_allocator/oom_callback.h 
+        pdfium/base/allocator/partition_allocator/page_allocator.h 
+        pdfium/base/allocator/partition_allocator/page_allocator_constants.h 
+        pdfium/base/allocator/partition_allocator/page_allocator_internal.h 
+        pdfium/base/allocator/partition_allocator/page_allocator_internals_posix.h 
+        pdfium/base/allocator/partition_allocator/page_allocator_internals_win.h 
+        pdfium/base/allocator/partition_allocator/partition_alloc.h 
+        pdfium/base/allocator/partition_allocator/partition_alloc_constants.h 
+        pdfium/base/allocator/partition_allocator/partition_bucket.h 
+        pdfium/base/allocator/partition_allocator/partition_cookie.h 
+        pdfium/base/allocator/partition_allocator/partition_direct_map_extent.h 
+        pdfium/base/allocator/partition_allocator/partition_freelist_entry.h 
+        pdfium/base/allocator/partition_allocator/partition_oom.h 
+        pdfium/base/allocator/partition_allocator/partition_page.h 
+        pdfium/base/allocator/partition_allocator/partition_root_base.h 
+        pdfium/base/allocator/partition_allocator/random.h 
+        pdfium/base/allocator/partition_allocator/spin_lock.h 
+        pdfium/base/containers/adapters.h 
+        pdfium/base/debug/alias.h 
+        pdfium/base/memory/aligned_memory.h 
+        pdfium/base/numerics/checked_math.h 
+        pdfium/base/numerics/checked_math_impl.h 
+        pdfium/base/numerics/clamped_math.h 
+        pdfium/base/numerics/clamped_math_impl.h 
+        pdfium/base/numerics/safe_conversions.h 
+        pdfium/base/numerics/safe_conversions_arm_impl.h 
+        pdfium/base/numerics/safe_conversions_impl.h 
+        pdfium/base/numerics/safe_math.h 
+        pdfium/base/numerics/safe_math_arm_impl.h 
+        pdfium/base/numerics/safe_math_clang_gcc_impl.h 
+        pdfium/base/numerics/safe_math_shared_impl.h 
+        pdfium/base/base_export.h 
+        pdfium/base/bits.h 
+        pdfium/base/compiler_specific.h 
+        pdfium/base/immediate_crash.h 
+        pdfium/base/logging.h 
+        pdfium/base/no_destructor.h 
+        pdfium/base/optional.h 
+        pdfium/base/span.h 
+        pdfium/base/stl_util.h 
+        pdfium/base/sys_byteorder.h 
+        pdfium/base/template_util.h
+
+        # Source files
+        pdfium/base/allocator/partition_allocator/address_space_randomization.cc
+        pdfium/base/allocator/partition_allocator/oom_callback.cc 
+        pdfium/base/allocator/partition_allocator/page_allocator.cc 
+        pdfium/base/allocator/partition_allocator/partition_alloc.cc 
+        pdfium/base/allocator/partition_allocator/partition_bucket.cc 
+        pdfium/base/allocator/partition_allocator/partition_oom.cc 
+        pdfium/base/allocator/partition_allocator/partition_page.cc 
+        pdfium/base/allocator/partition_allocator/partition_root_base.cc 
+        pdfium/base/allocator/partition_allocator/random.cc 
+        pdfium/base/allocator/partition_allocator/spin_lock.cc 
+        pdfium/base/debug/alias.cc 
+        pdfium/base/memory/aligned_memory.cc
+) 
