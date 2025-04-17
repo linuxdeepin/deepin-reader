@@ -212,7 +212,9 @@ class CPDFSDK_FormFillEnvironment final : public Observable,
 
   // Creates if not present.
   CFFL_InteractiveFormFiller* GetInteractiveFormFiller();
+#ifdef PDF_ENABLE_JS
   IJS_Runtime* GetIJSRuntime();                   // Creates if not present.
+#endif
   CPDFSDK_ActionHandler* GetActionHandler();      // Creates if not present.
   CPDFSDK_InteractiveForm* GetInteractiveForm();  // Creates if not present.
 
@@ -222,7 +224,9 @@ class CPDFSDK_FormFillEnvironment final : public Observable,
 
   FPDF_FORMFILLINFO* const m_pInfo;
   std::unique_ptr<CPDFSDK_ActionHandler> m_pActionHandler;
+#ifdef PDF_ENABLE_JS
   std::unique_ptr<IJS_Runtime> m_pIJSRuntime;
+#endif
   std::map<IPDF_Page*, std::unique_ptr<CPDFSDK_PageView>> m_PageMap;
   std::unique_ptr<CPDFSDK_InteractiveForm> m_pInteractiveForm;
   ObservedPtr<CPDFSDK_Annot> m_pFocusAnnot;

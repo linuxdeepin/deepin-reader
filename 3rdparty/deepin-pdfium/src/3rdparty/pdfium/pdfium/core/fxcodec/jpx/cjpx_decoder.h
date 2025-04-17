@@ -10,13 +10,9 @@
 #include <memory>
 
 #include "core/fxcrt/unowned_ptr.h"
-#include "third_party/base/span.h"
+#include "base/span.h"
 
-#if defined(USE_SYSTEM_LIBOPENJPEG2)
 #include <openjpeg.h>
-#else
-#include "third_party/libopenjpeg20/openjpeg.h"
-#endif
 
 namespace fxcodec {
 

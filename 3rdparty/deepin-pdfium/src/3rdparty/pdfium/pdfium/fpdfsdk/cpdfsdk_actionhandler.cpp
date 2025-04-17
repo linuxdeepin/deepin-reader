@@ -453,11 +453,14 @@ void CPDFSDK_ActionHandler::DoAction_ResetForm(
   pForm->DoAction_ResetForm(action);
 }
 
+
 void CPDFSDK_ActionHandler::RunScript(CPDFSDK_FormFillEnvironment* pFormFillEnv,
                                       const WideString& script,
                                       const RunScriptCallback& cb) {
+#ifdef PDF_ENABLE_JS                                  
   IJS_Runtime::ScopedEventContext pContext(pFormFillEnv->GetIJSRuntime());
   cb(pContext.Get());
   pContext->RunScript(script);
   // TODO(dsinclair): Return error if RunScript returns a IJS_Runtime::JS_Error.
+#endif
 }

@@ -16,14 +16,10 @@
 #include "core/fxcodec/scanlinedecoder.h"
 #include "core/fxcrt/fx_extension.h"
 #include "core/fxcrt/fx_memory_wrappers.h"
-#include "third_party/base/numerics/safe_conversions.h"
-#include "third_party/base/span.h"
+#include "base/numerics/safe_conversions.h"
+#include "base/span.h"
 
-#if defined(USE_SYSTEM_ZLIB)
 #include <zlib.h>
-#else
-#include "third_party/zlib/zlib.h"
-#endif
 
 extern "C" {
 

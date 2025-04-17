@@ -12,13 +12,10 @@
 
 #include "core/fxcodec/jpx/jpx_decode_utils.h"
 #include "core/fxcrt/fx_safe_types.h"
-#include "third_party/base/optional.h"
-#include "third_party/base/ptr_util.h"
-#include "third_party/base/stl_util.h"
+#include "base/optional.h"
+#include "base/ptr_util.h"
+#include "base/stl_util.h"
 
-#if !defined(USE_SYSTEM_LIBOPENJPEG2)
-#include "third_party/libopenjpeg20/opj_malloc.h"
-#endif
 
 namespace fxcodec {
 
@@ -487,11 +484,9 @@ bool CJPX_Decoder::StartDecode() {
     // TODO(palmer): Using |opj_free| here resolves the crash described in
     // https://crbug.com/737033, but ultimately we need to harmonize the
     // memory allocation strategy across OpenJPEG and its PDFium callers.
-#if !defined(USE_SYSTEM_LIBOPENJPEG2)
-    opj_free(m_Image->icc_profile_buf);
-#else
+
     free(m_Image->icc_profile_buf);
-#endif
+
     m_Image->icc_profile_buf = nullptr;
     m_Image->icc_profile_len = 0;
   }

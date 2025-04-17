@@ -184,11 +184,11 @@ FPDF_InitLibraryWithConfig(const FPDF_LIBRARY_CONFIG *config)
     CPDFXFA_ModuleInit();
 #endif  // PDF_ENABLE_XFA
 
-    if (config && config->version >= 2) {
-        void *platform = config->version >= 3 ? config->m_pPlatform : nullptr;
-        IJS_Runtime::Initialize(config->m_v8EmbedderSlot, config->m_pIsolate,
-                                platform);
-    }
+    // if (config && config->version >= 2) {
+    //     void *platform = config->version >= 3 ? config->m_pPlatform : nullptr;
+    //     IJS_Runtime::Initialize(config->m_v8EmbedderSlot, config->m_pIsolate,
+    //                             platform);
+    // }
     g_bLibraryInitialized = true;
 }
 
@@ -203,7 +203,9 @@ FPDF_EXPORT void FPDF_CALLCONV FPDF_DestroyLibrary()
 
     CPDF_PageModule::Destroy();
     CFX_GEModule::Destroy();
+#ifdef PDF_ENABLE_JS
     IJS_Runtime::Destroy();
+#endif
 
     g_bLibraryInitialized = false;
 }
