@@ -2,6 +2,7 @@
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
+pkg_check_modules(PDFIUM REQUIRED deepin-pdfium${PDF_LIB_VERSION})
 
 # 收集所有源文件
 file(GLOB SOURCES 
@@ -68,6 +69,7 @@ target_include_directories(deepin-reader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/sidebar
     ${CMAKE_CURRENT_SOURCE_DIR}/uiframe
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+    ${PDFIUM_INCLUDE_DIRS}
 )
 
 if (NOT APP_VERSION)
@@ -83,9 +85,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 # 链接库
 target_link_libraries(deepin-reader PRIVATE
     ${LINK_LIBS}
-    deepin-pdfium-reader
     ${LIBJPEG_LIBRARIES}
     ${DDJVU_LIBRARIES}
+    ${PDFIUM_LIBRARIES}
 )
 
 # 添加资源文件
