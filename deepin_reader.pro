@@ -47,7 +47,6 @@ CONFIG  += ordered
 
 message("Build on host arch: $$QMAKE_HOST.arch")
 
-SUBDIRS += 3rdparty/deepin-pdfium
 
 SUBDIRS += htmltopdf
 

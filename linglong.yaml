@@ -22,7 +22,7 @@ build: |
   bash ./install_dep linglong/sources "${PREFIX}"
 
   # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
-  sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
+  # sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
   sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
   sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
   sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
@@ -47,7 +47,7 @@ build: |
     deepin-reader
     ../lib/deepin-reader/htmltopdf
     pandoc
-    libdeepin-pdfium-reader.so
+    libdeepin-pdfium.so
     # 定制插件不存在
     libzpdcallback.so
   )
@@ -79,7 +79,7 @@ build: |
 
 sources:
   # linglong:gen_deb_source sources amd64 http://10.20.64.92:8080/testing25_daily stable main
-  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc
+  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libdeepin-pdfium-dev
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/q/qt6-tools/assistant-qt6_6.8.0-0deepin3_amd64.deb
     digest: b6175963d3e4cf00d76fe431e75e52450bad93604945040d706d97b65cd8623d
@@ -242,6 +242,12 @@ sources:
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/d/dbus/libdbus-1-3_1.14.10-3_amd64.deb
     digest: 1dff3a63259f14e7de7c4502e7083f7077b30a274f09d195176d566406b1b827
+  - kind: file
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/d/deepin-pdfium/libdeepin-pdfium-dev_1.5.1_amd64.deb
+    digest: 8443c959f85d5708f1859870bfc8d332baaf1fa113de217b70fdcaf795222f43
+  - kind: file
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/d/deepin-pdfium/libdeepin-pdfium_1.5.1_amd64.deb
+    digest: 98e2abf016ee313f6782dfa0630b1472f3c754c1a4e71ed2e398ecdcb4725790
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libd/libdeflate/libdeflate-dev_1.18-1_amd64.deb
     digest: 04a8d4c536a9f106a9f4b38fdc012fbe745b928e32ef3f05db4704d30c1023b5
