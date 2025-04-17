@@ -11,6 +11,7 @@ equals(QT_MAJOR_VERSION, 6) {
     # Qt6 lrelease configuration
     QMAKE_LRELEASE = /usr/lib/qt6/bin/lrelease
 
+    PDF_LIB_VERSION = ""
 } else {
     QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
 
@@ -18,6 +19,8 @@ equals(QT_MAJOR_VERSION, 6) {
     PKGCONFIG += dtkwidget dtkgui dtkcore
 
     QMAKE_LRELEASE = lrelease
+
+    PDF_LIB_VERSION = "5"
 }
 
 # # 检查 Qt 版本
@@ -65,6 +68,7 @@ if(contains(DEFINES, CMAKE_COVERAGE_ARG_ON)){
 }
 
 CONFIG += c++11 link_pkgconfig
+PKGCONFIG += deepin-pdfium$$PDF_LIB_VERSION
 
 TARGET = deepin-reader
 

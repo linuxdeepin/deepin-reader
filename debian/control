@@ -6,7 +6,7 @@ Maintainer: deepin <packages@deepin.com>
 Build-Depends:
  debhelper (>= 11),
  pkg-config,
- qt6-5compat-dev [!mipsel !mips64el] | hello,
+ qt6-5compat-dev [!mipsel !mips64el] | libqt5x11extras5-dev,
  qt6-base-dev [!mipsel !mips64el] | qtbase5-dev,
  qt6-tools-dev-tools [!mipsel !mips64el] | qttools5-dev-tools,
  qt6-tools-dev [!mipsel !mips64el] | qttools5-dev,
@@ -15,6 +15,7 @@ Build-Depends:
  libdtk6widget-dev [!mipsel !mips64el] | libdtkwidget-dev,
  libdtk6gui-dev [!mipsel !mips64el] | libdtkgui-dev,
  libdtk6core-dev [!mipsel !mips64el] | libdtkcore-dev,
+ libdeepin-pdfium-dev (>= 1.5.1),
  libdjvulibre-dev,
  libtiff-dev,
  libjpeg-dev,
