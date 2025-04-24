@@ -1,3 +1,12 @@
+deepin-reader (6.5.22) unstable; urgency=medium
+
+  * refactor: [build]Enable cmake build
+  * chore: [build]Replace the source build with install library
+  * chore: Remove unused source
+  * fix: [build]Fix the build depend for Qt5 base.
+
+ -- renbin <renbin@uniontech.com>  Thu, 24 Apr 2025 17:15:20 +0800
+
 deepin-reader (6.5.21) unstable; urgency=medium
 
   * chore: update translations.
