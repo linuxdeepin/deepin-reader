@@ -1,3 +1,10 @@
+deepin-reader (6.5.23) unstable; urgency=medium
+
+  * fix: Fix file loss issue when saving and closing documents in SMB network share
+  * Bump version to 6.5.23
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Fri, 09 May 2025 13:19:21 +0800
+
 deepin-reader (6.5.22) unstable; urgency=medium
 
   * refactor: [build]Enable cmake build
