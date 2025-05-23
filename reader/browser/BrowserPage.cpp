@@ -25,12 +25,14 @@
 #include <QDesktopServices>
 #include <QDebug>
 #include <QMutexLocker>
+#include <QDebug>
 
 const int ICON_SIZE = 23;
 
 BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet) :
     QGraphicsItem(), m_sheet(sheet), m_parent(parent), m_index(index)
 {
+    qDebug() << "BrowserPage created, index:" << index;
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsPanel);
@@ -40,6 +42,7 @@ BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet) :
 
 BrowserPage::~BrowserPage()
 {
+    qDebug() << "BrowserPage destroyed, index:" << m_index;
     PageRenderThread::clearImageTasks(m_sheet, this);
 
     qDeleteAll(m_annotations);
@@ -84,6 +87,7 @@ QRectF BrowserPage::bookmarkMouseRect()
 
 void BrowserPage::setBookmark(const bool &hasBookmark)
 {
+    qDebug() << "BrowserPage::setBookmark:" << hasBookmark;
     m_bookmark = hasBookmark;
 
     if (hasBookmark)
@@ -160,6 +164,7 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation, const bool &renderLater, const bool &force)
 {
+    qDebug() << "BrowserPage::render scale:" << scaleFactor << "rotation:" << rotation << "force:" << force;
     if (!force && renderLater && qFuzzyCompare(scaleFactor, m_scaleFactor) && rotation == m_rotation)
         return;
 
@@ -316,6 +321,7 @@ void BrowserPage::renderViewPort()
 
 void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixmap, const QRect &slice)
 {
+    qDebug() << "BrowserPage::handleRenderFinished pixmapId:" << pixmapId << "slice:" << slice;
     if (m_pixmapId != pixmapId)
         return;
 
@@ -394,8 +400,11 @@ void BrowserPage::handleAnnotationLoaded(const QList<Annotation *> &annots)
 
 QImage BrowserPage::getCurrentImage(int width, int height)
 {
-    if (m_pixmap.isNull())
+    qDebug() << "Getting current image, requested size:" << width << "x" << height;
+    if (m_pixmap.isNull()) {
+        qWarning() << "Pixmap is null, returning empty image";
         return QImage();
+    }
 
     //获取图片比原图还大,就不需要原图了
     if (qMin(width, height) > qMax(m_pixmap.width(), m_pixmap.height()))
@@ -408,6 +417,7 @@ QImage BrowserPage::getCurrentImage(int width, int height)
 
 QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 {
+    qDebug() << "Getting image at point:" << point << "with scale factor:" << scaleFactor;
     QTransform transform;
 
     transform.rotate(m_rotation * 90);
@@ -462,8 +472,10 @@ void BrowserPage::loadWords()
 {
     m_wordNeeded = true;
 
-    if (m_wordIsRendering)
+    if (m_wordIsRendering) {
+        qDebug() << "Word is rendering, return";
         return;
+    }
 
     if (m_wordHasRendered) {
         //如果已经加载则取消隐藏和改变大小
@@ -498,6 +510,7 @@ void BrowserPage::loadWords()
 
 void BrowserPage::clearPixmap()
 {
+    qDebug() << "Clearing pixmap for page" << m_index;
     if (m_renderPixmapScaleFactor < -0.0001)
         return;
 
@@ -611,6 +624,7 @@ bool BrowserPage::updateAnnotation(deepin_reader::Annotation *annotation, const 
 
 Annotation *BrowserPage::addHighlightAnnotation(QString text, QColor color)
 {
+    qInfo() << "BrowserPage::addHighlightAnnotation text:" << text << "color:" << color;
     Annotation *highLightAnnot = nullptr;
     QList<QRectF> boundaries;
 
@@ -869,6 +883,7 @@ QPointF BrowserPage::getTopLeftPos()
 
 bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 {
+    qInfo() << "Removing annotation" << annota << "from page" << m_index;
     if (nullptr == annota)
         return false;
 
@@ -909,6 +924,7 @@ bool BrowserPage::removeAnnotation(deepin_reader::Annotation *annota)
 
 Annotation *BrowserPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
+    qInfo() << "Adding icon annotation at rect:" << rect << "with text:" << text;
     Annotation *annot = m_sheet->renderer()->addIconAnnotation(itemIndex(), rect, text);
 
     if (annot) {
@@ -964,6 +980,7 @@ bool BrowserPage::sceneEvent(QEvent *event)
 
 void BrowserPage::setSearchHighlightRectf(const QVector<PageSection> &sections)
 {
+    qDebug() << "Setting search highlight for" << sections.size() << "sections";
     if (sections.size() > 0) {
         if (m_parent->currentPage() == this->itemIndex() + 1)
             m_searchSelectLighRectf = sections.first();
@@ -974,6 +991,7 @@ void BrowserPage::setSearchHighlightRectf(const QVector<PageSection> &sections)
 
 void BrowserPage::clearSearchHighlightRects()
 {
+    qDebug() << "Clearing search highlights";
     m_searchSelectLighRectf.clear();
     m_searchLightrectLst.clear();
     update();
@@ -1080,8 +1098,7 @@ BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
 
 bool BrowserPage::isBigDoc()
 {
-    if (Dr::PDF == m_sheet->fileType() && boundingRect().width() > 1000 && boundingRect().height() > 1000)
-        return true;
-
-    return false;
+    bool isBig = Dr::PDF == m_sheet->fileType() && boundingRect().width() > 1000 && boundingRect().height() > 1000;
+    qDebug() << "Checking if document is big:" << isBig;
+    return isBig;
 }

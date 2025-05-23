@@ -21,6 +21,7 @@ bool PageRenderThread::s_quitForever = false;
 
 PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 {
+    qDebug() << "PageRenderThread created";
     qRegisterMetaType<deepin_reader::Document *>("deepin_reader::Document *");
     qRegisterMetaType<QList<deepin_reader::Word>>("QList<deepin_reader::Word>");
     qRegisterMetaType<QList<deepin_reader::Annotation *>>("QList<deepin_reader::Annotation *>");
@@ -46,6 +47,7 @@ PageRenderThread::PageRenderThread(QObject *parent) : QThread(parent)
 
 PageRenderThread::~PageRenderThread()
 {
+    qDebug() << "PageRenderThread destroyed";
     m_quit = true;
     wait();
 }
@@ -126,17 +128,21 @@ void PageRenderThread::appendTask(DocPageNormalImageTask task)
     PageRenderThread *instance  = PageRenderThread::instance();
 
     if (nullptr == instance) {
+        qWarning() << "PageRenderThread instance is null";
         return;
     }
 
     instance->m_pageNormalImageMutex.lock();
 
     instance->m_pageNormalImageTasks.append(task);
+    qDebug() << "Append normal image task, page:" << task.page->itemIndex();
 
     instance->m_pageNormalImageMutex.unlock();
 
-    if (!instance->isRunning())
+    if (!instance->isRunning()) {
+        qDebug() << "Starting render thread";
         instance->start();
+    }
 }
 
 void PageRenderThread::appendTask(DocPageSliceImageTask task)
@@ -513,33 +519,34 @@ bool PageRenderThread::popNextDocCloseTask(DocCloseTask &task)
 
 bool PageRenderThread::execNextDocPageNormalImageTask()
 {
-    qDebug() << "正在执行正常取图片任务...";
+    qDebug() << "Executing normal image task...";
 
     if (m_quit) {
-        qDebug() << "正常取图片任务已结束";
+        qDebug() << "Render thread quitting, abort task";
         return false;
     }
-
 
     DocPageNormalImageTask task;
 
     if (!popNextDocPageNormalImageTask(task)) {
-        qDebug() << "任务池不存在正常取图片任务，已结束";
+        qDebug() << "No normal image tasks in queue";
         return false;
     }
 
-
     if (!DocSheet::existSheet(task.sheet)) {
-        qDebug() << "文档不存在，正常取图片任务已结束";
+        qWarning() << "Sheet no longer exists, skip task";
         return true;
     }
 
     QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height());
 
-    if (!image.isNull())
+    if (image.isNull()) {
+        qWarning() << "Failed to get image for page:" << task.page->itemIndex();
+    } else {
+        qDebug() << "Image rendered successfully for page:" << task.page->itemIndex();
         emit sigDocPageNormalImageTaskFinished(task, QPixmap::fromImage(image));
+    }
 
-    qDebug() << "执行取正常取图片任务已完成";
     return true;
 }
 
@@ -801,10 +808,13 @@ void PageRenderThread::destroyForever()
 
 PageRenderThread *PageRenderThread::instance()
 {
-    if (s_quitForever)
+    if (s_quitForever) {
+        qDebug() << "Render thread permanently quit";
         return nullptr;
+    }
 
     if (nullptr == s_instance) {
+        qDebug() << "Creating new render thread instance";
         s_instance = new PageRenderThread;
     }
 

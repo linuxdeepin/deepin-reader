@@ -15,6 +15,7 @@
 TitleWidget::TitleWidget(DWidget *parent)
     : BaseWidget(parent)
 {
+    qDebug() << "Initializing TitleWidget...";
     m_pThumbnailBtn = new DIconButton(this);
     m_pThumbnailBtn->setObjectName("Thumbnails");
     m_pThumbnailBtn->setToolTip(tr("Thumbnails"));
@@ -89,7 +90,7 @@ TitleWidget::TitleWidget(DWidget *parent)
 
 TitleWidget::~TitleWidget()
 {
-
+    qDebug() << "Destroying TitleWidget...";
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)
@@ -114,28 +115,33 @@ void TitleWidget::setBtnDisable(const bool &bAble)
 
 void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 {
+    qDebug() << "Current sheet changed";
     m_curSheet = sheet;
 
     emit dApp->emitSheetChanged();
 
     if (nullptr == m_curSheet || m_curSheet->fileType() == Dr::Unknown) {
+        qWarning() << "Invalid sheet, disabling controls";
         setBtnDisable(true);
         return;
+    }
 
-    } else if (Dr::PDF == m_curSheet->fileType() || Dr::DOCX == m_curSheet->fileType()) {
+    qDebug() << "Setting up controls for file type:" << m_curSheet->fileType();
+    if (Dr::PDF == m_curSheet->fileType() || Dr::DOCX == m_curSheet->fileType()) {
         if (m_curSheet->opened()) {
+            qDebug() << "Document opened, enabling controls";
             setBtnDisable(false);
             m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
         } else {
+            qDebug() << "Document not opened, disabling controls";
             setBtnDisable(true);
             m_pThumbnailBtn->setChecked(false);
         }
         m_pSw->setSheet(m_curSheet);
-
     } else if (Dr::DJVU == m_curSheet->fileType()) {
+        qDebug() << "DJVU document, setting up controls";
         m_pThumbnailBtn->setDisabled(false);
         m_pSw->setDisabled(false);
-
         m_pThumbnailBtn->setChecked(m_curSheet->operation().sidebarVisible);
         m_pSw->setSheet(m_curSheet);
     }
@@ -143,11 +149,15 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
 void TitleWidget::onThumbnailBtnClicked(bool checked)
 {
-    if (m_curSheet.isNull())
+    if (m_curSheet.isNull()) {
+        qWarning() << "Thumbnail button clicked but no current sheet";
         return;
+    }
 
+    qDebug() << "Thumbnail button clicked, checked:" << checked;
     m_pThumbnailBtn->setChecked(checked);
     bool rl = m_pThumbnailBtn->isChecked();
+    qDebug() << "Setting sidebar visibility to:" << rl;
     m_curSheet->setSidebarVisible(rl);
 }
 
@@ -165,6 +175,7 @@ void TitleWidget::onFindOperation(const int &sAction)
 
 void TitleWidget::setControlEnabled(const bool &enable)
 {
+    qDebug() << "Setting controls enabled:" << enable;
     m_pThumbnailBtn->setChecked(false);
     m_pThumbnailBtn->setEnabled(enable);
     m_pSw->clear();

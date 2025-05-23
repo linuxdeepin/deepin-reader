@@ -10,7 +10,7 @@
 
 SheetRenderer::SheetRenderer(DocSheet *parent) : QObject(parent), m_sheet(parent)
 {
-
+    qDebug() << "Creating SheetRenderer for sheet:" << (parent ? parent->filePath() : "null");
 }
 
 SheetRenderer::~SheetRenderer()
@@ -28,6 +28,7 @@ SheetRenderer::~SheetRenderer()
 
 bool SheetRenderer::openFileExec(const QString &password)
 {
+    qDebug() << "Executing synchronous file open";
     QEventLoop loop;
 
     connect(this, &SheetRenderer::sigOpened, &loop, &QEventLoop::quit);
@@ -36,11 +37,16 @@ bool SheetRenderer::openFileExec(const QString &password)
 
     loop.exec();
 
-    return deepin_reader::Document::NoError == m_error;
+    bool success = deepin_reader::Document::NoError == m_error;
+    if (!success) {
+        qWarning() << "Failed to open file synchronously, error:" << m_error;
+    }
+    return success;
 }
 
 void SheetRenderer::openFileAsync(const QString &password)
 {
+    qDebug() << "Starting asynchronous file open";
     DocOpenTask task;
 
     task.sheet = m_sheet;
@@ -196,10 +202,17 @@ deepin_reader::Properties SheetRenderer::properties() const
 
 bool SheetRenderer::save()
 {
-    if (m_document == nullptr)
+    qDebug() << "Attempting to save document";
+    if (m_document == nullptr) {
+        qWarning() << "Cannot save - no document loaded";
         return false;
+    }
 
-    return m_document->save();
+    bool success = m_document->save();
+    if (!success) {
+        qWarning() << "Failed to save document";
+    }
+    return success;
 }
 
 void SheetRenderer::loadPageLable()
@@ -254,14 +267,26 @@ QString SheetRenderer::pageNum2Lable(const int index)
 
 bool SheetRenderer::saveAs(const QString &filePath)
 {
-    if (filePath.isEmpty() || m_document == nullptr)
+    qDebug() << "Attempting to save document as:" << filePath;
+    if (filePath.isEmpty()) {
+        qWarning() << "Cannot save - empty file path";
         return false;
+    }
+    if (m_document == nullptr) {
+        qWarning() << "Cannot save - no document loaded";
+        return false;
+    }
 
-    return m_document->saveAs(filePath);;
+    bool success = m_document->saveAs(filePath);
+    if (!success) {
+        qWarning() << "Failed to save document as:" << filePath;
+    }
+    return success;
 }
 
 void SheetRenderer::handleOpened(deepin_reader::Document::Error error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
+    qDebug() << "Document opened with error:" << error;
     m_error = error;
 
     m_document = document;

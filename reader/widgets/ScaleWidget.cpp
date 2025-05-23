@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ScaleWidget.h"
+#include <QDebug>
 
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -17,12 +18,13 @@
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "ScaleWidget created, parent:" << parent;
     initWidget();
 }
 
 ScaleWidget::~ScaleWidget()
 {
-
+    qDebug() << "ScaleWidget destroyed";
 }
 
 void ScaleWidget::initWidget()
@@ -81,6 +83,7 @@ void ScaleWidget::initWidget()
 
 void ScaleWidget::onPrevScale()
 {
+    qDebug() << "Zoom out requested";
     if (m_sheet.isNull())
         return;
 
@@ -89,6 +92,7 @@ void ScaleWidget::onPrevScale()
 
 void ScaleWidget::onNextScale()
 {
+    qDebug() << "Zoom in requested";
     if (m_sheet.isNull())
         return;
 
@@ -97,6 +101,7 @@ void ScaleWidget::onNextScale()
 
 void ScaleWidget::onReturnPressed()
 {
+    qDebug() << "Scale value entered:" << m_lineEdit->text();
     if (m_sheet.isNull())
         return;
 
@@ -107,6 +112,7 @@ void ScaleWidget::onReturnPressed()
 
 void ScaleWidget::onArrowBtnlicked()
 {
+    qDebug() << "Scale menu button clicked";
     m_lineEdit->lineEdit()->setFocus(Qt::MouseFocusReason);
 
     ScaleMenu scaleMenu;
@@ -131,6 +137,7 @@ void ScaleWidget::onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode)
 
 void ScaleWidget::onEditFinished()
 {
+    qDebug() << "Scale edit finished, current scale:" << m_sheet->operation().scaleFactor;
     if (nullptr == m_sheet)
         return;
 
@@ -140,6 +147,7 @@ void ScaleWidget::onEditFinished()
 
 void ScaleWidget::setSheet(DocSheet *sheet)
 {
+    qDebug() << "Setting document sheet:" << (sheet ? "valid" : "null");
     m_sheet = sheet;
     if (nullptr == sheet)
         return;

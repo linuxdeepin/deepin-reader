@@ -416,10 +416,12 @@ DjVuPage::DjVuPage(const DjVuDocument *parent, int index, const ddjvu_pageinfo_t
     m_size(pageinfo.width, pageinfo.height),
     m_resolution(pageinfo.dpi)
 {
+    qDebug() << "DjVuPage constructor called for page" << index << "with size" << m_size << "and DPI" << m_resolution;
 }
 
 DjVuPage::~DjVuPage()
 {
+    qDebug() << "DjVuPage destructor called for page" << m_index;
 }
 
 QSizeF DjVuPage::sizeF() const
@@ -429,11 +431,13 @@ QSizeF DjVuPage::sizeF() const
 
 QImage DjVuPage::render(int width, int height, const QRect &slice)const
 {
+    qDebug() << "Rendering page" << m_index << "with size" << width << "x" << height << "and slice" << slice;
     LOCK_PAGE
 
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(m_parent->m_document, m_index);
 
     if (page == nullptr) {
+        qWarning() << "Failed to create page for rendering, page is null";
         return QImage();
     }
 
@@ -450,6 +454,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     }
 
     if (status >= DDJVU_JOB_FAILED) {
+        qWarning() << "Page decoding failed with status:" << status;
         ddjvu_page_release(page);
 
         return QImage();
@@ -481,6 +486,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     QImage image(static_cast<int>(renderrect.w),  static_cast<int>(renderrect.h), QImage::Format_RGB32);
 
     if (!ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pagerect, &renderrect, m_parent->m_format, static_cast<unsigned long>(image.bytesPerLine()), reinterpret_cast< char * >(image.bits()))) {
+        qWarning() << "Failed to render page" << m_index;
         image = QImage();
     }
 
@@ -493,10 +499,11 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
 
 deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath, deepin_reader::Document::Error &error)
 {
+    qInfo() << "Starting to load DjVu document from path:" << filePath;
     ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
 
     if (context == nullptr) {
-
+        qCritical() << "Failed to create DjVu context";
         error = Document::FileError;
         return nullptr;
     }
@@ -508,6 +515,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
 #endif // DDJVUAPI_VERSION
 
     if (document == nullptr) {
+        qCritical() << "Failed to create DjVu document from file:" << filePath;
         ddjvu_context_release(context);
 
         error = Document::FileError;
@@ -517,6 +525,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     waitForMessageTag(context, DDJVU_DOCINFO);
 
     if (ddjvu_document_decoding_error(document)) {
+        qCritical() << "Document decoding error occurred";
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 
@@ -529,6 +538,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     djvuDocument->m_filePath = filePath;
 
     error = Document::NoError;
+    qInfo() << "Successfully loaded DjVu document from:" << filePath << "with" << djvuDocument->pageCount() << "pages";
 
     return djvuDocument;
 }
@@ -661,6 +671,7 @@ DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document)
 
 DjVuDocument::~DjVuDocument()
 {
+    qDebug() << "DjVuDocument destructor called, releasing resources for document:" << m_filePath;
     ddjvu_document_release(m_document);
     ddjvu_context_release(m_context);
     ddjvu_format_release(m_format);
@@ -668,6 +679,7 @@ DjVuDocument::~DjVuDocument()
 
 int DjVuDocument::pageCount() const
 {
+    qDebug() << "Getting page count for document:" << m_filePath;
     LOCK_DOCUMENT
 
     return ddjvu_document_get_pagenum(m_document);
@@ -691,6 +703,7 @@ Page *DjVuDocument::page(int index) const
     }
 
     if (status >= DDJVU_JOB_FAILED) {
+        qWarning() << "Failed to get page info, status:" << status;
         return nullptr;
     }
 
@@ -708,6 +721,7 @@ QStringList DjVuDocument::saveFilter() const
 
 bool DjVuDocument::saveAs(const QString &filePath) const
 {
+    qInfo() << "Starting to save document to:" << filePath << "from original path:" << m_filePath;
     LOCK_DOCUMENT
 
 #ifdef _MSC_VER
@@ -721,6 +735,7 @@ bool DjVuDocument::saveAs(const QString &filePath) const
 #endif // _MSC_VER
 
     if (file == nullptr) {
+        qWarning() << "Failed to open file for saving:" << filePath;
         return false;
     }
 
@@ -732,7 +747,12 @@ bool DjVuDocument::saveAs(const QString &filePath) const
 
     fclose(file);
 
-    return !ddjvu_job_error(job);
+    bool success = !ddjvu_job_error(job);
+    if (!success) {
+        qWarning() << "Failed to save document to:" << filePath << "Error:" << ddjvu_job_status(job);
+    }
+    qInfo() << "Document save operation" << (success ? "succeeded" : "failed");
+    return success;
 }
 
 bool DjVuDocument::save() const
@@ -759,11 +779,15 @@ bool DjVuDocument::save() const
 
     file.remove();          //不remove会出现第二次导出丢失数据问题 (保存动作完成之后，如果当前文档是当初打开那个，下一次导出会出错)
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        qWarning() << "Failed to open file for writing:" << m_filePath;
         return false;
+    }
 
-    if (array.size() != file.write(array))
+    if (array.size() != file.write(array)) {
+        qWarning() << "Failed to write all data to file";
         result = false;
+    }
 
     file.flush();//函数将用户缓存中的内容写入内核缓冲区
     fsync(file.handle());//将内核缓冲写入文件(磁盘)
@@ -809,6 +833,7 @@ bool DjVuDocument::save() const
 
 Properties DjVuDocument::properties() const
 {
+    qDebug() << "Getting document properties for:" << m_filePath;
     Properties properties;
 
     LOCK_DOCUMENT
@@ -842,6 +867,8 @@ Properties DjVuDocument::properties() const
 
 void DjVuDocument::prepareFileInfo()
 {
+    qDebug() << "Preparing file info for document:" << m_filePath;
+
     for (int index = 0, count = ddjvu_document_get_filenum(m_document); index < count; ++index) {
         ddjvu_fileinfo_t fileinfo;
 

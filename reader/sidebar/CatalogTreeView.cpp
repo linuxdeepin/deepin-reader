@@ -86,6 +86,8 @@ QVariant CatalogModel::data(const QModelIndex &index, int role) const
 CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     : DTreeView(parent), m_sheet(sheet)
 {
+    qDebug() << "Creating CatalogTreeView for document:" << (sheet ? sheet->filePath() : "null");
+
     ActiveProxyStyle *style = new ActiveProxyStyle(this);
     setStyle(style);
     setFrameShape(QFrame::NoFrame);
@@ -117,7 +119,7 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
 
 CatalogTreeView::~CatalogTreeView()
 {
-
+    qDebug() << "Destroying CatalogTreeView";
 }
 
 void CatalogTreeView::setRightControl(bool hasControl)
@@ -127,6 +129,8 @@ void CatalogTreeView::setRightControl(bool hasControl)
 
 void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStandardItem *parentItem)
 {
+    qDebug() << "Parsing catalog section:" << ol.title << "with" << ol.children.size() << "children";
+
     foreach (auto s, ol.children) { //  2级显示
         if (s.nIndex >= 0) {
             auto itemList = getItemList(s.title, s.nIndex, s.offsetPointF.x(), s.offsetPointF.y());
@@ -161,12 +165,16 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
 
 void CatalogTreeView::handleOpenSuccess()
 {
+    qDebug() << "Handling document open success, building catalog tree";
+
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
         model->clear();
 
-        if (nullptr == m_sheet)
+        if (nullptr == m_sheet) {
+            qCritical() << "Cannot build catalog tree - document sheet is null";
             return;
+        }
 
         m_index = m_sheet->currentIndex();
         const deepin_reader::Outline &ol = m_sheet->outline();
@@ -184,20 +192,28 @@ void CatalogTreeView::handleOpenSuccess()
 
 void CatalogTreeView::slotCollapsed(const QModelIndex &index)
 {
+    qDebug() << "Catalog tree item collapsed:" << index.data().toString();
+
     Q_UNUSED(index);
 
-    if (nullptr == m_sheet)
+    if (nullptr == m_sheet) {
+        qWarning() << "Cannot handle collapse event - document sheet is null";
         return;
+    }
 
     setIndex(m_index, m_title);
 }
 
 void CatalogTreeView::slotExpanded(const QModelIndex &index)
 {
+    qDebug() << "Catalog tree item expanded:" << index.data().toString();
+
     Q_UNUSED(index);
 
-    if (nullptr == m_sheet)
+    if (nullptr == m_sheet) {
+        qWarning() << "Cannot handle expand event - document sheet is null";
         return;
+    }
 
     setIndex(m_index, m_title);
 }
@@ -207,8 +223,10 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
     Q_UNUSED(previous);
     if (!rightnotifypagechanged) {
 
-        if (nullptr == m_sheet)
+        if (nullptr == m_sheet) {
+            qCritical() << "Cannot navigate - document sheet is null";
             return;
+        }
 
         int nIndex = current.data(Qt::UserRole + 1).toInt();
         double left = current.data(Qt::UserRole + 2).toDouble();
@@ -224,8 +242,12 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
 
 void CatalogTreeView::onItemClicked(const QModelIndex &current)
 {
-    if (nullptr == m_sheet)
+    qDebug() << "Catalog item clicked:" << current.data().toString() << "page:" << current.data(Qt::UserRole + 1).toInt();
+
+    if (nullptr == m_sheet) {
+        qCritical() << "Cannot navigate to clicked item - document sheet is null";
         return;
+    }
 
     int nIndex = current.data(Qt::UserRole + 1).toInt();
     double left = current.data(Qt::UserRole + 2).toDouble();
@@ -256,6 +278,8 @@ void CatalogTreeView::keyPressEvent(QKeyEvent *event)
 
 void CatalogTreeView::setIndex(int index, const QString &title)
 {
+    qDebug() << "Setting catalog selection - page:" << index << "title:" << (title.isEmpty() ? "[any]" : title);
+
     m_index = index;
     m_title = title;
     this->clearSelection();
@@ -298,30 +322,40 @@ void CatalogTreeView::resizeCoulumnWidth()
 
 void CatalogTreeView::nextPage()
 {
+    qDebug() << "Navigating to next catalog item";
+
     const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier);
     scrollToIndex(newCurrent);
 }
 
 void CatalogTreeView::pageDownPage()
 {
+    qDebug() << "Page down navigation in catalog";
+
     const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
     scrollToIndex(newCurrent);
 }
 
 void CatalogTreeView::prevPage()
 {
+    qDebug() << "Navigating to previous catalog item";
+
     const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier);
     scrollToIndex(newCurrent);
 }
 
 void CatalogTreeView::pageUpPage()
 {
+    qDebug() << "Page up navigation in catalog";
+
     const QModelIndex &newCurrent = this->moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
     scrollToIndex(newCurrent);
 }
 
 void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
 {
+    qDebug() << "Scrolling to catalog index:" << newIndex.data().toString();
+
     if (newIndex.isValid()) {
         rightnotifypagechanged = false;
         currentChanged(newIndex, currentIndex());
@@ -332,6 +366,8 @@ void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
 
 void CatalogTreeView::onFontChanged(const QFont &font)
 {
+    qDebug() << "Handling font change in catalog view";
+
     Q_UNUSED(font);
     resizeCoulumnWidth();
 }

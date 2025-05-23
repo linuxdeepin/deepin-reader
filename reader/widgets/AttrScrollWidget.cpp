@@ -7,6 +7,7 @@
 #include "Utils.h"
 #include "DocSheet.h"
 #include "WordWrapLabel.h"
+#include <QDebug>
 
 #include <DFontSizeManager>
 #include <DTextBrowser>
@@ -18,6 +19,7 @@ DWIDGET_USE_NAMESPACE
 AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     : DFrame(parent)
 {
+    qDebug() << "AttrScrollWidget constructor start, sheet:" << sheet;
     setFrameShape(QFrame::NoFrame);
 
     installEventFilter(this);
@@ -56,10 +58,12 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     vLayout->addStretch(1);
 
     this->setLayout(vLayout);
+    qDebug() << "AttrScrollWidget constructor end";
 }
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QString &sData)
 {
+    qDebug() << "Create label for" << objName << "with text data";
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
@@ -82,6 +86,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const QDateTime &sData)
 {
+    qDebug() << "Create label for" << objName << "with datetime data";
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
@@ -102,6 +107,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const QString &objName, const bool &bData)
 {
+    qDebug() << "Create label for" << objName << "with boolean data";
     DLabel *label = new DLabel(objName, this);
     DFontSizeManager::instance()->bind(label, DFontSizeManager::T8);
     label->setAlignment(Qt::AlignTop);
@@ -119,6 +125,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 bool AttrScrollWidget::eventFilter(QObject *object, QEvent *event)
 {
+    qDebug() << "Event filter triggered, type:" << event->type();
     if (object == this) {
         if (event->type() == QEvent::Resize) {
             QLocale locale;
@@ -138,5 +145,7 @@ bool AttrScrollWidget::eventFilter(QObject *object, QEvent *event)
                 widget->setFixedWidth(240 - leftMinwidth);
         }
     }
-    return DFrame::eventFilter(object, event);
+    bool result = DFrame::eventFilter(object, event);
+    qDebug() << "Event filter processed, result:" << result;
+    return result;
 }

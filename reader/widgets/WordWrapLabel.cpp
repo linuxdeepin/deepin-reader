@@ -4,23 +4,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "WordWrapLabel.h"
+#include <QDebug>
 
 #include <QPainter>
 
 WordWrapLabel::WordWrapLabel(QWidget *parent)
     : DLabel(parent)
 {
+    qDebug() << "WordWrapLabel created, parent:" << parent;
     m_margin = 0;
 }
 
 void WordWrapLabel::setText(const QString &text)
 {
+    qDebug() << "Setting label text, length:" << text.length();
     m_text = text;
     update();
 }
 
 void WordWrapLabel::setMargin(int margin)
 {
+    qDebug() << "Setting label margin:" << margin;
     m_margin = margin;
     update();
 }
@@ -40,6 +44,7 @@ void WordWrapLabel::paintEvent(QPaintEvent *event)
 
 void WordWrapLabel::adjustContent()
 {
+    qDebug() << "Adjusting label content height";
     QFontMetrics fontMetris(this->font());
     int wordHeight = fontMetris.boundingRect(0, 0, this->width() - 2 * m_margin, 0, static_cast<int>(this->alignment() | Qt::TextWrapAnywhere), m_text).height();
     if (this->height() == wordHeight) return;

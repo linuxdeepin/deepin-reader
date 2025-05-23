@@ -20,6 +20,7 @@
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
 {
+    qDebug() << "Initializing DocTabBar...";
 #if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 2 ))
     this->setEnabledEmbedStyle(true);//设置直角样式
     this->setExpanding(true);//设置平铺窗口模式
@@ -68,8 +69,10 @@ int DocTabBar::indexOfFilePath(const QString &filePath)
 
 void DocTabBar::insertSheet(DocSheet *sheet, int index)
 {
-    if (sheet == nullptr)
+    if (sheet == nullptr) {
+        qWarning() << "Cannot insert null sheet";
         return;
+    }
 
     QString fileName = QFileInfo(sheet->filePath()).fileName();
 
@@ -91,6 +94,7 @@ void DocTabBar::insertSheet(DocSheet *sheet, int index)
 
 void DocTabBar::removeSheet(DocSheet *sheet)
 {
+    qDebug() << "Removing sheet:" << (sheet ? sheet->filePath() : "null");
     for (int i = 0; i < count(); ++i) {
         if (DocSheet::getSheet(this->tabData(i).toString()) == sheet) {
             removeTab(i);
@@ -98,6 +102,7 @@ void DocTabBar::removeSheet(DocSheet *sheet)
             return;
         }
     }
+    qWarning() << "Sheet not found in tab bar";
 }
 
 void DocTabBar::showSheet(DocSheet *sheet)
@@ -245,16 +250,24 @@ void DocTabBar::onDragActionChanged(Qt::DropAction action)
 
 void DocTabBar::onTabChanged(int index)
 {
+    qDebug() << "Tab changed to index:" << index;
     QString id = tabData(index).toString();
-
-    sigTabChanged(DocSheet::getSheet(id));
-
+    DocSheet *sheet = DocSheet::getSheet(id);
+    if (sheet) {
+        qInfo() << "Switched to sheet:" << sheet->filePath();
+    } else {
+        qWarning() << "No sheet found for tab index:" << index;
+    }
+    sigTabChanged(sheet);
 }
 
 void DocTabBar::onTabReleased(int)
 {
-    if (count() <= 1)
+    qDebug() << "Tab released";
+    if (count() <= 1) {
+        qDebug() << "Only one tab, ignoring release";
         return;
+    }
 
     int dropIndex = currentIndex();     //使用dropIndex替代index ,因为index是记录刚drag的index，当拖拽的时候几个item被移动了就会出错
 
@@ -300,8 +313,11 @@ void DocTabBar::onSetCurrentIndex()
 
 void DocTabBar::onTabCloseRequested(int index)
 {
-    if (m_intervalTimer->isActive())
+    qDebug() << "Tab close requested for index:" << index;
+    if (m_intervalTimer->isActive()) {
+        qDebug() << "Close operation throttled, ignoring";
         return;
+    }
 
     DocSheet *sheet = DocSheet::getSheet(this->tabData(index).toString());
 

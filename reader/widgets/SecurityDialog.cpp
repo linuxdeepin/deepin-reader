@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SecurityDialog.h"
+#include <QDebug>
 
 #include <DFontSizeManager>
 #include <DLabel>
@@ -51,6 +52,7 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
 SecurityDialog::SecurityDialog(const QString &urlstr, QWidget *parent)
     : DDialog(parent)
 {
+    qDebug() << "SecurityDialog created for URL:" << urlstr << ", parent:" << parent;
     setFixedWidth(380);
     setMinimumHeight(180);
     setIcon(QIcon::fromTheme("deepin-reader"));
@@ -86,6 +88,7 @@ SecurityDialog::SecurityDialog(const QString &urlstr, QWidget *parent)
 
 void SecurityDialog::autoFeed()
 {
+    qDebug() << "Auto feed processing for text:" << m_strDesText;
     if (nullptr == NameLabel || nullptr == ContentLabel) {
         return;
     }
@@ -108,6 +111,7 @@ void SecurityDialog::autoFeed()
 
 void SecurityDialog::setLabelColor(DLabel *label, qreal alphaF)
 {
+    qDebug() << "Setting label color with alpha:" << alphaF << ", label:" << (label ? "valid" : "null");
     if (nullptr == label) {
         return;
     }
@@ -121,6 +125,7 @@ void SecurityDialog::setLabelColor(DLabel *label, qreal alphaF)
 
 void SecurityDialog::changeEvent(QEvent *event)
 {
+    qDebug() << "Change event received, type:" << event->type();
     if (QEvent::FontChange == event->type()) {
         autoFeed();
     } else if (QEvent::ThemeChange == event->type()) { // 根据主题变化重新设置颜色

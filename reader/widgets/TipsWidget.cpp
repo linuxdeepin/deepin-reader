@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TipsWidget.h"
+#include <QDebug>
 
 #include <DPlatformWindowHandle>
 #include <DGuiApplicationHelper>
@@ -15,6 +16,7 @@
 
 TipsWidget::TipsWidget(QWidget *parent) : DWidget(parent)
 {
+    qDebug() << "TipsWidget created, parent:" << parent;
     m_parent = parent;
     setWindowFlags(Qt::ToolTip);
     initWidget();
@@ -41,6 +43,7 @@ void TipsWidget::initWidget()
 
 void TipsWidget::onUpdateTheme()
 {
+    qDebug() << "Updating tips widget theme";
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Window, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
@@ -48,6 +51,7 @@ void TipsWidget::onUpdateTheme()
 
 void TipsWidget::setText(const QString &text)
 {
+    qDebug() << "Setting tips text, length:" << text.length();
     m_text = text;
     m_text.replace(QChar('\n'), QString(""));
     m_text.replace(QChar('\t'), QString(""));
@@ -103,6 +107,7 @@ void TipsWidget::adjustContent(const QString &text)
 
 void TipsWidget::showEvent(QShowEvent *event)
 {
+    qDebug() << "TipsWidget showing, autoChecked:" << m_autoChecked;
     DWidget::showEvent(event);
     if (m_autoChecked)
         m_timer.start();
@@ -110,6 +115,7 @@ void TipsWidget::showEvent(QShowEvent *event)
 
 void TipsWidget::hideEvent(QHideEvent *event)
 {
+    qDebug() << "TipsWidget hiding";
     DWidget::hideEvent(event);
     m_timer.stop();
 }
@@ -121,6 +127,7 @@ void TipsWidget::setAutoChecked(bool autoChecked)
 
 void TipsWidget::onTimeOut()
 {
+    qDebug() << "TipsWidget timeout check, visible:" << isVisible();
     if (this->isVisible() && ((m_parent && !m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos()))) || DApplication::widgetAt(QCursor::pos()) == nullptr)) {
         this->hide();
     }

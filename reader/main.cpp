@@ -26,7 +26,8 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     PERF_PRINT_BEGIN("POINT-01", "");
-    qDebug() << __FUNCTION__ << "启动应用！";
+    qDebug() << "Application starting with arguments:" << argc;
+    qDebug() << "Command line:" << QCoreApplication::arguments().join(" ");
 
     // 依赖DTK的程序，如果要在root下或者非deepin/uos环境下运行不会发生异常，就需要加上该环境变量
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     }
 
     // Init DTK.
+    qDebug() << "Initializing DTK application";
     Application a(argc, argv);
     QCommandLineParser parser;
     parser.addHelpOption();
@@ -58,11 +60,17 @@ int main(int argc, char *argv[])
     if (parser.isSet("thumbnail") && parser.isSet("filePath") && parser.isSet("thumbnailPath")) {
         QString filePath = parser.value("filePath");
         QString thumbnailPath = parser.value("thumbnailPath");
-        if (filePath.isEmpty() || thumbnailPath.isEmpty())
+        qDebug() << "Generating thumbnail for:" << filePath;
+        qDebug() << "Thumbnail output path:" << thumbnailPath;
+        if (filePath.isEmpty() || thumbnailPath.isEmpty()) {
+            qWarning() << "Empty file path or thumbnail path";
             return -1;
+        }
 
-        if (!CentralDocPage::firstThumbnail(filePath, thumbnailPath))
+        if (!CentralDocPage::firstThumbnail(filePath, thumbnailPath)) {
+            qWarning() << "Failed to generate thumbnail";
             return -1;
+        }
 
         return 0;
     }
@@ -73,8 +81,11 @@ int main(int argc, char *argv[])
         PERF_PRINT_BEGIN("POINT-05", "");
 
     //=======通知已经打开的进程
-    if (!DBusObject::instance()->registerOrNotify(arguments))
+    qDebug() << "Registering DBus service";
+    if (!DBusObject::instance()->registerOrNotify(arguments)) {
+        qInfo() << "Another instance is running, exiting";
         return 0;
+    }
 
     QAccessible::installFactory(accessibleFactory);
 
@@ -84,11 +95,15 @@ int main(int argc, char *argv[])
     Q_UNUSED(savetheme)
 #endif
 
+    qDebug() << "Setting up log appenders";
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
-    if (!MainWindow::allowCreateWindow())
+    qDebug() << "Checking if new window can be created";
+    if (!MainWindow::allowCreateWindow()) {
+        qWarning() << "Maximum window count reached";
         return -1;
+    }
 
     qDebug() << __FUNCTION__ << "正在创建主窗口...";
     qApp->setAttribute(Qt::AA_ForceRasterWidgets, true);
@@ -101,9 +116,11 @@ int main(int argc, char *argv[])
 
     PERF_PRINT_END("POINT-01", "");
 
+    qDebug() << "Entering main event loop";
     int result = a.exec();
 
     PERF_PRINT_END("POINT-02", "");
+    qInfo() << "Application exiting with code:" << result;
 
     return result;
 }

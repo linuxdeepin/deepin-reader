@@ -29,6 +29,7 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
     : DWidget(MainWindow::windowContainSheet(docsheet))
     , m_docSheet(docsheet)
 {
+    qDebug() << "SlideWidget created, initial page:" << docsheet->currentIndex();
     initControl();
     initImageControl();
     show();
@@ -36,6 +37,7 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
 
 SlideWidget::~SlideWidget()
 {
+    qDebug() << "SlideWidget destroyed";
     setWidgetState(false);
 }
 
@@ -185,6 +187,7 @@ void SlideWidget::mouseMoveEvent(QMouseEvent *event)
 
 void SlideWidget::setWidgetState(bool full)
 {
+    qDebug() << "Setting widget state, fullscreen:" << full;
     if (m_parentIsDestroyed || !parentWidget())
         return;
 
@@ -201,6 +204,7 @@ void SlideWidget::setWidgetState(bool full)
 
 void SlideWidget::onPreBtnClicked()
 {
+    qDebug() << "Previous button clicked, current page:" << m_curPageIndex;
     //已到第一页时，再次点击上一页按钮
     if(m_curPageIndex <= 0) {
         m_slidePlayWidget->updateProcess(m_curPageIndex - 1, m_docSheet->pageCount());
@@ -222,6 +226,7 @@ void SlideWidget::onPreBtnClicked()
 
 void SlideWidget::onPlayBtnClicked()
 {
+    qDebug() << "Play button clicked, new state:" << !m_slidePlayWidget->getPlayStatus();
     if (m_slidePlayWidget->getPlayStatus()) {
         //最后一页点播放时，则返回开始播放
         if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
@@ -238,6 +243,7 @@ void SlideWidget::onPlayBtnClicked()
 
 void SlideWidget::onNextBtnClicked()
 {
+    qDebug() << "Next button clicked, current page:" << m_curPageIndex;
     //已到最后一页时，再次点击下一页按钮
     if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
         m_slidePlayWidget->updateProcess(m_curPageIndex + 1, m_docSheet->pageCount());
@@ -258,11 +264,14 @@ void SlideWidget::onNextBtnClicked()
 
 void SlideWidget::onExitBtnClicked()
 {
+    qDebug() << "Exit button clicked";
     m_docSheet->closeSlide();
 }
 
 void SlideWidget::playImage()
 {
+    qDebug() << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
+             << "direction:" << (m_blefttoright ? "right" : "left");
     m_imageAnimation->stop();
 
     if (m_preIndex <= m_curPageIndex) { //正序切换(包括第一页切到最后一页)
@@ -286,6 +295,7 @@ void SlideWidget::playImage()
 
 void SlideWidget::onImageShowTimeOut()
 {
+    qDebug() << "Image show timeout, moving to next page";
     m_preIndex = m_curPageIndex;
 
     m_curPageIndex++;
@@ -361,6 +371,7 @@ void SlideWidget::handleKeyPressEvent(const QString &sKey)
 
 void SlideWidget::onFetchImage(int index)
 {
+    qDebug() << "Fetching image for page:" << index;
     const QPixmap &pix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, index);
 
     if (!pix.isNull() && qMax(pix.width(), pix.height()) == qMin(this->width() - 40, this->height() - 20)) {
@@ -380,6 +391,8 @@ void SlideWidget::onFetchImage(int index)
 
 void SlideWidget::onUpdatePageImage(int pageIndex)
 {
+    qDebug() << "Updating page image:" << pageIndex
+             << "current:" << m_curPageIndex << "previous:" << m_preIndex;
     if (pageIndex == m_preIndex) {
         const QPixmap &lPix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, pageIndex);
         m_lpixmap = drawImage(lPix);

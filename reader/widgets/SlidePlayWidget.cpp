@@ -5,6 +5,7 @@
 
 #include "SlidePlayWidget.h"
 #include "Utils.h"
+#include <QDebug>
 
 #include <DPlatformWindowHandle>
 #include <DWidget>
@@ -16,11 +17,13 @@
 
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {
+    qDebug() << "SlidePlayWidget created, parent:" << parent;
     initControl();
 }
 
 void SlidePlayWidget::initControl()
 {
+    qDebug() << "Initializing slide play controls";
     setBlurBackgroundEnabled(true);
     setFramRadius(18);
 
@@ -150,12 +153,14 @@ DIconButton *SlidePlayWidget::createBtn(const QString &strname)
 
 void SlidePlayWidget::setPlayStatus(bool play)
 {
+    qDebug() << "Setting play status:" << play;
     m_autoPlay = play;
     playStatusChanged();
 }
 
 void SlidePlayWidget::updateProcess(int cur, int total)
 {
+    qDebug() << "Updating slide position, current:" << cur << ", total:" << total;
     /* 幻灯片放映时
      * cur:当前页、total总页数
      * 当cur:0, total:3
@@ -183,6 +188,7 @@ void SlidePlayWidget::updateProcess(int cur, int total)
 
 void SlidePlayWidget::Notify(const QString &text)
 {
+    qDebug() << "Showing notification:" << text;
     if(nullptr == m_dbusNotify) {
         m_dbusNotify = new QDBusInterface("com.deepin.dde.Notification",
                                           "/com/deepin/dde/Notification",
@@ -209,27 +215,32 @@ bool SlidePlayWidget::getPlayStatus()
 
 void SlidePlayWidget::onPreClicked()
 {
+    qDebug() << "Previous button clicked";
     emit signalPreBtnClicked();
 }
 
 void SlidePlayWidget::onPlayClicked()
 {
+    qDebug() << "Play button clicked, new state:" << !m_autoPlay;
     m_autoPlay = !m_autoPlay;
     playStatusChanged();
 }
 
 void SlidePlayWidget::onNextClicked()
 {
+    qDebug() << "Next button clicked";
     emit signalNextBtnClicked();
 }
 
 void SlidePlayWidget::onExitClicked()
 {
+    qDebug() << "Exit button clicked";
     emit signalExitBtnClicked();
 }
 
 void SlidePlayWidget::playStatusChanged()
 {
+    qDebug() << "Play status changed to:" << m_autoPlay;
     if (m_autoPlay) {
         m_playBtn->setIcon(QIcon::fromTheme(QString("dr_") + "suspend_normal"));
     } else {

@@ -6,6 +6,7 @@
 #include "PagingWidget.h"
 #include "DocSheet.h"
 #include "TMFunctionThread.h"
+#include <QDebug>
 
 #include <QValidator>
 
@@ -18,6 +19,7 @@
 PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
 {
+    qDebug() << "PagingWidget created";
     initWidget();
 
     slotUpdateTheme();
@@ -29,7 +31,7 @@ PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
 
 PagingWidget::~PagingWidget()
 {
-
+    qDebug() << "PagingWidget destroyed";
 }
 
 /**
@@ -38,6 +40,7 @@ PagingWidget::~PagingWidget()
  */
 void PagingWidget::initWidget()
 {
+    qDebug() << "Initializing paging widget";
     m_pTotalPagesLab = new DLabel(this);
     m_pTotalPagesLab->setAccessibleName("Label_TotalPage");
 
@@ -94,6 +97,7 @@ void PagingWidget::initWidget()
     hLayout->addWidget(m_pNextPageBtn);
 
     this->setLayout(hLayout);
+    qDebug() << "Paging widget initialized";
 }
 
 void PagingWidget::slotUpdateTheme()
@@ -135,6 +139,7 @@ void PagingWidget::resizeEvent(QResizeEvent *event)
 
 void PagingWidget::setIndex(int index)
 {
+    qDebug() << "Setting page index:" << index;
     if (nullptr == m_sheet)
         return;
 
@@ -161,6 +166,7 @@ void PagingWidget::setIndex(int index)
 
 void PagingWidget::handleOpenSuccess()
 {
+    qDebug() << "Document opened successfully, checking page labels";
     if (nullptr == m_sheet)
         return;
 
@@ -176,6 +182,7 @@ void PagingWidget::handleOpenSuccess()
 
 void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
+    qDebug() << "Page jump requested, hasLabel:" << m_bHasLabel;
     if (m_bHasLabel) {
         pageNumberJump();
     } else {
@@ -191,6 +198,7 @@ void PagingWidget::onEditFinished()
 
 void PagingWidget::normalChangePage()
 {
+    qDebug() << "Normal page change requested, text:" << m_pJumpPageLineEdit->text();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = sText.toInt();
     if (iPage <= 0 || iPage > m_sheet->pageCount()) {
@@ -202,6 +210,7 @@ void PagingWidget::normalChangePage()
 
 void PagingWidget::pageNumberJump()
 {
+    qDebug() << "Page number jump requested, text:" << m_pJumpPageLineEdit->text();
     int nPageSum = m_sheet->pageCount();
     QString sText = m_pJumpPageLineEdit->text();
     int iPage = m_sheet->getIndexByPageLable(sText);
@@ -215,11 +224,13 @@ void PagingWidget::pageNumberJump()
 
 void PagingWidget::slotPrePageBtnClicked()
 {
+    qDebug() << "Previous page button clicked";
     m_sheet->jumpToPrevPage();
 }
 
 void PagingWidget::slotNextPageBtnClicked()
 {
+    qDebug() << "Next page button clicked";
     m_sheet->jumpToNextPage();
 }
 
@@ -232,6 +243,7 @@ void PagingWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 
 void PagingWidget::onFuncThreadFinished()
 {
+    qDebug() << "Page label check completed, hasLabel:" << m_tmFuncThread->result.toBool();
     m_bHasLabel = m_tmFuncThread->result.toBool();
     m_pCurrentPageLab->setVisible(m_bHasLabel);
     int currentIndex = m_sheet->currentIndex();

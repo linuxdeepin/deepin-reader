@@ -6,15 +6,18 @@
 #include "HandleMenu.h"
 #include "DocSheet.h"
 #include <QActionGroup>
+#include <QDebug>
 
 HandleMenu::HandleMenu(DWidget *parent)
     : DMenu(parent)
 {
+    qDebug() << "HandleMenu created, parent:" << parent;
     initActions();
 }
 
 void HandleMenu::initActions()
 {
+    qDebug() << "Initializing handle menu actions";
     m_docSheet = nullptr;
     QActionGroup *actionGroup = new QActionGroup(this);
 
@@ -33,22 +36,27 @@ void HandleMenu::initActions()
 
     actionGroup->addAction(m_handAction);
     addAction(m_handAction);
+    qDebug() << "Handle menu actions initialized";
 }
 
 void HandleMenu::onHandTool()
 {
+    qDebug() << "Hand tool selected";
     if (m_docSheet)
         m_docSheet->setMouseShape(Dr::MouseShapeHand);
 }
 
 void HandleMenu::onSelectText()
 {
+    qDebug() << "Text selection tool selected";
     if (m_docSheet)
         m_docSheet->setMouseShape(Dr::MouseShapeNormal);
 }
 
 void HandleMenu::readCurDocParam(DocSheet *docSheet)
 {
+    qDebug() << "Reading document parameters";
+
     m_docSheet = docSheet;
     if (!docSheet)
         return;

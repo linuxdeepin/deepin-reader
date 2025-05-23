@@ -9,6 +9,7 @@
 #include "Application.h"
 
 #include <QPainter>
+#include <QDebug>
 #include <QIcon>
 #include <QMutexLocker>
 #include <QMetaObject>
@@ -16,19 +17,23 @@
 
 ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread(parent)
 {
+    qDebug() << "ReadMagnifierManager created";
     m_parent = parent;
 }
 
 ReadMagnifierManager::~ReadMagnifierManager()
 {
+    qDebug() << "ReadMagnifierManager destroyed";
     this->wait();
 }
 
 void ReadMagnifierManager::addTask(const MagnifierInfo_t &task)
 {
+    qDebug() << "ReadMagnifierManager::addTask";
     m_tTasklst << task;
 
     if (!this->isRunning()) {
+        qInfo() << "Starting ReadMagnifierManager thread";
         this->start();
     }
 }
@@ -51,6 +56,7 @@ void ReadMagnifierManager::run()
 BrowserMagniFier::BrowserMagniFier(SheetBrowser *parent)
     : QLabel(parent)
 {
+    qDebug() << "BrowserMagniFier created";
     m_readManager = new ReadMagnifierManager(this);
 
     m_brwoser = parent;
@@ -70,11 +76,13 @@ BrowserMagniFier::BrowserMagniFier(SheetBrowser *parent)
 
 BrowserMagniFier::~BrowserMagniFier()
 {
+    qDebug() << "BrowserMagniFier destroyed";
     m_readManager->wait();
 }
 
 void BrowserMagniFier::updateImage()
 {
+    qDebug() << "BrowserMagniFier::updateImage";
     QPointF point = m_lastScenePoint;
 
     BrowserPage *page = m_brwoser->getBrowserPageForPoint(point);
@@ -105,6 +113,7 @@ void BrowserMagniFier::updateImage()
 
 void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, double scaleFactor)
 {
+    qDebug() << "BrowserMagniFier::showMagnigierImage at" << mousePos << "with scale" << scaleFactor;
     scaleFactor += 2;
 
     m_lastScenePoint = mousePos;
@@ -144,6 +153,7 @@ void BrowserMagniFier::showMagnigierImage(QPoint mousePos, QPoint magnifierPos, 
 
 void BrowserMagniFier::onUpdateMagnifierImage(const MagnifierInfo_t &task, const QImage &image)
 {
+    qDebug() << "BrowserMagniFier::onUpdateMagnifierImage";
     if (task.mousePos == m_lastPoint && qFuzzyCompare(task.scaleFactor, m_lastScaleFactor))
         setMagniFierImage(image);
 }

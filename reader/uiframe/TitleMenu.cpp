@@ -11,6 +11,7 @@
 TitleMenu::TitleMenu(DWidget *parent)
     : DMenu(parent)
 {
+    qDebug() << "Initializing TitleMenu...";
     QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
     QStringList firstActionObjList = QStringList() << "New window" << "New tab";
     createActionMap(firstActionList, firstActionObjList);
@@ -44,7 +45,9 @@ TitleMenu::TitleMenu(DWidget *parent)
 
 void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 {
+    qDebug() << "Current sheet changed";
     if (nullptr == sheet || !sheet->opened()) {
+        qWarning() << "Invalid sheet, disabling all actions";
         disableAllAction();
         return;
     }
@@ -70,30 +73,38 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 void TitleMenu::onActionTriggered()
 {
     QAction *action = static_cast<QAction *>(sender());
-    if (nullptr == action)
+    if (nullptr == action) {
+        qWarning() << "Action triggered but sender is null";
         return;
+    }
 
+    qDebug() << "Menu action triggered:" << action->objectName();
     emit sigActionTriggered(action->objectName());
 }
 
 void TitleMenu::disableAllAction()
 {
+    qDebug() << "Disabling all menu actions";
     QStringList actiontextlist;
     actiontextlist << "Save" << "Save as" << "Display in file manager" << "Magnifer" << "Search" << "Print";
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
-        if (actiontextlist.indexOf(a->objectName()) != -1)
+        if (actiontextlist.indexOf(a->objectName()) != -1) {
             a->setDisabled(true);
+            qDebug() << "Disabled action:" << a->objectName();
+        }
     }
     m_handleMenu->setDisabled(true);
 }
 
 void TitleMenu::disableSaveButton(bool disable)
 {
+    qDebug() << (disable ? "Disabling" : "Enabling") << "Save button";
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (a->text() == tr("Save")) {
             a->setDisabled(disable);
+            qDebug() << "Save button state:" << (disable ? "disabled" : "enabled");
             break;
         }
     }

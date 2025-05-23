@@ -14,24 +14,27 @@
 
 #include <DPushButton>
 #include <DHorizontalLine>
+#include <QDebug>
 
 #include <QVBoxLayout>
 
 const int LEFTMINHEIGHT = 80;
-
 NotesWidget::NotesWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
 {
+    qDebug() << "NotesWidget created for document:" << (sheet ? sheet->filePath() : "null");
     initWidget();
 }
 
 NotesWidget::~NotesWidget()
 {
-
+    qDebug() << "NotesWidget destroyed";
 }
+
 
 void NotesWidget::initWidget()
 {
+    qDebug() << "Initializing NotesWidget UI";
     QVBoxLayout *pVLayout = new QVBoxLayout;
     pVLayout->setContentsMargins(0, 10, 0, 0);
     pVLayout->setSpacing(0);
@@ -136,14 +139,18 @@ void NotesWidget::deleteAllItem()
 
 void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
 {
-    if (anno == nullptr || anno->contents().isEmpty())
+    if (anno == nullptr || anno->contents().isEmpty()) {
+        qWarning() << "Attempt to add invalid annotation";
         return;
+    }
 
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = anno->page - 1;
     tImagePageInfo.strcontents = anno->contents();
     tImagePageInfo.annotation = anno;
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
+    qDebug() << "Added note item for page:" << tImagePageInfo.pageIndex
+            << "content:" << tImagePageInfo.strcontents.left(20) + "...";
 
     int modelIndex = m_pImageListView->getImageModel()->findItemForAnno(anno);
     if (modelIndex >= 0)
@@ -152,6 +159,11 @@ void NotesWidget::addNoteItem(deepin_reader::Annotation *anno)
 
 void NotesWidget::deleteNoteItem(deepin_reader::Annotation *anno)
 {
+    if (!anno) {
+        qWarning() << "Attempt to delete null annotation";
+        return;
+    }
+    qDebug() << "Deleting note item for page:" << anno->page - 1;
     m_pImageListView->getImageModel()->removeItemForAnno(anno);
 }
 
@@ -166,6 +178,7 @@ void NotesWidget::handleOpenSuccess()
 
 void NotesWidget::onListMenuClick(const int &iAction)
 {
+    qDebug() << "List menu action triggered:" << iAction;
     if (iAction == E_NOTE_COPY) {
         copyNoteContent();
     } else if (iAction == E_NOTE_DELETE) {
@@ -179,6 +192,7 @@ void NotesWidget::onListMenuClick(const int &iAction)
 
 void NotesWidget::onListItemClicked(int row)
 {
+    qDebug() << "List item clicked at row:" << row;
     ImagePageInfo_t tImagePageInfo;
     m_pImageListView->getImageModel()->getModelIndexImageInfo(row, tImagePageInfo);
     if (tImagePageInfo.pageIndex >= 0) {
@@ -188,11 +202,13 @@ void NotesWidget::onListItemClicked(int row)
 
 void NotesWidget::onAddAnnotation()
 {
+    qDebug() << "Add annotation button clicked";
     m_sheet->setAnnotationInserting(true);
 }
 
 void NotesWidget::handleAnntationMsg(const int &msgType, deepin_reader::Annotation *anno)
 {
+    qDebug() << "Handling annotation message type:" << msgType;
     if (msgType == MSG_NOTE_ADD) {
         addNoteItem(anno);
     } else if (msgType == MSG_NOTE_DELETE) {

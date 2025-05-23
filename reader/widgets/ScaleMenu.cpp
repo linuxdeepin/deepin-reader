@@ -5,16 +5,20 @@
 
 #include "ScaleMenu.h"
 #include "DocSheet.h"
+#include <QDebug>
 
 ScaleMenu::ScaleMenu(QWidget *parent) : DMenu(parent)
 {
-
+    qDebug() << "ScaleMenu created, parent:" << parent;
 }
 
 void ScaleMenu::readCurDocParam(DocSheet *docSheet)
 {
-    if (docSheet == nullptr)
+    qDebug() << "Reading document parameters";
+    if (docSheet == nullptr) {
+        qDebug() << "No document sheet found, return";
         return;
+    }
 
     m_sheet = docSheet;
     m_pTwoPageAction    = createAction(tr("Two-Page View"), SLOT(onTwoPage()), true);
@@ -45,10 +49,14 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
     m_pFitWorHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWorHMode);
     m_pFiteWAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageWidthMode);
     m_pFiteHAction->setChecked(docSheet->operation().scaleMode == Dr::FitToPageHeightMode);
+    qDebug() << "Current scale mode:" << docSheet->operation().scaleMode
+             << ", layout mode:" << docSheet->operation().layoutMode
+             << ", scale factor:" << docSheet->operation().scaleFactor;
 }
 
 void ScaleMenu::onTwoPage()
 {
+    qDebug() << "Two page mode selected, checked:" << m_pTwoPageAction->isChecked();
     if (m_sheet == nullptr)
         return;
 
@@ -61,30 +69,35 @@ void ScaleMenu::onTwoPage()
 
 void ScaleMenu::onFiteH()
 {
+    qDebug() << "Fit height mode selected";
     if (m_sheet)
         m_sheet->setScaleMode(Dr::FitToPageHeightMode);
 }
 
 void ScaleMenu::onFiteW()
 {
+    qDebug() << "Fit width mode selected";
     if (m_sheet)
         m_sheet->setScaleMode(Dr::FitToPageWidthMode);
 }
 
 void ScaleMenu::onDefaultPage()
 {
+    qDebug() << "Default size (1:1) selected";
     if (m_sheet)
         m_sheet->setScaleMode(Dr::FitToPageDefaultMode);
 }
 
 void ScaleMenu::onFitPage()
 {
+    qDebug() << "Fit page mode selected";
     if (m_sheet)
         m_sheet->setScaleMode(Dr::FitToPageWorHMode);
 }
 
 void ScaleMenu::onScaleFactor()
 {
+    qDebug() << "Scale factor selected";
     if (m_sheet == nullptr)
         return;
 
@@ -98,6 +111,7 @@ void ScaleMenu::onScaleFactor()
 
 QAction *ScaleMenu::createAction(const QString &objName, const char *member, bool checkable)
 {
+    qDebug() << "Creating action:" << objName << ", checkable:" << checkable;
     QAction *action = new QAction(objName, this);
     action->setObjectName(objName);
     action->setCheckable(checkable);

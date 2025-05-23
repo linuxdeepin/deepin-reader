@@ -47,6 +47,7 @@ QList<MainWindow *> MainWindow::m_list;
 MainWindow::MainWindow(QStringList filePathList, DMainWindow *parent)
     : DMainWindow(parent), m_initFilePathList(filePathList)
 {
+    qDebug() << "MainWindow constructor called with" << filePathList.size() << "files";
     initBase();
     initUI();
 
@@ -82,6 +83,7 @@ MainWindow::MainWindow(DocSheet *sheet, DMainWindow *parent)
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "MainWindow destructor called";
     m_list.removeOne(this);
 
     if (m_list.count() <= 0) {
@@ -91,6 +93,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::addSheet(DocSheet *sheet)
 {
+    qDebug() << "Adding sheet to window:" << (sheet ? sheet->filePath() : "null");
     if (nullptr == m_central)
         return;
 
@@ -99,6 +102,7 @@ void MainWindow::addSheet(DocSheet *sheet)
 
 bool MainWindow::hasSheet(DocSheet *sheet)
 {
+    qDebug() << "Checking if window contains sheet:" << (sheet ? sheet->filePath() : "null");
     if (nullptr == m_central)
         return false;
 
@@ -107,6 +111,7 @@ bool MainWindow::hasSheet(DocSheet *sheet)
 
 void MainWindow::activateSheet(DocSheet *sheet)
 {
+    qDebug() << "Activating sheet:" << (sheet ? sheet->filePath() : "null");
     if (nullptr == m_central)
         return;
 
@@ -119,6 +124,7 @@ void MainWindow::activateSheet(DocSheet *sheet)
 
 bool MainWindow::handleClose(bool needToBeSaved)
 {
+    qDebug() << "Handling window close, needToBeSaved:" << needToBeSaved;
     if ((nullptr != m_central) && (!m_central->handleClose(needToBeSaved)))
         return false;
 
@@ -129,6 +135,7 @@ bool MainWindow::handleClose(bool needToBeSaved)
 
 void MainWindow::addFile(const QString &filePath)
 {
+    qDebug() << "Adding file to window:" << filePath;
     if (nullptr == m_central)
         return;
 
@@ -198,6 +205,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::initUI()
 {
+    qDebug() << "Initializing main window UI";
     qDebug() << __FUNCTION__ << "正在初始化UI界面...";
     m_central = new Central(this);
 
@@ -265,6 +273,7 @@ void MainWindow::initUI()
 
 void MainWindow::setDocTabBarWidget(QWidget *widget)
 {
+    qDebug() << "Setting doc tab bar widget:" << widget;
     if (m_FullTitleWidget == nullptr) {
         m_FullTitleWidget = new BaseWidget(this);
 
@@ -288,6 +297,7 @@ void MainWindow::onTitleAniFinished()
 
 void MainWindow::handleMainWindowFull()
 {
+    qDebug() << "Handling window fullscreen state";
     if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
         return;
 
@@ -324,6 +334,7 @@ void MainWindow::handleMainWindowFull()
 
 void MainWindow::handleMainWindowExitFull()
 {
+    qDebug() << "Handling window exit fullscreen state";
     if (m_FullTitleWidget == nullptr)
         return;
 
@@ -369,6 +380,7 @@ void MainWindow::setTitleBarFocusEnable(bool enable)
 
 void MainWindow::resizeFullTitleWidget()
 {
+    qDebug() << "Resizing full title widget";
     if (m_FullTitleWidget == nullptr || m_docTabWidget == nullptr)
         return;
 
@@ -381,6 +393,7 @@ void MainWindow::resizeFullTitleWidget()
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
 {
+    qDebug() << "Finding window containing sheet:" << (sheet ? sheet->filePath() : "null");
     foreach (MainWindow *window, m_list) {
         if (window->hasSheet(sheet)) {
             return window;
@@ -392,11 +405,13 @@ MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)
 
 bool MainWindow::allowCreateWindow()
 {
+    qDebug() << "Checking if new window can be created, current count:" << m_list.count();
     return m_list.count() < 20;
 }
 
 bool MainWindow::activateSheetIfExist(const QString &filePath)
 {
+    qDebug() << "Attempting to activate sheet for file:" << filePath;
     DocSheet *sheet = DocSheet::getSheetByFilePath(filePath);
 
     if (nullptr == sheet)
@@ -414,6 +429,7 @@ bool MainWindow::activateSheetIfExist(const QString &filePath)
 
 MainWindow *MainWindow::createWindow(QStringList filePathList)
 {
+    qDebug() << "Creating new window with" << filePathList.size() << "files";
     qDebug() << __FUNCTION__ << "正在创建主窗口...";
     int iCount = MainWindow::m_list.count();   // 获取现有窗口数目
     MainWindow *pMainWindow = new MainWindow(filePathList);   // 创建文档查看器对话框
@@ -430,12 +446,14 @@ MainWindow *MainWindow::createWindow(QStringList filePathList)
 
 MainWindow *MainWindow::createWindow(DocSheet *sheet)
 {
+    qDebug() << "Creating new window for sheet:" << (sheet ? sheet->filePath() : "null");
     qDebug() << __FUNCTION__ << "创建窗口！";
     return new MainWindow(sheet);
 }
 
 void MainWindow::showDefaultSize()
 {
+    qDebug() << "Setting window default size";
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
 
     int width = settings.value("LASTWIDTH").toInt();
@@ -450,6 +468,7 @@ void MainWindow::showDefaultSize()
 
 void MainWindow::initDynamicLibPath()
 {
+    qDebug() << "Initializing dynamic library paths";
     qDebug() << "正在加载动态库...";
     // 解析ZPD定制需求提供的库 libzpdcallback.so
     LoadLibNames tmp;
@@ -482,11 +501,13 @@ QString MainWindow::libPath(const QString &strlib)
 
 void MainWindow::onDelayInit()
 {
+    qDebug() << "Performing delayed initialization";
     initUI();
 }
 
 void MainWindow::initBase()
 {
+    qDebug() << "Initializing window base resources";
     qDebug() << __FUNCTION__ << "正在初始化基础资源...";
 
     m_list.append(this);
@@ -518,6 +539,7 @@ void MainWindow::initBase()
 
 void MainWindow::onUpdateTitleLabelRect()
 {
+    qDebug() << "Updating title label rectangle";
     if (nullptr == m_central)
         return;
 
@@ -531,6 +553,7 @@ void MainWindow::onUpdateTitleLabelRect()
 
 void MainWindow::updateOrderWidgets(const QList<QWidget *> &orderlst)
 {
+    qDebug() << "Updating widget tab order for" << orderlst.size() << "widgets";
     for (int i = 0; i < orderlst.size() - 1; i++) {
         QWidget::setTabOrder(orderlst.at(i), orderlst.at(i + 1));
     }

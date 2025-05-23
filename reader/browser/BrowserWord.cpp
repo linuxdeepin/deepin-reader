@@ -8,15 +8,18 @@
 #include "Model.h"
 
 #include <QPainter>
+#include <QDebug>
 #include <QStyleOptionGraphicsItem>
 
 BrowserWord::BrowserWord(QGraphicsItem *parent, deepin_reader::Word word) : QGraphicsItem(parent), m_word(word)
 {
+    qDebug() << "BrowserWord created, text:" << word.text;
     setZValue(deepin_reader::Z_ORDER_SELECT_TEXT);
 }
 
 void BrowserWord::setScaleFactor(qreal scaleFactor)
 {
+    qDebug() << "BrowserWord::setScaleFactor:" << scaleFactor;
     m_scaleFactor = scaleFactor;
     update();
 }
@@ -28,6 +31,7 @@ QString BrowserWord::text()
 
 void BrowserWord::setSelectable(bool enable)
 {
+    qDebug() << "BrowserWord::setSelectable:" << enable;
     m_selectable = enable;
 
     setFlag(QGraphicsItem::ItemIsSelectable, enable);
@@ -46,6 +50,7 @@ QRectF BrowserWord::boundingBox() const
 void BrowserWord::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     if (isSelected()) {
+        qDebug() << "BrowserWord::paint - selected:" << m_word.text;
         painter->setBrush(QColor(72, 118, 255, 100));
         painter->setPen(Qt::NoPen);
         painter->drawRect(option->rect.x() + 1, option->rect.y() + 1, option->rect.width() - 2, option->rect.height() - 2);

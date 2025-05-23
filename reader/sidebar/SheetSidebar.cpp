@@ -16,6 +16,7 @@
 
 #include <DPushButton>
 #include <DGuiApplicationHelper>
+#include <QDebug>
 
 #include <QButtonGroup>
 #include <QVBoxLayout>
@@ -28,17 +29,19 @@ SheetSidebar::SheetSidebar(DocSheet *parent, PreviewWidgesFlags widgesFlag)
     , m_sheet(parent)
     , m_widgetsFlag(widgesFlag | PREVIEW_SEARCH)
 {
+    qDebug() << "SheetSidebar created with flags:" << widgesFlag;
     initWidget();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetSidebar::onUpdateWidgetTheme);
 }
 
 SheetSidebar::~SheetSidebar()
 {
-
+    qDebug() << "SheetSidebar destroyed";
 }
 
 void SheetSidebar::initWidget()
 {
+    qDebug() << "Initializing SheetSidebar UI";
     m_scale           = 1.0;
     m_bOldVisible     = false;
     m_bOpenDocOpenSuccess = false;
@@ -189,8 +192,10 @@ void SheetSidebar::initWidget()
 
 void SheetSidebar::onBtnClicked(int index)
 {
-    if (!m_btnGroupMap.contains(index))
+    if (!m_btnGroupMap.contains(index)) {
+        qWarning() << "Invalid button index:" << index;
         return;
+    }
 
     for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
         iter.value()->setChecked(false);
@@ -252,6 +257,7 @@ void SheetSidebar::onHandWidgetDocOpenSuccess()
 
 void SheetSidebar::handleSearchStart(const QString &text)
 {
+    qDebug() << "Starting search for:" << text;
     for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
         iter.value()->setEnabled(false);
     }
@@ -260,6 +266,7 @@ void SheetSidebar::handleSearchStart(const QString &text)
     m_searchWidget->searchKey(text);
     onBtnClicked(m_searchId);
     this->setVisible(true);
+    qDebug() << "Search UI activated";
 }
 
 void SheetSidebar::handleSearchStop()
@@ -323,9 +330,13 @@ void SheetSidebar::resizeEvent(QResizeEvent *event)
 
 void SheetSidebar::adaptWindowSize(const double &scale)
 {
+    qDebug() << "Adapting window size with scale:" << scale;
     m_scale = scale;
     BaseWidget *curWidget = dynamic_cast<BaseWidget *>(m_stackLayout->currentWidget());
-    if (curWidget) curWidget->adaptWindowSize(scale);
+    if (curWidget) {
+        qDebug() << "Adapting widget:" << curWidget->metaObject()->className();
+        curWidget->adaptWindowSize(scale);
+    }
 }
 
 void SheetSidebar::keyPressEvent(QKeyEvent *event)
@@ -380,6 +391,7 @@ void SheetSidebar::dealWithPressKey(const QString &sKey)
 void SheetSidebar::onJumpToPrevPage()
 {
     QWidget *curWidget = m_stackLayout->currentWidget();
+    qDebug() << "Jumping to previous page in widget:" << (curWidget ? curWidget->metaObject()->className() : "null");
     if (curWidget == m_thumbnailWidget) {
         m_thumbnailWidget->prevPage();
     }  else if (curWidget == m_bookmarkWidget) {
@@ -460,11 +472,13 @@ bool SheetSidebar::event(QEvent *event)
 
 void SheetSidebar::onUpdateWidgetTheme()
 {
+    qDebug() << "Updating widget theme";
     updateWidgetTheme();
     for (auto iter = m_btnGroupMap.begin(); iter != m_btnGroupMap.end(); iter++) {
         const QString &objName = iter.value()->objectName();
         const QIcon &icon = QIcon::fromTheme(QString("dr_") + objName);
         iter.value()->setIcon(icon);
+        qDebug() << "Updated icon for button:" << objName;
     }
 }
 

@@ -6,6 +6,7 @@
 #include "TransparentTextEdit.h"
 #include "Application.h"
 #include "MsgHeader.h"
+#include <QDebug>
 
 #include <DFontSizeManager>
 
@@ -19,6 +20,7 @@
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
 {
+    qDebug() << "TransparentTextEdit created, parent:" << parent;
     this->setObjectName("TransparentTextEdit");
 
     this->setAcceptRichText(false);
@@ -47,6 +49,7 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
 
 void TransparentTextEdit::slotTextEditMaxContantNum()
 {
+    qDebug() << "Checking text content length, max:" << m_nMaxContantLen;
     QString textContent = this->toPlainText();
 
     int length = textContent.count();
@@ -117,12 +120,14 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
 
 void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
 {
+    qDebug() << "Inserting from mime data, has text:" << !source->text().isEmpty();
     if (!source->text().isEmpty())
         this->insertPlainText(source->text());
 }
 
 void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
 {
+    qDebug() << "Key pressed:" << keyEvent->key() << "modifiers:" << keyEvent->modifiers();
     if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
         QMenu *menu =  this->createStandardContextMenu();
 
@@ -139,6 +144,7 @@ void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
 
 void TransparentTextEdit::focusOutEvent(QFocusEvent *event)
 {
+    qDebug() << "Focus out event, reason:" << event->reason();
     QTextEdit::focusOutEvent(event);
 
     Q_EMIT sigCloseNoteWidget();

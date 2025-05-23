@@ -10,6 +10,7 @@
 #include "DocSheet.h"
 #include "MsgHeader.h"
 #include "Utils.h"
+#include <QDebug>
 
 #include <DFontSizeManager>
 #include <DFrame>
@@ -55,6 +56,7 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
+    qDebug() << "FileAttrWidget created, parent:" << parent;
     setFixedSize(QSize(300, 622));
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);
@@ -64,10 +66,12 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 
 FileAttrWidget::~FileAttrWidget()
 {
+    qDebug() << "FileAttrWidget destroyed";
 }
 
 void FileAttrWidget::setFileAttr(DocSheet *sheet)
 {
+    qDebug() << "Setting file attributes for sheet:" << (sheet ? "valid" : "null");
     if (sheet == nullptr)
         return;
 
@@ -118,6 +122,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     scrolllayout->addWidget(infoframe);
 
     m_pVBoxLayout->addLayout(scrolllayout, 1);
+    qDebug() << "File attributes set, image loaded:" << (!image.isNull() ? "success" : "failed");
 }
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
@@ -134,12 +139,14 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
 
 void FileAttrWidget::showScreenCenter()
 {
+    qDebug() << "Showing file attribute widget at screen center";
     Dtk::Widget::moveToCenter(this);
     this->show();
 }
 
 void FileAttrWidget::initWidget()
 {
+    qDebug() << "Initializing file attribute widget";
     initCloseBtn();
     initImageLabel();
 }
@@ -163,6 +170,7 @@ void FileAttrWidget::initCloseBtn()
     } else {
         closeButton->setFixedSize(QSize(40, 40));
         closeButton->setIconSize(QSize(40, 40));
+        qDebug() << "File attribute widget initialization completed";
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if (sizeMode == DGuiApplicationHelper::NormalMode) {
