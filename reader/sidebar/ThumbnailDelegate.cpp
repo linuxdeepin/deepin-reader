@@ -9,21 +9,24 @@
 #include "Application.h"
 
 #include <DGuiApplicationHelper>
+#include <QDebug>
 
 #include <QPainter>
 #include <QItemSelectionModel>
 #include <QAbstractItemView>
 #include <QPainterPath>
 #include <QTransform>
-
 ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
+    qDebug() << "ThumbnailDelegate created with parent:" << parent;
     m_parent = parent;
 }
 
+
 void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    qDebug() << "Painting thumbnail for row:" << index.row();
     if (index.isValid()) {
         qreal pixscale = m_parent->property("adaptScale").toDouble();
 
@@ -77,16 +80,19 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         drawBookMark(painter, rect, bShowBookMark);
     }
 }
-
 QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    qDebug() << "Calculating size hint for row:" << index.row();
     return DStyledItemDelegate::sizeHint(option, index);
 }
 
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
 {
     if (visible) {
+        qDebug() << "Drawing bookmark at:" << rect;
         QPixmap pixmap(QIcon::fromTheme("dr_bookmark_checked").pixmap({36, 36}));
         painter->drawPixmap(rect.right() - 42, rect.y(), pixmap);
+    } else {
+        qDebug() << "Bookmark not visible for rect:" << rect;
     }
 }

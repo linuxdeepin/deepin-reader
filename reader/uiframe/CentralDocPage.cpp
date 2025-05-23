@@ -85,6 +85,7 @@ static bool pathControl(const QString &sPath) noexcept
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
+    qDebug() << "Initializing CentralDocPage...";
     m_tabBar = new DocTabBar(this);
     connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
@@ -127,6 +128,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
 CentralDocPage::~CentralDocPage()
 {
+    qDebug() << "Destroying CentralDocPage...";
 }
 
 bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
@@ -145,8 +147,10 @@ bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
 void CentralDocPage::openCurFileFolder()
 {
     DocSheet *sheet = getCurSheet();
-    if (nullptr == sheet)
+    if (nullptr == sheet) {
+        qWarning() << "No current sheet to open folder for";
         return;
+    }
 
     QString filePath = sheet->filePath();
     QUrl displayUrl = QUrl(filePath);
@@ -246,6 +250,7 @@ void CentralDocPage::addFileAsync(const QString &filePath)
 void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error error)
 {
     if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error || deepin_reader::Document::ConvertFailed == error) {
+        qWarning() << "Failed to open document:" << sheet->filePath() << "Error:" << error;
         m_stackedLayout->removeWidget(sheet);
 
         m_tabBar->removeSheet(sheet);
@@ -467,10 +472,13 @@ QList<DocSheet *> CentralDocPage::getSheets()
 
 bool CentralDocPage::saveCurrent()
 {
+    qDebug() << "Attempting to save current document";
     DocSheet *sheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
 
-    if (nullptr == sheet)
+    if (nullptr == sheet) {
+        qWarning() << "No current sheet to save";
         return false;
+    }
 
     if (!sheet->fileChanged()) {
         return false;
@@ -495,6 +503,7 @@ bool CentralDocPage::saveCurrent()
 
 bool CentralDocPage::saveAsCurrent()
 {
+    qDebug() << "Attempting to save current document as...";
     DocSheet *sheet = getCurSheet();
 
     if (nullptr == sheet)
@@ -677,6 +686,7 @@ void CentralDocPage::showTips(QWidget *parent, const QString &tips, int iconInde
 
 void CentralDocPage::openMagnifer()
 {
+    qDebug() << "Opening magnifier tool";
     quitMagnifer();
 
     m_magniferSheet = getCurSheet();
@@ -696,6 +706,7 @@ void CentralDocPage::quitMagnifer()
 
 void CentralDocPage::openSlide()
 {
+    qDebug() << "Opening slide mode";
     DocSheet *docSheet = getCurSheet();
     if (docSheet && docSheet->opened() && m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(getCurSheet());
@@ -827,6 +838,7 @@ QWidget *CentralDocPage::getTitleLabel()
 
 void CentralDocPage::handleBlockShutdown()
 {
+    qDebug() << "Checking if need to block shutdown";
     bool bBlock = false;
     QList<DocSheet *> sheets = m_tabBar->getSheets();
 
@@ -839,8 +851,10 @@ void CentralDocPage::handleBlockShutdown()
     }
 
     if (bBlock) {
+        qInfo() << "Blocking shutdown due to unsaved documents";
         DBusObject::instance()->blockShutdown();    // 存在未保存的文档时阻塞关机
     } else {
+        qDebug() << "No need to block shutdown";
         DBusObject::instance()->unBlockShutdown();  // 所有文档都保存的情况下不阻塞关机
     }
 }

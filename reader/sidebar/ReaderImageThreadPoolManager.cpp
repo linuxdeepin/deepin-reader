@@ -6,6 +6,7 @@
 #include "ReaderImageThreadPoolManager.h"
 #include "DocSheet.h"
 #include "Application.h"
+#include <QDebug>
 
 #include <QUuid>
 
@@ -49,6 +50,7 @@ void ReadImageTask::run()
 Q_GLOBAL_STATIC(ReaderImageThreadPoolManager, theInstance)
 ReaderImageThreadPoolManager::ReaderImageThreadPoolManager()
 {
+    qDebug() << "Initializing ReaderImageThreadPoolManager with max threads:" << maxThreadCnt;
     setMaxThreadCount(maxThreadCnt);
 }
 
@@ -61,6 +63,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
 {
     //To avoid repetitive tasks
     if (m_taskList.contains(readImageParam)) {
+        qDebug() << "Skip duplicate task for page:" << readImageParam.pageIndex;
         return;
     }
 
@@ -76,6 +79,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     //remove invalid task
     QMutexLocker mutext(&m_runMutex);
     if (!readImageParam.bForceUpdate && m_taskList.size() >= maxTaskList) {
+        qDebug() << "Task queue full (" << m_taskList.size() << "), removing excess tasks";
         for (int index = maxTaskList; index < m_taskList.size(); index++) {
             QRunnable *runable = m_taskList.at(index).task;
             if (this->tryTake(runable)) {
@@ -93,6 +97,8 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     task->setThreadPoolManager(this);
     task->addgetDocImageTask(tParam);
     m_taskList << tParam;
+    qDebug() << "Starting new image load task for page:" << tParam.pageIndex
+             << "total tasks:" << m_taskList.size();
     this->start(task);
 }
 
@@ -100,7 +106,10 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
 {
     QMutexLocker mutext(&m_runMutex);
 
-    QPixmap pixmap =  QPixmap::fromImage(image);
+    QPixmap pixmap = QPixmap::fromImage(image);
+    qDebug() << "Task finished for page:" << task.pageIndex
+             << "image size:" << image.size()
+             << "remaining tasks:" << m_taskList.size() - 1;
 
     setImageForDocSheet(task.sheet, task.pageIndex, pixmap);
 
@@ -113,8 +122,11 @@ void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task
 QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int pageIndex)
 {
     if (m_docSheetImgMap.contains(sheet)) {
+        qDebug() << "Image cache" << (m_docSheetImgMap[sheet][pageIndex].isNull() ? "miss" : "hit")
+                 << "for page:" << pageIndex;
         return m_docSheetImgMap[sheet][pageIndex];
     }
+    qDebug() << "No cache found for document";
     return QPixmap();
 }
 
@@ -126,14 +138,17 @@ void ReaderImageThreadPoolManager::setImageForDocSheet(DocSheet *sheet, int page
 
 void ReaderImageThreadPoolManager::onDocProxyDestroyed(QObject *obj)
 {
+    qDebug() << "Cleaning up resources for destroyed document proxy";
     m_docProxylst.removeAll(obj);
     m_docSheetImgMap.remove(obj);
 }
 
 void ReaderImageThreadPoolManager::onReceiverDestroyed(QObject *obj)
 {
+    qDebug() << "Cleaning up tasks for destroyed receiver";
     for (const ReaderImageParam_t &iter : m_taskList) {
         if (iter.receiver == obj) {
+            qDebug() << "Removing task for page:" << iter.pageIndex;
             m_taskList.removeAll(iter);
             return;
         }

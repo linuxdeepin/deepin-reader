@@ -12,6 +12,8 @@ HtmltoPdfConverter::HtmltoPdfConverter(const QString &inputPath, const QString &
     , m_outputPath(outputPath)
     , m_page(new QWebEnginePage)
 {
+    qDebug() << "HtmltoPdfConverter initialized with input:" << inputPath << "output:" << outputPath;
+
     connect(m_page.data(), &QWebEnginePage::loadFinished,
             this, &HtmltoPdfConverter::loadFinished);
     connect(m_page.data(), &QWebEnginePage::pdfPrintingFinished,
@@ -20,8 +22,9 @@ HtmltoPdfConverter::HtmltoPdfConverter(const QString &inputPath, const QString &
 
 int HtmltoPdfConverter::run()
 {
+    qDebug() << "Starting HTML to PDF conversion process";
     QUrl url = QUrl::fromUserInput(m_inputPath);
-    qDebug() << "htmltoPdf 加载的文件路径: " <<  url;
+    qDebug() << "Loading HTML file from path:" << url;
     m_page->load(url);
     return QCoreApplication::exec();
 }
@@ -29,17 +32,17 @@ int HtmltoPdfConverter::run()
 void HtmltoPdfConverter::loadFinished(bool ok)
 {
     if (!ok) {
-        qInfo() << QString("failed to load URL '%1'").arg(m_inputPath);
+        qWarning() << QString("Failed to load URL '%1'").arg(m_inputPath);
         QCoreApplication::exit(1);
     }
-    qInfo() << QString("success to load URL '%1'").arg(m_inputPath);
+    qInfo() << QString("Successfully loaded URL '%1'").arg(m_inputPath);
     m_page->printToPdf(m_outputPath);
 }
 
 void HtmltoPdfConverter::pdfPrintingFinished(const QString &filePath, bool success)
 {
     if (!success) {
-        qInfo() << QString("failed to print to output file '%1'").arg(filePath);
+        qWarning() << QString("Failed to print to output file '%1'").arg(filePath);
         QCoreApplication::exit(1);
     } else {
         QCoreApplication::quit();

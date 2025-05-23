@@ -52,6 +52,7 @@ QString DocSheet::g_lastOperationFile;
 DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidget *parent)
     : DSplitter(parent), m_filePath(filePath), m_fileType(fileType)
 {
+    qDebug() << "Creating DocSheet for file:" << filePath;
     setAlive(true);
     setHandleWidth(5);
     setChildrenCollapsible(false);  //  子部件不可拉伸到 0
@@ -212,9 +213,14 @@ QList<DocSheet *> DocSheet::getSheets()
 
 bool DocSheet::openFileExec(const QString &password)
 {
+    qDebug() << "Executing file open synchronously";
     m_password = password;
 
-    return m_renderer->openFileExec(password);
+    bool result = m_renderer->openFileExec(password);
+    if (!result) {
+        qWarning() << "Failed to open file synchronously";
+    }
+    return result;
 }
 
 void DocSheet::openFileAsync(const QString &password)
@@ -227,6 +233,7 @@ void DocSheet::openFileAsync(const QString &password)
 
 void DocSheet::jumpToPage(int page)
 {
+    qDebug() << "Jumping to page:" << page;
     m_browser->setCurrentPage(page);
 }
 
@@ -449,9 +456,9 @@ bool DocSheet::fileChanged()
 {
     return (m_documentChanged || m_bookmarkChanged);
 }
-
 bool DocSheet::saveData()
 {
+    qDebug() << "Saving document data";
     PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
 
     //文档改变或者原文档被删除 则进行数据保存
@@ -469,9 +476,9 @@ bool DocSheet::saveData()
 
     return true;
 }
-
 bool DocSheet::saveAsData(QString targetFilePath)
 {
+    qDebug() << "Saving document as:" << targetFilePath;
     stopSearch();
 
     if (m_documentChanged && Dr::DOCX != fileType()) {
@@ -738,8 +745,11 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
 
 void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
 {
-    if (pageRange.isEmpty())
+    qDebug() << "Print requested for pages:" << pageRange;
+    if (pageRange.isEmpty()) {
+        qWarning() << "Empty page range for printing";
         return;
+    }
 
     //后台加载动画
     QWidget *pCurWgt = nullptr;
@@ -1281,6 +1291,7 @@ QString DocSheet::getPageLabelByIndex(const int &index)
 
 void DocSheet::onExtractPassword(const QString &password)
 {
+    qDebug() << "Extracted password, attempting to open file";
     m_password = password;
 
     m_renderer->openFileAsync(m_password);
@@ -1293,8 +1304,11 @@ SheetRenderer *DocSheet::renderer()
 
 void DocSheet::onPopPrintDialog()
 {
-    if (!this->opened())
+    qDebug() << "Preparing print dialog";
+    if (!this->opened()) {
+        qWarning() << "Cannot print - document not opened";
         return;
+    }
 
     DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
     preview->setAttribute(Qt::WA_DeleteOnClose);

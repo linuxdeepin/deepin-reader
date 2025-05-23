@@ -7,6 +7,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "RoundColorWidget.h"
+#include <QDebug>
 
 #include <DFontSizeManager>
 
@@ -17,12 +18,14 @@
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
 {
+    qDebug() << "ColorWidgetAction created, parent:" << pParent;
     initWidget(pParent);
     setSeparator(true);
 }
 
 void ColorWidgetAction::slotBtnClicked(int index)
 {
+    qDebug() << "Color button clicked, index:" << index;
     auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
     foreach (auto btn, btnList) {
         int btnIndex = btn->objectName().toInt();
@@ -35,10 +38,12 @@ void ColorWidgetAction::slotBtnClicked(int index)
             btn->setSelected(false);
         }
     }
+    qDebug() << "Highlight color changed to index:" << index;
 }
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
 {
+    qDebug() << "Initializing color widget with" << Utils::getHiglightColorList().size() << "colors";
     DWidget *pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
 
@@ -63,6 +68,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
         sigMap->setMapping(btn, iLoop);
 
         buttonLayout->addWidget(btn);
+        qDebug() << "Color widget initialization completed";
     }
     connect(sigMap, SIGNAL(mapped(int)), SLOT(slotBtnClicked(int)));
 

@@ -12,15 +12,16 @@
 #include "ThumbnailDelegate.h"
 
 #include <DHorizontalLine>
+#include <QDebug>
 
 #include <QVBoxLayout>
 
 const int LEFTMINHEIGHT = 220;
-
 ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent)
     , m_sheet(sheet)
 {
+    qDebug() << "ThumbnailWidget created for document:" << (sheet ? sheet->filePath() : "null");
     initWidget();
 }
 
@@ -31,6 +32,7 @@ ThumbnailWidget::~ThumbnailWidget()
 
 void ThumbnailWidget::initWidget()
 {
+    qDebug() << "Initializing ThumbnailWidget UI";
     m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
@@ -53,8 +55,11 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::handleOpenSuccess()
 {
-    if (bIshandOpenSuccess)
+    if (bIshandOpenSuccess) {
+        qDebug() << "Already handled open success";
         return;
+    }
+    qDebug() << "Handling document open success";
     bIshandOpenSuccess = true;
     m_pImageListView->handleOpenSuccess();
     m_pPageWidget->handleOpenSuccess();
@@ -75,6 +80,7 @@ void ThumbnailWidget::handlePage(int index)
 
 void ThumbnailWidget::setBookMarkState(const int &index, const int &type)
 {
+    qDebug() << "Setting bookmark state for page:" << index << "type:" << type;
     m_pImageListView->getImageModel()->setBookMarkVisible(index, type);
 }
 
@@ -116,8 +122,11 @@ void ThumbnailWidget::pageDown()
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
+    qDebug() << "Adapting window size with scale:" << scale;
     m_pImageListView->setProperty("adaptScale", scale);
-    m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0))));
+    QSize newSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
+    qDebug() << "Setting new item size:" << newSize;
+    m_pImageListView->setItemSize(newSize);
     m_pImageListView->reset();
     scrollToCurrentPage();
 }

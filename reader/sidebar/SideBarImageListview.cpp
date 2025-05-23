@@ -13,11 +13,12 @@
 #include <QScrollBar>
 #include <QSet>
 #include <QMouseEvent>
-
+#include <QDebug>
 SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
     , m_docSheet(sheet)
 {
+    qDebug() << "SideBarImageListView created for document:" << (sheet ? sheet->filePath() : "null");
     initControl();
     setAutoScroll(false);
     setProperty("adaptScale", 1.0);
@@ -32,11 +33,13 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+    qDebug() << "Enabled touch gesture scrolling";
 
     connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &SideBarImageListView::onRemoveThumbnailListSlideGesture);
-
     connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &SideBarImageListView::onSetThumbnailListSlideGesture);
+    qDebug() << "Connected scrollbar signals";
 }
+
 
 void SideBarImageListView::initControl()
 {
@@ -73,6 +76,7 @@ void SideBarImageListView::setListType(int type)
 
 void SideBarImageListView::handleOpenSuccess()
 {
+    qDebug() << "Handling open success for list type:" << m_listType;
     if (m_listType == E_SideBar::SIDE_THUMBNIL) {
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         for (int pageIndex : pageList) {
@@ -113,8 +117,12 @@ void SideBarImageListView::handleOpenSuccess()
 void SideBarImageListView::onItemClicked(const QModelIndex &index)
 {
     if (index.isValid()) {
-        m_docSheet->jumpToIndex(m_imageModel->getPageIndexForModelIndex(index.row()));
+        int pageIndex = m_imageModel->getPageIndexForModelIndex(index.row());
+        qDebug() << "Item clicked at row:" << index.row() << "jumping to page:" << pageIndex;
+        m_docSheet->jumpToIndex(pageIndex);
         emit sigListItemClicked(index.row());
+    } else {
+        qWarning() << "Invalid index in onItemClicked";
     }
 }
 
@@ -130,6 +138,7 @@ void SideBarImageListView::onRemoveThumbnailListSlideGesture()
 
 bool SideBarImageListView::scrollToIndex(int index, bool scrollTo)
 {
+    qDebug() << "Scrolling to index:" << index << "scrollTo:" << scrollTo;
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(index);
     if (indexlst.size() > 0) {
         const QModelIndex &index = indexlst.first();
@@ -137,8 +146,10 @@ bool SideBarImageListView::scrollToIndex(int index, bool scrollTo)
             this->scrollTo(index);
         this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
         this->setCurrentIndex(index);
+        qDebug() << "Successfully scrolled to model index:" << index.row();
         return true;
     } else {
+        qWarning() << "No model index found for page index:" << index;
         this->setCurrentIndex(QModelIndex());
         this->clearSelection();
         return false;
@@ -173,22 +184,27 @@ void SideBarImageListView::mousePressEvent(QMouseEvent *event)
 
 void SideBarImageListView::showNoteMenu(const QPoint &point)
 {
+    qDebug() << "Showing note menu at:" << point;
     if (m_pNoteMenu == nullptr) {
+        qDebug() << "Creating new note menu";
         m_pNoteMenu = new DMenu(this);
         m_pNoteMenu->setAccessibleName("Menu_Note");
 
         QAction *copyAction = m_pNoteMenu->addAction(tr("Copy"));
         connect(copyAction, &QAction::triggered, [this]() {
+            qDebug() << "Copy note action triggered";
             emit sigListMenuClick(E_NOTE_COPY);
         });
 
         QAction *delAction = m_pNoteMenu->addAction(tr("Remove annotation"));
         connect(delAction, &QAction::triggered, [this]() {
+            qDebug() << "Delete note action triggered";
             emit sigListMenuClick(E_NOTE_DELETE);
         });
 
         QAction *delAllAction = m_pNoteMenu->addAction(tr("Remove all"));
         connect(delAllAction, &QAction::triggered, [this]() {
+            qDebug() << "Delete all notes action triggered";
             emit sigListMenuClick(E_NOTE_DELETE_ALL);
         });
     }
@@ -218,8 +234,10 @@ int  SideBarImageListView::getModelIndexForPageIndex(int pageIndex)
 {
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(pageIndex);
     if (indexlst.size() > 0) {
+        qDebug() << "Found model index:" << indexlst.first().row() << "for page:" << pageIndex;
         return indexlst.first().row();
     }
+    qWarning() << "No model index found for page:" << pageIndex;
     return -1;
 }
 

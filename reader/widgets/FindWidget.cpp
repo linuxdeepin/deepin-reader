@@ -7,6 +7,7 @@
 #include "BaseWidget.h"
 #include "DocSheet.h"
 #include "Utils.h"
+#include <QDebug>
 
 #include <DDialogCloseButton>
 #include <DIconButton>
@@ -19,6 +20,7 @@ FindWidget::FindWidget(DWidget *parent)
     : DFloatingWidget(parent)
     , m_parentWidget(parent)
 {
+    qDebug() << "FindWidget created, parent:" << parent;
     setMinimumSize(QSize(414, 60));
 
     setBlurBackgroundEnabled(true);
@@ -31,6 +33,7 @@ FindWidget::FindWidget(DWidget *parent)
 
 FindWidget::~FindWidget()
 {
+    qDebug() << "FindWidget destroyed";
 }
 
 void FindWidget::setDocSheet(DocSheet *sheet)
@@ -40,6 +43,7 @@ void FindWidget::setDocSheet(DocSheet *sheet)
 
 void FindWidget::updatePosition()
 {
+    qDebug() << "Updating find widget position, yOffset:" << m_yOff;
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     this->move(screenGeometry.width() - this->width() - 10, m_yOff + 10);
 
@@ -54,6 +58,7 @@ void FindWidget::setSearchEditFocus()
 
 void FindWidget::onSearchStop()
 {
+    qDebug() << "Search stopped, last search text:" << (m_lastSearchText.isEmpty() ? "empty" : "non-empty");
     m_lastSearchText.clear();
 
     m_findPrevButton->setDisabled(true);
@@ -67,6 +72,7 @@ void FindWidget::onSearchStop()
 
 void FindWidget::onSearchStart()
 {
+    qDebug() << "Search started, text:" << (m_pSearchEdit->text().isEmpty() ? "empty" : "non-empty");
     QString searchText = m_pSearchEdit->text().trimmed();
 
     if ((searchText != "") && (m_lastSearchText != searchText)) {
@@ -80,12 +86,14 @@ void FindWidget::onSearchStart()
 
 void FindWidget::slotFindNextBtnClicked()
 {
+    qDebug() << "Find next result triggered";
     if (m_docSheet)
         m_docSheet->jumpToNextSearchResult();
 }
 
 void FindWidget::slotFindPrevBtnClicked()
 {
+    qDebug() << "Find previous result triggered";
     if (m_docSheet)
         m_docSheet->jumpToPrevSearchResult();
 }
@@ -99,6 +107,7 @@ void FindWidget::onTextChanged()
 
 void FindWidget::initWidget()
 {
+    qDebug() << "Initializing find widget controls";
     m_pSearchEdit = new DSearchEdit(this);
     m_pSearchEdit->setObjectName("findSearchEdit_P");
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
@@ -173,6 +182,7 @@ void FindWidget::initWidget()
     setFixedSize(422, 60);
 #endif
     Utils::setObjectNoFocusPolicy(this);
+    qDebug() << "Find widget controls initialized";
 }
 
 void FindWidget::setEditAlert(const int &iFlag)
@@ -194,6 +204,7 @@ void FindWidget::setYOff(int yOff)
 
 void FindWidget::onCloseBtnClicked()
 {
+    qDebug() << "Find widget close button clicked";
     onSearchStop();
 
     m_pSearchEdit->clear();

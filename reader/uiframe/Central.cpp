@@ -24,6 +24,7 @@
 Central::Central(QWidget *parent)
     : BaseWidget(parent)
 {
+    qDebug() << "Central widget initializing...";
     setAcceptDrops(true);
 
     m_widget = new TitleWidget(parent);
@@ -86,6 +87,7 @@ Central::Central(QWidget *parent)
 
 Central::~Central()
 {
+    qDebug() << "Central widget destroying...";
 }
 
 TitleWidget *Central::titleWidget()
@@ -119,18 +121,21 @@ void Central::setMenu(TitleMenu *menu)
 
 void Central::addFilesWithDialog()
 {
+    qDebug() << "Opening file selection dialog...";
     DFileDialog dialog(this);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu *.docx)");
     dialog.setDirectory(QDir::homePath());
 
     if (QDialog::Accepted != dialog.exec()) {
+        qDebug() << "File selection dialog canceled";
         return;
     }
 
     QStringList filePathList = dialog.selectedFiles();
 
     if (filePathList.count() <= 0) {
+        qWarning() << "No files selected in dialog";
         return;
     }
 
@@ -148,6 +153,7 @@ void Central::addFilesWithDialog()
 
 void Central::addFileAsync(const QString &filePath)
 {
+    qDebug() << "Adding file asynchronously:" << filePath;
     docPage()->addFileAsync(filePath);
 }
 
@@ -177,6 +183,7 @@ QList<DocSheet *> Central::getSheets()
 void Central::handleShortcut(const QString &shortcut)
 {
     if (shortcut == Dr::key_ctrl_o) {
+        qDebug() << "Handling Ctrl+O shortcut - opening file dialog";
         addFilesWithDialog();
     } if (shortcut == Dr::key_ctrl_shift_slash) { //  显示快捷键预览
         ShortCutShow show;
@@ -193,6 +200,7 @@ bool Central::handleClose(bool needToBeSaved)
         qDebug() << __FUNCTION__ << "正在关闭所有 sheet ...";
         return docPage()->closeAllSheets(needToBeSaved);
     }
+    qWarning() << "No document page available to close";
 
     return true;
 }
@@ -233,6 +241,7 @@ void Central::onMenuTriggered(const QString &action)
 
 void Central::onOpenFilesExec()
 {
+    qDebug() << "Executing open files request";
     addFilesWithDialog();
 }
 
@@ -284,8 +293,10 @@ void Central::onTouchPadEvent(const QString &name, const QString &direction, int
 void Central::onKeyTriggered()
 {
     QAction *action = static_cast<QAction *>(sender());
-    if (nullptr == action)
+    if (nullptr == action) {
+        qWarning() << "Received key trigger from null action";
         return;
+    }
 
     handleShortcut(action->shortcut().toString());
 }
@@ -343,6 +354,7 @@ void Central::dropEvent(QDropEvent *event)
 
 void Central::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "Handling resize event to size:" << event->size();
     m_mainWidget->move(0, 0);
     m_mainWidget->resize(event->size());
     BaseWidget::resizeEvent(event);

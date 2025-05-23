@@ -9,7 +9,7 @@
 #include "Application.h"
 
 #include <QTimer>
-#include <QtDebug>
+#include <QDebug>
 
 ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
 {
@@ -35,11 +35,13 @@ SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent), m_sheet(sheet)
 {
+    qDebug() << "SideBarImageViewModel created for document:" << (sheet ? sheet->filePath() : "null");
     connect(m_sheet, &DocSheet::sigPageModified, this, &SideBarImageViewModel::onUpdateImage);
 }
 
 void SideBarImageViewModel::resetData()
 {
+    qDebug() << "Resetting model data";
     beginResetModel();
     m_pagelst.clear();
     endResetModel();
@@ -47,12 +49,15 @@ void SideBarImageViewModel::resetData()
 
 void SideBarImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
+    qDebug() << "Initializing model with" << pagelst.size() << "items, sort:" << sort;
     beginResetModel();
 
     m_pagelst = pagelst;
 
-    if (sort)
+    if (sort) {
+        qDebug() << "Sorting model data";
         std::sort(m_pagelst.begin(), m_pagelst.end());
+    }
 
     endResetModel();
 }
@@ -170,6 +175,7 @@ void SideBarImageViewModel::onUpdateImage(int index)
 void SideBarImageViewModel::insertPageIndex(int pageIndex)
 {
     if (!m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
+        qDebug() << "Inserting page index:" << pageIndex;
         int iterIndex = 0;
         int rowCount = m_pagelst.size();
         for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
@@ -180,6 +186,8 @@ void SideBarImageViewModel::insertPageIndex(int pageIndex)
         m_pagelst.insert(iterIndex, tImageinfo);
         beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
         endInsertRows();
+    } else {
+        qWarning() << "Page index already exists:" << pageIndex;
     }
 }
 
@@ -211,9 +219,12 @@ void SideBarImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInf
 void SideBarImageViewModel::removePageIndex(int pageIndex)
 {
     if (m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
+        qDebug() << "Removing page index:" << pageIndex;
         beginResetModel();
         m_pagelst.removeAll(ImagePageInfo_t(pageIndex));
         endResetModel();
+    } else {
+        qWarning() << "Page index not found:" << pageIndex;
     }
 }
 
@@ -247,10 +258,12 @@ int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation
 
 void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
 {
+    qDebug() << "Handling thumbnail render for page:" << index << "size:" << pixmap.size();
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     m_sheet->setThumbnail(index, pixmap);
 
     const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
+    qDebug() << "Notifying" << modelIndexlst.size() << "views of data change";
     for (const QModelIndex &modelIndex : modelIndexlst)
         emit dataChanged(modelIndex, modelIndex);
 }

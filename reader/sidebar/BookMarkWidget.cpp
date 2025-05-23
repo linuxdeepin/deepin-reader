@@ -24,13 +24,15 @@ const int LEFTMINHEIGHT = 80;
 BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
 {
+    qDebug() << "Creating BookMarkWidget for document:" << (sheet ? sheet->filePath() : "null");
+
     initWidget();
     onUpdateTheme();
 }
 
 BookMarkWidget::~BookMarkWidget()
 {
-
+    qDebug() << "Destroying BookMarkWidget";
 }
 
 void BookMarkWidget::initWidget()
@@ -73,8 +75,12 @@ void BookMarkWidget::initWidget()
 
 void BookMarkWidget::prevPage()
 {
-    if (m_sheet.isNull())
+    qDebug() << "Navigating to previous bookmark, current row:" << m_pImageListView->currentIndex().row();
+
+    if (m_sheet.isNull()) {
+        qWarning() << "Cannot navigate - sheet is null";
         return;
+    }
 
     int curPage = m_pImageListView->currentIndex().row() - 1;
     if (curPage < 0)
@@ -85,8 +91,12 @@ void BookMarkWidget::prevPage()
 
 void BookMarkWidget::pageUp()
 {
-    if (m_sheet.isNull())
+    qDebug() << "Performing page up navigation";
+
+    if (m_sheet.isNull()) {
+        qWarning() << "Cannot page up - sheet is null";
         return;
+    }
 
     const QModelIndex &pageIndex = m_pImageListView->pageUpIndex();
     if (!pageIndex.isValid())
@@ -97,8 +107,12 @@ void BookMarkWidget::pageUp()
 
 void BookMarkWidget::nextPage()
 {
-    if (m_sheet.isNull())
+    qDebug() << "Navigating to next bookmark, current row:" << m_pImageListView->currentIndex().row();
+
+    if (m_sheet.isNull()) {
+        qWarning() << "Cannot navigate - sheet is null";
         return;
+    }
 
     int curPage = m_pImageListView->currentIndex().row() + 1;
     m_sheet->jumpToIndex(m_pImageListView->getPageIndexForModelIndex(curPage));
@@ -106,8 +120,12 @@ void BookMarkWidget::nextPage()
 
 void BookMarkWidget::pageDown()
 {
-    if (m_sheet.isNull())
+    qDebug() << "Performing page down navigation";
+
+    if (m_sheet.isNull()) {
+        qWarning() << "Cannot page down - sheet is null";
         return;
+    }
 
     const QModelIndex &pageIndex = m_pImageListView->pageDownIndex();
     if (!pageIndex.isValid())
@@ -118,8 +136,12 @@ void BookMarkWidget::pageDown()
 
 void BookMarkWidget::handleOpenSuccess()
 {
-    if (bIshandOpenSuccess)
+    qDebug() << "Handling document open success, bookmark count:" << m_sheet->getBookMarkList().size();
+
+    if (bIshandOpenSuccess) {
+        qDebug() << "Open success already handled, skipping";
         return;
+    }
     bIshandOpenSuccess = true;
     const QSet<int> &pageList = m_sheet->getBookMarkList();
     if (pageList.contains(m_sheet->currentIndex()))
@@ -131,10 +153,13 @@ void BookMarkWidget::handlePage(int index)
 {
     bool result = m_pImageListView->scrollToIndex(index);
     m_pAddBookMarkBtn->setDisabled(result);
+    qDebug() << "Handling page change to index:" << index << "scroll result:" << result;
 }
 
 void BookMarkWidget::handleBookMark(int index, int state)
 {
+    qDebug() << "Updating bookmark state - index:" << index << "state:" << (state ? "added" : "removed");
+
     if (state) {
         int nCurIndex = m_sheet->currentIndex();
         if (nCurIndex == index) m_pAddBookMarkBtn->setEnabled(false);
@@ -149,13 +174,21 @@ void BookMarkWidget::handleBookMark(int index, int state)
 
 void BookMarkWidget::deleteItemByKey()
 {
+    qDebug() << "Deleting bookmark by key";
+
     int curIndex = m_pImageListView->getPageIndexForModelIndex(m_pImageListView->currentIndex().row());
-    if (curIndex >= 0)
+    if (curIndex >= 0) {
+        qDebug() << "Removing bookmark at index:" << curIndex;
         m_sheet->setBookMark(curIndex, false);
+    } else {
+        qWarning() << "Invalid index for bookmark deletion";
+    }
 }
 
 void BookMarkWidget::deleteAllItem()
 {
+    qDebug() << "Preparing to delete all bookmarks";
+
     QList<int> bookmarks;
     int itemsize = m_pImageListView->model()->rowCount();
     for (int i = 0; i < itemsize; i++) {
@@ -169,13 +202,19 @@ void BookMarkWidget::deleteAllItem()
 
 void BookMarkWidget::onAddBookMarkClicked()
 {
-    if (m_sheet.isNull()) return;
+    qDebug() << "Add bookmark button clicked";
+    if (m_sheet.isNull()) {
+        qWarning() << "Cannot add bookmark - sheet is null";
+        return;
+    }
     int nPage = m_sheet->currentIndex();
     m_sheet->setBookMark(nPage, true);
 }
 
 void BookMarkWidget::adaptWindowSize(const double &scale)
 {
+    qDebug() << "Adapting window size with scale factor:" << scale;
+
     m_pImageListView->setProperty("adaptScale", scale);
     m_pImageListView->setItemSize(QSize(static_cast<int>(LEFTMINWIDTH * scale), LEFTMINHEIGHT));
     m_pImageListView->reset();
@@ -184,6 +223,8 @@ void BookMarkWidget::adaptWindowSize(const double &scale)
 
 void BookMarkWidget::showMenu()
 {
+    qDebug() << "Showing bookmark context menu, item count:" << (m_pImageListView ? m_pImageListView->count() : 0);
+
     if (m_pImageListView && m_pImageListView->count()) {
         m_pImageListView->showMenu();
     }
@@ -191,6 +232,8 @@ void BookMarkWidget::showMenu()
 
 void BookMarkWidget::onUpdateTheme()
 {
+    qDebug() << "Updating widget theme colors";
+
     QPalette plt = QApplication::palette();
     plt.setColor(QPalette::Window, plt.color(QPalette::Base));
     setPalette(plt);
@@ -200,11 +243,15 @@ void BookMarkWidget::onUpdateTheme()
 
 void BookMarkWidget::onListMenuClick(const int &iType)
 {
+    qDebug() << "Bookmark list menu action triggered, type:" << iType <<
+            (iType == E_BOOKMARK_DELETE ? "(Delete)" : "(Delete All)");
+
     if (iType == E_BOOKMARK_DELETE) {
         deleteItemByKey();
     } else if (iType == E_BOOKMARK_DELETE_ALL) {
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?") ,this);
         if (result == 1) {
+            qDebug() << "User confirmed deletion of all bookmarks";
             deleteAllItem();
         }
     }

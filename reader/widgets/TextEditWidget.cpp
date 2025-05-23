@@ -12,6 +12,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "DBusObject.h"
+#include <QDebug>
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -27,6 +28,7 @@
 TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "TextEditShadowWidget created, parent:" << parent;
     setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
 
     setAttribute(Qt::WA_TranslucentBackground);
@@ -92,6 +94,7 @@ void TextEditShadowWidget::slotCloseNoteWidget(bool isEsc)
 TextEditWidget::TextEditWidget(DWidget *parent)
     : BaseWidget(parent)
 {
+    qDebug() << "TextEditWidget created";
     setAttribute(Qt::WA_TranslucentBackground);
 
     initWidget();
@@ -121,6 +124,7 @@ void TextEditWidget::onShowMenu()
 
 void TextEditWidget::setEditText(const QString &note)
 {
+    qDebug() << "Setting edit text, length:" << note.length();
     m_pTextEdit->clear();
     m_pTextEdit->setPlainText(note);
     m_strNote = note;
@@ -132,6 +136,7 @@ void TextEditWidget::setEditText(const QString &note)
 
 void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 {
+    qDebug() << "Setting annotation, type:" << (annotation ? annotation->type() : -1);
     m_annotation = annotation;
 }
 
@@ -156,6 +161,7 @@ TransparentTextEdit *TextEditWidget::getTextEdit() const
 
 void TextEditWidget::hideEvent(QHideEvent *event)
 {
+    qDebug() << "TextEditWidget hiding";
     BaseWidget::hideEvent(event);
     QString sText = m_pTextEdit->toPlainText().trimmed();
 
@@ -265,6 +271,7 @@ void TextEditWidget::paintEvent(QPaintEvent *event)
 
 void TextEditWidget::focusOutEvent(QFocusEvent *event)
 {
+    qDebug() << "TextEditWidget focus out, reason:" << event->reason();
     BaseWidget::focusOutEvent(event);
 
     Q_EMIT sigCloseNoteWidget();

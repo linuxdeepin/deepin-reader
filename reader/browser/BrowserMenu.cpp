@@ -10,14 +10,17 @@
 #include "Global.h"
 
 #include <DFontSizeManager>
+#include <QDebug>
 
 BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
 {
+    qDebug() << "BrowserMenu created";
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
 }
 
 void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, const QString &copytext)
 {
+    qDebug() << "BrowserMenu::initActions type:" << type << "index:" << index << "fileType:" << sheet->fileType();
     m_type = type;
     m_pColorWidgetAction = nullptr;
     if (type == DOC_MENU_ANNO_ICON) {
@@ -157,6 +160,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
 
 void BrowserMenu::hideEvent(QHideEvent *event)
 {
+    qDebug() << "BrowserMenu hidden";
     emit sigMenuHide();
 
     DMenu::hideEvent(event);
@@ -164,6 +168,7 @@ void BrowserMenu::hideEvent(QHideEvent *event)
 
 QAction *BrowserMenu::createAction(const QString &displayname, const QString &objectname)
 {
+    qDebug() << "BrowserMenu::createAction:" << objectname;
     QAction *action = new  QAction(displayname, this);
     action->setObjectName(objectname);
     connect(action, SIGNAL(triggered()), this, SLOT(onItemClicked()));
@@ -173,11 +178,14 @@ QAction *BrowserMenu::createAction(const QString &displayname, const QString &ob
 
 void BrowserMenu::onItemClicked()
 {
-    emit signalMenuItemClicked(sender()->objectName());
+    QString actionName = sender()->objectName();
+    qInfo() << "BrowserMenu item clicked:" << actionName;
+    emit signalMenuItemClicked(actionName);
 }
 
 void BrowserMenu::onSetHighLight()
 {
+    qDebug() << "BrowserMenu::onSetHighLight type:" << m_type;
     if (m_type == DOC_MENU_SELECT_TEXT) {
         emit signalMenuItemClicked("AddTextHighlight");
     } else if (m_type == DOC_MENU_ANNO_HIGHLIGHT) {

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SaveDialog.h"
+#include <QDebug>
 
 #include <DDialog>
 
@@ -12,11 +13,12 @@ DWIDGET_USE_NAMESPACE
 SaveDialog::SaveDialog(QObject *parent)
     : QObject(parent)
 {
-
+    qDebug() << "SaveDialog created, parent:" << parent;
 }
 
 int SaveDialog::showExitDialog(QString fileName, QWidget  *parent)
 {
+    qDebug() << "Showing save dialog for file:" << fileName << ", parent:" << parent;
     DDialog dlg(tr("Save the changes to \"%1\"?").arg(fileName), "", parent);
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel", "button") << tr("Discard", "button"));
@@ -24,11 +26,13 @@ int SaveDialog::showExitDialog(QString fileName, QWidget  *parent)
     QMargins mar(12, 12, 12, 12);
     dlg.setContentLayoutContentsMargins(mar);
     int nRes = dlg.exec();
+    qDebug() << "Save dialog result:" << nRes;
     return nRes;
 }
 
 int SaveDialog::showTipDialog(const QString &content, QWidget *parent)
 {
+    qDebug() << "Showing tip dialog, content:" << content;
     DDialog dlg(content, "", parent);
     dlg.setIcon(QIcon::fromTheme("deepin-reader"));
     dlg.addButtons(QStringList() <<  tr("Cancel"));

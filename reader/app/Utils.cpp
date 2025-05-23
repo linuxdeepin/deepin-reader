@@ -30,6 +30,7 @@ int Utils::m_colorIndex = 0;
 QString Utils::m_currenFilePath = "";
 QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
+    qDebug() << "Processing keyboard shortcut";
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
     if (modifiers != Qt::NoModifier) {
@@ -59,6 +60,7 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 
 QString Utils::getInputDataSize(const qint64 &dSize)
 {
+    qDebug() << "Formatting data size:" << dSize;
     if (dSize < 1024) {
         return QString("%1 B").arg(dSize);
     }
@@ -94,6 +96,7 @@ QPixmap Utils::roundQPixmap(const QPixmap &img_in, int radius)
 
 void  Utils::copyText(const QString &sText)
 {
+    qDebug() << "Copying text to clipboard";
 #if _ZPD_
     int intercept = 0;
     if (getLoadLibsInstance()->m_document_clip_copy) {
@@ -129,11 +132,15 @@ QString Utils::getElidedText(const QFontMetrics &fontMetrics, const QSize &size,
 
 bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
 {
-    if (sourcePath == destinationPath)
+    qDebug() << "Copying file from:" << sourcePath << "to:" << destinationPath;
+    if (sourcePath == destinationPath) {
+        qDebug() << "Source and destination paths are the same";
         return true;
+    }
 
     QFile sourceFile(sourcePath);
     if (!sourceFile.open(QIODevice::ReadOnly)) {
+        qWarning() << "Failed to open source file for reading";
         return false;
     }
 
@@ -171,6 +178,7 @@ bool Utils::copyFile(const QString &sourcePath, const QString &destinationPath)
 
 QImage Utils::copyImage(const QImage &srcimg, int x, int y, int w, int h)
 {
+    qDebug() << "Copying image region:" << QRect(x, y, w, h);
     int dx = 0;
     int dy = 0;
     if (w <= 0 || h <= 0)
@@ -297,6 +305,7 @@ void Utils::setObjectNoFocusPolicy(QObject *obj)
 
 bool Utils::isWayland()
 {
+    qDebug() << "Checking for Wayland environment";
     auto e = QProcessEnvironment::systemEnvironment();
     QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
     QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
@@ -310,5 +319,6 @@ bool Utils::isWayland()
 
 void Utils::setCurrentFilePath(QString currentFilePath)
 {
+    qDebug() << "Setting current file path:" << currentFilePath;
     m_currenFilePath = currentFilePath;
 }

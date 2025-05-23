@@ -48,9 +48,11 @@ DWIDGET_USE_NAMESPACE
 const qreal deltaManhattanLength = 12.0;
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
+    qDebug() << "SheetBrowser constructor started";
     setMouseTracking(true);
 
     setScene(new QGraphicsScene(this));
+    qDebug() << "Graphics scene created";
 
     setFrameShape(QFrame::NoFrame);
 
@@ -62,27 +64,26 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setAttribute(Qt::WA_AcceptTouchEvents);
 
-    grabGesture(Qt::PinchGesture);//捏合缩放
+    grabGesture(Qt::PinchGesture);
+    qDebug() << "Pinch gesture enabled";
 
     setProperty("pinchgetsturing", false);
 
     m_scroller = QScroller::scroller(this);
+    qDebug() << "Scroller initialized";
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
-
     connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &SheetBrowser::onRemoveDocSlideGesture);
-
     connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &SheetBrowser::onSetDocSlideGesture);
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onHorizontalScrollBarValueChanged(int)));
-
     connect(horizontalScrollBar(), &QScrollBar::sliderPressed, this, &SheetBrowser::onRemoveDocSlideGesture);
-
     connect(horizontalScrollBar(), &QScrollBar::sliderReleased, this, &SheetBrowser::onSetDocSlideGesture);
 
     m_tipsWidget = new TipsWidget(this);
     m_tipsWidget->setAccessibleName("Tips");
     m_tipsWidget->setAutoChecked(true);
+    qDebug() << "Tips widget created";
 
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 
@@ -92,16 +93,24 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
     this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+    
+    qDebug() << "SheetBrowser constructor completed";
 }
 
 SheetBrowser::~SheetBrowser()
 {
+    qDebug() << "SheetBrowser destructor started";
     disconnect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 
     qDeleteAll(m_items);
+    qDebug() << "Deleted all browser items, count:" << m_items.count();
 
-    if (nullptr != m_noteEditWidget)
+    if (nullptr != m_noteEditWidget) {
         delete m_noteEditWidget;
+        qDebug() << "Note edit widget deleted";
+    }
+    
+    qDebug() << "SheetBrowser destructor completed";
 }
 
 QImage SheetBrowser::firstThumbnail(const QString &filePath)
@@ -139,46 +148,62 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
 void SheetBrowser::init(SheetOperation &operation, const QSet<int> &bookmarks)
 {
+    qDebug() << "Initializing SheetBrowser with page count:" << m_sheet->pageCount()
+             << "and" << bookmarks.count() << "bookmarks";
+
     int pageCount = m_sheet->pageCount();
 
     for (int i = 0; i < pageCount; ++i) {
         BrowserPage *item = new BrowserPage(this, i, m_sheet);
+        qDebug() << "Created BrowserPage for page:" << i;
 
-        if (bookmarks.contains(i))
+        if (bookmarks.contains(i)) {
             item->setBookmark(true);
+            qDebug() << "Set bookmark for page:" << i;
+        }
 
         m_items.append(item);
 
-        if (m_sheet->renderer()->getPageSize(i).width() > m_maxWidth)
-            m_maxWidth = m_sheet->renderer()->getPageSize(i).width();
+        QSizeF pageSize = m_sheet->renderer()->getPageSize(i);
+        if (pageSize.width() > m_maxWidth)
+            m_maxWidth = pageSize.width();
 
-        if (m_sheet->renderer()->getPageSize(i).height() > m_maxHeight)
-            m_maxHeight = m_sheet->renderer()->getPageSize(i).height();
+        if (pageSize.height() > m_maxHeight)
+            m_maxHeight = pageSize.height();
 
         scene()->addItem(item);
     }
 
+    qDebug() << "Max page dimensions - width:" << m_maxWidth << "height:" << m_maxHeight;
+
     setMouseShape(operation.mouseShape);
+    qDebug() << "Mouse shape set to:" << operation.mouseShape;
 
     deform(operation);
 
     m_initPage = operation.currentPage;
-
     m_hasLoaded = true;
+    
+    qInfo() << "SheetBrowser initialized successfully, initial page:" << m_initPage;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 {
+    qDebug() << "Setting mouse shape to:" << shape;
     closeMagnifier();
+    
     if (Dr::MouseShapeHand == shape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(false);
+        qDebug() << "Set to hand drag mode, word selection disabled";
     } else if (Dr::MouseShapeNormal == shape) {
         setDragMode(QGraphicsView::NoDrag);
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(true);
+        qDebug() << "Set to normal mode, word selection enabled";
     }
+    
     m_bHandAndLink = false;
 }
 
@@ -261,12 +286,18 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
     // 超链接与高亮区域重合时，手形工具下只响应超链接
-    if (annotation == nullptr || m_bHandAndLink)
+    if (annotation == nullptr || m_bHandAndLink) {
+        qDebug() << "Skipping note edit - annotation null or hand and link mode";
         return;
+    }
 
+    qDebug() << "Showing note edit widget for annotation at:" << point;
+    
     m_tipsWidget->hide();
     if (m_noteEditWidget == nullptr) {
         m_noteEditWidget = new TextEditShadowWidget(this);
+        qDebug() << "Created new TextEditShadowWidget";
+        
         connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
         connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigRemoveAnnotation, this, &SheetBrowser::onRemoveAnnotation);
         connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigUpdateAnnotation, this, &SheetBrowser::onUpdateAnnotation);
@@ -278,6 +309,8 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
     m_noteEditWidget->getTextEditWidget()->setEditText(annotation->contents());
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
     m_noteEditWidget->showWidget(point);
+    
+    qDebug() << "Note edit widget shown with content:" << annotation->contents();
 }
 
 bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
@@ -698,8 +731,12 @@ bool SheetBrowser::event(QEvent *event)
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
-    if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+    qDebug() << "Gesture event received, type:" << event->gestures().count();
+    
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
+        qDebug() << "Processing pinch gesture";
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
+    }
 
     return true;
 }
@@ -752,6 +789,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 
 void SheetBrowser::deform(SheetOperation &operation)
 {
+    qDebug() << "Deforming view with scale factor:" << operation.scaleFactor
+             << "mode:" << operation.scaleMode << "rotation:" << operation.rotation;
+             
     m_lastScaleFactor = operation.scaleFactor;
 
     //根据缩放模式调整缩放比例
@@ -926,9 +966,12 @@ void SheetBrowser::resizeEvent(QResizeEvent *event)
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << "Mouse press at:" << event->pos() << "button:" << event->button();
+    
     QPointF point = event->pos();
 
     BrowserPage *page = getBrowserPageForPoint(point);
+    qDebug() << "Event on page:" << (page ? page->itemIndex() : -1);
 
     m_scroller->stop();
 
@@ -937,7 +980,6 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
         m_iconAnnot = nullptr;
 
         if (btn == Qt::LeftButton) {
-
             //清除上一次选中
             clearSelectIconAnnotAfterMenu();
 
@@ -947,20 +989,24 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
                 m_scroller->handleInput(QScroller::InputPress, event->pos(), static_cast<qint64>(event->timestamp()));
+                qDebug() << "Touch screen gesture started";
             } else {
                 m_selectStartWord = nullptr;
                 m_selectEndWord = nullptr;
                 scene()->setSelectionArea(QPainterPath());
+                qDebug() << "Selection area cleared";
             }
 
             m_selectWord = nullptr;
             m_selectEndPos = QPointF();
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
+            qDebug() << "Selection start position:" << m_selectPressedPos;
 
             if (page != nullptr) {
                 m_selectIndex = page->itemIndex();
                 //add by dxh 2020-8-19  防止书签附近有文字时,操作书签无效
                 page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
+                qDebug() << "Set page bookmark at:" << page->mapFromScene(m_selectPressedPos);
             }
 
             deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
@@ -975,6 +1021,7 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
                 m_iconAnnot = clickAnno;
+                qDebug() << "Text annotation selected:" << clickAnno->contents();
                 return DGraphicsView::mousePressEvent(event);
             }
         } else if (btn == Qt::RightButton) {
@@ -1459,8 +1506,12 @@ int SheetBrowser::currentScrollValueForPage()
 
 void SheetBrowser::setCurrentPage(int page)
 {
-    if (page < 1 || page > allPages())
+    if (page < 1 || page > allPages()) {
+        qWarning() << "Invalid page number:" << page << "max pages:" << allPages();
         return;
+    }
+
+    qDebug() << "Setting current page to:" << page;
 
     m_bNeedNotifyCurPageChanged = false;
 
@@ -1481,6 +1532,7 @@ void SheetBrowser::setCurrentPage(int page)
     m_bNeedNotifyCurPageChanged = true;
 
     curpageChanged(page);
+    qDebug() << "Page changed to:" << page << "successfully";
 }
 
 bool SheetBrowser::getExistImage(int index, QImage &image, int width, int height)
@@ -1610,19 +1662,25 @@ void SheetBrowser::showEvent(QShowEvent *event)
 
 void SheetBrowser::handlePrepareSearch()
 {
+    qDebug() << "Preparing search for file type:" << m_sheet->fileType();
+    
     //目前只有PDF开放搜索功能
-    if (m_sheet->fileType() != Dr::FileType::PDF && m_sheet->fileType() != Dr::FileType::DOCX)
+    if (m_sheet->fileType() != Dr::FileType::PDF && m_sheet->fileType() != Dr::FileType::DOCX) {
+        qDebug() << "Search not supported for current file type";
         return;
+    }
 
     if (m_findWidget == nullptr) {
         m_findWidget = new FindWidget(this->window());
         int windowY = this->mapTo(this->window(), QPoint(0, 0)).y();
         m_findWidget->setYOff(windowY);
         m_findWidget->setDocSheet(m_sheet);
+        qDebug() << "Created new FindWidget with Y offset:" << windowY;
     }
 
     m_findWidget->updatePosition();
     m_findWidget->setSearchEditFocus();
+    qDebug() << "FindWidget positioned and focused";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if(m_findWidget && m_findWidget->isVisible()){
@@ -1767,8 +1825,13 @@ void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &
 
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    if (m_findWidget)
-        m_findWidget->setEditAlert(searchcnt == 0);
+    qInfo() << "Search finished with" << searchcnt << "results";
+    
+    if (m_findWidget) {
+        bool alert = searchcnt == 0;
+        m_findWidget->setEditAlert(alert);
+        qDebug() << "FindWidget alert set to:" << alert;
+    }
 }
 
 void SheetBrowser::curpageChanged(int curpage)
@@ -1783,13 +1846,17 @@ bool SheetBrowser::isLink(QPointF viewpoint)
 {
     BrowserPage *page = getBrowserPageForPoint(viewpoint);
 
-    if (nullptr == page)
+    if (nullptr == page) {
+        qDebug() << "No page found at viewpoint";
         return false;
+    }
 
     viewpoint = translate2Local(viewpoint);
 
-    //判断当前位置是否有link
-    return m_sheet->renderer()->inLink(page->itemIndex(), viewpoint);
+    bool isLink = m_sheet->renderer()->inLink(page->itemIndex(), viewpoint);
+    qDebug() << "Link check at page" << page->itemIndex() << "position" << viewpoint << "result:" << isLink;
+    
+    return isLink;
 }
 
 Link SheetBrowser::getLinkAtPoint(QPointF viewpoint)

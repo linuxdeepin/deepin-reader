@@ -20,11 +20,13 @@ namespace deepin_reader {
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
     m_dannotation(dannotation)
 {
-
+    qDebug() << "Creating PDF annotation with type:" << (dannotation ? dannotation->type() : -1);
 }
 
 PDFAnnotation::~PDFAnnotation()
 {
+    qDebug() << "Destroying PDF annotation";
+
     m_dannotation = nullptr;
 }
 
@@ -43,16 +45,20 @@ QList<QRectF> PDFAnnotation::boundary() const
 
 QString PDFAnnotation::contents() const
 {
-    if (nullptr == m_dannotation)
+    if (nullptr == m_dannotation) {
+        qWarning() << "Attempt to get contents from null annotation";
         return QString();
+    }
 
     return m_dannotation->text();
 }
 
 int PDFAnnotation::type()
 {
-    if (nullptr == m_dannotation)
+    if (nullptr == m_dannotation) {
+        qWarning() << "Attempt to get type from null annotation";
         return -1;
+    }
 
     return m_dannotation->type();
 }
@@ -65,12 +71,12 @@ DPdfAnnot *PDFAnnotation::ownAnnotation()
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
     m_docMutex(mutex), m_page(page)
 {
-
+    qInfo() << "Creating PDF page handler";
 }
 
 PDFPage::~PDFPage()
 {
-
+    qInfo() << "Destroying PDF page handler";
 }
 
 QSizeF PDFPage::sizeF() const
@@ -80,6 +86,8 @@ QSizeF PDFPage::sizeF() const
 
 QImage PDFPage::render(int width, int height, const QRect &slice) const
 {
+    qInfo() << "Rendering PDF page with size:" << width << "x" << height << "slice:" << slice;
+
     LOCK_DOCUMENT
 
     QRect ratioRect = slice.isValid() ? QRect(slice.x(), slice.y(), slice.width(), slice.height()) : QRect();
@@ -118,6 +126,7 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
 
 bool PDFPage::hasWidgetAnnots() const
 {
+    qDebug() << "Checking if page has widget annotations";
     return m_page->widgets().count() > 0;
 }
 
@@ -128,6 +137,8 @@ QString PDFPage::text(const QRectF &rect) const
 
 QList<Word> PDFPage::words()
 {
+    qInfo() << "Extracting text words from PDF page";
+
     LOCK_DOCUMENT
 
     if (m_wordLoaded)
@@ -272,6 +283,8 @@ QList<Word> PDFPage::words()
 
 QVector<PageSection> PDFPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
+    qInfo() << "Searching PDF page for text:" << text << "matchCase:" << matchCase << "wholeWords:" << wholeWords;
+
     LOCK_DOCUMENT
 
     return m_page->search(text, matchCase, wholeWords);
@@ -279,6 +292,8 @@ QVector<PageSection> PDFPage::search(const QString &text, bool matchCase, bool w
 
 QList< Annotation * > PDFPage::annotations() const
 {
+    qDebug() << "Retrieving PDF page annotations";
+
     QList< Annotation * > annotations;
 
     const QList<DPdfAnnot *> &annos = m_page->annots();
@@ -292,15 +307,21 @@ QList< Annotation * > PDFPage::annotations() const
 
 Annotation *PDFPage::addHighlightAnnotation(const QList<QRectF> &boundaries, const QString &text, const QColor &color)
 {
+    qInfo() << "Adding highlight annotation with boundaries:" << boundaries << "text:" << text << "color:" << color;
+
     return new PDFAnnotation(m_page->createHightLightAnnot(boundaries, text, color));
 }
 
 bool PDFPage::removeAnnotation(Annotation *annotation)
 {
+    qInfo() << "Removing PDF annotation";
+
     PDFAnnotation *PDFAnnotation = static_cast< class PDFAnnotation * >(annotation);
 
-    if (PDFAnnotation == nullptr)
+    if (PDFAnnotation == nullptr) {
+        qWarning() << "Attempt to remove null annotation";
         return false;
+    }
 
     m_page->removeAnnot(PDFAnnotation->m_dannotation);
 
@@ -313,8 +334,12 @@ bool PDFPage::removeAnnotation(Annotation *annotation)
 
 bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, const QColor &color)
 {
-    if (nullptr == annotation)
+    qInfo() << "Updating PDF annotation with text:" << text << "color:" << color;
+
+    if (nullptr == annotation) {
+        qWarning() << "Attempt to update null annotation";
         return false;
+    }
 
     if (m_page->annots().contains(annotation->ownAnnotation())) {
         if (annotation->type() == DPdfAnnot::AText)
@@ -329,16 +354,24 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
 
 Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
 {
-    if (nullptr == m_page)
+    qInfo() << "Adding icon annotation at rect:" << rect << "with text:" << text;
+
+    if (nullptr == m_page) {
+        qCritical() << "Attempt to add icon annotation to null page";
         return nullptr;
+    }
 
     return new PDFAnnotation(m_page->createTextAnnot(rect.center(), text));
 }
 
 Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 {
-    if (nullptr == m_page || nullptr == annot)
+    qInfo() << "Moving icon annotation to rect:" << rect;
+
+    if (nullptr == m_page || nullptr == annot) {
+        qCritical() << "Attempt to move icon annotation with null page or annotation";
         return nullptr;
+    }
 
     if (annot->ownAnnotation()) {
         m_page->updateTextAnnot(annot->ownAnnotation(), annot->ownAnnotation()->text(), rect.center());
@@ -351,6 +384,8 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
 PDFDocument::PDFDocument(DPdfDoc *document) :
     m_document(document)
 {
+    qInfo() << "Creating PDF document handler with page count:" << (document ? document->pageCount() : 0);
+
     m_docMutex = new QMutex;
 
     QScreen *srn = QApplication::screens().value(0);
@@ -362,8 +397,10 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
 
 PDFDocument::~PDFDocument()
 {
+    qInfo() << "Destroying PDF document handler";
+
     //需要确保pages先被析构完成
-    qDebug() << "正在释放当前 document ...";
+    qDebug() << "Releasing PDF document resources...";
 
     m_docMutex->lock();
 
@@ -374,20 +411,27 @@ PDFDocument::~PDFDocument()
     m_docMutex->unlock();
 
     delete m_docMutex;
-    qDebug() << "当前 document 已释放";
+    qDebug() << "PDF document resources released";
 }
 
 int PDFDocument::pageCount() const
 {
+    qDebug() << "Retrieving PDF document page count";
+
     return m_document->pageCount();
 }
 
 Page *PDFDocument::page(int index) const
 {
+    qInfo() << "Retrieving PDF page at index:" << index;
+
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
 
-        if (page->isValid())
+        if (page->isValid()) {
+            qDebug() << "PDF page at index" << index << "is valid";
             return new PDFPage(m_docMutex, page);
+        }
+        qWarning() << "PDF page at index" << index << "is invalid";
     }
 
     return nullptr;
@@ -395,21 +439,29 @@ Page *PDFDocument::page(int index) const
 
 QString PDFDocument::label(int index) const
 {
+    qDebug() << "Retrieving label for PDF page at index:" << index;
+
     return m_document->label(index);
 }
 
 QStringList PDFDocument::saveFilter() const
 {
+    qDebug() << "Retrieving PDF save filters";
+
     return QStringList() << "Portable document format (*.pdf)";
 }
 
 bool PDFDocument::save() const
 {
+    qInfo() << "Saving PDF document";
+
     return m_document->save();
 }
 
 bool PDFDocument::saveAs(const QString &filePath) const
 {
+    qInfo() << "Saving PDF document as:" << filePath;
+
     return m_document->saveAs(filePath);
 }
 
@@ -429,8 +481,12 @@ void collectOuleLine(const DPdfDoc::Outline &cOutline, Outline &outline)
 
 Outline PDFDocument::outline() const
 {
-    if (m_outline.size() > 0)
+    qInfo() << "Retrieving PDF document outline";
+
+    if (m_outline.size() > 0) {
+        qDebug() << "Returning cached PDF outline";
         return m_outline;
+    }
 
     const DPdfDoc::Outline &cOutline = m_document->outline(m_xRes, m_yRes);
 
@@ -441,8 +497,12 @@ Outline PDFDocument::outline() const
 
 Properties PDFDocument::properties() const
 {
-    if (m_fileProperties.size() > 0)
+    qInfo() << "Retrieving PDF document properties";
+
+    if (m_fileProperties.size() > 0) {
+        qDebug() << "Returning cached PDF properties";
         return m_fileProperties;
+    }
 
     m_fileProperties = m_document->proeries();
 
@@ -451,18 +511,26 @@ Properties PDFDocument::properties() const
 
 PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error)
 {
+    qInfo() << "Loading PDF document from:" << filePath << "with password:" << (!password.isEmpty() ? "[provided]" : "[not provided]");
+
     DPdfDoc *document = new DPdfDoc(filePath, password);
 
     if (document->status() == DPdfDoc::SUCCESS) {
+        qInfo() << "PDF document loaded successfully";
         error = Document::NoError;
         return new PDFDocument(document);
     } else if (document->status() == DPdfDoc::PASSWORD_ERROR) {
-        if (password.isEmpty())
+        if (password.isEmpty()) {
+            qWarning() << "PDF document requires password but none provided";
             error = Document::NeedPassword;
-        else
+        } else {
+            qWarning() << "Incorrect password provided for PDF document";
             error = Document::WrongPassword;
-    } else
+        }
+    } else {
+        qCritical() << "Failed to load PDF document, error code:" << document->status();
         error = Document::FileError;
+    }
 
     delete document;
 

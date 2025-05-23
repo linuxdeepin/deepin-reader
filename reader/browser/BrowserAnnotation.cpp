@@ -7,6 +7,7 @@
 #include "BrowserPage.h"
 
 #include <DGuiApplicationHelper>
+#include <QDebug>
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
@@ -14,8 +15,12 @@
 BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation, qreal scalefactor) : QGraphicsItem(parent),
     m_annotation(annotation), m_rect(rect), m_parent(parent), m_scaleFactor(scalefactor)
 {
-    if (nullptr == m_annotation)
+    if (nullptr == m_annotation) {
+        qWarning() << "BrowserAnnotation: Invalid annotation pointer";
         return;
+    }
+
+    qDebug() << "BrowserAnnotation created, type:" << m_annotation->type();
 
     if (m_annotation->type() == deepin_reader::Annotation::AText)
         setZValue(deepin_reader::Z_ORDER_ICON);
@@ -25,6 +30,7 @@ BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_
 
 BrowserAnnotation::~BrowserAnnotation()
 {
+    qDebug() << "BrowserAnnotation destroyed";
     m_annotation = nullptr;
 }
 
@@ -50,6 +56,7 @@ QRectF BrowserAnnotation::boundingRect() const
                   m_rect.y() * m_scaleFactor,
                   m_rect.width() * m_scaleFactor,
                   m_rect.height() * m_scaleFactor);
+    qDebug() << "BrowserAnnotation::paint - end";
 }
 
 void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
@@ -73,6 +80,7 @@ bool BrowserAnnotation::isSame(Annotation *annotation)
 
 void BrowserAnnotation::setDrawSelectRect(const bool draw)
 {
+    qDebug() << "BrowserAnnotation::setDrawSelectRect:" << draw;
     if (nullptr != m_annotation && m_annotation->type() != 1) {
         m_drawSelectRect = false;
         update();

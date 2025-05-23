@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "RoundColorWidget.h"
+#include <QDebug>
 
 #include <DStyle>
 
@@ -19,10 +20,12 @@ RoundColorWidget::RoundColorWidget(const QColor &color, QWidget *parent)
     , m_isSelected(false)
     , m_color(color)
 {
+    qDebug() << "RoundColorWidget created, color:" << color.name() << ", parent:" << parent;
 }
 
 void RoundColorWidget::setSelected(bool selected)
 {
+    qDebug() << "RoundColorWidget selection changed from" << m_isSelected << "to" << selected;
     if (m_isSelected == selected)
         return;
 
@@ -33,6 +36,7 @@ void RoundColorWidget::setSelected(bool selected)
 
 void RoundColorWidget::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << "RoundColorWidget clicked, selected:" << m_isSelected << ", allNotify:" << m_allnotify;
     if (event->button() == Qt::LeftButton) {
         if (m_isSelected && !m_allnotify) return;
         Q_EMIT clicked();
