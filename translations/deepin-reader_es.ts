@@ -266,12 +266,12 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Conversor fallido, por favor verifique si el archivo esta dañado</translation>
+        <translation>La conversión falló, verifique si el archivo esta dañado</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Guardar falló</translation>
+        <translation>Error al guardar</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
