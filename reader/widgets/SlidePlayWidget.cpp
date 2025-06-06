@@ -14,6 +14,9 @@
 #include <QDBusInterface>
 #include <QDBusConnection>
 #include <DGuiApplicationHelper>
+#include <DSysInfo>
+
+DCORE_USE_NAMESPACE
 
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {
@@ -190,9 +193,19 @@ void SlidePlayWidget::Notify(const QString &text)
 {
     qDebug() << "Showing notification:" << text;
     if(nullptr == m_dbusNotify) {
-        m_dbusNotify = new QDBusInterface("com.deepin.dde.Notification",
-                                          "/com/deepin/dde/Notification",
-                                          "com.deepin.dde.Notification",
+        QString serviceName = "com.deepin.dde.Notification";
+        QString servicePath = "/com/deepin/dde/Notification";
+        QString serviceInterface = "com.deepin.dde.Notification";
+        int osMajor = DSysInfo::majorVersion().toInt();
+        if (osMajor >= 23) {
+            serviceName = "org.deepin.dde.Notification1";
+            servicePath = "/org/deepin/dde/Notification1";
+            serviceInterface = "org.deepin.dde.Notification1";
+        }
+
+        m_dbusNotify = new QDBusInterface(serviceName,
+                                          servicePath,
+                                          serviceInterface,
                                           QDBusConnection::sessionBus(),
                                           this);
     }
