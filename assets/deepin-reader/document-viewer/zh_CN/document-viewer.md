@@ -69,8 +69,6 @@
 
 ![printer](fig/printer.png)
 
-![printer](fig/setting.png)
-
 ### 管理标签页
 
 新增标签页
