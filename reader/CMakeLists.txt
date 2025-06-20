@@ -4,6 +4,11 @@ pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 pkg_check_modules(PDFIUM REQUIRED deepin-pdfium${PDF_LIB_VERSION})
 
+# 添加位置无关代码编译标志
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+
 # 收集所有源文件
 file(GLOB SOURCES 
     "*.cpp" 

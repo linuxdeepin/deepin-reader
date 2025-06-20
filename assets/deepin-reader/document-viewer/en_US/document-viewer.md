@@ -68,11 +68,7 @@ To print you have to connect and configure a printer.
 3. In this previewing interface, click **Advanced** to set the page size, print method and other parameters. 
 4. Click **Print**  then the document will be sent to the printer for printing. 
 
-![preview](fig/previewdoc1.png)
-
-![pagesetup](fig/pageSetupdoc.png)
-
-
+![preview](fig/printer.png)
 
 ### Manage tabs
 
@@ -147,9 +143,9 @@ Document Viewer integrates many features to make document management simpler and
 This function is only applicable for the current tab.
 1. On Document Viewer interface, open a file. 
 2. Right-click and select **Search** or press **Ctrl**+**F** to open a searching window. 
-   
+  
 3. In the searching box, you can click ![search](../common/search.svg) to input keywords. 
-   
+  
 4. Press  **Enter** to locate quickly. 
    - All matching information will be displayed in a list and are highlighted in the document.
    - If searching fails, "No search results" will be displayed. 
