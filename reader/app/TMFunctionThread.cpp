@@ -5,6 +5,8 @@
 
 #include "TMFunctionThread.h"
 
+#include <QDebug>
+
 TMFunctionThread::TMFunctionThread(QObject *parent) : QThread(parent)
 {
     qDebug() << "Function thread created";
