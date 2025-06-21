@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer este un instrument pentru citirea fișierelor de documente, susținând PDF, DJVU, DOCX etc.</translation>
     </message>
 </context>
 <context>
@@ -122,8 +122,6 @@
     <name>BrowserMenu</name>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="52"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
         <translation>Copiere </translation>
     </message>
@@ -134,24 +132,16 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
         <source>Add annotation</source>
         <translation>Adăugarea adnotare</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="77"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="85"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="129"/>
         <source>Remove bookmark</source>
         <translation>Eliminarea marcajului</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Add bookmark</source>
         <translation>Adăugarea marcajului</translation>
     </message>
@@ -167,73 +157,61 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
         <source>Search</source>
         <translation>Căutare </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
         <translation> Ieșire ecran complet </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
         <translation>Ecran complet </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Slide show</source>
         <translation>Prezentare </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
         <source>First page</source>
         <translation>Prima pagină </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
         <source>Previous page</source>
         <translation>Pagina precedentă </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Next page</source>
         <translation>Pagina următoare </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="156"/>
         <source>Last page</source>
         <translation>Ultima pagină </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Rotate left</source>
         <translation>Rotire stânga </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="165"/>
         <source>Rotate right</source>
         <translation>Rotire dreapta </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
         <source>Print</source>
         <translation>Printare </translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Document info</source>
         <translation>Informație document </translation>
     </message>
@@ -266,7 +244,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Conversia a eșuat, vă rugăm să verificați dacă fișierul este deteriorat</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -285,13 +263,11 @@
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Nume de fișier inacceptabil </translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK </translation>
@@ -319,19 +295,16 @@
     <name>DocSheet</name>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="360"/>
         <source>The bookmark has been removed</source>
         <translation>Marcajul a fost eliminat</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
         <translation>Selectați vă rog textul</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="607"/>
         <source>The annotation has been removed</source>
         <translation>Adnotare a fost eliminată</translation>
     </message>
@@ -412,7 +385,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Se convertește</translation>
     </message>
 </context>
 <context>
@@ -427,8 +400,8 @@
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <source>Save the changes to "%1"?</source>
+        <translation>Salvați modificările în "%1"?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -505,24 +478,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>Acest document încearcă să se conecteze la:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>Dacă aveți încredere în site, faceți clic pe Allow, altfel faceți clic pe Block.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Blocați</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Permiteți</translation>
     </message>
 </context>
 <context>
@@ -638,12 +611,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Mutați la început</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Mutați la sfârșit</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -740,7 +713,6 @@
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>Eliminare tot</translation>
     </message>
@@ -763,12 +735,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>Este prima pagină</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>Este ultima pagină</translation>
     </message>
 </context>
 <context>
@@ -785,7 +757,6 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
         <translation>Salvare</translation>
     </message>
@@ -845,7 +816,6 @@
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
-        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>Cale Fișierului</translation>
     </message>

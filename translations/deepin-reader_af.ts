@@ -1,15 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="da">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="af">
 <context>
     <name>Application</name>
     <message>
         <location filename="../reader/Application.cpp" line="39"/>
         <source>Document Viewer</source>
-        <translation>Dokumentfremviser</translation>
+        <translation>Dokumentviewer</translation>
     </message>
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation>Dokumentviewer er et værktøj til at læse dokumentfiler, som PDF, DJVU, DOCX osv.</translation>
+        <translation>Dokumentviewer is 'n instrument vir lees van dokumentbestandde, wat PDF, DJVU, DOCX ens. ondersteun</translation>
     </message>
 </context>
 <context>
@@ -17,82 +17,82 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Location</source>
-        <translation>Placering</translation>
+        <translation>Lokasie</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
-        <translation>Emne</translation>
+        <translation>Onderwerp</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Author</source>
-        <translation>Forfatter</translation>
+        <translation>Auteur</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Keywords</source>
-        <translation>Nøgleord</translation>
+        <translation>Sleutelwoorde</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
-        <translation>Producent</translation>
+        <translation>Produent</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
-        <translation>Skaber</translation>
+        <translation>Skepper</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Time created</source>
-        <translation>Oprettelsestidspunkt</translation>
+        <translation>Tyd van aanmaak</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
-        <translation>Ændringstidspunkt</translation>
+        <translation>Tyd van aanpassing</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>Formaat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Pages</source>
-        <translation>Sider</translation>
+        <translation>Bladerys</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Optimized</source>
-        <translation>Optimeret</translation>
+        <translation>Geoptimeer</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Security</source>
-        <translation>Sikkerhed</translation>
+        <translation>Veiligheid</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="59"/>
         <source>Page size</source>
-        <translation>Sidestøttelse</translation>
+        <translation>Bladsy grootte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>File size</source>
-        <translation>Filstørrelse</translation>
+        <translation>Bestandsgrootte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
-        <translation>Grundlæggende information</translation>
+        <translation>Basiese inligting</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="85"/>
         <source>Unknown</source>
-        <translation>Ukendt</translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>No</source>
-        <translation>Nej</translation>
+        <translation>Nee</translation>
     </message>
 </context>
 <context>
@@ -110,12 +110,12 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Voeg bladmerk by</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation>Er du sikker på, at du vil slette alle bogmærker?</translation>
+        <translation>Wees seker jy wil alle bladmerke verwyder?</translation>
     </message>
 </context>
 <context>
@@ -123,97 +123,97 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Kopieer</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
         <source>Remove annotation</source>
-        <translation>Fjern annotering</translation>
+        <translation>Verwyder aantekening</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Voeg aantekening by</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
         <source>Remove bookmark</source>
-        <translation>Fjern bogmærke</translation>
+        <translation>Verwyder bladmerk</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Voeg bladmerk by</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
         <source>Highlight</source>
-        <translation>Fremhæv</translation>
+        <translation>Benadruk</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="69"/>
         <source>Remove highlight</source>
-        <translation>Fjern fremhævning</translation>
+        <translation>Verwyder benadrukking</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Soek</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <source>Exit fullscreen</source>
-        <translation>Afslut fuldskærm</translation>
+        <translation>Verlaat volledig scherm</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
         <source>Fullscreen</source>
-        <translation>Fuldskærm</translation>
+        <translation>Volledig scherm</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
         <source>Slide show</source>
-        <translation>Slideshow</translation>
+        <translation>Diashow</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
         <source>First page</source>
-        <translation>Første side</translation>
+        <translation>Eerste blad</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
         <source>Previous page</source>
-        <translation>Forrige side</translation>
+        <translation>Vorige blad</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
         <source>Next page</source>
-        <translation>Næste side</translation>
+        <translation>Volgende blad</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
         <source>Last page</source>
-        <translation>Sidste side</translation>
+        <translation>Laatste blad</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Drej til venstre</translation>
+        <translation>Draai links</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation>Drej til højre</translation>
+        <translation>Draai regs</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Druk</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
         <source>Document info</source>
-        <translation>Dokumentinformation</translation>
+        <translation>Dokumentinligting</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="147"/>
         <source>Documents</source>
-        <translation>Dokumenter</translation>
+        <translation>Dokumente</translation>
     </message>
 </context>
 <context>
@@ -229,42 +229,42 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
-        <translation>Formatet understøttes ikke</translation>
+        <translation>Die formaat is nie ondersteun nie</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
-        <translation>Åbning mislykkedes</translation>
+        <translation>Ouwen misluk</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation>Tjek venligst om filen er beskadiget</translation>
+        <translation>Skakel asof die lêer beskadig is</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Konvertering mislykkedes, tjek venligst om filen er skadet</translation>
+        <translation>Konversie misluk, skakel asof die lêer beskadig is</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Kunne ikke gemme</translation>
+        <translation>Opslaan misluk</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
-        <translation>Gemt</translation>
+        <translation>Opslaan suksesvol</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Opslaan as</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
         <source>Invalid file name</source>
-        <translation>Ugyldigt filnavn</translation>
+        <translation>Ongeldige lêernaam</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
@@ -278,17 +278,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation>Træk dokumenter her</translation>
+        <translation>Drag dokumente hier</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Støttet format: %1</translation>
+        <translation>Formaat ondersteun: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation>Vælg fil</translation>
+        <translation>Kies lêer</translation>
     </message>
 </context>
 <context>
@@ -296,17 +296,17 @@
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
         <source>The bookmark has been removed</source>
-        <translation>Bogmærket er fjernet</translation>
+        <translation>Die bladmerk is verwyder</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
         <source>Please select the text</source>
-        <translation>Vælg venligst teksten</translation>
+        <translation>Skakel asseblief die teks</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
         <source>The annotation has been removed</source>
-        <translation>Annoteringen er fjernet</translation>
+        <translation>Die aantekening is verwyder</translation>
     </message>
 </context>
 <context>
@@ -314,12 +314,12 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Krypteret fil, indtast venligst adgangskode</translation>
+        <translation>Versleutelde lêer, asseblief voeg die woorde aan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
-        <translation>Adgangskode</translation>
+        <translation>Woorde</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
-        <translation>Forkert adgangskode</translation>
+        <translation>Verkeerde woordevoeging</translation>
     </message>
 </context>
 <context>
@@ -338,12 +338,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
         <source>Previous</source>
-        <translation>Forrige</translation>
+        <translation>Vorige</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
-        <translation>Næste</translation>
+        <translation>Volgende</translation>
     </message>
 </context>
 <context>
@@ -351,12 +351,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation>Vælg tekst</translation>
+        <translation>Kies Tekst</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation>Håndværktøj</translation>
+        <translation>Hand Werk</translation>
     </message>
 </context>
 <context>
@@ -364,12 +364,12 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Voeg aantekening by</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation>Er du sikker på, at du vil slette alle noter?</translation>
+        <translation>Wees seker jy wil al aantekeninge skrap?</translation>
     </message>
 </context>
 <context>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation>Ugyldigt sidetal</translation>
+        <translation>Ongeldige bladsy nommer</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation>Konverterer</translation>
+        <translation>Konvertering</translation>
     </message>
 </context>
 <context>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="103"/>
         <source>Document not saved</source>
-        <translation>Dokument ikke gemt</translation>
+        <translation>Dokument is nie gespeek nie</translation>
     </message>
 </context>
 <context>
@@ -401,35 +401,35 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to "%1"?</source>
-        <translation>Gem ændringerne til "%1"?</translation>
+        <translation>Sparen die veranderinge na "%1"?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Annuller</translation>
+        <translation>Annuleer</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation>Forkast</translation>
+        <translation>Verwerp</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="38"/>
         <source>Save</source>
         <comment>button</comment>
-        <translation>Gem</translation>
+        <translation>Sparen</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation>Annuller</translation>
+        <translation>Annuleer</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="50"/>
         <source>Delete</source>
-        <translation>Slet</translation>
+        <translation>Verwijder</translation>
     </message>
 </context>
 <context>
@@ -437,27 +437,27 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="35"/>
         <source>Two-Page View</source>
-        <translation>Tosidet visning</translation>
+        <translation>Twee-bladsy weergawe</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation>1:1 størrelse</translation>
+        <translation>1:1 grootte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation>Passer side</translation>
+        <translation>Pas Bladsy</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="38"/>
         <source>Fit Height</source>
-        <translation>Tilpas højde</translation>
+        <translation>Pas Hoogte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="39"/>
         <source>Fit Width</source>
-        <translation>Tilpas bredde</translation>
+        <translation>Pas Breedte</translation>
     </message>
 </context>
 <context>
@@ -465,12 +465,12 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
-        <translation>Ingen søgeresultater</translation>
+        <translation>Geen soekresultate</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation>%1 elementer fundet</translation>
+        <translation>'%1 items gevind'</translation>
     </message>
 </context>
 <context>
@@ -478,24 +478,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation>Denne dokument er ved at forbinde til:</translation>
+        <translation>Hierdie dokument probeer verbind met:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Hvis du er sikker på webstedet, klik på Tillad, ellers klik på Blokér.</translation>
+        <translation>As jy die webwerf vertrou, kliek Allow, anders kliek Block.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation>Blokér</translation>
+        <translation>Blok</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation>Tillad</translation>
+        <translation>Toestaan</translation>
     </message>
 </context>
 <context>
@@ -503,7 +503,7 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Miniature</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
@@ -513,12 +513,12 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
         <source>Bookmarks</source>
-        <translation>Bogmærker</translation>
+        <translation>Bladsymerkers</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
         <source>Annotations</source>
-        <translation>Annoteringer</translation>
+        <translation>Aantekeninge</translation>
     </message>
 </context>
 <context>
@@ -526,177 +526,177 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="60"/>
         <source>Settings</source>
-        <translation>Indstillinger</translation>
+        <translation>Instellings</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Exit</source>
-        <translation>Afslut</translation>
+        <translation>Verlaat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
         <source>Help</source>
-        <translation>Hjælp</translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Page up</source>
-        <translation>Side op</translation>
+        <translation>Blad oop</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Page down</source>
-        <translation>Side ned</translation>
+        <translation>Blad af</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
         <source>Open</source>
-        <translation>Åbn</translation>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Zoom in</source>
-        <translation>Zoom ind</translation>
+        <translation>Zoom in</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>Zoom out</source>
-        <translation>Zoom ud</translation>
+        <translation>Zoom uit</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Stoor as</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Druk</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
         <source>Save</source>
-        <translation>Gem</translation>
+        <translation>Stoor</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Miniature</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
         <source>1:1 size</source>
-        <translation>1:1 størrelse</translation>
+        <translation>1:1 grootte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
         <source>Fit height</source>
-        <translation>Tilpas højde</translation>
+        <translation>Pas hoogte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
         <source>Fit width</source>
-        <translation>Tilpas bredde</translation>
+        <translation>Pas breedte</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Drej til venstre</translation>
+        <translation>Draai links</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation>Drej til højre</translation>
+        <translation>Draai regs</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation>Flyt til starten</translation>
+        <translation>Verplaats na die begin</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation>Flyt til slutningen</translation>
+        <translation>Verplaats na die einde</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
-        <translation>Vælg tekst</translation>
+        <translation>Kies teks</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Hand tool</source>
-        <translation>Håndværktøj</translation>
+        <translation>Handinstrument</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Voeg bladmerk by</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Delete</source>
-        <translation>Slet</translation>
+        <translation>Verwys</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
         <source>Magnifier</source>
-        <translation>Forstørrelsesglas</translation>
+        <translation>Vergrerger</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
-        <translation>Slideshow</translation>
+        <translation>Diasshow</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Fullscreen</source>
-        <translation>Fuldskærm</translation>
+        <translation>Volskerm</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Kopieer</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Cut</source>
-        <translation>Klip</translation>
+        <translation>Sny</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Paste</source>
-        <translation>Indsæt</translation>
+        <translation>Plak</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Undo</source>
-        <translation>Fortryd</translation>
+        <translation>Herlaat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Select all</source>
-        <translation>Vælg alt</translation>
+        <translation>Alles kies</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
         <source>Display shortcuts</source>
-        <translation>Vis genveje</translation>
+        <translation>Skrifteken toon</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Notas toevoeg</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Highlight</source>
-        <translation>Fremhæv</translation>
+        <translation>Benadruk</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Soek</translation>
     </message>
 </context>
 <context>
@@ -704,22 +704,22 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Kopieer</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Remove annotation</source>
-        <translation>Fjern annotering</translation>
+        <translation>Verwyder notas</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
         <source>Remove all</source>
-        <translation>Fjern alt</translation>
+        <translation>Alles verwyder</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
-        <translation>Fjern bogmærke</translation>
+        <translation>Verwyder bladmerk</translation>
     </message>
 </context>
 <context>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
-        <translation>Side %1</translation>
+        <translation>Bladsy %1</translation>
     </message>
 </context>
 <context>
@@ -735,12 +735,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation>Det er den første side</translation>
+        <translation>Dit is die eerste bladsy</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation>Det er den sidste side</translation>
+        <translation>Dit is die laaste bladsy</translation>
     </message>
 </context>
 <context>
@@ -748,47 +748,47 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
         <source>New window</source>
-        <translation>Nyt vindue</translation>
+        <translation>Nuwe venster</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
         <source>New tab</source>
-        <translation>Nyt faneblad</translation>
+        <translation>Nuwe tab</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save</source>
-        <translation>Gem</translation>
+        <translation>Stoor</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Stoor as</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Display in file manager</source>
-        <translation>Vis i filhåndtering</translation>
+        <translation>Toon in lêerbeheer</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Magnifer</source>
-        <translation>Forstørrelsesglas</translation>
+        <translation>Vergrader</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="50"/>
         <source>Tools</source>
-        <translation>Værktøjer</translation>
+        <translation>Werktyge</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Druk</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Miniature</translation>
     </message>
 </context>
 <context>
@@ -796,7 +796,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Invoerlimiet bereik</translation>
     </message>
 </context>
 <context>
@@ -804,7 +804,7 @@
     <message>
         <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
-        <translation>Inputgrænse nået</translation>
+        <translation>Dokumentlêerpad.</translation>
     </message>
 </context>
 <context>
@@ -812,22 +812,22 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation>Dokumentfilsti.</translation>
+        <translation>Lêerpad</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
         <source>FilePath</source>
-        <translation>Filsti</translation>
+        <translation>Miniaturelêerpad.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation>ThumbnailPath-sti.</translation>
+        <translation>Genereer miniature.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
-        <translation>Generer thumbnail.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

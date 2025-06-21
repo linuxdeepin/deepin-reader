@@ -1,15 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="da">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ky">
 <context>
     <name>Application</name>
     <message>
         <location filename="../reader/Application.cpp" line="39"/>
         <source>Document Viewer</source>
-        <translation>Dokumentfremviser</translation>
+        <translation>Документ қарау</translation>
     </message>
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation>Dokumentviewer er et værktøj til at læse dokumentfiler, som PDF, DJVU, DOCX osv.</translation>
+        <translation>Документ қарау документ файлдарын оқу үшін құрал, PDF, DJVU, DOCX сияқты файлдарды қамтиды.</translation>
     </message>
 </context>
 <context>
@@ -17,92 +17,92 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Location</source>
-        <translation>Placering</translation>
+        <translation>Жайылғы</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
-        <translation>Emne</translation>
+        <translation>Тақырыбы</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Author</source>
-        <translation>Forfatter</translation>
+        <translation>Жазуы</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>Keywords</source>
-        <translation>Nøgleord</translation>
+        <translation>Англаттар</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
-        <translation>Producent</translation>
+        <translation>Түзетуші</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
-        <translation>Skaber</translation>
+        <translation>Сәйкес</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
         <source>Time created</source>
-        <translation>Oprettelsestidspunkt</translation>
+        <translation>Жасалған уақыты</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
-        <translation>Ændringstidspunkt</translation>
+        <translation>Өзгерту уақыты</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="54"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>Формат</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="55"/>
         <source>Pages</source>
-        <translation>Sider</translation>
+        <translation>Беттер</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="56"/>
         <source>Optimized</source>
-        <translation>Optimeret</translation>
+        <translation>Таңбаланған</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="57"/>
         <source>Security</source>
-        <translation>Sikkerhed</translation>
+        <translation>Қауіпсіздік</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="59"/>
         <source>Page size</source>
-        <translation>Sidestøttelse</translation>
+        <translation>Бет өлшемі</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="60"/>
         <source>File size</source>
-        <translation>Filstørrelse</translation>
+        <translation>Файл өлшемі</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
-        <translation>Grundlæggende information</translation>
+        <translation>Негізгі мағлұмат</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="85"/>
         <source>Unknown</source>
-        <translation>Ukendt</translation>
+        <translation>Белгісіз</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation>Жоғары</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
         <source>No</source>
-        <translation>Nej</translation>
+        <translation>Жоқ</translation>
     </message>
 </context>
 <context>
@@ -110,12 +110,12 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Маркер қосу</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation>Er du sikker på, at du vil slette alle bogmærker?</translation>
+        <translation>Барлық маркерлерді өшіруге сіз құттықтайсыз ба?</translation>
     </message>
 </context>
 <context>
@@ -123,97 +123,97 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Көшіру</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
         <source>Remove annotation</source>
-        <translation>Fjern annotering</translation>
+        <translation>Түсіндіруді алып тастау</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Түсіндіру қосу</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
         <source>Remove bookmark</source>
-        <translation>Fjern bogmærke</translation>
+        <translation>Маркерді алып тастау</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Маркер қосу</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
         <source>Highlight</source>
-        <translation>Fremhæv</translation>
+        <translation>Айырылу</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="69"/>
         <source>Remove highlight</source>
-        <translation>Fjern fremhævning</translation>
+        <translation>Айырылу алып тастау</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Қарастыру</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <source>Exit fullscreen</source>
-        <translation>Afslut fuldskærm</translation>
+        <translation>Толук экранга чыг</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
         <source>Fullscreen</source>
-        <translation>Fuldskærm</translation>
+        <translation>Толук экран</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
         <source>Slide show</source>
-        <translation>Slideshow</translation>
+        <translation>Слайд шоу</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
         <source>First page</source>
-        <translation>Første side</translation>
+        <translation>Биринчи бет</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
         <source>Previous page</source>
-        <translation>Forrige side</translation>
+        <translation>Алдыңғы бет</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
         <source>Next page</source>
-        <translation>Næste side</translation>
+        <translation>Келесі бет</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
         <source>Last page</source>
-        <translation>Sidste side</translation>
+        <translation>Соңғы бет</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Drej til venstre</translation>
+        <translation>Солға түсір</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation>Drej til højre</translation>
+        <translation>Оңға түсір</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Шынжырлау</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
         <source>Document info</source>
-        <translation>Dokumentinformation</translation>
+        <translation>Документтын маълуматы</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="147"/>
         <source>Documents</source>
-        <translation>Dokumenter</translation>
+        <translation>Документтар</translation>
     </message>
 </context>
 <context>
@@ -229,48 +229,48 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
-        <translation>Formatet understøttes ikke</translation>
+        <translation>Форматтын түрі дәстүрләнбеген</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
-        <translation>Åbning mislykkedes</translation>
+        <translation>Ачылмады</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation>Tjek venligst om filen er beskadiget</translation>
+        <translation>Файлдын бұзылғанын тексеріңіз</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Konvertering mislykkedes, tjek venligst om filen er skadet</translation>
+        <translation>Айналдыру үзгерісі үшін файлдын бұзылғанын тексеріңіз</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation>Kunne ikke gemme</translation>
+        <translation>Сақтау үзгерісі үшін файлдын бұзылғанын тексеріңіз</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
-        <translation>Gemt</translation>
+        <translation>Мақсаттау үшін файлдын бұзылғанын тексеріңіз</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Сақтау үшін</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
         <source>Invalid file name</source>
-        <translation>Ugyldigt filnavn</translation>
+        <translation>Дәл әріпсіз файл аты</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>Тағдырын</translation>
     </message>
 </context>
 <context>
@@ -278,17 +278,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation>Træk dokumenter her</translation>
+        <translation>Документтарды шығар</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation>Støttet format: %1</translation>
+        <translation>Форматтын түрі: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation>Vælg fil</translation>
+        <translation>Файлды таңдаңыз</translation>
     </message>
 </context>
 <context>
@@ -296,17 +296,17 @@
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
         <source>The bookmark has been removed</source>
-        <translation>Bogmærket er fjernet</translation>
+        <translation>Күшті атау үзгерісі</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
         <source>Please select the text</source>
-        <translation>Vælg venligst teksten</translation>
+        <translation>Мәтінді таңдаңыз</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
         <source>The annotation has been removed</source>
-        <translation>Annoteringen er fjernet</translation>
+        <translation>Түсіндіру үзгерісі</translation>
     </message>
 </context>
 <context>
@@ -314,23 +314,23 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Krypteret fil, indtast venligst adgangskode</translation>
+        <translation>Шифрланған файл, құпия сөз енгізіңіз</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
-        <translation>Adgangskode</translation>
+        <translation>Құпия сөз</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>Тағдырын</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
-        <translation>Forkert adgangskode</translation>
+        <translation>Жазылган үткөн</translation>
     </message>
 </context>
 <context>
@@ -338,12 +338,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
         <source>Previous</source>
-        <translation>Forrige</translation>
+        <translation>Алдыңгы</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
-        <translation>Næste</translation>
+        <translation>Кийинки</translation>
     </message>
 </context>
 <context>
@@ -351,12 +351,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation>Vælg tekst</translation>
+        <translation>Мәтінді тандаңыз</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation>Håndværktøj</translation>
+        <translation>Көрсеткіш әріп</translation>
     </message>
 </context>
 <context>
@@ -364,12 +364,12 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Түшініктеме қўшыңыз</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation>Er du sikker på, at du vil slette alle noter?</translation>
+        <translation>Барлық түшініктемелерди өчүрәрсіз ба? </translation>
     </message>
 </context>
 <context>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation>Ugyldigt sidetal</translation>
+        <translation>Берілгін page number қате</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation>Konverterer</translation>
+        <translation>Айландыруу</translation>
     </message>
 </context>
 <context>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="103"/>
         <source>Document not saved</source>
-        <translation>Dokument ikke gemt</translation>
+        <translation>Документ сақталған жок</translation>
     </message>
 </context>
 <context>
@@ -401,35 +401,35 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
         <source>Save the changes to "%1"?</source>
-        <translation>Gem ændringerne til "%1"?</translation>
+        <translation>"%1" үзіндісін сақлау қылырсыз ба?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Annuller</translation>
+        <translation>Батыр</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation>Forkast</translation>
+        <translation>Алып таста</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="38"/>
         <source>Save</source>
         <comment>button</comment>
-        <translation>Gem</translation>
+        <translation>Сақла</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation>Annuller</translation>
+        <translation>Батыр</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="50"/>
         <source>Delete</source>
-        <translation>Slet</translation>
+        <translation>Жою</translation>
     </message>
 </context>
 <context>
@@ -437,27 +437,27 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="35"/>
         <source>Two-Page View</source>
-        <translation>Tosidet visning</translation>
+        <translation>Екі беттік қарау</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
         <source>1:1 size</source>
-        <translation>1:1 størrelse</translation>
+        <translation>1:1 өлчөм</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation>Passer side</translation>
+        <translation>Бетке үйләт</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="38"/>
         <source>Fit Height</source>
-        <translation>Tilpas højde</translation>
+        <translation>Биіктікке үйләт</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="39"/>
         <source>Fit Width</source>
-        <translation>Tilpas bredde</translation>
+        <translation>Енге үйләт</translation>
     </message>
 </context>
 <context>
@@ -465,12 +465,12 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="60"/>
         <source>No search results</source>
-        <translation>Ingen søgeresultater</translation>
+        <translation>Қарастыру нәтижесі жок</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation>%1 elementer fundet</translation>
+        <translation>'%1 өнімдер табылды'</translation>
     </message>
 </context>
 <context>
@@ -478,24 +478,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation>Denne dokument er ved at forbinde til:</translation>
+        <translation>Бұл документ үзінде қосылуға тырысады:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Hvis du er sikker på webstedet, klik på Tillad, ellers klik på Blokér.</translation>
+        <translation>Сайтты үйрәнсеңіз, Allow деген дәнгейді басыңыз, әйтпесе Block деген дәнгейді басыңыз.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation>Blokér</translation>
+        <translation>Блок</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation>Tillad</translation>
+        <translation>Разрешить</translation>
     </message>
 </context>
 <context>
@@ -503,22 +503,22 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Кішірейтілген көріністер</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
         <source>Catalog</source>
-        <translation>Katalog</translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
         <source>Bookmarks</source>
-        <translation>Bogmærker</translation>
+        <translation>Мұрағаттар</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
         <source>Annotations</source>
-        <translation>Annoteringer</translation>
+        <translation>Таңбалар</translation>
     </message>
 </context>
 <context>
@@ -526,177 +526,177 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="60"/>
         <source>Settings</source>
-        <translation>Indstillinger</translation>
+        <translation>Төҙөлөштөр</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Exit</source>
-        <translation>Afslut</translation>
+        <translation>Чыгыу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
         <source>Help</source>
-        <translation>Hjælp</translation>
+        <translation>Көмөк</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Page up</source>
-        <translation>Side op</translation>
+        <translation>Бет үткөн</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Page down</source>
-        <translation>Side ned</translation>
+        <translation>Бет үткөн</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
         <source>Open</source>
-        <translation>Åbn</translation>
+        <translation>Ачыу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Zoom in</source>
-        <translation>Zoom ind</translation>
+        <translation>Күбөйтүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>Zoom out</source>
-        <translation>Zoom ud</translation>
+        <translation>Күчөрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Сақлау</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Чынтау</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
         <source>Save</source>
-        <translation>Gem</translation>
+        <translation>Сақлау</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Кичине көрүнүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
         <source>1:1 size</source>
-        <translation>1:1 størrelse</translation>
+        <translation>1:1 өлчөм</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
         <source>Fit height</source>
-        <translation>Tilpas højde</translation>
+        <translation>Жоюу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
         <source>Fit width</source>
-        <translation>Tilpas bredde</translation>
+        <translation>Жоюу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation>Drej til venstre</translation>
+        <translation>Солго түшүрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation>Drej til højre</translation>
+        <translation>Оңго түшүрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation>Flyt til starten</translation>
+        <translation>Башына күчөрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation>Flyt til slutningen</translation>
+        <translation>Аягына күчөрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
-        <translation>Vælg tekst</translation>
+        <translation>Мәтінді тандау</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Hand tool</source>
-        <translation>Håndværktøj</translation>
+        <translation>Көрүү өйөнөнө</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation>Tilføj bogmærke</translation>
+        <translation>Таңбалау өйөнөнө</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Delete</source>
-        <translation>Slet</translation>
+        <translation>Жогуу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
         <source>Magnifier</source>
-        <translation>Forstørrelsesglas</translation>
+        <translation>Көзөнөнө</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
-        <translation>Slideshow</translation>
+        <translation>Слайд шоу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Fullscreen</source>
-        <translation>Fuldskærm</translation>
+        <translation>Кеңейтилгән</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Көчүрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Cut</source>
-        <translation>Klip</translation>
+        <translation>Көчүрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Paste</source>
-        <translation>Indsæt</translation>
+        <translation>Көчүрүү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Undo</source>
-        <translation>Fortryd</translation>
+        <translation>Башҡаға</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Select all</source>
-        <translation>Vælg alt</translation>
+        <translation>Барлығын сикерәтлә</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
         <source>Display shortcuts</source>
-        <translation>Vis genveje</translation>
+        <translation>Тышҡы ҡырҡыларҙы күрһәтеү</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Add annotation</source>
-        <translation>Tilføj annotering</translation>
+        <translation>Түгеләт ҡушыу</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Highlight</source>
-        <translation>Fremhæv</translation>
+        <translation>Түгеләт</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Ҡырҡылар</translation>
     </message>
 </context>
 <context>
@@ -704,22 +704,22 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
         <source>Copy</source>
-        <translation>Kopiér</translation>
+        <translation>Күчереү</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
         <source>Remove annotation</source>
-        <translation>Fjern annotering</translation>
+        <translation>Түгеләт алыу</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
         <source>Remove all</source>
-        <translation>Fjern alt</translation>
+        <translation>Барлығын алыу</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
-        <translation>Fjern bogmærke</translation>
+        <translation>Саҡыт алыу</translation>
     </message>
 </context>
 <context>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
         <source>Page %1</source>
-        <translation>Side %1</translation>
+        <translation>Бит %1</translation>
     </message>
 </context>
 <context>
@@ -735,12 +735,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation>Det er den første side</translation>
+        <translation>Был беренсе бит</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation>Det er den sidste side</translation>
+        <translation>Был өйрәнеш бит</translation>
     </message>
 </context>
 <context>
@@ -748,47 +748,47 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
         <source>New window</source>
-        <translation>Nyt vindue</translation>
+        <translation>Яңы ҡырҡылау</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
         <source>New tab</source>
-        <translation>Nyt faneblad</translation>
+        <translation>Яңы вкладка</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save</source>
-        <translation>Gem</translation>
+        <translation>Сақлау</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
         <source>Save as</source>
-        <translation>Gem som</translation>
+        <translation>Сақлау һыҙыҡ</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Display in file manager</source>
-        <translation>Vis i filhåndtering</translation>
+        <translation>Файл менеджерында күрһәтеү</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Magnifer</source>
-        <translation>Forstørrelsesglas</translation>
+        <translation>Магнит</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="50"/>
         <source>Tools</source>
-        <translation>Værktøjer</translation>
+        <translation>Ағзалар</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation>Ҡырҡылар</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Print</source>
-        <translation>Udskriv</translation>
+        <translation>Ҡаплау</translation>
     </message>
 </context>
 <context>
@@ -796,7 +796,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
-        <translation>Miniaturer</translation>
+        <translation>Ҡаплауҙар</translation>
     </message>
 </context>
 <context>
@@ -804,7 +804,7 @@
     <message>
         <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
-        <translation>Inputgrænse nået</translation>
+        <translation>Күсереү һыҙығын ҡынау</translation>
     </message>
 </context>
 <context>
@@ -812,22 +812,22 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation>Dokumentfilsti.</translation>
+        <translation>Документ файлын ҡынау.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
         <source>FilePath</source>
-        <translation>Filsti</translation>
+        <translation>Файлын ҡынау</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation>ThumbnailPath-sti.</translation>
+        <translation>Ҡаплауҙар ҡынауы.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
-        <translation>Generer thumbnail.</translation>
+        <translation>Ҡаплау ҡынауы.</translation>
     </message>
 </context>
 </TS>
