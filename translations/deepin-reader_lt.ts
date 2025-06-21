@@ -123,8 +123,6 @@
     <name>BrowserMenu</name>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="52"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
         <translation>Kopijuoti</translation>
     </message>
@@ -135,24 +133,16 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
         <source>Add annotation</source>
         <translation>Pridėti atsakymą</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="77"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="85"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="129"/>
         <source>Remove bookmark</source>
         <translation>Šaliu žymes</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Add bookmark</source>
         <translation>Pridėti žymę</translation>
     </message>
@@ -168,73 +158,61 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
         <source>Search</source>
         <translation>Ieškoti</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
         <translation>Išeiti iš pilno ekrano</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
         <translation>Pilnas ekranas</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Slide show</source>
         <translation>Sliktinė skelbimas</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
         <source>First page</source>
         <translation>Pirmas puslapis</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
         <source>Previous page</source>
         <translation>Ankstesnis puslapis</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Next page</source>
         <translation>Kitas puslapis</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="156"/>
         <source>Last page</source>
         <translation>Paskutinis puslapis</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Rotate left</source>
         <translation>Rotuoti į kairę</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="165"/>
         <source>Rotate right</source>
         <translation>Rotuoti į dešinę</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
         <source>Print</source>
         <translation>Spausdinti</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Document info</source>
         <translation>Dokumento informacija</translation>
     </message>
@@ -286,13 +264,11 @@
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>Neteisingas failo pavadinimas</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Gerai</translation>
@@ -303,38 +279,35 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>Pakelkite dokumentus čia</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>Palaikomas formatas: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite failą</translation>
     </message>
 </context>
 <context>
     <name>DocSheet</name>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="360"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Žymė buvo pašalinama</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>Prašome pasirinkti tekstą</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="607"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Pastaba buvo pašalinama</translation>
     </message>
 </context>
 <context>
@@ -342,7 +315,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Šifravimo failas, prašome įvesti slaptažodį</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
@@ -379,12 +352,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti tekstą</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>Rankinis įrankis</translation>
     </message>
 </context>
 <context>
@@ -397,7 +370,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pašalinti visas pastabas?</translation>
     </message>
 </context>
 <context>
@@ -405,7 +378,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>Nesukurta puslapis</translation>
     </message>
 </context>
 <context>
@@ -413,7 +386,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Konvertuojama</translation>
     </message>
 </context>
 <context>
@@ -428,8 +401,8 @@
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <source>Save the changes to "%1"?</source>
+        <translation>Įrašyti pakeitimus į "%1"?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -741,7 +714,6 @@
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>Pašalinti viską</translation>
     </message>
@@ -786,7 +758,6 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
         <translation>Saugoti</translation>
     </message>
@@ -846,7 +817,6 @@
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
-        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>Failo kelias</translation>
     </message>

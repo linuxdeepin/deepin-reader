@@ -123,8 +123,6 @@
     <name>BrowserMenu</name>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="52"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
         <translation>কopi</translation>
     </message>
@@ -135,24 +133,16 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
         <source>Add annotation</source>
         <translation>মার্কার যোগ করুন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="77"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="85"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="129"/>
         <source>Remove bookmark</source>
         <translation>বইমার্ক মুছে ফেলুন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Add bookmark</source>
         <translation>বইমার্ক যোগ করুন</translation>
     </message>
@@ -168,73 +158,61 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
         <source>Search</source>
         <translation>অনুসন্ধান</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
         <translation>ফুল স্কিন থেকে বের হো</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
         <translation>ফুল স্কিন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Slide show</source>
         <translation>প্রেzent সাইল</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
         <source>First page</source>
         <translation>প্রথম পাতা</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
         <source>Previous page</source>
         <translation>পূর্বোক্ত পাতা</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Next page</source>
         <translation>পরবর্তী পাতা</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="156"/>
         <source>Last page</source>
         <translation>সর্বশেষ পাতা</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Rotate left</source>
         <translation>বামে ঘূর্ণিত করুন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="165"/>
         <source>Rotate right</source>
         <translation>ডানে ঘূর্ণিত করুন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
         <source>Print</source>
         <translation>প্রিন্ট করুন</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Document info</source>
         <translation>প্রতিবেদন তথ্য</translation>
     </message>
@@ -286,16 +264,14 @@
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
         <translation>অকৃত্রিম ফাইল নাম</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁ</translation>
     </message>
 </context>
 <context>
@@ -303,38 +279,35 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট গুলি এখানে টানুন</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>যে ফরমেট সমর্থিত: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>ফাইল নির্বাচন করুন</translation>
     </message>
 </context>
 <context>
     <name>DocSheet</name>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="360"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>আপনার বুকমার্ক অপসারণ করা হয়েছে</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>দয়া করে টেক্সট নির্বাচন করুন</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="607"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>আপনার অ্যানোটেশন অপসারণ করা হয়েছে</translation>
     </message>
 </context>
 <context>
@@ -342,23 +315,23 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>কী সম্প্রসারিত ফাইল, দয়া করে কী লিখুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>কী</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁ</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>ভুল কী</translation>
     </message>
 </context>
 <context>
@@ -366,12 +339,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>পূর্ববর্তী</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>পরবর্তী</translation>
     </message>
 </context>
 <context>
@@ -379,12 +352,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>টেক্সট নির্বাচন করুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁন্ড টুল</translation>
     </message>
 </context>
 <context>
@@ -397,7 +370,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি সব অ্যানোটেশন মুছে ফেলতে চান কি?</translation>
     </message>
 </context>
 <context>
@@ -405,7 +378,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>অবৈধ পেজ নম্বর</translation>
     </message>
 </context>
 <context>
@@ -413,7 +386,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>পরিবর্তন করা হচ্ছে</translation>
     </message>
 </context>
 <context>
@@ -421,27 +394,27 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="103"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট সংরক্ষণ করা হয়নি</translation>
     </message>
 </context>
 <context>
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <source>Save the changes to "%1"?</source>
+        <translation>"%1" ফাইলে পরিবর্তনগুলি সংরক্ষণ করতে চান কি?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>বাতিল করুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="38"/>
@@ -452,7 +425,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="49"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="50"/>
@@ -741,7 +714,6 @@
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>সব পাড়ো</translation>
     </message>
@@ -786,7 +758,6 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
         <translation>পরিসংখ্যান</translation>
     </message>
@@ -846,7 +817,6 @@
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
-        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
         <translation>ফাইল পথ</translation>
     </message>

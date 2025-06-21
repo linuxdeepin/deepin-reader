@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer adalah alat untuk membaca berkas dokumen, mendukung PDF, DJVU, DOCX dll.</translation>
     </message>
 </context>
 <context>
@@ -22,12 +22,12 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
         <source>Subject</source>
-        <translation type="unfinished"/>
+        <translation>Subjek</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Author</source>
-        <translation type="unfinished"/>
+        <translation>Penulis</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="49"/>
@@ -37,12 +37,12 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="50"/>
         <source>Producer</source>
-        <translation type="unfinished"/>
+        <translation>Pembuat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
         <source>Creator</source>
-        <translation type="unfinished"/>
+        <translation>Pembuat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
@@ -52,7 +52,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
         <source>Time modified</source>
-        <translation type="unfinished"/>
+        <translation>Waktu diubah</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="54"/>
@@ -110,20 +110,18 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan bookmark</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"/>
+        <translation>Apakah Anda yakin ingin menghapus semua bookmark?</translation>
     </message>
 </context>
 <context>
     <name>BrowserMenu</name>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="52"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
         <translation>Salin</translation>
     </message>
@@ -134,106 +132,86 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="73"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
         <source>Add annotation</source>
         <translation>Tambah anotasi</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="77"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="85"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="129"/>
         <source>Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Hapus bookmark</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Tambahkan bookmark</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Tekanan</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="69"/>
         <source>Remove highlight</source>
-        <translation type="unfinished"/>
+        <translation>Hapus tekanan</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Cari</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
         <source>Exit fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Keluar dari tampilan penuh</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
         <source>Fullscreen</source>
         <translation>Layar penuh</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
         <source>Slide show</source>
-        <translation type="unfinished"/>
+        <translation>Slide show</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="148"/>
         <source>First page</source>
         <translation>Halaman pertama</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
         <source>Previous page</source>
         <translation>Halaman sebelumnya</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Next page</source>
         <translation>Halaman selanjutnya</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="156"/>
         <source>Last page</source>
         <translation>Halaman terakhir</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Rotate left</source>
-        <translation type="unfinished"/>
+        <translation>Putar ke kiri</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="165"/>
         <source>Rotate right</source>
-        <translation type="unfinished"/>
+        <translation>Putar ke kanan</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="168"/>
         <source>Print</source>
         <translation>Cetak</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Document info</source>
         <translation>Informasi dokumen</translation>
     </message>
@@ -251,7 +229,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
-        <translation type="unfinished"/>
+        <translation>Format tidak didukung</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
@@ -261,12 +239,12 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Silakan periksa apakah berkas rusak</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Pengubahan gagal, silakan periksa apakah berkas rusak</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
@@ -285,13 +263,11 @@
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="463"/>
         <source>Invalid file name</source>
-        <translation type="unfinished"/>
+        <translation>Nama berkas tidak valid</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="465"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Oke</translation>
@@ -302,12 +278,12 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>Tarik dokumen di sini</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>Format yang didukung: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
@@ -319,21 +295,18 @@
     <name>DocSheet</name>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="360"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Bookmark telah dihapus</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="548"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>Silakan pilih teks</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="607"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Anotasi telah dihapus</translation>
     </message>
 </context>
 <context>
@@ -341,7 +314,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Berkas terenkripsi, silakan masukkan kata sandi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
@@ -383,7 +356,7 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>Alat Tangan</translation>
     </message>
 </context>
 <context>
@@ -396,7 +369,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Apakah Anda yakin ingin menghapus semua anotasi?</translation>
     </message>
 </context>
 <context>
@@ -404,7 +377,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>Nomor halaman tidak valid</translation>
     </message>
 </context>
 <context>
@@ -412,7 +385,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Mengonversi</translation>
     </message>
 </context>
 <context>
@@ -420,15 +393,15 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="103"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>Dokumen tidak disimpan</translation>
     </message>
 </context>
 <context>
     <name>SaveDialog</name>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to &quot;%1&quot;?</source>
-        <translation>Simpan perubahan ke &quot;%1&quot;?</translation>
+        <source>Save the changes to "%1"?</source>
+        <translation>Simpan perubahan ke "%1"?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
@@ -440,7 +413,7 @@
         <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Buang</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="38"/>
@@ -464,7 +437,7 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="35"/>
         <source>Two-Page View</source>
-        <translation type="unfinished"/>
+        <translation>Tampilan Dua Halaman</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
@@ -474,17 +447,17 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation>Pas Page</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="38"/>
         <source>Fit Height</source>
-        <translation type="unfinished"/>
+        <translation>Pas Tinggi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="39"/>
         <source>Fit Width</source>
-        <translation type="unfinished"/>
+        <translation>Pas Lebar</translation>
     </message>
 </context>
 <context>
@@ -497,7 +470,7 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation type="unfinished"/>
+        <translation>'%1 item ditemukan'</translation>
     </message>
 </context>
 <context>
@@ -505,7 +478,7 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>Dokumen ini sedang mencoba terhubung ke:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
@@ -530,7 +503,7 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Pratinjau</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
@@ -540,12 +513,12 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>Bookmark</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
         <source>Annotations</source>
-        <translation type="unfinished"/>
+        <translation>Anotasi</translation>
     </message>
 </context>
 <context>
@@ -568,12 +541,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Halaman ke atas</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Halaman ke bawah</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
@@ -583,12 +556,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>Zoom masuk</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>Zoom keluar</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
@@ -608,7 +581,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Pratinjau</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
@@ -618,32 +591,32 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
         <source>Fit height</source>
-        <translation type="unfinished"/>
+        <translation>Pas tinggi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
         <source>Fit width</source>
-        <translation type="unfinished"/>
+        <translation>Pas lebar</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation type="unfinished"/>
+        <translation>Putar ke kiri</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation type="unfinished"/>
+        <translation>Putar ke kanan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Pindah ke awal</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Pindah ke akhir</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
@@ -653,12 +626,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Hand tool</source>
-        <translation type="unfinished"/>
+        <translation>Alat tangan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Tambah bookmark</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
@@ -668,12 +641,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
         <source>Magnifier</source>
-        <translation type="unfinished"/>
+        <translation>Peng放大</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Slide show</source>
-        <translation type="unfinished"/>
+        <translation>Slide show</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
@@ -698,7 +671,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
@@ -708,7 +681,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan pintasan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
@@ -718,12 +691,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Tekanan</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Cari</translation>
     </message>
 </context>
 <context>
@@ -740,14 +713,13 @@
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="223"/>
         <source>Remove all</source>
         <translation>Hapus semua</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
         <source>Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Hapus bookmark</translation>
     </message>
 </context>
 <context>
@@ -763,12 +735,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>Ini adalah halaman pertama</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>Ini adalah halaman terakhir</translation>
     </message>
 </context>
 <context>
@@ -785,7 +757,6 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="110"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
@@ -797,22 +768,22 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan di pengelola file</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Magnifer</source>
-        <translation type="unfinished"/>
+        <translation>Peng放大</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="50"/>
         <source>Tools</source>
-        <translation type="unfinished"/>
+        <translation>Alat</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Cari</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
@@ -825,7 +796,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Pratinjau</translation>
     </message>
 </context>
 <context>
@@ -833,7 +804,7 @@
     <message>
         <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
         <source>Input limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Batas masukan tercapai</translation>
     </message>
 </context>
 <context>
@@ -841,23 +812,22 @@
     <message>
         <location filename="../reader/main.cpp" line="40"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"/>
+        <translation>Lokasi File Dokumen.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="41"/>
-        <location filename="../reader/main.cpp" line="45"/>
         <source>FilePath</source>
-        <translation type="unfinished"/>
+        <translation>Lokasi File</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="44"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"/>
+        <translation>Lokasi Pratinjau.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="49"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"/>
+        <translation>Buat pratinjau.</translation>
     </message>
 </context>
 </TS>
