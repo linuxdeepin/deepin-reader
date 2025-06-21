@@ -1,3 +1,9 @@
+deepin-reader (6.5.26) unstable; urgency=medium
+
+  * Fix build failure on mips64el
+
+ -- wangrong <wangrong@uniontech.com>  Sat, 21 Jun 2025 09:43:10 +0800
+
 deepin-reader (6.5.25) unstable; urgency=medium
 
   * build: Add position-independent code compilation flags
