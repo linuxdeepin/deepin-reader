@@ -1,3 +1,9 @@
+deepin-reader (6.5.29) unstable; urgency=medium
+
+  * chore: update translation
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 01 Jul 2025 19:23:43 +0800
+
 deepin-reader (6.5.28) unstable; urgency=medium
 
   * chore: remove deepin-reader_en_AU.ts file
