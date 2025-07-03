@@ -22,7 +22,7 @@ class PageSearchThread;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
-    Dr::ScaleMode scaleMode     = Dr::FitToPageWorHMode;
+    Dr::ScaleMode scaleMode     = Dr::FitToPageWidthMode;
     Dr::Rotation rotation       = Dr::RotateBy0;
     qreal scaleFactor           = 1.0;
     bool sidebarVisible         = false;
