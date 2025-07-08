@@ -116,7 +116,7 @@
 - 複製注釋
    + 在頁面上，右鍵單擊已添加注釋的文本內容，選擇 **複製**，複製該條注釋的全部內容。
    + 在頁面上，右鍵單擊注釋圖標，選擇 **複製**，複製該條注釋的全部內容。
-   + 單擊圖標 ![menu](../common/thumbnail_normal_light.svg) 打開左側工具欄，在工具欄下方單擊圖標 ![view](../common/comments_normal_light.svg) 打開注釋目錄，右鍵單擊某一個注釋，選擇 **複製**，複製該條注釋的全部內容。
+   + 單擊圖標 ![menu](../common/thumbnail_normal_light.svg) 打開左側工具欄，右鍵單擊某一個注釋，選擇 **複製**，複製該條注釋的全部內容。
 
 - 顯示注釋  
    1.  將鼠標懸停至注釋圖標上，在出現的浮框中顯示部分注釋內容。
@@ -164,7 +164,7 @@
 
 ### 切換目錄
 
-通過縮略圖可以進行文檔縮略圖目錄 ![view](../common/view_normal.svg)、文檔目錄 ![catalog](../common/catalog.svg) 、書籤目錄 ![view](../common/bookmark_normal.svg)、注釋目錄 ![view](../common/comments_normal_light.svg) 的切換。手動拖拽目錄邊框，縮略圖跟隨可拖拽寬度大小的變化而變化。
+通過縮略圖可以進行文檔縮略圖目錄 ![view](../common/view_normal.svg)、文檔目錄 ![catalog](../common/catalog.svg) 、書籤目錄 ![view](../common/bookmark_normal.svg) 的切換。手動拖拽目錄邊框，縮略圖跟隨可拖拽寬度大小的變化而變化。
 
 ### 全屏
 
