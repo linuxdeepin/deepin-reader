@@ -111,11 +111,11 @@ sources:
     url: http://10.20.64.92:8080/testing25_daily/pool/main/d/dpkg/dpkg_1.22.6deepin4_loong64.deb
     digest: ed2c4a87410d3beea4622bbe835dab07b458a8e286be591ca34e97f2a6f6d730
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/fontconfig-config_2.14.2-6_loong64.deb
-    digest: 17c510572e0a51ecc5a4eba486a1cfcb55d2ac297c84f35bc7c58cbc31e6471b
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/fontconfig-config_2.15.0-2.3deepin1_loong64.deb
+    digest: 06fd1e3b51d4e56571e9e974fd7936aa7010220f954b9a78b239b42bbf6e94fc
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/fontconfig_2.14.2-6_loong64.deb
-    digest: 85fed3d569a4fc895efd890e842e276016aa92848ddc3419c6fdaabc02280c7f
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/fontconfig_2.15.0-2.3deepin1_loong64.deb
+    digest: 383b6417f02a2850dc8dc08613ba4f188f63943deef4f707fb03b50e34627c30
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fonts-noto/fonts-croscore_20201225-deepin_all.deb
     digest: afbaf120869a08aa7dd14da9ad014de48a751aa4330534b531410bb86c411b55
@@ -147,8 +147,8 @@ sources:
     url: http://10.20.64.92:8080/testing25_daily/pool/main/g/googletest/googletest_1.12.1-0.2_all.deb
     digest: 2df57ce8c5c8fdc37e1dbbe302d276f1cb9a784df5dd3423208f87933cfa28a0
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/icu-devtools_74.2-1deepin1_loong64.deb
-    digest: bd0810980b18f056dfba145cf242ad53070af276f89afe1891fa8284bf5c77fc
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/icu-devtools_74.2-1deepin4_loong64.deb
+    digest: 29bc31d34206b2ad29fa35e68acc54adc4ac8b94d19ad03e1ba96c8cb0cf0cdd
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/a/acl/libacl1_2.3.1-3_loong64.deb
     digest: 7388773fe6ec2b0439e0383023e06d26dee49dc9a2adc9b0969c3e24a51f09e7
@@ -351,8 +351,8 @@ sources:
     url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fmtlib/libfmt10_10.1.1+ds1-4deepin0+rb1_loong64.deb
     digest: afa51b193209a8d67f9f610e43bc9dffadd90f61fd77112ca1f0cfb87a7bd269
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/libfontconfig1_2.14.2-6_loong64.deb
-    digest: db05b74e370f34d39ff896e5070fee3351a4cb938e86bc6dc852c624cc9534cb
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/f/fontconfig/libfontconfig1_2.15.0-2.3deepin1_loong64.deb
+    digest: e4faee509dbabd22ea70b8d59aedef53701693356ca681d32eeb855026312c03
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libf/libfontenc/libfontenc1_1.1.4-1_loong64.deb
     digest: 36450772f287a243ed0ff6c3b5e491021c7d63f6f68a9e71711fbb6e5884c868
@@ -450,11 +450,11 @@ sources:
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libi/libice/libice6_1.0.10-1_loong64.deb
     digest: 71f07175fac63f8a51f001299a9329a38c4320df6b46e6bdda20768aa90a3456
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/libicu-dev_74.2-1deepin1_loong64.deb
-    digest: 7d1b947d76748b16c18b40ddf9b6810281e7e8690d290a43a445b811f3936c10
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/libicu-dev_74.2-1deepin4_loong64.deb
+    digest: 90ca2b00fbf2a39a59bc0f9f992eca99951ef6c0ab632c28c2ea9abb8849c16a
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/libicu74_74.2-1deepin1_loong64.deb
-    digest: 2ed8252419a84421d4df376a90e03cc9eb4d1a6d4ec4120a64ab4935f80e3ba8
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/i/icu/libicu74_74.2-1deepin4_loong64.deb
+    digest: d60c34f7df7c6c7b8b950d3b2996bd1dda6ea510d77de2869bd13c614a1fe00a
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libi/libidn/libidn12_1.38-4_loong64.deb
     digest: a1dd33dad4610dba45cf4d56413c69307100ce90358efc41395a826211e3e3a5
@@ -615,8 +615,8 @@ sources:
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libp/libpaper/libpaper1_1.1.29_loong64.deb
     digest: 18f6cb0de49c065b4e3a8d453bf879158b1d83af787a6fe84ce15a31e1cff650
   - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/p/pciutils/libpci3_3.10.0-2_loong64.deb
-    digest: 1cc751e287cd0be69d3d7308f1143eab0e671b51f31fee5e5b626f06e0d2875c
+    url: http://10.20.64.92:8080/testing25_daily/pool/main/p/pciutils/libpci3_3.13.0-2_loong64.deb
+    digest: 4665f42c84e127912b56c3e5025085a6cfdae9bcdad17c802abaec73540db64f
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/p/pcre2/libpcre2-16-0_10.39-2_loong64.deb
     digest: c8062fb10212742a2ee3206282e185e1072fb891c17ae8bbb73777d7f4ebd93b
