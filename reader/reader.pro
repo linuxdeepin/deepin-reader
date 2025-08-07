@@ -1,4 +1,5 @@
 include($$PWD/src.pri)
+INCLUDEPATH += $$INCPATHS
 
 #config
 # 基础 Qt 模块

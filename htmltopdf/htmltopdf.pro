@@ -32,6 +32,7 @@ contains(QMAKE_HOST.arch, mips64):{
 }
 
 CONFIG += c++11
+INCLUDEPATH += $$INCPATHS
 
 #code
 HEADERS += \
