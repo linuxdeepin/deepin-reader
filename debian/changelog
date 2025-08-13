@@ -1,3 +1,9 @@
+deepin-reader (6.5.35) unstable; urgency=medium
+
+  * chore: Update version to 6.5.35
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 13 Aug 2025 16:31:09 +0800
+
 deepin-reader (6.5.34) unstable; urgency=medium
 
   * chore: Add INCLUDEPATH to project files for htmltopdf and reader
