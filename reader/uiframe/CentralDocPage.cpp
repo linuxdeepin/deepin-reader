@@ -213,13 +213,21 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
+#ifdef XPS_SUPPORT_ENABLED
+    if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType && Dr::XPS != fileType) {
+#else
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
+#endif
         if (pathControl(filePath)) {
             qInfo() << "没有权限读取该文件";
             return;
         }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
-        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6)";
+#ifdef XPS_SUPPORT_ENABLED
+        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX、XPS）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
+#else
+        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
+#endif
         return;
     }
 

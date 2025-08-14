@@ -30,6 +30,15 @@ FileType fileType(const QString &filePath)
     } else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
         qDebug() << "Matched DJVU file type";
         fileType = DJVU;
+    
+#ifdef XPS_SUPPORT_ENABLED
+    } else if (filePath.right(4).toLower() == ".xps") {
+        qDebug() << "Matched XPS file type by extension";
+        fileType = XPS;
+    } else if (mimeType.name() == QLatin1String("application/vnd.ms-xpsdocument")) {
+        qDebug() << "Matched XPS file type by MIME type";
+        fileType = XPS;
+#endif
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "pptx") {
         qDebug() << "Matched PPTX file type";
         fileType = PPTX;
