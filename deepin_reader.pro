@@ -47,6 +47,14 @@ CONFIG  += ordered
 
 message("Build on host arch: $$QMAKE_HOST.arch")
 
+# XPS支持配置（默认关闭）
+# 使用方式：qmake CONFIG+=xps_support 来启用XPS支持
+xps_support {
+    message(">>> XPS support enabled")
+    DEFINES += XPS_SUPPORT_ENABLED
+} else {
+    message(">>> XPS support disabled")
+}
 
 SUBDIRS += htmltopdf
 

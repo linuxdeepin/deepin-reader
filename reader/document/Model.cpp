@@ -3,6 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "Model.h"
+#ifdef XPS_SUPPORT_ENABLED
+#include "XpsDocument.h"
+#endif
 #include "PDFModel.h"
 #include "DjVuModel.h"
 #include "dpdfannot.h"
@@ -34,6 +37,11 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     } else if (Dr::DJVU == fileType) {
         qDebug() << "Handling DJVU document";
         document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
+#ifdef XPS_SUPPORT_ENABLED
+    } else if (Dr::XPS == fileType) {
+        qDebug() << "Handling XPS document";
+        document = deepin_reader::XpsDocument::loadDocument(filePath, error);
+#endif
     } else if (Dr::DOCX == fileType) {
         qDebug() << "Starting DOCX document conversion process";
         if (nullptr == pprocess) {

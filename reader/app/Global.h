@@ -39,7 +39,10 @@ enum FileType {
     DOCX    = 3,
     PS      = 4,
     DOC     = 5,
-    PPTX    = 6
+    PPTX    = 6,
+#ifdef XPS_SUPPORT_ENABLED
+    XPS     = 7
+#endif
 };
 FileType fileType(const QString &filePath);
 

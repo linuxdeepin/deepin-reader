@@ -11,6 +11,15 @@ project(deepin-reader
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# XPS支持选项（默认关闭）
+option(XPS_SUPPORT "Enable XPS document format support" OFF)
+if(XPS_SUPPORT)
+    message(">>> XPS support enabled")
+    add_compile_definitions(XPS_SUPPORT_ENABLED)
+else()
+    message(">>> XPS support disabled")
+endif()
+
 include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    set(CMAKE_INSTALL_PREFIX /usr)
