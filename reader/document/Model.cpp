@@ -17,7 +17,30 @@
 #include <QDir>
 #include <QTimer>
 #include <QTemporaryFile>
+#include <QLibraryInfo>
 
+
+namespace {
+
+QString getHtmlToPdfPath() {
+
+    QString path = QString(INSTALL_PREFIX) + "/lib/deepin-reader/htmltopdf";
+    if (QFile::exists(path)) {
+        qDebug() << "Found htmltopdf in INSTALL_PREFIX: " << path;
+        return path;
+    }
+
+    path = QLibraryInfo::path(QLibraryInfo::LibrariesPath) + "/deepin-reader/htmltopdf";
+    if (QFile::exists(path)) {
+        qDebug() << "Found htmltopdf in LibrariesPath: " << path;
+        return path;
+    }
+
+    qWarning() << "Not found htmltopdf";
+    return QString();
+}
+
+}
 namespace deepin_reader {
 deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &fileType,
                                                                      const QString &filePath,
@@ -161,7 +184,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter2.setWorkingDirectory(convertedFileDir + "/word");
         qInfo() << "Converting HTML to PDF:" << realFilePath;
 
-        QString htmltopdfCommand = prefix + "/lib/deepin-reader/htmltopdf " +  tmpHtmlFilePath + " " + realFilePath;
+        QString htmltopdfCommand = getHtmlToPdfPath() + " " + tmpHtmlFilePath + " " + realFilePath;
         qDebug() << "执行命令: " << htmltopdfCommand;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         converter2.start(htmltopdfCommand);
