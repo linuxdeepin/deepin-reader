@@ -1,3 +1,9 @@
+deepin-reader (6.5.36) unstable; urgency=medium
+
+  * bug: Add dynamic path resolution for htmltopdf
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 03 Sep 2025 09:29:10 +0800
+
 deepin-reader (6.5.35) unstable; urgency=medium
 
   * chore: Update version to 6.5.35
