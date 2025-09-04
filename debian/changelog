@@ -1,3 +1,9 @@
+deepin-reader (6.5.37) unstable; urgency=medium
+
+  * fix: Update getHtmlToPdfPath for Qt version compatibility and include cmath in XpsDocument
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 04 Sep 2025 16:56:23 +0800
+
 deepin-reader (6.5.36) unstable; urgency=medium
 
   * bug: Add dynamic path resolution for htmltopdf

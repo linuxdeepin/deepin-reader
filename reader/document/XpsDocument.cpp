@@ -20,7 +20,7 @@
 #include <QDirIterator>
 #include <QImageReader>
 #include <QFontDatabase>
-
+#include <cmath>
 namespace deepin_reader {
 
 XpsPage::XpsPage(const XpsPageData &pageData, QMutex *mutex)
