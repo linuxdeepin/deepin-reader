@@ -29,7 +29,7 @@ QString getHtmlToPdfPath() {
         qDebug() << "Found htmltopdf in INSTALL_PREFIX: " << path;
         return path;
     }
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
     path = QLibraryInfo::path(QLibraryInfo::LibrariesPath) + "/deepin-reader/htmltopdf";
 #else
     path = QLibraryInfo::location(QLibraryInfo::LibrariesPath) + "/deepin-reader/htmltopdf";
