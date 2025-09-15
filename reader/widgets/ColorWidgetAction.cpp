@@ -30,11 +30,13 @@ void ColorWidgetAction::slotBtnClicked(int index)
     foreach (auto btn, btnList) {
         int btnIndex = btn->objectName().toInt();
         if (btnIndex == index) {
+            // qDebug() << "Color button clicked, index:" << index << "is selected";
             btn->setSelected(true);
 
             Utils::setHiglightColorIndex(index);
             emit sigBtnGroupClicked();
         } else {
+            // qDebug() << "Color button clicked, index:" << index << "is not selected";
             btn->setSelected(false);
         }
     }

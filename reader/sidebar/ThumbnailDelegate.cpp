@@ -19,15 +19,16 @@
 ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
-    qDebug() << "ThumbnailDelegate created with parent:" << parent;
+    // qDebug() << "ThumbnailDelegate created with parent:" << parent;
     m_parent = parent;
 }
 
 
 void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug() << "Painting thumbnail for row:" << index.row();
+    // qDebug() << "ThumbnailDelegate::paint start - row:" << index.row();
     if (index.isValid()) {
+        // qDebug() << "Valid index, proceeding with paint";
         qreal pixscale = m_parent->property("adaptScale").toDouble();
 
         int rotate = index.data(ImageinfoType_e::IMAGE_ROTATE).toInt();
@@ -54,6 +55,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         const QRect &rect = QRect(option.rect.center().x() - scalePixSize.width() / 2, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
+            // qDebug() << "Drawing pixmap at:" << rect;
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;
@@ -79,20 +81,22 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->restore();
         drawBookMark(painter, rect, bShowBookMark);
     }
+    // qDebug() << "ThumbnailDelegate::paint end";
 }
 QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug() << "Calculating size hint for row:" << index.row();
+    // qDebug() << "Calculating size hint for row:" << index.row();
     return DStyledItemDelegate::sizeHint(option, index);
 }
 
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
 {
+    // qDebug() << "Drawing bookmark at:" << rect;
     if (visible) {
-        qDebug() << "Drawing bookmark at:" << rect;
+        // qDebug() << "Drawing bookmark at:" << rect;
         QPixmap pixmap(QIcon::fromTheme("dr_bookmark_checked").pixmap({36, 36}));
         painter->drawPixmap(rect.right() - 42, rect.y(), pixmap);
     } else {
-        qDebug() << "Bookmark not visible for rect:" << rect;
+        // qDebug() << "Bookmark not visible for rect:" << rect;
     }
 }

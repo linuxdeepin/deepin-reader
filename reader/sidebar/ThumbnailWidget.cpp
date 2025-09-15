@@ -27,7 +27,7 @@ ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-
+    // qDebug() << "ThumbnailWidget destroyed";
 }
 
 void ThumbnailWidget::initWidget()
@@ -55,6 +55,7 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::handleOpenSuccess()
 {
+    qDebug() << "handleOpenSuccess";
     if (bIshandOpenSuccess) {
         qDebug() << "Already handled open success";
         return;
@@ -64,16 +65,19 @@ void ThumbnailWidget::handleOpenSuccess()
     m_pImageListView->handleOpenSuccess();
     m_pPageWidget->handleOpenSuccess();
     scrollToCurrentPage();
+    qDebug() << "handleOpenSuccess end";
 }
 
 void ThumbnailWidget::handleRotate()
 {
+    qDebug() << "handleRotate";
     m_pImageListView->reset();
     scrollToCurrentPage();
 }
 
 void ThumbnailWidget::handlePage(int index)
 {
+    qDebug() << "handlePage";
     m_pImageListView->scrollToIndex(index);
     m_pPageWidget->setIndex(index);
 }
@@ -86,12 +90,14 @@ void ThumbnailWidget::setBookMarkState(const int &index, const int &type)
 
 void ThumbnailWidget::prevPage()
 {
+    qDebug() << "prevPage";
     if (!m_sheet.isNull())
         m_sheet->jumpToPrevPage();
 }
 
 void ThumbnailWidget::pageUp()
 {
+    qDebug() << "pageUp";
     if (m_sheet.isNull())
         return;
 
@@ -104,12 +110,14 @@ void ThumbnailWidget::pageUp()
 
 void ThumbnailWidget::nextPage()
 {
+    qDebug() << "nextPage";
     if (!m_sheet.isNull())
         m_sheet->jumpToNextPage();
 }
 
 void ThumbnailWidget::pageDown()
 {
+    qDebug() << "pageDown";
     if (m_sheet.isNull())
         return;
 
@@ -133,10 +141,12 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
 
 void ThumbnailWidget::scrollToCurrentPage()
 {
+    qDebug() << "scrollToCurrentPage";
     m_pImageListView->scrollToIndex(m_sheet->currentIndex());
 }
 
 void ThumbnailWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
+    qDebug() << "setTabOrderWidget";
     m_pPageWidget->setTabOrderWidget(tabWidgetlst);
 }

@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QProcessEnvironment>
+#include <QDebug>
 
 bool isWayland();
 
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     bool wayland = isWayland();
     qDebug() << "Wayland environment detected:" << wayland;
     if (wayland) {
+        qDebug() << "Wayland detected, disabling GPU";
         // 解决klu panguV平台使用QWebEnginePage崩溃的问题，不支持gpu渲染
         qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
     }
@@ -66,8 +68,10 @@ bool isWayland()
     QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+        qDebug() << "Wayland session detected";
         return true;
     } else {
+        qDebug() << "X11 session detected";
         return false;
     }
 }

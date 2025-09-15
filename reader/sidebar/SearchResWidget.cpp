@@ -83,9 +83,11 @@ int  SearchResWidget::handleFindFinished()
 
 void SearchResWidget::clearFindResult()
 {
+    qDebug() << "SearchResWidget::clearFindResult start";
     m_searchKey.clear();
     m_stackLayout->setCurrentIndex(SEARCH_INDEX);
     m_pImageListView->getImageModel()->resetData();
+    qDebug() << "SearchResWidget::clearFindResult end";
 }
 
 void SearchResWidget::searchKey(const QString &searchKey)
@@ -96,8 +98,11 @@ void SearchResWidget::searchKey(const QString &searchKey)
 
 void SearchResWidget::addSearchsItem(const int &pageIndex, const QString &text, const int &resultNum)
 {
-    if (nullptr == m_sheet && !text.contains(m_searchKey))
+    qDebug() << "SearchResWidget::addSearchsItem start";
+    if (nullptr == m_sheet && !text.contains(m_searchKey)) {
+        qDebug() << "Invalid sheet or text does not contain search key";
         return;
+    }
 
     ImagePageInfo_t tImagePageInfo;
     tImagePageInfo.pageIndex = pageIndex;
@@ -105,8 +110,11 @@ void SearchResWidget::addSearchsItem(const int &pageIndex, const QString &text, 
     tImagePageInfo.strSearchcount = tr("%1 items found").arg(resultNum);
     m_pImageListView->getImageModel()->insertPageIndex(tImagePageInfo);
 
-    if (m_stackLayout->currentIndex() != SEARCH_INDEX)
+    if (m_stackLayout->currentIndex() != SEARCH_INDEX) {
+        qDebug() << "Setting current index to SEARCH_INDEX";
         m_stackLayout->setCurrentIndex(SEARCH_INDEX);
+    }
+    qDebug() << "SearchResWidget::addSearchsItem end";
 }
 
 void SearchResWidget::adaptWindowSize(const double &scale)
