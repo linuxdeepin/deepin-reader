@@ -20,89 +20,106 @@ namespace deepin_reader {
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
     m_dannotation(dannotation)
 {
-    qDebug() << "Creating PDF annotation with type:" << (dannotation ? dannotation->type() : -1);
+    // qDebug() << "Creating PDF annotation with type:" << (dannotation ? dannotation->type() : -1);
 }
 
 PDFAnnotation::~PDFAnnotation()
 {
-    qDebug() << "Destroying PDF annotation";
+    // qDebug() << "Destroying PDF annotation";
 
     m_dannotation = nullptr;
 }
 
 QList<QRectF> PDFAnnotation::boundary() const
 {
+    qDebug() << "PDFAnnotation::boundary() - Getting annotation boundary";
     QList<QRectF> rectFList;
 
     if (m_dannotation->type() == DPdfAnnot::AText || m_dannotation->type() == DPdfAnnot::AHighlight) {
-
+        qDebug() << "PDFAnnotation::boundary() - Processing text or highlight annotation";
         foreach (QRectF rect, m_dannotation->boundaries())
             rectFList.append(rect);
     }
 
+    qDebug() << "PDFAnnotation::boundary() - Returning" << rectFList.size() << "boundaries";
     return rectFList;
 }
 
 QString PDFAnnotation::contents() const
 {
+    qDebug() << "PDFAnnotation::contents() - Getting annotation contents";
     if (nullptr == m_dannotation) {
         qWarning() << "Attempt to get contents from null annotation";
         return QString();
     }
 
-    return m_dannotation->text();
+    QString text = m_dannotation->text();
+    qDebug() << "PDFAnnotation::contents() - Returning contents:" << text;
+    return text;
 }
 
 int PDFAnnotation::type()
 {
+    qDebug() << "PDFAnnotation::type() - Getting annotation type";
     if (nullptr == m_dannotation) {
         qWarning() << "Attempt to get type from null annotation";
         return -1;
     }
 
-    return m_dannotation->type();
+    int type = m_dannotation->type();
+    qDebug() << "PDFAnnotation::type() - Returning type:" << type;
+    return type;
 }
 
 DPdfAnnot *PDFAnnotation::ownAnnotation()
 {
+    // qDebug() << "PDFAnnotation::ownAnnotation() - Getting own annotation pointer";
     return m_dannotation;
 }
 
 PDFPage::PDFPage(QMutex *mutex, DPdfPage *page) :
     m_docMutex(mutex), m_page(page)
 {
-    qInfo() << "Creating PDF page handler";
+    // qInfo() << "Creating PDF page handler";
 }
 
 PDFPage::~PDFPage()
 {
-    qInfo() << "Destroying PDF page handler";
+    // qInfo() << "Destroying PDF page handler";
 }
 
 QSizeF PDFPage::sizeF() const
 {
-    return m_page->sizeF();
+    // qDebug() << "PDFPage::sizeF() - Getting page size";
+    QSizeF size = m_page->sizeF();
+    // qDebug() << "PDFPage::sizeF() - Returning size:" << size;
+    return size;
 }
 
 QImage PDFPage::render(int width, int height, const QRect &slice) const
 {
-    qInfo() << "Rendering PDF page with size:" << width << "x" << height << "slice:" << slice;
+    // qInfo() << "Rendering PDF page with size:" << width << "x" << height << "slice:" << slice;
 
     LOCK_DOCUMENT
 
     QRect ratioRect = slice.isValid() ? QRect(slice.x(), slice.y(), slice.width(), slice.height()) : QRect();
 
-    return m_page->image(width, height, ratioRect);
+    QImage result = m_page->image(width, height, ratioRect);
+    // qDebug() << "PDFPage::render() - Render completed";
+    return result;
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &pos)
 {
+    // qDebug() << "PDFPage::getLinkAtPoint() - Getting link at point:" << pos;
     Link link;
     const QList<DPdfAnnot *> &dlinkAnnots = m_page->links();
     if (dlinkAnnots.size() > 0) {
+        // qDebug() << "PDFPage::getLinkAtPoint() - Found" << dlinkAnnots.size() << "link annotations";
         for (DPdfAnnot *annot : dlinkAnnots) {
             DPdfLinkAnnot *linkAnnot = dynamic_cast<DPdfLinkAnnot *>(annot);
             if (linkAnnot && linkAnnot->pointIn(pos)) {
+                // qDebug() << "PDFPage::getLinkAtPoint() - Found matching link annotation";
                 if (!linkAnnot->isValid())
                     m_page->initAnnot(annot);
 
@@ -121,17 +138,19 @@ Link PDFPage::getLinkAtPoint(const QPointF &pos)
             }
         }
     }
+    // qDebug() << "PDFPage::getLinkAtPoint() - No matching link found";
     return link;
 }
 
 bool PDFPage::hasWidgetAnnots() const
 {
-    qDebug() << "Checking if page has widget annotations";
+    // qDebug() << "Checking if page has widget annotations";
     return m_page->widgets().count() > 0;
 }
 
 QString PDFPage::text(const QRectF &rect) const
 {
+    // qDebug() << "PDFPage::text() - Getting text from rect:" << rect;
     return m_page->text(rect).simplified();
 }
 
@@ -141,8 +160,10 @@ QList<Word> PDFPage::words()
 
     LOCK_DOCUMENT
 
-    if (m_wordLoaded)
+    if (m_wordLoaded) {
+        qDebug() << "PDFPage::words() - Words already loaded, returning cached words";
         return m_words;
+    }
 
     int charCount = 0;
 
@@ -154,8 +175,10 @@ QList<Word> PDFPage::words()
 
     m_wordLoaded = true;
 
-    if (charCount <= 0)
+    if (charCount <= 0) {
+        qDebug() << "PDFPage::words() - No characters found, returning empty word list";
         return m_words;
+    }
 
     int index = 0;
 
@@ -167,6 +190,7 @@ QList<Word> PDFPage::words()
 
     while (1) {
         if (index == charCount) {
+            // qDebug() << "PDFPage::words() - Processed all characters, appending final row";
             m_words.append(rowWords);
             break;
         }
@@ -278,6 +302,7 @@ QList<Word> PDFPage::words()
 //        m_words.append(word);
 //    }
 
+    qDebug() << "PDFPage::words() - Word extraction completed, total words:" << m_words.size();
     return m_words;
 }
 
@@ -302,6 +327,7 @@ QList< Annotation * > PDFPage::annotations() const
         annotations.append(new PDFAnnotation(dannotation));
     }
 
+    // qDebug() << "PDFPage::annotations() - Found" << annotations.size() << "annotations";
     return annotations;
 }
 
@@ -329,6 +355,7 @@ bool PDFPage::removeAnnotation(Annotation *annotation)
 
     delete PDFAnnotation;
 
+    qDebug() << "PDFPage::removeAnnotation() - Successfully removed annotation";
     return true;
 }
 
@@ -342,13 +369,18 @@ bool PDFPage::updateAnnotation(Annotation *annotation, const QString &text, cons
     }
 
     if (m_page->annots().contains(annotation->ownAnnotation())) {
-        if (annotation->type() == DPdfAnnot::AText)
+        qDebug() << "PDFPage::updateAnnotation() - Found annotation, updating";
+        if (annotation->type() == DPdfAnnot::AText) {
+            qDebug() << "PDFPage::updateAnnotation() - Updating text annotation";
             m_page->updateTextAnnot(annotation->ownAnnotation(), text);
-        else
+        } else {
+            qDebug() << "PDFPage::updateAnnotation() - Updating highlight annotation";
             m_page->updateHightLightAnnot(annotation->ownAnnotation(), color, text);
+        }
         return true;
     }
 
+    qDebug() << "PDFPage::updateAnnotation() - Failed, annotation not found";
     return false;
 }
 
@@ -374,10 +406,12 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
     }
 
     if (annot->ownAnnotation()) {
+        qDebug() << "PDFPage::moveIconAnnotation() - Moving annotation";
         m_page->updateTextAnnot(annot->ownAnnotation(), annot->ownAnnotation()->text(), rect.center());
 
         return annot;
     }
+    qDebug() << "PDFPage::moveIconAnnotation() - Failed, no annotation data";
     return nullptr;
 }
 
@@ -390,9 +424,11 @@ PDFDocument::PDFDocument(DPdfDoc *document) :
 
     QScreen *srn = QApplication::screens().value(0);
     if (nullptr != srn) {
+        qDebug() << "PDFDocument::PDFDocument() - Screen DPI set, x:" << m_xRes << "y:" << m_yRes;
         m_xRes = srn->logicalDotsPerInchX(); // 获取屏幕的横纵向逻辑dpi
         m_yRes = srn->logicalDotsPerInchY();
     }
+    qDebug() << "PDFDocument::PDFDocument() - Constructor completed";
 }
 
 PDFDocument::~PDFDocument()
@@ -426,7 +462,7 @@ Page *PDFDocument::page(int index) const
     qInfo() << "Retrieving PDF page at index:" << index;
 
     if (DPdfPage *page = m_document->page(index, m_xRes, m_yRes)) {
-
+        qDebug() << "PDFDocument::page() - Page object created";
         if (page->isValid()) {
             qDebug() << "PDF page at index" << index << "is valid";
             return new PDFPage(m_docMutex, page);
@@ -434,6 +470,7 @@ Page *PDFDocument::page(int index) const
         qWarning() << "PDF page at index" << index << "is invalid";
     }
 
+    qDebug() << "PDFDocument::page() - Returning null page";
     return nullptr;
 }
 
@@ -467,16 +504,19 @@ bool PDFDocument::saveAs(const QString &filePath) const
 
 void collectOuleLine(const DPdfDoc::Outline &cOutline, Outline &outline)
 {
+    qDebug() << "collectOuleLine() - Processing outline with" << cOutline.size() << "sections";
     for (const DPdfDoc::Section &cSection : cOutline) {
         Section setction;
         setction.nIndex = cSection.nIndex;
         setction.title = cSection.title;
         setction.offsetPointF = cSection.offsetPointF;
         if (cSection.children.size() > 0) {
+            // qDebug() << "collectOuleLine() - Processing" << cSection.children.size() << "child sections";
             collectOuleLine(cSection.children, setction.children);
         }
         outline << setction;
     }
+    qDebug() << "collectOuleLine() - Completed processing outline";
 }
 
 Outline PDFDocument::outline() const
@@ -492,6 +532,7 @@ Outline PDFDocument::outline() const
 
     collectOuleLine(cOutline, m_outline);
 
+    qDebug() << "PDFDocument::outline() - Outline built with" << m_outline.size() << "sections";
     return m_outline;
 }
 
@@ -506,6 +547,7 @@ Properties PDFDocument::properties() const
 
     m_fileProperties = m_document->proeries();
 
+    qDebug() << "PDFDocument::properties() - Properties loaded, count:" << m_fileProperties.size();
     return m_fileProperties;
 }
 
@@ -520,6 +562,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
         error = Document::NoError;
         return new PDFDocument(document);
     } else if (document->status() == DPdfDoc::PASSWORD_ERROR) {
+        qDebug() << "PDFDocument::loadDocument() - Document status: PASSWORD_ERROR";
         if (password.isEmpty()) {
             qWarning() << "PDF document requires password but none provided";
             error = Document::NeedPassword;
@@ -533,7 +576,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
     }
 
     delete document;
-
+    qDebug() << "PDFDocument::loadDocument() - Returning null document";
     return nullptr;
 }
 }

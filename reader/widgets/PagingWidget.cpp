@@ -102,28 +102,37 @@ void PagingWidget::initWidget()
 
 void PagingWidget::slotUpdateTheme()
 {
+    qDebug() << "slotUpdateTheme";
     if (m_pTotalPagesLab) {
+        qDebug() << "slotUpdateTheme m_pTotalPagesLab";
         m_pTotalPagesLab->setForegroundRole(DPalette::Text);
     }
 
     if (m_pCurrentPageLab) {
+        qDebug() << "slotUpdateTheme m_pCurrentPageLab";
         m_pCurrentPageLab->setForegroundRole(DPalette::Text);
     }
 }
 
 void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
 {
+    qDebug() << "setBtnState";
     if (currntPage == 1) {// 第一页
+        qDebug() << "setBtnState currntPage == 1";
         m_pPrePageBtn->setEnabled(false);
         if (totalPage == 1) {// 也是最后一页
+            qDebug() << "setBtnState currntPage == 1 totalPage == 1";
             m_pNextPageBtn->setEnabled(false);
         } else {
+            qDebug() << "setBtnState currntPage == 1 totalPage != 1";
             m_pNextPageBtn->setEnabled(true);
         }
     } else if (currntPage == totalPage) {// 最后一页
+        qDebug() << "setBtnState currntPage == totalPage";
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(false);
     } else {// 中间页
+        qDebug() << "setBtnState currntPage != 1 && currntPage != totalPage";
         m_pPrePageBtn->setEnabled(true);
         m_pNextPageBtn->setEnabled(true);
     }
@@ -131,10 +140,12 @@ void PagingWidget::setBtnState(const int &currntPage, const int &totalPage)
 
 void PagingWidget::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "resizeEvent";
     if (m_curIndex >= 0)
         setIndex(m_curIndex);
 
     this->QWidget::resizeEvent(event);
+    qDebug() << "resizeEvent end";
 }
 
 void PagingWidget::setIndex(int index)
@@ -154,12 +165,14 @@ void PagingWidget::setIndex(int index)
     m_pTotalPagesLab->setToolTip(QString("%1").arg(totalPage));
 
     if (m_bHasLabel) {
+        qDebug() << "setIndex m_bHasLabel";
         m_pCurrentPageLab->setText(m_pCurrentPageLab->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, iControlMaxWidth));
         m_pCurrentPageLab->setToolTip(QString::number(currntPage));
 
         QString sPage = m_sheet->getPageLabelByIndex(inputData);
         m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(sPage, Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     } else {
+        qDebug() << "setIndex m_bHasLabel";
         m_pJumpPageLineEdit->setText(m_pJumpPageLineEdit->fontMetrics().elidedText(QString::number(currntPage), Qt::ElideRight, m_pJumpPageLineEdit->width() - LineEditSpacing));
     }
 }
@@ -184,14 +197,17 @@ void PagingWidget::SlotJumpPageLineEditReturnPressed()
 {
     qDebug() << "Page jump requested, hasLabel:" << m_bHasLabel;
     if (m_bHasLabel) {
+        qDebug() << "Page jump requested, hasLabel: m_bHasLabel";
         pageNumberJump();
     } else {
+        qDebug() << "Page jump requested, hasLabel: !m_bHasLabel";
         normalChangePage();
     }
 }
 
 void PagingWidget::onEditFinished()
 {
+    qDebug() << "onEditFinished";
     if (m_curIndex >= 0)
         setIndex(m_curIndex);
 }
@@ -216,8 +232,10 @@ void PagingWidget::pageNumberJump()
     int iPage = m_sheet->getIndexByPageLable(sText);
 
     if (iPage > -1 && iPage < nPageSum) {   //  输入的页码 必须在 0-最大值 之间, 才可以
+        qDebug() << "Page number jump requested, iPage:" << iPage;
         m_sheet->jumpToIndex(iPage);
     } else {
+        qDebug() << "Page number jump requested, iPage:" << iPage << "is not valid";
         normalChangePage();
     }
 }
@@ -236,6 +254,7 @@ void PagingWidget::slotNextPageBtnClicked()
 
 void PagingWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
+    qDebug() << "setTabOrderWidget";
     tabWidgetlst << m_pJumpPageLineEdit;
     tabWidgetlst << m_pPrePageBtn;
     tabWidgetlst << m_pNextPageBtn;

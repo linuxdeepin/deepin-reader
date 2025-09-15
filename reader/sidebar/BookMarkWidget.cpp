@@ -32,11 +32,12 @@ BookMarkWidget::BookMarkWidget(DocSheet *sheet, DWidget *parent)
 
 BookMarkWidget::~BookMarkWidget()
 {
-    qDebug() << "Destroying BookMarkWidget";
+    // qDebug() << "Destroying BookMarkWidget";
 }
 
 void BookMarkWidget::initWidget()
 {
+    qDebug() << "Initializing BookMarkWidget";
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &BookMarkWidget::onUpdateTheme);
 
     m_pImageListView = new SideBarImageListView(m_sheet, this);
@@ -70,6 +71,7 @@ void BookMarkWidget::initWidget()
 
     connect(m_pImageListView, SIGNAL(sigListMenuClick(const int &)), SLOT(onListMenuClick(const int &)));
     m_pImageListView->setItemSize(QSize(LEFTMINWIDTH, LEFTMINHEIGHT));
+    qDebug() << "BookMarkWidget initialization completed";
 }
 
 
@@ -151,6 +153,7 @@ void BookMarkWidget::handleOpenSuccess()
 
 void BookMarkWidget::handlePage(int index)
 {
+    qDebug() << "Handling page change to index:" << index;
     bool result = m_pImageListView->scrollToIndex(index);
     m_pAddBookMarkBtn->setDisabled(result);
     qDebug() << "Handling page change to index:" << index << "scroll result:" << result;
@@ -247,8 +250,10 @@ void BookMarkWidget::onListMenuClick(const int &iType)
             (iType == E_BOOKMARK_DELETE ? "(Delete)" : "(Delete All)");
 
     if (iType == E_BOOKMARK_DELETE) {
+        qDebug() << "Deleting bookmark by key";
         deleteItemByKey();
     } else if (iType == E_BOOKMARK_DELETE_ALL) {
+        qDebug() << "Deleting all bookmarks";
         int result = SaveDialog::showTipDialog(tr("Are you sure you want to delete all bookmarks?") ,this);
         if (result == 1) {
             qDebug() << "User confirmed deletion of all bookmarks";
@@ -259,5 +264,6 @@ void BookMarkWidget::onListMenuClick(const int &iType)
 
 void BookMarkWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
+    qDebug() << "Setting tab order widget";
     tabWidgetlst << m_pAddBookMarkBtn;
 }

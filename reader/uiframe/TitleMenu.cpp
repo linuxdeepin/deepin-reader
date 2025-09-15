@@ -63,15 +63,20 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 
     QAction *searchAction = this->findChild<QAction *>("Search");
     if (searchAction) {
-        if (sheet->fileType() == Dr::PDF || sheet->fileType() == Dr::DOCX)
+        if (sheet->fileType() == Dr::PDF || sheet->fileType() == Dr::DOCX) {
+            qDebug() << "Enabling search for PDF/DOCX";
             searchAction->setVisible(true);
-        else
+        } else {
+            qDebug() << "Disabling search for other formats";
             searchAction->setVisible(false);
+        }
     }
+    qDebug() << "TitleMenu::onCurSheetChanged end";
 }
 
 void TitleMenu::onActionTriggered()
 {
+    qDebug() << "Menu action triggered";
     QAction *action = static_cast<QAction *>(sender());
     if (nullptr == action) {
         qWarning() << "Action triggered but sender is null";
@@ -95,6 +100,7 @@ void TitleMenu::disableAllAction()
         }
     }
     m_handleMenu->setDisabled(true);
+    qDebug() << "Disabled all menu actions";
 }
 
 void TitleMenu::disableSaveButton(bool disable)
@@ -108,10 +114,12 @@ void TitleMenu::disableSaveButton(bool disable)
             break;
         }
     }
+    qDebug() << "Save button state:" << (disable ? "disabled" : "enabled");
 }
 
 void TitleMenu::createActionMap(const QStringList &actionList, const QStringList &actionObjList)
 {
+    qDebug() << "Creating action map";
     int nFirstSize = actionList.size();
     for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
         QString sActionName = actionList.at(iLoop);
@@ -120,13 +128,16 @@ void TitleMenu::createActionMap(const QStringList &actionList, const QStringList
         QAction *action = createAction(sActionName, sObjName);
         connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
     }
+    qDebug() << "Created action map";
 }
 
 QAction *TitleMenu::createAction(const QString &actionName, const QString &objName)
 {
+    qDebug() << "Creating action:" << actionName;
     QAction *action = new QAction(actionName, this);
     action->setObjectName(objName);
     action->setDisabled(true);
     this->addAction(action);
+    qDebug() << "Created action:" << actionName;
     return action;
 }

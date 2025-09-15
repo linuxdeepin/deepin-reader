@@ -50,15 +50,18 @@ TextEditShadowWidget::TextEditShadowWidget(QWidget *parent)
     setObjectName("TextEditShadowWidget");
 
     connect(m_TextEditWidget, &TextEditWidget::sigCloseNoteWidget, this, &TextEditShadowWidget::slotCloseNoteWidget);
+    qDebug() << "TextEditShadowWidget initWidget end";
 }
 
 TextEditWidget *TextEditShadowWidget::getTextEditWidget()
 {
+    // qDebug() << "getTextEditWidget";
     return m_TextEditWidget;
 }
 
 void TextEditShadowWidget::showWidget(const QPoint &point)
 {
+    qDebug() << "showWidget";
     QPoint pos = mapToParent(mapFromGlobal(point)); //先转换为相对于父对象的坐标
 
     //如果下边超出程序则向上移动
@@ -77,18 +80,23 @@ void TextEditShadowWidget::showWidget(const QPoint &point)
     show();
 
     m_TextEditWidget->setEditFocus();
+    qDebug() << "showWidget end";
 }
 
 
 void TextEditShadowWidget::slotCloseNoteWidget(bool isEsc)
 {
+    qDebug() << "slotCloseNoteWidget";
     if (isEsc) {
+        qDebug() << "slotCloseNoteWidget isEsc";
         close();
     } else if (nullptr != m_TextEditWidget->getTextEdit()
                && !m_TextEditWidget->getTextEdit()->hasFocus()
                && !m_TextEditWidget->hasFocus()) {
+        qDebug() << "slotCloseNoteWidget hasFocus";
         close();
     }
+    qDebug() << "slotCloseNoteWidget end";
 }
 
 TextEditWidget::TextEditWidget(DWidget *parent)
@@ -108,18 +116,23 @@ TextEditWidget::TextEditWidget(DWidget *parent)
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &TextEditWidget::onTouchPadEvent);
     connect(m_pTextEdit, &TransparentTextEdit::sigCloseNoteWidget, this, &TextEditWidget::sigCloseNoteWidget);
+    qDebug() << "TextEditWidget initWidget end";
 }
 
 void TextEditWidget::onShowMenu()
 {
+    qDebug() << "onShowMenu";
     if (this->isVisible() && m_pTextEdit) {
+        qDebug() << "onShowMenu m_pTextEdit";
         QMenu *menu =  m_pTextEdit->createStandardContextMenu();
         if (menu) {
+            qDebug() << "onShowMenu menu";
             menu->exec(QCursor::pos());
             delete  menu;
             menu = nullptr;
         }
     }
+    qDebug() << "onShowMenu end";
 }
 
 void TextEditWidget::setEditText(const QString &note)
@@ -142,6 +155,7 @@ void TextEditWidget::setAnnotation(deepin_reader::Annotation *annotation)
 
 void TextEditWidget::setEditFocus()
 {
+    // qDebug() << "setEditFocus";
     /**
      * fixbug:111746
      * wayland上，立即将焦点设置到编辑框内，但是此时会偶现激活窗口，这样焦点就离开了编辑框，触发关闭注释弹框的关闭逻辑
@@ -156,12 +170,13 @@ void TextEditWidget::setEditFocus()
 
 TransparentTextEdit *TextEditWidget::getTextEdit() const
 {
+    // qDebug() << "getTextEdit";
     return m_pTextEdit;
 }
 
 void TextEditWidget::hideEvent(QHideEvent *event)
 {
-    qDebug() << "TextEditWidget hiding";
+    // qDebug() << "TextEditWidget hiding";
     BaseWidget::hideEvent(event);
     QString sText = m_pTextEdit->toPlainText().trimmed();
 
@@ -175,10 +190,12 @@ void TextEditWidget::hideEvent(QHideEvent *event)
     }
 
     emit sigHide();
+    // qDebug() << "TextEditWidget hiding end";
 }
 
 void TextEditWidget::initWidget()
 {
+    qDebug() << "TextEditWidget initWidget";
     setFixedSize(QSize(254, 320));
     setMinimumHeight(310);
     setMaximumHeight(320);
@@ -200,22 +217,28 @@ void TextEditWidget::initWidget()
 
     onBlurWindowChanged();
     QObject::connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, &TextEditWidget::onBlurWindowChanged);
+    qDebug() << "TextEditWidget initWidget end";
 }
 
 void TextEditWidget::onBlurWindowChanged()
 {
+    qDebug() << "onBlurWindowChanged";
     if (DWindowManagerHelper::instance()->hasComposite()) {
+        qDebug() << "onBlurWindowChanged hasComposite";
         this->graphicsEffect()->setEnabled(true);
         parentWidget()->layout()->setContentsMargins(12, 12, 12, 12);
 
     } else {
+        qDebug() << "onBlurWindowChanged no composite";
         this->graphicsEffect()->setEnabled(false);
         parentWidget()->layout()->setContentsMargins(0, 0, 0, 0);
     }
+    qDebug() << "onBlurWindowChanged end";
 }
 
 void TextEditWidget::onTouchPadEvent(QString name, QString direction, int fingers)
 {
+    qDebug() << "onTouchPadEvent";
     Q_UNUSED(name)
 
     if (fingers == 0) {
@@ -227,10 +250,12 @@ void TextEditWidget::onTouchPadEvent(QString name, QString direction, int finger
             }
         }
     }
+    qDebug() << "onTouchPadEvent end";
 }
 
 void TextEditWidget::paintEvent(QPaintEvent *event)
 {
+    // qDebug() << "TextEditWidget paintEvent";
     BaseWidget::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
@@ -267,11 +292,12 @@ void TextEditWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::NoBrush);
     painter.setPen(QColor(0, 0, 0, 51));
     painter.drawPath(clippath);
+    // qDebug() << "TextEditWidget paintEvent end";
 }
 
 void TextEditWidget::focusOutEvent(QFocusEvent *event)
 {
-    qDebug() << "TextEditWidget focus out, reason:" << event->reason();
+    // qDebug() << "TextEditWidget focus out, reason:" << event->reason();
     BaseWidget::focusOutEvent(event);
 
     Q_EMIT sigCloseNoteWidget();

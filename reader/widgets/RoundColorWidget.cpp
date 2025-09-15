@@ -36,8 +36,9 @@ void RoundColorWidget::setSelected(bool selected)
 
 void RoundColorWidget::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "RoundColorWidget clicked, selected:" << m_isSelected << ", allNotify:" << m_allnotify;
+    // qDebug() << "RoundColorWidget mousePressEvent";
     if (event->button() == Qt::LeftButton) {
+        // qDebug() << "RoundColorWidget clicked, selected:" << m_isSelected << ", allNotify:" << m_allnotify;
         if (m_isSelected && !m_allnotify) return;
         Q_EMIT clicked();
     }
@@ -45,6 +46,7 @@ void RoundColorWidget::mousePressEvent(QMouseEvent *event)
 
 void RoundColorWidget::paintEvent(QPaintEvent *event)
 {
+    // qDebug() << "RoundColorWidget paintEvent";
     Q_UNUSED(event)
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
@@ -54,6 +56,7 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
 
     QRect squareRect = rect();
     if (m_isSelected) {
+        // qDebug() << "RoundColorWidget paintEvent m_isSelected";
         //draw select circle
         QPen pen;
         pen.setBrush(QBrush(m_color));
@@ -68,4 +71,5 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
     path.addEllipse(r);
     painter.setClipPath(path);
     painter.fillPath(path, QBrush(m_color));
+    // qDebug() << "RoundColorWidget paintEvent end";
 }

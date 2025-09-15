@@ -24,6 +24,7 @@ class ActiveProxyStyle : public QProxyStyle
 public:
     explicit ActiveProxyStyle(DWidget *parent)
     {
+        // qDebug() << "ActiveProxyStyle::ActiveProxyStyle() - Starting constructor";
         this->setParent(parent);
     }
 
@@ -31,6 +32,7 @@ public:
 
     void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
+        // qDebug() << "ActiveProxyStyle::drawComplexControl() - Starting drawComplexControl";
         QStyleOptionComplex *op = const_cast<QStyleOptionComplex *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawComplexControl(control, op, painter, widget);
@@ -38,6 +40,7 @@ public:
 
     void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
+        // qDebug() << "ActiveProxyStyle::drawControl() - Starting drawControl";
         QStyleOption *op = const_cast<QStyleOption *>(option);
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawControl(element, op, painter, widget);
@@ -45,6 +48,7 @@ public:
 
     void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
+        // qDebug() << "ActiveProxyStyle::drawPrimitive() - Starting drawPrimitive";
         if (element == QStyle::PE_IndicatorBranch)
             painter->setPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().text().color());
         QStyleOption *op = const_cast<QStyleOption *>(option);
@@ -55,6 +59,7 @@ public:
 
 ActiveProxyStyle::~ActiveProxyStyle()
 {
+    // qDebug() << "ActiveProxyStyle::~ActiveProxyStyle() - Starting destructor";
     //NotTodo
 }
 
@@ -75,11 +80,13 @@ private:
 
 QVariant CatalogModel::data(const QModelIndex &index, int role) const
 {
+    // qDebug() << "CatalogModel::data() - Starting data";
     if (role == Qt::SizeHintRole) {
         QSize size = QStandardItemModel::data(index, role).toSize();
         size.setHeight(m_parent->fontMetrics().height());
         return size;
     }
+    // qDebug() << "CatalogModel::data() - Returning data";
     return QStandardItemModel::data(index, role);
 }
 
@@ -115,15 +122,17 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     connect(dApp, &DApplication::fontChanged, this, &CatalogTreeView::onFontChanged);
 
     QScroller::grabGesture(this, QScroller::TouchGesture);//滑动
+    qDebug() << "CatalogTreeView::CatalogTreeView() - Constructor completed";
 }
 
 CatalogTreeView::~CatalogTreeView()
 {
-    qDebug() << "Destroying CatalogTreeView";
+    // qDebug() << "Destroying CatalogTreeView";
 }
 
 void CatalogTreeView::setRightControl(bool hasControl)
 {
+    // qDebug() << "CatalogTreeView::setRightControl() - Setting right control:" << hasControl;
     rightnotifypagechanged = hasControl;
 }
 
@@ -142,10 +151,12 @@ void CatalogTreeView::parseCatalogData(const deepin_reader::Section &ol, QStanda
             }
         }
     }
+    qDebug() << "CatalogTreeView::parseCatalogData() - Completed";
 }
 
 QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const int &index, const qreal  &realleft, const qreal &realtop)
 {
+    qDebug() << "CatalogTreeView::getItemList() - Creating item for:" << title << "page:" << index;
     QStandardItem *item = new QStandardItem(title);
     item->setData(index);
     item->setData(realleft, Qt::UserRole + 2);
@@ -160,6 +171,7 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
     item1->setForeground(QBrush(color));
 
+    qDebug() << "CatalogTreeView::getItemList() - Returning item list";
     return QList<QStandardItem *>() << item << item1;
 }
 
@@ -169,6 +181,7 @@ void CatalogTreeView::handleOpenSuccess()
 
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
+        qDebug() << "CatalogTreeView::handleOpenSuccess() - Clearing model";
         model->clear();
 
         if (nullptr == m_sheet) {
@@ -188,6 +201,7 @@ void CatalogTreeView::handleOpenSuccess()
         setIndex(m_index);
     }
     resizeCoulumnWidth();
+    qDebug() << "CatalogTreeView::handleOpenSuccess() - Completed";
 }
 
 void CatalogTreeView::slotCollapsed(const QModelIndex &index)
@@ -202,6 +216,7 @@ void CatalogTreeView::slotCollapsed(const QModelIndex &index)
     }
 
     setIndex(m_index, m_title);
+    qDebug() << "CatalogTreeView::slotCollapsed() - Completed";
 }
 
 void CatalogTreeView::slotExpanded(const QModelIndex &index)
@@ -216,6 +231,7 @@ void CatalogTreeView::slotExpanded(const QModelIndex &index)
     }
 
     setIndex(m_index, m_title);
+    qDebug() << "CatalogTreeView::slotExpanded() - Completed";
 }
 
 void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -237,6 +253,7 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
     }
     rightnotifypagechanged = false;
 
+    qDebug() << "CatalogTreeView::currentChanged() - Completed";
     return DTreeView::currentChanged(current, previous);
 }
 
@@ -256,24 +273,32 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
 
     if (nIndex >= 0)
         m_sheet->jumpToOutline(left, top, nIndex);
+
+    qDebug() << "CatalogTreeView::onItemClicked() - Completed";
 }
 
 void CatalogTreeView::resizeEvent(QResizeEvent *event)
 {
+    // qDebug() << "CatalogTreeView::resizeEvent() - Starting resize event";
     DTreeView::resizeEvent(event);
     resizeCoulumnWidth();
+    // qDebug() << "CatalogTreeView::resizeEvent() - Completed";
 }
 
 void CatalogTreeView::mousePressEvent(QMouseEvent *event)
 {
+    // qDebug() << "CatalogTreeView::mousePressEvent() - Starting mouse press event";
     rightnotifypagechanged = false;
     DTreeView::mousePressEvent(event);
+    // qDebug() << "CatalogTreeView::mousePressEvent() - Completed";
 }
 
 void CatalogTreeView::keyPressEvent(QKeyEvent *event)
 {
+    // qDebug() << "CatalogTreeView::keyPressEvent() - Starting key press event";
     rightnotifypagechanged = false;
     DTreeView::keyPressEvent(event);
+    // qDebug() << "CatalogTreeView::keyPressEvent() - Completed";
 }
 
 void CatalogTreeView::setIndex(int index, const QString &title)
@@ -286,6 +311,7 @@ void CatalogTreeView::setIndex(int index, const QString &title)
 
     auto model = reinterpret_cast<QStandardItemModel *>(this->model());
     if (model) {
+        qDebug() << "CatalogTreeView::setIndex() - Finding items";
         const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
         foreach (QStandardItem *item, itemList) {
             int itemIndex = item->data().toInt();
@@ -309,15 +335,19 @@ void CatalogTreeView::setIndex(int index, const QString &title)
             }
         }
     }
+    qDebug() << "CatalogTreeView::setIndex() - Completed";
 }
 
 void CatalogTreeView::resizeCoulumnWidth()
 {
+    qDebug() << "CatalogTreeView::resizeCoulumnWidth() - Resizing column width";
     if (m_sheet) {
+        qDebug() << "CatalogTreeView::resizeCoulumnWidth() - Resizing column width";
         int maxPageColumnWid = this->fontMetrics().horizontalAdvance(QString::number(m_sheet->pageCount())) + 34;
         this->setColumnWidth(0, this->width() - maxPageColumnWid);
         this->setColumnWidth(1, maxPageColumnWid);
     }
+    qDebug() << "CatalogTreeView::resizeCoulumnWidth() - Completed";
 }
 
 void CatalogTreeView::nextPage()
@@ -357,6 +387,7 @@ void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
     qDebug() << "Scrolling to catalog index:" << newIndex.data().toString();
 
     if (newIndex.isValid()) {
+        qDebug() << "CatalogTreeView::scrollToIndex() - Scrolling to index";
         rightnotifypagechanged = false;
         currentChanged(newIndex, currentIndex());
         this->selectionModel()->select(newIndex, QItemSelectionModel::SelectCurrent);
@@ -366,7 +397,7 @@ void CatalogTreeView::scrollToIndex(const QModelIndex &newIndex)
 
 void CatalogTreeView::onFontChanged(const QFont &font)
 {
-    qDebug() << "Handling font change in catalog view";
+    // qDebug() << "Handling font change in catalog view";
 
     Q_UNUSED(font);
     resizeCoulumnWidth();

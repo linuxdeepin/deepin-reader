@@ -86,29 +86,37 @@ TitleWidget::TitleWidget(DWidget *parent)
         m_pThumbnailBtn->setFixedSize(QSize(36, 36));
         m_pThumbnailBtn->setIconSize(QSize(36, 36));
 #endif
+    qDebug() << "TitleWidget initialized";
 }
 
 TitleWidget::~TitleWidget()
 {
-    qDebug() << "Destroying TitleWidget...";
+    // qDebug() << "Destroying TitleWidget...";
 }
 
 void TitleWidget::keyPressEvent(QKeyEvent *event)
 {
-    if (nullptr == m_pSw)
+    // qDebug() << "TitleWidget::keyPressEvent start - key:" << event->key();
+    if (nullptr == m_pSw) {
+        // qDebug() << "Scale widget is null, delegating to base";
         return BaseWidget::keyPressEvent(event);
+    }
 
     if (event->key() == Qt::Key_Up && !event->isAutoRepeat()) {
+        // qDebug() << "Up key pressed, previous scale";
         m_pSw->onPrevScale();
     } else if (event->key() == Qt::Key_Down && !event->isAutoRepeat()) {
+        // qDebug() << "Down key pressed, next scale";
         m_pSw->onNextScale();
     }
 
+    // qDebug() << "TitleWidget::keyPressEvent end";
     return BaseWidget::keyPressEvent(event);
 }
 
 void TitleWidget::setBtnDisable(const bool &bAble)
 {
+    qDebug() << "Setting button disable:" << bAble;
     m_pThumbnailBtn->setDisabled(bAble);
     m_pSw->setDisabled(bAble);
 }
@@ -149,28 +157,33 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 
 void TitleWidget::onThumbnailBtnClicked(bool checked)
 {
+    qDebug() << "Thumbnail button clicked, checked:" << checked;
     if (m_curSheet.isNull()) {
         qWarning() << "Thumbnail button clicked but no current sheet";
         return;
     }
 
-    qDebug() << "Thumbnail button clicked, checked:" << checked;
     m_pThumbnailBtn->setChecked(checked);
     bool rl = m_pThumbnailBtn->isChecked();
     qDebug() << "Setting sidebar visibility to:" << rl;
     m_curSheet->setSidebarVisible(rl);
+    qDebug() << "Thumbnail button clicked, checked:" << checked;
 }
 
 void TitleWidget::onFindOperation(const int &sAction)
 {
+    qDebug() << "Finding operation:" << sAction;
     if (sAction == E_FIND_CONTENT) {
+        qDebug() << "Finding operation content";
         m_pThumbnailBtn->setChecked(true);
     } else if (sAction == E_FIND_EXIT) {
+        qDebug() << "Finding operation exit";
         if (m_curSheet) {
             bool close = m_curSheet->operation().sidebarVisible;
             m_pThumbnailBtn->setChecked(close);
         }
     }
+    qDebug() << "Finding operation end";
 }
 
 void TitleWidget::setControlEnabled(const bool &enable)
@@ -179,4 +192,5 @@ void TitleWidget::setControlEnabled(const bool &enable)
     m_pThumbnailBtn->setChecked(false);
     m_pThumbnailBtn->setEnabled(enable);
     m_pSw->clear();
+    qDebug() << "Setting controls enabled end";
 }

@@ -33,11 +33,12 @@ FindWidget::FindWidget(DWidget *parent)
 
 FindWidget::~FindWidget()
 {
-    qDebug() << "FindWidget destroyed";
+    // qDebug() << "FindWidget destroyed";
 }
 
 void FindWidget::setDocSheet(DocSheet *sheet)
 {
+    qDebug() << "setDocSheet";
     m_docSheet = sheet;
 }
 
@@ -53,6 +54,7 @@ void FindWidget::updatePosition()
 
 void FindWidget::setSearchEditFocus()
 {
+    qDebug() << "setSearchEditFocus";
     m_pSearchEdit->lineEdit()->setFocus();
 }
 
@@ -76,6 +78,7 @@ void FindWidget::onSearchStart()
     QString searchText = m_pSearchEdit->text().trimmed();
 
     if ((searchText != "") && (m_lastSearchText != searchText)) {
+        qDebug() << "searchText != \"\" && m_lastSearchText != searchText";
         m_lastSearchText = searchText;
         setEditAlert(0);
         m_docSheet->startSearch(searchText);
@@ -100,7 +103,9 @@ void FindWidget::slotFindPrevBtnClicked()
 
 void FindWidget::onTextChanged()
 {
+    qDebug() << "onTextChanged";
     if (m_pSearchEdit->text().isEmpty()) {
+        qDebug() << "m_pSearchEdit->text().isEmpty()";
         setEditAlert(0);
     }
 }
@@ -150,11 +155,13 @@ void FindWidget::initWidget()
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        qDebug() << "DGuiApplicationHelper::NormalMode";
         m_pSearchEdit->setFixedSize(QSize(270, 36));
         m_findPrevButton->setFixedSize(QSize(36, 36));
         m_findNextButton->setFixedSize(QSize(36, 36));
         setFixedSize(422, 60);
     } else {
+        qDebug() << "DGuiApplicationHelper::SmallMode";
         m_pSearchEdit->setFixedSize(QSize(270, 24));
         m_findPrevButton->setFixedSize(QSize(24, 24));
         m_findNextButton->setFixedSize(QSize(24, 24));
@@ -162,11 +169,13 @@ void FindWidget::initWidget()
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            qDebug() << "DGuiApplicationHelper::NormalMode";
             m_pSearchEdit->setFixedSize(QSize(270, 36));
             m_findPrevButton->setFixedSize(QSize(36, 36));
             m_findNextButton->setFixedSize(QSize(36, 36));
             setFixedSize(422, 60);
         } else {
+            qDebug() << "DGuiApplicationHelper::SmallMode";
             m_pSearchEdit->setFixedSize(QSize(270, 24));
             m_findPrevButton->setFixedSize(QSize(24, 24));
             m_findNextButton->setFixedSize(QSize(24, 24));
@@ -187,6 +196,7 @@ void FindWidget::initWidget()
 
 void FindWidget::setEditAlert(const int &iFlag)
 {
+    qDebug() << "setEditAlert";
     if (m_pSearchEdit) {
         bool bAlert = (iFlag == 1 ? true : false);
 
@@ -199,6 +209,7 @@ void FindWidget::setEditAlert(const int &iFlag)
 
 void FindWidget::setYOff(int yOff)
 {
+    qDebug() << "setYOff";
     m_yOff = yOff;
 }
 
@@ -216,7 +227,9 @@ void FindWidget::onCloseBtnClicked()
 
 void FindWidget::keyPressEvent(QKeyEvent *event)
 {
+    // qDebug() << "keyPressEvent";
     if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
+        // qDebug() << "keyPressEvent Up or Down";
         //这里不过滤掉的话,事件会跑到Browser上
         return;
     }
@@ -226,8 +239,11 @@ void FindWidget::keyPressEvent(QKeyEvent *event)
 
 bool FindWidget::eventFilter(QObject *watched, QEvent *event)
 {
+    // qDebug() << "eventFilter";
     if(watched == m_parentWidget && event->type() == QEvent::Resize) {
+        // qDebug() << "eventFilter Resize";
         updatePosition();
     }
+    // qDebug() << "eventFilter end";
     return DFloatingWidget::eventFilter(watched, event);
 }

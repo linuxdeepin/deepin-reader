@@ -209,7 +209,9 @@ void waitForMessageTag(ddjvu_context_t *context, ddjvu_message_tag_t tag)
 
 QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
 {
+    qDebug() << "loadText";
     if (miniexp_length(textExp) < 6 && !miniexp_symbolp(miniexp_car(textExp))) {
+        qDebug() << "return QString()";
         return QString();
     }
 
@@ -222,6 +224,7 @@ QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
         const QString type = QString::fromUtf8(miniexp_to_name(miniexp_car(textExp)));
 
         if (type == QLatin1String("word")) {
+            qDebug() << "return QString::fromUtf8(miniexp_to_str(miniexp_nth(5, textExp)))";
             return QString::fromUtf8(miniexp_to_str(miniexp_nth(5, textExp)));
         } else {
             QStringList text;
@@ -238,12 +241,15 @@ QString loadText(miniexp_t textExp, QSizeF size, const QRectF &rect)
         }
     }
 
+    qDebug() << "finnally return QString()";
     return QString();
 }
 
 QVector< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform &transform, const QStringList &words, bool matchCase, bool wholeWords)
 {
+    qDebug() << "findText";
     if (words.isEmpty()) {
+        qDebug() << "words is empty";
         return QVector< QRectF >();
     }
 
@@ -320,6 +326,7 @@ QVector< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform 
         }
     }
 
+    qDebug() << "findText end";
     return results;
 }
 
@@ -376,6 +383,7 @@ QVector< QRectF > findText(miniexp_t pageTextExp, QSizeF size, const QTransform 
 
 Properties loadProperties(miniexp_t annoExp)
 {
+    qDebug() << "loadProperties";
     Properties properties;
 
     for (miniexp_t annoItem = miniexp_nil; miniexp_consp(annoExp); annoExp = miniexp_cdr(annoExp)) {
@@ -403,6 +411,7 @@ Properties loadProperties(miniexp_t annoExp)
         }
     }
 
+    qDebug() << "loadProperties end";
     return properties;
 }
 
@@ -416,16 +425,17 @@ DjVuPage::DjVuPage(const DjVuDocument *parent, int index, const ddjvu_pageinfo_t
     m_size(pageinfo.width, pageinfo.height),
     m_resolution(pageinfo.dpi)
 {
-    qDebug() << "DjVuPage constructor called for page" << index << "with size" << m_size << "and DPI" << m_resolution;
+    // qDebug() << "DjVuPage constructor called for page" << index << "with size" << m_size << "and DPI" << m_resolution;
 }
 
 DjVuPage::~DjVuPage()
 {
-    qDebug() << "DjVuPage destructor called for page" << m_index;
+    // qDebug() << "DjVuPage destructor called for page" << m_index;
 }
 
 QSizeF DjVuPage::sizeF() const
 {
+    // qDebug() << "DjVuPage::sizeF() - Returning page size:" << m_size;
     return m_size;
 }
 
@@ -472,11 +482,13 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     ddjvu_rect_t renderrect;
 
     if (slice.isNull()) {
+        qDebug() << "DjVuPage::render() - Using full page rect for rendering";
         renderrect.x = pagerect.x;
         renderrect.y = pagerect.y;
         renderrect.w = pagerect.w;
         renderrect.h = pagerect.h;
     } else {
+        qDebug() << "DjVuPage::render() - Using slice rect for rendering:" << slice;
         renderrect.x = static_cast<int>(slice.x());
         renderrect.y = static_cast<int>(slice.y());
         renderrect.w = static_cast<unsigned int>(slice.width());
@@ -494,6 +506,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
 
     ddjvu_page_release(page);
 
+    qDebug() << "DjVuPage::render() - Render operation completed";
     return image;
 }
 
@@ -581,6 +594,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
 
 QString DjVuPage::text(const QRectF &rect) const
 {
+    qDebug() << "DjVuPage::text() - Getting text for rect" << rect;
     LOCK_PAGE
 
     miniexp_t pageTextExp = miniexp_nil;
@@ -609,11 +623,13 @@ QString DjVuPage::text(const QRectF &rect) const
         ddjvu_miniexp_release(m_parent->m_document, pageTextExp);
     }
 
+    qDebug() << "DjVuPage::text() - Text for rect" << rect << "is" << text.simplified();
     return text.simplified();
 }
 
 QVector<PageSection> DjVuPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
+    qDebug() << "DjVuPage::search() - Searching for text" << text << "with match case" << matchCase << "and whole words" << wholeWords;
     LOCK_PAGE
 
     miniexp_t pageTextExp = miniexp_nil;
@@ -649,6 +665,8 @@ QVector<PageSection> DjVuPage::search(const QString &text, bool matchCase, bool 
     for(const auto &rect : results) {
         sections << PageSection{PageLine{QString(), rect}};
     }
+
+    qDebug() << "DjVuPage::search() - Search for text" << text << "with match case" << matchCase << "and whole words" << wholeWords << "completed";
     return sections;
 }
 
@@ -660,6 +678,7 @@ DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document)
     m_pageByName(),
     m_titleByIndex()
 {
+    qDebug() << "DjVuDocument::DjVuDocument() - Starting constructor";
     unsigned int mask[] = {0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000};
 
     m_format = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, mask);
@@ -667,6 +686,7 @@ DjVuDocument::DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document)
     ddjvu_format_set_y_direction(m_format, 1);
 
     prepareFileInfo();
+    qDebug() << "DjVuDocument::DjVuDocument() - Constructor completed";
 }
 
 DjVuDocument::~DjVuDocument()
@@ -675,6 +695,7 @@ DjVuDocument::~DjVuDocument()
     ddjvu_document_release(m_document);
     ddjvu_context_release(m_context);
     ddjvu_format_release(m_format);
+    qDebug() << "DjVuDocument::~DjVuDocument() - Destructor completed";
 }
 
 int DjVuDocument::pageCount() const
@@ -682,11 +703,14 @@ int DjVuDocument::pageCount() const
     qDebug() << "Getting page count for document:" << m_filePath;
     LOCK_DOCUMENT
 
-    return ddjvu_document_get_pagenum(m_document);
+    int count = ddjvu_document_get_pagenum(m_document);
+    qDebug() << "DjVuDocument::pageCount() - Page count:" << count;
+    return count;
 }
 
 Page *DjVuDocument::page(int index) const
 {
+    qDebug() << "Getting page" << index << "for document:" << m_filePath;
     LOCK_DOCUMENT
 
     ddjvu_status_t status;
@@ -711,11 +735,13 @@ Page *DjVuDocument::page(int index) const
 
     m_pages << page;
 
+    qDebug() << "DjVuDocument::page() - Page" << index << "for document:" << m_filePath << "created";
     return page;
 }
 
 QStringList DjVuDocument::saveFilter() const
 {
+    // qDebug() << "Getting save filter for document:" << m_filePath;
     return QStringList() << QLatin1String("DjVu (*.djvu *.djv)");
 }
 
@@ -757,6 +783,7 @@ bool DjVuDocument::saveAs(const QString &filePath) const
 
 bool DjVuDocument::save() const
 {
+    qDebug() << "Saving document to:" << m_filePath;
     QTemporaryDir tempDir;
 
     QString tempFilePath = tempDir.path() + "/" + QUuid::createUuid().toString();
@@ -793,6 +820,7 @@ bool DjVuDocument::save() const
     fsync(file.handle());//将内核缓冲写入文件(磁盘)
     file.close();
 
+    qDebug() << "Document save operation completed";
     return result;
 }
 
@@ -862,6 +890,7 @@ Properties DjVuDocument::properties() const
         ddjvu_miniexp_release(m_document, annoExp);
     }
 
+    qDebug() << "DjVuDocument::properties() - Document properties:" << properties;
     return properties;
 }
 
@@ -889,6 +918,7 @@ void DjVuDocument::prepareFileInfo()
 
     m_pageByName.squeeze();
     m_titleByIndex.squeeze();
+    qDebug() << "Preparing file info for document:" << m_filePath << "completed";
 }
 
 }

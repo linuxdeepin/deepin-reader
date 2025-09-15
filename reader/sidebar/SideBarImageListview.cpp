@@ -43,11 +43,13 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
 
 void SideBarImageListView::initControl()
 {
+    qDebug() << "SideBarImageListView::initControl start";
     m_pBookMarkMenu = nullptr;
     m_pNoteMenu = nullptr;
     m_listType = E_SideBar::SIDE_THUMBNIL;
     m_imageModel = new SideBarImageViewModel(m_docSheet, this);
     this->setModel(m_imageModel);
+    qDebug() << "SideBarImageListView::initControl end";
 }
 
 SideBarImageViewModel *SideBarImageListView::getImageModel()
@@ -57,20 +59,27 @@ SideBarImageViewModel *SideBarImageListView::getImageModel()
 
 void SideBarImageListView::showMenu()
 {
-    if (!this->currentIndex().isValid())
+    qDebug() << "SideBarImageListView::showMenu start";
+    if (!this->currentIndex().isValid()) {
+        qDebug() << "Current index not valid, returning";
         return;
+    }
 
     const QRect &visualRect = this->visualRect(this->currentIndex());
     QPoint point = mapToGlobal(QPoint(this->width() / 2 - 4, visualRect.y() + visualRect.height() / 2 - 4));
     if (m_listType == E_SideBar::SIDE_NOTE) {
+        qDebug() << "Showing note menu";
         showNoteMenu(point);
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
+        qDebug() << "Showing bookmark menu";
         showBookMarkMenu(point);
     }
+    qDebug() << "SideBarImageListView::showMenu end";
 }
 
 void SideBarImageListView::setListType(int type)
 {
+    qDebug() << "Setting list type to:" << type;
     m_listType = type;
 }
 
@@ -78,6 +87,7 @@ void SideBarImageListView::handleOpenSuccess()
 {
     qDebug() << "Handling open success for list type:" << m_listType;
     if (m_listType == E_SideBar::SIDE_THUMBNIL) {
+        qDebug() << "Handling open success for thumbnail widget";
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         for (int pageIndex : pageList) {
             m_imageModel->setBookMarkVisible(pageIndex, true, false);
@@ -89,12 +99,14 @@ void SideBarImageListView::handleOpenSuccess()
             pageSrclst << ImagePageInfo_t(index);
         m_imageModel->initModelLst(pageSrclst);
     } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
+        qDebug() << "Handling open success for bookmark widget";
         const QSet<int> &pageList = m_docSheet->getBookMarkList();
         QList<ImagePageInfo_t> pageSrclst;
         for (int pageIndex : pageList)
             pageSrclst << ImagePageInfo_t(pageIndex);
         m_imageModel->initModelLst(pageSrclst, true);
     } else if (m_listType == E_SideBar::SIDE_NOTE) {
+        qDebug() << "Handling open success for notes widget";
         const QList< deepin_reader::Annotation * > &annotationlst = m_docSheet->annotations();
         QList<ImagePageInfo_t> pageSrclst;
         int pagesNum = annotationlst.size();
@@ -116,9 +128,11 @@ void SideBarImageListView::handleOpenSuccess()
 
 void SideBarImageListView::onItemClicked(const QModelIndex &index)
 {
+    // qDebug() << "Item clicked at row:" << index.row();
     if (index.isValid()) {
+        // qDebug() << "Item clicked at row:" << index.row();
         int pageIndex = m_imageModel->getPageIndexForModelIndex(index.row());
-        qDebug() << "Item clicked at row:" << index.row() << "jumping to page:" << pageIndex;
+        // qDebug() << "Item clicked at row:" << index.row() << "jumping to page:" << pageIndex;
         m_docSheet->jumpToIndex(pageIndex);
         emit sigListItemClicked(index.row());
     } else {
@@ -128,11 +142,13 @@ void SideBarImageListView::onItemClicked(const QModelIndex &index)
 
 void SideBarImageListView::onSetThumbnailListSlideGesture()
 {
+    qDebug() << "Setting thumbnail list slide gesture";
     QScroller::grabGesture(this, QScroller::TouchGesture);//缩略图列表滑动
 }
 
 void SideBarImageListView::onRemoveThumbnailListSlideGesture()
 {
+    qDebug() << "Removing thumbnail list slide gesture";
     QScroller::grabGesture(this, QScroller::MiddleMouseButtonGesture);//缩略图列表不滑动
 }
 
@@ -141,6 +157,7 @@ bool SideBarImageListView::scrollToIndex(int index, bool scrollTo)
     qDebug() << "Scrolling to index:" << index << "scrollTo:" << scrollTo;
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(index);
     if (indexlst.size() > 0) {
+        qDebug() << "Found model index for page index:" << index;
         const QModelIndex &index = indexlst.first();
         if (scrollTo)
             this->scrollTo(index);
@@ -158,28 +175,36 @@ bool SideBarImageListView::scrollToIndex(int index, bool scrollTo)
 
 void SideBarImageListView::scrollToModelInexPage(const QModelIndex &index, bool scrollto)
 {
+    qDebug() << "Scrolling to model index:" << index << "scrollto:" << scrollto;
     if (index.isValid()) {
+        qDebug() << "Model index is valid";
         this->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
         this->setCurrentIndex(index);
         if (scrollto) this->scrollTo(index);
     }
+    qDebug() << "Scrolling to model index end";
 }
 
 void SideBarImageListView::mousePressEvent(QMouseEvent *event)
 {
+    // qDebug() << "SideBarImageListView::mousePressEvent start - button:" << event->button();
     DListView::mousePressEvent(event);
     onItemClicked(this->indexAt(event->pos()));
     //Menu
     if (event->button() == Qt::RightButton) {
+        // qDebug() << "Right button pressed, checking for menu";
         const QModelIndex &modelIndex = this->indexAt(event->pos());
         if (modelIndex.isValid()) {
             if (m_listType == E_SideBar::SIDE_NOTE) {
+                // qDebug() << "Showing note menu";
                 showNoteMenu(QCursor::pos());
             } else if (m_listType == E_SideBar::SIDE_BOOKMARK) {
+                // qDebug() << "Showing bookmark menu";
                 showBookMarkMenu(QCursor::pos());
             }
         }
     }
+    // qDebug() << "SideBarImageListView::mousePressEvent end";
 }
 
 void SideBarImageListView::showNoteMenu(const QPoint &point)
@@ -213,6 +238,7 @@ void SideBarImageListView::showNoteMenu(const QPoint &point)
 
 void SideBarImageListView::showBookMarkMenu(const QPoint &point)
 {
+    qDebug() << "Showing bookmark menu at:" << point;
     if (m_pBookMarkMenu == nullptr) {
         m_pBookMarkMenu = new DMenu(this);
         m_pBookMarkMenu->setAccessibleName("Menu_BookMark");
@@ -228,10 +254,12 @@ void SideBarImageListView::showBookMarkMenu(const QPoint &point)
         });
     }
     m_pBookMarkMenu->exec(point);
+    qDebug() << "Showing bookmark menu end";
 }
 
 int  SideBarImageListView::getModelIndexForPageIndex(int pageIndex)
 {
+    qDebug() << "Getting model index for page index:" << pageIndex;
     const QList<QModelIndex> &indexlst = m_imageModel->getModelIndexForPageIndex(pageIndex);
     if (indexlst.size() > 0) {
         qDebug() << "Found model index:" << indexlst.first().row() << "for page:" << pageIndex;
@@ -243,15 +271,18 @@ int  SideBarImageListView::getModelIndexForPageIndex(int pageIndex)
 
 int  SideBarImageListView::getPageIndexForModelIndex(int row)
 {
+    qDebug() << "Getting page index for model index:" << row;
     return m_imageModel->getPageIndexForModelIndex(row);
 }
 
 QModelIndex SideBarImageListView::pageUpIndex()
 {
+    qDebug() << "Getting page up index";
     return DListView::moveCursor(QAbstractItemView::MovePageUp, Qt::NoModifier);
 }
 
 QModelIndex SideBarImageListView::pageDownIndex()
 {
+    qDebug() << "Getting page down index";
     return DListView::moveCursor(QAbstractItemView::MovePageDown, Qt::NoModifier);
 }

@@ -28,11 +28,12 @@ public:
     explicit ImageWidget(DWidget *parent)
         : DWidget(parent)
     {
-
+        // qDebug() << "ImageWidget created, parent:" << parent;
     }
 
     void setPixmap(const QPixmap &pixmap)
     {
+        // qDebug() << "Setting pixmap for ImageWidget";
         if (!pixmap.isNull()) {
             m_pixmap = pixmap;
             update();
@@ -48,6 +49,7 @@ private:
 
 void ImageWidget::paintEvent(QPaintEvent *event)
 {
+    // qDebug() << "Painting ImageWidget";
     DWidget::paintEvent(event);
     QPainter painter(this);
     painter.drawPixmap(static_cast<int>(this->width() * 0.5 - m_pixmap.width() * 0.5 / m_pixmap.devicePixelRatioF()),  static_cast<int>(this->height() * 0.5 - m_pixmap.height() * 0.5 / m_pixmap.devicePixelRatioF()), m_pixmap);
@@ -66,7 +68,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
 
 FileAttrWidget::~FileAttrWidget()
 {
-    qDebug() << "FileAttrWidget destroyed";
+    // qDebug() << "FileAttrWidget destroyed";
 }
 
 void FileAttrWidget::setFileAttr(DocSheet *sheet)
@@ -80,6 +82,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     int tmpWidth = static_cast<int>(94 * dApp->devicePixelRatio());
     int tmpHeight = static_cast<int>(tmpWidth * aspectRatio);
     if (tmpHeight > static_cast<int>(113 * dApp->devicePixelRatio())) { // 使打印的图片保持原始图片的宽高比
+        qDebug() << "tmpHeight > static_cast<int>(113 * dApp->devicePixelRatio())";
         tmpHeight = static_cast<int>(113 * dApp->devicePixelRatio());
         tmpWidth = static_cast<int>(tmpHeight / aspectRatio);
     }
@@ -87,6 +90,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
     image.setDevicePixelRatio(dApp->devicePixelRatio());
 
     if (!image.isNull() && frameImage) {
+        qDebug() << "image is not null and frameImage is not null";
         const QPixmap &pix = Utils::roundQPixmap(QPixmap::fromImage(image), 8);
         frameImage->setPixmap(pix);
     }
@@ -127,6 +131,7 @@ void FileAttrWidget::setFileAttr(DocSheet *sheet)
 
 void FileAttrWidget::addTitleFrame(const QString &sData)
 {
+    qDebug() << "Adding title frame";
     WordWrapLabel *labelText = new WordWrapLabel(this);
     DFontSizeManager::instance()->bind(labelText, DFontSizeManager::T8);
     labelText->setFixedWidth(this->width());
@@ -135,6 +140,7 @@ void FileAttrWidget::addTitleFrame(const QString &sData)
     labelText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     labelText->setText(labelText->fontMetrics().elidedText(sData, Qt::ElideMiddle, 680));
     m_pVBoxLayout->addWidget(labelText);
+    qDebug() << "Adding title frame end";
 }
 
 void FileAttrWidget::showScreenCenter()
@@ -153,6 +159,7 @@ void FileAttrWidget::initWidget()
 
 void FileAttrWidget::initCloseBtn()
 {
+    qDebug() << "Initializing close button";
     auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addStretch(0);
@@ -183,10 +190,12 @@ void FileAttrWidget::initCloseBtn()
     });
 #endif
     m_pVBoxLayout->addItem(layout);
+    qDebug() << "Initializing close button end";
 }
 
 void FileAttrWidget::initImageLabel()
 {
+    qDebug() << "Initializing image label";
     frameImage = new ImageWidget(this);
     frameImage->setFixedSize(98, 117);
 
@@ -196,4 +205,5 @@ void FileAttrWidget::initImageLabel()
     vlayout->addWidget(frameImage);
 
     m_pVBoxLayout->addItem(vlayout);
+    qDebug() << "Initializing image label end";
 }

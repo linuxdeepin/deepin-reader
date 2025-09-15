@@ -26,19 +26,27 @@ namespace deepin_reader {
 XpsPage::XpsPage(const XpsPageData &pageData, QMutex *mutex)
     : m_pageData(pageData), m_docMutex(mutex)
 {
+    // qDebug() << "XpsPage::XpsPage() - Starting constructor";
+    // qDebug() << "XpsPage::XpsPage() - Constructor completed";
 }
 
 XpsPage::~XpsPage()
 {
+    // qDebug() << "XpsPage::~XpsPage() - Starting destructor";
+    // qDebug() << "XpsPage::~XpsPage() - Destructor completed";
 }
 
 QSizeF XpsPage::sizeF() const
 {
-    return m_pageData.size;
+    // qDebug() << "XpsPage::sizeF() - Getting page size";
+    QSizeF size = m_pageData.size;
+    // qDebug() << "XpsPage::sizeF() - Returning size:" << size;
+    return size;
 }
 
 QImage XpsPage::render(int width, int height, const QRect &slice) const
 {
+    // qDebug() << "XpsPage::render() - Starting render";
     QMutexLocker lock(m_docMutex);
     
     QImage image(width, height, QImage::Format_RGB32);
@@ -210,28 +218,33 @@ QImage XpsPage::render(int width, int height, const QRect &slice) const
             indicesWidthPage = widthPage;
         }
     }
+    // qDebug() << "XpsPage::render() - Render completed";
     return image;
 }
 
-Link XpsPage::getLinkAtPoint(const QPointF &)
+Link XpsPage::getLinkAtPoint(const QPointF &pos)
 {
+    // qDebug() << "XpsPage::getLinkAtPoint() - Getting link at point:" << pos;
     // XPS暂不支持链接
     return Link();
 }
 
 QString XpsPage::text(const QRectF &rect) const
 {
+    // qDebug() << "XpsPage::text() - Getting text from rect:" << rect;
     QString result;
     for (int i = 0; i < m_pageData.textRects.size() && i < m_pageData.textStrings.size(); ++i) {
         if (m_pageData.textRects[i].intersects(rect)) {
             result += m_pageData.textStrings[i] + " ";
         }
     }
+    // qDebug() << "XpsPage::text() - Returning text length:" << result.length();
     return result.trimmed();
 }
 
 QVector<PageSection> XpsPage::search(const QString &searchText, bool matchCase, bool wholeWords) const
 {
+    // qDebug() << "XpsPage::search() - Starting search";
     QVector<PageSection> results;
     
     QString searchPattern = searchText;
@@ -267,18 +280,22 @@ QVector<PageSection> XpsPage::search(const QString &searchText, bool matchCase, 
         }
     }
     
+    // qDebug() << "XpsPage::search() - Search completed, found" << results.size() << "matches";
     return results;
 }
 
 QList<Annotation *> XpsPage::annotations() const
 {
+    // qDebug() << "XpsPage::annotations() - Getting annotations";
     // XPS暂不支持注释
     return QList<Annotation *>();
 }
 
 QList<Word> XpsPage::words()
 {
+    // qDebug() << "XpsPage::words() - Starting word extraction";
     if (m_wordLoaded) {
+        // qDebug() << "XpsPage::words() - Words already loaded, returning cached words";
         return m_words;
     }
     
@@ -293,6 +310,7 @@ QList<Word> XpsPage::words()
     }
     
     m_wordLoaded = true;
+    // qDebug() << "XpsPage::words() - Word extraction completed, total words:" << m_words.size();
     return m_words;
 }
 
@@ -302,13 +320,16 @@ XpsDocument::XpsDocument(const QString &filePath)
 {
     qInfo() << "Creating XPS document for:" << filePath;
     loadXpsFile();
+    qDebug() << "XpsDocument::XpsDocument() - Constructor completed";
 }
 
 QByteArray XpsDocument::deobfuscateOdttf(const QByteArray &data, const QString &fontUri)
 {
+    qDebug() << "XpsDocument::deobfuscateOdttf() - Deobfuscating font data for:" << fontUri;
     QRegularExpression re("([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})");
     QRegularExpressionMatch m = re.match(fontUri);
     if (!m.hasMatch() || data.size() < 32) {
+        qDebug() << "XpsDocument::deobfuscateOdttf() - No GUID match or data too small, returning original data";
         return data;
     }
     QString guid = m.captured(1);
@@ -327,11 +348,13 @@ QByteArray XpsDocument::deobfuscateOdttf(const QByteArray &data, const QString &
     for (int i = 0; i < 32 && i < out.size(); ++i) {
         out[i] = out[i] ^ key[i % 16];
     }
+    qDebug() << "XpsDocument::deobfuscateOdttf() - Font data deobfuscated";
     return out;
 }
 
 QString XpsDocument::resolveFontFamily(const QString &fontUri)
 {
+    qDebug() << "XpsDocument::resolveFontFamily() - Resolving font family for:" << fontUri;
     if (fontUri.isEmpty()) return QString();
     if (m_fontFamilyCache.contains(fontUri)) {
         return m_fontFamilyCache.value(fontUri);
@@ -357,34 +380,45 @@ QString XpsDocument::resolveFontFamily(const QString &fontUri)
 
 XpsDocument::~XpsDocument()
 {
+    // qDebug() << "XpsDocument::~XpsDocument() - Starting destructor";
+    // qDebug() << "XpsDocument::~XpsDocument() - Destructor completed";
 }
 
 int XpsDocument::pageCount() const
 {
-    return m_pages.size();
+    // qDebug() << "XpsDocument::pageCount() - Getting page count";
+    int count = m_pages.size();
+    // qDebug() << "XpsDocument::pageCount() - Page count:" << count;
+    return count;
 }
 
 Page *XpsDocument::page(int index) const
 {
+    // qDebug() << "XpsDocument::page() - Getting page at index:" << index;
     if (index >= 0 && index < m_pages.size()) {
+        // qDebug() << "XpsDocument::page() - Valid index, creating XpsPage";
         return new XpsPage(m_pages[index], const_cast<QMutex *>(&m_mutex));
     }
+    // qWarning() << "XpsDocument::page() - Invalid index:" << index << "total pages:" << m_pages.size();
     return nullptr;
 }
 
 QStringList XpsDocument::saveFilter() const
 {
+    qDebug() << "XpsDocument::saveFilter() - Returning save filter";
     return QStringList() << "XPS files (*.xps)";
 }
 
 bool XpsDocument::save() const
 {
+    qDebug() << "XpsDocument::save() - Saving XPS document";
     // XPS暂不支持保存
     return false;
 }
 
 bool XpsDocument::saveAs(const QString &filePath) const
 {
+    qDebug() << "XpsDocument::saveAs() - Saving XPS document as:" << filePath;
     // XPS暂不支持另存为
     Q_UNUSED(filePath)
     return false;
@@ -392,12 +426,14 @@ bool XpsDocument::saveAs(const QString &filePath) const
 
 Outline XpsDocument::outline() const
 {
+    qDebug() << "XpsDocument::outline() - Returning outline";
     // XPS暂不支持大纲
     return Outline();
 }
 
 Properties XpsDocument::properties() const
 {
+    qDebug() << "XpsDocument::properties() - Returning properties";
     Properties props;
     props["Title"] = m_title;
     props["Author"] = m_author;
@@ -417,9 +453,11 @@ XpsDocument *XpsDocument::loadDocument(const QString &filePath, Document::Error 
     
     XpsDocument *doc = new XpsDocument(filePath);
     if (doc->m_loaded) {
+        qDebug() << "XpsDocument::loadDocument() - XPS document loaded successfully";
         error = Document::NoError;
         return doc;
     } else {
+        qDebug() << "XpsDocument::loadDocument() - XPS document loaded failed";
         error = Document::FileError;
         delete doc;
         return nullptr;
@@ -510,6 +548,7 @@ bool XpsDocument::loadXpsFile()
 
 void XpsDocument::collectFilesRecursively(const QString &dirPath, const QString &relativePath, QList<QPair<QString, QString>> &fileList)
 {
+    qDebug() << "XpsDocument::collectFilesRecursively() - Collecting files recursively from:" << dirPath << "with relative path:" << relativePath;
     QDir dir(dirPath);
     QFileInfoList entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
     
@@ -522,6 +561,7 @@ void XpsDocument::collectFilesRecursively(const QString &dirPath, const QString 
             collectFilesRecursively(entry.absoluteFilePath(), newRelativePath, fileList);
         }
     }
+    qDebug() << "XpsDocument::collectFilesRecursively() - Collected files recursively from:" << dirPath << "with relative path:" << relativePath;
 }
 
 void XpsDocument::parseXpsContent()
@@ -619,13 +659,16 @@ void XpsDocument::parseXpsContent()
     
     // 设置文档属性
     if (!m_pages.isEmpty()) {
+        qDebug() << "XpsDocument::parseXpsContent() - Setting document size";
         m_documentSize = m_pages.first().size;
         qInfo() << "XPS document loaded with" << m_pages.size() << "pages";
     }
+    qDebug() << "XpsDocument::parseXpsContent() - Parsed XPS content";
 }
 
 void XpsDocument::parsePageContent(const QByteArray &pageData, XpsPageData &pageInfo)
 {
+    qDebug() << "XpsDocument::parsePageContent() - Parsing page content";
     QXmlStreamReader reader(pageData);
     
     // 获取页面尺寸
@@ -674,11 +717,12 @@ void XpsDocument::parsePageContent(const QByteArray &pageData, XpsPageData &page
         }
     }
     
-    
+    qDebug() << "XpsDocument::parsePageContent() - Parsed page content";
 }
 
 void XpsDocument::parsePathData(QXmlStreamReader &reader, QPainterPath &path, XpsPageData &pageInfo)
 {
+    qDebug() << "XpsDocument::parsePathData() - Parsing path data";
     QXmlStreamAttributes attrs = reader.attributes();
     QString fillColor = attrs.value("Fill").toString();
     
@@ -795,10 +839,12 @@ void XpsDocument::parsePathData(QXmlStreamReader &reader, QPainterPath &path, Xp
             break;
         }
     }
+    qDebug() << "XpsDocument::parsePathData() - Parsed path data";
 }
 
 void XpsDocument::parseTextData(QXmlStreamReader &reader, XpsPageData &pageInfo)
 {
+    // qDebug() << "XpsDocument::parseTextData() - Parsing text data";
     // 解析文本属性
     QXmlStreamAttributes attrs = reader.attributes();
     QString originX = attrs.value("OriginX").toString();
@@ -812,6 +858,7 @@ void XpsDocument::parseTextData(QXmlStreamReader &reader, XpsPageData &pageInfo)
     // 读取文本内容：优先属性 UnicodeString，其次子元素 UnicodeString
     QString text = attrs.value("UnicodeString").toString();
     if (text.isEmpty()) {
+        // qDebug() << "XpsDocument::parseTextData() - Parsing text data";
         while (!reader.atEnd()) {
             QXmlStreamReader::TokenType token = reader.readNext();
             if (token == QXmlStreamReader::StartElement && reader.name() == "UnicodeString") {
@@ -825,7 +872,7 @@ void XpsDocument::parseTextData(QXmlStreamReader &reader, XpsPageData &pageInfo)
     }
     
     if (!text.isEmpty()) {
-        
+        // qDebug() << "XpsDocument::parseTextData() - Parsing text data";
         
         bool ok1, ok2, ok3;
         qreal x = originX.toDouble(&ok1);
@@ -888,6 +935,7 @@ void XpsDocument::parseTextData(QXmlStreamReader &reader, XpsPageData &pageInfo)
             
         }
     }
+    // qDebug() << "XpsDocument::parseTextData() - Parsed text data";
 }
 
 } // namespace deepin_reader
