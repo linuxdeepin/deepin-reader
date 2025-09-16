@@ -9,6 +9,7 @@
 #include "PageRenderThread.h"
 #include "DocSheet.h"
 #include "DBusObject.h"
+#include "ddlog.h"
 
 #include <QIcon>
 #include <QDebug>
@@ -18,9 +19,9 @@
 Application::Application(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-    qDebug() << "Initializing application";
+    qCDebug(appLog) << "Initializing application";
     loadTranslator();
-    qDebug() << "Translations loaded";
+    qCDebug(appLog) << "Translations loaded";
     setAttribute(Qt::AA_UseHighDpiPixmaps);
     setApplicationName("deepin-reader");
     setOrganizationName("deepin");
@@ -38,12 +39,12 @@ Application::Application(int &argc, char **argv)
 
 Application::~Application()
 {
-    qDebug() << "Destroying application resources";
+    qCDebug(appLog) << "Destroying application resources";
     PageRenderThread::destroyForever();
-    qDebug() << "Page render threads destroyed";
+    qCDebug(appLog) << "Page render threads destroyed";
     DBusObject::destory();
-    qDebug() << "DBus object destroyed";
-    qInfo() << "Application exiting";
+    qCDebug(appLog) << "DBus object destroyed";
+    qCInfo(appLog) << "Application exiting";
 }
 
 void Application::emitSheetChanged()
@@ -53,7 +54,7 @@ void Application::emitSheetChanged()
 
 void Application::handleQuitAction()
 {
-    qDebug() << "Handling quit action";
+    qCDebug(appLog) << "Handling quit action";
     QList<MainWindow *> list = MainWindow::m_list;
 
     //倒序退出,如果取消了则停止
@@ -71,7 +72,7 @@ bool Application::notify(QObject *object, QEvent *event)
         if ((object->inherits("QAbstractButton")) && (keyevent->key() == Qt::Key_Return || keyevent->key() == Qt::Key_Enter)) {
             QAbstractButton *pushButton = dynamic_cast<QAbstractButton *>(object);
             if (pushButton) {
-                qDebug() << "Simulating click for button:" << pushButton;
+                qCDebug(appLog) << "Simulating click for button:" << pushButton;
                 emit pushButton->clicked(!pushButton->isChecked());
                 return true;
             }
@@ -86,7 +87,7 @@ bool Application::notify(QObject *object, QEvent *event)
             // QPoint(0,0) 表示无法获取光标位置
             if (pos != QPoint(0, 0)) {
                 QMouseEvent event(QEvent::MouseButtonPress, pos, Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-                qDebug() << "Simulating right click at position:" << pos;
+                qCDebug(appLog) << "Simulating right click at position:" << pos;
                 QCoreApplication::sendEvent(object, &event);
             }
         }
@@ -106,7 +107,7 @@ bool Application::notify(QObject *object, QEvent *event)
             if (top_window->isWindow() && !top_window->property(NON_FIRST_ACTIVE).toBool()) {
                 top_window->setFocus();
                 top_window->setProperty(NON_FIRST_ACTIVE, true);
-                qDebug() << "Reset focus to top level window";
+                qCDebug(appLog) << "Reset focus to top level window";
             }
         }
     }
@@ -117,7 +118,7 @@ bool Application::notify(QObject *object, QEvent *event)
     if (event->type() == QEvent::ZOrderChange ||
             event->type() == QEvent::WindowActivate) {
         if (DocSheet *doc = qobject_cast<DocSheet *>(object)) {
-            qDebug() << "Updating last operation file to:" << doc->filePath();
+            qCDebug(appLog) << "Updating last operation file to:" << doc->filePath();
             DocSheet::g_lastOperationFile = doc->filePath();
         }
     }

@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "Application.h"
 #include "Global.h"
+#include "ddlog.h"
 
 #include <QDBusConnection>
 #include <QUrl>
@@ -30,11 +31,11 @@ DBusObject *DBusObject::s_instance = nullptr;
 DBusObject *DBusObject::instance()
 {
     if (nullptr == s_instance) {
-        qDebug() << "Creating new DBusObject instance";
+        qCDebug(appLog) << "Creating new DBusObject instance";
         s_instance = new DBusObject;
     }
 
-    qDebug() << "Returning DBusObject instance";
+    qCDebug(appLog) << "Returning DBusObject instance";
     return s_instance;
 }
 
@@ -48,20 +49,20 @@ void DBusObject::destory()
 
 bool DBusObject::registerOrNotify(QStringList arguments)
 {
-    qDebug() << "Registering DBus service:" << DBUS_SERVER;
+    qCDebug(appLog) << "Registering DBus service:" << DBUS_SERVER;
     QDBusConnection dbus = QDBusConnection::sessionBus();
     if (!dbus.registerService(DBUS_SERVER)) {
-        qDebug() << "Service already registered, sending notification";
+        qCDebug(appLog) << "Service already registered, sending notification";
         QDBusInterface notification(DBUS_SERVER, DBUS_SERVER_PATH, DBUS_SERVER, QDBusConnection::sessionBus());
         QList<QVariant> args;
         args.append(arguments);
         QString error = notification.callWithArgumentList(QDBus::Block, "handleFiles", args).errorMessage();
         if (!error.isEmpty())
-            qWarning() << "DBus notification error:" << error;
+            qCWarning(appLog) << "DBus notification error:" << error;
         return false;
     }
 
-    qDebug() << "Registering DBus object path:" << DBUS_SERVER_PATH;
+    qCDebug(appLog) << "Registering DBus object path:" << DBUS_SERVER_PATH;
     dbus.registerObject(DBUS_SERVER_PATH, this, QDBusConnection::ExportScriptableSlots);
 
     const QString gestureSignal = "Event";
@@ -81,7 +82,7 @@ bool DBusObject::registerOrNotify(QStringList arguments)
 
 void DBusObject::unRegister()
 {
-    qDebug() << "Unregistering DBus service:" << DBUS_SERVER;
+    qCDebug(appLog) << "Unregistering DBus service:" << DBUS_SERVER;
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.unregisterService(DBUS_SERVER);
 }
@@ -89,21 +90,21 @@ void DBusObject::unRegister()
 void DBusObject::blockShutdown()
 {
     if (m_isBlockShutdown) {
-        qDebug() << "Shutdown already blocked";
+        qCDebug(appLog) << "Shutdown already blocked";
         return;
     }
 
     if (m_blockShutdownReply.value().isValid()) {
-        qDebug() << "Valid shutdown block already exists";
+        qCDebug(appLog) << "Valid shutdown block already exists";
         return;
     }
 
     if (m_blockShutdownInterface == nullptr) {
-        qDebug() << "Creating shutdown block interface";
+        qCDebug(appLog) << "Creating shutdown block interface";
         m_blockShutdownInterface = new QDBusInterface("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus());
     }
 
-    qDebug() << "Blocking system shutdown";
+    qCDebug(appLog) << "Blocking system shutdown";
     QList<QVariant> args;
     args << QString("shutdown") // what
          << qApp->applicationDisplayName() // who
@@ -112,11 +113,11 @@ void DBusObject::blockShutdown()
 
     m_blockShutdownReply = m_blockShutdownInterface->callWithArgumentList(QDBus::Block, "Inhibit", args);
     if (m_blockShutdownReply.isValid()) {
-        qDebug() << "Shutdown blocked successfully";
+        qCDebug(appLog) << "Shutdown blocked successfully";
         m_blockShutdownReply.value().fileDescriptor();
         m_isBlockShutdown = true;
     } else {
-        qWarning() << "Failed to block shutdown:" << m_blockShutdownReply.error();
+        qCWarning(appLog) << "Failed to block shutdown:" << m_blockShutdownReply.error();
     }
 }
 
@@ -130,41 +131,41 @@ void DBusObject::unBlockShutdown()
 
 void DBusObject::handleFiles(QStringList filePathList)
 {
-    qDebug() << "Handling files via DBus, count:" << filePathList.count();
+    qCDebug(appLog) << "Handling files via DBus, count:" << filePathList.count();
     if (filePathList.count() <= 0) {
-        qDebug() << "No files provided, creating empty window";
+        qCDebug(appLog) << "No files provided, creating empty window";
         MainWindow::createWindow()->show();
         return;
     }
 
     MainWindow *mainwindow = MainWindow::m_list.count() > 0 ? MainWindow::m_list[0] : MainWindow::createWindow();
-    qDebug() << "Using main window:" << mainwindow;
+    qCDebug(appLog) << "Using main window:" << mainwindow;
     mainwindow->setProperty("loading", true);
     
     foreach (QString filePath, filePathList) {
-        qDebug() << "Processing file:" << filePath;
+        qCDebug(appLog) << "Processing file:" << filePath;
         QUrl url(filePath);
         if (url.isLocalFile()) {
             filePath = url.toLocalFile();
-            qDebug() << "Converted to local path:" << filePath;
+            qCDebug(appLog) << "Converted to local path:" << filePath;
         }
 
         if (mainwindow->property("windowClosed").toBool()) {
-            qDebug() << "Window closed, stopping file processing";
+            qCDebug(appLog) << "Window closed, stopping file processing";
             break;
         }
 
         if (!MainWindow::activateSheetIfExist(filePath)) {
-            qDebug() << "Adding new file to window";
+            qCDebug(appLog) << "Adding new file to window";
             mainwindow->setWindowState((MainWindow::m_list[0]->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
             mainwindow->addFile(filePath);
         } else {
-            qDebug() << "File already open in existing window";
+            qCDebug(appLog) << "File already open in existing window";
         }
     }
 
     mainwindow->setProperty("loading", false);
-    qDebug() << "Finished processing all files";
+    qCDebug(appLog) << "Finished processing all files";
 }
 
 DBusObject::DBusObject(QObject *parent) : QObject(parent)
@@ -174,12 +175,12 @@ DBusObject::DBusObject(QObject *parent) : QObject(parent)
 
 DBusObject::~DBusObject()
 {
-    qDebug() << "Destroying DBusObject";
+    qCDebug(appLog) << "Destroying DBusObject";
     m_blockShutdownReply = QDBusReply<QDBusUnixFileDescriptor>();
     m_isBlockShutdown = false;
 
     if (nullptr != m_blockShutdownInterface) {
-        qDebug() << "Cleaning up shutdown block interface";
+        qCDebug(appLog) << "Cleaning up shutdown block interface";
         delete m_blockShutdownInterface;
     }
 }

@@ -6,6 +6,8 @@
 #include "TransparentTextEdit.h"
 #include "Application.h"
 #include "MsgHeader.h"
+#include "ddlog.h"
+
 #include <QDebug>
 
 #include <DFontSizeManager>
@@ -20,7 +22,7 @@
 TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     : QTextEdit(parent)
 {
-    qDebug() << "TransparentTextEdit created, parent:" << parent;
+    qCDebug(appLog) << "TransparentTextEdit created, parent:" << parent;
     this->setObjectName("TransparentTextEdit");
 
     this->setAcceptRichText(false);
@@ -45,18 +47,18 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextEditMaxContantNum()));
-    qDebug() << "TransparentTextEdit initialized";
+    qCDebug(appLog) << "TransparentTextEdit initialized";
 }
 
 void TransparentTextEdit::slotTextEditMaxContantNum()
 {
-    qDebug() << "Checking text content length, max:" << m_nMaxContantLen;
+    qCDebug(appLog) << "Checking text content length, max:" << m_nMaxContantLen;
     QString textContent = this->toPlainText();
 
     int length = textContent.count();
 
     if (length > m_nMaxContantLen) {
-        qDebug() << "Text length exceeds limit, trimming content";
+        qCDebug(appLog) << "Text length exceeds limit, trimming content";
         int position = this->textCursor().position();
 
         QTextCursor textCursor = this->textCursor();
@@ -71,12 +73,12 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
 
         sigNeedShowTips(tr("Input limit reached"), 1);
     }
-    qDebug() << "TransparentTextEdit::slotTextEditMaxContantNum end";
+    qCDebug(appLog) << "TransparentTextEdit::slotTextEditMaxContantNum end";
 }
 
 void TransparentTextEdit::paintEvent(QPaintEvent *event)
 {
-    // qDebug() << "TransparentTextEdit::paintEvent start";
+    // qCDebug(appLog) << "TransparentTextEdit::paintEvent start";
     QTextEdit::paintEvent(event);
 
     QPainter painter(this->viewport());
@@ -112,7 +114,7 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
     }
 
     if (this->verticalScrollBar()->maximum() - this->verticalScrollBar()->value() < maxLineHeight) {
-        // qDebug() << "Drawing bottom line";
+        // qCDebug(appLog) << "Drawing bottom line";
         pen.setWidth(maxLineHeight);
 
         painter.setPen(pen);
@@ -121,25 +123,25 @@ void TransparentTextEdit::paintEvent(QPaintEvent *event)
 
         painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
     }
-    // qDebug() << "TransparentTextEdit::paintEvent end";
+    // qCDebug(appLog) << "TransparentTextEdit::paintEvent end";
 }
 
 void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
 {
-    qDebug() << "Inserting from mime data, has text:" << !source->text().isEmpty();
+    qCDebug(appLog) << "Inserting from mime data, has text:" << !source->text().isEmpty();
     if (!source->text().isEmpty())
         this->insertPlainText(source->text());
 }
 
 void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
 {
-    // qDebug() << "Key pressed:" << keyEvent->key() << "modifiers:" << keyEvent->modifiers();
+    // qCDebug(appLog) << "Key pressed:" << keyEvent->key() << "modifiers:" << keyEvent->modifiers();
     if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
-        // qDebug() << "Alt+M pressed, showing context menu";
+        // qCDebug(appLog) << "Alt+M pressed, showing context menu";
         QMenu *menu =  this->createStandardContextMenu();
 
         if (menu) {
-            // qDebug() << "Showing context menu";
+            // qCDebug(appLog) << "Showing context menu";
             menu->exec(this->cursor().pos());
             delete  menu;
             menu = nullptr;
@@ -148,14 +150,14 @@ void TransparentTextEdit::keyPressEvent(QKeyEvent *keyEvent)
     }
 
     QTextEdit::keyPressEvent(keyEvent);
-    // qDebug() << "TransparentTextEdit::keyPressEvent end";
+    // qCDebug(appLog) << "TransparentTextEdit::keyPressEvent end";
 }
 
 void TransparentTextEdit::focusOutEvent(QFocusEvent *event)
 {
-    // qDebug() << "Focus out event, reason:" << event->reason();
+    // qCDebug(appLog) << "Focus out event, reason:" << event->reason();
     QTextEdit::focusOutEvent(event);
 
     Q_EMIT sigCloseNoteWidget();
-    // qDebug() << "TransparentTextEdit::focusOutEvent end";
+    // qCDebug(appLog) << "TransparentTextEdit::focusOutEvent end";
 }

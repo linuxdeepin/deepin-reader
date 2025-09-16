@@ -6,6 +6,7 @@
 #include "EncryptionPage.h"
 #include "Utils.h"
 #include "Application.h"
+#include "ddlog.h"
 #include <QDebug>
 
 #include <DFontSizeManager>
@@ -17,19 +18,19 @@
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)
 {
-    qDebug() << "EncryptionPage created, parent:" << parent;
+    qCDebug(appLog) << "EncryptionPage created, parent:" << parent;
     InitUI();
     InitConnection();
 }
 
 EncryptionPage::~EncryptionPage()
 {
-    qDebug() << "EncryptionPage destroyed";
+    qCDebug(appLog) << "EncryptionPage destroyed";
 }
 
 void EncryptionPage::InitUI()
 {
-    qDebug() << "Initializing encryption page UI";
+    qCDebug(appLog) << "Initializing encryption page UI";
     QPixmap m_encrypticon = QIcon::fromTheme("dr_compress_lock").pixmap(128, 128);
     DLabel *pixmaplabel = new DLabel(this);
     pixmaplabel->setPixmap(m_encrypticon);
@@ -73,12 +74,12 @@ void EncryptionPage::InitUI()
     onUpdateTheme();
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &EncryptionPage::onUpdateTheme);
-    qDebug() << "Encryption page UI initialized";
+    qCDebug(appLog) << "Encryption page UI initialized";
 }
 
 void EncryptionPage::InitConnection()
 {
-    qDebug() << "Setting up encryption page signal connections";
+    qCDebug(appLog) << "Setting up encryption page signal connections";
     connect(m_password, &DPasswordEdit::textChanged, this, &EncryptionPage::onPasswordChanged);
     connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
 
@@ -87,13 +88,13 @@ void EncryptionPage::InitConnection()
 
 void EncryptionPage::nextbuttonClicked()
 {
-    qDebug() << "Password submitted (length:" << m_password->text().length() << "chars)";
+    qCDebug(appLog) << "Password submitted (length:" << m_password->text().length() << "chars)";
     emit sigExtractPassword(m_password->text());
 }
 
 void EncryptionPage::wrongPassWordSlot()
 {
-    qWarning() << "Wrong password entered";
+    qCWarning(appLog) << "Wrong password entered";
     m_password->clear();
     m_password->setAlert(true);
     m_password->showAlertMessage(tr("Wrong password"));
@@ -102,11 +103,11 @@ void EncryptionPage::wrongPassWordSlot()
 
 void EncryptionPage::onPasswordChanged()
 {
-    qDebug() << "Password field changed, empty:" << m_password->text().isEmpty();
+    qCDebug(appLog) << "Password field changed, empty:" << m_password->text().isEmpty();
     if (m_password->isAlert()) {
         m_password->setAlert(false);
         m_password->hideAlertMessage();
-        qDebug() << "Encryption page theme updated";
+        qCDebug(appLog) << "Encryption page theme updated";
     }
 
     if (m_password->text().isEmpty()) {
@@ -124,7 +125,7 @@ void EncryptionPage::onSetPasswdFocus()
 
 void EncryptionPage::onUpdateTheme()
 {
-    qDebug() << "Updating encryption page theme";
+    qCDebug(appLog) << "Updating encryption page theme";
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Window, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);

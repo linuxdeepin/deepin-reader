@@ -7,6 +7,7 @@
 #include "SideBarImageViewModel.h"
 #include "Utils.h"
 #include "Application.h"
+#include "ddlog.h"
 
 #include <DGuiApplicationHelper>
 
@@ -18,16 +19,16 @@
 NotesDelegate::NotesDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
-    // qDebug() << "NotesDelegate::NotesDelegate() - Starting constructor";
+    // qCDebug(appLog) << "NotesDelegate::NotesDelegate() - Starting constructor";
     m_parent = parent;
-    // qDebug() << "NotesDelegate::NotesDelegate() - Constructor completed";
+    // qCDebug(appLog) << "NotesDelegate::NotesDelegate() - Constructor completed";
 }
 
 void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "NotesDelegate::paint() - Painting notes item"; // Commented to avoid high frequency logs
+    // qCDebug(appLog) << "NotesDelegate::paint() - Painting notes item"; // Commented to avoid high frequency logs
     if (index.isValid()) {
-        // qDebug() << "NotesDelegate::paint() - Painting notes item";
+        // qCDebug(appLog) << "NotesDelegate::paint() - Painting notes item";
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
         QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
 
@@ -37,7 +38,7 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
-            // qDebug() << "NotesDelegate::paint() - Painting notes item";
+            // qCDebug(appLog) << "NotesDelegate::paint() - Painting notes item";
             const QPixmap &scalePix = pixmap.scaled(pageSize);
             //clipPath pixmap
             painter->save();
@@ -100,11 +101,11 @@ void NotesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
         painter->restore();
     }
-    // qDebug() << "NotesDelegate::paint() - Completed";
+    // qCDebug(appLog) << "NotesDelegate::paint() - Completed";
 }
 
 QSize NotesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // qDebug() << "NotesDelegate::sizeHint() - Getting size hint for notes item";
+    // qCDebug(appLog) << "NotesDelegate::sizeHint() - Getting size hint for notes item";
     return DStyledItemDelegate::sizeHint(option, index);
 }

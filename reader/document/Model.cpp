@@ -11,6 +11,7 @@
 #include "dpdfannot.h"
 #include "dpdfpage.h"
 #include "dpdfdoc.h"
+#include "ddlog.h"
 
 #include <QProcess>
 #include <QFile>
@@ -26,7 +27,7 @@ QString getHtmlToPdfPath() {
 
     QString path = QString(INSTALL_PREFIX) + "/lib/deepin-reader/htmltopdf";
     if (QFile::exists(path)) {
-        qDebug() << "Found htmltopdf in INSTALL_PREFIX: " << path;
+        qCDebug(appLog) << "Found htmltopdf in INSTALL_PREFIX: " << path;
         return path;
     }
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
@@ -36,11 +37,11 @@ QString getHtmlToPdfPath() {
 #endif
 
     if (QFile::exists(path)) {
-        qDebug() << "Found htmltopdf in LibrariesPath: " << path;
+        qCDebug(appLog) << "Found htmltopdf in LibrariesPath: " << path;
         return path;
     }
 
-    qWarning() << "Not found htmltopdf";
+    qCWarning(appLog) << "Not found htmltopdf";
     return QString();
 }
 
@@ -53,24 +54,24 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
                                                                      QProcess **pprocess,
                                                                      deepin_reader::Document::Error &error)
 {
-    qDebug() << "Creating document handler for type:" << fileType << "file:" << filePath;
+    qCDebug(appLog) << "Creating document handler for type:" << fileType << "file:" << filePath;
 
     deepin_reader::Document *document = nullptr;
 
-    qDebug() << "Processing document file:" << filePath;
+    qCDebug(appLog) << "Processing document file:" << filePath;
     if (Dr::PDF == fileType) {
-        qDebug() << "Handling PDF document";
+        qCDebug(appLog) << "Handling PDF document";
         document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
     } else if (Dr::DJVU == fileType) {
-        qDebug() << "Handling DJVU document";
+        qCDebug(appLog) << "Handling DJVU document";
         document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
 #ifdef XPS_SUPPORT_ENABLED
     } else if (Dr::XPS == fileType) {
-        qDebug() << "Handling XPS document";
+        qCDebug(appLog) << "Handling XPS document";
         document = deepin_reader::XpsDocument::loadDocument(filePath, error);
 #endif
     } else if (Dr::DOCX == fileType) {
-        qDebug() << "Starting DOCX document conversion process";
+        qCDebug(appLog) << "Starting DOCX document conversion process";
         if (nullptr == pprocess) {
             qCritical() << "Invalid process pointer for DOCX conversion";
             error = deepin_reader::Document::ConvertFailed;
@@ -83,16 +84,16 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         // QDir convertedDir(convertedFileDir);
         // if (!convertedDir.exists()) {
         //     bool flag = convertedDir.mkdir(convertedFileDir);
-        //     qDebug() << "创建文件夹" << convertedFileDir << "是否成功？" << flag;
+        //     qCDebug(appLog) << "创建文件夹" << convertedFileDir << "是否成功？" << flag;
         // } else {
-        //     qDebug() << "文件夹" << convertedFileDir << "已经存在！";
+        //     qCDebug(appLog) << "文件夹" << convertedFileDir << "已经存在！";
         // }
-        // qDebug() << "targetDoc: " << targetDoc;
-        // qDebug() << "tmpHtmlFilePath: " << tmpHtmlFilePath;
-        // qDebug() << "realFilePath: " << realFilePath;
+        // qCDebug(appLog) << "targetDoc: " << targetDoc;
+        // qCDebug(appLog) << "tmpHtmlFilePath: " << tmpHtmlFilePath;
+        // qCDebug(appLog) << "realFilePath: " << realFilePath;
 
         QString prefix = INSTALL_PREFIX;
-        // qDebug() << "应用安装路径: " << prefix;
+        // qCDebug(appLog) << "应用安装路径: " << prefix;
 
         QFile file(filePath);
         if (!file.copy(targetDoc)) {
@@ -105,9 +106,9 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QProcess decompressor;
         *pprocess = &decompressor;
         decompressor.setWorkingDirectory(convertedFileDir);
-        qInfo() << "Unzipping DOCX document:" << targetDoc;
+        qCInfo(appLog) << "Unzipping DOCX document:" << targetDoc;
         QString unzipCommand = "unzip " + targetDoc;
-        qDebug() << "执行命令: " << unzipCommand;
+        qCDebug(appLog) << "执行命令: " << unzipCommand;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         decompressor.start(unzipCommand);
 #else
@@ -133,7 +134,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
-        qInfo() << "Document unzipped successfully";
+        qCInfo(appLog) << "Document unzipped successfully";
         QTemporaryFile tmpFile(convertedFileDir + "/word/" + QCoreApplication::applicationName() + "_XXXXXX.html");
         if( tmpFile.open()) { //fix 232871
              tmpHtmlFilePath = tmpFile.fileName(); // returns the unique file name
@@ -142,17 +143,17 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         QProcess converter;
         *pprocess = &converter;
         converter.setWorkingDirectory(convertedFileDir + "/word");
-        qInfo() << "Converting DOCX to HTML:" << tmpHtmlFilePath;
+        qCInfo(appLog) << "Converting DOCX to HTML:" << tmpHtmlFilePath;
         // QFile targetDocFile(targetDoc);
         // if (targetDocFile.exists()) {
-        //     qDebug() << "文档" << targetDocFile.fileName() << "存在！";
+        //     qCDebug(appLog) << "文档" << targetDocFile.fileName() << "存在！";
         // } else {
-        //     qDebug() << "文档" << targetDocFile.fileName() << "不存在！";
+        //     qCDebug(appLog) << "文档" << targetDocFile.fileName() << "不存在！";
         // }
         QString pandocDataDir = prefix + "/share/pandoc/data";
         QString pandocCommand = QString("pandoc %1 --data-dir=%2 -o %3").arg(targetDoc).arg(pandocDataDir).arg(tmpHtmlFilePath);
 
-        qDebug() << "执行命令: " << pandocCommand;
+        qCDebug(appLog) << "执行命令: " << pandocCommand;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         converter.start(pandocCommand);
 #else
@@ -180,16 +181,16 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
-        qInfo() << "DOCX to HTML conversion completed";
+        qCInfo(appLog) << "DOCX to HTML conversion completed";
 
         // html -> pdf
         QProcess converter2;
         *pprocess = &converter2;
         converter2.setWorkingDirectory(convertedFileDir + "/word");
-        qInfo() << "Converting HTML to PDF:" << realFilePath;
+        qCInfo(appLog) << "Converting HTML to PDF:" << realFilePath;
 
         QString htmltopdfCommand = getHtmlToPdfPath() + " " + tmpHtmlFilePath + " " + realFilePath;
-        qDebug() << "执行命令: " << htmltopdfCommand;
+        qCDebug(appLog) << "执行命令: " << htmltopdfCommand;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         converter2.start(htmltopdfCommand);
 #else
@@ -217,24 +218,24 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             }
             return nullptr;
         }
-        qInfo() << "HTML to PDF conversion completed";
+        qCInfo(appLog) << "HTML to PDF conversion completed";
 
         *pprocess = nullptr;
-        qInfo() << "Loading converted PDF document:" << realFilePath;
+        qCInfo(appLog) << "Loading converted PDF document:" << realFilePath;
         document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
     }
 
     if (document) {
-        qInfo() << "Document created successfully for:" << filePath;
+        qCInfo(appLog) << "Document created successfully for:" << filePath;
     } else {
-        qWarning() << "Failed to create document for:" << filePath << "Error:" << error;
+        qCWarning(appLog) << "Failed to create document for:" << filePath << "Error:" << error;
     }
     return document;
 }
 
 bool SearchResult::setctionsFillText(std::function<QString(int, QRectF)> getText)
 {
-    qDebug() << "Filling search result text for page:" << page;
+    qCDebug(appLog) << "Filling search result text for page:" << page;
 
     bool ret = false;
     for (auto &section : sections) {
@@ -248,13 +249,13 @@ bool SearchResult::setctionsFillText(std::function<QString(int, QRectF)> getText
             }
         }
     }
-    qDebug() << "Search result text filled, success:" << ret;
+    qCDebug(appLog) << "Search result text filled, success:" << ret;
     return ret;
 }
 
 QRectF SearchResult::sectionBoundingRect(const PageSection &section)
 {
-    qDebug() << "Calculating bounding rect for search result section";
+    qCDebug(appLog) << "Calculating bounding rect for search result section";
 
     QRectF ret;
     for (const PageLine &line : section) {

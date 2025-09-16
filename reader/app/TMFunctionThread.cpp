@@ -4,24 +4,25 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TMFunctionThread.h"
+#include "ddlog.h"
 
 #include <QDebug>
 
 TMFunctionThread::TMFunctionThread(QObject *parent) : QThread(parent)
 {
-    qDebug() << "Function thread created";
+    qCDebug(appLog) << "Function thread created";
 }
 
 TMFunctionThread::~TMFunctionThread()
 {
-    qDebug() << "Destroying function thread";
+    qCDebug(appLog) << "Destroying function thread";
     this->wait();
-    qDebug() << "Function thread destroyed";
+    qCDebug(appLog) << "Function thread destroyed";
 }
 
 void TMFunctionThread::run()
 {
-    qDebug() << "Function thread started running";
+    qCDebug(appLog) << "Function thread started running";
     result = func();
-    qDebug() << "Function execution completed, result:" << result;
+    qCDebug(appLog) << "Function execution completed, result:" << result;
 }

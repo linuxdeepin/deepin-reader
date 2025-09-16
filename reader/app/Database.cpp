@@ -7,6 +7,7 @@
 #include "DocSheet.h"
 #include "Global.h"
 #include "DocSheet.h"
+#include "ddlog.h"
 
 #include <QApplication>
 #include <QCryptographicHash>
@@ -20,31 +21,31 @@
 Transaction::Transaction(QSqlDatabase &database)
     : m_committed(false), m_database(database)
 {
-    qDebug() << "Starting database transaction";
+    qCDebug(appLog) << "Starting database transaction";
     if (!m_database.transaction()) {
-        qWarning() << "Failed to start transaction:" << m_database.lastError();
+        qCWarning(appLog) << "Failed to start transaction:" << m_database.lastError();
     }
 }
 
 Transaction::~Transaction()
 {
-    // qDebug() << "Transaction::~Transaction() start";
+    // qCDebug(appLog) << "Transaction::~Transaction() start";
     if (!m_committed) {
         if (!m_database.rollback()) {
-            qInfo() << m_database.lastError();
+            qCInfo(appLog) << m_database.lastError();
         }
     }
-    // qDebug() << "Transaction::~Transaction() end";
+    // qCDebug(appLog) << "Transaction::~Transaction() end";
 }
 
 void Transaction::commit()
 {
-    qDebug() << "Committing transaction";
+    qCDebug(appLog) << "Committing transaction";
     m_committed = m_database.commit();
     if (!m_committed) {
-        qWarning() << "Failed to commit transaction:" << m_database.lastError();
+        qCWarning(appLog) << "Failed to commit transaction:" << m_database.lastError();
     }
-    // qDebug() << "Transaction::commit() end";
+    // qCDebug(appLog) << "Transaction::commit() end";
 }
 
 
@@ -52,30 +53,30 @@ Database *Database::s_instance = nullptr;
 
 Database *Database::instance()
 {
-    // qDebug() << "Database::instance() start";
+    // qCDebug(appLog) << "Database::instance() start";
     if (s_instance == nullptr) {
-        // qDebug() << "Creating new Database instance";
+        // qCDebug(appLog) << "Creating new Database instance";
         s_instance = new Database(qApp);
     }
 
-    // qDebug() << "Returning Database instance";
+    // qCDebug(appLog) << "Returning Database instance";
     return s_instance;
 }
 
 Database::~Database()
 {
-    // qDebug() << __FUNCTION__ << " start";
+    // qCDebug(appLog) << __FUNCTION__ << " start";
     m_database.close();
     s_instance = nullptr;
-    // qDebug() << "Database::~Database() end";
+    // qCDebug(appLog) << "Database::~Database() end";
 }
 
 bool Database::prepareOperation()
 {
-    // qDebug() << "prepareOperation start";
+    // qCDebug(appLog) << "prepareOperation start";
     Transaction transaction(m_database);
 
-    qDebug() << "Preparing operation table";
+    qCDebug(appLog) << "Preparing operation table";
     QSqlQuery query(m_database);
     if (!query.exec("CREATE TABLE operation "
                     "(filePath TEXT primary key"
@@ -87,37 +88,37 @@ bool Database::prepareOperation()
                     ",sidebarVisible INTEGER"
                     ",sidebarIndex INTEGER"
                     ",currentPage INTEGER)")) {
-        qInfo() << query.lastError();
+        qCInfo(appLog) << query.lastError();
         return false;
     }
 
     if (!query.isActive()) {
-        qInfo() << query.lastError();
+        qCInfo(appLog) << query.lastError();
         return false;
     }
 
     transaction.commit();
-    // qDebug() << "prepareOperation end";
+    // qCDebug(appLog) << "prepareOperation end";
     return true;
 }
 
 bool Database::readOperation(DocSheet *sheet)
 {
-    // qDebug() << "readOperation start";
+    // qCDebug(appLog) << "readOperation start";
     if(!sheet) {
-        // qDebug() << __FUNCTION__ << " end";
+        // qCDebug(appLog) << __FUNCTION__ << " end";
         return false;
     }
 
-    // qDebug() << "Reading operation for file:" << sheet->filePath();
+    // qCDebug(appLog) << "Reading operation for file:" << sheet->filePath();
     QSqlQuery query(m_database);
     query.prepare(" select * from operation where filePath = :filePath");
     query.bindValue(":filePath", sheet->filePath());
     if (!query.exec()) {
-        qWarning() << "Failed to read operation:" << query.lastError();
+        qCWarning(appLog) << "Failed to read operation:" << query.lastError();
     }
     if (query.next()) {
-        // qDebug() << "Reading operation for file:" << sheet->filePath();
+        // qCDebug(appLog) << "Reading operation for file:" << sheet->filePath();
         sheet->m_operation.layoutMode = static_cast<Dr::LayoutMode>(query.value("layoutMode").toInt());
         sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(query.value("mouseShape").toInt());
         sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(query.value("scaleMode").toInt());
@@ -128,15 +129,15 @@ bool Database::readOperation(DocSheet *sheet)
         sheet->m_operation.currentPage = query.value("currentPage").toInt();
         return true;
     }
-    // qDebug() << "readOperation end";
+    // qCDebug(appLog) << "readOperation end";
     return false;
 }
 
 bool Database::saveOperation(DocSheet *sheet)
 {
-    // qDebug() << "saveOperation start";
+    // qCDebug(appLog) << "saveOperation start";
     if(!sheet) {
-        // qDebug() << "saveOperation end";
+        // qCDebug(appLog) << "saveOperation end";
         return false;
     }
 
@@ -155,48 +156,48 @@ bool Database::saveOperation(DocSheet *sheet)
     query.bindValue(":currentPage", sheet->m_operation.currentPage);
 
     if(!query.exec()){
-        qInfo() << query.lastError().text();
+        qCInfo(appLog) << query.lastError().text();
         return false;
     }
-    // qDebug() << "saveOperation end";
+    // qCDebug(appLog) << "saveOperation end";
     return true;
 }
 
 bool Database::prepareBookmark()
 {
-    qDebug() << "Preparing bookmark table";
+    qCDebug(appLog) << "Preparing bookmark table";
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
     if (!query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)")) {
-        qWarning() << "Failed to create bookmark table:" << query.lastError();
+        qCWarning(appLog) << "Failed to create bookmark table:" << query.lastError();
         return false;
     }
 
     if (!query.isActive()) {
-        qInfo() << query.lastError();
+        qCInfo(appLog) << query.lastError();
         return false;
     }
 
     transaction.commit();
-    qDebug() << "prepareBookmark end, return true";
+    qCDebug(appLog) << "prepareBookmark end, return true";
     return true;
 }
 
 bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
 {
-    qDebug() << "readBookmarks start";
+    qCDebug(appLog) << "readBookmarks start";
     if (m_database.isOpen()) {
         QSqlQuery query(m_database);
 
         if (!query.prepare(" select * from bookmark where filePath = :filePath")) {
-            qInfo() << query.lastError();
+            qCInfo(appLog) << query.lastError();
             return false;
         }
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
-            qInfo() << query.lastError().text();
+            qCInfo(appLog) << query.lastError().text();
             return false;
         }
 
@@ -204,31 +205,31 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
             bookmarks.insert(query.value("bookmarkIndex").toInt());
         }
 
-        qDebug() << "readBookmarks end, return true";
+        qCDebug(appLog) << "readBookmarks end, return true";
         return true;
     }
 
-    qDebug() << "readBookmarks end, return false";
+    qCDebug(appLog) << "readBookmarks end, return false";
     return false;
 }
 
 bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
 {
-    qDebug() << "saveBookmarks start";
+    qCDebug(appLog) << "saveBookmarks start";
     if (m_database.isOpen()) {
         QSqlQuery query(m_database);
 
         Transaction transaction(m_database);
 
         if (!query.prepare("delete from bookmark where filePath = :filePath")) {
-            qInfo() << query.lastError();
+            qCInfo(appLog) << query.lastError();
             return false;
         }
 
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
-            qInfo() << query.lastError().text();
+            qCInfo(appLog) << query.lastError().text();
             return false;
         }
 
@@ -236,7 +237,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
             if (!query.prepare(" insert into "
                                " bookmark(filePath,bookmarkIndex)"
                                " VALUES(:filePath,:bookmarkIndex)")) {
-                qInfo() << query.lastError();
+                qCInfo(appLog) << query.lastError();
                 return false;
             }
 
@@ -245,45 +246,45 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
             query.bindValue(":bookmarkIndex", index);
 
             if (!query.exec()) {
-                qInfo() << query.lastError().text();
+                qCInfo(appLog) << query.lastError().text();
                 return false;
             }
         }
 
         transaction.commit();
 
-        qDebug() << "saveBookmarks end, return true";
+        qCDebug(appLog) << "saveBookmarks end, return true";
         return true;
     }
 
-    qDebug() << "saveBookmarks end, return false";
+    qCDebug(appLog) << "saveBookmarks end, return false";
     return false;
 }
 
 Database::Database(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Initializing database connection";
+    qCDebug(appLog) << "Initializing database connection";
     const QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
-    qDebug() << "Database path:" << path;
+    qCDebug(appLog) << "Database path:" << path;
     QDir().mkpath(path);
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     m_database.setDatabaseName(QDir(path).filePath("user.db"));
-    qDebug() << "Opening database:" << m_database.databaseName();
+    qCDebug(appLog) << "Opening database:" << m_database.databaseName();
     if (!m_database.open()) {
         qCritical() << "Failed to open database:" << m_database.lastError();
     }
 
     if (m_database.isOpen()) {
-        qDebug() << "Setting database optimization parameters";
+        qCDebug(appLog) << "Setting database optimization parameters";
         {
             QSqlQuery query(m_database);
             if (!query.exec("PRAGMA synchronous = OFF")) {
-                qWarning() << "Failed to set synchronous mode:" << query.lastError();
+                qCWarning(appLog) << "Failed to set synchronous mode:" << query.lastError();
             }
             if (!query.exec("PRAGMA journal_mode = MEMORY")) {
-                qWarning() << "Failed to set journal mode:" << query.lastError();
+                qCWarning(appLog) << "Failed to set journal mode:" << query.lastError();
             }
         }
 
@@ -297,7 +298,7 @@ Database::Database(QObject *parent) : QObject(parent)
             prepareBookmark();
         }
     } else {
-        qInfo() << m_database.lastError();
+        qCInfo(appLog) << m_database.lastError();
     }
-    qDebug() << "Database::Database() end";
+    qCDebug(appLog) << "Database::Database() end";
 }

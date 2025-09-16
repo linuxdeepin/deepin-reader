@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ScaleWidget.h"
+#include "ddlog.h"
 #include <QDebug>
 
 #include <QHBoxLayout>
@@ -18,18 +19,18 @@
 ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
-    qDebug() << "ScaleWidget created, parent:" << parent;
+    qCDebug(appLog) << "ScaleWidget created, parent:" << parent;
     initWidget();
 }
 
 ScaleWidget::~ScaleWidget()
 {
-    // qDebug() << "ScaleWidget destroyed";
+    // qCDebug(appLog) << "ScaleWidget destroyed";
 }
 
 void ScaleWidget::initWidget()
 {
-    qDebug() << "ScaleWidget::initWidget start";
+    qCDebug(appLog) << "ScaleWidget::initWidget start";
     QHBoxLayout *m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(10);
@@ -51,11 +52,11 @@ void ScaleWidget::initWidget()
     m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
     m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    qInfo() << "Compact mode support!!!";
+    qCInfo(appLog) << "Compact mode support!!!";
     onSizeModeChanged(DGuiApplicationHelper::instance()->sizeMode());
     connect(DGuiApplicationHelper::instance(), SIGNAL(sizeModeChanged(DGuiApplicationHelper::SizeMode)), this, SLOT(onSizeModeChanged(DGuiApplicationHelper::SizeMode)));
 #else
-    qInfo() << "Compact mode is not supported!!!";
+    qCInfo(appLog) << "Compact mode is not supported!!!";
 #endif
     m_lineEdit->lineEdit()->setTextMargins(0, 0, m_arrowBtn->width(), 0);
     m_lineEdit->setClearButtonEnabled(false);
@@ -80,12 +81,12 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(pPreBtn);
     m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(pNextBtn);
-    qDebug() << "ScaleWidget::initWidget end";
+    qCDebug(appLog) << "ScaleWidget::initWidget end";
 }
 
 void ScaleWidget::onPrevScale()
 {
-    qDebug() << "Zoom out requested";
+    qCDebug(appLog) << "Zoom out requested";
     if (m_sheet.isNull())
         return;
 
@@ -94,7 +95,7 @@ void ScaleWidget::onPrevScale()
 
 void ScaleWidget::onNextScale()
 {
-    qDebug() << "Zoom in requested";
+    qCDebug(appLog) << "Zoom in requested";
     if (m_sheet.isNull())
         return;
 
@@ -103,7 +104,7 @@ void ScaleWidget::onNextScale()
 
 void ScaleWidget::onReturnPressed()
 {
-    qDebug() << "Scale value entered:" << m_lineEdit->text();
+    qCDebug(appLog) << "Scale value entered:" << m_lineEdit->text();
     if (m_sheet.isNull())
         return;
 
@@ -114,7 +115,7 @@ void ScaleWidget::onReturnPressed()
 
 void ScaleWidget::onArrowBtnlicked()
 {
-    qDebug() << "Scale menu button clicked";
+    qCDebug(appLog) << "Scale menu button clicked";
     m_lineEdit->lineEdit()->setFocus(Qt::MouseFocusReason);
 
     ScaleMenu scaleMenu;
@@ -126,22 +127,22 @@ void ScaleWidget::onArrowBtnlicked()
 #ifdef DTKWIDGET_CLASS_DSizeMode
 void ScaleWidget::onSizeModeChanged(DGuiApplicationHelper::SizeMode sizeMode)
 {
-    qDebug() << "ScaleWidget::onSizeModeChanged start - sizeMode:" << sizeMode;
+    qCDebug(appLog) << "ScaleWidget::onSizeModeChanged start - sizeMode:" << sizeMode;
     if (sizeMode == DGuiApplicationHelper::SizeMode::CompactMode) {
-        qInfo() << "Size Mode Changed! Current SizeMode is CompactMode";
+        qCInfo(appLog) << "Size Mode Changed! Current SizeMode is CompactMode";
         m_arrowBtn->setFixedSize(CompactModeArrowBtnSize, CompactModeArrowBtnSize);
     } else {
-        qInfo() << "Size Mode Changed! Current SizeMode is " << sizeMode;
+        qCInfo(appLog) << "Size Mode Changed! Current SizeMode is " << sizeMode;
         m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
     }
     m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);
-    qDebug() << "ScaleWidget::onSizeModeChanged end";
+    qCDebug(appLog) << "ScaleWidget::onSizeModeChanged end";
 }
 #endif
 
 void ScaleWidget::onEditFinished()
 {
-    qDebug() << "Scale edit finished, current scale:" << m_sheet->operation().scaleFactor;
+    qCDebug(appLog) << "Scale edit finished, current scale:" << m_sheet->operation().scaleFactor;
     if (nullptr == m_sheet)
         return;
 
@@ -151,7 +152,7 @@ void ScaleWidget::onEditFinished()
 
 void ScaleWidget::setSheet(DocSheet *sheet)
 {
-    qDebug() << "Setting document sheet:" << (sheet ? "valid" : "null");
+    qCDebug(appLog) << "Setting document sheet:" << (sheet ? "valid" : "null");
     m_sheet = sheet;
     if (nullptr == sheet)
         return;
@@ -164,11 +165,11 @@ void ScaleWidget::setSheet(DocSheet *sheet)
     QString text = QString::number(QString::number(m_sheet->operation().scaleFactor * 100, 'f', 2).toDouble()) + "%";
     m_lineEdit->setText(m_lineEdit->fontMetrics().elidedText(text, Qt::ElideRight, m_lineEdit->width() - m_arrowBtn->width() - 2 - LineEditSpacing));
     m_lineEdit->lineEdit()->setCursorPosition(0);
-    qDebug() << "ScaleWidget::setSheet end";
+    qCDebug(appLog) << "ScaleWidget::setSheet end";
 }
 
 void ScaleWidget::clear()
 {
-    // qDebug() << "Clearing scale widget";
+    // qCDebug(appLog) << "Clearing scale widget";
     m_lineEdit->clear();
 }
