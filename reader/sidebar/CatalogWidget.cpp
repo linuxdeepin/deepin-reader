@@ -6,6 +6,7 @@
 #include "CatalogWidget.h"
 #include "CatalogTreeView.h"
 #include "DocSheet.h"
+#include "ddlog.h"
 
 #include <QVBoxLayout>
 
@@ -14,19 +15,19 @@
 CatalogWidget::CatalogWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent), m_sheet(sheet)
 {
-    qDebug() << "Creating CatalogWidget for document:" << (sheet ? sheet->filePath() : "null");
+    qCDebug(appLog) << "Creating CatalogWidget for document:" << (sheet ? sheet->filePath() : "null");
 
     initWidget();
 }
 
 CatalogWidget::~CatalogWidget()
 {
-    qDebug() << "Destroying CatalogWidget";
+    qCDebug(appLog) << "Destroying CatalogWidget";
 }
 
 void CatalogWidget::initWidget()
 {
-    qDebug() << "Initializing CatalogWidget UI components";
+    qCDebug(appLog) << "Initializing CatalogWidget UI components";
 
     QHBoxLayout *titleLayout = new QHBoxLayout;
 
@@ -59,7 +60,7 @@ void CatalogWidget::initWidget()
 
 void CatalogWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "Handling CatalogWidget resize event";
+    qCDebug(appLog) << "Handling CatalogWidget resize event";
 
     if (m_strTheme != "" && titleLabel) {
         setTitleTheme();
@@ -70,7 +71,7 @@ void CatalogWidget::resizeEvent(QResizeEvent *event)
 
 void CatalogWidget::setTitleTheme()
 {
-    qDebug() << "Updating catalog title theme:" << m_strTheme << "with width:" << this->width();
+    qCDebug(appLog) << "Updating catalog title theme:" << m_strTheme << "with width:" << this->width();
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T8);
 
@@ -84,14 +85,14 @@ void CatalogWidget::setTitleTheme()
 
 void CatalogWidget::handleOpenSuccess()
 {
-    qDebug() << "Handling document open success, loading catalog";
+    qCDebug(appLog) << "Handling document open success, loading catalog";
 
     if (nullptr == m_sheet) {
         qCritical() << "Cannot load catalog - document sheet is null";
         return;
     }
     if (bIshandOpenSuccess) {
-        qDebug() << "Catalog already loaded, skipping";
+        qCDebug(appLog) << "Catalog already loaded, skipping";
         return;
     }
 
@@ -107,7 +108,7 @@ void CatalogWidget::handleOpenSuccess()
 
 void CatalogWidget::handlePage(int index)
 {
-    qDebug() << "Handling page navigation to index:" << index;
+    qCDebug(appLog) << "Handling page navigation to index:" << index;
 
     m_pTree->setIndex(index);
     m_pTree->setRightControl(true);
@@ -115,28 +116,28 @@ void CatalogWidget::handlePage(int index)
 
 void CatalogWidget::nextPage()
 {
-    qDebug() << "Navigating to next catalog item";
+    qCDebug(appLog) << "Navigating to next catalog item";
 
     m_pTree->nextPage();
 }
 
 void CatalogWidget::prevPage()
 {
-    qDebug() << "Navigating to previous catalog item";
+    qCDebug(appLog) << "Navigating to previous catalog item";
 
     m_pTree->prevPage();
 }
 
 void CatalogWidget::pageDown()
 {
-    qDebug() << "Performing page down navigation in catalog";
+    qCDebug(appLog) << "Performing page down navigation in catalog";
 
     m_pTree->pageDownPage();
 }
 
 void CatalogWidget::pageUp()
 {
-    qDebug() << "Performing page up navigation in catalog";
+    qCDebug(appLog) << "Performing page up navigation in catalog";
 
     m_pTree->pageUpPage();
 }

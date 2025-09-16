@@ -1,0 +1,10 @@
+{
+  "name": "deepin-reader",
+  "group": "",
+  "filter": "",
+  "exec": "/usr/bin/deepin-reader",
+  "logType": "journal",
+  "logPath": "~/.cache/deepin/deepin-reader/deepin-reader.log",
+  "visible": true,
+  "version": "V1.0"
+}

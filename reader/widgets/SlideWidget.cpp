@@ -9,6 +9,7 @@
 #include "SlidePlayWidget.h"
 #include "Application.h"
 #include "ReaderImageThreadPoolManager.h"
+#include "ddlog.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -29,22 +30,22 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
     : DWidget(MainWindow::windowContainSheet(docsheet))
     , m_docSheet(docsheet)
 {
-    qDebug() << "SlideWidget created, initial page:" << docsheet->currentIndex();
+    qCDebug(appLog) << "SlideWidget created, initial page:" << docsheet->currentIndex();
     initControl();
     initImageControl();
     show();
-    qDebug() << "SlideWidget initialized";
+    qCDebug(appLog) << "SlideWidget initialized";
 }
 
 SlideWidget::~SlideWidget()
 {
-    // qDebug() << "SlideWidget destroyed";
+    // qCDebug(appLog) << "SlideWidget destroyed";
     setWidgetState(false);
 }
 
 void SlideWidget::initControl()
 {
-    qDebug() << "Initializing slide widget";
+    qCDebug(appLog) << "Initializing slide widget";
     m_offset = 0;
     m_curPageIndex = m_docSheet->currentIndex();
     m_preIndex = m_curPageIndex;
@@ -53,7 +54,7 @@ void SlideWidget::initControl()
     setAttribute(Qt::WA_DeleteOnClose);
     setWidgetState(true);
     if (parentWidget()) {
-        qDebug() << "Parent widget is valid";
+        qCDebug(appLog) << "Parent widget is valid";
         parentWidget()->stackUnder(this);
         connect(parentWidget(), &QObject::destroyed, this, &SlideWidget::onParentDestroyed);
     }
@@ -71,7 +72,7 @@ void SlideWidget::initControl()
         width = dApp->primaryScreen()->size().width();
         height = dApp->primaryScreen()->size().height();
     }
-    qInfo() << QString("screenNum:%1 width:%2 height:%3").arg(screenNum).arg(width).arg(height);
+    qCInfo(appLog) << QString("screenNum:%1 width:%2 height:%3").arg(screenNum).arg(width).arg(height);
 #else
     QScreen *screen = QApplication::primaryScreen();
     int width = screen->size().width();
@@ -94,21 +95,21 @@ void SlideWidget::initControl()
     m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
-        qDebug() << "Normal mode";
+        qCDebug(appLog) << "Normal mode";
         m_slidePlayWidget->setFixedWidth(250);
         m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
     } else {
-        qDebug() << "Compact mode";
+        qCDebug(appLog) << "Compact mode";
         m_slidePlayWidget->setFixedWidth(194);
         m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if (sizeMode == DGuiApplicationHelper::NormalMode) {
-            qDebug() << "Normal mode";
+            qCDebug(appLog) << "Normal mode";
             m_slidePlayWidget->setFixedWidth(250);
             m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
         } else {
-            qDebug() << "Compact mode";
+            qCDebug(appLog) << "Compact mode";
             m_slidePlayWidget->setFixedWidth(194);
             m_slidePlayWidget->move((width - m_slidePlayWidget->width()) / 2, height - 100);
         }
@@ -120,7 +121,7 @@ void SlideWidget::initControl()
 
 void SlideWidget::initImageControl()
 {
-    qDebug() << "Initializing image control";
+    qCDebug(appLog) << "Initializing image control";
     m_imageTimer = new QTimer(this);
     m_imageTimer->setInterval(3000);
     connect(m_imageTimer, &QTimer::timeout, this, &SlideWidget::onImageShowTimeOut);
@@ -131,38 +132,38 @@ void SlideWidget::initImageControl()
     m_imageAnimation->setDuration(500);
     connect(m_imageAnimation, &QPropertyAnimation::valueChanged, this, &SlideWidget::onImagevalueChanged);
     connect(m_imageAnimation, &QPropertyAnimation::finished, this, &SlideWidget::onImageAniFinished);
-    qDebug() << "Image control initialized";
+    qCDebug(appLog) << "Image control initialized";
 }
 
 void SlideWidget::onImagevalueChanged(const QVariant &variant)
 {
-    qDebug() << "Image value changed:" << variant.toInt();
+    qCDebug(appLog) << "Image value changed:" << variant.toInt();
     m_offset = variant.toInt();
     update();
 }
 
 void SlideWidget::onImageAniFinished()
 {
-    qDebug() << "Image animation finished";
+    qCDebug(appLog) << "Image animation finished";
     bool autoplay = m_slidePlayWidget->getPlayStatus();
     if (autoplay) {
-        qDebug() << "Autoplay is true, starting image timer";
+        qCDebug(appLog) << "Autoplay is true, starting image timer";
         m_imageTimer->start();
     } else {
-        qDebug() << "Autoplay is false, stopping image timer";
+        qCDebug(appLog) << "Autoplay is false, stopping image timer";
         m_imageTimer->stop();
     }
 }
 
 void SlideWidget::onParentDestroyed()
 {
-    qDebug() << "Parent destroyed";
+    qCDebug(appLog) << "Parent destroyed";
     m_parentIsDestroyed = true;
 }
 
 void SlideWidget::paintEvent(QPaintEvent *event)
 {
-    // qDebug() << "Painting slide widget";
+    // qCDebug(appLog) << "Painting slide widget";
     DWidget::paintEvent(event);
 
     QPainter painter(this);
@@ -174,25 +175,25 @@ void SlideWidget::paintEvent(QPaintEvent *event)
     int roffset = 0;
 
     if (m_blefttoright) {
-        // qDebug() << "Left to right";
+        // qCDebug(appLog) << "Left to right";
         roffset = m_offset - width();
         painter.drawPixmap(m_offset, 0, m_lpixmap);
         painter.drawPixmap(roffset, 0, m_rpixmap);
     } else {
-        // qDebug() << "Right to left";
+        // qCDebug(appLog) << "Right to left";
         roffset = m_offset + width();
         painter.drawPixmap(m_offset, 0, m_lpixmap);
         painter.drawPixmap(roffset, 0, m_rpixmap);
     }
 
     if (m_rpixmap.isNull()) {
-        // qDebug() << "RPixmap is null";
+        // qCDebug(appLog) << "RPixmap is null";
         if (m_curPageIndex == m_preIndex) roffset = 0;
         m_loadSpinner->move(roffset + (this->width() - m_loadSpinner->width()) / 2, (this->height() - m_loadSpinner->height()) / 2);
         m_loadSpinner->start();
         m_loadSpinner->show();
     } else {
-        qDebug() << "RPixmap is not null";
+        qCDebug(appLog) << "RPixmap is not null";
         m_loadSpinner->hide();
         m_loadSpinner->stop();
     }
@@ -200,25 +201,25 @@ void SlideWidget::paintEvent(QPaintEvent *event)
 
 void SlideWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse move event";
+    // qCDebug(appLog) << "Mouse move event";
     DWidget::mouseMoveEvent(event);
     m_slidePlayWidget->showControl();
 }
 
 void SlideWidget::setWidgetState(bool full)
 {
-    qDebug() << "Setting widget state, fullscreen:" << full;
+    qCDebug(appLog) << "Setting widget state, fullscreen:" << full;
     if (m_parentIsDestroyed || !parentWidget())
         return;
 
     if (full) {
-        qDebug() << "Setting widget state to fullscreen";
+        qCDebug(appLog) << "Setting widget state to fullscreen";
         m_nOldState = parentWidget()->windowState(); // 保存幻灯片播放前的windowstate
         if (!m_nOldState.testFlag(Qt::WindowFullScreen)) {
             parentWidget()->setWindowState(parentWidget()->windowState() | Qt::WindowFullScreen);
         }
     } else if (parentWidget()->windowState().testFlag(Qt::WindowFullScreen) && !m_nOldState.testFlag(Qt::WindowFullScreen)) {
-        qDebug() << "Setting widget state to normal";
+        qCDebug(appLog) << "Setting widget state to normal";
         parentWidget()->setWindowState(parentWidget()->windowState() & ~Qt::WindowFullScreen);
         m_nOldState = parentWidget()->windowState();
     }
@@ -226,7 +227,7 @@ void SlideWidget::setWidgetState(bool full)
 
 void SlideWidget::onPreBtnClicked()
 {
-    qDebug() << "Previous button clicked, current page:" << m_curPageIndex;
+    qCDebug(appLog) << "Previous button clicked, current page:" << m_curPageIndex;
     //已到第一页时，再次点击上一页按钮
     if(m_curPageIndex <= 0) {
         m_slidePlayWidget->updateProcess(m_curPageIndex - 1, m_docSheet->pageCount());
@@ -238,22 +239,22 @@ void SlideWidget::onPreBtnClicked()
     m_curPageIndex--;
 
     if (m_curPageIndex >= m_docSheet->pageCount()) {
-        qDebug() << "Current page index is greater than page count, setting to 0";
+        qCDebug(appLog) << "Current page index is greater than page count, setting to 0";
         m_curPageIndex = 0;
     } else if (m_curPageIndex < 0) {
-        qDebug() << "Current page index is less than 0, setting to page count - 1";
+        qCDebug(appLog) << "Current page index is less than 0, setting to page count - 1";
         m_curPageIndex = m_docSheet->pageCount() - 1;
     }
 
     playImage();
-    qDebug() << "Previous button clicked end";
+    qCDebug(appLog) << "Previous button clicked end";
 }
 
 void SlideWidget::onPlayBtnClicked()
 {
-    qDebug() << "Play button clicked, new state:" << !m_slidePlayWidget->getPlayStatus();
+    qCDebug(appLog) << "Play button clicked, new state:" << !m_slidePlayWidget->getPlayStatus();
     if (m_slidePlayWidget->getPlayStatus()) {
-        qDebug() << "Play button clicked, play status is true";
+        qCDebug(appLog) << "Play button clicked, play status is true";
         //最后一页点播放时，则返回开始播放
         if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
             m_curPageIndex = 0;
@@ -263,18 +264,18 @@ void SlideWidget::onPlayBtnClicked()
         m_canRestart = true;
         m_imageTimer->start();
     } else {
-        qDebug() << "Play button clicked, play status is false";
+        qCDebug(appLog) << "Play button clicked, play status is false";
         m_imageTimer->stop();
     }
-    qDebug() << "Play button clicked end";
+    qCDebug(appLog) << "Play button clicked end";
 }
 
 void SlideWidget::onNextBtnClicked()
 {
-    qDebug() << "Next button clicked, current page:" << m_curPageIndex;
+    qCDebug(appLog) << "Next button clicked, current page:" << m_curPageIndex;
     //已到最后一页时，再次点击下一页按钮
     if(m_curPageIndex >= m_docSheet->pageCount() - 1) {
-        qDebug() << "Current page index is greater than page count, setting to 0";
+        qCDebug(appLog) << "Current page index is greater than page count, setting to 0";
         m_slidePlayWidget->updateProcess(m_curPageIndex + 1, m_docSheet->pageCount());
         return;
     }
@@ -283,37 +284,37 @@ void SlideWidget::onNextBtnClicked()
     m_curPageIndex++;
 
     if (m_curPageIndex >= m_docSheet->pageCount()) {
-        qDebug() << "Current page index is greater than page count, setting to 0";
+        qCDebug(appLog) << "Current page index is greater than page count, setting to 0";
         m_curPageIndex = 0;
     } else if (m_curPageIndex < 0) {
-        qDebug() << "Current page index is less than 0, setting to page count - 1";
+        qCDebug(appLog) << "Current page index is less than 0, setting to page count - 1";
         m_curPageIndex = m_docSheet->pageCount() - 1;
     }
 
     playImage();
-    qDebug() << "Next button clicked end";
+    qCDebug(appLog) << "Next button clicked end";
 }
 
 void SlideWidget::onExitBtnClicked()
 {
-    qDebug() << "Exit button clicked";
+    qCDebug(appLog) << "Exit button clicked";
     m_docSheet->closeSlide();
 }
 
 void SlideWidget::playImage()
 {
-    qDebug() << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
+    qCDebug(appLog) << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
              << "direction:" << (m_blefttoright ? "right" : "left");
     m_imageAnimation->stop();
 
     if (m_preIndex <= m_curPageIndex) { //正序切换(包括第一页切到最后一页)
-        qDebug() << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
+        qCDebug(appLog) << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
                  << "direction:" << "right";
         m_blefttoright = false;
         m_imageAnimation->setStartValue(0);
         m_imageAnimation->setEndValue(0 - width());
     } else { //逆序切换(包括最后一页切到第一页)
-        qDebug() << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
+        qCDebug(appLog) << "Playing image, from:" << m_preIndex << "to:" << m_curPageIndex
                  << "direction:" << "left";
         m_blefttoright = true;
         m_imageAnimation->setStartValue(0);
@@ -327,23 +328,23 @@ void SlideWidget::playImage()
     onFetchImage(m_curPageIndex);
     m_imageAnimation->start();
     m_imageTimer->stop();
-    qDebug() << "Playing image end";
+    qCDebug(appLog) << "Playing image end";
 }
 
 void SlideWidget::onImageShowTimeOut()
 {
-    qDebug() << "Image show timeout, moving to next page";
+    qCDebug(appLog) << "Image show timeout, moving to next page";
     m_preIndex = m_curPageIndex;
 
     m_curPageIndex++;
 
     if (m_curPageIndex >= m_docSheet->pageCount()) {
-        qDebug() << "Current page index is greater than page count, setting to 0";
+        qCDebug(appLog) << "Current page index is greater than page count, setting to 0";
         if (m_canRestart) {
             m_curPageIndex = 0;
 
         } else {
-            qDebug() << "Current page index is greater than page count, setting to page count - 1";
+            qCDebug(appLog) << "Current page index is greater than page count, setting to page count - 1";
             m_curPageIndex = m_docSheet->pageCount() - 1;
 
             m_slidePlayWidget->setPlayStatus(false);
@@ -355,12 +356,12 @@ void SlideWidget::onImageShowTimeOut()
     m_canRestart = false;
 
     playImage();
-    qDebug() << "Image show timeout end";
+    qCDebug(appLog) << "Image show timeout end";
 }
 
 QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
 {
-    qDebug() << "Drawing image";
+    qCDebug(appLog) << "Drawing image";
     QPixmap pixmap(static_cast<int>(this->width() * dApp->devicePixelRatio()), static_cast<int>(this->height() * dApp->devicePixelRatio()));
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     pixmap.fill(Qt::transparent);
@@ -370,65 +371,65 @@ QPixmap SlideWidget::drawImage(const QPixmap &srcImage)
     qreal iheight = srcImage.height();
     painter.drawPixmap(static_cast<int>((pixmap.width() - iwidth) * 0.5 / dApp->devicePixelRatio()),
                        static_cast<int>((pixmap.height() - iheight) * 0.5 / dApp->devicePixelRatio()), srcImage);
-    qDebug() << "Drawing image end";
+    qCDebug(appLog) << "Drawing image end";
     return pixmap;
 }
 
 void SlideWidget::mousePressEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse press event";
+    // qCDebug(appLog) << "Mouse press event";
     DWidget::mousePressEvent(event);
     if (event->button() == Qt::RightButton)
         onExitBtnClicked();
     else if (event->button() == Qt::LeftButton)
         m_slidePlayWidget->showControl();
-    // qDebug() << "Mouse press event end";
+    // qCDebug(appLog) << "Mouse press event end";
 }
 
 void SlideWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse release event";
+    // qCDebug(appLog) << "Mouse release event";
     DWidget::mouseReleaseEvent(event);
     onNextBtnClicked();
 }
 
 void SlideWidget::wheelEvent(QWheelEvent *event)
 {
-    // qDebug() << "Wheel event";
+    // qCDebug(appLog) << "Wheel event";
     DWidget::wheelEvent(event);
     if (event->angleDelta().y() > 0) {
-        // qDebug() << "Wheel event, angle delta y is greater than 0";
+        // qCDebug(appLog) << "Wheel event, angle delta y is greater than 0";
         onPreBtnClicked();
     } else {
-        // qDebug() << "Wheel event, angle delta y is less than 0";
+        // qCDebug(appLog) << "Wheel event, angle delta y is less than 0";
         onNextBtnClicked();
     }
 }
 
 void SlideWidget::handleKeyPressEvent(const QString &sKey)
 {
-    // qDebug() << "Handling key press event:" << sKey;
+    // qCDebug(appLog) << "Handling key press event:" << sKey;
     if (sKey == Dr::key_space) {
-        // qDebug() << "Handling key press event, key is space";
+        // qCDebug(appLog) << "Handling key press event, key is space";
         bool autoplay = m_slidePlayWidget->getPlayStatus();
         m_slidePlayWidget->setPlayStatus(!autoplay);
     } else if (sKey == Dr::key_left || sKey == Dr::key_up) {
-        // qDebug() << "Handling key press event, key is left or up";
+        // qCDebug(appLog) << "Handling key press event, key is left or up";
         onPreBtnClicked();
     } else if (sKey == Dr::key_right || sKey == Dr::key_down) {
-        // qDebug() << "Handling key press event, key is right or down";
+        // qCDebug(appLog) << "Handling key press event, key is right or down";
         onNextBtnClicked();
     }
-    // qDebug() << "Handling key press event end";
+    // qCDebug(appLog) << "Handling key press event end";
 }
 
 void SlideWidget::onFetchImage(int index)
 {
-    qDebug() << "Fetching image for page:" << index;
+    qCDebug(appLog) << "Fetching image for page:" << index;
     const QPixmap &pix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, index);
 
     if (!pix.isNull() && qMax(pix.width(), pix.height()) == qMin(this->width() - 40, this->height() - 20)) {
-        qDebug() << "Fetching image for page:" << index << "is not null";
+        qCDebug(appLog) << "Fetching image for page:" << index << "is not null";
         onUpdatePageImage(index);
         return;
     }
@@ -441,25 +442,25 @@ void SlideWidget::onFetchImage(int index)
     tParam.boundedRect = QSize(this->width(), this->height());
     tParam.slotFun = "onUpdatePageImage";
     ReaderImageThreadPoolManager::getInstance()->addgetDocImageTask(tParam);
-    qDebug() << "Fetching image for page:" << index << "end";
+    qCDebug(appLog) << "Fetching image for page:" << index << "end";
 }
 
 void SlideWidget::onUpdatePageImage(int pageIndex)
 {
-    qDebug() << "Updating page image:" << pageIndex
+    qCDebug(appLog) << "Updating page image:" << pageIndex
              << "current:" << m_curPageIndex << "previous:" << m_preIndex;
     if (pageIndex == m_preIndex) {
-        qDebug() << "Updating page image, previous:" << pageIndex;
+        qCDebug(appLog) << "Updating page image, previous:" << pageIndex;
         const QPixmap &lPix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, pageIndex);
         m_lpixmap = drawImage(lPix);
         update();
     }
 
     if (pageIndex == m_curPageIndex) {
-        qDebug() << "Updating page image, current:" << pageIndex;
+        qCDebug(appLog) << "Updating page image, current:" << pageIndex;
         const QPixmap &rPix = ReaderImageThreadPoolManager::getInstance()->getImageForDocSheet(m_docSheet, pageIndex);
         m_rpixmap = drawImage(rPix);
         update();
     }
-    qDebug() << "Updating page image end";
+    qCDebug(appLog) << "Updating page image end";
 }

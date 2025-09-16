@@ -6,6 +6,7 @@
 #include "BookMarkDelegate.h"
 #include "SideBarImageViewModel.h"
 #include "Application.h"
+#include "ddlog.h"
 
 #include <DGuiApplicationHelper>
 
@@ -17,17 +18,17 @@
 BookMarkDelegate::BookMarkDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
-    qInfo() << "Creating BookMarkDelegate with parent widget:" << parent;
+    qCInfo(appLog) << "Creating BookMarkDelegate with parent widget:" << parent;
 
     m_parent = parent;
 }
 
 void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug() << "Painting bookmark item at row:" << index.row();
+    qCDebug(appLog) << "Painting bookmark item at row:" << index.row();
 
     if (index.isValid()) {
-        qDebug() << "Index is valid, proceeding with bookmark item rendering";
+        qCDebug(appLog) << "Index is valid, proceeding with bookmark item rendering";
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
         QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
 
@@ -37,7 +38,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         const QRect &rect = QRect(option.rect.x() + 10, option.rect.center().y() - scalePixSize.height() / 2, scalePixSize.width(), scalePixSize.height());
 
         if (!pixmap.isNull()) {
-            qDebug() << "Rendering bookmark thumbnail image";
+            qCDebug(appLog) << "Rendering bookmark thumbnail image";
             const QPixmap &scalePix = pixmap.scaled(pageSize);
             //clipPath pixmap
             painter->save();
@@ -53,7 +54,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setBrush(Qt::NoBrush);
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
         bool isSelected = m_parent->selectionModel()->isRowSelected(index.row(), index.parent());
-        qDebug() << "Drawing selection border - selected:" << isSelected;
+        qCDebug(appLog) << "Drawing selection border - selected:" << isSelected;
         if (isSelected) {
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
             painter->drawRoundedRect(rect, borderRadius, borderRadius);
@@ -72,7 +73,7 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         font = DFontSizeManager::instance()->t8(font);
         painter->setFont(font);
         const QString &pageText = index.data(ImageinfoType_e::IMAGE_INDEX_TEXT).toString();
-        qDebug() << "Rendering page number text:" << pageText;
+        qCDebug(appLog) << "Rendering page number text:" << pageText;
         int pagetextHeight = painter->fontMetrics().height();
         painter->drawText(rect.right() + 18, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, pageText);
         painter->restore();

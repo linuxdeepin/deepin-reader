@@ -9,52 +9,53 @@
 #include <QJsonDocument>
 
 #include "eventlogutils.h"
+#include "ddlog.h"
 
 EventLogUtils *EventLogUtils::mInstance(nullptr);
 
 EventLogUtils &EventLogUtils::get()
 {
     if (mInstance == nullptr) {
-        qDebug() << "Creating new EventLogUtils instance";
+        qCDebug(appLog) << "Creating new EventLogUtils instance";
         mInstance = new EventLogUtils;
     }
-    qDebug() << "Returning EventLogUtils instance";
+    qCDebug(appLog) << "Returning EventLogUtils instance";
     return *mInstance;
 }
 
 EventLogUtils::EventLogUtils()
 {
-    qDebug() << "Loading event log library";
+    qCDebug(appLog) << "Loading event log library";
     QLibrary library("libdeepin-event-log.so");
 
-    qDebug() << "Resolving Initialize function";
+    qCDebug(appLog) << "Resolving Initialize function";
     init = reinterpret_cast<bool (*)(const std::string &, bool)>(library.resolve("Initialize"));
-    qDebug() << "Resolving WriteEventLog function";
+    qCDebug(appLog) << "Resolving WriteEventLog function";
     writeEventLog = reinterpret_cast<void (*)(const std::string &)>(library.resolve("WriteEventLog"));
 
     if (init == nullptr) {
-        qWarning() << "Failed to resolve Initialize function";
+        qCWarning(appLog) << "Failed to resolve Initialize function";
         return;
     }
 
-    qDebug() << "Initializing event log for deepin-reader";
+    qCDebug(appLog) << "Initializing event log for deepin-reader";
     if (!init("deepin-reader", true)) {
-        qWarning() << "Failed to initialize event log";
+        qCWarning(appLog) << "Failed to initialize event log";
     } else {
-        qDebug() << "Event log initialized successfully";
+        qCDebug(appLog) << "Event log initialized successfully";
     }
 }
 
 void EventLogUtils::writeLogs(QJsonObject &data)
 {
     if (writeEventLog == nullptr) {
-        qWarning() << "WriteEventLog function not available";
+        qCWarning(appLog) << "WriteEventLog function not available";
         return;
     }
 
-    qDebug() << "Writing event log data";
+    qCDebug(appLog) << "Writing event log data";
     QByteArray jsonData = QJsonDocument(data).toJson(QJsonDocument::Compact);
-    qDebug() << "Event log content:" << jsonData;
+    qCDebug(appLog) << "Event log content:" << jsonData;
     writeEventLog(jsonData.toStdString());
-    qDebug() << "Event log written successfully";
+    qCDebug(appLog) << "Event log written successfully";
 }

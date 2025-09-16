@@ -7,11 +7,12 @@
 #include "HandleMenu.h"
 #include "DocSheet.h"
 #include "Global.h"
+#include "ddlog.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
     : DMenu(parent)
 {
-    qDebug() << "Initializing TitleMenu...";
+    qCDebug(appLog) << "Initializing TitleMenu...";
     QStringList firstActionList = QStringList() << tr("New window") << tr("New tab");
     QStringList firstActionObjList = QStringList() << "New window" << "New tab";
     createActionMap(firstActionList, firstActionObjList);
@@ -45,9 +46,9 @@ TitleMenu::TitleMenu(DWidget *parent)
 
 void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 {
-    qDebug() << "Current sheet changed";
+    qCDebug(appLog) << "Current sheet changed";
     if (nullptr == sheet || !sheet->opened()) {
-        qWarning() << "Invalid sheet, disabling all actions";
+        qCWarning(appLog) << "Invalid sheet, disabling all actions";
         disableAllAction();
         return;
     }
@@ -64,62 +65,62 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
     QAction *searchAction = this->findChild<QAction *>("Search");
     if (searchAction) {
         if (sheet->fileType() == Dr::PDF || sheet->fileType() == Dr::DOCX) {
-            qDebug() << "Enabling search for PDF/DOCX";
+            qCDebug(appLog) << "Enabling search for PDF/DOCX";
             searchAction->setVisible(true);
         } else {
-            qDebug() << "Disabling search for other formats";
+            qCDebug(appLog) << "Disabling search for other formats";
             searchAction->setVisible(false);
         }
     }
-    qDebug() << "TitleMenu::onCurSheetChanged end";
+    qCDebug(appLog) << "TitleMenu::onCurSheetChanged end";
 }
 
 void TitleMenu::onActionTriggered()
 {
-    qDebug() << "Menu action triggered";
+    qCDebug(appLog) << "Menu action triggered";
     QAction *action = static_cast<QAction *>(sender());
     if (nullptr == action) {
-        qWarning() << "Action triggered but sender is null";
+        qCWarning(appLog) << "Action triggered but sender is null";
         return;
     }
 
-    qDebug() << "Menu action triggered:" << action->objectName();
+    qCDebug(appLog) << "Menu action triggered:" << action->objectName();
     emit sigActionTriggered(action->objectName());
 }
 
 void TitleMenu::disableAllAction()
 {
-    qDebug() << "Disabling all menu actions";
+    qCDebug(appLog) << "Disabling all menu actions";
     QStringList actiontextlist;
     actiontextlist << "Save" << "Save as" << "Display in file manager" << "Magnifer" << "Search" << "Print";
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (actiontextlist.indexOf(a->objectName()) != -1) {
             a->setDisabled(true);
-            qDebug() << "Disabled action:" << a->objectName();
+            qCDebug(appLog) << "Disabled action:" << a->objectName();
         }
     }
     m_handleMenu->setDisabled(true);
-    qDebug() << "Disabled all menu actions";
+    qCDebug(appLog) << "Disabled all menu actions";
 }
 
 void TitleMenu::disableSaveButton(bool disable)
 {
-    qDebug() << (disable ? "Disabling" : "Enabling") << "Save button";
+    qCDebug(appLog) << (disable ? "Disabling" : "Enabling") << "Save button";
     const QList<QAction *> &actions = this->findChildren<QAction *>();
     foreach (QAction *a, actions) {
         if (a->text() == tr("Save")) {
             a->setDisabled(disable);
-            qDebug() << "Save button state:" << (disable ? "disabled" : "enabled");
+            qCDebug(appLog) << "Save button state:" << (disable ? "disabled" : "enabled");
             break;
         }
     }
-    qDebug() << "Save button state:" << (disable ? "disabled" : "enabled");
+    qCDebug(appLog) << "Save button state:" << (disable ? "disabled" : "enabled");
 }
 
 void TitleMenu::createActionMap(const QStringList &actionList, const QStringList &actionObjList)
 {
-    qDebug() << "Creating action map";
+    qCDebug(appLog) << "Creating action map";
     int nFirstSize = actionList.size();
     for (int iLoop = 0; iLoop < nFirstSize; iLoop++) {
         QString sActionName = actionList.at(iLoop);
@@ -128,16 +129,16 @@ void TitleMenu::createActionMap(const QStringList &actionList, const QStringList
         QAction *action = createAction(sActionName, sObjName);
         connect(action, SIGNAL(triggered()), this, SLOT(onActionTriggered()));
     }
-    qDebug() << "Created action map";
+    qCDebug(appLog) << "Created action map";
 }
 
 QAction *TitleMenu::createAction(const QString &actionName, const QString &objName)
 {
-    qDebug() << "Creating action:" << actionName;
+    qCDebug(appLog) << "Creating action:" << actionName;
     QAction *action = new QAction(actionName, this);
     action->setObjectName(objName);
     action->setDisabled(true);
     this->addAction(action);
-    qDebug() << "Created action:" << actionName;
+    qCDebug(appLog) << "Created action:" << actionName;
     return action;
 }

@@ -119,6 +119,25 @@ install(FILES
 
 # 安装帮助文件
 install(DIRECTORY
-    ${CMAKE_SOURCE_DIR}/assets/
+    ${CMAKE_SOURCE_DIR}/assets/deepin-reader
     DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application
 )
+
+# log viewer config
+file(GLOB LOGCONFIG_FILES "${CMAKE_SOURCE_DIR}/assets/logconfig/*.json")
+install(FILES ${LOGCONFIG_FILES} DESTINATION share/deepin-log-viewer/deepin-log.conf.d)
+
+# 安装 DConfig 配置文件，1040及以下的默认DTK环境不支持DConfig
+set(DCONFIG_APPID org.deepin.reader)
+file(GLOB DCONFIG_FILES "${CMAKE_SOURCE_DIR}/assets/configs/*.json")
+if(DEFINED DSG_DATA_DIR)
+    if (DTK_VERSION_MAJOR EQUAL "6")
+        dtk_add_config_meta_files(APPID ${DCONFIG_APPID} FILES ${DCONFIG_FILES})
+    else()
+        dconfig_meta_files(APPID ${DCONFIG_APPID} FILES ${DCONFIG_FILES})
+    endif()
+    message("-- DConfig is supported by DTK")
+else()
+    install(FILES ${DCONFIG_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${DCONFIG_APPID})
+    message("-- DConfig is not supported by DTK")
+endif()

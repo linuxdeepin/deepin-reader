@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "Global.h"
+#include "ddlog.h"
 
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -13,46 +14,46 @@
 namespace Dr {
 FileType fileType(const QString &filePath)
 {
-    qDebug() << "Detecting file type for:" << filePath;
+    qCDebug(appLog) << "Detecting file type for:" << filePath;
     FileType fileType = FileType::Unknown;
 
     //具体的MIME文件类型可以参考https://baike.baidu.com/item/MIME/2900607?fr=aladdin
     const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filePath, QMimeDatabase::MatchContent);
 
-    qInfo() << "File MIME type:" << mimeType.name();
-    qDebug() << "Matching file type...";
+    qCInfo(appLog) << "File MIME type:" << mimeType.name();
+    qCDebug(appLog) << "Matching file type...";
     if (mimeType.name() == QLatin1String("application/pdf")) {
-        qDebug() << "Matched PDF file type";
+        qCDebug(appLog) << "Matched PDF file type";
         fileType = PDF;
     } else if (mimeType.name() == QLatin1String("application/postscript")) {
-        qDebug() << "Matched PS file type";
+        qCDebug(appLog) << "Matched PS file type";
         fileType = PS;
     } else if (mimeType.name() == QLatin1String("image/vnd.djvu") || mimeType.name() == QLatin1String("image/vnd.djvu+multipage")) {
-        qDebug() << "Matched DJVU file type";
+        qCDebug(appLog) << "Matched DJVU file type";
         fileType = DJVU;
     
 #ifdef XPS_SUPPORT_ENABLED
     } else if (filePath.right(4).toLower() == ".xps") {
-        qDebug() << "Matched XPS file type by extension";
+        qCDebug(appLog) << "Matched XPS file type by extension";
         fileType = XPS;
     } else if (mimeType.name() == QLatin1String("application/vnd.ms-xpsdocument")) {
-        qDebug() << "Matched XPS file type by MIME type";
+        qCDebug(appLog) << "Matched XPS file type by MIME type";
         fileType = XPS;
 #endif
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "pptx") {
-        qDebug() << "Matched PPTX file type";
+        qCDebug(appLog) << "Matched PPTX file type";
         fileType = PPTX;
     } else if (mimeType.name() == QLatin1String("application/zip") && filePath.right(4) == "docx") {
-        qDebug() << "Matched DOCX file type (zip)";
+        qCDebug(appLog) << "Matched DOCX file type (zip)";
         fileType = DOCX;
     } else if (mimeType.name() == QLatin1String("application/x-ole-storage") && filePath.right(4) == "docx") {
-        qDebug() << "Matched DOCX file type (ole)";
+        qCDebug(appLog) << "Matched DOCX file type (ole)";
         fileType = DOCX;
     } else {
-        qDebug() << "Unknown file type";
+        qCDebug(appLog) << "Unknown file type";
     }
 
-    qDebug() << "Final file type:" << static_cast<int>(fileType);
+    qCDebug(appLog) << "Final file type:" << static_cast<int>(fileType);
     return fileType;
 }
 

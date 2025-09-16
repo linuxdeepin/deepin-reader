@@ -7,6 +7,7 @@
 #include "SideBarImageViewModel.h"
 #include "Utils.h"
 #include "Application.h"
+#include "ddlog.h"
 
 #include <DGuiApplicationHelper>
 #include <QDebug>
@@ -19,15 +20,15 @@ SearchResDelegate::SearchResDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
     m_parent = parent;
-    qDebug() << "SearchResDelegate created with parent:" << parent;
+    qCDebug(appLog) << "SearchResDelegate created with parent:" << parent;
 }
 
 
 void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug() << "Entering SearchResDelegate::paint() for row:" << index.row();
+    qCDebug(appLog) << "Entering SearchResDelegate::paint() for row:" << index.row();
     if (index.isValid()) {
-        qDebug() << "Painting valid index for row:" << index.row();
+        qCDebug(appLog) << "Painting valid index for row:" << index.row();
         const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
         QSize pageSize = index.data(ImageinfoType_e::IMAGE_PAGE_SIZE).toSize();
 
@@ -110,16 +111,16 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
         painter->restore();
     } else {
-        qWarning() << "Invalid index in SearchResDelegate::paint()";
+        qCWarning(appLog) << "Invalid index in SearchResDelegate::paint()";
     }
-    qDebug() << "Exiting SearchResDelegate::paint() for row:" << index.row();
+    qCDebug(appLog) << "Exiting SearchResDelegate::paint() for row:" << index.row();
 }
 
 QSize SearchResDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug() << "Entering SearchResDelegate::sizeHint()";
+    qCDebug(appLog) << "Entering SearchResDelegate::sizeHint()";
     QSize size = DStyledItemDelegate::sizeHint(option, index);
-    qDebug() << "Exiting SearchResDelegate::sizeHint(), returning size:" << size;
+    qCDebug(appLog) << "Exiting SearchResDelegate::sizeHint(), returning size:" << size;
     return size;
 }
 

@@ -7,6 +7,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "RoundColorWidget.h"
+#include "ddlog.h"
 #include <QDebug>
 
 #include <DFontSizeManager>
@@ -18,34 +19,34 @@
 ColorWidgetAction::ColorWidgetAction(DWidget *pParent)
     : QWidgetAction(pParent)
 {
-    qDebug() << "ColorWidgetAction created, parent:" << pParent;
+    qCDebug(appLog) << "ColorWidgetAction created, parent:" << pParent;
     initWidget(pParent);
     setSeparator(true);
 }
 
 void ColorWidgetAction::slotBtnClicked(int index)
 {
-    qDebug() << "Color button clicked, index:" << index;
+    qCDebug(appLog) << "Color button clicked, index:" << index;
     auto btnList = this->defaultWidget()->findChildren<RoundColorWidget *>();
     foreach (auto btn, btnList) {
         int btnIndex = btn->objectName().toInt();
         if (btnIndex == index) {
-            // qDebug() << "Color button clicked, index:" << index << "is selected";
+            // qCDebug(appLog) << "Color button clicked, index:" << index << "is selected";
             btn->setSelected(true);
 
             Utils::setHiglightColorIndex(index);
             emit sigBtnGroupClicked();
         } else {
-            // qDebug() << "Color button clicked, index:" << index << "is not selected";
+            // qCDebug(appLog) << "Color button clicked, index:" << index << "is not selected";
             btn->setSelected(false);
         }
     }
-    qDebug() << "Highlight color changed to index:" << index;
+    qCDebug(appLog) << "Highlight color changed to index:" << index;
 }
 
 void ColorWidgetAction::initWidget(DWidget *pParent)
 {
-    qDebug() << "Initializing color widget with" << Utils::getHiglightColorList().size() << "colors";
+    qCDebug(appLog) << "Initializing color widget with" << Utils::getHiglightColorList().size() << "colors";
     DWidget *pWidget = new DWidget(pParent);
     setDefaultWidget(pWidget);
 
@@ -70,7 +71,7 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
         sigMap->setMapping(btn, iLoop);
 
         buttonLayout->addWidget(btn);
-        qDebug() << "Color widget initialization completed";
+        qCDebug(appLog) << "Color widget initialization completed";
     }
     connect(sigMap, SIGNAL(mapped(int)), SLOT(slotBtnClicked(int)));
 

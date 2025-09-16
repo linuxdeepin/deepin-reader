@@ -7,30 +7,31 @@
 #include "DocSheet.h"
 #include "PageRenderThread.h"
 #include "Application.h"
+#include "ddlog.h"
 
 #include <QTimer>
 #include <QDebug>
 
 ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
 {
-    // qDebug() << "ImagePageInfo_t created for page index:" << index;
+    // qCDebug(appLog) << "ImagePageInfo_t created for page index:" << index;
 }
 
 bool ImagePageInfo_t::operator == (const ImagePageInfo_t &other) const
 {
-    // qDebug() << "ImagePageInfo_t == other";
+    // qCDebug(appLog) << "ImagePageInfo_t == other";
     return (this->pageIndex == other.pageIndex);
 }
 
 bool ImagePageInfo_t::operator < (const ImagePageInfo_t &other) const
 {
-    // qDebug() << "ImagePageInfo_t < other";
+    // qCDebug(appLog) << "ImagePageInfo_t < other";
     return (this->pageIndex < other.pageIndex);
 }
 
 bool ImagePageInfo_t::operator > (const ImagePageInfo_t &other) const
 {
-    // qDebug() << "ImagePageInfo_t > other";
+    // qCDebug(appLog) << "ImagePageInfo_t > other";
     return (this->pageIndex > other.pageIndex);
 }
 
@@ -38,13 +39,13 @@ SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
     : QAbstractListModel(parent)
     , m_parent(parent), m_sheet(sheet)
 {
-    qDebug() << "SideBarImageViewModel created for document:" << (sheet ? sheet->filePath() : "null");
+    qCDebug(appLog) << "SideBarImageViewModel created for document:" << (sheet ? sheet->filePath() : "null");
     connect(m_sheet, &DocSheet::sigPageModified, this, &SideBarImageViewModel::onUpdateImage);
 }
 
 void SideBarImageViewModel::resetData()
 {
-    qDebug() << "Resetting model data";
+    qCDebug(appLog) << "Resetting model data";
     beginResetModel();
     m_pagelst.clear();
     endResetModel();
@@ -52,13 +53,13 @@ void SideBarImageViewModel::resetData()
 
 void SideBarImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, bool sort)
 {
-    qDebug() << "Initializing model with" << pagelst.size() << "items, sort:" << sort;
+    qCDebug(appLog) << "Initializing model with" << pagelst.size() << "items, sort:" << sort;
     beginResetModel();
 
     m_pagelst = pagelst;
 
     if (sort) {
-        qDebug() << "Sorting model data";
+        qCDebug(appLog) << "Sorting model data";
         std::sort(m_pagelst.begin(), m_pagelst.end());
     }
 
@@ -67,16 +68,16 @@ void SideBarImageViewModel::initModelLst(const QList<ImagePageInfo_t> &pagelst, 
 
 void SideBarImageViewModel::changeModelData(const QList<ImagePageInfo_t> &pagelst)
 {
-    qDebug() << "Changing model data";
+    qCDebug(appLog) << "Changing model data";
     m_pagelst = pagelst;
 }
 
 void SideBarImageViewModel::setBookMarkVisible(int index, bool visible, bool updateIndex)
 {
-    qDebug() << "Setting book mark visible for index:" << index << "visible:" << visible << "updateIndex:" << updateIndex;
+    qCDebug(appLog) << "Setting book mark visible for index:" << index << "visible:" << visible << "updateIndex:" << updateIndex;
     m_cacheBookMarkMap.insert(index, visible);
     if (updateIndex) {
-        qDebug() << "Updating model data for index:" << index;
+        qCDebug(appLog) << "Updating model data for index:" << index;
         const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
         for (const QModelIndex &modelIndex : modelIndexlst)
             emit dataChanged(modelIndex, modelIndex);
@@ -85,19 +86,19 @@ void SideBarImageViewModel::setBookMarkVisible(int index, bool visible, bool upd
 
 int SideBarImageViewModel::rowCount(const QModelIndex &) const
 {
-    // qDebug() << "Getting row count:" << m_pagelst.size();
+    // qCDebug(appLog) << "Getting row count:" << m_pagelst.size();
     return m_pagelst.size();
 }
 
 int SideBarImageViewModel::columnCount(const QModelIndex &) const
 {
-    // qDebug() << "Getting column count";
+    // qCDebug(appLog) << "Getting column count";
     return 1;
 }
 
 QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 {
-    // qDebug() << "Getting data for index:" << index.row() << "role:" << role;
+    // qCDebug(appLog) << "Getting data for index:" << index.row() << "role:" << role;
     if (!index.isValid())
         return QVariant();
 
@@ -110,7 +111,7 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
         QPixmap pixmap = m_sheet->thumbnail(nRow);
 
         if (pixmap.isNull()) {
-            // qDebug() << "Pixmap is null, filling with white";
+            // qCDebug(appLog) << "Pixmap is null, filling with white";
             //先填充空白
             QPixmap emptyPixmap(174, 174);
             emptyPixmap.fill(Qt::white);
@@ -126,28 +127,28 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 
         return QVariant::fromValue(pixmap);
     } else if (role == ImageinfoType_e::IMAGE_BOOKMARK) {
-        // qDebug() << "Getting book mark for index:" << nRow;
+        // qCDebug(appLog) << "Getting book mark for index:" << nRow;
         if (m_cacheBookMarkMap.contains(nRow)) {
             return QVariant::fromValue(m_cacheBookMarkMap.value(nRow));
         }
         return QVariant::fromValue(false);
     } else if (role == ImageinfoType_e::IMAGE_ROTATE) {
-        // qDebug() << "Getting rotate for index:" << nRow;
+        // qCDebug(appLog) << "Getting rotate for index:" << nRow;
         return QVariant::fromValue(m_sheet->operation().rotation * 90);
     } else if (role == ImageinfoType_e::IMAGE_INDEX_TEXT) {
-        // qDebug() << "Getting index text for index:" << nRow;
+        // qCDebug(appLog) << "Getting index text for index:" << nRow;
         return QVariant::fromValue(tr("Page %1").arg(nRow + 1));
     } else if (role == ImageinfoType_e::IMAGE_CONTENT_TEXT) {
-        // qDebug() << "Getting content text for index:" << nRow;
+        // qCDebug(appLog) << "Getting content text for index:" << nRow;
         return QVariant::fromValue(m_pagelst.at(index.row()).strcontents);
     } else if (role == ImageinfoType_e::IMAGE_SEARCH_COUNT) {
-        // qDebug() << "Getting search count for index:" << nRow;
+        // qCDebug(appLog) << "Getting search count for index:" << nRow;
         return QVariant::fromValue(m_pagelst.at(index.row()).strSearchcount);
     } else if (role == Qt::AccessibleTextRole) {
-        // qDebug() << "Getting accessible text for index:" << nRow;
+        // qCDebug(appLog) << "Getting accessible text for index:" << nRow;
         return index.row();
     } else if (role == ImageinfoType_e::IMAGE_PAGE_SIZE) {
-        // qDebug() << "Getting page size for index:" << nRow;
+        // qCDebug(appLog) << "Getting page size for index:" << nRow;
         return QVariant::fromValue(m_sheet->pageSizeByIndex(nRow));
     }
     return QVariant();
@@ -155,7 +156,7 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
 
 bool SideBarImageViewModel::setData(const QModelIndex &index, const QVariant &data, int role)
 {
-    // qDebug() << "Setting data for index:" << index.row() << "role:" << role;
+    // qCDebug(appLog) << "Setting data for index:" << index.row() << "role:" << role;
     if (!index.isValid())
         return false;
     return QAbstractListModel::setData(index, data, role);
@@ -163,7 +164,7 @@ bool SideBarImageViewModel::setData(const QModelIndex &index, const QVariant &da
 
 QList<QModelIndex> SideBarImageViewModel::getModelIndexForPageIndex(int pageIndex)
 {
-    qDebug() << "Getting model index for page index:" << pageIndex;
+    qCDebug(appLog) << "Getting model index for page index:" << pageIndex;
     QList<QModelIndex> modelIndexlst;
 
     int pageSize = m_pagelst.size();
@@ -177,7 +178,7 @@ QList<QModelIndex> SideBarImageViewModel::getModelIndexForPageIndex(int pageInde
 
 int SideBarImageViewModel::getPageIndexForModelIndex(int row)
 {
-    qDebug() << "Getting page index for model index:" << row;
+    qCDebug(appLog) << "Getting page index for model index:" << row;
     if (row >= 0 && row < m_pagelst.size())
         return m_pagelst.at(row).pageIndex;
     return -1;
@@ -185,20 +186,20 @@ int SideBarImageViewModel::getPageIndexForModelIndex(int row)
 
 void SideBarImageViewModel::onUpdateImage(int index)
 {
-    qDebug() << "Updating image for index:" << index;
+    qCDebug(appLog) << "Updating image for index:" << index;
     DocPageThumbnailTask task;
     task.sheet = m_sheet;
     task.index = index;
     task.model = const_cast<SideBarImageViewModel *>(this);
     PageRenderThread::appendTask(task);
-    qDebug() << "Updating image for index:" << index << "end";
+    qCDebug(appLog) << "Updating image for index:" << index << "end";
 }
 
 void SideBarImageViewModel::insertPageIndex(int pageIndex)
 {
-    qDebug() << "Inserting page index:" << pageIndex;
+    qCDebug(appLog) << "Inserting page index:" << pageIndex;
     if (!m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
-        qDebug() << "Inserting page index:" << pageIndex;
+        qCDebug(appLog) << "Inserting page index:" << pageIndex;
         int iterIndex = 0;
         int rowCount = m_pagelst.size();
         for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
@@ -210,25 +211,25 @@ void SideBarImageViewModel::insertPageIndex(int pageIndex)
         beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
         endInsertRows();
     } else {
-        qWarning() << "Page index already exists:" << pageIndex;
+        qCWarning(appLog) << "Page index already exists:" << pageIndex;
     }
-    qDebug() << "Inserting page index:" << pageIndex << "end";
+    qCDebug(appLog) << "Inserting page index:" << pageIndex << "end";
 }
 
 void SideBarImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInfo)
 {
     int index = -1;
-    qDebug() << "Inserting page index";
+    qCDebug(appLog) << "Inserting page index";
     if (tImagePageInfo.annotation == nullptr) {
-        qDebug() << "Inserting page index without annotation";
+        qCDebug(appLog) << "Inserting page index without annotation";
         index = m_pagelst.indexOf(tImagePageInfo);
     } else {
-        qDebug() << "Inserting page index with annotation";
+        qCDebug(appLog) << "Inserting page index with annotation";
         index = findItemForAnno(tImagePageInfo.annotation);
     }
 
     if (index == -1) {
-        qDebug() << "Inserting page index not found";
+        qCDebug(appLog) << "Inserting page index not found";
         int iterIndex = 0;
         int rowCount = m_pagelst.size();
         for (iterIndex = 0; iterIndex < rowCount; iterIndex++) {
@@ -239,70 +240,70 @@ void SideBarImageViewModel::insertPageIndex(const ImagePageInfo_t &tImagePageInf
         beginInsertRows(this->index(iterIndex).parent(), iterIndex, iterIndex);
         endInsertRows();
     } else {
-        qDebug() << "Inserting page index found";
+        qCDebug(appLog) << "Inserting page index found";
         m_pagelst[index].strcontents = tImagePageInfo.strcontents;
         emit dataChanged(this->index(index), this->index(index));
     }
-    qDebug() << "Inserting page index:" << tImagePageInfo.pageIndex << "end";
+    qCDebug(appLog) << "Inserting page index:" << tImagePageInfo.pageIndex << "end";
 }
 
 void SideBarImageViewModel::removePageIndex(int pageIndex)
 {
-    qDebug() << "Removing page index:" << pageIndex;
+    qCDebug(appLog) << "Removing page index:" << pageIndex;
     if (m_pagelst.contains(ImagePageInfo_t(pageIndex))) {
-        qDebug() << "Removing page index:" << pageIndex;
+        qCDebug(appLog) << "Removing page index:" << pageIndex;
         beginResetModel();
         m_pagelst.removeAll(ImagePageInfo_t(pageIndex));
         endResetModel();
     } else {
-        qWarning() << "Page index not found:" << pageIndex;
+        qCWarning(appLog) << "Page index not found:" << pageIndex;
     }
-    qDebug() << "Removing page index:" << pageIndex << "end";
+    qCDebug(appLog) << "Removing page index:" << pageIndex << "end";
 }
 
 void SideBarImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
 {
-    qDebug() << "Removing item for annotation:" << annotation;
+    qCDebug(appLog) << "Removing item for annotation:" << annotation;
     int index = findItemForAnno(annotation);
     if (index >= 0) {
-        qDebug() << "Removing item for annotation:" << annotation << "found";
+        qCDebug(appLog) << "Removing item for annotation:" << annotation << "found";
         beginResetModel();
         m_pagelst.removeAt(index);
         endResetModel();
     }
-    qDebug() << "Removing item for annotation:" << annotation << "end";
+    qCDebug(appLog) << "Removing item for annotation:" << annotation << "end";
 }
 
 void SideBarImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
 {
-    qDebug() << "Getting model index image info for model index:" << modelIndex;
+    qCDebug(appLog) << "Getting model index image info for model index:" << modelIndex;
     if (modelIndex >= 0 && modelIndex < m_pagelst.size()) {
         tImagePageInfo = m_pagelst.at(modelIndex);
     }
-    qDebug() << "Getting model index image info for model index:" << modelIndex << "end";
+    qCDebug(appLog) << "Getting model index image info for model index:" << modelIndex << "end";
 }
 
 int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation)
 {
-    qDebug() << "Finding item for annotation:" << annotation;
+    qCDebug(appLog) << "Finding item for annotation:" << annotation;
     int count = m_pagelst.size();
     for (int index = 0; index < count; index++) {
         if (annotation == m_pagelst.at(index).annotation) {
             return index;
         }
     }
-    qDebug() << "Finding item for annotation:" << annotation << "end";
+    qCDebug(appLog) << "Finding item for annotation:" << annotation << "end";
     return -1;
 }
 
 void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
 {
-    qDebug() << "Handling thumbnail render for page:" << index << "size:" << pixmap.size();
+    qCDebug(appLog) << "Handling thumbnail render for page:" << index << "size:" << pixmap.size();
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     m_sheet->setThumbnail(index, pixmap);
 
     const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
-    qDebug() << "Notifying" << modelIndexlst.size() << "views of data change";
+    qCDebug(appLog) << "Notifying" << modelIndexlst.size() << "views of data change";
     for (const QModelIndex &modelIndex : modelIndexlst)
         emit dataChanged(modelIndex, modelIndex);
 }

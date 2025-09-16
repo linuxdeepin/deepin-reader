@@ -5,6 +5,7 @@
 
 #include "BrowserAnnotation.h"
 #include "BrowserPage.h"
+#include "ddlog.h"
 
 #include <DGuiApplicationHelper>
 #include <QDebug>
@@ -15,121 +16,121 @@
 BrowserAnnotation::BrowserAnnotation(QGraphicsItem *parent, QRectF rect, deepin_reader::Annotation *annotation, qreal scalefactor) : QGraphicsItem(parent),
     m_annotation(annotation), m_rect(rect), m_parent(parent), m_scaleFactor(scalefactor)
 {
-    qDebug() << "BrowserAnnotation::BrowserAnnotation() - Starting constructor";
+    qCDebug(appLog) << "BrowserAnnotation::BrowserAnnotation() - Starting constructor";
     if (nullptr == m_annotation) {
-        qWarning() << "BrowserAnnotation: Invalid annotation pointer";
+        qCWarning(appLog) << "BrowserAnnotation: Invalid annotation pointer";
         return;
     }
 
-    qDebug() << "BrowserAnnotation created, type:" << m_annotation->type();
+    qCDebug(appLog) << "BrowserAnnotation created, type:" << m_annotation->type();
 
     if (m_annotation->type() == deepin_reader::Annotation::AText) {
-        qDebug() << "BrowserAnnotation::BrowserAnnotation() - Setting Z_ORDER_ICON for text annotation";
+        qCDebug(appLog) << "BrowserAnnotation::BrowserAnnotation() - Setting Z_ORDER_ICON for text annotation";
         setZValue(deepin_reader::Z_ORDER_ICON);
     } else {
-        qDebug() << "BrowserAnnotation::BrowserAnnotation() - Setting Z_ORDER_HIGHLIGHT for other annotation";
+        qCDebug(appLog) << "BrowserAnnotation::BrowserAnnotation() - Setting Z_ORDER_HIGHLIGHT for other annotation";
         setZValue(deepin_reader::Z_ORDER_HIGHLIGHT);
     }
-    qDebug() << "BrowserAnnotation::BrowserAnnotation() - Constructor completed";
+    qCDebug(appLog) << "BrowserAnnotation::BrowserAnnotation() - Constructor completed";
 }
 
 BrowserAnnotation::~BrowserAnnotation()
 {
-    // qDebug() << "BrowserAnnotation destroyed";
+    // qCDebug(appLog) << "BrowserAnnotation destroyed";
     m_annotation = nullptr;
 }
 
 int BrowserAnnotation::annotationType()
 {
-    // qDebug() << "BrowserAnnotation::annotationType() - Getting annotation type";
+    // qCDebug(appLog) << "BrowserAnnotation::annotationType() - Getting annotation type";
     if (nullptr == m_annotation) {
-        // qDebug() << "BrowserAnnotation::annotationType() - Annotation is null, returning -1";
+        // qCDebug(appLog) << "BrowserAnnotation::annotationType() - Annotation is null, returning -1";
         return -1;
     }
 
     int type = m_annotation->type();
-    // qDebug() << "BrowserAnnotation::annotationType() - Annotation type:" << type;
+    // qCDebug(appLog) << "BrowserAnnotation::annotationType() - Annotation type:" << type;
     return type;
 }
 
 QString BrowserAnnotation::annotationText()
 {
-    // qDebug() << "BrowserAnnotation::annotationText() - Getting annotation text";
+    // qCDebug(appLog) << "BrowserAnnotation::annotationText() - Getting annotation text";
     if (nullptr == m_annotation) {
-        // qDebug() << "BrowserAnnotation::annotationText() - Annotation is null, returning empty string";
+        // qCDebug(appLog) << "BrowserAnnotation::annotationText() - Annotation is null, returning empty string";
         return QString();
     }
 
     QString text = m_annotation->contents();
-    // qDebug() << "BrowserAnnotation::annotationText() - Annotation text length:" << text.length();
+    // qCDebug(appLog) << "BrowserAnnotation::annotationText() - Annotation text length:" << text.length();
     return text;
 }
 
 QRectF BrowserAnnotation::boundingRect() const
 {
-    // qDebug() << "BrowserAnnotation::boundingRect() - Calculating bounding rectangle";
+    // qCDebug(appLog) << "BrowserAnnotation::boundingRect() - Calculating bounding rectangle";
     QRectF rect = QRectF(m_rect.x() * m_scaleFactor,
                   m_rect.y() * m_scaleFactor,
                   m_rect.width() * m_scaleFactor,
                   m_rect.height() * m_scaleFactor);
-    // qDebug() << "BrowserAnnotation::boundingRect() - Bounding rectangle:" << rect;
+    // qCDebug(appLog) << "BrowserAnnotation::boundingRect() - Bounding rectangle:" << rect;
     return rect;
 }
 
 void BrowserAnnotation::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    // qDebug() << "BrowserAnnotation::paint() - Starting paint operation";
+    // qCDebug(appLog) << "BrowserAnnotation::paint() - Starting paint operation";
     if (m_drawSelectRect) {
-        // qDebug() << "BrowserAnnotation::paint() - Drawing selection rectangle";
+        // qCDebug(appLog) << "BrowserAnnotation::paint() - Drawing selection rectangle";
         QPen pen(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         painter->setPen(pen);
         painter->drawRect(option->rect);
     }
-    // qDebug() << "BrowserAnnotation::paint() - Paint operation completed";
+    // qCDebug(appLog) << "BrowserAnnotation::paint() - Paint operation completed";
 }
 
 deepin_reader::Annotation *BrowserAnnotation::annotation()
 {
-    // qDebug() << "BrowserAnnotation::annotation() - Returning annotation pointer";
+    // qCDebug(appLog) << "BrowserAnnotation::annotation() - Returning annotation pointer";
     return m_annotation;
 }
 
 bool BrowserAnnotation::isSame(Annotation *annotation)
 {
-    // qDebug() << "BrowserAnnotation::isSame() - Comparing annotations";
+    // qCDebug(appLog) << "BrowserAnnotation::isSame() - Comparing annotations";
     bool isSame = (annotation == m_annotation);
-    // qDebug() << "BrowserAnnotation::isSame() - Annotations are same:" << isSame;
+    // qCDebug(appLog) << "BrowserAnnotation::isSame() - Annotations are same:" << isSame;
     return isSame;
 }
 
 void BrowserAnnotation::setDrawSelectRect(const bool draw)
 {
-    // qDebug() << "BrowserAnnotation::setDrawSelectRect:" << draw;
+    // qCDebug(appLog) << "BrowserAnnotation::setDrawSelectRect:" << draw;
     if (nullptr != m_annotation && m_annotation->type() != 1) {
-        // qDebug() << "BrowserAnnotation::setDrawSelectRect() - Annotation type is not 1, setting to false";
+        // qCDebug(appLog) << "BrowserAnnotation::setDrawSelectRect() - Annotation type is not 1, setting to false";
         m_drawSelectRect = false;
         update();
         return;
     }
 
-    // qDebug() << "BrowserAnnotation::setDrawSelectRect() - Setting draw select rect to:" << draw;
+    // qCDebug(appLog) << "BrowserAnnotation::setDrawSelectRect() - Setting draw select rect to:" << draw;
     m_drawSelectRect = draw;
 
     update();
-    // qDebug() << "BrowserAnnotation::setDrawSelectRect() - Update called";
+    // qCDebug(appLog) << "BrowserAnnotation::setDrawSelectRect() - Update called";
 }
 
 void BrowserAnnotation::setScaleFactor(const double scale)
 {
-    // qDebug() << "BrowserAnnotation::setScaleFactor() - Setting scale factor to:" << scale;
+    // qCDebug(appLog) << "BrowserAnnotation::setScaleFactor() - Setting scale factor to:" << scale;
     if (nullptr == m_annotation) {
-        // qDebug() << "BrowserAnnotation::setScaleFactor() - Annotation is null, returning";
+        // qCDebug(appLog) << "BrowserAnnotation::setScaleFactor() - Annotation is null, returning";
         return;
     }
 
     m_scaleFactor = scale;
-    // qDebug() << "BrowserAnnotation::setScaleFactor() - Scale factor set, calling update";
+    // qCDebug(appLog) << "BrowserAnnotation::setScaleFactor() - Scale factor set, calling update";
 
     update();
-    // qDebug() << "BrowserAnnotation::setScaleFactor() - Update called";
+    // qCDebug(appLog) << "BrowserAnnotation::setScaleFactor() - Update called";
 }

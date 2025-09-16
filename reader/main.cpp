@@ -8,6 +8,8 @@
 #include "accessible.h"
 #include "Utils.h"
 #include "DBusObject.h"
+#include "ddlog.h"
+#include "logger.h"
 
 #include <DLog>
 
@@ -21,13 +23,25 @@
 #include <QDebug>
 #include <QFontDatabase>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    // set log format and register console and file appenders
+    const QString logFormat = "%{time}{yy-MM-ddTHH:mm:ss.zzz} [%{type:-7}] [%{category}] <%{function}:%{line}> %{message}";
+    DLogManager::setLogFormat(logFormat);
+    // 为了兼容性
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 6, 8, 0))
+    DLogManager::registerJournalAppender();
+#endif
+    DLogManager::registerConsoleAppender();
+
+    MLogger();   // 日志处理要放在app之前，否则QApplication内部可能进行了日志打印，导致环境变量设置不生效
+
     PERF_PRINT_BEGIN("POINT-01", "");
-    qDebug() << "Application starting with arguments:" << argc;
-    qDebug() << "Command line:" << QCoreApplication::arguments().join(" ");
+    qCDebug(appLog) << "Application starting with arguments:" << argc;
+    qCDebug(appLog) << "Command line:" << QCoreApplication::arguments().join(" ");
 
     // 依赖DTK的程序，如果要在root下或者非deepin/uos环境下运行不会发生异常，就需要加上该环境变量
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
@@ -35,8 +49,12 @@ int main(int argc, char *argv[])
     }
 
     // Init DTK.
-    qDebug() << "Initializing DTK application";
+    qCDebug(appLog) << "Initializing DTK application";
     Application a(argc, argv);
+
+    // register file appender must after Application instance created
+    DLogManager::registerFileAppender();
+
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addOptions({
@@ -60,15 +78,15 @@ int main(int argc, char *argv[])
     if (parser.isSet("thumbnail") && parser.isSet("filePath") && parser.isSet("thumbnailPath")) {
         QString filePath = parser.value("filePath");
         QString thumbnailPath = parser.value("thumbnailPath");
-        qDebug() << "Generating thumbnail for:" << filePath;
-        qDebug() << "Thumbnail output path:" << thumbnailPath;
+        qCDebug(appLog) << "Generating thumbnail for:" << filePath;
+        qCDebug(appLog) << "Thumbnail output path:" << thumbnailPath;
         if (filePath.isEmpty() || thumbnailPath.isEmpty()) {
-            qWarning() << "Empty file path or thumbnail path";
+            qCWarning(appLog) << "Empty file path or thumbnail path";
             return -1;
         }
 
         if (!CentralDocPage::firstThumbnail(filePath, thumbnailPath)) {
-            qWarning() << "Failed to generate thumbnail";
+            qCWarning(appLog) << "Failed to generate thumbnail";
             return -1;
         }
 
@@ -81,9 +99,9 @@ int main(int argc, char *argv[])
         PERF_PRINT_BEGIN("POINT-05", "");
 
     //=======通知已经打开的进程
-    qDebug() << "Registering DBus service";
+    qCDebug(appLog) << "Registering DBus service";
     if (!DBusObject::instance()->registerOrNotify(arguments)) {
-        qInfo() << "Another instance is running, exiting";
+        qCInfo(appLog) << "Another instance is running, exiting";
         return 0;
     }
 
@@ -95,32 +113,28 @@ int main(int argc, char *argv[])
     Q_UNUSED(savetheme)
 #endif
 
-    qDebug() << "Setting up log appenders";
-    Dtk::Core::DLogManager::registerConsoleAppender();
-    Dtk::Core::DLogManager::registerFileAppender();
-
-    qDebug() << "Checking if new window can be created";
+    qCDebug(appLog) << "Checking if new window can be created";
     if (!MainWindow::allowCreateWindow()) {
-        qWarning() << "Maximum window count reached";
+        qCWarning(appLog) << "Maximum window count reached";
         return -1;
     }
 
-    qDebug() << __FUNCTION__ << "正在创建主窗口...";
+    qCDebug(appLog) << __FUNCTION__ << "正在创建主窗口...";
     qApp->setAttribute(Qt::AA_ForceRasterWidgets, true);
     MainWindow *w = MainWindow::createWindow(arguments);
     w->winId();
     qApp->setAttribute(Qt::AA_ForceRasterWidgets, false);
     w->show();
 
-    qDebug() << __FUNCTION__ << "主窗口已创建并显示";
+    qCDebug(appLog) << __FUNCTION__ << "主窗口已创建并显示";
 
     PERF_PRINT_END("POINT-01", "");
 
-    qDebug() << "Entering main event loop";
+    qCDebug(appLog) << "Entering main event loop";
     int result = a.exec();
 
     PERF_PRINT_END("POINT-02", "");
-    qInfo() << "Application exiting with code:" << result;
+    qCInfo(appLog) << "Application exiting with code:" << result;
 
     return result;
 }

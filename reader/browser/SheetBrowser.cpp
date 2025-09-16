@@ -21,6 +21,7 @@
 #include "Utils.h"
 #include "SheetRenderer.h"
 #include "SecurityDialog.h"
+#include "ddlog.h"
 
 #include <DMenu>
 #include <DGuiApplicationHelper>
@@ -48,11 +49,11 @@ DWIDGET_USE_NAMESPACE
 const qreal deltaManhattanLength = 12.0;
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
-    qDebug() << "SheetBrowser constructor started";
+    qCDebug(appLog) << "SheetBrowser constructor started";
     setMouseTracking(true);
 
     setScene(new QGraphicsScene(this));
-    // qDebug() << "Graphics scene created";
+    // qCDebug(appLog) << "Graphics scene created";
 
     setFrameShape(QFrame::NoFrame);
 
@@ -65,12 +66,12 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     setAttribute(Qt::WA_AcceptTouchEvents);
 
     grabGesture(Qt::PinchGesture);
-    // qDebug() << "Pinch gesture enabled";
+    // qCDebug(appLog) << "Pinch gesture enabled";
 
     setProperty("pinchgetsturing", false);
 
     m_scroller = QScroller::scroller(this);
-    // qDebug() << "Scroller initialized";
+    // qCDebug(appLog) << "Scroller initialized";
 
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onVerticalScrollBarValueChanged(int)));
     connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &SheetBrowser::onRemoveDocSlideGesture);
@@ -83,7 +84,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     m_tipsWidget = new TipsWidget(this);
     m_tipsWidget->setAccessibleName("Tips");
     m_tipsWidget->setAutoChecked(true);
-    // qDebug() << "Tips widget created";
+    // qCDebug(appLog) << "Tips widget created";
 
     connect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)), Qt::QueuedConnection);
 
@@ -94,44 +95,44 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
     this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
     
-    qDebug() << "SheetBrowser constructor completed";
+    qCDebug(appLog) << "SheetBrowser constructor completed";
 }
 
 SheetBrowser::~SheetBrowser()
 {
-    // qDebug() << "SheetBrowser destructor started";
+    // qCDebug(appLog) << "SheetBrowser destructor started";
     disconnect(this, SIGNAL(sigAddHighLightAnnot(BrowserPage *, QString, QColor)), this, SLOT(onAddHighLightAnnot(BrowserPage *, QString, QColor)));
 
     qDeleteAll(m_items);
-    // qDebug() << "Deleted all browser items, count:" << m_items.count();
+    // qCDebug(appLog) << "Deleted all browser items, count:" << m_items.count();
 
     if (nullptr != m_noteEditWidget) {
         delete m_noteEditWidget;
-        // qDebug() << "Note edit widget deleted";
+        // qCDebug(appLog) << "Note edit widget deleted";
     }
     
-    // qDebug() << "SheetBrowser destructor completed";
+    // qCDebug(appLog) << "SheetBrowser destructor completed";
 }
 
 QImage SheetBrowser::firstThumbnail(const QString &filePath)
 {
-    qDebug() << "SheetBrowser::firstThumbnail() - Starting first thumbnail generation";
+    qCDebug(appLog) << "SheetBrowser::firstThumbnail() - Starting first thumbnail generation";
     deepin_reader::Document *document = nullptr;
 
     int fileType = Dr::fileType(filePath);
 
     deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
 
-    // qDebug() << "SheetBrowser::firstThumbnail";
+    // qCDebug(appLog) << "SheetBrowser::firstThumbnail";
     document = DocumentFactory::getDocument(fileType, filePath, "", "", nullptr, error);
 
     if (nullptr == document) {
-        qDebug() << "SheetBrowser::firstThumbnail() - Failed to create document, returning empty image";
+        qCDebug(appLog) << "SheetBrowser::firstThumbnail() - Failed to create document, returning empty image";
         return QImage();
     }
 
     if (document->pageCount() <= 0) {
-        qDebug() << "SheetBrowser::firstThumbnail() - Document has no pages, returning empty image";
+        qCDebug(appLog) << "SheetBrowser::firstThumbnail() - Document has no pages, returning empty image";
         delete document;
         return QImage();
     }
@@ -139,7 +140,7 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
     deepin_reader::Page *page = document->page(0);
 
     if (nullptr == page) {
-        qDebug() << "SheetBrowser::firstThumbnail() - Failed to get first page, returning empty image";
+        qCDebug(appLog) << "SheetBrowser::firstThumbnail() - Failed to get first page, returning empty image";
         delete document;
         return QImage();
     }
@@ -150,70 +151,70 @@ QImage SheetBrowser::firstThumbnail(const QString &filePath)
 
     delete document;
 
-    qDebug() << "SheetBrowser::firstThumbnail() - First thumbnail generation completed";
+    qCDebug(appLog) << "SheetBrowser::firstThumbnail() - First thumbnail generation completed";
     return image;
 }
 
 void SheetBrowser::init(SheetOperation &operation, const QSet<int> &bookmarks)
 {
-    qDebug() << "Initializing SheetBrowser with page count:" << m_sheet->pageCount()
+    qCDebug(appLog) << "Initializing SheetBrowser with page count:" << m_sheet->pageCount()
              << "and" << bookmarks.count() << "bookmarks";
 
     int pageCount = m_sheet->pageCount();
 
     for (int i = 0; i < pageCount; ++i) {
         BrowserPage *item = new BrowserPage(this, i, m_sheet);
-        // qDebug() << "Created BrowserPage for page:" << i;
+        // qCDebug(appLog) << "Created BrowserPage for page:" << i;
 
         if (bookmarks.contains(i)) {
             item->setBookmark(true);
-            // qDebug() << "Set bookmark for page:" << i;
+            // qCDebug(appLog) << "Set bookmark for page:" << i;
         }
 
         m_items.append(item);
 
         QSizeF pageSize = m_sheet->renderer()->getPageSize(i);
         if (pageSize.width() > m_maxWidth) {
-            // qDebug() << "SheetBrowser::init() - Updated max width to:" << pageSize.width();
+            // qCDebug(appLog) << "SheetBrowser::init() - Updated max width to:" << pageSize.width();
             m_maxWidth = pageSize.width();
         }
 
         if (pageSize.height() > m_maxHeight) {
-            // qDebug() << "SheetBrowser::init() - Updated max height to:" << pageSize.height();
+            // qCDebug(appLog) << "SheetBrowser::init() - Updated max height to:" << pageSize.height();
             m_maxHeight = pageSize.height();
         }
 
         scene()->addItem(item);
     }
 
-    qDebug() << "Max page dimensions - width:" << m_maxWidth << "height:" << m_maxHeight;
+    qCDebug(appLog) << "Max page dimensions - width:" << m_maxWidth << "height:" << m_maxHeight;
 
     setMouseShape(operation.mouseShape);
-    qDebug() << "Mouse shape set to:" << operation.mouseShape;
+    qCDebug(appLog) << "Mouse shape set to:" << operation.mouseShape;
 
     deform(operation);
 
     m_initPage = operation.currentPage;
     m_hasLoaded = true;
     
-    qInfo() << "SheetBrowser initialized successfully, initial page:" << m_initPage;
+    qCInfo(appLog) << "SheetBrowser initialized successfully, initial page:" << m_initPage;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 {
-    qDebug() << "Setting mouse shape to:" << shape;
+    qCDebug(appLog) << "Setting mouse shape to:" << shape;
     closeMagnifier();
     
     if (Dr::MouseShapeHand == shape) {
         setDragMode(QGraphicsView::ScrollHandDrag);
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(false);
-        qDebug() << "Set to hand drag mode, word selection disabled";
+        qCDebug(appLog) << "Set to hand drag mode, word selection disabled";
     } else if (Dr::MouseShapeNormal == shape) {
         setDragMode(QGraphicsView::NoDrag);
         foreach (BrowserPage *item, m_items)
             item->setWordSelectable(true);
-        qDebug() << "Set to normal mode, word selection enabled";
+        qCDebug(appLog) << "Set to normal mode, word selection enabled";
     }
     
     m_bHandAndLink = false;
@@ -221,21 +222,21 @@ void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
 
 void SheetBrowser::setBookMark(int index, int state)
 {
-    // qDebug() << "SheetBrowser::setBookMark() - Starting set bookmark";
+    // qCDebug(appLog) << "SheetBrowser::setBookMark() - Starting set bookmark";
     if (index >= 0 && index < m_items.count())
         m_items.at(index)->setBookmark(state);
-    // qDebug() << "SheetBrowser::setBookMark() - Set bookmark completed";
+    // qCDebug(appLog) << "SheetBrowser::setBookMark() - Set bookmark completed";
 }
 
 void SheetBrowser::setAnnotationInserting(bool inserting)
 {
-    // qDebug() << "SheetBrowser::setAnnotationInserting() - Starting set annotation inserting";
+    // qCDebug(appLog) << "SheetBrowser::setAnnotationInserting() - Starting set annotation inserting";
     m_annotationInserting = inserting;
 }
 
 void SheetBrowser::onVerticalScrollBarValueChanged(int)
 {
-    // qDebug() << "SheetBrowser::onVerticalScrollBarValueChanged() - Starting on vertical scroll bar value changed";
+    // qCDebug(appLog) << "SheetBrowser::onVerticalScrollBarValueChanged() - Starting on vertical scroll bar value changed";
     beginViewportChange();
 
     int curScrollPage = currentScrollValueForPage();
@@ -243,20 +244,20 @@ void SheetBrowser::onVerticalScrollBarValueChanged(int)
     if (m_bNeedNotifyCurPageChanged && curScrollPage != m_currentPage) {
         curpageChanged(curScrollPage);
     }
-    // qDebug() << "SheetBrowser::onVerticalScrollBarValueChanged() - On vertical scroll bar value changed completed";
+    // qCDebug(appLog) << "SheetBrowser::onVerticalScrollBarValueChanged() - On vertical scroll bar value changed completed";
 }
 
 void SheetBrowser::onHorizontalScrollBarValueChanged(int)
 {
-    // qDebug() << "SheetBrowser::onHorizontalScrollBarValueChanged() - Starting on horizontal scroll bar value changed";
+    // qCDebug(appLog) << "SheetBrowser::onHorizontalScrollBarValueChanged() - Starting on horizontal scroll bar value changed";
     beginViewportChange();
 }
 
 void SheetBrowser::beginViewportChange()
 {
-    // qDebug() << "SheetBrowser::beginViewportChange() - Starting begin viewport change";
+    // qCDebug(appLog) << "SheetBrowser::beginViewportChange() - Starting begin viewport change";
     if (nullptr == m_viewportChangeTimer) {
-        // qDebug() << "SheetBrowser::beginViewportChange() - Creating new viewport change timer";
+        // qCDebug(appLog) << "SheetBrowser::beginViewportChange() - Creating new viewport change timer";
         m_viewportChangeTimer = new QTimer(this);
         connect(m_viewportChangeTimer, &QTimer::timeout, this, &SheetBrowser::onViewportChanged);
         m_viewportChangeTimer->setSingleShot(true);
@@ -266,22 +267,22 @@ void SheetBrowser::beginViewportChange()
         m_viewportChangeTimer->stop();
 
     m_viewportChangeTimer->start(100);
-    // qDebug() << "SheetBrowser::beginViewportChange() - Begin viewport change completed";
+    // qCDebug(appLog) << "SheetBrowser::beginViewportChange() - Begin viewport change completed";
 }
 
 void SheetBrowser::hideSubTipsWidget()
 {
-    // qDebug() << "SheetBrowser::hideSubTipsWidget() - Starting hide sub tips widget";
+    // qCDebug(appLog) << "SheetBrowser::hideSubTipsWidget() - Starting hide sub tips widget";
     if (m_tipsWidget)
         m_tipsWidget->hide();
 
     setCursor(QCursor(Qt::ArrowCursor));
-    // qDebug() << "SheetBrowser::hideSubTipsWidget() - Hide sub tips widget completed";
+    // qCDebug(appLog) << "SheetBrowser::hideSubTipsWidget() - Hide sub tips widget completed";
 }
 
 void SheetBrowser::onViewportChanged()
 {
-    // qDebug() << "SheetBrowser::onViewportChanged() - Starting on viewport changed";
+    // qCDebug(appLog) << "SheetBrowser::onViewportChanged() - Starting on viewport changed";
     int fromIndex = 0;
     int toIndex = 0;
     currentIndexRange(fromIndex, toIndex);
@@ -292,14 +293,14 @@ void SheetBrowser::onViewportChanged()
             item->clearWords();
         }
     }
-    // qDebug() << "SheetBrowser::onViewportChanged() - On viewport changed completed";
+    // qCDebug(appLog) << "SheetBrowser::onViewportChanged() - On viewport changed completed";
 }
 
 void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor color)
 {
-    // qDebug() << "SheetBrowser::onAddHighLightAnnot() - Starting on add high light annot";
+    // qCDebug(appLog) << "SheetBrowser::onAddHighLightAnnot() - Starting on add high light annot";
     if (page) {
-        // qDebug() << "SheetBrowser::onAddHighLightAnnot() - Page is not null";
+        // qCDebug(appLog) << "SheetBrowser::onAddHighLightAnnot() - Page is not null";
         Annotation *highLightAnnot = nullptr;
 
         highLightAnnot = page->addHighlightAnnotation(text, color);
@@ -308,24 +309,24 @@ void SheetBrowser::onAddHighLightAnnot(BrowserPage *page, QString text, QColor c
             emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
 
     }
-    // qDebug() << "SheetBrowser::onAddHighLightAnnot() - On add high light annot completed";
+    // qCDebug(appLog) << "SheetBrowser::onAddHighLightAnnot() - On add high light annot completed";
 }
 
 void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, const QPoint &point)
 {
-    qDebug() << "SheetBrowser::showNoteEditWidget() - Starting show note edit widget";
+    qCDebug(appLog) << "SheetBrowser::showNoteEditWidget() - Starting show note edit widget";
     // 超链接与高亮区域重合时，手形工具下只响应超链接
     if (annotation == nullptr || m_bHandAndLink) {
-        qDebug() << "Skipping note edit - annotation null or hand and link mode";
+        qCDebug(appLog) << "Skipping note edit - annotation null or hand and link mode";
         return;
     }
 
-    qDebug() << "Showing note edit widget for annotation at:" << point;
+    qCDebug(appLog) << "Showing note edit widget for annotation at:" << point;
     
     m_tipsWidget->hide();
     if (m_noteEditWidget == nullptr) {
         m_noteEditWidget = new TextEditShadowWidget(this);
-        qDebug() << "Created new TextEditShadowWidget";
+        qCDebug(appLog) << "Created new TextEditShadowWidget";
         
         connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigNeedShowTips, m_sheet, &DocSheet::showTips);
         connect(m_noteEditWidget->getTextEditWidget(), &TextEditWidget::sigRemoveAnnotation, this, &SheetBrowser::onRemoveAnnotation);
@@ -339,12 +340,12 @@ void SheetBrowser::showNoteEditWidget(deepin_reader::Annotation *annotation, con
     m_noteEditWidget->getTextEditWidget()->setAnnotation(annotation);
     m_noteEditWidget->showWidget(point);
     
-    qDebug() << "Note edit widget shown with content:" << annotation->contents();
+    qCDebug(appLog) << "Note edit widget shown with content:" << annotation->contents();
 }
 
 bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QRectF &iconRect)
 {
-    // qDebug() << "SheetBrowser::calcIconAnnotRect() - Starting calc icon annot rect";
+    // qCDebug(appLog) << "SheetBrowser::calcIconAnnotRect() - Starting calc icon annot rect";
     if (nullptr == page || nullptr == m_sheet)
         return false;
 
@@ -361,27 +362,27 @@ bool SheetBrowser::calcIconAnnotRect(BrowserPage *page, const QPointF &point, QR
 
     iconRect = QRectF(clickPoint.x() / scaleFactor - 10, clickPoint.y() / scaleFactor - 10, 20, 20);
 
-    // qDebug() << "SheetBrowser::calcIconAnnotRect() - Calc icon annot rect completed";
+    // qCDebug(appLog) << "SheetBrowser::calcIconAnnotRect() - Calc icon annot rect completed";
     return true;
 }
 
 QPointF SheetBrowser::translate2Local(QPointF clickPoint)
 {
-    // qDebug() << "SheetBrowser::translate2Local() - Starting translate 2 local";
+    // qCDebug(appLog) << "SheetBrowser::translate2Local() - Starting translate 2 local";
     const SheetOperation  &operation = m_sheet->operation();
 
     if (qFuzzyIsNull(operation.scaleFactor)) {
-        // qDebug() << "SheetBrowser::translate2Local() - Scale factor is 0, returning 0,0";
+        // qCDebug(appLog) << "SheetBrowser::translate2Local() - Scale factor is 0, returning 0,0";
         return QPointF();
     }
 
-    // qDebug() << "SheetBrowser::translate2Local() - Translate 2 local completed";
+    // qCDebug(appLog) << "SheetBrowser::translate2Local() - Translate 2 local completed";
     return QPointF(clickPoint.x() / operation.scaleFactor, clickPoint.y() / operation.scaleFactor);
 }
 
 Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPoint, bool drawRect)
 {
-    // qDebug() << "SheetBrowser::getClickAnnot() - Starting get click annot";
+    // qCDebug(appLog) << "SheetBrowser::getClickAnnot() - Starting get click annot";
     if (nullptr == m_sheet || nullptr == page)
         return nullptr;
 
@@ -399,17 +400,17 @@ Annotation *SheetBrowser::getClickAnnot(BrowserPage *page, const QPointF clickPo
         }
     }
 
-    // qDebug() << "SheetBrowser::getClickAnnot() - Get click annot completed";
+    // qCDebug(appLog) << "SheetBrowser::getClickAnnot() - Get click annot completed";
     return nullptr;
 }
 
 Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const QColor color, QPoint &showPoint)
 {
-    // qDebug() << "SheetBrowser::addHighLightAnnotation() - Starting add high light annotation";
+    // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Starting add high light annotation";
     Annotation *highLightAnnot = nullptr;
 
     if (m_selectStartWord == nullptr || m_selectEndWord == nullptr) {
-        // qDebug() << "SheetBrowser::addHighLightAnnotation() - Select start word or select end word is null, returning null";
+        // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Select start word or select end word is null, returning null";
         return nullptr;
     }
 
@@ -422,7 +423,7 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     if (startPage == nullptr || endPage == nullptr) {
         m_selectStartWord = nullptr;
         m_selectEndWord = nullptr;
-        // qDebug() << "SheetBrowser::addHighLightAnnotation() - Start page or end page is null, returning null";
+        // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Start page or end page is null, returning null";
         return nullptr;
     }
 
@@ -430,10 +431,10 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     showPoint =  this->mapToGlobal(this->mapFromScene(m_selectEndWord->mapToScene(m_selectEndWord->boundingRect().topRight())));
 
     if (startPage == endPage) {
-        // qDebug() << "SheetBrowser::addHighLightAnnotation() - Start page and end page are the same, adding highlight annotation";
+        // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Start page and end page are the same, adding highlight annotation";
         highLightAnnot = startPage->addHighlightAnnotation(contains, color);
     } else {
-        // qDebug() << "SheetBrowser::addHighLightAnnotation() - Start page and end page are different, adding highlight annotation";
+        // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Start page and end page are different, adding highlight annotation";
         if (endPage->itemIndex() < startPage->itemIndex())
             qSwap(startPage, endPage);
 
@@ -449,20 +450,20 @@ Annotation *SheetBrowser::addHighLightAnnotation(const QString contains, const Q
     }
 
     if (highLightAnnot) {
-        // qDebug() << "SheetBrowser::addHighLightAnnotation() - High light annotation added, emitting sigOperaAnnotation";
+        // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - High light annotation added, emitting sigOperaAnnotation";
         emit sigOperaAnnotation(MSG_NOTE_ADD, highLightAnnot->page - 1, highLightAnnot);
     }
 
     m_selectStartWord = nullptr;
     m_selectEndWord = nullptr;
 
-    // qDebug() << "SheetBrowser::addHighLightAnnotation() - Add high light annotation completed";
+    // qCDebug(appLog) << "SheetBrowser::addHighLightAnnotation() - Add high light annotation completed";
     return highLightAnnot;
 }
 
 void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, const qreal posTop)
 {
-    // qDebug() << "SheetBrowser::jump2PagePos() - Starting jump 2 page pos";
+    // qCDebug(appLog) << "SheetBrowser::jump2PagePos() - Starting jump 2 page pos";
     if (nullptr == jumpPage)
         return;
 
@@ -486,12 +487,12 @@ void SheetBrowser::jump2PagePos(BrowserPage *jumpPage, const qreal posLeft, cons
     m_bNeedNotifyCurPageChanged = true;
 
     curpageChanged(jumpPage->itemIndex() + 1);
-    // qDebug() << "SheetBrowser::jump2PagePos() - Jump 2 page pos completed";
+    // qCDebug(appLog) << "SheetBrowser::jump2PagePos() - Jump 2 page pos completed";
 }
 
 bool SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
 {
-    // qDebug() << "SheetBrowser::moveIconAnnot() - Starting move icon annot";
+    // qCDebug(appLog) << "SheetBrowser::moveIconAnnot() - Starting move icon annot";
     if (nullptr == page)
         return false;
 
@@ -500,17 +501,17 @@ bool SheetBrowser::moveIconAnnot(BrowserPage *page, const QPointF &clickPoint)
     bool isVaild = calcIconAnnotRect(page, clickPoint, iconRect);
 
     if (isVaild) {
-        // qDebug() << "SheetBrowser::moveIconAnnot() - Icon annot is valid, moving icon annot";
+        // qCDebug(appLog) << "SheetBrowser::moveIconAnnot() - Icon annot is valid, moving icon annot";
         return page->moveIconAnnotation(iconRect);
     }
 
-    // qDebug() << "SheetBrowser::moveIconAnnot() - Icon annot is not valid, returning false";
+    // qCDebug(appLog) << "SheetBrowser::moveIconAnnot() - Icon annot is not valid, returning false";
     return false;
 }
 
 void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
 {
-    // qDebug() << "SheetBrowser::currentIndexRange() - Starting current index range";
+    // qCDebug(appLog) << "SheetBrowser::currentIndexRange() - Starting current index range";
     fromIndex = -1;
     toIndex = -1;
 
@@ -547,36 +548,36 @@ void SheetBrowser::currentIndexRange(int &fromIndex, int &toIndex)
             toIndex = i;
         }
     }
-    // qDebug() << "SheetBrowser::currentIndexRange() - Current index range completed";
+    // qCDebug(appLog) << "SheetBrowser::currentIndexRange() - Current index range completed";
 }
 
 QString SheetBrowser::selectedWordsText()
 {
-    // qDebug() << "SheetBrowser::selectedWordsText() - Starting selected words text";
+    // qCDebug(appLog) << "SheetBrowser::selectedWordsText() - Starting selected words text";
     QString text;
     foreach (BrowserPage *item, m_items)
         text += item->selectedWords();
 
-    // qDebug() << "SheetBrowser::selectedWordsText() - Selected words text completed";
+    // qCDebug(appLog) << "SheetBrowser::selectedWordsText() - Selected words text completed";
     return text;
 }
 
 QList<deepin_reader::Annotation *> SheetBrowser::annotations()
 {
-    // qDebug() << "SheetBrowser::annotations() - Starting annotations";
+    // qCDebug(appLog) << "SheetBrowser::annotations() - Starting annotations";
     QList<deepin_reader::Annotation *> list;
 
     foreach (BrowserPage *item, m_items) {
         list.append(item->annotations());
     }
 
-    // qDebug() << "SheetBrowser::annotations() - Annotations completed";
+    // qCDebug(appLog) << "SheetBrowser::annotations() - Annotations completed";
     return list;
 }
 
 bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
 {
-    // qDebug() << "SheetBrowser::removeAnnotation() - Starting remove annotation";
+    // qCDebug(appLog) << "SheetBrowser::removeAnnotation() - Starting remove annotation";
     bool ret = false;
     int pageIndex = -1;
     foreach (BrowserPage *item, m_items) {
@@ -590,13 +591,13 @@ bool SheetBrowser::removeAnnotation(deepin_reader::Annotation *annotation)
     if (ret)
         emit sigOperaAnnotation(MSG_NOTE_DELETE, pageIndex, annotation);
 
-    // qDebug() << "SheetBrowser::removeAnnotation() - Remove annotation completed";
+    // qCDebug(appLog) << "SheetBrowser::removeAnnotation() - Remove annotation completed";
     return ret;
 }
 
 bool SheetBrowser::removeAllAnnotation()
 {
-    // qDebug() << "SheetBrowser::removeAllAnnotation() - Starting remove all annotation";
+    // qCDebug(appLog) << "SheetBrowser::removeAllAnnotation() - Starting remove all annotation";
     foreach (BrowserPage *item, m_items) {
         if (item && item->removeAllAnnotation()) {
         }
@@ -604,13 +605,13 @@ bool SheetBrowser::removeAllAnnotation()
 
     emit sigOperaAnnotation(MSG_ALL_NOTE_DELETE, -1, nullptr);
 
-    // qDebug() << "SheetBrowser::removeAllAnnotation() - Remove all annotation completed";
+    // qCDebug(appLog) << "SheetBrowser::removeAllAnnotation() - Remove all annotation completed";
     return true;
 }
 
 bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const QString &text, QColor color)
 {
-    // qDebug() << "SheetBrowser::updateAnnotation() - Starting update annotation";
+    // qCDebug(appLog) << "SheetBrowser::updateAnnotation() - Starting update annotation";
     if (nullptr == annotation)
         return false;
 
@@ -625,62 +626,62 @@ bool SheetBrowser::updateAnnotation(deepin_reader::Annotation *annotation, const
     }
 
     if (ret) {
-        // qDebug() << "SheetBrowser::updateAnnotation() - Update annotation completed, emitting sigOperaAnnotation";
+        // qCDebug(appLog) << "SheetBrowser::updateAnnotation() - Update annotation completed, emitting sigOperaAnnotation";
         if (!text.isEmpty())
             emit sigOperaAnnotation(MSG_NOTE_ADD, pageIndex, annotation);
         else
             emit sigOperaAnnotation(MSG_NOTE_DELETE, pageIndex, annotation);
     }
 
-    // qDebug() << "SheetBrowser::updateAnnotation() - Update annotation completed";
+    // qCDebug(appLog) << "SheetBrowser::updateAnnotation() - Update annotation completed";
     return ret;
 }
 
 void SheetBrowser::onRemoveAnnotation(deepin_reader::Annotation *annotation, bool tips)
 {
-    // qDebug() << "SheetBrowser::onRemoveAnnotation() - Starting remove annotation";
+    // qCDebug(appLog) << "SheetBrowser::onRemoveAnnotation() - Starting remove annotation";
     m_sheet->removeAnnotation(annotation, tips);
 }
 
 void SheetBrowser::onUpdateAnnotation(deepin_reader::Annotation *annotation, const QString &text)
 {
-    // qDebug() << "SheetBrowser::onUpdateAnnotation() - Starting update annotation";
+    // qCDebug(appLog) << "SheetBrowser::onUpdateAnnotation() - Starting update annotation";
     updateAnnotation(annotation, text);
 }
 
 void SheetBrowser::onSetDocSlideGesture()
 {
-    // qDebug() << "SheetBrowser::onSetDocSlideGesture() - Starting set doc slide gesture";
+    // qCDebug(appLog) << "SheetBrowser::onSetDocSlideGesture() - Starting set doc slide gesture";
     m_scroller->stop();
 }
 
 void SheetBrowser::onRemoveDocSlideGesture()
 {
-    // qDebug() << "SheetBrowser::onRemoveDocSlideGesture() - Starting remove doc slide gesture";
+    // qCDebug(appLog) << "SheetBrowser::onRemoveDocSlideGesture() - Starting remove doc slide gesture";
     m_scroller->stop();
 }
 
 void SheetBrowser::onRemoveIconAnnotSelect()
 {
-    // qDebug() << "SheetBrowser::onRemoveIconAnnotSelect() - Starting remove icon annot select";
+    // qCDebug(appLog) << "SheetBrowser::onRemoveIconAnnotSelect() - Starting remove icon annot select";
     clearSelectIconAnnotAfterMenu();
 }
 
 void SheetBrowser::onInit()
 {
-    qDebug() << "SheetBrowser::onInit() - Starting init";
+    qCDebug(appLog) << "SheetBrowser::onInit() - Starting init";
     if (1 != m_initPage) {
         setCurrentPage(m_initPage);
         m_initPage = 1;
     }
 
     onViewportChanged();
-    qDebug() << "SheetBrowser::onInit() - Init completed";
+    qCDebug(appLog) << "SheetBrowser::onInit() - Init completed";
 }
 
 void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, int index)
 {
-    qDebug() << "SheetBrowser::jumpToOutline() - Starting jump to outline";
+    qCDebug(appLog) << "SheetBrowser::jumpToOutline() - Starting jump to outline";
     int pageIndex = index;
 
     if (nullptr == m_sheet || pageIndex < 0 || pageIndex >= m_items.count() || linkLeft < 0 || linkTop < 0)
@@ -690,14 +691,14 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, in
     Dr::Rotation rotation = operation.rotation;
 
     if (rotation != Dr::NumberOfRotations && rotation != Dr::RotateBy0) {
-        qDebug() << "SheetBrowser::jumpToOutline() - Rotation is not 0 or NumberOfRotations, setting current page to:" << ++pageIndex;
+        qCDebug(appLog) << "SheetBrowser::jumpToOutline() - Rotation is not 0 or NumberOfRotations, setting current page to:" << ++pageIndex;
         setCurrentPage(++pageIndex);
         return;
     }
 
     BrowserPage *jumpPage = m_items.at(pageIndex);
     if (nullptr == jumpPage) {
-        qDebug() << "SheetBrowser::jumpToOutline() - Jump page is null";
+        qCDebug(appLog) << "SheetBrowser::jumpToOutline() - Jump page is null";
         return;
     }
 
@@ -705,12 +706,12 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, in
         jump2PagePos(jumpPage, linkLeft, jumpPage->boundingRect().height() / operation.scaleFactor - linkTop);
     else
         jump2PagePos(jumpPage, linkLeft, 0);
-    qDebug() << "SheetBrowser::jumpToOutline() - Jump to outline completed";
+    qCDebug(appLog) << "SheetBrowser::jumpToOutline() - Jump to outline completed";
 }
 
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
 {
-    qDebug() << "SheetBrowser::jumpToHighLight() - Starting jump to high light";
+    qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Starting jump to high light";
     if (nullptr == m_sheet || nullptr == annotation || index < 0 || index >= m_items.count())
         return;
 
@@ -734,45 +735,45 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     Dr::Rotation rotation = operation.rotation;
 
     if (Dr::RotateBy90 == rotation) {
-        qDebug() << "SheetBrowser::jumpToHighLight() - Rotation is 90, setting pos left to:" << rect.left() << "and pos top to:" << rect.bottom();
+        qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Rotation is 90, setting pos left to:" << rect.left() << "and pos top to:" << rect.bottom();
         posLeft = rect.left();
         posTop = rect.bottom();
     } else if (Dr::RotateBy180 == rotation) {
-        qDebug() << "SheetBrowser::jumpToHighLight() - Rotation is 180, setting pos left to:" << rect.right() << "and pos top to:" << rect.bottom();
+        qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Rotation is 180, setting pos left to:" << rect.right() << "and pos top to:" << rect.bottom();
         posLeft = rect.right();
         posTop = rect.bottom();
     } else if (Dr::RotateBy270 == rotation) {
-        qDebug() << "SheetBrowser::jumpToHighLight() - Rotation is 270, setting pos left to:" << rect.right() << "and pos top to:" << rect.top();
+        qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Rotation is 270, setting pos left to:" << rect.right() << "and pos top to:" << rect.top();
         posLeft = rect.right();
         posTop = rect.top();
     }
 
     jump2PagePos(jumpPage, posLeft, posTop);
-    qDebug() << "SheetBrowser::jumpToHighLight() - Jump to high light completed";
+    qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Jump to high light completed";
 }
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
-    // qDebug() << "SheetBrowser::wheelEvent() - Starting wheel event";
+    // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Starting wheel event";
     // 当注释窗口弹出时，屏蔽鼠标滚动
     if (nullptr != m_noteEditWidget && !m_noteEditWidget->isHidden()) {
-        // qDebug() << "SheetBrowser::wheelEvent() - Note edit widget is not hidden, returning";
+        // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Note edit widget is not hidden, returning";
         return;
     }
 
     m_scroller->stop();
 
     if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-        // qDebug() << "SheetBrowser::wheelEvent() - Control modifier is pressed";
+        // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Control modifier is pressed";
         if (nullptr == m_sheet)
             return;
 
         // Use angleDelta() instead of delta()
         if (event->angleDelta().y() > 0) {
-            // qDebug() << "SheetBrowser::wheelEvent() - Zooming in";
+            // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Zooming in";
             m_sheet->zoomin();
         } else {
-            // qDebug() << "SheetBrowser::wheelEvent() - Zooming out";
+            // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Zooming out";
             m_sheet->zoomout();
         }
 
@@ -780,28 +781,28 @@ void SheetBrowser::wheelEvent(QWheelEvent *event)
     }
 
     QGraphicsView::wheelEvent(event);
-    // qDebug() << "SheetBrowser::wheelEvent() - Wheel event completed";
+    // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Wheel event completed";
 }
 
 bool SheetBrowser::event(QEvent *event)
 {
-    // qDebug() << "SheetBrowser::event() - Starting event";
+    // qCDebug(appLog) << "SheetBrowser::event() - Starting event";
     if (event && event->type() == QEvent::KeyPress) {
-        // qDebug() << "SheetBrowser::event() - Key press event";
+        // qCDebug(appLog) << "SheetBrowser::event() - Key press event";
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent && keyEvent->key() == Qt::Key_Tab && !keyEvent->isAutoRepeat()) {
-            // qDebug() << "SheetBrowser::event() - Key is Tab, setting select icon rect to false";
+            // qCDebug(appLog) << "SheetBrowser::event() - Key is Tab, setting select icon rect to false";
             if (m_lastSelectIconAnnotPage && m_items.contains(m_lastSelectIconAnnotPage)) {
                 m_lastSelectIconAnnotPage->setSelectIconRect(false);
             }
         }
 
         if (keyEvent && keyEvent->key() == Qt::Key_Menu && !keyEvent->isAutoRepeat()) {
-            // qDebug() << "SheetBrowser::event() - Key is Menu, showing menu";
+            // qCDebug(appLog) << "SheetBrowser::event() - Key is Menu, showing menu";
             this->showMenu();
         }
         if (keyEvent->key() == Qt::Key_M && (keyEvent->modifiers() & Qt::AltModifier) && !keyEvent->isAutoRepeat()) {
-            // qDebug() << "SheetBrowser::event() - Key is M, showing menu";
+            // qCDebug(appLog) << "SheetBrowser::event() - Key is M, showing menu";
             //搜索框
             if (m_findWidget && m_findWidget->isVisible() && m_findWidget->hasFocus()) {
                 return DGraphicsView::event(event);
@@ -812,20 +813,20 @@ bool SheetBrowser::event(QEvent *event)
     }
 
     if (event->type() == QEvent::Gesture) {
-        // qDebug() << "SheetBrowser::event() - Gesture event";
+        // qCDebug(appLog) << "SheetBrowser::event() - Gesture event";
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
     }
 
     return QGraphicsView::event(event);
-    // qDebug() << "SheetBrowser::event() - Event completed";
+    // qCDebug(appLog) << "SheetBrowser::event() - Event completed";
 }
 
 bool SheetBrowser::gestureEvent(QGestureEvent *event)
 {
-    // qDebug() << "Gesture event received, type:" << event->gestures().count();
+    // qCDebug(appLog) << "Gesture event received, type:" << event->gestures().count();
     
     if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
-        // qDebug() << "Processing pinch gesture";
+        // qCDebug(appLog) << "Processing pinch gesture";
         pinchTriggered(reinterpret_cast<QPinchGesture *>(pinch));
     }
 
@@ -834,13 +835,13 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
-    // qDebug() << "SheetBrowser::pinchTriggered() - Starting pinch triggered";
+    // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Starting pinch triggered";
     static bool  canRotate = false;
     static qreal currentStepScaleFactor = 1.0;
     static qreal tempScalefactor = 1.0;
 
     if (gesture->state() == Qt::GestureStarted) {
-        // qDebug() << "SheetBrowser::pinchTriggered() - Gesture started";
+        // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Gesture started";
         m_startPinch = true;
         canRotate = true;
         tempScalefactor = m_lastScaleFactor;
@@ -852,10 +853,10 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
         if (canRotate && qAbs(gesture->rotationAngle()) > 35.0) {
             if (gesture->rotationAngle() < 0.0) {
-                // qDebug() << "SheetBrowser::pinchTriggered() - Rotation angle is less than 0, rotating left";
+                // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Rotation angle is less than 0, rotating left";
                 m_sheet->rotateLeft();
             } else {
-                // qDebug() << "SheetBrowser::pinchTriggered() - Rotation angle is greater than 0, rotating right";
+                // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Rotation angle is greater than 0, rotating right";
                 m_sheet->rotateRight();
             }
             canRotate = false;
@@ -864,13 +865,13 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     }
 
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
-        // qDebug() << "SheetBrowser::pinchTriggered() - Scale factor changed";
+        // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Scale factor changed";
         currentStepScaleFactor = gesture->totalScaleFactor();
     }
 
     qreal curscalfactor = currentStepScaleFactor * tempScalefactor;
     if (gesture->state() == Qt::GestureFinished) {
-        // qDebug() << "SheetBrowser::pinchTriggered() - Gesture finished";
+        // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Gesture finished";
         this->setProperty("pinchgetsturing", false);
         QTimer::singleShot(10, [this]() {
             //稍微延迟下,不然还是会引起mouse事件触发
@@ -882,12 +883,12 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     }
 
     m_sheet->setScaleFactor(curscalfactor);
-    // qDebug() << "SheetBrowser::pinchTriggered() - Pinch triggered completed";
+    // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Pinch triggered completed";
 }
 
 void SheetBrowser::deform(SheetOperation &operation)
 {
-    qDebug() << "Deforming view with scale factor:" << operation.scaleFactor
+    qCDebug(appLog) << "Deforming view with scale factor:" << operation.scaleFactor
              << "mode:" << operation.scaleMode << "rotation:" << operation.rotation;
              
     m_lastScaleFactor = operation.scaleFactor;
@@ -897,7 +898,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     default:
     case Dr::RotateBy0:
     case Dr::RotateBy180:
-        qDebug() << "SheetBrowser::deform() - Rotation is 0 or 180";
+        qCDebug(appLog) << "SheetBrowser::deform() - Rotation is 0 or 180";
         if (Dr::FitToPageWidthMode == operation.scaleMode)
             operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
@@ -914,7 +915,7 @@ void SheetBrowser::deform(SheetOperation &operation)
         break;
     case Dr::RotateBy90:
     case Dr::RotateBy270:
-        qDebug() << "SheetBrowser::deform() - Rotation is 90 or 270";
+        qCDebug(appLog) << "SheetBrowser::deform() - Rotation is 90 or 270";
         if (Dr::FitToPageWidthMode == operation.scaleMode)
             operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
@@ -938,7 +939,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     int space = 5;              //页之间间隙
 
     for (int i = 0; i < m_items.count(); ++i) {
-        // qDebug() << "SheetBrowser::deform() - Clearing words for item:" << i;
+        // qCDebug(appLog) << "SheetBrowser::deform() - Clearing words for item:" << i;
         //m_items[i]->clearWords();     //忘记为什么要删除，暂时注释
 
         if (i % 2 == 1)
@@ -973,7 +974,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     }
 
     if (Dr::SinglePageMode == operation.layoutMode) {
-        qDebug() << "SheetBrowser::deform() - Single page mode";
+        qCDebug(appLog) << "SheetBrowser::deform() - Single page mode";
         for (int i = 0; i < m_items.count(); ++i) {
             int x = static_cast<int>(maxWidth - m_items.at(i)->rect().width()) / 2;
             if (x < 0)
@@ -991,7 +992,7 @@ void SheetBrowser::deform(SheetOperation &operation)
             maxHeight += m_items.at(i)->rect().height() + space;
         }
     } else if (Dr::TwoPagesMode == operation.layoutMode) {
-        qDebug() << "SheetBrowser::deform() - Two pages mode";
+        qCDebug(appLog) << "SheetBrowser::deform() - Two pages mode";
         for (int i = 0; i < m_items.count(); ++i) {
             if (i % 2 == 1)
                 continue;
@@ -1032,14 +1033,14 @@ void SheetBrowser::deform(SheetOperation &operation)
     setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
-        qDebug() << "SheetBrowser::deform() - Setting scroll bar value for page:" << page;
+        qCDebug(appLog) << "SheetBrowser::deform() - Setting scroll bar value for page:" << page;
         verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().y()));
         horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().x()));
     }
 
     //update Magnifier Image
     if (magnifierOpened() && operation.rotation != m_lastrotation) {
-        qDebug() << "SheetBrowser::deform() - Updating magnifier image";
+        qCDebug(appLog) << "SheetBrowser::deform() - Updating magnifier image";
         m_magnifierLabel->updateImage();
     }
     m_lastrotation = operation.rotation;
@@ -1048,41 +1049,41 @@ void SheetBrowser::deform(SheetOperation &operation)
         m_tipsWidget->hide();
 
     beginViewportChange();
-    qDebug() << "SheetBrowser::deform() - Begin viewport change";
+    qCDebug(appLog) << "SheetBrowser::deform() - Begin viewport change";
 }
 
 bool SheetBrowser::hasLoaded()
 {
-    // qDebug() << "SheetBrowser::hasLoaded() - Starting has loaded";
+    // qCDebug(appLog) << "SheetBrowser::hasLoaded() - Starting has loaded";
     return m_hasLoaded;
 }
 
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
-    // qDebug() << "SheetBrowser::resizeEvent() - Starting resize event";
+    // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Starting resize event";
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
-        // qDebug() << "SheetBrowser::resizeEvent() - Has loaded, deforming";
+        // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Has loaded, deforming";
         deform(m_sheet->operationRef());
         m_sheet->setOperationChanged();
     }
 
     if (magnifierOpened()) {
-        // qDebug() << "SheetBrowser::resizeEvent() - Magnifier opened, opening magnifier";
+        // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Magnifier opened, opening magnifier";
         QTimer::singleShot(1, this, SLOT(openMagnifier()));
     }
 
     QGraphicsView::resizeEvent(event);
-    // qDebug() << "SheetBrowser::resizeEvent() - Resize event completed";
+    // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Resize event completed";
 }
 
 void SheetBrowser::mousePressEvent(QMouseEvent *event)
 {
-    // qDebug() << "Mouse press at:" << event->pos() << "button:" << event->button();
+    // qCDebug(appLog) << "Mouse press at:" << event->pos() << "button:" << event->button();
     
     QPointF point = event->pos();
 
     BrowserPage *page = getBrowserPageForPoint(point);
-    // qDebug() << "Event on page:" << (page ? page->itemIndex() : -1);
+    // qCDebug(appLog) << "Event on page:" << (page ? page->itemIndex() : -1);
 
     m_scroller->stop();
 
@@ -1100,24 +1101,24 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_canTouchScreen = true;
                 m_repeatTimer.start(REPEAT_MOVE_DELAY, this);
                 m_scroller->handleInput(QScroller::InputPress, event->pos(), static_cast<qint64>(event->timestamp()));
-                // qDebug() << "Touch screen gesture started";
+                // qCDebug(appLog) << "Touch screen gesture started";
             } else {
                 m_selectStartWord = nullptr;
                 m_selectEndWord = nullptr;
                 scene()->setSelectionArea(QPainterPath());
-                // qDebug() << "Selection area cleared";
+                // qCDebug(appLog) << "Selection area cleared";
             }
 
             m_selectWord = nullptr;
             m_selectEndPos = QPointF();
             m_selectStartPos = m_selectPressedPos = mapToScene(event->pos());
-            // qDebug() << "Selection start position:" << m_selectPressedPos;
+            // qCDebug(appLog) << "Selection start position:" << m_selectPressedPos;
 
             if (page != nullptr) {
                 m_selectIndex = page->itemIndex();
                 //add by dxh 2020-8-19  防止书签附近有文字时,操作书签无效
                 page->setPageBookMark(page->mapFromScene(m_selectPressedPos));
-                // qDebug() << "Set page bookmark at:" << page->mapFromScene(m_selectPressedPos);
+                // qCDebug(appLog) << "Set page bookmark at:" << page->mapFromScene(m_selectPressedPos);
             }
 
             deepin_reader::Annotation *clickAnno = getClickAnnot(page, m_selectPressedPos, true);
@@ -1132,11 +1133,11 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
                 m_iconAnnotationMovePos = m_selectPressedPos;
                 m_annotationInserting = false;
                 m_iconAnnot = clickAnno;
-                // qDebug() << "Text annotation selected:" << clickAnno->contents();
+                // qCDebug(appLog) << "Text annotation selected:" << clickAnno->contents();
                 return DGraphicsView::mousePressEvent(event);
             }
         } else if (btn == Qt::RightButton) {
-            // qDebug() << "SheetBrowser::mousePressEvent() - Right button pressed";
+            // qCDebug(appLog) << "SheetBrowser::mousePressEvent() - Right button pressed";
             closeMagnifier();
 
             m_selectPressedPos = QPointF();
@@ -1175,20 +1176,20 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
             connect(&menu, &BrowserMenu::signalMenuItemClicked, [ & ](const QString & objectname) {
                 const QPointF &clickPos = mapToScene(event->pos());
                 if (objectname == "Copy") {
-                    // qDebug() << "SheetBrowser::mousePressEvent() - Copy";
+                    // qCDebug(appLog) << "SheetBrowser::mousePressEvent() - Copy";
                     Utils::setCurrentFilePath(m_sheet->filePath());
                     //右键菜单->复制
                     Utils::copyText(selectWords);
                 } else if (objectname == "CopyAnnoText") {
                     //右键菜单->复制注释文本
                     if (annotation){
-                        // qDebug() << "SheetBrowser::mousePressEvent() - Copy annotation text";
+                        // qCDebug(appLog) << "SheetBrowser::mousePressEvent() - Copy annotation text";
                         Utils::setCurrentFilePath(m_sheet->filePath());
                         Utils::copyText(annotation->annotationText());
                     }
                 } else if (objectname == "AddTextHighlight") {
                     QPoint pointEnd;
-                    // qDebug() << "SheetBrowser::mousePressEvent() - Add text highlight";
+                    // qCDebug(appLog) << "SheetBrowser::mousePressEvent() - Add text highlight";
                     addHighLightAnnotation("", Utils::getCurHiglightColor(), pointEnd);
                 } else if (objectname == "ChangeAnnotationColor") {
                     if (annotation) {
@@ -1282,19 +1283,19 @@ void SheetBrowser::mousePressEvent(QMouseEvent *event)
     }
 
     DGraphicsView::mousePressEvent(event);
-    // qDebug() << "SheetBrowser::mousePressEvent() - Mouse press event completed";
+    // qCDebug(appLog) << "SheetBrowser::mousePressEvent() - Mouse press event completed";
 }
 
 void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 {
-    // qDebug() << "SheetBrowser::mouseMoveEvent() - Starting mouse move event";
+    // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Starting mouse move event";
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode()) && !m_bHandAndLink) {
-        // qDebug() << "SheetBrowser::mouseMoveEvent() - Not start pinch, drag mode is not NoDrag or RubberBandDrag, and not hand and link";
+        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Not start pinch, drag mode is not NoDrag or RubberBandDrag, and not hand and link";
         QPoint mousePos = event->pos();
 
         //触摸
         if (m_canTouchScreen && event->source() == Qt::MouseEventSynthesizedByQt) {
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Can touch screen, event source is Qt::MouseEventSynthesizedByQt";
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Can touch screen, event source is Qt::MouseEventSynthesizedByQt";
             QPointF delta = mapToScene(mousePos) - m_selectPressedPos;
             if (!m_selectPressedPos.isNull() && delta.manhattanLength() > 20) {
                 m_repeatTimer.stop();
@@ -1306,18 +1307,18 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         //处理当前拖放图标注释
         if (m_selectIconAnnotation && m_lastSelectIconAnnotPage) {
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Select icon annotation, last select icon annot page is not null";
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Select icon annotation, last select icon annot page is not null";
             QPointF posInPage = m_lastSelectIconAnnotPage->mapFromScene(mapToScene(mousePos));
 
             posInPage = getAnnotPosInPage(posInPage, m_lastSelectIconAnnotPage);
 
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Pos in page:" << posInPage;
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Pos in page:" << posInPage;
             QPointF curPointF = m_lastSelectIconAnnotPage->mapToScene(posInPage);
 
             const QPointF &delta = curPointF - m_iconAnnotationMovePos;
 
             if (delta.manhattanLength() > deltaManhattanLength) {
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Delta manhattan length is greater than delta manhattan length";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Delta manhattan length is greater than delta manhattan length";
                 m_iconAnnotationMovePos = QPointF();
 
                 m_lastSelectIconAnnotPage->setDrawMoveIconRect(true);
@@ -1335,26 +1336,26 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
 
         if (m_sheet->isFullScreen() && !m_sheet->operation().sidebarVisible) {
             if (mousePos.x() <= 0) {
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse pos x is less than or equal to 0";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse pos x is less than or equal to 0";
                 m_sheet->setSidebarVisible(true, false);
             } else {
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse pos x is greater than 0";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse pos x is greater than 0";
                 m_sheet->setSidebarVisible(false, false);
             }
         }
 
         if (magnifierOpened()) {
             //放大镜
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Magnifier opened";
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Magnifier opened";
             showMagnigierImage(mousePos);
         } else {
             QPointF mousposF = event->pos();
 
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse pos:" << mousposF;
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse pos:" << mousposF;
             BrowserPage *page = getBrowserPageForPoint(mousposF);
 
             if (page) { //加载页码内的文字
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Page is not null";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Page is not null";
                 page->loadWords();
                 if (m_selectIndex >= 0 && !m_selectPressedPos.isNull()) {//将两页之间所有的页面文字都取出来
                     if (page->itemIndex() - m_selectIndex > 1) {
@@ -1370,20 +1371,20 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             }
 
             if (m_selectPressedPos.isNull()) { //鼠标处于非按压状态
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse is not pressed";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse is not pressed";
                 if (page) {
                     const Link &mlink = getLinkAtPoint(mousePos);
                     BrowserAnnotation *browserAnno = page->getBrowserAnnotation(mousposF);
                     //鼠标所在位置存在注释且不为空 当前非平板模式 显示tips
                     if (event->source() != Qt::MouseEventSynthesizedByQt && browserAnno && !browserAnno->annotationText().isEmpty()) {
-                        // qDebug() << "SheetBrowser::mouseMoveEvent() - Annotation text is not empty";
+                        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Annotation text is not empty";
                         m_tipsWidget->setText(browserAnno->annotationText());
                         QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
                         m_tipsWidget->move(showRealPos);
                         m_tipsWidget->show();
                         setCursor(QCursor(Qt::PointingHandCursor));
                     } else if (mlink.isValid() && nullptr == browserAnno) {
-                        // qDebug() << "SheetBrowser::mouseMoveEvent() - Link is valid and annotation is null";
+                        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Link is valid and annotation is null";
                         //处理移动到超链接区域
                         //未开启放大镜时，如果超链接文本添加了高亮注释，高亮注释优先显示
                         if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
@@ -1394,20 +1395,20 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                         }
                         setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
                     } else if (page->getBrowserWord(mousposF)) {
-                        // qDebug() << "SheetBrowser::mouseMoveEvent() - Browser word is not null";
+                        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Browser word is not null";
                         m_tipsWidget->hide();
                         setCursor(QCursor(Qt::IBeamCursor));
                     } else {
-                        // qDebug() << "SheetBrowser::mouseMoveEvent() - Browser word is null";
+                        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Browser word is null";
                         m_tipsWidget->hide();
                         setCursor(QCursor(Qt::ArrowCursor));
                     }
                 } else {
-                    // qDebug() << "SheetBrowser::mouseMoveEvent() - Page is null";
+                    // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Page is null";
                     setCursor(QCursor(Qt::ArrowCursor));
                 }
             } else {//当前正在被按下
-                // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse is pressed";
+                // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse is pressed";
                 m_tipsWidget->hide();
                 QPointF beginPos = m_selectPressedPos;
                 QPointF endPos = mapToScene(event->pos());
@@ -1464,10 +1465,10 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
             }
         }
     } else if (!m_startPinch && (QGraphicsView::ScrollHandDrag == dragMode() || m_bHandAndLink)) {
-        // qDebug() << "SheetBrowser::mouseMoveEvent() - Not start pinch, drag mode is ScrollHandDrag or hand and link";
+        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Not start pinch, drag mode is ScrollHandDrag or hand and link";
         // 切换至手形样式后，也要求可是点击超链接文本并打开
         if (!magnifierOpened()) {
-            // qDebug() << "SheetBrowser::mouseMoveEvent() - Magnifier not opened";
+            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Magnifier not opened";
             if (Qt::NoButton == event->buttons()) { //鼠标处于非按压状态
                 QPoint mousePos = event->pos();
                 QPointF mousposF = event->pos();
@@ -1476,7 +1477,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                 if (page) {
                     const Link &mlink = getLinkAtPoint(mousePos);
                     if (mlink.isValid()) {
-                        // qDebug() << "SheetBrowser::mouseMoveEvent() - Link is valid";
+                        // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Link is valid";
                         //处理移动
                         if (!mlink.urlOrFileName.isEmpty()) { // 超链接地址为空时，不显示浮窗
                             QPoint showRealPos(QCursor::pos().x(), QCursor::pos().y() + 20);
@@ -1485,7 +1486,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                             m_tipsWidget->show();
                         }
                         if (!m_bHandAndLink) {
-                            // qDebug() << "SheetBrowser::mouseMoveEvent() - Setting hand and link";
+                            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Setting hand and link";
                             m_bHandAndLink = true;
                             setDragMode(QGraphicsView::NoDrag);
                             setCursor(QCursor(Qt::PointingHandCursor)); //设为指针光标
@@ -1493,7 +1494,7 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
                     } else {
                         // 离开超链接区域，还原为手形工具
                         if (m_bHandAndLink) {
-                            // qDebug() << "SheetBrowser::mouseMoveEvent() - Setting hand and link to false";
+                            // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Setting hand and link to false";
                             m_bHandAndLink = false;
                             m_tipsWidget->hide();
                             setDragMode(QGraphicsView::ScrollHandDrag);
@@ -1505,14 +1506,14 @@ void SheetBrowser::mouseMoveEvent(QMouseEvent *event)
     }
 
     QGraphicsView::mouseMoveEvent(event);
-    // qDebug() << "SheetBrowser::mouseMoveEvent() - Mouse move event completed";
+    // qCDebug(appLog) << "SheetBrowser::mouseMoveEvent() - Mouse move event completed";
 }
 
 void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 {
-    // qDebug() << "SheetBrowser::mouseReleaseEvent() - Starting mouse release event";
+    // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Starting mouse release event";
     if (!m_startPinch && (QGraphicsView::NoDrag == dragMode() || QGraphicsView::RubberBandDrag == dragMode())) {
-        // qDebug() << "SheetBrowser::mouseReleaseEvent() - Not start pinch, drag mode is not NoDrag or RubberBandDrag";
+        // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Not start pinch, drag mode is not NoDrag or RubberBandDrag";
         if (event->button() == Qt::LeftButton) {
             if (m_canTouchScreen) {
                 m_scroller->handleInput(QScroller::InputRelease, event->pos(), static_cast<qint64>(event->timestamp()));
@@ -1534,7 +1535,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                 clickAnno = m_iconAnnot;
 
             if (!m_selectIconAnnotation) {
-                // qDebug() << "SheetBrowser::mouseReleaseEvent() - Not select icon annotation";
+                // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Not select icon annotation";
                 if (m_annotationInserting && (nullptr == m_iconAnnot)) {
                     if (clickAnno && clickAnno->type() == deepin_reader::Annotation::AText) {
                         updateAnnotation(clickAnno, clickAnno->contents());
@@ -1547,14 +1548,14 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
 
                     m_annotationInserting = false;
                 } else {
-                    // qDebug() << "SheetBrowser::mouseReleaseEvent() - Select word is not null";
+                    // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Select word is not null";
                     if (clickAnno && m_selectWord == nullptr)
                         showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
                 }
                 m_selectEndPos = mapToScene(event->pos());
             } else {
                 //存在选中的icon annotation
-                // qDebug() << "SheetBrowser::mouseReleaseEvent() - Select icon annotation";
+                // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Select icon annotation";
                 if (m_lastSelectIconAnnotPage && m_iconAnnotationMovePos.isNull()) {
                     m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
 
@@ -1562,7 +1563,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
                         emit sigOperaAnnotation(MSG_NOTE_MOVE, m_lastSelectIconAnnotPage->itemIndex(), clickAnno);
 
                 } else if (clickAnno && m_lastSelectIconAnnotPage) {
-                    // qDebug() << "SheetBrowser::mouseReleaseEvent() - Click annotation and last select icon annot page is not null";
+                    // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Click annotation and last select icon annot page is not null";
                     showNoteEditWidget(clickAnno, mapToGlobal(event->pos()));
                 }
             }
@@ -1577,7 +1578,7 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
             // 手形工具时，点击高亮注释的超链接文本时，只响应超链接
             // 点击时鼠标按下和离开时坐标相差两个像素内可以打开链接
             if ((m_selectStartPos - m_selectEndPos).manhattanLength() <= 2 && (nullptr == clickAnno || m_bHandAndLink)) {
-                // qDebug() << "SheetBrowser::mouseReleaseEvent() - Manhattan length is less than or equal to 2 and click annotation is null or hand and link";
+                // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Manhattan length is less than or equal to 2 and click annotation is null or hand and link";
                 // 跳转链接时隐藏tips
                 if (nullptr != m_tipsWidget && !m_tipsWidget->isHidden()) {
                     m_tipsWidget->hide();
@@ -1588,44 +1589,44 @@ void SheetBrowser::mouseReleaseEvent(QMouseEvent *event)
     }
 
     QGraphicsView::mouseReleaseEvent(event);
-    // qDebug() << "SheetBrowser::mouseReleaseEvent() - Mouse release event completed";
+    // qCDebug(appLog) << "SheetBrowser::mouseReleaseEvent() - Mouse release event completed";
 }
 
 void SheetBrowser::focusOutEvent(QFocusEvent *event)
 {
-    // qDebug() << "SheetBrowser::focusOutEvent() - Starting focus out event";
+    // qCDebug(appLog) << "SheetBrowser::focusOutEvent() - Starting focus out event";
     // 鼠标为手形工具状态且在超链接处，此时失去焦点恢复成默认手形状态
     if (m_bHandAndLink) {
-        // qDebug() << "SheetBrowser::focusOutEvent() - Hand and link";
+        // qCDebug(appLog) << "SheetBrowser::focusOutEvent() - Hand and link";
         m_bHandAndLink = false;
         setDragMode(QGraphicsView::ScrollHandDrag);
     }
 
     DGraphicsView::focusOutEvent(event);
-    // qDebug() << "SheetBrowser::focusOutEvent() - Focus out event completed";
+    // qCDebug(appLog) << "SheetBrowser::focusOutEvent() - Focus out event completed";
 }
 
 void SheetBrowser::timerEvent(QTimerEvent *event)
 {
-    // qDebug() << "SheetBrowser::timerEvent() - Starting timer event";
+    // qCDebug(appLog) << "SheetBrowser::timerEvent() - Starting timer event";
     QGraphicsView::timerEvent(event);
     if (event->timerId() == m_repeatTimer.timerId()) {
-        // qDebug() << "SheetBrowser::timerEvent() - Timer event is m_repeatTimer";
+        // qCDebug(appLog) << "SheetBrowser::timerEvent() - Timer event is m_repeatTimer";
         m_repeatTimer.stop();
         m_canTouchScreen = false;
     }
-    // qDebug() << "SheetBrowser::timerEvent() - Timer event completed";
+    // qCDebug(appLog) << "SheetBrowser::timerEvent() - Timer event completed";
 }
 
 int SheetBrowser::allPages()
 {
-    // qDebug() << "SheetBrowser::allPages() - All pages:" << m_items.count();
+    // qCDebug(appLog) << "SheetBrowser::allPages() - All pages:" << m_items.count();
     return m_items.count();
 }
 
 int SheetBrowser::currentPage()
 {
-    // qDebug() << "SheetBrowser::currentPage() - Current page:" << m_currentPage;
+    // qCDebug(appLog) << "SheetBrowser::currentPage() - Current page:" << m_currentPage;
     if (m_currentPage >= 1)
         return m_currentPage;
 
@@ -1634,7 +1635,7 @@ int SheetBrowser::currentPage()
 
 int SheetBrowser::currentScrollValueForPage()
 {
-    // qDebug() << "SheetBrowser::currentScrollValueForPage() - Current scroll value for page";
+    // qCDebug(appLog) << "SheetBrowser::currentScrollValueForPage() - Current scroll value for page";
     int value = verticalScrollBar()->value();
 
     int index = 0;
@@ -1663,30 +1664,30 @@ int SheetBrowser::currentScrollValueForPage()
 
 void SheetBrowser::setCurrentPage(int page)
 {
-    // qDebug() << "SheetBrowser::setCurrentPage() - Setting current page to:" << page;
+    // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Setting current page to:" << page;
     if (page < 1 || page > allPages()) {
-        qWarning() << "Invalid page number:" << page << "max pages:" << allPages();
+        qCWarning(appLog) << "Invalid page number:" << page << "max pages:" << allPages();
         return;
     }
 
-    qDebug() << "Setting current page to:" << page;
+    qCDebug(appLog) << "Setting current page to:" << page;
 
     m_bNeedNotifyCurPageChanged = false;
 
     if (Dr::RotateBy0 == m_sheet->operation().rotation) {
-        // qDebug() << "SheetBrowser::setCurrentPage() - Rotate by 0";
+        // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Rotate by 0";
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
     } else if (Dr::RotateBy90 == m_sheet->operation().rotation) {
-        // qDebug() << "SheetBrowser::setCurrentPage() - Rotate by 90";
+        // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Rotate by 90";
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x() -  m_items.at(page - 1)->boundingRect().height()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y()));
     } else if (Dr::RotateBy180 == m_sheet->operation().rotation) {
-        // qDebug() << "SheetBrowser::setCurrentPage() - Rotate by 180";
+        // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Rotate by 180";
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x() - m_items.at(page - 1)->boundingRect().width()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y() - m_items.at(page - 1)->boundingRect().height()));
     } else if (Dr::RotateBy270 == m_sheet->operation().rotation) {
-        // qDebug() << "SheetBrowser::setCurrentPage() - Rotate by 270";
+        // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Rotate by 270";
         horizontalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().x()));
         verticalScrollBar()->setValue(static_cast<int>(m_items.at(page - 1)->pos().y() - m_items.at(page - 1)->boundingRect().width()));
     }
@@ -1694,12 +1695,12 @@ void SheetBrowser::setCurrentPage(int page)
     m_bNeedNotifyCurPageChanged = true;
 
     curpageChanged(page);
-    qDebug() << "Page changed to:" << page << "successfully";
+    qCDebug(appLog) << "Page changed to:" << page << "successfully";
 }
 
 bool SheetBrowser::getExistImage(int index, QImage &image, int width, int height)
 {
-    // qDebug() << "SheetBrowser::getExistImage() - Getting exist image for index:" << index;
+    // qCDebug(appLog) << "SheetBrowser::getExistImage() - Getting exist image for index:" << index;
     if (m_items.count() <= index)
         return false;
 
@@ -1710,7 +1711,7 @@ bool SheetBrowser::getExistImage(int index, QImage &image, int width, int height
 
 BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
 {
-    // qDebug() << "SheetBrowser::getBrowserPageForPoint() - Getting browser page for point:" << viewPoint;
+    // qCDebug(appLog) << "SheetBrowser::getBrowserPageForPoint() - Getting browser page for point:" << viewPoint;
     BrowserPage *item = nullptr;
 
     QPoint ponit = viewPoint.toPoint();
@@ -1721,24 +1722,24 @@ BrowserPage *SheetBrowser::getBrowserPageForPoint(QPointF &viewPoint)
         item = dynamic_cast<BrowserPage *>(itemIter);
 
         if (item != nullptr) {
-            // qDebug() << "SheetBrowser::getBrowserPageForPoint() - Item is not null";
+            // qCDebug(appLog) << "SheetBrowser::getBrowserPageForPoint() - Item is not null";
             const QPointF &itemPoint = item->mapFromScene(mapToScene(ponit));
 
             if (item->contains(itemPoint)) {
-                // qDebug() << "SheetBrowser::getBrowserPageForPoint() - Item contains point";
+                // qCDebug(appLog) << "SheetBrowser::getBrowserPageForPoint() - Item contains point";
                 viewPoint = itemPoint;
                 return item;
             }
         }
     }
 
-    // qDebug() << "SheetBrowser::getBrowserPageForPoint() - Item is null";
+    // qCDebug(appLog) << "SheetBrowser::getBrowserPageForPoint() - Item is null";
     return nullptr;
 }
 
 Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &clickPoint, const QString &contents)
 {
-    // qDebug() << "SheetBrowser::addIconAnnotation() - Adding icon annotation for page:" << page;
+    // qCDebug(appLog) << "SheetBrowser::addIconAnnotation() - Adding icon annotation for page:" << page;
     Annotation *anno = nullptr;
     if (nullptr != page) {
         clearSelectIconAnnotAfterMenu();
@@ -1754,7 +1755,7 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
     }
 
     if (anno && !contents.isEmpty()) {
-        // qDebug() << "SheetBrowser::addIconAnnotation() - Annotation is not null and contents is not empty";
+        // qCDebug(appLog) << "SheetBrowser::addIconAnnotation() - Annotation is not null and contents is not empty";
         m_selectIconAnnotation = true;
 
         if (m_lastSelectIconAnnotPage) {
@@ -1763,17 +1764,17 @@ Annotation *SheetBrowser::addIconAnnotation(BrowserPage *page, const QPointF &cl
 
         emit sigOperaAnnotation(MSG_NOTE_ADD, anno->page - 1, anno);
     }
-    // qDebug() << "SheetBrowser::addIconAnnotation() - Annotation is:" << anno;
+    // qCDebug(appLog) << "SheetBrowser::addIconAnnotation() - Annotation is:" << anno;
     return anno;
 }
 
 void SheetBrowser::openMagnifier()
 {
-    // qDebug() << "SheetBrowser::openMagnifier() - Opening magnifier";
+    // qCDebug(appLog) << "SheetBrowser::openMagnifier() - Opening magnifier";
     if (nullptr == m_magnifierLabel) {
         m_magnifierLabel = new BrowserMagniFier(this);
     } else {
-        // qDebug() << "SheetBrowser::openMagnifier() - Magnifier label is not null";
+        // qCDebug(appLog) << "SheetBrowser::openMagnifier() - Magnifier label is not null";
         m_magnifierLabel->raise();
 
         m_magnifierLabel->show();
@@ -1784,12 +1785,12 @@ void SheetBrowser::openMagnifier()
     setCursor(QCursor(Qt::BlankCursor));
 
     showMagnigierImage(this->mapFromGlobal(QCursor::pos()));
-    // qDebug() << "SheetBrowser::openMagnifier() - Magnifier opened";
+    // qCDebug(appLog) << "SheetBrowser::openMagnifier() - Magnifier opened";
 }
 
 void SheetBrowser::closeMagnifier()
 {
-    // qDebug() << "SheetBrowser::closeMagnifier() - Closing magnifier";
+    // qCDebug(appLog) << "SheetBrowser::closeMagnifier() - Closing magnifier";
     if (nullptr != m_magnifierLabel) {
         m_magnifierLabel->hide();
 
@@ -1800,55 +1801,55 @@ void SheetBrowser::closeMagnifier()
             setDragMode(QGraphicsView::NoDrag);
         }
     }
-    // qDebug() << "SheetBrowser::closeMagnifier() - Magnifier closed";
+    // qCDebug(appLog) << "SheetBrowser::closeMagnifier() - Magnifier closed";
 }
 
 bool SheetBrowser::magnifierOpened()
 {
-    // qDebug() << "SheetBrowser::magnifierOpened() - Magnifier opened:" << (m_magnifierLabel && m_magnifierLabel->isVisible());
+    // qCDebug(appLog) << "SheetBrowser::magnifierOpened() - Magnifier opened:" << (m_magnifierLabel && m_magnifierLabel->isVisible());
     return (m_magnifierLabel && m_magnifierLabel->isVisible()) ;
 }
 
 qreal SheetBrowser::maxWidth()
 {
-    // qDebug() << "SheetBrowser::maxWidth() - Max width:" << m_maxWidth;
+    // qCDebug(appLog) << "SheetBrowser::maxWidth() - Max width:" << m_maxWidth;
     return m_maxWidth;
 }
 
 qreal SheetBrowser::maxHeight()
 {
-    // qDebug() << "SheetBrowser::maxHeight() - Max height:" << m_maxHeight;
+    // qCDebug(appLog) << "SheetBrowser::maxHeight() - Max height:" << m_maxHeight;
     return m_maxHeight;
 }
 
 void SheetBrowser::needBookmark(int index, bool state)
 {
-    // qDebug() << "SheetBrowser::needBookmark() - Need bookmark:" << index << "state:" << state;
+    // qCDebug(appLog) << "SheetBrowser::needBookmark() - Need bookmark:" << index << "state:" << state;
     emit sigNeedBookMark(index, state);
 }
 
 void SheetBrowser::dragEnterEvent(QDragEnterEvent *event)
 {
-    // qDebug() << "SheetBrowser::dragEnterEvent() - Drag enter event";
+    // qCDebug(appLog) << "SheetBrowser::dragEnterEvent() - Drag enter event";
     event->ignore();
 }
 
 void SheetBrowser::showEvent(QShowEvent *event)
 {
-    // qDebug() << "SheetBrowser::showEvent() - Showing event";
+    // qCDebug(appLog) << "SheetBrowser::showEvent() - Showing event";
     QTimer::singleShot(100, this, SLOT(onInit()));
 
     QGraphicsView::showEvent(event);
-    // qDebug() << "SheetBrowser::showEvent() - Showing event completed";
+    // qCDebug(appLog) << "SheetBrowser::showEvent() - Showing event completed";
 }
 
 void SheetBrowser::handlePrepareSearch()
 {
-    qDebug() << "Preparing search for file type:" << m_sheet->fileType();
+    qCDebug(appLog) << "Preparing search for file type:" << m_sheet->fileType();
     
     //目前只有PDF开放搜索功能
     if (m_sheet->fileType() != Dr::FileType::PDF && m_sheet->fileType() != Dr::FileType::DOCX) {
-        qDebug() << "Search not supported for current file type";
+        qCDebug(appLog) << "Search not supported for current file type";
         return;
     }
 
@@ -1857,12 +1858,12 @@ void SheetBrowser::handlePrepareSearch()
         int windowY = this->mapTo(this->window(), QPoint(0, 0)).y();
         m_findWidget->setYOff(windowY);
         m_findWidget->setDocSheet(m_sheet);
-        qDebug() << "Created new FindWidget with Y offset:" << windowY;
+        qCDebug(appLog) << "Created new FindWidget with Y offset:" << windowY;
     }
 
     m_findWidget->updatePosition();
     m_findWidget->setSearchEditFocus();
-    qDebug() << "FindWidget positioned and focused";
+    qCDebug(appLog) << "FindWidget positioned and focused";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if(m_findWidget && m_findWidget->isVisible()){
@@ -1874,9 +1875,9 @@ void SheetBrowser::handlePrepareSearch()
 
 void SheetBrowser::jumpToNextSearchResult()
 {
-    qDebug() << "SheetBrowser::jumpToNextSearchResult() - Jumping to next search result";
+    qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Jumping to next search result";
     if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索下一个
-        qDebug() << "SheetBrowser::jumpToNextSearchResult() - Search result is empty";
+        qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Search result is empty";
         return;
     }
 
@@ -1887,7 +1888,7 @@ void SheetBrowser::jumpToNextSearchResult()
         int pageHighlightSize = page->searchHighlightRectSize();
         if (pageHighlightSize > 0) {
             if (m_lastFindPage && m_lastFindPage != page && m_changSearchFlag) {
-                // qDebug() << "SheetBrowser::jumpToNextSearchResult() - Last find page is not null and last find page is not current page and change search flag";
+                // qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Last find page is not null and last find page is not current page and change search flag";
                 m_changSearchFlag = false;
                 m_searchPageTextIndex = -1;
                 m_lastFindPage->clearSelectSearchHighlightRects();
@@ -1895,14 +1896,14 @@ void SheetBrowser::jumpToNextSearchResult()
 
             m_searchPageTextIndex++;
             if (m_searchPageTextIndex >= pageHighlightSize) {
-                // qDebug() << "SheetBrowser::jumpToNextSearchResult() - Search page text index is greater than or equal to page highlight size";
+                // qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Search page text index is greater than or equal to page highlight size";
                 //当前页搜索完了，可以进行下一页
                 m_changSearchFlag = true;
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex + 1;
 
                 if (m_searchCurIndex >= size) { // 全部搜索完，从头搜索
-                    // qDebug() << "SheetBrowser::jumpToNextSearchResult() - Search current index is greater than or equal to size";
+                    // qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Search current index is greater than or equal to size";
                     m_searchCurIndex = 0;
                     m_searchPageTextIndex = -1;
                     index = -1;
@@ -1917,10 +1918,10 @@ void SheetBrowser::jumpToNextSearchResult()
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
         } else {
-            // qDebug() << "SheetBrowser::jumpToNextSearchResult() - Page highlight size is not greater than 0";
+            // qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Page highlight size is not greater than 0";
             m_searchCurIndex++;
             if (m_searchCurIndex >= size) {
-                // qDebug() << "SheetBrowser::jumpToNextSearchResult() - Search current index is greater than or equal to size";
+                // qCDebug(appLog) << "SheetBrowser::jumpToNextSearchResult() - Search current index is greater than or equal to size";
                 m_searchCurIndex = 0;
                 m_searchPageTextIndex = -1;
                 m_lastFindPage = page;
@@ -1932,9 +1933,9 @@ void SheetBrowser::jumpToNextSearchResult()
 
 void SheetBrowser::jumpToPrevSearchResult()
 {
-    qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Jumping to previous search result";
+    qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Jumping to previous search result";
     if (!m_isSearchResultNotEmpty) { //搜索到的结果为空，不搜索上一个
-        qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Search result is empty";
+        qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Search result is empty";
         return;
     }
 
@@ -1945,7 +1946,7 @@ void SheetBrowser::jumpToPrevSearchResult()
         int pageHighlightSize = page->searchHighlightRectSize();
         if (pageHighlightSize > 0) {
             if (m_lastFindPage && m_lastFindPage != page && m_changSearchFlag) {
-                // qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Last find page is not null and last find page is not current page and change search flag";
+                // qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Last find page is not null and last find page is not current page and change search flag";
                 m_changSearchFlag = false;
                 m_searchPageTextIndex = pageHighlightSize;
                 m_lastFindPage->clearSelectSearchHighlightRects();
@@ -1953,14 +1954,14 @@ void SheetBrowser::jumpToPrevSearchResult()
 
             m_searchPageTextIndex--;
             if (m_searchPageTextIndex < 0) {
-                // qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Search page text index is less than 0";
+                // qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Search page text index is less than 0";
                 //当前页搜索完了，可以进行下一页
                 m_changSearchFlag = true;
                 m_lastFindPage = page;
                 m_searchCurIndex = curIndex - 1;
 
                 if (m_searchCurIndex < 0) { // 全部搜索完，从尾搜索
-                    // qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Search current index is less than 0";
+                    // qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Search current index is less than 0";
                     m_searchCurIndex = size - 1;
                     m_searchPageTextIndex = pageHighlightSize;
                     index = -1;
@@ -1975,10 +1976,10 @@ void SheetBrowser::jumpToPrevSearchResult()
             verticalScrollBar()->setValue(static_cast<int>(page->pos().y() + pageHigRect.y()) - this->height() / 2);
             break;
         } else {
-            // qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Page highlight size is not greater than 0";
+            // qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Page highlight size is not greater than 0";
             m_searchCurIndex--;
             if (m_searchCurIndex < 0) {
-                // qDebug() << "SheetBrowser::jumpToPrevSearchResult() - Search current index is less than 0";
+                // qCDebug(appLog) << "SheetBrowser::jumpToPrevSearchResult() - Search current index is less than 0";
                 m_searchCurIndex = size - 1;
                 m_searchPageTextIndex = pageHighlightSize;
                 m_lastFindPage = page;
@@ -1990,7 +1991,7 @@ void SheetBrowser::jumpToPrevSearchResult()
 
 void SheetBrowser::handleSearchStart()
 {
-    qDebug() << "SheetBrowser::handleSearchStart() - Handling search start";
+    qCDebug(appLog) << "SheetBrowser::handleSearchStart() - Handling search start";
     m_searchCurIndex = 0;
     m_searchPageTextIndex = -1;
     m_isSearchResultNotEmpty = false;
@@ -2000,7 +2001,7 @@ void SheetBrowser::handleSearchStart()
 
 void SheetBrowser::handleSearchStop()
 {
-    qDebug() << "SheetBrowser::handleSearchStop() - Handling search stop";
+    qCDebug(appLog) << "SheetBrowser::handleSearchStop() - Handling search stop";
     m_searchCurIndex = 0;
     m_searchPageTextIndex = -1;
     m_isSearchResultNotEmpty = false;
@@ -2010,7 +2011,7 @@ void SheetBrowser::handleSearchStop()
 
 void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &res)
 {
-    qDebug() << "SheetBrowser::handleSearchResultComming() - Handling search result comming";
+    qCDebug(appLog) << "SheetBrowser::handleSearchResultComming() - Handling search result comming";
     if (res.page <= 0)
         return;
 
@@ -2021,77 +2022,77 @@ void SheetBrowser::handleSearchResultComming(const deepin_reader::SearchResult &
     if (-1 == m_searchPageTextIndex)
         jumpToNextSearchResult();
 
-    qDebug() << "SheetBrowser::handleSearchResultComming() - Search result comming completed";
+    qCDebug(appLog) << "SheetBrowser::handleSearchResultComming() - Search result comming completed";
 }
 
 void SheetBrowser::handleFindFinished(int searchcnt)
 {
-    qInfo() << "Search finished with" << searchcnt << "results";
+    qCInfo(appLog) << "Search finished with" << searchcnt << "results";
     
     if (m_findWidget) {
         bool alert = searchcnt == 0;
         m_findWidget->setEditAlert(alert);
-        qDebug() << "FindWidget alert set to:" << alert;
+        qCDebug(appLog) << "FindWidget alert set to:" << alert;
     }
 }
 
 void SheetBrowser::curpageChanged(int curpage)
 {
-    qDebug() << "SheetBrowser::curpageChanged() - Current page changed";
+    qCDebug(appLog) << "SheetBrowser::curpageChanged() - Current page changed";
     if (m_currentPage != curpage) {
         m_currentPage = curpage;
         emit sigPageChanged(curpage);
     }
-    qDebug() << "SheetBrowser::curpageChanged() - Current page changed completed";
+    qCDebug(appLog) << "SheetBrowser::curpageChanged() - Current page changed completed";
 }
 
 bool SheetBrowser::isLink(QPointF viewpoint)
 {
-    qDebug() << "SheetBrowser::isLink() - Checking link at point";
+    qCDebug(appLog) << "SheetBrowser::isLink() - Checking link at point";
     BrowserPage *page = getBrowserPageForPoint(viewpoint);
 
     if (nullptr == page) {
-        qDebug() << "No page found at viewpoint";
+        qCDebug(appLog) << "No page found at viewpoint";
         return false;
     }
 
     viewpoint = translate2Local(viewpoint);
 
     bool isLink = m_sheet->renderer()->inLink(page->itemIndex(), viewpoint);
-    qDebug() << "Link check at page" << page->itemIndex() << "position" << viewpoint << "result:" << isLink;
+    qCDebug(appLog) << "Link check at page" << page->itemIndex() << "position" << viewpoint << "result:" << isLink;
     
     return isLink;
 }
 
 Link SheetBrowser::getLinkAtPoint(QPointF viewpoint)
 {
-    // qDebug() << "SheetBrowser::getLinkAtPoint() - Getting link at point";
+    // qCDebug(appLog) << "SheetBrowser::getLinkAtPoint() - Getting link at point";
     BrowserPage *page = getBrowserPageForPoint(viewpoint);
 
     if (nullptr == page) {
-        // qDebug() << "SheetBrowser::getLinkAtPoint() - Page is null";
+        // qCDebug(appLog) << "SheetBrowser::getLinkAtPoint() - Page is null";
         return Link();
     }
 
     viewpoint = translate2Local(viewpoint);
 
     // 获取当前位置的link
-    // qDebug() << "SheetBrowser::getLinkAtPoint() - Getting link at point completed";
+    // qCDebug(appLog) << "SheetBrowser::getLinkAtPoint() - Getting link at point completed";
     return m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), viewpoint);
 }
 
 void SheetBrowser::setIconAnnotSelect(const bool select)
 {
-    qDebug() << "SheetBrowser::setIconAnnotSelect() - Setting icon annot select";
+    qCDebug(appLog) << "SheetBrowser::setIconAnnotSelect() - Setting icon annot select";
     if (m_lastSelectIconAnnotPage)
         m_lastSelectIconAnnotPage->setSelectIconRect(select);
     m_lastSelectIconAnnotPage = nullptr;
-    qDebug() << "SheetBrowser::setIconAnnotSelect() - Setting icon annot select completed";
+    qCDebug(appLog) << "SheetBrowser::setIconAnnotSelect() - Setting icon annot select completed";
 }
 
 bool SheetBrowser::setDocTapGestrue(QPoint mousePos)
 {
-    qDebug() << "SheetBrowser::setDocTapGestrue() - Setting doc tap gesture";
+    qCDebug(appLog) << "SheetBrowser::setDocTapGestrue() - Setting doc tap gesture";
     QPointF viewpoint = mousePos;
     BrowserPage *page = getBrowserPageForPoint(viewpoint);
     if (nullptr == page)
@@ -2103,29 +2104,29 @@ bool SheetBrowser::setDocTapGestrue(QPoint mousePos)
         return false;
     }
 
-    qDebug() << "SheetBrowser::setDocTapGestrue() - Setting doc tap gesture completed";
+    qCDebug(appLog) << "SheetBrowser::setDocTapGestrue() - Setting doc tap gesture completed";
     return true;
 }
 
 void SheetBrowser::clearSelectIconAnnotAfterMenu()
 {
-    qDebug() << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Clearing select icon annot after menu";
+    qCDebug(appLog) << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Clearing select icon annot after menu";
     m_selectIconAnnotation = false;
     if (m_lastSelectIconAnnotPage) {
-        qDebug() << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Last select icon annot page is not null";
+        qCDebug(appLog) << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Last select icon annot page is not null";
         m_lastSelectIconAnnotPage->setDrawMoveIconRect(false);
         m_lastSelectIconAnnotPage->setSelectIconRect(false);
     }
-    qDebug() << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Clearing select icon annot after menu completed";
+    qCDebug(appLog) << "SheetBrowser::clearSelectIconAnnotAfterMenu() - Clearing select icon annot after menu completed";
 }
 
 bool SheetBrowser::jump2Link(QPointF point)
 {
-    qDebug() << "SheetBrowser::jump2Link() - Jumping to link";
+    qCDebug(appLog) << "SheetBrowser::jump2Link() - Jumping to link";
     BrowserPage *page = getBrowserPageForPoint(point);
 
     if (nullptr == page) {
-        qDebug() << "SheetBrowser::jump2Link() - Page is null";
+        qCDebug(appLog) << "SheetBrowser::jump2Link() - Page is null";
         return false;
     }
 
@@ -2134,16 +2135,16 @@ bool SheetBrowser::jump2Link(QPointF point)
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
     if (link.page > 0 && link.page <= allPages()) {
-        qDebug() << "SheetBrowser::jump2Link() - Link page is greater than 0 and less than or equal to all pages";
+        qCDebug(appLog) << "SheetBrowser::jump2Link() - Link page is greater than 0 and less than or equal to all pages";
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);
         return true;
     } else if (!link.urlOrFileName.isEmpty()) {
-        qDebug() << "SheetBrowser::jump2Link() - Link url or file name is not empty";
+        qCDebug(appLog) << "SheetBrowser::jump2Link() - Link url or file name is not empty";
         QString urlstr;
         if (link.urlOrFileName.startsWith(QLatin1String("file://"))) {
             urlstr = link.urlOrFileName.mid(7); //删除前缀"file://"
             if (!QFileInfo::exists(urlstr)) {
-                qInfo() << urlstr << "文件不存在";
+                qCInfo(appLog) << urlstr << "文件不存在";
             }
         } else {
             urlstr = link.urlOrFileName;
@@ -2154,17 +2155,17 @@ bool SheetBrowser::jump2Link(QPointF point)
             const QUrl &url = QUrl(urlstr, QUrl::TolerantMode);
             QDesktopServices::openUrl(url);
         }
-        qDebug() << "SheetBrowser::jump2Link() - Link url or file name is not empty completed";
+        qCDebug(appLog) << "SheetBrowser::jump2Link() - Link url or file name is not empty completed";
         return true;
     }
 
-    qDebug() << "SheetBrowser::jump2Link() - Link url or file name is empty";
+    qCDebug(appLog) << "SheetBrowser::jump2Link() - Link url or file name is empty";
     return false;
 }
 
 void SheetBrowser::showMenu()
 {
-    qDebug() << "SheetBrowser::showMenu() - Showing menu";
+    qCDebug(appLog) << "SheetBrowser::showMenu() - Showing menu";
     BrowserMenu menu;
     QString selectWords = selectedWordsText();
     connect(&menu, &BrowserMenu::sigMenuHide, this, &SheetBrowser::onRemoveIconAnnotSelect);
@@ -2254,79 +2255,79 @@ void SheetBrowser::showMenu()
     }
 
     clearSelectIconAnnotAfterMenu();
-    qDebug() << "SheetBrowser::showMenu() - Showing menu completed";
+    qCDebug(appLog) << "SheetBrowser::showMenu() - Showing menu completed";
 }
 
 QList<BrowserPage *> SheetBrowser::pages()
 {
-    // qDebug() << "SheetBrowser::pages() - Getting pages";
+    // qCDebug(appLog) << "SheetBrowser::pages() - Getting pages";
     return m_items;
 }
 
 void SheetBrowser::showMagnigierImage(const QPoint &point)
 {
-    // qDebug() << "SheetBrowser::showMagnigierImage() - Showing magnigier image";
+    // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Showing magnigier image";
     QPoint magnifierPos = point;
     if (point.y() < 122) {
-        // qDebug() << "SheetBrowser::showMagnigierImage() - Point y is less than 122";
+        // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Point y is less than 122";
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (122 - point.y()));
         magnifierPos.setY(122);
     }
 
     if (point.x() < 122) {
-        // qDebug() << "SheetBrowser::showMagnigierImage() - Point x is less than 122";
+        // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Point x is less than 122";
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (122 - point.x()));
         magnifierPos.setX(122);
     }
 
     if (point.y() > (this->size().height() - 122) && (this->size().height() - 122 > 0)) {
-        // qDebug() << "SheetBrowser::showMagnigierImage() - Point y is greater than size height - 122";
+        // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Point y is greater than size height - 122";
         verticalScrollBar()->setValue(verticalScrollBar()->value() + (point.y() - (this->size().height() - 122)));
         magnifierPos.setY(this->size().height() - 122);
     }
 
     if (point.x() > (this->size().width() - 122) && (this->size().width() - 122 > 0)) {
-        // qDebug() << "SheetBrowser::showMagnigierImage() - Point x is greater than size width - 122";
+        // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Point x is greater than size width - 122";
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (point.x() - (this->size().width() - 122)));
         magnifierPos.setX(this->size().width() - 122);
     }
 
     m_magnifierLabel->showMagnigierImage(point, magnifierPos, m_lastScaleFactor);
-    // qDebug() << "SheetBrowser::showMagnigierImage() - Showing magnigier image completed";
+    // qCDebug(appLog) << "SheetBrowser::showMagnigierImage() - Showing magnigier image completed";
 }
 
 
 void SheetBrowser::moveScrollBar(const QPoint &point)
 {
-    // qDebug() << "SheetBrowser::moveScrollBar() - Moving scroll bar";
+    // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Moving scroll bar";
     //鼠标靠近显示区域的边距
     int margin = 20;
     if (point.y() < margin) {
-        // qDebug() << "SheetBrowser::moveScrollBar() - Point y is less than margin";
+        // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Point y is less than margin";
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (margin - point.y()));
     }
 
     if (point.x() < margin) {
-        // qDebug() << "SheetBrowser::moveScrollBar() - Point x is less than margin";
+        // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Point x is less than margin";
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (margin - point.x()));
     }
 
     if (point.y() > (this->size().height() - margin) && (this->size().height() - margin > 0)) {
-        // qDebug() << "SheetBrowser::moveScrollBar() - Point y is greater than size height - margin";
+        // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Point y is greater than size height - margin";
         verticalScrollBar()->setValue(verticalScrollBar()->value() + (point.y() - (this->size().height() - margin)));
     }
 
     if (point.x() > (this->size().width() - margin) && (this->size().width() - margin > 0)) {
-        // qDebug() << "SheetBrowser::moveScrollBar() - Point x is greater than size width - margin";
+        // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Point x is greater than size width - margin";
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() + (point.x() - (this->size().width() - margin)));
     }
 
-    // qDebug() << "SheetBrowser::moveScrollBar() - Moving scroll bar completed";
+    // qCDebug(appLog) << "SheetBrowser::moveScrollBar() - Moving scroll bar completed";
 }
 
 QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
 {
-    // qDebug() << "SheetBrowser::getAnnotPosInPage() - Getting annot pos in page";
+    // qCDebug(appLog) << "SheetBrowser::getAnnotPosInPage() - Getting annot pos in page";
     QPointF newPos = pos;
 
     if (newPos.x() < 15 * page->scaleFactor())
@@ -2341,23 +2342,23 @@ QPointF SheetBrowser::getAnnotPosInPage(const QPointF &pos, BrowserPage *page)
     if (newPos.y() > page->rect().height() - 15 * page->scaleFactor())
         newPos.setY(page->rect().height() - 15 * page->scaleFactor());
 
-    // qDebug() << "SheetBrowser::getAnnotPosInPage() - Getting annot pos in page completed";
+    // qCDebug(appLog) << "SheetBrowser::getAnnotPosInPage() - Getting annot pos in page completed";
     return newPos;
 }
 
 void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
 {
-    // qDebug() << "SheetBrowser::setIsSearchResultNotEmpty() - Setting is search result not empty";
+    // qCDebug(appLog) << "SheetBrowser::setIsSearchResultNotEmpty() - Setting is search result not empty";
     m_isSearchResultNotEmpty = isSearchResultNotEmpty;
     if (!m_findWidget.isNull()) {
-        // qDebug() << "SheetBrowser::setIsSearchResultNotEmpty() - Find widget is not null";
+        // qCDebug(appLog) << "SheetBrowser::setIsSearchResultNotEmpty() - Find widget is not null";
         m_findWidget->setEditAlert(false);
     }
-    // qDebug() << "SheetBrowser::setIsSearchResultNotEmpty() - Setting is search result not empty completed";
+    // qCDebug(appLog) << "SheetBrowser::setIsSearchResultNotEmpty() - Setting is search result not empty completed";
 }
 
 TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
 {
-    // qDebug() << "SheetBrowser::getNoteEditWidget() - Getting note edit widget";
+    // qCDebug(appLog) << "SheetBrowser::getNoteEditWidget() - Getting note edit widget";
     return m_noteEditWidget;
 }

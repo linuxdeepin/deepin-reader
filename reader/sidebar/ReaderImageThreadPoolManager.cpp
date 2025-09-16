@@ -6,6 +6,8 @@
 #include "ReaderImageThreadPoolManager.h"
 #include "DocSheet.h"
 #include "Application.h"
+#include "ddlog.h"
+
 #include <QDebug>
 
 #include <QUuid>
@@ -16,24 +18,24 @@ const static char *threadPoolSlotFun = "onTaskFinished";
 
 void ReadImageTask::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {
-    qDebug() << "ReadImageTask::addgetDocImageTask() - Adding task for page:" << readImageParam.pageIndex;
+    qCDebug(appLog) << "ReadImageTask::addgetDocImageTask() - Adding task for page:" << readImageParam.pageIndex;
     m_docParam = readImageParam;
-    qDebug() << "ReadImageTask::addgetDocImageTask() - Task added successfully";
+    qCDebug(appLog) << "ReadImageTask::addgetDocImageTask() - Task added successfully";
 }
 
 void ReadImageTask::setThreadPoolManager(QObject *object)
 {
-    qDebug() << "ReadImageTask::setThreadPoolManager() - Setting thread pool manager";
+    qCDebug(appLog) << "ReadImageTask::setThreadPoolManager() - Setting thread pool manager";
     m_threadpoolManager = object;
-    qDebug() << "ReadImageTask::setThreadPoolManager() - Thread pool manager set";
+    qCDebug(appLog) << "ReadImageTask::setThreadPoolManager() - Thread pool manager set";
 }
 
 void ReadImageTask::run()
 {
-    qDebug() << "ReadImageTask::run() - Starting image generation task";
+    qCDebug(appLog) << "ReadImageTask::run() - Starting image generation task";
     DocSheet *sheet = m_docParam.sheet;
     if (!DocSheet::getUuid(sheet).isNull() && sheet->opened()) {
-        // qDebug() << "ReadImageTask::run() - Processing page:" << m_docParam.pageIndex;
+        // qCDebug(appLog) << "ReadImageTask::run() - Processing page:" << m_docParam.pageIndex;
         int totalPage = sheet->pageCount();
 
         m_docParam.pageIndex = qBound(0, m_docParam.pageIndex, totalPage - 1);
@@ -47,40 +49,40 @@ void ReadImageTask::run()
         image.setDevicePixelRatio(dApp->devicePixelRatio());
 
         if (!image.isNull()) {
-            // qDebug() << "ReadImageTask::run() - Image generated successfully, size:" << image.size();
+            // qCDebug(appLog) << "ReadImageTask::run() - Image generated successfully, size:" << image.size();
             QMetaObject::invokeMethod(m_threadpoolManager, threadPoolSlotFun, Qt::QueuedConnection, Q_ARG(const ReaderImageParam_t &, m_docParam), Q_ARG(const QImage &, image));
         }
         QThread::sleep(1);
     }
-    qDebug() << "ReadImageTask::run() - Task completed";
+    qCDebug(appLog) << "ReadImageTask::run() - Task completed";
 }
 
 Q_GLOBAL_STATIC(ReaderImageThreadPoolManager, theInstance)
 ReaderImageThreadPoolManager::ReaderImageThreadPoolManager()
 {
-    qDebug() << "Initializing ReaderImageThreadPoolManager with max threads:" << maxThreadCnt;
+    qCDebug(appLog) << "Initializing ReaderImageThreadPoolManager with max threads:" << maxThreadCnt;
     setMaxThreadCount(maxThreadCnt);
-    qDebug() << "ReaderImageThreadPoolManager::ReaderImageThreadPoolManager() - Initialization completed";
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::ReaderImageThreadPoolManager() - Initialization completed";
 }
 
 ReaderImageThreadPoolManager *ReaderImageThreadPoolManager::getInstance()
 {
-    // qDebug() << "ReaderImageThreadPoolManager::getInstance() - Returning singleton instance";
+    // qCDebug(appLog) << "ReaderImageThreadPoolManager::getInstance() - Returning singleton instance";
     return theInstance();
 }
 
 void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &readImageParam)
 {
-    qDebug() << "ReaderImageThreadPoolManager::addgetDocImageTask() - Adding task for page:" << readImageParam.pageIndex;
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::addgetDocImageTask() - Adding task for page:" << readImageParam.pageIndex;
     //To avoid repetitive tasks
     if (m_taskList.contains(readImageParam)) {
-        qDebug() << "Skip duplicate task for page:" << readImageParam.pageIndex;
+        qCDebug(appLog) << "Skip duplicate task for page:" << readImageParam.pageIndex;
         return;
     }
 
     //only initOnce
     if (!m_docProxylst.contains(readImageParam.sheet)) {
-        qDebug() << "ReaderImageThreadPoolManager::addgetDocImageTask() - Initializing document sheet";
+        qCDebug(appLog) << "ReaderImageThreadPoolManager::addgetDocImageTask() - Initializing document sheet";
         m_docProxylst << readImageParam.sheet;
         QVector<QPixmap> imagelst(readImageParam.sheet->pageCount());
         Q_ASSERT(imagelst.size() > 0 && "pagesNum == 0");
@@ -91,7 +93,7 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     //remove invalid task
     QMutexLocker mutext(&m_runMutex);
     if (!readImageParam.bForceUpdate && m_taskList.size() >= maxTaskList) {
-        qDebug() << "Task queue full (" << m_taskList.size() << "), removing excess tasks";
+        qCDebug(appLog) << "Task queue full (" << m_taskList.size() << "), removing excess tasks";
         for (int index = maxTaskList; index < m_taskList.size(); index++) {
             QRunnable *runable = m_taskList.at(index).task;
             if (this->tryTake(runable)) {
@@ -109,67 +111,67 @@ void ReaderImageThreadPoolManager::addgetDocImageTask(const ReaderImageParam_t &
     task->setThreadPoolManager(this);
     task->addgetDocImageTask(tParam);
     m_taskList << tParam;
-    qDebug() << "Starting new image load task for page:" << tParam.pageIndex
+    qCDebug(appLog) << "Starting new image load task for page:" << tParam.pageIndex
              << "total tasks:" << m_taskList.size();
     this->start(task);
-    qDebug() << "ReaderImageThreadPoolManager::addgetDocImageTask() - Task added successfully";
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::addgetDocImageTask() - Task added successfully";
 }
 
 void ReaderImageThreadPoolManager::onTaskFinished(const ReaderImageParam_t &task, const QImage &image)
 {
-    qDebug() << "ReaderImageThreadPoolManager::onTaskFinished() - Task finished for page:" << task.pageIndex;
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::onTaskFinished() - Task finished for page:" << task.pageIndex;
     QMutexLocker mutext(&m_runMutex);
 
     QPixmap pixmap = QPixmap::fromImage(image);
-    qDebug() << "Task finished for page:" << task.pageIndex
+    qCDebug(appLog) << "Task finished for page:" << task.pageIndex
              << "image size:" << image.size()
              << "remaining tasks:" << m_taskList.size() - 1;
 
     setImageForDocSheet(task.sheet, task.pageIndex, pixmap);
 
     if (m_taskList.contains(task)) {
-        qDebug() << "ReaderImageThreadPoolManager::onTaskFinished() - Notifying receiver";
+        qCDebug(appLog) << "ReaderImageThreadPoolManager::onTaskFinished() - Notifying receiver";
         QMetaObject::invokeMethod(task.receiver, task.slotFun.toStdString().c_str(), Qt::QueuedConnection, Q_ARG(int, task.pageIndex));
         m_taskList.removeAll(task);
     }
-    qDebug() << "ReaderImageThreadPoolManager::onTaskFinished() - Task processing completed";
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::onTaskFinished() - Task processing completed";
 }
 
 QPixmap ReaderImageThreadPoolManager::getImageForDocSheet(DocSheet *sheet, int pageIndex)
 {
-    qDebug() << "ReaderImageThreadPoolManager::getImageForDocSheet() - Retrieving image for page:" << pageIndex;
+    qCDebug(appLog) << "ReaderImageThreadPoolManager::getImageForDocSheet() - Retrieving image for page:" << pageIndex;
     if (m_docSheetImgMap.contains(sheet)) {
-        qDebug() << "Image cache" << (m_docSheetImgMap[sheet][pageIndex].isNull() ? "miss" : "hit")
+        qCDebug(appLog) << "Image cache" << (m_docSheetImgMap[sheet][pageIndex].isNull() ? "miss" : "hit")
                  << "for page:" << pageIndex;
         return m_docSheetImgMap[sheet][pageIndex];
     }
-    qDebug() << "No cache found for document";
+    qCDebug(appLog) << "No cache found for document";
     return QPixmap();
 }
 
 void ReaderImageThreadPoolManager::setImageForDocSheet(DocSheet *sheet, int pageIndex, const QPixmap &pixmap)
 {
-    qDebug() << "Setting image for document sheet:" << sheet->filePath() << "page:" << pageIndex;
+    qCDebug(appLog) << "Setting image for document sheet:" << sheet->filePath() << "page:" << pageIndex;
     if (pageIndex >= 0 && m_docSheetImgMap.contains(sheet) && m_docSheetImgMap[sheet].size() > pageIndex)
         m_docSheetImgMap[sheet][pageIndex] = pixmap;
 }
 
 void ReaderImageThreadPoolManager::onDocProxyDestroyed(QObject *obj)
 {
-    qDebug() << "Cleaning up resources for destroyed document proxy";
+    qCDebug(appLog) << "Cleaning up resources for destroyed document proxy";
     m_docProxylst.removeAll(obj);
     m_docSheetImgMap.remove(obj);
 }
 
 void ReaderImageThreadPoolManager::onReceiverDestroyed(QObject *obj)
 {
-    qDebug() << "Cleaning up tasks for destroyed receiver";
+    qCDebug(appLog) << "Cleaning up tasks for destroyed receiver";
     for (const ReaderImageParam_t &iter : m_taskList) {
         if (iter.receiver == obj) {
-            qDebug() << "Removing task for page:" << iter.pageIndex;
+            qCDebug(appLog) << "Removing task for page:" << iter.pageIndex;
             m_taskList.removeAll(iter);
             return;
         }
     }
-    qDebug() << "Completed cleaning up tasks for destroyed receiver";
+    qCDebug(appLog) << "Completed cleaning up tasks for destroyed receiver";
 }

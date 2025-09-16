@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "TipsWidget.h"
+#include "ddlog.h"
+
 #include <QDebug>
 
 #include <DPlatformWindowHandle>
@@ -16,7 +18,7 @@
 
 TipsWidget::TipsWidget(QWidget *parent) : DWidget(parent)
 {
-    qDebug() << "TipsWidget created, parent:" << parent;
+    qCDebug(appLog) << "TipsWidget created, parent:" << parent;
     m_parent = parent;
     setWindowFlags(Qt::ToolTip);
     initWidget();
@@ -25,7 +27,7 @@ TipsWidget::TipsWidget(QWidget *parent) : DWidget(parent)
 
 void TipsWidget::initWidget()
 {
-    qDebug() << "TipsWidget initWidget";
+    qCDebug(appLog) << "TipsWidget initWidget";
     m_tbMargin = 8;
     m_lrMargin = 10;
     m_maxLineCount = 10;
@@ -44,7 +46,7 @@ void TipsWidget::initWidget()
 
 void TipsWidget::onUpdateTheme()
 {
-    // qDebug() << "Updating tips widget theme";
+    // qCDebug(appLog) << "Updating tips widget theme";
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     plt.setColor(Dtk::Gui::DPalette::Window, plt.color(Dtk::Gui::DPalette::Base));
     setPalette(plt);
@@ -52,7 +54,7 @@ void TipsWidget::onUpdateTheme()
 
 void TipsWidget::setText(const QString &text)
 {
-    // qDebug() << "Setting tips text, length:" << text.length();
+    // qCDebug(appLog) << "Setting tips text, length:" << text.length();
     m_text = text;
     m_text.replace(QChar('\n'), QString(""));
     m_text.replace(QChar('\t'), QString(""));
@@ -61,35 +63,35 @@ void TipsWidget::setText(const QString &text)
 
 void TipsWidget::setAlignment(Qt::Alignment alignment)
 {
-    // qDebug() << "Setting tips alignment";
+    // qCDebug(appLog) << "Setting tips alignment";
     m_alignment = alignment;
     update();
 }
 
 void TipsWidget::setLeftRightMargin(int margin)
 {
-    // qDebug() << "Setting tips left right margin";
+    // qCDebug(appLog) << "Setting tips left right margin";
     m_lrMargin = margin;
     update();
 }
 
 void TipsWidget::setTopBottomMargin(int margin)
 {
-    // qDebug() << "Setting tips top bottom margin";
+    // qCDebug(appLog) << "Setting tips top bottom margin";
     m_tbMargin = margin;
     update();
 }
 
 void TipsWidget::setMaxLineCount(int maxLinecnt)
 {
-    // qDebug() << "Setting tips max line count";
+    // qCDebug(appLog) << "Setting tips max line count";
     m_maxLineCount = maxLinecnt;
     update();
 }
 
 void TipsWidget::paintEvent(QPaintEvent *event)
 {
-    // qDebug() << "TipsWidget paintEvent";
+    // qCDebug(appLog) << "TipsWidget paintEvent";
     DWidget::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
@@ -104,7 +106,7 @@ void TipsWidget::paintEvent(QPaintEvent *event)
 
 void TipsWidget::adjustContent(const QString &text)
 {
-    // qDebug() << "Adjusting tips content";
+    // qCDebug(appLog) << "Adjusting tips content";
     QFontMetricsF fontMetris(this->font());
     int wordHeight = static_cast<int>(fontMetris.boundingRect(QRectF(0, 0, this->width() - 2 * m_lrMargin, 0),
                                                               static_cast<int>(m_alignment | Qt::TextWrapAnywhere), text).height() + 2 * m_tbMargin);
@@ -114,7 +116,7 @@ void TipsWidget::adjustContent(const QString &text)
 
 void TipsWidget::showEvent(QShowEvent *event)
 {
-    // qDebug() << "TipsWidget showing, autoChecked:" << m_autoChecked;
+    // qCDebug(appLog) << "TipsWidget showing, autoChecked:" << m_autoChecked;
     DWidget::showEvent(event);
     if (m_autoChecked)
         m_timer.start();
@@ -122,20 +124,20 @@ void TipsWidget::showEvent(QShowEvent *event)
 
 void TipsWidget::hideEvent(QHideEvent *event)
 {
-    // qDebug() << "TipsWidget hiding";
+    // qCDebug(appLog) << "TipsWidget hiding";
     DWidget::hideEvent(event);
     m_timer.stop();
 }
 
 void TipsWidget::setAutoChecked(bool autoChecked)
 {
-    // qDebug() << "Setting tips auto checked";
+    // qCDebug(appLog) << "Setting tips auto checked";
     m_autoChecked = autoChecked;
 }
 
 void TipsWidget::onTimeOut()
 {
-    // qDebug() << "TipsWidget timeout check, visible:" << isVisible();
+    // qCDebug(appLog) << "TipsWidget timeout check, visible:" << isVisible();
     if (this->isVisible() && ((m_parent && !m_parent->rect().contains(m_parent->mapFromGlobal(QCursor::pos()))) || DApplication::widgetAt(QCursor::pos()) == nullptr)) {
         this->hide();
     }

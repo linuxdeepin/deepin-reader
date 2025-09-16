@@ -5,6 +5,7 @@
 
 #include "CentralNavPage.h"
 #include "MainWindow.h"
+#include "ddlog.h"
 
 #include <DLabel>
 #include <DPushButton>
@@ -17,7 +18,7 @@
 CentralNavPage::CentralNavPage(DWidget *parent)
     : BaseWidget(parent)
 {
-    qDebug() << "Initializing CentralNavPage...";
+    qCDebug(appLog) << "Initializing CentralNavPage...";
     auto tipsLabel = new DLabel(tr("Drag documents here"), this);
     tipsLabel->setAccessibleName("Label_Drag documents here");
     tipsLabel->setAlignment(Qt::AlignHCenter);
@@ -76,7 +77,7 @@ CentralNavPage::CentralNavPage(DWidget *parent)
 //  主题切换
 void CentralNavPage::onThemeChanged()
 {
-    qDebug() << "Theme changed, updating UI";
+    qCDebug(appLog) << "Theme changed, updating UI";
     auto iconSvg = this->findChild<DLabel *>("iconSvg");
     if (iconSvg) {
         auto plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();

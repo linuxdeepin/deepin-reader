@@ -13,6 +13,7 @@
 #include "DBusObject.h"
 #include "SheetBrowser.h"
 #include "TextEditWidget.h"
+#include "ddlog.h"
 
 #include <DDialog>
 #include <DTitlebar>
@@ -46,7 +47,7 @@ extern "C" {
  */
 static bool pathControl(const QString &sPath) noexcept
 {
-    qInfo() << "pathControl";
+    qCInfo(appLog) << "pathControl";
     /**
      * docPath: 文档目录
      * picPath：图片目录
@@ -59,37 +60,37 @@ static bool pathControl(const QString &sPath) noexcept
     QDBusMessage reply;
     QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1", QDBusConnection::systemBus());
     if (iface.isValid()) {
-        qInfo() << "iface isValid";
+        qCInfo(appLog) << "iface isValid";
         if (sPath.startsWith(docPath)) {
-            qInfo() << "docPath";
+            qCInfo(appLog) << "docPath";
             reply = iface.call("GetApps", docPath);
         } else if (sPath.startsWith(picPath)) {
-            qInfo() << "picPath";
+            qCInfo(appLog) << "picPath";
             reply = iface.call("GetApps", picPath);
         }
-        qInfo() << "iface isValid";
+        qCInfo(appLog) << "iface isValid";
     }
     if (reply.type() == QDBusMessage::ReplyMessage) {
-        qInfo() << "reply.type() == QDBusMessage::ReplyMessage";
+        qCInfo(appLog) << "reply.type() == QDBusMessage::ReplyMessage";
         /**
          * lValue：被禁止读取的应用列表，deepin-reader在列表中返回true
          */
         QList<QString> lValue = reply.arguments().takeFirst().toStringList();
         QString strApp = QStandardPaths::findExecutable("deepin-reader");
-        qInfo() << "lValue :" << lValue << " strApp: " << strApp;
+        qCInfo(appLog) << "lValue :" << lValue << " strApp: " << strApp;
         if (lValue.contains(strApp)) {
-            qInfo() << "lValue.contains(strApp)";
+            qCInfo(appLog) << "lValue.contains(strApp)";
             return true;
         }
     }
-    qInfo() << "return false";
+    qCInfo(appLog) << "return false";
     return false;
 }
 
 CentralDocPage::CentralDocPage(DWidget *parent)
     : BaseWidget(parent)
 {
-    qDebug() << "Initializing CentralDocPage...";
+    qCDebug(appLog) << "Initializing CentralDocPage...";
     m_tabBar = new DocTabBar(this);
     connect(m_tabBar, SIGNAL(sigTabChanged(DocSheet *)), this, SLOT(onTabChanged(DocSheet *)));
     connect(m_tabBar, SIGNAL(sigTabMoveIn(DocSheet *)), this, SLOT(onTabMoveIn(DocSheet *)));
@@ -117,7 +118,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
     QWidget *mainwindow = parent->parentWidget();
     if (mainwindow) {
-        qInfo() << "mainwindow";
+        qCInfo(appLog) << "mainwindow";
         DIconButton *leftButton = m_tabBar->findChild<DIconButton *>("leftButton");
         DIconButton *rightButton = m_tabBar->findChild<DIconButton *>("rightButton");
         DIconButton *addButton = m_tabBar->findChild<DIconButton *>("AddButton");
@@ -133,15 +134,15 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
 CentralDocPage::~CentralDocPage()
 {
-    // qDebug() << "Destroying CentralDocPage...";
+    // qCDebug(appLog) << "Destroying CentralDocPage...";
 }
 
 bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
 {
-    qInfo() << "firstThumbnail";
+    qCInfo(appLog) << "firstThumbnail";
     int fileType = Dr::fileType(filePath);
     if (Dr::DJVU == fileType) {
-        qInfo() << "Dr::DJVU == fileType";
+        qCInfo(appLog) << "Dr::DJVU == fileType";
         QImage image = DocSheet::firstThumbnail(filePath);
         if (image.isNull())
             return false;
@@ -153,21 +154,21 @@ bool CentralDocPage::firstThumbnail(QString filePath, QString thumbnailPath)
 
 void CentralDocPage::openCurFileFolder()
 {
-    qInfo() << "openCurFileFolder";
+    qCInfo(appLog) << "openCurFileFolder";
     DocSheet *sheet = getCurSheet();
     if (nullptr == sheet) {
-        qWarning() << "No current sheet to open folder for";
+        qCWarning(appLog) << "No current sheet to open folder for";
         return;
     }
 
     QString filePath = sheet->filePath();
     QUrl displayUrl = QUrl(filePath);
-    qDebug() << "在文件夹中显示当前文件: " << displayUrl;
+    qCDebug(appLog) << "在文件夹中显示当前文件: " << displayUrl;
     QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
                                  QStringLiteral("/org/freedesktop/FileManager1"),
                                  QStringLiteral("org.freedesktop.FileManager1"));
     if (interface.isValid()) {
-        qInfo() << "interface isValid";
+        qCInfo(appLog) << "interface isValid";
         QStringList list;
         list << displayUrl.toString();
         interface.call("ShowItems", list, "");
@@ -181,7 +182,7 @@ void CentralDocPage::openCurFileFolder()
 
 void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 {
-    qInfo() << "onSheetFileChanged";
+    qCInfo(appLog) << "onSheetFileChanged";
     if (DocSheet::existFileChanged()) {
         DBusObject::instance()->blockShutdown();
     } else {
@@ -196,7 +197,7 @@ void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 
 void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
 {
-    qInfo() << "onSheetOperationChanged";
+    qCInfo(appLog) << "onSheetOperationChanged";
     if (nullptr == sheet && sheet != getCurSheet())
         return;
 
@@ -205,7 +206,7 @@ void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
 
 void CentralDocPage::addSheet(DocSheet *sheet)
 {
-    qInfo() << "addSheet";
+    qCInfo(appLog) << "addSheet";
     m_tabBar->insertSheet(sheet);
 
     enterSheet(sheet);
@@ -213,12 +214,12 @@ void CentralDocPage::addSheet(DocSheet *sheet)
 
 void CentralDocPage::addFileAsync(const QString &filePath)
 {
-    qDebug() << "正在打开文档: " << filePath;
+    qCDebug(appLog) << "正在打开文档: " << filePath;
     //判断在打开的文档中是否有filePath，如果有则切到相应的sheet，反之执行打开操作
     if (m_tabBar) {
         int index = m_tabBar->indexOfFilePath(filePath);
         if (index >= 0 && index < m_tabBar->count()) {
-            qInfo() << "此文档已经被打开，自动跳转到该文档界面";
+            qCInfo(appLog) << "此文档已经被打开，自动跳转到该文档界面";
             m_tabBar->setCurrentIndex(index);
             return;
         }
@@ -231,14 +232,14 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
 #endif
         if (pathControl(filePath)) {
-            qInfo() << "没有权限读取该文件";
+            qCInfo(appLog) << "没有权限读取该文件";
             return;
         }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
 #ifdef XPS_SUPPORT_ENABLED
-        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX、XPS）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
+        qCWarning(appLog) << "不支持该文件格式!（仅支持PDF、DJVU、DOCX、XPS）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
 #else
-        qWarning() << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
+        qCWarning(appLog) << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
 #endif
         return;
     }
@@ -269,9 +270,9 @@ void CentralDocPage::addFileAsync(const QString &filePath)
 
 void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error error)
 {
-    qInfo() << "onOpened";
+    qCInfo(appLog) << "onOpened";
     if (deepin_reader::Document::FileError == error || deepin_reader::Document::FileDamaged == error || deepin_reader::Document::ConvertFailed == error) {
-        qWarning() << "Failed to open document:" << sheet->filePath() << "Error:" << error;
+        qCWarning(appLog) << "Failed to open document:" << sheet->filePath() << "Error:" << error;
         m_stackedLayout->removeWidget(sheet);
 
         m_tabBar->removeSheet(sheet);
@@ -302,9 +303,9 @@ void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error er
 
 void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
-    qInfo() << "onTabChanged";
+    qCInfo(appLog) << "onTabChanged";
     if (nullptr != sheet) {
-        qInfo() << "sheet is not null";
+        qCInfo(appLog) << "sheet is not null";
         m_stackedLayout->setCurrentWidget(sheet);
 
         sheet->defaultFocus();
@@ -315,7 +316,7 @@ void CentralDocPage::onTabChanged(DocSheet *sheet)
 
 void CentralDocPage::onTabMoveIn(DocSheet *sheet)
 {
-    qInfo() << "onTabMoveIn";
+    qCInfo(appLog) << "onTabMoveIn";
     if (nullptr == sheet)
         return;
 
@@ -324,13 +325,13 @@ void CentralDocPage::onTabMoveIn(DocSheet *sheet)
 
 void CentralDocPage::onTabClosed(DocSheet *sheet)
 {
-    qDebug() << "(" << __FUNCTION__ << ") 标题栏点击，关闭当前标签页";
+    qCDebug(appLog) << "(" << __FUNCTION__ << ") 标题栏点击，关闭当前标签页";
     closeSheet(sheet, true);
 }
 
 void CentralDocPage::onTabMoveOut(DocSheet *sheet)
 {
-    qInfo() << "onTabMoveOut";
+    qCInfo(appLog) << "onTabMoveOut";
     if (nullptr == sheet)
         return;
 
@@ -344,7 +345,7 @@ void CentralDocPage::onTabMoveOut(DocSheet *sheet)
 
 void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 {
-    qInfo() << "onTabNewWindow";
+    qCInfo(appLog) << "onTabNewWindow";
     leaveSheet(sheet);
 
     MainWindow *window = MainWindow::createWindow(sheet);
@@ -356,13 +357,13 @@ void CentralDocPage::onTabNewWindow(DocSheet *sheet)
 
 void CentralDocPage::onCentralMoveIn(DocSheet *sheet)
 {
-    qInfo() << "onCentralMoveIn";
+    qCInfo(appLog) << "onCentralMoveIn";
     addSheet(sheet);
 }
 
 void CentralDocPage::leaveSheet(DocSheet *sheet)
 {
-    qInfo() << "leaveSheet";
+    qCInfo(appLog) << "leaveSheet";
     if (nullptr == sheet)
         return;
 
@@ -379,8 +380,8 @@ void CentralDocPage::leaveSheet(DocSheet *sheet)
 
 bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 {
-    qDebug() << "(" << __FUNCTION__ << ") 关闭当前 sheet";
-    qDebug() << "当前 sheet 数量: " <<  DocSheet::g_sheetList.size();
+    qCDebug(appLog) << "(" << __FUNCTION__ << ") 关闭当前 sheet";
+    qCDebug(appLog) << "当前 sheet 数量: " <<  DocSheet::g_sheetList.size();
 
     if (nullptr == sheet)
         return false;
@@ -391,22 +392,22 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
 
     //如果文档有变动且需要保存
     if (sheet->fileChanged() && needToBeSaved) {
-        qInfo() << "sheet->fileChanged() && needToBeSaved";
+        qCInfo(appLog) << "sheet->fileChanged() && needToBeSaved";
         int result = SaveDialog::showExitDialog(QFileInfo(sheet->filePath()).fileName(), this);
 
         if (result <= 0) {
-            qInfo() << "result <= 0";
+            qCInfo(appLog) << "result <= 0";
             return false;
         }
 
         if (result == 2) {
             //docx的保存将会当做另存为处理
             if (Dr::DOCX == sheet->fileType()) {
-                qInfo() << "Dr::DOCX == sheet->fileType()";
+                qCInfo(appLog) << "Dr::DOCX == sheet->fileType()";
                 if (!saveAsCurrent())
                     return false;
             } else {
-                qInfo() << "Dr::DOCX != sheet->fileType()";
+                qCInfo(appLog) << "Dr::DOCX != sheet->fileType()";
                 if (!sheet->saveData())
                     return false;
             }
@@ -416,7 +417,7 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     m_stackedLayout->removeWidget(sheet);
 
     if (m_tabBar) {
-        qInfo() << "m_tabBar";
+        qCInfo(appLog) << "m_tabBar";
         m_tabBar->removeSheet(sheet);
     }
 
@@ -425,19 +426,19 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
 #if _ZPD_
     if (getLoadLibsInstance()->m_document_close) {
-        qInfo() << "调用三方库document_close " /*<< sheet->filePath()*/;
+        qCInfo(appLog) << "调用三方库document_close " /*<< sheet->filePath()*/;
         getLoadLibsInstance()->m_document_close(sheet->filePath().toLocal8Bit().data());
     }
 #endif
     delete sheet;
 
-    qDebug() << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
+    qCDebug(appLog) << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();
     return true;
 }
 
 bool CentralDocPage::closeAllSheets(bool needToBeSaved)
 {
-    qDebug() << "正在关闭所有 sheet ...";
+    qCDebug(appLog) << "正在关闭所有 sheet ...";
     QList<DocSheet *> sheets = m_tabBar->getSheets();
 
     if (sheets.count() > 0) {
@@ -448,13 +449,13 @@ bool CentralDocPage::closeAllSheets(bool needToBeSaved)
         }
     }
 
-    qDebug() << "所有 sheet 已关闭";
+    qCDebug(appLog) << "所有 sheet 已关闭";
     return true;
 }
 
 void CentralDocPage::enterSheet(DocSheet *sheet)
 {
-    qInfo() << "enterSheet";
+    qCInfo(appLog) << "enterSheet";
     if (nullptr == sheet)
         return;
 
@@ -473,12 +474,12 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
     emit sigSheetCountChanged(m_stackedLayout->count());
 
     emit sigCurSheetChanged(static_cast<DocSheet *>(m_stackedLayout->currentWidget()));
-    qInfo() << "enterSheet end";
+    qCInfo(appLog) << "enterSheet end";
 }
 
 bool CentralDocPage::hasSheet(DocSheet *sheet)
 {
-    qInfo() << "hasSheet";
+    qCInfo(appLog) << "hasSheet";
     if (nullptr == sheet)
         return false;
 
@@ -495,7 +496,7 @@ bool CentralDocPage::hasSheet(DocSheet *sheet)
 
 void CentralDocPage::showSheet(DocSheet *sheet)
 {
-    qInfo() << "showSheet";
+    qCInfo(appLog) << "showSheet";
     if (nullptr == sheet)
         return;
 
@@ -504,17 +505,17 @@ void CentralDocPage::showSheet(DocSheet *sheet)
 
 QList<DocSheet *> CentralDocPage::getSheets()
 {
-    qInfo() << "getSheets";
+    qCInfo(appLog) << "getSheets";
     return m_tabBar->getSheets();
 }
 
 bool CentralDocPage::saveCurrent()
 {
-    qDebug() << "Attempting to save current document";
+    qCDebug(appLog) << "Attempting to save current document";
     DocSheet *sheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
 
     if (nullptr == sheet) {
-        qWarning() << "No current sheet to save";
+        qCWarning(appLog) << "No current sheet to save";
         return false;
     }
 
@@ -536,13 +537,13 @@ bool CentralDocPage::saveCurrent()
 
     showTips(m_stackedLayout->currentWidget(), tr("Saved successfully"));
 
-    qInfo() << "saveCurrent end, return true";
+    qCInfo(appLog) << "saveCurrent end, return true";
     return true;
 }
 
 bool CentralDocPage::saveAsCurrent()
 {
-    qDebug() << "Attempting to save current document as...";
+    qCDebug(appLog) << "Attempting to save current document as...";
     DocSheet *sheet = getCurSheet();
 
     if (nullptr == sheet)
@@ -562,7 +563,7 @@ bool CentralDocPage::saveAsCurrent()
 
     //文件名合法性判断
     if (Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()) {
-        qInfo() << "Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()";
+        qCInfo(appLog) << "Dr::PDF == sheet->fileType() || Dr::DOCX == sheet->fileType()";
         if (saveFilePath.endsWith("/.pdf")) {
             DDialog dlg("", tr("Invalid file name"));
             dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
@@ -573,7 +574,7 @@ bool CentralDocPage::saveAsCurrent()
             return false;
         }
     } else if (Dr::DJVU == sheet->fileType()) {
-        qInfo() << "Dr::DJVU == sheet->fileType()";
+        qCInfo(appLog) << "Dr::DJVU == sheet->fileType()";
         if (saveFilePath.endsWith("/.djvu")) {
             DDialog dlg("", tr("Invalid file name"));
             dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
@@ -588,11 +589,11 @@ bool CentralDocPage::saveAsCurrent()
     bool ret = false;
     // 当源文件和目标文件(非docx格式)相同时，走保存的逻辑
     if (showFilePath == saveFilePath && Dr::DOCX != sheet->fileType()) {
-        qInfo() << "showFilePath == saveFilePath && Dr::DOCX != sheet->fileType()";
+        qCInfo(appLog) << "showFilePath == saveFilePath && Dr::DOCX != sheet->fileType()";
         ret = saveCurrent();
         handleBlockShutdown();
     } else {
-        qInfo() << "showFilePath != saveFilePath || Dr::DOCX == sheet->fileType()";
+        qCInfo(appLog) << "showFilePath != saveFilePath || Dr::DOCX == sheet->fileType()";
         ret = sheet->saveAsData(saveFilePath);
     }
 
@@ -601,7 +602,7 @@ bool CentralDocPage::saveAsCurrent()
 
 DocSheet *CentralDocPage::getCurSheet()
 {
-    qInfo() << "getCurSheet";
+    qCInfo(appLog) << "getCurSheet";
     if (m_stackedLayout != nullptr) {
         return dynamic_cast<DocSheet *>(m_stackedLayout->currentWidget());
     }
@@ -611,7 +612,7 @@ DocSheet *CentralDocPage::getCurSheet()
 
 DocSheet *CentralDocPage::getSheet(const QString &filePath)
 {
-    qInfo() << "getSheet";
+    qCInfo(appLog) << "getSheet";
     auto sheets = this->findChildren<DocSheet *>();
     foreach (auto sheet, sheets) {
         if (sheet->filePath() == filePath) {
@@ -624,20 +625,20 @@ DocSheet *CentralDocPage::getSheet(const QString &filePath)
 
 void CentralDocPage::handleShortcut(const QString &s)
 {
-    qInfo() << "handleShortcut";
+    qCInfo(appLog) << "handleShortcut";
     if (s == Dr::key_esc && m_slideWidget) {
         quitSlide();
         return;
     }
 
     if (s == Dr::key_f11 && m_slideWidget) { //幻灯片时 f11设置为不起作    用
-        qInfo() << "s == Dr::key_f11 && m_slideWidget";
+        qCInfo(appLog) << "s == Dr::key_f11 && m_slideWidget";
         return;
     }
 
     if (s == Dr::key_esc && !m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         quitMagnifer();
-        qInfo() << "quitMagnifer";
+        qCInfo(appLog) << "quitMagnifer";
         return;
     }
 
@@ -655,13 +656,13 @@ void CentralDocPage::handleShortcut(const QString &s)
     }
 
     if (s == Dr::key_ctrl_home) {
-        qInfo() << "s == Dr::key_ctrl_home";
+        qCInfo(appLog) << "s == Dr::key_ctrl_home";
         auto sheet = getCurSheet();
         if (sheet)
             sheet->jumpToFirstPage();
     }
     if (s == Dr::key_ctrl_end) {
-        qInfo() << "s == Dr::key_ctrl_end";
+        qCInfo(appLog) << "s == Dr::key_ctrl_end";
         auto sheet = getCurSheet();
         if (sheet)
             sheet->jumpToLastPage();
@@ -673,95 +674,95 @@ void CentralDocPage::handleShortcut(const QString &s)
     }
 
     if (s == Dr::key_ctrl_s) {
-        qInfo() << "s == Dr::key_ctrl_s";
+        qCInfo(appLog) << "s == Dr::key_ctrl_s";
         saveCurrent();
         handleBlockShutdown();
     } else if (s == Dr::key_ctrl_shift_s) {
-        qInfo() << "s == Dr::key_ctrl_shift_s";
+        qCInfo(appLog) << "s == Dr::key_ctrl_shift_s";
         saveAsCurrent();
     } else if (s == Dr::key_f5) {
-        qInfo() << "s == Dr::key_f5";
+        qCInfo(appLog) << "s == Dr::key_f5";
         openSlide();
     } else if (s == Dr::key_alt_z) {
-        qInfo() << "s == Dr::key_alt_z";
+        qCInfo(appLog) << "s == Dr::key_alt_z";
         openMagnifer();
     } else { //  以下都是需要 CurSheet 不为空的操作
         auto sheet = getCurSheet();
         if (sheet) {
             if (s == Dr::key_ctrl_p) {
-                qInfo() << "s == Dr::key_ctrl_p";
+                qCInfo(appLog) << "s == Dr::key_ctrl_p";
                 QTimer::singleShot(1, sheet, SLOT(onPopPrintDialog()));
             } else if (s == Dr::key_alt_1) {
-                qInfo() << "s == Dr::key_alt_1";
+                qCInfo(appLog) << "s == Dr::key_alt_1";
                 sheet->setMouseShape(Dr::MouseShapeNormal);
             } else if (s == Dr::key_alt_2) {
-                qInfo() << "s == Dr::key_alt_2";
+                qCInfo(appLog) << "s == Dr::key_alt_2";
                 sheet->setMouseShape(Dr::MouseShapeHand);
             } else if (s == Dr::key_ctrl_1) {
-                qInfo() << "s == Dr::key_ctrl_1";
+                qCInfo(appLog) << "s == Dr::key_ctrl_1";
                 sheet->setScaleMode(Dr::FitToPageDefaultMode);
             } else if (s == Dr::key_ctrl_m) {
-                qInfo() << "s == Dr::key_ctrl_m";
+                qCInfo(appLog) << "s == Dr::key_ctrl_m";
                 sheet->setSidebarVisible(true);
             } else if (s == Dr::key_ctrl_2) {
-                qInfo() << "s == Dr::key_ctrl_2";
+                qCInfo(appLog) << "s == Dr::key_ctrl_2";
                 sheet->setScaleMode(Dr::FitToPageHeightMode);
             } else if (s == Dr::key_ctrl_3) {
-                qInfo() << "s == Dr::key_ctrl_3";
+                qCInfo(appLog) << "s == Dr::key_ctrl_3";
                 sheet->setScaleMode(Dr::FitToPageWidthMode);
             } else if (s == Dr::key_ctrl_r) {
-                qInfo() << "s == Dr::key_ctrl_r";
+                qCInfo(appLog) << "s == Dr::key_ctrl_r";
                 sheet->rotateLeft();
             } else if (s == Dr::key_ctrl_shift_r) {
-                qInfo() << "s == Dr::key_ctrl_shift_r";
+                qCInfo(appLog) << "s == Dr::key_ctrl_shift_r";
                 sheet->rotateRight();
             } else if (s == Dr::key_alt_harger || s == Dr::key_ctrl_equal) {
-                qInfo() << "s == Dr::key_alt_harger || s == Dr::key_ctrl_equal";
+                qCInfo(appLog) << "s == Dr::key_alt_harger || s == Dr::key_ctrl_equal";
                 sheet->zoomin();
             } else if (s == Dr::key_ctrl_smaller) {
-                qInfo() << "s == Dr::key_ctrl_smaller";
+                qCInfo(appLog) << "s == Dr::key_ctrl_smaller";
                 sheet->zoomout();
             } else if (s == Dr::key_ctrl_d) {
-                qInfo() << "s == Dr::key_ctrl_d";
+                qCInfo(appLog) << "s == Dr::key_ctrl_d";
                 sheet->setBookMark(sheet->currentIndex(), true);
             } else if (s == Dr::key_ctrl_f) {
-                qInfo() << "s == Dr::key_ctrl_f";
+                qCInfo(appLog) << "s == Dr::key_ctrl_f";
                 sheet->prepareSearch();
             } else if (s == Dr::key_ctrl_c) {
-                qInfo() << "s == Dr::key_ctrl_c";
+                qCInfo(appLog) << "s == Dr::key_ctrl_c";
                 sheet->copySelectedText();
             } else if (s == Dr::key_alt_h) {
-                qInfo() << "s == Dr::key_alt_h";
+                qCInfo(appLog) << "s == Dr::key_alt_h";
                 sheet->highlightSelectedText();
             } else if (s == Dr::key_alt_a) {
-                qInfo() << "s == Dr::key_alt_a";
+                qCInfo(appLog) << "s == Dr::key_alt_a";
                 sheet->addSelectedTextHightlightAnnotation();
             }
             // 屏蔽右侧区域的切页快捷键，使用默认的滚动效果
             /*else if (s == Dr::key_left) {
-                qInfo() << "s == Dr::key_left";
+                qCInfo(appLog) << "s == Dr::key_left";
                 sheet->jumpToPrevPage();
             } else if (s == Dr::key_right) {
-                qInfo() << "s == Dr::key_right";
+                qCInfo(appLog) << "s == Dr::key_right";
                 sheet->jumpToNextPage();
             } */else if (s == Dr::key_f11) {
-                qInfo() << "s == Dr::key_f11";
+                qCInfo(appLog) << "s == Dr::key_f11";
                 sheet->openFullScreen();
             }
         }
     }
-    qInfo() << "handleShortcut end";
+    qCInfo(appLog) << "handleShortcut end";
 }
 
 void CentralDocPage::showTips(QWidget *parent, const QString &tips, int iconIndex)
 {
-    qInfo() << "showTips";
+    qCInfo(appLog) << "showTips";
     emit sigNeedShowTips(parent, tips, iconIndex);
 }
 
 void CentralDocPage::openMagnifer()
 {
-    qDebug() << "Opening magnifier tool";
+    qCDebug(appLog) << "Opening magnifier tool";
     quitMagnifer();
 
     m_magniferSheet = getCurSheet();
@@ -773,7 +774,7 @@ void CentralDocPage::openMagnifer()
 //  取消放大镜
 void CentralDocPage::quitMagnifer()
 {
-    qInfo() << "quitMagnifer";
+    qCInfo(appLog) << "quitMagnifer";
     if (!m_magniferSheet.isNull() && m_magniferSheet->magnifierOpened()) {
         m_magniferSheet->closeMagnifier();
         m_magniferSheet = nullptr;
@@ -782,7 +783,7 @@ void CentralDocPage::quitMagnifer()
 
 void CentralDocPage::openSlide()
 {
-    qDebug() << "Opening slide mode";
+    qCDebug(appLog) << "Opening slide mode";
     DocSheet *docSheet = getCurSheet();
     if (docSheet && docSheet->opened() && m_slideWidget == nullptr) {
         m_slideWidget = new SlideWidget(getCurSheet());
@@ -794,9 +795,9 @@ void CentralDocPage::openSlide()
 
 void CentralDocPage::quitSlide()
 {
-    qInfo() << "quitSlide";
+    qCInfo(appLog) << "quitSlide";
     if (m_slideWidget) {
-        qInfo() << "m_slideWidget";
+        qCInfo(appLog) << "m_slideWidget";
         m_slideWidget->close();
         m_slideWidget = nullptr;
     }
@@ -804,13 +805,13 @@ void CentralDocPage::quitSlide()
 
 bool CentralDocPage::isSlide()
 {
-    // qInfo() << "isSlide";
+    // qCInfo(appLog) << "isSlide";
     return m_slideWidget != nullptr;
 }
 
 void CentralDocPage::prepareSearch()
 {
-    qInfo() << "prepareSearch";
+    qCInfo(appLog) << "prepareSearch";
     DocSheet *docSheet = getCurSheet();
 
     if (docSheet)
@@ -819,7 +820,7 @@ void CentralDocPage::prepareSearch()
 
 bool CentralDocPage::isFullScreen()
 {
-    qInfo() << "isFullScreen";
+    qCInfo(appLog) << "isFullScreen";
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
@@ -830,7 +831,7 @@ bool CentralDocPage::isFullScreen()
 
 void CentralDocPage::openFullScreen()
 {
-    qInfo() << "openFullScreen";
+    qCInfo(appLog) << "openFullScreen";
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
@@ -850,14 +851,14 @@ void CentralDocPage::openFullScreen()
 
 bool CentralDocPage::quitFullScreen(bool force)
 {
-    qInfo() << "quitFullScreen";
+    qCInfo(appLog) << "quitFullScreen";
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
         return false;
 
     if (mainWindow->isFullScreen() || force) {
-        qInfo() << "mainWindow->isFullScreen() || force";
+        qCInfo(appLog) << "mainWindow->isFullScreen() || force";
         m_tabBar->setParent(this);
 
         m_mainLayout->insertWidget(0, m_tabBar);
@@ -874,18 +875,18 @@ bool CentralDocPage::quitFullScreen(bool force)
         return true;
     }
 
-    qInfo() << "quitFullScreen end, return false";
+    qCInfo(appLog) << "quitFullScreen end, return false";
     return false;
 }
 
 void CentralDocPage::onSheetCountChanged(int count)
 {
-    qInfo() << "onSheetCountChanged";
+    qCInfo(appLog) << "onSheetCountChanged";
     if (count == 0)
         return;
 
     if (count == 1) {
-        qInfo() << "count == 1";
+        qCInfo(appLog) << "count == 1";
         //tabText(0)可能存在还没取到值的情况，稍微延迟下做处理
         QTimer::singleShot(10, this, SLOT(onUpdateTabLabelText()));
 
@@ -893,7 +894,7 @@ void CentralDocPage::onSheetCountChanged(int count)
 
         m_tabBar->setVisible(false);
     } else {
-        qInfo() << "count != 1";
+        qCInfo(appLog) << "count != 1";
         m_tabLabel->setVisible(false);
 
         m_tabBar->setVisible(true);
@@ -902,11 +903,11 @@ void CentralDocPage::onSheetCountChanged(int count)
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (mainWindow && mainWindow->isFullScreen()) {
-        qInfo() << "mainWindow && mainWindow->isFullScreen()";
+        qCInfo(appLog) << "mainWindow && mainWindow->isFullScreen()";
         mainWindow->resizeFullTitleWidget();
 
     } else if (m_tabBar->parent() != this) {
-        qInfo() << "m_tabBar->parent() != this";
+        qCInfo(appLog) << "m_tabBar->parent() != this";
         m_tabBar->setParent(this);
 
         m_mainLayout->insertWidget(0, m_tabBar);
@@ -917,20 +918,20 @@ void CentralDocPage::onSheetCountChanged(int count)
 
 void CentralDocPage::onUpdateTabLabelText()
 {
-    qInfo() << "onUpdateTabLabelText";
+    qCInfo(appLog) << "onUpdateTabLabelText";
     if (m_tabBar->count() > 0)
         m_tabLabel->setText(m_tabBar->tabText(0));
 }
 
 QWidget *CentralDocPage::getTitleLabel()
 {
-    // qInfo() << "getTitleLabel";
+    // qCInfo(appLog) << "getTitleLabel";
     return m_tabLabel;
 }
 
 void CentralDocPage::handleBlockShutdown()
 {
-    qDebug() << "Checking if need to block shutdown";
+    qCDebug(appLog) << "Checking if need to block shutdown";
     bool bBlock = false;
     QList<DocSheet *> sheets = m_tabBar->getSheets();
 
@@ -943,28 +944,28 @@ void CentralDocPage::handleBlockShutdown()
     }
 
     if (bBlock) {
-        qInfo() << "Blocking shutdown due to unsaved documents";
+        qCInfo(appLog) << "Blocking shutdown due to unsaved documents";
         DBusObject::instance()->blockShutdown();    // 存在未保存的文档时阻塞关机
     } else {
-        qDebug() << "No need to block shutdown";
+        qCDebug(appLog) << "No need to block shutdown";
         DBusObject::instance()->unBlockShutdown();  // 所有文档都保存的情况下不阻塞关机
     }
 }
 
 void CentralDocPage::zoomIn()
 {
-    qInfo() << "zoomIn";
+    qCInfo(appLog) << "zoomIn";
     if (getCurSheet()) {
-        qInfo() << "getCurSheet";
+        qCInfo(appLog) << "getCurSheet";
         getCurSheet()->zoomin();
     }
 }
 
 void CentralDocPage::zoomOut()
 {
-    qInfo() << "zoomOut";
+    qCInfo(appLog) << "zoomOut";
     if (getCurSheet()) {
-        qInfo() << "getCurSheet";
+        qCInfo(appLog) << "getCurSheet";
         getCurSheet()->zoomout();
     }
 }

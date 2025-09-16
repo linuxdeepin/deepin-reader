@@ -10,6 +10,7 @@
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
 #include "ThumbnailDelegate.h"
+#include "ddlog.h"
 
 #include <DHorizontalLine>
 #include <QDebug>
@@ -21,18 +22,18 @@ ThumbnailWidget::ThumbnailWidget(DocSheet *sheet, DWidget *parent)
     : BaseWidget(parent)
     , m_sheet(sheet)
 {
-    qDebug() << "ThumbnailWidget created for document:" << (sheet ? sheet->filePath() : "null");
+    qCDebug(appLog) << "ThumbnailWidget created for document:" << (sheet ? sheet->filePath() : "null");
     initWidget();
 }
 
 ThumbnailWidget::~ThumbnailWidget()
 {
-    // qDebug() << "ThumbnailWidget destroyed";
+    // qCDebug(appLog) << "ThumbnailWidget destroyed";
 }
 
 void ThumbnailWidget::initWidget()
 {
-    qDebug() << "Initializing ThumbnailWidget UI";
+    qCDebug(appLog) << "Initializing ThumbnailWidget UI";
     m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
     ThumbnailDelegate *imageDelegate = new ThumbnailDelegate(m_pImageListView);
@@ -55,49 +56,49 @@ void ThumbnailWidget::initWidget()
 
 void ThumbnailWidget::handleOpenSuccess()
 {
-    qDebug() << "handleOpenSuccess";
+    qCDebug(appLog) << "handleOpenSuccess";
     if (bIshandOpenSuccess) {
-        qDebug() << "Already handled open success";
+        qCDebug(appLog) << "Already handled open success";
         return;
     }
-    qDebug() << "Handling document open success";
+    qCDebug(appLog) << "Handling document open success";
     bIshandOpenSuccess = true;
     m_pImageListView->handleOpenSuccess();
     m_pPageWidget->handleOpenSuccess();
     scrollToCurrentPage();
-    qDebug() << "handleOpenSuccess end";
+    qCDebug(appLog) << "handleOpenSuccess end";
 }
 
 void ThumbnailWidget::handleRotate()
 {
-    qDebug() << "handleRotate";
+    qCDebug(appLog) << "handleRotate";
     m_pImageListView->reset();
     scrollToCurrentPage();
 }
 
 void ThumbnailWidget::handlePage(int index)
 {
-    qDebug() << "handlePage";
+    qCDebug(appLog) << "handlePage";
     m_pImageListView->scrollToIndex(index);
     m_pPageWidget->setIndex(index);
 }
 
 void ThumbnailWidget::setBookMarkState(const int &index, const int &type)
 {
-    qDebug() << "Setting bookmark state for page:" << index << "type:" << type;
+    qCDebug(appLog) << "Setting bookmark state for page:" << index << "type:" << type;
     m_pImageListView->getImageModel()->setBookMarkVisible(index, type);
 }
 
 void ThumbnailWidget::prevPage()
 {
-    qDebug() << "prevPage";
+    qCDebug(appLog) << "prevPage";
     if (!m_sheet.isNull())
         m_sheet->jumpToPrevPage();
 }
 
 void ThumbnailWidget::pageUp()
 {
-    qDebug() << "pageUp";
+    qCDebug(appLog) << "pageUp";
     if (m_sheet.isNull())
         return;
 
@@ -110,14 +111,14 @@ void ThumbnailWidget::pageUp()
 
 void ThumbnailWidget::nextPage()
 {
-    qDebug() << "nextPage";
+    qCDebug(appLog) << "nextPage";
     if (!m_sheet.isNull())
         m_sheet->jumpToNextPage();
 }
 
 void ThumbnailWidget::pageDown()
 {
-    qDebug() << "pageDown";
+    qCDebug(appLog) << "pageDown";
     if (m_sheet.isNull())
         return;
 
@@ -130,10 +131,10 @@ void ThumbnailWidget::pageDown()
 
 void ThumbnailWidget::adaptWindowSize(const double &scale)
 {
-    qDebug() << "Adapting window size with scale:" << scale;
+    qCDebug(appLog) << "Adapting window size with scale:" << scale;
     m_pImageListView->setProperty("adaptScale", scale);
     QSize newSize(static_cast<int>(LEFTMINWIDTH * scale), static_cast<int>(qMax(LEFTMINHEIGHT * scale, LEFTMINHEIGHT * 1.0)));
-    qDebug() << "Setting new item size:" << newSize;
+    qCDebug(appLog) << "Setting new item size:" << newSize;
     m_pImageListView->setItemSize(newSize);
     m_pImageListView->reset();
     scrollToCurrentPage();
@@ -141,12 +142,12 @@ void ThumbnailWidget::adaptWindowSize(const double &scale)
 
 void ThumbnailWidget::scrollToCurrentPage()
 {
-    qDebug() << "scrollToCurrentPage";
+    qCDebug(appLog) << "scrollToCurrentPage";
     m_pImageListView->scrollToIndex(m_sheet->currentIndex());
 }
 
 void ThumbnailWidget::setTabOrderWidget(QList<QWidget *> &tabWidgetlst)
 {
-    qDebug() << "setTabOrderWidget";
+    qCDebug(appLog) << "setTabOrderWidget";
     m_pPageWidget->setTabOrderWidget(tabWidgetlst);
 }
