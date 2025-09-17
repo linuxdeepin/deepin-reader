@@ -15,11 +15,13 @@ include ($$PWD/uiframe/uiframe.pri)
 SOURCES += \
     $$PWD/Application.cpp \
     $$PWD/MainWindow.cpp \
+    $$PWD/logger.cpp \
     $$PWD/load_libs.c
 
 HEADERS +=\
     $$PWD/Application.h\
     $$PWD/MainWindow.h \
+    $$PWD/logger.h \
     $$PWD/load_libs.h
 
 RESOURCES    += $$PWD/../resources/resources.qrc

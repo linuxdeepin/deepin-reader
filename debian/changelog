@@ -1,3 +1,9 @@
+deepin-reader (6.5.39) unstable; urgency=medium
+
+  * chore: fix linglong build issue and update version.
+
+ -- re2zero <yangwu@uniontech.com>  Wed, 17 Sep 2025 17:40:33 +0800
+
 deepin-reader (6.5.38) unstable; urgency=medium
 
   * chore: Update linglong base and runtime
