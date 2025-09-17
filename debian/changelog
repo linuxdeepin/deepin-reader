@@ -1,3 +1,9 @@
+deepin-reader (6.5.38) unstable; urgency=medium
+
+  * chore: Update linglong base and runtime
+
+ -- wangrong <wangrong@uniontech.com>  Wed, 17 Sep 2025 11:05:54 +0800
+
 deepin-reader (6.5.37) unstable; urgency=medium
 
   * fix: Update getHtmlToPdfPath for Qt version compatibility and include cmath in XpsDocument
