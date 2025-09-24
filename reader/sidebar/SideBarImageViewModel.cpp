@@ -263,15 +263,12 @@ void SideBarImageViewModel::removePageIndex(int pageIndex)
 
 void SideBarImageViewModel::removeItemForAnno(deepin_reader::Annotation *annotation)
 {
-    qCDebug(appLog) << "Removing item for annotation:" << annotation;
     int index = findItemForAnno(annotation);
     if (index >= 0) {
-        qCDebug(appLog) << "Removing item for annotation:" << annotation << "found";
         beginResetModel();
         m_pagelst.removeAt(index);
         endResetModel();
     }
-    qCDebug(appLog) << "Removing item for annotation:" << annotation << "end";
 }
 
 void SideBarImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo_t &tImagePageInfo)
@@ -285,14 +282,12 @@ void SideBarImageViewModel::getModelIndexImageInfo(int modelIndex, ImagePageInfo
 
 int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation)
 {
-    qCDebug(appLog) << "Finding item for annotation:" << annotation;
     int count = m_pagelst.size();
     for (int index = 0; index < count; index++) {
         if (annotation == m_pagelst.at(index).annotation) {
             return index;
         }
     }
-    qCDebug(appLog) << "Finding item for annotation:" << annotation << "end";
     return -1;
 }
 
