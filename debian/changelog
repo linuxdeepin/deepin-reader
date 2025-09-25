@@ -1,3 +1,9 @@
+deepin-reader (6.5.40) unstable; urgency=medium
+
+  * fix(reader): remove unsafe QObject* logging in SideBarImageViewModel
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 25 Sep 2025 16:04:50 +0800
+
 deepin-reader (6.5.39) unstable; urgency=medium
 
   * chore: fix linglong build issue and update version.
