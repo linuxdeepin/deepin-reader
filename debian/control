@@ -27,6 +27,7 @@ Build-Depends:
  libfreetype6-dev,
  libgtest-dev,
  libchardet-dev,
+ libxkbcommon-dev,
 Standards-Version: 4.5.0
 
 Package: deepin-reader
