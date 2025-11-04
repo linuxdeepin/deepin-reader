@@ -87,7 +87,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     APP_VERSION="${APP_VERSION}"
 )
 
-# 链接库
+# 添加资源文件
+if (QT_VERSION_MAJOR MATCHES 6)
+    # 链接库
 target_link_libraries(deepin-reader PRIVATE
     ${LINK_LIBS}
     ${LIBJPEG_LIBRARIES}
@@ -95,10 +97,27 @@ target_link_libraries(deepin-reader PRIVATE
     ${PDFIUM_LIBRARIES}
 )
 
-# 添加资源文件
 qt_add_resources(reader_RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/resources.qrc
 )
+
+else()
+
+# 链接库
+target_link_libraries(deepin-reader PRIVATE
+    ${LINK_LIBS}
+    ${LIBJPEG_LIBRARIES}
+    ${DDJVU_LIBRARIES}
+    ${PDFIUM_LIBRARIES}
+    dl
+    pthread
+)
+
+qt5_add_resources(reader_RESOURCES
+    ${CMAKE_SOURCE_DIR}/resources/resources.qrc
+)
+endif()
+
 target_sources(deepin-reader PRIVATE ${reader_RESOURCES})
 
 # 安装目标
