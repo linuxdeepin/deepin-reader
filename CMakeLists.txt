@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # XPS支持选项（默认关闭）
 option(XPS_SUPPORT "Enable XPS document format support" OFF)
+
 if(XPS_SUPPORT)
     message(">>> XPS support enabled")
     add_compile_definitions(XPS_SUPPORT_ENABLED)
@@ -37,11 +38,10 @@ set(QT_DESIRED_VERSION ${QT_VERSION_MAJOR})
 # 设置DTK版本
 if (QT_VERSION_MAJOR MATCHES 6)
     set(DTK_VERSION_MAJOR 6)
-    set(PDF_LIB_VERSION "")
 else()
     set(DTK_VERSION_MAJOR "")
-    set(PDF_LIB_VERSION 5)
 endif()
+set(PDF_LIB_VERSION "")
 message(">>> Build with DTK: ${DTK_VERSION_MAJOR}")
 
 # 定义必需的Qt组件

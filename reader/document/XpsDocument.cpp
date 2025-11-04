@@ -302,7 +302,11 @@ QList<Word> XpsPage::words()
     
     m_words.clear();
     for (int i = 0; i < m_pageData.textStrings.size(); ++i) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QStringList wordList = m_pageData.textStrings[i].split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+#else
         QStringList wordList = m_pageData.textStrings[i].split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+#endif
         for (const QString &word : wordList) {
             if (!word.isEmpty()) {
                 m_words.append(Word(word, m_pageData.textRects[i]));
@@ -629,8 +633,6 @@ void XpsDocument::parseXpsContent()
                 QXmlStreamAttributes attrs = docReader.attributes();
                 QString pageSource = attrs.value("Source").toString();
 
-                
-
                 // 解析页面路径：
                 // - 以 '/' 开头：包内绝对路径，直接去掉开头的 '/'
                 // - 否则：相对于主文档 FixedDoc.fdoc 所在目录
@@ -924,7 +926,11 @@ void XpsDocument::parseTextData(QXmlStreamReader &reader, XpsPageData &pageInfo)
                 // 去掉分号，将逗号分隔的数值提取
                 QString cleaned = idx;
                 cleaned.replace(';', ' ');
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                const QStringList parts = cleaned.split(',', QString::SkipEmptyParts);
+#else
                 const QStringList parts = cleaned.split(',', Qt::SkipEmptyParts);
+#endif
                 for (const QString &part : parts) {
                     bool okv = false;
                     qreal v = part.trimmed().toDouble(&okv);
