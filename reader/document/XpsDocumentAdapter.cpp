@@ -488,21 +488,30 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
     }
 
     const QSizeF logicalSize = m_pageSizes.at(pageIndex);
-    const QRectF fullRect(QPointF(0, 0), logicalSize);
-    QRectF clipRect = slice.isValid() ? QRectF(slice) : fullRect;
-    clipRect = clipRect.intersected(fullRect);
-    if (clipRect.isEmpty()) {
-        clipRect = fullRect;
-    }
-    if (clipRect.width() <= 0.0 || clipRect.height() <= 0.0) {
-        qCWarning(appLog) << "Invalid clip rectangle for XPS render" << clipRect;
+    if (logicalSize.isEmpty() || logicalSize.width() <= 0.0 || logicalSize.height() <= 0.0) {
+        qCWarning(appLog) << "Invalid logical size for XPS page" << logicalSize;
         return QImage();
     }
 
-    const double scaleX = width / clipRect.width();
-    const double scaleY = height / clipRect.height();
+    const double pixelsPerDocX = static_cast<double>(width) / logicalSize.width();
+    const double pixelsPerDocY = static_cast<double>(height) / logicalSize.height();
 
-    QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
+    if (pixelsPerDocX <= 0.0 || pixelsPerDocY <= 0.0) {
+        qCWarning(appLog) << "Invalid pixels-per-document ratio" << pixelsPerDocX << pixelsPerDocY;
+        return QImage();
+    }
+
+    const QRect fullSlice(0, 0, width, height);
+    const QRect requestedSlice = slice.isValid() ? slice : fullSlice;
+
+    if (requestedSlice.width() <= 0 || requestedSlice.height() <= 0) {
+        qCWarning(appLog) << "Requested slice has non-positive size" << requestedSlice;
+        return QImage();
+    }
+
+    const QSize targetSize(requestedSlice.size());
+
+    QImage image(targetSize.width(), targetSize.height(), QImage::Format_ARGB32_Premultiplied);
     if (image.isNull()) {
         qCWarning(appLog) << "Failed to allocate image for XPS render";
         return image;
@@ -511,8 +520,8 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
 
     CairoSurfacePtr surface(cairo_image_surface_create_for_data(image.bits(),
                                                                CAIRO_FORMAT_ARGB32,
-                                                               width,
-                                                               height,
+                                                               targetSize.width(),
+                                                               targetSize.height(),
                                                                image.bytesPerLine()));
     if (!surface || cairo_surface_status(surface.get()) != CAIRO_STATUS_SUCCESS) {
         qCWarning(appLog) << "Failed to create Cairo surface for XPS render";
@@ -529,11 +538,16 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
     cairo_paint(context.get());
 
     cairo_matrix_t matrix;
+    cairo_set_antialias(context.get(), CAIRO_ANTIALIAS_BEST);
+
+    const double translateX = slice.isValid() ? -static_cast<double>(requestedSlice.left()) : 0.0;
+    const double translateY = slice.isValid() ? -static_cast<double>(requestedSlice.top()) : 0.0;
+
     cairo_matrix_init(&matrix,
-                      scaleX, 0.0,
-                      0.0, scaleY,
-                      -clipRect.left() * scaleX,
-                      -clipRect.top() * scaleY);
+                      pixelsPerDocX, 0.0,
+                      0.0, pixelsPerDocY,
+                      translateX,
+                      translateY);
     cairo_set_matrix(context.get(), &matrix);
 
     GErrorPtr renderError;

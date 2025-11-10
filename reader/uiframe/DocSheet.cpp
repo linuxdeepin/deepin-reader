@@ -76,6 +76,10 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
     else if (Dr::DOCX == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK | PREVIEW_NOTE);
+#ifdef XPS_SUPPORT_ENABLED
+    else if (Dr::XPS == fileType)
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK);
+#endif
     else
         m_sidebar = new SheetSidebar(this);
 

@@ -1234,7 +1234,11 @@ BrowserWord *BrowserPage::getBrowserWord(const QPointF &point)
 bool BrowserPage::isBigDoc()
 {
     qCDebug(appLog) << "BrowserPage::isBigDoc() - Starting is big doc";
-    bool isBig = Dr::PDF == m_sheet->fileType() && boundingRect().width() > 1000 && boundingRect().height() > 1000;
+    bool supportedType = (Dr::PDF == m_sheet->fileType());
+#ifdef XPS_SUPPORT_ENABLED
+    supportedType = supportedType || (Dr::XPS == m_sheet->fileType());
+#endif
+    bool isBig = supportedType && boundingRect().width() > 1000 && boundingRect().height() > 1000;
     qCDebug(appLog) << "Checking if document is big:" << isBig;
     return isBig;
 }

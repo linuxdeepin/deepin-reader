@@ -893,6 +893,9 @@ void SheetBrowser::deform(SheetOperation &operation)
              
     m_lastScaleFactor = operation.scaleFactor;
 
+    const qreal safeMaxWidth = qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth;
+    const qreal safeMaxHeight = qFuzzyIsNull(m_maxHeight) ? (qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth) : m_maxHeight;
+
     //根据缩放模式调整缩放比例
     switch (operation.rotation) {
     default:
@@ -900,15 +903,15 @@ void SheetBrowser::deform(SheetOperation &operation)
     case Dr::RotateBy180:
         qCDebug(appLog) << "SheetBrowser::deform() - Rotation is 0 or 180";
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / safeMaxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->height()) / m_maxHeight;
+            operation.scaleFactor = static_cast<double>(this->height()) / safeMaxHeight;
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
-            if (scaleFactor * m_maxHeight > this->height())
-                scaleFactor = static_cast<double>(this->height()) / m_maxHeight;
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / safeMaxWidth / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            if (scaleFactor * safeMaxHeight > this->height())
+                scaleFactor = static_cast<double>(this->height()) / safeMaxHeight;
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;
@@ -917,15 +920,15 @@ void SheetBrowser::deform(SheetOperation &operation)
     case Dr::RotateBy270:
         qCDebug(appLog) << "SheetBrowser::deform() - Rotation is 90 or 270";
         if (Dr::FitToPageWidthMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            operation.scaleFactor = static_cast<double>(this->width() - 25.0) / safeMaxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
         else if (Dr::FitToPageHeightMode == operation.scaleMode)
-            operation.scaleFactor = static_cast<double>(this->height()) / m_maxWidth;
+            operation.scaleFactor = static_cast<double>(this->height()) / safeMaxWidth;
         else if (Dr::FitToPageDefaultMode == operation.scaleMode)
             operation.scaleFactor = 1.0 ;
         else if (Dr::FitToPageWorHMode == operation.scaleMode) {
-            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / m_maxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
-            if (scaleFactor * m_maxWidth > this->height())
-                scaleFactor = static_cast<double>(this->height()) / m_maxWidth;
+            qreal scaleFactor = static_cast<double>(this->width() - 25.0) / safeMaxHeight / (Dr::TwoPagesMode == operation.layoutMode ? 2 : 1);
+            if (scaleFactor * safeMaxWidth > this->height())
+                scaleFactor = static_cast<double>(this->height()) / safeMaxWidth;
             operation.scaleFactor = scaleFactor;
         } else
             operation.scaleMode = Dr::ScaleFactorMode;

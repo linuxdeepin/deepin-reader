@@ -136,7 +136,12 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
     }
 
     qCDebug(appLog) << "Setting up controls for file type:" << m_curSheet->fileType();
-    if (Dr::PDF == m_curSheet->fileType() || Dr::DOCX == m_curSheet->fileType()) {
+    if (Dr::PDF == m_curSheet->fileType()
+            || Dr::DOCX == m_curSheet->fileType()
+#ifdef XPS_SUPPORT_ENABLED
+            || Dr::XPS == m_curSheet->fileType()
+#endif
+        ) {
         if (m_curSheet->opened()) {
             qCDebug(appLog) << "Document opened, enabling controls";
             setBtnDisable(false);
