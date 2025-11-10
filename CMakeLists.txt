@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # XPS支持选项（默认关闭）
 option(XPS_SUPPORT "Enable XPS document format support" OFF)
-
+set (XPS_SUPPORT ON)
 if(XPS_SUPPORT)
     message(">>> XPS support enabled")
     add_compile_definitions(XPS_SUPPORT_ENABLED)

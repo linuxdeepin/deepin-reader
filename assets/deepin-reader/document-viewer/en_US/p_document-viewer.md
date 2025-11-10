@@ -44,7 +44,7 @@ Document Viewer realizes basic document management such as opening files, saving
 
 ### Open files
 
-Document Viewer supports DOCX, PDF and DJVU formats. You can open a file by: 
+Document Viewer supports DOCX, PDF, DJVU, and XPS formats. You can open a file by: 
 
 - Dragging it directly into the interface or onto the icon. 
 - Right-clicking it and selecting **Open with** > **Document Viewer**. After setting Document Viewer as the default program, you can open it by double-clicking it directly.
