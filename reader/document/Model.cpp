@@ -4,7 +4,7 @@
 
 #include "Model.h"
 #ifdef XPS_SUPPORT_ENABLED
-#include "XpsDocument.h"
+#include "XpsDocumentAdapter.h"
 #endif
 #include "PDFModel.h"
 #include "DjVuModel.h"
@@ -68,7 +68,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 #ifdef XPS_SUPPORT_ENABLED
     } else if (Dr::XPS == fileType) {
         qCDebug(appLog) << "Handling XPS document";
-        document = deepin_reader::XpsDocument::loadDocument(filePath, error);
+        document = deepin_reader::XpsDocumentAdapter::loadDocument(filePath, error);
 #endif
     } else if (Dr::DOCX == fileType) {
         qCDebug(appLog) << "Starting DOCX document conversion process";

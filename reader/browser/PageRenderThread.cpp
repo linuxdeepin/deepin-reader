@@ -9,6 +9,7 @@
 #include "DocSheet.h"
 #include "SheetRenderer.h"
 #include "SideBarImageViewModel.h"
+#include "Application.h"
 #include "ddlog.h"
 
 #include <QTime>
@@ -594,7 +595,20 @@ bool PageRenderThread::execNextDocPageNormalImageTask()
         return true;
     }
 
-    QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height());
+    int targetWidth = task.rect.width();
+    int targetHeight = task.rect.height();
+    if (targetWidth <= 0 || targetHeight <= 0) {
+        const qreal deviceRatio = dApp ? dApp->devicePixelRatio() : 1.0;
+        const double pageScale = (task.page && task.page->m_scaleFactor > 0.0)
+                ? task.page->m_scaleFactor
+                : (task.sheet ? task.sheet->operation().scaleFactor : 1.0);
+        const QSizeF pageSize = task.page ? task.page->m_originSizeF : QSizeF();
+        targetWidth = qMax(1, qRound(pageSize.width() * pageScale * deviceRatio));
+        targetHeight = qMax(1, qRound(pageSize.height() * pageScale * deviceRatio));
+        task.rect = QRect(0, 0, targetWidth, targetHeight);
+    }
+
+    QImage image = task.sheet->getImage(task.page->itemIndex(), targetWidth, targetHeight);
 
     if (image.isNull()) {
         qCWarning(appLog) << "Failed to get image for page:" << task.page->itemIndex();

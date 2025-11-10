@@ -5,8 +5,8 @@ HEADERS += \
 
 # XPS支持文件（条件包含）
 xps_support {
-    HEADERS += $$PWD/XpsDocument.h
-    SOURCES += $$PWD/XpsDocument.cpp
+    HEADERS += $$PWD/XpsDocumentAdapter.h
+    SOURCES += $$PWD/XpsDocumentAdapter.cpp
 }
 
 SOURCES += \
