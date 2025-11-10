@@ -129,11 +129,11 @@ void Central::addFilesWithDialog()
     qCDebug(appLog) << "Opening file selection dialog...";
     DFileDialog dialog(this);
     dialog.setFileMode(DFileDialog::ExistingFiles);
+    QStringList filters = {"*.pdf", "*.djvu", "*.docx"};
 #ifdef XPS_SUPPORT_ENABLED
-    dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu *.docx *.xps)");
-#else
-    dialog.setNameFilter(tr("Documents") + " (*.pdf *.djvu *.docx)");
+    filters << "*.xps";
 #endif
+    dialog.setNameFilter(tr("Documents") + QStringLiteral(" (") + filters.join(' ') + QLatin1Char(')'));
     dialog.setDirectory(QDir::homePath());
 
     if (QDialog::Accepted != dialog.exec()) {
