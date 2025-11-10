@@ -1186,13 +1186,27 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
     tFileInfo.size = fileInfo.size();
     tFileInfo.createTime = fileInfo.birthTime();
     tFileInfo.changeTime = fileInfo.lastModified();
-    tFileInfo.auther = fileInfo.owner();
     tFileInfo.filePath = fileInfo.filePath();
 
     const Properties &propertys = m_renderer->properties();
     tFileInfo.format = format();
     tFileInfo.optimization = propertys.value("Linearized").toBool();
-    tFileInfo.keyword = propertys.value("KeyWords").toString();
+    QString keywords = propertys.value("KeyWords").toString();
+    if (keywords.isEmpty()) {
+        keywords = propertys.value("Keywords").toString();
+    }
+    tFileInfo.keyword = keywords;
+
+    QString author = propertys.value("Author").toString();
+    if (author.isEmpty()) {
+        author = propertys.value("Creator").toString();
+    }
+    if (author.isEmpty()) {
+        author = fileInfo.owner();
+        qCDebug(appLog) << "Using file owner as fallback author for document";
+    }
+    tFileInfo.auther = author;
+
     tFileInfo.theme = propertys.value("Title").toString();
     tFileInfo.producter = propertys.value("Producer").toString();
     tFileInfo.creater = propertys.value("Creator").toString();

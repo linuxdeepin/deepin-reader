@@ -261,7 +261,7 @@ QString toQString(const gchar *value)
     return QString::fromUtf8(value);
 }
 
-QString normalizedString(const gchar *value, const QString &fallback = QStringLiteral("未知"))
+QString normalizedString(const gchar *value, const QString &fallback = QString())
 {
     QString result = toQString(value).trimmed();
     return result.isEmpty() ? fallback : result;
@@ -635,21 +635,33 @@ void XpsDocumentAdapter::ensureProperties() const
             logGError(QStringLiteral("gxps_file_get_core_properties failed"), coreError.get());
         }
     } else {
-        props["Title"] = normalizedString(gxps_core_properties_get_title(core.get()));
-        props["Author"] = normalizedString(gxps_core_properties_get_creator(core.get()));
-        props["Subject"] = normalizedString(gxps_core_properties_get_subject(core.get()), QString());
-        props["Keywords"] = normalizedString(gxps_core_properties_get_keywords(core.get()), QString());
-        props["Description"] = normalizedString(gxps_core_properties_get_description(core.get()), QString());
-        props["Version"] = normalizedString(gxps_core_properties_get_version(core.get()), QString());
-        props["Creator"] = normalizedString(gxps_core_properties_get_last_modified_by(core.get()), QString());
+        const auto setPropertyWithLog = [&](const QString &key, const gchar *value) {
+            const QString text = normalizedString(value);
+            if (text.isEmpty()) {
+                qCDebug(appLog) << "XPS metadata missing or empty field:" << key;
+            }
+            props[key] = text;
+        };
+
+        setPropertyWithLog(QStringLiteral("Title"), gxps_core_properties_get_title(core.get()));
+        setPropertyWithLog(QStringLiteral("Author"), gxps_core_properties_get_creator(core.get()));
+        setPropertyWithLog(QStringLiteral("Subject"), gxps_core_properties_get_subject(core.get()));
+        setPropertyWithLog(QStringLiteral("KeyWords"), gxps_core_properties_get_keywords(core.get()));
+        setPropertyWithLog(QStringLiteral("Description"), gxps_core_properties_get_description(core.get()));
+        setPropertyWithLog(QStringLiteral("Version"), gxps_core_properties_get_version(core.get()));
+        setPropertyWithLog(QStringLiteral("Creator"), gxps_core_properties_get_last_modified_by(core.get()));
 
         const QDateTime created = fromUnixTime(gxps_core_properties_get_created(core.get()));
         const QDateTime modified = fromUnixTime(gxps_core_properties_get_modified(core.get()));
         if (created.isValid()) {
             props["CreationDate"] = created;
+        } else {
+            qCDebug(appLog) << "XPS metadata CreationDate missing or invalid";
         }
         if (modified.isValid()) {
             props["ModificationDate"] = modified;
+        } else {
+            qCDebug(appLog) << "XPS metadata ModificationDate missing or invalid";
         }
     }
 
@@ -677,10 +689,12 @@ void XpsDocumentAdapter::ensureOutline() const
 
     GObjectPtr<GXPSDocumentStructure> structure(gxps_document_get_structure(m_handle->document));
     if (!structure) {
+        qCDebug(appLog) << "XPS document has no structure section, outline unavailable";
         return;
     }
 
     if (!gxps_document_structure_has_outline(structure.get())) {
+        qCDebug(appLog) << "XPS document structure present but outline is empty";
         return;
     }
 
@@ -740,6 +754,10 @@ void XpsDocumentAdapter::ensureOutline() const
     do {
         result.append(buildSection(&iter));
     } while (gxps_outline_iter_next(&iter));
+
+    if (result.isEmpty()) {
+        qCDebug(appLog) << "XPS outline iterator completed but no sections were generated";
+    }
 
     m_outline = result;
 }
