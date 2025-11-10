@@ -15,7 +15,10 @@ Build-Depends:
  libdtk6widget-dev [!mipsel !mips64el] | libdtkwidget-dev,
  libdtk6gui-dev [!mipsel !mips64el] | libdtkgui-dev,
  libdtk6core-dev [!mipsel !mips64el] | libdtkcore-dev,
- libdeepin-pdfium-dev (>= 1.5.1) [!mipsel !mips64el] | libdeepin-pdfium5-dev (>= 1.5.1),
+ libdeepin-pdfium-dev [!mipsel !mips64el] | libdeepin-pdfium-dev,
+ libgxps-dev,
+ libcairo2-dev,
+ libglib2.0-dev,
  libdjvulibre-dev,
  libtiff-dev,
  libjpeg-dev,
@@ -35,6 +38,6 @@ Depends:
     ${shlibs:Depends}, 
     ${misc:Depends}, 
     pandoc,  
-    libqt6webenginecore6-bin [!mipsel !mips64el] | libqt5core5a
+    libqt6webenginecore6-bin [!mipsel !mips64el] | libqt5core5a,
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.

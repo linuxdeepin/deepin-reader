@@ -79,7 +79,7 @@ build: |
 
 sources:
   # linglong:gen_deb_source sources amd64 http://10.20.64.92:8080/crimson_25.1 stable main
-  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libdeepin-pdfium-dev
+  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libdeepin-pdfium-dev, libgxps-dev, libcairo2-dev, libglib2.0-dev, libgobject-2.0-dev
   - kind: file
     url: http://10.20.64.92:8080/crimson_25.1/pool/main/q/qt6-tools/assistant-qt6_6.8.0-0deepin3_amd64.deb
     digest: 8b5df0b28f8a7cfc63a1ba4ac369f09a66e19d47a462c4bc8fa8bc552f18a714
