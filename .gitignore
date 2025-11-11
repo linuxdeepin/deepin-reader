@@ -39,3 +39,4 @@ build
 .promptx/
 .spec-workflow/
 .cursorindexingignore
+.cursor/
