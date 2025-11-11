@@ -80,6 +80,7 @@ QImage SheetRenderer::getImage(int index, int width, int height, const QRect &sl
         return QImage();
     }
 
+    // width/height may come from high-DPI print requests: keep pipeline ready for large images.
     QImage image = m_pages.value(index)->render(width, height, slice);
     qCDebug(appLog) << "SheetRenderer::getImage end";
     return image;

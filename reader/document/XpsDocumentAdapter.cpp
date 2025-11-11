@@ -537,6 +537,7 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
     cairo_set_source_rgb(context.get(), 1.0, 1.0, 1.0);
     cairo_paint(context.get());
 
+    // Scaling via cairo_matrix keeps high-DPI print requests accurate, no device-scale override needed here.
     cairo_matrix_t matrix;
     cairo_set_antialias(context.get(), CAIRO_ANTIALIAS_BEST);
 
