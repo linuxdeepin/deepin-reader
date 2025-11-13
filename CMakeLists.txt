@@ -68,7 +68,12 @@ if (QT_VERSION_MAJOR MATCHES 6)
 else()
     set(DTK_VERSION_MAJOR "")
 endif()
-set(PDF_LIB_VERSION "")
+
+if (QT_VERSION_MAJOR MATCHES 5)
+    set(PDF_LIB_VERSION 5)
+else()
+    set(PDF_LIB_VERSION "")
+endif()
 message(">>> Build with DTK: ${DTK_VERSION_MAJOR}")
 
 # 定义必需的Qt组件
