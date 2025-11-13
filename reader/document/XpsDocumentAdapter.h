@@ -40,6 +40,8 @@ public:
     QImage renderPage(int pageIndex, int width, int height, const QRect &slice) const;
     QSizeF pageSize(int pageIndex) const;
 
+    QString filePath() const { return m_filePath; }
+
 private:
     class Handle;
 

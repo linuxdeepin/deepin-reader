@@ -5,6 +5,7 @@
 
 #include "XpsDocumentAdapter.h"
 
+#include "XpsTextExtractor.h"
 #include "ddlog.h"
 
 #include <QByteArray>
@@ -13,6 +14,8 @@
 #include <QMutexLocker>
 #include <QRectF>
 #include <functional>
+
+#include <algorithm>
 
 #ifdef signals
 #pragma push_macro("signals")
@@ -795,8 +798,63 @@ Link XpsPageAdapter::getLinkAtPoint(const QPointF &point)
 
 QString XpsPageAdapter::text(const QRectF &rect) const
 {
-    Q_UNUSED(rect)
-    return QString();
+    if (!m_document || rect.isEmpty()) {
+        return QString();
+    }
+
+    // 直接调用文本提取器，避免通过非const的words()方法
+    QString filePath = m_document->filePath();
+    if (filePath.isEmpty()) {
+        qCWarning(appLog) << "XpsPageAdapter::text() - Empty file path";
+        return QString();
+    }
+
+    QList<Word> allWords = XpsTextExtractor::extractWords(filePath, m_pageIndex);
+    if (allWords.isEmpty()) {
+        return QString();
+    }
+
+    // 筛选在矩形区域内的words并按位置排序
+    QList<Word> selectedWords;
+    for (const Word &word : allWords) {
+        if (rect.intersects(word.boundingBox)) {
+            selectedWords.append(word);
+        }
+    }
+
+    if (selectedWords.isEmpty()) {
+        return QString();
+    }
+
+    // 按位置排序（从上到下，从左到右）
+    std::sort(selectedWords.begin(), selectedWords.end(), [](const Word &a, const Word &b) {
+        const double yThreshold = 5.0; // Y坐标容差
+        if (qAbs(a.boundingBox.y() - b.boundingBox.y()) > yThreshold) {
+            return a.boundingBox.y() < b.boundingBox.y();
+        }
+        return a.boundingBox.x() < b.boundingBox.x();
+    });
+
+    // 拼接文本，处理换行
+    QStringList textParts;
+    qreal lastY = selectedWords.first().boundingBox.y();
+    const double yThreshold = 5.0;
+
+    for (const Word &word : selectedWords) {
+        // 检测换行
+        if (qAbs(word.boundingBox.y() - lastY) > yThreshold && !textParts.isEmpty()) {
+            // 如果Y坐标变化较大，可能是新行，添加换行符（可选）
+            // 这里先不添加，让调用者处理
+        }
+        textParts.append(word.text);
+        lastY = word.boundingBox.y();
+    }
+
+    QString result = textParts.join(QStringLiteral(" "));
+
+    qCDebug(appLog) << "XpsPageAdapter::text() - Extracted text for rect" << rect << ":" << result;
+
+    return result.simplified();
 }
 
 QVector<PageSection> XpsPageAdapter::search(const QString &text, bool matchCase, bool wholeWords) const
@@ -814,7 +872,20 @@ QList<Annotation *> XpsPageAdapter::annotations() const
 
 QList<Word> XpsPageAdapter::words()
 {
-    return {};
+    if (!m_document) {
+        qCWarning(appLog) << "XpsPageAdapter::words() - Invalid document";
+        return {};
+    }
+
+    // 获取文档文件路径
+    QString filePath = m_document->filePath();
+    if (filePath.isEmpty()) {
+        qCWarning(appLog) << "XpsPageAdapter::words() - Empty file path";
+        return {};
+    }
+
+    // 使用文本提取器提取文本
+    return XpsTextExtractor::extractWords(filePath, m_pageIndex);
 }
 
 } // namespace deepin_reader
