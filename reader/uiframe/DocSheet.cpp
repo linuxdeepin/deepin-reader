@@ -518,9 +518,11 @@ QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 
 QSize DocSheet::calculatePrintTargetSize(int pageIndex, const QPrinter &printer, const QRectF &pageRect) const
 {
+#ifdef XPS_SUPPORT_ENABLED
     if (m_fileType != Dr::XPS) {
         return QSize();
     }
+#endif
 
     const QSizeF logicalSize = m_renderer ? m_renderer->getPageSize(pageIndex) : QSizeF();
     if (logicalSize.isEmpty() || logicalSize.width() <= 0.0 || logicalSize.height() <= 0.0) {
@@ -928,7 +930,11 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
+#ifdef XPS_SUPPORT_ENABLED
     const bool isXpsDocument = (m_fileType == Dr::XPS);
+#else
+    const bool isXpsDocument = false;
+#endif
     auto targetRectForSize = [&pageRect](const QSize &sourceSize) -> QRect {
         if (!sourceSize.isValid() || sourceSize.isEmpty()) {
             return QRect();
@@ -1054,7 +1060,11 @@ void DocSheet::onPrintRequested(DPrinter *printer)
     LoadingWidget loading(qApp->activeWindow());
     loading.show();
 
+#ifdef XPS_SUPPORT_ENABLED
     const bool isXpsDocument = (m_fileType == Dr::XPS);
+#else
+    const bool isXpsDocument = false;
+#endif
     auto targetRectForSize = [&pageRect](const QSize &sourceSize) -> QRect {
         if (!sourceSize.isValid() || sourceSize.isEmpty()) {
             return QRect();
