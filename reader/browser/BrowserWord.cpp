@@ -44,10 +44,7 @@ void BrowserWord::setSelectable(bool enable)
 
 QRectF BrowserWord::boundingRect() const
 {
-    // qCDebug(appLog) << "BrowserWord::boundingRect() - Calculating bounding rectangle";
-    QRectF rect = QRectF(m_word.boundingBox.x() * m_scaleFactor - 1, m_word.boundingBox.y() * m_scaleFactor - 1, m_word.boundingBox.width() * m_scaleFactor + 2, m_word.boundingBox.height() * m_scaleFactor + 2);
-    // qCDebug(appLog) << "BrowserWord::boundingRect() - Bounding rectangle:" << rect;
-    return rect;
+    return QRectF(m_word.boundingBox.x() * m_scaleFactor - 1, m_word.boundingBox.y() * m_scaleFactor - 1, m_word.boundingBox.width() * m_scaleFactor + 2, m_word.boundingBox.height() * m_scaleFactor + 2);
 }
 
 QRectF BrowserWord::boundingBox() const
