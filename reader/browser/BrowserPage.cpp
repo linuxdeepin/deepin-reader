@@ -251,9 +251,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
             task.pixmapId = m_pixmapId;
 
-            task.rect = QRect(0, 0,
-                              static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
-                              static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+            const qreal deviceRatio = dApp ? dApp->devicePixelRatio() : 1.0;
+            const int targetWidth = qMax(1, qRound(boundingRect().width() * deviceRatio));
+            const int targetHeight = qMax(1, qRound(boundingRect().height() * deviceRatio));
+            task.rect = QRect(0, 0, targetWidth, targetHeight);
 
             PageRenderThread::appendTask(task);
         } else {
@@ -266,9 +267,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
             task.pixmapId = m_pixmapId;
 
-            task.rect = QRect(0, 0,
-                              static_cast<int>(boundingRect().width() * dApp->devicePixelRatio()),
-                              static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
+            const qreal deviceRatio = dApp ? dApp->devicePixelRatio() : 1.0;
+            const int targetWidth = qMax(1, qRound(boundingRect().width() * deviceRatio));
+            const int targetHeight = qMax(1, qRound(boundingRect().height() * deviceRatio));
+            task.rect = QRect(0, 0, targetWidth, targetHeight);
 
             PageRenderThread::appendTask(task);
         }

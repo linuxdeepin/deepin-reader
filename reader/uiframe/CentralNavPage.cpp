@@ -25,13 +25,16 @@ CentralNavPage::CentralNavPage(DWidget *parent)
     tipsLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(tipsLabel, DFontSizeManager::T8);
 
+    constexpr auto kFormatsWithXps = "PDF,DJVU,DOCX,XPS";
+    constexpr auto kFormatsWithoutXps = "PDF,DJVU,DOCX";
 #ifdef XPS_SUPPORT_ENABLED
-    auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU,DOCX,XPS"), this);
-    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg("PDF,DJVU,DOCX,XPS"));
+    auto supportedFormats = QString::fromLatin1(kFormatsWithXps);
 #else
-    auto formatLabel = new DLabel(tr("Format supported: %1").arg("PDF,DJVU,DOCX"), this);
-    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg("PDF,DJVU,DOCX"));
+    auto supportedFormats = QString::fromLatin1(kFormatsWithoutXps);
 #endif
+
+    auto formatLabel = new DLabel(tr("Format supported: %1").arg(supportedFormats), this);
+    formatLabel->setAccessibleName(QString("Label_format supported: %1").arg(supportedFormats));
     formatLabel->setAlignment(Qt::AlignHCenter);
     formatLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(formatLabel, DFontSizeManager::T8);

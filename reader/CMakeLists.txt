@@ -3,6 +3,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 pkg_check_modules(PDFIUM REQUIRED deepin-pdfium${PDF_LIB_VERSION})
+if (XPS_SUPPORT_ENABLED)
+    pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0)
+endif()
 
 # 添加位置无关代码编译标志
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIE")
@@ -75,6 +78,7 @@ target_include_directories(deepin-reader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/uiframe
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${PDFIUM_INCLUDE_DIRS}
+    $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
 )
 
 if (NOT APP_VERSION)
@@ -87,18 +91,40 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     APP_VERSION="${APP_VERSION}"
 )
 
-# 链接库
-target_link_libraries(deepin-reader PRIVATE
+if (XPS_SUPPORT_ENABLED)
+    target_compile_options(deepin-reader PRIVATE ${XPS_DEPS_CFLAGS_OTHER})
+endif()
+
+# 添加资源文件
+set(READER_LINK_LIBS
     ${LINK_LIBS}
     ${LIBJPEG_LIBRARIES}
     ${DDJVU_LIBRARIES}
     ${PDFIUM_LIBRARIES}
 )
 
-# 添加资源文件
-qt_add_resources(reader_RESOURCES
-    ${CMAKE_SOURCE_DIR}/resources/resources.qrc
-)
+if (XPS_SUPPORT_ENABLED)
+    list(APPEND READER_LINK_LIBS ${XPS_DEPS_LIBRARIES})
+endif()
+
+if (QT_VERSION_MAJOR MATCHES 6)
+    target_link_libraries(deepin-reader PRIVATE ${READER_LINK_LIBS})
+
+    qt_add_resources(reader_RESOURCES
+        ${CMAKE_SOURCE_DIR}/resources/resources.qrc
+    )
+else()
+    target_link_libraries(deepin-reader PRIVATE
+        ${READER_LINK_LIBS}
+        dl
+        pthread
+    )
+
+    qt5_add_resources(reader_RESOURCES
+        ${CMAKE_SOURCE_DIR}/resources/resources.qrc
+    )
+endif()
+
 target_sources(deepin-reader PRIVATE ${reader_RESOURCES})
 
 # 安装目标

@@ -46,8 +46,7 @@ void FindWidget::setDocSheet(DocSheet *sheet)
 void FindWidget::updatePosition()
 {
     qCDebug(appLog) << "Updating find widget position, yOffset:" << m_yOff;
-    QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
-    this->move(screenGeometry.width() - this->width() - 10, m_yOff + 10);
+    this->move(m_parentWidget->width() - this->width() - 10, m_yOff + 10);
 
     this->show();
     this->raise();

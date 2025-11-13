@@ -29,11 +29,16 @@ Application::Application(int &argc, char **argv)
     setApplicationVersion(DApplication::buildVersion(APP_VERSION));
     setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin_reader");
     setApplicationDisplayName(tr("Document Viewer"));
+    const QStringList supportedFormats = {
+        QStringLiteral("PDF"),
+        QStringLiteral("DJVU"),
+        QStringLiteral("DOCX")
 #ifdef XPS_SUPPORT_ENABLED
-    setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX, XPS etc."));
-#else
-    setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc."));
+        , QStringLiteral("XPS")
 #endif
+    };
+    setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting %1.")
+                                  .arg(supportedFormats.join(QStringLiteral(", "))));
     setProductIcon(QIcon::fromTheme("deepin-reader"));
 }
 
