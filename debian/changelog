@@ -1,3 +1,9 @@
+deepin-reader (6.5.42) unstable; urgency=medium
+
+  * fix: improve FindWidget position update logic
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 13 Nov 2025 14:35:10 +0800
+
 deepin-reader (6.5.41) unstable; urgency=medium
 
   * fix: fix access with long url in pdf.
