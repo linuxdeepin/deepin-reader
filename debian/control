@@ -15,7 +15,7 @@ Build-Depends:
  libdtk6widget-dev [!mipsel !mips64el] | libdtkwidget-dev,
  libdtk6gui-dev [!mipsel !mips64el] | libdtkgui-dev,
  libdtk6core-dev [!mipsel !mips64el] | libdtkcore-dev,
- libdeepin-pdfium-dev [!mipsel !mips64el] | libdeepin-pdfium-dev,
+ libdeepin-pdfium-dev [!mipsel !mips64el] | libdeepin-pdfium5-dev,
  libgxps-dev,
  libcairo2-dev,
  libglib2.0-dev,
