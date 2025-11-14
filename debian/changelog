@@ -1,3 +1,9 @@
+deepin-reader (6.5.44) unstable; urgency=medium
+
+  * build error (#207)
+
+ -- lizheng <uos@uos-PC>  Fri, 14 Nov 2025 08:12:03 +0800
+
 deepin-reader (6.5.43) unstable; urgency=medium
 
   * feat: Improve XPS print quality by using printer DPI-aware rendering
