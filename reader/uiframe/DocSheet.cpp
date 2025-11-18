@@ -598,6 +598,15 @@ bool DocSheet::saveAsData(QString targetFilePath)
     qCDebug(appLog) << "Saving document as:" << targetFilePath;
     stopSearch();
 
+#ifdef XPS_SUPPORT_ENABLED
+    // XPS can be saved as XPS (copy) or exported to PDF (conversion)
+    // Always use saveAs() to handle both cases
+    if (Dr::XPS == fileType()) {
+        qCDebug(appLog) << "XPS saveAs:" << targetFilePath;
+        if (!m_renderer->saveAs(targetFilePath))
+            return false;
+    } else
+#endif
     if (m_documentChanged && Dr::DOCX != fileType()) {
         qCDebug(appLog) << "Saving document as:" << targetFilePath;
         if (!m_renderer->saveAs(targetFilePath))
@@ -789,6 +798,17 @@ QString DocSheet::filter()
         return  "Pdf File (*.pdf)";
     else if (Dr::DJVU == m_fileType)
         return "Djvu files (*.djvu)";
+#ifdef XPS_SUPPORT_ENABLED
+    else if (Dr::XPS == m_fileType) {
+        // XPS can be saved as XPS or exported to PDF
+        if (m_renderer && m_renderer->opened()) {
+            // Try to get filters from document if available
+            // For now, return both XPS and PDF filters
+            return QStringLiteral("XPS files (*.xps);;Portable document format (*.pdf)");
+        }
+        return QStringLiteral("XPS files (*.xps);;Portable document format (*.pdf)");
+    }
+#endif
 
     qCDebug(appLog) << "filter end, return:";
     return "";
