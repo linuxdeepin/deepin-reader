@@ -859,10 +859,112 @@ QString XpsPageAdapter::text(const QRectF &rect) const
 
 QVector<PageSection> XpsPageAdapter::search(const QString &text, bool matchCase, bool wholeWords) const
 {
-    Q_UNUSED(text)
-    Q_UNUSED(matchCase)
-    Q_UNUSED(wholeWords)
-    return {};
+    qCDebug(appLog) << "XpsPageAdapter::search() - Searching for text:" << text 
+                    << "matchCase:" << matchCase << "wholeWords:" << wholeWords;
+
+    if (text.isEmpty()) {
+        qCDebug(appLog) << "XpsPageAdapter::search() - Empty search text";
+        return QVector<PageSection>();
+    }
+
+    if (!m_document) {
+        qCWarning(appLog) << "XpsPageAdapter::search() - Invalid document";
+        return QVector<PageSection>();
+    }
+
+    // 获取文档文件路径
+    QString filePath = m_document->filePath();
+    if (filePath.isEmpty()) {
+        qCWarning(appLog) << "XpsPageAdapter::search() - Empty file path";
+        return QVector<PageSection>();
+    }
+
+    // 提取页面所有文字（复用 TASK008 的实现）
+    QList<Word> allWords = XpsTextExtractor::extractWords(filePath, m_pageIndex);
+    if (allWords.isEmpty()) {
+        qCDebug(appLog) << "XpsPageAdapter::search() - No words found on page";
+        return QVector<PageSection>();
+    }
+
+    // 文本匹配策略
+    Qt::CaseSensitivity caseSensitivity = matchCase ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+    // 构建完整的页面文本字符串用于搜索（考虑跨多个 Word 的情况）
+    QString pageText;
+    for (const Word &word : allWords) {
+        pageText.append(word.text);
+    }
+
+    QVector<PageSection> sections;
+    int searchIndex = 0;
+
+    // 在页面文本中查找所有匹配位置
+    while ((searchIndex = pageText.indexOf(text, searchIndex, caseSensitivity)) != -1) {
+        const int matchStart = searchIndex;
+        const int matchEnd = searchIndex + text.length();
+
+        // 检查整词匹配要求
+        if (wholeWords) {
+            const bool wordBegins = (matchStart == 0) || 
+                                    !pageText.at(matchStart - 1).isLetterOrNumber();
+            const bool wordEnds = (matchEnd >= pageText.length()) || 
+                                  (matchEnd < pageText.length() && !pageText.at(matchEnd).isLetterOrNumber());
+            if (!wordBegins || !wordEnds) {
+                searchIndex = matchEnd;
+                continue;
+            }
+        }
+
+        // 计算匹配文本在 words 中的位置范围
+        int charCount = 0;
+        int startWordIndex = -1;
+        int endWordIndex = -1;
+
+        for (int i = 0; i < allWords.size(); ++i) {
+            const int wordLength = allWords[i].text.length();
+            const int wordStart = charCount;
+            const int wordEnd = charCount + wordLength;
+
+            // 找到包含 matchStart 的 word
+            if (startWordIndex == -1 && wordStart <= matchStart && matchStart < wordEnd) {
+                startWordIndex = i;
+            }
+            // 找到包含 matchEnd-1 的 word（matchEnd 是开区间）
+            if (wordStart <= matchEnd - 1 && matchEnd - 1 < wordEnd) {
+                endWordIndex = i;
+                break;
+            }
+            charCount += wordLength;
+        }
+
+        if (startWordIndex == -1 || endWordIndex == -1) {
+            searchIndex = matchEnd;
+            continue;
+        }
+
+        // 合并匹配的 words 的边界框
+        QRectF matchRect;
+        for (int i = startWordIndex; i <= endWordIndex; ++i) {
+            if (matchRect.isEmpty()) {
+                matchRect = allWords[i].boundingBox;
+            } else {
+                matchRect = matchRect.united(allWords[i].boundingBox);
+            }
+        }
+
+        if (!matchRect.isEmpty()) {
+            // 创建 PageSection（每个匹配创建一个 PageLine）
+            PageSection section;
+            section.append(PageLine{QString(), matchRect});
+            sections.append(section);
+        }
+
+        // 移动到下一个可能的匹配位置
+        searchIndex = matchEnd;
+    }
+
+    qCDebug(appLog) << "XpsPageAdapter::search() - Found" << sections.size() << "matches";
+    return sections;
 }
 
 QList<Annotation *> XpsPageAdapter::annotations() const
