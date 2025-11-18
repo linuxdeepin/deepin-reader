@@ -29,6 +29,7 @@
 extern "C" {
 #include <libgxps/gxps.h>
 #include <cairo.h>
+#include <cairo-pdf.h>
 #include <gio/gio.h>
 }
 
@@ -421,20 +422,177 @@ Page *XpsDocumentAdapter::page(int index) const
 
 QStringList XpsDocumentAdapter::saveFilter() const
 {
-    return QStringList() << QStringLiteral("XPS files (*.xps)");
+    return QStringList() << QStringLiteral("XPS files (*.xps)")
+                         << QStringLiteral("Portable document format (*.pdf)");
 }
 
 bool XpsDocumentAdapter::save() const
 {
-    qCWarning(appLog) << "XPS save() not implemented";
+    // XPS is a read-only format, cannot save in-place
+    // User should use saveAs() to export to PDF
+    qCInfo(appLog) << "XPS save() called: XPS is read-only, use saveAs() to export to PDF";
     return false;
 }
 
 bool XpsDocumentAdapter::saveAs(const QString &filePath) const
 {
-    Q_UNUSED(filePath)
-    qCWarning(appLog) << "XPS saveAs() not implemented";
-    return false;
+    if (filePath.isEmpty()) {
+        qCWarning(appLog) << "XPS saveAs: empty file path";
+        return false;
+    }
+
+    // Determine format based on file extension
+    const QString lowerPath = filePath.toLower();
+    const bool isPdf = lowerPath.endsWith(QStringLiteral(".pdf"));
+    const bool isXps = lowerPath.endsWith(QStringLiteral(".xps"));
+
+    if (!isPdf && !isXps) {
+        qCWarning(appLog) << "XPS saveAs: unsupported file format, expected .xps or .pdf:" << filePath;
+        return false;
+    }
+
+    // Handle XPS format: copy source file if different, or return success if same
+    if (isXps) {
+        if (filePath == m_filePath) {
+            qCInfo(appLog) << "XPS saveAs: source and target are the same, no action needed";
+            return true;
+        }
+
+        // Try to copy the source XPS file
+        QFile sourceFile(m_filePath);
+        if (!sourceFile.exists()) {
+            qCWarning(appLog) << "XPS saveAs: source file does not exist:" << m_filePath;
+            return false;
+        }
+
+        // Remove target file if it exists
+        if (QFile::exists(filePath)) {
+            if (!QFile::remove(filePath)) {
+                qCWarning(appLog) << "XPS saveAs: failed to remove existing target file:" << filePath;
+                return false;
+            }
+        }
+
+        if (!sourceFile.copy(filePath)) {
+            qCWarning(appLog) << "XPS saveAs: failed to copy XPS file from" << m_filePath << "to" << filePath;
+            return false;
+        }
+
+        qCInfo(appLog) << "XPS saveAs: successfully copied XPS file to" << filePath;
+        return true;
+    }
+
+    // Handle PDF format: export XPS to PDF using Cairo
+    if (!m_handle || !m_handle->document) {
+        qCWarning(appLog) << "XPS saveAs: invalid document handle";
+        return false;
+    }
+
+    ensurePageCache();
+
+    QMutexLocker lock(&m_mutex);
+    const int pageCount = m_pageSizes.size();
+    if (pageCount <= 0) {
+        qCWarning(appLog) << "XPS saveAs: document has no pages";
+        return false;
+    }
+
+    qCInfo(appLog) << "Exporting XPS to PDF:" << filePath << "pages:" << pageCount;
+
+    // Convert QString to UTF-8 for Cairo
+    const QByteArray filePathUtf8 = filePath.toUtf8();
+    const char *cFilePath = filePathUtf8.constData();
+
+    // Get first page size to determine PDF dimensions (in points, 72 DPI)
+    const QSizeF firstPageSize = m_pageSizes.at(0);
+    if (firstPageSize.isEmpty() || firstPageSize.width() <= 0.0 || firstPageSize.height() <= 0.0) {
+        qCWarning(appLog) << "XPS saveAs: invalid first page size" << firstPageSize;
+        return false;
+    }
+
+    // Create PDF surface with first page dimensions (in points)
+    CairoSurfacePtr pdfSurface(cairo_pdf_surface_create(cFilePath,
+                                                         firstPageSize.width(),
+                                                         firstPageSize.height()));
+    if (!pdfSurface || cairo_surface_status(pdfSurface.get()) != CAIRO_STATUS_SUCCESS) {
+        qCWarning(appLog) << "XPS saveAs: failed to create PDF surface";
+        return false;
+    }
+
+    // Render all pages
+    for (int pageIndex = 0; pageIndex < pageCount; ++pageIndex) {
+        if (pageIndex > 0) {
+            // Set size for subsequent pages (they may have different sizes)
+            const QSizeF pageSize = m_pageSizes.at(pageIndex);
+            if (pageSize.isEmpty() || pageSize.width() <= 0.0 || pageSize.height() <= 0.0) {
+                qCWarning(appLog) << "XPS saveAs: invalid page size at index" << pageIndex << pageSize;
+                continue;
+            }
+            cairo_pdf_surface_set_size(pdfSurface.get(), pageSize.width(), pageSize.height());
+        }
+
+        // Get page object
+        GErrorPtr pageError;
+        GObjectPtr<GXPSPage> page(gxps_document_get_page(m_handle->document,
+                                                         static_cast<guint>(pageIndex),
+                                                         pageError.outPtr()));
+        if (!page) {
+            logGError(QStringLiteral("gxps_document_get_page failed for page %1").arg(pageIndex),
+                      pageError.get());
+            continue;
+        }
+
+        const QSizeF logicalSize = m_pageSizes.at(pageIndex);
+        if (logicalSize.isEmpty() || logicalSize.width() <= 0.0 || logicalSize.height() <= 0.0) {
+            qCWarning(appLog) << "XPS saveAs: invalid logical size for page" << pageIndex << logicalSize;
+            continue;
+        }
+
+        // Create context for this page
+        CairoContextPtr context(cairo_create(pdfSurface.get()));
+        if (!context || cairo_status(context.get()) != CAIRO_STATUS_SUCCESS) {
+            qCWarning(appLog) << "XPS saveAs: failed to create Cairo context for page" << pageIndex;
+            continue;
+        }
+
+        // Set white background
+        cairo_set_source_rgb(context.get(), 1.0, 1.0, 1.0);
+        cairo_paint(context.get());
+
+        // Set identity matrix (1:1 mapping from XPS logical units to PDF points)
+        cairo_matrix_t matrix;
+        cairo_matrix_init_identity(&matrix);
+        cairo_set_matrix(context.get(), &matrix);
+
+        // Enable best quality rendering
+        cairo_set_antialias(context.get(), CAIRO_ANTIALIAS_BEST);
+
+        // Render XPS page to PDF
+        GErrorPtr renderError;
+        if (!gxps_page_render(page.get(), context.get(), renderError.outPtr())) {
+            logGError(QStringLiteral("gxps_page_render failed for page %1").arg(pageIndex),
+                      renderError.get());
+            // Continue with next page even if this one fails
+            continue;
+        }
+
+        // Show page (adds page to PDF)
+        cairo_show_page(context.get());
+        cairo_surface_flush(pdfSurface.get());
+
+        qCDebug(appLog) << "XPS saveAs: rendered page" << pageIndex << "/" << pageCount;
+    }
+
+    // Finalize PDF
+    cairo_surface_finish(pdfSurface.get());
+    cairo_status_t status = cairo_surface_status(pdfSurface.get());
+    if (status != CAIRO_STATUS_SUCCESS) {
+        qCWarning(appLog) << "XPS saveAs: PDF surface error:" << cairo_status_to_string(status);
+        return false;
+    }
+
+    qCInfo(appLog) << "XPS saveAs: successfully exported" << pageCount << "pages to PDF";
+    return true;
 }
 
 Outline XpsDocumentAdapter::outline() const
