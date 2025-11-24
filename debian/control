@@ -4,6 +4,7 @@ Section: graphics
 Priority: optional
 Maintainer: deepin <packages@deepin.com>
 Build-Depends:
+ cmake,
  debhelper (>= 11),
  pkg-config,
  qt6-5compat-dev [!mipsel !mips64el] | libqt5x11extras5-dev,
