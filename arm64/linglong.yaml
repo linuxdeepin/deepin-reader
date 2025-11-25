@@ -22,7 +22,7 @@ build: |
   bash ./install_dep linglong/sources "${PREFIX}"
 
   # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
-  # sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
+  sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
   sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
   sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
   sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
@@ -47,7 +47,7 @@ build: |
     deepin-reader
     ../lib/deepin-reader/htmltopdf
     pandoc
-    libdeepin-pdfium.so
+    libdeepin-pdfium-reader.so
     # 定制插件不存在
     libzpdcallback.so
   )
@@ -79,7 +79,7 @@ build: |
 
 sources:
   # linglong:gen_deb_source sources arm64 http://10.20.64.92:8080/crimson_25.1 stable main
-  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libdeepin-pdfium-dev
+  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libgxps-dev, libcairo2-dev, libglib2.0-dev, libgobject-2.0-dev
   - kind: file
     url: http://10.20.64.92:8080/crimson_25.1/pool/main/q/qt6-tools/assistant-qt6_6.8.0-0deepin3_arm64.deb
     digest: 8640b3a520c753202b7522eb12370205694c88cd354b3b24d4bb5fd25d51fba2
@@ -254,12 +254,6 @@ sources:
   - kind: file
     url: http://10.20.64.92:8080/crimson_25.1/pool/main/d/dbus/libdbus-1-3_1.14.10-3-1deepin3_arm64.deb
     digest: a95fe373de371c4dfe8ac52306db0dc788f64c53a5758255c7823557f3330d08
-  - kind: file
-    url: http://10.20.64.92:8080/crimson_25.1/pool/main/d/deepin-pdfium/libdeepin-pdfium-dev_1.5.7_arm64.deb
-    digest: 237ecf0b8bf3e9acc471d91ed4a85b6627e0ce45660ac64d3593a09403bb75dd
-  - kind: file
-    url: http://10.20.64.92:8080/crimson_25.1/pool/main/d/deepin-pdfium/libdeepin-pdfium_1.5.7_arm64.deb
-    digest: 02d412ef306589574716e3e97c04c35c0392af2b39c0ad321c39a14ad31f7447
   - kind: file
     url: http://10.20.64.92:8080/crimson_25.1/pool/main/libd/libdeflate/libdeflate-dev_1.18-1_arm64.deb
     digest: d5e52d889f15c80ffe7214c06605d831488c2650ec00d7c9eb9b50ebbc108133

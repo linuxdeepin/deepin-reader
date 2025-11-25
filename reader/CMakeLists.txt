@@ -2,6 +2,7 @@
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
+
 pkg_check_modules(PDFIUM REQUIRED deepin-pdfium${PDF_LIB_VERSION})
 if (XPS_SUPPORT_ENABLED)
     pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0)
@@ -98,9 +99,9 @@ endif()
 # 添加资源文件
 set(READER_LINK_LIBS
     ${LINK_LIBS}
+    deepin-pdfium-reader
     ${LIBJPEG_LIBRARIES}
     ${DDJVU_LIBRARIES}
-    ${PDFIUM_LIBRARIES}
 )
 
 if (XPS_SUPPORT_ENABLED)

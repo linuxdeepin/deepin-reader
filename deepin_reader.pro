@@ -55,6 +55,7 @@ xps_support {
 } else {
     message(">>> XPS support disabled")
 }
+SUBDIRS += 3rdparty/deepin-pdfium
 
 SUBDIRS += htmltopdf
 
