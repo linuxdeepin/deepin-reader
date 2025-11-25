@@ -22,7 +22,7 @@ build: |
   bash ./install_dep linglong/sources "${PREFIX}"
 
   # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
-  # sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
+  sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
   sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
   sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
   sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
@@ -47,7 +47,7 @@ build: |
     deepin-reader
     ../lib/deepin-reader/htmltopdf
     pandoc
-    libdeepin-pdfium.so
+    libdeepin-pdfium-reader.so
     # 定制插件不存在
     libzpdcallback.so
   )
@@ -79,7 +79,7 @@ build: |
 
 sources:
   # linglong:gen_deb_source sources sw64 https://pools.uniontech.com/desktop-professional-V25 snipe/2500 main community
-  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libdeepin-pdfium-dev
+  # linglong:gen_deb_source install qt6-base-dev, qt6-base-dev-tools, qt6-tools-dev, libdtk6widget-dev, libspectre-dev, libdjvulibre-dev, libtiff-dev, libjpeg-dev, libicu-dev, libpng-dev, zlib1g-dev, liblcms2-dev, libopenjp2-7-dev, libfreetype6-dev, libgtest-dev, libchardet-dev, qt6-webengine-dev, qt6-5compat-dev, libdtk6gui-dev, libdtk6core-dev, qt6-svg-dev, pandoc, libgxps-dev, libcairo2-dev, libglib2.0-dev, libgobject-2.0-dev
   - kind: file
     url: https://pools.uniontech.com/desktop-professional-V25/pool/main/q/qt6-tools/assistant-qt6_6.8.0-0deepin3_sw64.deb
     digest: 637b3d77dbb06fcaac2d23df85135d52cc8b4a4a1cab3b5aa3d213e27e40a4d1
@@ -257,12 +257,6 @@ sources:
   - kind: file
     url: https://pools.uniontech.com/desktop-professional-V25/pool/main/d/dbus/libdbus-1-3_1.14.10-3-1deepin2_sw64.deb
     digest: 8d08f815ef97905b2299c1f30a13e40964bc26b6de16c4c1b020bc7a2beee881
-  - kind: file
-    url: https://pools.uniontech.com/desktop-professional-V25/pool/main/d/deepin-pdfium/libdeepin-pdfium-dev_1.5.3-1_sw64.deb
-    digest: 8daeaf39a7917a01af686d66810a17f90efcf85d2bb3553530a0b69e101b7b5d
-  - kind: file
-    url: https://pools.uniontech.com/desktop-professional-V25/pool/main/d/deepin-pdfium/libdeepin-pdfium_1.5.3-1_sw64.deb
-    digest: 2dbab2e57cc9cfc5f79d499c2bfbf77c88af82cf421e7c1ce24676276bd17a67
   - kind: file
     url: https://pools.uniontech.com/desktop-professional-V25/pool/main/libd/libdeflate/libdeflate-dev_1.18-1_sw64.deb
     digest: 2acd3b98366af1a46a747253d674915a1beffc041b6b41ef7d6d9cbdf5d28648
