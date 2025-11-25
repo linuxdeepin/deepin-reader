@@ -401,7 +401,11 @@ QTransform XpsTextExtractor::parseTransformMatrix(const QString &transformStr)
     }
 
     // XPS变换矩阵格式: "m11,m12,m21,m22,dx,dy"
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList parts = transformStr.split(QLatin1Char(','), QString::SkipEmptyParts);
+    #else
+    QStringList parts = transformStr.split(QLatin1Char(','), Qt::SkipEmptyParts);
+    #endif
     if (parts.size() != 6) {
         return QTransform();
     }
@@ -477,7 +481,11 @@ QList<double> XpsTextExtractor::parseIndices(const QString &indicesStr, int text
     // XPS Indices格式：每个字符对应一个值，用分号分隔
     // 格式可能是：",100;,100;,98.864;" 或 "100;100;98.864;"
     // 值表示字符的advance width（相对于字体大小的比例，单位是1/100 em）
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QStringList parts = indicesStr.split(QLatin1Char(';'), QString::SkipEmptyParts);
+    #else
+    QStringList parts = indicesStr.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+    #endif
     
     for (int i = 0; i < parts.size() && i < textLength; ++i) {
         QString part = parts[i].trimmed();
