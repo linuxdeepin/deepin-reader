@@ -493,7 +493,7 @@ QList<double> XpsTextExtractor::parseIndices(const QString &indicesStr, int text
         if (part.startsWith(QLatin1Char(','))) {
             part = part.mid(1);
         }
-        
+
         bool ok = false;
         double value = part.toDouble(&ok);
         if (ok && value > 0) {
