@@ -63,6 +63,11 @@ Files: tests/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# 3rdparty/deepin-pdfium
+Files: 3rdparty/deepin-pdfium/*
+Copyright: 2014-2019 PDFium Authors.
+License: GPL-3.0-or-later
+
 # reader all files
 Files: reader/*
 Copyright: UnionTech Software Technology Co., Ltd.
@@ -72,6 +77,10 @@ License: GPL-3.0-or-later
 Files: resources/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
+
+Files: 3rdparty/deepin-pdfium/src/*
+Copyright: PDFium Authors. All rights reserved.
+License: BSD-3-Clause  
 
 # htmltopdf
 Files: htmltopdf/*
