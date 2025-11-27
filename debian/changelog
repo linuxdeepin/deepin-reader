@@ -1,3 +1,18 @@
+deepin-reader (6.5.45) unstable; urgency=medium
+
+  * feat: Add XPS text extraction and character-level selection
+  * fix: adapt to libdfm package name change in Qt5 for V25
+  * feat: [xps] support text-search and highlight
+  * feat: [xps] implement export to PDF and save as XPS
+  * fix: [scale] Adjust the default zoom mode to 'FitToPageWidthMode'
+  * fix: [dpkg] build error
+  * Revert "chore: [build]Replace the source build with install library"
+  * Revert "chore: Remove unused source"
+  * fix: build error
+  * fix: [build] cannot found hello package in sw_64
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 27 Nov 2025 16:27:23 +0800
+
 deepin-reader (6.5.44) unstable; urgency=medium
 
   * build error (#207)
