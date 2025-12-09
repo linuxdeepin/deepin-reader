@@ -17,7 +17,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Location</source>
-        <translation>ファイルパス</translation>
+        <translation>場所</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
