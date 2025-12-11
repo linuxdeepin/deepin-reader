@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Parësi i Dokumenteve është një mjet për lexim kartelash dokument, që mbulon %1.</translation>
     </message>
 </context>
 <context>
