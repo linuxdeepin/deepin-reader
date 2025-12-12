@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>El Visualitzador de documents és una eina per llegir fitxers de documents que admet %1.</translation>
     </message>
 </context>
 <context>
