@@ -82,6 +82,7 @@ endif()
 # 查找Qt和DTK
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
 find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Gui Core)
+pkg_check_modules(DEEPIN-PDFIUM REQUIRED IMPORTED_TARGET deepin-pdfium)
 
 # 定义链接库
 set(LINK_LIBS
@@ -96,6 +97,7 @@ set(LINK_LIBS
     Dtk${DTK_VERSION_MAJOR}::Widget
     Dtk${DTK_VERSION_MAJOR}::Gui
     Dtk${DTK_VERSION_MAJOR}::Core
+    PkgConfig::DEEPIN-PDFIUM
 )
 
 # 添加Qt6特有链接库
@@ -118,7 +120,7 @@ add_link_options(
 )
 
 # 添加子项目
-add_subdirectory(3rdparty/deepin-pdfium)
+# add_subdirectory(3rdparty/deepin-pdfium)
 add_subdirectory(reader)
 add_subdirectory(htmltopdf)
 

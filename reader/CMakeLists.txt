@@ -98,7 +98,6 @@ endif()
 # 添加资源文件
 set(READER_LINK_LIBS
     ${LINK_LIBS}
-    deepin-pdfium-reader
     ${LIBJPEG_LIBRARIES}
     ${DDJVU_LIBRARIES}
 )
