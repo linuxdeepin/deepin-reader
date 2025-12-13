@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Asiakirjat on työkalu asiakirjojen lukemiseen, tukee %1:tä.</translation>
     </message>
 </context>
 <context>
