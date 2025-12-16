@@ -88,8 +88,14 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         }
     } else if (type == DOC_MENU_KEY) {
         qCDebug(appLog) << "BrowserMenu::initActions() - Processing DOC_MENU_KEY";
-        createAction(tr("Search"), "Search");
-        this->addSeparator();
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX
+#ifdef XPS_SUPPORT_ENABLED
+            || sheet->fileType() == Dr::FileType::XPS
+#endif
+        ) {
+            createAction(tr("Search"), "Search");
+            this->addSeparator();
+        }
 
         if (sheet->hasBookMark(index)) {
             qCDebug(appLog) << "BrowserMenu::initActions() - Adding remove bookmark action";
@@ -138,8 +144,12 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Document info"), "DocumentInfo");
     } else {
         qCDebug(appLog) << "BrowserMenu::initActions() - Processing default menu type";
-        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
-            qCDebug(appLog) << "BrowserMenu::initActions() - Adding search action for PDF/DOCX";
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX
+#ifdef XPS_SUPPORT_ENABLED
+            || sheet->fileType() == Dr::FileType::XPS
+#endif
+        ) {
+            qCDebug(appLog) << "BrowserMenu::initActions() - Adding search action for PDF/DOCX/XPS";
             createAction(tr("Search"), "Search");
             this->addSeparator();
         }
