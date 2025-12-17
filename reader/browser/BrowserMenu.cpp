@@ -57,15 +57,17 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         }
         this->addSeparator();
 
-        QAction *highAct = createAction(tr("Highlight"), type != DOC_MENU_SELECT_TEXT ? "ChangeAnnotationColor" : "AddTextHighlight");
-        if (type == DOC_MENU_ANNO_HIGHLIGHT) {
-            qCDebug(appLog) << "BrowserMenu::initActions() - Disabling highlight action for annotation highlight";
-            highAct->setDisabled(true);
-        }
+        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
+            QAction *highAct = createAction(tr("Highlight"), type != DOC_MENU_SELECT_TEXT ? "ChangeAnnotationColor" : "AddTextHighlight");
+            if (type == DOC_MENU_ANNO_HIGHLIGHT) {
+                qCDebug(appLog) << "BrowserMenu::initActions() - Disabling highlight action for annotation highlight";
+                highAct->setDisabled(true);
+            }
 
-        m_pColorWidgetAction = new ColorWidgetAction(this);
-        connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
-        this->addAction(m_pColorWidgetAction);
+            m_pColorWidgetAction = new ColorWidgetAction(this);
+            connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
+            this->addAction(m_pColorWidgetAction);
+        }
 
         if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX) {
             qCDebug(appLog) << "BrowserMenu::initActions() - Adding PDF/DOCX highlight actions";
