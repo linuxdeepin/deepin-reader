@@ -4,7 +4,7 @@ pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 
 if (XPS_SUPPORT_ENABLED)
-    pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0)
+    pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0 freetype2)
 endif()
 
 # 添加位置无关代码编译标志
