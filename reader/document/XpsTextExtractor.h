@@ -126,6 +126,14 @@ private:
      * @return FixedPage文件在ZIP中的路径，失败返回空字符串
      */
     static QString findFixedPagePath(const QString &filePath, int pageIndex);
+
+    /**
+     * @brief 从ZIP文件读取字体文件
+     * @param filePath XPS文件路径
+     * @param fontUri 字体URI（相对路径）
+     * @return 字体文件数据
+     */
+    static QByteArray readFontFromZip(const QString &filePath, const QString &fontUri);
 };
 
 } // namespace deepin_reader
