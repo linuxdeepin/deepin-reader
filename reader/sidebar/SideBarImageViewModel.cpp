@@ -11,6 +11,8 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <QSet>
+#include <algorithm>
 
 ImagePageInfo_t::ImagePageInfo_t(int index): pageIndex(index)
 {
@@ -41,6 +43,11 @@ SideBarImageViewModel::SideBarImageViewModel(DocSheet *sheet, QObject *parent)
 {
     qCDebug(appLog) << "SideBarImageViewModel created for document:" << (sheet ? sheet->filePath() : "null");
     connect(m_sheet, &DocSheet::sigPageModified, this, &SideBarImageViewModel::onUpdateImage);
+
+    m_batchUpdateTimer = new QTimer(this);
+    m_batchUpdateTimer->setSingleShot(true);
+    m_batchUpdateTimer->setInterval(100);
+    connect(m_batchUpdateTimer, &QTimer::timeout, this, &SideBarImageViewModel::onBatchUpdateTimer);
 }
 
 void SideBarImageViewModel::resetData()
@@ -297,8 +304,36 @@ void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
     m_sheet->setThumbnail(index, pixmap);
 
-    const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(index);
-    qCDebug(appLog) << "Notifying" << modelIndexlst.size() << "views of data change";
-    for (const QModelIndex &modelIndex : modelIndexlst)
-        emit dataChanged(modelIndex, modelIndex);
+    m_pendingUpdatePages.insert(index);
+    if (!m_batchUpdateTimer->isActive()) {
+        m_batchUpdateTimer->start();
+    }
+}
+
+void SideBarImageViewModel::onBatchUpdateTimer()
+{
+    if (m_pendingUpdatePages.isEmpty()) {
+        return;
+    }
+
+    qCDebug(appLog) << "Batch updating" << m_pendingUpdatePages.size() << "thumbnails";
+
+    QList<QModelIndex> allModelIndexes;
+    for (int pageIndex : m_pendingUpdatePages) {
+        const QList<QModelIndex> &modelIndexlst = getModelIndexForPageIndex(pageIndex);
+        allModelIndexes.append(modelIndexlst);
+    }
+
+    if (!allModelIndexes.isEmpty()) {
+        std::sort(allModelIndexes.begin(), allModelIndexes.end(),
+                  [](const QModelIndex &a, const QModelIndex &b) {
+                      return a.row() < b.row();
+                  });
+
+        for (const QModelIndex &modelIndex : allModelIndexes) {
+            emit dataChanged(modelIndex, modelIndex);
+        }
+    }
+
+    m_pendingUpdatePages.clear();
 }

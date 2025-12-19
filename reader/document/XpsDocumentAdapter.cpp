@@ -633,10 +633,14 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
 
     ensurePageCache();
 
-    QMutexLocker lock(&m_mutex);
-    if (pageIndex < 0 || pageIndex >= m_pageSizes.size()) {
-        qCWarning(appLog) << "Render request out of bounds" << pageIndex;
-        return QImage();
+    QSizeF logicalSize;
+    {
+        QMutexLocker lock(&m_mutex);
+        if (pageIndex < 0 || pageIndex >= m_pageSizes.size()) {
+            qCWarning(appLog) << "Render request out of bounds" << pageIndex;
+            return QImage();
+        }
+        logicalSize = m_pageSizes.at(pageIndex);
     }
 
     qCDebug(appLog) << "Rendering XPS page" << pageIndex << "@" << width << "x" << height << "slice" << slice;
@@ -647,8 +651,6 @@ QImage XpsDocumentAdapter::renderPage(int pageIndex, int width, int height, cons
         logGError(QStringLiteral("gxps_document_get_page failed"), pageError.get());
         return QImage();
     }
-
-    const QSizeF logicalSize = m_pageSizes.at(pageIndex);
     if (logicalSize.isEmpty() || logicalSize.width() <= 0.0 || logicalSize.height() <= 0.0) {
         qCWarning(appLog) << "Invalid logical size for XPS page" << logicalSize;
         return QImage();

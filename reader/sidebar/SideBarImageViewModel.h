@@ -8,6 +8,8 @@
 
 #include <QAbstractListModel>
 #include <QMap>
+#include <QTimer>
+#include <QSet>
 
 namespace deepin_reader {
 class Annotation;
@@ -201,12 +203,22 @@ protected:
      */
     bool setData(const QModelIndex &index, const QVariant &data, int role) override;
 
+private slots:
+    /**
+     * @brief onBatchUpdateTimer
+     * 批量更新定时器触发
+     */
+    void onBatchUpdateTimer();
+
 private:
     QObject *m_parent = nullptr;
     DocSheet *m_sheet = nullptr;
     QList<ImagePageInfo_t> m_pagelst;
     QMap<int, bool> m_cacheBookMarkMap;
     static QMap<QObject *, QVector<QPixmap>> g_sheetPixmapMap;
+
+    QTimer *m_batchUpdateTimer = nullptr;
+    QSet<int> m_pendingUpdatePages;
 };
 
 #endif // SIDEBARIMAGEVIEWMODEL_H
