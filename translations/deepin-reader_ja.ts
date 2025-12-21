@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>ドキュメントビューアーは、%1ファイルを表示するツールです。</translation>
     </message>
 </context>
 <context>
@@ -378,12 +378,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation>テキスト選択モード</translation>
+        <translation>テキスト選択</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation>スクロールモード</translation>
+        <translation>スクロール</translation>
     </message>
 </context>
 <context>
@@ -648,12 +648,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
         <source>Select text</source>
-        <translation>テキスト選択モード</translation>
+        <translation>テキスト選択</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Hand tool</source>
-        <translation>スクロールモード</translation>
+        <translation>スクロール</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
@@ -807,7 +807,7 @@
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
         <source>Tools</source>
-        <translation>ドラッグモード</translation>
+        <translation>モード切替</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
