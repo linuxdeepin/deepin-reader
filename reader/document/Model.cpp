@@ -107,13 +107,10 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         *pprocess = &decompressor;
         decompressor.setWorkingDirectory(convertedFileDir);
         qCInfo(appLog) << "Unzipping DOCX document:" << targetDoc;
-        QString unzipCommand = "unzip " + targetDoc;
-        qCDebug(appLog) << "执行命令: " << unzipCommand;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        decompressor.start(unzipCommand);
-#else
-        decompressor.startCommand(unzipCommand);
-#endif
+        QStringList unzipArgs;
+        unzipArgs << targetDoc;
+        qCDebug(appLog) << "执行命令: unzip" << unzipArgs;
+        decompressor.start("unzip", unzipArgs);
         if (!decompressor.waitForStarted()) {
             qCritical() << "Failed to start unzip process for file:" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
@@ -151,14 +148,10 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         //     qCDebug(appLog) << "文档" << targetDocFile.fileName() << "不存在！";
         // }
         QString pandocDataDir = prefix + "/share/pandoc/data";
-        QString pandocCommand = QString("pandoc %1 --data-dir=%2 -o %3").arg(targetDoc).arg(pandocDataDir).arg(tmpHtmlFilePath);
-
-        qCDebug(appLog) << "执行命令: " << pandocCommand;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        converter.start(pandocCommand);
-#else
-        converter.startCommand(pandocCommand);
-#endif
+        QStringList pandocArgs;
+        pandocArgs << targetDoc << "--data-dir=" + pandocDataDir << "-o" << tmpHtmlFilePath;
+        qCDebug(appLog) << "执行命令: pandoc" << pandocArgs;
+        converter.start("pandoc", pandocArgs);
         if (!converter.waitForStarted()) {
             qCritical() << "Failed to start pandoc conversion process";
             error = deepin_reader::Document::ConvertFailed;
@@ -189,13 +182,10 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         converter2.setWorkingDirectory(convertedFileDir + "/word");
         qCInfo(appLog) << "Converting HTML to PDF:" << realFilePath;
 
-        QString htmltopdfCommand = getHtmlToPdfPath() + " " + tmpHtmlFilePath + " " + realFilePath;
-        qCDebug(appLog) << "执行命令: " << htmltopdfCommand;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        converter2.start(htmltopdfCommand);
-#else
-        converter2.startCommand(htmltopdfCommand);
-#endif
+        QStringList htmltopdfArgs;
+        htmltopdfArgs << tmpHtmlFilePath << realFilePath;
+        qCDebug(appLog) << "执行命令:" << getHtmlToPdfPath() << htmltopdfArgs;
+        converter2.start(getHtmlToPdfPath(), htmltopdfArgs);
         if (!converter2.waitForStarted()) {
             qCritical() << "Failed to start htmltopdf conversion process";
             error = deepin_reader::Document::ConvertFailed;

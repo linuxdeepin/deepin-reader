@@ -49,11 +49,11 @@ int main(int argc, char *argv[])
     parser.process(QCoreApplication::arguments());
 
     const QStringList requiredArguments = parser.positionalArguments();
-    qInfo() << "Input file:" << requiredArguments.at(0) << "Output PDF:" << requiredArguments.at(1);
     if (requiredArguments.size() != 2) {
         qCritical() << "Invalid number of arguments, expected 2 but got" << requiredArguments.size();
         parser.showHelp(1);
     }
+    qInfo() << "Input file:" << requiredArguments.at(0) << "Output PDF:" << requiredArguments.at(1);
 
     qInfo() << "Creating PDF converter instance";
     HtmltoPdfConverter converter(requiredArguments.at(0), requiredArguments.at(1));
