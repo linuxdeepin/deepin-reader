@@ -74,11 +74,11 @@ int DocTabBar::indexOfFilePath(const QString &filePath)
 
 void DocTabBar::insertSheet(DocSheet *sheet, int index)
 {
-    qCDebug(appLog) << "DocTabBar::insertSheet start - inserting sheet:" << sheet->filePath();
     if (sheet == nullptr) {
         qCWarning(appLog) << "Cannot insert null sheet";
         return;
     }
+    qCDebug(appLog) << "DocTabBar::insertSheet start - inserting sheet:" << sheet->filePath();
 
     QString fileName = QFileInfo(sheet->filePath()).fileName();
 

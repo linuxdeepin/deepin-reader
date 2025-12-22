@@ -81,7 +81,9 @@ void FindWidget::onSearchStart()
         qCDebug(appLog) << "searchText != \"\" && m_lastSearchText != searchText";
         m_lastSearchText = searchText;
         setEditAlert(0);
-        m_docSheet->startSearch(searchText);
+        if (m_docSheet) {
+            m_docSheet->startSearch(searchText);
+        }
         m_findPrevButton->setDisabled(false);
         m_findNextButton->setDisabled(false);
     }
