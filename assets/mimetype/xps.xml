@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <!-- XPS 文档格式 (Microsoft XML Paper Specification) -->
+  <mime-type type="text/xps">
+    <comment>XPS document</comment>
+    <comment xml:lang="zh_CN">XPS 文档</comment>
+    <comment xml:lang="en">XPS Document</comment>
+    <acronym>XPS</acronym>
+    <expanded-acronym>XML Paper Specification</expanded-acronym>
+    <sub-class-of type="application/zip"/>
+    <generic-icon name="x-office-document"/>
+    <glob pattern="*.xps"/>
+    <magic priority="80">
+      <match type="string" value="PK" offset="0"/>
+      <match type="string" value="[Content_Types].xml" offset="30:1000"/>
+    </magic>
+    <alias type="application/vnd.ms-xpsdocument"/>
+    <alias type="application/xps"/>
+  </mime-type>
+  
+  <!-- OXPS 文档格式 (Open XML Paper Specification) -->
+  <mime-type type="text/oxps">
+    <comment>OpenXPS document</comment>
+    <comment xml:lang="zh_CN">OpenXPS 文档</comment>
+    <comment xml:lang="en">OpenXPS Document</comment>
+    <acronym>OpenXPS</acronym>
+    <expanded-acronym>Open XML Paper Specification</expanded-acronym>
+    <sub-class-of type="application/zip"/>
+    <generic-icon name="x-office-document"/>
+    <glob pattern="*.oxps"/>
+    <magic priority="60">
+      <match type="string" value="PK" offset="0"/>
+      <match type="string" value="[Content_Types].xml" offset="30:1000"/>
+    </magic>
+  </mime-type>
+</mime-info>
+
