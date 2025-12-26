@@ -143,6 +143,15 @@ install(FILES
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
 )
 
+if (XPS_SUPPORT_ENABLED)
+    install(FILES
+        ${CMAKE_SOURCE_DIR}/assets/mimetype/xps.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages
+    )
+    message(STATUS ">>> XPS MIME type definition will be installed to ${CMAKE_INSTALL_DATADIR}/mime/packages")
+    message(STATUS ">>> Note: After installation, please run 'sudo update-mime-database ${CMAKE_INSTALL_DATADIR}/mime' to update MIME database")
+endif()
+
 # 安装帮助文件
 install(DIRECTORY
     ${CMAKE_SOURCE_DIR}/assets/deepin-reader
