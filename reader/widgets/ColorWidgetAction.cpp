@@ -67,13 +67,24 @@ void ColorWidgetAction::initWidget(DWidget *pParent)
         btn->setFixedSize(QSize(tW, tH));
         if (colorlst.at(iLoop) == Utils::getCurHiglightColor())
             btn->setSelected(true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         connect(btn, SIGNAL(clicked()), sigMap, SLOT(map()));
+#else
+        connect(btn, &RoundColorWidget::clicked, this, [this, iLoop]() {
+            slotBtnClicked(iLoop);
+        });
+#endif
         sigMap->setMapping(btn, iLoop);
 
         buttonLayout->addWidget(btn);
         qCDebug(appLog) << "Color widget initialization completed";
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(sigMap, SIGNAL(mapped(int)), SLOT(slotBtnClicked(int)));
+#else
+    connect(sigMap, &QSignalMapper::mappedInt,
+            this, &ColorWidgetAction::slotBtnClicked);
+#endif
 
     buttonLayout->addStretch(1);
 
