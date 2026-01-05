@@ -1,3 +1,9 @@
+deepin-reader (6.5.47) unstable; urgency=medium
+
+  * chore: correct .tx/config to use auto sync resources
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Mon, 05 Jan 2026 15:29:58 +0800
+
 deepin-reader (6.5.46) unstable; urgency=medium
 
   * chore: Update version to 6.5.46
