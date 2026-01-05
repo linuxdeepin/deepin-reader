@@ -2,832 +2,862 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../reader/Application.cpp" line="39"/>
+        <location filename="../reader/Application.cpp" line="31"/>
         <source>Document Viewer</source>
-        <translation>Visualizador de documentos</translation>
+        <translation>Visor de documentos</translation>
     </message>
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
-        <source>Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.</source>
-        <translation>Document Viewer ye una herramienta pa ller documentos, soporta PDF, DJVU, DOCX, etc.</translation>
+        <source>Document Viewer is a tool for reading document files, supporting %1.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="46"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="34"/>
         <source>Location</source>
-        <translation>Ubicación</translation>
+        <translation>Allugamientu</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="35"/>
+        <source>Subject</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="36"/>
+        <source>Author</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="37"/>
+        <source>Keywords</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="38"/>
+        <source>Producer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="39"/>
+        <source>Creator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="40"/>
+        <source>Time created</source>
+        <translation>Data de creación</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="41"/>
+        <source>Time modified</source>
+        <translation>Data de modificación</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="42"/>
+        <source>Format</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="43"/>
+        <source>Pages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="44"/>
+        <source>Optimized</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="45"/>
+        <source>Security</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
-        <source>Subject</source>
-        <translation>Asunto</translation>
+        <source>Page size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
-        <source>Author</source>
-        <translation>Autor</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="49"/>
-        <source>Keywords</source>
-        <translation>Palabras clave</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="50"/>
-        <source>Producer</source>
-        <translation>Productor</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="51"/>
-        <source>Creator</source>
-        <translation>Creador</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="52"/>
-        <source>Time created</source>
-        <translation>Tiempu creáu</translation>
+        <source>File size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
-        <source>Time modified</source>
-        <translation>Tiempu modifica</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="54"/>
-        <source>Format</source>
-        <translation>Formato</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="55"/>
-        <source>Pages</source>
-        <translation>Páxinas</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="56"/>
-        <source>Optimized</source>
-        <translation>Optimizado</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="57"/>
-        <source>Security</source>
-        <translation>Seguridad</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="59"/>
-        <source>Page size</source>
-        <translation>Tamiño de páxina</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="60"/>
-        <source>File size</source>
-        <translation>Tamiño de fitxer</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="65"/>
         <source>Basic info</source>
-        <translation>Información básica</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="85"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="75"/>
         <source>Unknown</source>
-        <translation>Desconocíu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="119"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="127"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="119"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Non</translation>
     </message>
 </context>
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="64"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="54"/>
         <source>Add bookmark</source>
-        <translation>Añadir marca</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="220"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="258"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation>¿Esti seguru de qu'quier eliminar toles marcas?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>BrowserMenu</name>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="39"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="30"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
         <source>Copy</source>
-        <translation>Copiar</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="35"/>
+        <source>Remove annotation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="157"/>
+        <source>Add annotation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="84"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
+        <source>Remove bookmark</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <source>Remove annotation</source>
-        <translation>Eliminar anotación</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
-        <source>Add annotation</source>
-        <translation>Añadir anotación</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="47"/>
-        <source>Remove bookmark</source>
-        <translation>Eliminar marca</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="99"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="152"/>
         <source>Add bookmark</source>
-        <translation>Añadir marca</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
         <source>Highlight</source>
-        <translation>Destacar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="69"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
         <source>Remove highlight</source>
-        <translation>Eliminar destaque</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="143"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Exit fullscreen</source>
-        <translation>Salir del modo pantalla completa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
         <source>Fullscreen</source>
-        <translation>Pantalla completa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="170"/>
         <source>Slide show</source>
-        <translation>Presentación de diapositivas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
         <source>First page</source>
-        <translation>Primera página</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
-        <source>Previous page</source>
-        <translation>Página anterior</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <source>Next page</source>
-        <translation>Página siguiente</translation>
-    </message>
-    <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
-        <source>Last page</source>
-        <translation>Última página</translation>
+        <translation>Primer páxina</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="174"/>
+        <source>Previous page</source>
+        <translation>Páxina anterior</translation>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="181"/>
+        <source>Next page</source>
+        <translation>Páxina siguiente</translation>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
+        <source>Last page</source>
+        <translation>Última páxina</translation>
+    </message>
+    <message>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="191"/>
         <source>Rotate left</source>
-        <translation>Girar a la izquierda</translation>
+        <translation>Voltiar a la esquierda</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="192"/>
         <source>Rotate right</source>
-        <translation>Girar a la derecha</translation>
+        <translation>Voltiar a la derecha</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="137"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="195"/>
         <source>Print</source>
-        <translation>Imprimir</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="138"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="196"/>
         <source>Document info</source>
-        <translation>Información del documento</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="147"/>
+        <location filename="../reader/uiframe/Central.cpp" line="136"/>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation>Documentu</translation>
     </message>
 </context>
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="238"/>
         <source>The format is not supported</source>
-        <translation>El formato no es compatible</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
         <source>Open failed</source>
-        <translation>Error al abrir</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
         <source>Please check if the file is damaged</source>
-        <translation>Verifique si el archivo está dañado</translation>
+        <translation>Comprueba si&apos;l ficheru ta dañáu</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation>Error en la conversión, por favor verifique si el archivo está dañado</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
         <source>Save failed</source>
-        <translation>Error al guardar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Saved successfully</source>
-        <translation>Guardado con éxito</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="558"/>
         <source>Save as</source>
-        <translation>Guardar como</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="568"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="579"/>
         <source>Invalid file name</source>
-        <translation>Nombre de archivo inválido</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="570"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Aceptar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>CentralNavPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation>Arrastre documentos aquí</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation>Formato compatible: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
         <source>Select File</source>
-        <translation>Seleccionar archivo</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
         <source>The bookmark has been removed</source>
-        <translation>El marcador ha sido eliminado</translation>
+        <translation>Quitóse&apos;l marcador</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
         <source>Please select the text</source>
-        <translation>Por favor seleccione el texto</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation>La anotación ha sido eliminada</translation>
+        <translation>Quitóse l&apos;anotación</translation>
     </message>
 </context>
 <context>
     <name>EncryptionPage</name>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Archivo cifrado, por favor introduzca la contraseña</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>Aceptar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="127"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
         <source>Previous</source>
-        <translation>Anterior</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
-        <translation>Siguiente</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>HandleMenu</name>
     <message>
-        <location filename="../reader/widgets/HandleMenu.cpp" line="35"/>
+        <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation>Seleccionar texto</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/HandleMenu.cpp" line="43"/>
+        <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation>Herramienta de mano</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../reader/sidebar/NotesWidget.cpp" line="67"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="57"/>
         <source>Add annotation</source>
-        <translation>Añadir anotación</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/NotesWidget.cpp" line="189"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation>¿Estás seguro de que quieres eliminar todas las anotaciones?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="212"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
         <source>Invalid page number</source>
-        <translation>Número de página inválido</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../reader/widgets/ProgressDialog.cpp" line="18"/>
+        <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation>Convertiendo</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../reader/app/DBusObject.cpp" line="103"/>
+        <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation>Documento no guardado</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="35"/>
-        <source>Save the changes to "%1"?</source>
-        <translation>¿Guardar los cambios en "%1"?</translation>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <source>Save the changes to &quot;%1&quot;?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Cancelar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="37"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation>Descartar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="38"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
         <source>Save</source>
         <comment>button</comment>
-        <translation>Guardar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="49"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="50"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>ScaleMenu</name>
     <message>
-        <location filename="../reader/widgets/ScaleMenu.cpp" line="35"/>
+        <location filename="../reader/widgets/ScaleMenu.cpp" line="25"/>
         <source>Two-Page View</source>
-        <translation>Vista de dos páginas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ScaleMenu.cpp" line="36"/>
+        <location filename="../reader/widgets/ScaleMenu.cpp" line="26"/>
         <source>1:1 size</source>
-        <translation>Tamaño 1:1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ScaleMenu.cpp" line="37"/>
+        <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation>Ajustar a la página</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ScaleMenu.cpp" line="38"/>
+        <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
         <source>Fit Height</source>
-        <translation>Ajustar altura</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ScaleMenu.cpp" line="39"/>
+        <location filename="../reader/widgets/ScaleMenu.cpp" line="29"/>
         <source>Fit Width</source>
-        <translation>Ajustar anchura</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../reader/sidebar/SearchResWidget.cpp" line="60"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="49"/>
         <source>No search results</source>
-        <translation>No hay resultados de búsqueda</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation>'%1 elementos encontrados'</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SecurityDialog</name>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="72"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation>Este documento intenta conectarse a:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="73"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Si confías en el sitio web, haz clic en Permitir, de lo contrario haz clic en Bloquear.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="76"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation>Bloquear</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SecurityDialog.cpp" line="77"/>
+        <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation>Permitir</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SheetSidebar</name>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="84"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="75"/>
         <source>Thumbnails</source>
-        <translation>Miniaturas</translation>
+        <translation>Miniatures</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="99"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="91"/>
         <source>Catalog</source>
-        <translation>Catálogo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="112"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="105"/>
         <source>Bookmarks</source>
-        <translation>Marcadores</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/SheetSidebar.cpp" line="127"/>
+        <location filename="../reader/sidebar/SheetSidebar.cpp" line="121"/>
         <source>Annotations</source>
-        <translation>التعليقات</translation>
+        <translation>Anotaciones</translation>
     </message>
 </context>
 <context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="60"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="64"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
-        <source>Exit</source>
-        <translation>الخروج</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="100"/>
-        <source>Help</source>
-        <translation>المساعدة</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
-        <source>Page up</source>
-        <translation>الصفحة العليا</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
-        <source>Page down</source>
-        <translation>الصفحة السفلى</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="105"/>
-        <source>Open</source>
-        <translation>فتح</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
-        <source>Zoom in</source>
-        <translation>تكبير</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
-        <source>Zoom out</source>
-        <translation>تصغير</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
-        <source>Save as</source>
-        <translation>حفظ كـ</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
-        <source>Print</source>
-        <translation>طباعة</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="108"/>
-        <source>Save</source>
-        <translation>حفظ</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
-        <source>Thumbnails</source>
-        <translation>الصور المصغرة</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
-        <source>1:1 size</source>
-        <translation>حجم 1:1</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
-        <source>Fit height</source>
-        <translation>الملاءمة بالارتفاع</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="115"/>
-        <source>Fit width</source>
-        <translation>الملاءمة بالعرض</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="116"/>
-        <source>Rotate left</source>
-        <translation>الدوران إلى اليسار</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="117"/>
-        <source>Rotate right</source>
-        <translation>الدوران إلى اليمين</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
-        <source>Move to the beginning</source>
-        <translation>الانتقال إلى البداية</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
-        <source>Move to the end</source>
-        <translation>الانتقال إلى النهاية</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
-        <source>Select text</source>
-        <translation>تحديد النص</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
-        <source>Hand tool</source>
-        <translation>أداة اليد</translation>
+        <translation>Axustes</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
-        <source>Add bookmark</source>
-        <translation>إضافة علامة</translation>
+        <source>Exit</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
-        <source>Delete</source>
-        <translation>حذف</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
+        <source>Help</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="133"/>
-        <source>Magnifier</source>
-        <translation>التكبير</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
+        <source>Page up</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
-        <source>Slide show</source>
-        <translation>عرض الشرائح</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
+        <source>Page down</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
-        <source>Fullscreen</source>
-        <translation>الوضع الكامل</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
+        <source>Open</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
-        <source>Copy</source>
-        <translation>نسخ</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
+        <source>Zoom in</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
-        <source>Cut</source>
-        <translation>قص</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
+        <source>Zoom out</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
-        <source>Paste</source>
-        <translation>اللصق</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
+        <source>Save as</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
-        <source>Undo</source>
-        <translation>Desfacer</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
+        <source>Print</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
-        <source>Select all</source>
-        <translation>Seleccionar todo</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
+        <source>Save</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="101"/>
-        <source>Display shortcuts</source>
-        <translation>Mostrar atajos</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
+        <source>Thumbnails</source>
+        <translation>Miniatures</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
-        <source>Add annotation</source>
-        <translation>Añadir anotación</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
+        <source>1:1 size</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
-        <source>Highlight</source>
-        <translation>Destacar</translation>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
+        <source>Fit height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
+        <source>Fit width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
+        <source>Rotate left</source>
+        <translation>Voltiar a la esquierda</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
+        <source>Rotate right</source>
+        <translation>Voltiar a la derecha</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Move to the beginning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Move to the end</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
+        <source>Select text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
+        <source>Hand tool</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
+        <source>Add bookmark</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
+        <source>Delete</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
+        <source>Magnifier</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
+        <source>Slide show</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
+        <source>Fullscreen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <source>Copy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <source>Cut</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
+        <source>Paste</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
+        <source>Undo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
+        <source>Select all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
+        <source>Display shortcuts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
+        <source>Add annotation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
+        <source>Highlight</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="194"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
         <source>Copy</source>
-        <translation>Copiar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="199"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
         <source>Remove annotation</source>
-        <translation>Eliminar anotación</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="204"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
         <source>Remove all</source>
-        <translation>Eliminar todos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="218"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
         <source>Remove bookmark</source>
-        <translation>Eliminar marcador</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="135"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="140"/>
         <source>Page %1</source>
-        <translation>Página %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SlidePlayWidget</name>
     <message>
-        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="127"/>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation>Es la primera pàgina</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="132"/>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation>Es la última pàgina</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
         <source>New window</source>
-        <translation>Nueva ventana</translation>
+        <translation>Ventana nueva</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="29"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
         <source>New tab</source>
-        <translation>Nueva pestaña</translation>
+        <translation>Llingüeta nueva</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="112"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="39"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
         <source>Save as</source>
-        <translation>Guardar como</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
         <source>Display in file manager</source>
-        <translation>Mostrar nel xestor de ficheros</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
         <source>Magnifer</source>
-        <translation>Amplificador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="50"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
         <source>Tools</source>
-        <translation>Herramientas</translation>
+        <translation>Ferramientes</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="54"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
         <source>Print</source>
-        <translation>Imprimir</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../reader/uiframe/TitleWidget.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleWidget.cpp" line="22"/>
         <source>Thumbnails</source>
-        <translation>Miniaturas</translation>
+        <translation>Miniatures</translation>
     </message>
 </context>
 <context>
     <name>TransparentTextEdit</name>
     <message>
-        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="82"/>
+        <location filename="../reader/widgets/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
-        <translation>Límite de entrada alcansáu</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="40"/>
+        <location filename="../reader/main.cpp" line="63"/>
         <source>Document File Path.</source>
-        <translation>Camínu de fichero del documentu.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="41"/>
+        <location filename="../reader/main.cpp" line="64"/>
+        <location filename="../reader/main.cpp" line="68"/>
         <source>FilePath</source>
-        <translation>Camínu de fichero</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="44"/>
+        <location filename="../reader/main.cpp" line="67"/>
         <source>ThumbnailPath Path.</source>
-        <translation>Camínu de miniatura.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="49"/>
+        <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
-        <translation>Xenerar miniatura.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
