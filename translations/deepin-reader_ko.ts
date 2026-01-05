@@ -115,7 +115,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="258"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"/>
+        <translation>모든 북마크를 삭제하시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="136"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>문서</translation>
     </message>
 </context>
 <context>
@@ -256,7 +256,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
         <source>Open failed</source>
-        <translation type="unfinished"/>
+        <translation>열기 실패</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>변환 실패, 파일이 손상되었는지 확인해 주세요</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
@@ -341,12 +341,12 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>암호화된 파일입니다. 비밀번호를 입력해 주세요</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>잘못된 비밀번호</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>모든 어노테이션을 삭제하시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>변환 중</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot;에 변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
@@ -474,7 +474,7 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation>페이지 맞춤</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
@@ -505,24 +505,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>이 문서가 연결하려고 합니다:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>웹사이트를 신뢰하시면 허용을 클릭하고, 그렇지 않다면 차단을 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>차단</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>허용</translation>
     </message>
 </context>
 <context>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>처음으로 이동</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>끝으로 이동</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -742,7 +742,7 @@
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
         <source>Remove all</source>
-        <translation type="unfinished"/>
+        <translation>모두 제거</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>첫 번째 페이지입니다</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>마지막 페이지입니다</translation>
     </message>
 </context>
 <context>
@@ -841,23 +841,23 @@
     <message>
         <location filename="../reader/main.cpp" line="63"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"/>
+        <translation>문서 파일 경로.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="64"/>
         <location filename="../reader/main.cpp" line="68"/>
         <source>FilePath</source>
-        <translation type="unfinished"/>
+        <translation>파일 경로</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="67"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"/>
+        <translation>썸네일 경로.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"/>
+        <translation>썸네일 생성.</translation>
     </message>
 </context>
 </TS>
