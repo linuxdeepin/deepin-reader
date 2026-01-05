@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ug">
 <context>
     <name>Application</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation>پۈتۈك كۆرگۈچ—پۈتۈك ھۆججەتلىرىنى ئوقۇشقا ئىشلىتىلىدىغان قورال بولۇپ، قوللايدۇ%1.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
