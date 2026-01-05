@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>文件檢視器係一個用嚟閱讀文件嘅工具，支援%1.</translation>
     </message>
 </context>
 <context>
