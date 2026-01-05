@@ -37,7 +37,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="38"/>
         <source>Producer</source>
-        <translation type="unfinished"/>
+        <translation>Proizvođač</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="39"/>
@@ -130,14 +130,14 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="35"/>
         <source>Remove annotation</source>
-        <translation type="unfinished"/>
+        <translation>Ukloni napomenu</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="157"/>
         <source>Add annotation</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj napomenu</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
@@ -163,7 +163,7 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
         <source>Remove highlight</source>
-        <translation type="unfinished"/>
+        <translation>Ukloni naglasak</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
@@ -256,7 +256,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
         <source>Open failed</source>
-        <translation type="unfinished"/>
+        <translation>Otvorenje nije uspelo</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Konverzija nije uspela, молим проверите да ли је датотека повређена</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
@@ -333,7 +333,7 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Напомена је уклоњена</translation>
     </message>
 </context>
 <context>
@@ -341,7 +341,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Шифрована датотека, молим унесите лозинку</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
@@ -383,7 +383,7 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>Ručni alat</translation>
     </message>
 </context>
 <context>
@@ -391,12 +391,12 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="57"/>
         <source>Add annotation</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj napomenu</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Сигурни сте да желите обришите све напомене?</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Konverzija</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Сачувати промене у &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
@@ -440,7 +440,7 @@
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Odbaci</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
@@ -474,17 +474,17 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation>Prilagodi страну</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
         <source>Fit Height</source>
-        <translation type="unfinished"/>
+        <translation>Prilagodi висину</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="29"/>
         <source>Fit Width</source>
-        <translation type="unfinished"/>
+        <translation>Prilagodi ширину</translation>
     </message>
 </context>
 <context>
@@ -497,7 +497,7 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1 stavki pronađene&apos;</translation>
     </message>
 </context>
 <context>
@@ -505,18 +505,18 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>Овај документ покушава да се повеже са:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>Ако верујете да је сајт безбедан, кликните Дозволи, у супротном кликните Блокирај.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Блокирај</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
@@ -530,7 +530,7 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="75"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Miniaturice</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="91"/>
@@ -545,7 +545,7 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="121"/>
         <source>Annotations</source>
-        <translation type="unfinished"/>
+        <translation>Napomene</translation>
     </message>
 </context>
 <context>
@@ -583,12 +583,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>Povećaj</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>Smanji</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Miniaturice</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
@@ -618,12 +618,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
         <source>Fit height</source>
-        <translation type="unfinished"/>
+        <translation>Prilagodi висину</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
         <source>Fit width</source>
-        <translation type="unfinished"/>
+        <translation>Prilagodi ширину</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Премести на почетак</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Pomakni na kraj</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -653,7 +653,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
         <source>Hand tool</source>
-        <translation type="unfinished"/>
+        <translation>Ručni alat</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
@@ -698,7 +698,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Povuči</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
@@ -713,7 +713,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
         <source>Add annotation</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj napomenu</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
         <source>Remove annotation</source>
-        <translation type="unfinished"/>
+        <translation>Ukloni napomenu</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>To je prva stranica</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>To je zadnja stranica</translation>
     </message>
 </context>
 <context>
@@ -825,7 +825,7 @@
     <message>
         <location filename="../reader/uiframe/TitleWidget.cpp" line="22"/>
         <source>Thumbnails</source>
-        <translation type="unfinished"/>
+        <translation>Pretpreglednice</translation>
     </message>
 </context>
 <context>
@@ -833,7 +833,7 @@
     <message>
         <location filename="../reader/widgets/TransparentTextEdit.cpp" line="74"/>
         <source>Input limit reached</source>
-        <translation type="unfinished"/>
+        <translation>Dostignut je limit unosa</translation>
     </message>
 </context>
 <context>
@@ -841,23 +841,23 @@
     <message>
         <location filename="../reader/main.cpp" line="63"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"/>
+        <translation>Put do dokumenta</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="64"/>
         <location filename="../reader/main.cpp" line="68"/>
         <source>FilePath</source>
-        <translation type="unfinished"/>
+        <translation>Put do datoteke</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="67"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"/>
+        <translation>Put do pretpreglednice</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"/>
+        <translation>Generiraj pretpreglednicu.</translation>
     </message>
 </context>
 </TS>
