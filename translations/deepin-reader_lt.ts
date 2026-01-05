@@ -303,17 +303,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>Pakelkite dokumentus čia</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>Palaikomas formatas: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite failą</translation>
     </message>
 </context>
 <context>
@@ -322,19 +322,19 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Žymė buvo pašalinama</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>Prašome pasirinkti tekstą</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>Pastaba buvo pašalinama</translation>
     </message>
 </context>
 <context>
@@ -342,7 +342,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Šifravimo failas, prašome įvesti slaptažodį</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
@@ -379,12 +379,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti tekstą</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>Rankinis įrankis</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pašalinti visas pastabas?</translation>
     </message>
 </context>
 <context>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>Nesukurta puslapis</translation>
     </message>
 </context>
 <context>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Konvertuojama</translation>
     </message>
 </context>
 <context>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti pakeitimus į &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
