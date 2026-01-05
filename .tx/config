@@ -3,16 +3,15 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-document-viewer.deepin-document-viewer]
+[o:linuxdeepin:p:deepin-document-viewer:r:0bf886dcd46d915b03818c9c195b2dcb]
 file_filter = translations/deepin-reader_<lang>.ts
 source_file = translations/deepin-reader.ts
-source_lang = en
+source_lang = en_US
 type = QT
 
-[deepin-document-viewer.deepin-document-viewer-desktop-ts]
+[o:linuxdeepin:p:deepin-document-viewer:r:28bcc56abfadb0b92eceed51dba3e6b7]
 file_filter = translations/desktop/desktop_<lang>.ts
 preTranslate_file = src/deepin-reader.desktop
 source_file = translations/desktop/desktop.ts
-source_lang = en
+source_lang = en_US
 type = QT
-
