@@ -115,7 +115,7 @@
     <message>
         <location filename="../reader/sidebar/BookMarkWidget.cpp" line="258"/>
         <source>Are you sure you want to delete all bookmarks?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på, at du vil slette alle bogmærker?</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Fuldskærm</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="136"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenter</translation>
     </message>
 </context>
 <context>
@@ -256,7 +256,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
         <source>Open failed</source>
-        <translation type="unfinished"/>
+        <translation>Åbning mislykkedes</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Konvertering mislykkedes, tjek venligst om filen er skadet</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
@@ -302,12 +302,12 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>Træk dokumenter her</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>Støttet format: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
@@ -341,12 +341,12 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Krypteret fil, indtast venligst adgangskode</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Adgangskode</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>Forkert adgangskode</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på, at du vil slette alle noter?</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Konverterer</translation>
     </message>
 </context>
 <context>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>Dokument ikke gemt</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Gem ændringerne til &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
@@ -469,12 +469,12 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="26"/>
         <source>1:1 size</source>
-        <translation type="unfinished"/>
+        <translation>1:1 størrelse</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation>Passer side</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
@@ -505,24 +505,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>Denne dokument er ved at forbinde til:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>Hvis du er sikker på webstedet, klik på Tillad, ellers klik på Blokér.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Blokér</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tillad</translation>
     </message>
 </context>
 <context>
@@ -613,7 +613,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
         <source>1:1 size</source>
-        <translation type="unfinished"/>
+        <translation>1:1 størrelse</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Flyt til starten</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Flyt til slutningen</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -678,7 +678,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Fuldskærm</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
@@ -742,7 +742,7 @@
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
         <source>Remove all</source>
-        <translation type="unfinished"/>
+        <translation>Fjern alt</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>Det er den første side</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>Det er den sidste side</translation>
     </message>
 </context>
 <context>
@@ -841,23 +841,23 @@
     <message>
         <location filename="../reader/main.cpp" line="63"/>
         <source>Document File Path.</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentfilsti.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="64"/>
         <location filename="../reader/main.cpp" line="68"/>
         <source>FilePath</source>
-        <translation type="unfinished"/>
+        <translation>Filsti</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="67"/>
         <source>ThumbnailPath Path.</source>
-        <translation type="unfinished"/>
+        <translation>ThumbnailPath-sti.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
-        <translation type="unfinished"/>
+        <translation>Generer thumbnail.</translation>
     </message>
 </context>
 </TS>
