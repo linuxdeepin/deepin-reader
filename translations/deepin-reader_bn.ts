@@ -295,7 +295,7 @@
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁ</translation>
     </message>
 </context>
 <context>
@@ -303,17 +303,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট গুলি এখানে টানুন</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>যে ফরমেট সমর্থিত: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>ফাইল নির্বাচন করুন</translation>
     </message>
 </context>
 <context>
@@ -322,19 +322,19 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>আপনার বুকমার্ক অপসারণ করা হয়েছে</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>দয়া করে টেক্সট নির্বাচন করুন</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>আপনার অ্যানোটেশন অপসারণ করা হয়েছে</translation>
     </message>
 </context>
 <context>
@@ -342,23 +342,23 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>কী সম্প্রসারিত ফাইল, দয়া করে কী লিখুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>কী</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁ</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>ভুল কী</translation>
     </message>
 </context>
 <context>
@@ -366,12 +366,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>পূর্ববর্তী</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>পরবর্তী</translation>
     </message>
 </context>
 <context>
@@ -379,12 +379,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>টেক্সট নির্বাচন করুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>হ্যাঁন্ড টুল</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি সব অ্যানোটেশন মুছে ফেলতে চান কি?</translation>
     </message>
 </context>
 <context>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>অবৈধ পেজ নম্বর</translation>
     </message>
 </context>
 <context>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>পরিবর্তন করা হচ্ছে</translation>
     </message>
 </context>
 <context>
@@ -421,7 +421,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট সংরক্ষণ করা হয়নি</translation>
     </message>
 </context>
 <context>
@@ -429,19 +429,19 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; ফাইলে পরিবর্তনগুলি সংরক্ষণ করতে চান কি?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>বাতিল করুন</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
@@ -452,7 +452,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
