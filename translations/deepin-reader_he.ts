@@ -163,7 +163,7 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
         <source>Remove highlight</source>
-        <translation type="unfinished"/>
+        <translation>הסרת הדגשה</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
@@ -175,7 +175,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Exit fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>יציאה מהשופט</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
@@ -193,25 +193,25 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
         <source>First page</source>
-        <translation type="unfinished"/>
+        <translation> الصفحة הראשונה</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="174"/>
         <source>Previous page</source>
-        <translation type="unfinished"/>
+        <translation> الصفحة הקודמת</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="181"/>
         <source>Next page</source>
-        <translation type="unfinished"/>
+        <translation> الصفحة הבאה</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
         <source>Last page</source>
-        <translation type="unfinished"/>
+        <translation> الصفحة האחרונה</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
@@ -235,7 +235,7 @@
         <location filename="../reader/browser/BrowserMenu.cpp" line="138"/>
         <location filename="../reader/browser/BrowserMenu.cpp" line="196"/>
         <source>Document info</source>
-        <translation type="unfinished"/>
+        <translation>מידע על מסמך</translation>
     </message>
 </context>
 <context>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="136"/>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>מסמכים</translation>
     </message>
 </context>
 <context>
@@ -251,32 +251,32 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="238"/>
         <source>The format is not supported</source>
-        <translation type="unfinished"/>
+        <translation>הפורמט אינו נתמך</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
         <source>Open failed</source>
-        <translation type="unfinished"/>
+        <translation>פתיחה נכשלה</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
         <source>Please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>אנא בדקו אם הקובץ נפגש נזק</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>הconverting נכשלה, אנא בדקו אם הקובץ נפגש נזק</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
         <source>Save failed</source>
-        <translation type="unfinished"/>
+        <translation>שמירת הקובץ נכשלה</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Saved successfully</source>
-        <translation type="unfinished"/>
+        <translation>ה虞 נשמרה בהצלחה</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="558"/>
@@ -287,14 +287,14 @@
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="568"/>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="579"/>
         <source>Invalid file name</source>
-        <translation type="unfinished"/>
+        <translation>שם קובץ לא חוקי</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="570"/>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>בסדר</translation>
     </message>
 </context>
 <context>
@@ -302,17 +302,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>גרור מסמכים לכאן</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>פורמט נתמך: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>בחר קובץ</translation>
     </message>
 </context>
 <context>
@@ -321,19 +321,19 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>הסימן במחברת נמחק</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>אנא בחר טקסט</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>הסימן הוסר</translation>
     </message>
 </context>
 <context>
@@ -341,23 +341,23 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>קובץ מוצפן, אנא הזינו סיסמה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>סיסמה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>בסדר</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>סיסמה שגויה</translation>
     </message>
 </context>
 <context>
@@ -365,12 +365,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>הקודם</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>הבא</translation>
     </message>
 </context>
 <context>
@@ -378,12 +378,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>בחר טקסט</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>כלי יד</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>האם אתה בטוח שברצונך למחוק את כל הערותיך?</translation>
     </message>
 </context>
 <context>
@@ -404,7 +404,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>מספר עמוד לא חוקי</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>המרת</translation>
     </message>
 </context>
 <context>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>המסמך לא נשמר</translation>
     </message>
 </context>
 <context>
@@ -428,19 +428,19 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>האם לשמור את השינויים ב &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>لغا</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>למחוק</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
@@ -451,7 +451,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>לغا</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
@@ -464,7 +464,7 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="25"/>
         <source>Two-Page View</source>
-        <translation type="unfinished"/>
+        <translation>מבט על שתי страницות</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="26"/>
@@ -474,17 +474,17 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation type="unfinished"/>
+        <translation>התאמה לעמוד</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
         <source>Fit Height</source>
-        <translation type="unfinished"/>
+        <translation>התאמה לגובה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="29"/>
         <source>Fit Width</source>
-        <translation type="unfinished"/>
+        <translation>התאמה לרוחב</translation>
     </message>
 </context>
 <context>
@@ -492,12 +492,12 @@
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="49"/>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>אין תוצאות חיפוש</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
         <source>%1 items found</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1 פריטים נמצאו&apos;</translation>
     </message>
 </context>
 <context>
@@ -505,24 +505,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>המסמך מנסה להתחבר ל:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>אם אתה מאמין באתרים, לחץ על &apos;אפשר&apos;, אחרת לחץ על &apos;חסום&apos;.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>חסום</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>אפשר</translation>
     </message>
 </context>
 <context>
@@ -535,17 +535,17 @@
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="91"/>
         <source>Catalog</source>
-        <translation type="unfinished"/>
+        <translation>קטלוג</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="105"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>סימני דרך</translation>
     </message>
     <message>
         <location filename="../reader/sidebar/SheetSidebar.cpp" line="121"/>
         <source>Annotations</source>
-        <translation type="unfinished"/>
+        <translation>הערות</translation>
     </message>
 </context>
 <context>
@@ -553,42 +553,42 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="64"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>הגדרות</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>יציאה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>עזרה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>עמוד למעלה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>עמוד למטה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>פתיחה</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>התאמה מוקדמת</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>התאמה מוקדמת פחות</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
