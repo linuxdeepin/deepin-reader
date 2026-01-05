@@ -638,12 +638,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>शुरूआत में ले जाएं</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>अंत में ले जाएं</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>यह पहली पृष्ठ है</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>यह अंतिम पृष्ठ है</translation>
     </message>
 </context>
 <context>
