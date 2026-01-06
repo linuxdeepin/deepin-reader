@@ -7,12 +7,16 @@
 #include <QLoggingCategory>
 #include <QObject>
 
+#ifdef DTKCORE_CLASS_DConfigFile
 #include <DConfig>
-
+#endif
 DCORE_USE_NAMESPACE
 
 MLogger::MLogger(QObject *parent)
-    : QObject(parent), m_rules(""), m_config(nullptr)
+    : QObject(parent), m_rules("")
+#ifdef DTKCORE_CLASS_DConfigFile
+    , m_config(nullptr)
+#endif
 {
     QByteArray logRules = qgetenv("QT_LOGGING_RULES");
     // qunsetenv 之前一定不要有任何日志打印，否则取消环境变量设置不会生效
@@ -21,6 +25,7 @@ MLogger::MLogger(QObject *parent)
     // set env
     m_rules = logRules;
 
+#ifdef DTKCORE_CLASS_DConfigFile
     // set dconfig
     m_config = DConfig::create("org.deepin.reader", "org.deepin.reader");
     logRules = m_config->value("log_rules").toByteArray();
@@ -33,11 +38,18 @@ MLogger::MLogger(QObject *parent)
             setRules(m_config->value(key).toByteArray());
         }
     });
+#else
+    setRules(m_rules);
+#endif
 }
 
 MLogger::~MLogger()
 {
-    m_config->deleteLater();
+#ifdef DTKCORE_CLASS_DConfigFile
+    if (m_config) {
+        m_config->deleteLater();
+    }
+#endif
 }
 
 void MLogger::setRules(const QString &rules)
