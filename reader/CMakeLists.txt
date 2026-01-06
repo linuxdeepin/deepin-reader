@@ -81,6 +81,15 @@ target_include_directories(deepin-reader PUBLIC
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
 )
 
+# 使用DTK变量包含目录
+if(NOT QT_VERSION_MAJOR MATCHES 6)
+    target_include_directories(deepin-reader PUBLIC
+        ${DtkWidget_INCLUDE_DIRS}
+        ${DtkGui_INCLUDE_DIRS}
+        ${DtkCore_INCLUDE_DIRS}
+    )
+endif()
+
 if (NOT APP_VERSION)
     set(APP_VERSION "1.0.0")
 endif()
@@ -118,6 +127,12 @@ else()
         ${READER_LINK_LIBS}
         dl
         pthread
+    )
+    # 使用DTK变量而不是目标
+    target_link_libraries(deepin-reader PRIVATE
+        ${DtkWidget_LIBRARIES}
+        ${DtkGui_LIBRARIES}
+        ${DtkCore_LIBRARIES}
     )
 
     qt5_add_resources(reader_RESOURCES
