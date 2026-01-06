@@ -81,7 +81,16 @@ endif()
 
 # 查找Qt和DTK
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
-find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Gui Core)
+
+if(DTK_VERSION_MAJOR)
+    find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Gui Core)
+    set(DTK_USE_TARGETS ON)
+else()
+    find_package(DtkWidget REQUIRED)
+    find_package(DtkGui REQUIRED)
+    find_package(DtkCore REQUIRED)
+    set(DTK_USE_TARGETS OFF)
+endif()
 
 # 定义链接库
 set(LINK_LIBS
@@ -93,10 +102,16 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Svg
     Qt${QT_DESIRED_VERSION}::Concurrent
     Qt${QT_DESIRED_VERSION}::Xml
-    Dtk${DTK_VERSION_MAJOR}::Widget
-    Dtk${DTK_VERSION_MAJOR}::Gui
-    Dtk${DTK_VERSION_MAJOR}::Core
 )
+
+# Qt6使用命名空间目标，Qt5使用变量
+if(DTK_USE_TARGETS)
+    list(APPEND LINK_LIBS
+        Dtk${DTK_VERSION_MAJOR}::Widget
+        Dtk${DTK_VERSION_MAJOR}::Gui
+        Dtk${DTK_VERSION_MAJOR}::Core
+    )
+endif()
 
 # 添加Qt6特有链接库
 if (QT_DESIRED_VERSION MATCHES 6)
