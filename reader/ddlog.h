@@ -4,7 +4,9 @@
 
 #ifndef DDLOG_H
 #define DDLOG_H
+#ifdef DTKCORE_CLASS_DConfigFile
 #include <DConfig>
+#endif
 #include <DLog>
 
 DCORE_USE_NAMESPACE

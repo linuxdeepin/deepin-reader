@@ -5,9 +5,11 @@
 #include <QObject>
 #include <dtkcore_global.h>
 
+#ifdef DTKCORE_CLASS_DConfigFile
 DCORE_BEGIN_NAMESPACE
 class DConfig;
 DCORE_END_NAMESPACE
+#endif
 
 class MLogger : public QObject
 {
@@ -24,5 +26,7 @@ private:
 
 private:
     QString m_rules;
+#ifdef DTKCORE_CLASS_DConfigFile
     Dtk::Core::DConfig *m_config;
+#endif
 };
