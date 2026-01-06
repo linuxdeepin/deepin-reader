@@ -82,6 +82,11 @@ endif()
 # 查找Qt和DTK
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
 
+if(NOT QT_DESIRED_VERSION MATCHES 6)
+    find_package(Qt5DBus REQUIRED)
+    find_package(Qt5PrintSupport QUIET)
+endif()
+
 if(DTK_VERSION_MAJOR)
     find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Gui Core)
     set(DTK_USE_TARGETS ON)
@@ -103,6 +108,13 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Concurrent
     Qt${QT_DESIRED_VERSION}::Xml
 )
+
+if(NOT QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt5::DBus)
+    if(Qt5PrintSupport_FOUND)
+        list(APPEND LINK_LIBS Qt5::PrintSupport)
+    endif()
+endif()
 
 # Qt6使用命名空间目标，Qt5使用变量
 if(DTK_USE_TARGETS)
