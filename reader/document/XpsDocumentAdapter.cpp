@@ -422,8 +422,8 @@ Page *XpsDocumentAdapter::page(int index) const
 
 QStringList XpsDocumentAdapter::saveFilter() const
 {
-    return QStringList() << QStringLiteral("XPS files (*.xps)")
-                         << QStringLiteral("Portable document format (*.pdf)");
+    return QStringList() << QStringLiteral("XPS Files (*.xps)")
+                         << QStringLiteral("Pdf Files (*.pdf)");
 }
 
 bool XpsDocumentAdapter::save() const
