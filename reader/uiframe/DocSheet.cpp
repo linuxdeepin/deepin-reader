@@ -804,9 +804,9 @@ QString DocSheet::filter()
         if (m_renderer && m_renderer->opened()) {
             // Try to get filters from document if available
             // For now, return both XPS and PDF filters
-            return QStringLiteral("XPS files (*.xps);;Portable document format (*.pdf)");
+            return QStringLiteral("XPS Files (*.xps);;Pdf Files (*.pdf)");
         }
-        return QStringLiteral("XPS files (*.xps);;Portable document format (*.pdf)");
+        return QStringLiteral("XPS Files (*.xps);;Pdf Files (*.pdf)");
     }
 #endif
 

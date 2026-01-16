@@ -486,7 +486,7 @@ QStringList PDFDocument::saveFilter() const
 {
     qCDebug(appLog) << "Retrieving PDF save filters";
 
-    return QStringList() << "Portable document format (*.pdf)";
+    return QStringList() << "Pdf Files (*.pdf)";
 }
 
 bool PDFDocument::save() const
