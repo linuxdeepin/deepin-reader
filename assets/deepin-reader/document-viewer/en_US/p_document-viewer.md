@@ -134,6 +134,7 @@ On Document Viewer interface, open a file.
    > ![notes](../common/notes.svg)Notes: 
    > + You can move the note icon in the current page.
    > + You can not add annotations to DJVU files.
+   > + You can not add annotations to XPS files.
 
 ## Common operations
 
@@ -221,6 +222,7 @@ In the scaling drop-down box of tool bar, you can:
 >
 > - Document Viewer memorizes the color choice of the user, which will be the default color used when the user highlights any text the next time.  
 > - You can not highlight in DJVU files.
+> - You can not highlight in XPS files.
 
 
 
