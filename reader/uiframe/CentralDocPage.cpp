@@ -820,7 +820,7 @@ void CentralDocPage::prepareSearch()
 
 bool CentralDocPage::isFullScreen()
 {
-    qCInfo(appLog) << "isFullScreen";
+    // qCInfo(appLog) << "isFullScreen";
     MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
 
     if (nullptr == mainWindow)
