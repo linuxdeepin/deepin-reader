@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
     }
     // 解决__sw_64__平台使用QWebEnginePage崩溃的问题
 #ifdef __sw_64__
-    qDebug() << "Running on __sw_64__ platform, disabling sandbox";
-    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--no-sandbox");
+    qDebug() << "Running on __sw_64__ platform, --js-flags=--jitless";
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--js-flags=--jitless");
 #endif
 
     //需求文案中不涉及，不做翻译
