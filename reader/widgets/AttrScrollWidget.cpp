@@ -126,7 +126,7 @@ void AttrScrollWidget::createLabel(QGridLayout *layout, const int &index, const 
 
 bool AttrScrollWidget::eventFilter(QObject *object, QEvent *event)
 {
-    qCDebug(appLog) << "Event filter triggered, type:" << event->type();
+    // qCDebug(appLog) << "Event filter triggered, type:" << event->type();
     if (object == this) {
         if (event->type() == QEvent::Resize) {
             QLocale locale;
@@ -147,6 +147,6 @@ bool AttrScrollWidget::eventFilter(QObject *object, QEvent *event)
         }
     }
     bool result = DFrame::eventFilter(object, event);
-    qCDebug(appLog) << "Event filter processed, result:" << result;
+    // qCDebug(appLog) << "Event filter processed, result:" << result;
     return result;
 }

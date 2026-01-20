@@ -1275,7 +1275,7 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
 
 bool DocSheet::isFullScreen()
 {
-    qCDebug(appLog) << "isFullScreen";
+    // qCDebug(appLog) << "isFullScreen";
     CentralDocPage *doc = static_cast<CentralDocPage *>(parent());
 
     if (nullptr == doc)
