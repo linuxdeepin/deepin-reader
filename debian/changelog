@@ -1,3 +1,17 @@
+deepin-reader (6.5.48) unstable; urgency=medium
+
+  * fix(print): use pdftocairo to convert linearized PDF for printing
+  * chore: remove debug logging statements from ui components
+  * fix: Update __sw_64__ platform settings for QWebEnginePage
+  * fix: Document XPS limitations for highlight and annotation
+  * fix: [xps] Description mismatch of "save as"
+  * fix: [build] can`t find qdbus in low version
+  * fix: [build] dconfig error in low dtk version
+  * fix: [build] build error in 1042
+  * fix: [cmake] can not cmake in low version envrionment
+
+ -- re2zero <yangwu@uniontech.com>  Wed, 21 Jan 2026 15:06:31 +0800
+
 deepin-reader (6.5.47) unstable; urgency=medium
 
   * chore: correct .tx/config to use auto sync resources
