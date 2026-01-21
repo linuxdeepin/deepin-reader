@@ -1309,23 +1309,17 @@ void DocSheet::onPopPrintDialog()
 
     //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
     if (Dr::PDF == fileType()) {
-        deepin_reader::Document *document = nullptr;
-        deepin_reader::Document::Error error = deepin_reader::Document ::NoError;
-        document = DocumentFactory::getDocument(m_fileType,
-                                                m_filePath,
-                                                convertedFileDir(),
-                                                m_password, nullptr, error);
-
         QString pdfPath = filePath();
-        qInfo() << pdfPath << "isLinearized:" << document->properties().value("Linearized").toBool();
-        if (document->properties().value("Linearized").toBool()) {
-            pdfPath = QTemporaryDir("LinearizedConverted.pdf").path();
-            if (!m_renderer->saveAs(pdfPath)) {
-                qInfo() << "saveAs failed when print Linearized pdf";
-                return;
-            }
+        // 使用 pdftocairo 转换为嵌入矢量pdf，解决打印乱码和模糊问题
+        QString tmpPdfPath = convertedFileDir() + "/pdftocairoPrint.pdf";
+        QProcess process;
+        process.start("pdftocairo", QStringList() << "-pdf" << pdfPath << tmpPdfPath);
+        process.waitForFinished();
+        if (process.exitCode() != 0) {
+            qWarning() << "pdftocairo failed:" << process.readAllStandardError();
+            return;
         }
-        preview->setPrintFromPath(pdfPath);
+        preview->setPrintFromPath(tmpPdfPath);
     }
     connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
 #else
