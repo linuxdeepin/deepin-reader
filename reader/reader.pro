@@ -44,12 +44,12 @@ DEFINES += QMAKE_INSTALL_PREFIX=\"\\\"$$PREFIX\\\"\"
 #QMAKE_LFLAGS += -g -fsanitize=undefined,address -O2
 
 #安全编译参数
-QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
-QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy
+QMAKE_CFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy -D_FORTIFY_SOURCE=2 -O2
+QMAKE_CXXFLAGS += -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy -D_FORTIFY_SOURCE=2 -O2
 
 QMAKE_CXXFLAGS += -fPIE
 
-QMAKE_LFLAGS += -pie
+QMAKE_LFLAGS += -pie -Wl,-z,relro -Wl,-z,now
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 message("APP_VERSION: "$$VERSION)
