@@ -18,6 +18,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,relro -Wl,-z,now")
 endif()
 
+# Option to use bundled PDFium
+option(USE_PDFIUM_BUNDLE ON)
+
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -156,9 +159,12 @@ add_link_options(
 )
 
 # 添加子项目
-add_subdirectory(3rdparty/deepin-pdfium)
 add_subdirectory(reader)
 add_subdirectory(htmltopdf)
+
+if (USE_PDFIUM_BUNDLE)
+    add_subdirectory(3rdparty/deepin-pdfium)
+endif()
 
 # translation files
 TRANSLATION_GENERATE(QM_FILES ${CMAKE_SOURCE_DIR}/translations)

@@ -3,6 +3,11 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 
+# Use pdfium in system default
+if (NOT USE_PDFIUM_BUNDLE)
+    pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
+endif()
+
 if (XPS_SUPPORT_ENABLED)
     pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0 freetype2)
 endif()
@@ -107,7 +112,6 @@ endif()
 # 添加资源文件
 set(READER_LINK_LIBS
     ${LINK_LIBS}
-    deepin-pdfium-reader
     ${LIBJPEG_LIBRARIES}
     ${DDJVU_LIBRARIES}
 )
@@ -138,6 +142,12 @@ else()
     qt5_add_resources(reader_RESOURCES
         ${CMAKE_SOURCE_DIR}/resources/resources.qrc
     )
+endif()
+
+if (USE_PDFIUM_BUNDLE)
+    target_link_libraries(deepin-reader PRIVATE deepin-pdfium-reader)
+else()
+    target_link_libraries(deepin-reader PRIVATE PkgConfig::Deepin-pdfium)
 endif()
 
 target_sources(deepin-reader PRIVATE ${reader_RESOURCES})
