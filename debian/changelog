@@ -1,3 +1,9 @@
+deepin-reader (6.5.49) unstable; urgency=medium
+
+  * chore: Update compiler flags for security enhancements
+
+ -- wangrong <wangrong@uniontech.com>  Wed, 04 Feb 2026 14:14:47 +0800
+
 deepin-reader (6.5.48) unstable; urgency=medium
 
   * fix(print): use pdftocairo to convert linearized PDF for printing
