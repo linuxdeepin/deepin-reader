@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -23,7 +23,37 @@
 
 namespace {
 
-QString getHtmlToPdfPath() {
+// DOCX conversion timeout constants (in milliseconds)
+static constexpr int UNZIP_BASE_TIMEOUT = 30000;        // 30 seconds base timeout for unzip
+static constexpr int UNZIP_TIMEOUT_PER_MB = 2000;       // 2 seconds per MB for unzip
+static constexpr int PANDOC_BASE_TIMEOUT = 60000;       // 60 seconds base timeout for pandoc
+static constexpr int PANDOC_TIMEOUT_PER_MB = 5000;      // 5 seconds per MB for pandoc
+static constexpr int HTMLTOPDF_BASE_TIMEOUT = 120000;   // 120 seconds base timeout for html to pdf
+static constexpr int HTMLTOPDF_TIMEOUT_PER_MB = 10000;  // 10 seconds per MB for html to pdf
+static constexpr int BYTES_PER_MB = 1024 * 1024;        // Bytes in one megabyte
+static constexpr int MAX_TIMEOUT_MS = 600000;           // Maximum timeout: 10 minutes
+
+static int calculateTimeout(qint64 sizeInMB, int baseTimeout, int perMbTimeout) {
+    // Ensure base timeout is returned for zero or negative size
+    if (sizeInMB <= 0) {
+        return baseTimeout;
+    }
+    
+    // Check for potential overflow before multiplication
+    qint64 maxSafeSize = (MAX_TIMEOUT_MS - baseTimeout) / perMbTimeout;
+    if (sizeInMB > maxSafeSize) {
+        qCWarning(appLog) << "File size" << sizeInMB << "MB exceeds safe calculation limit, using max timeout";
+        return MAX_TIMEOUT_MS;
+    }
+    
+    // Safe to calculate now
+    qint64 calculated = sizeInMB * perMbTimeout + baseTimeout;
+    int timeout = static_cast<int>(qMin(calculated, static_cast<qint64>(MAX_TIMEOUT_MS)));
+    
+    return qMax(baseTimeout, timeout);
+}
+
+static QString getHtmlToPdfPath() {
 
     QString path = QString(INSTALL_PREFIX) + "/lib/deepin-reader/htmltopdf";
     if (QFile::exists(path)) {
@@ -102,6 +132,16 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             return nullptr;
         }
 
+        // Calculate dynamic timeout based on file size
+        qint64 fileSizeInMB = file.size() / BYTES_PER_MB;
+        
+        int unzipTimeout = calculateTimeout(fileSizeInMB, UNZIP_BASE_TIMEOUT, UNZIP_TIMEOUT_PER_MB);
+        int pandocTimeout = calculateTimeout(fileSizeInMB, PANDOC_BASE_TIMEOUT, PANDOC_TIMEOUT_PER_MB);
+        int htmlToPdfTimeout = calculateTimeout(fileSizeInMB, HTMLTOPDF_BASE_TIMEOUT, HTMLTOPDF_TIMEOUT_PER_MB);
+        
+        qCInfo(appLog) << "File size:" << fileSizeInMB << "MB, Timeouts - unzip:" << unzipTimeout/1000 
+                       << "s, pandoc:" << pandocTimeout/1000 << "s, htmltopdf:" << htmlToPdfTimeout/1000 << "s";
+
         //解压的目的是为了让资源文件可以被转换的时候使用到，防止转换后丢失图片等媒体信息
         QProcess decompressor;
         *pprocess = &decompressor;
@@ -117,7 +157,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!decompressor.waitForFinished()) {
+        if (!decompressor.waitForFinished(unzipTimeout)) {
             qCritical() << "Unzip process failed for file:" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
@@ -158,7 +198,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!converter.waitForFinished()) {
+        if (!converter.waitForFinished(pandocTimeout)) {
             qCritical() << "Pandoc conversion process failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
@@ -192,7 +232,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
             *pprocess = nullptr;
             return nullptr;
         }
-        if (!converter2.waitForFinished()) {
+        if (!converter2.waitForFinished(htmlToPdfTimeout)) {
             qCritical() << "Htmltopdf conversion process failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
