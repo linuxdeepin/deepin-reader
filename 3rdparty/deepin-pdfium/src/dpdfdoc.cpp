@@ -267,19 +267,54 @@ bool DPdfDoc::save()
 
     tempFile.close();
 
-    QFile file(d_func()->m_filePath);
+    QString targetPath = d_func()->m_filePath;
 
-    file.remove();          //不remove会出现第二次导出丢失数据问题 (保存动作完成之后，如果当前文档是当初打开那个，下一次导出会出错)
+    // Extract directory and filename to create hidden backup file
+    QFileInfo fileInfo(targetPath);
+    QString backupPath = fileInfo.absolutePath() + "/." + fileInfo.fileName() + ".backup." + QUuid::createUuid().toString();
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    QFile targetFile(targetPath);
+
+    // Rename original file to backup instead of deleting (avoids SMB file handle issues)
+    if (targetFile.exists()) {
+        if (!targetFile.rename(backupPath)) {
+            qWarning() << "Failed to rename original file to backup:" << targetPath;
+            return false;
+        }
+    }
+
+    // Write new file
+    QFile newFile(targetPath);
+    if (!newFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        qWarning() << "Failed to open file for writing:" << targetPath;
+        // Restore original file on failure
+        if (QFile::exists(backupPath)) {
+            QFile::rename(backupPath, targetPath);
+        }
         return false;
+    }
 
-    if (array.size() != file.write(array))
+    if (array.size() != newFile.write(array)) {
+        qWarning() << "Failed to write data to file:" << targetPath;
         result = false;
+        newFile.close();
+        newFile.remove();
+        // Restore original file on failure
+        if (QFile::exists(backupPath)) {
+            QFile::rename(backupPath, targetPath);
+        }
+        return false;
+    }
 
-    file.flush();//函数将用户缓存中的内容写入内核缓冲区
-    fsync(file.handle());//将内核缓冲写入文件(磁盘)
-    file.close();
+    newFile.flush(); // Flush user buffer to kernel buffer
+    fsync(newFile.handle()); // Sync kernel buffer to disk
+    newFile.close();
+
+    // Remove backup file after successful write
+    if (QFile::exists(backupPath)) {
+        QFile::remove(backupPath);
+    }
+
     return result;
 }
 
