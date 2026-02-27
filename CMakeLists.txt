@@ -19,7 +19,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # Option to use bundled PDFium
-option(USE_PDFIUM_BUNDLE ON)
+option(USE_PDFIUM_BUNDLE "Use bundled PDFium library instead of system version" ON)
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
