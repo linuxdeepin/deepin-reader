@@ -1,3 +1,9 @@
+deepin-reader (6.5.53) unstable; urgency=medium
+
+  * chore: Bump version to 6.5.53
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 05 Mar 2026 20:34:38 +0800
+
 deepin-reader (6.5.52) unstable; urgency=medium
 
   * chore: bump version to 6.5.52
