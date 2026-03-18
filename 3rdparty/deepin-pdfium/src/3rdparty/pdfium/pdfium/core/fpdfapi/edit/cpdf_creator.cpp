@@ -76,8 +76,15 @@ bool CFX_FileBufferArchive::Flush() {
 }
 
 bool CFX_FileBufferArchive::WriteBlock(const void* pBuf, size_t size) {
+  // A zero-length write is a valid no-op. Some callers may pass nullptr when
+  // size==0 (e.g. empty name/string serialization). Treat it as success to
+  // avoid aborting on benign inputs.
+  if (size == 0)
+    return true;
+
   ASSERT(pBuf);
-  ASSERT(size > 0);
+  if (!pBuf)
+    return false;
 
   const uint8_t* buffer = reinterpret_cast<const uint8_t*>(pBuf);
   size_t temp_size = size;
