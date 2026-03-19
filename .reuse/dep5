@@ -13,6 +13,11 @@ Files: .gitignore
 Copyright: None
 License: CC0-1.0
 
+# project (tooling/config)
+Files: .project
+Copyright: None
+License: CC0-1.0
+
 # xml toml json conf yaml sh
 Files:  *.toml *.json *conf *.yaml *.sh
 Copyright: None
