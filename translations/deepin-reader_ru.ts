@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Просмотрщик документов — это средство для чтения файлов документов в формате %1.</translation>
     </message>
 </context>
 <context>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation>Документ не сохранен</translation>
+        <translation>Документ не сохранён</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation>Сохранить изменения в &quot;%1&quot;?</translation>
+        <translation>Сохранить изменения в «%1»?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
@@ -510,7 +510,7 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation>Если Вы доверяете веб-сайту, нажмите &quot;Разрешить&quot;, в противном случае нажмите &quot;Заблокировать&quot;.</translation>
+        <translation>Если вы доверяете веб-сайту, нажмите «Разрешить», в противном случае нажмите «Заблокировать».</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
@@ -852,12 +852,12 @@
     <message>
         <location filename="../reader/main.cpp" line="67"/>
         <source>ThumbnailPath Path.</source>
-        <translation>ThumbnailPath путь.</translation>
+        <translation>Путь ThumbnailPath.</translation>
     </message>
     <message>
         <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
-        <translation>Сгенерировать эскиз</translation>
+        <translation>Сгенерировать эскиз.</translation>
     </message>
 </context>
 </TS>
