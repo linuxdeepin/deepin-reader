@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -78,52 +78,61 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
 
 void TransparentTextEdit::paintEvent(QPaintEvent *event)
 {
-    // qCDebug(appLog) << "TransparentTextEdit::paintEvent start";
     QTextEdit::paintEvent(event);
 
     QPainter painter(this->viewport());
-
     painter.setRenderHints(QPainter::Antialiasing);
-
-    int maxLineHeight = 2;
-
-    int totalheight = this->viewport()->height() - maxLineHeight;
-
-    const QFontMetricsF &fontmetricsf = QFontMetricsF(this->font());
-
-    qreal lineheight = fontmetricsf.height();
-
     painter.setBrush(Qt::NoBrush);
 
-    QPen pen(QColor(219, 189, 119), maxLineHeight);
+    const qreal topLineHeight = 2.0;
+    const qreal normalLineHeight = 1.0;
+    const qreal leftMargin = 2.0;
+    const qreal rightMargin = 4.0;
+    const qreal viewWidth = this->viewport()->width() * 1.0;
 
+    qreal scrollY = this->verticalScrollBar()->value();
+    qreal docMargin = this->document()->documentMargin();
+    qreal viewportHeight = this->viewport()->height();
+
+    // Top line (thicker, at document margin)
+    qreal topY = docMargin - scrollY;
+    QPen pen(QColor(219, 189, 119), topLineHeight);
+    painter.setPen(pen);
+    painter.drawLine(QPointF(leftMargin, topY), QPointF(viewWidth - rightMargin, topY));
+
+    // Draw ruled lines aligned with actual text layout
+    pen.setWidth(normalLineHeight);
     painter.setPen(pen);
 
-    int startLine = static_cast<int>(this->document()->documentMargin() - this->verticalScrollBar()->value());
+    bool atBottom = (this->verticalScrollBar()->maximum() - this->verticalScrollBar()->value()) < topLineHeight;
 
-    painter.drawLine(2, startLine, this->viewport()->width() - 4, startLine);
-
-    pen.setWidth(1);
-
-    painter.setPen(pen);
-
-    qreal curh;
-
-    for (curh = startLine + lineheight; curh <= totalheight; curh += lineheight) {
-        painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
+    QTextDocument *doc = this->document();
+    QTextBlock block = doc->begin();
+    while (block.isValid()) {
+        QTextLayout *layout = block.layout();
+        if (layout) {
+            QPointF blockPos = layout->position();
+            for (int i = 0; i < layout->lineCount(); ++i) {
+                QTextLine textLine = layout->lineAt(i);
+                qreal lineY = blockPos.y() + textLine.position().y() + textLine.height() - scrollY;
+                if (lineY < topY)
+                    continue;
+                if (lineY > viewportHeight)
+                    break;
+                // Last visible line gets thicker bottom stroke
+                if (atBottom && lineY + textLine.height() > viewportHeight) {
+                    pen.setWidth(topLineHeight);
+                    painter.setPen(pen);
+                }
+                painter.drawLine(QPointF(leftMargin, lineY), QPointF(viewWidth - rightMargin, lineY));
+                if (pen.widthF() != normalLineHeight) {
+                    pen.setWidth(normalLineHeight);
+                    painter.setPen(pen);
+                }
+            }
+        }
+        block = block.next();
     }
-
-    if (this->verticalScrollBar()->maximum() - this->verticalScrollBar()->value() < maxLineHeight) {
-        // qCDebug(appLog) << "Drawing bottom line";
-        pen.setWidth(maxLineHeight);
-
-        painter.setPen(pen);
-
-        curh -= lineheight;
-
-        painter.drawLine(QPointF(2.0, curh), QPointF(this->viewport()->width() * 1.0 - 4.0, curh));
-    }
-    // qCDebug(appLog) << "TransparentTextEdit::paintEvent end";
 }
 
 void TransparentTextEdit::insertFromMimeData(const QMimeData *source)
