@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -17,6 +17,7 @@
 #include <QUuid>
 #include <QWindow>
 #include <QLayout>
+#include <QTabBar>
 
 DocTabBar::DocTabBar(QWidget *parent)
     : DTabBar(parent)
@@ -26,6 +27,10 @@ DocTabBar::DocTabBar(QWidget *parent)
     this->setEnabledEmbedStyle(true);//设置直角样式
     this->setExpanding(true);//设置平铺窗口模式
 #endif
+    QTabBar *innerTabBar = findChild<QTabBar *>();
+    if (innerTabBar) {
+        innerTabBar->setExpanding(false);
+    }
 
     this->setTabsClosable(true);
 
@@ -152,24 +157,17 @@ QList<DocSheet *> DocTabBar::getSheets()
 
 void DocTabBar::updateTabWidth()
 {
-    qCDebug(appLog) << "DocTabBar::updateTabWidth start";
     int tabCount = count();
     if (tabCount != 0) {
-        qCDebug(appLog) << "DocTabBar::updateTabWidth - tabCount:" << tabCount;
-        int tabWidth = (this->width() - 40) / tabCount - (tabCount - 1) * 10;
-        for (int i = 0; i < count(); i++) {
-            if (tabWidth <= 140) {
-                setUsesScrollButtons(true);
-                setTabMinimumSize(i, QSize(140, 37));
-                setTabMaximumSize(i, QSize(140, 37));
-            } else {
-                setUsesScrollButtons(false);
-                setTabMinimumSize(i, QSize(tabWidth, 37));
-                setTabMaximumSize(i, QSize(tabWidth, 37));
-            }
+        int innerWidth = this->width() - 44;
+        int tabWidth = innerWidth / tabCount;
+        setUsesScrollButtons(tabWidth <= 140);
+        for (int i = 0; i < tabCount; i++) {
+            int w = qMax(tabWidth, 140);
+            setTabMinimumSize(i, QSize(w, 37));
+            setTabMaximumSize(i, QSize(w, 37));
         }
     }
-    qCDebug(appLog) << "DocTabBar::updateTabWidth end";
 }
 
 QMimeData *DocTabBar::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -246,10 +244,15 @@ void DocTabBar::dragEnterEvent(QDragEnterEvent *event)
 
 void DocTabBar::resizeEvent(QResizeEvent *e)
 {
-    // qCDebug(appLog) << "DocTabBar::resizeEvent start";
-    DTabBar::resizeEvent(e);
     updateTabWidth();
-    // qCDebug(appLog) << "DocTabBar::resizeEvent end";
+    DTabBar::resizeEvent(e);
+    QTabBar *innerTabBar = findChild<QTabBar *>();
+    if (innerTabBar) {
+        int w = innerTabBar->width();
+        int h = innerTabBar->height();
+        innerTabBar->resize(w + 1, h);
+        innerTabBar->resize(w, h);
+    }
 }
 
 void DocTabBar::onDragActionChanged(Qt::DropAction action)
