@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -891,8 +891,6 @@ void SheetBrowser::deform(SheetOperation &operation)
     qCDebug(appLog) << "Deforming view with scale factor:" << operation.scaleFactor
              << "mode:" << operation.scaleMode << "rotation:" << operation.rotation;
              
-    m_lastScaleFactor = operation.scaleFactor;
-
     const qreal safeMaxWidth = qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth;
     const qreal safeMaxHeight = qFuzzyIsNull(m_maxHeight) ? (qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth) : m_maxHeight;
 
@@ -934,6 +932,8 @@ void SheetBrowser::deform(SheetOperation &operation)
             operation.scaleMode = Dr::ScaleFactorMode;
         break;
     }
+
+    m_lastScaleFactor = operation.scaleFactor;
 
     int page = operation.currentPage;
     //进行render 并算出最宽的一行
