@@ -27,6 +27,7 @@
 #include <DGuiApplicationHelper>
 
 #include <QGraphicsItem>
+#include <QKeyEvent>
 #include <QScrollBar>
 #include <QTimer>
 #include <QApplication>
@@ -750,6 +751,21 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
 
     jump2PagePos(jumpPage, posLeft, posTop);
     qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Jump to high light completed";
+}
+
+void SheetBrowser::keyPressEvent(QKeyEvent *event)
+{
+    if (m_sheet) {
+        if (event->key() == Qt::Key_PageDown && !event->isAutoRepeat()) {
+            m_sheet->jumpToNextPage();
+            return;
+        }
+        if (event->key() == Qt::Key_PageUp && !event->isAutoRepeat()) {
+            m_sheet->jumpToPrevPage();
+            return;
+        }
+    }
+    DGraphicsView::keyPressEvent(event);
 }
 
 void SheetBrowser::wheelEvent(QWheelEvent *event)

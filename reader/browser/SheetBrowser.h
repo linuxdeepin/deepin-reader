@@ -409,6 +409,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     /**
+     * @brief keyPressEvent
+     * 键盘按键事件，适合高度模式下拦截PageDown/PageUp实现精确翻页
+     * @param event
+     */
+    void keyPressEvent(QKeyEvent *event) override;
+
+    /**
      * @brief focusOutEvent
      * 失去焦点处理
      * @param event
