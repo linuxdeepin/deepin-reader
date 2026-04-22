@@ -58,6 +58,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
 
     setFrameShape(QFrame::NoFrame);
 
+    scene()->setItemIndexMethod(QGraphicsScene::NoIndex);  // 禁用场景索引（对于静态场景更高效）
+
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     setAttribute(Qt::WA_TranslucentBackground);
