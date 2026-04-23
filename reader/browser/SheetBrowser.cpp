@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -27,6 +27,7 @@
 #include <DGuiApplicationHelper>
 
 #include <QGraphicsItem>
+#include <QKeyEvent>
 #include <QScrollBar>
 #include <QTimer>
 #include <QApplication>
@@ -56,6 +57,8 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     // qCDebug(appLog) << "Graphics scene created";
 
     setFrameShape(QFrame::NoFrame);
+
+    scene()->setItemIndexMethod(QGraphicsScene::NoIndex);  // 禁用场景索引（对于静态场景更高效）
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -752,6 +755,21 @@ void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const 
     qCDebug(appLog) << "SheetBrowser::jumpToHighLight() - Jump to high light completed";
 }
 
+void SheetBrowser::keyPressEvent(QKeyEvent *event)
+{
+    if (m_sheet) {
+        if (event->key() == Qt::Key_PageDown && !event->isAutoRepeat()) {
+            m_sheet->jumpToNextPage();
+            return;
+        }
+        if (event->key() == Qt::Key_PageUp && !event->isAutoRepeat()) {
+            m_sheet->jumpToPrevPage();
+            return;
+        }
+    }
+    DGraphicsView::keyPressEvent(event);
+}
+
 void SheetBrowser::wheelEvent(QWheelEvent *event)
 {
     // qCDebug(appLog) << "SheetBrowser::wheelEvent() - Starting wheel event";
@@ -891,8 +909,6 @@ void SheetBrowser::deform(SheetOperation &operation)
     qCDebug(appLog) << "Deforming view with scale factor:" << operation.scaleFactor
              << "mode:" << operation.scaleMode << "rotation:" << operation.rotation;
              
-    m_lastScaleFactor = operation.scaleFactor;
-
     const qreal safeMaxWidth = qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth;
     const qreal safeMaxHeight = qFuzzyIsNull(m_maxHeight) ? (qFuzzyIsNull(m_maxWidth) ? 1.0 : m_maxWidth) : m_maxHeight;
 
@@ -934,6 +950,8 @@ void SheetBrowser::deform(SheetOperation &operation)
             operation.scaleMode = Dr::ScaleFactorMode;
         break;
     }
+
+    m_lastScaleFactor = operation.scaleFactor;
 
     int page = operation.currentPage;
     //进行render 并算出最宽的一行
