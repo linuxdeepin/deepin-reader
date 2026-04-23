@@ -1,3 +1,16 @@
+deepin-reader (6.5.54) unstable; urgency=medium
+
+  * [skip CI] Translate deepin-reader.ts in pt_BR
+  * fix: optimize window resize performance for large documents by disabling scene index
+  * fix(annotation): use text layout positions for ruled lines in note editor
+  * fix(browser): intercept PageDown/PageUp to snap to page boundary
+  * fix(browser): fix annotation jump position in fit-to-width mode
+  * fix(ui): fix tab titles shifting left after window restore from maximize
+  * fix(pdfium): allow zero-length WriteBlock() no-op
+  * chore(CI): add debian check workflow
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 23 Apr 2026 19:05:20 +0800
+
 deepin-reader (6.5.53) unstable; urgency=medium
 
   * chore: Bump version to 6.5.53
