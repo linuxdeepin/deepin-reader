@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -125,6 +125,8 @@ void ShortCutShow::initPDF()
              {Dr::key_ctrl_smaller    , tr("Zoom out")           },
              {Dr::key_pgUp            , tr("Page up")            },
              {Dr::key_pgDown          , tr("Page down")          },
+             {Dr::key_up              , tr("Scroll up one line")  },
+             {Dr::key_down            , tr("Scroll down one line") },
              {Dr::key_ctrl_home       , tr("Move to the beginning") },
              {Dr::key_ctrl_end        , tr("Move to the end")  },
              {Dr::key_esc             , tr("Exit")               }}},

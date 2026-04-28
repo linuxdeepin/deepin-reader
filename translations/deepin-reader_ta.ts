@@ -620,6 +620,17 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>ஒரு வரி மேலே நிலைப்படுத்து</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>ஒரு வரி கீழே நிலைப்படுத்து</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
         <translation>தொடர்புடைய பொருளை தேர்ந்தெடுக்கவும்</translation>
     </message>

@@ -163,57 +163,57 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
         <source>Exit fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Exit fullscreen</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="94"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullscreen</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="97"/>
         <source>Slide show</source>
-        <translation type="unfinished"></translation>
+        <translation>Slide show</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="100"/>
         <source>First page</source>
-        <translation type="unfinished"></translation>
+        <translation>First page</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="101"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>Previous page</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>Next page</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="108"/>
         <source>Last page</source>
-        <translation type="unfinished"></translation>
+        <translation>Last page</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
         <source>Rotate left</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotate left</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
         <source>Rotate right</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotate right</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Print</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
         <source>Document info</source>
-        <translation type="unfinished"></translation>
+        <translation>Document info</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../reader/uiframe/Central.cpp" line="147"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Documents</translation>
     </message>
 </context>
 <context>
@@ -229,48 +229,48 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="166"/>
         <source>The format is not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>The format is not supported</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="208"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Open failed</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="210"/>
         <source>Please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Please check if the file is damaged</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="212"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversion failed, please check if the file is damaged</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="420"/>
         <source>Save failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Save failed</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="426"/>
         <source>Saved successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Saved successfully</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="444"/>
         <source>Save as</source>
-        <translation type="unfinished"></translation>
+        <translation>Save as</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="453"/>
         <source>Invalid file name</source>
-        <translation type="unfinished"></translation>
+        <translation>Invalid file name</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="455"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -278,17 +278,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="35"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"></translation>
+        <translation>Drag documents here</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="41"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Format supported: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="47"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Select File</translation>
     </message>
 </context>
 <context>
@@ -296,17 +296,17 @@
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="332"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"></translation>
+        <translation>The bookmark has been removed</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="533"/>
         <source>Please select the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Please select the text</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="598"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"></translation>
+        <translation>The annotation has been removed</translation>
     </message>
 </context>
 <context>
@@ -314,18 +314,18 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="50"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"></translation>
+        <translation>Encrypted file, please enter the password</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="56"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="61"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="105"/>
@@ -618,6 +618,17 @@
         <source>Move to the end</source>
         <translation>ಅಂತ್ಯದ ಬದಲಿಗೆ ಸ್ಥಳಾಂತರಿಸಿ</translation>
     </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>

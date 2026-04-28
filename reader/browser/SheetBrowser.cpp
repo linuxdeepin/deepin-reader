@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -48,6 +48,7 @@ DWIDGET_USE_NAMESPACE
 
 #define REPEAT_MOVE_DELAY 500
 const qreal deltaManhattanLength = 12.0;
+
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     qCDebug(appLog) << "SheetBrowser constructor started";
@@ -764,6 +765,17 @@ void SheetBrowser::keyPressEvent(QKeyEvent *event)
         }
         if (event->key() == Qt::Key_PageUp && !event->isAutoRepeat()) {
             m_sheet->jumpToPrevPage();
+            return;
+        }
+
+        if (event->key() == Qt::Key_Down) {
+            event->accept();
+            verticalScrollBar()->setValue(verticalScrollBar()->value() + Dr::key_scroll_step_pixels);
+            return;
+        }
+        if (event->key() == Qt::Key_Up) {
+            event->accept();
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - Dr::key_scroll_step_pixels);
             return;
         }
     }
@@ -1657,6 +1669,9 @@ int SheetBrowser::currentPage()
 int SheetBrowser::currentScrollValueForPage()
 {
     // qCDebug(appLog) << "SheetBrowser::currentScrollValueForPage() - Current scroll value for page";
+    if (m_items.isEmpty())
+        return 1;
+
     int value = verticalScrollBar()->value();
 
     int index = 0;
@@ -1680,7 +1695,12 @@ int SheetBrowser::currentScrollValueForPage()
         }
     }
 
-    return index + 1;
+    // 确保页码在有效范围内 [1, m_items.count()]
+    int page = index + 1;
+    if (page < 1) page = 1;
+    if (page > m_items.count()) page = m_items.count();
+
+    return page;
 }
 
 void SheetBrowser::setCurrentPage(int page)

@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
     </message>
 </context>
 <context>
@@ -635,6 +635,17 @@
         <source>Rotate right</source>
         <translation>Rodar para a direita</translation>
     </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>

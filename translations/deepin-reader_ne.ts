@@ -158,7 +158,7 @@
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Search</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="92"/>
@@ -618,6 +618,17 @@
         <source>Move to the end</source>
         <translation>अंत में लेने</translation>
     </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>

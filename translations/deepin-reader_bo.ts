@@ -637,6 +637,17 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>གྲལ་ཐིག་གཅིག་གྱེར་འདྲེན་བྱེད།</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>གྲལ་ཐིག་གཅིག་མར་འདྲེན་བྱེད།</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
         <translation>ཤོག་ངོས་དང་པོར་ལོག་པ།</translation>
     </message>
