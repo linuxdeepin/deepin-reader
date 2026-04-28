@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
         <source>Conversion failed, please check if the file is damaged</source>
-        <translation type="unfinished"/>
+        <translation>Conversion failed, please check if the file is damaged</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
@@ -412,7 +412,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Converting</translation>
     </message>
 </context>
 <context>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Save the changes to &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
@@ -505,24 +505,24 @@
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="64"/>
         <source>This document is trying to connect to:</source>
-        <translation type="unfinished"/>
+        <translation>This document is trying to connect to:</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="65"/>
         <source>If you trust the website, click Allow, otherwise click Block.</source>
-        <translation type="unfinished"/>
+        <translation>If you trust the website, click Allow, otherwise click Block.</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="68"/>
         <source>Block</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Block</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SecurityDialog.cpp" line="69"/>
         <source>Allow</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Allow</translation>
     </message>
 </context>
 <context>
@@ -637,13 +637,24 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Move to the beginning</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Move to the end</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -763,12 +774,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>It is the first page</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>It is the last page</translation>
     </message>
 </context>
 <context>

@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
     </message>
 </context>
 <context>
@@ -295,7 +295,7 @@
         <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -303,17 +303,17 @@
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="22"/>
         <source>Drag documents here</source>
-        <translation type="unfinished"/>
+        <translation>Drag documents here</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
         <source>Format supported: %1</source>
-        <translation type="unfinished"/>
+        <translation>Format supported: %1</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>Select File</translation>
     </message>
 </context>
 <context>
@@ -322,19 +322,19 @@
         <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
         <source>The bookmark has been removed</source>
-        <translation type="unfinished"/>
+        <translation>The bookmark has been removed</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
         <source>Please select the text</source>
-        <translation type="unfinished"/>
+        <translation>Please select the text</translation>
     </message>
     <message>
         <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
         <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
         <source>The annotation has been removed</source>
-        <translation type="unfinished"/>
+        <translation>The annotation has been removed</translation>
     </message>
 </context>
 <context>
@@ -342,23 +342,23 @@
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="41"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished"/>
+        <translation>Encrypted file, please enter the password</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
-        <translation type="unfinished"/>
+        <translation>Wrong password</translation>
     </message>
 </context>
 <context>
@@ -366,12 +366,12 @@
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>Previous</translation>
     </message>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Next</translation>
     </message>
 </context>
 <context>
@@ -379,12 +379,12 @@
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="25"/>
         <source>Select Text</source>
-        <translation type="unfinished"/>
+        <translation>Select Text</translation>
     </message>
     <message>
         <location filename="../reader/widgets/HandleMenu.cpp" line="33"/>
         <source>Hand Tool</source>
-        <translation type="unfinished"/>
+        <translation>Hand Tool</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@
     <message>
         <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
         <source>Are you sure you want to delete all annotations?</source>
-        <translation type="unfinished"/>
+        <translation>Are you sure you want to delete all annotations?</translation>
     </message>
 </context>
 <context>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
         <source>Invalid page number</source>
-        <translation type="unfinished"/>
+        <translation>Invalid page number</translation>
     </message>
 </context>
 <context>
@@ -413,7 +413,7 @@
     <message>
         <location filename="../reader/widgets/ProgressDialog.cpp" line="25"/>
         <source>Converting</source>
-        <translation type="unfinished"/>
+        <translation>Converting</translation>
     </message>
 </context>
 <context>
@@ -421,7 +421,7 @@
     <message>
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
-        <translation type="unfinished"/>
+        <translation>Document not saved</translation>
     </message>
 </context>
 <context>
@@ -429,19 +429,19 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
         <source>Save the changes to &quot;%1&quot;?</source>
-        <translation type="unfinished"/>
+        <translation>Save the changes to &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
         <source>Discard</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Discard</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
@@ -452,7 +452,7 @@
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
@@ -636,6 +636,17 @@
         <source>Rotate right</source>
         <translation> xoay phải</translation>
     </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>

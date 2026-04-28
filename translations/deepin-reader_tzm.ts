@@ -620,6 +620,17 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Select text</source>
         <translation>اختيار النص</translation>
     </message>

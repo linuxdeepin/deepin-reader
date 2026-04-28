@@ -637,6 +637,17 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>上一行</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>下一行</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
         <translation>定位至首頁</translation>
     </message>

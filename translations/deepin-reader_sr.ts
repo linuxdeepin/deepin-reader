@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation type="unfinished"/>
+        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
     </message>
 </context>
 <context>
@@ -637,13 +637,24 @@
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <source>Scroll up one line</source>
+        <translation>Scroll up one line</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <source>Scroll down one line</source>
+        <translation>Scroll down one line</translation>
+    </message>
+
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
         <source>Move to the beginning</source>
-        <translation type="unfinished"/>
+        <translation>Move to the beginning</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Move to the end</source>
-        <translation type="unfinished"/>
+        <translation>Move to the end</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
@@ -763,12 +774,12 @@
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
         <source>It is the first page</source>
-        <translation type="unfinished"/>
+        <translation>It is the first page</translation>
     </message>
     <message>
         <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the last page</source>
-        <translation type="unfinished"/>
+        <translation>It is the last page</translation>
     </message>
 </context>
 <context>

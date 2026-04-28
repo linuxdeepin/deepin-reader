@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,6 +25,7 @@
 #include <QScreen>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QScrollBar>
 #include <QStackedLayout>
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -737,6 +738,18 @@ void CentralDocPage::handleShortcut(const QString &s)
             } else if (s == Dr::key_alt_a) {
                 qCInfo(appLog) << "s == Dr::key_alt_a";
                 sheet->addSelectedTextHightlightAnnotation();
+            } else if (s == Dr::key_down) {
+                // 上下键按固定像素滚动（每次约一行）
+                if (sheet->getSheetBrowser()) {
+                    sheet->getSheetBrowser()->verticalScrollBar()->setValue(
+                        sheet->getSheetBrowser()->verticalScrollBar()->value() + Dr::key_scroll_step_pixels);
+                }
+            } else if (s == Dr::key_up) {
+                // 上下键按固定像素滚动（每次约一行）
+                if (sheet->getSheetBrowser()) {
+                    sheet->getSheetBrowser()->verticalScrollBar()->setValue(
+                        sheet->getSheetBrowser()->verticalScrollBar()->value() - Dr::key_scroll_step_pixels);
+                }
             }
             // 屏蔽右侧区域的切页快捷键，使用默认的滚动效果
             /*else if (s == Dr::key_left) {

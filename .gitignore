@@ -26,6 +26,7 @@ ui_*.h
 #linglong building dir
 linglong
 build
+obj-x86_64-linux-gnu/
 
 # vscode
 .vscode
