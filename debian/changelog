@@ -1,3 +1,10 @@
+deepin-reader (6.5.55) unstable; urgency=medium
+
+  * feat(shortcuts): add arrow key scrolling support for document viewer
+  * chore: update version to 6.5.54
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 29 Apr 2026 16:50:58 +0800
+
 deepin-reader (6.5.54) unstable; urgency=medium
 
   * [skip CI] Translate deepin-reader.ts in pt_BR
