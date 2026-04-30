@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -328,18 +328,22 @@ bool DPdfPagePrivate::loadAnnots()
 
             //获取类型
             if (PDFACTION_URI == type) {
-                char uri[256] = {0};
-                unsigned long lenth = FPDFAction_GetURIPath(m_doc, action, uri, 256);
-                if (0 != lenth) {
-                    dAnnot->setUrl(uri);
+                // 先获取所需缓冲区大小
+                unsigned long length = FPDFAction_GetURIPath(m_doc, action, nullptr, 0);
+                if (length > 0) {
+                    QByteArray uriBuffer(length, 0);
+                    FPDFAction_GetURIPath(m_doc, action, uriBuffer.data(), length);
+                    dAnnot->setUrl(QString::fromUtf8(uriBuffer.constData()));
                 }
 
                 dAnnot->setLinkType(DPdfLinkAnnot::Uri);
             } else if (PDFACTION_REMOTEGOTO == type) {
-                char filePath[256] = {0};
-                unsigned long lenth = FPDFAction_GetFilePath(action, filePath, 256);
-                if (0 != lenth) {
-                    dAnnot->setFilePath(filePath);
+                // 先获取所需缓冲区大小
+                unsigned long length = FPDFAction_GetFilePath(action, nullptr, 0);
+                if (length > 0) {
+                    QByteArray pathBuffer(length, 0);
+                    FPDFAction_GetFilePath(action, pathBuffer.data(), length);
+                    dAnnot->setFilePath(QString::fromUtf8(pathBuffer.constData()));
                 }
 
                 dAnnot->setLinkType(DPdfLinkAnnot::RemoteGoTo);
