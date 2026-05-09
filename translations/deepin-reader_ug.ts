@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ug">
 <context>
     <name>Application</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -600,7 +598,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
         <source>File</source>
-        <translation>ھۆججەت</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
@@ -610,7 +608,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
         <source>Tools</source>
-        <translation>قورالقورال</translation>
+        <translation>قورال</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
@@ -660,12 +658,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
