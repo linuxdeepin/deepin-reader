@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -134,106 +134,106 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="157"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Add annotation</source>
         <translation>Kommentár hozzáadása</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="84"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="86"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="104"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="161"/>
         <source>Remove bookmark</source>
         <translation>Könyvjelző eltávolítása</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="99"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="152"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="89"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Add bookmark</source>
         <translation>Könyvjelző hozzáadása</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="61"/>
         <source>Highlight</source>
         <translation>Kiemelés</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="74"/>
         <source>Remove highlight</source>
         <translation>Kiemelés eltávolítása</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="143"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="98"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="114"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="176"/>
         <source>Exit fullscreen</source>
         <translation>Kilépés a teljes képernyőből</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="179"/>
         <source>Fullscreen</source>
         <translation>Teljes képernyő</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="170"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
         <source>Slide show</source>
         <translation>Diavetítés</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="185"/>
         <source>First page</source>
         <translation>Első oldal</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="174"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="186"/>
         <source>Previous page</source>
         <translation>Előző oldal</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="181"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="193"/>
         <source>Next page</source>
         <translation>Következő oldal</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="132"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="194"/>
         <source>Last page</source>
         <translation>Utolsó oldal</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="191"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="141"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="203"/>
         <source>Rotate left</source>
         <translation>Elforgatás balra</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="192"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="204"/>
         <source>Rotate right</source>
         <translation>Elforgatás jobbra</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="137"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="195"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="207"/>
         <source>Print</source>
         <translation>Nyomtatás</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="138"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="196"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="146"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="208"/>
         <source>Document info</source>
         <translation>Dokumentum információi</translation>
     </message>
@@ -249,49 +249,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="238"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="239"/>
         <source>The format is not supported</source>
         <translation>A formátum nem támogatott</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
         <source>Open failed</source>
         <translation>A megnyitás sikertelen</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Please check if the file is damaged</source>
         <translation>Kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>A konvertálás sikertelen, kérjük ellenőrizze, hogy a fájl megsérült-e</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
         <source>Save failed</source>
         <translation>A mentés sikertelen</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
         <source>Saved successfully</source>
         <translation>A mentés sikeres</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="558"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
         <source>Save as</source>
         <translation>Mentés másként</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="568"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="579"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
         <source>Invalid file name</source>
         <translation>Érvénytelen fájlnév</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="570"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -363,12 +363,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
         <source>Previous</source>
         <translation>Előző</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
         <translation>Következő</translation>
     </message>
@@ -551,188 +551,207 @@
 <context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="64"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="67"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
         <source>Exit</source>
         <translation>Kilépés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Help</source>
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Page up</source>
         <translation>Előző oldal</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Page down</source>
         <translation>Következő oldal</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Open</source>
         <translation>Megnyitás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Zoom in</source>
         <translation>Nagyítás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Zoom out</source>
         <translation>Kicsinyítés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Save as</source>
         <translation>Mentés másként</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
+        <source>File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
+        <source>Display</source>
+        <translation>Megjelenítés</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
+        <source>Tools</source>
+        <translation>Eszközök</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
+        <source>Edit</source>
+        <translation>Szerkesztés</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Print</source>
         <translation>Nyomtatás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Thumbnails</source>
         <translation>Bélyegképek</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
         <source>1:1 size</source>
         <translation>1:1 méret</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
         <source>Fit height</source>
         <translation>Magasság illesztése</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
         <source>Fit width</source>
         <translation>Szélesség illesztése</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Rotate left</source>
         <translation>Elforgatás balra</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Rotate right</source>
         <translation>Elforgatás jobbra</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation type="unfinished"/>
     </message>
-
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
         <source>Move to the beginning</source>
         <translation>Ugrás az elejére</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
         <source>Move to the end</source>
         <translation>Ugrás a végére</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="154"/>
         <source>Select text</source>
         <translation>Szöveg kijelölése</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="155"/>
         <source>Hand tool</source>
         <translation>Kéz eszköz</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="156"/>
         <source>Add bookmark</source>
         <translation>Könyvjelző hozzáadása</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="169"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="159"/>
         <source>Magnifier</source>
         <translation>Nagyító</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="161"/>
         <source>Slide show</source>
         <translation>Diavetítés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="162"/>
         <source>Fullscreen</source>
         <translation>Teljes képernyő</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="166"/>
         <source>Copy</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="167"/>
         <source>Cut</source>
         <translation>Kivágás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="168"/>
         <source>Paste</source>
         <translation>Beillesztés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="170"/>
         <source>Undo</source>
         <translation>Visszavonás</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="171"/>
         <source>Select all</source>
         <translation>Összes kijelölése</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Display shortcuts</source>
         <translation>Gyorsbillentyűk megjelenítése</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="157"/>
         <source>Add annotation</source>
         <translation>Kommentár hozzáadása</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="158"/>
         <source>Highlight</source>
         <translation>Kiemelés</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="160"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
@@ -764,7 +783,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="140"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="147"/>
         <source>Page %1</source>
         <translation>%1 oldal</translation>
     </message>
@@ -796,7 +815,7 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="112"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
