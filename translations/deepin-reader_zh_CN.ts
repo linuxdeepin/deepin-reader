@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -578,16 +576,6 @@
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
-        <source>Scroll up one line</source>
-        <translation>上一行</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
-        <source>Scroll down one line</source>
-        <translation>下一行</translation>
-    </message>
-    <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Open</source>
         <translation>打开</translation>
@@ -666,6 +654,16 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Rotate right</source>
         <translation>右旋转</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <source>Scroll up one line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <source>Scroll down one line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
