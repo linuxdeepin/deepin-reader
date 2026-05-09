@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -57,17 +56,26 @@ void ShortCutShow::show()
     for(ShortCutType type : listType)
     {
         QJsonObject group;
-        group.insert("groupName", tr("Settings"));
-        QJsonArray items;
 
+        QString strType;
+        switch (type) {
+        case ShortCutType::Settings: strType = tr("Settings"); break;
+        case ShortCutType::File: strType = tr("File"); break;
+        case ShortCutType::Display: strType = tr("Display"); break;
+        case ShortCutType::Tools: strType = tr("Tools"); break;
+        case ShortCutType::Edit: strType = tr("Edit"); break;
+        }
+        group.insert("groupName", strType);
+
+        QJsonArray items;
         for (const auto &d : m_shortcutMap[type]) {
             QJsonObject jsonItem;
             jsonItem.insert("name", d.second);
             jsonItem.insert("value", d.first);
             items.append(jsonItem);
         }
-
         group.insert("groupItems", items);
+
         jsonGroups.append(group);
     }
 
