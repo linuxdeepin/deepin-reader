@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -134,106 +134,106 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="157"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Add annotation</source>
         <translation>Tambah catatan</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="84"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="86"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="104"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="161"/>
         <source>Remove bookmark</source>
         <translation>Buang tanda buku</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="99"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="152"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="89"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Add bookmark</source>
         <translation>Tambah tanda buku</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="61"/>
         <source>Highlight</source>
         <translation>Sorot</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="74"/>
         <source>Remove highlight</source>
         <translation>Buang sorot</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="143"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="98"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Search</source>
         <translation>Gelintar</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="114"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="176"/>
         <source>Exit fullscreen</source>
         <translation>Keluar dari skrin penuh</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="179"/>
         <source>Fullscreen</source>
         <translation>Skrin penuh</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="170"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
         <source>Slide show</source>
         <translation>Paparan slaid</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="185"/>
         <source>First page</source>
         <translation>Halaman pertama</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="174"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="186"/>
         <source>Previous page</source>
         <translation>Halaman terdahulu</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="181"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="193"/>
         <source>Next page</source>
         <translation>Halaman berikutnya</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="132"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="194"/>
         <source>Last page</source>
         <translation>Halaman terakhir</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="191"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="141"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="203"/>
         <source>Rotate left</source>
         <translation>Putar kiri</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="192"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="204"/>
         <source>Rotate right</source>
         <translation>Putar kanan</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="137"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="195"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="207"/>
         <source>Print</source>
         <translation>Cetak</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="138"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="196"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="146"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="208"/>
         <source>Document info</source>
         <translation>Maklumat dokumen</translation>
     </message>
@@ -249,49 +249,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="238"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="239"/>
         <source>The format is not supported</source>
         <translation>Format tidak disokong</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
         <source>Open failed</source>
         <translation>Gagal dibuka</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Please check if the file is damaged</source>
         <translation>Sila periksa sekiranya fail telah rosak</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>Penukaran format gagal, sila periksa sama ada fail tersebut sudah rosak</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
         <source>Save failed</source>
         <translation>Gagal disimpan</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
         <source>Saved successfully</source>
         <translation>Berjaya disimpan</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="558"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="568"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="579"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
         <source>Invalid file name</source>
         <translation>Nama fail tidak sah</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="570"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -363,12 +363,12 @@
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
         <source>Previous</source>
         <translation>Terdahulu</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
         <translation>Berikutnya</translation>
     </message>
@@ -551,188 +551,207 @@
 <context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="64"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="67"/>
         <source>Settings</source>
         <translation>Tetapan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
         <source>Exit</source>
         <translation>Keluar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Page up</source>
         <translation>Halaman ke atas</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Page down</source>
         <translation>Halaman ke bawah</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Open</source>
         <translation>Buka</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Zoom in</source>
         <translation>Zum masuk</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Zoom out</source>
         <translation>Zum keluar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
+        <source>File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
+        <source>Display</source>
+        <translation>Papar</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
+        <source>Tools</source>
+        <translation>Alat</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
+        <source>Edit</source>
+        <translation>Sunting</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Print</source>
         <translation>Cetak</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Thumbnails</source>
         <translation>Imej Kenit</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
         <source>1:1 size</source>
         <translation>Saiz 1:1</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
         <source>Fit height</source>
         <translation>Suai muat tinggi</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
         <source>Fit width</source>
         <translation>Suai muat lebar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Rotate left</source>
         <translation>Putar kiri</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Rotate right</source>
         <translation>Putar kanan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation type="unfinished"/>
     </message>
-
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
         <source>Move to the beginning</source>
         <translation>Alih ke permulaan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
         <source>Move to the end</source>
         <translation>Alih ke penghujung</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="154"/>
         <source>Select text</source>
         <translation>Pilih teks</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="155"/>
         <source>Hand tool</source>
         <translation>Alat tangan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="156"/>
         <source>Add bookmark</source>
         <translation>Tambah tanda buku</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="169"/>
         <source>Delete</source>
         <translation>Padam</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="159"/>
         <source>Magnifier</source>
         <translation>Pembesar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="161"/>
         <source>Slide show</source>
         <translation>Paparan slaid</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="162"/>
         <source>Fullscreen</source>
         <translation>Skrin penuh</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="166"/>
         <source>Copy</source>
         <translation>Salin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="167"/>
         <source>Cut</source>
         <translation>Potong</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="168"/>
         <source>Paste</source>
         <translation>Tampal</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="170"/>
         <source>Undo</source>
         <translation>Buat asal</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="171"/>
         <source>Select all</source>
         <translation>Pilih semua</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Display shortcuts</source>
         <translation>Papar pintasan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="157"/>
         <source>Add annotation</source>
         <translation>Tambah catatan</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="158"/>
         <source>Highlight</source>
         <translation>Sorot</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="160"/>
         <source>Search</source>
         <translation>Gelintar</translation>
     </message>
@@ -764,7 +783,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="140"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="147"/>
         <source>Page %1</source>
         <translation>Halaman %1</translation>
     </message>
@@ -796,7 +815,7 @@
     </message>
     <message>
         <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="112"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
