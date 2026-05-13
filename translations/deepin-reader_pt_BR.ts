@@ -598,7 +598,7 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Arquivo</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
@@ -658,12 +658,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Rolar uma linha para cima</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Rolar uma linha para baixo</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
