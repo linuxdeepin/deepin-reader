@@ -21,7 +21,7 @@ PDFDocument *loadpdfDocument_stub(const QString &, const QString &, deepin_reade
     return nullptr;
 }
 
-DjVuDocument *loaddjvuDocument_stub(const QString &, deepin_reader::Document::Error &error)
+DjVuDocument *loaddjvuDocument_stub(const QString &, deepin_reader::Document::Error &error, const QString & = "")
 {
     error = Document::FileError;
     return nullptr;

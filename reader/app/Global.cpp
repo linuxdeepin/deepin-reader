@@ -9,6 +9,7 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QDebug>
+#include <QStorageInfo>
 #include <DGuiApplicationHelper>
 
 namespace Dr {
@@ -55,6 +56,24 @@ FileType fileType(const QString &filePath)
 
     qCDebug(appLog) << "Final file type:" << static_cast<int>(fileType);
     return fileType;
+}
+
+bool isNetworkPath(const QString &filePath)
+{
+    const QStorageInfo storage(filePath);
+    if (!storage.isValid() || storage.isRoot())
+        return false;
+
+    const QByteArray fsType = storage.fileSystemType().toLower();
+    if (fsType.contains("nfs") || fsType.contains("cifs") ||
+        fsType.contains("smb") || fsType.contains("sshfs") ||
+        fsType.contains("gvfsd"))
+        return true;
+
+    if (filePath.startsWith("/run/user/") && filePath.contains("/gvfs/"))
+        return true;
+
+    return false;
 }
 
 }

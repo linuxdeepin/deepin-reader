@@ -869,6 +869,9 @@ QString DocSheet::openedFilePath()
     if (Dr::DOCX == fileType())
         return convertedFileDir() + "/temp.pdf";
 
+    if (Dr::DJVU == fileType() && Dr::isNetworkPath(filePath()))
+        return convertedFileDir() + "/temp.djvu";
+
     return filePath();
 }
 
