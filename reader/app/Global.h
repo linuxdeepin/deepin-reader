@@ -9,6 +9,7 @@
 #include "DebugTimeManager.h"
 
 #include <QString>
+#include <QStorageInfo>
 
 namespace Dr {
 
@@ -45,6 +46,7 @@ enum FileType {
 #endif
 };
 FileType fileType(const QString &filePath);
+bool isNetworkPath(const QString &filePath);
 
 /**
  * @brief The Rotation enum

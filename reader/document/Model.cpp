@@ -19,6 +19,7 @@
 #include <QTimer>
 #include <QTemporaryFile>
 #include <QLibraryInfo>
+#include "Global.h"
 
 
 namespace {
@@ -94,7 +95,22 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         document = deepin_reader::PDFDocument::loadDocument(filePath, password, error);
     } else if (Dr::DJVU == fileType) {
         qCDebug(appLog) << "Handling DJVU document";
-        document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
+        if (Dr::isNetworkPath(filePath) && !convertedFileDir.isEmpty()) {
+            qCInfo(appLog) << "DJVU file is on network path, copying to local temp dir";
+            QString localFilePath = convertedFileDir + "/temp.djvu";
+            if (QFile::exists(localFilePath))
+                QFile::remove(localFilePath);
+
+            if (!QFile::copy(filePath, localFilePath)) {
+                qCritical() << "Failed to copy network DJVU file from" << filePath << "to" << localFilePath;
+                error = deepin_reader::Document::FileError;
+            } else {
+                qCInfo(appLog) << "Copied network DJVU to local:" << localFilePath;
+                document = deepin_reader::DjVuDocument::loadDocument(localFilePath, error, filePath);
+            }
+        } else {
+            document = deepin_reader::DjVuDocument::loadDocument(filePath, error);
+        }
 #ifdef XPS_SUPPORT_ENABLED
     } else if (Dr::XPS == fileType) {
         qCDebug(appLog) << "Handling XPS document";

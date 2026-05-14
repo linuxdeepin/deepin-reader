@@ -71,7 +71,7 @@ public:
 
     Properties properties() const override;
 
-    static deepin_reader::DjVuDocument *loadDocument(const QString &filePath, deepin_reader::Document::Error &error);
+    static deepin_reader::DjVuDocument *loadDocument(const QString &filePath, deepin_reader::Document::Error &error, const QString &displayFilePath = "");
 
 private:
     DjVuDocument(ddjvu_context_t *context, ddjvu_document_t *document);

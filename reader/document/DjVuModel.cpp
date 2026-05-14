@@ -511,7 +511,7 @@ QImage DjVuPage::render(int width, int height, const QRect &slice)const
     return image;
 }
 
-deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath, deepin_reader::Document::Error &error)
+deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath, deepin_reader::Document::Error &error, const QString &displayFilePath)
 {
     qCInfo(appLog) << "Starting to load DjVu document from path:" << filePath;
     ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
@@ -549,7 +549,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
 
     DjVuDocument *djvuDocument = new DjVuDocument(context, document);
 
-    djvuDocument->m_filePath = filePath;
+    djvuDocument->m_filePath = displayFilePath.isEmpty() ? filePath : displayFilePath;
 
     error = Document::NoError;
     qCInfo(appLog) << "Successfully loaded DjVu document from:" << filePath << "with" << djvuDocument->pageCount() << "pages";
