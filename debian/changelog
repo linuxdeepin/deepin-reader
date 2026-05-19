@@ -1,3 +1,12 @@
+deepin-reader (6.5.56) unstable; urgency=medium
+
+  * fix(djvu): copy network djvu files to local temp dir before loading
+  * Fix: add translate for short cut
+  * fix(shortcuts): display correct group name for each shortcut type
+  * fix(pdfium): resolve buffer overflow in PDF link handling
+
+ -- Wang Yu <wangyu@uniontech.com>  Tue, 19 May 2026 21:16:06 +0800
+
 deepin-reader (6.5.55) unstable; urgency=medium
 
   * feat(shortcuts): add arrow key scrolling support for document viewer
