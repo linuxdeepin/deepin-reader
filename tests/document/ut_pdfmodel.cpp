@@ -363,7 +363,9 @@ TEST_F(TestPDFPage, UT_PDFPage_updateAnnotation_001)
 
     Stub s;
     s.set(static_cast<bool(DPdfPage::*)(DPdfAnnot *, QString txt, QPointF)>(ADDR(DPdfPage, updateTextAnnot)), updateTextAnnot_stub);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
+#endif
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
     dAnnot->m_type = DPdfAnnot::AText;
     annotation = new PDFAnnotation(dAnnot);
@@ -384,7 +386,9 @@ TEST_F(TestPDFPage, UT_PDFPage_updateAnnotation_002)
 {
     Stub s;
     s.set(static_cast<bool(DPdfPage::*)(DPdfAnnot *, QColor, QString)>(ADDR(DPdfPage, updateHightLightAnnot)), updateHightLightAnnot_stub);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
+#endif
     QString text("test");
     QColor color(Qt::red);
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;

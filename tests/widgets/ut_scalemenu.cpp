@@ -9,6 +9,7 @@
 #include "ut_defines.h"
 #include "stub.h"
 
+#include <QtGlobal>
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QList>
@@ -96,7 +97,9 @@ TEST_F(TestScaleMenu, testonFitPage)
 TEST_F(TestScaleMenu, testonScaleFactor)
 {
     Stub s;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     s.set(ADDR(QList<QAction *>, indexOf), indexOf_stub);
+#endif
     s.set(ADDR(DocSheet, scaleFactorList), scaleFactorList_stub);
     m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
     m_tester->onScaleFactor();

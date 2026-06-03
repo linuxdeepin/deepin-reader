@@ -7,6 +7,7 @@
 #include "DocSheet.h"
 
 #include "stub.h"
+#include "ut_compat.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -113,7 +114,7 @@ TEST_F(TestCatalogTreeView, testresizeEvent)
 TEST_F(TestCatalogTreeView, testmousePressEvent)
 {
     QTest::mousePress(m_tester, Qt::LeftButton);
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(event);
     delete event;
     EXPECT_TRUE(m_tester->rightnotifypagechanged == false);

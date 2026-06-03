@@ -14,6 +14,7 @@
 #include <QResizeEvent>
 
 #include "stub.h"
+#include "ut_compat.h"
 #include <gtest/gtest.h>
 
 static void openFileAsync_stub(const QString &)
@@ -100,7 +101,7 @@ TEST_F(TestMainWindow, testcloseEvent)
 
 TEST_F(TestMainWindow, testeventFilter)
 {
-    QHoverEvent *mouseEvent = new QHoverEvent(QEvent::HoverMove, QPointF(100, 100), QPointF(0, 0));
+    QHoverEvent *mouseEvent = createHoverEvent(QEvent::HoverMove, QPointF(100, 100), QPointF(0, 0));
     m_tester->eventFilter(m_tester, mouseEvent);
     delete mouseEvent;
 

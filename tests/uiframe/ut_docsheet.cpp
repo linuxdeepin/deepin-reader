@@ -468,7 +468,7 @@ TEST_F(TestDocSheet, UT_DocSheet_existFileChanged_001)
 
 TEST_F(TestDocSheet, UT_DocSheet_getUuid_001)
 {
-    EXPECT_TRUE(DocSheet::getUuid(DocSheet::g_sheetList.last()) == DocSheet::g_uuidList.last());
+    EXPECT_TRUE(DocSheet::getUuid(DocSheet::g_sheetList.last()).toString() == DocSheet::g_uuidList.last());
 }
 
 TEST_F(TestDocSheet, UT_DocSheet_existSheet_001)

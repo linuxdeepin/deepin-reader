@@ -1583,9 +1583,14 @@ void DocSheet::setAlive(bool alive)
 
         int index = g_uuidList.indexOf(m_uuid);
 
-        g_sheetList.removeAt(index);
-
-        g_uuidList.removeAt(index);
+        if (index >= 0) {
+            if (index < g_sheetList.size())
+                g_sheetList.removeAt(index);
+            g_uuidList.removeAt(index);
+        } else {
+            // 列表不同步时，尝试从 g_sheetList 中直接移除 this
+            g_sheetList.removeOne(this);
+        }
 
         m_uuid.clear();
 

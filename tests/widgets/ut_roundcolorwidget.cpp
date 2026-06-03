@@ -6,6 +6,7 @@
 #include "RoundColorWidget.h"
 
 #include <QSignalSpy>
+#include "ut_compat.h"
 
 #include <gtest/gtest.h>
 
@@ -51,7 +52,7 @@ TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_mousePressEvent)
 {
     QSignalSpy spy(m_tester, SIGNAL(clicked()));
     m_tester->m_isSelected = false;
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(event);
     delete event;
     EXPECT_TRUE(spy.count() == 1);

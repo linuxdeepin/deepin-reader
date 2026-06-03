@@ -79,7 +79,7 @@ TEST_F(UT_EncryptionPage, UT_EncryptionPage_onUpdateTheme)
 {
     DPalette plt = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
     m_tester->onUpdateTheme();
-    EXPECT_TRUE(m_tester->palette().color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
+    EXPECT_TRUE(m_tester->palette().color(QPalette::Window) == plt.color(Dtk::Gui::DPalette::Base));
 }
 
 

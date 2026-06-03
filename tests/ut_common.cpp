@@ -8,6 +8,7 @@
 #include <DMenu>
 
 #include <QProcess>
+#include <QtGlobal>
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,6 +39,13 @@ bool qProcess_startDetached_stub(const QString &, const QStringList &)
     return true;
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+bool qProcess_startDetached_qt6_stub(const QString &, const QStringList &, const QString &, qint64 *)
+{
+    return true;
+}
+#endif
+
 void UTCommon::stub_DMenu_exec(Stub &stub)
 {
     stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), dmenu_exec_stub);
@@ -52,6 +60,10 @@ void UTCommon::stub_QWidget_isVisible(Stub &stub, bool isVisible)
 void UTCommon::stub_QProcess_startDetached(Stub &stub)
 {
 #if !defined(Q_QDOC)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    stub.set(static_cast<bool(*)(const QString &, const QStringList &, const QString &, qint64 *)>(&QProcess::startDetached), qProcess_startDetached_qt6_stub);
+#else
     stub.set((bool(*)(const QString &, const QStringList &))ADDR(QProcess, startDetached), qProcess_startDetached_stub);
+#endif
 #endif
 }
