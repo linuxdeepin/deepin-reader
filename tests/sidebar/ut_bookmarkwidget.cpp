@@ -11,7 +11,9 @@
 #include "stub.h"
 
 #include <DPushButton>
-#include <DApplicationHelper>
+#include <dapplicationhelper.h>
+#include <dpalette.h>
+#include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -125,8 +127,8 @@ TEST_F(TestBookMarkWidget, testshowMenu)
 TEST_F(TestBookMarkWidget, testonUpdateTheme)
 {
     m_tester->onUpdateTheme();
-    DPalette paFrame = DApplicationHelper::instance()->palette(m_tester);
-    EXPECT_TRUE(DApplicationHelper::instance()->palette(m_tester) == paFrame);
+    Dtk::Gui::DPalette paFrame = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette();
+    EXPECT_TRUE(Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette() == paFrame);
 }
 
 static QString g_deleteItemByKey_result;

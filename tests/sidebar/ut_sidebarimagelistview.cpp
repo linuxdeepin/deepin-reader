@@ -8,6 +8,7 @@
 #include "SideBarImageViewModel.h"
 
 #include "stub.h"
+#include "ut_compat.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -136,7 +137,7 @@ TEST_F(TestSideBarImageListView, testmousePressEvent)
     stub.set(ADDR(SideBarImageListView, showNoteMenu), showNoteMenu_stub);
     stub.set(ADDR(SideBarImageListView, showBookMarkMenu), showBookMarkMenu_stub);
 
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
 
     m_tester->m_listType = E_SideBar::SIDE_NOTE;
     m_tester->mousePressEvent(event);

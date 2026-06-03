@@ -12,7 +12,7 @@
 #include "BrowserWord.h"
 #include "stub.h"
 
-#include <DApplicationHelper>
+#include <dapplicationhelper.h>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsScene>
 #include <QPainter>

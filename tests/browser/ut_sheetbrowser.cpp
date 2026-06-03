@@ -25,6 +25,7 @@
 #include <QDesktopServices>
 
 #include <gtest/gtest.h>
+#include "ut_compat.h"
 
 ///*******************************函数打桩************************************/
 static QString g_funcName;
@@ -677,7 +678,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent)
 {
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = true;
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(event);
     delete event;
     EXPECT_TRUE(m_tester->m_bHandAndLink == true);
@@ -731,7 +732,7 @@ TEST_F(TestSheetBrowser, testshowMenu003)
     stub.set(ADDR(BrowserMenu, initActions), initActions_stub);
     stub.set((QAction * (QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), exec_stub);
     stub.set(ADDR(SheetBrowser, clearSelectIconAnnotAfterMenu), clearSelectIconAnnotAfterMenu_stub);
-    stub.set(ADDR(QWidget, mapToGlobal), mapToGlobal_stub);
+    stub.set(static_cast<QPoint(QWidget::*)(const QPoint &) const>(&QWidget::mapToGlobal), mapToGlobal_stub);
 
     BrowserWord *p = new BrowserWord(nullptr, Word());
     m_tester->m_selectEndWord = p;
@@ -1125,8 +1126,9 @@ TEST_F(TestSheetBrowser, testmousePressEvent001)
     BrowserPage p1(nullptr, 0, &sheet);
     m_tester->m_lastSelectIconAnnotPage = &p1;
     QPointF localPos;
-    QMouseEvent event(QEvent::MouseButtonPress, localPos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_tester->mousePressEvent(&event);
+    QMouseEvent *eventPtr = createMouseEvent(QEvent::MouseButtonPress, localPos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mousePressEvent(eventPtr);
+    delete eventPtr;
 
     delete g_pBrowserPage2;
     delete g_pPDFAnnotation;
@@ -1144,8 +1146,9 @@ TEST_F(TestSheetBrowser, testmousePressEvent001)
 TEST_F(TestSheetBrowser, testmousePressEvent002)
 {
     QPointF localPos;
-    QMouseEvent event(QEvent::MouseButtonPress, localPos, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-    m_tester->mousePressEvent(&event);
+    QMouseEvent *eventPtr2 = createMouseEvent(QEvent::MouseButtonPress, localPos, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    m_tester->mousePressEvent(eventPtr2);
+    delete eventPtr2;
 
     EXPECT_TRUE(m_tester->m_annotationInserting == false);
     EXPECT_TRUE(m_tester->m_canTouchScreen == false);
@@ -1524,7 +1527,7 @@ TEST_F(TestSheetBrowser, testwheelEvent001)
     int delta;
     Qt::MouseButtons buttons = Qt::LeftButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QWheelEvent *event = new QWheelEvent(pos, delta, buttons, modifiers);
+    QWheelEvent *event = createWheelEvent(pos, delta, buttons, modifiers);
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
     m_tester->m_sheet = sheet;
 
@@ -1707,7 +1710,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent001)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1732,7 +1735,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent002)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1767,7 +1770,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent003)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1801,7 +1804,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent004)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1845,7 +1848,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent005)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1900,7 +1903,7 @@ TEST_F(TestSheetBrowser, testmouseMoveEvent006)
     Qt::MouseButton button = Qt::NoButton;
     Qt::MouseButtons buttons = Qt::NoButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_bHandAndLink = false;
@@ -1951,7 +1954,7 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent001)
     Qt::MouseButton button = Qt::LeftButton;
     Qt::MouseButtons buttons = Qt::LeftButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_selectIconAnnotation = false;
@@ -1989,7 +1992,7 @@ TEST_F(TestSheetBrowser, testmouseReleaseEvent002)
     Qt::MouseButton button = Qt::LeftButton;
     Qt::MouseButtons buttons = Qt::LeftButton;
     Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-    QMouseEvent *event = new QMouseEvent(type, localPos, button, buttons, modifiers);
+    QMouseEvent *event = createMouseEvent(type, localPos, button, buttons, modifiers);
 
     m_tester->m_startPinch = false;
     m_tester->m_selectIconAnnotation = true;

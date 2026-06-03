@@ -16,6 +16,7 @@
 
 #include <QProcess>
 #include <QDesktopServices>
+#include <QtGlobal>
 #include <QSignalSpy>
 #include <QLayout>
 #include <QStackedLayout>
@@ -75,6 +76,14 @@ bool startDetached_stub(const QString &)
     g_funcName = __FUNCTION__;
     return false;
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+bool startDetached_qt6_stub(const QString &, const QStringList &, const QString &, qint64 *)
+{
+    g_funcName = __FUNCTION__;
+    return false;
+}
+#endif
 
 static bool openUrl_stub(const QUrl &)
 {
@@ -374,7 +383,11 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_openCurFileFolder_001)
 {
     Stub s;
     s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s.set(static_cast<bool(*)(const QString &, const QStringList &, const QString &, qint64 *)>(&QProcess::startDetached), startDetached_qt6_stub);
+#else
     s.set(static_cast<bool (*)(const QString &)>(ADDR(QProcess, startDetached)), startDetached_stub);
+#endif
     s.set(ADDR(QDesktopServices, openUrl), openUrl_stub);
     m_tester->openCurFileFolder();
 

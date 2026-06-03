@@ -166,6 +166,12 @@ if (USE_PDFIUM_BUNDLE)
     add_subdirectory(3rdparty/deepin-pdfium)
 endif()
 
+# 单元测试（可选）
+option(BUILD_TESTS "Build unit tests" OFF)
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
+
 # translation files
 TRANSLATION_GENERATE(QM_FILES ${CMAKE_SOURCE_DIR}/translations)
 add_custom_target(${PROJECT_NAME}_qm_files DEPENDS ${QM_FILES})

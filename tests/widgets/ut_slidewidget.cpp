@@ -14,6 +14,7 @@
 #include "Application.h"
 
 #include <gtest/gtest.h>
+#include "ut_compat.h"
 #include <QTimer>
 #include <QTest>
 #include <QPropertyAnimation>
@@ -150,7 +151,7 @@ TEST_F(TestSlideWidget, testmouseMoveEvent)
 {
     Stub s;
     s.set(ADDR(SlidePlayWidget, showControl), showControl_stub);
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mouseMoveEvent(event);
     delete event;
     EXPECT_TRUE(g_funcname == "showControl_stub");
@@ -261,7 +262,7 @@ TEST_F(TestSlideWidget, testmousePressEvent)
     Stub s;
     s.set(ADDR(SlidePlayWidget, showControl), showControl_stub);
 
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(event);
     delete event;
     EXPECT_TRUE(g_funcname == "showControl_stub");

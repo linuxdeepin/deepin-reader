@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 UnionTech Software Technology Co.,Ltd
+// Copyright (C) 2019-2026 UnionTech Software Technology Co.,Ltd
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -41,7 +41,7 @@ TEST_F(UT_TipsWidget, UT_TipsWidget_onUpdateTheme)
 {
     m_tester->onUpdateTheme();
     DPalette plt = m_tester->palette();
-    EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::Background) == plt.color(Dtk::Gui::DPalette::Base));
+    EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::ItemBackground) == plt.color(Dtk::Gui::DPalette::Base));
 }
 
 TEST_F(UT_TipsWidget, UT_TipsWidget_setText)

@@ -10,6 +10,7 @@
 
 #include <QProcess>
 #include <QDir>
+#include <QtGlobal>
 
 #include <gtest/gtest.h>
 using namespace deepin_reader;
@@ -35,6 +36,12 @@ bool copy_stub(void *, const QString &)
 void start_stub(const QString &, QProcess::OpenMode)
 {
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+void start_stub_qt6(const QString &, const QStringList &, QProcess::OpenMode)
+{
+}
+#endif
 
 bool waitForStarted_true_stub(int)
 {
@@ -135,7 +142,11 @@ TEST(UT_DocumentFactory_getDocument, UT_DocumentFactory_getDocument_004)
 
     Stub s;
     s.set(static_cast<bool(QFile::*)(const QString &)>(ADDR(QFile, copy)), copy_stub);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s.set(static_cast<void(QProcess::*)(const QString &, const QStringList &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub_qt6);
+#else
     s.set(static_cast<void(QProcess::*)(const QString &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub);
+#endif
     Stub s1;
 
     s1.set(ADDR(QProcess, waitForStarted), waitForStarted_false_stub);

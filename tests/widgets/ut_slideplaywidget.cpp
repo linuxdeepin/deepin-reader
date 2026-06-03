@@ -5,6 +5,7 @@
 
 #include "SlidePlayWidget.h"
 #include "ut_common.h"
+#include "ut_compat.h"
 
 #include <QSignalSpy>
 #include <QDebug>
@@ -60,7 +61,7 @@ TEST_F(UT_SlidePlayWidget, test_TestTextEditShadowWidget_onTimerout)
 
 TEST_F(UT_SlidePlayWidget, test_TestTextEditShadowWidget_enterEvent)
 {
-    QEvent *event = new QEvent(QEvent::Enter);
+    QEnterEvent *event = new QEnterEvent(QPointF(0, 0), QPointF(0, 0), QPointF(0, 0));
     m_tester->enterEvent(event);
     delete event;
     EXPECT_TRUE(m_tester->m_timer.isActive() == false);
@@ -134,7 +135,7 @@ TEST_F(UT_SlidePlayWidget, test_TestTextEditShadowWidget_playStatusChanged_002)
 
 TEST_F(UT_SlidePlayWidget, test_TestTextEditShadowWidget_mousePressEvent)
 {
-    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(event);
     delete event;
     EXPECT_TRUE(m_tester != nullptr);
