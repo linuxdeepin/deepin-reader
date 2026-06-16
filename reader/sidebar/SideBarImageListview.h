@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,6 +17,7 @@ class SideBarImageViewModel;
 class BookMarkMenu;
 class NoteMenu;
 class QMouseEvent;
+class QKeyEvent;
 
 const int LEFTMINWIDTH = 266;
 const int LEFTMAXWIDTH = 380;
@@ -165,6 +166,21 @@ protected:
      * @param event
      */
     void mousePressEvent(QMouseEvent *event);
+
+    /**
+     * @brief keyPressEvent
+     * 键盘事件，处理 Up/Down/PageUp/PageDown 导航
+     * @param event
+     */
+    void keyPressEvent(QKeyEvent *event) override;
+
+    /**
+     * @brief event
+     * 拦截 ShortcutOverride，抑制 Central 的窗口级翻页快捷键，
+     * 使方向键/翻页键交由本控件 keyPressEvent 处理
+     * @param event
+     */
+    bool event(QEvent *event) override;
 
 private:
     int m_listType;
