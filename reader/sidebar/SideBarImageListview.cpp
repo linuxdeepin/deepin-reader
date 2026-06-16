@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -66,8 +66,12 @@ void SideBarImageListView::showMenu()
         return;
     }
 
+    // visualRect() is in viewport coordinates, so map through viewport() —
+    // mapping through `this` adds a frame/margin offset and shifts the menu.
     const QRect &visualRect = this->visualRect(this->currentIndex());
-    QPoint point = mapToGlobal(QPoint(this->width() / 2 - 4, visualRect.y() + visualRect.height() / 2 - 4));
+    QPoint point = viewport()->mapToGlobal(
+        QPoint(viewport()->width() / 2 - 4,
+               visualRect.y() + visualRect.height() / 2 - 4));
     if (m_listType == E_SideBar::SIDE_NOTE) {
         qCDebug(appLog) << "Showing note menu";
         showNoteMenu(point);
