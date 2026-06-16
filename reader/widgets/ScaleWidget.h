@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -44,6 +44,13 @@ public:
      * 清空缩放比缩放框
      */
     void clear();
+
+protected:
+    /**
+     * @brief eventFilter
+     * 缩放框获得焦点时拦截方向键，调整缩放比而非滚动文档
+     */
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     /**

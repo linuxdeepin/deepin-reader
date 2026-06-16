@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,12 +8,14 @@
 #include "SideBarImageViewModel.h"
 #include "Application.h"
 #include "MsgHeader.h"
+#include "ThumbnailWidget.h"
 #include "ddlog.h"
 
 #include <QScroller>
 #include <QScrollBar>
 #include <QSet>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QDebug>
 SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     : DListView(parent)
@@ -24,7 +26,8 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     setAutoScroll(false);
     setProperty("adaptScale", 1.0);
     setSpacing(4);
-    setFocusPolicy(Qt::NoFocus);
+    setObjectName("sideBarImageListView");
+    setFocusPolicy(Qt::ClickFocus);
     setFrameShape(QFrame::NoFrame);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -210,6 +213,57 @@ void SideBarImageListView::mousePressEvent(QMouseEvent *event)
         }
     }
     // qCDebug(appLog) << "SideBarImageListView::mousePressEvent end";
+}
+
+void SideBarImageListView::keyPressEvent(QKeyEvent *event)
+{
+    if (m_docSheet) {
+        switch (event->key()) {
+        case Qt::Key_Up:
+            m_docSheet->jumpToPrevPage();
+            event->accept();
+            return;
+        case Qt::Key_Down:
+            m_docSheet->jumpToNextPage();
+            event->accept();
+            return;
+        case Qt::Key_PageUp: {
+            ThumbnailWidget *tw = qobject_cast<ThumbnailWidget *>(parentWidget());
+            if (tw) tw->pageUp();
+            event->accept();
+            return;
+        }
+        case Qt::Key_PageDown: {
+            ThumbnailWidget *tw = qobject_cast<ThumbnailWidget *>(parentWidget());
+            if (tw) tw->pageDown();
+            event->accept();
+            return;
+        }
+        default:
+            break;
+        }
+    }
+    DListView::keyPressEvent(event);
+}
+
+bool SideBarImageListView::event(QEvent *event)
+{
+    // 焦点在缩略图列表时，接受 ShortcutOverride 以抑制 Central 注册的窗口级
+    // 快捷键(Up/Down 文档滚动)，使按键作为普通 KeyPress 交给 keyPressEvent 翻页
+    if (event->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        switch (keyEvent->key()) {
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        case Qt::Key_PageUp:
+        case Qt::Key_PageDown:
+            event->accept();
+            return true;
+        default:
+            break;
+        }
+    }
+    return DListView::event(event);
 }
 
 void SideBarImageListView::showNoteMenu(const QPoint &point)

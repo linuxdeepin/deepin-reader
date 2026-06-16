@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,6 +9,8 @@
 
 #include <QHBoxLayout>
 #include <QLineEdit>
+#include <QKeyEvent>
+#include <QEvent>
 #include <DApplication>
 #include <DFontSizeManager>
 
@@ -64,6 +66,7 @@ void ScaleWidget::initWidget()
     connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(onReturnPressed()));
     connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
     connect(m_arrowBtn, SIGNAL(clicked()), SLOT(onArrowBtnlicked()));
+    m_lineEdit->lineEdit()->installEventFilter(this);
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement, this);
     pPreBtn->setObjectName("SP_DecreaseElement");
@@ -82,6 +85,28 @@ void ScaleWidget::initWidget()
     m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(pNextBtn);
     qCDebug(appLog) << "ScaleWidget::initWidget end";
+}
+
+bool ScaleWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    // 缩放框获得焦点时，Up/Down 调整缩放比，且不能让事件穿透到 Central 的窗口级
+    // 快捷键(文档滚动)。必须同时处理 ShortcutOverride(抑制快捷键)和 KeyPress(执行缩放)。
+    if (m_lineEdit && obj == m_lineEdit->lineEdit()
+            && (event->type() == QEvent::ShortcutOverride || event->type() == QEvent::KeyPress)) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Up) {
+            if (event->type() == QEvent::KeyPress)
+                onNextScale();   // Up = 放大
+            event->accept();
+            return true;
+        } else if (keyEvent->key() == Qt::Key_Down) {
+            if (event->type() == QEvent::KeyPress)
+                onPrevScale();  // Down = 缩小
+            event->accept();
+            return true;
+        }
+    }
+    return DWidget::eventFilter(obj, event);
 }
 
 void ScaleWidget::onPrevScale()

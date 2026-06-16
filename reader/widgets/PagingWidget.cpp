@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,6 +10,7 @@
 #include <QDebug>
 
 #include <QValidator>
+#include <QKeyEvent>
 
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -28,6 +29,33 @@ PagingWidget::PagingWidget(DocSheet *sheet, DWidget *parent)
 
     m_tmFuncThread = new TMFunctionThread(this);
     connect(m_tmFuncThread, &TMFunctionThread::finished, this, &PagingWidget::onFuncThreadFinished);
+}
+
+bool PagingWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    // 页数框获得焦点时，方向键/翻页键应翻页，且不能让事件穿透到 Central 的窗口级
+    // 快捷键(文档滚动)。必须同时处理 ShortcutOverride(抑制快捷键)和 KeyPress(执行翻页)。
+    if (m_pJumpPageLineEdit && obj == m_pJumpPageLineEdit->lineEdit()
+            && (event->type() == QEvent::ShortcutOverride || event->type() == QEvent::KeyPress)) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        switch (keyEvent->key()) {
+        case Qt::Key_Up:
+        case Qt::Key_PageUp:
+            if (event->type() == QEvent::KeyPress && m_sheet)
+                m_sheet->jumpToPrevPage();
+            event->accept();
+            return true;
+        case Qt::Key_Down:
+        case Qt::Key_PageDown:
+            if (event->type() == QEvent::KeyPress && m_sheet)
+                m_sheet->jumpToNextPage();
+            event->accept();
+            return true;
+        default:
+            break;
+        }
+    }
+    return BaseWidget::eventFilter(obj, event);
 }
 
 PagingWidget::~PagingWidget()
@@ -59,6 +87,7 @@ void PagingWidget::initWidget()
     m_pJumpPageLineEdit->setClearButtonEnabled(false);
     connect(m_pJumpPageLineEdit, SIGNAL(returnPressed()), SLOT(SlotJumpPageLineEditReturnPressed()));
     connect(m_pJumpPageLineEdit, SIGNAL(editingFinished()), SLOT(onEditFinished()));
+    m_pJumpPageLineEdit->lineEdit()->installEventFilter(this);
 
     Dtk::Widget::DFontSizeManager::instance()->bind(m_pJumpPageLineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
 
