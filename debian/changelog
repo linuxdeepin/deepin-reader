@@ -1,3 +1,9 @@
+deepin-reader (6.5.57) unstable; urgency=medium
+
+  * Update version to 6.5.57.
+
+ -- Tian ShiLin <tianshilin@uniontech.com>  Wed, 17 Jun 2026 15:45:02 +0800
+
 deepin-reader (6.5.56) unstable; urgency=medium
 
   * fix(djvu): copy network djvu files to local temp dir before loading
