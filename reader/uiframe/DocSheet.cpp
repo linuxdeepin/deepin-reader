@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1697,12 +1697,23 @@ void DocSheet::onPopPrintDialog()
         QString tmpPdfPath = convertedFileDir() + "/pdftocairoPrint.pdf";
         QProcess process;
         process.start("pdftocairo", QStringList() << "-pdf" << pdfPath << tmpPdfPath);
-        process.waitForFinished();
-        if (process.exitCode() != 0) {
-            qCWarning(appLog) << "pdftocairo failed:" << process.readAllStandardError();
-            return;
+        bool converted = process.waitForFinished(5 * 60 * 1000) && process.exitCode() == 0;
+        if (converted) {
+            // pdftocairo 有时 exit code 为 0 但输出 PDF 结构不完整，验证关键标记是否存在
+            QFile outFile(tmpPdfPath);
+            if (outFile.open(QIODevice::ReadOnly)) {
+                outFile.seek(qMax(0LL, outFile.size() - 1024));
+                const QByteArray tail = outFile.readAll();
+                outFile.close();
+                if (!tail.contains("startxref") || !tail.contains("%%EOF"))
+                    converted = false;
+            } else {
+                converted = false;
+            }
         }
-        preview->setPrintFromPath(tmpPdfPath);
+        if (!converted)
+            qCWarning(appLog) << "pdftocairo conversion failed or produced invalid PDF, using original";
+        preview->setPrintFromPath(converted ? tmpPdfPath : pdfPath);
     }
     connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
 #else
