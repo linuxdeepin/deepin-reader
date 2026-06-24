@@ -28,6 +28,7 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     setSpacing(4);
     setObjectName("sideBarImageListView");
     setFocusPolicy(Qt::ClickFocus);
+    viewport()->setObjectName("sideBarImageListViewViewport");
     setFrameShape(QFrame::NoFrame);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
