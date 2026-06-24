@@ -549,14 +549,7 @@ bool SheetSidebar::event(QEvent *event)
     // qCDebug(appLog) << "SheetSidebar::event start - type:" << event->type();
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
-        const bool isMenuKey = (key_event->key() == Qt::Key_Menu);
-        const bool isAltM = (key_event->key() == Qt::Key_M
-                             && (key_event->modifiers() & Qt::AltModifier));
-        if ((isMenuKey || isAltM) && !key_event->isAutoRepeat()) {
-            // Consume the event so it does not propagate to Qt's mnemonic /
-            // accelerator handling — otherwise the same Alt+M keeps the
-            // accelerator state active after exec() returns, causing the
-            // popup to jump and requiring a second ESC to dismiss it.
+        if (key_event->key() == Qt::Key_Menu && !key_event->isAutoRepeat()) {
             showMenu();
             return true;
         }
