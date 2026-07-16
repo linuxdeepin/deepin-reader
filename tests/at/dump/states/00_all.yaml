@@ -1,0 +1,3461 @@
+version: '1.0'
+app: deepin-reader
+type: state
+state_label: all
+tree:
+- role: form
+  name: Form_DMainWindow
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions:
+  - SetFocus
+  index_in_parent: 0
+  states:
+  - enabled
+  - focusable
+  - resizable
+  - sensitive
+  - showing
+  - visible
+  source: runtime
+  children:
+  - role: form
+    name: Form_Central
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 0
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+    children:
+    - role: form
+      name: Form_widget_1
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: form
+        name: Form_CentralNavPage
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        source: runtime
+        children:
+        - role: label
+          name: Label_Drag documents here
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 0
+          states:
+          - enabled
+          - read_only
+          - sensitive
+          source: runtime
+        - role: label
+          name: 'Label_format supported: PDF,DJVU,DOCX,XPS'
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 1
+          states:
+          - enabled
+          - read_only
+          - sensitive
+          source: runtime
+        - role: button
+          name: Button_SelectFile
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - ShowMenu
+          index_in_parent: 2
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          source: runtime
+        - role: image
+          name: Label_Icon
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 3
+          states:
+          - enabled
+          - read_only
+          - sensitive
+          source: runtime
+      - role: form
+        name: Form_CentralDocPage
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 1
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: form
+          name: Form_DocSheet
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 0
+          states:
+          - enabled
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          children:
+          - role: form
+            name: Form_SheetSidebar
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - SetFocus
+            index_in_parent: 0
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            - showing
+            - visible
+            source: runtime
+            children:
+            - role: form
+              name: Form_SearchResWidget
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 0
+              states:
+              - enabled
+              - sensitive
+              source: runtime
+              children:
+              - role: label
+                name: 无搜索结果
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 0
+                states:
+                - enabled
+                - read_only
+                - sensitive
+                source: runtime
+              - role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 1
+                states:
+                - enabled
+                - focusable
+                - manages_descendants
+                - sensitive
+                source: runtime
+            - role: check box
+              name: Button_thumbnail
+              object_name: ''
+              accessible_id: ''
+              description: 缩略图
+              actions:
+              - Toggle
+              - Press
+              - SetFocus
+              index_in_parent: 1
+              states:
+              - checkable
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: check box
+              name: Button_catalog
+              object_name: ''
+              accessible_id: ''
+              description: 目录
+              actions:
+              - Toggle
+              - Press
+              - SetFocus
+              index_in_parent: 2
+              states:
+              - checkable
+              - checked
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: check box
+              name: Button_bookmark
+              object_name: ''
+              accessible_id: ''
+              description: 书签
+              actions:
+              - Toggle
+              - Press
+              - SetFocus
+              index_in_parent: 3
+              states:
+              - checkable
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: check box
+              name: Button_annotation
+              object_name: ''
+              accessible_id: ''
+              description: 注释
+              actions:
+              - Toggle
+              - Press
+              - SetFocus
+              index_in_parent: 4
+              states:
+              - checkable
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: check box
+              name: Button_search
+              object_name: ''
+              accessible_id: ''
+              description: Search
+              actions:
+              - Toggle
+              - Press
+              - SetFocus
+              index_in_parent: 5
+              states:
+              - checkable
+              - enabled
+              - focusable
+              - sensitive
+              source: runtime
+            - role: form
+              name: Form_ThumbnailWidget
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 6
+              states:
+              - enabled
+              - sensitive
+              source: runtime
+              children:
+              - role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 0
+                states:
+                - enabled
+                - focusable
+                - manages_descendants
+                - sensitive
+                source: runtime
+                children:
+                - role: list item
+                  name: '0'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 0
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '1'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 1
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '2'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 2
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '3'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 3
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '4'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 4
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '5'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 5
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '6'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 6
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '7'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 7
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '8'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 8
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '9'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 9
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '10'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 10
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '11'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 11
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '12'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 12
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '13'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 13
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '14'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 14
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '15'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 15
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '16'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 16
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '17'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 17
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '18'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 18
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '19'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 19
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '20'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 20
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '21'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 21
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '22'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 22
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '23'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 23
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '24'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 24
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '25'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 25
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '26'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 26
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '27'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 27
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '28'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 28
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '29'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 29
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '30'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 30
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '31'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 31
+                  states:
+                  - enabled
+                  - focusable
+                  - focused
+                  - selectable
+                  - selected
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: list item
+                  name: '32'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 32
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '33'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 33
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '34'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 34
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '35'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 35
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '36'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 36
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '37'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 37
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '38'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 38
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '39'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 39
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '40'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 40
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '41'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 41
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '42'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 42
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '43'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 43
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '44'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 44
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '45'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 45
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '46'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 46
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '47'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 47
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '48'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 48
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '49'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 49
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '50'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 50
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '51'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 51
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '52'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 52
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '53'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 53
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '54'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 54
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '55'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 55
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '56'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 56
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '57'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 57
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '58'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 58
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '59'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 59
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '60'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 60
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '61'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 61
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '62'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 62
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '63'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 63
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '64'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 64
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '65'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 65
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '66'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 66
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '67'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 67
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '68'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 68
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '69'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 69
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '70'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 70
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '71'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 71
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '72'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 72
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '73'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 73
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '74'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 74
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '75'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 75
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '76'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 76
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '77'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 77
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '78'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 78
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '79'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 79
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '80'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 80
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '81'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 81
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '82'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 82
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '83'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 83
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '84'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 84
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '85'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 85
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '86'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 86
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '87'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 87
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '88'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 88
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '89'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 89
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '90'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 90
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '91'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 91
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '92'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 92
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '93'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 93
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '94'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 94
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '95'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 95
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '96'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 96
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '97'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 97
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '98'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 98
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+                - role: list item
+                  name: '99'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 99
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - transient
+                  source: runtime
+              - role: form
+                name: Form_Paging
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 1
+                states:
+                - enabled
+                - sensitive
+                source: runtime
+                children:
+                - role: label
+                  name: Label_TotalPage
+                  object_name: ''
+                  accessible_id: ''
+                  description: '344'
+                  actions: []
+                  index_in_parent: 0
+                  states:
+                  - enabled
+                  - read_only
+                  - sensitive
+                  source: runtime
+                - role: form
+                  name: Form_Page
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - SetFocus
+                  index_in_parent: 1
+                  states:
+                  - enabled
+                  - focusable
+                  - sensitive
+                  source: runtime
+                  children:
+                  - role: text
+                    name: pageEdit
+                    object_name: ''
+                    accessible_id: ''
+                    description: ''
+                    actions:
+                    - SetFocus
+                    index_in_parent: 0
+                    states:
+                    - editable
+                    - enabled
+                    - focusable
+                    - sensitive
+                    source: runtime
+                - role: label
+                  name: CurrentPage
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions: []
+                  index_in_parent: 2
+                  states:
+                  - enabled
+                  - read_only
+                  - sensitive
+                  source: runtime
+                - role: button
+                  name: Button_ThumbnailPre
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Press
+                  - SetFocus
+                  index_in_parent: 3
+                  states:
+                  - enabled
+                  - focusable
+                  - sensitive
+                  source: runtime
+                - role: button
+                  name: Button_ThumbnailNext
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Press
+                  - SetFocus
+                  index_in_parent: 4
+                  states:
+                  - enabled
+                  - focusable
+                  - sensitive
+                  source: runtime
+              - role: form
+                name: Form_ThumbnailLine
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 2
+                states:
+                - enabled
+                - sensitive
+                source: runtime
+            - role: form
+              name: Form_NotesWidget
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 7
+              states:
+              - enabled
+              - sensitive
+              source: runtime
+              children:
+              - role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 0
+                states:
+                - enabled
+                - focusable
+                - manages_descendants
+                - sensitive
+                source: runtime
+              - role: button
+                name: Button_NotesAdd
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions:
+                - Press
+                - ShowMenu
+                index_in_parent: 1
+                states:
+                - enabled
+                - focusable
+                - sensitive
+                source: runtime
+              - role: form
+                name: Form_NotesLine
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 2
+                states:
+                - enabled
+                - sensitive
+                source: runtime
+            - role: form
+              name: Form_BookMarkWidget
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 8
+              states:
+              - enabled
+              - sensitive
+              source: runtime
+              children:
+              - role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 0
+                states:
+                - enabled
+                - focusable
+                - manages_descendants
+                - sensitive
+                source: runtime
+                children:
+                - role: list item
+                  name: '0'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 0
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+              - role: button
+                name: Button_BookmarkAdd
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions:
+                - Press
+                - ShowMenu
+                index_in_parent: 1
+                states:
+                - enabled
+                - focusable
+                - sensitive
+                source: runtime
+              - role: form
+                name: Form_BookMarkLine
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 2
+                states:
+                - enabled
+                - sensitive
+                source: runtime
+            - role: form
+              name: Form_CatalogWidget
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 9
+              states:
+              - enabled
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+              children:
+              - role: label
+                name: Label_title
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 0
+                states:
+                - enabled
+                - read_only
+                - sensitive
+                - showing
+                - visible
+                source: runtime
+              - role: tree
+                name: View_CatalogTree
+                object_name: ''
+                accessible_id: ''
+                description: ''
+                actions: []
+                index_in_parent: 1
+                states:
+                - enabled
+                - manages_descendants
+                - sensitive
+                - showing
+                - visible
+                source: runtime
+                children:
+                - role: table column header
+                  name: '1'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions: []
+                  index_in_parent: 0
+                  states:
+                  - enabled
+                  - sensitive
+                  source: runtime
+                - role: table column header
+                  name: '2'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions: []
+                  index_in_parent: 1
+                  states:
+                  - enabled
+                  - sensitive
+                  source: runtime
+                - role: table cell
+                  name: JavaScript Application Design
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 2
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '1'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 3
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: brief contents
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 4
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '8'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 5
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: contents
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 6
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '10'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 7
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: foreword
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 8
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '16'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 9
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: preface
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 10
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '18'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 11
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: acknowledgments
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 12
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '20'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 13
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: about this book
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 14
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '22'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 15
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: about the author
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 16
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '26'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 17
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: about the cover illustration
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 18
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '27'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 19
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: Part 1 Build processes
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 20
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - selected
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '30'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 21
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - selected
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: Part 2 Managing complexity
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 22
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '126'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 23
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: appendix A Modules in Node.js
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 24
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '302'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 25
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: appendix B Introduction to Grunt
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 26
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '305'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 27
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: appendix C Picking your build tool
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 28
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '313'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 29
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: appendix D JavaScript code quality guide
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 30
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '322'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 31
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: index
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 32
+                  states:
+                  - enabled
+                  - expandable
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '336'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 33
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: JavaScript Application Design-back
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 34
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '344'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 35
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: maps and atlases, especially of North America. His work as
+                    a mapmaker sparked an interest in local d
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 36
+                  states:
+                  - enabled
+                  - focusable
+                  - focused
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '27'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 37
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: 'a mapmaker sparked an interest in local dress customs of
+                    the lands he surveyed and mapped; they are '
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 38
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+                - role: table cell
+                  name: '27'
+                  object_name: ''
+                  accessible_id: ''
+                  description: ''
+                  actions:
+                  - Toggle
+                  index_in_parent: 39
+                  states:
+                  - enabled
+                  - focusable
+                  - selectable
+                  - sensitive
+                  - showing
+                  - transient
+                  - visible
+                  source: runtime
+          - role: form
+            name: Form_SheetBrowser
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - SetFocus
+            index_in_parent: 1
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            - showing
+            - visible
+            source: runtime
+            children:
+            - role: form
+              name: Form_qt_scrollarea_hcontainer
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 0
+              states:
+              - enabled
+              - sensitive
+              source: runtime
+            - role: form
+              name: Form_widget_2
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - SetFocus
+              index_in_parent: 1
+              states:
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: form
+              name: Form_qt_scrollarea_vcontainer
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 2
+              states:
+              - enabled
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+        - role: form
+          name: Form_DocTabBar
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 1
+          states:
+          - enabled
+          - sensitive
+          source: runtime
+          children:
+          - role: page tab list
+            name: normal.pdf
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions: []
+            index_in_parent: 0
+            states:
+            - enabled
+            - sensitive
+            source: runtime
+            children:
+            - role: page tab
+              name: normal.pdf
+              object_name: ''
+              accessible_id: ''
+              description: normal.pdf
+              actions:
+              - Press
+              index_in_parent: 0
+              states:
+              - enabled
+              - focused
+              - selectable
+              - selected
+              - sensitive
+              source: runtime
+            - role: button
+              name: 向左滚动
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 1
+              states:
+              - focusable
+              source: runtime
+            - role: button
+              name: 向右滚动
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - Press
+              - SetFocus
+              index_in_parent: 2
+              states:
+              - enabled
+              - focusable
+              - sensitive
+              source: runtime
+          - role: button
+            name: DTabBarAddButton
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            - SetFocus
+            index_in_parent: 1
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            source: runtime
+          - role: button
+            name: ''
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions: []
+            index_in_parent: 2
+            states:
+            - focusable
+            source: runtime
+          - role: button
+            name: ''
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            - SetFocus
+            index_in_parent: 3
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            source: runtime
+  - role: form
+    name: Form_widget_3
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 1
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+  - role: form
+    name: Form_DMainWindowTitlebar
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 2
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+    children:
+    - role: label
+      name: DTitlebarCenterArea
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - enabled
+      - read_only
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+    - role: form
+      name: Form_DTitlebarTopHorizontalLine
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 1
+      states:
+      - enabled
+      - sensitive
+      source: runtime
+    - role: form
+      name: Form_DTitlebarHorizontalLine
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 2
+      states:
+      - enabled
+      - sensitive
+      source: runtime
+    - role: form
+      name: Form_DTitlebarLeftArea
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 3
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: button
+        name: DTitlebarIconLabel
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+      - role: form
+        name: Form_TitleWidget
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 1
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: check box
+          name: ''
+          object_name: ''
+          accessible_id: ''
+          description: 缩略图
+          actions:
+          - Toggle
+          - Press
+          - SetFocus
+          index_in_parent: 0
+          states:
+          - checkable
+          - checked
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: form
+          name: Form_widget
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 1
+          states:
+          - enabled
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          children:
+          - role: form
+            name: Form_scaleEdit_P
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - SetFocus
+            index_in_parent: 0
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            - showing
+            - visible
+            source: runtime
+            children:
+            - role: text
+              name: DLineEditChildLineEdit
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - SetFocus
+              index_in_parent: 0
+              states:
+              - editable
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+            - role: button
+              name: ''
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - Press
+              - SetFocus
+              index_in_parent: 1
+              states:
+              - enabled
+              - focusable
+              - sensitive
+              - showing
+              - visible
+              source: runtime
+          - role: button
+            name: ''
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            - SetFocus
+            index_in_parent: 1
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            - showing
+            - visible
+            source: runtime
+          - role: button
+            name: ''
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            - SetFocus
+            index_in_parent: 2
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            - showing
+            - visible
+            source: runtime
+      - role: label
+        name: normal.pdf
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 2
+        states:
+        - enabled
+        - read_only
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+    - role: form
+      name: Form_DTitlebarRightArea
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 4
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: form
+        name: Form_DTitlebarButtonArea
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: button
+          name: DTitlebarDWindowOptionButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 0
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: button
+          name: DTitlebarDWindowMinButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 1
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: button
+          name: DTitlebarDWindowMaxButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 2
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: button
+          name: DTitlebarDWindowQuitFullscreenButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 3
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          source: runtime
+        - role: button
+          name: DTitlebarDWindowCloseButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 4
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+  - role: form
+    name: Form_DMainWindowTitleShadowLine
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 3
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+  - role: form
+    name: Form_widget_4
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 4
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+    children:
+    - role: form
+      name: Form_widget_5
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+    - role: form
+      name: Form_findSearchEdit_P
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions:
+      - SetFocus
+      index_in_parent: 1
+      states:
+      - enabled
+      - focusable
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: text
+        name: DLineEditChildLineEdit
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - SetFocus
+        index_in_parent: 0
+        states:
+        - editable
+        - enabled
+        - focusable
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: button
+          name: DLineEditClearButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          index_in_parent: 0
+          states:
+          - enabled
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: button
+          name: DSearchEditIconButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          index_in_parent: 1
+          states:
+          - enabled
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+        - role: form
+          name: Form_DSearchEditIconWidget
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 2
+          states:
+          - enabled
+          - sensitive
+          source: runtime
+          children:
+          - role: button
+            name: DSearchEditIconButton
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            index_in_parent: 0
+            states:
+            - enabled
+            - sensitive
+            source: runtime
+          - role: label
+            name: DSearchEditPlaceHolderLabel
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions: []
+            index_in_parent: 1
+            states:
+            - enabled
+            - read_only
+            - sensitive
+            source: runtime
+    - role: button
+      name: ''
+      object_name: ''
+      accessible_id: ''
+      description: 上一个
+      actions: []
+      index_in_parent: 2
+      states:
+      - focusable
+      - showing
+      - visible
+      source: runtime
+    - role: button
+      name: ''
+      object_name: ''
+      accessible_id: ''
+      description: 下一个
+      actions: []
+      index_in_parent: 3
+      states:
+      - focusable
+      - showing
+      - visible
+      source: runtime
+    - role: button
+      name: ''
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions:
+      - Press
+      - SetFocus
+      index_in_parent: 4
+      states:
+      - enabled
+      - focusable
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+- role: popup menu
+  name: DTitlebarMainMenu
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions: []
+  index_in_parent: 1
+  states:
+  - enabled
+  - resizable
+  - sensitive
+  source: runtime
+- role: form
+  name: Form_Tips
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions: []
+  index_in_parent: 2
+  states:
+  - enabled
+  - sensitive
+  source: runtime

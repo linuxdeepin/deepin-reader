@@ -1,0 +1,30 @@
+name: 主界面 — 无文档打开_suite
+app: deepin-reader
+description: ''
+module: 主界面 — 无文档打开
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_main_no_doc_s1
+  name: 启动 deepin-reader，不打开任何文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+  assert_steps:
+  - action: assert_element
+    ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

@@ -1,0 +1,2736 @@
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, _Bool>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, signed char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, wchar_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, char16_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, char32_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, float>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, long double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/base/optional.h
+base_classes:
+- __hash_base<size_t, nullptr_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_InsertWord
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_InsertReturn
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_ReplaceSelection
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_Backspace
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_Delete
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_Clear
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFXEU_InsertText
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_impl.h
+base_classes:
+- IFX_Edit_UndoItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFX_KeyValue
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fxjs/cfx_keyvalue.h
+base_classes:
+- CFX_Value
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: vertex_dist_cmd
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/third_party/agg23/agg_vertex_sequence.h
+base_classes:
+- vertex_dist
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfTextAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfSquareAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfCIRCLEAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfHightLightAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfLinkAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfWidgetAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfUnknownAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfUnderlineAnnot
+source_file: 3rdparty/deepin-pdfium/include/dpdfannot.h
+base_classes:
+- DPdfAnnot
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfDoc
+source_file: 3rdparty/deepin-pdfium/include/dpdfdoc.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfMutexLocker
+source_file: 3rdparty/deepin-pdfium/include/dpdfglobal.h
+base_classes:
+- QMutexLocker
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DPdfPage
+source_file: 3rdparty/deepin-pdfium/include/dpdfpage.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, _Bool>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, signed char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, wchar_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, char16_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, char32_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, unsigned long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, float>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, long double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/base/optional.h
+base_classes:
+- __hash_base<size_t, nullptr_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TCoverageFormat1
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+base_classes:
+- TCoverageFormatBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TCoverageFormat2
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+base_classes:
+- TCoverageFormatBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TSubTable1
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+base_classes:
+- TSubTableBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TSubTable2
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+base_classes:
+- TSubTableBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, _Bool>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, signed char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, unsigned char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, wchar_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, char16_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, char32_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, unsigned short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, unsigned int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, unsigned long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, unsigned long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, float>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, long double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, nullptr_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, wstring_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, u16string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, u32string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, wstring>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, u16string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, u32string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_string_base<pmr::string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_string_base<pmr::u16string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_string_base<pmr::u32string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_string_base<pmr::wstring>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, error_code>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+base_classes:
+- __hash_base<size_t, error_condition>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: IFX_ArchiveStream
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+base_classes:
+- IFX_WriteStream
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: IFX_SeekableWriteStream
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+base_classes:
+- IFX_StreamWithSize
+- IFX_RetainableWriteStream
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: IFX_SeekableReadStream
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+base_classes:
+- IFX_StreamWithSize
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: IFX_SeekableStream
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+base_classes:
+- IFX_SeekableReadStream
+- IFX_SeekableWriteStream
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, _Bool>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, signed char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, unsigned char>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, wchar_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, char16_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, char32_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, unsigned short>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, unsigned int>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, unsigned long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, unsigned long long>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, float>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, long double>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, nullptr_t>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, wstring_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, u16string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, u32string_view>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, wstring>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, u16string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, u32string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_string_base<pmr::string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_string_base<pmr::u16string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_string_base<pmr::u32string>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_string_base<pmr::wstring>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, error_code>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: hash
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+base_classes:
+- __hash_base<size_t, error_condition>
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFX_RetainableGraphStateData
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxge/cfx_graphstatedata.h
+base_classes:
+- CFX_GraphStateData
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFX_RetainablePathData
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxge/cfx_pathdata.h
+base_classes:
+- CFX_PathData
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CPDF_NonConstObjectWalker
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_walker.h
+base_classes:
+- CPDF_ObjectWalker
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FlatePredictorScanlineDecoder
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxcodec/flate/flatemodule.cpp
+base_classes:
+- FlateScanlineDecoder
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CFX_BilinearMatrix
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagetransformer.cpp
+base_classes:
+- CPDF_FixedMatrix
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AutoClosedQCommand
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_appstream.cpp
+base_classes:
+- AutoClosedCommand
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CPDF_PageExporter
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/fpdf_ppo.cpp
+base_classes:
+- CPDF_PageOrganizer
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CPDF_NPageToOneExporter
+source_file: 3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium/fpdfsdk/fpdf_ppo.cpp
+base_classes:
+- CPDF_PageOrganizer
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Holder
+source_file: 3rdparty/deepin-pdfium/src/dpdfglobal.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Holder
+source_file: 3rdparty/deepin-pdfium/src/dpdfglobal.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Application
+source_file: reader/Application.cpp
+base_classes:
+- DApplication
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Application
+source_file: reader/Application.h
+base_classes:
+- DApplication
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: MainWindow
+source_file: reader/MainWindow.cpp
+base_classes:
+- Dtk::Widget::DMainWindow
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DMainWindow
+- DMainWindow
+---
+class_name: MainWindow
+source_file: reader/MainWindow.h
+base_classes:
+- Dtk::Widget::DMainWindow
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DBusObject
+source_file: reader/app/DBusObject.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DBusObject
+source_file: reader/app/DBusObject.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Database
+source_file: reader/app/Database.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Database
+source_file: reader/app/Database.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TMFunctionThread
+source_file: reader/app/TMFunctionThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TMFunctionThread
+source_file: reader/app/TMFunctionThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Utils
+source_file: reader/app/Utils.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Utils
+source_file: reader/app/Utils.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleMainWindow
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleCentral
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleCentralDocPage
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleCentralNavPage
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDocSheet
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDocTabBar
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleTitleWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleSheetSidebar
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleSheetBrowser
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleThumbnailWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleCatalogWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleBookMarkWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleNotesWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleSearchResWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleQFrame
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleQWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleQPushButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleQSlider
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+- QAccessibleValueInterface
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDFrame
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDWidget
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDBackgroundGroup
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDSwitchButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDFloatingButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDSearchEdit
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDPushButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDIconButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDCheckBox
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDCommandLinkButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDLabel
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+- QAccessibleTextInterface
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDTitlebar
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDToolButton
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDDialog
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AccessibleDFileDialog
+source_file: reader/app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserAnnotation
+source_file: reader/browser/BrowserAnnotation.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserAnnotation
+source_file: reader/browser/BrowserAnnotation.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReadMagnifierManager
+source_file: reader/browser/BrowserMagniFier.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserMagniFier
+source_file: reader/browser/BrowserMagniFier.cpp
+base_classes:
+- QLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReadMagnifierManager
+source_file: reader/browser/BrowserMagniFier.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserMagniFier
+source_file: reader/browser/BrowserMagniFier.h
+base_classes:
+- QLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserMenu
+source_file: reader/browser/BrowserMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserMenu
+source_file: reader/browser/BrowserMenu.h
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserPage
+source_file: reader/browser/BrowserPage.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserPage
+source_file: reader/browser/BrowserPage.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserWord
+source_file: reader/browser/BrowserWord.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BrowserWord
+source_file: reader/browser/BrowserWord.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PageRenderThread
+source_file: reader/browser/PageRenderThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PageRenderThread
+source_file: reader/browser/PageRenderThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PageSearchThread
+source_file: reader/browser/PageSearchThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PageSearchThread
+source_file: reader/browser/PageSearchThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SheetBrowser
+source_file: reader/browser/SheetBrowser.cpp
+base_classes:
+- Dtk::Widget::DGraphicsView
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SheetBrowser
+source_file: reader/browser/SheetBrowser.h
+base_classes:
+- Dtk::Widget::DGraphicsView
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DjVuPage
+source_file: reader/document/DjVuModel.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DjVuDocument
+source_file: reader/document/DjVuModel.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DjVuPage
+source_file: reader/document/DjVuModel.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DjVuDocument
+source_file: reader/document/DjVuModel.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Annotation
+source_file: reader/document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FormField
+source_file: reader/document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Page
+source_file: reader/document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Document
+source_file: reader/document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Annotation
+source_file: reader/document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FormField
+source_file: reader/document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Page
+source_file: reader/document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Document
+source_file: reader/document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFAnnotation
+source_file: reader/document/PDFModel.cpp
+base_classes:
+- Annotation
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFPage
+source_file: reader/document/PDFModel.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFDocument
+source_file: reader/document/PDFModel.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFAnnotation
+source_file: reader/document/PDFModel.h
+base_classes:
+- Annotation
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFPage
+source_file: reader/document/PDFModel.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PDFDocument
+source_file: reader/document/PDFModel.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: XpsDocumentAdapter
+source_file: reader/document/XpsDocumentAdapter.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: XpsPageAdapter
+source_file: reader/document/XpsDocumentAdapter.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: XpsDocumentAdapter
+source_file: reader/document/XpsDocumentAdapter.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: XpsPageAdapter
+source_file: reader/document/XpsDocumentAdapter.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: MLogger
+source_file: reader/logger.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: MLogger
+source_file: reader/logger.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BookMarkDelegate
+source_file: reader/sidebar/BookMarkDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DStyledItemDelegate
+---
+class_name: BookMarkDelegate
+source_file: reader/sidebar/BookMarkDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CatalogTreeView
+source_file: reader/sidebar/CatalogTreeView.cpp
+base_classes:
+- DTreeView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ActiveProxyStyle
+source_file: reader/sidebar/CatalogTreeView.cpp
+base_classes:
+- QProxyStyle
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CatalogModel
+source_file: reader/sidebar/CatalogTreeView.cpp
+base_classes:
+- QStandardItemModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: CatalogTreeView
+source_file: reader/sidebar/CatalogTreeView.h
+base_classes:
+- DTreeView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: NotesDelegate
+source_file: reader/sidebar/NotesDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DStyledItemDelegate
+---
+class_name: NotesDelegate
+source_file: reader/sidebar/NotesDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReadImageTask
+source_file: reader/sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- QRunnable
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReaderImageThreadPoolManager
+source_file: reader/sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- QThreadPool
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Holder
+source_file: reader/sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: Holder
+source_file: reader/sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReadImageTask
+source_file: reader/sidebar/ReaderImageThreadPoolManager.h
+base_classes:
+- QRunnable
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ReaderImageThreadPoolManager
+source_file: reader/sidebar/ReaderImageThreadPoolManager.h
+base_classes:
+- QThreadPool
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SearchResDelegate
+source_file: reader/sidebar/SearchResDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DStyledItemDelegate
+---
+class_name: SearchResDelegate
+source_file: reader/sidebar/SearchResDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SideBarImageListView
+source_file: reader/sidebar/SideBarImageListview.h
+base_classes:
+- DListView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SideBarImageViewModel
+source_file: reader/sidebar/SideBarImageViewModel.cpp
+base_classes:
+- QAbstractListModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SideBarImageViewModel
+source_file: reader/sidebar/SideBarImageViewModel.h
+base_classes:
+- QAbstractListModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ThumbnailDelegate
+source_file: reader/sidebar/ThumbnailDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DStyledItemDelegate
+---
+class_name: ThumbnailDelegate
+source_file: reader/sidebar/ThumbnailDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DocSheet
+source_file: reader/uiframe/DocSheet.cpp
+base_classes:
+- Dtk::Widget::DSplitter
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: LoadingWidget
+source_file: reader/uiframe/DocSheet.cpp
+base_classes:
+- QWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DocSheet
+source_file: reader/uiframe/DocSheet.h
+base_classes:
+- Dtk::Widget::DSplitter
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: LoadingWidget
+source_file: reader/uiframe/DocSheet.h
+base_classes:
+- QWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: DocTabBar
+source_file: reader/uiframe/DocTabBar.cpp
+base_classes:
+- DTabBar
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DTabBar
+---
+class_name: DocTabBar
+source_file: reader/uiframe/DocTabBar.h
+base_classes:
+- DTabBar
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SheetRenderer
+source_file: reader/uiframe/SheetRenderer.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SheetRenderer
+source_file: reader/uiframe/SheetRenderer.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TitleMenu
+source_file: reader/uiframe/TitleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TitleMenu
+source_file: reader/uiframe/TitleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: AttrScrollWidget
+source_file: reader/widgets/AttrScrollWidget.cpp
+base_classes:
+- Dtk::Widget::DFrame
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFrame
+---
+class_name: AttrScrollWidget
+source_file: reader/widgets/AttrScrollWidget.h
+base_classes:
+- Dtk::Widget::DFrame
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BaseWidget
+source_file: reader/widgets/BaseWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: BaseWidget
+source_file: reader/widgets/BaseWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ColorWidgetAction
+source_file: reader/widgets/ColorWidgetAction.cpp
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ColorWidgetAction
+source_file: reader/widgets/ColorWidgetAction.h
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: EncryptionPage
+source_file: reader/widgets/EncryptionPage.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FileAttrWidget
+source_file: reader/widgets/FileAttrWidget.cpp
+base_classes:
+- DAbstractDialog
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DAbstractDialog
+---
+class_name: ImageWidget
+source_file: reader/widgets/FileAttrWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FileAttrWidget
+source_file: reader/widgets/FileAttrWidget.h
+base_classes:
+- DAbstractDialog
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: FindWidget
+source_file: reader/widgets/FindWidget.cpp
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFloatingWidget
+---
+class_name: FindWidget
+source_file: reader/widgets/FindWidget.h
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: HandleMenu
+source_file: reader/widgets/HandleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PagingWidget
+source_file: reader/widgets/PagingWidget.h
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ProgressDialog
+source_file: reader/widgets/ProgressDialog.cpp
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DDialog
+---
+class_name: ProgressDialog
+source_file: reader/widgets/ProgressDialog.h
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: RoundColorWidget
+source_file: reader/widgets/RoundColorWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: RoundColorWidget
+source_file: reader/widgets/RoundColorWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SaveDialog
+source_file: reader/widgets/SaveDialog.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SaveDialog
+source_file: reader/widgets/SaveDialog.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ScaleMenu
+source_file: reader/widgets/ScaleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ScaleMenu
+source_file: reader/widgets/ScaleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ScaleWidget
+source_file: reader/widgets/ScaleWidget.cpp
+base_classes:
+- Dtk::Widget::DWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ScaleWidget
+source_file: reader/widgets/ScaleWidget.h
+base_classes:
+- Dtk::Widget::DWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SecurityDialog
+source_file: reader/widgets/SecurityDialog.cpp
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DDialog
+---
+class_name: SecurityDialog
+source_file: reader/widgets/SecurityDialog.h
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ShortCutShow
+source_file: reader/widgets/ShortCutShow.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: KeyDataList
+source_file: reader/widgets/ShortCutShow.cpp
+base_classes:
+- QList<std::pair<QString, QString> >
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: ShortCutShow
+source_file: reader/widgets/ShortCutShow.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: KeyDataList
+source_file: reader/widgets/ShortCutShow.h
+base_classes:
+- QList<std::pair<QString, QString> >
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SlidePlayWidget
+source_file: reader/widgets/SlidePlayWidget.cpp
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFloatingWidget
+---
+class_name: SlidePlayWidget
+source_file: reader/widgets/SlidePlayWidget.h
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SlideWidget
+source_file: reader/widgets/SlideWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: SlideWidget
+source_file: reader/widgets/SlideWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TextEditWidget
+source_file: reader/widgets/TextEditWidget.cpp
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TextEditWidget
+source_file: reader/widgets/TextEditWidget.h
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TextEditShadowWidget
+source_file: reader/widgets/TextEditWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TipsWidget
+source_file: reader/widgets/TipsWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TipsWidget
+source_file: reader/widgets/TipsWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TransparentTextEdit
+source_file: reader/widgets/TransparentTextEdit.h
+base_classes:
+- QTextEdit
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: WordWrapLabel
+source_file: reader/widgets/WordWrapLabel.cpp
+base_classes:
+- DLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DLabel
+---
+class_name: WordWrapLabel
+source_file: reader/widgets/WordWrapLabel.h
+base_classes:
+- DLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []

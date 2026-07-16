@@ -1,0 +1,60 @@
+name: 右键缩放区域菜单_suite
+app: deepin-reader
+description: ''
+module: 右键缩放区域菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_scale_s1
+  name: 启动 deepin-reader 并打开文档
+  description: ''
+  tags: []
+  steps:
+  # 百分编辑右边的下拉没有元素
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 双页显示
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 默认大小
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适合页面
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适应高度
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适应宽度
+  assert_steps:
+  - action: assert_element
+    ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

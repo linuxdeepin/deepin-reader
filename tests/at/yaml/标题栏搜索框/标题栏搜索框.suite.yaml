@@ -1,0 +1,44 @@
+name: 标题栏搜索框_suite
+app: deepin-reader
+description: ''
+module: 标题栏搜索框
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_titlebar_search_s1
+  name: 启动 deepin-reader并打开文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n243
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: keyboard_type_text
+    text: test
+  - action: keyboard_press
+    key: return
+  - action: mouse_click
+    ref: n244
+    selector:
+      name: DLineEditClearButton
+      role: button
+  assert_steps:
+  - action: assert_element
+    ref: n243
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    ref: n243
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+teardown:
+- action: session_stop

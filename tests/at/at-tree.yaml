@@ -1,0 +1,460 @@
+version: '1.0'
+tree:
+- id: n0
+  role: form
+  name: Form_DMainWindow
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: ''
+  annotation_status: draft
+  children:
+  - id: n1
+    role: form
+    name: Form_Central
+    object_name: ''
+    accessible_id: ''
+    classification: container
+    comment: ''
+    annotation_status: draft
+    children:
+    - id: n2
+      role: form
+      name: Form_widget_1
+      object_name: ''
+      accessible_id: ''
+      classification: container
+      comment: ''
+      annotation_status: draft
+      children:
+      - id: n3
+        role: form
+        name: Form_CentralNavPage
+        object_name: ''
+        accessible_id: ''
+        classification: container
+        comment: ''
+        annotation_status: draft
+        children:
+        - id: n6
+          role: button
+          name: Button_SelectFile
+          object_name: ''
+          accessible_id: ''
+          classification: interactive
+          comment: 'GUI位置: 中央空白页(无文件打开时) | 功能: 打开文件选择对话框'
+          annotation_status: reviewed
+        - id: n7
+          role: image
+          name: Label_Icon
+          object_name: ''
+          accessible_id: ''
+          classification: container
+          comment: ''
+          annotation_status: draft
+      - id: n8
+        role: form
+        name: Form_CentralDocPage
+        object_name: ''
+        accessible_id: ''
+        classification: container
+        comment: ''
+        annotation_status: draft
+        children:
+        - id: n9
+          role: form
+          name: Form_DocSheet
+          object_name: ''
+          accessible_id: ''
+          classification: container
+          comment: ''
+          annotation_status: draft
+          children:
+          - id: n10
+            role: form
+            name: Form_SheetSidebar
+            object_name: ''
+            accessible_id: ''
+            classification: container
+            comment: ''
+            annotation_status: draft
+            children:
+            - id: n11
+              role: form
+              name: Form_SearchResWidget
+              object_name: ''
+              accessible_id: ''
+              classification: container
+              comment: ''
+              annotation_status: draft
+              children:
+              - id: n13
+                role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                classification: container
+                comment: ''
+                annotation_status: draft
+            - id: n14
+              role: check box
+              name: Button_thumbnail
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 左侧栏顶部按钮组 | 功能: 切换到缩略图视图'
+              annotation_status: reviewed
+            - id: n15
+              role: check box
+              name: Button_catalog
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 左侧栏顶部按钮组 | 功能: 切换到目录视图'
+              annotation_status: reviewed
+            - id: n16
+              role: check box
+              name: Button_bookmark
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 左侧栏顶部按钮组 | 功能: 切换到书签视图'
+              annotation_status: reviewed
+            - id: n17
+              role: check box
+              name: Button_annotation
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 左侧栏顶部按钮组 | 功能: 切换到批注视图'
+              annotation_status: reviewed
+            - id: n18
+              role: check box
+              name: Button_search
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 左侧栏顶部按钮组 | 功能: 切换到搜索视图'
+              annotation_status: reviewed
+            - id: n19
+              role: form
+              name: Form_BookMarkWidget
+              object_name: ''
+              accessible_id: ''
+              classification: container
+              comment: ''
+              annotation_status: draft
+              children:
+              - id: n20
+                role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                classification: container
+                comment: ''
+                annotation_status: draft
+              - id: n22
+                role: button
+                name: Button_BookmarkAdd
+                object_name: ''
+                accessible_id: ''
+                classification: interactive
+                comment: 'GUI位置: 左侧栏书签视图底部 | 功能: 添加书签'
+                annotation_status: reviewed
+            - id: n24
+              role: form
+              name: Form_NotesWidget
+              object_name: ''
+              accessible_id: ''
+              classification: container
+              comment: ''
+              annotation_status: draft
+              children:
+              - id: n25
+                role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                classification: container
+                comment: ''
+                annotation_status: draft
+              - id: n49
+                role: button
+                name: Button_NotesAdd
+                object_name: ''
+                accessible_id: ''
+                classification: interactive
+                comment: 'GUI位置: 左侧栏批注视图底部 | 功能: 添加批注'
+                annotation_status: reviewed
+            - id: n51
+              role: form
+              name: Form_ThumbnailWidget
+              object_name: ''
+              accessible_id: ''
+              classification: container
+              comment: ''
+              annotation_status: draft
+              children:
+              - id: n52
+                role: list
+                name: View_ImageList
+                object_name: ''
+                accessible_id: ''
+                classification: container
+                comment: ''
+                annotation_status: draft
+              - id: n153
+                role: form
+                name: Form_Paging
+                object_name: ''
+                accessible_id: ''
+                classification: container
+                comment: ''
+                annotation_status: draft
+                children:
+                - id: n155
+                  role: form
+                  name: Form_Page
+                  object_name: ''
+                  accessible_id: ''
+                  classification: container
+                  comment: ''
+                  annotation_status: draft
+                  children:
+                  - id: n156
+                    role: text
+                    name: pageEdit
+                    object_name: ''
+                    accessible_id: ''
+                    classification: interactive
+                    comment: 'GUI位置: 左侧栏缩略图视图分页区 | 功能: 输入页码跳转'
+                    annotation_status: reviewed
+                - id: n158
+                  role: button
+                  name: Button_ThumbnailPre
+                  object_name: ''
+                  accessible_id: ''
+                  classification: interactive
+                  comment: 'GUI位置: 左侧栏缩略图视图分页区 | 功能: 上一页缩略图'
+                  annotation_status: reviewed
+                - id: n159
+                  role: button
+                  name: Button_ThumbnailNext
+                  object_name: ''
+                  accessible_id: ''
+                  classification: interactive
+                  comment: 'GUI位置: 左侧栏缩略图视图分页区 | 功能: 下一页缩略图'
+                  annotation_status: reviewed
+            - id: n161
+              role: form
+              name: Form_CatalogWidget
+              object_name: ''
+              accessible_id: ''
+              classification: container
+              comment: ''
+              annotation_status: draft
+              children:
+              - id: n163
+                role: tree
+                name: View_CatalogTree
+                object_name: ''
+                accessible_id: ''
+                classification: interactive
+                comment: 'GUI位置: 左侧栏目录视图 | 功能: 显示文档目录树'
+                annotation_status: reviewed
+        - id: n208
+          role: form
+          name: Form_DocTabBar
+          object_name: ''
+          accessible_id: ''
+          classification: container
+          comment: ''
+          annotation_status: draft
+          children:
+          - id: n209
+            role: page tab list
+            name: normal.pdf
+            object_name: ''
+            accessible_id: ''
+            classification: interactive
+            comment: 'GUI位置: 顶部标签页栏 | 功能: 已打开文档的标签页列表'
+            annotation_status: reviewed
+            children:
+            - id: n210
+              role: page tab
+              name: normal.pdf
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 顶部标签页栏 | 功能: normal.pdf文档标签页'
+              annotation_status: reviewed
+            - id: n211
+              role: button
+              name: 向左滚动
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 顶部标签页栏 | 功能: 标签页向左滚动'
+              annotation_status: reviewed
+            - id: n212
+              role: button
+              name: 向右滚动
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 顶部标签页栏 | 功能: 标签页向右滚动'
+              annotation_status: reviewed
+          - id: n213
+            role: button
+            name: DTabBarAddButton
+            object_name: ''
+            accessible_id: ''
+            classification: interactive
+            comment: 'GUI位置: 顶部标签页栏右侧 | 功能: 新建标签页'
+            annotation_status: reviewed
+  - id: n217
+    role: form
+    name: Form_DMainWindowTitlebar
+    object_name: ''
+    accessible_id: ''
+    classification: container
+    comment: ''
+    annotation_status: draft
+    children:
+    - id: n221
+      role: form
+      name: Form_DTitlebarLeftArea
+      object_name: ''
+      accessible_id: ''
+      classification: container
+      comment: ''
+      annotation_status: draft
+      children:
+      - id: n223
+        role: form
+        name: Form_TitleWidget
+        object_name: ''
+        accessible_id: ''
+        classification: container
+        comment: ''
+        annotation_status: draft
+        children:
+        - id: n225
+          role: form
+          name: Form_widget
+          object_name: ''
+          accessible_id: ''
+          classification: container
+          comment: ''
+          annotation_status: draft
+          children:
+          - id: n226
+            role: form
+            name: Form_scaleEdit_P
+            object_name: ''
+            accessible_id: ''
+            classification: container
+            comment: ''
+            annotation_status: draft
+            children:
+            - id: n227
+              role: text
+              name: DLineEditChildLineEdit
+              object_name: ''
+              accessible_id: ''
+              classification: interactive
+              comment: 'GUI位置: 标题栏缩放输入框 | 功能: 输入缩放比例'
+              annotation_status: reviewed
+  - id: n240
+    role: form
+    name: Form_widget_4
+    object_name: ''
+    accessible_id: ''
+    classification: container
+    comment: ''
+    annotation_status: draft
+    children:
+    - id: n242
+      role: form
+      name: Form_findSearchEdit_P
+      object_name: ''
+      accessible_id: ''
+      classification: container
+      comment: ''
+      annotation_status: draft
+      children:
+      - id: n243
+        role: text
+        name: DLineEditChildLineEdit
+        object_name: ''
+        accessible_id: ''
+        classification: interactive
+        comment: 'GUI位置: 标题栏搜索框 | 功能: 输入搜索关键词'
+        annotation_status: reviewed
+        children:
+        - id: n244
+          role: button
+          name: DLineEditClearButton
+          object_name: ''
+          accessible_id: ''
+          classification: interactive
+          comment: 'GUI位置: 标题栏搜索框内 | 功能: 清除搜索内容'
+          annotation_status: reviewed
+        - id: n245
+          role: button
+          name: DSearchEditIconButton
+          object_name: ''
+          accessible_id: ''
+          classification: interactive
+          comment: 'GUI位置: 标题栏搜索框内 | 功能: 搜索按钮'
+          annotation_status: reviewed
+        - id: n246
+          role: form
+          name: Form_DSearchEditIconWidget
+          object_name: ''
+          accessible_id: ''
+          classification: container
+          comment: ''
+          annotation_status: draft
+          children:
+          - id: n247
+            role: button
+            name: DSearchEditIconButton
+            object_name: ''
+            accessible_id: ''
+            classification: interactive
+            comment: 'GUI位置: 标题栏搜索框内 | 功能: 搜索按钮(图标)'
+            annotation_status: reviewed
+- id: n253
+  role: popup menu
+  name: DTitlebarThemeMenu
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: ''
+  annotation_status: draft
+  children:
+  - id: n254
+    role: menu item
+    name: 浅色
+    object_name: ''
+    accessible_id: ''
+    classification: interactive
+    comment: 'GUI位置: 标题栏主题菜单 | 功能: 切换到浅色主题'
+    annotation_status: reviewed
+  - id: n255
+    role: menu item
+    name: 深色
+    object_name: ''
+    accessible_id: ''
+    classification: interactive
+    comment: 'GUI位置: 标题栏主题菜单 | 功能: 切换到深色主题'
+    annotation_status: reviewed
+  - id: n256
+    role: menu item
+    name: 跟随系统
+    object_name: ''
+    accessible_id: ''
+    classification: interactive
+    comment: 'GUI位置: 标题栏主题菜单 | 功能: 主题跟随系统设置'
+    annotation_status: reviewed

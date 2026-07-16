@@ -1,0 +1,132 @@
+version: '1.0'
+app: deepin-reader
+summary:
+  total_interactive: 25
+  with_accessible_id: 0
+  missing_accessible_id: 25
+gaps:
+- id: n6
+  name: Button_SelectFile
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_SelectFile") in source code
+- id: n14
+  name: Button_thumbnail
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_thumbnail") in source code
+- id: n15
+  name: Button_catalog
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_catalog") in source code
+- id: n16
+  name: Button_bookmark
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_bookmark") in source code
+- id: n17
+  name: Button_annotation
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_annotation") in source code
+- id: n18
+  name: Button_search
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_search") in source code
+- id: n22
+  name: Button_BookmarkAdd
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_BookmarkAdd") in source code
+- id: n49
+  name: Button_NotesAdd
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_NotesAdd") in source code
+- id: n156
+  name: pageEdit
+  role: text
+  class_name: ''
+  suggestion: Add setAccessibleName("pageEdit") in source code
+- id: n158
+  name: Button_ThumbnailPre
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_ThumbnailPre") in source code
+- id: n159
+  name: Button_ThumbnailNext
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_ThumbnailNext") in source code
+- id: n163
+  name: View_CatalogTree
+  role: tree
+  class_name: ''
+  suggestion: Add setAccessibleName("View_CatalogTree") in source code
+- id: n209
+  name: normal.pdf
+  role: page tab list
+  class_name: ''
+  suggestion: Add setAccessibleName("normal.pdf") in source code
+- id: n210
+  name: normal.pdf
+  role: page tab
+  class_name: ''
+  suggestion: Add setAccessibleName("normal.pdf") in source code
+- id: n211
+  name: 向左滚动
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("向左滚动") in source code
+- id: n212
+  name: 向右滚动
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("向右滚动") in source code
+- id: n213
+  name: DTabBarAddButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTabBarAddButton") in source code
+- id: n227
+  name: DLineEditChildLineEdit
+  role: text
+  class_name: ''
+  suggestion: Add setAccessibleName("DLineEditChildLineEdit") in source code
+- id: n243
+  name: DLineEditChildLineEdit
+  role: text
+  class_name: ''
+  suggestion: Add setAccessibleName("DLineEditChildLineEdit") in source code
+- id: n244
+  name: DLineEditClearButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DLineEditClearButton") in source code
+- id: n245
+  name: DSearchEditIconButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DSearchEditIconButton") in source code
+- id: n247
+  name: DSearchEditIconButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DSearchEditIconButton") in source code
+- id: n254
+  name: 浅色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("浅色") in source code
+- id: n255
+  name: 深色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("深色") in source code
+- id: n256
+  name: 跟随系统
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("跟随系统") in source code

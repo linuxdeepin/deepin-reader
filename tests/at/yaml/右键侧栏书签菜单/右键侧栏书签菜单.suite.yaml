@@ -1,0 +1,64 @@
+name: 右键侧栏书签菜单_suite
+app: deepin-reader
+description: ''
+module: 右键侧栏书签菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_bookmark_s1
+  name: 启动应用
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加书签
+  - action: mouse_click
+    selector:
+      name: Button_bookmark
+      role: push button
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 删除书签
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加书签
+  - action: mouse_click
+    selector:
+      name: Button_bookmark
+      role: push button
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      role: list
+  # - action: dtk_context_menu
+  #   selector:
+  #     name: View_ImageList
+  #     role: list
+  #   items:
+  #   - 全部删除
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop
