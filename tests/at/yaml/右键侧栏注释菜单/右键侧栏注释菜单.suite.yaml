@@ -1,0 +1,78 @@
+name: 右键侧栏注释菜单_suite
+app: deepin-reader
+description: ''
+module: 右键侧栏注释菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_note_s1
+  name: 启动应用
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加注释
+  - action: mouse_click
+    selector:
+      name: Button_annotation
+      role: push button
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除注释
+  - action: mouse_click
+    selector:
+      name: Button_bookmark
+      role: push button
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加注释
+  - action: mouse_click
+    selector:
+      name: Button_annotation
+      role: push button
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 全部删除
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

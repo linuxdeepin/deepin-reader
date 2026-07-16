@@ -1,0 +1,34 @@
+name: 标题栏缩放输入框_suite
+app: deepin-reader
+description: ''
+module: 标题栏缩放输入框
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_titlebar_scale_s1
+  name: 启动 deepin-reader并打开文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: keyboard_type_text
+    text: '100'
+  - action: keyboard_press
+    key: return
+  assert_steps:
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+teardown:
+- action: session_stop

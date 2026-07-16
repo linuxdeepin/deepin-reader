@@ -1,0 +1,35 @@
+name: 左侧栏 — 书签视图_suite
+app: deepin-reader
+description: ''
+module: 左侧栏 — 书签视图
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_sidebar_bookmarks_s1
+  name: 启动 deepin-reader并打开文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+      role: check box
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+  assert_steps:
+  - action: assert_element
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+teardown:
+- action: session_stop

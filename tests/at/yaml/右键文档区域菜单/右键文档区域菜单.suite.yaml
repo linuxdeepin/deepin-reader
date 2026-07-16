@@ -1,0 +1,164 @@
+name: 右键文档区域菜单_suite
+app: deepin-reader
+description: ''
+module: 右键文档区域菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_doc_s1
+  name: 启动 deepin-reader 并打开文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 搜索
+  - action: keyboard_press
+    key: escape
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 最后一页
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 前一页
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 后一页
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 第一页
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加书签
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 添加注释
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 全屏
+  - action: keyboard_press
+    key: escape
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 幻灯片放映
+  - action: keyboard_press
+    key: escape
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 左旋转
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 右旋转
+  # - action: mouse_click
+  #   selector:
+  #     name: pageEdit
+  #     role: panel
+  # - action: dtk_context_menu
+  #   selector:
+  #     name: pageEdit
+  #     role: panel
+  #   items:
+  #   - 打印
+  - action: keyboard_press
+    key: escape
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: panel
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: panel
+    items:
+    - 文档信息
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

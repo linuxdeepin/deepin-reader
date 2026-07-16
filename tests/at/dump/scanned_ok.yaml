@@ -1,0 +1,88 @@
+---
+class_name: SideBarImageListView
+source_file: reader/sidebar/SideBarImageListview.cpp
+base_classes:
+- DListView
+is_ui_widget: true
+object_names:
+- sideBarImageListView
+- sideBarImageListViewViewport
+accessible_names:
+- Menu_Note
+- Menu_BookMark
+dtk_instantiations:
+- DListView
+---
+class_name: SideBarImageListView
+source_file: reader/sidebar/SideBarImageListview.cpp
+base_classes: []
+is_ui_widget: false
+object_names:
+- sideBarImageListView
+- sideBarImageListViewViewport
+accessible_names:
+- Menu_Note
+- Menu_BookMark
+dtk_instantiations:
+- DListView
+---
+class_name: EncryptionPage
+source_file: reader/widgets/EncryptionPage.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names:
+- passwdEdit
+- ensureBtn
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: HandleMenu
+source_file: reader/widgets/HandleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: false
+object_names:
+- defaultshape
+- handleshape
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: PagingWidget
+source_file: reader/widgets/PagingWidget.cpp
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names:
+- Edit_Page_P
+- Edit_Page
+- thumbnailPreBtn
+- thumbnailNextBtn
+accessible_names:
+- Label_TotalPage
+- Page
+- pageEdit
+- Button_ThumbnailPre
+- Button_ThumbnailNext
+- CurrentPage
+dtk_instantiations: []
+---
+class_name: TextEditShadowWidget
+source_file: reader/widgets/TextEditWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names:
+- TextEditShadowWidget
+accessible_names: []
+dtk_instantiations: []
+---
+class_name: TransparentTextEdit
+source_file: reader/widgets/TransparentTextEdit.cpp
+base_classes:
+- QTextEdit
+is_ui_widget: true
+object_names:
+- TransparentTextEdit
+accessible_names: []
+dtk_instantiations: []

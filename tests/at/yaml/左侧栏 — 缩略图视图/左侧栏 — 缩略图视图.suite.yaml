@@ -1,0 +1,39 @@
+name: 左侧栏 — 缩略图视图_suite
+app: deepin-reader
+description: ''
+module: 左侧栏 — 缩略图视图
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_sidebar_thumbnails_s1
+  name: 启动 deepin-reader并打开文档
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n14
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: mouse_click
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: backspace
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+teardown:
+- action: session_stop

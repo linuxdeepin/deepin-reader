@@ -1,0 +1,704 @@
+version: '1.0'
+metadata:
+  source: 文档查看器V25-用例.xlsx → cases_raw.yaml
+  normalized_at: '2026-07-16'
+  normalizer: LLM-assisted + human review
+  non_gui_cases:
+    count: 12
+    reason: 'll-cli terminal commands, not GUI automation'
+    case_ids:
+    - case_1704991
+    - case_1704989
+    - case_1704987
+    - case_1704985
+    - case_1704983
+    - case_1704981
+    - case_1704975
+    - case_1704971
+    - case_1704969
+    - case_1704967
+    - case_1704965
+    - case_1704963
+cases:
+- id: suite_main_no_doc
+  name: 主界面 — 无文档打开 — 打开文件
+  status: active
+  annotation:
+    测试界面: 主界面 — 无文档打开
+    测试功能: 打开文件
+    前置条件: deepin-reader 已启动，未打开任何文档
+    AT元素引用: Button_SelectFile
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader，不打开任何文档
+    action: session_start
+  - step_type: assert
+    description: 主界面显示打开文件按钮(Button_SelectFile)
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+    action: assert_visible
+  - step_type: action
+    description: 点击打开文件按钮
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+    action: click
+  - step_type: assert
+    description: 弹出系统文件选择对话框
+    action: assert_visible
+- id: suite_sidebar_tabs
+  name: 左侧栏 — 按钮切换 — 缩略图/目录/书签/注释
+  status: active
+  annotation:
+    测试界面: 左侧栏 — 按钮切换
+    测试功能: 侧边栏四个功能按钮切换（缩略图/目录/书签/注释）
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: Button_thumbnail, Button_catalog, Button_bookmark, Button_annotation,
+      Button_search, View_CatalogTree, Button_BookmarkAdd, Button_NotesAdd
+  steps:
+  - step_type: action
+    description: 打开文档，展开左侧栏，点击缩略图按钮
+    element_ref: n14
+    selector:
+      name: Button_thumbnail
+      role: check box
+    action: click
+  - step_type: assert
+    description: 显示缩略图视图，含页数输入框和翻页按钮
+    element_ref: n14
+    selector:
+      name: Button_thumbnail
+      role: check box
+    action: assert_checked
+  - step_type: action
+    description: 点击目录按钮
+    element_ref: n15
+    selector:
+      name: Button_catalog
+      role: check box
+    action: click
+  - step_type: assert
+    description: 显示目录视图(View_CatalogTree)
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      role: tree
+    action: assert_visible
+  - step_type: action
+    description: 点击书签按钮
+    element_ref: n16
+    selector:
+      name: Button_bookmark
+      role: check box
+    action: click
+  - step_type: assert
+    description: 显示书签视图，含添加书签按钮(Button_BookmarkAdd)
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    action: assert_visible
+  - step_type: action
+    description: 点击注释按钮
+    element_ref: n17
+    selector:
+      name: Button_annotation
+      role: check box
+    action: click
+  - step_type: assert
+    description: 显示注释视图，含添加注释按钮(Button_NotesAdd)
+    element_ref: n49
+    selector:
+      name: Button_NotesAdd
+      role: button
+    action: assert_visible
+- id: suite_sidebar_thumbnails
+  name: 左侧栏 — 缩略图视图 — 分页导航
+  status: active
+  annotation:
+    测试界面: 左侧栏 — 缩略图视图
+    测试功能: 缩略图分页导航
+    前置条件: deepin-reader 已打开一个多页 PDF 文档，左侧栏展开且选中缩略图视图
+    AT元素引用: pageEdit, Button_ThumbnailPre, Button_ThumbnailNext, DLineEditChildLineEdit
+  steps:
+  - step_type: action
+    description: 删除底部页数框(pageEdit)中的数值
+    element_ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    action: clear
+  - step_type: action
+    description: 点击窗口内其他位置
+    action: click
+  - step_type: assert
+    description: 输入框中应该再次显示最近一次的数据
+    element_ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    action: assert_visible
+- id: suite_tab_management
+  name: 顶部标签页栏 — 添加/滚动/切换
+  status: active
+  annotation:
+    测试界面: 顶部标签页栏
+    测试功能: 标签页添加、滚动、关闭
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: normal.pdf, DTabBarAddButton, 向左滚动, 向右滚动
+  steps:
+  - step_type: action
+    description: 点击新建标签页按钮(DTabBarAddButton)
+    element_ref: n213
+    selector:
+      name: DTabBarAddButton
+      role: button
+    action: click
+  - step_type: assert
+    description: 标签栏需全部占满，无空出区域；标签页最小140px
+    element_ref: n209
+    selector:
+      name: normal.pdf
+      role: page tab list
+    action: assert_visible
+  - step_type: action
+    description: 点击左移按钮
+    element_ref: n211
+    selector:
+      name: 向左滚动
+      role: button
+    action: click
+  - step_type: assert
+    description: 标签页正常向左滚动
+    element_ref: n211
+    selector:
+      name: 向左滚动
+      role: button
+    action: assert_visible
+  - step_type: action
+    description: 点击右移按钮
+    element_ref: n212
+    selector:
+      name: 向右滚动
+      role: button
+    action: click
+  - step_type: assert
+    description: 标签页正常向右滚动
+    element_ref: n212
+    selector:
+      name: 向右滚动
+      role: button
+    action: assert_visible
+- id: suite_titlebar_search
+  name: 标题栏搜索框 — 关键字输入/清除/搜索
+  status: active
+  annotation:
+    测试界面: 标题栏搜索框
+    测试功能: 搜索关键字输入、清除、搜索执行
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: DLineEditChildLineEdit, DLineEditClearButton, DSearchEditIconButton
+  steps:
+  - step_type: action
+    description: 点击搜索框输入关键字
+    element_ref: n243
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    action: input
+  - step_type: action
+    description: 点击键盘enter键搜索
+    action: keyboard_press_key
+  - step_type: assert
+    description: 正常显示搜索结果
+    action: assert_visible
+  - step_type: action
+    description: 点击搜索框右侧清除按钮(DLineEditClearButton)
+    element_ref: n244
+    selector:
+      name: DLineEditClearButton
+      role: button
+    action: click
+  - step_type: assert
+    description: 可以正常关闭搜索，搜索框和搜索结果都会消失
+    action: assert_not_visible
+- id: suite_titlebar_scale
+  name: 标题栏缩放输入框 — 缩放比例输入
+  status: active
+  annotation:
+    测试界面: 标题栏缩放输入框
+    测试功能: 缩放比例输入
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: DLineEditChildLineEdit
+  steps:
+  - step_type: action
+    description: 点击百分比图标编辑框输入数值
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    action: click
+  - step_type: action
+    description: 输入新的缩放比例
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    action: input
+  - step_type: assert
+    description: 文档按输入的缩放比例显示
+    action: assert_visible
+- id: suite_theme_menu
+  name: 标题栏主题菜单 — 浅色/深色/跟随系统切换
+  status: active
+  annotation:
+    测试界面: 标题栏主题菜单
+    测试功能: 浅色/深色/跟随系统主题切换
+    前置条件: deepin-reader 已打开，标题栏主题菜单已展开
+    AT元素引用: 浅色, 深色, 跟随系统
+  steps:
+  - step_type: action
+    description: 点击工具栏中的菜单键，鼠标放置在主题菜单上
+    action: dtk_main_menu
+  - step_type: assert
+    description: 弹出三个主题菜单：浅色、深色、跟随主题
+    element_ref: n254
+    selector:
+      name: 浅色
+      role: menu item
+    action: assert_visible
+  - step_type: action
+    description: 点击浅色主题
+    element_ref: n254
+    selector:
+      name: 浅色
+      role: menu item
+    action: click
+  - step_type: assert
+    description: 应用切换到浅色主题
+    action: assert_visible
+  - step_type: action
+    description: 重新打开主题菜单，点击深色主题
+    element_ref: n255
+    selector:
+      name: 深色
+      role: menu item
+    action: click
+  - step_type: assert
+    description: 应用切换到深色主题
+    action: assert_visible
+  - step_type: action
+    description: 重新打开主题菜单，点击跟随系统
+    element_ref: n256
+    selector:
+      name: 跟随系统
+      role: menu item
+    action: click
+  - step_type: assert
+    description: 应用主题跟随系统设置
+    action: assert_visible
+- id: suite_sidebar_catalog
+  name: 左侧栏 — 目录视图 — 目录树显示和点击跳转
+  status: active
+  annotation:
+    测试界面: 左侧栏 — 目录视图
+    测试功能: 目录树显示和点击跳转
+    前置条件: deepin-reader 已打开一个有目录的 PDF 文档，左侧栏展开且选中目录视图
+    AT元素引用: Button_catalog, View_CatalogTree
+  steps:
+  - step_type: action
+    description: 展开左侧栏，点击目录按钮
+    element_ref: n15
+    selector:
+      name: Button_catalog
+      role: check box
+    action: click
+  - step_type: assert
+    description: 显示目录树(View_CatalogTree)
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      role: tree
+    action: assert_visible
+  - step_type: action
+    description: 点击目录树中任意一个目录项
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      role: tree
+    action: click
+  - step_type: assert
+    description: 右侧文档跳转到对应页面
+    action: assert_visible
+- id: suite_sidebar_bookmarks
+  name: 左侧栏 — 书签视图 — 添加书签
+  status: active
+  annotation:
+    测试界面: 左侧栏 — 书签视图
+    测试功能: 添加书签
+    前置条件: deepin-reader 已打开一个 PDF 文档，左侧栏展开且选中书签视图
+    AT元素引用: Button_bookmark, Button_BookmarkAdd
+  steps:
+  - step_type: action
+    description: 切换到书签视图
+    element_ref: n16
+    selector:
+      name: Button_bookmark
+      role: check box
+    action: click
+  - step_type: action
+    description: 点击添加书签按钮
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    action: click
+  - step_type: assert
+    description: 当前页正常添加书签，左边栏显示书签缩略图
+    action: assert_visible
+- id: suite_titlebar_main_menu
+  name: 标题栏主菜单 — 所有菜单项导航
+  status: active
+  annotation:
+    测试界面: 标题栏主菜单
+    测试功能: 主菜单所有菜单项导航测试
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: Button_SelectFile
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+  - step_type: action
+    description: 打开主菜单，选择"新建窗口"
+    action: dtk_main_menu
+    items:
+    - 新建窗口
+  - step_type: action
+    description: 打开主菜单，选择"新建标签页"
+    action: dtk_main_menu
+    items:
+    - 新建标签页
+  - step_type: action
+    description: 打开主菜单，选择"保存"
+    action: dtk_main_menu
+    items:
+    - 保存
+  - step_type: action
+    description: 打开主菜单，选择"另存为"
+    action: dtk_main_menu
+    items:
+    - 另存为
+  - step_type: action
+    description: 打开主菜单，选择"在文件管理器中显示"
+    action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  - step_type: action
+    description: 打开主菜单，选择"放大镜"
+    action: dtk_main_menu
+    items:
+    - 放大镜
+  - step_type: action
+    description: 打开主菜单，选择"工具" -> "选择文本"
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 选择文本
+  - step_type: action
+    description: 打开主菜单，选择"工具" -> "手型工具"
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 手型工具
+  - step_type: action
+    description: 打开主菜单，选择"搜索"
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 打开主菜单，选择"打印"
+    action: dtk_main_menu
+    items:
+    - 打印
+- id: suite_context_menu_doc
+  name: 右键文档区域菜单 — 所有菜单项
+  status: active
+  annotation:
+    测试界面: 右键文档区域菜单
+    测试功能: 文档右键菜单所有菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: Form_CentralDocPage
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+  - step_type: action
+    description: 在文档区域右键，选择"搜索"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 搜索
+  - step_type: action
+    description: 在文档区域右键，选择"添加书签"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 添加书签
+  - step_type: action
+    description: 在文档区域右键，选择"添加注释"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 添加注释
+  - step_type: action
+    description: 在文档区域右键，选择"全屏"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 全屏
+  - step_type: action
+    description: 在文档区域右键，选择"幻灯片放映"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 幻灯片放映
+  - step_type: action
+    description: 在文档区域右键，选择"首页"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 首页
+  - step_type: action
+    description: 在文档区域右键，选择"上一页"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 上一页
+  - step_type: action
+    description: 在文档区域右键，选择"下一页"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 下一页
+  - step_type: action
+    description: 在文档区域右键，选择"末页"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 末页
+  - step_type: action
+    description: 在文档区域右键，选择"左旋转"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 左旋转
+  - step_type: action
+    description: 在文档区域右键，选择"右旋转"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 右旋转
+  - step_type: action
+    description: 在文档区域右键，选择"打印"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 打印
+  - step_type: action
+    description: 在文档区域右键，选择"文档信息"
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 文档信息
+- id: suite_context_menu_scale
+  name: 右键缩放区域菜单 — 所有菜单项
+  status: active
+  annotation:
+    测试界面: 右键缩放区域菜单
+    测试功能: 缩放菜单所有菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: DLineEditChildLineEdit
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+  - step_type: action
+    description: 在缩放输入区域右键，选择"双页视图"
+    action: dtk_context_menu
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 双页视图
+  - step_type: action
+    description: 在缩放输入区域右键，选择"实际大小"
+    action: dtk_context_menu
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 实际大小
+  - step_type: action
+    description: 在缩放输入区域右键，选择"适合页面"
+    action: dtk_context_menu
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适合页面
+  - step_type: action
+    description: 在缩放输入区域右键，选择"适合高度"
+    action: dtk_context_menu
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适合高度
+  - step_type: action
+    description: 在缩放输入区域右键，选择"适合宽度"
+    action: dtk_context_menu
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    items:
+    - 适合宽度
+- id: suite_context_menu_note
+  name: 右键侧栏注释菜单 — 所有菜单项
+  status: active
+  annotation:
+    测试界面: 右键侧栏注释菜单
+    测试功能: 注释右键菜单所有菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档且侧栏有注释
+    AT元素引用: View_ImageList
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+  - step_type: action
+    description: 在侧栏注释列表右键，选择"复制"
+    action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 复制
+  - step_type: action
+    description: 在侧栏注释列表右键，选择"删除注释"
+    action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除注释
+  - step_type: action
+    description: 在侧栏注释列表右键，选择"删除全部"
+    action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除全部
+- id: suite_context_menu_bookmark
+  name: 右键侧栏书签菜单 — 所有菜单项
+  status: active
+  annotation:
+    测试界面: 右键侧栏书签菜单
+    测试功能: 书签右键菜单所有菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档且侧栏有书签
+    AT元素引用: View_ImageList
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+  - step_type: action
+    description: 在侧栏书签列表右键，选择"删除书签"
+    action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除书签
+  - step_type: action
+    description: 在侧栏书签列表右键，选择"删除全部"
+    action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除全部
+- id: suite_theme_menu_v2
+  name: 标题栏主题菜单 — 浅色/深色/跟随系统切换(items方式)
+  status: active
+  annotation:
+    测试界面: 标题栏主题菜单
+    测试功能: 浅色/深色/跟随系统主题切换
+    前置条件: deepin-reader 已打开，标题栏主题菜单可用
+    AT元素引用: Button_SelectFile, 浅色, 深色, 跟随系统
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader，不打开文档
+    action: session_start
+  - step_type: action
+    description: 打开主题菜单，选择"浅色"
+    action: dtk_main_menu
+    items:
+    - 浅色
+  - step_type: assert
+    description: 应用切换到浅色主题，主界面仍然响应
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+    action: assert_visible
+  - step_type: action
+    description: 打开主题菜单，选择"深色"
+    action: dtk_main_menu
+    items:
+    - 深色
+  - step_type: assert
+    description: 应用切换到深色主题，主界面仍然响应
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+    action: assert_visible
+  - step_type: action
+    description: 打开主题菜单，选择"跟随系统"
+    action: dtk_main_menu
+    items:
+    - 跟随系统
+  - step_type: assert
+    description: 应用主题跟随系统设置，主界面仍然响应
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      role: button
+    action: assert_visible

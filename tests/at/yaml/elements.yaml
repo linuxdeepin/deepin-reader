@@ -1,0 +1,181 @@
+elements:
+  n6:
+    name: Button_SelectFile
+    role: button
+  n14:
+    name: Button_thumbnail
+    role: check box
+  n15:
+    name: Button_catalog
+    role: check box
+  n163:
+    name: View_CatalogTree
+    role: tree
+  n16:
+    name: Button_bookmark
+    role: check box
+  n22:
+    name: Button_BookmarkAdd
+    role: button
+  n17:
+    name: Button_annotation
+    role: check box
+  n49:
+    name: Button_NotesAdd
+    role: button
+  n156:
+    name: pageEdit
+    role: text
+  n213:
+    name: DTabBarAddButton
+    role: button
+  n209:
+    name: normal.pdf
+    role: page tab list
+  n211:
+    name: 向左滚动
+    role: button
+  n212:
+    name: 向右滚动
+    role: button
+  n243:
+    name: DLineEditChildLineEdit
+    role: text
+  n244:
+    name: DLineEditClearButton
+    role: button
+  n227:
+    name: DLineEditChildLineEdit
+    role: text
+  n254:
+    name: 浅色
+    role: menu item
+  n255:
+    name: 深色
+    role: menu item
+  n256:
+    name: 跟随系统
+    role: menu item
+  pageEdit:
+    name: pageEdit
+    role: panel
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  Button_annotation:
+    name: Button_annotation
+    role: push button
+  View_ImageList:
+    name: View_ImageList
+    role: list
+  Button_bookmark:
+    name: Button_bookmark
+    role: push button
+  n0:
+    name: Form_DMainWindow
+    role: form
+  n1:
+    name: Form_Central
+    role: form
+  n2:
+    name: Form_widget_1
+    role: form
+  n3:
+    name: Form_CentralNavPage
+    role: form
+  n7:
+    name: Label_Icon
+    role: image
+  n8:
+    name: Form_CentralDocPage
+    role: form
+  n9:
+    name: Form_DocSheet
+    role: form
+  n10:
+    name: Form_SheetSidebar
+    role: form
+  n11:
+    name: Form_SearchResWidget
+    role: form
+  n13:
+    name: View_ImageList
+    role: list
+  n18:
+    name: Button_search
+    role: check box
+  n19:
+    name: Form_BookMarkWidget
+    role: form
+  n20:
+    name: View_ImageList
+    role: list
+  n24:
+    name: Form_NotesWidget
+    role: form
+  n25:
+    name: View_ImageList
+    role: list
+  n51:
+    name: Form_ThumbnailWidget
+    role: form
+  n52:
+    name: View_ImageList
+    role: list
+  n153:
+    name: Form_Paging
+    role: form
+  n155:
+    name: Form_Page
+    role: form
+  n158:
+    name: Button_ThumbnailPre
+    role: button
+  n159:
+    name: Button_ThumbnailNext
+    role: button
+  n161:
+    name: Form_CatalogWidget
+    role: form
+  n208:
+    name: Form_DocTabBar
+    role: form
+  n210:
+    name: normal.pdf
+    role: page tab
+  n217:
+    name: Form_DMainWindowTitlebar
+    role: form
+  n221:
+    name: Form_DTitlebarLeftArea
+    role: form
+  n223:
+    name: Form_TitleWidget
+    role: form
+  n225:
+    name: Form_widget
+    role: form
+  n226:
+    name: Form_scaleEdit_P
+    role: form
+  n240:
+    name: Form_widget_4
+    role: form
+  n242:
+    name: Form_findSearchEdit_P
+    role: form
+  n245:
+    name: DSearchEditIconButton
+    role: button
+  n246:
+    name: Form_DSearchEditIconWidget
+    role: form
+  n247:
+    name: DSearchEditIconButton
+    role: button
+  n253:
+    name: DTitlebarThemeMenu
+    role: popup menu
