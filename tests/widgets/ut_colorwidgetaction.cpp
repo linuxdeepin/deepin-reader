@@ -1,9 +1,11 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019-2026 ~ 2020 UnionTech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ColorWidgetAction.h"
+#include "RoundColorWidget.h"
+#include "Utils.h"
 
 #include "stub.h"
 
@@ -34,7 +36,6 @@ protected:
 
 TEST_F(TestColorWidgetAction, initTest)
 {
-
 }
 
 TEST_F(TestColorWidgetAction, testslotBtnClicked)
@@ -42,4 +43,44 @@ TEST_F(TestColorWidgetAction, testslotBtnClicked)
     QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
     m_tester->slotBtnClicked(0);
     EXPECT_EQ(spy.count(), 1);
+}
+
+TEST_F(TestColorWidgetAction, testslotBtnClickedAllIndices)
+{
+    // Color list has 8 colors per Utils::getHiglightColorList()
+    int colorCount = Utils::getHiglightColorList().size();
+    ASSERT_GT(colorCount, 0);
+
+    QColor lastSelectedColor;
+    for (int i = 0; i < colorCount; ++i) {
+        QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
+        m_tester->slotBtnClicked(i);
+        EXPECT_EQ(spy.count(), 1);
+        lastSelectedColor = Utils::getHiglightColorList().at(i);
+    }
+
+    // After iterating all buttons, the current color should match last selection
+    EXPECT_EQ(Utils::getCurHiglightColor(), lastSelectedColor);
+}
+
+TEST_F(TestColorWidgetAction, testslotBtnClickedInvalidIndex)
+{
+    // Invalid index should not crash and should not emit signal
+    QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
+    m_tester->slotBtnClicked(999);
+    EXPECT_EQ(spy.count(), 0);
+}
+
+TEST_F(TestColorWidgetAction, testDefaultWidgetPopulated)
+{
+    QWidget *defaultWidget = m_tester->defaultWidget();
+    ASSERT_NE(defaultWidget, nullptr);
+
+    auto buttons = defaultWidget->findChildren<RoundColorWidget *>();
+    EXPECT_GE(buttons.size(), 1);
+}
+
+TEST_F(TestColorWidgetAction, testSeparatorProperty)
+{
+    EXPECT_TRUE(m_tester->isSeparator());
 }
