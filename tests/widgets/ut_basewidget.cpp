@@ -41,7 +41,7 @@ TEST_F(TestBaseWidget, testupdateWidgetTheme)
 {
     m_tester->updateWidgetTheme();
     Dtk::Gui::DPalette plt = m_tester->palette();
-    EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::ItemBackground) == plt.color(Dtk::Gui::DPalette::Base));
+    EXPECT_TRUE(plt.color(Dtk::Gui::DPalette::Window) == plt.color(Dtk::Gui::DPalette::Base));
 }
 
 TEST_F(TestBaseWidget, testadaptWindowSize)

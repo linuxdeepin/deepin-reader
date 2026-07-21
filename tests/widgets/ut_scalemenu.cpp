@@ -97,11 +97,15 @@ TEST_F(TestScaleMenu, testonFitPage)
 TEST_F(TestScaleMenu, testonScaleFactor)
 {
     Stub s;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    s.set(ADDR(QList<QAction *>, indexOf), indexOf_stub);
-#endif
     s.set(ADDR(DocSheet, scaleFactorList), scaleFactorList_stub);
     m_tester->m_sheet->m_operation.scaleMode = Dr::FitToPageWidthMode;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Trigger an action's signal so sender() returns a valid QAction inside onScaleFactor
+    ASSERT_FALSE(m_tester->m_actionGroup.isEmpty());
+    emit m_tester->m_actionGroup.first()->triggered();
+#else
+    s.set(ADDR(QList<QAction *>, indexOf), indexOf_stub);
     m_tester->onScaleFactor();
+#endif
     EXPECT_TRUE(m_tester->m_sheet->m_operation.scaleMode == Dr::ScaleFactorMode);
 }

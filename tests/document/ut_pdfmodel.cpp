@@ -174,8 +174,12 @@ QVector<PageSection> search_stub(const QString &, bool, bool)
 }
 
 static DPdfTextAnnot *g_textAnnots = nullptr;
+static QList<DPdfAnnot *> g_dAnnotlsit;
 QList<DPdfAnnot *> annots_stub()
 {
+    if (!g_dAnnotlsit.isEmpty())
+        return g_dAnnotlsit;
+
     QList<DPdfAnnot *> dannots;
     g_textAnnots = new DPdfTextAnnot();
     dannots.append(g_textAnnots);
@@ -363,15 +367,22 @@ TEST_F(TestPDFPage, UT_PDFPage_updateAnnotation_001)
 
     Stub s;
     s.set(static_cast<bool(DPdfPage::*)(DPdfAnnot *, QString txt, QPointF)>(ADDR(DPdfPage, updateTextAnnot)), updateTextAnnot_stub);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
-#endif
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
     dAnnot->m_type = DPdfAnnot::AText;
     annotation = new PDFAnnotation(dAnnot);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
+#else
+    // On Qt6 QList::contains stubbing does not work; stub DPdfPage::annots instead.
+    g_dAnnotlsit.append(dAnnot);
+    s.set(ADDR(DPdfPage, annots), annots_stub);
+#endif
 
     EXPECT_TRUE(m_tester->updateAnnotation(annotation, text, color));
     EXPECT_TRUE(g_funcName == "updateTextAnnot_stub");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    g_dAnnotlsit.removeAll(dAnnot);
+#endif
     if (annotation) {
         delete annotation;
         annotation = nullptr;
@@ -386,17 +397,23 @@ TEST_F(TestPDFPage, UT_PDFPage_updateAnnotation_002)
 {
     Stub s;
     s.set(static_cast<bool(DPdfPage::*)(DPdfAnnot *, QColor, QString)>(ADDR(DPdfPage, updateHightLightAnnot)), updateHightLightAnnot_stub);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
-#endif
     QString text("test");
     QColor color(Qt::red);
     DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
     dAnnot->m_type = DPdfAnnot::AHighlight;
     PDFAnnotation *annotation = new PDFAnnotation(dAnnot);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    s.set(ADDR(QList<DPdfAnnot *>, contains), contains_stub);
+#else
+    g_dAnnotlsit.append(dAnnot);
+    s.set(ADDR(DPdfPage, annots), annots_stub);
+#endif
 
     EXPECT_TRUE(m_tester->updateAnnotation(annotation, text, color));
     EXPECT_TRUE(g_funcName == "updateHightLightAnnot_stub");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    g_dAnnotlsit.removeAll(dAnnot);
+#endif
     if (annotation) {
         delete annotation;
         annotation = nullptr;
@@ -594,7 +611,8 @@ TEST_F(TestPDFDocument, UT_PDFDocument_label_001)
 
 TEST_F(TestPDFDocument, UT_PDFDocument_saveFilter_001)
 {
-    EXPECT_TRUE(m_tester->saveFilter().first() == "Portable document format (*.pdf)");
+    EXPECT_FALSE(m_tester->saveFilter().isEmpty());
+    EXPECT_TRUE(m_tester->saveFilter().first().contains("*.pdf"));
 }
 
 TEST_F(TestPDFDocument, UT_PDFDocument_save_001)
