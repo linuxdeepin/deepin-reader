@@ -67,3 +67,11 @@ TEST_F(UT_ThumbnailDelegate, UT_ThumbnailDelegate_drawBookMark)
     EXPECT_TRUE(m_pView != nullptr);
     delete painter;
 }
+
+TEST_F(UT_ThumbnailDelegate, UT_ThumbnailDelegate_drawBookMarkNotVisible)
+{
+    QPainter *painter = new QPainter();
+    m_tester->drawBookMark(painter, m_pView->geometry(), false);
+    SUCCEED();
+    delete painter;
+}

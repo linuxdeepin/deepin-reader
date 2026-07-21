@@ -178,3 +178,78 @@ TEST(UT_DocumentFactory_getDocument, UT_DocumentFactory_getDocument_004)
     EXPECT_TRUE(process == nullptr);
     EXPECT_EQ(error, Document::FileError);
 }
+
+// SearchResult helper tests
+TEST(UT_SearchResult, sectionBoundingRectEmptySection)
+{
+    PageSection empty;
+    QRectF rect = SearchResult::sectionBoundingRect(empty);
+    EXPECT_TRUE(rect.isNull());
+}
+
+TEST(UT_SearchResult, sectionBoundingRectSingleLine)
+{
+    PageSection section;
+    PageLine line;
+    line.rect = QRectF(10, 20, 100, 30);
+    section.append(line);
+
+    QRectF rect = SearchResult::sectionBoundingRect(section);
+    EXPECT_EQ(rect, QRectF(10, 20, 100, 30));
+}
+
+TEST(UT_SearchResult, sectionBoundingRectMultipleLines)
+{
+    PageSection section;
+    PageLine l1;
+    l1.rect = QRectF(0, 0, 50, 10);
+    PageLine l2;
+    l2.rect = QRectF(20, 30, 60, 15);
+    section.append(l1);
+    section.append(l2);
+
+    QRectF rect = SearchResult::sectionBoundingRect(section);
+    EXPECT_EQ(rect, QRectF(0, 0, 80, 45));
+}
+
+TEST(UT_SearchResult, setctionsFillTextEmptySections)
+{
+    SearchResult result;
+    result.page = 1;
+    bool ok = result.setctionsFillText([](int, QRectF) { return QString("text"); });
+    EXPECT_FALSE(ok);
+}
+
+TEST(UT_SearchResult, setctionsFillTextWithContent)
+{
+    SearchResult result;
+    result.page = 2;  // page is 1-based, so index is 1
+
+    PageSection section;
+    PageLine line;
+    line.rect = QRectF(0, 0, 10, 10);
+    section.append(line);
+    result.sections.append(section);
+
+    bool ok = result.setctionsFillText([](int index, QRectF) {
+        EXPECT_EQ(index, 1);
+        return QString("filled");
+    });
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(result.sections.at(0).at(0).text, QString("filled"));
+}
+
+TEST(UT_SearchResult, setctionsFillTextEmptyCallbackReturnsFalse)
+{
+    SearchResult result;
+    result.page = 1;
+
+    PageSection section;
+    PageLine line;
+    line.rect = QRectF(0, 0, 10, 10);
+    section.append(line);
+    result.sections.append(section);
+
+    bool ok = result.setctionsFillText([](int, QRectF) { return QString(); });
+    EXPECT_FALSE(ok);
+}
