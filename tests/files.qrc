@@ -16,5 +16,6 @@
         <file>files/normal.png</file>
         <file>files/normal.pptx</file>
         <file>files/normal.txt</file>
+        <file>files/normal.xps</file>
     </qresource>
 </RCC>
