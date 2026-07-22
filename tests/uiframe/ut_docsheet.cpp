@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "dpdfannot.h"
 #include "PDFModel.h"
+#include "BrowserPage.h"
 #include "CentralDocPage.h"
 #include "SheetSidebar.h"
 #include "EncryptionPage.h"
@@ -17,11 +18,16 @@
 #include "stub.h"
 
 #include <DPrintPreviewDialog>
+#include <DDialog>
 
 #include <QUuid>
 #include <QClipboard>
 #include <QSignalSpy>
 #include <QEvent>
+#include <QMainWindow>
+#include <QPrinter>
+#include <QDialog>
+#include <QTest>
 //#include <QStackedLayout>
 //#include <QFileDialog>
 
@@ -1381,4 +1387,284 @@ TEST_F(TestDocSheet, UT_DocSheet_setAlive_002)
     m_tester->m_uuid = DocSheet::g_uuidList.last();
     m_tester->setAlive(false);
     EXPECT_TRUE(g_funcName == "saveOperation_stub");
+}
+
+namespace {
+int QDialog_exec_stub()
+{
+    g_funcName = __FUNCTION__;
+    return 0;
+}
+
+QSizeF getPageSize_stub2(int)
+{
+    g_funcName = __FUNCTION__;
+    return QSizeF(100.0, 200.0);
+}
+
+void openFileAsync_stub2(const QString &)
+{
+    g_funcName = __FUNCTION__;
+}
+
+QImage getImage_stub2(int, int, int, const QRect &)
+{
+    g_funcName = __FUNCTION__;
+    return QImage(10, 20, QImage::Format_ARGB32);
+}
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_getPageLabelByIndex_001)
+{
+    QString label = m_tester->getPageLabelByIndex(0);
+    EXPECT_FALSE(label.isEmpty());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onExtractPassword_001)
+{
+    Stub s;
+    s.set(ADDR(SheetRenderer, openFileAsync), openFileAsync_stub2);
+
+    m_tester->onExtractPassword("testpassword");
+    EXPECT_TRUE(m_tester->m_password == "testpassword");
+    EXPECT_TRUE(g_funcName == "openFileAsync_stub2");
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPopInfoDialog_001)
+{
+    Stub s;
+    s.set(ADDR(SheetRenderer, getPageSize), getPageSize_stub2);
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub2);
+
+    typedef int (*fptr)();
+    fptr QDialog_exec = (fptr)(&QDialog::exec);
+    s.set(QDialog_exec, QDialog_exec_stub);
+
+    m_tester->onPopInfoDialog();
+    EXPECT_TRUE(g_funcName == "QDialog_exec_stub");
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_readLastFileOperation_001)
+{
+    DocSheet::g_lastOperationFile.clear();
+    EXPECT_FALSE(m_tester->readLastFileOperation());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_readLastFileOperation_002)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+
+    DocSheet *other = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    DocSheet::g_sheetList.append(other);
+    DocSheet::g_uuidList.append(QUuid::createUuid().toString());
+    DocSheet::g_lastOperationFile = strPath;
+
+    EXPECT_TRUE(m_tester->readLastFileOperation());
+
+    DocSheet::g_sheetList.removeAll(other);
+    DocSheet::g_uuidList.removeLast();
+    DocSheet::g_lastOperationFile.clear();
+    delete other;
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_showEncryPage_001)
+{
+    EXPECT_TRUE(m_tester->m_encryPage == nullptr);
+    m_tester->showEncryPage();
+    EXPECT_TRUE(m_tester->m_encryPage != nullptr);
+
+    m_tester->showEncryPage();
+    EXPECT_TRUE(m_tester->m_encryPage != nullptr);
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_calculatePrintTargetSize_001)
+{
+    QPrinter printer;
+    QRectF pageRect(0, 0, 100, 100);
+    QSize result = m_tester->calculatePrintTargetSize(0, printer, pageRect);
+    EXPECT_TRUE(result.isEmpty());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_calculatePrintTargetSize_002)
+{
+    Stub s;
+    s.set(ADDR(SheetRenderer, getPageSize), getPageSize_stub2);
+
+    m_tester->m_fileType = Dr::XPS;
+
+    QPrinter printer;
+    QRectF pageRect(0, 0, 100, 100);
+    QSize result = m_tester->calculatePrintTargetSize(0, printer, pageRect);
+    EXPECT_FALSE(result.isEmpty());
+
+    m_tester->m_fileType = Dr::PDF;
+}
+
+// LoadingWidget tests - need parent widget for Q_ASSERT
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_constructor)
+{
+    DWidget parent;
+    parent.resize(100, 100);
+    {
+        DocSheet::LoadingWidget lw(&parent);
+        EXPECT_TRUE(lw.parent() == &parent);
+    }
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_paintEvent)
+{
+    DWidget parent;
+    parent.resize(100, 100);
+    DocSheet::LoadingWidget lw(&parent);
+    QPaintEvent paint(QRect(0, 0, 100, 100));
+    lw.paintEvent(&paint);
+    EXPECT_FALSE(lw.grab().isNull());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_getImage)
+{
+    Stub s;
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    DWidget parent;
+    parent.resize(100, 100);
+    DocSheet::LoadingWidget lw(&parent);
+    QImage img = lw.getImage(m_tester, 0, 10, 20);
+    EXPECT_TRUE(g_funcName == "getImage_stub");
+    EXPECT_FALSE(img.isNull());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_getImageForPrint_valid)
+{
+    Stub s;
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    DWidget parent;
+    parent.resize(100, 100);
+    DocSheet::LoadingWidget lw(&parent);
+    QImage img = lw.getImageForPrint(m_tester, 0, QSize(10, 20));
+    EXPECT_TRUE(g_funcName == "getImage_stub");
+    EXPECT_FALSE(img.isNull());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_getImageForPrint_nullDoc)
+{
+    DWidget parent;
+    parent.resize(100, 100);
+    DocSheet::LoadingWidget lw(&parent);
+    QImage img = lw.getImageForPrint(nullptr, 0, QSize(10, 20));
+    EXPECT_TRUE(img.isNull());
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_LoadingWidget_getImageForPrint_invalidSize)
+{
+    DWidget parent;
+    parent.resize(100, 100);
+    DocSheet::LoadingWidget lw(&parent);
+    QImage img = lw.getImageForPrint(m_tester, 0, QSize(0, 0));
+    EXPECT_TRUE(img.isNull());
+
+    QImage img2 = lw.getImageForPrint(m_tester, 0, QSize(-1, 10));
+    EXPECT_TRUE(img2.isNull());
+}
+
+namespace {
+int QDialog_exec_stub3()
+{
+    g_funcName = __FUNCTION__;
+    return 0;
+}
+
+bool SheetRenderer_opened_stub_false()
+{
+    return false;
+}
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPrintRequested_emptyRange)
+{
+    DPrinter printer;
+    QVector<int> pageRange;
+    m_tester->onPrintRequested(&printer, pageRange);
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPopPrintDialog_notOpened)
+{
+    // Stub opened() to return false so dialog is not created
+    Stub s;
+    s.set(ADDR(SheetRenderer, opened), SheetRenderer_opened_stub_false);
+    m_tester->onPopPrintDialog();
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPrintRequested_singleArg)
+{
+    // Need an active window for LoadingWidget creation
+    QWidget activeWindow;
+    activeWindow.resize(200, 200);
+    activeWindow.show();
+    activeWindow.activateWindow();
+    QTest::qWait(50);
+
+    Stub s;
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    s.set(ADDR(DocSheet, pageCount), pageCount_stub);
+
+    DPrinter printer;
+    m_tester->onPrintRequested(&printer);
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPrintRequested_pageRange_lambda)
+{
+    // Cover the targetRectForSize lambda inside
+    // DocSheet::onPrintRequested(DPrinter*, QVector<int>) (XPS path).
+    // LoadingWidget requires a QMainWindow in qApp->topLevelWidgets().
+    QMainWindow mainWindow;
+    mainWindow.resize(200, 200);
+    mainWindow.show();
+    QTest::qWait(50);
+
+    Stub s;
+    s.set(ADDR(SheetRenderer, getPageSize), getPageSize_stub2);
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    s.set(ADDR(DocSheet, pageCount), pageCount_stub);
+
+    m_tester->m_fileType = Dr::XPS;
+
+    // m_browser->pages() must have at least one entry to satisfy the
+    // `pageRange[i] <= m_browser->pages().count()` check.
+    BrowserPage *bp = new BrowserPage(nullptr, 0, m_tester);
+    m_tester->m_browser->m_items.append(bp);
+
+    DPrinter printer;
+    QVector<int> pageRange = {1};
+    m_tester->onPrintRequested(&printer, pageRange);
+
+    m_tester->m_fileType = Dr::PDF;
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onPrintRequested_singleArg_lambda)
+{
+    // Cover the targetRectForSize lambda inside
+    // DocSheet::onPrintRequested(DPrinter*) (XPS path).
+    QMainWindow mainWindow;
+    mainWindow.resize(200, 200);
+    mainWindow.show();
+    mainWindow.activateWindow();
+    QTest::qWait(50);
+
+    Stub s;
+    s.set(ADDR(SheetRenderer, getPageSize), getPageSize_stub2);
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    s.set(ADDR(DocSheet, pageCount), pageCount_stub);
+
+    m_tester->m_fileType = Dr::XPS;
+
+    DPrinter printer;
+    m_tester->onPrintRequested(&printer);
+
+    m_tester->m_fileType = Dr::PDF;
+    SUCCEED();
 }

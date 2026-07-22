@@ -84,3 +84,22 @@ TEST_F(TestTitleMenu, testOnActionTriggeredValid)
     EXPECT_EQ(spy.count(), 1);
     EXPECT_EQ(spy.takeFirst().at(0).toString(), QString("New window"));
 }
+
+TEST_F(TestTitleMenu, testDisableSaveButton)
+{
+    QList<QAction *> actionsBefore = m_tester->findChildren<QAction *>();
+    QAction *saveAction = nullptr;
+    for (QAction *a : actionsBefore) {
+        if (a->text() == TitleMenu::tr("Save")) {
+            saveAction = a;
+            break;
+        }
+    }
+    ASSERT_NE(saveAction, nullptr);
+
+    m_tester->disableSaveButton(true);
+    EXPECT_FALSE(saveAction->isEnabled());
+
+    m_tester->disableSaveButton(false);
+    EXPECT_TRUE(saveAction->isEnabled());
+}
