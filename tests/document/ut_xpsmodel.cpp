@@ -13,6 +13,7 @@
 #include <QImage>
 #include <QPageSize>
 #include <QTemporaryDir>
+#include <QXmlStreamReader>
 
 #include <gtest/gtest.h>
 
@@ -268,6 +269,19 @@ TEST_F(TestXpsDocumentAdapter, pageAdapterWordsAndAnnotations)
     EXPECT_FALSE(page->hasWidgetAnnots());
 }
 
+TEST_F(TestXpsDocumentAdapter, pageAdapterGetLinkAtPoint)
+{
+    // XpsPageAdapter::getLinkAtPoint always returns an empty Link;
+    // exercising it directly (via -fno-access-control) ensures coverage.
+    std::unique_ptr<XpsPageAdapter> xpage(static_cast<XpsPageAdapter *>(m_doc->page(0)));
+    ASSERT_NE(xpage, nullptr);
+
+    Link link = xpage->getLinkAtPoint(QPointF(0, 0));
+    // Default-constructed Link has page == -1 and empty urlOrFileName.
+    EXPECT_EQ(link.page, -1);
+    EXPECT_TRUE(link.urlOrFileName.isEmpty());
+}
+
 TEST_F(TestXpsDocumentAdapter, loadDocumentInvalidPath)
 {
     Document::Error error = Document::NoError;
@@ -351,4 +365,130 @@ TEST(UT_DocumentFactory_XPS, getDocumentXpsNonExistent)
     Document *doc = DocumentFactory::getDocument(Dr::XPS, "/tmp/__no_such_file__.xps", QString(), QString(), nullptr, error);
     EXPECT_EQ(doc, nullptr);
     EXPECT_NE(error, Document::NoError);
+}
+
+// Tests for XpsTextExtractor private helpers (reachable via -fno-access-control).
+TEST_F(TestXpsTextExtractor, findFixedPagePathKnownIndex)
+{
+    QString p0 = XpsTextExtractor::findFixedPagePath(m_path, 0);
+    EXPECT_EQ(p0.toStdString(), "Documents/1/Pages/1.fpage");
+
+    QString p2 = XpsTextExtractor::findFixedPagePath(m_path, 2);
+    EXPECT_EQ(p2.toStdString(), "Documents/1/Pages/3.fpage");
+}
+
+TEST_F(TestXpsTextExtractor, findFixedPagePathNegativeIndex)
+{
+    QString p = XpsTextExtractor::findFixedPagePath(m_path, -1);
+    EXPECT_TRUE(p.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, readFixedPageFromZipValid)
+{
+    QByteArray data = XpsTextExtractor::readFixedPageFromZip(m_path, 0);
+    // The first page of normal.xps should yield non-empty XML.
+    EXPECT_FALSE(data.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, readFixedPageFromZipOutOfRange)
+{
+    QByteArray data = XpsTextExtractor::readFixedPageFromZip(m_path, 99999);
+    // Out-of-range page returns empty data from zip lookup.
+    EXPECT_TRUE(data.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, readFontFromZipInvalidUri)
+{
+    QByteArray data = XpsTextExtractor::readFontFromZip(m_path, QStringLiteral("/no/such/font.otf"));
+    EXPECT_TRUE(data.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, readFontFromZipEmptyInputs)
+{
+    QByteArray data1 = XpsTextExtractor::readFontFromZip(QString(), QStringLiteral("font.otf"));
+    EXPECT_TRUE(data1.isEmpty());
+
+    QByteArray data2 = XpsTextExtractor::readFontFromZip(m_path, QString());
+    EXPECT_TRUE(data2.isEmpty());
+}
+
+// Helper to advance the XML reader to the first start element.
+static bool advanceToFirstStartElement(QXmlStreamReader &xml)
+{
+    while (!xml.atEnd()) {
+        QXmlStreamReader::TokenType t = xml.readNext();
+        if (t == QXmlStreamReader::StartElement)
+            return true;
+        if (t == QXmlStreamReader::EndElement)
+            return false;
+    }
+    return false;
+}
+
+TEST_F(TestXpsTextExtractor, parseGlyphsBasic)
+{
+    // Build a minimal Glyphs XML and call parseGlyphs directly.
+    const QByteArray xmlData =
+        "<Glyphs "
+        "OriginX=\"10\" OriginY=\"20\" "
+        "FontRenderingEmSize=\"16\" "
+        "UnicodeString=\"Hello\" "
+        "FontUri=\"/fonts/test.otf\" "
+        "Indices=\"0.5;1.0;2.0;3.0;4.0\" "
+        "RenderTransform=\"1,0,0,1,5,7\" />";
+
+    QXmlStreamReader xml(xmlData);
+    ASSERT_TRUE(advanceToFirstStartElement(xml));
+    ASSERT_EQ(xml.name().toString().toStdString(), "Glyphs");
+
+    QTransform parent;
+    XpsTextExtractor::GlyphInfo info = XpsTextExtractor::parseGlyphs(xml, parent);
+
+    EXPECT_EQ(info.text.toStdString(), "Hello");
+    EXPECT_EQ(info.position, QPointF(10, 20));
+    EXPECT_DOUBLE_EQ(info.fontSize, 16.0);
+    EXPECT_EQ(info.fontUri.toStdString(), "/fonts/test.otf");
+    EXPECT_FALSE(info.boundingBox.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, parseGlyphsEscapeSequence)
+{
+    // "{}" escape sequence at the start should be skipped.
+    const QByteArray xmlData =
+        "<Glyphs "
+        "OriginX=\"0\" OriginY=\"0\" "
+        "FontRenderingEmSize=\"12\" "
+        "UnicodeString=\"{}World\" />";
+
+    QXmlStreamReader xml(xmlData);
+    ASSERT_TRUE(advanceToFirstStartElement(xml));
+
+    QTransform parent;
+    XpsTextExtractor::GlyphInfo info = XpsTextExtractor::parseGlyphs(xml, parent);
+    EXPECT_EQ(info.text.toStdString(), "World");
+}
+
+TEST_F(TestXpsTextExtractor, parseGlyphsEmptyUnicodeString)
+{
+    const QByteArray xmlData = "<Glyphs OriginX=\"0\" OriginY=\"0\" UnicodeString=\"\"/>";
+    QXmlStreamReader xml(xmlData);
+    ASSERT_TRUE(advanceToFirstStartElement(xml));
+
+    QTransform parent;
+    XpsTextExtractor::GlyphInfo info = XpsTextExtractor::parseGlyphs(xml, parent);
+    EXPECT_TRUE(info.text.isEmpty());
+}
+
+TEST_F(TestXpsTextExtractor, parseGlyphsMissingOrigin)
+{
+    // Without OriginX/OriginY, parseGlyphs returns early (just text set).
+    const QByteArray xmlData = "<Glyphs UnicodeString=\"abc\"/>";
+    QXmlStreamReader xml(xmlData);
+    ASSERT_TRUE(advanceToFirstStartElement(xml));
+
+    QTransform parent;
+    XpsTextExtractor::GlyphInfo info = XpsTextExtractor::parseGlyphs(xml, parent);
+    EXPECT_EQ(info.text.toStdString(), "abc");
+    // Position is default-constructed QPointF.
+    EXPECT_TRUE(info.position.isNull());
 }
