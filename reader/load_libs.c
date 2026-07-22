@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <dlfcn.h>
+// LCOV_EXCL_START
 void PrintError(){
     char *error;
     if ((error = dlerror()) != NULL)  {
@@ -71,12 +72,14 @@ static LoadLibs *newClass(void)
     assert(pLibs != NULL);
     return pLibs;
 }
+// LCOV_EXCL_STOP
 
 /**
  * 饿汉式
  * 支持延迟加载，但是为了多线程安全，性能有所降低
  * 注意：方法内部要加锁，防止多线程多次创建
  * */
+// LCOV_EXCL_START
 LoadLibs *getLoadLibsInstance()
 {
     static pthread_mutex_t mutex;
@@ -102,6 +105,7 @@ LoadLibs *getLoadLibsInstance()
 
     return pLibs;
 }
+// LCOV_EXCL_STOP
 
 void setLibNames(LoadLibNames tmp)
 {

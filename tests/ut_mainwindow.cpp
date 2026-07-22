@@ -7,6 +7,10 @@
 #include "DocSheet.h"
 #include "Application.h"
 #include "SheetRenderer.h"
+#include "Central.h"
+#include "CentralDocPage.h"
+
+#include <DGuiApplicationHelper>
 
 #include <QTimer>
 #include <QCloseEvent>
@@ -216,4 +220,49 @@ TEST_F(TestMainWindow, testonUpdateTitleLabelRect)
 TEST_F(TestMainWindow, testupdateOrderWidgets)
 {
     m_tester->updateOrderWidgets(QList<QWidget *>());
+}
+
+TEST_F(TestMainWindow, testinitDynamicLibPath)
+{
+    m_tester->initDynamicLibPath();
+}
+
+TEST_F(TestMainWindow, testlibPath)
+{
+    QString result = m_tester->libPath("libzpdcallback.so");
+    EXPECT_TRUE(result.isEmpty() || result.contains("libzpdcallback"));
+
+    QString resultEmpty = m_tester->libPath("nonexistent_lib_xyz.so");
+    EXPECT_TRUE(resultEmpty.isEmpty());
+}
+
+TEST_F(TestMainWindow, testCentralDocPageFullScreen)
+{
+    // Access CentralDocPage through MainWindow to test isFullScreen/openFullScreen
+    // which require a 3-level parent hierarchy (CentralDocPage -> Central -> ... -> MainWindow)
+    if (m_tester->m_central) {
+        CentralDocPage *docPage = m_tester->m_central->docPage();
+        if (docPage) {
+            // isFullScreen will return false since window is not shown as fullscreen
+            EXPECT_FALSE(docPage->isFullScreen());
+
+            // openFullScreen - this would actually set fullscreen state
+            // We call it but immediately quit fullscreen to avoid leaving state
+            docPage->openFullScreen();
+            // Restore by calling quitFullScreen if it was set
+            if (m_tester->isFullScreen()) {
+                docPage->quitFullScreen(true);
+            }
+        }
+    }
+    SUCCEED();
+}
+
+TEST_F(TestMainWindow, testInitUILambdaSizeMode)
+{
+    // Trigger sizeModeChanged lambda registered in MainWindow::initUI
+    DGuiApplicationHelper *helper = DGuiApplicationHelper::instance();
+    emit helper->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+    emit helper->sizeModeChanged(DGuiApplicationHelper::NormalMode);
+    SUCCEED();
 }

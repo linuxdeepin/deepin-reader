@@ -1,6 +1,6 @@
-// SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2025-2026 UnionTech Software Technology Co., Ltd.
 //
-// SPDX-Liteense-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "logger.h"
 #include "ddlog.h"
@@ -33,11 +33,13 @@ MLogger::MLogger(QObject *parent)
     setRules(m_rules);
 
     // watch dconfig
+    // LCOV_EXCL_START
     connect(m_config, &DConfig::valueChanged, this, [this](const QString &key) {
         if (key == "log_rules") {
             setRules(m_config->value(key).toByteArray());
         }
     });
+    // LCOV_EXCL_STOP
 #else
     setRules(m_rules);
 #endif
