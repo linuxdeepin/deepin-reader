@@ -59,3 +59,12 @@ TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_paint)
     EXPECT_TRUE(m_tester->m_parent == m_pView);
     delete painter;
 }
+
+TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_sizeHint)
+{
+    m_pView->getImageModel()->insertPageIndex(1);
+    QStyleOptionViewItem option;
+    QModelIndex index = m_pView->getImageModel()->index(0, 0);
+    QSize size = m_tester->sizeHint(option, index);
+    EXPECT_FALSE(size.isEmpty());
+}

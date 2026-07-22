@@ -56,13 +56,13 @@ TEST_F(TestBookMarkWidget, testprevPage)
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-TEST_F(TestBookMarkWidget, testpageUp)
+TEST_F(TestBookMarkWidget, testnextPage)
 {
-    m_tester->pageUp();
+    m_tester->nextPage();
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
-TEST_F(TestBookMarkWidget, testnextPage)
+TEST_F(TestBookMarkWidget, testpageUp)
 {
     m_tester->pageUp();
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
