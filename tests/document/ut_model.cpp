@@ -6,6 +6,9 @@
 #include "Model.h"
 #include "PDFModel.h"
 #include "DjVuModel.h"
+#include "dpdfannot.h"
+#include "dpdfpage.h"
+#include "dpdfdoc.h"
 #include "stub.h"
 
 #include <QProcess>
@@ -252,4 +255,53 @@ TEST(UT_SearchResult, setctionsFillTextEmptyCallbackReturnsFalse)
 
     bool ok = result.setctionsFillText([](int, QRectF) { return QString(); });
     EXPECT_FALSE(ok);
+}
+
+/* ====== Document / Page / Annotation base class coverage ======
+ * The following tests exercise:
+ *  - Document::label() default behavior on a subclass that does not override it
+ *    (DjVuDocument) to hit the base class implementation in Model.h
+ *  - The virtual destructors of Document, Page and Annotation to ensure they
+ *    are invoked (and registered for coverage) on real subclasses
+ */
+
+TEST(UT_DocumentBase, UT_Document_label_default_001)
+{
+    // DjVuDocument does not override label(); exercises Model.h default impl
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.djvu";
+    deepin_reader::Document::Error error;
+    DjVuDocument *doc = DjVuDocument::loadDocument(strPath, error);
+    ASSERT_NE(doc, nullptr);
+    // Default impl returns QString() -> empty
+    EXPECT_TRUE(doc->label(0).isNull());
+    delete doc;
+}
+
+TEST(UT_DocumentBase, UT_Document_destructor_001)
+{
+    // Exercise PDFDocument destructor (Document base dtor invoked virtually)
+    DPdfDoc *d = new DPdfDoc("test.pdf", "");
+    PDFDocument *pdfDoc = new PDFDocument(d);
+    delete pdfDoc;
+}
+
+TEST(UT_DocumentBase, UT_Page_destructor_001)
+{
+    // Exercise PDFPage destructor (Page base dtor invoked virtually)
+    DPdfPage *dpage = new DPdfPage(nullptr, 0, 96, 96);
+    QMutex *mutex = new QMutex;
+    PDFPage *page = new PDFPage(mutex, dpage);
+    delete page;
+    delete mutex;
+}
+
+TEST(UT_DocumentBase, UT_Annotation_destructor_001)
+{
+    // Exercise PDFAnnotation destructor (Annotation base dtor invoked virtually)
+    DPdfTextAnnot *dAnnot = new DPdfTextAnnot;
+    PDFAnnotation *annot = new PDFAnnotation(dAnnot);
+    annot->disconnect();
+    delete annot;
+    delete dAnnot;
 }
