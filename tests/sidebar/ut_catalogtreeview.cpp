@@ -193,3 +193,10 @@ TEST_F(TestCatalogTreeView, testonFontChanged)
     m_tester->onFontChanged(QFont());
     EXPECT_TRUE(g_resizeCoulumnWidth_result == "resizeCoulumnWidth_stub");
 }
+
+TEST_F(TestCatalogTreeView, testkeyPressEvent_direct)
+{
+    QKeyEvent event(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
+    m_tester->keyPressEvent(&event);
+    EXPECT_FALSE(m_tester->rightnotifypagechanged);
+}
