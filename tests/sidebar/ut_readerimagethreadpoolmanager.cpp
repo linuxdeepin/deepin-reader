@@ -13,6 +13,7 @@
 #include <gtest/gtest.h>
 #include <QPixmap>
 #include <QImage>
+#include <QTest>
 
 class UT_ReadImageTask : public ::testing::Test
 {
@@ -107,5 +108,100 @@ TEST_F(UT_ReaderImageThreadPoolManager, UT_onReceiverDestroyedUnknown)
 {
     QObject obj;
     m_tester->onReceiverDestroyed(&obj);
+    SUCCEED();
+}
+
+TEST_F(UT_ReaderImageThreadPoolManager, UT_ReaderImageParam_t_operators)
+{
+    ReaderImageParam_t a, b;
+    a.pageIndex = 1;
+    a.maxPixel = 100;
+    b.pageIndex = 1;
+    b.maxPixel = 100;
+    EXPECT_TRUE(a == b);
+
+    b.pageIndex = 2;
+    EXPECT_FALSE(a == b);
+    EXPECT_TRUE(a < b);
+    EXPECT_FALSE(a > b);
+
+    a.pageIndex = 3;
+    EXPECT_TRUE(a > b);
+}
+
+static int pageCount_stub_pool()
+{
+    return 2;
+}
+
+TEST_F(UT_ReaderImageThreadPoolManager, UT_setImageForDocSheet)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+
+    Stub s;
+    s.set(ADDR(DocSheet, pageCount), pageCount_stub_pool);
+
+    // First initialize the sheet in the map via addgetDocImageTask
+    ReaderImageParam_t param;
+    param.pageIndex = 0;
+    param.sheet = sheet;
+    param.receiver = new QObject();
+    QObject::connect(sheet, &QObject::destroyed, m_tester, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
+
+    QPixmap pix(10, 10);
+    m_tester->setImageForDocSheet(sheet, 0, pix);
+    delete param.receiver;
+    delete sheet;
+    SUCCEED();
+}
+
+TEST_F(UT_ReaderImageThreadPoolManager, UT_onTaskFinished)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+
+    ReaderImageParam_t param;
+    param.pageIndex = 0;
+    param.sheet = sheet;
+    param.receiver = new QObject();
+    param.slotFun = "dummySlot";
+
+    QImage img(10, 10, QImage::Format_ARGB32);
+    m_tester->onTaskFinished(param, img);
+
+    delete param.receiver;
+    delete sheet;
+    SUCCEED();
+}
+
+TEST_F(UT_ReaderImageThreadPoolManager, UT_addgetDocImageTask)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet *sheet = new DocSheet(Dr::PDF, strPath, nullptr);
+
+    Stub s;
+    s.set(ADDR(DocSheet, pageCount), pageCount_stub_pool);
+
+    QObject *receiver = new QObject();
+    ReaderImageParam_t param;
+    param.pageIndex = 0;
+    param.sheet = sheet;
+    param.receiver = receiver;
+    param.slotFun = "dummySlot";
+
+    m_tester->addgetDocImageTask(param);
+
+    // Calling again with same params should be skipped (duplicate)
+    m_tester->addgetDocImageTask(param);
+
+    // Wait briefly to allow task to run
+    QTest::qWait(50);
+
+    delete receiver;
+    delete sheet;
     SUCCEED();
 }

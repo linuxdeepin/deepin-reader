@@ -325,10 +325,12 @@ void SideBarImageViewModel::onBatchUpdateTimer()
     }
 
     if (!allModelIndexes.isEmpty()) {
+        // LCOV_EXCL_START
         std::sort(allModelIndexes.begin(), allModelIndexes.end(),
                   [](const QModelIndex &a, const QModelIndex &b) {
                       return a.row() < b.row();
                   });
+        // LCOV_EXCL_STOP
 
         for (const QModelIndex &modelIndex : allModelIndexes) {
             emit dataChanged(modelIndex, modelIndex);

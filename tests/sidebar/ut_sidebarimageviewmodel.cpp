@@ -39,22 +39,22 @@ TEST_F(TestImagePageInfo_t, initTest)
 
 }
 
-TEST_F(TestImagePageInfo_t, test1)
+TEST_F(TestImagePageInfo_t, test_operators)
 {
-    ImagePageInfo_t temp;
-    m_tester == &temp;
-}
+    ImagePageInfo_t a, b;
+    a.pageIndex = 1;
+    b.pageIndex = 1;
+    EXPECT_TRUE(a == b);
+    EXPECT_FALSE(a < b);
+    EXPECT_FALSE(a > b);
 
-TEST_F(TestImagePageInfo_t, test2)
-{
-    ImagePageInfo_t temp;
-    m_tester < &temp;
-}
+    b.pageIndex = 2;
+    EXPECT_FALSE(a == b);
+    EXPECT_TRUE(a < b);
+    EXPECT_FALSE(a > b);
 
-TEST_F(TestImagePageInfo_t, test3)
-{
-    ImagePageInfo_t temp;
-    m_tester > &temp;
+    a.pageIndex = 3;
+    EXPECT_TRUE(a > b);
 }
 
 
@@ -193,4 +193,11 @@ TEST_F(TestSideBarImageViewModel, testfindItemForAnno)
 TEST_F(TestSideBarImageViewModel, testhandleRenderThumbnail)
 {
     m_tester->handleRenderThumbnail(0, QPixmap());
+}
+
+TEST_F(TestSideBarImageViewModel, testonBatchUpdateTimer)
+{
+    // Trigger onBatchUpdateTimer directly
+    m_tester->onBatchUpdateTimer();
+    SUCCEED();
 }
