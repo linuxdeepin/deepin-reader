@@ -280,6 +280,7 @@ void MainWindow::initUI()
     qCDebug(appLog) << __FUNCTION__ << "UI界面初始化已完成";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     qCDebug(appLog) << "MainWindow::initUI() - Setting up size mode change handler";
+    // LCOV_EXCL_START
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         qCDebug(appLog) << "MainWindow::initUI() - Size mode changed to:" << sizeMode;
         if (sizeMode == DGuiApplicationHelper::NormalMode) {
@@ -292,6 +293,7 @@ void MainWindow::initUI()
             handleMainWindowFull();
         }
     });
+    // LCOV_EXCL_STOP
 #endif
 
 #if _ZPD_

@@ -20,6 +20,14 @@ TEST(UT_Application, UT_Application_emitSheetChanged)
     SUCCEED();
 }
 
+TEST(UT_Application, UT_Application_handleQuitAction)
+{
+    // MainWindow::m_list should be empty in test environment
+    EXPECT_NE(dApp, nullptr);
+    dApp->handleQuitAction();
+    SUCCEED();
+}
+
 TEST(UT_Application, UT_Application_notifyKeyPressReturn)
 {
     QPushButton btn;
