@@ -54,7 +54,7 @@ TEST_F(UT_NotesWidget, initTest)
 
 TEST_F(UT_NotesWidget, UT_NotesWidget_prevPage)
 {
-    m_tester->pageUp();
+    m_tester->prevPage();
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
@@ -64,9 +64,21 @@ TEST_F(UT_NotesWidget, UT_NotesWidget_nextPage)
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 
+TEST_F(UT_NotesWidget, UT_NotesWidget_deleteNoteItem_nullptr)
+{
+    m_tester->deleteNoteItem(nullptr);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+}
+
 TEST_F(UT_NotesWidget, UT_NotesWidget_pageDown)
 {
     m_tester->pageDown();
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+}
+
+TEST_F(UT_NotesWidget, UT_NotesWidget_pageUp)
+{
+    m_tester->pageUp();
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
 

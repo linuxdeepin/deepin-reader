@@ -75,3 +75,12 @@ TEST_F(UT_ThumbnailDelegate, UT_ThumbnailDelegate_drawBookMarkNotVisible)
     SUCCEED();
     delete painter;
 }
+
+TEST_F(UT_ThumbnailDelegate, UT_ThumbnailDelegate_sizeHint)
+{
+    m_pView->getImageModel()->insertPageIndex(1);
+    QStyleOptionViewItem option;
+    QModelIndex index = m_pView->getImageModel()->index(0, 0);
+    QSize size = m_tester->sizeHint(option, index);
+    EXPECT_FALSE(size.isEmpty());
+}
