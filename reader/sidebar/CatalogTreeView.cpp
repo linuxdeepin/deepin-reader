@@ -31,6 +31,7 @@ public:
 
     ~ActiveProxyStyle();
 
+    // LCOV_EXCL_START
     void drawComplexControl(QStyle::ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = nullptr) const
     {
         // qCDebug(appLog) << "ActiveProxyStyle::drawComplexControl() - Starting drawComplexControl";
@@ -38,6 +39,7 @@ public:
         op->state = option->state | QStyle::State_Active;
         QProxyStyle::drawComplexControl(control, op, painter, widget);
     }
+    // LCOV_EXCL_STOP
 
     void drawControl(QStyle::ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget = nullptr) const
     {

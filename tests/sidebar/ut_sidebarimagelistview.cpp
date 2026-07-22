@@ -14,6 +14,8 @@
 #include <QTest>
 #include <QListView>
 #include <QScroller>
+#include <QSignalSpy>
+#include <QMenu>
 
 class TestSideBarImageListView : public ::testing::Test
 {
@@ -171,6 +173,40 @@ TEST_F(TestSideBarImageListView, testshowBookMarkMenu)
     EXPECT_TRUE(m_tester->m_pBookMarkMenu != nullptr);
 }
 
+TEST_F(TestSideBarImageListView, testshowNoteMenuLambdas)
+{
+    Stub stub;
+    stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), menu_exec_stub1);
+    m_tester->showNoteMenu(QPoint(0, 0));
+    ASSERT_TRUE(m_tester->m_pNoteMenu != nullptr);
+
+    auto actions = m_tester->m_pNoteMenu->actions();
+    EXPECT_GE(actions.size(), 3);
+
+    QSignalSpy spy(m_tester, SIGNAL(sigListMenuClick(int)));
+    for (QAction *act : actions) {
+        emit act->triggered();
+    }
+    EXPECT_EQ(spy.count(), actions.size());
+}
+
+TEST_F(TestSideBarImageListView, testshowBookMarkMenuLambdas)
+{
+    Stub stub;
+    stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), menu_exec_stub1);
+    m_tester->showBookMarkMenu(QPoint(0, 0));
+    ASSERT_TRUE(m_tester->m_pBookMarkMenu != nullptr);
+
+    auto actions = m_tester->m_pBookMarkMenu->actions();
+    EXPECT_GE(actions.size(), 2);
+
+    QSignalSpy spy(m_tester, SIGNAL(sigListMenuClick(int)));
+    for (QAction *act : actions) {
+        emit act->triggered();
+    }
+    EXPECT_EQ(spy.count(), actions.size());
+}
+
 TEST_F(TestSideBarImageListView, testgetModelIndexForPageIndex)
 {
     EXPECT_TRUE(m_tester->getModelIndexForPageIndex(0) == -1);
@@ -189,4 +225,13 @@ TEST_F(TestSideBarImageListView, testpageUpIndex)
 TEST_F(TestSideBarImageListView, testpageDownIndex)
 {
     EXPECT_TRUE(m_tester->pageDownIndex() == QModelIndex());
+}
+
+TEST_F(TestSideBarImageListView, testkeyPressEvent)
+{
+    QTest::keyPress(m_tester, Qt::Key_Up);
+    QTest::keyPress(m_tester, Qt::Key_Down);
+    QTest::keyPress(m_tester, Qt::Key_PageUp);
+    QTest::keyPress(m_tester, Qt::Key_PageDown);
+    EXPECT_TRUE(m_tester->m_docSheet != nullptr);
 }

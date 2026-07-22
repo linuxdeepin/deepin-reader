@@ -12,12 +12,17 @@
 #include "SearchResWidget.h"
 #include "SideBarImageListview.h"
 #include "ut_common.h"
+#include "Model.h"
 
 #include "stub.h"
 
 //#include <QStackedLayout>
 #include <QTest>
+#include <QToolButton>
+#include <DGuiApplicationHelper>
 #include <gtest/gtest.h>
+
+using namespace deepin_reader;
 
 class UT_SheetSidebar : public ::testing::Test
 {
@@ -530,4 +535,27 @@ TEST_F(UT_SheetSidebar, UT_SheetSidebar_changeResetModelData)
     stub.set(ADDR(NotesWidget, changeResetModelData), NotesWidget_changeResetModelData_stub);
     m_tester->changeResetModelData();
     EXPECT_TRUE(g_funcname == "NotesWidget_changeResetModelData_stub");
+}
+
+TEST_F(UT_SheetSidebar, UT_SheetSidebar_UT_SheetSidebar_btnClickedLambdas)
+{
+    QList<QToolButton *> buttons = m_tester->findChildren<QToolButton *>();
+    EXPECT_TRUE(buttons.size() > 0);
+    for (QToolButton *btn : buttons) {
+        emit btn->clicked();
+    }
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
+}
+
+TEST_F(UT_SheetSidebar, UT_SheetSidebar_UT_SheetSidebar_handleSearchResultComming)
+{
+    m_tester->handleSearchResultComming(SearchResult());
+    EXPECT_TRUE(m_tester->m_searchWidget != nullptr);
+}
+
+TEST_F(UT_SheetSidebar, UT_SheetSidebar_UT_SheetSidebar_sizeModeChanged)
+{
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
+    EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }

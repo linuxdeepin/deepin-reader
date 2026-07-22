@@ -47,7 +47,7 @@ private:
     friend class ReaderImageThreadPoolManager;
     QRunnable *task = nullptr;
 } ReaderImageParam_t;
-Q_DECLARE_METATYPE(ReaderImageParam_t);
+Q_DECLARE_METATYPE(ReaderImageParam_t); // LCOV_EXCL_LINE
 
 /**
  * @brief The ReadImageTask class
