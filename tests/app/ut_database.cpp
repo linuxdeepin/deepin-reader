@@ -130,11 +130,14 @@ TEST_F(TestDatabase, UT_Database_prepareBookmark_001)
 //    EXPECT_TRUE(m_tester->readBookmarks(strPath, bookmarks));
 //}
 
-//TEST_F(TestDatabase, UT_Database_saveBookmarks_001)
-//{
-//    QString strPath = UTSOURCEDIR;
-//    strPath += "/files/normal.pdf";
-//    QSet<int> bookmarks = {0, 1};
-//    EXPECT_TRUE(m_tester->saveBookmarks(strPath, bookmarks));
-//}
+TEST_F(TestDatabase, UT_Database_saveBookmarks_001)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    QSet<int> bookmarks = {0, 1};
+
+    Stub s;
+    s.set((bool (QSqlQuery::*)())ADDR(QSqlQuery, exec), ut_sqlquery_exec);
+    EXPECT_TRUE(m_tester->saveBookmarks(strPath, bookmarks));
+}
 

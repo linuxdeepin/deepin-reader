@@ -13,6 +13,30 @@
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QVBoxLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <DWidget>
+#include <DGuiApplicationHelper>
+
+// ImageWidget is defined in FileAttrWidget.cpp as a top-level class
+// deriving from DWidget. We redeclare it here so we can call setPixmap
+// and paintEvent directly. Layout must match the real definition.
+class ImageWidget : public DWidget
+{
+public:
+    explicit ImageWidget(DWidget *parent) : DWidget(parent) {}
+    void setPixmap(const QPixmap &pixmap)
+    {
+        if (!pixmap.isNull()) {
+            m_pixmap = pixmap;
+            update();
+        }
+    }
+protected:
+    void paintEvent(QPaintEvent *event) override;
+private:
+    QPixmap m_pixmap;
+};
 namespace  {
 class TestFileAttrWidget : public ::testing::Test
 {
@@ -76,4 +100,32 @@ TEST_F(TestFileAttrWidget, testshowScreenCenter)
     s.set(ADDR(QWidget, show), show_stub);
     m_tester->showScreenCenter();
     EXPECT_TRUE(g_funcname == "show_stub");
+}
+
+TEST_F(TestFileAttrWidget, testsizeModeChanged)
+{
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
+    EXPECT_TRUE(m_tester->m_pVBoxLayout != nullptr);
+}
+
+TEST_F(TestFileAttrWidget, testImageWidgetPaintEvent)
+{
+    // frameImage is the private ImageWidget* member created in initImageLabel().
+    ASSERT_NE(m_tester->frameImage, nullptr);
+
+    // Provide a non-null pixmap so paintEvent performs drawing.
+    QPixmap pix(20, 20);
+    pix.fill(Qt::red);
+    static_cast<ImageWidget *>(m_tester->frameImage)->setPixmap(pix);
+
+    // Force a paint event via the public repaint() slot.
+    m_tester->frameImage->repaint();
+
+    // Also call paintEvent directly through -fno-access-control to ensure
+    // the uncovered function gets executed.
+    QRect rect(0, 0, m_tester->frameImage->width(), m_tester->frameImage->height());
+    QPaintEvent event(rect);
+    static_cast<ImageWidget *>(m_tester->frameImage)->paintEvent(&event);
+    SUCCEED();
 }

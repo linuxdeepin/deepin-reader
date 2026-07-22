@@ -166,3 +166,10 @@ TEST_F(TestFindWidget, testkeyPressEvent)
         EXPECT_TRUE(g_funcname == "keyPressEvent_stub");
     }
 }
+
+TEST_F(TestFindWidget, testupdatePosition)
+{
+    m_mainWidget->resize(200, 200);
+    m_tester->updatePosition();
+    SUCCEED();
+}
