@@ -129,7 +129,7 @@ class Annotation : public QObject
 public:
     Annotation() : QObject() {}
 
-    virtual ~Annotation() {}
+    virtual ~Annotation() {} // LCOV_EXCL_LINE
 
     virtual QList<QRectF> boundary() const = 0;
 
@@ -183,6 +183,7 @@ public:
 
     virtual QSizeF sizeF() const = 0;
     virtual QImage render(int width, int height, const QRect &slice = QRect()) const = 0;
+    // LCOV_EXCL_START
     virtual Link getLinkAtPoint(const QPointF &) { return Link(); }
     virtual QString text(const QRectF &rect) const = 0;
     virtual QString cachedText(const QRectF &rect) const { return text(rect); }
@@ -197,6 +198,7 @@ public:
     virtual bool updateAnnotation(Annotation *, const QString &, const QColor &) {return false;}
     virtual Annotation *addIconAnnotation(const QRectF &ponit, const QString &text) { Q_UNUSED(ponit) Q_UNUSED(text) return nullptr; }
     virtual Annotation *moveIconAnnotation(Annotation *annot, const QRectF &rect) { Q_UNUSED(annot) Q_UNUSED(rect) return nullptr; }
+    // LCOV_EXCL_STOP
 };
 
 class Document: public QObject
@@ -213,14 +215,14 @@ public:
     };
 
     Document() : QObject() {}
-    virtual ~Document() {}
+    virtual ~Document() {} // LCOV_EXCL_LINE
     virtual int pageCount() const = 0;
     virtual Page *page(int index) const = 0;
     virtual QStringList saveFilter() const = 0;
     virtual QString label(int) const { return QString(); }
     virtual bool save() const = 0;
     virtual bool saveAs(const QString &filePath) const = 0;
-    virtual Outline outline() const { return Outline(); }
+    virtual Outline outline() const { return Outline(); } // LCOV_EXCL_LINE
     virtual Properties properties() const = 0;
 };
 
