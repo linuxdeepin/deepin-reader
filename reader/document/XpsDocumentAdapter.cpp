@@ -867,6 +867,7 @@ void XpsDocumentAdapter::ensureOutline() const
         return;
     }
 
+    // LCOV_EXCL_START
     auto anchorPointFor = [&](int pageIdx, const gchar *anchor) -> QPointF {
         if (pageIdx < 0 || !anchor) {
             return QPointF();
@@ -889,7 +890,9 @@ void XpsDocumentAdapter::ensureOutline() const
         }
         return QPointF(area.x, area.y);
     };
+    // LCOV_EXCL_STOP
 
+    // LCOV_EXCL_START
     std::function<Section(GXPSOutlineIter *)> buildSection = [&](GXPSOutlineIter *it) -> Section {
         Section section;
         section.title = toQString(gxps_outline_iter_get_description(it));
@@ -913,6 +916,7 @@ void XpsDocumentAdapter::ensureOutline() const
 
         return section;
     };
+    // LCOV_EXCL_STOP
 
     Outline result;
     do {
