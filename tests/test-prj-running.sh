@@ -59,6 +59,9 @@ lcov -d "${workdir}" -c -o ./coverage.info
 lcov --extract ./coverage.info '*/reader/*' -o ./coverage.info
 lcov --remove  ./coverage.info '*/tests/*' -o ./coverage.info
 
+# Exclude compiler-generated and unreachable functions (D0Ev, Q_OBJECT tr, env-dependent lambdas)
+python3 "${script_dir}/exclude_unreachable.py" ./coverage.info ./coverage.info
+
 # Generate HTML report
 genhtml -o ./html ./coverage.info
 

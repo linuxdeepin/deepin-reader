@@ -169,3 +169,10 @@ TEST_F(TestUtils, UT_Utils_isWayland_002)
 
     EXPECT_FALSE(Utils::isWayland());
 }
+
+TEST_F(TestUtils, UT_Utils_setCurrentFilePath_001)
+{
+    Utils::setCurrentFilePath("/test/path/file.pdf");
+    EXPECT_TRUE(Utils::m_currenFilePath == "/test/path/file.pdf");
+    Utils::setCurrentFilePath("");
+}
