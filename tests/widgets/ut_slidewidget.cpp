@@ -20,6 +20,8 @@
 #include <QPropertyAnimation>
 #include <QDBusMessage>
 #include <QDBusInterface>
+#include <QPaintEvent>
+#include <DGuiApplicationHelper>
 
 namespace {
 void ReaderImageThreadPoolManager_addgetDocImageTask_stub(const ReaderImageParam_t &);
@@ -300,5 +302,60 @@ TEST_F(TestSlideWidget, testonUpdatePageImage)
     m_tester->m_curPageIndex = 0;
     m_tester->onUpdatePageImage(0);
     EXPECT_TRUE(g_funcname == "0");
+}
+
+TEST_F(TestSlideWidget, testsizeModeChanged)
+{
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
+    EXPECT_TRUE(m_tester->m_slidePlayWidget != nullptr);
+}
+
+TEST_F(TestSlideWidget, testpaintEvent)
+{
+    m_tester->resize(200, 200);
+    m_tester->m_offset = 0;
+    m_tester->m_blefttoright = true;
+    QPaintEvent event(QRect(0, 0, 100, 100));
+    m_tester->paintEvent(&event);
+    EXPECT_TRUE(m_tester->m_loadSpinner != nullptr);
+}
+
+TEST_F(TestSlideWidget, testmouseReleaseEvent)
+{
+    Stub stub;
+    stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
+
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mouseReleaseEvent(event);
+    delete event;
+    EXPECT_TRUE(g_funcname == "playImage_stub");
+}
+
+TEST_F(TestSlideWidget, testwheelEvent)
+{
+    Stub stub;
+    stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
+    stub.set(ADDR(SlideWidget, playImage), playImage_stub);
+
+    m_tester->m_curPageIndex = 2;
+
+    QPointF pos(50, 50);
+    int delta = 120;
+    Qt::MouseButtons buttons = Qt::NoButton;
+    Qt::KeyboardModifiers modifiers = Qt::NoModifier;
+    QWheelEvent *event = createWheelEvent(pos, delta, buttons, modifiers);
+    m_tester->wheelEvent(event);
+    EXPECT_TRUE(g_funcname == "playImage_stub");
+    delete event;
+}
+
+TEST_F(TestSlideWidget, testonImageAniFinished)
+{
+    Stub stub;
+    stub.set(ADDR(DocSheet, pageCount), pageCount_stub);
+    m_tester->onImageAniFinished();
+    SUCCEED();
 }
 

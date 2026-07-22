@@ -84,3 +84,17 @@ TEST_F(TestColorWidgetAction, testSeparatorProperty)
 {
     EXPECT_TRUE(m_tester->isSeparator());
 }
+
+TEST_F(TestColorWidgetAction, testRoundColorWidgetClickedLambda)
+{
+    // Triggering the button click lambda (Qt6 path) inside initWidget
+    QWidget *defaultWidget = m_tester->defaultWidget();
+    ASSERT_NE(defaultWidget, nullptr);
+
+    auto buttons = defaultWidget->findChildren<RoundColorWidget *>();
+    ASSERT_GE(buttons.size(), 1);
+
+    QSignalSpy spy(m_tester, SIGNAL(sigBtnGroupClicked()));
+    emit buttons.first()->clicked();
+    EXPECT_EQ(spy.count(), 1);
+}

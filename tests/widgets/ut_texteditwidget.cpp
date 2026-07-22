@@ -14,6 +14,7 @@
 
 #include <QSignalSpy>
 #include <QDebug>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
@@ -65,6 +66,20 @@ TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotClos
 {
     m_tester->showWidget(QPoint());
     EXPECT_TRUE(m_tester->m_TextEditWidget != nullptr);
+}
+
+TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotCloseNoteWidget_isEsc)
+{
+    m_tester->showWidget(QPoint());
+    m_tester->slotCloseNoteWidget(true);
+    SUCCEED();
+}
+
+TEST_F(UT_TextEditShadowWidgetayWidget, UT_TextEditShadowWidgetayWidget_slotCloseNoteWidget_notEsc)
+{
+    m_tester->showWidget(QPoint());
+    m_tester->slotCloseNoteWidget(false);
+    SUCCEED();
 }
 
 
@@ -201,5 +216,15 @@ TEST_F(TestTextEditWidget, test_TestTextEditWidget_focusOutEvent)
     m_tester->focusOutEvent(event);
     delete event;
     EXPECT_TRUE(spy.count() == 1);
+}
+
+TEST_F(TestTextEditWidget, test_TestTextEditWidget_showMenuTimerLambda)
+{
+    // Trigger the lambda connected to m_showMenuTimer->timeout
+    Stub stub;
+    UTCommon::stub_QWidget_isVisible(stub, false);  // not visible -> early return
+    QMetaObject::invokeMethod(m_tester->m_showMenuTimer, "timeout");
+    QTest::qWait(50);
+    SUCCEED();
 }
 

@@ -108,3 +108,15 @@ TEST_F(UT_ShortCutShow, UT_ShortCutShow_initPDF)
     EXPECT_TRUE(m_tester->m_shortcutMap.count() > 0);
 }
 
+TEST_F(UT_ShortCutShow, UT_ShortCutShow_KeyDataList_defaultConstructor)
+{
+    ShortCutShow::KeyDataList list;
+    EXPECT_TRUE(list.isEmpty());
+
+    ShortCutShow::KeyDataList list2{{"Ctrl+S", "Save"}, {"Ctrl+O", "Open"}};
+    EXPECT_EQ(list2.count(), 2);
+
+    list2.removeKey("Ctrl+S");
+    EXPECT_EQ(list2.count(), 1);
+}
+
