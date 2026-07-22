@@ -15,6 +15,7 @@
 #include "dpdfpage.h"
 #include "TipsWidget.h"
 #include "TextEditWidget.h"
+#include "Utils.h"
 #include "stub.h"
 
 #include <DDialog>
@@ -23,6 +24,8 @@
 #include <QSignalSpy>
 #include <QScroller>
 #include <QDesktopServices>
+#include <QShowEvent>
+#include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
 #include "ut_compat.h"
@@ -2497,4 +2500,151 @@ TEST_F(TestSheetBrowser, testfirstThumbnail001)
     strPath += "/files/normal.pdf";
 
     EXPECT_FALSE(m_tester->firstThumbnail(strPath).isNull());
+}
+
+TEST_F(TestSheetBrowser, testshowEvent_ext)
+{
+    QShowEvent event;
+    m_tester->showEvent(&event);
+    EXPECT_TRUE(m_tester->m_items.count() == 2);
+}
+
+TEST_F(TestSheetBrowser, testsizeModeChanged_ext)
+{
+    Stub s;
+    s.set(ADDR(FindWidget, updatePosition), showPosition_stub);
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    sheet->m_fileType = Dr::FileType::PDF;
+    m_tester->m_sheet = sheet;
+
+    m_tester->handlePrepareSearch();
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::CompactMode);
+    emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
+
+    delete sheet;
+    SUCCEED();
+}
+
+TEST_F(TestSheetBrowser, testtimerEvent_repeatTimer)
+{
+    // Cover SheetBrowser::timerEvent() branch where the timer id
+    // matches m_repeatTimer.timerId().
+    m_tester->m_repeatTimer.start(5000, m_tester);
+    int tid = m_tester->m_repeatTimer.timerId();
+    ASSERT_GT(tid, 0);
+
+    QTimerEvent event(tid);
+    m_tester->timerEvent(&event);
+
+    EXPECT_FALSE(m_tester->m_canTouchScreen);
+    EXPECT_FALSE(m_tester->m_repeatTimer.isActive());
+}
+
+TEST_F(TestSheetBrowser, testtimerEvent_other)
+{
+    // Cover SheetBrowser::timerEvent() branch where the timer id
+    // does NOT match m_repeatTimer.timerId().
+    m_tester->m_canTouchScreen = true;
+    QTimerEvent event(999999);  // unlikely to collide
+    m_tester->timerEvent(&event);
+    EXPECT_TRUE(m_tester->m_canTouchScreen);
+}
+
+TEST_F(TestSheetBrowser, testshowNoteEditWidget_sigHideLambda)
+{
+    // Cover the sigHide lambda inside SheetBrowser::showNoteEditWidget().
+    Stub s;
+    s.set(ADDR(TextEditShadowWidget, showWidget), showWidget_stub);
+    s.set(ADDR(SheetBrowser, setIconAnnotSelect), show_stub);
+
+    DPdfTextAnnot *dPdfAnnot = new DPdfTextAnnot();
+    Annotation *annotation = new PDFAnnotation(dPdfAnnot);
+    QPoint point(0, 0);
+
+    m_tester->m_bHandAndLink = false;
+    g_funcName.clear();
+    m_tester->showNoteEditWidget(annotation, point);
+    ASSERT_NE(m_tester->m_noteEditWidget, nullptr);
+
+    // Emitting sigHide should invoke the connected lambda, which calls
+    // setIconAnnotSelect(false).
+    emit m_tester->m_noteEditWidget->getTextEditWidget()->sigHide();
+
+    EXPECT_TRUE(g_funcName == "show_stub");
+
+    delete dPdfAnnot;
+    delete annotation;
+}
+
+// Stub for QMenu::exec that emits signalMenuItemClicked while showMenu()
+// is still running. This lets us invoke the local lambda that is registered
+// inside SheetBrowser::showMenu() and SheetBrowser::mousePressEvent().
+typedef QAction *(*CapturedExecSig)(QMenu *, const QPoint &, QAction *);
+QAction *exec_emitCopy_stub(QMenu *self, const QPoint &pos, QAction *at)
+{
+    Q_UNUSED(pos)
+    Q_UNUSED(at)
+    BrowserMenu *menu = static_cast<BrowserMenu *>(self);
+    emit menu->signalMenuItemClicked("Copy");
+    return nullptr;
+}
+
+TEST_F(TestSheetBrowser, testshowMenu_lambda)
+{
+    // Cover the signalMenuItemClicked lambda inside SheetBrowser::showMenu().
+    Stub stub;
+    stub.set(ADDR(SheetBrowser, selectedWordsText), selectedWordsText_stub);
+    stub.set(ADDR(BrowserMenu, initActions), initActions_stub);
+    stub.set((QAction * (QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), exec_emitCopy_stub);
+    stub.set(ADDR(SheetBrowser, clearSelectIconAnnotAfterMenu), clearSelectIconAnnotAfterMenu_stub);
+    stub.set(ADDR(Utils, copyText), show_stub);
+
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+
+    BrowserWord *p = new BrowserWord(nullptr, Word());
+    m_tester->m_selectEndWord = p;
+
+    g_funcName.clear();
+    m_tester->showMenu();
+    EXPECT_TRUE(g_funcName == "show_stub");
+
+    delete p;
+    delete sheet;
+}
+
+// items() stub that returns a list containing a BrowserPage, so mousePressEvent
+// finds a non-null item and proceeds to create the context menu.
+static QList<QGraphicsItem *> items_stub_browserpage(const QPointF &, Qt::ItemSelectionMode, Qt::SortOrder, const QTransform &)
+{
+    QList<QGraphicsItem *> items;
+    DocSheet sheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    items.append(new BrowserPage(nullptr, 0, &sheet));
+    return items;
+}
+
+TEST_F(TestSheetBrowser, testmousePressEvent_lambda)
+{
+    // Cover the signalMenuItemClicked lambda inside SheetBrowser::mousePressEvent().
+    Stub stub;
+    stub.set(ADDR(SheetBrowser, selectedWordsText), selectedWordsText_stub);
+    stub.set(ADDR(BrowserMenu, initActions), initActions_stub);
+    stub.set((QAction * (QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), exec_emitCopy_stub);
+    stub.set(static_cast<QList<QGraphicsItem *>(QGraphicsScene::*)(const QPointF &, Qt::ItemSelectionMode, Qt::SortOrder, const QTransform &) const>(ADDR(QGraphicsScene, items)), items_stub_browserpage);
+    stub.set(ADDR(Utils, copyText), show_stub);
+
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+
+    QPointF localPos(10, 10);
+    QMouseEvent *event = createMouseEvent(QEvent::MouseButtonPress, localPos, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+
+    g_funcName.clear();
+    m_tester->mousePressEvent(event);
+    EXPECT_TRUE(g_funcName == "show_stub");
+
+    delete event;
+    delete sheet;
+    qDeleteAll(g_QGraphicsItemList);
+    g_QGraphicsItemList.clear();
 }
