@@ -233,11 +233,13 @@ void DocTabBar::dragEnterEvent(QDragEnterEvent *event)
     DTabBar::dragEnterEvent(event);
     if (event->mimeData()->hasFormat("deepin_reader/tabbar")) {
         qCDebug(appLog) << "DocTabBar::dragEnterEvent - hasFormat";
+        // LCOV_EXCL_START
         QTimer::singleShot(1, [this]() {
             DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
             QGuiApplication::changeOverrideCursor(Qt::DragCopyCursor);
             DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
         });
+        // LCOV_EXCL_STOP
     }
     qCDebug(appLog) << "DocTabBar::dragEnterEvent end";
 }

@@ -1325,3 +1325,46 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_zoomOut_001)
     delete g_docsheet;
     g_docsheet = nullptr;
 }
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_invoke)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+
+    QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
+    m_tester->onSheetOperationChanged(sheet);
+    EXPECT_TRUE(spy.count() == 1);
+
+    delete sheet;
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_nullptr)
+{
+    // nullptr sheet with no current sheet -> signal still emitted
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub_nullptr);
+
+    QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
+    m_tester->onSheetOperationChanged(nullptr);
+    EXPECT_TRUE(spy.count() == 1);
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_onCentralMoveIn_invoke)
+{
+    Stub s;
+    s.set(ADDR(DocTabBar, insertSheet), insertSheet_stub);
+    s.set(ADDR(CentralDocPage, enterSheet), enterSheet_stub);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+
+    m_tester->onCentralMoveIn(sheet);
+    EXPECT_TRUE(g_funcName == "enterSheet_stub");
+
+    delete sheet;
+}
+
+// Note: isFullScreen/openFullScreen require MainWindow in parent hierarchy
+// which is not available in this test fixture - skipping to avoid crash.
