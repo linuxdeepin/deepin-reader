@@ -311,3 +311,20 @@ TEST_F(UT_DocTabBar, UT_DocTabBar_resizeEvent)
     m_tester->resizeEvent(&event);
     SUCCEED();
 }
+
+TEST_F(UT_DocTabBar, UT_DocTabBar_onDragActionChanged_nullDrag)
+{
+    // No drag in progress - dragIconWindow() returns nullptr, function returns early
+    m_tester->onDragActionChanged(Qt::IgnoreAction);
+    m_tester->onDragActionChanged(Qt::CopyAction);
+    m_tester->onDragActionChanged(Qt::MoveAction);
+    SUCCEED();
+}
+
+TEST_F(UT_DocTabBar, UT_DocTabBar_dragEnterEvent_emptyMime)
+{
+    QMimeData mimeData;
+    QDragEnterEvent event(QPoint(0, 0), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
+    m_tester->dragEnterEvent(&event);
+    SUCCEED();
+}

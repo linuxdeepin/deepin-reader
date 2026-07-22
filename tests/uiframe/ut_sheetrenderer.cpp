@@ -14,6 +14,8 @@
 #include <QImage>
 #include <QPointF>
 #include <QRectF>
+#include <QTest>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -263,5 +265,25 @@ TEST_F(TestSheetRenderer, testLoadPageLableDirectly)
 {
     // Test that loadPageLable is safe when document is null
     m_tester->loadPageLable();
+    SUCCEED();
+}
+
+TEST_F(TestSheetRenderer, testOpenFileAsync)
+{
+    // Call openFileAsync - it just appends a task to the render thread
+    m_tester->openFileAsync("test");
+    // Wait briefly for the task to be processed
+    QTest::qWait(100);
+    SUCCEED();
+}
+
+TEST_F(TestSheetRenderer, testOpenFileExec)
+{
+    // Schedule sigOpened emission to break the event loop in openFileExec
+    QTimer::singleShot(50, m_tester, [this]() {
+        emit m_tester->sigOpened(deepin_reader::Document::NoError);
+    });
+    bool result = m_tester->openFileExec("test");
+    Q_UNUSED(result);
     SUCCEED();
 }
