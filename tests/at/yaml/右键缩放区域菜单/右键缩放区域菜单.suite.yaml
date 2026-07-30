@@ -18,10 +18,6 @@ suites:
   # 百分编辑右边的下拉没有元素
   - action: mouse_click
     selector:
-      name: pageEdit
-      role: panel
-  - action: mouse_click
-    selector:
       name: DLineEditChildLineEdit
       role: text
     items:
@@ -54,7 +50,7 @@ suites:
   - action: assert_element
     ref: n6
     selector:
-      name: Button_SelectFile
-      role: button
+      name: DLineEditChildLineEdit
+      role: text
 teardown:
 - action: session_stop

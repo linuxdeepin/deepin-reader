@@ -4,22 +4,18 @@ elements:
     role: button
   n14:
     name: Button_thumbnail
-    role: check box
   n15:
     name: Button_catalog
-    role: check box
   n163:
     name: View_CatalogTree
     role: tree
   n16:
     name: Button_bookmark
-    role: check box
   n22:
     name: Button_BookmarkAdd
     role: button
   n17:
     name: Button_annotation
-    role: check box
   n49:
     name: Button_NotesAdd
     role: button
@@ -58,7 +54,7 @@ elements:
     role: menu item
   pageEdit:
     name: pageEdit
-    role: panel
+    role: text
   Button_SelectFile:
     name: Button_SelectFile
     role: button

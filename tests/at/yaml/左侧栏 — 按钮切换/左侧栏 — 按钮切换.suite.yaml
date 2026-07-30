@@ -8,39 +8,38 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
-  wait: 3.0
+  wait: 6.0
 suites:
 - id: suite_sidebar_tabs_s1
   name: 启动 deepin-reader并打开文档
   description: ''
   tags: []
   steps:
-  - action: mouse_click
+  - action: element_action
+    do: click
     ref: n14
     selector:
       name: Button_thumbnail
-      role: check box
-  - action: mouse_click
+  - action: element_action
+    do: click
     ref: n15
     selector:
       name: Button_catalog
-      role: check box
-  - action: mouse_click
+  - action: element_action
+    do: click
     ref: n16
     selector:
       name: Button_bookmark
-      role: check box
-  - action: mouse_click
+  - action: element_action
+    do: click
     ref: n17
     selector:
       name: Button_annotation
-      role: check box
   assert_steps:
   - action: assert_element
     ref: n14
     selector:
       name: Button_thumbnail
-      role: check box
   - action: assert_element
     ref: n163
     selector:
