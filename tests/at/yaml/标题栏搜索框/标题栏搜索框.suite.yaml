@@ -24,11 +24,6 @@ suites:
     text: test
   - action: keyboard_press
     key: return
-  - action: mouse_click
-    ref: n244
-    selector:
-      name: DLineEditClearButton
-      role: button
   assert_steps:
   - action: assert_element
     ref: n243
