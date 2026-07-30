@@ -1,3 +1,31 @@
+deepin-reader (6.5.59) unstable; urgency=medium
+
+  * chore: Update version to 6.5.59
+  * test(sidebar): cover sidebar views and thread pool manager
+  * test(infra): add coverage post-processing and update test runner
+  * test(browser): add PageRenderThread slots and SheetBrowser event coverage
+  * test(document): cover DjVu text/search and Model.h virtual defaults
+  * test(sidebar): cover delegate sizeHint and bookmark/notes widgets
+  * test(uiframe): cover CentralDocPage, DocTabBar and SheetRenderer
+  * test(widgets): extend color/file/find/slide/text/db coverage
+  * test(uiframe): add DocSheet print path and TitleWidget tests
+  * test(app): cover Application notify and MainWindow paths
+  * test(document): extend PDF and XPS adapter coverage
+  * test(sidebar): cover sidebar views and thread pool manager
+  * test: add SecurityDialog/autoCutText and expand ColorWidget/Model coverage
+  * test: add XPS adapter and TitleMenu/Application test cases
+  * fix(tests): adapt 12 failing Qt6 cases to new source semantics
+  * test: add SheetRenderer/Logger cases and extend DocTabBar/ThreadPool
+  * fix(tests): repair test-prj-running.sh to build and report coverage
+  * ci: upgrade actions/checkout to v7 with unsafe PR checkout
+  * fix(pdf): use UUID-only backup filename to avoid NAME_MAX overflow
+  * fix: add X-Deepin-Singleton flag to desktop file
+  * test: add AT-SPI test cases and suites
+  * [skip CI] Translate deepin-reader.ts in it
+  * fix(keyboard): SheetSidebar::event() 不再处理 Alt+M 消除双菜单
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 30 Jul 2026 15:30:54 +0800
+
 deepin-reader (6.5.58) unstable; urgency=medium
 
   * chore: Update version to 6.5.58
