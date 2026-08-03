@@ -11,46 +11,53 @@ setup:
   wait: 3.0
 suites:
 - id: suite_context_menu_scale_s1
-  name: 启动 deepin-reader 并打开文档
+  name: 右键缩放区域菜单 — 所有菜单项
   description: ''
   tags: []
   steps:
-  # 百分编辑右边的下拉没有元素
   - action: mouse_click
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_CentralDocPage
+  - action: dtk_context_menu
+    selector:
+      name: Form_scaleEdit_P
+      child_index: 1
+      popup: click
     items:
     - 双页显示
-  - action: mouse_click
+  - action: dtk_context_menu
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_scaleEdit_P
+      child_index: 1
+      popup: click
     items:
     - 默认大小
-  - action: mouse_click
+  - action: dtk_context_menu
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_scaleEdit_P
+      child_index: 1
+      popup: click
     items:
     - 适合页面
-  - action: mouse_click
+  - action: dtk_context_menu
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_scaleEdit_P
+      child_index: 1
+      popup: click
     items:
     - 适应高度
-  - action: mouse_click
+  - action: dtk_context_menu
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_scaleEdit_P
+      child_index: 1
+      popup: click
     items:
     - 适应宽度
   assert_steps:
   - action: assert_element
     ref: n6
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: Form_CentralDocPage
+      role: form
 teardown:
 - action: session_stop

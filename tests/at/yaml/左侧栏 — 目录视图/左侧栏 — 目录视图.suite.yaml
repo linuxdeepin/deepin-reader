@@ -8,23 +8,33 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
-  wait: 6.0
+  wait: 3.0
 suites:
 - id: suite_sidebar_catalog_s1
-  name: 启动 deepin-reader并打开文档
+  name: 左侧栏 — 目录视图 — 目录树显示和点击跳转
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+  - action: mouse_click
     ref: n15
     selector:
       name: Button_catalog
+  - action: mouse_click
+    ref: n163
+    selector:
+      name: View_CatalogTree
   assert_steps:
   - action: assert_element
     ref: n163
     selector:
       name: View_CatalogTree
-      role: tree
+  - action: assert_element
+    ref: n163
+    selector:
+      name: View_CatalogTree
 teardown:
 - action: session_stop

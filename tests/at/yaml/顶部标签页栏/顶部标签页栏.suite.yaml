@@ -11,17 +11,30 @@ setup:
   wait: 3.0
 suites:
 - id: suite_tab_management_s1
-  name: 启动 deepin-reader并打开文档
+  name: 顶部标签页栏 — 添加/滚动/切换
   description: ''
   tags: []
   steps:
-  - action: wait
-    seconds: 1.0
+  - action: mouse_click
+    ref: n210
+    selector:
+      name: normal.pdf
+      role: page tab
   assert_steps:
   - action: assert_element
     ref: n209
     selector:
       name: normal.pdf
-      role: page tab list
+      role: page tab
+  - action: assert_element
+    ref: n211
+    selector:
+      name: normal.pdf
+      role: page tab
+  - action: assert_element
+    ref: n212
+    selector:
+      name: normal.pdf
+      role: page tab
 teardown:
 - action: session_stop

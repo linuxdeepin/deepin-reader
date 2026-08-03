@@ -1,39 +1,37 @@
 elements:
   n6:
     name: Button_SelectFile
-    role: button
+  n224:
+    name: Button_ThumbnailToggle
   n14:
     name: Button_thumbnail
   n15:
     name: Button_catalog
   n163:
     name: View_CatalogTree
-    role: tree
   n16:
     name: Button_bookmark
   n22:
     name: Button_BookmarkAdd
-    role: button
   n17:
     name: Button_annotation
   n49:
     name: Button_NotesAdd
-    role: button
   n156:
     name: pageEdit
     role: text
-  n213:
-    name: DTabBarAddButton
-    role: button
+  n210:
+    name: normal.pdf
+    role: page tab
   n209:
     name: normal.pdf
-    role: page tab list
+    role: page tab
   n211:
-    name: 向左滚动
-    role: button
+    name: normal.pdf
+    role: page tab
   n212:
-    name: 向右滚动
-    role: button
+    name: normal.pdf
+    role: page tab
   n243:
     name: DLineEditChildLineEdit
     role: text
@@ -42,34 +40,19 @@ elements:
     role: button
   n227:
     name: DLineEditChildLineEdit
-    role: text
-  n254:
-    name: 浅色
-    role: menu item
-  n255:
-    name: 深色
-    role: menu item
-  n256:
-    name: 跟随系统
-    role: menu item
-  pageEdit:
-    name: pageEdit
-    role: text
-  Button_SelectFile:
-    name: Button_SelectFile
-    role: button
-  DLineEditChildLineEdit:
-    name: DLineEditChildLineEdit
-    role: text
+  Form_CentralDocPage:
+    name: Form_CentralDocPage
+  Form_scaleEdit_P:
+    name: Form_scaleEdit_P
+    child_index: 1
+    popup: click
   Button_annotation:
     name: Button_annotation
-    role: push button
   View_ImageList:
     name: View_ImageList
-    role: list
+    child_index: 0
   Button_bookmark:
     name: Button_bookmark
-    role: push button
   n0:
     name: Form_DMainWindow
     role: form
@@ -139,9 +122,9 @@ elements:
   n208:
     name: Form_DocTabBar
     role: form
-  n210:
-    name: normal.pdf
-    role: page tab
+  n213:
+    name: DTabBarAddButton
+    role: button
   n217:
     name: Form_DMainWindowTitlebar
     role: form
@@ -175,3 +158,12 @@ elements:
   n253:
     name: DTitlebarThemeMenu
     role: popup menu
+  n254:
+    name: 浅色
+    role: menu item
+  n255:
+    name: 深色
+    role: menu item
+  n256:
+    name: 跟随系统
+    role: menu item

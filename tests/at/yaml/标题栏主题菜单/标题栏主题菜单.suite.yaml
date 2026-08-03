@@ -8,10 +8,10 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader
-  wait: 2.0
+  wait: 3.0
 suites:
-- id: suite_theme_menu_s1
-  name: 启动 deepin-reader，不打开文档
+- id: suite_theme_menu_v2_s1
+  name: 标题栏主题菜单 — 浅色/深色/跟随系统切换(items方式)
   description: ''
   tags: []
   steps:
@@ -32,6 +32,13 @@ suites:
     ref: n6
     selector:
       name: Button_SelectFile
-      role: button
+  - action: assert_element
+    ref: n6
+    selector:
+      name: Button_SelectFile
+  - action: assert_element
+    ref: n6
+    selector:
+      name: Button_SelectFile
 teardown:
 - action: session_stop

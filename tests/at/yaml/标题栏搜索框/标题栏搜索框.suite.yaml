@@ -11,19 +11,28 @@ setup:
   wait: 3.0
 suites:
 - id: suite_titlebar_search_s1
-  name: 启动 deepin-reader并打开文档
+  name: 标题栏搜索框 — 关键字输入/清除/搜索
   description: ''
   tags: []
   steps:
-  - action: mouse_click
-    ref: n243
-    selector:
-      name: DLineEditChildLineEdit
-      role: text
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  # 会点击到缩放框
+  # - action: mouse_click
+  #   ref: n243
+  #   selector:
+  #     name: DLineEditChildLineEdit
+  #     role: text
   - action: keyboard_type_text
     text: test
   - action: keyboard_press
     key: return
+  - action: mouse_click
+    ref: n244
+    selector:
+      name: DLineEditClearButton
+      role: button
   assert_steps:
   - action: assert_element
     ref: n243
@@ -31,9 +40,9 @@ suites:
       name: DLineEditChildLineEdit
       role: text
   - action: assert_element
-    ref: n243
+    ref: n244
     selector:
-      name: DLineEditChildLineEdit
-      role: text
+      name: DLineEditClearButton
+      role: button
 teardown:
 - action: session_stop

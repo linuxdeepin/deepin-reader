@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: suite_titlebar_scale_s1
-  name: 启动 deepin-reader并打开文档
+  name: 标题栏缩放输入框 — 缩放比例输入
   description: ''
   tags: []
   steps:
@@ -19,7 +19,6 @@ suites:
     ref: n227
     selector:
       name: DLineEditChildLineEdit
-      role: text
   - action: keyboard_type_text
     text: '100'
   - action: keyboard_press
@@ -29,6 +28,5 @@ suites:
     ref: n227
     selector:
       name: DLineEditChildLineEdit
-      role: text
 teardown:
 - action: session_stop

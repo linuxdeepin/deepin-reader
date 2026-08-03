@@ -8,20 +8,22 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
-  wait: 6.0
+  wait: 3.0
 suites:
 - id: suite_sidebar_thumbnails_s1
-  name: 启动 deepin-reader并打开文档
+  name: 左侧栏 — 缩略图视图 — 分页导航
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+  - action: mouse_click
     ref: n14
     selector:
       name: Button_thumbnail
-  - action: element_action
-    do: click
+  - action: mouse_click
     ref: n156
     selector:
       name: pageEdit
