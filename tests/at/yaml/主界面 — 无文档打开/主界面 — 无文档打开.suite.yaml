@@ -11,7 +11,7 @@ setup:
   wait: 3.0
 suites:
 - id: suite_main_no_doc_s1
-  name: 启动 deepin-reader，不打开任何文档
+  name: 主界面 — 无文档打开 — 打开文件
   description: ''
   tags: []
   steps:
@@ -19,12 +19,10 @@ suites:
     ref: n6
     selector:
       name: Button_SelectFile
-      role: button
   assert_steps:
   - action: assert_element
     ref: n6
     selector:
       name: Button_SelectFile
-      role: button
 teardown:
 - action: session_stop

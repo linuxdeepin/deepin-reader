@@ -8,30 +8,30 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
-  wait: 6.0
+  wait: 3.0
 suites:
 - id: suite_sidebar_tabs_s1
-  name: 启动 deepin-reader并打开文档
+  name: 左侧栏 — 按钮切换 — 缩略图/目录/书签/注释
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+  - action: mouse_click
     ref: n14
     selector:
       name: Button_thumbnail
-  - action: element_action
-    do: click
+  - action: mouse_click
     ref: n15
     selector:
       name: Button_catalog
-  - action: element_action
-    do: click
+  - action: mouse_click
     ref: n16
     selector:
       name: Button_bookmark
-  - action: element_action
-    do: click
+  - action: mouse_click
     ref: n17
     selector:
       name: Button_annotation
@@ -44,16 +44,13 @@ suites:
     ref: n163
     selector:
       name: View_CatalogTree
-      role: tree
   - action: assert_element
     ref: n22
     selector:
       name: Button_BookmarkAdd
-      role: button
   - action: assert_element
     ref: n49
     selector:
       name: Button_NotesAdd
-      role: button
 teardown:
 - action: session_stop

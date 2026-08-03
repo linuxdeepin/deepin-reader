@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -117,7 +117,9 @@ void FindWidget::initWidget()
     qCDebug(appLog) << "Initializing find widget controls";
     m_pSearchEdit = new DSearchEdit(this);
     m_pSearchEdit->setObjectName("findSearchEdit_P");
+    m_pSearchEdit->setAccessibleName("Form_findSearchEdit_P");
     m_pSearchEdit->lineEdit()->setObjectName("findSearchEdit");
+    m_pSearchEdit->lineEdit()->setAccessibleName("DLineEditChildLineEdit");
     m_pSearchEdit->lineEdit()->setFocusPolicy(Qt::StrongFocus);
     connect(m_pSearchEdit, &DSearchEdit::returnPressed, this, &FindWidget::onSearchStart);
     connect(m_pSearchEdit, &DSearchEdit::textChanged, this, &FindWidget::onTextChanged);

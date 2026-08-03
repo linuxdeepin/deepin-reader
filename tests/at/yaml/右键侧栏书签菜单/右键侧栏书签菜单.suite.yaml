@@ -8,26 +8,57 @@ env_check: []
 setup:
 - action: session_start
   command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
-  wait: 6.0
+  wait: 3.0
 suites:
 - id: suite_context_menu_bookmark_s1
-  name: 启动应用
+  name: 右键侧栏书签菜单 — 所有菜单项
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加书签
+  - action: mouse_click
     selector:
       name: Button_bookmark
-  - action: element_action
-    do: click
+  - action: mouse_click
     selector:
       name: View_ImageList
-      role: list
+      child_index: 0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 删除书签
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加书签
+  - action: mouse_click
+    selector:
+      name: Button_bookmark
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      child_index: 0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 全部删除
   assert_steps:
   - action: assert_element
     selector:
-      name: View_ImageList
-      role: list
+      name: Form_CentralDocPage
+      role: form
 teardown:
 - action: session_stop

@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -16,6 +16,7 @@
 BrowserMenu::BrowserMenu(QWidget *parent) : DMenu(parent)
 {
     qCDebug(appLog) << "BrowserMenu created";
+    setAccessibleName("Menu_Browser");
     DFontSizeManager::instance()->bind(this, DFontSizeManager::T6);
     qCDebug(appLog) << "BrowserMenu::BrowserMenu() - Constructor completed";
 }

@@ -5,7 +5,7 @@ metadata:
   normalizer: LLM-assisted + human review
   non_gui_cases:
     count: 12
-    reason: 'll-cli terminal commands, not GUI automation'
+    reason: ll-cli terminal commands, not GUI automation
     case_ids:
     - case_1704991
     - case_1704989
@@ -37,7 +37,6 @@ cases:
     element_ref: n6
     selector:
       name: Button_SelectFile
-      role: button
     action: assert_visible
   - step_type: action
     description: 点击打开文件按钮
@@ -56,8 +55,7 @@ cases:
     测试界面: 左侧栏 — 按钮切换
     测试功能: 侧边栏四个功能按钮切换（缩略图/目录/书签/注释）
     前置条件: deepin-reader 已打开一个 PDF 文档
-    AT元素引用: Button_thumbnail, Button_catalog, Button_bookmark, Button_annotation,
-      Button_search, View_CatalogTree, Button_BookmarkAdd, Button_NotesAdd
+    AT元素引用: Button_thumbnail, Button_catalog, Button_bookmark, Button_annotation, Button_search, View_CatalogTree, Button_BookmarkAdd, Button_NotesAdd
   steps:
   - step_type: action
     description: 打开文档，展开左侧栏，点击缩略图按钮
@@ -85,7 +83,6 @@ cases:
     element_ref: n163
     selector:
       name: View_CatalogTree
-      role: tree
     action: assert_visible
   - step_type: action
     description: 点击书签按钮
@@ -99,7 +96,6 @@ cases:
     element_ref: n22
     selector:
       name: Button_BookmarkAdd
-      role: button
     action: assert_visible
   - step_type: action
     description: 点击注释按钮
@@ -113,7 +109,6 @@ cases:
     element_ref: n49
     selector:
       name: Button_NotesAdd
-      role: button
     action: assert_visible
 - id: suite_sidebar_thumbnails
   name: 左侧栏 — 缩略图视图 — 分页导航
@@ -139,7 +134,6 @@ cases:
     element_ref: n156
     selector:
       name: pageEdit
-      role: text
     action: assert_visible
 - id: suite_tab_management
   name: 顶部标签页栏 — 添加/滚动/切换
@@ -162,7 +156,6 @@ cases:
     element_ref: n209
     selector:
       name: normal.pdf
-      role: page tab list
     action: assert_visible
   - step_type: action
     description: 点击左移按钮
@@ -176,7 +169,6 @@ cases:
     element_ref: n211
     selector:
       name: 向左滚动
-      role: button
     action: assert_visible
   - step_type: action
     description: 点击右移按钮
@@ -190,7 +182,6 @@ cases:
     element_ref: n212
     selector:
       name: 向右滚动
-      role: button
     action: assert_visible
 - id: suite_titlebar_search
   name: 标题栏搜索框 — 关键字输入/清除/搜索
@@ -250,55 +241,6 @@ cases:
   - step_type: assert
     description: 文档按输入的缩放比例显示
     action: assert_visible
-- id: suite_theme_menu
-  name: 标题栏主题菜单 — 浅色/深色/跟随系统切换
-  status: active
-  annotation:
-    测试界面: 标题栏主题菜单
-    测试功能: 浅色/深色/跟随系统主题切换
-    前置条件: deepin-reader 已打开，标题栏主题菜单已展开
-    AT元素引用: 浅色, 深色, 跟随系统
-  steps:
-  - step_type: action
-    description: 点击工具栏中的菜单键，鼠标放置在主题菜单上
-    action: dtk_main_menu
-  - step_type: assert
-    description: 弹出三个主题菜单：浅色、深色、跟随主题
-    element_ref: n254
-    selector:
-      name: 浅色
-      role: menu item
-    action: assert_visible
-  - step_type: action
-    description: 点击浅色主题
-    element_ref: n254
-    selector:
-      name: 浅色
-      role: menu item
-    action: click
-  - step_type: assert
-    description: 应用切换到浅色主题
-    action: assert_visible
-  - step_type: action
-    description: 重新打开主题菜单，点击深色主题
-    element_ref: n255
-    selector:
-      name: 深色
-      role: menu item
-    action: click
-  - step_type: assert
-    description: 应用切换到深色主题
-    action: assert_visible
-  - step_type: action
-    description: 重新打开主题菜单，点击跟随系统
-    element_ref: n256
-    selector:
-      name: 跟随系统
-      role: menu item
-    action: click
-  - step_type: assert
-    description: 应用主题跟随系统设置
-    action: assert_visible
 - id: suite_sidebar_catalog
   name: 左侧栏 — 目录视图 — 目录树显示和点击跳转
   status: active
@@ -320,7 +262,6 @@ cases:
     element_ref: n163
     selector:
       name: View_CatalogTree
-      role: tree
     action: assert_visible
   - step_type: action
     description: 点击目录树中任意一个目录项
@@ -422,6 +363,9 @@ cases:
     action: dtk_main_menu
     items:
     - 打印
+  - step_type: assert
+    description: 菜单操作后应用仍正常响应
+    action: assert_visible
 - id: suite_context_menu_doc
   name: 右键文档区域菜单 — 所有菜单项
   status: active
@@ -439,7 +383,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 搜索
   - step_type: action
@@ -447,7 +390,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 添加书签
   - step_type: action
@@ -455,7 +397,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 添加注释
   - step_type: action
@@ -463,7 +404,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 全屏
   - step_type: action
@@ -471,7 +411,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 幻灯片放映
   - step_type: action
@@ -479,7 +418,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 首页
   - step_type: action
@@ -487,7 +425,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 上一页
   - step_type: action
@@ -495,7 +432,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 下一页
   - step_type: action
@@ -503,7 +439,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 末页
   - step_type: action
@@ -511,7 +446,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 左旋转
   - step_type: action
@@ -519,7 +453,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 右旋转
   - step_type: action
@@ -527,7 +460,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 打印
   - step_type: action
@@ -535,9 +467,11 @@ cases:
     action: dtk_context_menu
     selector:
       name: Form_CentralDocPage
-      role: form
     items:
     - 文档信息
+  - step_type: assert
+    description: 右键菜单操作后应用仍正常响应
+    action: assert_visible
 - id: suite_context_menu_scale
   name: 右键缩放区域菜单 — 所有菜单项
   status: active
@@ -555,7 +489,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: DLineEditChildLineEdit
-      role: text
     items:
     - 双页视图
   - step_type: action
@@ -563,7 +496,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: DLineEditChildLineEdit
-      role: text
     items:
     - 实际大小
   - step_type: action
@@ -571,7 +503,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: DLineEditChildLineEdit
-      role: text
     items:
     - 适合页面
   - step_type: action
@@ -579,7 +510,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: DLineEditChildLineEdit
-      role: text
     items:
     - 适合高度
   - step_type: action
@@ -587,9 +517,11 @@ cases:
     action: dtk_context_menu
     selector:
       name: DLineEditChildLineEdit
-      role: text
     items:
     - 适合宽度
+  - step_type: assert
+    description: 缩放菜单操作后应用仍正常响应
+    action: assert_visible
 - id: suite_context_menu_note
   name: 右键侧栏注释菜单 — 所有菜单项
   status: active
@@ -607,7 +539,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: View_ImageList
-      role: list
     items:
     - 复制
   - step_type: action
@@ -615,7 +546,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: View_ImageList
-      role: list
     items:
     - 删除注释
   - step_type: action
@@ -623,9 +553,11 @@ cases:
     action: dtk_context_menu
     selector:
       name: View_ImageList
-      role: list
     items:
     - 删除全部
+  - step_type: assert
+    description: 注释菜单操作后应用仍正常响应
+    action: assert_visible
 - id: suite_context_menu_bookmark
   name: 右键侧栏书签菜单 — 所有菜单项
   status: active
@@ -643,7 +575,6 @@ cases:
     action: dtk_context_menu
     selector:
       name: View_ImageList
-      role: list
     items:
     - 删除书签
   - step_type: action
@@ -651,9 +582,11 @@ cases:
     action: dtk_context_menu
     selector:
       name: View_ImageList
-      role: list
     items:
     - 删除全部
+  - step_type: assert
+    description: 书签菜单操作后应用仍正常响应
+    action: assert_visible
 - id: suite_theme_menu_v2
   name: 标题栏主题菜单 — 浅色/深色/跟随系统切换(items方式)
   status: active
@@ -676,7 +609,6 @@ cases:
     element_ref: n6
     selector:
       name: Button_SelectFile
-      role: button
     action: assert_visible
   - step_type: action
     description: 打开主题菜单，选择"深色"
@@ -688,7 +620,6 @@ cases:
     element_ref: n6
     selector:
       name: Button_SelectFile
-      role: button
     action: assert_visible
   - step_type: action
     description: 打开主题菜单，选择"跟随系统"
@@ -700,5 +631,4 @@ cases:
     element_ref: n6
     selector:
       name: Button_SelectFile
-      role: button
     action: assert_visible

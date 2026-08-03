@@ -339,6 +339,14 @@ tree:
         comment: ''
         annotation_status: draft
         children:
+        - id: n224
+          role: check box
+          name: Button_ThumbnailToggle
+          object_name: Thumbnails
+          accessible_id: ''
+          classification: interactive
+          comment: 'GUI位置: 标题栏左侧 | 功能: 展开/收起侧边栏'
+          annotation_status: reviewed
         - id: n225
           role: form
           name: Form_widget

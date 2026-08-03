@@ -1,5 +1,5 @@
                                                                                                                                                                                // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,6 +19,7 @@ TitleWidget::TitleWidget(DWidget *parent)
     qCDebug(appLog) << "Initializing TitleWidget...";
     m_pThumbnailBtn = new DIconButton(this);
     m_pThumbnailBtn->setObjectName("Thumbnails");
+    m_pThumbnailBtn->setAccessibleName("Button_ThumbnailToggle");
     m_pThumbnailBtn->setToolTip(tr("Thumbnails"));
     m_pThumbnailBtn->setCheckable(true);
     m_pThumbnailBtn->setDisabled(true);
