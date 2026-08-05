@@ -34,14 +34,17 @@ void EncryptionPage::InitUI()
     QPixmap m_encrypticon = QIcon::fromTheme("dr_compress_lock").pixmap(128, 128);
     DLabel *pixmaplabel = new DLabel(this);
     pixmaplabel->setPixmap(m_encrypticon);
+    pixmaplabel->setAccessibleName("Label_EncryptIcon");
     DLabel *stringinfolabel = new DLabel(this);
 
     DFontSizeManager::instance()->bind(stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
+    stringinfolabel->setAccessibleName("Label_EncryptInfo");
 
     m_password = new DPasswordEdit(this);
     m_password->setFixedSize(360, 36);
+    m_password->setAccessibleName("PasswordEdit");
     QLineEdit *edit = m_password->lineEdit();
     edit->setObjectName("passwdEdit");
     edit->setPlaceholderText(tr("Password"));

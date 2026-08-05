@@ -31,6 +31,7 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
     , m_docSheet(docsheet)
 {
     qCDebug(appLog) << "SlideWidget created, initial page:" << docsheet->currentIndex();
+    setAccessibleName("SlideWidget");
     initControl();
     initImageControl();
     show();

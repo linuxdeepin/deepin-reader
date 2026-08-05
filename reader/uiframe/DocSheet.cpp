@@ -1754,11 +1754,13 @@ DocSheet::LoadingWidget::LoadingWidget(QWidget *parent)
     , m_parentWidget(parent)
 {
     qCDebug(appLog) << "LoadingWidget";
+    setAccessibleName("LoadingWidget");
     Q_ASSERT(m_parentWidget);
     setGeometry(0, 0, m_parentWidget->width(), m_parentWidget->height());
 
     DSpinner *spinner = new DSpinner(this);
     spinner->setFixedSize(32, 32);
+    spinner->setAccessibleName("Spinner_Loading");
     moveToCenter(spinner);
     spinner->start();
 

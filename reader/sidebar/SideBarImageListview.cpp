@@ -22,6 +22,7 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     , m_docSheet(sheet)
 {
     qCDebug(appLog) << "SideBarImageListView created for document:" << (sheet ? sheet->filePath() : "null");
+    setAccessibleName("SideBarImageListView");
     initControl();
     setAutoScroll(false);
     setProperty("adaptScale", 1.0);

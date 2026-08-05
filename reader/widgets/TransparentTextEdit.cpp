@@ -24,6 +24,7 @@ TransparentTextEdit::TransparentTextEdit(DWidget *parent)
 {
     qCDebug(appLog) << "TransparentTextEdit created, parent:" << parent;
     this->setObjectName("TransparentTextEdit");
+    this->setAccessibleName("TransparentTextEdit");
 
     this->setAcceptRichText(false);
 

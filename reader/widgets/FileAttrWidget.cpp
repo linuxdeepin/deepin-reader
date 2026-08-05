@@ -60,6 +60,7 @@ FileAttrWidget::FileAttrWidget(DWidget *parent)
     : DAbstractDialog(parent)
 {
     qCDebug(appLog) << "FileAttrWidget created, parent:" << parent;
+    setAccessibleName("FileAttrWidget");
     setFixedSize(QSize(300, 622));
     m_pVBoxLayout = new QVBoxLayout;
     m_pVBoxLayout->setContentsMargins(0, 0, 0, 10);

@@ -112,6 +112,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
     this->setLayout(m_mainLayout);
 
     m_tabLabel = new DLabel(this);
+    m_tabLabel->setAccessibleName("Label_Tab");
     m_tabLabel->setElideMode(Qt::ElideMiddle);
     m_tabLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     m_tabLabel->setAlignment(Qt::AlignCenter);

@@ -11,6 +11,7 @@
 ScaleMenu::ScaleMenu(QWidget *parent) : DMenu(parent)
 {
     qCDebug(appLog) << "ScaleMenu created, parent:" << parent;
+    setAccessibleName("ScaleMenu");
 }
 
 void ScaleMenu::readCurDocParam(DocSheet *docSheet)

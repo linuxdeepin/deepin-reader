@@ -104,6 +104,7 @@ CatalogTreeView::CatalogTreeView(DocSheet *sheet, DWidget *parent)
     : DTreeView(parent), m_sheet(sheet)
 {
     qCDebug(appLog) << "Creating CatalogTreeView for document:" << (sheet ? sheet->filePath() : "null");
+    setAccessibleName("CatalogTreeView");
 
     ActiveProxyStyle *style = new ActiveProxyStyle(this);
     setStyle(style);

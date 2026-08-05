@@ -23,10 +23,22 @@
 #include "BookMarkWidget.h"
 #include "NotesWidget.h"
 #include "SearchResWidget.h"
+#include "FindWidget.h"
+#include "SlidePlayWidget.h"
+#include "FileAttrWidget.h"
+#include "TransparentTextEdit.h"
+#include "SideBarImageListview.h"
+#include "CatalogTreeView.h"
+#include "HandleMenu.h"
+#include "ScaleMenu.h"
+#include "BrowserMenu.h"
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>
 #include <DFloatingButton>
+#include <DFloatingWidget>
+#include <DMenu>
+#include <DAbstractDialog>
 #include <DLineEdit>
 #include <DLabel>
 #include <DListView>
@@ -60,12 +72,22 @@ SET_FORM_ACCESSIBLE(CatalogWidget, "CatalogWidget")
 SET_FORM_ACCESSIBLE(BookMarkWidget, "BookMarkWidget")
 SET_FORM_ACCESSIBLE(NotesWidget, "NotesWidget")
 SET_FORM_ACCESSIBLE(SearchResWidget, "SearchResWidget")
+SET_FORM_ACCESSIBLE(TitleMenu, "TitleMenu")
+SET_FORM_ACCESSIBLE(FindWidget, "FindWidget")
+SET_FORM_ACCESSIBLE(SlidePlayWidget, "SlidePlayWidget")
+SET_FORM_ACCESSIBLE(FileAttrWidget, "FileAttrWidget")
+SET_FORM_ACCESSIBLE(SideBarImageListView, "SideBarImageListView")
+SET_FORM_ACCESSIBLE(CatalogTreeView, "CatalogTreeView")
+SET_FORM_ACCESSIBLE(HandleMenu, "HandleMenu")
+SET_FORM_ACCESSIBLE(ScaleMenu, "ScaleMenu")
+SET_FORM_ACCESSIBLE(BrowserMenu, "BrowserMenu")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(QPushButton, m_w->text().isEmpty() ? "qpushbutton" : m_w->text())
 SET_SLIDER_ACCESSIBLE(QSlider, "qslider")
+SET_EDITABLE_ACCESSIBLE(QTextEdit, m_w->objectName().isEmpty() ? "QTextEdit" : m_w->objectName())
 
 // Dtk控件
 SET_FORM_ACCESSIBLE(DFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
@@ -78,9 +100,14 @@ SET_BUTTON_ACCESSIBLE(DPushButton, m_w->objectName().isEmpty() ? "DPushButton" :
 SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "DIconButton" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DCheckBox, m_w->objectName().isEmpty() ? "DCheckBox" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DCommandLinkButton, "DCommandLinkButton")
-SET_LABEL_ACCESSIBLE(DLabel, m_w->objectName().isEmpty() ? "DLabel" : m_w->objectName())   //不生效
+SET_LABEL_ACCESSIBLE(DLabel, m_w->objectName().isEmpty() ? "DLabel" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DTitlebar, m_w->objectName().isEmpty() ? "DTitlebar" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DToolButton, m_w->objectName().isEmpty() ? "DToolButton" : m_w->objectName())
+SET_FORM_ACCESSIBLE(DFloatingWidget, m_w->objectName().isEmpty() ? "DFloatingWidget" : m_w->objectName())
+SET_FORM_ACCESSIBLE(DMenu, m_w->objectName().isEmpty() ? "DMenu" : m_w->objectName())
+SET_FORM_ACCESSIBLE(DAbstractDialog, m_w->objectName().isEmpty() ? "DAbstractDialog" : m_w->objectName())
+SET_FORM_ACCESSIBLE(DListView, m_w->objectName().isEmpty() ? "DListView" : m_w->objectName())
+SET_FORM_ACCESSIBLE(DTreeView, m_w->objectName().isEmpty() ? "DTreeView" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DDialog, m_w->objectName().isEmpty() ? "DDialog" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DFileDialog, m_w->objectName().isEmpty() ? "DFileDialog" : m_w->objectName())
 
@@ -104,12 +131,22 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BookMarkWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), NotesWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SearchResWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), TitleMenu);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), FindWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SlidePlayWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), FileAttrWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SideBarImageListView);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), CatalogTreeView);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), HandleMenu);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), ScaleMenu);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), BrowserMenu);
 
     //  Qt 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QPushButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QSlider);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QTextEdit);
 
     //  dtk 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DFrame);
@@ -122,7 +159,14 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DIconButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DCheckBox);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DCommandLinkButton);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DLabel);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DToolButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DTitlebar);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DFloatingWidget);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DMenu);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DAbstractDialog);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DListView);
+    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DTreeView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DDialog);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), DFileDialog);
 

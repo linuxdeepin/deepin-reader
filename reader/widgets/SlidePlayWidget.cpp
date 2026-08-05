@@ -22,6 +22,7 @@ DCORE_USE_NAMESPACE
 SlidePlayWidget::SlidePlayWidget(QWidget *parent) : DFloatingWidget(parent)
 {
     qCDebug(appLog) << "SlidePlayWidget created, parent:" << parent;
+    setAccessibleName("SlidePlayWidget");
     initControl();
 }
 
@@ -158,6 +159,7 @@ DIconButton *SlidePlayWidget::createBtn(const QString &strname)
     qCDebug(appLog) << "Creating button:" << strname;
     DIconButton *btn = new  DIconButton(this);
     btn->setObjectName(strname);
+    btn->setAccessibleName("Button_" + strname);
     btn->setFixedSize(50, 50);
     btn->setIcon(/*PF::getIcon*/QIcon::fromTheme(QString("dr_") + strname));
     btn->setIconSize(QSize(36, 36));

@@ -65,11 +65,14 @@ SecurityDialog::SecurityDialog(const QString &urlstr, QWidget *parent)
     QString str2(urlstr + QLatin1String(" ") + tr("If you trust the website, click Allow, otherwise click Block."));
     m_strDesText = str2;
 
+    setAccessibleName("SecurityDialog");
+
     addButton(tr("Block", "button"));
     addButton(tr("Allow", "button"), true, ButtonRecommend);
 
     // 标题
     NameLabel = new DLabel(this);
+    NameLabel->setAccessibleName("Label_SecurityTitle");
     NameLabel->setFixedWidth(340);
     NameLabel->setAlignment(Qt::AlignCenter);
     NameLabel->setText(str1);
@@ -79,6 +82,7 @@ SecurityDialog::SecurityDialog(const QString &urlstr, QWidget *parent)
 
     // 提示
     ContentLabel = new DLabel(this);
+    ContentLabel->setAccessibleName("Label_SecurityContent");
     ContentLabel->setFixedWidth(340);
     ContentLabel->setAlignment(Qt::AlignCenter);
     ContentLabel->setText(str2);

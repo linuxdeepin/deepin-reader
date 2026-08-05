@@ -22,6 +22,7 @@ ScaleWidget::ScaleWidget(DWidget *parent)
     : DWidget(parent)
 {
     qCDebug(appLog) << "ScaleWidget created, parent:" << parent;
+    setAccessibleName("ScaleWidget");
     initWidget();
 }
 
@@ -50,6 +51,7 @@ void ScaleWidget::initWidget()
 
     m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
     m_arrowBtn->setObjectName("editArrowBtn");
+    m_arrowBtn->setAccessibleName("Button_ScaleMenu");
     //添加显示比例值默认值
     m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
     m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);
@@ -70,6 +72,7 @@ void ScaleWidget::initWidget()
 
     DIconButton *pPreBtn = new DIconButton(DStyle::SP_DecreaseElement, this);
     pPreBtn->setObjectName("SP_DecreaseElement");
+    pPreBtn->setAccessibleName("Button_ZoomOut");
     DStyle::setFrameRadius(pPreBtn, 12);
     pPreBtn->setFixedSize(24, 24);
     connect(pPreBtn, SIGNAL(clicked()), SLOT(onPrevScale()));
@@ -77,6 +80,7 @@ void ScaleWidget::initWidget()
     DIconButton *pNextBtn = new DIconButton(this/*DStyle::SP_IncreaseElement*/);
     pNextBtn->setIcon(QIcon::fromTheme("dr_button_add"));
     pNextBtn->setObjectName("SP_IncreaseElement");
+    pNextBtn->setAccessibleName("Button_ZoomIn");
     DStyle::setFrameRadius(pNextBtn, 12);
     pNextBtn->setFixedSize(24, 24);
     connect(pNextBtn, SIGNAL(clicked()), SLOT(onNextScale()));

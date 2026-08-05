@@ -13,6 +13,7 @@ HandleMenu::HandleMenu(DWidget *parent)
     : DMenu(parent)
 {
     qCDebug(appLog) << "HandleMenu created, parent:" << parent;
+    setAccessibleName("HandleMenu");
     initActions();
 }
 

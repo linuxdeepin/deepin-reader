@@ -22,6 +22,7 @@ FindWidget::FindWidget(DWidget *parent)
     , m_parentWidget(parent)
 {
     qCDebug(appLog) << "FindWidget created, parent:" << parent;
+    setAccessibleName("FindWidget");
     setMinimumSize(QSize(414, 60));
 
     setBlurBackgroundEnabled(true);
