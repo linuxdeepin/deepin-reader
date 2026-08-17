@@ -583,12 +583,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Zoom in</source>
-        <translation>Lähennä</translation>
+        <translation>Lähemmäksi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Zoom out</source>
-        <translation>Loitonna</translation>
+        <translation>Kauemmaksi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
