@@ -32,7 +32,7 @@ You can run, close or create a shortcut of Document Viewer as follows.
 
 ### View Shortcut Keys
 
-On Document Viewer interface, press  **Ctrl + Shift+ ?** to view all shortcut keys quickly, which helps you to use them skillfully and improves your working efficiency. 
+On Document Viewer interface, press  **Ctrl+Shift/** to view all shortcut keys quickly, which helps you to use them skillfully and improves your working efficiency. 
 
 ![1|hotkey](fig/hotkey.png)
 
