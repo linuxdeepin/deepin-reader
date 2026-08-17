@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>添加文档</title>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="dr_import_photo_title">
+    <title id="dr_import_photo_title">添加文档</title>
     <g id="dark" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.3">
         <g id="1-初次使用文档查看器" transform="translate(-478, -275)">
             <g id="添加文档" transform="translate(478, 275)">
