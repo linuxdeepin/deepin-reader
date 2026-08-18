@@ -251,6 +251,8 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
     connect(sheet, &DocSheet::sigFileOpened, this, &CentralDocPage::onOpened);
+    // 监听恢复阅读位置提示信号，转发给 Central 显示
+    connect(sheet, &DocSheet::sigShowRestoreTip, this, &CentralDocPage::sigShowRestoreTip);
 
     m_stackedLayout->addWidget(sheet);
 
@@ -465,6 +467,9 @@ void CentralDocPage::enterSheet(DocSheet *sheet)
     connect(sheet, SIGNAL(sigFileChanged(DocSheet *)), this, SLOT(onSheetFileChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigOperationChanged(DocSheet *)), this, SLOT(onSheetOperationChanged(DocSheet *)));
     connect(sheet, SIGNAL(sigFindOperation(const int &)), this, SIGNAL(sigFindOperation(const int &)));
+
+    // 监听恢复阅读位置提示信号，转发给 Central 显示
+    connect(sheet, &DocSheet::sigShowRestoreTip, this, &CentralDocPage::sigShowRestoreTip);
 
     m_stackedLayout->addWidget(sheet);
 

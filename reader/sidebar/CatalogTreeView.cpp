@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -189,7 +189,7 @@ void CatalogTreeView::handleOpenSuccess()
 {
     qCDebug(appLog) << "Handling document open success, building catalog tree";
 
-    auto model = reinterpret_cast<QStandardItemModel *>(this->model());
+    auto model = qobject_cast<QStandardItemModel *>(this->model());
     if (model) {
         qCDebug(appLog) << "CatalogTreeView::handleOpenSuccess() - Clearing model";
         model->clear();
@@ -212,6 +212,73 @@ void CatalogTreeView::handleOpenSuccess()
     }
     resizeCoulumnWidth();
     qCDebug(appLog) << "CatalogTreeView::handleOpenSuccess() - Completed";
+}
+
+QStringList CatalogTreeView::getExpandedSections() const
+{
+    QStringList result;
+    auto model = qobject_cast<QStandardItemModel *>(this->model());
+    if (!model)
+        return result;
+
+    // 递归遍历所有节点，收集展开状态的节点标题路径
+    const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+    for (QStandardItem *item : itemList) {
+        QModelIndex idx = item->index();
+        // 只检查第0列的节点（标题列）
+        if (idx.column() != 0)
+            continue;
+        if (isExpanded(idx)) {
+            // 构建标题路径：从当前节点向上拼接父节点标题
+            QStringList pathParts;
+            QStandardItem *cur = item;
+            while (cur) {
+                pathParts.prepend(cur->text());
+                cur = cur->parent();
+            }
+            QString path = pathParts.join("/");
+            result.append(path);
+        }
+    }
+    qCDebug(appLog) << "CatalogTreeView::getExpandedSections() - Found" << result.size() << "expanded sections";
+    return result;
+}
+
+void CatalogTreeView::restoreExpandedSections(const QStringList &sections)
+{
+    if (sections.isEmpty())
+        return;
+
+    auto model = qobject_cast<QStandardItemModel *>(this->model());
+    if (!model)
+        return;
+
+    qCDebug(appLog) << "CatalogTreeView::restoreExpandedSections() - Restoring" << sections.size() << "sections";
+
+    // 先折叠所有节点
+    collapseAll();
+
+    // 遍历所有节点，匹配路径并展开
+    const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+    for (QStandardItem *item : itemList) {
+        QModelIndex idx = item->index();
+        if (idx.column() != 0)
+            continue;
+
+        // 构建当前节点的标题路径
+        QStringList pathParts;
+        QStandardItem *cur = item;
+        while (cur) {
+            pathParts.prepend(cur->text());
+            cur = cur->parent();
+        }
+        QString path = pathParts.join("/");
+
+        if (sections.contains(path)) {
+            expand(idx);
+            qCDebug(appLog) << "CatalogTreeView::restoreExpandedSections() - Expanded:" << path;
+        }
+    }
 }
 
 void CatalogTreeView::slotCollapsed(const QModelIndex &index)
@@ -319,7 +386,7 @@ void CatalogTreeView::setIndex(int index, const QString &title)
     m_title = title;
     this->clearSelection();
 
-    auto model = reinterpret_cast<QStandardItemModel *>(this->model());
+    auto model = qobject_cast<QStandardItemModel *>(this->model());
     if (model) {
         qCDebug(appLog) << "CatalogTreeView::setIndex() - Finding items";
         const QList<QStandardItem *> &itemList = model->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);

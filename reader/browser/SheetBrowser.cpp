@@ -2427,3 +2427,25 @@ TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
     // qCDebug(appLog) << "SheetBrowser::getNoteEditWidget() - Getting note edit widget";
     return m_noteEditWidget;
 }
+
+float SheetBrowser::getScrollPosition()
+{
+    QScrollBar *vBar = verticalScrollBar();
+    if (!vBar || vBar->maximum() <= vBar->minimum()) {
+        return 0.0f;
+    }
+    float pos = static_cast<float>(vBar->value() - vBar->minimum())
+                / static_cast<float>(vBar->maximum() - vBar->minimum());
+    return qBound(0.0f, pos, 1.0f);
+}
+
+void SheetBrowser::restoreScrollPosition(float position)
+{
+    qCDebug(appLog) << "Restoring scroll position:" << position;
+    QScrollBar *vBar = verticalScrollBar();
+    if (!vBar || vBar->maximum() <= vBar->minimum()) {
+        return;
+    }
+    int value = vBar->minimum() + static_cast<int>(position * (vBar->maximum() - vBar->minimum()));
+    vBar->setValue(value);
+}
