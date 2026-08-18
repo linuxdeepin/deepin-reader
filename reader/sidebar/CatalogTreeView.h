@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -78,6 +78,18 @@ public:
      * 数据初始化
      */
     void handleOpenSuccess();
+
+    /**
+     * @brief getExpandedSections 获取当前展开节点的标题路径列表
+     * @return 展开节点的标题路径（如 "1.概述" 或 "1.概述/1.1 背景"）
+     */
+    QStringList getExpandedSections() const;
+
+    /**
+     * @brief restoreExpandedSections 恢复目录树展开状态
+     * @param sections 展开节点的标题路径列表
+     */
+    void restoreExpandedSections(const QStringList &sections);
 
 protected:
     /**

@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +11,7 @@
 #include "Application.h"
 #include "Utils.h"
 #include "DocSheet.h"
+#include "Database.h"
 #include "DBusObject.h"
 #include "SaveDialog.h"
 #include "eventlogutils.h"
@@ -171,10 +172,26 @@ void MainWindow::closeEvent(QCloseEvent *event)
         return;
     }
 
-    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
-    qCDebug(appLog) << "配置文件路径: ***" /* << QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf")*/;
-    settings.setValue("LASTWIDTH", QString::number(width()));
+    if (m_central && m_central->docPage()) {
+        QList<DocSheet *> sheets = m_central->docPage()->getSheets();
+        QStringList filePaths;
+        int activeIndex = 0;
+        DocSheet *curSheet = m_central->docPage()->getCurSheet();
+        for (int i = 0; i < sheets.size(); ++i) {
+            filePaths.append(sheets[i]->filePath());
+            if (sheets[i] == curSheet) {
+                activeIndex = i;
+            }
+        }
+        int windowIndex = MainWindow::m_list.indexOf(this);
+        if (windowIndex >= 0) {
+            Database::instance()->saveTabGroup(windowIndex, filePaths, activeIndex);
+        }
+    }
 
+    QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);
+    qCDebug(appLog) << "配置文件路径: ***";
+    settings.setValue("LASTWIDTH", QString::number(width()));
     settings.setValue("LASTHEIGHT", QString::number(height()));
 
     qCDebug(appLog) << __FUNCTION__ << "关闭文档查看器主窗口！";

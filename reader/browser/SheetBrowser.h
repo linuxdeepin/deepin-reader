@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -130,6 +130,22 @@ public:
      * @param page 跳转的页码(base 1)
      */
     void setCurrentPage(int page);
+
+    /**
+     * @brief getScrollPosition
+     * 获取当前滚动位置（纵向偏移比例 0.0~1.0）
+     * 用于状态持久化
+     * @return 滚动位置比例
+     */
+    float getScrollPosition();
+
+    /**
+     * @brief restoreScrollPosition
+     * 恢复滚动位置
+     * 用于状态持久化
+     * @param position 滚动位置比例
+     */
+    void restoreScrollPosition(float position);
 
     /**
      * @brief getExistImage

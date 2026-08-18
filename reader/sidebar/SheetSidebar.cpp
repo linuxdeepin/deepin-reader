@@ -373,11 +373,14 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
 
 void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
-    // qCDebug(appLog) << "SheetSidebar::resizeEvent start - size:" << event->size();
+    // 侧边栏宽度变化时通知 DocSheet 更新
+    if (m_sheet && event->size().width() > 0) {
+        m_sheet->setSidebarWidth(event->size().width());
+    }
+
     qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
     adaptWindowSize(scale);
     BaseWidget::resizeEvent(event);
-    // qCDebug(appLog) << "SheetSidebar::resizeEvent end";
 }
 
 void SheetSidebar::adaptWindowSize(const double &scale)
@@ -579,4 +582,17 @@ void SheetSidebar::changeResetModelData()
         m_notesWidget->changeResetModelData();
     }
     // qCDebug(appLog) << "Changing reset model data end";
+}
+
+QStringList SheetSidebar::getExpandedSections() const
+{
+    if (m_catalogWidget)
+        return m_catalogWidget->getExpandedSections();
+    return QStringList();
+}
+
+void SheetSidebar::restoreExpandedSections(const QStringList &sections)
+{
+    if (m_catalogWidget)
+        m_catalogWidget->restoreExpandedSections(sections);
 }
