@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="136"/>
+        <location filename="../reader/uiframe/Central.cpp" line="154"/>
         <source>Documents</source>
         <translation>Documents</translation>
     </message>
@@ -256,44 +256,44 @@
         <translation>The format is not supported</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Open failed</source>
         <translation>Open failed</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Please check if the file is damaged</source>
         <translation>Please check if the file is damaged</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="294"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>Conversion failed, please check if the file is damaged</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Save failed</source>
         <translation>Save failed</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="544"/>
         <source>Saved successfully</source>
         <translation>Saved successfully</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="564"/>
         <source>Save as</source>
         <translation>Save as</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="574"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="585"/>
         <source>Invalid file name</source>
         <translation>Invalid file name</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="576"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="587"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="380"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="410"/>
         <source>The bookmark has been removed</source>
         <translation>The bookmark has been removed</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="679"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="696"/>
         <source>Please select the text</source>
         <translation>Please select the text</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="756"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="767"/>
         <source>The annotation has been removed</source>
         <translation>The annotation has been removed</translation>
     </message>
@@ -360,6 +360,37 @@
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
         <translation>Wrong password</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
+        <source>No eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
+        <source>Classic eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
+        <source>Green eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
+        <source>Night eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
+        <source>Reading mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -404,7 +435,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="251"/>
         <source>Invalid page number</source>
         <translation>Invalid page number</translation>
     </message>
@@ -426,37 +457,55 @@
     </message>
 </context>
 <context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation>Restored to last reading position</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
+        <source>Jump to first page</source>
+        <translation>Jump to first page</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
+        <source>Close</source>
+        <translation>Close</translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="31"/>
         <source>Save the changes to &quot;%1&quot;?</source>
         <translation>Save the changes to &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Discard</source>
         <comment>button</comment>
         <translation>Discard</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="34"/>
         <source>Save</source>
         <comment>button</comment>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="47"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="48"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
@@ -761,23 +810,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="278"/>
         <source>Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="284"/>
         <source>Remove annotation</source>
         <translation>Remove annotation</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="290"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="311"/>
         <source>Remove all</source>
         <translation>Remove all</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="306"/>
         <source>Remove bookmark</source>
         <translation>Remove bookmark</translation>
     </message>
@@ -806,48 +855,48 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New window</source>
         <translation>New window</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New tab</source>
         <translation>New tab</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="121"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
         <source>Save as</source>
         <translation>Save as</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Display in file manager</source>
         <translation>Display in file manager</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Magnifer</source>
         <translation>Magnifer</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="42"/>
         <source>Tools</source>
         <translation>Tools</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Search</source>
         <translation>Search</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Print</source>
         <translation>Print</translation>
     </message>
@@ -871,25 +920,30 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="63"/>
+        <location filename="../reader/main.cpp" line="64"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="64"/>
-        <location filename="../reader/main.cpp" line="68"/>
+        <location filename="../reader/main.cpp" line="65"/>
+        <location filename="../reader/main.cpp" line="69"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="68"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="72"/>
+        <location filename="../reader/main.cpp" line="73"/>
         <source>Generate thumbnail.</source>
         <translation>Generate thumbnail.</translation>
+    </message>
+    <message>
+        <location filename="../reader/main.cpp" line="77"/>
+        <source>Batch print documents without UI.</source>
+        <translation>Batch print documents without UI.</translation>
     </message>
 </context>
 </TS>
