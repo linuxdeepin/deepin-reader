@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +11,7 @@
 #include "MainWindow.h"
 #include "ShortCutShow.h"
 #include "DBusObject.h"
+#include "RestoreTipWidget.h"
 #include "ddlog.h"
 
 #include <DMessageManager>
@@ -38,6 +39,17 @@ Central::Central(QWidget *parent)
     m_layout->setSpacing(0);
     m_layout->addWidget(m_navPage);
     m_mainWidget->setLayout(m_layout);
+
+    // 恢复阅读位置提示条
+    m_restoreTipWidget = new RestoreTipWidget(this);
+    m_restoreTipWidget->hide();
+    connect(m_restoreTipWidget, &RestoreTipWidget::sigJumpToFirstPage, this, [this]() {
+        if (m_docPage) {
+            DocSheet *sheet = m_docPage->getCurSheet();
+            if (sheet)
+                sheet->jumpToFirstPage();
+        }
+    });
 
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
 
@@ -112,6 +124,12 @@ CentralDocPage *Central::docPage()
         connect(m_docPage, SIGNAL(sigSheetCountChanged(int)), this, SLOT(onSheetCountChanged(int)));
         connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
         connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
+
+        // 监听恢复阅读位置提示信号
+        connect(m_docPage, &CentralDocPage::sigShowRestoreTip, this, [this]() {
+            if (m_restoreTipWidget)
+                m_restoreTipWidget->showTip();
+        });
     }
     // qCDebug(appLog) << "Getting doc page end";
     return m_docPage;
@@ -406,6 +424,9 @@ void Central::resizeEvent(QResizeEvent *event)
     // qCDebug(appLog) << "Central::resizeEvent start - size:" << event->size();
     m_mainWidget->move(0, 0);
     m_mainWidget->resize(event->size());
+    // 提示条跟随 Central 尺寸重新定位
+    if (m_restoreTipWidget && m_restoreTipWidget->isVisible())
+        m_restoreTipWidget->reposition();
     BaseWidget::resizeEvent(event);
     // qCDebug(appLog) << "Central::resizeEvent end";
 }

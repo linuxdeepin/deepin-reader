@@ -21,6 +21,7 @@
 #include "Utils.h"
 #include "SheetRenderer.h"
 #include "SecurityDialog.h"
+#include "EyeProtectionManager.h"
 #include "ddlog.h"
 
 #include <DMenu>
@@ -98,6 +99,25 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
     this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+
+    // 监听护眼模式变化
+    connect(EyeProtectionManager::instance(), &EyeProtectionManager::modeChanged,
+            this, [this](EyeProtectionManager::Mode mode) {
+        Q_UNUSED(mode)
+        // 更新视口背景色
+        setBackgroundBrush(QBrush(EyeProtectionManager::instance()->viewportBackgroundColor()));
+        // 设置 viewport 背景色（视口空白区）
+        QPalette pal = viewport()->palette();
+        pal.setColor(viewport()->backgroundRole(), EyeProtectionManager::instance()->viewportBackgroundColor());
+        viewport()->setPalette(pal);
+        viewport()->update();
+    });
+
+    // 初始化护眼模式背景色
+    setBackgroundBrush(QBrush(EyeProtectionManager::instance()->viewportBackgroundColor()));
+    QPalette pal = viewport()->palette();
+    pal.setColor(viewport()->backgroundRole(), EyeProtectionManager::instance()->viewportBackgroundColor());
+    viewport()->setPalette(pal);
     
     qCDebug(appLog) << "SheetBrowser constructor completed";
 }
@@ -2406,4 +2426,26 @@ TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
 {
     // qCDebug(appLog) << "SheetBrowser::getNoteEditWidget() - Getting note edit widget";
     return m_noteEditWidget;
+}
+
+float SheetBrowser::getScrollPosition()
+{
+    QScrollBar *vBar = verticalScrollBar();
+    if (!vBar || vBar->maximum() <= vBar->minimum()) {
+        return 0.0f;
+    }
+    float pos = static_cast<float>(vBar->value() - vBar->minimum())
+                / static_cast<float>(vBar->maximum() - vBar->minimum());
+    return qBound(0.0f, pos, 1.0f);
+}
+
+void SheetBrowser::restoreScrollPosition(float position)
+{
+    qCDebug(appLog) << "Restoring scroll position:" << position;
+    QScrollBar *vBar = verticalScrollBar();
+    if (!vBar || vBar->maximum() <= vBar->minimum()) {
+        return;
+    }
+    int value = vBar->minimum() + static_cast<int>(position * (vBar->maximum() - vBar->minimum()));
+    vBar->setValue(value);
 }

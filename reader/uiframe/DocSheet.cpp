@@ -52,6 +52,8 @@ namespace {
 constexpr double kXpsLogicalDpi = 96.0;
 constexpr int kFallbackPrintDpi = 300;
 constexpr int kMaxPrintPixelsPerSide = 10000;
+constexpr int kRestoreScrollDelayMs = 100;    // 恢复滚动位置延迟
+constexpr int kRestoreCatalogDelayMs = 150;   // 恢复目录树展开状态延迟
 }
 
 QReadWriteLock DocSheet::g_lock;
@@ -104,6 +106,13 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     resetChildParent();
     this->insertWidget(0, m_browser);
     this->insertWidget(0, m_sidebar);
+
+    // 定时自动保存（30秒）
+    m_autoSaveTimer = new QTimer(this);
+    m_autoSaveTimer->setInterval(30000);
+    m_autoSaveTimer->setSingleShot(false);
+    connect(m_autoSaveTimer, &QTimer::timeout, this, &DocSheet::onAutoSave);
+
     qCDebug(appLog) << "DocSheet created end";
 }
 
@@ -845,6 +854,11 @@ SheetOperation DocSheet::operation() const
     return m_operation;
 }
 
+void DocSheet::setSidebarWidth(int width)
+{
+    m_operation.sidebarWidth = width;
+}
+
 SheetOperation &DocSheet::operationRef()
 {
     // qCDebug(appLog) << "operationRef";
@@ -1264,7 +1278,35 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
 
         m_browser->init(m_operation, m_bookmarks);
 
+        // 恢复滚动位置
+        if (m_restoredFromState && m_operation.scrollPosition > 0.0f) {
+            // 延迟恢复滚动位置（等 deform 和布局完成后）
+            QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
+                m_browser->restoreScrollPosition(m_operation.scrollPosition);
+                // 显示恢复提示条
+                emit sigShowRestoreTip();
+                emit sigStateRestored(this);
+            });
+        }
+
         m_sidebar->handleOpenSuccess();
+
+        // 恢复目录树展开状态
+        if (m_restoredFromState && !m_operation.expandedSections.isEmpty()) {
+            QTimer::singleShot(kRestoreCatalogDelayMs, this, [this]() {
+                m_sidebar->restoreExpandedSections(m_operation.expandedSections);
+            });
+        }
+
+        // 恢复侧边栏宽度
+        if (m_restoredFromState && m_operation.sidebarWidth > 0) {
+            m_sidebar->resize(m_operation.sidebarWidth, m_sidebar->height());
+        }
+
+        // 启动定时自动保存
+        if (m_autoSaveTimer) {
+            m_autoSaveTimer->start();
+        }
 
         emit sigOperationChanged(this);
 
@@ -1562,6 +1604,11 @@ void DocSheet::setAlive(bool alive)
 
         if (Database::instance()->readOperation(this)) {
             qCInfo(appLog) << "read from database config";
+            m_restoredFromState = true;
+        } else if (Database::instance()->matchOperationByContent(QFileInfo(m_filePath), this)) {
+            // 文件移动/重命名后通过内容特征匹配恢复状态
+            qCInfo(appLog) << "read from content match config";
+            m_restoredFromState = true;
         } else if (readLastFileOperation()) {
             qCInfo(appLog) << "read from last operation file config";
         } else {
@@ -1577,7 +1624,24 @@ void DocSheet::setAlive(bool alive)
 
         stopSearch();
 
-        Database::instance()->saveOperation(this);
+        // 保存滚动位置
+        if (m_browser) {
+            m_operation.scrollPosition = m_browser->getScrollPosition();
+        }
+
+        // 保存目录树展开状态
+        if (m_sidebar) {
+            m_operation.expandedSections = m_sidebar->getExpandedSections();
+        }
+
+        // 停止定时保存
+        if (m_autoSaveTimer) {
+            m_autoSaveTimer->stop();
+        }
+
+        // 关闭时重新计算内容哈希（文件可能已修改）
+        m_cachedContentHash = Database::computeContentHash(m_filePath);
+        Database::instance()->saveOperation(this, m_cachedContentHash);
 
         g_lock.lockForWrite();
 
@@ -1843,4 +1907,25 @@ void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
     painter.setPen(QPen(QColor(0, 0, 0, int(255 * 0.05)), 1));
     painter.drawPath(path);
     // qCDebug(appLog) << "paintEvent end";
+}
+
+void DocSheet::onAutoSave()
+{
+    qCDebug(appLog) << "Auto-save triggered for:" << m_filePath;
+
+    // 更新滚动位置
+    if (m_browser) {
+        m_operation.scrollPosition = m_browser->getScrollPosition();
+    }
+
+    // 更新目录树展开状态
+    if (m_sidebar) {
+        m_operation.expandedSections = m_sidebar->getExpandedSections();
+    }
+
+    // 自动保存时使用缓存哈希，避免每30秒读盘计算
+    if (m_cachedContentHash.isEmpty()) {
+        m_cachedContentHash = Database::computeContentHash(m_filePath);
+    }
+    Database::instance()->saveOperation(this, m_cachedContentHash);
 }

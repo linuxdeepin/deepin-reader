@@ -54,6 +54,16 @@ file(GLOB_RECURSE WIDGET_SOURCES
     "widgets/*.cpp" 
     "widgets/*.h"
 )
+# eyeprotection sources
+file(GLOB_RECURSE EYE_PROTECTION_SOURCES 
+    "eyeprotection/*.cpp" 
+    "eyeprotection/*.h"
+)
+# batchprint sources
+file(GLOB_RECURSE BATCH_PRINT_SOURCES 
+    "batchprint/*.cpp" 
+    "batchprint/*.h"
+)
 
 # 定义reader可执行文件
 add_executable(deepin-reader
@@ -64,6 +74,8 @@ add_executable(deepin-reader
     ${SIDEBAR_SOURCES}
     ${UIFRAME_SOURCES}
     ${WIDGET_SOURCES}
+    ${EYE_PROTECTION_SOURCES}
+    ${BATCH_PRINT_SOURCES}
 )
 
 # 启用自动moc处理
@@ -82,6 +94,8 @@ target_include_directories(deepin-reader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/sidebar
     ${CMAKE_CURRENT_SOURCE_DIR}/uiframe
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+    ${CMAKE_CURRENT_SOURCE_DIR}/eyeprotection
+    ${CMAKE_CURRENT_SOURCE_DIR}/batchprint
     ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
 )

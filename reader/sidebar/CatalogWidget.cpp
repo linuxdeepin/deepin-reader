@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -140,4 +140,17 @@ void CatalogWidget::pageUp()
     qCDebug(appLog) << "Performing page up navigation in catalog";
 
     m_pTree->pageUpPage();
+}
+
+QStringList CatalogWidget::getExpandedSections() const
+{
+    if (m_pTree)
+        return m_pTree->getExpandedSections();
+    return QStringList();
+}
+
+void CatalogWidget::restoreExpandedSections(const QStringList &sections)
+{
+    if (m_pTree)
+        m_pTree->restoreExpandedSections(sections);
 }

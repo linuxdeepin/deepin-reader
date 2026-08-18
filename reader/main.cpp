@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 #include "accessible.h"
 #include "Utils.h"
 #include "DBusObject.h"
+#include "BatchPrintHandler.h"
 #include "ddlog.h"
 #include "logger.h"
 
@@ -70,10 +71,20 @@ int main(int argc, char *argv[])
         {
             "thumbnail",
             QCoreApplication::translate("main", "Generate thumbnail.")
+        },
+        {
+            {"b", "batch-print"},
+            QCoreApplication::translate("main", "Batch print documents without UI.")
         }
     });
 
     parser.process(a);
+
+    if (parser.isSet("batch-print")) {
+        QStringList files = parser.positionalArguments();
+        qCInfo(appLog) << "Batch print mode, files:" << files.size();
+        return BatchPrintHandler::runBatchPrint(files);
+    }
 
     if (parser.isSet("thumbnail") && parser.isSet("filePath") && parser.isSet("thumbnailPath")) {
         QString filePath = parser.value("filePath");

@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,6 +14,7 @@ class TitleMenu;
 class TitleWidget;
 class DocSheet;
 class QStackedLayout;
+class RestoreTipWidget;
 
 /**
  * @brief The BaseWidget class
@@ -179,6 +180,7 @@ private:
     CentralNavPage  *m_navPage = nullptr;
     TitleMenu       *m_menu = nullptr;
     TitleWidget     *m_widget = nullptr;
+    RestoreTipWidget *m_restoreTipWidget = nullptr;   // V1.2 恢复阅读位置提示条
 };
 
 #endif  // CENTRAL_H

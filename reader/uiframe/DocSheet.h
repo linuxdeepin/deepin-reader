@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -21,6 +21,7 @@ class EncryptionPage;
 class QPropertyAnimation;
 class QPrinter;
 class PageSearchThread;
+class QTimer;
 struct SheetOperation {
     Dr::LayoutMode layoutMode   = Dr::SinglePageMode;
     Dr::MouseShape mouseShape   = Dr::MouseShapeNormal;
@@ -30,6 +31,12 @@ struct SheetOperation {
     bool sidebarVisible         = false;
     int  sidebarIndex           = 0;
     int  currentPage            = 1;
+    // 侧边栏宽度
+    int  sidebarWidth           = 200;
+    // 滚动位置（纵向偏移比例 0.0~1.0）
+    float scrollPosition        = 0.0f;
+    // 目录树展开节点标题路径列表（如 ["1.概述", "1.概述/1.1 背景"]）
+    QStringList expandedSections;
 };
 
 DWIDGET_BEGIN_NAMESPACE
@@ -435,6 +442,13 @@ public:
     QSet<int> getBookMarkList() const;
 
     /**
+     * @brief setSidebarWidth
+     * 设置侧边栏宽度（封装对 m_operation 的访问）
+     * @param width 宽度
+     */
+    void setSidebarWidth(int width);
+
+    /**
      * @brief operation
      * 获取用户操作
      * @return
@@ -632,6 +646,12 @@ public slots:
      */
     void onPopInfoDialog();
 
+    /**
+     * @brief onAutoSave
+     * 定时自动保存
+     */
+    void onAutoSave();
+
 private:
     /**
      * @brief operationRef
@@ -755,6 +775,19 @@ signals:
      */
     void sigOperationChanged(DocSheet *sheet);    //被修改了 缩放 当前页等
 
+    /**
+     * @brief sigStateRestored
+     * 状态已恢复信号
+     * @param sheet 恢复状态的文档
+     */
+    void sigStateRestored(DocSheet *sheet);
+
+    /**
+     * @brief sigShowRestoreTip
+     * 请求显示恢复阅读位置提示条
+     */
+    void sigShowRestoreTip();
+
 private slots:
     /**
      * @brief onBrowserPageChanged
@@ -854,6 +887,14 @@ private:
     PageSearchThread *m_searchTask = nullptr;
     EncryptionPage  *m_encryPage = nullptr;
     QPropertyAnimation *m_sideAnimation = nullptr;
+
+    // 定时自动保存
+    QTimer *m_autoSaveTimer = nullptr;
+    // 恢复阅读位置提示条
+    // 标记是否从保存状态恢复
+    bool m_restoredFromState = false;
+    // 缓存的内容哈希，避免自动保存时反复读盘计算
+    QString m_cachedContentHash;
 
 public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址

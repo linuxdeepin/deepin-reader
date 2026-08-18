@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,7 @@
 #include "HandleMenu.h"
 #include "DocSheet.h"
 #include "Global.h"
+#include "EyeProtectionAction.h"
 #include "ddlog.h"
 
 TitleMenu::TitleMenu(DWidget *parent)
@@ -31,6 +32,10 @@ TitleMenu::TitleMenu(DWidget *parent)
     QStringList thirdActionList = QStringList() << tr("Display in file manager") << tr("Magnifer");
     QStringList thirdActionObjList = QStringList() << "Display in file manager" << "Magnifer";
     createActionMap(thirdActionList, thirdActionObjList);
+
+    // 阅读模式（护眼模式）菜单项
+    m_eyeProtectionAction = new EyeProtectionAction(this);
+    this->addAction(m_eyeProtectionAction);
 
     m_handleMenu = new HandleMenu(this);
     m_handleMenu->setDisabled(true);

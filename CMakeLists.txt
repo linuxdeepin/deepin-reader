@@ -179,3 +179,8 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_qm_files)
 
 # Install translations
 install(FILES ${QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
+
+install(FILES
+    ${CMAKE_SOURCE_DIR}/data/context-menus/deepin-reader-batch-print.conf
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus
+)
