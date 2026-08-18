@@ -243,7 +243,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="136"/>
+        <location filename="../reader/uiframe/Central.cpp" line="154"/>
         <source>Documents</source>
         <translation>文件</translation>
     </message>
@@ -256,44 +256,44 @@
         <translation>不支援該檔案格式</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Open failed</source>
         <translation>打開失敗</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Please check if the file is damaged</source>
         <translation>請檢查文件是否損壞</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="294"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>轉換失敗，請檢查文件是否損壞</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Save failed</source>
         <translation>儲存失敗</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="544"/>
         <source>Saved successfully</source>
         <translation>儲存成功</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="564"/>
         <source>Save as</source>
         <translation>另存為</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="574"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="585"/>
         <source>Invalid file name</source>
         <translation>請輸入有效的檔案名</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="576"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="587"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -320,20 +320,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="380"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="410"/>
         <source>The bookmark has been removed</source>
         <translation>已刪除書籤</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="679"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="696"/>
         <source>Please select the text</source>
         <translation>請選擇文字</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="756"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="767"/>
         <source>The annotation has been removed</source>
         <translation>已刪除注釋</translation>
     </message>
@@ -360,6 +360,37 @@
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
         <translation>密碼錯誤</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
+        <source>No eye protection</source>
+        <translation>無護眼</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
+        <source>Classic eye protection</source>
+        <translation>經典護眼</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
+        <source>Green eye protection</source>
+        <translation>綠色護眼</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
+        <source>Night eye protection</source>
+        <translation>夜間護眼</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
+        <source>Reading mode</source>
+        <translation>閱讀模式</translation>
     </message>
 </context>
 <context>
@@ -404,7 +435,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="251"/>
         <source>Invalid page number</source>
         <translation>請輸入有效的頁碼</translation>
     </message>
@@ -426,37 +457,55 @@
     </message>
 </context>
 <context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation>已恢復上次閱讀位置</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
+        <source>Jump to first page</source>
+        <translation>跳轉到首頁</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
+        <source>Close</source>
+        <translation>關閉</translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="31"/>
         <source>Save the changes to &quot;%1&quot;?</source>
         <translation>是否儲存對“%1”的編輯？</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Discard</source>
         <comment>button</comment>
         <translation>不儲存</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="34"/>
         <source>Save</source>
         <comment>button</comment>
         <translation>儲 存</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="47"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="48"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
@@ -761,23 +810,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="278"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="284"/>
         <source>Remove annotation</source>
         <translation>刪除注釋</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="290"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="311"/>
         <source>Remove all</source>
         <translation>全部刪除</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="306"/>
         <source>Remove bookmark</source>
         <translation>刪除書籤</translation>
     </message>
@@ -806,48 +855,48 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New window</source>
         <translation>新視窗</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New tab</source>
         <translation>新分頁</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="121"/>
         <source>Save</source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
         <source>Save as</source>
         <translation>另存為</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Display in file manager</source>
         <translation>在檔案管理器中顯示</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Magnifer</source>
         <translation>放大鏡</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="42"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Search</source>
         <translation>搜尋</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Print</source>
         <translation>列印</translation>
     </message>
@@ -871,25 +920,30 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="63"/>
+        <location filename="../reader/main.cpp" line="64"/>
         <source>Document File Path.</source>
         <translation>Document File Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="64"/>
-        <location filename="../reader/main.cpp" line="68"/>
+        <location filename="../reader/main.cpp" line="65"/>
+        <location filename="../reader/main.cpp" line="69"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="68"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath Path.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="72"/>
+        <location filename="../reader/main.cpp" line="73"/>
         <source>Generate thumbnail.</source>
         <translation>Generate thumbnail.</translation>
+    </message>
+    <message>
+        <location filename="../reader/main.cpp" line="77"/>
+        <source>Batch print documents without UI.</source>
+        <translation>無介面批次列印文件。</translation>
     </message>
 </context>
 </TS>
