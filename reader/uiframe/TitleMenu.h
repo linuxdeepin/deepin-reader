@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,6 +10,7 @@
 
 class DocSheet;
 class HandleMenu;
+class EyeProtectionAction;
 
 /**
  * @brief The TitleMenu class
@@ -79,6 +80,7 @@ private:
 
 private:
     HandleMenu *m_handleMenu = nullptr;
+    EyeProtectionAction *m_eyeProtectionAction = nullptr;
 };
 
 

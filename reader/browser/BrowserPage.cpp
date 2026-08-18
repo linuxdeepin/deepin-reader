@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,6 +12,7 @@
 #include "Utils.h"
 #include "Global.h"
 #include "SheetRenderer.h"
+#include "EyeProtectionManager.h"
 #include "ddlog.h"
 
 #include <DGuiApplicationHelper>
@@ -151,6 +152,33 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
 
     painter->drawPixmap(0, 0, m_renderPixmap);  //m_renderPixmap的大小存在系统缩放，可能不等于option->rect()，需要按坐标绘制
+
+    // 护眼模式背景色叠加
+    EyeProtectionManager *epMgr = EyeProtectionManager::instance();
+    if (epMgr->mode() != EyeProtectionManager::Off) {
+        QColor pageBg = epMgr->pageBackgroundColor();
+
+        if (epMgr->mode() == EyeProtectionManager::Night) {
+            // 夜间模式：先完整反色（白底黑字 → 黑底白字）
+            // Exclusion(src=白) 结果 = src + dest - 2*src*dest/255
+            //   白(255) → 0(黑)，黑(0) → 255(白)
+            painter->setCompositionMode(QPainter::CompositionMode_Exclusion);
+            painter->fillRect(boundingRect(), QColor(255, 255, 255, 255));
+            painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+            // 再叠加深色半透明层降低整体亮度，保持文字清晰可读
+            QColor dark = pageBg;
+            dark.setAlpha(80);
+            painter->fillRect(boundingRect(), dark);
+        } else {
+            // 经典/绿色护眼：正片叠底(Multiply)染色
+            // result = src * dest / 255
+            //   白色背景(255)被染为护眼色，黑色文字(0)保持深色不变
+            //   避免使用 SourceAtop 导致黑色文字被覆盖为叠加色
+            painter->setCompositionMode(QPainter::CompositionMode_Multiply);
+            painter->fillRect(boundingRect(), pageBg);
+            painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        }
+    }
 
     if (1 == m_bookmarkState)
         painter->drawPixmap(static_cast<int>(bookmarkRect().x()), static_cast<int>(bookmarkRect().y()), QIcon::fromTheme("dr_bookmark_hover").pixmap(QSize(39, 39)));

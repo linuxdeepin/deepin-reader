@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include <DStyle>
+#include <DGuiApplicationHelper>
 
 #include <QColor>
 #include <QPainter>
@@ -15,6 +16,7 @@
 #include <QPainterPath>
 
 DWIDGET_USE_NAMESPACE
+using namespace Dtk::Gui;
 
 RoundColorWidget::RoundColorWidget(const QColor &color, QWidget *parent)
     : DWidget(parent)
@@ -59,8 +61,9 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
     if (m_isSelected) {
         // qCDebug(appLog) << "RoundColorWidget paintEvent m_isSelected";
         //draw select circle
+        QColor highlightColor = DGuiApplicationHelper::instance()->applicationPalette().highlight().color();
         QPen pen;
-        pen.setBrush(QBrush(m_color));
+        pen.setBrush(QBrush(highlightColor));
         pen.setWidth(borderWidth);  //pen width
         painter.setPen(pen);
         QRect r = squareRect.adjusted(3, 3, -3, -3);
@@ -72,5 +75,14 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
     path.addEllipse(r);
     painter.setClipPath(path);
     painter.fillPath(path, QBrush(m_color));
+
+    if (!m_isSelected) {
+        painter.setClipping(false);
+        QColor borderColor = palette().color(QPalette::WindowText);
+        borderColor.setAlpha(60);
+        painter.setPen(QPen(borderColor, 1));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawEllipse(r);
+    }
     // qCDebug(appLog) << "RoundColorWidget paintEvent end";
 }
