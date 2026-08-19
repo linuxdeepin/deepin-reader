@@ -1,0 +1,876 @@
+name: 注释_suite
+app: deepin-reader
+description: ''
+module: 注释
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_注释_s1
+  name: 注释测试
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: keyboard_press
+    key: delete
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: keyboard_press
+    key: delete
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: keyboard_type
+    text: test_input
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+- id: suite_注释_1_s1
+  name: 注释测试
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: keyboard_type
+    text: test_input
+  - action: keyboard_type
+    text: test_input
+  - action: keyboard_type
+    text: test_input
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+- id: suite_注释_2_s1
+  name: 注释测试
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: element_action
+    selector:
+      name: ReaderTitle
+      role: label
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: BrowserPage
+      role: panel
+    items:
+    - 复制
+  - action: keyboard_type
+    text: test_input
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_press
+    key: delete
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+- id: suite_注释_2_s2
+  name: 注释测试
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: mouse_click
+    selector:
+      name: ReaderTitle
+      role: label
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+  - action: assert_element
+    selector:
+      name: ReaderTitle
+      role: label
+teardown:
+- action: session_stop

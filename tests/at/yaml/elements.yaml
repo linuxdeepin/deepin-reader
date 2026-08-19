@@ -1,0 +1,7 @@
+elements:
+  ReaderTitle:
+    name: ReaderTitle
+    role: label
+  BrowserPage:
+    name: BrowserPage
+    role: panel
