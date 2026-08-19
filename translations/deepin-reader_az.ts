@@ -9,7 +9,7 @@
     <message>
         <location filename="../reader/Application.cpp" line="40"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
-        <translation>Document Viewer is a tool for reading document files, supporting %1.</translation>
+        <translation>Sənədə baxış %1 dəstəkləyən sənəd fayllarını oxumaq üçün bir alətdir.</translation>
     </message>
 </context>
 <context>
@@ -134,106 +134,106 @@
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="79"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="157"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
         <source>Add annotation</source>
         <translation>Aşıqlama əlavə edin</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="84"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="86"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="104"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="161"/>
         <source>Remove bookmark</source>
         <translation>Əlfəcini silin</translation>
     </message>
     <message>
         <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="87"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="99"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="152"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="89"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
         <source>Add bookmark</source>
         <translation>Əlfəcin əlavə edin</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="60"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="61"/>
         <source>Highlight</source>
         <translation>Vurğulamaq</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="72"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="74"/>
         <source>Remove highlight</source>
         <translation>Vurğulamanı silin</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="143"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="98"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Search</source>
         <translation>Axtarış</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="106"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="114"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="176"/>
         <source>Exit fullscreen</source>
         <translation>Tam ekrandan çıxış</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="109"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="167"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="179"/>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="170"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
         <source>Slide show</source>
         <translation>Slayd-şou</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="185"/>
         <source>First page</source>
         <translation>Birinci səhifə</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="116"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="174"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="186"/>
         <source>Previous page</source>
         <translation>Əvvəlki səhifə</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="181"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="193"/>
         <source>Next page</source>
         <translation>Növbəti səhifə</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="132"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="194"/>
         <source>Last page</source>
         <translation>Sonuncu səhifə</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="133"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="191"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="141"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="203"/>
         <source>Rotate left</source>
         <translation>Sola döndərin</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="134"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="192"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="204"/>
         <source>Rotate right</source>
         <translation>Sağa döndərin</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="137"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="195"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="207"/>
         <source>Print</source>
         <translation>Çap</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="138"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="196"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="146"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="208"/>
         <source>Document info</source>
         <translation>Sənəd məlumatı</translation>
     </message>
@@ -241,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="136"/>
+        <location filename="../reader/uiframe/Central.cpp" line="154"/>
         <source>Documents</source>
         <translation>Sənədlər</translation>
     </message>
@@ -249,49 +249,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="238"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="239"/>
         <source>The format is not supported</source>
         <translation>Format dəstəklənmir</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="287"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Open failed</source>
         <translation>Açıla bilmədi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="289"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Please check if the file is damaged</source>
         <translation>Lütfən yoxlayın, fayl zədələnib ya yox</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="291"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="294"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>Çevrilmə alınmadı, faylın zədəli olub olmadığını yoxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="532"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Save failed</source>
         <translation>Saxlanıla bilmədi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="544"/>
         <source>Saved successfully</source>
         <translation>Uğurla saxlanıldı</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="558"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="564"/>
         <source>Save as</source>
         <translation>Belə saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="568"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="579"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="574"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="585"/>
         <source>Invalid file name</source>
         <translation>Səhv fayl adı</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="570"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="581"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="576"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="587"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -318,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="380"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="410"/>
         <source>The bookmark has been removed</source>
         <translation>Əlfəcin silindi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="679"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="696"/>
         <source>Please select the text</source>
         <translation>Lütfən mətn seçin</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="756"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="767"/>
         <source>The annotation has been removed</source>
         <translation>Açıqlamalar silindi</translation>
     </message>
@@ -361,14 +361,45 @@
     </message>
 </context>
 <context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
+        <source>No eye protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
+        <source>Classic eye protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
+        <source>Green eye protection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
+        <source>Night eye protection</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
+        <source>Reading mode</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
         <source>Previous</source>
         <translation>Əvvəlki</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="133"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
         <source>Next</source>
         <translation>Növbəti</translation>
     </message>
@@ -402,7 +433,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="251"/>
         <source>Invalid page number</source>
         <translation>Yalnış səhifə nömrəsi</translation>
     </message>
@@ -424,37 +455,55 @@
     </message>
 </context>
 <context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
+        <source>Jump to first page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
+        <source>Close</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="31"/>
         <source>Save the changes to &quot;%1&quot;?</source>
         <translation>Dəyişikliklər &quot;%1&quot; tərkibində saxlanılsın?</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Discard</source>
         <comment>button</comment>
         <translation>Ləğv edin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="34"/>
         <source>Save</source>
         <comment>button</comment>
         <translation>Saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="47"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="48"/>
         <source>Delete</source>
         <translation>Silin</translation>
     </message>
@@ -551,188 +600,207 @@
 <context>
     <name>ShortCutShow</name>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="64"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="67"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
         <source>Exit</source>
         <translation>Çıxış</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="106"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
         <source>Help</source>
         <translation>Kömək</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="126"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="144"/>
         <source>Page up</source>
         <translation>Səhifə yuxarı</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="127"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="145"/>
         <source>Page down</source>
         <translation>Səhifə aşağı</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="111"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Open</source>
         <translation>Açın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="124"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Zoom in</source>
         <translation>Böyütmək</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Zoom out</source>
         <translation>Kiçiltmək</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="112"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
         <source>Save as</source>
         <translation>Belə saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="113"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
+        <source>File</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
+        <source>Display</source>
+        <translation>Görüntü</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
+        <source>Tools</source>
+        <translation>Alətlər</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
+        <source>Edit</source>
+        <translation>Düzəliş</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
         <source>Print</source>
         <translation>Çap</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="114"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="132"/>
         <source>Save</source>
         <translation>Saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="118"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
         <source>Thumbnails</source>
         <translation>Miniatürlər</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="119"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
         <source>1:1 size</source>
         <translation>1:1 ölçü</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="120"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
         <source>Fit height</source>
         <translation>Hündürlüyünə sığışdırın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="121"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
         <source>Fit width</source>
         <translation>Eninə doldurun</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="122"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
         <source>Rotate left</source>
         <translation>Sola döndərin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="123"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Rotate right</source>
         <translation>Sağa döndərin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation type="unfinished"/>
     </message>
-
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="128"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
         <source>Move to the beginning</source>
         <translation>Başlanğıca köçürün</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
         <source>Move to the end</source>
         <translation>Sona köşürün</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="134"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="154"/>
         <source>Select text</source>
         <translation>Mətni seçin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="135"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="155"/>
         <source>Hand tool</source>
         <translation>İş aləti</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="136"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="156"/>
         <source>Add bookmark</source>
         <translation>Əlfəcin əlavə edinƏlfəcin əlavə edin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="149"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="169"/>
         <source>Delete</source>
         <translation>Silin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="159"/>
         <source>Magnifier</source>
         <translation>Böyüdücü</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="161"/>
         <source>Slide show</source>
         <translation>Slayd-şou</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="162"/>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="166"/>
         <source>Copy</source>
         <translation>Kopyalayın</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="167"/>
         <source>Cut</source>
         <translation>Kəsmək</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="168"/>
         <source>Paste</source>
         <translation>Yerləşdirin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="150"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="170"/>
         <source>Undo</source>
         <translation>Geriyə</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="151"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="171"/>
         <source>Select all</source>
         <translation>Hamısını seçin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="107"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="125"/>
         <source>Display shortcuts</source>
         <translation>Qısayolları göstərmək</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="137"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="157"/>
         <source>Add annotation</source>
         <translation>Açıqlama əlavə edin</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="158"/>
         <source>Highlight</source>
         <translation>Vurğulamaq</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="160"/>
         <source>Search</source>
         <translation>Axtarış</translation>
     </message>
@@ -740,23 +808,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="278"/>
         <source>Copy</source>
         <translation>Kopyalayın</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="284"/>
         <source>Remove annotation</source>
         <translation>Açıqlamanı silin</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="290"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="311"/>
         <source>Remove all</source>
         <translation>Hamısını silin</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="306"/>
         <source>Remove bookmark</source>
         <translation>Əlfəcini silin</translation>
     </message>
@@ -764,7 +832,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="140"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="147"/>
         <source>Page %1</source>
         <translation>Səhifə %1</translation>
     </message>
@@ -785,48 +853,48 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New window</source>
         <translation>Yeni pəncərə</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New tab</source>
         <translation>Yeni vərəq</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="112"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="121"/>
         <source>Save</source>
         <translation>Saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
         <source>Save as</source>
         <translation>Belə saxlayın</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Display in file manager</source>
         <translation>Fayl menecerində göstərmək</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Magnifer</source>
         <translation>Böyüdücü</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="42"/>
         <source>Tools</source>
         <translation>Alətlər</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Search</source>
         <translation>Axtarış</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Print</source>
         <translation>Çap</translation>
     </message>
@@ -850,25 +918,30 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="63"/>
+        <location filename="../reader/main.cpp" line="64"/>
         <source>Document File Path.</source>
         <translation>Sənəd faylının yolu.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="64"/>
-        <location filename="../reader/main.cpp" line="68"/>
+        <location filename="../reader/main.cpp" line="65"/>
+        <location filename="../reader/main.cpp" line="69"/>
         <source>FilePath</source>
         <translation>FilePath</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="68"/>
         <source>ThumbnailPath Path.</source>
         <translation>ThumbnailPath yolu</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="72"/>
+        <location filename="../reader/main.cpp" line="73"/>
         <source>Generate thumbnail.</source>
         <translation>Miniatürlər yaratmaq</translation>
+    </message>
+    <message>
+        <location filename="../reader/main.cpp" line="77"/>
+        <source>Batch print documents without UI.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
