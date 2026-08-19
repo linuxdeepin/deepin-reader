@@ -1,0 +1,40 @@
+name: 顶部标签页栏_suite
+app: deepin-reader
+description: ''
+module: 顶部标签页栏
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_tab_management_s1
+  name: 顶部标签页栏 — 添加/切换/关闭
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: mouse_click
+    selector:
+      name: 向左滚动
+      role: button
+  - action: mouse_click
+    selector:
+      name: 向右滚动
+      role: button
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

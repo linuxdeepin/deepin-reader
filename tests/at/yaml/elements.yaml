@@ -1,0 +1,190 @@
+elements:
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  n0:
+    name: Form_DMainWindow
+    role: form
+  n1:
+    name: Form_DMainWindowTitlebar
+    role: form
+  n5:
+    name: Form_DTitlebarLeftArea
+    role: form
+  n6:
+    name: DTitlebarIconLabel
+    role: button
+  n7:
+    name: Form_TitleWidget
+    role: form
+  n8:
+    name: Button_ThumbnailToggle
+    role: check box
+  n9:
+    name: Form_widget
+    role: form
+  n10:
+    name: Form_scaleEdit_P
+    role: form
+  n11:
+    name: DLineEditChildLineEdit
+    role: text
+  n16:
+    name: Form_DTitlebarRightArea
+    role: form
+  n17:
+    name: Form_DTitlebarButtonArea
+    role: form
+  n18:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  n19:
+    name: DTitlebarDWindowMinButton
+    role: button
+  n20:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  n21:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  n22:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  n23:
+    name: Form_Central
+    role: form
+  n24:
+    name: Form_widget_1
+    role: form
+  n25:
+    name: Form_CentralDocPage
+    role: form
+  n26:
+    name: Form_DocTabBar
+    role: form
+  n27:
+    name: ''
+    role: page tab list
+  n28:
+    name: 向左滚动
+    role: button
+  n29:
+    name: 向右滚动
+    role: button
+  n30:
+    name: DTabBarAddButton
+    role: button
+  n33:
+    name: Form_CentralNavPage
+    role: form
+  n36:
+    name: Button_SelectFile
+    role: button
+  n37:
+    name: Label_Icon
+    role: image
+  n39:
+    name: DTitlebarMainMenu
+    role: popup menu
+  n40:
+    name: 新窗口
+    role: menu item
+  n41:
+    name: 新标签页
+    role: menu item
+  n42:
+    name: 保存
+    role: menu item
+  n43:
+    name: 另存为
+    role: menu item
+  n44:
+    name: 在文件管理器中显示
+    role: menu item
+  n45:
+    name: 放大镜
+    role: menu item
+  n46:
+    name: 工具
+    role: menu item
+  n47:
+    name: Menu_Hand
+    role: popup menu
+  n48:
+    name: 选择工具
+    role: menu item
+  n49:
+    name: 手形工具
+    role: menu item
+  n50:
+    name: 搜索
+    role: menu item
+  n51:
+    name: 打印
+    role: menu item
+  n52:
+    name: 主题
+    role: menu item
+  n53:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n54:
+    name: 浅色
+    role: menu item
+  n55:
+    name: 深色
+    role: menu item
+  n56:
+    name: 跟随系统
+    role: menu item
+  n57:
+    name: 帮助
+    role: menu item
+  n58:
+    name: 关于
+    role: menu item
+  n59:
+    name: 退出
+    role: menu item
+  n60:
+    name: Menu_Hand
+    role: popup menu
+  n61:
+    name: 选择工具
+    role: menu item
+  n62:
+    name: 手形工具
+    role: menu item
+  n63:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  n64:
+    name: 浅色
+    role: menu item
+  n65:
+    name: 深色
+    role: menu item
+  n66:
+    name: 跟随系统
+    role: menu item

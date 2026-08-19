@@ -1,0 +1,36 @@
+name: 标题栏主题菜单_suite
+app: deepin-reader
+description: ''
+module: 标题栏主题菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_theme_menu_s1
+  name: 标题栏主题菜单 — 浅色/深色/跟随系统
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

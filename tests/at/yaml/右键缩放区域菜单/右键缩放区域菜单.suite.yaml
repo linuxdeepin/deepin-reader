@@ -1,0 +1,33 @@
+name: 右键缩放区域菜单_suite
+app: deepin-reader
+description: ''
+module: 右键缩放区域菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_scale_s1
+  name: 右键缩放区域菜单
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    items:
+    - 双页视图
+  - action: dtk_context_menu
+    items:
+    - 适合页面
+  - action: dtk_context_menu
+    items:
+    - 适合宽度
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+teardown:
+- action: session_stop

@@ -1,0 +1,51 @@
+name: 标题栏主菜单_suite
+app: deepin-reader
+description: ''
+module: 标题栏主菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_titlebar_main_menu_s1
+  name: 标题栏主菜单 — 菜单项导航
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  - action: keyboard_press
+    key: escape
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - action: dtk_main_menu
+    items:
+    - 打印
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

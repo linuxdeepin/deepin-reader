@@ -1,0 +1,49 @@
+name: 右键文档区域菜单_suite
+app: deepin-reader
+description: ''
+module: 右键文档区域菜单
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_context_menu_doc_s1
+  name: 右键文档区域菜单 — 所有菜单项
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    items:
+    - 搜索
+  - action: keyboard_press
+    key: escape
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: dtk_context_menu
+    items:
+    - 全屏
+  - action: keyboard_press
+    key: escape
+  - action: dtk_context_menu
+    items:
+    - 首页
+  - action: dtk_context_menu
+    items:
+    - 上一页
+  - action: dtk_context_menu
+    items:
+    - 下一页
+  - action: dtk_context_menu
+    items:
+    - 末页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

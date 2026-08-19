@@ -1,0 +1,36 @@
+name: 窗口管理_suite
+app: deepin-reader
+description: ''
+module: 窗口管理
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_window_s1
+  name: 窗口管理 — 最小化/最大化/关闭
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: mouse_click
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+teardown:
+- action: session_stop

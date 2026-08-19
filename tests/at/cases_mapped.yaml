@@ -1,0 +1,495 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2024-01-01T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     module: "module-name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "工具栏操作"
+#       前置条件: "应用已启动"
+#       AT元素引用: ["open_button"]
+#     steps:
+#       - step_type: "action"
+#         action: "session_start"
+#         command: "deepin-reader ${TEST_FILES_DIR}/normal.pdf"
+#       - step_type: "action"
+#         action: "mouse_click"
+#         selector: {name: "Button_SelectFile", role: "push button"}
+#       - step_type: "action"
+#         action: "dtk_main_menu"
+#         items: ["菜单项A", "子菜单项"]
+#       - step_type: "action"
+#         action: "dtk_context_menu"
+#         selector: {name: "Form_CentralDocPage"}
+#         items: ["搜索"]
+#       - step_type: "assert"
+#         action: "assert_element"
+#         selector: {name: "Button_SelectFile", role: "push button"}
+#       - step_type: "assert"
+#         action: "assert_window"
+#         assertion: "window_exists"
+# === 格式范例结束 ===
+version: '1.0'
+metadata:
+  generated_at: '2026-08-19T13:30:00'
+  source: 文档查看器V25-用例.xlsx
+cases:
+- id: suite_main_no_doc
+  name: 主界面 — 无文档打开 — 打开文件
+  module: 主界面 — 无文档打开
+  status: active
+  annotation:
+    测试界面: 主界面-无文档打开
+    测试功能: 无文档时主界面显示与文件打开按钮
+    前置条件: deepin-reader 已启动，未打开任何文档
+    AT元素引用: ["Button_SelectFile"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader，不打开任何文档
+    action: session_start
+    command: deepin-reader
+  - step_type: assert
+    description: 主界面显示打开文件按钮(Button_SelectFile)
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - step_type: action
+    description: 点击打开文件按钮
+    action: mouse_click
+    selector:
+      name: Button_SelectFile
+      role: button
+  - step_type: assert
+    description: 检查文件选择对话框弹出
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_titlebar_main_menu
+  name: 标题栏主菜单 — 菜单项导航
+  module: 标题栏主菜单
+  status: active
+  annotation:
+    测试界面: 标题栏-主菜单
+    测试功能: 主菜单项导航(新窗口/新建标签/保存/搜索/打印/工具/主题)
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["DTitlebarMainMenu"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 打开主菜单，选择"新窗口"
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    description: 打开主菜单，选择"新标签页"
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    description: 打开主菜单，选择"保存"
+    action: dtk_main_menu
+    items:
+    - 保存
+  - step_type: action
+    description: 打开主菜单，选择"搜索"
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 按ESC关闭搜索框
+    action: keyboard_press
+    key: Escape
+  - step_type: action
+    description: 打开主菜单，选择"工具"→"选择工具"
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - step_type: action
+    description: 打开主菜单，选择"工具"→"手形工具"
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - step_type: action
+    description: 打开主菜单，选择"打印"
+    action: dtk_main_menu
+    items:
+    - 打印
+  - step_type: action
+    description: 关闭打印对话框
+    action: keyboard_press
+    key: Escape
+  - step_type: assert
+    description: 验证菜单操作后应用仍正常响应
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_theme_menu
+  name: 标题栏主题菜单 — 浅色/深色/跟随系统
+  module: 标题栏主题菜单
+  status: active
+  annotation:
+    测试界面: 标题栏-主题菜单
+    测试功能: 主题切换（浅色、深色、跟随系统）
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["DTitlebarMainMenu"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 打开主菜单→主题→浅色
+    action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - step_type: action
+    description: 打开主菜单→主题→深色
+    action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - step_type: action
+    description: 打开主菜单→主题→跟随系统
+    action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  - step_type: assert
+    description: 验证主题切换后应用仍正常响应
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_tab_management
+  name: 顶部标签页栏 — 添加/切换/关闭
+  module: 顶部标签页栏
+  status: active
+  annotation:
+    测试界面: 文档区域-标签页栏
+    测试功能: 标签页添加、滚动、切换、关闭
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["DTabBarAddButton", "向左滚动", "向右滚动"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击新建标签页按钮
+    action: mouse_click
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - step_type: assert
+    description: 验证新建标签页成功
+    action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - step_type: action
+    description: 点击向左滚动按钮
+    action: mouse_click
+    selector:
+      name: 向左滚动
+      role: button
+  - step_type: action
+    description: 点击向右滚动按钮
+    action: mouse_click
+    selector:
+      name: 向右滚动
+      role: button
+  - step_type: assert
+    description: 验证标签页滚动后界面正常
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_sidebar_tabs
+  name: 左侧栏 — 按钮切换
+  module: 左侧栏 — 按钮切换
+  status: active
+  annotation:
+    测试界面: 左侧栏-按钮切换
+    测试功能: 侧边栏缩略图切换按钮
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["Button_ThumbnailToggle"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击标题栏缩略图切换按钮展开侧边栏
+    action: mouse_click
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - step_type: action
+    description: 再次点击关闭侧边栏
+    action: mouse_click
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - step_type: assert
+    description: 验证侧边栏切换正常
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_context_menu_doc
+  name: 右键文档区域菜单 — 所有菜单项
+  module: 右键文档区域菜单
+  status: active
+  annotation:
+    测试界面: 文档区域-右键菜单
+    测试功能: 文档右键菜单所有菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["Button_SelectFile"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 在文档区域右键选择"搜索"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 搜索
+  - step_type: action
+    description: 关闭搜索框
+    action: keyboard_press
+    key: Escape
+  - step_type: action
+    description: 在文档区域右键选择"添加书签"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 添加书签
+  - step_type: action
+    description: 在文档区域右键选择"全屏"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 全屏
+  - step_type: action
+    description: 退出全屏
+    action: keyboard_press
+    key: Escape
+  - step_type: action
+    description: 在文档区域右键选择"首页"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 首页
+  - step_type: action
+    description: 在文档区域右键选择"上一页"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 上一页
+  - step_type: action
+    description: 在文档区域右键选择"下一页"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 下一页
+  - step_type: action
+    description: 在文档区域右键选择"末页"
+    action: dtk_context_menu
+    x: 400
+    y: 300
+    items:
+    - 末页
+  - step_type: assert
+    description: 验证右键菜单操作后应用正常响应
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_window
+  name: 窗口管理 — 最小化/最大化/关闭
+  module: 窗口管理
+  status: active
+  annotation:
+    测试界面: 全局-窗口管理
+    测试功能: 窗口按钮操作
+    前置条件: deepin-reader 已启动
+    AT元素引用: ["DTitlebarDWindowMinButton", "DTitlebarDWindowMaxButton", "DTitlebarDWindowCloseButton"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader
+    action: session_start
+    command: deepin-reader
+  - step_type: assert
+    description: 验证主窗口可见
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - step_type: action
+    description: 点击最小化按钮
+    action: mouse_click
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - step_type: action
+    description: 点击最大化按钮
+    action: mouse_click
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  - step_type: assert
+    description: 验证窗口按钮操作后应用正常
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_titlebar_scale
+  name: 标题栏缩放输入框 — 缩放比例输入
+  module: 标题栏缩放输入框
+  status: active
+  annotation:
+    测试界面: 标题栏-缩放输入框
+    测试功能: 缩放比例输入
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["DLineEditChildLineEdit"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击缩放比例输入框以聚焦
+    action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - step_type: action
+    description: 输入新的缩放比例100
+    action: keyboard_type
+    text: '100'
+  - step_type: action
+    description: 按Enter键确认缩放比例
+    action: keyboard_press
+    key: Return
+  - step_type: assert
+    description: 验证缩放输入框可见
+    action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_context_menu_scale
+  name: 右键缩放区域菜单
+  module: 右键缩放区域菜单
+  status: active
+  annotation:
+    测试界面: 标题栏-缩放输入框右键
+    测试功能: 缩放菜单项
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["DLineEditChildLineEdit"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 在缩放输入区域右键选择"双页视图"
+    action: dtk_context_menu
+    x: 350
+    y: 50
+    items:
+    - 双页视图
+  - step_type: action
+    description: 在缩放输入区域右键选择"适合页面"
+    action: dtk_context_menu
+    x: 350
+    y: 50
+    items:
+    - 适合页面
+  - step_type: action
+    description: 在缩放输入区域右键选择"适合宽度"
+    action: dtk_context_menu
+    x: 350
+    y: 50
+    items:
+    - 适合宽度
+  - step_type: assert
+    description: 验证缩放菜单操作后应用正常
+    action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_keyboard
+  name: 键盘快捷键交互
+  module: 键盘交互
+  status: active
+  annotation:
+    测试界面: 全局-键盘快捷键
+    测试功能: 键盘快捷键操作
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素引用: ["Button_SelectFile"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 按Ctrl+F打开搜索
+    action: keyboard_hot_key
+    key: ctrl+f
+  - step_type: action
+    description: 按ESC关闭搜索
+    action: keyboard_press
+    key: Escape
+  - step_type: assert
+    description: 验证键盘操作后应用正常
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_doc_open
+  name: 文档打开
+  module: 文档打开
+  status: active
+  annotation:
+    测试界面: 主窗口-文档打开
+    测试功能: 文档打开功能
+    前置条件: deepin-reader 已启动
+    AT元素引用: ["Button_SelectFile"]
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader
+    action: session_start
+    command: deepin-reader
+  - step_type: action
+    description: 点击打开文件按钮
+    action: mouse_click
+    selector:
+      name: Button_SelectFile
+      role: button
+  - step_type: assert
+    description: 验证文件选择对话框已弹出
+    action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
