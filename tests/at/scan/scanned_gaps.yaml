@@ -1,0 +1,1828 @@
+---
+class_name: SideBarImageListView
+source_file: sidebar/SideBarImageListview.h
+base_classes:
+- DListView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SideBarImageViewModel
+source_file: sidebar/SideBarImageViewModel.cpp
+base_classes:
+- QAbstractListModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SideBarImageViewModel
+source_file: sidebar/SideBarImageViewModel.h
+base_classes:
+- QAbstractListModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ThumbnailDelegate
+source_file: sidebar/ThumbnailDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ThumbnailDelegate
+source_file: sidebar/ThumbnailDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SheetBrowser
+source_file: browser/SheetBrowser.h
+base_classes:
+- Dtk::Widget::DGraphicsView
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DjVuPage
+source_file: document/DjVuModel.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DjVuDocument
+source_file: document/DjVuModel.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DjVuPage
+source_file: document/DjVuModel.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DjVuDocument
+source_file: document/DjVuModel.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Annotation
+source_file: document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: FormField
+source_file: document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Page
+source_file: document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Document
+source_file: document/Model.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Annotation
+source_file: document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: FormField
+source_file: document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Page
+source_file: document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Document
+source_file: document/Model.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFAnnotation
+source_file: document/PDFModel.cpp
+base_classes:
+- Annotation
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFPage
+source_file: document/PDFModel.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFDocument
+source_file: document/PDFModel.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFAnnotation
+source_file: document/PDFModel.h
+base_classes:
+- Annotation
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFPage
+source_file: document/PDFModel.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PDFDocument
+source_file: document/PDFModel.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: XpsDocumentAdapter
+source_file: document/XpsDocumentAdapter.cpp
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: XpsPageAdapter
+source_file: document/XpsDocumentAdapter.cpp
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: XpsDocumentAdapter
+source_file: document/XpsDocumentAdapter.h
+base_classes:
+- Document
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: XpsPageAdapter
+source_file: document/XpsDocumentAdapter.h
+base_classes:
+- Page
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EyeProtectionAction
+source_file: eyeprotection/EyeProtectionAction.cpp
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EyeProtectionAction
+source_file: eyeprotection/EyeProtectionAction.h
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EyeProtectionManager
+source_file: eyeprotection/EyeProtectionManager.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EyeProtectionManager
+source_file: eyeprotection/EyeProtectionManager.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: MLogger
+source_file: logger.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserAnnotation
+source_file: browser/BrowserAnnotation.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserAnnotation
+source_file: browser/BrowserAnnotation.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReadMagnifierManager
+source_file: browser/BrowserMagniFier.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserMagniFier
+source_file: browser/BrowserMagniFier.cpp
+base_classes:
+- QLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReadMagnifierManager
+source_file: browser/BrowserMagniFier.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserMagniFier
+source_file: browser/BrowserMagniFier.h
+base_classes:
+- QLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserMenu
+source_file: browser/BrowserMenu.h
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserPage
+source_file: browser/BrowserPage.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserPage
+source_file: browser/BrowserPage.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserWord
+source_file: browser/BrowserWord.cpp
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserWord
+source_file: browser/BrowserWord.h
+base_classes:
+- QGraphicsItem
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PageRenderThread
+source_file: browser/PageRenderThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PageRenderThread
+source_file: browser/PageRenderThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PageSearchThread
+source_file: browser/PageSearchThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PageSearchThread
+source_file: browser/PageSearchThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SheetBrowser
+source_file: browser/SheetBrowser.cpp
+base_classes:
+- Dtk::Widget::DGraphicsView
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Application
+source_file: Application.cpp
+base_classes:
+- DApplication
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Application
+source_file: Application.h
+base_classes:
+- DApplication
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: MainWindow
+source_file: MainWindow.cpp
+base_classes:
+- Dtk::Widget::DMainWindow
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DMainWindow
+action_texts: []
+menu_actions: []
+---
+class_name: MainWindow
+source_file: MainWindow.h
+base_classes:
+- Dtk::Widget::DMainWindow
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DBusObject
+source_file: app/DBusObject.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DBusObject
+source_file: app/DBusObject.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Database
+source_file: app/Database.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Database
+source_file: app/Database.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TMFunctionThread
+source_file: app/TMFunctionThread.cpp
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TMFunctionThread
+source_file: app/TMFunctionThread.h
+base_classes:
+- QThread
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Utils
+source_file: app/Utils.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Utils
+source_file: app/Utils.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleMainWindow
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleCentral
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleCentralDocPage
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleCentralNavPage
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDocSheet
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDocTabBar
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleTitleWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleSheetSidebar
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleSheetBrowser
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleThumbnailWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleCatalogWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleBookMarkWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleNotesWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleSearchResWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleQFrame
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleQWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleQPushButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleQSlider
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+- QAccessibleValueInterface
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDFrame
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDWidget
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDBackgroundGroup
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDSwitchButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDFloatingButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDSearchEdit
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDPushButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDIconButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDCheckBox
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDCommandLinkButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDLabel
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+- QAccessibleTextInterface
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDTitlebar
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDToolButton
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDDialog
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AccessibleDFileDialog
+source_file: app/accessible.h
+base_classes:
+- QAccessibleWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: MLogger
+source_file: logger.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BookMarkDelegate
+source_file: sidebar/BookMarkDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BookMarkDelegate
+source_file: sidebar/BookMarkDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: CatalogTreeView
+source_file: sidebar/CatalogTreeView.cpp
+base_classes:
+- DTreeView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ActiveProxyStyle
+source_file: sidebar/CatalogTreeView.cpp
+base_classes:
+- QProxyStyle
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: CatalogModel
+source_file: sidebar/CatalogTreeView.cpp
+base_classes:
+- QStandardItemModel
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: CatalogTreeView
+source_file: sidebar/CatalogTreeView.h
+base_classes:
+- DTreeView
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: NotesDelegate
+source_file: sidebar/NotesDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: NotesDelegate
+source_file: sidebar/NotesDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReadImageTask
+source_file: sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- QRunnable
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReaderImageThreadPoolManager
+source_file: sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- QThreadPool
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Holder
+source_file: sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: Holder
+source_file: sidebar/ReaderImageThreadPoolManager.cpp
+base_classes:
+- HolderBase
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReadImageTask
+source_file: sidebar/ReaderImageThreadPoolManager.h
+base_classes:
+- QRunnable
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ReaderImageThreadPoolManager
+source_file: sidebar/ReaderImageThreadPoolManager.h
+base_classes:
+- QThreadPool
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SearchResDelegate
+source_file: sidebar/SearchResDelegate.cpp
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SearchResDelegate
+source_file: sidebar/SearchResDelegate.h
+base_classes:
+- DStyledItemDelegate
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DocSheet
+source_file: uiframe/DocSheet.cpp
+base_classes:
+- Dtk::Widget::DSplitter
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: LoadingWidget
+source_file: uiframe/DocSheet.cpp
+base_classes:
+- QWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DocSheet
+source_file: uiframe/DocSheet.h
+base_classes:
+- Dtk::Widget::DSplitter
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: LoadingWidget
+source_file: uiframe/DocSheet.h
+base_classes:
+- QWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: DocTabBar
+source_file: uiframe/DocTabBar.cpp
+base_classes:
+- DTabBar
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DTabBar
+action_texts: []
+menu_actions: []
+---
+class_name: DocTabBar
+source_file: uiframe/DocTabBar.h
+base_classes:
+- DTabBar
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SheetRenderer
+source_file: uiframe/SheetRenderer.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SheetRenderer
+source_file: uiframe/SheetRenderer.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TitleMenu
+source_file: uiframe/TitleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TitleMenu
+source_file: uiframe/TitleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: AttrScrollWidget
+source_file: widgets/AttrScrollWidget.cpp
+base_classes:
+- Dtk::Widget::DFrame
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFrame
+action_texts: []
+menu_actions: []
+---
+class_name: AttrScrollWidget
+source_file: widgets/AttrScrollWidget.h
+base_classes:
+- Dtk::Widget::DFrame
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BaseWidget
+source_file: widgets/BaseWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: BaseWidget
+source_file: widgets/BaseWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ColorWidgetAction
+source_file: widgets/ColorWidgetAction.cpp
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ColorWidgetAction
+source_file: widgets/ColorWidgetAction.h
+base_classes:
+- QWidgetAction
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EncryptionPage
+source_file: widgets/EncryptionPage.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: FileAttrWidget
+source_file: widgets/FileAttrWidget.cpp
+base_classes:
+- DAbstractDialog
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DAbstractDialog
+action_texts: []
+menu_actions: []
+---
+class_name: ImageWidget
+source_file: widgets/FileAttrWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: FileAttrWidget
+source_file: widgets/FileAttrWidget.h
+base_classes:
+- DAbstractDialog
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: FindWidget
+source_file: widgets/FindWidget.cpp
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFloatingWidget
+action_texts: []
+menu_actions: []
+---
+class_name: FindWidget
+source_file: widgets/FindWidget.h
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: HandleMenu
+source_file: widgets/HandleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: PagingWidget
+source_file: widgets/PagingWidget.h
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ProgressDialog
+source_file: widgets/ProgressDialog.cpp
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DDialog
+action_texts: []
+menu_actions: []
+---
+class_name: ProgressDialog
+source_file: widgets/ProgressDialog.h
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: RestoreTipWidget
+source_file: widgets/RestoreTipWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DIconButton
+action_texts: []
+menu_actions: []
+---
+class_name: RestoreTipWidget
+source_file: widgets/RestoreTipWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: RoundColorWidget
+source_file: widgets/RoundColorWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: RoundColorWidget
+source_file: widgets/RoundColorWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SaveDialog
+source_file: widgets/SaveDialog.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SaveDialog
+source_file: widgets/SaveDialog.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ScaleMenu
+source_file: widgets/ScaleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ScaleMenu
+source_file: widgets/ScaleMenu.h
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ScaleWidget
+source_file: widgets/ScaleWidget.cpp
+base_classes:
+- Dtk::Widget::DWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ScaleWidget
+source_file: widgets/ScaleWidget.h
+base_classes:
+- Dtk::Widget::DWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SecurityDialog
+source_file: widgets/SecurityDialog.cpp
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DDialog
+- DLabel
+action_texts: []
+menu_actions: []
+---
+class_name: SecurityDialog
+source_file: widgets/SecurityDialog.h
+base_classes:
+- Dtk::Widget::DDialog
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ShortCutShow
+source_file: widgets/ShortCutShow.cpp
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: KeyDataList
+source_file: widgets/ShortCutShow.cpp
+base_classes:
+- QList<std::pair<QString, QString> >
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: ShortCutShow
+source_file: widgets/ShortCutShow.h
+base_classes:
+- QObject
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: KeyDataList
+source_file: widgets/ShortCutShow.h
+base_classes:
+- QList<std::pair<QString, QString> >
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SlidePlayWidget
+source_file: widgets/SlidePlayWidget.cpp
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DFloatingWidget
+action_texts: []
+menu_actions: []
+---
+class_name: SlidePlayWidget
+source_file: widgets/SlidePlayWidget.h
+base_classes:
+- DFloatingWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SlideWidget
+source_file: widgets/SlideWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: SlideWidget
+source_file: widgets/SlideWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TextEditWidget
+source_file: widgets/TextEditWidget.cpp
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TextEditWidget
+source_file: widgets/TextEditWidget.h
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TextEditShadowWidget
+source_file: widgets/TextEditWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TipsWidget
+source_file: widgets/TipsWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TipsWidget
+source_file: widgets/TipsWidget.h
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TransparentTextEdit
+source_file: widgets/TransparentTextEdit.h
+base_classes:
+- QTextEdit
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: WordWrapLabel
+source_file: widgets/WordWrapLabel.cpp
+base_classes:
+- DLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations:
+- DLabel
+action_texts: []
+menu_actions: []
+---
+class_name: WordWrapLabel
+source_file: widgets/WordWrapLabel.h
+base_classes:
+- DLabel
+is_ui_widget: true
+object_names: []
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []

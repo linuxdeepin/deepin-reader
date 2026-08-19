@@ -1,0 +1,29 @@
+name: community_suite
+app: deepin-reader
+description: ''
+module: community
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_community_s1
+  name: 社区需求
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 幻灯片
+  - action: mouse_click
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+teardown:
+- action: session_stop

@@ -1,0 +1,25 @@
+name: toc_suite
+app: deepin-reader
+description: ''
+module: toc
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_toc_s1
+  name: 目录导航
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+  - action: mouse_click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+teardown:
+- action: session_stop

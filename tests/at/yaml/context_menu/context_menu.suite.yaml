@@ -1,0 +1,35 @@
+name: context_menu_suite
+app: deepin-reader
+description: ''
+module: context_menu
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_context_menu_s1
+  name: 文档视图-右键菜单
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+  - action: dtk_context_menu
+    items:
+    - 第一页
+  - action: mouse_click
+  - action: dtk_context_menu
+    items:
+    - 上一页
+  - action: mouse_click
+  - action: dtk_context_menu
+    items:
+    - 下一页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+teardown:
+- action: session_stop

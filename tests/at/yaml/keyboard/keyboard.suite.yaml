@@ -1,0 +1,47 @@
+name: keyboard_suite
+app: deepin-reader
+description: ''
+module: keyboard
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_keyboard_1_s1
+  name: 键盘交互(1)
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+- id: suite_keyboard_2_s1
+  name: 键盘交互(2)
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: test
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: ctrl+p
+  - action: keyboard_press
+    key: escape
+  assert_steps: []
+teardown:
+- action: session_stop

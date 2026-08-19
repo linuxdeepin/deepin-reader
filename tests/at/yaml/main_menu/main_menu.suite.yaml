@@ -1,0 +1,56 @@
+name: main_menu_suite
+app: deepin-reader
+description: ''
+module: main_menu
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_main_menu_1_s1
+  name: 主菜单操作(1)
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: f1
+  - action: keyboard_press
+    key: escape
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: HandleMenu
+- id: suite_main_menu_2_s1
+  name: 主菜单操作(2)
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 选择文本
+  assert_steps: []
+teardown:
+- action: session_stop

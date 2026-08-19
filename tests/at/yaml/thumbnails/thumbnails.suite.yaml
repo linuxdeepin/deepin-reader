@@ -1,0 +1,25 @@
+name: thumbnails_suite
+app: deepin-reader
+description: ''
+module: thumbnails
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_thumbnails_s1
+  name: 缩略图显示
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+  - action: mouse_click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+teardown:
+- action: session_stop

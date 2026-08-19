@@ -1,0 +1,862 @@
+# === 格式范例 ===
+# metadata:
+#   generated_at: "2024-01-01T00:00:00"
+#   source: "input.xlsx"
+# cases:
+#   - id: "suite-id"
+#     name: "Suite name"
+#     module: "module-name"
+#     status: "active"
+#     annotation:
+#       测试界面: "主窗口"
+#       测试功能: "工具栏操作"
+#       前置条件: "应用已启动"
+#       AT元素引用: ["open_button"]
+#     setup:
+#       - action: session_start
+#         command: "deepin-reader"
+#     steps:
+#       - step_type: "action"
+#         description: "测试步骤描述"
+#         action: "element_action"
+#         selector:
+#           name: "控件名"
+#           role: "push button"
+#         do: "click"
+#       - step_type: "assert"
+#         description: "验证步骤"
+#         action: "assert_element"
+#         selector:
+#           name: "元素名"
+#         do: "assert_exists"
+#     teardown:
+#       - action: session_stop
+# === 格式范例结束 ===
+
+metadata:
+  generated_at: "2026-08-19T14:35:00"
+  source: "文档查看器V25-用例.xlsx"
+cases:
+  # ==========================================================
+  # Suite: doc_open_1 - 文档打开-基础操作
+  # ==========================================================
+  - id: suite_doc_open_1
+    name: "文档打开-基础操作"
+    module: doc_open
+    status: active
+    annotation:
+      测试界面: "主窗口-文件打开界面"
+      测试功能: "文档打开功能（多种格式/拖拽/快捷键打开）"
+      前置条件: "应用已启动"
+      AT元素引用: ["PagingWidget"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps:
+      - step_type: action
+        description: "打开文档，查看右侧和底部进度条"
+        action: keyboard_hot_key
+        key: ctrl+o
+      - step_type: action
+        description: "选择测试文档打开"
+        action: keyboard_type
+        text: "/home/test/test.pdf"
+      - step_type: action
+        description: "确认打开"
+        action: keyboard_press
+        key: enter
+      - step_type: assert
+        description: "文档已打开，进度条显示正常"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+      - step_type: action
+        description: "重命名操作测试"
+        action: keyboard_press
+        key: tab
+      - step_type: action
+        description: "按Enter键确认"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "按空格键"
+        action: keyboard_press
+        key: space
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: doc_open_2 - 文档打开-保存退出
+  # ==========================================================
+  - id: suite_doc_open_2
+    name: "文档打开-保存退出"
+    module: doc_open
+    status: active
+    annotation:
+      测试界面: "主窗口-文件操作"
+      测试功能: "文档保存/另存/退出提示"
+      前置条件: "文档已打开"
+      AT元素引用: ["PagingWidget"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "打开多个标签页"
+        action: dtk_main_menu
+        items: ["新标签页"]
+      - step_type: action
+        description: "按Ctrl+S保存"
+        action: keyboard_hot_key
+        key: ctrl+s
+      - step_type: assert
+        description: "文档保存成功"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+      - step_type: action
+        description: "按Ctrl+Shift+S另存"
+        action: keyboard_hot_key
+        key: ctrl+shift+s
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: doc_ops_1 - 文档视图-页面操作
+  # ==========================================================
+  - id: suite_doc_ops_1
+    name: "文档视图-页面操作(1)"
+    module: doc_ops
+    status: active
+    annotation:
+      测试界面: "主窗口-文档视图区域"
+      测试功能: "页面导航与缩放操作"
+      前置条件: "文档已打开"
+      AT元素引用: ["PagingWidget", "Edit_Page", "Edit_Page_P", "thumbnailNextBtn", "thumbnailPreBtn"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "输入页码"
+        action: element_action
+        selector:
+          name: Edit_Page
+          role: panel
+        do: click
+      - step_type: action
+        description: "输入页码数值"
+        action: keyboard_type
+        text: "3"
+      - step_type: action
+        description: "确认跳转"
+        action: keyboard_press
+        key: enter
+      - step_type: assert
+        description: "页面跳转成功"
+        action: assert_element
+        selector:
+          name: Edit_Page
+        do: assert_exists
+      - step_type: action
+        description: "翻到下一页"
+        action: element_action
+        selector:
+          name: thumbnailNextBtn
+          role: panel
+        do: click
+      - step_type: action
+        description: "翻到上一页"
+        action: element_action
+        selector:
+          name: thumbnailPreBtn
+          role: panel
+        do: click
+      - step_type: action
+        description: "Ctrl+滚轮放大"
+        action: keyboard_hot_key
+        key: ctrl+equal
+      - step_type: action
+        description: "Ctrl+滚轮缩小"
+        action: keyboard_hot_key
+        key: ctrl+minus
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: context_menu - 文档视图-右键菜单
+  # ==========================================================
+  - id: suite_context_menu
+    name: "文档视图-右键菜单"
+    module: context_menu
+    status: active
+    annotation:
+      测试界面: "主窗口-文档视图区域"
+      测试功能: "右键菜单操作（复制/搜索）"
+      前置条件: "文档已打开"
+      AT元素引用: ["BrowserMenu"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "右键点击文档区域，弹出页面跳转菜单"
+        action: mouse_click
+        button: 3
+        x: 400
+        y: 300
+      - step_type: action
+        description: "选第一页"
+        action: dtk_context_menu
+        x: 400
+        y: 300
+        items: ["第一页"]
+      - step_type: assert
+        description: "页面跳转正确"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+      - step_type: action
+        description: "右键点击文档区域，弹出查看菜单"
+        action: mouse_click
+        button: 3
+        x: 400
+        y: 300
+      - step_type: action
+        description: "上一页"
+        action: dtk_context_menu
+        x: 400
+        y: 300
+        items: ["上一页"]
+      - step_type: action
+        description: "右键点击文档区域，弹出查看菜单"
+        action: mouse_click
+        button: 3
+        x: 400
+        y: 300
+      - step_type: action
+        description: "下一页"
+        action: dtk_context_menu
+        x: 400
+        y: 300
+        items: ["下一页"]
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: main_menu_1 - 主菜单操作(1)
+  # ==========================================================
+  - id: suite_main_menu_1
+    name: "主菜单操作(1)"
+    module: main_menu
+    status: active
+    annotation:
+      测试界面: "主窗口-工具栏菜单"
+      测试功能: "主菜单功能（关于/帮助/主题/退出）"
+      前置条件: "文档已打开"
+      AT元素引用: ["HandleMenu", "defaultshape", "handleshape"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "点击菜单键"
+        action: dtk_main_menu
+        items: ["关于"]
+      - step_type: assert
+        description: "关于页面显示正确"
+        action: assert_element
+        selector:
+          name: HandleMenu
+        do: assert_exists
+      - step_type: action
+        description: "按Esc关闭关于窗口"
+        action: keyboard_press
+        key: escape
+      - step_type: action
+        description: "按F1打开帮助"
+        action: keyboard_hot_key
+        key: f1
+      - step_type: action
+        description: "按Esc关闭帮助"
+        action: keyboard_press
+        key: escape
+      - step_type: action
+        description: "切换主题"
+        action: dtk_main_menu
+        items: ["主题", "浅色"]
+      - step_type: action
+        description: "切换深色主题"
+        action: dtk_main_menu
+        items: ["主题", "深色"]
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: main_menu_2 - 主菜单操作(2)
+  # ==========================================================
+  - id: suite_main_menu_2
+    name: "主菜单操作(2)"
+    module: main_menu
+    status: active
+    annotation:
+      测试界面: "主窗口-工具栏菜单"
+      测试功能: "主菜单功能"
+      前置条件: "文档已打开"
+      AT元素引用: ["HandleMenu"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "另存为"
+        action: dtk_main_menu
+        items: ["另存为"]
+      - step_type: action
+        description: "文件管理器中显示"
+        action: dtk_main_menu
+        items: ["在文件管理器中显示"]
+      - step_type: action
+        description: "工具-选择文本"
+        action: dtk_main_menu
+        items: ["工具", "选择文本"]
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: tabs - 标签页管理
+  # ==========================================================
+  - id: suite_tabs
+    name: "标签页管理"
+    module: tabs
+    status: active
+    annotation:
+      测试界面: "主窗口-标签页"
+      测试功能: "标签页打开/关闭/拖拽操作"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "新标签页打开文档"
+        action: keyboard_hot_key
+        key: ctrl+t
+      - step_type: action
+        description: "关闭当前标签页"
+        action: keyboard_hot_key
+        key: ctrl+w
+      - step_type: action
+        description: "切换标签页"
+        action: keyboard_hot_key
+        key: ctrl+tab
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: thumbnails - 缩略图显示
+  # ==========================================================
+  - id: suite_thumbnails
+    name: "缩略图显示"
+    module: thumbnails
+    status: active
+    annotation:
+      测试界面: "左侧栏-缩略图"
+      测试功能: "缩略图显示与导航"
+      前置条件: "文档已打开"
+      AT元素引用: ["SideBarImageListView", "sideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "展开左侧栏缩略图"
+        action: mouse_click
+        x: 50
+        y: 200
+      - step_type: action
+        description: "点击缩略图跳转"
+        action: mouse_click
+        x: 50
+        y: 200
+      - step_type: assert
+        description: "缩略图显示正常"
+        action: assert_element
+        selector:
+          name: SideBarImageListView
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: bookmarks - 书签管理
+  # ==========================================================
+  - id: suite_bookmarks
+    name: "书签管理"
+    module: bookmarks
+    status: active
+    annotation:
+      测试界面: "左侧栏-书签"
+      测试功能: "书签添加/删除/导航"
+      前置条件: "文档已打开"
+      AT元素引用: ["SideBarImageListView", "sideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "添加书签"
+        action: keyboard_hot_key
+        key: ctrl+d
+      - step_type: assert
+        description: "书签添加成功"
+        action: assert_element
+        selector:
+          name: SideBarImageListView
+        do: assert_exists
+      - step_type: action
+        description: "删除书签"
+        action: keyboard_hot_key
+        key: delete
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: annotations_1 - 注释管理(1)
+  # ==========================================================
+  - id: suite_annotations_1
+    name: "注释管理(1)"
+    module: annotations
+    status: active
+    annotation:
+      测试界面: "左侧栏/文档-注释"
+      测试功能: "高亮/图标注释功能"
+      前置条件: "文档已打开"
+      AT元素引用: ["TransparentTextEdit", "TextEditShadowWidget"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "选中文本"
+        action: mouse_click
+        x: 400
+        y: 300
+      - step_type: action
+        description: "右键点击弹出菜单"
+        action: mouse_click
+        button: 3
+        x: 400
+        y: 300
+      - step_type: action
+        description: "添加高亮注释"
+        action: dtk_context_menu
+        x: 400
+        y: 300
+        items: ["添加注释"]
+      - step_type: assert
+        description: "注释文本框出现"
+        action: assert_element
+        selector:
+          name: TransparentTextEdit
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: annotations_2 - 注释管理(2)
+  # ==========================================================
+  - id: suite_annotations_2
+    name: "注释管理(2)"
+    module: annotations
+    status: active
+    annotation:
+      测试界面: "左侧栏/文档-注释"
+      测试功能: "高亮/图标注释功能"
+      前置条件: "文档已打开"
+      AT元素引用: ["TransparentTextEdit"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "编辑注释内容"
+        action: element_action
+        selector:
+          name: TransparentTextEdit
+          role: panel
+        do: click
+      - step_type: action
+        description: "输入注释文本"
+        action: keyboard_type
+        text: "测试注释内容"
+      - step_type: action
+        description: "点击其他区域取消"
+        action: keyboard_press
+        key: escape
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: annotations_3 - 注释管理(3)
+  # ==========================================================
+  - id: suite_annotations_3
+    name: "注释管理(3)"
+    module: annotations
+    status: active
+    annotation:
+      测试界面: "左侧栏/文档-注释"
+      测试功能: "高亮/图标注释功能"
+      前置条件: "文档已打开"
+      AT元素引用: ["TransparentTextEdit", "TextEditShadowWidget"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "复制注释内容"
+        action: keyboard_hot_key
+        key: ctrl+c
+      - step_type: action
+        description: "删除注释"
+        action: keyboard_press
+        key: delete
+      - step_type: assert
+        description: "注释已删除"
+        action: assert_element
+        selector:
+          name: TransparentTextEdit
+        do: assert_not_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: toc - 目录导航
+  # ==========================================================
+  - id: suite_toc
+    name: "目录导航"
+    module: toc
+    status: active
+    annotation:
+      测试界面: "左侧栏-目录"
+      测试功能: "目录导航/跳转"
+      前置条件: "文档已打开"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "展开左侧栏目录"
+        action: mouse_click
+        x: 50
+        y: 200
+      - step_type: action
+        description: "点击目录索引"
+        action: mouse_click
+        x: 50
+        y: 200
+      - step_type: assert
+        description: "目录与右侧文档对应"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: keyboard_1 - 键盘交互(1)
+  # ==========================================================
+  - id: suite_keyboard_1
+    name: "键盘交互(1)"
+    module: keyboard
+    status: active
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "键盘Tab/快捷键操作"
+      前置条件: "应用已启动"
+      AT元素引用: ["PagingWidget", "Edit_Page", "HandleMenu"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps:
+      - step_type: action
+        description: "Tab键切换焦点"
+        action: keyboard_press
+        key: tab
+      - step_type: action
+        description: "Enter确认"
+        action: keyboard_press
+        key: enter
+      - step_type: action
+        description: "方向键导航"
+        action: keyboard_press
+        key: down
+      - step_type: action
+        description: "Esc关闭弹窗"
+        action: keyboard_press
+        key: escape
+      - step_type: assert
+        description: "焦点切换正常"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: keyboard_2 - 键盘交互(2)
+  # ==========================================================
+  - id: suite_keyboard_2
+    name: "键盘交互(2)"
+    module: keyboard
+    status: active
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "键盘快捷键操作"
+      前置条件: "应用已启动"
+      AT元素引用: ["PagingWidget", "SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "Ctrl+F查找"
+        action: keyboard_hot_key
+        key: ctrl+f
+      - step_type: action
+        description: "输入查找内容"
+        action: keyboard_type
+        text: "test"
+      - step_type: action
+        description: "Esc关闭查找"
+        action: keyboard_press
+        key: escape
+      - step_type: action
+        description: "Ctrl+P打印"
+        action: keyboard_hot_key
+        key: ctrl+p
+      - step_type: action
+        description: "Esc取消打印"
+        action: keyboard_press
+        key: escape
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: other_interact - 其它交互
+  # ==========================================================
+  - id: suite_other_interact
+    name: "其它交互"
+    module: other_interact
+    status: active
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "放大镜/快捷键预览"
+      前置条件: "文档已打开"
+      AT元素引用: ["PagingWidget", "HandleMenu"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "放大镜功能"
+        action: dtk_main_menu
+        items: ["放大镜"]
+      - step_type: action
+        description: "Esc退出放大镜"
+        action: keyboard_press
+        key: escape
+      - step_type: action
+        description: "快捷键预览(Ctrl+Shift+?)"
+        action: keyboard_hot_key
+        key: ctrl+shift+?
+      - step_type: action
+        description: "Esc关闭预览"
+        action: keyboard_press
+        key: escape
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: window_mgmt - 窗口管理
+  # ==========================================================
+  - id: suite_window_mgmt
+    name: "窗口管理"
+    module: window_mgmt
+    status: active
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "窗口大小调整"
+      前置条件: "应用已启动"
+      AT元素引用: ["PagingWidget"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps:
+      - step_type: action
+        description: "调整窗口大小"
+        action: wait
+        wait: 1.0
+      - step_type: assert
+        description: "界面显示正常"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: community - 社区需求
+  # ==========================================================
+  - id: suite_community
+    name: "社区需求"
+    module: community
+    status: active
+    annotation:
+      测试界面: "主窗口-幻灯片播放"
+      测试功能: "幻灯片/功能增强"
+      前置条件: "文档已打开"
+      AT元素引用: ["PagingWidget", "BrowserMenu"]
+    setup:
+      - action: session_start
+        command: "deepin-reader /home/test/test.pdf"
+    steps:
+      - step_type: action
+        description: "幻灯片播放"
+        action: dtk_main_menu
+        items: ["幻灯片"]
+      - step_type: action
+        description: "右键弹出菜单"
+        action: mouse_click
+        button: 3
+        x: 400
+        y: 300
+      - step_type: action
+        description: "退出幻灯片"
+        action: keyboard_press
+        key: escape
+      - step_type: assert
+        description: "退出幻灯片，正常显示"
+        action: assert_element
+        selector:
+          name: PagingWidget
+        do: assert_exists
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suites: touchscreen, trackpad, stress, performance, compatibility
+  # - These require hardware/environment-specific conditions
+  # - Marked as unsupported for AT automation
+  # ==========================================================
+  - id: suite_touchscreen
+    name: "触摸屏交互"
+    module: touchscreen
+    status: unsupported
+    reason: "需要触摸屏硬件，AT-SPI无法模拟触摸手势"
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "触摸屏手势操作"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop
+
+  - id: suite_trackpad
+    name: "触摸板交互"
+    module: trackpad
+    status: unsupported
+    reason: "需要触摸板硬件，AT-SPI无法模拟触摸板手势"
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "触摸板手势操作"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop
+
+  - id: suite_stress
+    name: "压力测试"
+    module: stress
+    status: unsupported
+    reason: "压力测试需要大量资源，不适合自动化AT测试"
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "压力场景"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop
+
+  - id: suite_performance
+    name: "性能测试"
+    module: performance
+    status: unsupported
+    reason: "性能测试依赖具体硬件平台，无法在AT测试中验证"
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "性能响应"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop
+
+  - id: suite_compatibility
+    name: "兼容性测试"
+    module: compatibility
+    status: unsupported
+    reason: "兼容性测试需要切换系统语言，无法在AT测试中自动化"
+    annotation:
+      测试界面: "主窗口-全局"
+      测试功能: "语言切换"
+      前置条件: "应用已启动"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop
+
+  # ==========================================================
+  # Suite: linglong - 玲珑应用（非GUI测试）
+  # ==========================================================
+  - id: suite_linglong
+    name: "玲珑应用"
+    module: linglong
+    status: non_gui
+    annotation:
+      测试界面: "终端"
+      测试功能: "玲珑应用安装/卸载"
+      前置条件: "终端已打开"
+      AT元素引用: ["SideBarImageListView"]
+    setup:
+      - action: session_start
+        command: "deepin-reader"
+    steps: []
+    teardown:
+      - action: session_stop

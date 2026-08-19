@@ -1,0 +1,9 @@
+metadata: {generated_at: '2026-08-19T14:30:00', total_non_gui: 12}
+cases:
+- id: linglong
+  name: 玲珑应用
+  module: linglong
+  status: non_gui
+  case_ids: [case_1704991, case_1704989, case_1704987, case_1704985, case_1704983,
+    case_1704981, case_1704975, case_1704971, case_1704969, case_1704967, case_1704965,
+    case_1704963]

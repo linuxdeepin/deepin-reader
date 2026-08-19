@@ -1,0 +1,27 @@
+name: bookmarks_suite
+app: deepin-reader
+description: ''
+module: bookmarks
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_bookmarks_s1
+  name: 书签管理
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+d
+  - action: keyboard_hot_key
+    key: delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+teardown:
+- action: session_stop

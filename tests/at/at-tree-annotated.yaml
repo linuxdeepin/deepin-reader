@@ -1,0 +1,142 @@
+version: '1.0'
+tree:
+- id: ''
+  role: panel
+  name: SideBarImageListView
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 左侧侧边栏-图像列表视图 | 功能: 显示缩略图/书签/注释/目录等侧边栏内容的图像列表容器"
+  annotation_status: draft
+  children:
+  - id: ''
+    role: panel
+    name: sideBarImageListView
+    object_name: sideBarImageListView
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 左侧侧边栏-图像列表视图内 | 功能: 侧边栏内部列表视图，显示缩略图/书签列表项"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: sideBarImageListViewViewport
+    object_name: sideBarImageListViewViewport
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 左侧侧边栏-图像列表视图视口 | 功能: 侧边栏列表视口的视图窗口"
+    annotation_status: draft
+- id: ''
+  role: panel
+  name: BrowserMenu
+  object_name: BrowserMenu
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 文档阅读区域 | 功能: 浏览器右键菜单容器，包含复制/搜索等菜单项"
+  annotation_status: draft
+- id: ''
+  role: panel
+  name: EncryptionPage
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 加密PDF文档打开时的密码输入页面 | 功能: 加密文档密码验证界面"
+  annotation_status: draft
+  children:
+  - id: ''
+    role: panel
+    name: ensureBtn
+    object_name: ensureBtn
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 加密页面-确认按钮 | 功能: 确认密码输入"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: passwdEdit
+    object_name: passwdEdit
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 加密页面-密码输入框 | 功能: 输入PDF文档密码"
+    annotation_status: draft
+- id: ''
+  role: panel
+  name: HandleMenu
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 工具栏-工具切换菜单 | 功能: 手形工具/选择文本工具切换菜单"
+  annotation_status: draft
+  children:
+  - id: ''
+    role: panel
+    name: defaultshape
+    object_name: defaultshape
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 工具栏-工具菜单-默认选项 | 功能: 手形工具（Hand Tool）模式"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: handleshape
+    object_name: handleshape
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 工具栏-工具菜单-选择文本选项 | 功能: 选择文本（Select Text）模式"
+    annotation_status: draft
+- id: ''
+  role: panel
+  name: PagingWidget
+  object_name: ''
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 底部工具栏-翻页控件 | 功能: 文档翻页导航（页码输入/上下翻页）"
+  annotation_status: draft
+  children:
+  - id: ''
+    role: panel
+    name: Edit_Page
+    object_name: Edit_Page
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 底部翻页控件-当前页码输入框 | 功能: 显示和输入当前页码"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: Edit_Page_P
+    object_name: Edit_Page_P
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 底部翻页控件-总页码显示 | 功能: 显示文档总页数"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: thumbnailNextBtn
+    object_name: thumbnailNextBtn
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 底部翻页控件-下一页按钮 | 功能: 翻到下一页"
+    annotation_status: draft
+  - id: ''
+    role: panel
+    name: thumbnailPreBtn
+    object_name: thumbnailPreBtn
+    accessible_id: ''
+    classification: container
+    comment: "GUI位置: 底部翻页控件-上一页按钮 | 功能: 翻到上一页"
+    annotation_status: draft
+- id: ''
+  role: panel
+  name: TextEditShadowWidget
+  object_name: TextEditShadowWidget
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 注释编辑区域 | 功能: 文本编辑阴影控件，用于注释文本编辑框的阴影效果"
+  annotation_status: draft
+- id: ''
+  role: panel
+  name: TransparentTextEdit
+  object_name: TransparentTextEdit
+  accessible_id: ''
+  classification: container
+  comment: "GUI位置: 注释编辑区域 | 功能: 透明文本编辑框，用于文档注释编辑"
+  annotation_status: draft

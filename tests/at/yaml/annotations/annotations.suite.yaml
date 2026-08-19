@@ -1,0 +1,56 @@
+name: annotations_suite
+app: deepin-reader
+description: ''
+module: annotations
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_annotations_1_s1
+  name: 注释管理(1)
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+  - action: mouse_click
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TransparentTextEdit
+- id: suite_annotations_2_s1
+  name: 注释管理(2)
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    selector:
+      name: TransparentTextEdit
+      role: panel
+    do: click
+  - action: keyboard_type
+    text: 测试注释内容
+  - action: keyboard_press
+    key: escape
+  assert_steps: []
+- id: suite_annotations_3_s1
+  name: 注释管理(3)
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+c
+  - action: keyboard_press
+    key: delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TransparentTextEdit
+teardown:
+- action: session_stop

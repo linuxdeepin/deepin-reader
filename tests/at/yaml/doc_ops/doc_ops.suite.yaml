@@ -1,0 +1,46 @@
+name: doc_ops_suite
+app: deepin-reader
+description: ''
+module: doc_ops
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_doc_ops_1_s1
+  name: 文档视图-页面操作(1)
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    selector:
+      name: Edit_Page
+      role: panel
+    do: click
+  - action: keyboard_type
+    text: '3'
+  - action: keyboard_press
+    key: enter
+  - action: element_action
+    selector:
+      name: thumbnailNextBtn
+      role: panel
+    do: click
+  - action: element_action
+    selector:
+      name: thumbnailPreBtn
+      role: panel
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+equal
+  - action: keyboard_hot_key
+    key: ctrl+minus
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Edit_Page
+teardown:
+- action: session_stop

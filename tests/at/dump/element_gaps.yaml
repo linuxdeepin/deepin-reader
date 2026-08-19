@@ -1,0 +1,188 @@
+version: '1.0'
+app: deepin-reader
+summary:
+  total_interactive: 36
+  with_accessible_id: 0
+  missing_accessible_id: 36
+gaps:
+- id: n6
+  name: DTitlebarIconLabel
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarIconLabel") in source code
+- id: n8
+  name: Button_ThumbnailToggle
+  role: check box
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_ThumbnailToggle") in source code
+- id: n11
+  name: DLineEditChildLineEdit
+  role: text
+  class_name: ''
+  suggestion: Add setAccessibleName("DLineEditChildLineEdit") in source code
+- id: n18
+  name: DTitlebarDWindowOptionButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarDWindowOptionButton") in source code
+- id: n19
+  name: DTitlebarDWindowMinButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarDWindowMinButton") in source code
+- id: n20
+  name: DTitlebarDWindowMaxButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarDWindowMaxButton") in source code
+- id: n21
+  name: DTitlebarDWindowQuitFullscreenButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarDWindowQuitFullscreenButton") in source
+    code
+- id: n22
+  name: DTitlebarDWindowCloseButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTitlebarDWindowCloseButton") in source code
+- id: n27
+  name: ''
+  role: page tab list
+  class_name: ''
+  suggestion: Add setAccessibleName("") in source code
+- id: n28
+  name: 向左滚动
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("向左滚动") in source code
+- id: n29
+  name: 向右滚动
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("向右滚动") in source code
+- id: n30
+  name: DTabBarAddButton
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("DTabBarAddButton") in source code
+- id: n36
+  name: Button_SelectFile
+  role: button
+  class_name: ''
+  suggestion: Add setAccessibleName("Button_SelectFile") in source code
+- id: n40
+  name: 新窗口
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("新窗口") in source code
+- id: n41
+  name: 新标签页
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("新标签页") in source code
+- id: n42
+  name: 保存
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("保存") in source code
+- id: n43
+  name: 另存为
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("另存为") in source code
+- id: n44
+  name: 在文件管理器中显示
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("在文件管理器中显示") in source code
+- id: n45
+  name: 放大镜
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("放大镜") in source code
+- id: n46
+  name: 工具
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("工具") in source code
+- id: n48
+  name: 选择工具
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("选择工具") in source code
+- id: n49
+  name: 手形工具
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("手形工具") in source code
+- id: n50
+  name: 搜索
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("搜索") in source code
+- id: n51
+  name: 打印
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("打印") in source code
+- id: n52
+  name: 主题
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("主题") in source code
+- id: n54
+  name: 浅色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("浅色") in source code
+- id: n55
+  name: 深色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("深色") in source code
+- id: n56
+  name: 跟随系统
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("跟随系统") in source code
+- id: n57
+  name: 帮助
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("帮助") in source code
+- id: n58
+  name: 关于
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("关于") in source code
+- id: n59
+  name: 退出
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("退出") in source code
+- id: n61
+  name: 选择工具
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("选择工具") in source code
+- id: n62
+  name: 手形工具
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("手形工具") in source code
+- id: n64
+  name: 浅色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("浅色") in source code
+- id: n65
+  name: 深色
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("深色") in source code
+- id: n66
+  name: 跟随系统
+  role: menu item
+  class_name: ''
+  suggestion: Add setAccessibleName("跟随系统") in source code

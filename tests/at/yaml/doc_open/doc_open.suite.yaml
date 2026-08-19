@@ -1,0 +1,51 @@
+name: doc_open_suite
+app: deepin-reader
+description: ''
+module: doc_open
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_doc_open_1_s1
+  name: 文档打开-基础操作
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: keyboard_type
+    text: /home/test/test.pdf
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: space
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+- id: suite_doc_open_2_s1
+  name: 文档打开-保存退出
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+teardown:
+- action: session_stop

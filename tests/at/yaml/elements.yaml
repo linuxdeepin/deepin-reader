@@ -1,0 +1,18 @@
+elements:
+  PagingWidget:
+    name: PagingWidget
+  Edit_Page:
+    name: Edit_Page
+    role: panel
+  thumbnailNextBtn:
+    name: thumbnailNextBtn
+    role: panel
+  thumbnailPreBtn:
+    name: thumbnailPreBtn
+    role: panel
+  HandleMenu:
+    name: HandleMenu
+  SideBarImageListView:
+    name: SideBarImageListView
+  TransparentTextEdit:
+    name: TransparentTextEdit

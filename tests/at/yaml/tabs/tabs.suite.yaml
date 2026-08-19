@@ -1,0 +1,26 @@
+name: tabs_suite
+app: deepin-reader
+description: ''
+module: tabs
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_tabs_s1
+  name: 标签页管理
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: keyboard_hot_key
+    key: ctrl+w
+  - action: keyboard_hot_key
+    key: ctrl+tab
+  assert_steps: []
+teardown:
+- action: session_stop

@@ -1,0 +1,23 @@
+name: window_mgmt_suite
+app: deepin-reader
+description: ''
+module: window_mgmt
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_window_mgmt_s1
+  name: 窗口管理
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+teardown:
+- action: session_stop
