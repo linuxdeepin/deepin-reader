@@ -365,22 +365,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
         <source>No eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Ei silmille mukavuutta</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Silmien mukavuus klassinen</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Silmien mukavuus vihreä</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Silmien mukavuus yöllä</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
         <source>Reading mode</source>
-        <translation type="unfinished"/>
+        <translation>Lukutila</translation>
     </message>
 </context>
 <context>
@@ -459,17 +459,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"/>
+        <translation>Palautettu edelliseen lukuasentoon</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"/>
+        <translation>Siirry alkuun</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -941,7 +941,7 @@
     <message>
         <location filename="../reader/main.cpp" line="77"/>
         <source>Batch print documents without UI.</source>
-        <translation type="unfinished"/>
+        <translation>Erätulostus ilman käyttöliittymää.</translation>
     </message>
 </context>
 </TS>
