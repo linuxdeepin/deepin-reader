@@ -1,0 +1,418 @@
+name: 文档视图_操作_suite
+app: deepin-reader
+module: 文档视图_操作
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_操作_case_1581295_s1
+  name: 删除输入框数值再点击其他位置
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: clear
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: value_reverted_to_previous
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581285_s1
+  name: 切换单页/双页，页面需适配
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: page_mode_changed
+  - value: click
+    expected: ''
+  - value: ''
+    expected: page_mode_changed
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581057_s1
+  name: 手型工具
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: hand_tool_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581055_s1
+  name: 默认使用选择工具和文档的浏览效果
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: default_tool_selection
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581051_s1
+  name: '[018]百分比图标的下拉框'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click_dropdown
+    expected: ''
+  - value: select_option_75%
+    expected: ''
+  - value: ''
+    expected: zoom_changed
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581049_s1
+  name: '[019]百分比图标的编辑框'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_150
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_updated
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581045_s1
+  name: ctrl1、ctrl2、ctrl3快捷键切换规则
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_100_percent
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: fit_height
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: fit_width
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581043_s1
+  name: '[021]点击百分比图标中+、-按钮'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click_plus
+    expected: ''
+  - value: ''
+    expected: zoom_increased
+  - value: click_minus
+    expected: ''
+  - value: ''
+    expected: zoom_decreased
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581041_s1
+  name: 取消适合宽度的方法
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_height_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581039_s1
+  name: 取消适合高度的方法
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_width_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581031_s1
+  name: 视图调整菜单
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_150
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_updated
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581029_s1
+  name: 视图调整菜单
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: dual_page_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581027_s1
+  name: 视图调整菜单
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_35
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_35_percent
+  assert_steps: []
+- id: suite_文档视图_操作_case_1581025_s1
+  name: 视图调整菜单
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: dual_page_active
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_width_active
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_height_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580979_s1
+  name: 不同视图下进入全屏
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580971_s1
+  name: 全屏后点击缩略图图标
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: thumbnail_toggle_highlighted
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580945_s1
+  name: '[026]进入全屏'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580935_s1
+  name: 全屏中增加或减少标签页
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: new_tab_added
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580933_s1
+  name: 全屏中的右上角菜单
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: menu_opened
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580931_s1
+  name: '[027]退出全屏方式'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580929_s1
+  name: 翻页后退出全屏
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580921_s1
+  name: 选择手型工具后退出全屏
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: hand_tool_active
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580917_s1
+  name: 退出全屏后的标题显示
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: titlebar_visible
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580915_s1
+  name: 调整视图后退出全屏
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: view_state_preserved
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580897_s1
+  name: '[028]右键菜单中的全屏与退出全屏菜单'
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580895_s1
+  name: 全屏中菜单功能
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: first_page_shown
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580783_s1
+  name: 全屏显示界面打开放大镜，按esc键退出放大镜
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: magnifier_exited_fullscreen_remains
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580717_s1
+  name: 不同百分比显示时进行视图调整
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_10
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: view_adjusted
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580575_s1
+  name: 进入全屏再退出，窗口大小需保持之前的状态
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: window_maximized
+  assert_steps: []
+- id: suite_文档视图_操作_case_1580363_s1
+  name: 1、视图保持_新安装新标签页首次打开文档
+  description: ''
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: default_view_fit_page
+  assert_steps: []
+teardown:
+- action: session_stop

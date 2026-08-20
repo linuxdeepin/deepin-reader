@@ -1,0 +1,123 @@
+elements:
+  保存:
+    name: 保存
+    role: menu item
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  DTitlebarDWindowCloseButton:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  关于:
+    name: 关于
+    role: dialog
+  DTitlebarThemeMenu:
+    name: DTitlebarThemeMenu
+    role: popup menu
+  DTitlebarIconLabel:
+    name: DTitlebarIconLabel
+    role: button
+  Button_SelectFile:
+    name: Button_SelectFile
+  DTitlebarMainMenu:
+    name: DTitlebarMainMenu
+    role: popup menu
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  SideBarImageListView:
+    name: SideBarImageListView
+    role: panel
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  Form_CentralDocPage:
+    name: Form_CentralDocPage
+    role: form
+  Menu_Hand:
+    name: Menu_Hand
+    role: popup menu
+  Edit_Page:
+    name: Edit_Page
+    role: panel
+  PagingWidget:
+    name: PagingWidget
+    role: panel
+  搜索:
+    name: 搜索
+  TextEditShadowWidget:
+    name: TextEditShadowWidget
+    role: panel
+  DTitlebarDWindowQuitFullscreenButton:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  打印预览:
+    name: 打印预览
+  文档信息:
+    name: 文档信息
+  sideBarImageListView:
+    name: sideBarImageListView
+    role: panel
+  DTitlebarDWindowOptionButton:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  ? ''
+  : name: ''
+    role: page tab list
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  新窗口:
+    name: 新窗口
+    role: menu item
+  新标签页:
+    name: 新标签页
+    role: menu item
+  另存为:
+    name: 另存为
+    role: menu item
+  在文件管理器中显示:
+    name: 在文件管理器中显示
+    role: menu item
+  放大镜:
+    name: 放大镜
+    role: menu item
+  工具:
+    name: 工具
+    role: menu item
+  选择工具:
+    name: 选择工具
+    role: menu item
+  手形工具:
+    name: 手形工具
+    role: menu item
+  打印:
+    name: 打印
+    role: menu item
+  主题:
+    name: 主题
+    role: menu item
+  浅色:
+    name: 浅色
+    role: menu item
+  深色:
+    name: 深色
+    role: menu item
+  跟随系统:
+    name: 跟随系统
+    role: menu item
+  帮助:
+    name: 帮助
+    role: menu item
+  退出:
+    name: 退出
+    role: menu item

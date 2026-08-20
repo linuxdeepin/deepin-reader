@@ -1,0 +1,23 @@
+name: 文档打开_suite
+app: deepin-reader
+module: 文档打开
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档打开_case_1580675_s1
+  name: '[003]退出打开'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_cancel
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+teardown:
+- action: session_stop

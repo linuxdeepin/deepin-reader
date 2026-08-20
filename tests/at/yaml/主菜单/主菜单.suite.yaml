@@ -1,0 +1,149 @@
+name: 主菜单_suite
+app: deepin-reader
+module: 主菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_主菜单_case_1581267_s1
+  name: '[007]保存'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+- id: suite_主菜单_case_1581231_s1
+  name: '[004]最小化. 最大化. 关闭'
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_case_1581229_s1
+  name: '[010]退出'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  assert_steps:
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_case_1581227_s1
+  name: '[001]关于'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 关于
+      role: dialog
+- id: suite_主菜单_case_1581223_s1
+  name: '[005]主题'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarThemeMenu
+      role: popup menu
+- id: suite_主菜单_case_1581209_s1
+  name: '[009]新标签页'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: ''
+      role: page tab list
+- id: suite_主菜单_case_1581081_s1
+  name: 添加新窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_window_count
+    expected: 2
+- id: suite_主菜单_case_1581007_s1
+  name: '[025]多次保存'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 保存
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+- id: suite_主菜单_case_1580513_s1
+  name: 支持打开多个窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_window_count
+    expected: 2
+  - action: assert_window_count
+    expected: 3
+teardown:
+- action: session_stop

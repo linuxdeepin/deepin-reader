@@ -1,0 +1,1601 @@
+=== 格式范例 ===
+# 格式说明：
+# 每个 case 包含 id, name, module, steps
+# steps 中每个 step 包含 action 和对应参数
+# 菜单操作使用 dtk_main_menu/dtk_context_menu
+# 文件对话框使用 file_dialog_select/file_dialog_cancel
+# 断言使用 assert_element/assert_not_exists/assert_window
+# 键盘操作使用 keyboard_press/keyboard_hot_key/keyboard_type
+# 元素选择器使用 name + role 定位
+=== 格式范例 ===
+
+version: '1.0'
+cases:
+- id: suite_主菜单_case_1581267_s1
+  name: '[007]保存'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+- id: suite_主菜单_case_1581231_s1
+  name: '[004]最小化. 最大化. 关闭'
+  module: 主菜单
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_case_1581229_s1
+  name: '[010]退出'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_case_1581227_s1
+  name: '[001]关于'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: assert_element
+    selector:
+      name: 关于
+      role: dialog
+- id: suite_主菜单_case_1581223_s1
+  name: '[005]主题'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  - action: assert_element
+    selector:
+      name: DTitlebarThemeMenu
+      role: popup menu
+- id: suite_主菜单_case_1581209_s1
+  name: '[009]新标签页'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: assert_element
+    selector:
+      name: ''
+      role: page tab list
+- id: suite_主菜单_case_1581081_s1
+  name: 添加新窗口
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: assert_window_count
+    expected: 2
+- id: suite_主菜单_case_1581007_s1
+  name: '[025]多次保存'
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: wait
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+- id: suite_主菜单_case_1580513_s1
+  name: 支持打开多个窗口
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: assert_window_count
+    expected: 2
+  - action: assert_window_count
+    expected: 3
+- id: suite_交互_键盘_case_1580879_s1
+  name: 首页Tab键切换
+  module: 交互_键盘
+  steps:
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+    do: assert_not_exists
+- id: suite_交互_键盘_case_1580877_s1
+  name: 单个文档未展开左侧栏，Tab键切换
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+- id: suite_交互_键盘_case_1580875_s1
+  name: 单个文档展开左侧栏，Tab键切换
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580873_s1
+  name: 多个文档未展开左侧栏，Tab键切换
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test2.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_交互_键盘_case_1580871_s1
+  name: 多个文档展开左侧栏，Tab键切换
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test2.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580869_s1
+  name: 百分比输入框下拉菜单界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_交互_键盘_case_1580867_s1
+  name: 主菜单下拉界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+    do: assert_not_exists
+- id: suite_交互_键盘_case_1580865_s1
+  name: 右击主视图界面弹出右键菜单界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 打印
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+- id: suite_交互_键盘_case_1580863_s1
+  name: 左侧栏目录上下切换与删除
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  - action: keyboard_press
+    key: page_down
+  - action: keyboard_press
+    key: page_up
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580855_s1
+  name: 选中输入框内容按Alt+M
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_type
+    text: '100'
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+- id: suite_交互_键盘_case_1580853_s1
+  name: 点击“删除全部书签”对话框界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+- id: suite_交互_键盘_case_1580851_s1
+  name: 点击“删除全部注释”对话框界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+- id: suite_交互_键盘_case_1580847_s1
+  name: 不改变文件名保存替换界面，弹出对话框
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+- id: suite_交互_键盘_case_1580845_s1
+  name: 搜索框界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+- id: suite_交互_键盘_case_1580843_s1
+  name: 文档信息界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+- id: suite_交互_键盘_case_1580841_s1
+  name: 在文件管理器显示界面
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+- id: suite_交互_键盘_case_1580839_s1
+  name: 关于界面
+  module: 交互_键盘
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+- id: suite_交互_键盘_case_1580773_s1
+  name: 百分比框和页码框输入数值，按键盘enter键
+  module: 交互_键盘
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_type
+    text: '150'
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_type
+    text: '5'
+  - action: keyboard_press
+    key: enter
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Edit_Page
+      role: panel
+- id: suite_文档打开_case_1580675_s1
+  name: '[003]退出打开'
+  module: 文档打开
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_cancel
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+- id: suite_文档视图_右键菜单_case_1581283_s1
+  name: 上下页面均有一部分显示在当前窗口时，未选中文本右击弹出菜单
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581257_s1
+  name: 打开PDF文档，未选中文本右击弹出菜单
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: assert_element
+    selector:
+      name: 搜索
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 文档信息
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581221_s1
+  name: 幻灯片放映
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: keyboard_hot_key
+    key: ctrl+h
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_not_exists
+- id: suite_文档视图_右键菜单_case_1581217_s1
+  name: 打印（未连接打印机，打印到文件）
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/print_output.pdf
+    wait: 3.0
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581037_s1
+  name: '[022]窗口中显示当前页（不显示上下页）时，点击右键菜单选项'
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1580705_s1
+  name: 打开DJVU文档，未选中文本右击弹出菜单
+  module: 文档视图_右键菜单
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 文档信息
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1580523_s1
+  name: 退出幻灯片播放，应用保持之前的最大化或默认状态
+  module: 文档视图_右键菜单
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+- id: suite_文档视图_操作_case_1581295_s1
+  name: 删除输入框数值再点击其他位置
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: clear
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: value_reverted_to_previous
+- id: suite_文档视图_操作_case_1581285_s1
+  name: 切换单页/双页，页面需适配
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: page_mode_changed
+  - value: click
+    expected: ''
+  - value: ''
+    expected: page_mode_changed
+- id: suite_文档视图_操作_case_1581057_s1
+  name: 手型工具
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: hand_tool_active
+- id: suite_文档视图_操作_case_1581055_s1
+  name: 默认使用选择工具和文档的浏览效果
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: default_tool_selection
+- id: suite_文档视图_操作_case_1581051_s1
+  name: '[018]百分比图标的下拉框'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click_dropdown
+    expected: ''
+  - value: select_option_75%
+    expected: ''
+  - value: ''
+    expected: zoom_changed
+- id: suite_文档视图_操作_case_1581049_s1
+  name: '[019]百分比图标的编辑框'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_150
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_updated
+- id: suite_文档视图_操作_case_1581045_s1
+  name: ctrl1、ctrl2、ctrl3快捷键切换规则
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_100_percent
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: fit_height
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: fit_width
+- id: suite_文档视图_操作_case_1581043_s1
+  name: '[021]点击百分比图标中+、-按钮'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click_plus
+    expected: ''
+  - value: ''
+    expected: zoom_increased
+  - value: click_minus
+    expected: ''
+  - value: ''
+    expected: zoom_decreased
+- id: suite_文档视图_操作_case_1581041_s1
+  name: 取消适合宽度的方法
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_height_active
+- id: suite_文档视图_操作_case_1581039_s1
+  name: 取消适合高度的方法
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_width_active
+- id: suite_文档视图_操作_case_1581031_s1
+  name: 视图调整菜单
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_150
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_updated
+- id: suite_文档视图_操作_case_1581029_s1
+  name: 视图调整菜单
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: dual_page_active
+- id: suite_文档视图_操作_case_1581027_s1
+  name: 视图调整菜单
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_35
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: zoom_35_percent
+- id: suite_文档视图_操作_case_1581025_s1
+  name: 视图调整菜单
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: dual_page_active
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_width_active
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fit_height_active
+- id: suite_文档视图_操作_case_1580979_s1
+  name: 不同视图下进入全屏
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_active
+- id: suite_文档视图_操作_case_1580971_s1
+  name: 全屏后点击缩略图图标
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: thumbnail_toggle_highlighted
+- id: suite_文档视图_操作_case_1580945_s1
+  name: '[026]进入全屏'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_active
+- id: suite_文档视图_操作_case_1580935_s1
+  name: 全屏中增加或减少标签页
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: new_tab_added
+- id: suite_文档视图_操作_case_1580933_s1
+  name: 全屏中的右上角菜单
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: menu_opened
+- id: suite_文档视图_操作_case_1580931_s1
+  name: '[027]退出全屏方式'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+- id: suite_文档视图_操作_case_1580929_s1
+  name: 翻页后退出全屏
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+- id: suite_文档视图_操作_case_1580921_s1
+  name: 选择手型工具后退出全屏
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: hand_tool_active
+- id: suite_文档视图_操作_case_1580917_s1
+  name: 退出全屏后的标题显示
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: titlebar_visible
+- id: suite_文档视图_操作_case_1580915_s1
+  name: 调整视图后退出全屏
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: view_state_preserved
+- id: suite_文档视图_操作_case_1580897_s1
+  name: '[028]右键菜单中的全屏与退出全屏菜单'
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: fullscreen_exited
+- id: suite_文档视图_操作_case_1580895_s1
+  name: 全屏中菜单功能
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: first_page_shown
+- id: suite_文档视图_操作_case_1580783_s1
+  name: 全屏显示界面打开放大镜，按esc键退出放大镜
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: ''
+    expected: magnifier_exited_fullscreen_remains
+- id: suite_文档视图_操作_case_1580717_s1
+  name: 不同百分比显示时进行视图调整
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: type_text_10
+    expected: ''
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: view_adjusted
+- id: suite_文档视图_操作_case_1580575_s1
+  name: 进入全屏再退出，窗口大小需保持之前的状态
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: window_maximized
+- id: suite_文档视图_操作_case_1580363_s1
+  name: 1、视图保持_新安装新标签页首次打开文档
+  module: 文档视图_操作
+  steps:
+  - value: ''
+    expected: ''
+  - value: click
+    expected: ''
+  - value: ''
+    expected: default_view_fit_page
+- id: suite_缩略图_注释_case_1581191_s1
+  name: delete快捷键删除注释目录
+  module: 缩略图_注释
+  steps:
+  - action: element_action
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: Delete
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists
+- id: suite_缩略图_注释_case_1581183_s1
+  name: 复制左侧栏的注释目录
+  module: 缩略图_注释
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists
+- id: suite_缩略图_注释_case_1581181_s1
+  name: 点击注释目录
+  module: 缩略图_注释
+  steps:
+  - action: element_action
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+    do: click
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists

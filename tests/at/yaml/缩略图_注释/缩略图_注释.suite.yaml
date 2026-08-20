@@ -1,0 +1,59 @@
+name: 缩略图_注释_suite
+app: deepin-reader
+module: 缩略图_注释
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_注释_case_1581191_s1
+  name: delete快捷键删除注释目录
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: Delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists
+- id: suite_缩略图_注释_case_1581183_s1
+  name: 复制左侧栏的注释目录
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists
+- id: suite_缩略图_注释_case_1581181_s1
+  name: 点击注释目录
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: sideBarImageListView
+      role: panel
+      child_index: 0
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: sideBarImageListView
+      role: panel
+    do: assert_exists
+teardown:
+- action: session_stop

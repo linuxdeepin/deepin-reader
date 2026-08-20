@@ -1,0 +1,642 @@
+name: 交互_键盘_suite
+app: deepin-reader
+module: 交互_键盘
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_交互_键盘_case_1580879_s1
+  name: 首页Tab键切换
+  description: ''
+  steps:
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+    do: assert_not_exists
+- id: suite_交互_键盘_case_1580877_s1
+  name: 单个文档未展开左侧栏，Tab键切换
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+- id: suite_交互_键盘_case_1580875_s1
+  name: 单个文档展开左侧栏，Tab键切换
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580873_s1
+  name: 多个文档未展开左侧栏，Tab键切换
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test2.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_交互_键盘_case_1580871_s1
+  name: 多个文档展开左侧栏，Tab键切换
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+t
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test2.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580869_s1
+  name: 百分比输入框下拉菜单界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_交互_键盘_case_1580867_s1
+  name: 主菜单下拉界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+    do: assert_not_exists
+- id: suite_交互_键盘_case_1580865_s1
+  name: 右击主视图界面弹出右键菜单界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 打印
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+- id: suite_交互_键盘_case_1580863_s1
+  name: 左侧栏目录上下切换与删除
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  - action: keyboard_press
+    key: page_down
+  - action: keyboard_press
+    key: page_up
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_case_1580855_s1
+  name: 选中输入框内容按Alt+M
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_type
+    text: '100'
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: right
+  - action: keyboard_press
+    key: left
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+- id: suite_交互_键盘_case_1580853_s1
+  name: 点击“删除全部书签”对话框界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+- id: suite_交互_键盘_case_1580851_s1
+  name: 点击“删除全部注释”对话框界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+- id: suite_交互_键盘_case_1580847_s1
+  name: 不改变文件名保存替换界面，弹出对话框
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps: []
+- id: suite_交互_键盘_case_1580845_s1
+  name: 搜索框界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  assert_steps: []
+- id: suite_交互_键盘_case_1580843_s1
+  name: 文档信息界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps: []
+- id: suite_交互_键盘_case_1580841_s1
+  name: 在文件管理器显示界面
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  assert_steps: []
+- id: suite_交互_键盘_case_1580839_s1
+  name: 关于界面
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: wait
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: escape
+  assert_steps: []
+- id: suite_交互_键盘_case_1580773_s1
+  name: 百分比框和页码框输入数值，按键盘enter键
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_type
+    text: '150'
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_press
+    key: tab
+  - action: keyboard_type
+    text: '5'
+  - action: keyboard_press
+    key: enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Edit_Page
+      role: panel
+teardown:
+- action: session_stop

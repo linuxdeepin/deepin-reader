@@ -1,0 +1,425 @@
+name: 文档视图_右键菜单_suite
+app: deepin-reader
+module: 文档视图_右键菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_右键菜单_case_1581283_s1
+  name: 上下页面均有一部分显示在当前窗口时，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581257_s1
+  name: 打开PDF文档，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 搜索
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 文档信息
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581221_s1
+  name: 幻灯片放映
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: keyboard_hot_key
+    key: ctrl+h
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_not_exists
+- id: suite_文档视图_右键菜单_case_1581217_s1
+  name: 打印（未连接打印机，打印到文件）
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/print_output.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1581037_s1
+  name: '[022]窗口中显示当前页（不显示上下页）时，点击右键菜单选项'
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1580705_s1
+  name: 打开DJVU文档，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 0.5
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 打印预览
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 文档信息
+    do: assert_exists
+- id: suite_文档视图_右键菜单_case_1580523_s1
+  name: 退出幻灯片播放，应用保持之前的最大化或默认状态
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: Escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+  - action: assert_window
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+teardown:
+- action: session_stop
