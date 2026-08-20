@@ -1,0 +1,406 @@
+name: 文档打开_suite
+app: deepin-reader
+module: 文档打开
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档打开_001_s1
+  name: 浅色和深色主题下查看右侧和底部进度条显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 主题
+  - action: dtk_main_menu
+    items:
+    - 浅色
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 主题
+  - action: dtk_main_menu
+    items:
+    - 深色
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element
+    selector:
+      name: DTitlebarThemeMenu
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element
+    selector:
+      name: DTitlebarThemeMenu
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_003_s1
+  name: 最小化窗口后，双击其他文档重新打开窗口
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_004_s1
+  name: 快速滑动页面
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+    do: click
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+    do: input
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_006_s1
+  name: 放大缩小文档，过程流畅，无闪烁
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: keyboard_hot_key
+    key: ctrl+=
+  - action: keyboard_hot_key
+    key: ctrl+-
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_007_s1
+  name: 翻页，页面显示流畅
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: thumbnailNextBtn
+    do: click
+  - action: element_action
+    selector:
+      name: thumbnailPreBtn
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_008_s1
+  name: 拖拽窗口界面显示顺畅
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_010_s1
+  name: 已添加DJVU文档界面布局显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: keyboard_hot_key
+    key: Escape
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element
+    selector:
+      name: 新窗口
+  - action: assert_element
+    selector:
+      name: 新标签页
+  - action: assert_element
+    selector:
+      name: 保存
+  - action: assert_element
+    selector:
+      name: 另存为
+  - action: assert_element
+    selector:
+      name: 在文件管理器中显示
+  - action: assert_element
+    selector:
+      name: 放大镜
+  - action: assert_element
+    selector:
+      name: 工具
+  - action: assert_element
+    selector:
+      name: 搜索
+  - action: assert_element
+    selector:
+      name: 打印
+  - action: assert_element
+    selector:
+      name: 主题
+  - action: assert_element
+    selector:
+      name: 帮助
+  - action: assert_element
+    selector:
+      name: 关于
+  - action: assert_element
+    selector:
+      name: 退出
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_文档打开_011_s1
+  name: docx文档打开方式
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_013_s1
+  name: '[003]退出打开'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_cancel
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+- id: suite_文档打开_014_s1
+  name: 同时打开三种格式文档
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_015_s1
+  name: '[030]docx文档打开界面显示'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档打开_016_s1
+  name: 单个窗口中只打开一个docx标签页，关闭或退出
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+- id: suite_文档打开_017_s1
+  name: 单个窗口中打开多个标签页（仅包含docx）全部未编辑，关闭或退出
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+- id: suite_文档打开_018_s1
+  name: '[031]Ctrl+S和Ctrl+Shift+S快捷键'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+  - action: keyboard_hot_key
+    key: ctrl+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+teardown:
+- action: session_stop

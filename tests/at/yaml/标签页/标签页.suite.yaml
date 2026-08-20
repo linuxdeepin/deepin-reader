@@ -1,0 +1,191 @@
+name: 标签页_suite
+app: deepin-reader
+module: 标签页
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_标签页_001_s1
+  name: 标签页多标签显示与滚动
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.txt
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: 向右滚动
+      role: push button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_标签页_002_s1
+  name: 添加标签页方式
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.txt
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.png
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_标签页_003_s1
+  name: 关闭标签页
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: push button
+    do: click
+  assert_steps:
+  - action: assert_window
+- id: suite_标签页_004_s1
+  name: 切换标签页与状态显示
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+tab
+  - action: keyboard_hot_key
+    key: ctrl+shift+tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_标签页_005_s1
+  name: 多标签页搜索管理
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: test
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_hot_key
+    key: ctrl+tab
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: demo
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  - action: keyboard_hot_key
+    key: ctrl+shift+tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_标签页_006_s1
+  name: 标签页拖拽排序与切换
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: push button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: mouse_drag
+    selector:
+      name: Form_DocTabBar
+      role: form
+  - action: keyboard_hot_key
+    key: ctrl+tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+teardown:
+- action: session_stop

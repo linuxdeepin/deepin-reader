@@ -1,0 +1,19 @@
+name: 文档查看器_suite
+app: deepin-reader
+module: 文档查看器
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档查看器_001_s1
+  name: 卸载玲珑应用
+  description: ''
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

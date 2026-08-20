@@ -1,0 +1,83 @@
+name: 缩略图_目录_suite
+app: deepin-reader
+module: 缩略图_目录
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_目录_001_s1
+  name: 翻页控件功能测试（不可读取页数文档）
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.png
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Edit_Page
+      role: panel
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: BackSpace
+  - action: keyboard_type
+    text: '1'
+  - action: keyboard_hot_key
+    key: Return
+  - action: element_action
+    selector:
+      name: Edit_Page
+      role: panel
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: BackSpace
+  - action: keyboard_type
+    text: a
+  - action: keyboard_hot_key
+    key: Return
+  - action: element_action
+    selector:
+      name: thumbnailNextBtn
+      role: panel
+    do: click
+  - action: element_action
+    selector:
+      name: thumbnailPreBtn
+      role: panel
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: Edit_Page
+      role: panel
+  - action: assert_element
+    selector:
+      name: Edit_Page_P
+      role: panel
+  - action: assert_element
+    selector:
+      name: thumbnailNextBtn
+      role: panel
+  - action: assert_element
+    selector:
+      name: thumbnailPreBtn
+      role: panel
+teardown:
+- action: session_stop

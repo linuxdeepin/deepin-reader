@@ -1,0 +1,1072 @@
+name: 文档视图_操作_suite
+app: deepin-reader
+module: 文档视图_操作
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_操作_001_s1
+  name: 删除输入框数值再点击其他位置
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_press
+    key: delete
+  - action: element_action
+    selector:
+      name: Form_CentralDocPage
+  - action: element_action
+    selector:
+      name: Edit_Page
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_press
+    key: delete
+  - action: element_action
+    selector:
+      name: Form_CentralDocPage
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: Edit_Page
+- id: suite_文档视图_操作_002_s1
+  name: 切换单页/双页，页面需适配
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_文档视图_操作_003_s1
+  name: 搜索功能-关键字搜索与切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: user
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: 系统
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_FindWidget
+  - action: assert_element
+    selector:
+      name: Form_FindWidget
+- id: suite_文档视图_操作_004_s1
+  name: 搜索功能-开启、关闭与边界情况
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_type
+    text: zzz_nonexistent
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_FindWidget
+  - action: assert_element
+    selector:
+      name: Form_FindWidget
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_006_s1
+  name: 手型工具与选择工具切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - action: element_action
+    selector:
+      name: Form_BrowserPage
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_007_s1
+  name: 百分比缩放功能-下拉框、编辑框、图标显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '150'
+  - action: keyboard_press
+    key: enter
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '50'
+  - action: keyboard_press
+    key: enter
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+- id: suite_文档视图_操作_008_s1
+  name: 快捷键缩放 Ctrl1/Ctrl2/Ctrl3
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: keyboard_hot_key
+    key: ctrl+3
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_009_s1
+  name: 百分比加减按钮与不同百分比视图调整
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '10'
+  - action: keyboard_press
+    key: enter
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '500'
+  - action: keyboard_press
+    key: enter
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+- id: suite_文档视图_操作_010_s1
+  name: 取消适合宽度/适合高度
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '75'
+  - action: keyboard_press
+    key: enter
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_011_s1
+  name: 关闭再打开文档记忆状态
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action
+    selector:
+      name: Edit_Page
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '5'
+  - action: keyboard_press
+    key: enter
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: Edit_Page
+- id: suite_文档视图_操作_012_s1
+  name: 视图调整-百分比大小与窗口切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应高度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 旋转
+    - 顺时针
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 旋转
+    - 逆时针
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_013_s1
+  name: 翻页-键盘快捷键操作
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_press
+    key: pagedown
+  - action: keyboard_press
+    key: pageup
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_014_s1
+  name: 焦点定位与书签/注释缩略图删除
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: keyboard_press
+    key: delete
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_文档视图_操作_015_s1
+  name: 宽高度不一致的文档显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应高度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '100'
+  - action: keyboard_press
+    key: enter
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_016_s1
+  name: 进入全屏与退出全屏
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 全屏
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_017_s1
+  name: 全屏-工具栏与侧边栏呼唤
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_文档视图_操作_018_s1
+  name: 全屏-退出全屏多种方式
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: f11
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: keyboard_hot_key
+    key: f11
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 退出全屏
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_019_s1
+  name: 全屏-侧边栏收起展开与状态保持
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应高度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_020_s1
+  name: 全屏-右键菜单全屏与退出全屏菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 退出全屏
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_021_s1
+  name: 全屏-多文档全屏、标题栏、视图调整后退出全屏
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_024_s1
+  name: 全屏-放大镜与Esc键退出
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: dtk_main_menu
+    items:
+    - 放大镜
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_025_s1
+  name: 搜索过程中点击主菜单选项
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: test
+  - action: keyboard_press
+    key: enter
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_操作_026_s1
+  name: 不同百分比显示时进行视图调整
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '10'
+  - action: keyboard_press
+    key: enter
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应高度
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_type
+    text: '500'
+  - action: keyboard_press
+    key: enter
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应宽度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 适应高度
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 旋转
+    - 顺时针
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 旋转
+    - 逆时针
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_027_s1
+  name: 按快捷键翻页（1040阶段）
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_press
+    key: pagedown
+  - action: element_action
+    selector:
+      name: Form_TitleWidget
+  - action: keyboard_press
+    key: pagedown
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+  - action: keyboard_press
+    key: pagedown
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action
+    selector:
+      name: SideBarImageListView
+  - action: keyboard_press
+    key: pagedown
+  - action: element_action
+    selector:
+      name: Form_CentralDocPage
+  - action: keyboard_press
+    key: pagedown
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_028_s1
+  name: 打开多份文档并进入全屏或退出，不会丢失
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_029_s1
+  name: 进入全屏再退出，窗口大小需保持之前的状态
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 全屏
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 退出全屏
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 全屏
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 退出全屏
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_030_s1
+  name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: escape
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_035_s1
+  name: 不选中文本右击
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 搜索
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_操作_037_s1
+  name: 视图保持-新标签页首次打开文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_操作_038_s1
+  name: 视图保持-调整页面视图后新窗口打开新文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_操作_039_s1
+  name: 视图保持-多标签页多窗口打开调整过视图的文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: session_end
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+teardown:
+- action: session_stop

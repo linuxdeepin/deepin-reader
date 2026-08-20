@@ -1,0 +1,177 @@
+name: 缩略图_缩略图_suite
+app: deepin-reader
+module: 缩略图_缩略图
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_缩略图_001_s1
+  name: 左边栏底部按钮功能
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: push button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: push button
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: Edit_Page
+      role: panel
+  - action: assert_element
+    selector:
+      name: Edit_Page_P
+      role: panel
+  - action: assert_element
+    selector:
+      name: thumbnailNextBtn
+      role: panel
+  - action: assert_element
+    selector:
+      name: thumbnailPreBtn
+      role: panel
+  - action: assert_element
+    selector:
+      name: CatalogWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: BookMarkWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: NotesWidget
+      role: panel
+- id: suite_缩略图_缩略图_004_s1
+  name: 缩略图标开关
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: push button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: push button
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: push button
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: CatalogWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: BookMarkWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: NotesWidget
+      role: panel
+teardown:
+- action: session_stop

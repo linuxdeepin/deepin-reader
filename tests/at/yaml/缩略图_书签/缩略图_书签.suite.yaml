@@ -1,0 +1,570 @@
+name: 缩略图_书签_suite
+app: deepin-reader
+module: 缩略图_书签
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_书签_001_s1
+  name: 打开多途径获取的PDF、DOCX文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: DOCX文档
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_缩略图_书签_002_s1
+  name: delete快捷键删除书签缩略图
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  - action: UNSUPPORTED
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: keyboard_hot_key
+    key: Delete
+  assert_steps:
+  - action: assert_element_not_exists
+    selector:
+      name: SideBarImageListView
+- id: suite_缩略图_书签_003_s1
+  name: 删除书签
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  - action: UNSUPPORTED
+  - action: UNSUPPORTED
+  - action: UNSUPPORTED
+  - action: element_action_right_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: dtk_context_menu
+    items:
+    - 删除书签
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: keyboard_hot_key
+    key: Delete
+  assert_steps:
+  - action: assert_element_not_exists
+    selector:
+      name: SideBarImageListView
+  - action: assert_element_not_exists
+    selector:
+      name: SideBarImageListView
+- id: suite_缩略图_书签_004_s1
+  name: 点击缩略图_书签
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 1
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  assert_steps: []
+- id: suite_缩略图_书签_006_s1
+  name: 点击书签图标添加书签
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_缩略图_书签_007_s1
+  name: 打开损坏的文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: 损坏的文档
+  assert_steps:
+  - action: assert_dialog
+- id: suite_缩略图_书签_008_s1
+  name: '[036]关闭再打开'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: session_close
+    command: deepin-reader
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+- id: suite_缩略图_书签_010_s1
+  name: 多种打开方式
+  description: ''
+  steps:
+  - action: UNSUPPORTED
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: UNSUPPORTED
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: UNSUPPORTED
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: keyboard_hot_key
+    key: Escape
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: element_action_click
+    selector:
+      name: DTabBarAddButton
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+- id: suite_缩略图_书签_011_s1
+  name: 已添加PDF/DOCX文档界面布局显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: element_action_click
+    selector:
+      name: DTitlebarDWindowOptionButton
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element
+    selector:
+      name: 新窗口
+  - action: assert_element
+    selector:
+      name: 新标签页
+  - action: assert_element
+    selector:
+      name: 保存
+  - action: assert_element
+    selector:
+      name: 另存为
+  - action: assert_element
+    selector:
+      name: 在文件管理器中显示
+  - action: assert_element
+    selector:
+      name: 放大镜
+  - action: assert_element
+    selector:
+      name: 工具
+  - action: assert_element
+    selector:
+      name: 搜索
+  - action: assert_element
+    selector:
+      name: 打印
+  - action: assert_element
+    selector:
+      name: 主题
+  - action: assert_element
+    selector:
+      name: 帮助
+  - action: assert_element
+    selector:
+      name: 关于
+  - action: assert_element
+    selector:
+      name: 退出
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+- id: suite_缩略图_书签_012_s1
+  name: '[023]未打开文档界面显示'
+  description: ''
+  steps:
+  - action: element_action_click
+    selector:
+      name: DTitlebarIconLabel
+  - action: element_action_click
+    selector:
+      name: DTitlebarDWindowOptionButton
+  - action: element_action_click
+    selector:
+      name: DTitlebarDWindowMinButton
+  - action: wait
+    selector:
+      name: DTitlebarDWindowMinButton
+  - action: element_action_click
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: wait
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: element_action_click
+    selector:
+      name: DTitlebarDWindowCloseButton
+  - action: wait
+    selector:
+      name: DTitlebarDWindowCloseButton
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+  - action: assert_element_enabled
+    selector:
+      name: 新窗口
+  - action: assert_element_enabled
+    selector:
+      name: 新标签页
+  - action: assert_element_disabled
+    selector:
+      name: 保存
+  - action: assert_element_disabled
+    selector:
+      name: 另存为
+  - action: assert_element_disabled
+    selector:
+      name: 在文件管理器中显示
+  - action: assert_element_disabled
+    selector:
+      name: 放大镜
+  - action: assert_element_disabled
+    selector:
+      name: 选择工具
+  - action: assert_element_disabled
+    selector:
+      name: 搜索
+  - action: assert_element_disabled
+    selector:
+      name: 打印
+  - action: assert_element_enabled
+    selector:
+      name: 主题
+  - action: assert_element_enabled
+    selector:
+      name: 帮助
+  - action: assert_element_enabled
+    selector:
+      name: 关于
+  - action: assert_element_enabled
+    selector:
+      name: 退出
+- id: suite_缩略图_书签_013_s1
+  name: '[024]未打开文档界面显示'
+  description: ''
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+  - action: assert_element
+    selector:
+      name: Label_Icon
+  - action: assert_element
+    selector:
+      name: Label_Icon
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+- id: suite_缩略图_书签_014_s1
+  name: 已添加文档界面菜单显示
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: element_action_click
+    selector:
+      name: DLineEditChildLineEdit
+  - action: dtk_context_menu
+    items: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_缩略图_书签_015_s1
+  name: 删除所有书签
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action_right_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: dtk_context_menu
+    items:
+    - 删除所有书签
+  - action: element_action_click
+    selector:
+      name: 取消
+  - action: element_action_right_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: dtk_context_menu
+    items:
+    - 删除所有书签
+  - action: element_action_click
+    selector:
+      name: 确定
+  - action: UNSUPPORTED
+  - action: UNSUPPORTED
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_dialog
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_dialog
+  - action: assert_element_not_exists
+    selector:
+      name: SideBarImageListView
+- id: suite_缩略图_书签_017_s1
+  name: 快捷键切换书签/注释缩略图
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Ctrl+O
+  - action: file_dialog_select
+    selector:
+      name: PDF文档
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: Button_ThumbnailToggle
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: keyboard_hot_key
+    key: Down
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: keyboard_hot_key
+    key: Up
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: keyboard_hot_key
+    key: PageUp
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: element_action_click
+    selector:
+      name: DLineEditChildLineEdit
+  - action: UNSUPPORTED
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+  - action: element_action_click
+    selector:
+      name: SideBarImageListView
+      index: 0
+  - action: keyboard_hot_key
+    key: Down
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  - action: keyboard_hot_key
+    key: PageDown
+  - action: wait
+    selector:
+      name: Form_CentralDocPage
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+teardown:
+- action: session_stop

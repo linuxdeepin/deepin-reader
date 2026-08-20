@@ -1,0 +1,440 @@
+name: 交互_键盘_suite
+app: deepin-reader
+module: 交互_键盘
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_交互_键盘_001_s1
+  name: 首页Tab键切换
+  description: ''
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Space
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: push button
+- id: suite_交互_键盘_002_s1
+  name: 未展开侧栏Tab键切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_003_s1
+  name: 展开侧栏Tab键切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_004_s1
+  name: 百分比输入框下拉菜单键盘导航
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_交互_键盘_005_s1
+  name: 主菜单下拉界面键盘导航
+  description: ''
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: push button
+- id: suite_交互_键盘_006_s1
+  name: 右键菜单键盘导航
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Enter
+  - action: mouse_right_click
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+      role: panel
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_007_s1
+  name: 左侧栏目录上下切换与删除
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: PageUp
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_008_s1
+  name: Alt+M弹出右键菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+      role: panel
+  - action: assert_element
+    selector:
+      name: Menu_Hand
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_009_s1
+  name: 对话框Tab键切换
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+      role: panel
+- id: suite_交互_键盘_010_s1
+  name: 搜索框键盘导航
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_011_s1
+  name: 文档信息界面键盘导航
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_交互_键盘_012_s1
+  name: 关于界面键盘导航
+  description: ''
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: push button
+- id: suite_交互_键盘_013_s1
+  name: 百分比框和页码框输入数值按Enter
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_type
+    text: '150'
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_type
+    text: '1'
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Edit_Page
+      role: panel
+- id: suite_交互_键盘_014_s1
+  name: 焦点切换跳过置灰菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+teardown:
+- action: session_stop

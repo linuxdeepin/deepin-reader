@@ -1,0 +1,635 @@
+name: 文档视图_右键菜单_suite
+app: deepin-reader
+module: 文档视图_右键菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_右键菜单_001_s1
+  name: 上下页面均有一部分显示在当前窗口时，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 第一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 前一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 最后一页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+- id: suite_文档视图_右键菜单_002_s1
+  name: 打开PDF文档，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 搜索
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加书签
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加注释
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 全屏
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 幻灯片放映
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 第一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 前一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 最后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 左旋转
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 右旋转
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 打印
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 文档信息
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_FindWidget
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: HandleMenu
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Form_BrowserPage
+  - action: assert_element
+    selector:
+      name: Form_BrowserPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_右键菜单_003_s1
+  name: 选中高亮注释文本进行复制
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: Form_BrowserPage
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 复制
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_004_s1
+  name: 幻灯片放映
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 幻灯片放映
+  - action: keyboard_hot_key
+    key: Esc
+  - action: keyboard_hot_key
+    key: Ctrl+H
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_右键菜单_005_s1
+  name: 打印（已连接打印机）
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 打印
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_右键菜单_007_s1
+  name: 选中未高亮文本进行复制
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 复制
+  - action: keyboard_hot_key
+    key: Ctrl+C
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 高亮
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加书签
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_008_s1
+  name: '[034]右击选中文字弹出菜单'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_009_s1
+  name: '[022]窗口中显示当前页（不显示上下页）时，点击右键菜单选项'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加书签
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 第一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 前一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 最后一页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_010_s1
+  name: 选中一段文本，翻页后回到原位置，选中文本不会消失
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 前一页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_011_s1
+  name: 菜单高亮效果
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 复制
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items: []
+  - action: keyboard_hot_key
+    key: Menu
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_012_s1
+  name: '[029]选中文本后右击'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 复制
+  - action: element_action
+    selector:
+      name: Form_BrowserPage
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 第一页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+  - action: assert_element
+    selector:
+      name: BrowserMenu
+- id: suite_文档视图_右键菜单_013_s1
+  name: 打开DJVU文档，未选中文本右击弹出菜单
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 添加书签
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 全屏
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 幻灯片放映
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 第一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 前一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 最后一页
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 左旋转
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 右旋转
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 打印
+  - action: keyboard_hot_key
+    key: Esc
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 文档信息
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: SideBarImageListView
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Edit_Page
+  - action: assert_element
+    selector:
+      name: Form_BrowserPage
+  - action: assert_element
+    selector:
+      name: Form_BrowserPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_文档视图_右键菜单_014_s1
+  name: 退出幻灯片播放，应用保持之前的最大化或默认状态
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 幻灯片放映
+  - action: keyboard_hot_key
+    key: Esc
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 幻灯片放映
+  - action: keyboard_hot_key
+    key: Esc
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+- id: suite_文档视图_右键菜单_015_s1
+  name: 打印预览显示正常
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/landscape.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 打印
+  - action: keyboard_hot_key
+    key: Esc
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_context_menu
+    selector:
+      name: Form_BrowserPage
+    items:
+    - 打印
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+teardown:
+- action: session_stop

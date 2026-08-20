@@ -1,0 +1,42 @@
+name: 社区需求_suite
+app: deepin-reader
+module: 社区需求
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_社区需求_001_s1
+  name: 幻灯片进入与UI
+  description: ''
+  steps:
+  - action: file_dialog_select
+  - action: dtk_context_menu
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: SlidePlayWidget
+      role: panel
+  - action: assert_custom
+- id: suite_社区需求_002_s1
+  name: 幻灯片播放控制
+  description: ''
+  steps:
+  - action: file_dialog_select
+  - action: dtk_context_menu
+  - action: element_action
+    selector:
+      name: play_normal
+      role: push button
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_custom
+teardown:
+- action: session_stop

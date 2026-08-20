@@ -1,0 +1,242 @@
+name: 主菜单_suite
+app: deepin-reader
+module: 主菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_主菜单_001_s1
+  name: '[007]保存'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 保存
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_002_s1
+  name: 关闭按钮
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_003_s1
+  name: '[004]最小化. 最大化. 关闭'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_004_s1
+  name: '[010]退出'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 退出
+  assert_steps:
+  - action: assert_window_count
+    expected: 0
+- id: suite_主菜单_005_s1
+  name: '[001]关于'
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 关于
+- id: suite_主菜单_006_s1
+  name: '[002]帮助'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: F1
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 帮助
+- id: suite_主菜单_009_s1
+  name: 编辑后进行另存
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal_saved.pdf
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_011_s1
+  name: 添加新窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_window_count
+    expected: 2
+- id: suite_主菜单_012_s1
+  name: 取消使用放大镜
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 放大镜
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_014_s1
+  name: '[025]多次保存'
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_015_s1
+  name: 保存替换文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+- id: suite_主菜单_019_s1
+  name: 打开多个窗口，窗口A中点击"关于"并关闭，再点击窗口B中的"关于"无异常
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: keyboard_press
+    key: Escape
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 关于
+  - action: assert_window_count
+    expected: 1
+- id: suite_主菜单_021_s1
+  name: 未连接打印机，存为PDF
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+  - action: dtk_main_menu
+    items:
+    - 打印
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 打印
+- id: suite_主菜单_023_s1
+  name: 支持打开多个窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_window_count
+    expected: 2
+  - action: assert_window_count
+    expected: 3
+teardown:
+- action: session_stop
