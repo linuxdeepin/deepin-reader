@@ -7,266 +7,122 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
-- id: suite_003_s1
-  name: 主菜单 — 主菜单功能验证
+- id: suite_main_menu_new_window_s1
+  name: 标题栏主菜单 — 新窗口
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: dtk_main_menu
+    items:
+    - 新窗口
   assert_steps:
-  - action: assert_window
-  - action: assert_window
-- id: suite_004_s1
-  name: 主菜单 — 主菜单功能验证 (续1)
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_new_tab_s1
+  name: 标题栏主菜单 — 新标签页
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: dtk_main_menu
+    items:
+    - 新标签页
   assert_steps:
-  - action: assert_window
-  - action: assert_window
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_save_s1
+  name: 标题栏主菜单 — 保存
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_search_s1
+  name: 标题栏主菜单 — 搜索
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_print_s1
+  name: 标题栏主菜单 — 打印
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 打印
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_theme_s1
+  name: 标题栏主菜单 — 主题切换
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_about_s1
+  name: 标题栏主菜单 — 关于
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_main_menu_tools_s1
+  name: 标题栏主菜单 — 工具切换
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
 teardown:
 - action: session_stop

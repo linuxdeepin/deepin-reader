@@ -1,4 +1,28 @@
 elements:
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  Form_DMainWindow:
+    name: Form_DMainWindow
+    role: form
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
   n6:
     name: DTitlebarIconLabel
     role: button

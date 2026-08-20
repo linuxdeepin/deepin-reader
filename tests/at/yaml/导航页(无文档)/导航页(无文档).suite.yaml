@@ -1,43 +1,43 @@
-name: 顶部标签页栏_suite
+name: 导航页(无文档)_suite
 app: deepin-reader
 description: ''
-module: 顶部标签页栏
+module: 导航页(无文档)
 tags: []
 fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  command: deepin-reader
   wait: 3.0
 suites:
-- id: suite_tab_add_s1
-  name: 标签页 — 新建标签页
+- id: suite_main_no_doc_s1
+  name: 主界面 — 无文档打开
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_select_file_s1
+  name: 导航页 — 选择文件按钮
   description: ''
   tags: []
   steps:
   - action: mouse_click
     selector:
-      name: DTabBarAddButton
+      name: Button_SelectFile
       role: button
   assert_steps:
   - action: assert_element
     selector:
       name: Form_DMainWindow
       role: form
-- id: suite_tab_scroll_s1
-  name: 标签页 — 滚动
-  description: ''
-  tags: []
-  steps:
-  - action: mouse_click
-    selector:
-      name: 向左滚动
-      role: button
-  - action: mouse_click
-    selector:
-      name: 向右滚动
-      role: button
-  assert_steps:
   - action: assert_element
     selector:
       name: Form_DMainWindow

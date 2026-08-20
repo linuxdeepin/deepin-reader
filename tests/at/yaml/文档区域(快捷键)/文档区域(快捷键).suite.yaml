@@ -7,350 +7,46 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
-- id: suite_012_s1
-  name: 键盘 — 快捷键功能验证
+- id: suite_search_ctrlf_s1
+  name: 查找框 — Ctrl+F 查找
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: keyboard_hot_key
+    key: ctrl+f
   assert_steps:
-  - action: assert_window
-  - action: assert_window
-- id: suite_013_s1
-  name: 键盘 — 快捷键功能验证 (续1)
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_zoom_s1
+  name: 缩放 — Ctrl+Plus/Minus 缩放
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: keyboard_hot_key
+    key: ctrl+plus
+  - action: keyboard_hot_key
+    key: ctrl+minus
   assert_steps:
-  - action: assert_window
-  - action: assert_window
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_ctrl_s_save_s1
+  name: 键盘快捷键 — Ctrl+S 保存
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
 teardown:
 - action: session_stop

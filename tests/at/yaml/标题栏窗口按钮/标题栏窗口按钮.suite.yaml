@@ -7,46 +7,48 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
-- id: suite_005_s1
-  name: 窗口管理 — 窗口最小化/最大化/关闭
+- id: suite_window_buttons_s1
+  name: 标题栏 — 窗口最小化
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: mouse_click
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
   assert_steps:
-  - action: assert_window
-  - action: assert_window
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_window_max_s1
+  name: 标题栏 — 窗口最大化
+  description: ''
+  tags: []
+  steps:
+  - action: mouse_click
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_fullscreen_s1
+  name: 标题栏 — 全屏/退出全屏
+  description: ''
+  tags: []
+  steps:
+  - action: keyboard_press
+    key: f11
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
 teardown:
 - action: session_stop

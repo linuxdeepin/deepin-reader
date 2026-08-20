@@ -7,70 +7,22 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
-- id: suite_023_s1
-  name: 缩略图 — 缩略图视图翻页和跳转
+- id: suite_sidebar_toggle_s1
+  name: 左侧栏 — 缩略图面板切换
   description: ''
   tags: []
   steps:
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
-  - action: element_action
-    do: click
+  - action: mouse_click
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
   assert_steps:
-  - action: assert_window
-  - action: assert_window
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
 teardown:
 - action: session_stop
