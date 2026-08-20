@@ -1,0 +1,133 @@
+elements:
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  Form_DMainWindow:
+    name: Form_DMainWindow
+    role: form
+  BrowserMenu:
+    name: BrowserMenu
+    role: panel
+  Form_scaleEdit_P:
+    name: Form_scaleEdit_P
+    role: form
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  向左滚动:
+    name: 向左滚动
+    role: button
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  n6:
+    name: DTitlebarIconLabel
+    role: button
+  n8:
+    name: Button_ThumbnailToggle
+    role: check box
+  n11:
+    name: DLineEditChildLineEdit
+    role: text
+  n18:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  n19:
+    name: DTitlebarDWindowMinButton
+    role: button
+  n20:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  n21:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  n22:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  n27:
+    name: ''
+    role: page tab list
+  n28:
+    name: 向左滚动
+    role: button
+  n29:
+    name: 向右滚动
+    role: button
+  n30:
+    name: DTabBarAddButton
+    role: button
+  n36:
+    name: Button_SelectFile
+    role: button
+  n40:
+    name: 新窗口
+    role: menu item
+  n41:
+    name: 新标签页
+    role: menu item
+  n42:
+    name: 保存
+    role: menu item
+  n43:
+    name: 另存为
+    role: menu item
+  n44:
+    name: 在文件管理器中显示
+    role: menu item
+  n45:
+    name: 放大镜
+    role: menu item
+  n46:
+    name: 工具
+    role: menu item
+  n48:
+    name: 选择工具
+    role: menu item
+  n49:
+    name: 手形工具
+    role: menu item
+  n50:
+    name: 搜索
+    role: menu item
+  n51:
+    name: 打印
+    role: menu item
+  n52:
+    name: 主题
+    role: menu item
+  n54:
+    name: 浅色
+    role: menu item
+  n55:
+    name: 深色
+    role: menu item
+  n56:
+    name: 跟随系统
+    role: menu item
+  n57:
+    name: 帮助
+    role: menu item
+  n58:
+    name: 关于
+    role: menu item
+  n59:
+    name: 退出
+    role: menu item
+  n61:
+    name: 选择工具
+    role: menu item
+  n62:
+    name: 手形工具
+    role: menu item
+  n64:
+    name: 浅色
+    role: menu item
+  n65:
+    name: 深色
+    role: menu item
+  n66:
+    name: 跟随系统
+    role: menu item

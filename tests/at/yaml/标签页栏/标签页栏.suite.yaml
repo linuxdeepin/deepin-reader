@@ -1,0 +1,517 @@
+name: 标签页栏_suite
+app: deepin-reader
+description: ''
+module: 标签页栏
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s1
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s2
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s3
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s4
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 退出
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: keyboard_press
+    key: tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s5
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s6
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: BrowserMenu
+      role: panel
+    items:
+    - 适合宽度
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s7
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s8
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s9
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s10
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s11
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s12
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: 向右滚动
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s13
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s14
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__s15
+  name: 标签页栏
+  description: ''
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__1_s1
+  name: 标签页栏_2
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: BrowserMenu
+      role: panel
+    items:
+    - 双页显示
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__1_s2
+  name: 标签页栏_2
+  description: ''
+  tags: []
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

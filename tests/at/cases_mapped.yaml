@@ -1,0 +1,5345 @@
+metadata:
+  generated_at: '2026-08-20'
+  source: 文档查看器V25-用例.xlsx
+cases:
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器_
+  name: 文档视图操作
+  module: 文档视图操作
+  status: active
+  annotation: &id001
+    测试界面: 主窗口-文档阅读区
+    测试功能: 文档操作（翻页/缩放/全屏/旋转/幻灯片/打印/文档信息）
+    前置条件: 应用已启动，PDF文档已打开
+    AT元素引用:
+    - Button_ThumbnailToggle
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581295
+    case_name: 删除输入框数值再点击其他位置
+    description: 1. 展开左边栏，删除底部页数框中的数值，再点击窗口内外其他位置
+  - step_type: action
+    case_id: case_1581295
+    case_name: 删除输入框数值再点击其他位置
+    description: 1. 展开左边栏，删除底部页数框中的数值，再点击窗口内外其他位置
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1581295
+    case_name: 删除输入框数值再点击其他位置
+    description: 2. 删除百分比数值框中的数值，再点击窗口内外其他位置
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581295
+    case_name: 删除输入框数值再点击其他位置
+    description: 1. 输入框中应该再次显示最近一次的数据
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581295
+    case_name: 删除输入框数值再点击其他位置
+    description: 2. 输入框中应该再次显示最近一次的数据
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 1. 打开文档，查看默认百分比显示
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 1. 打开文档，查看默认百分比显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 2. 切换到双页显示
+    action: dtk_context_menu
+    items:
+    - 双页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 3. 再切到单页显示
+    action: dtk_context_menu
+    items:
+    - 单页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 4. 单页显示时打开左边栏
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 5. 双页页显示时打开左边栏
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 1. 默认显示单页，100%比例
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 2. 页面适配，无截断显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 3. 页面适配，无截断显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 4. 页面适配，无截断显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581285
+    case_name: 切换单页/双页，页面需适配
+    description: 5. 页面适配，无截断显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 1. 输入关键字并搜索
+  - step_type: action
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 1. 输入关键字并搜索
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 2. 按键盘Backspace键删除关键字，重新输入其他关键字并搜索
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 3. 点击搜索框中的上下键切换
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 1. 左边栏弹出搜索结果缩略图，文档中关键字被选中
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 2. 左边栏正常显示新的搜索结果缩略图，不会叠加显示，右侧文档中显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581281
+    case_name: 多次搜索
+    description: 3. 左边栏和右侧文档中显示均正确
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581207
+    case_name: '[011]关闭搜索'
+    description: 1. 点击搜索框最右侧X，查看
+  - step_type: assert
+    case_id: case_1581207
+    case_name: '[011]关闭搜索'
+    description: 1. 点击搜索框最右侧X，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581207
+    case_name: '[011]关闭搜索'
+    description: 1. 可以正常关闭搜索，搜索框和搜索结果都会消失
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581205
+    case_name: '[012]关闭搜索'
+    description: 1. 点击关键字右侧的X，查看显示
+  - step_type: assert
+    case_id: case_1581205
+    case_name: '[012]关闭搜索'
+    description: 1. 点击关键字右侧的X，查看显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581205
+    case_name: '[012]关闭搜索'
+    description: 2. 全选关键字，按delete键，或者按backspace删除关键字，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581205
+    case_name: '[012]关闭搜索'
+    description: 1. 搜索框中的关键字被删除，关键字旁边的X消失，搜索结果被关闭，搜索弹框不会关闭，可以继续输入关键字
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581205
+    case_name: '[012]关闭搜索'
+    description: 2. 只有关键字被删除，界面无变化，搜索结果不会被删除
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581203
+    case_name: '[032]不输入关键字点击enter键'
+    description: 1. 搜索弹框中未输入任何内容，点击键盘Enter键，查看界面显示
+  - step_type: assert
+    case_id: case_1581203
+    case_name: '[032]不输入关键字点击enter键'
+    description: 1. 搜索弹框中未输入任何内容，点击键盘Enter键，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581203
+    case_name: '[032]不输入关键字点击enter键'
+    description: 1. 界面无任何改变
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581201
+    case_name: '[033]无搜索结果'
+    description: 1. 在搜索框输入关键字搜索，且文档中无此关键字，查看界面显示
+  - step_type: assert
+    case_id: case_1581201
+    case_name: '[033]无搜索结果'
+    description: 1. 在搜索框输入关键字搜索，且文档中无此关键字，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581201
+    case_name: '[033]无搜索结果'
+    description: 1. 左边栏显示“无搜索结果”，右侧文档无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581199
+    case_name: 点击、滑动搜索结果缩略图
+    description: 1. 点击左边栏任意一个搜索结果缩略图，查看页面显示
+  - step_type: assert
+    case_id: case_1581199
+    case_name: 点击、滑动搜索结果缩略图
+    description: 1. 点击左边栏任意一个搜索结果缩略图，查看页面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581199
+    case_name: 点击、滑动搜索结果缩略图
+    description: 2. 左边栏页面超过一页时，滑动滑鼠，查看页面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581199
+    case_name: 点击、滑动搜索结果缩略图
+    description: 1. 点击的搜索结果缩略图显示选中状态，右侧文档跳转到相应页面，页面中所有关键字保持高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581199
+    case_name: 点击、滑动搜索结果缩略图
+    description: 2. 页面正常滑动显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 1. 点击搜索框手动输入关键字，点击键盘enter键搜索，查看搜索结果显示
+  - step_type: assert
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 1. 点击搜索框手动输入关键字，点击键盘enter键搜索，查看搜索结果显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 2. 点击上一个按钮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 3. 点击下一个按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 1. 正常显示搜索结果
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 2. 正常切换关键字，选中的关键字自动添加绿色高亮效果
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581195
+    case_name: '[013]手动输入关键字进行搜索'
+    description: 3. 正常切换关键字，选中的关键字自动添加绿色高亮效果
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581193
+    case_name: '[014]开启搜索'
+    description: 1. 在主菜单中选择搜索，查看界面显示
+  - step_type: assert
+    case_id: case_1581193
+    case_name: '[014]开启搜索'
+    description: 1. 在主菜单中选择搜索，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581193
+    case_name: '[014]开启搜索'
+    description: 2. 右击未选中文本或空白区域，弹出右键菜单项，选择搜索，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581193
+    case_name: '[014]开启搜索'
+    description: 1. 弹出搜索弹框，搜索框中显示搜索字样、搜索框右侧显示上一个、下一个按钮、关闭图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581193
+    case_name: '[014]开启搜索'
+    description: 2. 弹出搜索弹框，搜索框中显示搜索字样、搜索框右侧显示上一个、下一个按钮、关闭图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581139
+    case_name: 跨页高亮
+    description: 1. 跨页选中文本添加高亮
+  - step_type: action
+    case_id: case_1581139
+    case_name: 跨页高亮
+    description: 1. 跨页选中文本添加高亮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581139
+    case_name: 跨页高亮
+    description: 2. 右击高亮文本选择“取消高亮”
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581139
+    case_name: 跨页高亮
+    description: 1. 可以正常添加跨页高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581139
+    case_name: 跨页高亮
+    description: 2. 仅可取消当前页高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581135
+    case_name: 高亮重叠
+    description: 1. 文本已高亮显示，重叠选中另一段文本，右击未高亮区域添加颜色，查看
+  - step_type: assert
+    case_id: case_1581135
+    case_name: 高亮重叠
+    description: 1. 文本已高亮显示，重叠选中另一段文本，右击未高亮区域添加颜色，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581135
+    case_name: 高亮重叠
+    description: 1. 出现两段重叠颜色，重叠部分为混合色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581133
+    case_name: '[015]取消高亮'
+    description: 1. 选中/不选中已高亮的文本，点击右键菜单中“取消高亮”菜单，查看是否可以取消高亮
+  - step_type: assert
+    case_id: case_1581133
+    case_name: '[015]取消高亮'
+    description: 1. 选中/不选中已高亮的文本，点击右键菜单中“取消高亮”菜单，查看是否可以取消高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581133
+    case_name: '[015]取消高亮'
+    description: 1. 可以正常取消高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 1. 选中文本，右击选择一种高亮颜色（如：蓝色）
+  - step_type: action
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 1. 选中文本，右击选择一种高亮颜色（如：蓝色）
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 2. 不关闭应用，右击另一段高亮文本，右击弹出右键菜单查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 3. 选中文本，右击选择一种高亮颜色（如：蓝色）
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 4. 不关闭应用，选择另一段未高亮文本，右击弹出右键菜单查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 1. 文本添加蓝色高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 2. 右键菜单中蓝色图标仍为选中状态，点击“高亮”菜单，文本切换为蓝色高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 3. 文本添加蓝色高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581131
+    case_name: 记住高亮规则
+    description: 4. 右键菜单中蓝色图标仍为选中状态，点击“高亮”菜单，文本添加蓝色高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 1. 选中已高亮的文本，右击这段文本，点击右键菜单中任意颜色圈图标进行切换，查看
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 1. 选中已高亮的文本，右击这段文本，点击右键菜单中任意颜色圈图标进行切换，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 2. 不选中已高亮的文本，右击这段文本，点击右键菜单中任意颜色圈图标进行切换，查看是否可以切换
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 3. 选中一段未高亮的文本，右击这段文本，点击右键菜单中任意颜色圈图标添加高亮，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 4. 再次右击这段文本，选择其他颜色进行切换，查看是否切换成功
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 1. 每点击一种颜色，会叠加成混合色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 2. 可以正常切换高亮颜色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 3. 可以正常添加高亮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581129
+    case_name: 切换高亮颜色
+    description: 4. 可以正常切换高亮颜色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__1
+  name: 文档视图操作_2
+  module: 文档视图操作
+  status: active
+  annotation: *id001
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581127
+    case_name: '[016]“高亮”菜单和“取消高亮”菜单显示'
+    description: 1. 添加高亮后，查看“高亮”菜单和“取消高亮”菜单显示，查看颜色圈图标是否可以继续点击切换颜色
+  - step_type: assert
+    case_id: case_1581127
+    case_name: '[016]“高亮”菜单和“取消高亮”菜单显示'
+    description: 1. 添加高亮后，查看“高亮”菜单和“取消高亮”菜单显示，查看颜色圈图标是否可以继续点击切换颜色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581127
+    case_name: '[016]“高亮”菜单和“取消高亮”菜单显示'
+    description: 1. “高亮”菜单置灰，“取消高亮”菜单可点击，颜色圈图标可继续点击切换颜色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581125
+    case_name: '[017]添加高亮的方式'
+    description: 1. 选中一段未高亮文字,查看取消高亮菜单是否置灰
+  - step_type: assert
+    case_id: case_1581125
+    case_name: '[017]添加高亮的方式'
+    description: 1. 选中一段未高亮文字,查看取消高亮菜单是否置灰
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581125
+    case_name: '[017]添加高亮的方式'
+    description: 2. 点击右键菜单中的高亮菜单添加
+    action: dtk_context_menu
+    items:
+    - 高亮菜单添加
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581125
+    case_name: '[017]添加高亮的方式'
+    description: 1. 取消高亮菜单置灰
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581125
+    case_name: '[017]添加高亮的方式'
+    description: 2. 可以添加高亮，添加的高亮颜色为当前颜色圈图标选中的颜色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581123
+    case_name: 默认选中橘黄色高亮
+    description: 1. 首次打开文档，选中多行文本右击，查看默认选中的颜色圈图标
+  - step_type: assert
+    case_id: case_1581123
+    case_name: 默认选中橘黄色高亮
+    description: 1. 首次打开文档，选中多行文本右击，查看默认选中的颜色圈图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581123
+    case_name: 默认选中橘黄色高亮
+    description: 2. 切换颜色后，选中多行文本右击，关闭文档再打开，查看默认的颜色图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581123
+    case_name: 默认选中橘黄色高亮
+    description: 1. 默认选中橘黄色图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581123
+    case_name: 默认选中橘黄色高亮
+    description: 2. 默认选中橘黄色图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 1. 点击选择图标，在下拉框中选择手型图标
+  - step_type: action
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 1. 点击选择图标，在下拉框中选择手型图标
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 2. 鼠标移动到左边栏和右侧文档并点击
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 3. 长按鼠标，查看能否拖动页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 1. 工具栏显示手型工具图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 2. 鼠标移动到左边栏仍显示选择样式，点击可选择任意缩略图和按钮；鼠标移动到右侧文档显示为手型样式，无法选择文本；鼠标移动到链接内容仍显示为手型样式，点击无法进入相应链接
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581057
+    case_name: 手型工具
+    description: 3. 可以拖动页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 1. 文档打开后，查看默认使用的工具
+  - step_type: assert
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 1. 文档打开后，查看默认使用的工具
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 2. 鼠标移动到左边栏和右侧文档并点击
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 3. 长按鼠标，查看能否拖动页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 1. 默认使用选择工具，工具栏显示选择工具图标
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 2. 鼠标移动到非可选文档处仍显示选择样式，点击可选择任意缩略图和按钮；鼠标移动到右侧文档变成竖形选择文本图标，可以选择文本；鼠标移动到链接内容显示为手型样式，点击进入相应链接
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581055
+    case_name: 默认使用选择工具和文档的浏览效果
+    description: 3. 无法拖动页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581051
+    case_name: '[018]百分比图标的下拉框'
+    description: 1. 点击下拉框，选择百分比选项
+  - step_type: action
+    case_id: case_1581051
+    case_name: '[018]百分比图标的下拉框'
+    description: 1. 点击下拉框，选择百分比选项
+    action: element_action
+    selector:
+      name: Form_scaleEdit_P
+      role: form
+    do: click
+  - step_type: action
+    case_id: case_1581051
+    case_name: '[018]百分比图标的下拉框'
+    description: 2. 点击+、-按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581051
+    case_name: '[018]百分比图标的下拉框'
+    description: 1. 文档行相应百分比大小调整
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581051
+    case_name: '[018]百分比图标的下拉框'
+    description: 2. 缩放比例调整为列表中相邻比例选项进行调整
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581049
+    case_name: '[019]百分比图标的编辑框'
+    description: 1. 点击编辑框，输入10%-500%范围内任意百分比值（可以输小数点，小数点保留2位），按enter键，查看文档显示
+  - step_type: assert
+    case_id: case_1581049
+    case_name: '[019]百分比图标的编辑框'
+    description: 1. 点击编辑框，输入10%-500%范围内任意百分比值（可以输小数点，小数点保留2位），按enter键，查看文档显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581049
+    case_name: '[019]百分比图标的编辑框'
+    description: 2. 点击+、-按钮，
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581049
+    case_name: '[019]百分比图标的编辑框'
+    description: 1. 文档进行相应百分比大小调整，按enter键后输入框中内容无截断显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581049
+    case_name: '[019]百分比图标的编辑框'
+    description: 2. 缩放比例调整为列表中最靠近该比例的比例选项进行调整
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581047
+    case_name: '[020]工具栏中的百分比图标显示'
+    description: 1. 查看工具栏中的百分比图标显示
+  - step_type: assert
+    case_id: case_1581047
+    case_name: '[020]工具栏中的百分比图标显示'
+    description: 1. 查看工具栏中的百分比图标显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581047
+    case_name: '[020]工具栏中的百分比图标显示'
+    description: 2. 点击编辑框中的下拉按钮，查看显示的百分比选项
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581047
+    case_name: '[020]工具栏中的百分比图标显示'
+    description: 1. 显示带有下拉按钮的编辑框，编辑框左右两侧显示+-按钮；显示效果与设计图一致
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581047
+    case_name: '[020]工具栏中的百分比图标显示'
+    description: 2. 点击下拉框显示12个百分比选项：10%、25%、50%、75%、100%、125%、150%、175%、200%、300%、400%、500%；显示效果与设计图一致
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 1. 调整文档百分比大小，按ctrl1查看
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 1. 调整文档百分比大小，按ctrl1查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 2. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl1查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 3. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl2或适应高度菜单查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 4. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl3或适应宽度菜单查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 5. 分别按ctrl1、ctrl2、ctrl3
+    action: keyboard_hot_key
+    key: Ctrl+1
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 1. 文档显示为100%大小
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 2. 文档显示为100%大小,双页显示/左旋转/右旋转状态不会变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 3. 文档高度全部显示在当前页面,双页显示/左旋转/右旋转状态不会变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 4. 文档宽度全部显示在当前页面,双页显示/左旋转/右旋转状态不会变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581045
+    case_name: ctrl1、ctrl2、ctrl3快捷键切换规则
+    description: 5. 文档在实际大小、适应高度、适应宽度菜状态之间正常切换
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581043
+    case_name: '[021]点击百分比图标中+、-按钮'
+    description: 1. 百分比与比例选择列表中不匹配（大多数情况），点击+、-按钮
+  - step_type: action
+    case_id: case_1581043
+    case_name: '[021]点击百分比图标中+、-按钮'
+    description: 1. 百分比与比例选择列表中不匹配（大多数情况），点击+、-按钮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581043
+    case_name: '[021]点击百分比图标中+、-按钮'
+    description: 2. 百分比与比例选择列表中匹配（少部分情况），点击+、-按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581043
+    case_name: '[021]点击百分比图标中+、-按钮'
+    description: 1. 缩放比例调整为列表中最靠近该比例的比例选项进行调整
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581043
+    case_name: '[021]点击百分比图标中+、-按钮'
+    description: 2. 缩放比例调整为列表中相邻比例选项进行调整
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 1. 文档已调整为适合宽度状态，选择适合高度或按快捷键Ctrl2
+  - step_type: action
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 1. 文档已调整为适合宽度状态，选择适合高度或按快捷键Ctrl2
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 2. 文档已调整为适合宽度状态，在工具栏缩放比例图标中选择一个比例
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 3. 文档已调整为适合宽度状态，在工具栏缩放比例图标中手动编辑一个比例
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 4. 文档已调整为适合宽度状态，按快捷键Ctrl1
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 1. 进入适合高度状态，适合宽度被取消勾选，文档百分比显示正确
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 2. 文档显示选择的比例，适合宽度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 3. 文档显示编辑的比例，适合宽度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581041
+    case_name: 取消适合宽度的方法
+    description: 4. 文档恢复默认大小，适合宽度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 1. 文档已调整为适合高度状态，选择适合宽度或按快捷键Ctrl3
+  - step_type: action
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 1. 文档已调整为适合高度状态，选择适合宽度或按快捷键Ctrl3
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 2. 文档已调整为适合高度状态，在工具栏缩放比例图标中选择一个比例
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 3. 文档已调整为适合高度状态，在工具栏缩放比例图标中手动编辑一个比例
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 4. 文档已调整为适合高度状态，按快捷键Ctrl1
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 1. 进入适合宽度状态，适合高度被勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 2. 文档显示选择的比例，适合高度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 3. 文档显示编辑的比例，适合高度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581039
+    case_name: 取消适合高度的方法
+    description: 4. 文档恢复默认大小，适合高度取消勾选
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 1. 打开一份PDF文档，未展开左边栏，关闭应用再打开
+  - step_type: action
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 1. 打开一份PDF文档，未展开左边栏，关闭应用再打开
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 2. 打开一份PDF文档，展开左边栏，关闭应用再打开
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 3. 打开一份PDF文档，浏览文档，如当前页数为：5，关闭应用再打开
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 1. 左边栏保持隐藏状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 2. 左边栏保持展开状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581035
+    case_name: 关闭再打开文档记住所在页数和左边栏状态
+    description: 3. 页面仍停留在页数5
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 1. 窗口中只有一个标签页，分别点击调整百分比/双页视图/适应宽度/适应高度/左旋转/右旋转，关闭应用再进入查看
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 1. 窗口中只有一个标签页，分别点击调整百分比/双页视图/适应宽度/适应高度/左旋转/右旋转，关闭应用再进入查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 2. 窗口中有多个标签页，分别点击调整百分比/双页视图/适应宽度/适应高度/左旋转/右旋转，关闭应用再进入查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 3. 窗口中只有一个标签页，分别点击调整百分比/双页视图/适合宽度/适合高度/左旋转/右旋转，关闭标签页，不关闭应用，再次打开文档查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 4. 窗口中有多标签页，分别点击调整百分比/双页视图/适合宽度/适合高度/左旋转/右旋转，关闭标签页，不关闭应用，再次打开文档查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 1. 保持退出之前的状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 2. 保持退出之前的状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 3. 保持退出之前的状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581033
+    case_name: 关闭再打开文档记住百分比和视图调整状态
+    description: 4. 保持退出之前的状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 1. 文档单页显示时，改变工具栏百分比大小，查看文档内容变化
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 1. 文档单页显示时，改变工具栏百分比大小，查看文档内容变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 2. 文档单页显示时，使用Ctrl+滚轮或Ctrl++/Ctrl--改变文档大小，查看工具栏百分比数值变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 3. 文档双页显示时，改变工具栏百分比大小，查看文档内容变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 4. 文档双页显示时，使用Ctrl+滚轮或Ctrl++/Ctrl--改变文档大小，查看工具栏百分比数值变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 1. 文档内容大小同步变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 2. 工具栏百分比数值同步变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 3. 文档内容大小同步变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581031
+    case_name: 视图调整菜单
+    description: 4. 工具栏百分比数值同步变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__2
+  name: 文档视图操作_3
+  module: 文档视图操作
+  status: active
+  annotation: *id001
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 1. 默认文档比例进入双页显示，再切换大小窗口和窗口比例
+  - step_type: action
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 1. 默认文档比例进入双页显示，再切换大小窗口和窗口比例
+    action: dtk_context_menu
+    items:
+    - 双页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 2. 调整适合宽度，再切换大小窗口和窗口比例
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 3. 调整适合高度，再切换大小窗口和窗口比例
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 4. 左旋转，再切换大小窗口和窗口比例
+    action: dtk_context_menu
+    items:
+    - 向左旋转
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 5. 右旋转，再切换大小窗口和窗口比例
+    action: dtk_context_menu
+    items:
+    - 向右旋转
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 1. 保持双页显示，文档百分比显示正常，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 2. 保持适合宽度，文档百分比显示正常，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 3. 保持适合高度，文档百分比显示正常，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 4. 保持左旋转，文档百分比显示正常，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581029
+    case_name: 视图调整菜单
+    description: 5. 保持右旋转，文档百分比显示正常，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 1. 选择任意百分比（如：35%），再切换窗口大小
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 1. 选择任意百分比（如：35%），再切换窗口大小
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 2. 点击适合宽度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 3. 点击适合高度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 4. 选择任意百分比（如：35%），左旋转，且未选择适合高度/适合宽度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 5. 选择任意百分比（如：35%），右旋转，且未选择适合高度/适合宽度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 6. 选择任意百分比（如：35%），左旋转，且选择适合高度/适合宽度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 7. 选择任意百分比（如：35%），右旋转，且选择适合高度/适合宽度，再切换窗口大小
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 1. 百分比大小不会改变，界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 2. 保持适合宽度，文档百分比相应改变，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 3. 保持适合高度，文档百分比相应改变，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 4. 百分比大小不会改变，界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 5. 百分比大小不会改变，界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 6. 保持适合高/宽度，文档百分比相应改变，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581027
+    case_name: 视图调整菜单
+    description: 7. 保持适合高/宽度，文档百分比相应改变，不会出现闪退等异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 1. 首次打开文档，查看文档默认显示效果
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 1. 首次打开文档，查看文档默认显示效果
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 2. 点击双页显示
+    action: dtk_context_menu
+    items:
+    - 双页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 3. 点击适合宽度
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 4. 点击适合高度
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 5. 点击左旋转
+    action: dtk_context_menu
+    items:
+    - 向左旋转
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 6. 点击右旋转
+    action: dtk_context_menu
+    items:
+    - 向右旋转
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 1. 默认为单页，适合页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 2. 进入双页显示模式
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 3. 页面宽度在视窗内全部显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 4. 页面高度在视窗内全部显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 5. 仅当前页面正常进行左旋转，左边栏和工具栏不会翻转，旋转效果顺畅
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581025
+    case_name: 视图调整菜单
+    description: 6. 仅当前页面正常进行右旋转，左边栏和工具栏不会翻转，旋转效果顺畅
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 1. 打开文档，鼠标不点击，任意移动，按键盘上下键或pageup/pagedown
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 1. 打开文档，鼠标不点击，任意移动，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 2. 点击工具栏任意菜单（除去百分比菜单）后，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 3. 点击百分比或页数输入框后，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 4. 展开左边栏，鼠标点击左边栏区域后任意移动，按键盘上下键或pageup/pagedown
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 5. 鼠标点击右侧文档区域后任意移动，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 6. 鼠标点击窗口外桌面区域，，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 1. 焦点默认在文档中，文档正常逐行翻页/逐页翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 2. 焦点仍然默认在文档中，文档正常逐行翻页/逐页翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 3. 焦点在输入框，文档不会进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 4. 焦点在左侧，缩略图进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 5. 焦点在右侧，文档进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581011
+    case_name: 文档翻页
+    description: 6. 焦点在桌面中，选中桌面应用
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 1. 选中一个书签/注释缩略图，鼠标任意移动后，按键盘delete键
+  - step_type: action
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 1. 选中一个书签/注释缩略图，鼠标任意移动后，按键盘delete键
+    action: keyboard_press
+    key: Delete
+  - step_type: action
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 2. 选中一个书签/注释缩略图，鼠标点击右侧文档区域后，按键盘delete键
+    action: keyboard_press
+    key: Delete
+  - step_type: action
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 3. 选中一个书签/注释缩略图，点击百分比或页数输入框，按键盘delete键
+    action: keyboard_press
+    key: Delete
+  - step_type: assert
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 1. 正常删除书签/注释缩略图
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 2. 无法删除签/注释缩略图
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581009
+    case_name: 焦点定位与书签/注释缩略图的删除
+    description: 3. 无法删除签/注释缩略图
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580993
+    case_name: 宽高度不一致的文档显示
+    description: 1. 点击适合高度/适合宽度/调整百分比，查看
+  - step_type: assert
+    case_id: case_1580993
+    case_name: 宽高度不一致的文档显示
+    description: 1. 点击适合高度/适合宽度/调整百分比，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580993
+    case_name: 宽高度不一致的文档显示
+    description: 2. 添加书签和注释
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580993
+    case_name: 宽高度不一致的文档显示
+    description: 1. 界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580993
+    case_name: 宽高度不一致的文档显示
+    description: 2. 显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580979
+    case_name: 不同视图下进入全屏
+    description: 1. 隐藏侧边栏时，进入全屏
+  - step_type: action
+    case_id: case_1580979
+    case_name: 不同视图下进入全屏
+    description: 1. 隐藏侧边栏时，进入全屏
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580979
+    case_name: 不同视图下进入全屏
+    description: 2. 展开侧边栏时，进入全屏
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580979
+    case_name: 不同视图下进入全屏
+    description: 1. 侧边栏和标题栏自动隐藏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580979
+    case_name: 不同视图下进入全屏
+    description: 2. 侧边栏和标题栏自动隐藏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580977
+    case_name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+    description: 1. 进入全屏，鼠标移到窗口顶端，查看是否在1秒内呼唤出工具栏；
+  - step_type: assert
+    case_id: case_1580977
+    case_name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+    description: 1. 进入全屏，鼠标移到窗口顶端，查看是否在1秒内呼唤出工具栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580977
+    case_name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+    description: 2. 鼠标移出标题栏区域，查看是否在1秒内隐藏出工具栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580977
+    case_name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+    description: 1. 1秒内可以呼唤出工具栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580977
+    case_name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+    description: 2. 1秒内自动隐藏工具栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580975
+    case_name: 全屏前打开了左侧栏
+    description: 1. 全屏前打开了左侧栏再进入全屏，鼠标移动到窗口侧边
+  - step_type: action
+    case_id: case_1580975
+    case_name: 全屏前打开了左侧栏
+    description: 1. 全屏前打开了左侧栏再进入全屏，鼠标移动到窗口侧边
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580975
+    case_name: 全屏前打开了左侧栏
+    description: 2. 鼠标移出侧边栏区域
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580975
+    case_name: 全屏前打开了左侧栏
+    description: 1. 1秒钟呼唤出侧边栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580975
+    case_name: 全屏前打开了左侧栏
+    description: 2. 1秒钟自动隐藏侧边栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580973
+    case_name: 全屏前隐藏了左侧栏
+    description: 1. 全屏前隐藏了左侧栏再进入全屏，鼠标移动到窗口侧边
+  - step_type: action
+    case_id: case_1580973
+    case_name: 全屏前隐藏了左侧栏
+    description: 1. 全屏前隐藏了左侧栏再进入全屏，鼠标移动到窗口侧边
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580973
+    case_name: 全屏前隐藏了左侧栏
+    description: 2. 鼠标移出侧边栏区域
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580973
+    case_name: 全屏前隐藏了左侧栏
+    description: 1. 1秒内呼唤出侧边栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580973
+    case_name: 全屏前隐藏了左侧栏
+    description: 2. 1秒内自动隐藏侧边栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580971
+    case_name: 全屏后点击缩略图图标
+    description: 1. 全屏后唤出工具栏，未唤出侧边栏时，点击缩略图图标
+  - step_type: action
+    case_id: case_1580971
+    case_name: 全屏后点击缩略图图标
+    description: 1. 全屏后唤出工具栏，未唤出侧边栏时，点击缩略图图标
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580971
+    case_name: 全屏后点击缩略图图标
+    description: 2. 全屏后唤出工具栏和侧边栏时，点击缩略图图标
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: assert
+    case_id: case_1580971
+    case_name: 全屏后点击缩略图图标
+    description: 1. 缩略图图标高亮显示，鼠标移动到左侧栏不会隐藏左侧栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580971
+    case_name: 全屏后点击缩略图图标
+    description: 2. 缩略图图标高亮显示，鼠标移动到左侧栏不会隐藏左侧栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580945
+    case_name: '[026]进入全屏'
+    description: 1. 打开文档，不选中文本右击，弹出右键菜单，点击全屏菜单
+  - step_type: action
+    case_id: case_1580945
+    case_name: '[026]进入全屏'
+    description: 1. 打开文档，不选中文本右击，弹出右键菜单，点击全屏菜单
+    action: dtk_context_menu
+    items:
+    - 全
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580945
+    case_name: '[026]进入全屏'
+    description: 2. 打开文档，按F11键
+    action: keyboard_hot_key
+    key: F11
+  - step_type: assert
+    case_id: case_1580945
+    case_name: '[026]进入全屏'
+    description: '1.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580945
+    case_name: '[026]进入全屏'
+    description: 2. 1&2.进入全屏界面，隐藏“标题栏”和“侧边栏”
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580943
+    case_name: '[039]进入全屏呼唤出工具栏'
+    description: 1. 进入全屏，鼠标移到窗口顶端
+  - step_type: action
+    case_id: case_1580943
+    case_name: '[039]进入全屏呼唤出工具栏'
+    description: 1. 进入全屏，鼠标移到窗口顶端
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580943
+    case_name: '[039]进入全屏呼唤出工具栏'
+    description: 2. 鼠标移出标题栏区域
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580943
+    case_name: '[039]进入全屏呼唤出工具栏'
+    description: 1. 1秒钟内呼唤出工具栏，当存在两个标签页时，工具栏和标签栏同时被唤出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580943
+    case_name: '[039]进入全屏呼唤出工具栏'
+    description: 2. 1秒钟内自动隐藏工具栏和标签栏；
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 1. 打开文档，展开侧边栏，点击全屏菜单
+  - step_type: action
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 1. 打开文档，展开侧边栏，点击全屏菜单
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 2. 鼠标移动到窗口侧边
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 3. 鼠标移出侧边栏区域
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 1. 进入全屏界面，侧边栏隐藏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 2. 1秒内呼唤出侧边栏，“侧边栏”按钮为非选中状态，底部选中的按钮与全屏前一致
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580941
+    case_name: '[040]进入全屏呼唤出侧边栏'
+    description: 3. 自动隐藏侧边栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 1. 进入全屏显示，唤出工具栏
+  - step_type: action
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 1. 进入全屏显示，唤出工具栏
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 2. 点击工具栏中的“侧边栏”按钮，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 3. 再次点击“侧边栏”按钮，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 1. 工具栏正常唤出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 2. “侧边栏”按钮高亮显示，左侧栏固定显示，鼠标移出左侧栏不会隐藏左侧栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580939
+    case_name: '[041]仅唤出工具栏'
+    description: 3. 左侧栏被隐藏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__3
+  name: 文档视图操作_4
+  module: 文档视图操作
+  status: active
+  annotation: *id001
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 1. 进入全屏显示，先唤出侧边栏，再将鼠标移至左侧栏顶端区域
+  - step_type: action
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 1. 进入全屏显示，先唤出侧边栏，再将鼠标移至左侧栏顶端区域
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 2. 点击工具栏中的“侧边栏”按钮
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: assert
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 3. 再次点击“侧边栏”按钮，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 1. 侧边栏和工具栏同时唤出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 2. “侧边栏”按钮高亮显示，左侧栏固定显示，鼠标移出左侧栏不会隐藏左侧栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580937
+    case_name: '[042]侧边栏和工具栏同时唤出'
+    description: 3. 左侧栏被隐藏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580935
+    case_name: 全屏中增加或减少标签页
+    description: 1. 进入全屏，打开多个标签页，鼠标移至页面顶端查看
+  - step_type: assert
+    case_id: case_1580935
+    case_name: 全屏中增加或减少标签页
+    description: 1. 进入全屏，打开多个标签页，鼠标移至页面顶端查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580935
+    case_name: 全屏中增加或减少标签页
+    description: 2. 关闭仅剩余一个标签页，鼠标移至页面顶端查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580935
+    case_name: 全屏中增加或减少标签页
+    description: 1. 显示工具栏和标签栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580935
+    case_name: 全屏中增加或减少标签页
+    description: 2. 仅显示工具栏，标题显示在工具栏中间
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 1. 进入全屏，点击右上角菜单按钮
+  - step_type: action
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 1. 进入全屏，点击右上角菜单按钮
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 2. 进入全屏，点击右上角退出全屏按钮
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: action
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 3. 进入全屏，点击右上角关闭按钮
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 1. 弹出菜单弹框
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 2. 退出全屏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580933
+    case_name: 全屏中的右上角菜单
+    description: 3. 关闭文档
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 1. 进入全屏，点击工具栏右侧退出全屏菜单
+  - step_type: action
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 1. 进入全屏，点击工具栏右侧退出全屏菜单
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: action
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 2. 进入全屏，点击键盘esc按钮
+    action: keyboard_press
+    key: Escape
+  - step_type: action
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 3. 进入全屏，按快捷键F1 1
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 4. 进入全屏，右击文档弹出右键菜单，点击“退出全屏”
+    action: dtk_context_menu
+    items:
+    - “
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 1. 退出全屏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 2. 退出全屏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 3. 退出全屏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580931
+    case_name: '[027]退出全屏方式'
+    description: 4. 退出全屏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580929
+    case_name: 翻页后退出全屏
+    description: 1. 进入全屏翻页（如：第5页），左侧栏选中第5页文档缩略图，退出全屏查看
+  - step_type: assert
+    case_id: case_1580929
+    case_name: 翻页后退出全屏
+    description: 1. 进入全屏翻页（如：第5页），左侧栏选中第5页文档缩略图，退出全屏查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580929
+    case_name: 翻页后退出全屏
+    description: 1. 退出全屏显示后仍显示在第5页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580927
+    case_name: 选中目录后退出全屏
+    description: 1. 进入全屏选中一个目录，退出全屏查看
+  - step_type: assert
+    case_id: case_1580927
+    case_name: 选中目录后退出全屏
+    description: 1. 进入全屏选中一个目录，退出全屏查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580927
+    case_name: 选中目录后退出全屏
+    description: 1. 退出全屏左侧栏仍选中此目录
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580925
+    case_name: '[044]添加书签后退出全屏'
+    description: 1. 进入全屏添加书签，退出全屏后查看
+  - step_type: assert
+    case_id: case_1580925
+    case_name: '[044]添加书签后退出全屏'
+    description: 1. 进入全屏添加书签，退出全屏后查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580925
+    case_name: '[044]添加书签后退出全屏'
+    description: 1. 书签页数和书签个数无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580923
+    case_name: '[045]添加注释后退出全屏'
+    description: 1. 进入全屏添加注释，退出全屏后查看
+  - step_type: assert
+    case_id: case_1580923
+    case_name: '[045]添加注释后退出全屏'
+    description: 1. 进入全屏添加注释，退出全屏后查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580923
+    case_name: '[045]添加注释后退出全屏'
+    description: 1. 注释页数、个数、内容无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580921
+    case_name: 选择手型工具后退出全屏
+    description: 1. 进入全屏选择手型工具，退出全屏后查看
+  - step_type: assert
+    case_id: case_1580921
+    case_name: 选择手型工具后退出全屏
+    description: 1. 进入全屏选择手型工具，退出全屏后查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580921
+    case_name: 选择手型工具后退出全屏
+    description: 1. 仍显示手型工具
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580919
+    case_name: 弹出搜索结果后退出全屏
+    description: 1. 进入全屏搜索并弹出搜索结果，退出全屏查看
+  - step_type: assert
+    case_id: case_1580919
+    case_name: 弹出搜索结果后退出全屏
+    description: 1. 进入全屏搜索并弹出搜索结果，退出全屏查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580919
+    case_name: 弹出搜索结果后退出全屏
+    description: 1. 搜索结果仍显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580917
+    case_name: 退出全屏后的标题显示
+    description: 1. 仅只打开一份文档，进入再退出全屏，查看标题栏的显示
+  - step_type: assert
+    case_id: case_1580917
+    case_name: 退出全屏后的标题显示
+    description: 1. 仅只打开一份文档，进入再退出全屏，查看标题栏的显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580917
+    case_name: 退出全屏后的标题显示
+    description: 2. 打开多份文档，进入再退出全屏，查看标题栏的显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580917
+    case_name: 退出全屏后的标题显示
+    description: 1. 标题栏的显示无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580917
+    case_name: 退出全屏后的标题显示
+    description: 2. 标题栏的显示无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580915
+    case_name: 调整视图后退出全屏
+    description: 1. 进入全屏调整视图（双页显示、适合页面、默认大小、适应宽度、适应高度、每个百分比），退出后查看
+  - step_type: assert
+    case_id: case_1580915
+    case_name: 调整视图后退出全屏
+    description: 1. 进入全屏调整视图（双页显示、适合页面、默认大小、适应宽度、适应高度、每个百分比），退出后查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580915
+    case_name: 调整视图后退出全屏
+    description: 1. 退出全屏视图状态无变化，百分比数值相应变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580913
+    case_name: 双页显示后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击双页显示（适应宽度默认勾选）
+  - step_type: action
+    case_id: case_1580913
+    case_name: 双页显示后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击双页显示（适应宽度默认勾选）
+    action: dtk_context_menu
+    items:
+    - 双页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580913
+    case_name: 双页显示后鼠标再移出移入左侧栏
+    description: 2. 鼠标移出左侧栏再移入
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580913
+    case_name: 双页显示后鼠标再移出移入左侧栏
+    description: 1. 界面正常双页显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580913
+    case_name: 双页显示后鼠标再移出移入左侧栏
+    description: 2. 保持双页显示和适应宽度状态，百分比值改变
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580911
+    case_name: 适应高度后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击适应高度
+  - step_type: action
+    case_id: case_1580911
+    case_name: 适应高度后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击适应高度
+    action: dtk_context_menu
+    items:
+    - 适合高度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580911
+    case_name: 适应高度后鼠标再移出移入左侧栏
+    description: 2. 鼠标移出左侧栏再移入
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580911
+    case_name: 适应高度后鼠标再移出移入左侧栏
+    description: 1. 显示为适应高度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580911
+    case_name: 适应高度后鼠标再移出移入左侧栏
+    description: 2. 文档保持适应高度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580909
+    case_name: 适应宽度后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击适应宽度
+  - step_type: action
+    case_id: case_1580909
+    case_name: 适应宽度后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，点击适应宽度
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580909
+    case_name: 适应宽度后鼠标再移出移入左侧栏
+    description: 2. 鼠标移出左侧栏再移入
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580909
+    case_name: 适应宽度后鼠标再移出移入左侧栏
+    description: 1. 显示为适应宽度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580909
+    case_name: 适应宽度后鼠标再移出移入左侧栏
+    description: 2. 文档保持适应宽度状态，百分比数值不改变
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__4
+  name: 文档视图操作_5
+  module: 文档视图操作
+  status: active
+  annotation: *id001
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580907
+    case_name: 搜索结果缩略图显示后后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，搜索关键字并弹出搜索结果
+  - step_type: action
+    case_id: case_1580907
+    case_name: 搜索结果缩略图显示后后鼠标再移出移入左侧栏
+    description: 1. 进入全屏，未唤出左侧栏，搜索关键字并弹出搜索结果
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    case_id: case_1580907
+    case_name: 搜索结果缩略图显示后后鼠标再移出移入左侧栏
+    description: 2. 鼠标移出左侧栏再移入
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580907
+    case_name: 搜索结果缩略图显示后后鼠标再移出移入左侧栏
+    description: 1. 搜索结果缩略图显示，关键字黄色高亮显示，选中的关键字为绿色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580907
+    case_name: 搜索结果缩略图显示后后鼠标再移出移入左侧栏
+    description: 2. 搜索结果无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580905
+    case_name: 适合页面后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适合页面
+  - step_type: action
+    case_id: case_1580905
+    case_name: 适合页面后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适合页面
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580905
+    case_name: 适合页面后收起再展开左侧栏
+    description: 2. 收起再展开左侧栏
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580905
+    case_name: 适合页面后收起再展开左侧栏
+    description: 1. 界面显示适合页面状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580905
+    case_name: 适合页面后收起再展开左侧栏
+    description: 2. 文档保持适合页面状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580903
+    case_name: 适应高度后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适应高度
+  - step_type: action
+    case_id: case_1580903
+    case_name: 适应高度后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适应高度
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580903
+    case_name: 适应高度后收起再展开左侧栏
+    description: 2. 收起再展开左侧栏
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580903
+    case_name: 适应高度后收起再展开左侧栏
+    description: 1. 显示为适应高度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580903
+    case_name: 适应高度后收起再展开左侧栏
+    description: 2. 文档保持适应高度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580901
+    case_name: 适应宽度后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适应宽度
+  - step_type: action
+    case_id: case_1580901
+    case_name: 适应宽度后收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，点击适应宽度
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580901
+    case_name: 适应宽度后收起再展开左侧栏
+    description: 2. 收起再展开左侧栏
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580901
+    case_name: 适应宽度后收起再展开左侧栏
+    description: 1. 显示为适应宽度状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580901
+    case_name: 适应宽度后收起再展开左侧栏
+    description: 2. 文档保持适应宽度状态，百分比数值相应改变
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580899
+    case_name: 搜索结果缩略图显示收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，搜索关键字，左侧弹出搜索结果
+  - step_type: action
+    case_id: case_1580899
+    case_name: 搜索结果缩略图显示收起再展开左侧栏
+    description: 1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，搜索关键字，左侧弹出搜索结果
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580899
+    case_name: 搜索结果缩略图显示收起再展开左侧栏
+    description: 2. 收起再展开左侧栏
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580899
+    case_name: 搜索结果缩略图显示收起再展开左侧栏
+    description: 1. 搜索结果缩略图显示，关键字黄色高亮显示，选中的关键字为绿色
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580899
+    case_name: 搜索结果缩略图显示收起再展开左侧栏
+    description: 2. 搜索结果无变化
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580897
+    case_name: '[028]右键菜单中的全屏与退出全屏菜单'
+    description: 1. 进入全屏，未选中文本右击，查看右键菜单显示
+  - step_type: assert
+    case_id: case_1580897
+    case_name: '[028]右键菜单中的全屏与退出全屏菜单'
+    description: 1. 进入全屏，未选中文本右击，查看右键菜单显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580897
+    case_name: '[028]右键菜单中的全屏与退出全屏菜单'
+    description: 1. 全屏菜单变成“退出全屏”
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 1. 进入全屏，点击右键菜单中的第一页菜单
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 1. 进入全屏，点击右键菜单中的第一页菜单
+    action: dtk_context_menu
+    items:
+    - 第一页
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 2. 进入全屏，点击右键菜单中的前一页菜单
+    action: dtk_context_menu
+    items:
+    - 前一页
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 3. 进入全屏，点击右键菜单中的后一页菜单
+    action: dtk_context_menu
+    items:
+    - 后一页
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 4. 进入全屏，点击右键菜单中的最后一页菜单
+    action: dtk_context_menu
+    items:
+    - 最后一页
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 5. 进入全屏，点击右键菜单中的保存菜单
+    action: dtk_context_menu
+    items:
+    - 保存
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 6. 进入全屏，点击右键菜单中的另存为菜单
+    action: dtk_context_menu
+    items:
+    - 另存为
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 7. 进入全屏，点击右键菜单中的打印菜单
+    action: dtk_context_menu
+    items:
+    - 打印
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 8. 进入全屏，点击右键菜单中的幻灯片放映菜单
+    action: dtk_context_menu
+    items:
+    - 幻灯片放映
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 9. 进入全屏，点击右键菜单中的退出菜单
+    action: dtk_context_menu
+    items:
+    - 退出
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '1.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '2.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '3.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '4.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '5.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '6.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '7.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: '8.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580895
+    case_name: 全屏中菜单功能
+    description: 9. 1~9.功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580891
+    case_name: 搜索完成后按钮置灰，不应该有hover效果
+    description: 1. 搜索完成后，鼠标放置在左侧栏底部四个按钮之上
+  - step_type: action
+    case_id: case_1580891
+    case_name: 搜索完成后按钮置灰，不应该有hover效果
+    description: 1. 搜索完成后，鼠标放置在左侧栏底部四个按钮之上
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: assert
+    case_id: case_1580891
+    case_name: 搜索完成后按钮置灰，不应该有hover效果
+    description: 1. 按钮置灰，不应该有hover效果
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580783
+    case_name: 全屏显示界面打开放大镜，按esc键退出放大镜
+    description: 1. 全屏显示界面打开放大镜
+  - step_type: action
+    case_id: case_1580783
+    case_name: 全屏显示界面打开放大镜，按esc键退出放大镜
+    description: 1. 全屏显示界面打开放大镜
+    action: dtk_main_menu
+    items:
+    - 放大镜
+  - step_type: action
+    case_id: case_1580783
+    case_name: 全屏显示界面打开放大镜，按esc键退出放大镜
+    description: 2. 按esc键
+    action: keyboard_press
+    key: Escape
+  - step_type: assert
+    case_id: case_1580783
+    case_name: 全屏显示界面打开放大镜，按esc键退出放大镜
+    description: 1. 正常打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580783
+    case_name: 全屏显示界面打开放大镜，按esc键退出放大镜
+    description: 2. 退出放大镜，不会退出全屏显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 1. 搜索关键字，当搜索结果较多正在进行时，点新窗口菜单
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 1. 搜索关键字，当搜索结果较多正在进行时，点新窗口菜单
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 2. 搜索关键字，当搜索结果较多正在进行时，点新标签页菜单
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 3. 搜索关键字，当搜索结果较多正在进行时，点保存菜单
+    action: dtk_main_menu
+    items:
+    - 保存
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 4. 搜索关键字，当搜索结果较多正在进行时，点另存为菜单，另存为新文档
+    action: dtk_main_menu
+    items:
+    - 另存为
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 5. 搜索关键字，当搜索结果较多正在进行时，点击幻灯片放映菜单
+    action: dtk_main_menu
+    items:
+    - 幻灯片放映
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 6. 搜索关键字，当搜索结果较多正在进行时，点击放大镜菜单
+    action: dtk_main_menu
+    items:
+    - 放大镜
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 7. 搜索关键字，当搜索结果较多正在进行时，点击在文件管理器中显示菜单
+    action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 8. 搜索关键字，当搜索结果较多正在进行时，点击在主题菜单
+    action: dtk_main_menu
+    items:
+    - 主题
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 9. 搜索关键字，当搜索结果较多正在进行时，点击在帮助菜单
+    action: dtk_main_menu
+    items:
+    - 帮助
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 10. 搜索关键字，当搜索结果较多正在进行时，点击在关于菜单
+    action: dtk_main_menu
+    items:
+    - 关于
+  - step_type: action
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 11. 搜索关键字，当搜索结果较多正在进行时，点击在退出菜单
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 1. 正常弹出新窗口
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 2. 正常弹出文件管理器选择界面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 3. 正常保存文档
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 4. 可以另存成功
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 5. 进入幻灯片放映界面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 6. 放大镜正常可以使用
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 7. 可以打开所在文件夹
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 8. 正常切换主题
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 9. 进入帮助手册界面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 10. 打开关于弹窗
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580719
+    case_name: 搜索过程中点击主菜单选项
+    description: 11. 退出应用
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580717
+    case_name: 不同百分比显示时进行视图调整
+    description: 1. 百分比调整到10%，分别点击双页显示、适合宽度、 适合高度、适合页面、 左旋转、 右旋转，查看界面显示
+  - step_type: assert
+    case_id: case_1580717
+    case_name: 不同百分比显示时进行视图调整
+    description: 1. 百分比调整到10%，分别点击双页显示、适合宽度、 适合高度、适合页面、 左旋转、 右旋转，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580717
+    case_name: 不同百分比显示时进行视图调整
+    description: 2. 百分比调整到500%，分别点击双页显示、适合宽度、 适合高度、适合页面、 左旋转、 右旋转，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580717
+    case_name: 不同百分比显示时进行视图调整
+    description: 1. 界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580717
+    case_name: 不同百分比显示时进行视图调整
+    description: 2. 界面显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 1. 打开文档，鼠标不点击，任意移动，按键盘上下键或pageup/pagedown
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 1. 打开文档，鼠标不点击，任意移动，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 2. 点击工具栏任意菜单（除去百分比菜单）后，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 3. 点击百分比或页数输入框后，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 4. 展开左边栏，鼠标点击左边栏区域后任意移动，按键盘上下键或pageup/pagedown
+    action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 5. 鼠标点击右侧文档区域后任意移动，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: action
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 6. 鼠标点击窗口外桌面区域，，按键盘上下键或pageup/pagedown
+    action: keyboard_press
+    key: PageDown
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 1. 焦点默认在文档中，文档正常逐行翻页/逐页翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 2. 焦点转移到工具栏
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 3. 焦点在输入框，文档不会进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 4. 焦点在左侧，缩略图进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 5. 焦点在右侧，文档进行翻页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580601
+    case_name: 按快捷键翻页（1040阶段）
+    description: 6. 焦点在桌面中，选中桌面应用
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 1. 打开多份文档并进入全屏
+  - step_type: action
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 1. 打开多份文档并进入全屏
+    action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 2. 全屏界面添加新的文档
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 3. 退出全屏
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: action
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 4. 全屏界面关闭部分文档，再退出全屏
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: assert
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 1. 文档正常显示，不会丢失
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 2. 文档标题正常显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 3. 文档正常显示，不会丢失
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580595
+    case_name: 打开多份文档并进入全屏或退出，不会丢失
+    description: 4. 文档正常显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 1. 打开文档，打开搜索框，未输入关键词查看界面显示
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 1. 打开文档，打开搜索框，未输入关键词查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 2. 打开文档，打开搜索框，输入关键词未按enter键，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 3. 打开文档，打开搜索框，输入关键词并按enter键，查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 1. 向上、向下切换按键置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 2. 向上、向下切换按键置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580585
+    case_name: 【UI】搜索框界面显示
+    description: 3. 向上、向下切换按键高亮显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 1. 打开文档，在输入框中输入英文关键字，如：user，按键盘enter键，查看
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 1. 打开文档，在输入框中输入英文关键字，如：user，按键盘enter键，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 2. 点击搜索框上一个、下一个按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 3. 打开文档，在输入框中输入中文关键字，如：系统，按键盘enter键，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 4. 点击搜索框上一个、下一个按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 1. 搜索结果高亮显示，左侧栏中搜索结果内容与个数显示正确
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 2. 按整个单词跳转，而不是按单个字母跳转；点击“上一个” 、“下一个”按钮均可以起作用，跳转到最后一个关键字后循环切换
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 3. 搜索结果高亮显示，左侧栏中搜索结果个数显示正确
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580583
+    case_name: 多个英文或中文关键字均可以正常搜索到
+    description: 4. 按整个词语跳转，而不是按单个字跳转；点击“上一个” 、“下一个”按钮均可以起作用，跳转到最后一个关键字后循环切换
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__5
+  name: 文档视图操作_6
+  module: 文档视图操作
+  status: active
+  annotation: *id001
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 1. 打开文档，点击最大化按钮
+  - step_type: action
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 1. 打开文档，点击最大化按钮
+    action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - step_type: action
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 2. 点击右键菜单中的“全屏”菜单
+    action: dtk_context_menu
+    items:
+    - “全屏”
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 3. 右击主视图界面弹出右键菜单，点击“退出全屏”菜单
+    action: dtk_context_menu
+    items:
+    - “
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 4. 打开文档，显示为默认窗口大小，点击右键菜单中的“全屏”菜单
+    action: dtk_context_menu
+    items:
+    - “全屏”
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 5. 右击主视图界面弹出右键菜单，点击“退出全屏”菜单
+    action: dtk_context_menu
+    items:
+    - “
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 1. 窗口最大化显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 2. 进入全屏显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 3. 可以退出全屏显示，窗口需保持最大化显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 4. 进入全屏显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580575
+    case_name: 进入全屏再退出，窗口大小需保持之前的状态
+    description: 5. 可以退出全屏显示，窗口需保持默认大小显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 1. 打开文档，点击最大化显示
+  - step_type: action
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 1. 打开文档，点击最大化显示
+    action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - step_type: action
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 2. 鼠标放置在屏幕顶端，按快捷键F11
+    action: keyboard_hot_key
+    key: F11
+  - step_type: action
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 3. 打开文档，点击最大化显示
+    action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - step_type: action
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 4. 鼠标放置在屏幕左侧边缘，按快捷键F11
+    action: keyboard_hot_key
+    key: F11
+  - step_type: assert
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 1. 文档最大化显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 2. 工具栏自动弹出，按钮可点击，不会置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 3. 文档最大化显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580573
+    case_name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+    description: 4. 左侧栏自动弹出，按钮可点击，不会置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580553
+    case_name: 超链接详情浮窗显示
+    description: 1. 打开带有超链接文本的文档，鼠标（默认选择样式）放置在超链接文本之上，查看
+  - step_type: assert
+    case_id: case_1580553
+    case_name: 超链接详情浮窗显示
+    description: 1. 打开带有超链接文本的文档，鼠标（默认选择样式）放置在超链接文本之上，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580553
+    case_name: 超链接详情浮窗显示
+    description: 2. 移走鼠标，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580553
+    case_name: 超链接详情浮窗显示
+    description: 1. 鼠标显示为手形样式，显示超链接详情浮窗，浮窗立即显示无间隔时长，与UI图相符。浮窗内容无法点击
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580553
+    case_name: 超链接详情浮窗显示
+    description: 2. 超链接详情浮窗和手形样式消失，鼠标恢复选择样式
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 1. 鼠标放置在超链接文本之上，弹出手形样式和详情浮窗，点击超链接，查看
+  - step_type: assert
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 1. 鼠标放置在超链接文本之上，弹出手形样式和详情浮窗，点击超链接，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 2. 安全提示弹框弹出后，点击关闭按钮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 3. 安全提示弹框弹出后，点击“阻止”按钮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 4. 安全提示弹框弹出后，点击“允许”按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 1. 弹出安全提示弹框，弹框中显示关闭、“阻止”、“允许”按钮
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 2. 关闭弹窗，不做任何操作
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 3. 关闭弹窗，不做任何操作
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580551
+    case_name: 点击超链接
+    description: 4. 关闭弹窗，打开浏览器并跳转至该链接（网页的超链接会打开浏览器，email超链接会打开邮箱应用，多媒体超链接会打开相应的应用）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580549
+    case_name: 安全提示弹框弹出后，点击应用其他菜单不应该起作用
+    description: 1. 安全提示弹框弹出后，点击应用其他菜单
+  - step_type: action
+    case_id: case_1580549
+    case_name: 安全提示弹框弹出后，点击应用其他菜单不应该起作用
+    description: 1. 安全提示弹框弹出后，点击应用其他菜单
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580549
+    case_name: 安全提示弹框弹出后，点击应用其他菜单不应该起作用
+    description: 1. 点击均无作用
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 1. 点击超链接文本，点击安全提示弹框中的“允许”按钮
+  - step_type: action
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 1. 点击超链接文本，点击安全提示弹框中的“允许”按钮
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 2. 再次点击此超链接
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 1. 关闭弹窗，打开浏览器并跳转至该链接
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 2. 继续弹出安全提示弹框，点击“允许”按钮，浏览器中重新打开另一个标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580545
+    case_name: 每次点击超链接都会弹出安全提示弹框
+    description: 备注：每次点击超链接都会弹出安全提示弹框
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 1. 切换至手形工具，放置在超链接文本之上
+  - step_type: action
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 1. 切换至手形工具，放置在超链接文本之上
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - step_type: action
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 2. 切换至手形工具，点击超链接文本
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - step_type: action
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 3. 切换至手形工具，选中超链接文本或普通文本
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - step_type: action
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 4. 切换至手形工具，右击超链接文本
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 1. 会显示超链接浮窗
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 2. 弹出安全提示弹框，弹框中显示关闭、“阻止”、“允许”按钮，点击各按钮功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 3. 无法选中超链接文本或普通文本
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580543
+    case_name: 切换至手形工具点击超链接
+    description: 4. 弹出搜索相关的右键菜单
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580533
+    case_name: 不选中文本右击
+    description: 1. 不选中，直接右击超链接文本
+  - step_type: action
+    case_id: case_1580533
+    case_name: 不选中文本右击
+    description: 1. 不选中，直接右击超链接文本
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580533
+    case_name: 不选中文本右击
+    description: 1. 弹出包含搜索等的菜单的右键菜单，点击各菜单功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580529
+    case_name: 安全提示弹框弹出后按tab键
+    description: 1. 点击超链接弹出安全提示弹框
+  - step_type: action
+    case_id: case_1580529
+    case_name: 安全提示弹框弹出后按tab键
+    description: 1. 点击超链接弹出安全提示弹框
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580529
+    case_name: 安全提示弹框弹出后按tab键
+    description: 2. 按tab键切换
+    action: keyboard_press
+    key: Tab
+  - step_type: assert
+    case_id: case_1580529
+    case_name: 安全提示弹框弹出后按tab键
+    description: '1.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580529
+    case_name: 安全提示弹框弹出后按tab键
+    description: '2.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580363
+    case_name: 1、视图保持_新安装新标签页首次打开文档
+    description: 1. 在新标签页首次打开文档A
+  - step_type: action
+    case_id: case_1580363
+    case_name: 1、视图保持_新安装新标签页首次打开文档
+    description: 1. 在新标签页首次打开文档A
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: assert
+    case_id: case_1580363
+    case_name: 1、视图保持_新安装新标签页首次打开文档
+    description: 1. 文档A页面视图 默认为适合页面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580353
+    case_name: 6、视图保持_调整页面视图后新窗口打开新文档
+    description: 1. 打开文档A且调整页面视图为A（适合页面）
+  - step_type: action
+    case_id: case_1580353
+    case_name: 6、视图保持_调整页面视图后新窗口打开新文档
+    description: 1. 打开文档A且调整页面视图为A（适合页面）
+    action: dtk_context_menu
+    items:
+    - 适合页面
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580353
+    case_name: 6、视图保持_调整页面视图后新窗口打开新文档
+    description: 2. 在新窗口打开文档B
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: assert
+    case_id: case_1580353
+    case_name: 6、视图保持_调整页面视图后新窗口打开新文档
+    description: 1. 调整页面视图成功
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580353
+    case_name: 6、视图保持_调整页面视图后新窗口打开新文档
+    description: 2. 新打开的文档B页面视图为A（适合页面）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580331
+    case_name: 17、视图保持_修改页面视图后在多标签页打开调整过页面视图的文档
+    description: 1. 窗口1查看文档C且调整页面视图C（200%），窗口2查看文档D且调整页面视图D（适应宽度）
+  - step_type: assert
+    case_id: case_1580331
+    case_name: 17、视图保持_修改页面视图后在多标签页打开调整过页面视图的文档
+    description: 1. 窗口1查看文档C且调整页面视图C（200%），窗口2查看文档D且调整页面视图D（适应宽度）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580331
+    case_name: 17、视图保持_修改页面视图后在多标签页打开调整过页面视图的文档
+    description: 2. 两个窗口分别在新标签页打开文档A、文档B
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: assert
+    case_id: case_1580331
+    case_name: 17、视图保持_修改页面视图后在多标签页打开调整过页面视图的文档
+    description: 1. 调整页面视图成功
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580331
+    case_name: 17、视图保持_修改页面视图后在多标签页打开调整过页面视图的文档
+    description: 2. 文档A页面视图为A（适合页面），文档B页面视图为B（25%）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580329
+    case_name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+    description: 1. 窗口1查看文档C且调整页面视图C（300%），窗口2查看文档D且调整页面视图D（75%）
+  - step_type: assert
+    case_id: case_1580329
+    case_name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+    description: 1. 窗口1查看文档C且调整页面视图C（300%），窗口2查看文档D且调整页面视图D（75%）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580329
+    case_name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+    description: 2. 分别在两个新窗口打开文档A、文档B
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: assert
+    case_id: case_1580329
+    case_name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+    description: 1. 调整页面视图成功
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580329
+    case_name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+    description: 2. 文档A页面视图为A（双页显示、默认大小），文档B页面视图为B（双页显示、500%）
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器_
+  name: 标签页栏
+  module: 标签页栏
+  status: active
+  annotation: &id002
+    测试界面: 主窗口-标签页栏
+    测试功能: 标签页管理（打开/关闭/切换/拖拽）
+    前置条件: 应用已启动
+    AT元素引用:
+    - Form_DocTabBar
+    - DTabBarAddButton
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 1. 打开多个标签页，查看显示
+  - step_type: assert
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 1. 打开多个标签页，查看显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 2. 已打开多个标签页，添加其他标签页
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 3. 点击左移右移按钮
+    action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  - step_type: assert
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 1. 标签栏需全部占满，无空出区域；标签页最小140px；显示效果与设计图一致
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 2. 新添加的标签页高亮显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581293
+    case_name: 多个标签页的显示
+    description: 3. 正常显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 1. 窗口中只有一个标签页，将标签页拖拽到其他应用（如:编辑器）的工具栏或正文区域，查看
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 1. 窗口中只有一个标签页，将标签页拖拽到其他应用（如:编辑器）的工具栏或正文区域，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 2. 窗口中有多个标签页，将标签页拖拽到其他应用（如:编辑器）的工具栏区域，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 3. 窗口中有多个标签页，将标签页拖拽到其他应用（如:编辑器）的正文区域，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 1. 应该无法拖拽
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 2. 打开一个新窗口以显示此标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581279
+    case_name: 标签页拖拽至其他应用
+    description: 3. 打开一个新窗口以显示此标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 1. 打开文档，添加多个标签页
+  - step_type: action
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 1. 打开文档，添加多个标签页
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 2. 点击标题栏的x，关闭所有标签页
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 3. 关闭所有标签页后查看界面显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 1. 正常添加
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: 2. 正常关闭，若有编辑内容会弹出是否保存的提示弹框
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581273
+    case_name: 关闭所有标签页界面显示
+    description: '3.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 1. 打开多份文档文档，点击标签页右侧的+按钮
+  - step_type: action
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 1. 打开多份文档文档，点击标签页右侧的+按钮
+    action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - step_type: action
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 2. 退出选择界面，点击标签页中X进行关闭
+    action: dtk_main_menu
+    items:
+    - 退出
+  - step_type: action
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 3. 打开多份文档文档，其中一份文档A编辑后，点击标签页中X
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 4. 点击弹框中的保存
+    action: dtk_main_menu
+    items:
+    - 保存
+  - step_type: action
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 5. 点击弹框中的不保存
+    action: keyboard_press
+    key: Tab
+  - step_type: assert
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 1. 进入文件选择界面
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 2. 正常关闭
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 3. 弹出是否保存的提示弹框
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 4. 文档A关闭，再次打开文档A，编辑的内容正常保存
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581269
+    case_name: 关闭标签页
+    description: 5. 文档A关闭，再次打开文档A，编辑的内容未保存
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 1. 单个窗口中只有一个标签页，拖拽标签页移出窗口，查看
+  - step_type: assert
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 1. 单个窗口中只有一个标签页，拖拽标签页移出窗口，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 2. 单个窗口中只有一个标签页，拖拽标签页移至所在窗口的正文区域，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 3. 单个窗口中只有一个标签页，拖拽标签页移至所在窗口内标签栏或工具栏
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 1. 无法拖拽，无提示弹出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 2. 无法拖拽，无提示弹出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581265
+    case_name: 单个窗口中标签页拖拽
+    description: 3. 无法拖拽，无提示弹出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581255
+    case_name: 切换标签页状态显示
+    description: 1. 打开多个标签页，点击视图调整中适合高度、适合宽度、双页、左旋转、右旋转菜单；调整百分
+  - step_type: action
+    case_id: case_1581255
+    case_name: 切换标签页状态显示
+    description: 1. 打开多个标签页，点击视图调整中适合高度、适合宽度、双页、左旋转、右旋转菜单；调整百分
+    action: dtk_context_menu
+    items:
+    - 适合宽度
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: assert
+    case_id: case_1581255
+    case_name: 切换标签页状态显示
+    description: 2. 点击切换另一个标签页，查看视图调整中菜单显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581255
+    case_name: 切换标签页状态显示
+    description: 1. 页面正常进入相应状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581255
+    case_name: 切换标签页状态显示
+    description: 2. 显示当前页的状态
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 1. 未打开任何文档查看器窗口时，双击一份文档，查看
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 1. 未打开任何文档查看器窗口时，双击一份文档，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 2. 已打开一个文档查看器窗口，双击另一份文档并查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 3. 有多个窗口时，双击文档并查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 1. 文档在一个新窗口中打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 2. .窗口中新增标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581089
+    case_name: 多窗口多标签页时双击打开文档
+    description: 3. 文档展示在最早开启的窗口中
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581087
+    case_name: 多窗口多标签页时不支持打开相同文档
+    description: 1. 只打开一个窗口并添加文档A,双击/拖拽/点击添加标签页菜单方式打开再次添加文档A至此窗口
+  - step_type: action
+    case_id: case_1581087
+    case_name: 多窗口多标签页时不支持打开相同文档
+    description: 1. 只打开一个窗口并添加文档A,双击/拖拽/点击添加标签页菜单方式打开再次添加文档A至此窗口
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581087
+    case_name: 多窗口多标签页时不支持打开相同文档
+    description: 2. 打开多个窗口，文档A已在其中一个窗口打开，双击/拖拽/点击添加标签页菜单方式打开再次拖拽文档A至任意窗口，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581087
+    case_name: 多窗口多标签页时不支持打开相同文档
+    description: 1. 无法添加相同文档，激活当前页，无提示弹出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581087
+    case_name: 多窗口多标签页时不支持打开相同文档
+    description: 2. 无法添加相同文档，激活当前页，无提示弹出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 1. 打开多个窗口，每个窗口中分别有多个标签页
+  - step_type: action
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 1. 打开多个窗口，每个窗口中分别有多个标签页
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 2. 将一个窗口标签页拖拽到另外一个窗口中任意位置
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 3. .当窗口A中只有一个标签页，将此标签页拖拽至其他窗口，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: '1.'
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 2. 标签页可以正常在不同窗口之间拖拽移动，拖拽过程中鼠标显示绿色可拖拽标志
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581085
+    case_name: 多窗口多标签页时窗口间文档互相拖拽
+    description: 3. 窗口A自动关闭退出
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581083
+    case_name: 多窗口多标签页时拖拽打开新窗口
+    description: 1. 拖拽标签页移至另一个窗口中标签栏和文档区域，查看
+  - step_type: assert
+    case_id: case_1581083
+    case_name: 多窗口多标签页时拖拽打开新窗口
+    description: 1. 拖拽标签页移至另一个窗口中标签栏和文档区域，查看
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581083
+    case_name: 多窗口多标签页时拖拽打开新窗口
+    description: 2. 拖拽标签页至另一个窗口中工具栏区域或移出当前窗口，查看是否创建一个新的窗口
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581083
+    case_name: 多窗口多标签页时拖拽打开新窗口
+    description: 1. 标签页合并至另一个窗口中，拖拽过程中鼠标显示绿色可拖拽标志；拖动过程中界面显示正确
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581083
+    case_name: 多窗口多标签页时拖拽打开新窗口
+    description: 2. 正常创建一个新的窗口，拖拽过程中鼠标显示绿色可拖拽标志
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 1. 在不同标签页中进行搜索
+  - step_type: action
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 1. 在不同标签页中进行搜索
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 2. 切换产生搜索结果的标签页
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 3. 点击当前页搜索框中的关闭按钮
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 1. 每个标签页分别显示搜索结果，
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 2. 每个标签页的搜索结果和搜索弹框正常显示不会被关闭
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581079
+    case_name: 单个窗口中多标签页管理
+    description: 3. 仅当前页搜索结果被正常关闭，其他标签页搜索弹框和搜索结果仍正常显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 1. 窗口中打开多个标签页直到超过标签栏范围，窗口界面显示
+  - step_type: action
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 1. 窗口中打开多个标签页直到超过标签栏范围，窗口界面显示
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 2. 点击左翻按钮
+    action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  - step_type: action
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 3. 点击右翻按钮
+    action: element_action
+    selector:
+      name: 向右滚动
+      role: button
+    do: click
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 4. 选择首个标签页或左侧无隐藏文件时，查看左翻按钮是否置灰
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 5. 选择最后一个标签页右侧无隐藏文件时，查看右翻按钮是否置灰
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 1. 左翻箭头高亮显示，可以点击
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 2. 左侧隐藏的文档左移
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 3. 右侧隐藏的文档右移
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 4. 左翻按钮置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581077
+    case_name: 单个窗口中多标签页管理
+    description: 5. 右翻按钮置灰显示
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 1. 长按任意一个标签页拖拽，查看是否正常调整标签页排序
+  - step_type: assert
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 1. 长按任意一个标签页拖拽，查看是否正常调整标签页排序
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 2. 在标签栏滚动鼠标，查看是否可以滚动切换标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 3. 点击切换标签页
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 1. 可以调整标签页排序
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 2. 可以滚动切换标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581075
+    case_name: 单个窗口中多标签页管理
+    description: 3. 正常切换无异常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 1. 点击多标签栏右侧“+”图标添加新标签页
+  - step_type: action
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 1. 点击多标签栏右侧“+”图标添加新标签页
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 2. 从文件管理器或桌面中拖拽其他文档至窗口中
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 3. 点击菜单中的“新标签页”菜单添加新标签页
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 4. 双击另一份文档
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 5. 右击另一份文档，选择文档查看器
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 1. 可以在已打开的窗口中添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 2. 可以在已打开的窗口中添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 3. 可以在已打开的窗口中添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 4. 可以在已打开的窗口中添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581073
+    case_name: 单个窗口已有文档界面添加多标签页方式
+    description: 5. 可以在已打开的窗口中添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 1. 窗口中无标签页，打开文档查看器进入初始页面，从文件管理器或桌面拖拽多个文档添加
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 1. 窗口中无标签页，打开文档查看器进入初始页面，从文件管理器或桌面拖拽多个文档添加
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 2. 窗口中无标签页，点击菜单中的“新标签页”菜单，查看是否添加新标签页
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 3. 窗口中无标签页，双击另一份文档
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 4. 窗口中无标签页，右击另一份文档，选择文档查看器
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 1. 可以在已打开的窗口窗口中显示多个标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 2. 可以在已打开的窗口添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 3. 可以在已打开的窗口添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1581071
+    case_name: 单个窗口初始界面添加多标签页方式
+    description: 4. 可以在已打开的窗口添加标签页，文档显示正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_v25_2500_测试部专用_b类解耦商店应用_文档查看器__1
+  name: 标签页栏_2
+  module: 标签页栏
+  status: active
+  annotation: *id002
+  steps:
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 1. 不同窗口间文档拖拽
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 1. 不同窗口间文档拖拽
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 2. 窗口中拖拽添加的文档，进行视图调整操作：双页显示、适应高度、适应宽度、左旋转、右旋转
+    action: dtk_context_menu
+    items:
+    - 双页显示
+    selector:
+      name: BrowserMenu
+      role: panel
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 3. 窗口中拖拽添加的文档，添加书签、高亮、注释
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 4. 窗口中拖拽添加的文档，进行翻页操作
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 5. 窗口中拖拽添加的文档，选择选择工具和手形工具拖拽文档
+    action: dtk_main_menu
+    items:
+    - 工具
+    - 选择工具
+  - step_type: action
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 6. 窗口中拖拽添加的文档，点击菜单中选项：新窗口、新标签页、保存、另存为、打印、幻灯片放映、放大镜、文档信息、在文件管理器中显示、主题、帮助、关于、退出
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 1. 正常拖拽
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 2. 功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 3. 功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 4. 功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 5. 功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580989
+    case_name: 文档拖拽后各功能正常
+    description: 6. 功能正常
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    action: session_start
+    command: deepin-reader
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 1. 打开文档查看器后，点击“新窗口”菜单
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 1. 打开文档查看器后，点击“新窗口”菜单
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: action
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 2. 拖拽文档至新打开的窗口中
+    action: UNSUPPORTED
+  - step_type: action
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 3. 在新窗口中点击“选择文件”按钮打开文档
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 4. 在新窗口中点击“新标签页”添加文档
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 5. 关闭旧窗口，双击桌面或文件夹的一份文档
+    action: UNSUPPORTED
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 1. 打开一个新的窗口
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 2. 文档在新窗口中正常打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 3. 文档在新窗口中正常打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 4. 文档在新窗口中正常打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - step_type: assert
+    case_id: case_1580603
+    case_name: 新开启的窗口中文档打开正常
+    description: 5. 文档在新窗口中正常打开
+    action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form

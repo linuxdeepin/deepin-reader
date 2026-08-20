@@ -1,0 +1,55 @@
+metadata:
+  source: 文档查看器V25-用例.xlsx
+cases:
+- id: case_1704991
+  name: 【玲珑】【文档查看器】卸载指定版本的玲珑应用
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704989
+  name: 【玲珑】【文档查看器】卸载玲珑应用
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704987
+  name: 【玲珑】【文档查看器】查看玲珑应用包含的文件
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704985
+  name: 【玲珑】【文档查看器】杀掉玲珑应用运行进程
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704983
+  name: 【玲珑】【文档查看器】检查玲珑应用运行情况
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704981
+  name: 【玲珑】【文档查看器】进入容器内部
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704975
+  name: 【玲珑】【文档查看器】玲珑应用，基本功能测试
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704971
+  name: 【玲珑】【文档查看器】运行玲珑应用
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704969
+  name: 【玲珑】【文档查看器】安装玲珑应用指定版本
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704967
+  name: 【玲珑】【文档查看器】安装玲珑应用
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704965
+  name: 【玲珑】【文档查看器】仓库玲珑应用信息
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: case_1704963
+  name: 【玲珑】【文档查看器】查看玲珑应用信息
+  status: non_gui
+  reason: terminal CLI operation, no GUI
+- id: suite_compatibility
+  name: 多语言兼容性测试
+  status: non_gui
+  reason: 需要切换系统语言环境，无法在当前环境自动化
