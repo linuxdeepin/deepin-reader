@@ -1,0 +1,76 @@
+name: 左侧栏—缩略图视图_suite
+app: deepin-reader
+description: ''
+module: 左侧栏—缩略图视图
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_023_s1
+  name: 缩略图 — 缩略图视图翻页和跳转
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  assert_steps:
+  - action: assert_window
+  - action: assert_window
+teardown:
+- action: session_stop

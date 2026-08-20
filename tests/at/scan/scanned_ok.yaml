@@ -1,0 +1,120 @@
+---
+class_name: SideBarImageListView
+source_file: sidebar/SideBarImageListview.cpp
+base_classes:
+- DListView
+is_ui_widget: true
+object_names:
+- sideBarImageListView
+- sideBarImageListViewViewport
+accessible_names:
+- Menu_BookMark
+- Menu_Note
+dtk_instantiations:
+- DListView
+action_texts: []
+menu_actions: []
+---
+class_name: SideBarImageListView
+source_file: sidebar/SideBarImageListview.cpp
+base_classes: []
+is_ui_widget: false
+object_names:
+- sideBarImageListView
+- sideBarImageListViewViewport
+accessible_names:
+- Menu_BookMark
+- Menu_Note
+dtk_instantiations:
+- DListView
+action_texts: []
+menu_actions: []
+---
+class_name: BrowserMenu
+source_file: browser/BrowserMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names: []
+accessible_names:
+- Menu_Browser
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: EncryptionPage
+source_file: widgets/EncryptionPage.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names:
+- ensureBtn
+- passwdEdit
+accessible_names: []
+dtk_instantiations:
+- DPasswordEdit
+action_texts: []
+menu_actions: []
+---
+class_name: HandleMenu
+source_file: widgets/HandleMenu.cpp
+base_classes:
+- DMenu
+is_ui_widget: true
+object_names:
+- defaultshape
+- handleshape
+accessible_names: []
+dtk_instantiations: []
+action_texts:
+- Hand Tool
+- Select Text
+menu_actions: []
+---
+class_name: PagingWidget
+source_file: widgets/PagingWidget.cpp
+base_classes:
+- BaseWidget
+is_ui_widget: false
+object_names:
+- Edit_Page
+- Edit_Page_P
+- thumbnailNextBtn
+- thumbnailPreBtn
+accessible_names:
+- Button_ThumbnailNext
+- Button_ThumbnailPre
+- CurrentPage
+- Label_TotalPage
+- Page
+- pageEdit
+dtk_instantiations:
+- DIconButton
+- DLabel
+- DLineEdit
+action_texts: []
+menu_actions: []
+---
+class_name: TextEditShadowWidget
+source_file: widgets/TextEditWidget.cpp
+base_classes:
+- DWidget
+is_ui_widget: true
+object_names:
+- TextEditShadowWidget
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []
+---
+class_name: TransparentTextEdit
+source_file: widgets/TransparentTextEdit.cpp
+base_classes:
+- QTextEdit
+is_ui_widget: true
+object_names:
+- TransparentTextEdit
+accessible_names: []
+dtk_instantiations: []
+action_texts: []
+menu_actions: []

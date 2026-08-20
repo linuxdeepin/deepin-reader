@@ -1,0 +1,292 @@
+name: 文档区域(右键菜单)_suite
+app: deepin-reader
+description: ''
+module: 文档区域(右键菜单)
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_016_s1
+  name: 右键菜单 — 右键菜单功能验证
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  assert_steps:
+  - action: assert_window
+  - action: assert_window
+teardown:
+- action: session_stop

@@ -1,0 +1,272 @@
+version: '1.0'
+app: deepin-reader
+summary:
+  total_ui_classes: 43
+  classes_with_names: 6
+  classes_missing_names: 37
+gaps:
+- class_name: SideBarImageListView
+  source_file: sidebar/SideBarImageListview.h
+  base_classes:
+  - DListView
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: BrowserMagniFier
+  source_file: browser/BrowserMagniFier.cpp
+  base_classes:
+  - QLabel
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: BrowserMagniFier
+  source_file: browser/BrowserMagniFier.h
+  base_classes:
+  - QLabel
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: BrowserMenu
+  source_file: browser/BrowserMenu.h
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: CatalogTreeView
+  source_file: sidebar/CatalogTreeView.cpp
+  base_classes:
+  - DTreeView
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: CatalogTreeView
+  source_file: sidebar/CatalogTreeView.h
+  base_classes:
+  - DTreeView
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: LoadingWidget
+  source_file: uiframe/DocSheet.cpp
+  base_classes:
+  - QWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: LoadingWidget
+  source_file: uiframe/DocSheet.h
+  base_classes:
+  - QWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: DocTabBar
+  source_file: uiframe/DocTabBar.cpp
+  base_classes:
+  - DTabBar
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DTabBar
+- class_name: DocTabBar
+  source_file: uiframe/DocTabBar.h
+  base_classes:
+  - DTabBar
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TitleMenu
+  source_file: uiframe/TitleMenu.cpp
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TitleMenu
+  source_file: uiframe/TitleMenu.h
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: BaseWidget
+  source_file: widgets/BaseWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: BaseWidget
+  source_file: widgets/BaseWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: EncryptionPage
+  source_file: widgets/EncryptionPage.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: FileAttrWidget
+  source_file: widgets/FileAttrWidget.cpp
+  base_classes:
+  - DAbstractDialog
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DAbstractDialog
+- class_name: ImageWidget
+  source_file: widgets/FileAttrWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: FileAttrWidget
+  source_file: widgets/FileAttrWidget.h
+  base_classes:
+  - DAbstractDialog
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: FindWidget
+  source_file: widgets/FindWidget.cpp
+  base_classes:
+  - DFloatingWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DFloatingWidget
+- class_name: FindWidget
+  source_file: widgets/FindWidget.h
+  base_classes:
+  - DFloatingWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: HandleMenu
+  source_file: widgets/HandleMenu.h
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: RestoreTipWidget
+  source_file: widgets/RestoreTipWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DIconButton
+- class_name: RestoreTipWidget
+  source_file: widgets/RestoreTipWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: RoundColorWidget
+  source_file: widgets/RoundColorWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: RoundColorWidget
+  source_file: widgets/RoundColorWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: ScaleMenu
+  source_file: widgets/ScaleMenu.cpp
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: ScaleMenu
+  source_file: widgets/ScaleMenu.h
+  base_classes:
+  - DMenu
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: SlidePlayWidget
+  source_file: widgets/SlidePlayWidget.cpp
+  base_classes:
+  - DFloatingWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DFloatingWidget
+- class_name: SlidePlayWidget
+  source_file: widgets/SlidePlayWidget.h
+  base_classes:
+  - DFloatingWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: SlideWidget
+  source_file: widgets/SlideWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: SlideWidget
+  source_file: widgets/SlideWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TextEditShadowWidget
+  source_file: widgets/TextEditWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TipsWidget
+  source_file: widgets/TipsWidget.cpp
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TipsWidget
+  source_file: widgets/TipsWidget.h
+  base_classes:
+  - DWidget
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: TransparentTextEdit
+  source_file: widgets/TransparentTextEdit.h
+  base_classes:
+  - QTextEdit
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []
+- class_name: WordWrapLabel
+  source_file: widgets/WordWrapLabel.cpp
+  base_classes:
+  - DLabel
+  object_names: []
+  accessible_names: []
+  dtk_instantiations:
+  - DLabel
+- class_name: WordWrapLabel
+  source_file: widgets/WordWrapLabel.h
+  base_classes:
+  - DLabel
+  object_names: []
+  accessible_names: []
+  dtk_instantiations: []

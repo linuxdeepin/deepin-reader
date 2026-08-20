@@ -1,0 +1,575 @@
+cases:
+- description: 【玲珑】【文档查看器】卸载指定版本的玲珑应用
+  id: case_1704991
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】卸载指定版本的玲珑应用
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli uninstall org.deepin.reader/6.0.17
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 在终端执行命令：ll-cli info org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 【文档查看器】玲珑指定版本的应用卸载成功
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 没有指定版本玲珑应用【文档查看器】的应用信息
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】卸载玲珑应用
+  id: case_1704989
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】卸载玲珑应用
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli uninstall org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 在终端执行命令：ll-cli info org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 【文档查看器】玲珑应用卸载成功
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 没有玲珑应用【文档查看器】的应用信息
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】查看玲珑应用包含的文件
+  id: case_1704987
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】查看玲珑应用包含的文件
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli content org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 展示已安装的【文档查看器】应用包含的文件
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】杀掉玲珑应用运行进程
+  id: case_1704985
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】杀掉玲珑应用运行进程
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli kill org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 终止后再次终端执行命令：ll-cli ps
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 【文档查看器】应用进程运行被终止
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 没有显示【文档查看器】运行
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】检查玲珑应用运行情况
+  id: case_1704983
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】检查玲珑应用运行情况
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli ps
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以查看到【文档查看器】的运行情况，包含：App、ContainerID、Pid、Path
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】进入容器内部
+  id: case_1704981
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】进入容器内部
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli run org.deepin.reader --exec /bin/bash
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 进入【文档查看器】容器内部，可以内部执行命令，例如：ls
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】玲珑应用，基本功能测试
+  id: case_1704975
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】玲珑应用，基本功能测试
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 【文档查看器】应用，双击运行
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 选择pdf、djvu、docx文件类型打开浏览
+    needs_accessible_name: false
+    step_type: action
+  - description: 3. 搜索、添加/删除书签、注释等功能
+    needs_accessible_name: false
+    step_type: action
+  - description: 4. 全屏、幻灯片放映
+    needs_accessible_name: false
+    step_type: action
+  - description: 5. 文档信息查看
+    needs_accessible_name: false
+    step_type: assert
+  - description: 1. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 3. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 4. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 5. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】运行玲珑应用
+  id: case_1704971
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】运行玲珑应用
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli run org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 打开运行【文档查看器】应用
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】安装玲珑应用指定版本
+  id: case_1704969
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】安装玲珑应用指定版本
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli run org.deepin.reader/6.0.17
+    needs_accessible_name: false
+    step_type: action
+  - description: '1.0'
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】安装玲珑应用
+  id: case_1704967
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】安装玲珑应用
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli install org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 等待一段时间后，【文档查看器】安装完成(如果有多个版本，默认安装最高版本)，可以使用命令查看信息：ll-cli info org.deepin.reader
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】仓库玲珑应用信息
+  id: case_1704965
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】仓库玲珑应用信息
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli search org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 展示【文档查看器】应用的相关信息，包含appid、name、version、arch、channel、module、description；如果版本有多个，则全部展示
+    needs_accessible_name: false
+    step_type: assert
+- description: 【玲珑】【文档查看器】查看玲珑应用信息
+  id: case_1704963
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器(#110615)
+  name: 【玲珑】【文档查看器】查看玲珑应用信息
+  reason: ''
+  status: non_gui
+  steps:
+  - description: 1. 在终端执行命令：ll-cli info org.deepin.reader
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 展示玲珑应用(文档查看器)的应用信息；
+    needs_accessible_name: false
+    step_type: assert
+  - description: 'PS: 没有安装则不展示应用信息'
+    needs_accessible_name: false
+    step_type: assert
+- description: 打开大量窗口
+  id: case_1581003
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: 打开大量窗口
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 打开大量窗口，查看是否卡顿
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 打开20个窗口，查看界面显示
+    needs_accessible_name: false
+    step_type: assert
+  - description: 1. 最大限制打开20个窗口，无卡顿
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 窗口错开显示。任务栏和桌面打开窗口的数量正确
+    needs_accessible_name: false
+    step_type: assert
+- description: 产生大量搜索结果无卡顿
+  id: case_1580999
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: 产生大量搜索结果无卡顿
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 产生大量搜索结果，查看应用状态
+    needs_accessible_name: false
+    step_type: assert
+  - description: 1. 显示正常，无卡顿
+    needs_accessible_name: false
+    step_type: assert
+- description: 批量添加注释
+  id: case_1580997
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: 批量添加注释
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 添加多个图标注释/高亮注释（100个及以上），查看
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 添加完成后，右击注释目录，选择“删除所有”，查看
+    needs_accessible_name: false
+    step_type: assert
+  - description: 1. 显示正常无卡顿
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 正常删除，左边栏和右侧文档中的注释均清空
+    needs_accessible_name: false
+    step_type: assert
+- description: 多平台测试
+  id: case_1580995
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/性能(#114169)
+  name: 多平台测试
+  reason: performance test requiring measurement tools
+  status: unsupported
+  steps:
+  - description: 1. 分别在兆芯、龙芯、ARM平台测试
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+- description: PDF文档中批量添加书签
+  id: case_1580981
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: PDF文档中批量添加书签
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 打开PDF文档，添加100个书签
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 右击任意一个书签目录，点击“删除所有”菜单
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 添加成功
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 正常删除，左边栏和右侧文档书签均清空删除
+    needs_accessible_name: false
+    step_type: assert
+- description: 撤销更改（68M文档）响应时间
+  id: case_1580965
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/性能(#114169)
+  name: 撤销更改（68M文档）响应时间
+  reason: performance test requiring measurement tools
+  status: unsupported
+  steps:
+  - description: 1. 打开68M文档，编辑注释内容，按Ctrl+Z撤销更改
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 撤销完成的响应时间<2秒
+    needs_accessible_name: false
+    step_type: assert
+- description: 连续快速打开关闭单页大文档20次
+  id: case_1580889
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: 连续快速打开关闭单页大文档20次
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 连续快速打开关闭单页大文档20次
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 正常打开无异常
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击工具栏菜单按钮
+  id: case_1580837
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)
+  name: 单指手势单击工具栏菜单按钮
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 打开多份文档，单击工具栏菜单按钮
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击任意缩略图
+  id: case_1580835
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)
+  name: 单指手势单击任意缩略图
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 展开左侧栏，单击选择书签、目录、缩略图、注释功能
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 展开左侧栏，单击选择任意缩略图
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击视图方式
+  id: case_1580833
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)
+  name: 单指手势单击视图方式
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 单击放大缩小下拉框，选中视图方式
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击增加、切换标签页
+  id: case_1580831
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)
+  name: 单指手势单击增加、切换标签页
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 单击+按钮增加标签页
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 点击标签页切换显示
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 进入文件管理选择界面
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 可以切换显示
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指双击
+  id: case_1580829
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)
+  name: 单指双击
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 应用工具栏一指双击
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 再次双击
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 窗口最大化
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 恢复原来窗口大小
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击工具栏菜单按钮
+  id: case_1580817
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指手势单击工具栏菜单按钮
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 打开多份文档，单击工具栏菜单按钮
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 功能正常
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击任意缩略图
+  id: case_1580815
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指手势单击任意缩略图
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 展开左侧栏，单击选择书签、目录、缩略图、注释功能
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 展开左侧栏，单击选择任意缩略图
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击视图方式
+  id: case_1580813
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指手势单击视图方式
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 单击放大缩小下拉框，选中视图方式
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以正常选择切换
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指手势单击增加、切换标签页
+  id: case_1580811
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指手势单击增加、切换标签页
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 单击+按钮增加标签页
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 点击标签页切换显示
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 进入文件管理选择界面
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 可以切换显示
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指双击
+  id: case_1580809
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指双击
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 应用工具栏单指双击
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 再次双击
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 窗口最大化
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 恢复原来窗口大小
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指移动窗口的位置
+  id: case_1580807
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指移动窗口的位置
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 鼠标点击窗口的工具栏和左侧栏底部工具栏区域，不抬起手指，在屏幕上移动
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可以移动窗口的位置
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指拖拽批量文件到应用内
+  id: case_1580805
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指拖拽批量文件到应用内
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 文件夹中有多份文档，单指拖拽批量文件到应用内
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 应用中打开多个标签页
+    needs_accessible_name: false
+    step_type: assert
+- description: 单指拖拽拉伸窗口大小
+  id: case_1580803
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸屏(#114151)
+  name: 单指拖拽拉伸窗口大小
+  reason: requires touchscreen/trackpad hardware input
+  status: unsupported
+  steps:
+  - description: 1. 单指拖拽应用边角任意位置
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 可拉伸窗口大小
+    needs_accessible_name: false
+    step_type: assert
+- description: 切换系统语言后，检查翻译是否正确
+  id: case_1580755
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/兼容性(#114173)
+  name: 切换系统语言后，检查翻译是否正确
+  reason: compatibility test requiring specific environment
+  status: unsupported
+  steps:
+  - description: 1. 切换系统语言为英文，打开文档后查看各界面翻译是否正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 切换系统语言为繁体中文（香港），打开文档后查看各界面翻译是否正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 3. 切换系统语言为正体中文（台湾），打开文档后查看各界面翻译是否正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 4. 切换系统语言为藏语（终端locale查询显示Bo则表示切换成功），打开文档后查看各界面翻译是否正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 5. 切换系统语言为维吾尔语，打开文档后查看各界面翻译是否正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 1. 查看各界面显示正确，基本功能使用正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 查看各界面显示正确，基本功能使用正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 3. 查看各界面显示正确，基本功能使用正常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 4. 查看各界面显示正确
+    needs_accessible_name: false
+    step_type: assert
+  - description: 5. 查看各界面显示正确
+    needs_accessible_name: false
+    step_type: assert
+- description: 打开PDF和DOCX大文档无异常
+  id: case_1580491
+  module: /V25_2500（测试部专用）/B类解耦商店应用/文档查看器/压力(#114171)
+  name: 打开PDF和DOCX大文档无异常
+  reason: stress test requiring special environment/tools
+  status: unsupported
+  steps:
+  - description: 1. 打开50M、100M、200M、300M左右的PDF大文档
+    needs_accessible_name: false
+    step_type: action
+  - description: 2. 打开10M、20M、50M、100M左右的DOCX大文档
+    needs_accessible_name: false
+    step_type: action
+  - description: 1. 正常打开，点击菜单无异常
+    needs_accessible_name: false
+    step_type: assert
+  - description: 2. 正常打开，点击菜单无异常
+    needs_accessible_name: false
+    step_type: assert
+metadata:
+  generated_at: '2026-08-20T13:49:19.813397'
+  source: 文档查看器V25-用例.xlsx

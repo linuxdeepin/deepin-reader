@@ -1,0 +1,52 @@
+name: 标题栏窗口按钮_suite
+app: deepin-reader
+description: ''
+module: 标题栏窗口按钮
+tags: []
+fast_fail: false
+env_check: []
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_005_s1
+  name: 窗口管理 — 窗口最小化/最大化/关闭
+  description: ''
+  tags: []
+  steps:
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  - action: element_action
+    do: click
+  assert_steps:
+  - action: assert_window
+  - action: assert_window
+teardown:
+- action: session_stop
