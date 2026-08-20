@@ -365,22 +365,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
         <source>No eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Brak ochrony oczu</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Klasyczna ochrona oczu</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Zielona ochrona oczu</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Nocna ochrona oczu</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
         <source>Reading mode</source>
-        <translation type="unfinished"/>
+        <translation>Tryb czytania</translation>
     </message>
 </context>
 <context>
@@ -459,17 +459,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"/>
+        <translation>Przywrócono poprzednią pozycję czytania</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"/>
+        <translation>Skocz do pierwszej strony</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Zamknij</translation>
     </message>
 </context>
 <context>
@@ -941,7 +941,7 @@
     <message>
         <location filename="../reader/main.cpp" line="77"/>
         <source>Batch print documents without UI.</source>
-        <translation type="unfinished"/>
+        <translation>Drukuj seryjnie dokumenty bez interfejsu użytkownika.</translation>
     </message>
 </context>
 </TS>
