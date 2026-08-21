@@ -1,0 +1,154 @@
+name: 文档视图_右键菜单_suite
+app: deepin-reader
+module: 文档视图_右键菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_右键菜单_001_s1
+  name: 右键菜单_页面导航
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: push button
+    do: click
+    wait: 2.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 第一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 前一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 后一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 最后一页
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_文档视图_右键菜单_002_s1
+  name: 右键菜单_幻灯片放映_窗口状态保持
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: push button
+    do: click
+    wait: 2.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+    do: click
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 幻灯片放映
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 幻灯片放映
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+    do: assert_not_exists
+teardown:
+- action: session_stop

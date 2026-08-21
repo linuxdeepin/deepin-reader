@@ -1,0 +1,115 @@
+name: 文档打开_suite
+app: deepin-reader
+module: 文档打开
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档打开_001_s1
+  name: 通过选择文件按钮打开docx文档
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_002_s1
+  name: 通过Ctrl+O快捷键打开docx文档
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    selector:
+      name: Ctrl+O
+    do: press
+    key: ctrl+o
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_003_s1
+  name: 通过新标签页菜单打开docx文档
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: dtk_main_menu
+    selector:
+      name: 新标签页
+    do: click
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_004_s1
+  name: 通过标签栏+按钮打开docx文档
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: wait
+    selector:
+      name: Button_ThumbnailToggle
+    do: wait_visible
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_005_s1
+  name: 退出文件选择界面
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    selector:
+      name: Ctrl+O
+    do: press
+    key: ctrl+o
+  - action: wait
+    selector:
+      name: 文件选择对话框
+    do: wait_visible
+  - action: keyboard_press
+    selector:
+      name: ESC
+    do: press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+teardown:
+- action: session_stop
