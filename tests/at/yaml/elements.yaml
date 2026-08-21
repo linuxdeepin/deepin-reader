@@ -1,0 +1,104 @@
+elements:
+  DTabBarAddButton:
+    name: DTabBarAddButton
+  DTitlebarDWindowOptionButton:
+    name: DTitlebarDWindowOptionButton
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: push button
+  DTitlebarDWindowCloseButton:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: push button
+  docx文档:
+    name: docx文档
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+  Ctrl+O:
+    name: Ctrl+O
+  新标签页:
+    name: 新标签页
+  文件选择对话框:
+    name: 文件选择对话框
+  ESC:
+    name: ESC
+  Form_CentralDocPage:
+    name: Form_CentralDocPage
+    role: form
+  PagingWidget:
+    name: PagingWidget
+    role: panel
+  DTitlebarDWindowQuitFullscreenButton:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: push button
+  DTitlebarIconLabel:
+    name: DTitlebarIconLabel
+    role: button
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  ? ''
+  : name: ''
+    role: page tab list
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  新窗口:
+    name: 新窗口
+    role: menu item
+  保存:
+    name: 保存
+    role: menu item
+  另存为:
+    name: 另存为
+    role: menu item
+  在文件管理器中显示:
+    name: 在文件管理器中显示
+    role: menu item
+  放大镜:
+    name: 放大镜
+    role: menu item
+  工具:
+    name: 工具
+    role: menu item
+  选择工具:
+    name: 选择工具
+    role: menu item
+  手形工具:
+    name: 手形工具
+    role: menu item
+  搜索:
+    name: 搜索
+    role: menu item
+  打印:
+    name: 打印
+    role: menu item
+  主题:
+    name: 主题
+    role: menu item
+  浅色:
+    name: 浅色
+    role: menu item
+  深色:
+    name: 深色
+    role: menu item
+  跟随系统:
+    name: 跟随系统
+    role: menu item
+  帮助:
+    name: 帮助
+    role: menu item
+  关于:
+    name: 关于
+    role: menu item
+  退出:
+    name: 退出
+    role: menu item

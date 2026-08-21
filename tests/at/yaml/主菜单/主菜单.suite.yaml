@@ -1,0 +1,129 @@
+name: 主菜单_suite
+app: deepin-reader
+module: 主菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_主菜单_001_s1
+  name: 关于
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  assert_steps:
+  - action: assert_ocr_exists
+    text: 文档查看器
+- id: suite_主菜单_002_s1
+  name: 新标签页
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_主菜单_003_s1
+  name: 主题切换
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  - action: wait
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_主菜单_004_s1
+  name: 新窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_主菜单_005_s1
+  name: 退出（无编辑）
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  assert_steps:
+  - action: assert_window
+- id: suite_主菜单_006_s1
+  name: 窗口最大化
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: wait
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+- id: suite_主菜单_007_s1
+  name: 窗口关闭
+  description: ''
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_window
+- id: suite_主菜单_008_s1
+  name: Alt+F4退出（无编辑）
+  description: ''
+  steps:
+  - action: keyboard_hot_key
+    key: Alt+F4
+  assert_steps:
+  - action: assert_window
+- id: suite_主菜单_009_s1
+  name: 多次打开新窗口
+  description: ''
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+teardown:
+- action: session_stop

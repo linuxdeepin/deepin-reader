@@ -1,0 +1,1312 @@
+version: '1.0'
+app: ''
+tree:
+- role: form
+  name: Form_DMainWindow
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions:
+  - SetFocus
+  index_in_parent: 0
+  states:
+  - active
+  - enabled
+  - focusable
+  - focused
+  - resizable
+  - sensitive
+  - showing
+  - visible
+  source: runtime
+  children:
+  - role: form
+    name: Form_DMainWindowTitlebar
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 0
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+    children:
+    - role: form
+      name: Form_DTitlebarLeftArea
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 3
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: button
+        name: DTitlebarIconLabel
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        id: n6
+        classification: interactive
+        state_labels: &id001 []
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      - role: form
+        name: Form_TitleWidget
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 1
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: check box
+          name: Button_ThumbnailToggle
+          object_name: ''
+          accessible_id: ''
+          description: 缩略图
+          actions: []
+          index_in_parent: 0
+          states:
+          - checkable
+          - focusable
+          - showing
+          - visible
+          source: runtime
+          id: n8
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: form
+          name: Form_widget
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 1
+          states:
+          - showing
+          - visible
+          source: runtime
+          children:
+          - role: form
+            name: Form_scaleEdit_P
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions: []
+            index_in_parent: 0
+            states:
+            - focusable
+            - showing
+            - visible
+            source: runtime
+            children:
+            - role: text
+              name: DLineEditChildLineEdit
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions: []
+              index_in_parent: 0
+              states:
+              - editable
+              - focusable
+              - showing
+              - visible
+              source: runtime
+              id: n11
+              classification: interactive
+              state_labels: *id001
+              class_name: ''
+              comment: ''
+              annotation_status: draft
+            id: n10
+            classification: container
+            state_labels: *id001
+            class_name: ''
+            comment: ''
+            annotation_status: draft
+          id: n9
+          classification: container
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        id: n7
+        classification: container
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      id: n5
+      classification: container
+      state_labels: *id001
+      class_name: ''
+      comment: ''
+      annotation_status: draft
+    - role: form
+      name: Form_DTitlebarRightArea
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 4
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: form
+        name: Form_DTitlebarButtonArea
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: button
+          name: DTitlebarDWindowOptionButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 0
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n18
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: button
+          name: DTitlebarDWindowMinButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 1
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n19
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: button
+          name: DTitlebarDWindowMaxButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 2
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n20
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: button
+          name: DTitlebarDWindowQuitFullscreenButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 3
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          source: runtime
+          id: n21
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: button
+          name: DTitlebarDWindowCloseButton
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - SetFocus
+          index_in_parent: 4
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n22
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        id: n17
+        classification: container
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      id: n16
+      classification: container
+      state_labels: *id001
+      class_name: ''
+      comment: ''
+      annotation_status: draft
+    id: n1
+    classification: container
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: form
+    name: Form_Central
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions: []
+    index_in_parent: 1
+    states:
+    - enabled
+    - sensitive
+    - showing
+    - visible
+    source: runtime
+    children:
+    - role: form
+      name: Form_widget_1
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - enabled
+      - sensitive
+      - showing
+      - visible
+      source: runtime
+      children:
+      - role: form
+        name: Form_CentralDocPage
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 0
+        states:
+        - enabled
+        - sensitive
+        source: runtime
+        children:
+        - role: form
+          name: Form_DocTabBar
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 0
+          states:
+          - enabled
+          - sensitive
+          source: runtime
+          children:
+          - role: page tab list
+            name: ''
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions: []
+            index_in_parent: 0
+            states:
+            - enabled
+            - sensitive
+            source: runtime
+            children:
+            - role: button
+              name: 向左滚动
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - Press
+              - SetFocus
+              index_in_parent: 0
+              states:
+              - enabled
+              - focusable
+              - sensitive
+              source: runtime
+              id: n28
+              classification: interactive
+              state_labels: *id001
+              class_name: ''
+              comment: ''
+              annotation_status: draft
+            - role: button
+              name: 向右滚动
+              object_name: ''
+              accessible_id: ''
+              description: ''
+              actions:
+              - Press
+              - SetFocus
+              index_in_parent: 1
+              states:
+              - enabled
+              - focusable
+              - sensitive
+              source: runtime
+              id: n29
+              classification: interactive
+              state_labels: *id001
+              class_name: ''
+              comment: ''
+              annotation_status: draft
+            id: n27
+            classification: interactive
+            state_labels: *id001
+            class_name: ''
+            comment: ''
+            annotation_status: draft
+          - role: button
+            name: DTabBarAddButton
+            object_name: ''
+            accessible_id: ''
+            description: ''
+            actions:
+            - Press
+            - SetFocus
+            index_in_parent: 1
+            states:
+            - enabled
+            - focusable
+            - sensitive
+            source: runtime
+            id: n30
+            classification: interactive
+            state_labels: *id001
+            class_name: ''
+            comment: ''
+            annotation_status: draft
+          id: n26
+          classification: container
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        id: n25
+        classification: container
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      - role: form
+        name: Form_CentralNavPage
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions: []
+        index_in_parent: 1
+        states:
+        - enabled
+        - sensitive
+        - showing
+        - visible
+        source: runtime
+        children:
+        - role: button
+          name: Button_SelectFile
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions:
+          - Press
+          - ShowMenu
+          index_in_parent: 2
+          states:
+          - enabled
+          - focusable
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n36
+          classification: interactive
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        - role: image
+          name: Label_Icon
+          object_name: ''
+          accessible_id: ''
+          description: ''
+          actions: []
+          index_in_parent: 3
+          states:
+          - enabled
+          - read_only
+          - sensitive
+          - showing
+          - visible
+          source: runtime
+          id: n37
+          classification: container
+          state_labels: *id001
+          class_name: ''
+          comment: ''
+          annotation_status: draft
+        id: n33
+        classification: container
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      id: n24
+      classification: container
+      state_labels: *id001
+      class_name: ''
+      comment: ''
+      annotation_status: draft
+    id: n23
+    classification: container
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  id: n0
+  classification: container
+  state_labels: *id001
+  class_name: ''
+  comment: ''
+  annotation_status: draft
+- role: popup menu
+  name: DTitlebarMainMenu
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions: []
+  index_in_parent: 1
+  states:
+  - enabled
+  - resizable
+  - sensitive
+  source: runtime
+  children:
+  - role: menu item
+    name: 新窗口
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 0
+    states:
+    - enabled
+    - sensitive
+    source: runtime
+    id: n40
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 新标签页
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 1
+    states:
+    - enabled
+    - sensitive
+    source: runtime
+    id: n41
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 保存
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 3
+    states: []
+    source: runtime
+    id: n42
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 另存为
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 4
+    states: []
+    source: runtime
+    id: n43
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 在文件管理器中显示
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 6
+    states: []
+    source: runtime
+    id: n44
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 放大镜
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 7
+    states: []
+    source: runtime
+    id: n45
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 工具
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - ShowMenu
+    index_in_parent: 8
+    states: []
+    source: runtime
+    children:
+    - role: popup menu
+      name: Menu_Hand
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - resizable
+      source: runtime
+      children:
+      - role: menu item
+        name: 选择工具
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 0
+        states:
+        - checkable
+        - enabled
+        - sensitive
+        source: runtime
+        id: n48
+        classification: interactive
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      - role: menu item
+        name: 手形工具
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 1
+        states:
+        - checkable
+        - enabled
+        - sensitive
+        source: runtime
+        id: n49
+        classification: interactive
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      id: n47
+      classification: container
+      state_labels: *id001
+      class_name: ''
+      comment: ''
+      annotation_status: draft
+    id: n46
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 搜索
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 9
+    states: []
+    source: runtime
+    id: n50
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 打印
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 10
+    states: []
+    source: runtime
+    id: n51
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 主题
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - ShowMenu
+    index_in_parent: 12
+    states:
+    - enabled
+    - sensitive
+    source: runtime
+    children:
+    - role: popup menu
+      name: DTitlebarThemeMenu
+      object_name: ''
+      accessible_id: ''
+      description: ''
+      actions: []
+      index_in_parent: 0
+      states:
+      - enabled
+      - resizable
+      - sensitive
+      source: runtime
+      children:
+      - role: menu item
+        name: 浅色
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 0
+        states:
+        - checkable
+        - enabled
+        - sensitive
+        source: runtime
+        id: n54
+        classification: interactive
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      - role: menu item
+        name: 深色
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 1
+        states:
+        - checkable
+        - enabled
+        - sensitive
+        source: runtime
+        id: n55
+        classification: interactive
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      - role: menu item
+        name: 跟随系统
+        object_name: ''
+        accessible_id: ''
+        description: ''
+        actions:
+        - Press
+        index_in_parent: 2
+        states:
+        - checkable
+        - enabled
+        - sensitive
+        source: runtime
+        id: n56
+        classification: interactive
+        state_labels: *id001
+        class_name: ''
+        comment: ''
+        annotation_status: draft
+      id: n53
+      classification: container
+      state_labels: *id001
+      class_name: ''
+      comment: ''
+      annotation_status: draft
+    id: n52
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 帮助
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 14
+    states: []
+    source: runtime
+    id: n57
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 关于
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 15
+    states:
+    - enabled
+    - sensitive
+    source: runtime
+    id: n58
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 退出
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 16
+    states:
+    - enabled
+    - sensitive
+    source: runtime
+    id: n59
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  id: n39
+  classification: container
+  state_labels: *id001
+  class_name: ''
+  comment: ''
+  annotation_status: draft
+- role: popup menu
+  name: Menu_Hand
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions: []
+  index_in_parent: 0
+  states:
+  - resizable
+  source: runtime
+  children:
+  - role: menu item
+    name: 选择工具
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 0
+    states:
+    - checkable
+    - enabled
+    - sensitive
+    source: runtime
+    id: n61
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 手形工具
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 1
+    states:
+    - checkable
+    - enabled
+    - sensitive
+    source: runtime
+    id: n62
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  id: n60
+  classification: container
+  state_labels: *id001
+  class_name: ''
+  comment: ''
+  annotation_status: draft
+- role: popup menu
+  name: DTitlebarThemeMenu
+  object_name: ''
+  accessible_id: ''
+  description: ''
+  actions: []
+  index_in_parent: 0
+  states:
+  - enabled
+  - resizable
+  - sensitive
+  source: runtime
+  children:
+  - role: menu item
+    name: 浅色
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 0
+    states:
+    - checkable
+    - enabled
+    - sensitive
+    source: runtime
+    id: n64
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 深色
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 1
+    states:
+    - checkable
+    - enabled
+    - sensitive
+    source: runtime
+    id: n65
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  - role: menu item
+    name: 跟随系统
+    object_name: ''
+    accessible_id: ''
+    description: ''
+    actions:
+    - Press
+    index_in_parent: 2
+    states:
+    - checkable
+    - enabled
+    - sensitive
+    source: runtime
+    id: n66
+    classification: interactive
+    state_labels: *id001
+    class_name: ''
+    comment: ''
+    annotation_status: draft
+  id: n63
+  classification: container
+  state_labels: *id001
+  class_name: ''
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: BrowserMenu
+  role: panel
+  object_name: BrowserMenu
+  accessible_id: ''
+  source: static
+  class_name: BrowserMenu
+  classification: container
+  description: ''
+  actions: &id002 []
+  index_in_parent: -1
+  states: &id003 []
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: SideBarImageListView
+  role: panel
+  object_name: ''
+  accessible_id: ''
+  source: static
+  class_name: SideBarImageListView
+  children:
+  - id: ''
+    name: sideBarImageListView
+    role: panel
+    object_name: sideBarImageListView
+    accessible_id: ''
+    source: static
+    class_name: SideBarImageListView
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: sideBarImageListViewViewport
+    role: panel
+    object_name: sideBarImageListViewViewport
+    accessible_id: ''
+    source: static
+    class_name: SideBarImageListView
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: EncryptionPage
+  role: panel
+  object_name: ''
+  accessible_id: ''
+  source: static
+  class_name: EncryptionPage
+  children:
+  - id: ''
+    name: ensureBtn
+    role: panel
+    object_name: ensureBtn
+    accessible_id: ''
+    source: static
+    class_name: EncryptionPage
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: passwdEdit
+    role: panel
+    object_name: passwdEdit
+    accessible_id: ''
+    source: static
+    class_name: EncryptionPage
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: HandleMenu
+  role: panel
+  object_name: ''
+  accessible_id: ''
+  source: static
+  class_name: HandleMenu
+  children:
+  - id: ''
+    name: defaultshape
+    role: panel
+    object_name: defaultshape
+    accessible_id: ''
+    source: static
+    class_name: HandleMenu
+    action_texts: &id004
+    - Hand Tool
+    - Select Text
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: handleshape
+    role: panel
+    object_name: handleshape
+    accessible_id: ''
+    source: static
+    class_name: HandleMenu
+    action_texts: *id004
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  action_texts: *id004
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: PagingWidget
+  role: panel
+  object_name: ''
+  accessible_id: ''
+  source: static
+  class_name: PagingWidget
+  children:
+  - id: ''
+    name: Edit_Page
+    role: panel
+    object_name: Edit_Page
+    accessible_id: ''
+    source: static
+    class_name: PagingWidget
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: Edit_Page_P
+    role: panel
+    object_name: Edit_Page_P
+    accessible_id: ''
+    source: static
+    class_name: PagingWidget
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: thumbnailNextBtn
+    role: panel
+    object_name: thumbnailNextBtn
+    accessible_id: ''
+    source: static
+    class_name: PagingWidget
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  - id: ''
+    name: thumbnailPreBtn
+    role: panel
+    object_name: thumbnailPreBtn
+    accessible_id: ''
+    source: static
+    class_name: PagingWidget
+    classification: container
+    description: ''
+    actions: *id002
+    index_in_parent: -1
+    states: *id003
+    state_labels: *id001
+    comment: ''
+    annotation_status: draft
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: TextEditShadowWidget
+  role: panel
+  object_name: TextEditShadowWidget
+  accessible_id: ''
+  source: static
+  class_name: TextEditShadowWidget
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft
+- id: ''
+  name: TransparentTextEdit
+  role: panel
+  object_name: TransparentTextEdit
+  accessible_id: ''
+  source: static
+  class_name: TransparentTextEdit
+  classification: container
+  description: ''
+  actions: *id002
+  index_in_parent: -1
+  states: *id003
+  state_labels: *id001
+  comment: ''
+  annotation_status: draft

@@ -1,0 +1,363 @@
+# === 格式范例 ===
+# 每个 case 包含 id, name, module, steps
+# steps: action 步骤 + assert 步骤
+# action 支持: session_start, element_action, keyboard_press, keyboard_hot_key, keyboard_type, dtk_main_menu, dtk_context_menu, file_dialog_select, wait
+# assert 支持: assert_element, assert_not_exists, assert_window, assert_ocr_exists
+# selector: { name, role }
+# 菜单: items: ["菜单项", "子菜单项"]
+# === 格式范例结束 ===
+
+version: '1.0'
+cases:
+- id: suite_主菜单_001_s1
+  name: 关于
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: assert_ocr_exists
+    text: 文档查看器
+- id: suite_主菜单_002_s1
+  name: 新标签页
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_主菜单_003_s1
+  name: 主题切换
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  - action: wait
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_主菜单_004_s1
+  name: 新窗口
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_主菜单_005_s1
+  name: 退出（无编辑）
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  - action: assert_window
+- id: suite_主菜单_006_s1
+  name: 窗口最大化
+  module: 主菜单
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: wait
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+- id: suite_主菜单_007_s1
+  name: 窗口关闭
+  module: 主菜单
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  - action: assert_window
+- id: suite_主菜单_008_s1
+  name: Alt+F4退出（无编辑）
+  module: 主菜单
+  steps:
+  - action: keyboard_hot_key
+    key: Alt+F4
+  - action: assert_window
+- id: suite_主菜单_009_s1
+  name: 多次打开新窗口
+  module: 主菜单
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: wait
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_文档打开_001_s1
+  name: 通过选择文件按钮打开docx文档
+  module: 文档打开
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_002_s1
+  name: 通过Ctrl+O快捷键打开docx文档
+  module: 文档打开
+  steps:
+  - action: keyboard_hot_key
+    selector:
+      name: Ctrl+O
+    do: press
+    key: ctrl+o
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_003_s1
+  name: 通过新标签页菜单打开docx文档
+  module: 文档打开
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+    do: click
+  - action: dtk_main_menu
+    selector:
+      name: 新标签页
+    do: click
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_004_s1
+  name: 通过标签栏+按钮打开docx文档
+  module: 文档打开
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: wait
+    selector:
+      name: Button_ThumbnailToggle
+    do: wait_visible
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+    do: click
+  - action: file_dialog_select
+    selector:
+      name: docx文档
+    do: select
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+- id: suite_文档打开_005_s1
+  name: 退出文件选择界面
+  module: 文档打开
+  steps:
+  - action: keyboard_hot_key
+    selector:
+      name: Ctrl+O
+    do: press
+    key: ctrl+o
+  - action: wait
+    selector:
+      name: 文件选择对话框
+    do: wait_visible
+  - action: keyboard_press
+    selector:
+      name: ESC
+    do: press
+    key: Escape
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+- id: suite_文档视图_右键菜单_001_s1
+  name: 右键菜单_页面导航
+  module: 文档视图_右键菜单
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: push button
+    do: click
+    wait: 2.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 第一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 前一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 后一页
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 最后一页
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+  - action: assert_element
+    selector:
+      name: PagingWidget
+      role: panel
+- id: suite_文档视图_右键菜单_002_s1
+  name: 右键菜单_幻灯片放映_窗口状态保持
+  module: 文档视图_右键菜单
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: push button
+    do: click
+    wait: 2.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test.pdf
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+    do: click
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 幻灯片放映
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  - action: mouse_right_click
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    items:
+    - 幻灯片放映
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: push button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: push button
+    do: assert_not_exists
