@@ -523,7 +523,7 @@
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="27"/>
         <source>Fit Page</source>
-        <translation>Ajustar à Página</translation>
+        <translation>Ajustar à página</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ScaleMenu.cpp" line="28"/>
@@ -687,12 +687,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="138"/>
         <source>Fit height</source>
-        <translation>Ajustar altura</translation>
+        <translation>Ajustar à altura</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="139"/>
         <source>Fit width</source>
-        <translation>Ajustar largura</translation>
+        <translation>Ajustar à largura</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="140"/>
