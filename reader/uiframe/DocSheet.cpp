@@ -296,6 +296,12 @@ void DocSheet::jumpToFirstPage()
     m_browser->setCurrentPage(1);
 }
 
+void DocSheet::dismissRestoreTip()
+{
+    qCDebug(appLog) << "dismissRestoreTip";
+    m_needsRestoreTip = false;
+}
+
 void DocSheet::jumpToLastPage()
 {
     qCDebug(appLog) << "jumpToLastPage";
@@ -1293,7 +1299,8 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
             QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
                 m_browser->restoreScrollPosition(m_operation.scrollPosition);
                 // 显示恢复提示条
-                emit sigShowRestoreTip();
+                m_needsRestoreTip = true;
+                emit sigShowRestoreTip(this);
                 emit sigStateRestored(this);
             });
         }
@@ -1478,6 +1485,7 @@ void DocSheet::onBrowserPageChanged(int page)
 void DocSheet::onBrowserPageFirst()
 {
     qCDebug(appLog) << "onBrowserPageFirst";
+    dismissRestoreTip();
     jumpToFirstPage();
 }
 
@@ -1996,4 +2004,9 @@ void DocSheet::onAutoSave()
         m_cachedContentHash = Database::computeContentHash(m_filePath);
     }
     Database::instance()->saveOperation(this, m_cachedContentHash);
+}
+
+bool DocSheet::needsRestoreTip() const
+{
+    return m_needsRestoreTip;
 }

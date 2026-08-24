@@ -285,8 +285,9 @@ signals:
     /**
      * @brief sigShowRestoreTip
      * 请求显示恢复阅读位置提示条
+     * @param sheet 发出请求的文档
      */
-    void sigShowRestoreTip();
+    void sigShowRestoreTip(DocSheet *sheet);
 
     /**
      * @brief sigNeedClose

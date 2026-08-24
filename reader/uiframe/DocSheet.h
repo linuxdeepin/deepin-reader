@@ -641,6 +641,18 @@ public:
     void saveCurrentViewState();
 
     /**
+     * @brief needsRestoreTip 该 sheet 是否仍需要显示恢复阅读位置提示条
+     */
+    bool needsRestoreTip() const;
+
+    /**
+     * @brief dismissRestoreTip 清除恢复提示标记并隐藏提示条
+     * 在用户主动跳转首页（按钮/快捷键/翻页控件）时由调用方显式调用，
+     * 不放在 jumpToFirstPage() 内以避免隐式副作用扩散。
+     */
+    void dismissRestoreTip();
+
+    /**
      * @brief 恢复已保存的阅读状态
      * 包括滚动位置和侧边栏宽度，用于标签页切换回来时恢复阅读位置
      */
@@ -808,8 +820,9 @@ signals:
     /**
      * @brief sigShowRestoreTip
      * 请求显示恢复阅读位置提示条
+     * @param sheet 发出请求的文档，Central 据此判断是否为当前活跃标签
      */
-    void sigShowRestoreTip();
+    void sigShowRestoreTip(DocSheet *sheet);
 
 private slots:
     /**
@@ -913,9 +926,11 @@ private:
 
     // 定时自动保存
     QTimer *m_autoSaveTimer = nullptr;
-    // 恢复阅读位置提示条
     // 标记是否从保存状态恢复
     bool m_restoredFromState = false;
+    // 标记该 sheet 是否仍需要显示恢复阅读位置提示条
+    // 用户点击"跳转到首页"后置为 false，切换 tab 时据此决定是否显示提示条
+    bool m_needsRestoreTip = false;
     // 缓存的内容哈希，避免自动保存时反复读盘计算
     QString m_cachedContentHash;
 

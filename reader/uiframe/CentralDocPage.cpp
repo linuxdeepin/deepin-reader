@@ -682,8 +682,10 @@ void CentralDocPage::handleShortcut(const QString &s)
     if (s == Dr::key_ctrl_home) {
         qCInfo(appLog) << "s == Dr::key_ctrl_home";
         auto sheet = getCurSheet();
-        if (sheet)
+        if (sheet) {
+            sheet->dismissRestoreTip();
             sheet->jumpToFirstPage();
+        }
     }
     if (s == Dr::key_ctrl_end) {
         qCInfo(appLog) << "s == Dr::key_ctrl_end";
