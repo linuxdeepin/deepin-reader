@@ -24,6 +24,7 @@
 #include <QDesktopServices>
 #include <QScreen>
 #include <QUrl>
+#include <QPointer>
 #include <QDesktopServices>
 #include <QScrollBar>
 #include <QStackedLayout>
@@ -226,6 +227,12 @@ void CentralDocPage::addFileAsync(const QString &filePath)
         }
     }
 
+    // 打开新文件前，保存当前 sheet 的阅读状态
+    DocSheet *curSheet = getCurSheet();
+    if (curSheet && curSheet->opened()) {
+        curSheet->saveCurrentViewState();
+    }
+
     Dr::FileType fileType = Dr::fileType(filePath);
 #ifdef XPS_SUPPORT_ENABLED
     if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType && Dr::XPS != fileType) {
@@ -304,12 +311,23 @@ void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error er
     sheet->defaultFocus();
 }
 
+
 void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
     qCInfo(appLog) << "onTabChanged";
     if (nullptr != sheet) {
         qCInfo(appLog) << "sheet is not null";
+
+        // 离开当前 sheet 前，保存其阅读状态
+        QPointer<DocSheet> prevSheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
+        if (prevSheet && prevSheet != sheet && prevSheet->opened()) {
+            prevSheet->saveCurrentViewState();
+        }
+
         m_stackedLayout->setCurrentWidget(sheet);
+
+        // 切换到新 sheet 后，恢复其已保存的阅读状态
+        sheet->restoreSavedViewState();
 
         sheet->defaultFocus();
     }
