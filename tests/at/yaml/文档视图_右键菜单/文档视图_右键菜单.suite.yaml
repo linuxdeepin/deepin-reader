@@ -1,0 +1,444 @@
+name: 文档视图_右键菜单_suite
+app: deepin-reader
+module: 文档视图_右键菜单
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_右键菜单_001_s1
+  name: 未选中文本右击-页面导航与书签注释菜单
+  description: ''
+  annotation:
+    测试界面: 文档区 Form_DocSheet 右键菜单（BrowserMenu）
+    测试功能: 未选中文本右击弹出菜单，逐一选择第一页/前一页/后一页/最后一页实现页面跳转，添加书签/添加注释菜单可正常触发
+    前置条件: 已打开 PDF 文档（上下页面均有一部分显示在窗口内）
+    AT元素引用:
+    - Form_DocSheet
+    - BrowserMenu
+    - Button_SelectFile
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 第一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 前一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 后一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 最后一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+    selector:
+      name: Form_DocSheet
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_右键菜单_002_s1
+  name: 未选中文本右击-菜单功能（搜索/全屏/旋转）
+  description: ''
+  annotation:
+    测试界面: 文档区 Form_DocSheet 右键菜单（BrowserMenu）
+    测试功能: 打开 PDF 未选中文本右击弹出右键菜单，验证菜单由鼠标操作打开；逐项触发搜索、全屏/退出全屏、左旋转/右旋转等已具 AT 元素的功能
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DocSheet
+    - BrowserMenu
+    - Form_SearchResWidget
+    - DTitlebarDWindowQuitFullscreenButton
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 搜索
+    selector:
+      name: Form_DocSheet
+  - action: keyboard_type
+    text: user
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 退出全屏
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 左旋转
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 右旋转
+    selector:
+      name: Form_DocSheet
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_右键菜单_003_s1
+  name: DJVU未选中文本右击-页面导航全屏旋转
+  description: ''
+  annotation:
+    测试界面: 文档区 Form_DocSheet 右键菜单（BrowserMenu）
+    测试功能: 打开 DJVU 文档未选中文本右击弹出右键菜单，逐项触发添加书签/页面导航/左旋转/右旋转/全屏/退出全屏等已具 AT 元素的功能
+    前置条件: 已打开 DJVU 文档
+    AT元素引用:
+    - Form_DocSheet
+    - BrowserMenu
+    - DTitlebarDWindowQuitFullscreenButton
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 第一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 前一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 后一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 最后一页
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 退出全屏
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 左旋转
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 右旋转
+    selector:
+      name: Form_DocSheet
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_右键菜单_004_s1
+  name: 选中文本右击-复制高亮注释书签（含坐标选择/高亮颜色）
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 选中文本右击：复制/高亮/8色/取消高亮/添加注释/添加书签
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_右键菜单_005_s1
+  name: 幻灯片放映（进入/退出/循环/主题比对）
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 幻灯片放映：右键菜单进入/Esc退出/控制按钮/主题比对/Ctrl+H
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_右键菜单_006_s1
+  name: 退出幻灯片播放-窗口状态保持
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 最大/默认窗口下进入并退出幻灯片，状态保持
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_右键菜单_007_s1
+  name: 打印（连接打印机/打印到文件/预览横竖向显示）
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 打印：连接打印机打印/打印到文件(未连接)/预览横竖向显示
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_右键菜单_008_s1
+  name: 菜单高亮效果（鼠标悬停各菜单）
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 右键菜单/下拉框/主菜单悬停高亮显示
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_右键菜单_009_s1
+  name: 选中文本翻页后回到原位置不消失
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 选中文本翻页后回到原位置，选中不消失
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

@@ -1,0 +1,197 @@
+name: 主菜单_suite
+app: deepin-reader
+module: 主菜单
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_主菜单_001_s1
+  name: 主菜单-新标签页
+  description: ''
+  annotation:
+    测试界面: 主菜单 + 标签栏（Form_DocTabBar）
+    测试功能: 主菜单→新标签页，在已打开文档的基础上新增一个标签页
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 新标签页}'
+    - '{DTabBarAddButton}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_主菜单_002_s1
+  name: 主菜单-新窗口（多窗口）
+  description: ''
+  annotation:
+    测试界面: 主菜单 + 第二窗口（Form_DMainWindow_1）
+    测试功能: 主菜单→新窗口，打开新的文档查看器窗口并可重复打开，原窗口与文档保持开启
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 新窗口}'
+    - '{Form_DMainWindow_1}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow_1
+      role: form
+- id: suite_主菜单_003_s1
+  name: 主菜单-保存与多次保存
+  description: ''
+  annotation:
+    测试界面: 主菜单（保存/Ctrl+S）+ 文档区（Form_DocSheet）
+    测试功能: 对当前文档 Ctrl+S 保存，并支持多次保存不报错（保存当前修改并保持文档界面）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 保存}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_主菜单_004_s1
+  name: 主菜单-另存为
+  description: ''
+  annotation:
+    测试界面: 主菜单（另存为/Ctrl+Shift+S）+ 系统文件对话框
+    测试功能: 打开另存为（Ctrl+Shift+S）弹出文件保存对话框，选择路径保存为新文件
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 另存为}'
+    - '{Form_DMainWindow}'
+    - '{Form_CentralDocPage}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/save_copy_test.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_主菜单_005_s1
+  name: 主菜单-主题切换（深色/浅色/跟随系统）
+  description: ''
+  annotation:
+    测试界面: 主菜单-主题子菜单（DTitlebarThemeMenu）
+    测试功能: 主菜单→主题→深色/浅色/跟随系统，切换窗口主题并保持界面正常
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 主题}'
+    - '{DTitlebarThemeMenu 深色}'
+    - '{DTitlebarThemeMenu 浅色}'
+    - '{DTitlebarThemeMenu 跟随系统}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_主菜单_006_s1
+  name: 主菜单-放大镜启用与取消
+  description: ''
+  annotation:
+    测试界面: 主菜单（放大镜）+ 文档区（Form_DocSheet）
+    测试功能: 主菜单→放大镜启用放大镜，Esc/右键取消放大镜，窗口正常
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 放大镜}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 放大镜
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_主菜单_007_s1
+  name: 标题栏-最大化与无修改直接关闭
+  description: ''
+  annotation:
+    测试界面: 标题栏（DTitlebarDWindowMaxButton / DTitlebarDWindowCloseButton）
+    测试功能: 点击标题栏最大化按钮，点击关闭按钮在无修改场景下直接关闭（最小化需任务栏交互，标注不可自动化）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarDWindowMaxButton}'
+    - '{DTitlebarDWindowCloseButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_window
+- id: suite_主菜单_008_s1
+  name: 主菜单-无修改直接退出
+  description: ''
+  annotation:
+    测试界面: 主菜单（退出）+ 主窗口（Form_DMainWindow）
+    测试功能: 未修改文档时主菜单→退出，直接退出无提示弹框，窗口关闭（修改后保存确认弹框场景不可自动化，已另说明）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 退出}'
+    - '{Form_DocSheet}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_window
+teardown:
+- action: session_stop

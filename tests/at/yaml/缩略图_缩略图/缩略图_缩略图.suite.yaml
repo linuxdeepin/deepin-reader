@@ -1,0 +1,295 @@
+name: 缩略图_缩略图_suite
+app: deepin-reader
+module: 缩略图_缩略图
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_缩略图_001_s1
+  name: 左边栏底部按钮切换各目录（缩略图/目录/书签/注释）
+  description: ''
+  annotation:
+    测试界面: 左侧边栏（Button_ThumbnailToggle / Form_SheetSidebar / Button_thumbnail / Button_catalog
+      / Button_bookmark / Button_annotation）+ 缩略图目录（Form_ThumbnailWidget / Form_Paging
+      / pageEdit / Button_ThumbnailPre / Button_ThumbnailNext）
+    测试功能: 打开文档展开左边栏，依次点击底部缩略图、目录、书签、注释四个图标，验证底部显示四按钮、缩略图目录显示页数输入框总页数上下翻页并可输入页码跳转，各目录正确显示
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{Form_CentralDocPage}'
+    - '{Button_ThumbnailToggle}'
+    - '{Form_SheetSidebar}'
+    - '{Button_thumbnail}'
+    - '{Button_catalog}'
+    - '{Button_bookmark}'
+    - '{Button_annotation}'
+    - '{Form_ThumbnailWidget}'
+    - '{View_ImageList}'
+    - '{Form_Paging}'
+    - '{pageEdit}'
+    - '{Button_ThumbnailPre}'
+    - '{Button_ThumbnailNext}'
+    - '{Form_CatalogWidget}'
+    - '{Form_BookMarkWidget}'
+    - '{Form_NotesWidget}'
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '2'
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_SheetSidebar
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_ThumbnailWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailPre
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Form_CatalogWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+- id: suite_缩略图_缩略图_002_s1
+  name: 点击缩略图跳转页面与滚轮滑动缩略图列表
+  description: ''
+  annotation:
+    测试界面: 缩略图目录（Form_ThumbnailWidget / View_ImageList / pageEdit / Form_DocSheet）
+    测试功能: 点击缩略图目录中的任一页面缩略图（双击触发跳转），验证右侧文档跳转到对应页面；缩略图超过一页时滑动鼠标滚轮，验证缩略图列表正常滑动显示
+    前置条件: 应用已启动，已打开多页 PDF 并切换缩略图目录
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{Button_ThumbnailToggle}'
+    - '{Button_thumbnail}'
+    - '{View_ImageList}'
+    - '{Form_DocSheet}'
+    - '{pageEdit}'
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: double_click
+  - action: mouse_scroll
+    selector:
+      name: View_ImageList
+      role: list
+  - action: mouse_scroll
+    selector:
+      name: View_ImageList
+      role: list
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_缩略图_缩略图_003_s1
+  name: 顶部工具栏缩略图开关：四图标显示与收起
+  description: ''
+  annotation:
+    测试界面: 标题栏工具栏（Button_ThumbnailToggle）+ 左侧边栏（Button_thumbnail / Button_catalog /
+      Button_bookmark / Button_annotation / Form_ThumbnailWidget）
+    测试功能: 点击顶端工具栏缩略图开关展开左边栏，分别点击目录、书签、注释图标查看界面；再次点击顶端缩略图开关，验证左边栏及缩略图内容收起
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{Button_ThumbnailToggle}'
+    - '{Form_SheetSidebar}'
+    - '{Button_thumbnail}'
+    - '{Button_catalog}'
+    - '{Button_bookmark}'
+    - '{Button_annotation}'
+    - '{Form_ThumbnailWidget}'
+    - '{View_ImageList}'
+    - '{Form_CatalogWidget}'
+    - '{Form_BookMarkWidget}'
+    - '{Form_NotesWidget}'
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SheetSidebar
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_ThumbnailWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_CatalogWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+  - action: assert_not_exists
+    selector:
+      name: Form_SheetSidebar
+      role: form
+teardown:
+- action: session_stop

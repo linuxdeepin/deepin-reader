@@ -1,0 +1,664 @@
+name: 交互_键盘_suite
+app: deepin-reader
+module: 交互_键盘
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_交互_键盘_001_s1
+  name: 首页Tab键切换与主菜单键盘导航
+  description: ''
+  annotation:
+    测试界面: 主窗口-标题栏+首页（Form_CentralNavPage）
+    测试功能: 首页打开状态下 Tab 键在标题栏按钮（主菜单/最小化/最大化）与选择文件按钮间循环切换焦点；回车/空格执行选择；主菜单弹出后方向键、Esc 键盘导航与退出
+    前置条件: 应用启动进入首页，无文档打开
+    AT元素引用:
+    - DTitlebarIconLabel
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowMaxButton
+    - Button_SelectFile
+    - Form_DMainWindow
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: space
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_002_s1
+  name: 单个文档Tab键切换（未展开/展开左侧栏）
+  description: ''
+  annotation:
+    测试界面: 主窗口-工具栏+文档区（Form_DocSheet）+左侧栏（Form_SheetSidebar）
+    测试功能: 单个文档打开时 Tab 键焦点从工具栏开始从上至下、从左至右依次切换；回车/空格执行选择；展开左侧栏后 Tab 焦点切换至侧栏目录
+    前置条件: 已打开单个 PDF 文档；后半段展开左侧栏
+    AT元素引用:
+    - DTitlebarIconLabel
+    - DLineEditChildLineEdit
+    - DTitlebarDWindowMinButton
+    - Form_DocSheet
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Button_catalog
+    - Form_SheetSidebar
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: space
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_SheetSidebar
+      role: form
+- id: suite_交互_键盘_003_s1
+  name: 多个文档Tab键切换（含展开左侧栏）
+  description: ''
+  annotation:
+    测试界面: 主窗口-标签栏（Form_DocTabBar）+文档区+左侧栏（Form_SheetSidebar）
+    测试功能: 多个文档打开时 Tab 键焦点从工具栏开始切换；回车/空格执行选择；展开左侧栏后 Tab 焦点切换至侧栏目录
+    前置条件: 已打开多个文档；后半段展开左侧栏
+    AT元素引用:
+    - DTabBarAddButton
+    - DTitlebarIconLabel
+    - DTitlebarDWindowMinButton
+    - 多数字员工并行工作站.pdf
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Form_SheetSidebar
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: space
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab list
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_SheetSidebar
+      role: form
+- id: suite_交互_键盘_004_s1
+  name: 百分比输入框下拉菜单键盘操作
+  description: ''
+  annotation:
+    测试界面: 标题栏-缩放百分比输入框（DLineEditChildLineEdit）
+    测试功能: 选中百分比输入框下拉按钮按回车/空格弹出下拉菜单；上下方向键切换选中项；回车执行选择；Esc 退出菜单返回输入框选中
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_交互_键盘_005_s1
+  name: 主菜单下拉界面键盘导航
+  description: ''
+  annotation:
+    测试界面: 主窗口-标题栏主菜单按钮（DTitlebarIconLabel）+主菜单（DTitlebarMainMenu）
+    测试功能: Tab 选中主菜单按回车/空格弹出下拉菜单；上下方向键切换选中项；左右方向键展开/收起子菜单；回车执行选择；Esc 退出菜单返回主菜单按钮
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarIconLabel
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+    do: click
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_006_s1
+  name: 右击主视图弹出右键菜单键盘导航
+  description: ''
+  annotation:
+    测试界面: 文档内容区（Form_DocSheet）
+    测试功能: 右击主视图弹出右键菜单；上下方向键切换选中菜单；左右方向键展开/收起子菜单；回车执行选择；Esc 退出菜单
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DocSheet
+    - Form_DMainWindow
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_交互_键盘_007_s1
+  name: 左侧栏目录上下切换与删除
+  description: ''
+  annotation:
+    测试界面: 左侧栏-缩略图/目录/书签/注释目录（Form_ThumbnailWidget/Form_CatalogWidget/Form_BookMarkWidget/Form_NotesWidget）
+    测试功能: 缩略图目录上下方向键/PageUp/PageDown 切换；目录树方向键切换；书签目录方向键切换并 Delete 删除；注释目录方向键切换并 Delete
+      删除
+    前置条件: 已打开 PDF 文档并展开左侧栏
+    AT元素引用:
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Button_catalog
+    - Button_bookmark
+    - Button_annotation
+    - View_ImageList
+    - View_CatalogTree
+  steps:
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: PageUp
+  - action: keyboard_press
+    key: Up
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: PageUp
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: PageUp
+  - action: keyboard_press
+    key: Delete
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: Delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_交互_键盘_008_s1
+  name: 选中输入框内容按Alt+M弹出菜单
+  description: ''
+  annotation:
+    测试界面: 标题栏-缩放百分比输入框（DLineEditChildLineEdit）
+    测试功能: 选中输入框内容后按 Alt+M 弹出右键菜单，方向键切换、左右展开/收起子菜单、回车执行、Esc 退出菜单且输入框仍在
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+  steps:
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_交互_键盘_009_s1
+  name: 百分比框和页码框输入数值按Enter跳转
+  description: ''
+  annotation:
+    测试界面: 标题栏-缩放百分比输入框（DLineEditChildLineEdit）+缩略图目录页码框（pageEdit）
+    测试功能: 百分比框输入数值按回车页面跳转且焦点仍在百分比框；页码框输入数值按回车页面跳转且焦点仍在页码框
+    前置条件: 已打开 PDF 文档并展开左侧栏（页码框在缩略图目录）
+    AT元素引用:
+    - Button_ThumbnailToggle
+    - DLineEditChildLineEdit
+    - pageEdit
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '50'
+  - action: keyboard_press
+    key: Return
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '3'
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+- id: suite_交互_键盘_010_s1
+  name: 选中文本按Alt+M
+  description: ''
+  annotation:
+    测试界面: 文档内容区（Form_DocSheet）
+    测试功能: 选中文档文本按 Alt+M 弹出右键菜单并键盘导航
+    前置条件: 已打开 PDF 文档且存在可选中的文本
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_011_s1
+  name: 选中书签目录按Alt+M
+  description: ''
+  annotation:
+    测试界面: 左侧栏-书签目录（Form_BookMarkWidget）
+    测试功能: 选中书签目录按 Alt+M 弹出右键菜单并键盘导航
+    前置条件: 已打开文档且书签目录存在书签项
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_012_s1
+  name: 选中注释目录按Alt+M
+  description: ''
+  annotation:
+    测试界面: 左侧栏-注释目录（Form_NotesWidget）
+    测试功能: 选中注释目录按 Alt+M 弹出右键菜单并键盘导航
+    前置条件: 已打开文档且注释目录存在注释项
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_013_s1
+  name: 点击“删除全部书签”对话框界面
+  description: ''
+  annotation:
+    测试界面: 左侧栏-书签目录+删除确认对话框
+    测试功能: 点击删除全部书签弹确认对话框，tab 循环、回车执行、Esc 关闭
+    前置条件: 已打开文档且书签目录存在书签
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_014_s1
+  name: 点击“删除全部注释”对话框界面
+  description: ''
+  annotation:
+    测试界面: 左侧栏-注释目录+删除确认对话框
+    测试功能: 点击删除全部注释弹确认对话框，tab 循环、回车执行、Esc 关闭
+    前置条件: 已打开文档且注释目录存在注释
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_015_s1
+  name: 编辑文档后关闭/退出弹出是否保存对话框
+  description: ''
+  annotation:
+    测试界面: 主窗口-关闭/退出触发的是否保存对话框
+    测试功能: 编辑文档后关闭/退出弹是否保存对话框，tab 循环、回车执行、Esc 关闭
+    前置条件: 已打开并编辑过文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_016_s1
+  name: 不改变文件名保存替换对话框
+  description: ''
+  annotation:
+    测试界面: 主窗口-保存替换确认对话框
+    测试功能: 不改变文件名保存替换弹出对话框，tab 循环、回车执行、Esc 关闭
+    前置条件: 已打开文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_017_s1
+  name: 搜索框界面
+  description: ''
+  annotation:
+    测试界面: 搜索框（FindWidget 浮动窗）
+    测试功能: 搜索框 tab 切换按钮焦点并回车执行
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_018_s1
+  name: 文档信息界面
+  description: ''
+  annotation:
+    测试界面: 文档信息对话框
+    测试功能: 文档信息界面 tab 循环、回车执行、Esc 退出
+    前置条件: 已打开文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_019_s1
+  name: 在文件管理器显示界面
+  description: ''
+  annotation:
+    测试界面: 外部文件管理器（dde-file-manager）
+    测试功能: 在文件管理器显示界面循环切换并回车执行
+    前置条件: 已打开文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_020_s1
+  name: 关于界面
+  description: ''
+  annotation:
+    测试界面: 关于对话框
+    测试功能: 关于界面 tab 循环、回车执行、Esc 退出
+    前置条件: 应用已启动
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_键盘_021_s1
+  name: 焦点切换直接跳过置灰菜单
+  description: ''
+  annotation:
+    测试界面: 文档内容区（Form_DocSheet）右键菜单
+    测试功能: 选中文本右击后键盘上下键在菜单中切换焦点并跳过置灰菜单
+    前置条件: 已打开 PDF 文档且存在可选中的文本
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

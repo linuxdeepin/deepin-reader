@@ -1,0 +1,90 @@
+name: 窗口管理_suite
+app: deepin-reader
+module: 窗口管理
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_窗口管理_001_s1
+  name: 最小尺寸-检查（窗口尺寸与多窗口）
+  description: ''
+  annotation:
+    测试界面: 主窗口（Form_DMainWindow）+ 第二窗口（Form_DMainWindow_1）
+    测试功能: 检查应用窗口与各子页面正常显示，通过主菜单→新窗口打开新窗口并校验窗口数量与两窗口存在（新窗口尺寸为默认尺寸、680*300 像素精确尺寸及子页面无遮挡变形为视觉校验，见
+      mapping_note）
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{Form_DMainWindow}'
+    - '{DTitlebarMainMenu 新窗口}'
+    - '{Form_DMainWindow_1}'
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_window_count
+    expected: 2
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow_1
+      role: form
+- id: suite_窗口管理_002_s1
+  name: 最小尺寸-窗口最大化后再最小化
+  description: ''
+  annotation:
+    测试界面: 标题栏（DTitlebarDWindowMaxButton / DTitlebarDWindowMinButton）
+    测试功能: 窗口最大化之后点击最小化按钮，校验窗口控制按钮均正常响应、窗口不崩溃（恢复为最小窗口 680*300 为像素校验，见 mapping_note）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarDWindowMaxButton}'
+    - '{DTitlebarDWindowMinButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_窗口管理_003_s1
+  name: 最小尺寸-关闭后再次打开应用
+  description: ''
+  annotation:
+    测试界面: 标题栏（DTitlebarDWindowCloseButton）+ 主窗口（Form_DMainWindow）
+    测试功能: 点击关闭按钮关闭应用后再次启动应用，校验应用可正常关闭并重新打开（恢复后尺寸为最小窗口 680*300 为像素校验，见 mapping_note）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarDWindowCloseButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_window
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

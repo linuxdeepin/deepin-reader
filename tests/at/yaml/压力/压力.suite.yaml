@@ -1,0 +1,121 @@
+name: 压力_suite
+app: deepin-reader
+module: 压力
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_压力_001_s1
+  name: 单次添加书签（批量添加场景的可自动化子动作）
+  description: ''
+  annotation:
+    测试界面: 侧边栏-书签目录（Form_BookMarkWidget）
+    测试功能: 批量添加100个书签属于性能/压力场景，整体不可自动化；取其中可自动化的子动作（打开书签目录、单次点击添加书签）做最小覆盖
+    前置条件: 应用已启动
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - Form_BookMarkWidget
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+- id: suite_压力_002_s1
+  name: 打开大量窗口无卡顿
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 打开大量窗口无卡顿
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_压力_003_s1
+  name: 产生大量搜索结果无卡顿
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 产生大量搜索结果无卡顿
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_压力_004_s1
+  name: 批量添加注释（100个及以上）及删除所有
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 批量添加注释（100个及以上）及删除所有
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_压力_005_s1
+  name: PDF文档中批量添加书签及删除所有
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: PDF文档中批量添加书签及删除所有
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_压力_006_s1
+  name: 连续快速打开关闭单页大文档20次
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 连续快速打开关闭单页大文档20次
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_压力_007_s1
+  name: 打开PDF和DOCX大文档无异常
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 打开PDF和DOCX大文档无异常
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

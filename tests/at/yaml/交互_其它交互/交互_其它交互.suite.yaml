@@ -1,0 +1,159 @@
+name: 交互_其它交互_suite
+app: deepin-reader
+module: 交互_其它交互
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_交互_其它交互_001_s1
+  name: 快捷键_Ctrl+Home/Ctrl+End 定位与侧边栏联动
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet / Form_CentralDocPage）+ 侧边栏（Form_SheetSidebar）
+    测试功能: Ctrl+Home 定位首页、Ctrl+End 定位末尾，并联动切换缩略图/书签/注释侧边栏目录（缩略图/书签页的高亮定位为纯视觉部分，已在 unsupported
+      说明）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_DocSheet}'
+    - '{Button_thumbnail}'
+    - '{Button_bookmark}'
+    - '{Button_annotation}'
+    - '{Form_ThumbnailWidget}'
+    - '{Form_BookMarkWidget}'
+    - '{Form_NotesWidget}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+home
+  - action: keyboard_hot_key
+    key: ctrl+end
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_ThumbnailWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+- id: suite_交互_其它交互_002_s1
+  name: 快捷键-文件操作（Ctrl+O/Ctrl+S/Ctrl+Shift+S）
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_CentralDocPage）+ 系统文件对话框
+    测试功能: Ctrl+O 打开文件选择界面并选文件、Ctrl+S 保存、Ctrl+Shift+S 另存为（弹出系统保存对话框选择路径保存）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/test_file.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/save_copy_test.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_交互_其它交互_003_s1
+  name: 快捷键-文档视图（缩放/旋转/翻页/工具）
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）
+    测试功能: 文档视图快捷键冒烟：Ctrl+1/2/3 默认大小/适应高度/适应宽度、Ctrl+R/Ctrl+Shift+R 左/右旋转、Ctrl++/Ctrl+-
+      页面放大缩小、PageUp/PageDown 上下翻页、Up/Down 上下滚动，连续操作后文档区保持正常
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_DocSheet}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: keyboard_hot_key
+    key: ctrl+3
+  - action: keyboard_hot_key
+    key: ctrl+r
+  - action: keyboard_hot_key
+    key: ctrl+shift+r
+  - action: keyboard_hot_key
+    key: ctrl+add
+  - action: keyboard_hot_key
+    key: ctrl+subtract
+  - action: keyboard_press
+    key: pagedown
+  - action: keyboard_press
+    key: pageup
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_交互_其它交互_004_s1
+  name: 快捷键-全屏切换（F11/Esc）
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）+ 全屏状态标题栏（DTitlebarDWindowQuitFullscreenButton）
+    测试功能: F11 进入全屏（标题栏出现退出全屏按钮），Esc 退出全屏（退出全屏按钮消失）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_DocSheet}'
+    - '{DTitlebarDWindowQuitFullscreenButton}'
+  steps:
+  - action: keyboard_press
+    key: f11
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_not_exists
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+teardown:
+- action: session_stop

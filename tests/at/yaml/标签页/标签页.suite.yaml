@@ -1,0 +1,186 @@
+name: 标签页_suite
+app: deepin-reader
+module: 标签页
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_标签页_001_s1
+  name: 单个窗口添加多标签页（多文档打开方式）
+  description: ''
+  annotation:
+    测试界面: 标签栏（Form_DocTabBar）+ 主窗口（Form_DMainWindow）+ 文件对话框
+    测试功能: 在单个窗口中通过 Ctrl+O 打开多份文档（对应初始界面/已有文档界面添加多标签页），使标签栏出现多个标签页且各标签正常显示（拖拽/双击 OS
+      文件打开、从桌面拖拽等添加方式见 unsupported）
+    前置条件: 应用已启动，已打开 normal.pdf
+    AT元素引用:
+    - '{Form_DocTabBar}'
+    - '{Form_DMainWindow}'
+    - '{normal.docx}'
+    - '{DTabBarAddButton}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_cancel
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+      child_index: 1
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+- id: suite_标签页_002_s1
+  name: 多个标签页的添加与显示
+  description: ''
+  annotation:
+    测试界面: 标签栏（Form_DocTabBar/DTabBarAddButton）
+    测试功能: 已打开多个标签页后通过 + 按钮添加其他标签页，页面在标签栏中正常显示（标签栏占满/最小宽高/高亮等像素与视觉判断见 unsupported）
+    前置条件: 应用已启动，已打开多个文档标签页
+    AT元素引用:
+    - '{Form_DocTabBar}'
+    - '{DTabBarAddButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_cancel
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_标签页_003_s1
+  name: 点击切换标签页（当前页状态）
+  description: ''
+  annotation:
+    测试功能: 在当前打开的多个标签页间点击切换，验证切换后当前页正常显示、无异常（长按拖拽排序与滚轮滚动切换部分见 unsupported）
+    前置条件: 应用已启动且已打开多个文档标签页
+    AT元素引用:
+    - '{normal.docx}'
+    - '{normal.pdf}'
+    - '{Form_DocTabBar}'
+    测试界面: 标签栏（Form_DocTabBar/page tab）
+  steps:
+  - action: element_action
+    selector:
+      name: Form_DocTabBar
+      role: form
+      child_index: 1
+    do: click
+  - action: element_action
+    selector:
+      name: Form_DocTabBar
+      role: form
+      child_index: 0
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+      child_index: 1
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+      child_index: 0
+- id: suite_标签页_005_s1
+  name: 关闭所有标签页界面显示
+  description: ''
+  annotation:
+    测试功能: 打开多个标签页后点击标题栏关闭按钮关闭所有标签页，应用界面退出（有编辑内容时弹出是否保存对话框场景见 unsupported）
+    前置条件: 应用已启动并打开多个标签页
+    AT元素引用:
+    - '{DTitlebarDWindowCloseButton}'
+    - '{Form_DMainWindow}'
+    测试界面: 标签栏 + 标题栏关闭按钮（DTitlebarDWindowCloseButton）
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_window
+- id: suite_标签页_006_s1
+  name: 不支持重复打开相同文档
+  description: ''
+  annotation:
+    测试功能: 同一窗口已显示文档 A 时，再次双击/拖拽/点击添加标签页方式打开文档 A，应激活当前页且不新增相同标签（无法添加相同文档）
+    前置条件: 应用已启动且已打开 normal.pdf
+    AT元素引用:
+    - '{Form_DocSheet}'
+    - '{Form_DocTabBar}'
+    测试界面: 标签栏 + Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_标签页_007_s1
+  name: 新开启的窗口中文档打开正常
+  description: ''
+  annotation:
+    测试功能: 已打开文档查看器后点击『新窗口』菜单打开新窗口；在新窗口中点击选择文件/新标签页打开文档，验证新窗口中文档正常打开（拖拽文档与新窗口中双击 OS
+      打开部分见 unsupported）
+    前置条件: 应用已启动且已打开文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 新窗口}'
+    - '{Button_SelectFile_1}'
+    - '{Form_DMainWindow_1}'
+    - '{Form_DocSheet}'
+    测试界面: 第二窗口（Form_DMainWindow_1）+ 标签栏 + Form_DocSheet
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: element_action
+    selector:
+      name: Button_SelectFile_1
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow_1
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+teardown:
+- action: session_stop

@@ -1,0 +1,355 @@
+name: 文档打开_suite
+app: deepin-reader
+module: 文档打开
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档打开_001_s1
+  name: 打开常见格式文档（格式兼容）
+  description: ''
+  annotation:
+    测试界面: 初始界面（Button_SelectFile）+ 文档页（Form_CentralDocPage / Form_DocTabBar）
+    测试功能: 依次以 Ctrl+O 打开 PDF、DJVU、DOCX、DOC、PPTX、TXT、PNG、XPS 各格式文档，验证格式兼容可正常打开（PDF/DJVU
+      直接打开，OFFICE 系列转化为 PDF 打开）
+    前置条件: 应用已启动，处于初始未打开文档界面
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{Form_CentralDocPage}'
+    - '{Form_DocTabBar}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.doc
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pptx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.txt
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.png
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.xps
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_文档打开_002_s1
+  name: 打开损坏/异常文件不崩溃
+  description: ''
+  annotation:
+    测试界面: 文档页（Form_DMainWindow / Form_CentralDocPage）
+    测试功能: 打开损坏/异常的 PDF 与 DJVU 文件，验证应用不崩溃、给出异常处理且主窗口保持存活（格式容错与损坏文件兼容）
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{Form_DMainWindow}'
+    - '{Form_CentralDocPage}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/broken.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/5_broken.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/broken.djvu
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_window
+- id: suite_文档打开_003_s1
+  name: Ctrl+O 弹出文件选择对话框并取消退出
+  description: ''
+  annotation:
+    测试界面: 初始界面（Form_CentralNavPage）+ 系统文件对话框
+    测试功能: 初始界面按 Ctrl+O 弹出文件选择界面，点击取消/按 Esc 退出文件选择界面，返回初始界面不崩溃
+    前置条件: 应用已启动，处于初始界面
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{Form_CentralNavPage}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_cancel
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+      role: form
+- id: suite_文档打开_004_s1
+  name: docx 文档多种打开方式
+  description: ''
+  annotation:
+    测试界面: 初始界面（Button_SelectFile）+ 主菜单（新标签页）+ 标签栏（DTabBarAddButton）
+    测试功能: 通过应用内多种方式打开 docx：点击选择文件按钮、Ctrl+O、主菜单「新标签页」、标签栏「+」按钮，均能成功打开 docx（示例双击/右键/拖拽等桌面方式无法自动化）
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{Button_SelectFile}'
+    - '{DTitlebarMainMenu 新标签页}'
+    - '{DTabBarAddButton}'
+    - '{Form_CentralDocPage}'
+    - '{Form_DocTabBar}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+- id: suite_文档打开_005_s1
+  name: 同时打开三种格式文档（PDF/DJVU/DOCX 多标签）
+  description: ''
+  annotation:
+    测试界面: 文档页（Form_DocTabBar / Form_DocSheet / Form_CentralDocPage）
+    测试功能: 通过 Ctrl+O 及「新标签页」同时打开 PDF、DJVU、DOCX 三种格式，分别逐个标签打开，验证 PDF/DJVU 直接打开、DOCX
+      转化为 PDF 打开
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{DTitlebarMainMenu 新标签页}'
+    - '{Form_DocTabBar}'
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档打开_006_s1
+  name: DJVU 文档界面布局显示
+  description: ''
+  annotation:
+    测试界面: DJVU 文档页（Form_DocSheet）+ 顶部工具栏 + 主菜单（DTitlebarIconLabel）+ 左侧边栏（Button_ThumbnailToggle
+      / Form_SheetSidebar）
+    测试功能: 打开 DJVU 文档后，查看顶部工具栏/菜单项显示、文档区域显示、展开左边栏查看底部缩略图与书签图标显示无异常
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{Form_DocSheet}'
+    - '{Button_ThumbnailToggle}'
+    - '{DTitlebarIconLabel}'
+    - '{DTitlebarMainMenu}'
+    - '{Form_SheetSidebar}'
+    - '{Button_thumbnail}'
+    - '{Button_bookmark}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTitlebarIconLabel
+      role: button
+    do: click
+  - action: keyboard_press
+    key: escape
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+  - action: assert_element
+    selector:
+      name: Form_SheetSidebar
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: check box
+- id: suite_文档打开_007_s1
+  name: Ctrl+S 与 Ctrl+Shift+S 保存/另存为
+  description: ''
+  annotation:
+    测试界面: 文档页（Form_DocSheet）+ 系统文件保存对话框
+    测试功能: 打开 docx 文档，未编辑按 Ctrl+S 无提示不报错；按 Ctrl+Shift+S 弹出另存为界面，选择路径另存为新文件
+    前置条件: 应用已启动，已打开 docx 文档
+    AT元素引用:
+    - '{DTitlebarMainMenu 保存}'
+    - '{DTitlebarMainMenu 另存为}'
+    - '{Form_DocSheet}'
+    - '{Form_CentralDocPage}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/save_copy_test.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_文档打开_008_s1
+  name: 单个/多个 docx 文档未编辑直接关闭退出
+  description: ''
+  annotation:
+    测试界面: 标签栏（Form_DocTabBar）+ 标题栏关闭按钮（DTitlebarDWindowCloseButton）
+    测试功能: 单个 docx / 多个 docx 标签均未编辑时，点击标题栏关闭按钮，窗口直接关闭无保存提示弹出，编辑内容不丢失
+    前置条件: 应用已启动
+    AT元素引用:
+    - '{Form_DocSheet}'
+    - '{Form_DocTabBar}'
+    - '{DTitlebarDWindowCloseButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_window
+teardown:
+- action: session_stop

@@ -1,0 +1,1136 @@
+name: 文档视图_操作_suite
+app: deepin-reader
+module: 文档视图_操作
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档视图_操作_001_s1
+  name: 搜索-多次搜索（输入_删除_重输入）
+  description: ''
+  annotation:
+    测试界面: 搜索框 + 侧边栏 Form_SearchResWidget
+    测试功能: 输入关键字搜索、退格删除后重输入另一关键字再搜索，结果侧栏正确刷新不叠加
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Button_search
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: user
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: BackSpace
+  - action: keyboard_type
+    text: system
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+- id: suite_文档视图_操作_002_s1
+  name: 搜索-手动输入关键字搜索
+  description: ''
+  annotation:
+    测试界面: 搜索框 + 侧边栏 Form_SearchResWidget
+    测试功能: 手动输入关键字回车显示搜索结果；上一/下一按钮切换选中关键字
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: hello
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+- id: suite_文档视图_操作_004_s1
+  name: 搜索-开启搜索（主菜单）
+  description: ''
+  annotation:
+    测试界面: 主菜单「搜索」+ 搜索框
+    测试功能: 验证通过主菜单选择「搜索」开启搜索框并可输入关键字执行搜索
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarMainMenu
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 搜索
+  - action: keyboard_type
+    text: the
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+- id: suite_文档视图_操作_005_s1
+  name: 搜索-关闭搜索（Esc）
+  description: ''
+  annotation:
+    测试界面: 搜索框 + 侧边栏 Form_SearchResWidget
+    测试功能: 搜索后按 Esc 关闭搜索框，搜索框与搜索结果一并消失
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: user
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_not_exists
+    selector:
+      name: Form_SearchResWidget
+      role: form
+- id: suite_文档视图_操作_006_s1
+  name: 搜索-删除关键字后搜索框保留
+  description: ''
+  annotation:
+    测试界面: 搜索框 + 侧边栏 Form_SearchResWidget
+    测试功能: 删除搜索关键字后搜索结果关闭，但搜索框不关闭可继续输入关键字
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: user
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_press
+    key: BackSpace
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_not_exists
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_007_s1
+  name: 搜索-空关键字回车无变化
+  description: ''
+  annotation:
+    测试界面: 搜索框
+    测试功能: 搜索框为空时直接按回车，界面无任何变化（不产生搜索）
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_not_exists
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_008_s1
+  name: 搜索-无搜索结果提示
+  description: ''
+  annotation:
+    测试界面: 搜索框 + 侧边栏 Form_SearchResWidget
+    测试功能: 输入文档中不存在的关键字后侧边栏显示「无搜索结果」，右侧文档无变化
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_SearchResWidget
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: zzzzzznotexist
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_009_s1
+  name: 搜索-点击_滑动搜索结果缩略图
+  description: ''
+  annotation:
+    测试界面: 侧边栏 Form_SearchResWidget / View_ImageList
+    测试功能: 点击搜索结果缩略图跳转对应页面；结果多于一页时滑动鼠标正常滚动
+    前置条件: 已打开 PDF 文档并执行过搜索
+    AT元素引用:
+    - Form_SearchResWidget
+    - View_ImageList
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_type
+    text: the
+  - action: keyboard_press
+    key: Return
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: mouse_scroll
+    selector:
+      name: View_ImageList
+      role: list
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_SearchResWidget
+      role: form
+- id: suite_文档视图_操作_010_s1
+  name: 缩放-百分比编辑框输入
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放输入框 DLineEditChildLineEdit
+    测试功能: 编辑框输入 10%-500% 任意百分比回车，文档按比例调整，输入框内容无截断
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '120'
+  - action: keyboard_press
+    key: Return
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '35'
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_011_s1
+  name: 缩放-Ctrl+1/2/3 快捷键切换
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放 DLineEditChildLineEdit
+    测试功能: Ctrl+1 恢复 100%、Ctrl+2 适应高度、Ctrl+3 适应宽度，双页/旋转状态不变化
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: keyboard_hot_key
+    key: ctrl+3
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_012_s1
+  name: 缩放-取消适合宽度
+  description: ''
+  annotation:
+    测试界面: 缩放工具栏 DLineEditChildLineEdit
+    测试功能: 适合宽度状态下通过 Ctrl+2/选择比例/手动编辑比例/Ctrl+1 取消适合宽度并正确显示比例
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+3
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: keyboard_hot_key
+    key: ctrl+3
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '150'
+  - action: keyboard_press
+    key: Return
+  - action: keyboard_hot_key
+    key: ctrl+1
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_014_s1
+  name: 视图-左旋转_右旋转
+  description: ''
+  annotation:
+    测试界面: 文档内容区 Form_DocSheet 右键菜单
+    测试功能: 首次打开文档为单页适合页面；右键左旋转/右旋转仅当前页旋转，侧栏与工具栏不翻转
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DocSheet
+    - BrowserMenu
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 左旋转
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 右旋转
+    selector:
+      name: Form_DocSheet
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_015_s1
+  name: 工具-手型工具
+  description: ''
+  annotation:
+    测试界面: 主菜单「工具→手形工具」+ 文档区 Form_DocSheet
+    测试功能: 切换为手型工具后文档区可按住拖动页面，非文本选择样式
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarMainMenu
+    - Menu_Hand
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+  - action: element_action
+    selector:
+      name: Form_DocSheet
+      role: form
+    do: click
+  - action: mouse_drag
+    selector:
+      name: Form_DocSheet
+      role: form
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档视图_操作_016_s1
+  name: 翻页-键盘翻页
+  description: ''
+  annotation:
+    测试界面: 文档内容区 Form_DocSheet / 缩放输入框
+    测试功能: 默认焦点在文档时按上下方向键/PageUp/PageDown 逐行或逐页翻页；焦点在输入框时不翻页
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DocSheet
+    - DLineEditChildLineEdit
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: PageUp
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_press
+    key: PageUp
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_文档视图_操作_017_s1
+  name: 删除输入框数值
+  description: ''
+  annotation:
+    测试界面: 侧边栏页码框 pageEdit + 标题栏缩放框 DLineEditChildLineEdit
+    测试功能: 删除页码框/百分比框中的数值后点击其它位置，输入框自动恢复最近一次数据
+    前置条件: 已打开 PDF 文档并展开侧边栏
+    AT元素引用:
+    - pageEdit
+    - DLineEditChildLineEdit
+    - Button_thumbnail
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_press
+    key: Delete
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_press
+    key: Delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_文档视图_操作_018_s1
+  name: 全屏-进入（F11）
+  description: ''
+  annotation:
+    测试界面: 主窗口（F11 快捷键）
+    测试功能: 打开文档按 F11 进入全屏，隐藏标题栏与侧边栏
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarDWindowQuitFullscreenButton
+    - Form_DocSheet
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_019_s1
+  name: 全屏-退出全屏
+  description: ''
+  annotation:
+    测试界面: 全屏工具栏/退出全屏按钮 + Esc/F11
+    测试功能: 验证通过退出全屏按钮、Esc、F11、右键菜单均可退出全屏
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarDWindowQuitFullscreenButton
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: Escape
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: F11
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_020_s1
+  name: 全屏-右键菜单全屏_退出全屏
+  description: ''
+  annotation:
+    测试界面: 文档区右键菜单
+    测试功能: 未选中文本右键菜单显示「全屏」，全屏后右键菜单变为「退出全屏」
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DocSheet
+    - DTitlebarDWindowQuitFullscreenButton
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 全屏
+    selector:
+      name: Form_DocSheet
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    items:
+    - 退出全屏
+    selector:
+      name: Form_DocSheet
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_021_s1
+  name: 全屏-退出后窗口大小保持
+  description: ''
+  annotation:
+    测试界面: 主窗口（最大化/全屏）
+    测试功能: 最大化状态下进入并退出全屏仍保持最大化；默认窗口大小进入退出全屏仍保持默认
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarDWindowMaxButton
+    - Form_DMainWindow
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: Escape
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_022_s1
+  name: 全屏-放大镜打开与退出
+  description: ''
+  annotation:
+    测试界面: 全屏状态 + 主菜单「放大镜」
+    测试功能: 全屏下打开放大镜可放大，按 Esc 退出放大镜但不退出全屏
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - DTitlebarMainMenu
+    - DTitlebarDWindowQuitFullscreenButton
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: F11
+  - action: dtk_main_menu
+    items:
+    - 放大镜
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+- id: suite_文档视图_操作_023_s1
+  name: 搜索-搜索框界面显示
+  description: ''
+  annotation:
+    测试界面: 搜索框（FindWidget）
+    测试功能: 搜索框 UI 置灰/高亮显示
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_024_s1
+  name: 高亮-跨页高亮_重叠_取消
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 高亮-跨页高亮_重叠_取消
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_025_s1
+  name: 高亮-菜单显示_颜色切换_默认橘黄
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 高亮-菜单显示_颜色切换_默认橘黄
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_026_s1
+  name: 缩放-百分比下拉框显示与加减按钮
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 缩放-百分比下拉框显示与加减按钮
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_027_s1
+  name: 视图-窗口尺寸切换稳定性
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 视图-窗口尺寸切换稳定性
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_028_s1
+  name: 工具-默认选择工具与浏览效果
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 工具-默认选择工具与浏览效果
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_029_s1
+  name: 全屏-鼠标边缘1秒唤出_隐藏工具栏/侧边栏
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏-鼠标边缘1秒唤出_隐藏工具栏/侧边栏
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_030_s1
+  name: 全屏：侧边栏按钮高亮固定与隐藏
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：侧边栏按钮高亮固定与隐藏
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_031_s1
+  name: 全屏：侧边栏移入移出/收起展开视图保持
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：侧边栏移入移出/收起展开视图保持
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_032_s1
+  name: 全屏：退出后状态保持（翻页_目录_书签_注释_工具_搜索_视图）
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：退出后状态保持（翻页_目录_书签_注释_工具_搜索_视图）
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_033_s1
+  name: 全屏：右键菜单翻页/保存/另存为/打印/幻灯片/退出
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：右键菜单翻页/保存/另存为/打印/幻灯片/退出
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_034_s1
+  name: 全屏：鼠标边缘按 F11 唤出工具栏
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：鼠标边缘按 F11 唤出工具栏
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_035_s1
+  name: 全屏：多文档开合不丢失
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 全屏：多文档开合不丢失
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_036_s1
+  name: 搜索：过程中点击主菜单各项
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 搜索：过程中点击主菜单各项
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_037_s1
+  name: 搜索：完成后按钮置灰无 hover
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 搜索：完成后按钮置灰无 hover
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_038_s1
+  name: 缩放/视图：不同百分比下视图调整
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 缩放/视图：不同百分比下视图调整
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_039_s1
+  name: 视图：切换单/双页页面适配
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 视图：切换单/双页页面适配
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_040_s1
+  name: 缩放：高/宽不一致文档及加书签注释
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 缩放：高/宽不一致文档及加书签注释
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_041_s1
+  name: 焦点定位与书签/注释缩略图删除
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 焦点定位与书签/注释缩略图删除
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_042_s1
+  name: 超链接：浮窗/点击/安全提示跳转
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 超链接：浮窗/点击/安全提示跳转
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档视图_操作_043_s1
+  name: 视图保持：重启/多窗口/多标签保留页面视图
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 视图保持：重启/多窗口/多标签保留页面视图
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

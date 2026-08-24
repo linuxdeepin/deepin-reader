@@ -1,0 +1,135 @@
+name: 社区需求_suite
+app: deepin-reader
+module: 社区需求
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_社区需求_001_s1
+  name: 幻灯片放映-进入与退出
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_CentralDocPage / Form_DocSheet）+ 右键菜单 Menu_Browser
+    测试功能: 右键文档区→『幻灯片放映』进入全屏播放，Esc 退出返回文档视图
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+    - '{Menu_Browser}'
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    selector:
+      name: Form_DocSheet
+    items:
+    - 幻灯片放映
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_社区需求_002_s1
+  name: 幻灯片放映-键盘方向键翻页
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）+ 幻灯片放映全屏
+    测试功能: 方向键下/右切换下一页、上/左切换上一页（SlideWidget::handleKeyPressEvent），Esc 退出
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    selector:
+      name: Form_DocSheet
+    items:
+    - 幻灯片放映
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_社区需求_003_s1
+  name: 幻灯片放映-鼠标左击翻页
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）+ 幻灯片放映全屏
+    测试功能: 进入放映，鼠标左击演示区任意位置切换下一页，Esc 退出
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    selector:
+      name: Form_DocSheet
+    items:
+    - 幻灯片放映
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_社区需求_004_s1
+  name: 幻灯片放映-鼠标滚轮翻页
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）+ 幻灯片放映全屏
+    测试功能: 进入放映，鼠标滚轮上下滚动切换上一页/下一页，Esc 退出（滚轮翻页操作可自动化；末页 toast 提示属系统通知不可断言）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Form_CentralDocPage}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    selector:
+      name: Form_DocSheet
+    items:
+    - 幻灯片放映
+  - action: mouse_scroll
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: mouse_scroll
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+teardown:
+- action: session_stop

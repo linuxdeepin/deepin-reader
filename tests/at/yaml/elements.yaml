@@ -1,0 +1,175 @@
+elements:
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  Form_DMainWindow_1:
+    name: Form_DMainWindow_1
+    role: form
+  Form_DocSheet:
+    name: Form_DocSheet
+    role: form
+  Form_CentralDocPage:
+    name: Form_CentralDocPage
+    role: form
+  Form_DMainWindow:
+    name: Form_DMainWindow
+    role: form
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  DTitlebarDWindowCloseButton:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  Button_thumbnail:
+    name: Button_thumbnail
+    role: check box
+  Form_ThumbnailWidget:
+    name: Form_ThumbnailWidget
+    role: form
+  Button_bookmark:
+    name: Button_bookmark
+    role: check box
+  Form_BookMarkWidget:
+    name: Form_BookMarkWidget
+    role: form
+  Button_annotation:
+    name: Button_annotation
+    role: check box
+  Form_NotesWidget:
+    name: Form_NotesWidget
+    role: form
+  DTitlebarDWindowQuitFullscreenButton:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  DTitlebarDWindowOptionButton:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  Button_catalog:
+    name: Button_catalog
+    role: check box
+  Form_CatalogWidget:
+    name: Form_CatalogWidget
+    role: form
+  View_ImageList:
+    name: View_ImageList
+    role: list
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  Form_DocTabBar:
+    name: Form_DocTabBar
+    role: form
+  多数字员工并行工作站.pdf:
+    name: 多数字员工并行工作站.pdf
+    role: page tab
+  DTitlebarIconLabel:
+    name: DTitlebarIconLabel
+    role: button
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  Form_SheetSidebar:
+    name: Form_SheetSidebar
+    role: form
+  View_CatalogTree:
+    name: View_CatalogTree
+    role: tree
+  pageEdit:
+    name: pageEdit
+    role: text
+  Button_BookmarkAdd:
+    name: Button_BookmarkAdd
+    role: button
+  Form_CentralNavPage:
+    name: Form_CentralNavPage
+    role: form
+  DTitlebarMainMenu:
+    name: DTitlebarMainMenu
+    role: popup menu
+  Form_SearchResWidget:
+    name: Form_SearchResWidget
+    role: form
+  Button_SelectFile_1:
+    name: Button_SelectFile_1
+    role: button
+  Button_NotesAdd:
+    name: Button_NotesAdd
+    role: button
+  Button_ThumbnailPre:
+    name: Button_ThumbnailPre
+    role: button
+  Button_ThumbnailNext:
+    name: Button_ThumbnailNext
+    role: button
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  Button_search:
+    name: Button_search
+    role: check box
+  新窗口:
+    name: 新窗口
+    role: menu item
+  新标签页:
+    name: 新标签页
+    role: menu item
+  保存:
+    name: 保存
+    role: menu item
+  另存为:
+    name: 另存为
+    role: menu item
+  在文件管理器中显示:
+    name: 在文件管理器中显示
+    role: menu item
+  放大镜:
+    name: 放大镜
+    role: menu item
+  工具:
+    name: 工具
+    role: menu item
+  选择工具:
+    name: 选择工具
+    role: menu item
+  手形工具:
+    name: 手形工具
+    role: menu item
+  搜索:
+    name: 搜索
+    role: menu item
+  打印:
+    name: 打印
+    role: menu item
+  主题:
+    name: 主题
+    role: menu item
+  浅色:
+    name: 浅色
+    role: menu item
+  深色:
+    name: 深色
+    role: menu item
+  跟随系统:
+    name: 跟随系统
+    role: menu item
+  帮助:
+    name: 帮助
+    role: menu item
+  关于:
+    name: 关于
+    role: menu item
+  退出:
+    name: 退出
+    role: menu item
+  ? ''
+  : name: ''
+    role: page tab list

@@ -1,0 +1,245 @@
+name: 缩略图_目录_suite
+app: deepin-reader
+module: 缩略图_目录
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_目录_001_s1
+  name: 目录切换与目录-右侧文档联动（点击章节跳转/同步高亮）
+  description: ''
+  annotation:
+    测试界面: 左侧边栏（Button_ThumbnailToggle / Form_SheetSidebar / Button_catalog）+ 目录（Form_CatalogWidget
+      / View_CatalogTree）+ 文档区 Form_DocSheet
+    测试功能: 点击左边栏底部目录图标，左边栏显示文档目录（Form_CatalogWidget/View_CatalogTree）；在目录树选中/键盘上下键切换章节，右侧文档跳转至对应目录索引页；改变右侧文档当前页面后左边栏目录对应高亮同步显示
+    前置条件: 应用已启动，已打开带目录的多章 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Form_CentralDocPage
+    - Button_ThumbnailToggle
+    - Form_SheetSidebar
+    - Button_catalog
+    - Form_CatalogWidget
+    - View_CatalogTree
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: PageUp
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_CatalogWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_缩略图_目录_002_s1
+  name: 目录层级展开收起与恢复默认显示
+  description: ''
+  annotation:
+    测试界面: 目录（Form_CatalogWidget / View_CatalogTree）+ 左侧边栏 Form_SheetSidebar
+    测试功能: 打开文档查看目录默认展示方式：默认收起状态展示一级目录；点击目录层级索引可展开显示多级（最多显示三级），再次点击收起恢复默认一级显示；侧边栏宽度调整后目录内容超长省略（宽度拖拽无
+      AT 元素，仅断言目录显示不受影响）
+    前置条件: 应用已启动，已打开带多级目录的 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Button_ThumbnailToggle
+    - Button_catalog
+    - Form_CatalogWidget
+    - View_CatalogTree
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+      child_index: 0
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+      child_index: 0
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+  - action: assert_element
+    selector:
+      name: Form_CatalogWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_缩略图_目录_003_s1
+  name: 可读取页数文档-页码输入跳转与上/下翻页
+  description: ''
+  annotation:
+    测试界面: 侧边栏缩略图目录（Form_ThumbnailWidget / Form_Paging / pageEdit / Button_ThumbnailPre
+      / Button_ThumbnailNext）+ 文档区 Form_DocSheet
+    测试功能: 打开可读取页数的文档，页码输入框一行显示输入框、默认计算页数和文档总页数；输入有效页码按回车跳转至对应页面；输入字母等非有效内容提示『请输入有效页码』且页码不变；点击上翻/下翻按钮页数上下翻动且显示正确
+    前置条件: 应用已启动，已打开可读取总页数的 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Form_ThumbnailWidget
+    - pageEdit
+    - Button_ThumbnailPre
+    - Button_ThumbnailNext
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '3'
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: abc
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailPre
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailPre
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+teardown:
+- action: session_stop

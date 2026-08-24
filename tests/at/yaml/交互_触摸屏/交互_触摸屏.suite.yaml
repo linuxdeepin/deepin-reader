@@ -1,0 +1,225 @@
+name: 交互_触摸屏_suite
+app: deepin-reader
+module: 交互_触摸屏
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_交互_触摸屏_001_s1
+  name: 单指单击工具栏菜单按钮
+  description: ''
+  annotation:
+    测试界面: 主窗口-标题栏右上（Form_DTitlebarButtonArea）
+    测试功能: 单指点按标题栏菜单按钮可展开主菜单（触摸等效于鼠标单击）
+    前置条件: 应用已启动，已打开文档
+    AT元素引用:
+    - '{DTitlebarDWindowOptionButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: mouse_click
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+- id: suite_交互_触摸屏_002_s1
+  name: 单指单击侧边栏与任意缩略图切换
+  description: ''
+  annotation:
+    测试界面: 左侧边栏（Form_SheetSidebar）缩略图/目录/书签/注释
+    测试功能: 单指点（mouse_click）：展开左侧栏后依次点按书签/目录/缩略图/注释功能，再点按任意缩略图完成选择切换
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{Button_ThumbnailToggle}'
+    - '{Button_catalog}'
+    - '{Button_bookmark}'
+    - '{Button_annotation}'
+    - '{Button_thumbnail}'
+    - '{View_ImageList}'
+    - '{Form_CatalogWidget}'
+    - '{Form_BookMarkWidget}'
+    - '{Form_NotesWidget}'
+    - '{Form_ThumbnailWidget}'
+  steps:
+  - action: mouse_click
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+  - action: mouse_click
+    selector:
+      name: Button_catalog
+      role: check box
+  - action: mouse_click
+    selector:
+      name: Button_bookmark
+      role: check box
+  - action: mouse_click
+    selector:
+      name: Button_annotation
+      role: check box
+  - action: mouse_click
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: mouse_click
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CatalogWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_ThumbnailWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_交互_触摸屏_003_s1
+  name: 单指单击缩放下拉框切换视图方式
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放下拉/编辑框（DLineEditChildLineEdit）
+    测试功能: 单指点（mouse_click）放大缩小下拉框，通过缩放比例切换视图方式并可正常应用
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DLineEditChildLineEdit}'
+    - '{Form_DocSheet}'
+  steps:
+  - action: mouse_click
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: keyboard_hot_key
+    key: ctrl+a
+  - action: keyboard_type
+    text: '120'
+  - action: keyboard_press
+    key: Return
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_交互_触摸屏_004_s1
+  name: 单指单击增加与切换标签页
+  description: ''
+  annotation:
+    测试界面: 标签栏（Form_DocTabBar）+ 文件选择界面
+    测试功能: 单指点（mouse_click）点击 + 按钮增加标签页并进入文件选择界面，再点按已有标签页切换显示
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTabBarAddButton}'
+    - '{多数字员工并行工作站.pdf}'
+    - '{Form_DocTabBar}'
+  steps:
+  - action: mouse_click
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: mouse_click
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocTabBar
+      role: form
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_交互_触摸屏_005_s1
+  name: 单指双击标题栏最大化与还原
+  description: ''
+  annotation:
+    测试界面: 标题栏（Form_DMainWindowTitlebar）
+    测试功能: 单指双击标题栏窗口最大化，再次双击恢复原来窗口大小
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - '{DTitlebarDWindowMaxButton}'
+    - '{Form_DMainWindow}'
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: double_click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: double_click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_触摸屏_006_s1
+  name: 单指移动窗口的位置
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 单指移动窗口的位置
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_触摸屏_007_s1
+  name: 单指拖拽批量文件到应用内
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 单指拖拽批量文件到应用内
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_交互_触摸屏_008_s1
+  name: 单指拖拽拉伸窗口大小
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 单指拖拽拉伸窗口大小
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

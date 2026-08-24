@@ -1,0 +1,39 @@
+name: 兼容性_suite
+app: deepin-reader
+module: 兼容性
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_兼容性_001_s1
+  name: 烟雾-应用可正常启动
+  description: ''
+  annotation:
+    测试界面: 主窗口（Form_DMainWindow）
+    测试功能: 验证 deepin-reader 应用能正常启动并显示主窗口（兼容性模块的烟雾覆盖）
+    前置条件: 无
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_兼容性_002_s1
+  name: 切换系统语言后检查翻译正确性
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 切换系统语言后检查翻译正确性
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

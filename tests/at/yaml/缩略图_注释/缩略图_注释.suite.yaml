@@ -1,0 +1,342 @@
+name: 缩略图_注释_suite
+app: deepin-reader
+module: 缩略图_注释
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_注释_001_s1
+  name: 添加图标注释并显示注释侧边栏目录
+  description: ''
+  annotation:
+    测试界面: 侧边栏注释目录（Button_annotation / Form_NotesWidget / Button_NotesAdd / View_ImageList）+
+      文档区（Form_DocSheet / Form_CentralDocPage）
+    测试功能: 打开 PDF 后点击侧边栏注释图标切换注释目录；通过 Button_NotesAdd 进入注释模式在文档区放置图标注释并输入内容；添加后左边栏每图标注释均对应目录条目；添加后不多输入直接点击其他区域注释自动取消
+    前置条件: 应用已启动
+    AT元素引用:
+    - Button_SelectFile
+    - Form_CentralDocPage
+    - Button_annotation
+    - Form_NotesWidget
+    - Button_NotesAdd
+    - Form_DocSheet
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: test_annotation_001
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+- id: suite_缩略图_注释_002_s1
+  name: 注释目录点击跳转与右键复制
+  description: ''
+  annotation:
+    测试界面: 注释目录（Form_NotesWidget / View_ImageList / Button_NotesAdd）+ 文档区 Form_DocSheet
+    测试功能: 点击左边栏注释条目跳转到对应页对应注释内容处，目录与页面同步；右键注释条目弹出菜单（复制/删除注释/删除所有注释），菜单点复制可复制该条注释内容
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Button_annotation
+    - Form_NotesWidget
+    - Button_NotesAdd
+    - Form_DocSheet
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: jump_test_note
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 复制
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+- id: suite_缩略图_注释_003_s1
+  name: 删除注释（Delete 快捷键与右键删除菜单）
+  description: ''
+  annotation:
+    测试界面: 注释目录（Form_NotesWidget / View_ImageList / Button_NotesAdd）+ 功能区 Form_DocSheet
+    测试功能: 方式一：单击注释目录后按 Delete 快捷键删除，注释与左侧目录同步删除；方式二：右击注释目录选择「删除注释」菜单删除。针对高亮注释/图标注释的各类删除方式最终走左侧目录同步删除验证路径；鼠标不在目录上时
+      Delete 不误删（基线）
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Button_annotation
+    - Form_NotesWidget
+    - Button_NotesAdd
+    - View_ImageList
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: delete_me_note
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: Delete
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: context_delete_note
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 删除注释
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_NotesWidget
+      role: form
+- id: suite_缩略图_注释_004_s1
+  name: 快捷键切换注释目录
+  description: ''
+  annotation:
+    测试界面: 注释目录（Form_NotesWidget / View_ImageList / Button_NotesAdd）+ 功能区 Form_DocSheet
+    测试功能: 添加多个注释后注释目录显示多条，选中一个注释目录按键盘上下键/PageUp/PageDown 切换，右侧文档跟随跳转；双页显示模式同样切换正常
+    前置条件: 应用已启动，已打开 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Button_annotation
+    - Form_NotesWidget
+    - Button_NotesAdd
+    - Form_DocSheet
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: note_one
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: keyboard_type
+    text: note_two
+  - action: mouse_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: Down
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+teardown:
+- action: session_stop

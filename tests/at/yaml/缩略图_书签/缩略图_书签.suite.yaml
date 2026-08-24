@@ -1,0 +1,302 @@
+name: 缩略图_书签_suite
+app: deepin-reader
+module: 缩略图_书签
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_缩略图_书签_001_s1
+  name: 未打开文档初始界面显示
+  description: ''
+  annotation:
+    测试界面: 初始界面 Form_CentralNavPage + 标题栏
+    测试功能: 未打开文档时初始界面显示（应用图标/名称、拖拽提示、选择文件按钮）；关闭应用再打开后回到初始界面；未打开文档时侧边栏/缩放控件为置灰状态
+    前置条件: 应用已安装，无默认打开文档
+    AT元素引用:
+    - Form_CentralNavPage
+    - Button_SelectFile
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_缩略图_书签_002_s1
+  name: 打开文档与界面布局显示
+  description: ''
+  annotation:
+    测试界面: 文档页 Form_CentralDocPage + 侧边栏 Form_SheetSidebar
+    测试功能: 多种方式打开文档（点击选择文件/Ctrl+O）、支持格式 PDF/DJVU/DOCX 正常打开；打开后顶部工具栏、文档区、侧边栏底部缩略图/目录/书签/注释图标布局显示正常；双击/文件管理器内打开等外部途径不可在
+      AT 会话内覆盖
+    前置条件: 应用已启动
+    AT元素引用:
+    - Button_SelectFile
+    - Form_CentralDocPage
+    - Form_SheetSidebar
+    - Button_bookmark
+    - Form_BookMarkWidget
+    - Button_BookmarkAdd
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: check box
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+- id: suite_缩略图_书签_003_s1
+  name: 添加书签（按钮 + 右键菜单）
+  description: ''
+  annotation:
+    测试界面: 书签目录 Form_BookMarkWidget + 文档区 Form_DocSheet
+    测试功能: 点击书签图标上的添加按钮添加书签、或右键文档区域通过菜单添加书签；添加后左边栏列出书签页面（缩略图+页面数）
+    前置条件: 已打开 PDF 文档
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - Form_BookMarkWidget
+    - View_ImageList
+    - Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: dtk_context_menu
+    selector:
+      name: Form_DocSheet
+    items:
+    - 添加书签
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+- id: suite_缩略图_书签_004_s1
+  name: 点击书签缩略图跳转页面
+  description: ''
+  annotation:
+    测试界面: 书签目录 Form_BookMarkWidget（View_ImageList）+ 文档区 Form_DocSheet
+    测试功能: 点击左边栏任意书签缩略图，跳转到对应页面；右侧书签与缩略图同步展示
+    前置条件: 已打开 PDF 文档且已添加书签
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - View_ImageList
+    - Form_BookMarkWidget
+    - Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_缩略图_书签_005_s1
+  name: 删除书签（右键/Delete/删除所有）
+  description: ''
+  annotation:
+    测试界面: 书签目录 Form_BookMarkWidget（View_ImageList）+ 文档区 Form_DocSheet
+    测试功能: 通过右键菜单「删除书签」、选中书签按 Delete 快捷键、以及删除所有书签三种方式删除书签，删除后书签从列表/页面移除，页面右上角书签图标变为空心
+    前置条件: 已打开 PDF 文档且已添加书签
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - View_ImageList
+    - Form_BookMarkWidget
+    - Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: Delete
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 删除书签
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_BookMarkWidget
+      role: form
+- id: suite_缩略图_书签_006_s1
+  name: 快捷键切换书签缩略图
+  description: ''
+  annotation:
+    测试界面: 书签目录 View_ImageList + 文档区 Form_DocSheet
+    测试功能: 添加多个书签后，选择一个书签缩略图按方向键/PageUp/PageDown 切换，右侧文档跟随变化；双页显示同样可切换
+    前置条件: 已打开 PDF 文档且已添加多个书签
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - View_ImageList
+    - Form_BookMarkWidget
+    - Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 1.0
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+      child_index: 0
+    do: click
+  - action: keyboard_press
+    key: PageDown
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_缩略图_书签_007_s1
+  name: 打开多途径获取的文档
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 打开通过 FTP/U盘/网页下载等外部途径获取的 PDF、DOCX 文档
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_缩略图_书签_008_s1
+  name: 打开损坏的文档
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 打开损坏的文档验证错误提示（请检查文件是否损坏）
+    前置条件: —
+    AT元素引用:
+    - Form_DMainWindow
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop

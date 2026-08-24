@@ -1,0 +1,146 @@
+name: 文档查看器_suite
+app: deepin-reader
+module: 文档查看器
+setup:
+- action: session_start
+  command: deepin-reader
+  wait: 3.0
+suites:
+- id: suite_文档查看器_001_s1
+  name: 运行应用并打开浏览PDF文档
+  description: ''
+  annotation:
+    测试界面: 主窗口（Form_DMainWindow）→ 初始导航页/文档页
+    测试功能: 运行（双击启动）文档查看器，选择 PDF 文件打开并进入浏览
+    前置条件: 无
+    AT元素引用:
+    - Form_CentralNavPage
+    - Button_SelectFile
+    - Form_CentralDocPage
+    - Form_DocSheet
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_CentralNavPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+- id: suite_文档查看器_002_s1
+  name: 打开并浏览DJVU与DOCX文档
+  description: ''
+  annotation:
+    测试界面: 主窗口-文档页（Form_CentralDocPage / Form_DocSheet）
+    测试功能: 选择 DJVU、DOCX 两种格式文档打开浏览（PDF/DJVU 直接打开，DOCX 转化为 PDF 打开）
+    前置条件: 应用已启动
+    AT元素引用:
+    - Button_SelectFile
+    - Form_CentralDocPage
+    - Form_DocSheet
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DocSheet
+      role: form
+  - action: assert_element
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_文档查看器_003_s1
+  name: 全屏浏览与退出（F11/Esc）
+  description: ''
+  annotation:
+    测试界面: 文档区（Form_DocSheet）+ 全屏态标题栏
+    测试功能: F11 进入全屏浏览（标题栏出现退出全屏按钮），Esc 退出全屏，界面恢复正常
+    前置条件: 应用已启动，文档已打开
+    AT元素引用:
+    - Form_DocSheet
+    - DTitlebarDWindowQuitFullscreenButton
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_press
+    key: F11
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+  - action: assert_not_exists
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+- id: suite_文档查看器_004_s1
+  name: 玲珑应用安装/卸载
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 玲珑应用安装/卸载
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档查看器_005_s1
+  name: 玲珑应用运行/进程/容器
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 玲珑应用运行/进程/容器
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+- id: suite_文档查看器_006_s1
+  name: 玲珑应用信息/仓库/内容查询
+  description: ''
+  annotation:
+    测试界面: —
+    测试功能: 玲珑应用信息/仓库/内容查询
+    前置条件: —
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Form_DMainWindow
+      role: form
+teardown:
+- action: session_stop
