@@ -46,8 +46,11 @@ Central::Central(QWidget *parent)
     connect(m_restoreTipWidget, &RestoreTipWidget::sigJumpToFirstPage, this, [this]() {
         if (m_docPage) {
             DocSheet *sheet = m_docPage->getCurSheet();
-            if (sheet)
+            if (sheet) {
+                sheet->dismissRestoreTip();
                 sheet->jumpToFirstPage();
+                m_restoreTipWidget->hide();
+            }
         }
     });
 
@@ -125,10 +128,22 @@ CentralDocPage *Central::docPage()
         connect(m_docPage, SIGNAL(sigNeedOpenFilesExec()), SLOT(onOpenFilesExec()));
         connect(m_docPage, SIGNAL(sigNeedActivateWindow()), this, SLOT(onNeedActivateWindow()));
 
-        // 监听恢复阅读位置提示信号
-        connect(m_docPage, &CentralDocPage::sigShowRestoreTip, this, [this]() {
-            if (m_restoreTipWidget)
+        // 监听恢复阅读位置提示信号（仅当发出者为当前 sheet 时显示）
+        connect(m_docPage, &CentralDocPage::sigShowRestoreTip, this, [this](DocSheet *sheet) {
+            if (!m_restoreTipWidget || !m_docPage)
+                return;
+            if (sheet && sheet == m_docPage->getCurSheet() && sheet->needsRestoreTip())
                 m_restoreTipWidget->showTip();
+        });
+
+        // 标签页切换时，根据当前 sheet 的恢复提示状态同步提示条显隐
+        connect(m_docPage, &CentralDocPage::sigCurSheetChanged, this, [this](DocSheet *sheet) {
+            if (!m_restoreTipWidget || !m_docPage)
+                return;
+            if (sheet && sheet->needsRestoreTip())
+                m_restoreTipWidget->showTip();
+            else
+                m_restoreTipWidget->hide();
         });
     }
     // qCDebug(appLog) << "Getting doc page end";
@@ -251,6 +266,9 @@ void Central::onSheetCountChanged(int count)
         m_layout->setCurrentIndex(0);
         m_navPage->setFocus();
         m_widget->setControlEnabled(false);
+        // 所有标签页关闭时隐藏恢复提示条
+        if (m_restoreTipWidget)
+            m_restoreTipWidget->hide();
     }
 }
 
