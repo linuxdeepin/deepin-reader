@@ -1,0 +1,88 @@
+name: 文档查看器_suite
+app: deepin-reader
+module: 文档查看器
+setup:
+- action: session_start
+  command: ll-cli uninstall org.deepin.reader/6.0.17
+  wait: 3.0
+suites:
+- id: suite_文档查看器_007_s1
+  name: 玲珑应用基本功能测试
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏切换按钮组 / 书签注释面板 / 标题栏 / 右键菜单
+    测试功能: 双击运行后打开 pdf/djvu/docx 浏览，测试搜索、添加/删除书签、注释、全屏、幻灯片放映、文档信息查看等基本功能
+    前置条件: 应用未启动，TEST_FILES_DIR 下备有 pdf/djvu/docx 文档
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - Button_annotation
+    - Button_NotesAdd
+    - Button_search
+    - View_ImageList
+    - DTitlebarDWindowQuitFullscreenButton
+    - Form_CentralDocPage
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_search
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: click
+  - action: dtk_context_menu
+    items:
+    - 文档信息
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+teardown:
+- action: session_stop

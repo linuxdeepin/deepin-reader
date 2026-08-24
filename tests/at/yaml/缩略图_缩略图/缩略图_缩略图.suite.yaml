@@ -1,0 +1,235 @@
+name: 缩略图_缩略图_suite
+app: deepin-reader
+module: 缩略图_缩略图
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_缩略图_缩略图_001_s1
+  name: 缩略图视图切换与左边栏底部按钮
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏切换按钮组（Form_Sheetsidebar）/ 缩略图面板 / 目录面板 / 书签面板 / 注释面板
+    测试功能: 点击标题栏左侧缩略图切换开关与左边栏底部缩略图按钮展开左侧栏，查看底部缩略图、目录、书签、注释四个图标及其对应面板；再次点击缩略图按钮取消高亮、隐藏左侧栏与缩略图内容
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Button_catalog
+    - Button_bookmark
+    - Button_annotation
+    - View_ImageList
+    - View_CatalogTree
+    - Button_BookmarkAdd
+    - Button_NotesAdd
+  steps:
+  - action: element_action
+    selector:
+      name: Button_ThumbnailToggle
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: assert_not_exists
+- id: suite_缩略图_缩略图_002_s1
+  name: 缩略图列表浏览与翻页跳转
+  description: ''
+  annotation:
+    测试界面: 左侧栏缩略图面板（Form_ThumbnailWidget）
+    测试功能: 点击左边栏任意文档缩略图跳转相应页面；缩略图超过一页时翻页浏览；通过上一页/下一页按钮与页码输入框跳转页码
+    前置条件: 启动 deepin-reader 并打开多页 PDF 文档，已展开缩略图面板
+    AT元素引用:
+    - Button_thumbnail
+    - View_ImageList
+    - pageEdit
+    - Button_ThumbnailPre
+    - Button_ThumbnailNext
+  steps:
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailPre
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    selector:
+      name: pageEdit
+      role: text
+    text: '3'
+  - action: keyboard_press
+    key: enter
+  - action: mouse_scroll
+    selector:
+      name: View_ImageList
+      role: list
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_缩略图_003_s1
+  name: 缩略图中高亮书签注释显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏缩略图面板（Form_ThumbnailWidget）
+    测试功能: 文档中添加高亮、书签、注释后查看左侧栏文档缩略图中是否显示，删除后缩略图中是否同步删除
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - Button_thumbnail
+    - View_ImageList
+    - Button_BookmarkAdd
+    - dtk_context_menu
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: text
+    items:
+    - 添加注释
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除书签
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+teardown:
+- action: session_stop

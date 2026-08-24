@@ -1,0 +1,120 @@
+name: 交互_触摸屏_suite
+app: deepin-reader
+module: 交互_触摸屏
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_交互_触摸屏_001_s1
+  name: 单指单击工具栏菜单按钮
+  description: ''
+  annotation:
+    测试界面: 标题栏右区域（Form_DTitlebarButtonArea）
+    测试功能: 单指单击工具栏主菜单按钮，打开主菜单
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - DTitlebarMainMenu
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarMainMenu
+      role: popup menu
+    do: assert_exists
+- id: suite_交互_触摸屏_002_s1
+  name: 单指单击任意缩略图
+  description: ''
+  annotation:
+    测试界面: 左侧栏切换按钮组（Form_SheetSidebar）/ 缩略图面板（Form_ThumbnailWidget）
+    测试功能: 单指单击左侧栏目录、缩略图等切换按钮并单击任意缩略图，切换左侧面板
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - Button_catalog
+    - Button_thumbnail
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_交互_触摸屏_004_s1
+  name: 单指单击增加、切换标签页
+  description: ''
+  annotation:
+    测试界面: 文档标签页栏（Form_DocTabBar）
+    测试功能: 单指单击加号按钮新增标签页，单击标签页切换显示
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - DTabBarAddButton
+    - 多数字员工并行工作站.pdf
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: assert_exists
+- id: suite_交互_触摸屏_005_s1
+  name: 单指双击
+  description: ''
+  annotation:
+    测试界面: 标题栏左区域（Form_DTitlebarLeftArea）
+    测试功能: 单指双击工具栏，切换窗口最大化与还原
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - Form_DTitlebarLeftArea
+    - DTitlebarDWindowMaxButton
+    - Form_CentralDocPage
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+teardown:
+- action: session_stop

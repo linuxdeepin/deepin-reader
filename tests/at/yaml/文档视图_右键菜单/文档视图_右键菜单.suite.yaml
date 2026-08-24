@@ -1,0 +1,555 @@
+name: 文档视图_右键菜单_suite
+app: deepin-reader
+module: 文档视图_右键菜单
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_文档视图_右键菜单_001_s1
+  name: PDF未选中文本右键菜单完整功能
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 未选中文本时右键菜单显示及搜索、书签、注释、全屏、幻灯片、翻页、旋转、打印、文档信息
+    前置条件: 应用已启动并已打开一份PDF文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 搜索
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 左旋转
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 右旋转
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 打印
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 文档信息
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 搜索
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加注释
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 全屏
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 第一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 前一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 最后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 左旋转
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 右旋转
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 文档信息
+      role: menu item
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 文档信息
+      role: menu item
+- id: suite_文档视图_右键菜单_002_s1
+  name: DJVU文档未选中文本右键菜单
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: DJVU文档未选中文本时右键菜单显示及书签、全屏、幻灯片、翻页、旋转、打印、文档信息
+    前置条件: 应用已启动并已打开一份DJVU文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 左旋转
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 右旋转
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 全屏
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 第一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 前一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 最后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 左旋转
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 右旋转
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 文档信息
+      role: menu item
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+- id: suite_文档视图_右键菜单_003_s1
+  name: 上下页面均部分显示时的页面导航
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 上下页面均有一部分显示在当前窗口时，通过右键菜单第一页/前一页/后一页/最后一页跳转
+    前置条件: 应用已启动并已打开一份多页PDF文档，窗口同时显示上下两部分页面
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+- id: suite_文档视图_右键菜单_004_s1
+  name: 仅显示当前页时的页面导航
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 窗口中仅显示当前页（不显示上下页）时，通过右键菜单添加书签、添加注释及第一页/上一页/下一页/最后一页跳转
+    前置条件: 应用已启动并已打开一份文档，当前窗口仅显示当前页
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+  - action: assert_element
+    selector:
+      name: 第一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 前一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 最后一页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+- id: suite_文档视图_右键菜单_005_s1
+  name: 选中文本后的高亮相关菜单
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 选中文字后右击弹出高亮相关菜单（复制、高亮、8种高亮颜色、取消高亮、添加注释、添加书签）
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 复制
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 高亮
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 取消高亮
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加注释
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 取消高亮
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 高亮
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 第一页
+      role: menu item
+- id: suite_文档视图_右键菜单_006_s1
+  name: 复制与高亮注释书签功能
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 选中未高亮/高亮文本后复制、高亮、8种高亮颜色、取消高亮、添加注释、添加书签
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 复制
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 高亮
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加注释
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 复制
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 高亮
+      role: menu item
+- id: suite_文档视图_右键菜单_007_s1
+  name: 幻灯片放映与退出状态
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 通过右键菜单进入/退出幻灯片放映，退出后保持窗口最大化或默认状态
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - DTitlebarDWindowMaxButton
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: escape
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+- id: suite_文档视图_右键菜单_008_s1
+  name: 打印预览（打印到文件）
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 未连接打印机时通过右键菜单打印并打印到文件（PDF）
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - 打印
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 打印到文件（PDF）
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+- id: suite_文档视图_右键菜单_009_s1
+  name: 未自动化项
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu)
+    测试功能: 连接打印机打印、打印预览横向/纵向显示、菜单高亮效果、翻页后选中文本保持
+    前置条件: 无
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_ocr_exists
+    text: 打印预览界面
+  - action: assert_ocr_exists
+    text: 打印预览界面
+  - action: assert_ocr_exists
+    text: 右键菜单
+  - action: assert_ocr_exists
+    text: 选中文本
+teardown:
+- action: session_stop

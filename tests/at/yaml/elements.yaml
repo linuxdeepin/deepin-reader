@@ -1,0 +1,217 @@
+elements:
+  保存:
+    name: 保存
+    role: menu item
+  另存为:
+    name: 另存为
+    role: menu item
+  最小化窗口:
+    name: 最小化窗口
+    role: menu item
+  退出:
+    name: 退出
+    role: menu item
+  新标签页:
+    name: 新标签页
+    role: menu item
+  新窗口:
+    name: 新窗口
+    role: menu item
+  关于:
+    name: 关于
+    role: menu item
+  帮助:
+    name: 帮助
+    role: menu item
+  浅色:
+    name: 浅色
+    role: menu item
+  深色:
+    name: 深色
+    role: menu item
+  跟随系统:
+    name: 跟随系统
+    role: menu item
+  在文件管理器中显示:
+    name: 在文件管理器中显示
+    role: dialog
+  放大镜:
+    name: 放大镜
+    role: menu item
+  打印:
+    name: 打印
+    role: menu item
+  Button_thumbnail:
+    name: Button_thumbnail
+    role: check box
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  选择工具:
+    name: 选择工具
+    role: menu item
+  手形工具:
+    name: 手形工具
+    role: menu item
+  Button_BookmarkAdd:
+    name: Button_BookmarkAdd
+    role: button
+  Button_NotesAdd:
+    name: Button_NotesAdd
+    role: button
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  DTitlebarDWindowQuitFullscreenButton:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  Button_search:
+    name: Button_search
+    role: check box
+  Button_bookmark:
+    name: Button_bookmark
+    role: check box
+  Button_annotation:
+    name: Button_annotation
+    role: check box
+  View_ImageList:
+    name: View_ImageList
+    role: list
+  View_CatalogTree:
+    name: View_CatalogTree
+    role: tree
+  DTitlebarDWindowOptionButton:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  DTitlebarMainMenu:
+    name: DTitlebarMainMenu
+    role: popup menu
+  Button_catalog:
+    name: Button_catalog
+    role: check box
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  多数字员工并行工作站.pdf:
+    name: 多数字员工并行工作站.pdf
+    role: page tab
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  pageEdit:
+    name: pageEdit
+    role: text
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  删除全部书签:
+    name: 删除全部书签
+    role: dialog
+  取消:
+    name: 取消
+    role: push button
+  DTitlebarDWindowCloseButton:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  是否保存:
+    name: 是否保存
+    role: dialog
+  搜索:
+    name: 搜索
+    role: menu item
+  确定:
+    name: 确定
+    role: push button
+  Label_Icon:
+    name: Label_Icon
+    role: image
+  添加书签:
+    name: 添加书签
+    role: menu item
+  添加注释:
+    name: 添加注释
+    role: menu item
+  全屏:
+    name: 全屏
+    role: menu item
+  幻灯片放映:
+    name: 幻灯片放映
+    role: menu item
+  第一页:
+    name: 第一页
+    role: menu item
+  前一页:
+    name: 前一页
+    role: menu item
+  后一页:
+    name: 后一页
+    role: menu item
+  最后一页:
+    name: 最后一页
+    role: menu item
+  左旋转:
+    name: 左旋转
+    role: menu item
+  右旋转:
+    name: 右旋转
+    role: menu item
+  文档信息:
+    name: 文档信息
+    role: menu item
+  复制:
+    name: 复制
+    role: menu item
+  高亮:
+    name: 高亮
+    role: menu item
+  取消高亮:
+    name: 取消高亮
+    role: menu item
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  Button_ThumbnailPre:
+    name: Button_ThumbnailPre
+    role: button
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  播放:
+    name: 播放
+    role: button
+  暂停:
+    name: 暂停
+    role: button
+  自动播放:
+    name: 自动播放
+    role: button
+  下一页:
+    name: 下一页
+    role: button
+  TextEditShadowWidget:
+    name: TextEditShadowWidget
+    role: text
+  TransparentTextEdit:
+    name: TransparentTextEdit
+    role: text
+  Button_ThumbnailNext:
+    name: Button_ThumbnailNext
+    role: button
+  DTitlebarIconLabel:
+    name: DTitlebarIconLabel
+    role: button
+  工具:
+    name: 工具
+    role: menu item
+  主题:
+    name: 主题
+    role: menu item
+  ? ''
+  : name: ''
+    role: page tab list
+  Button_SelectFile_1:
+    name: Button_SelectFile_1
+    role: button
