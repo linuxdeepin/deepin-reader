@@ -83,6 +83,7 @@ bool Database::prepareOperation()
                     ",sidebarIndex INTEGER"
                     ",currentPage INTEGER"
                     ",sidebarWidth INTEGER DEFAULT 200"
+                    ",sidebarWidthChanged INTEGER DEFAULT 0"
                     ",scrollPosition REAL DEFAULT 0.0"
                     ",expandedSections TEXT DEFAULT '[]'"
                     ",fileSize INTEGER DEFAULT 0"
@@ -126,6 +127,7 @@ bool Database::migrateOperationTable()
 
     QList<NewColumn> newColumns = {
         {"sidebarWidth",  "INTEGER DEFAULT 200"},
+        {"sidebarWidthChanged", "INTEGER DEFAULT 0"},
         {"scrollPosition", "REAL DEFAULT 0.0"},
         {"expandedSections", "TEXT DEFAULT '[]'"},
         {"fileSize",       "INTEGER DEFAULT 0"},
@@ -179,6 +181,7 @@ bool Database::readOperation(DocSheet *sheet)
         sheet->m_operation.currentPage = query.value("currentPage").toInt();
         // V1.2 新增字段
         sheet->m_operation.sidebarWidth = query.value("sidebarWidth").toInt();
+        sheet->m_operation.sidebarWidthChanged = query.value("sidebarWidthChanged").toInt() != 0;
         sheet->m_operation.scrollPosition = query.value("scrollPosition").toFloat();
         // 目录树展开状态
         QString expandedJson = query.value("expandedSections").toString();
@@ -212,10 +215,10 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     QSqlQuery query(m_database);
     query.prepare("REPLACE INTO "
                   "operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,"
-                  "sidebarVisible,sidebarIndex,currentPage,sidebarWidth,scrollPosition,expandedSections,"
+                  "sidebarVisible,sidebarIndex,currentPage,sidebarWidth,sidebarWidthChanged,scrollPosition,expandedSections,"
                   "fileSize,lastModified,contentHash)"
                   " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,"
-                  ":sidebarVisible,:sidebarIndex,:currentPage,:sidebarWidth,:scrollPosition,:expandedSections,"
+                  ":sidebarVisible,:sidebarIndex,:currentPage,:sidebarWidth,:sidebarWidthChanged,:scrollPosition,:expandedSections,"
                   ":fileSize,:lastModified,:contentHash)");
     query.bindValue(":filePath", sheet->filePath());
     query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
@@ -228,6 +231,7 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     query.bindValue(":currentPage", sheet->m_operation.currentPage);
     // V1.2 新增字段
     query.bindValue(":sidebarWidth", sheet->m_operation.sidebarWidth);
+    query.bindValue(":sidebarWidthChanged", sheet->m_operation.sidebarWidthChanged ? 1 : 0);
     query.bindValue(":scrollPosition", sheet->m_operation.scrollPosition);
     // 目录树展开状态序列化为 JSON 数组
     QJsonArray expandedArr;
@@ -295,6 +299,7 @@ bool Database::matchOperationByContent(const QFileInfo &fileInfo, DocSheet *shee
         sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
         sheet->m_operation.currentPage = query.value("currentPage").toInt();
         sheet->m_operation.sidebarWidth = query.value("sidebarWidth").toInt();
+        sheet->m_operation.sidebarWidthChanged = query.value("sidebarWidthChanged").toInt() != 0;
         sheet->m_operation.scrollPosition = query.value("scrollPosition").toFloat();
         // 目录树展开状态
         QString expandedJson = query.value("expandedSections").toString();

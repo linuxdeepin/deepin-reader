@@ -20,6 +20,10 @@ class SlideWidget;
 class EncryptionPage;
 class QPropertyAnimation;
 class QPrinter;
+
+constexpr int kRestoreScrollDelayMs = 100;
+constexpr int kRestoreCatalogDelayMs = 150;
+
 class PageSearchThread;
 class QTimer;
 struct SheetOperation {
@@ -33,6 +37,8 @@ struct SheetOperation {
     int  currentPage            = 1;
     // 侧边栏宽度
     int  sidebarWidth           = 200;
+    // 标记用户是否主动调整过侧边栏宽度
+    bool sidebarWidthChanged    = false;
     // 滚动位置（纵向偏移比例 0.0~1.0）
     float scrollPosition        = 0.0f;
     // 目录树展开节点标题路径列表（如 ["1.概述", "1.概述/1.1 背景"]）
@@ -443,7 +449,7 @@ public:
 
     /**
      * @brief setSidebarWidth
-     * 设置侧边栏宽度（封装对 m_operation 的访问）
+     * 设置侧边栏宽度并标记为用户主动调整
      * @param width 宽度
      */
     void setSidebarWidth(int width);
@@ -627,6 +633,23 @@ public:
      * @return
      */
     QSizeF pageSizeByIndex(int index);
+
+    /**
+     * @brief 保存当前阅读状态到操作记录中
+     * 包括滚动位置、侧边栏宽度和展开状态，用于标签页切换时保存阅读位置
+     */
+    void saveCurrentViewState();
+
+    /**
+     * @brief 恢复已保存的阅读状态
+     * 包括滚动位置和侧边栏宽度，用于标签页切换回来时恢复阅读位置
+     */
+    void restoreSavedViewState();
+
+    /**
+     * @brief 获取当前滚动位置（0.0~1.0）
+     */
+    float currentScrollPosition() const;
 
     /**
      * @brief renderer

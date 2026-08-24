@@ -373,11 +373,7 @@ DToolButton *SheetSidebar::createBtn(const QString &btnName, const QString &objN
 
 void SheetSidebar::resizeEvent(QResizeEvent *event)
 {
-    // 侧边栏宽度变化时通知 DocSheet 更新
-    if (m_sheet && event->size().width() > 0) {
-        m_sheet->setSidebarWidth(event->size().width());
-    }
-
+    // 侧边栏宽度变化时的自适应缩放
     qreal scale = event->size().width() * 1.0 / LEFTMINWIDTH;
     adaptWindowSize(scale);
     BaseWidget::resizeEvent(event);

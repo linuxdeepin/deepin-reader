@@ -166,12 +166,16 @@ void MainWindow::addFile(const QString &filePath)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     qCDebug(appLog) << "MainWindow::closeEvent() - Starting close event processing";
-    if (m_central && !m_central->handleClose(true)) {
-        qCDebug(appLog) << "MainWindow::closeEvent() - Central widget close failed, ignoring event";
-        event->ignore();
-        return;
+
+    // 在关闭 sheet 前保存当前 sheet 的阅读状态
+    if (m_central && m_central->docPage()) {
+        DocSheet *curSheet = m_central->docPage()->getCurSheet();
+        if (curSheet && curSheet->opened()) {
+            curSheet->saveCurrentViewState();
+        }
     }
 
+    // 在关闭 sheet 之前保存标签页组（因为 handleClose 会删除所有 sheet）
     if (m_central && m_central->docPage()) {
         QList<DocSheet *> sheets = m_central->docPage()->getSheets();
         QStringList filePaths;
@@ -184,9 +188,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         }
         int windowIndex = MainWindow::m_list.indexOf(this);
-        if (windowIndex >= 0) {
+        if (windowIndex >= 0 && !filePaths.isEmpty()) {
             Database::instance()->saveTabGroup(windowIndex, filePaths, activeIndex);
         }
+    }
+
+    // 注意：滚动位置和标签页组在 handleClose 之前保存（乐观保存策略）。
+    // 如果 handleClose 返回 false（用户取消关闭），已保存的状态不会造成数据损坏，
+    // 因为后续操作（自动保存/真正关闭时）会更新为最新状态。
+
+    if (m_central && !m_central->handleClose(true)) {
+        qCDebug(appLog) << "MainWindow::closeEvent() - Central widget close failed, ignoring event";
+        event->ignore();
+        return;
     }
 
     QSettings settings(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("config.conf"), QSettings::IniFormat, this);

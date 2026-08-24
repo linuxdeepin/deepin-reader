@@ -52,8 +52,6 @@ namespace {
 constexpr double kXpsLogicalDpi = 96.0;
 constexpr int kFallbackPrintDpi = 300;
 constexpr int kMaxPrintPixelsPerSide = 10000;
-constexpr int kRestoreScrollDelayMs = 100;    // 恢复滚动位置延迟
-constexpr int kRestoreCatalogDelayMs = 150;   // 恢复目录树展开状态延迟
 }
 
 QReadWriteLock DocSheet::g_lock;
@@ -106,6 +104,16 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     resetChildParent();
     this->insertWidget(0, m_browser);
     this->insertWidget(0, m_sidebar);
+
+    // 用户拖拽 splitter 调整侧边栏宽度时记录
+    connect(this, &DSplitter::splitterMoved, this, [this](int pos, int index) {
+        Q_UNUSED(pos)
+        Q_UNUSED(index)
+        if (m_sidebar && m_sidebar->isVisible() && m_sidebar->width() > 0) {
+            m_operation.sidebarWidth = m_sidebar->width();
+            m_operation.sidebarWidthChanged = true;
+        }
+    });
 
     // 定时自动保存（30秒）
     m_autoSaveTimer = new QTimer(this);
@@ -857,6 +865,7 @@ SheetOperation DocSheet::operation() const
 void DocSheet::setSidebarWidth(int width)
 {
     m_operation.sidebarWidth = width;
+    m_operation.sidebarWidthChanged = true;
 }
 
 SheetOperation &DocSheet::operationRef()
@@ -1298,9 +1307,16 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
             });
         }
 
-        // 恢复侧边栏宽度
-        if (m_restoredFromState && m_operation.sidebarWidth > 0) {
-            m_sidebar->resize(m_operation.sidebarWidth, m_sidebar->height());
+        // 恢复侧边栏宽度（仅当用户主动调整过时才恢复，避免覆盖 QSplitter 默认布局）
+        if (m_restoredFromState && m_operation.sidebarWidthChanged && m_operation.sidebarWidth > 0) {
+            QTimer::singleShot(kRestoreCatalogDelayMs, this, [this]() {
+                if (this->width() > m_operation.sidebarWidth + this->handleWidth()) {
+                    QList<int> sizes;
+                    sizes << m_operation.sidebarWidth;
+                    sizes << this->width() - m_operation.sidebarWidth - this->handleWidth();
+                    this->setSizes(sizes);
+                }
+            });
         }
 
         // 启动定时自动保存
@@ -1629,8 +1645,9 @@ void DocSheet::setAlive(bool alive)
             m_operation.scrollPosition = m_browser->getScrollPosition();
         }
 
-        // 保存目录树展开状态
-        if (m_sidebar) {
+        // 保存侧边栏宽度和目录树展开状态
+        if (m_sidebar && m_sidebar->isVisible()) {
+            m_operation.sidebarWidth = m_sidebar->width();
             m_operation.expandedSections = m_sidebar->getExpandedSections();
         }
 
@@ -1727,6 +1744,56 @@ void DocSheet::onExtractPassword(const QString &password)
     m_password = password;
 
     m_renderer->openFileAsync(m_password);
+}
+
+void DocSheet::saveCurrentViewState()
+{
+    qCDebug(appLog) << "saveCurrentViewState for:" << m_filePath;
+    // 保存滚动位置
+    if (m_browser) {
+        m_operation.scrollPosition = m_browser->getScrollPosition();
+    }
+    // 保存侧边栏宽度和展开状态
+    if (m_sidebar && m_sidebar->isVisible()) {
+        m_operation.sidebarWidth = m_sidebar->width();
+        m_operation.expandedSections = m_sidebar->getExpandedSections();
+    }
+}
+
+void DocSheet::restoreSavedViewState()
+{
+    qCDebug(appLog) << "restoreSavedViewState for:" << m_filePath
+                    << "position:" << m_operation.scrollPosition
+                    << "sidebarWidth:" << m_operation.sidebarWidth;
+    if (!opened())
+        return;
+
+    // 恢复侧边栏宽度（仅当用户主动调整过时才恢复）
+    if (m_sidebar && m_sidebar->isVisible() && m_operation.sidebarWidthChanged && m_operation.sidebarWidth > 0) {
+        QTimer::singleShot(kRestoreCatalogDelayMs, this, [this]() {
+            if (this->width() > m_operation.sidebarWidth + this->handleWidth()) {
+                QList<int> sizes;
+                sizes << m_operation.sidebarWidth;
+                sizes << this->width() - m_operation.sidebarWidth - this->handleWidth();
+                this->setSizes(sizes);
+            }
+        });
+    }
+
+    // 恢复滚动位置
+    if (m_browser && m_operation.scrollPosition > 0.0f) {
+        QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
+            m_browser->restoreScrollPosition(m_operation.scrollPosition);
+        });
+    }
+}
+
+float DocSheet::currentScrollPosition() const
+{
+    if (m_browser) {
+        return m_browser->getScrollPosition();
+    }
+    return 0.0f;
 }
 
 SheetRenderer *DocSheet::renderer()
@@ -1918,8 +1985,9 @@ void DocSheet::onAutoSave()
         m_operation.scrollPosition = m_browser->getScrollPosition();
     }
 
-    // 更新目录树展开状态
-    if (m_sidebar) {
+    // 更新侧边栏宽度和目录树展开状态
+    if (m_sidebar && m_sidebar->isVisible()) {
+        m_operation.sidebarWidth = m_sidebar->width();
         m_operation.expandedSections = m_sidebar->getExpandedSections();
     }
 

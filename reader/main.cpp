@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 #include "accessible.h"
 #include "Utils.h"
 #include "DBusObject.h"
+#include "Database.h"
 #include "ddlog.h"
 #include "logger.h"
 
@@ -21,6 +22,7 @@
 #include <QScreen>
 #include <QAccessible>
 #include <QDebug>
+#include <QFileInfo>
 #include <QFontDatabase>
 
 DGUI_USE_NAMESPACE
@@ -103,6 +105,49 @@ int main(int argc, char *argv[])
     if (!DBusObject::instance()->registerOrNotify(arguments)) {
         qCInfo(appLog) << "Another instance is running, exiting";
         return 0;
+    }
+
+    // 这是第一个实例（没有其他 deepin-reader 在运行），恢复上次的标签页组
+    // 不管命令行是否指定了文件，都恢复之前的标签页
+    // 注意：当前仅恢复 windowIndex=0 的标签页组（多窗口场景的完整恢复待后续优化）
+    {
+        int savedActiveIndex = 0;
+        QStringList restoredFiles = Database::instance()->readTabGroup(0, savedActiveIndex);
+        // 过滤掉不存在或不可读的文件
+        QStringList validRestored;
+        for (const QString &filePath : restoredFiles) {
+            QFileInfo fi(filePath);
+            if (fi.exists() && fi.isReadable())
+                validRestored.append(filePath);
+        }
+
+        if (!validRestored.isEmpty()) {
+            // 将命令行参数中的 URL 转为本地路径
+            QStringList localArguments;
+            for (const QString &arg : arguments) {
+                QUrl url(arg);
+                if (url.isLocalFile())
+                    localArguments.append(url.toLocalFile());
+                else
+                    localArguments.append(arg);
+            }
+
+            // 合并文件列表：先恢复历史标签页，再把用户指定的文件放到末尾（成为活动标签页）
+            // 如果用户指定的文件已在恢复列表中，先移除再追加到末尾
+            QStringList allFiles = validRestored;
+            int existingCount = 0;
+            for (const QString &fp : localArguments) {
+                if (allFiles.removeAll(fp) > 0)
+                    existingCount++;
+                if (QFile::exists(fp))
+                    allFiles.append(fp);
+            }
+
+            arguments = allFiles;
+            int newFileCount = localArguments.size() - existingCount;
+            qCInfo(appLog) << "Restoring" << validRestored.size() << "tabs from last session"
+                           << "+" << newFileCount << "new files";
+        }
     }
 
     QAccessible::installFactory(accessibleFactory);
