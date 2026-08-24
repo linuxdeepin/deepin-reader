@@ -1,0 +1,366 @@
+name: 文档打开_suite
+app: deepin-reader
+module: 文档打开
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.djvu
+  wait: 3.0
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.docx
+  wait: 3.0
+suites:
+- id: suite_文档打开_001_s1
+  name: 命令行直接打开多格式文档
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 初始导航页
+    测试功能: 启动时直接指定文件路径打开 PDF/DJVU/DOCX，DOCX 自动转为 PDF
+    前置条件: 应用未启动，TEST_FILES_DIR 下备有各格式文档
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+    - Form_CentralDocPage
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Label_Icon
+      role: image
+    do: assert_not_exists
+- id: suite_文档打开_002_s1
+  name: 点击选择文件按钮打开文档
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文件对话框
+    测试功能: 点击初始界面选择文件按钮触发文件对话框并选择文档打开
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+- id: suite_文档打开_003_s1
+  name: Ctrl+O快捷键打开多格式文档
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文件对话框
+    测试功能: 按 Ctrl+O 打开文件对话框，选择三种格式文档打开，DOCX 转为 PDF
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+- id: suite_文档打开_004_s1
+  name: 新标签页与新增标签打开多格式文档
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 主菜单
+    测试功能: 通过主菜单新标签页、标签栏加号按钮新增标签页并打开文档
+    前置条件: 已有一份文档在窗口中打开
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - 新标签页
+    - DTabBarAddButton
+    - Button_SelectFile
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_文档打开_005_s1
+  name: 最小化窗口后重新打开另一份文档
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 标题栏 / 文件对话框
+    测试功能: 最小化窗口后通过双击（Ctrl+O）另一份文档在同一窗口重新打开
+    前置条件: 已有一份文档在窗口中打开
+    AT元素引用:
+    - DTitlebarDWindowMinButton
+    - Button_SelectFile
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_文档打开_006_s1
+  name: 文件选择界面取消退出
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文件对话框
+    测试功能: 弹出文件选择界面后通过取消或 ESC 退出文件选择界面
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_cancel
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+- id: suite_文档打开_007_s1
+  name: 特殊命名文档打开
+  description: ''
+  annotation:
+    测试界面: 文件对话框 / 文档阅读区
+    测试功能: 打开名称含特殊字符、标点符号及空格的文档，文档能正常打开
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/doc#特殊%名。pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+- id: suite_文档打开_008_s1
+  name: DJVU文档打开后界面布局显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 主菜单 / 左侧栏
+    测试功能: 打开 DJVU 后查看顶部工具栏、主菜单项、文档区域与左侧栏图标显示
+    前置条件: 应用已启动并通过文件对话框打开 DJVU 文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - 新窗口
+    - 新标签页
+    - 保存
+    - 另存为
+    - 在文件管理器中显示
+    - 放大镜
+    - 工具
+    - 打印
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+    - Button_thumbnail
+    - Button_catalog
+    - View_ImageList
+    - View_CatalogTree
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 保存
+    - 另存为
+    - 打印
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+  - action: assert_element
+    selector:
+      name: Button_catalog
+      role: check box
+- id: suite_文档打开_009_s1
+  name: DOCX文档打开后界面显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 打开 DOCX 文档后界面布局与标签页正常显示
+    前置条件: 应用已启动并通过文件对话框打开 DOCX 文档
+    AT元素引用:
+    - Button_SelectFile
+    - DTabBarAddButton
+    - Form_CentralDocPage
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_文档打开_010_s1
+  name: DOCX保存与另存为快捷键
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 另存为对话框
+    测试功能: DOCX 文档未编辑按 Ctrl+S 无提示，编辑后按 Ctrl+S 弹出另存为，Ctrl+Shift+S 弹出另存为
+    前置条件: 已打开一份 DOCX 文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Button_SelectFile
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+- id: suite_文档打开_011_s1
+  name: DOCX关闭与退出及保存提示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 标题栏 / 主菜单
+    测试功能: 关闭或退出时未编辑窗口直接关闭，编辑后弹出是否保存对文档的编辑提示
+    前置条件: 已打开一份 DOCX 文档
+    AT元素引用:
+    - DTitlebarDWindowCloseButton
+    - 退出
+    - Button_SelectFile
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 退出
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: assert_not_exists
+  - action: assert_ocr_exists
+    text: 是否保存对
+- id: suite_文档打开_012_s1
+  name: 浅色与深色主题下进度条显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 标题栏缩放控件
+    测试功能: 浅色与深色主题下右侧与底部进度条显示清晰无异常
+    前置条件: 已打开一份文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - 浅色
+    - 深色
+    - DLineEditChildLineEdit
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+teardown:
+- action: session_stop

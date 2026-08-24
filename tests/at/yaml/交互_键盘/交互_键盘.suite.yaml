@@ -1,0 +1,576 @@
+name: 交互_键盘_suite
+app: deepin-reader
+module: 交互_键盘
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_交互_键盘_001_s1
+  name: Tab键焦点切换（侧边栏展开状态）
+  description: ''
+  annotation:
+    测试界面: 文档查看器主界面（单/多文档、左侧栏展开/未展开）
+    测试功能: 按Tab键在工具栏与左侧栏按钮间切换焦点，enter/空格执行选择
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowMaxButton
+    - Button_ThumbnailToggle
+    - Button_thumbnail
+    - Button_catalog
+    - Button_bookmark
+    - Button_annotation
+    - Button_search
+    - View_CatalogTree
+    - View_ImageList
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: assert_exists
+- id: suite_交互_键盘_002_s1
+  name: Tab键焦点切换（多文档侧边栏状态）
+  description: ''
+  annotation:
+    测试界面: 多文档主界面（左侧栏展开/未展开）
+    测试功能: 多文档状态下按Tab键在工具栏与左侧栏按钮间切换焦点
+    前置条件: 启动 deepin-reader 并打开多个文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowMaxButton
+    - Button_thumbnail
+    - Button_catalog
+    - Button_bookmark
+    - Button_annotation
+    - Button_search
+    - View_CatalogTree
+    - View_ImageList
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: assert_exists
+- id: suite_交互_键盘_003_s1
+  name: 首页Tab键切换与主菜单按钮焦点
+  description: ''
+  annotation:
+    测试界面: 文档查看器首页/主界面
+    测试功能: Tab键在主菜单、最小化、最大化、选择文件按钮间切换，方向键操作主菜单
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowMaxButton
+    - Button_SelectFile
+    - 新窗口
+    - 新标签页
+    - 保存
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: click
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 新窗口
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Right
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 新窗口
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: assert_exists
+- id: suite_交互_键盘_004_s1
+  name: 主菜单下拉界面键盘导航
+  description: ''
+  annotation:
+    测试界面: 主菜单（DTitlebarMainMenu）
+    测试功能: 打开主菜单，上下/左右方向键与enter/空格/esc导航
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - 新窗口
+    - 新标签页
+    - 保存
+    - 工具
+    - 选择工具
+    - 手形工具
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: click
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 工具
+    - 选择工具
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Right
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 选择工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    do: assert_exists
+- id: suite_交互_键盘_005_s1
+  name: 右键菜单键盘导航
+  description: ''
+  annotation:
+    测试界面: 主视图界面 / 右键菜单
+    测试功能: 右击主视图弹出右键菜单，上下/左右方向键与enter/空格/esc导航
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 选择工具
+    - 手形工具
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 选择工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 手形工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+- id: suite_交互_键盘_006_s1
+  name: Alt+M右键菜单（文本/书签/注释/输入框）
+  description: ''
+  annotation:
+    测试界面: 主视图界面 / 书签目录 / 注释目录 / 输入框 / 右键菜单
+    测试功能: 选中目标后按Alt+M弹出右键菜单，方向键与enter/esc导航
+    前置条件: 启动 deepin-reader 并打开文档，创建书签与注释
+    AT元素引用:
+    - View_ImageList
+    - Button_BookmarkAdd
+    - Button_NotesAdd
+    - 选择工具
+    - 手形工具
+  steps:
+  - action: keyboard_hot_key
+    key: alt+m
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Left
+  - action: keyboard_press
+    key: Right
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 选择工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 手形工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_交互_键盘_007_s1
+  name: 百分比输入框下拉菜单界面
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放控件（DLineEditChildLineEdit）
+    测试功能: Tab选中百分比下拉按钮，上下方向键/enter/空格/esc缩放导航
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+  steps:
+  - action: keyboard_press
+    key: Tab
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+- id: suite_交互_键盘_008_s1
+  name: 左侧栏目录上下切换与删除
+  description: ''
+  annotation:
+    测试界面: 左侧栏目录/缩略图/书签/注释面板
+    测试功能: 目录、缩略图、书签、注释界面按上下方向键/pageup/pagedown切换，delete删除
+    前置条件: 启动 deepin-reader 并打开文档，展开左侧栏
+    AT元素引用:
+    - View_CatalogTree
+    - View_ImageList
+    - Button_bookmark
+    - Button_annotation
+  steps:
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_交互_键盘_009_s1
+  name: 删除全部书签对话框
+  description: ''
+  annotation:
+    测试界面: 删除全部书签对话框
+    测试功能: 点击删除全部书签，对话框Tab切换、回车、esc
+    前置条件: 启动 deepin-reader 并打开文档，存在书签
+    AT元素引用:
+    - Button_BookmarkAdd
+    - View_ImageList
+  steps:
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 书签
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 删除全部书签
+      role: dialog
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 取消
+      role: push button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_交互_键盘_011_s1
+  name: 编辑后退出是否保存对话框
+  description: ''
+  annotation:
+    测试界面: 是否保存对话框
+    测试功能: 编辑文档后关闭/退出，是否保存对话框Tab切换、回车、esc
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 保存
+    - 不保存
+    - 取消
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 是否保存
+      role: dialog
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 保存
+      role: push button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: assert_exists
+- id: suite_交互_键盘_013_s1
+  name: 搜索框界面
+  description: ''
+  annotation:
+    测试界面: 搜索框界面
+    测试功能: 搜索框弹出后Tab切换各按钮，回车执行
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 搜索
+    - View_ImageList
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+f
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 搜索
+      role: dialog
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_交互_键盘_015_s1
+  name: 在文件管理器显示
+  description: ''
+  annotation:
+    测试界面: 在文件管理器中显示对话框
+    测试功能: 在文件管理器中显示弹出后Tab切换、回车执行
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 在文件管理器中显示
+  steps:
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 在文件管理器中显示
+  - action: keyboard_press
+    key: Tab
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 在文件管理器中显示
+      role: dialog
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 确定
+      role: push button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 确定
+      role: push button
+    do: assert_exists
+- id: suite_交互_键盘_017_s1
+  name: 百分比框与页码框输入Enter跳转
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放输入框与缩略图页码输入框
+    测试功能: 在百分比框/页码框输入数值按Enter跳转页面
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - pageEdit
+  steps:
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    text: test_input_123
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    selector:
+      name: pageEdit
+      role: text
+    text: test_input_123
+  - action: keyboard_press
+    key: Enter
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_交互_键盘_018_s1
+  name: 焦点切换跳过置灰菜单
+  description: ''
+  annotation:
+    测试界面: 主视图界面 / 右键菜单
+    测试功能: 选中文本右击，右键菜单焦点切换时跳过置灰菜单
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 选择工具
+    - 手形工具
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: Down
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 选择工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 手形工具
+      role: menu item
+    do: assert_exists
+teardown:
+- action: session_stop

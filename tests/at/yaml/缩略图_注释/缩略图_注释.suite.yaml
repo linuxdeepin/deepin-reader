@@ -1,0 +1,1024 @@
+name: 缩略图_注释_suite
+app: deepin-reader
+module: 缩略图_注释
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_缩略图_注释_001_s1
+  name: 添加图标注释及文本输入上限
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏注释面板
+    测试功能: 通过左侧栏添加注释按钮在页面任意位置添加图标注释，输入内容自动换行并校验1500字符上限提示
+    前置条件: 启动 deepin-reader 并打开文档，展开注释面板
+    AT元素引用:
+    - Button_annotation
+    - Button_NotesAdd
+    - TextEditShadowWidget
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 这是一条图标注释示例文本
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: check box
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+- id: suite_缩略图_注释_002_s1
+  name: 图标注释的编辑、快捷键与取消
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 注释编辑窗口
+    测试功能: 单击注释图标弹出编辑框并修改内容，编辑窗口内快捷键可用，不输入内容时点击他处自动取消
+    前置条件: 启动 deepin-reader 并打开文档，已存在图标注释
+    AT元素引用:
+    - TextEditShadowWidget
+    - TransparentTextEdit
+    - Button_annotation
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: TransparentTextEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 编辑后的图标注释内容
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_press
+    key: ctrl+a
+  - action: keyboard_press
+    key: ctrl+c
+  - action: keyboard_press
+    key: ctrl+v
+  - action: keyboard_press
+    key: ctrl+x
+  - action: keyboard_press
+    key: ctrl+z
+  - action: keyboard_press
+    key: ctrl+s
+  - action: keyboard_press
+    key: delete
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TransparentTextEdit
+      role: text
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_not_exists
+- id: suite_缩略图_注释_003_s1
+  name: 图标注释图标的移动
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 图标注释图标可在当前页面内拖拽移动，无法跨页面移动，焦点在区域外时无法移动
+    前置条件: 启动 deepin-reader 并打开文档，已存在图标注释
+    AT元素引用:
+    - Button_annotation
+    - View_ImageList
+    - Form_CentralDocPage
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: drag
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+- id: suite_缩略图_注释_004_s1
+  name: 图标注释右键菜单、复制与删除
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 右键菜单
+    测试功能: 右键点击注释图标弹出菜单（复制、删除注释、添加注释、添加书签），可复制注释内容并删除注释
+    前置条件: 启动 deepin-reader 并打开文档，已存在图标注释
+    AT元素引用:
+    - Button_annotation
+    - View_ImageList
+    - dtk_context_menu
+    - Form_CentralDocPage
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 复制
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 删除注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加书签
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_005_s1
+  name: 图标注释与高亮注释浮窗显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 鼠标悬停图标注释图标显示浮窗显示部分注释文案，浮窗内容不可滑动
+    前置条件: 启动 deepin-reader 并打开文档，已存在图标注释
+    AT元素引用:
+    - View_ImageList
+    - Form_CentralDocPage
+    - TextEditShadowWidget
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: hover
+  - action: keyboard_press
+    key: down
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 高亮
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: hover
+  - action: keyboard_press
+    key: down
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_006_s1
+  name: 高亮注释的添加、编辑与文本上限
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 注释编辑窗口
+    测试功能: 选中文本后通过右键菜单添加高亮注释，可编辑内容，支持自动换行与1500字上限提示
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - TextEditShadowWidget
+    - Button_annotation
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 高亮
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本高亮注释内容示例文本
+  - action: keyboard_type
+    text: 注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: keyboard_type
+    text: 编辑后的高亮注释
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_007_s1
+  name: 高亮注释右键菜单、复制、取消与重叠添加
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 右键菜单
+    测试功能: 高亮文本右键菜单含复制、高亮、取消高亮、添加注释、添加书签；复制选中文本或注释；重叠高亮区域仅可修改原注释
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - View_ImageList
+    - Button_annotation
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 复制
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 复制
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 复制
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_008_s1
+  name: 高亮注释的删除
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏注释面板
+    测试功能: 通过取消高亮、编辑框清空、右键删除菜单、delete快捷键四种方式删除高亮注释，左侧栏同步删除
+    前置条件: 启动 deepin-reader 并打开文档，已存在高亮注释
+    AT元素引用:
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - View_ImageList
+    - Button_annotation
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 取消高亮
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 删除注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: keyboard_press
+    key: delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_009_s1
+  name: 注释目录的显示、顺序与切换
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏注释面板
+    测试功能: 高亮与图标注释均在左侧栏生成对应注释目录，按页面顺序与时间顺序展示，点击或快捷键可切换跳转
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - Button_annotation
+    - View_ImageList
+    - Button_NotesAdd
+    - TextEditShadowWidget
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 图标注释内容
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 高亮注释内容
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: pagedown
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_010_s1
+  name: 删除单条注释、删除所有注释与复制注释
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏注释面板 / 对话框
+    测试功能: 右键注释目录可复制、删除单条注释、删除所有注释，删除所有注释有确认提示且可取消
+    前置条件: 启动 deepin-reader 并打开文档，已存在多条注释
+    AT元素引用:
+    - Button_annotation
+    - View_ImageList
+    - dtk_context_menu
+    - Button_NotesAdd
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 第一条注释
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 第二条注释
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    items:
+    - 复制
+    selector:
+      name: View_ImageList
+      role: list
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    items:
+    - 删除注释
+    selector:
+      name: View_ImageList
+      role: list
+  - action: mouse_right_click
+    selector:
+      name: View_ImageList
+      role: list
+  - action: dtk_context_menu
+    items:
+    - 删除所有注释
+    selector:
+      name: View_ImageList
+      role: list
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_011_s1
+  name: delete快捷键删除注释目录
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧栏注释面板
+    测试功能: 选中左侧栏注释目录后按delete快捷键删除该条注释
+    前置条件: 启动 deepin-reader 并打开文档，已存在注释目录
+    AT元素引用:
+    - Button_annotation
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 待删除注释
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: keyboard_press
+    key: delete
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_012_s1
+  name: 注释内容达上限后保存与持久化
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 高亮与图标注释内容达到1500字上限后Ctrl+S保存并重启文档，注释正确保留
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - Button_annotation
+    - Button_NotesAdd
+    - TextEditShadowWidget
+    - View_ImageList
+  steps:
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    items:
+    - 添加注释
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: TextEditShadowWidget
+      role: text
+    do: click
+  - action: keyboard_type
+    text: 注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容注释内容
+  - action: keyboard_press
+    key: ctrl+s
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_013_s1
+  name: 发送文档保留注释（跨设备）
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 文档添加注释后发送至其他设备进行持久化验证
+    前置条件: 两台以上UOS设备及WPS/Windows/macOS环境
+    AT元素引用:
+    - View_ImageList
+    - Button_annotation
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: check box
+    do: assert_exists
+- id: suite_缩略图_注释_014_s1
+  name: Windows+D桌面快捷键注释浮窗
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 悬停注释浮窗时按Windows+D进桌面验证浮窗不单独显示
+    前置条件: 启动 deepin-reader 并打开文档，已存在注释
+    AT元素引用:
+    - View_ImageList
+    - TextEditShadowWidget
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_注释_015_s1
+  name: 焦点在注释图标区域外无法移动注释图标
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: 鼠标焦点在注释图标区域外时无法移动注释图标
+    前置条件: 启动 deepin-reader 并打开文档，已存在注释
+    AT元素引用:
+    - View_ImageList
+    - Form_CentralDocPage
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+teardown:
+- action: session_stop

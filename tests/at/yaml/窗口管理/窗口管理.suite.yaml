@@ -1,0 +1,117 @@
+name: 窗口管理_suite
+app: deepin-reader
+module: 窗口管理
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_窗口管理_001_s1
+  name: 窗口最大化与最小化控制
+  description: ''
+  annotation:
+    测试界面: 标题栏右区域按钮组 (Form_DTitlebarButtonArea)
+    测试功能: 点击最大化按钮后再点击最小化按钮，窗口缩至最小尺寸
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - DTitlebarDWindowMaxButton
+    - DTitlebarDWindowMinButton
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMaxButton
+      role: button
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+- id: suite_窗口管理_002_s1
+  name: 关闭后重新打开应用的最小尺寸
+  description: ''
+  annotation:
+    测试界面: 标题栏右区域按钮组 (Form_DTitlebarButtonArea)
+    测试功能: 关闭应用后再次打开，窗口以最小尺寸启动
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - DTitlebarDWindowCloseButton
+    - DTitlebarDWindowMinButton
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowCloseButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+- id: suite_窗口管理_003_s1
+  name: 最小尺寸与子页面完整性检查
+  description: ''
+  annotation:
+    测试界面: 主窗口 (Form_DMainWindow) 及子页面
+    测试功能: 应用与新窗口在最小尺寸下各子页面正常无变形
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowMaxButton
+    - Button_SelectFile
+    - Label_Icon
+  steps:
+  - action: element_action
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: Label_Icon
+      role: image
+- id: suite_窗口管理_005_s1
+  name: 多窗口并排
+  description: ''
+  annotation:
+    测试界面: 双窗口实例 (Form_DMainWindow / Form_DMainWindow_1)
+    测试功能: 同时打开两个文档查看器窗口并排显示
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - DTitlebarDWindowOptionButton
+    - 新窗口
+    - DTitlebarDWindowMinButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowMinButton
+      role: button
+  - action: assert_window_count
+    expected: 2
+teardown:
+- action: session_stop

@@ -1,0 +1,285 @@
+name: 缩略图_目录_suite
+app: deepin-reader
+module: 缩略图_目录
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_缩略图_目录_001_s1
+  name: 目录面板展开与默认收起显示
+  description: ''
+  annotation:
+    测试界面: 文档查看器主界面 / 左侧栏目录面板（Form_CatalogWidget）
+    测试功能: 点击左侧栏目录图标展开目录，默认收起展示一级目录，展开折叠层级索引
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - Button_catalog
+    - View_CatalogTree
+  steps:
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+- id: suite_缩略图_目录_002_s1
+  name: 点击目录节点跳转与右侧文档对应
+  description: ''
+  annotation:
+    测试界面: 文档查看器主界面 / 目录树（View_CatalogTree）与右侧文档阅读区
+    测试功能: 点击目录索引跳转至对应页，目录高亮，上下键/pageup/pagedown切换选中
+    前置条件: 启动 deepin-reader 并打开文档，展开目录面板
+    AT元素引用:
+    - Button_catalog
+    - View_CatalogTree
+  steps:
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  - action: keyboard_press
+    key: Down
+  - action: keyboard_press
+    key: PageUp
+  - action: keyboard_press
+    key: PageDown
+  - action: element_action
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+- id: suite_缩略图_目录_003_s1
+  name: 目录层级展开折叠（最多三级）
+  description: ''
+  annotation:
+    测试界面: 文档查看器主界面 / 目录树（View_CatalogTree）
+    测试功能: 点击展开及折叠目录层级索引，最多显示三级，超出省略不省略页数
+    前置条件: 启动 deepin-reader 并打开文档，展开目录面板
+    AT元素引用:
+    - Button_catalog
+    - View_CatalogTree
+  steps:
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+- id: suite_缩略图_目录_004_s1
+  name: 旋转状态下点击正文目录跳转
+  description: ''
+  annotation:
+    测试界面: 文档查看器主界面 / 目录树（View_CatalogTree）与右侧文档阅读区
+    测试功能: 文档在不同旋转角度下点击正文目录跳转至相应内容
+    前置条件: 启动 deepin-reader 并打开文档，展开目录面板
+    AT元素引用:
+    - Button_catalog
+    - View_CatalogTree
+  steps:
+  - action: element_action
+    selector:
+      name: Button_catalog
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: text
+    items:
+    - 左旋转
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: text
+    items:
+    - 右旋转
+  - action: element_action
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+- id: suite_缩略图_目录_005_s1
+  name: 页码输入框跳转与翻页
+  description: ''
+  annotation:
+    测试界面: 缩略图分页区（Form_Paging）/ 页码输入框（pageEdit）
+    测试功能: 打开文档查看页码输入框显示，输入页码跳转，无效内容提示，上翻下翻按钮
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - pageEdit
+    - Button_ThumbnailPre
+    - Button_ThumbnailNext
+  steps:
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    selector:
+      name: pageEdit
+      role: text
+    text: test_input_123
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: pageEdit
+      role: text
+    do: click
+  - action: keyboard_type
+    selector:
+      name: pageEdit
+      role: text
+    text: 无效内容
+  - action: keyboard_press
+    key: Enter
+  - action: element_action
+    selector:
+      name: Button_ThumbnailPre
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: Button_ThumbnailNext
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_ocr_exists
+    text: 请输入有效页码
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+teardown:
+- action: session_stop

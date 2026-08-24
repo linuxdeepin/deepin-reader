@@ -1,169 +1,217 @@
 elements:
-  n6:
-    name: Button_SelectFile
-  n224:
-    name: Button_ThumbnailToggle
-  n14:
-    name: Button_thumbnail
-  n15:
-    name: Button_catalog
-  n163:
-    name: View_CatalogTree
-  n16:
-    name: Button_bookmark
-  n22:
-    name: Button_BookmarkAdd
-  n17:
-    name: Button_annotation
-  n49:
-    name: Button_NotesAdd
-  n156:
-    name: pageEdit
-    role: text
-  n210:
-    name: normal.pdf
-    role: page tab
-  n209:
-    name: normal.pdf
-    role: page tab
-  n211:
-    name: normal.pdf
-    role: page tab
-  n212:
-    name: normal.pdf
-    role: page tab
-  n243:
-    name: DLineEditChildLineEdit
-    role: text
-  n244:
-    name: DLineEditClearButton
-    role: button
-  n227:
-    name: DLineEditChildLineEdit
-  Form_CentralDocPage:
-    name: Form_CentralDocPage
-  Form_scaleEdit_P:
-    name: Form_scaleEdit_P
-    child_index: 1
-    popup: click
-  Button_annotation:
-    name: Button_annotation
-  View_ImageList:
-    name: View_ImageList
-    child_index: 0
-  Button_bookmark:
-    name: Button_bookmark
-  n0:
-    name: Form_DMainWindow
-    role: form
-  n1:
-    name: Form_Central
-    role: form
-  n2:
-    name: Form_widget_1
-    role: form
-  n3:
-    name: Form_CentralNavPage
-    role: form
-  n7:
-    name: Label_Icon
-    role: image
-  n8:
-    name: Form_CentralDocPage
-    role: form
-  n9:
-    name: Form_DocSheet
-    role: form
-  n10:
-    name: Form_SheetSidebar
-    role: form
-  n11:
-    name: Form_SearchResWidget
-    role: form
-  n13:
-    name: View_ImageList
-    role: list
-  n18:
-    name: Button_search
-    role: check box
-  n19:
-    name: Form_BookMarkWidget
-    role: form
-  n20:
-    name: View_ImageList
-    role: list
-  n24:
-    name: Form_NotesWidget
-    role: form
-  n25:
-    name: View_ImageList
-    role: list
-  n51:
-    name: Form_ThumbnailWidget
-    role: form
-  n52:
-    name: View_ImageList
-    role: list
-  n153:
-    name: Form_Paging
-    role: form
-  n155:
-    name: Form_Page
-    role: form
-  n158:
-    name: Button_ThumbnailPre
-    role: button
-  n159:
-    name: Button_ThumbnailNext
-    role: button
-  n161:
-    name: Form_CatalogWidget
-    role: form
-  n208:
-    name: Form_DocTabBar
-    role: form
-  n213:
-    name: DTabBarAddButton
-    role: button
-  n217:
-    name: Form_DMainWindowTitlebar
-    role: form
-  n221:
-    name: Form_DTitlebarLeftArea
-    role: form
-  n223:
-    name: Form_TitleWidget
-    role: form
-  n225:
-    name: Form_widget
-    role: form
-  n226:
-    name: Form_scaleEdit_P
-    role: form
-  n240:
-    name: Form_widget_4
-    role: form
-  n242:
-    name: Form_findSearchEdit_P
-    role: form
-  n245:
-    name: DSearchEditIconButton
-    role: button
-  n246:
-    name: Form_DSearchEditIconWidget
-    role: form
-  n247:
-    name: DSearchEditIconButton
-    role: button
-  n253:
-    name: DTitlebarThemeMenu
-    role: popup menu
-  n254:
+  保存:
+    name: 保存
+    role: menu item
+  另存为:
+    name: 另存为
+    role: menu item
+  最小化窗口:
+    name: 最小化窗口
+    role: menu item
+  退出:
+    name: 退出
+    role: menu item
+  新标签页:
+    name: 新标签页
+    role: menu item
+  新窗口:
+    name: 新窗口
+    role: menu item
+  关于:
+    name: 关于
+    role: menu item
+  帮助:
+    name: 帮助
+    role: menu item
+  浅色:
     name: 浅色
     role: menu item
-  n255:
+  深色:
     name: 深色
     role: menu item
-  n256:
+  跟随系统:
     name: 跟随系统
     role: menu item
+  在文件管理器中显示:
+    name: 在文件管理器中显示
+    role: dialog
+  放大镜:
+    name: 放大镜
+    role: menu item
+  打印:
+    name: 打印
+    role: menu item
+  Button_thumbnail:
+    name: Button_thumbnail
+    role: check box
+  DLineEditChildLineEdit:
+    name: DLineEditChildLineEdit
+    role: text
+  选择工具:
+    name: 选择工具
+    role: menu item
+  手形工具:
+    name: 手形工具
+    role: menu item
+  Button_BookmarkAdd:
+    name: Button_BookmarkAdd
+    role: button
+  Button_NotesAdd:
+    name: Button_NotesAdd
+    role: button
+  Button_SelectFile:
+    name: Button_SelectFile
+    role: button
+  DTitlebarDWindowQuitFullscreenButton:
+    name: DTitlebarDWindowQuitFullscreenButton
+    role: button
+  Button_search:
+    name: Button_search
+    role: check box
+  Button_bookmark:
+    name: Button_bookmark
+    role: check box
+  Button_annotation:
+    name: Button_annotation
+    role: check box
+  View_ImageList:
+    name: View_ImageList
+    role: list
+  View_CatalogTree:
+    name: View_CatalogTree
+    role: tree
+  DTitlebarDWindowOptionButton:
+    name: DTitlebarDWindowOptionButton
+    role: button
+  DTitlebarMainMenu:
+    name: DTitlebarMainMenu
+    role: popup menu
+  Button_catalog:
+    name: Button_catalog
+    role: check box
+  DTabBarAddButton:
+    name: DTabBarAddButton
+    role: button
+  多数字员工并行工作站.pdf:
+    name: 多数字员工并行工作站.pdf
+    role: page tab
+  DTitlebarDWindowMaxButton:
+    name: DTitlebarDWindowMaxButton
+    role: button
+  pageEdit:
+    name: pageEdit
+    role: text
+  DTitlebarDWindowMinButton:
+    name: DTitlebarDWindowMinButton
+    role: button
+  删除全部书签:
+    name: 删除全部书签
+    role: dialog
+  取消:
+    name: 取消
+    role: push button
+  DTitlebarDWindowCloseButton:
+    name: DTitlebarDWindowCloseButton
+    role: button
+  是否保存:
+    name: 是否保存
+    role: dialog
+  搜索:
+    name: 搜索
+    role: menu item
+  确定:
+    name: 确定
+    role: push button
+  Label_Icon:
+    name: Label_Icon
+    role: image
+  添加书签:
+    name: 添加书签
+    role: menu item
+  添加注释:
+    name: 添加注释
+    role: menu item
+  全屏:
+    name: 全屏
+    role: menu item
+  幻灯片放映:
+    name: 幻灯片放映
+    role: menu item
+  第一页:
+    name: 第一页
+    role: menu item
+  前一页:
+    name: 前一页
+    role: menu item
+  后一页:
+    name: 后一页
+    role: menu item
+  最后一页:
+    name: 最后一页
+    role: menu item
+  左旋转:
+    name: 左旋转
+    role: menu item
+  右旋转:
+    name: 右旋转
+    role: menu item
+  文档信息:
+    name: 文档信息
+    role: menu item
+  复制:
+    name: 复制
+    role: menu item
+  高亮:
+    name: 高亮
+    role: menu item
+  取消高亮:
+    name: 取消高亮
+    role: menu item
+  Button_ThumbnailToggle:
+    name: Button_ThumbnailToggle
+    role: check box
+  Button_ThumbnailPre:
+    name: Button_ThumbnailPre
+    role: button
+  向左滚动:
+    name: 向左滚动
+    role: button
+  向右滚动:
+    name: 向右滚动
+    role: button
+  播放:
+    name: 播放
+    role: button
+  暂停:
+    name: 暂停
+    role: button
+  自动播放:
+    name: 自动播放
+    role: button
+  下一页:
+    name: 下一页
+    role: button
+  TextEditShadowWidget:
+    name: TextEditShadowWidget
+    role: text
+  TransparentTextEdit:
+    name: TransparentTextEdit
+    role: text
+  Button_ThumbnailNext:
+    name: Button_ThumbnailNext
+    role: button
+  DTitlebarIconLabel:
+    name: DTitlebarIconLabel
+    role: button
+  工具:
+    name: 工具
+    role: menu item
+  主题:
+    name: 主题
+    role: menu item
+  ? ''
+  : name: ''
+    role: page tab list
+  Button_SelectFile_1:
+    name: Button_SelectFile_1
+    role: button

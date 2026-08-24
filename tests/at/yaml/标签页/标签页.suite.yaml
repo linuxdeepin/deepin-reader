@@ -1,0 +1,504 @@
+name: 标签页_suite
+app: deepin-reader
+module: 标签页
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_标签页_001_s1
+  name: 已有文档界面添加多标签页
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 主菜单
+    测试功能: 在已打开文档的窗口中通过加号按钮、菜单、拖拽、双击、右键多种方式添加新标签页
+    前置条件: 已有一份文档在窗口中打开
+    AT元素引用:
+    - DTabBarAddButton
+    - 新标签页
+    - Button_SelectFile
+    - 多数字员工并行工作站.pdf
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_标签页_002_s1
+  name: 初始界面添加多标签页
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文档标签页栏 / 文件对话框
+    测试功能: 窗口无标签页时通过拖拽、菜单、双击、右键等方式添加文档形成多标签页
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - 新标签页
+    - DTabBarAddButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_标签页_003_s1
+  name: 多个标签页显示与高亮
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 多个标签页全部占满标签栏、最小宽度与新增标签页高亮显示
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - DTabBarAddButton
+    - 多数字员工并行工作站.pdf
+    - 向左滚动
+    - 向右滚动
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: 向右滚动
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_标签页_004_s1
+  name: 切换标签页状态显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 标题栏缩放控件 / 文档标签页栏
+    测试功能: 不同标签页视图调整状态相互独立，切换标签页后显示当前页状态
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - 多数字员工并行工作站.pdf
+    - DLineEditChildLineEdit
+    - 向左滚动
+    - 向右滚动
+  steps:
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_标签页_005_s1
+  name: 标签栏左右滚动
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 标签页超过标签栏范围时左翻右翻按钮滚动与置灰状态
+    前置条件: 已打开多个标签页且超过标签栏范围
+    AT元素引用:
+    - 向左滚动
+    - 向右滚动
+    - 多数字员工并行工作站.pdf
+    - DTabBarAddButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: 向左滚动
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: 向右滚动
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 向左滚动
+      role: button
+  - action: assert_element
+    selector:
+      name: 向右滚动
+      role: button
+- id: suite_标签页_006_s1
+  name: 标签页拖拽排序与滚动切换
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 长按拖拽调整标签页排序及滚轮滚动切换标签页
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - 多数字员工并行工作站.pdf
+    - 向左滚动
+    - 向右滚动
+  steps:
+  - action: mouse_drag
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: mouse_scroll
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab list
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: assert_element
+    selector:
+      name: 向左滚动
+      role: button
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_标签页_007_s1
+  name: 关闭标签页与保存提示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 保存提示弹框
+    测试功能: 关闭标签页进入文件选择界面，编辑文档后关闭弹出是否保存提示
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - DTabBarAddButton
+    - 多数字员工并行工作站.pdf
+    - 保存
+  steps:
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+- id: suite_标签页_008_s1
+  name: 关闭所有标签页界面显示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 主菜单
+    测试功能: 依次关闭所有标签页后界面显示状态
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - DTabBarAddButton
+    - 多数字员工并行工作站.pdf
+    - DTitlebarDWindowCloseButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+- id: suite_标签页_009_s1
+  name: 单窗口多标签页搜索管理
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 左侧搜索面板 / 文档标签页栏
+    测试功能: 在不同标签页中搜索，搜索结果按标签页独立显示与关闭
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - 多数字员工并行工作站.pdf
+    - View_ImageList
+    - Button_search
+  steps:
+  - action: element_action
+    selector:
+      name: Button_search
+      role: check box
+    do: click
+  - action: keyboard_type
+    text: test
+  - action: element_action
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+    do: click
+  - action: element_action
+    selector:
+      name: Button_search
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_标签页_012_s1
+  name: 拖拽标签页创建新窗口
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 多窗口间拖拽标签页，移出当前窗口时创建新窗口
+    前置条件: 已打开多个窗口且各窗口有多个标签页
+    AT元素引用:
+    - 多数字员工并行工作站.pdf
+    - DTabBarAddButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: mouse_drag
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: mouse_drag
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_标签页_013_s1
+  name: 窗口间文档互相拖拽
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏
+    测试功能: 多窗口间拖拽标签页移动，单标签页窗口拖出后自动关闭
+    前置条件: 已打开多个窗口且各窗口有多个标签页
+    AT元素引用:
+    - 多数字员工并行工作站.pdf
+    - DTitlebarDWindowCloseButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: mouse_drag
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: mouse_drag
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+  - action: assert_window
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_not_exists
+- id: suite_标签页_014_s1
+  name: 多窗口双击打开文档
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 文件对话框
+    测试功能: 多窗口多标签页环境下双击文档按窗口规则打开
+    前置条件: 已打开文档查看器窗口
+    AT元素引用:
+    - DTabBarAddButton
+    - Button_SelectFile
+    - 多数字员工并行工作站.pdf
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+- id: suite_标签页_015_s1
+  name: 多窗口不支持打开相同文档
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 文档标签页栏 / 主菜单
+    测试功能: 相同文档无法在窗口间重复添加，重复添加时激活当前页无提示
+    前置条件: 已打开多份文档形成多个标签页
+    AT元素引用:
+    - DTabBarAddButton
+    - 多数字员工并行工作站.pdf
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 多数字员工并行工作站.pdf
+      role: page tab
+- id: suite_标签页_016_s1
+  name: 新开启窗口中文档打开正常
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文档阅读区 / 文档标签页栏
+    测试功能: 新窗口中通过拖拽、选择文件、新标签页等方式正常打开文档
+    前置条件: 已打开文档查看器窗口
+    AT元素引用:
+    - 新窗口
+    - Button_SelectFile
+    - 新标签页
+    - DTabBarAddButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+teardown:
+- action: session_stop

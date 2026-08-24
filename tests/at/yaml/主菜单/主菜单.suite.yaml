@@ -1,0 +1,288 @@
+name: 主菜单_suite
+app: deepin-reader
+module: 主菜单
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_主菜单_001_s1
+  name: 保存与另存功能
+  description: ''
+  annotation:
+    测试界面: 主菜单 (DTitlebarMainMenu)
+    测试功能: 保存、另存为、多次保存、保存替换文档
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - 保存
+    - 另存为
+    - DTitlebarDWindowOptionButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: dtk_main_menu
+    items:
+    - 保存
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/saved_new.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/saved_unedited.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/saved_replace.pdf
+    wait: 3.0
+  - action: dtk_main_menu
+    items:
+    - 另存为
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/saved_replace.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 保存
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 另存为
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 另存为
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 另存为
+      role: menu item
+- id: suite_主菜单_002_s1
+  name: 窗口控制与多窗口
+  description: ''
+  annotation:
+    测试界面: 主菜单 (DTitlebarMainMenu) 与标题栏按钮
+    测试功能: 最小化、最大化、关闭、退出、新标签页、新窗口
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - 最小化窗口
+    - 最大化/还原窗口
+    - 关闭窗口
+    - 退出
+    - 新窗口
+    - 新标签页
+    - DTitlebarDWindowMinButton
+    - DTitlebarDWindowCloseButton
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 退出
+  - action: dtk_main_menu
+    items:
+    - 退出
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+  - action: dtk_main_menu
+    items:
+    - 关于
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 最小化窗口
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 退出
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 退出
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 新标签页
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 新窗口
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 新窗口
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 关于
+      role: menu item
+- id: suite_主菜单_003_s1
+  name: 关于与帮助
+  description: ''
+  annotation:
+    测试界面: 主菜单 (DTitlebarMainMenu)
+    测试功能: 关于页面与帮助手册入口
+    前置条件: 应用已启动
+    AT元素引用:
+    - 关于
+    - 帮助
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 关于
+  - action: keyboard_press
+    key: f1
+  - action: dtk_main_menu
+    items:
+    - 帮助
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 关于
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 帮助
+      role: menu item
+- id: suite_主菜单_004_s1
+  name: 主题切换
+  description: ''
+  annotation:
+    测试界面: 主菜单主题子菜单 (DTitlebarThemeMenu)
+    测试功能: 浅色、深色、跟随系统主题切换
+    前置条件: 应用已启动并已打开文档
+    AT元素引用:
+    - 主题
+    - 浅色
+    - 深色
+    - 跟随系统
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 浅色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 深色
+  - action: dtk_main_menu
+    items:
+    - 主题
+    - 跟随系统
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 浅色
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 深色
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 跟随系统
+      role: menu item
+- id: suite_主菜单_005_s1
+  name: 在文件管理器中显示
+  description: ''
+  annotation:
+    测试界面: 主菜单 (DTitlebarMainMenu)
+    测试功能: 在文件管理器中定位当前文档
+    前置条件: 应用已启动并已打开文档
+    AT元素引用:
+    - 在文件管理器中显示
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 在文件管理器中显示
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 在文件管理器中显示
+      role: menu item
+- id: suite_主菜单_006_s1
+  name: 放大镜
+  description: ''
+  annotation:
+    测试界面: 主菜单放大镜 (DTitlebarMainMenu)
+    测试功能: 启用与取消放大镜
+    前置条件: 应用已启动并已打开文档
+    AT元素引用:
+    - 放大镜
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 放大镜
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 放大镜
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 放大镜
+      role: menu item
+- id: suite_主菜单_007_s1
+  name: 打印导出
+  description: ''
+  annotation:
+    测试界面: 主菜单打印 (DTitlebarMainMenu)
+    测试功能: 未连接打印机时存为PDF与另存为图片
+    前置条件: 应用已启动并已打开文档
+    AT元素引用:
+    - 打印
+  steps:
+  - action: dtk_main_menu
+    items:
+    - 打印
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/printed.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+- id: suite_主菜单_008_s1
+  name: 不支持项
+  description: ''
+  annotation:
+    测试界面: 终端/系统级
+    测试功能: debian/control 描述字段校验（纯终端、系统级，不可自动化）
+    前置条件: 无
+    AT元素引用: []
+  steps: []
+  assert_steps:
+  - action: assert_ocr_exists
+    text: 描述与文案相符
+teardown:
+- action: session_stop

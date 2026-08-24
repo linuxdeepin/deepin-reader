@@ -1,0 +1,233 @@
+name: 社区需求_suite
+app: deepin-reader
+module: 社区需求
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_社区需求_001_s1
+  name: 幻灯片放映进入与暂停及UI展示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 (Form_CentralDocPage) 右键菜单 (dtk_context_menu) / 幻灯片放映界面
+    测试功能: 通过右键菜单进入幻灯片放映，验证默认暂停播放、播放内容顶格不拉伸、菜单栏呼出后3秒自动隐藏（鼠标悬停不隐藏）的UI表现
+    前置条件: 应用已启动并已打开一份PDF/DJVU/DOCX文档
+    AT元素引用:
+    - pageEdit
+    - Form_CentralDocPage
+    - dtk_context_menu
+    - 幻灯片放映
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  - action: keyboard_press
+    key: escape
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_社区需求_002_s1
+  name: 幻灯片鼠标与键盘翻页切换
+  description: ''
+  annotation:
+    测试界面: 幻灯片放映界面（播放控制区）
+    测试功能: 进入幻灯片播放界面后，通过鼠标左击、方向键/方向键、鼠标滚轮切换上一页与下一页
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - dtk_context_menu
+    - 幻灯片放映
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  - action: mouse_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_社区需求_003_s1
+  name: 幻灯片播放与暂停及自动播放控制
+  description: ''
+  annotation:
+    测试界面: 幻灯片放映界面（播放控制区/菜单键播放暂停按钮）
+    测试功能: 通过菜单键播放按钮开始/暂停播放，验证播放状态切换与自动播放、上一页/下一页切换
+    前置条件: 应用已启动并已打开一份文档
+    AT元素引用:
+    - pageEdit
+    - dtk_context_menu
+    - 幻灯片放映
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  - action: element_action
+    selector:
+      name: 播放
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  - action: element_action
+    selector:
+      name: 自动播放
+      role: button
+    do: click
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: up
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 暂停
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_社区需求_004_s1
+  name: 幻灯片播放到最后一页提示
+  description: ''
+  annotation:
+    测试界面: 幻灯片放映界面（播放控制区）
+    测试功能: 幻灯片播放/手动移动到最后一页时继续往后翻，验证toast提示“已是最后一页”及向后按钮置灰
+    前置条件: 应用已启动并已打开一份多页文档
+    AT元素引用:
+    - pageEdit
+    - dtk_context_menu
+    - 幻灯片放映
+  steps:
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: element_action
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: click
+  - action: element_action
+    selector:
+      name: 下一页
+      role: button
+    do: click
+  - action: element_action
+    selector:
+      name: 下一页
+      role: button
+    do: click
+  - action: keyboard_press
+    key: escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 幻灯片放映
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+teardown:
+- action: session_stop

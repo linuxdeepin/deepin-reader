@@ -1,0 +1,333 @@
+name: 交互_其它交互_suite
+app: deepin-reader
+module: 交互_其它交互
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_交互_其它交互_002_s1
+  name: 视图与导航快捷键
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 标题栏缩放控件（Form_scaleEdit_P）
+    测试功能: Ctrl+M/Ctrl+1/2/3/Ctrl++/-/Ctrl+R/Shift+R/PageUp/Down/Up/Down 视图与导航快捷键
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Button_thumbnail
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+m
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: keyboard_hot_key
+    key: ctrl+2
+  - action: keyboard_hot_key
+    key: ctrl+3
+  - action: keyboard_hot_key
+    key: ctrl++
+  - action: keyboard_hot_key
+    key: ctrl+-
+  - action: keyboard_hot_key
+    key: ctrl+r
+  - action: keyboard_hot_key
+    key: ctrl+shift+r
+  - action: keyboard_press
+    key: PageUp
+  - action: keyboard_press
+    key: PageDown
+  - action: keyboard_press
+    key: Up
+  - action: keyboard_press
+    key: Down
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+- id: suite_交互_其它交互_003_s1
+  name: 工具与标注快捷键
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 主菜单 / 注释窗口
+    测试功能: Alt+1/Alt+2/Ctrl+D/Alt+A/Alt+H/Delete/Alt+Z 工具与标注快捷键
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 选择工具
+    - 手形工具
+    - Button_BookmarkAdd
+    - Button_NotesAdd
+  steps:
+  - action: keyboard_hot_key
+    key: alt+1
+  - action: keyboard_hot_key
+    key: alt+2
+  - action: keyboard_hot_key
+    key: ctrl+d
+  - action: keyboard_hot_key
+    key: alt+a
+  - action: keyboard_hot_key
+    key: alt+h
+  - action: keyboard_hot_key
+    key: alt+z
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: 选择工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 手形工具
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: 放大镜
+      role: menu item
+    do: assert_exists
+- id: suite_交互_其它交互_004_s1
+  name: 编辑与系统快捷键
+  description: ''
+  annotation:
+    测试界面: 注释文本编辑区 / 文件对话框 / 主菜单
+    测试功能: Ctrl+C/X/V/S/Z/A/Ctrl+O/P/Shift+S/F1/F5/F11/Ctrl+Shift+? 编辑与系统快捷键
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - 另存为
+    - 打印
+    - 帮助
+    - 搜索
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+shift+?
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+  - action: keyboard_hot_key
+    key: ctrl+s
+  - action: keyboard_hot_key
+    key: ctrl+p
+  - action: keyboard_hot_key
+    key: f1
+  - action: keyboard_hot_key
+    key: f5
+  - action: keyboard_hot_key
+    key: f11
+  - action: keyboard_press
+    key: Escape
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 另存为
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 打印
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 帮助
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTitlebarDWindowQuitFullscreenButton
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+- id: suite_交互_其它交互_005_s1
+  name: DJVU格式文档快捷键
+  description: ''
+  annotation:
+    测试界面: 文档阅读区
+    测试功能: DJVU文档除Alt+A/Alt+H/Ctrl+F外其余快捷键同PDF
+    前置条件: 启动 deepin-reader 并打开DJVU文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+    - Button_thumbnail
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+shift+?
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: keyboard_hot_key
+    key: ctrl+m
+  - action: keyboard_hot_key
+    key: alt+a
+  - action: keyboard_hot_key
+    key: alt+h
+  - action: keyboard_hot_key
+    key: ctrl+f
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Button_search
+      role: check box
+    do: assert_not_exists
+- id: suite_交互_其它交互_006_s1
+  name: Ctrl+1视图调整菜单同步勾选
+  description: ''
+  annotation:
+    测试界面: 标题栏缩放控件（Form_scaleEdit_P）/ 百分比下拉菜单
+    测试功能: 按Ctrl+1后点击百分比下拉框，默认大小与100%选项自动勾选
+    前置条件: 启动 deepin-reader 并打开文档
+    AT元素引用:
+    - DLineEditChildLineEdit
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+1
+  - action: element_action
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    do: assert_checked
+- id: suite_交互_其它交互_007_s1
+  name: PDF未选中文本Alt+A与Alt+H提示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 注释提示
+    测试功能: 未选中文本时按Alt+A/Alt+H，PDF弹出请选择文本提示，DJVU无提示
+    前置条件: 启动 deepin-reader 分别打开PDF与DJVU文档
+    AT元素引用:
+    - Button_NotesAdd
+  steps:
+  - action: keyboard_hot_key
+    key: alt+a
+  - action: keyboard_hot_key
+    key: alt+h
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: Button_NotesAdd
+      role: button
+    do: assert_not_exists
+- id: suite_交互_其它交互_009_s1
+  name: Ctrl+Home快捷键到首页
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 侧边栏缩略图、书签、注释面板
+    测试功能: 按Ctrl+Home跳转首页，各缩略图面板高亮定位到首页，注释页无高亮
+    前置条件: 启动 deepin-reader 并打开含书签的文档
+    AT元素引用:
+    - View_ImageList
+    - View_CatalogTree
+    - Button_thumbnail
+    - Button_bookmark
+    - Button_annotation
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+home
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_annotation
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_CatalogTree
+      role: tree
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_annotation
+      role: check box
+    do: assert_exists
+teardown:
+- action: session_stop

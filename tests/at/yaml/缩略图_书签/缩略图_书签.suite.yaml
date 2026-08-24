@@ -1,0 +1,414 @@
+name: 缩略图_书签_suite
+app: deepin-reader
+module: 缩略图_书签
+setup:
+- action: session_start
+  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_缩略图_书签_001_s1
+  name: 书签添加（图标与右键菜单）
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 书签面板（Form_BookMarkWidget）
+    测试功能: 通过左侧栏书签切换按钮展开书签面板，点击添加书签按钮或右键菜单添加书签按钮添加书签
+    前置条件: 启动 deepin-reader 并打开 PDF 文档
+    AT元素引用:
+    - Button_bookmark
+    - Button_BookmarkAdd
+    - View_ImageList
+    - dtk_context_menu
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  - action: dtk_context_menu
+    selector:
+      name: pageEdit
+      role: text
+    items:
+    - 添加书签
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+- id: suite_缩略图_书签_002_s1
+  name: 书签删除（右键菜单、Delete键与删除所有书签）
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 书签面板 / 删除所有书签对话框
+    测试功能: 通过右键菜单删除书签、Delete键删除书签缩略图，以及删除所有书签确认对话框
+    前置条件: 启动 deepin-reader 并打开 PDF 文档，已添加多个书签
+    AT元素引用:
+    - Button_bookmark
+    - View_ImageList
+    - dtk_context_menu
+    - 删除书签
+    - 删除所有书签
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除书签
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: keyboard_press
+    key: delete
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除所有书签
+  - action: keyboard_press
+    key: escape
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      role: list
+    items:
+    - 删除所有书签
+  - action: keyboard_press
+    key: enter
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+  - action: assert_ocr_exists
+    text: 您确定要删除所有书签吗？
+  - action: assert_not_exists
+    text: 您确定要删除所有书签吗？
+  - action: assert_ocr_exists
+    text: 您确定要删除所有书签吗？
+  - action: assert_not_exists
+    text: 您确定要删除所有书签吗？
+  - action: assert_element
+    selector:
+      name: Button_BookmarkAdd
+      role: button
+    do: assert_exists
+- id: suite_缩略图_书签_003_s1
+  name: 书签列表导航与快捷键切换
+  description: ''
+  annotation:
+    测试界面: 左侧栏书签面板（Form_BookMarkWidget）
+    测试功能: 点击书签缩略图跳转至相应页面，按键盘上下/pageup/pagedown 切换书签缩略图
+    前置条件: 启动 deepin-reader 并打开 PDF 文档，已添加多个书签
+    AT元素引用:
+    - Button_bookmark
+    - View_ImageList
+    - pageEdit
+  steps:
+  - action: element_action
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: click
+  - action: element_action
+    selector:
+      name: View_ImageList
+      role: list
+    do: click
+  - action: keyboard_press
+    key: down
+  - action: keyboard_press
+    key: pageup
+  - action: keyboard_press
+    key: pagedown
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_缩略图_书签_004_s1
+  name: 多格式与多途径文档打开
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 初始导航页 / 文件对话框
+    测试功能: 分别打开 PDF、DJVU、DOCX 格式文档，DOCX 自动转 PDF，均能正常打开浏览
+    前置条件: 应用已启动并停留在初始导航页，TEST_FILES_DIR 下备有各格式文档
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+    - Form_CentralDocPage
+  steps:
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.djvu
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+- id: suite_缩略图_书签_005_s1
+  name: 关闭再打开与损坏文档提示
+  description: ''
+  annotation:
+    测试界面: 文档阅读区 / 初始导航页
+    测试功能: 关闭应用后再打开回到初始界面，打开损坏文档弹出错误提示
+    前置条件: 应用未启动，TEST_FILES_DIR 下备有损坏文档
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+    - Form_CentralDocPage
+  steps: []
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Label_Icon
+      role: image
+    do: assert_exists
+  - action: assert_ocr_exists
+    text: 请检查文件是否损坏
+- id: suite_缩略图_书签_006_s1
+  name: 未打开与已打开文档界面显示
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文档阅读区 / 标题栏 / 主菜单 / 右键菜单
+    测试功能: 未打开文档时图标置灰、菜单高亮项；已打开文档时工具栏、菜单项、右键菜单、左侧栏图标显示
+    前置条件: 应用已启动至初始界面及已打开 PDF 文档
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+    - DTitlebarDWindowOptionButton
+    - 新窗口
+    - 新标签页
+    - 保存
+    - 另存为
+    - 放大镜
+    - 搜索
+    - 打印
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+    - Button_thumbnail
+    - Button_catalog
+    - Button_bookmark
+    - Button_annotation
+    - View_ImageList
+    - dtk_context_menu
+  steps:
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 新窗口
+    - 新标签页
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+  - action: dtk_main_menu
+    selector:
+      name: DTitlebarDWindowOptionButton
+      role: button
+    items:
+    - 新窗口
+    - 新标签页
+    - 保存
+    - 另存为
+    - 在文件管理器中显示
+    - 放大镜
+    - 工具
+    - 搜索
+    - 打印
+    - 主题
+    - 帮助
+    - 关于
+    - 退出
+  - action: element_action
+    selector:
+      name: Button_thumbnail
+      role: check box
+    do: click
+  - action: mouse_right_click
+    selector:
+      name: pageEdit
+      role: text
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 新窗口
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: View_ImageList
+      role: list
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 退出
+      role: menu item
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_bookmark
+      role: check box
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: 添加书签
+      role: menu item
+    do: assert_exists
+- id: suite_缩略图_书签_007_s1
+  name: 多种打开方式（Ctrl+O 与选择文件）
+  description: ''
+  annotation:
+    测试界面: 初始导航页 / 文件对话框 / 文档标签页栏
+    测试功能: 通过 Ctrl+O、选择文件按钮、标签栏加号按钮打开文档，以及取消退出文件选择弹框
+    前置条件: 应用已启动并停留在初始导航页
+    AT元素引用:
+    - Button_SelectFile
+    - Label_Icon
+    - DTabBarAddButton
+    - dtk_main_menu
+  steps:
+  - action: keyboard_hot_key
+    key: ctrl+o
+  - action: file_dialog_cancel
+  - action: element_action
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: click
+  - action: file_dialog_select
+    path: ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  - action: element_action
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: click
+  assert_steps:
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: Button_SelectFile
+      role: button
+    do: assert_not_exists
+  - action: assert_element
+    selector:
+      name: pageEdit
+      role: text
+    do: assert_exists
+  - action: assert_element
+    selector:
+      name: DTabBarAddButton
+      role: button
+    do: assert_exists
+teardown:
+- action: session_stop
