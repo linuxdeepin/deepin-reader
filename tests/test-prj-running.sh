@@ -6,7 +6,7 @@
 
 set -u
 
-export builddir=build
+export builddir=build-ut
 export reportdir=build-ut
 export scriptdir="$(cd "$(dirname "$0")" && pwd)"
 export projectdir="$(cd "${scriptdir}/.." && pwd)"
@@ -51,9 +51,15 @@ workdir="${build_path}"
 lcov --directory "${workdir}" --zerocounters || true
 
 # Re-run tests so .gcda files reflect a clean run
+# If the first run segfaulted, .gcda files won't exist (atexit not called on SIGSEGV).
+# This re-run gives another chance; we also add a SIGSEGV handler as safety net.
 set +e
 ./tests/test-deepin-reader --gtest_output=xml:"${build_path}/report/report_deepin-reader.xml"
+retest_exit_code=$?
 set -e
+
+# Use the worst exit code between first and second run
+test_exit_code=$((test_exit_code || retest_exit_code))
 
 # Collect coverage data
 lcov -d "${workdir}" -c -o ./coverage.info
@@ -72,8 +78,11 @@ genhtml -o ./html ./coverage.info
 mv ./html/index.html ./html/cov_deepin-reader.html
 
 # Publish artifacts into project report dir
-cp -r html  "${report_path}/"
-cp -r "${build_path}/report" "${report_path}/"
+# If report_path differs from build_path, copy; otherwise files are already in place
+if [ "${report_path}" != "${build_path}" ]; then
+    cp -r html  "${report_path}/"
+    cp -r "${build_path}/report" "${report_path}/"
+fi
 cp -r asan*.log* "${report_path}/asan_deepin-reader.log" 2>/dev/null || true
 
 # 生成摘要 JSON
