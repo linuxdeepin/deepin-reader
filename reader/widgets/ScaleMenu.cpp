@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -27,6 +27,11 @@ void ScaleMenu::readCurDocParam(DocSheet *docSheet)
     m_pFitWorHAction    = createAction(tr("Fit Page"), SLOT(onFitPage()), true);
     m_pFiteHAction      = createAction(tr("Fit Height"), SLOT(onFiteH()), true);
     m_pFiteWAction      = createAction(tr("Fit Width"), SLOT(onFiteW()), true);
+    m_pTwoPageAction->setObjectName("PTwoPageAction");
+    m_pFitDefaultAction->setObjectName("PFitDefaultAction");
+    m_pFitWorHAction->setObjectName("PFitWorHaction");
+    m_pFiteHAction->setObjectName("PFiteHaction");
+    m_pFiteWAction->setObjectName("PFiteWaction");
 
     addSeparator();
     const QList<qreal> &scaleFactorlst = m_sheet->scaleFactorList();

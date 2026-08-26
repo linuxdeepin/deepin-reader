@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -45,6 +45,12 @@ void SlidePlayWidget::initControl()
     m_nextBtn = createBtn(QString("next_normal"));
     DIconButton *pbtnexit = createBtn(QString("exit_normal"));
     m_playBtn = pbtnplay;
+    m_preBtn->setObjectName("PreBtn");
+    m_preBtn->setAccessibleName("PreBtn");
+    m_nextBtn->setObjectName("NextBtn");
+    m_nextBtn->setAccessibleName("NextBtn");
+    m_playBtn->setObjectName("PlayBtn");
+    m_playBtn->setAccessibleName("PlayBtn");
 
     playout->addWidget(m_preBtn);
     playout->addWidget(pbtnplay);

@@ -280,6 +280,7 @@ void SideBarImageListView::showNoteMenu(const QPoint &point)
         qCDebug(appLog) << "Creating new note menu";
         m_pNoteMenu = new DMenu(this);
         m_pNoteMenu->setAccessibleName("Menu_Note");
+        m_pNoteMenu->setObjectName("PNoteMenu");
 
         QAction *copyAction = m_pNoteMenu->addAction(tr("Copy"));
         connect(copyAction, &QAction::triggered, [this]() {
@@ -308,6 +309,7 @@ void SideBarImageListView::showBookMarkMenu(const QPoint &point)
     if (m_pBookMarkMenu == nullptr) {
         m_pBookMarkMenu = new DMenu(this);
         m_pBookMarkMenu->setAccessibleName("Menu_BookMark");
+        m_pBookMarkMenu->setObjectName("PBookMarkMenu");
 
         QAction *dltBookMarkAction = m_pBookMarkMenu->addAction(tr("Remove bookmark"));
         connect(dltBookMarkAction, &QAction::triggered, [this]() {

@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -206,6 +206,8 @@ void TextEditWidget::initWidget()
     pHLayoutContant->setContentsMargins(20, 20, 6, 20);
 
     m_pTextEdit = new TransparentTextEdit(this);
+    m_pTextEdit->setObjectName("PTextEdit");
+    m_pTextEdit->setAccessibleName("PTextEdit");
     connect(m_pTextEdit, SIGNAL(sigNeedShowTips(const QString &, int)), this, SIGNAL(sigNeedShowTips(const QString &, int)));
 
     pHLayoutContant->addWidget(m_pTextEdit);

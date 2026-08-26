@@ -40,6 +40,7 @@ void ScaleWidget::initWidget()
 
     m_lineEdit = new DLineEdit(this);
     m_lineEdit->setObjectName("scaleEdit_P");
+    m_lineEdit->setAccessibleName("LineEdit");
     m_lineEdit->lineEdit()->setObjectName("scaleEdit");
     Dtk::Widget::DFontSizeManager::instance()->bind(m_lineEdit->lineEdit(), Dtk::Widget::DFontSizeManager::T6, true);
 
@@ -50,6 +51,7 @@ void ScaleWidget::initWidget()
 
     m_arrowBtn = new DIconButton(QStyle::SP_ArrowDown, m_lineEdit);
     m_arrowBtn->setObjectName("editArrowBtn");
+    m_arrowBtn->setAccessibleName("ArrowBtn");
     //添加显示比例值默认值
     m_arrowBtn->setFixedSize(NormalModeArrowBtnSize, NormalModeArrowBtnSize);
     m_arrowBtn->move(m_lineEdit->width() - m_arrowBtn->width() - 2, m_lineEdit->height() / 2 - m_arrowBtn->height() / 2);

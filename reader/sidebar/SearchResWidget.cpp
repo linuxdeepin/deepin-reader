@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -41,6 +41,7 @@ void SearchResWidget::initWidget()
 
     m_pImageListView = new SideBarImageListView(m_sheet, this);
     m_pImageListView->setAccessibleName("View_ImageList");
+    m_pImageListView->setObjectName("PImageListView_3");
     m_pImageListView->setListType(E_SideBar::SIDE_SEARCH);
     SearchResDelegate *imageDelegate = new SearchResDelegate(m_pImageListView);
     m_pImageListView->setItemDelegate(imageDelegate);
