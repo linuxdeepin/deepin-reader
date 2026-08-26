@@ -66,6 +66,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
             }
 
             m_pColorWidgetAction = new ColorWidgetAction(this);
+            m_pColorWidgetAction->setObjectName("PColorWidgetAction");
             connect(m_pColorWidgetAction, SIGNAL(sigBtnGroupClicked()), this, SLOT(onSetHighLight()));
             this->addAction(m_pColorWidgetAction);
         }

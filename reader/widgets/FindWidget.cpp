@@ -127,6 +127,7 @@ void FindWidget::initWidget()
 
     m_findPrevButton = new DIconButton(DStyle::SP_ArrowUp, this);
     m_findPrevButton->setObjectName("SP_ArrowUpBtn");
+    m_findPrevButton->setAccessibleName("FindPrevButton");
     m_findPrevButton->setToolTip(tr("Previous"));
     m_findPrevButton->setIconSize(QSize(12, 12));
     m_findPrevButton->setDisabled(true);
@@ -134,6 +135,7 @@ void FindWidget::initWidget()
 
     m_findNextButton = new DIconButton(DStyle::SP_ArrowDown, this);
     m_findNextButton->setObjectName("SP_ArrowDownBtn");
+    m_findNextButton->setAccessibleName("FindNextButton");
     m_findNextButton->setToolTip(tr("Next"));
     m_findNextButton->setIconSize(QSize(12, 12));
     m_findNextButton->setDisabled(true);

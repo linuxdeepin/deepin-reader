@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -53,6 +53,7 @@ void CatalogWidget::initWidget()
 
     m_pTree = new CatalogTreeView(m_sheet, this);
     m_pTree->setAccessibleName("View_CatalogTree");
+    m_pTree->setObjectName("PTree");
 
     mainLayout->addWidget(m_pTree);
     this->setLayout(mainLayout);

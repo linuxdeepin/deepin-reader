@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -41,6 +41,8 @@ void EncryptionPage::InitUI()
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
 
     m_password = new DPasswordEdit(this);
+    m_password->setObjectName("Password");
+    m_password->setAccessibleName("Password");
     m_password->setFixedSize(360, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setObjectName("passwdEdit");
@@ -48,6 +50,7 @@ void EncryptionPage::InitUI()
 
     m_nextbutton = new DPushButton(this);
     m_nextbutton->setObjectName("ensureBtn");
+    m_nextbutton->setAccessibleName("Nextbutton");
     m_nextbutton->setFixedSize(360, 36);
     m_nextbutton->setText(tr("OK", "button"));
     m_nextbutton->setDisabled(true);
