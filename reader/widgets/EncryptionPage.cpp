@@ -41,6 +41,8 @@ void EncryptionPage::InitUI()
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
 
     m_password = new DPasswordEdit(this);
+    m_password->setObjectName("Password");
+    m_password->setAccessibleName("Password");
     m_password->setFixedSize(360, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setObjectName("passwdEdit");

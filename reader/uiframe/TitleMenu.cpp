@@ -35,9 +35,11 @@ TitleMenu::TitleMenu(DWidget *parent)
 
     // 阅读模式（护眼模式）菜单项
     m_eyeProtectionAction = new EyeProtectionAction(this);
+    m_eyeProtectionAction->setObjectName("EyeProtectionAction");
     this->addAction(m_eyeProtectionAction);
 
     m_handleMenu = new HandleMenu(this);
+    m_handleMenu->setObjectName("HandleMenu");
     m_handleMenu->setDisabled(true);
     m_handleMenu->setTitle(tr("Tools"));
     m_handleMenu->setAccessibleName("Menu_Hand");

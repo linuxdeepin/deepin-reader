@@ -630,6 +630,7 @@ void MainWindow::initBase()
     this->setProperty("windowClosed", false);
 
     m_menu = new TitleMenu(this);
+    m_menu->setObjectName("Menu");
 
     m_menu->setAccessibleName("Menu_Title");
 

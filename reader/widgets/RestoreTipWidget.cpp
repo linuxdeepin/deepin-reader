@@ -53,6 +53,8 @@ void RestoreTipWidget::initUI()
     layout->addStretch(1);
 
     m_jumpBtn = new DPushButton(tr("Jump to first page"), this);
+    m_jumpBtn->setObjectName("JumpBtn");
+    m_jumpBtn->setAccessibleName("JumpBtn");
     m_jumpBtn->setFixedHeight(28);
     m_jumpBtn->setFocusPolicy(Qt::NoFocus);
     DFontSizeManager::instance()->bind(m_jumpBtn, DFontSizeManager::T8);
@@ -65,6 +67,8 @@ void RestoreTipWidget::initUI()
 
     DDciIcon closeIcon(QStringLiteral(":/icons/deepin/builtin/icons/dr_close_16px.dci"));
     m_closeBtn = new DIconButton(closeIcon, this);
+    m_closeBtn->setObjectName("CloseBtn");
+    m_closeBtn->setAccessibleName("CloseBtn");
     m_closeBtn->setFixedSize(28, 28);
     m_closeBtn->setIconSize(QSize(16, 16));
     m_closeBtn->setFlat(true);

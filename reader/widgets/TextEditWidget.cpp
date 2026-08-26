@@ -206,6 +206,8 @@ void TextEditWidget::initWidget()
     pHLayoutContant->setContentsMargins(20, 20, 6, 20);
 
     m_pTextEdit = new TransparentTextEdit(this);
+    m_pTextEdit->setObjectName("PTextEdit");
+    m_pTextEdit->setAccessibleName("PTextEdit");
     connect(m_pTextEdit, SIGNAL(sigNeedShowTips(const QString &, int)), this, SIGNAL(sigNeedShowTips(const QString &, int)));
 
     pHLayoutContant->addWidget(m_pTextEdit);

@@ -45,6 +45,12 @@ void SlidePlayWidget::initControl()
     m_nextBtn = createBtn(QString("next_normal"));
     DIconButton *pbtnexit = createBtn(QString("exit_normal"));
     m_playBtn = pbtnplay;
+    m_preBtn->setObjectName("PreBtn");
+    m_preBtn->setAccessibleName("PreBtn");
+    m_nextBtn->setObjectName("NextBtn");
+    m_nextBtn->setAccessibleName("NextBtn");
+    m_playBtn->setObjectName("PlayBtn");
+    m_playBtn->setAccessibleName("PlayBtn");
 
     playout->addWidget(m_preBtn);
     playout->addWidget(pbtnplay);
