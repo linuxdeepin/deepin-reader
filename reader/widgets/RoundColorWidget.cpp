@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -47,9 +47,28 @@ void RoundColorWidget::mousePressEvent(QMouseEvent *event)
     }
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void RoundColorWidget::enterEvent(QEvent *event)
+#else
+void RoundColorWidget::enterEvent(QEnterEvent *event)
+#endif
+{
+    qCDebug(appLog) << "RoundColorWidget enterEvent";
+    m_isHovered = true;
+    update();
+    DWidget::enterEvent(event);
+}
+
+void RoundColorWidget::leaveEvent(QEvent *event)
+{
+    qCDebug(appLog) << "RoundColorWidget leaveEvent";
+    m_isHovered = false;
+    update();
+    DWidget::leaveEvent(event);
+}
+
 void RoundColorWidget::paintEvent(QPaintEvent *event)
 {
-    // qCDebug(appLog) << "RoundColorWidget paintEvent";
     Q_UNUSED(event)
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
@@ -59,12 +78,20 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
 
     QRect squareRect = rect();
     if (m_isSelected) {
-        // qCDebug(appLog) << "RoundColorWidget paintEvent m_isSelected";
-        //draw select circle
         QColor highlightColor = DGuiApplicationHelper::instance()->applicationPalette().highlight().color();
         QPen pen;
         pen.setBrush(QBrush(highlightColor));
         pen.setWidth(borderWidth);  //pen width
+        painter.setPen(pen);
+        QRect r = squareRect.adjusted(3, 3, -3, -3);
+        painter.drawEllipse(r);
+    } else if (m_isHovered) {
+        bool isDark = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
+        QColor hoverColor = isDark ? Qt::white : Qt::black;
+        hoverColor.setAlpha(38);
+        QPen pen;
+        pen.setBrush(QBrush(hoverColor));
+        pen.setWidth(borderWidth);
         painter.setPen(pen);
         QRect r = squareRect.adjusted(3, 3, -3, -3);
         painter.drawEllipse(r);
@@ -84,5 +111,4 @@ void RoundColorWidget::paintEvent(QPaintEvent *event)
         painter.setBrush(Qt::NoBrush);
         painter.drawEllipse(r);
     }
-    // qCDebug(appLog) << "RoundColorWidget paintEvent end";
 }
