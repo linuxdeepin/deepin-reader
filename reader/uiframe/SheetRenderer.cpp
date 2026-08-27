@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -252,6 +252,13 @@ bool SheetRenderer::save()
     }
     qCDebug(appLog) << "SheetRenderer::save end, success:" << success;
     return success;
+}
+
+QString SheetRenderer::fileIdentifier() const
+{
+    if (m_document == nullptr)
+        return QString();
+    return m_document->fileIdentifier();
 }
 
 void SheetRenderer::loadPageLable()

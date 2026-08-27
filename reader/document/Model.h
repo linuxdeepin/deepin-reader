@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 -2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -224,6 +224,11 @@ public:
     virtual bool saveAs(const QString &filePath) const = 0;
     virtual Outline outline() const { return Outline(); } // LCOV_EXCL_LINE
     virtual Properties properties() const = 0;
+    /**
+     * @brief 获取文档内置的唯一标识符（如 PDF 的 /ID）
+     * 用于在文件被移动/重命名后识别同一文档，返回空串表示无可用 ID
+     */
+    virtual QString fileIdentifier() const { return QString(); }
 };
 
 class DocumentFactory
