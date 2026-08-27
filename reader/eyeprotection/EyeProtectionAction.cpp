@@ -45,19 +45,19 @@ void EyeProtectionAction::initWidget(DWidget *parent)
     mainLayout->setSpacing(4);
 
     // 第一行：标题
-    DLabel *titleLabel = new DLabel(tr("Reading mode"), pWidget);
+    DLabel *titleLabel = new DLabel(tr("Eye protection mode"), pWidget);
     titleLabel->setForegroundRole(DPalette::TextTitle);
     mainLayout->addWidget(titleLabel);
 
     // 第二行：4个圆形选择控件
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->setContentsMargins(0, 2, 0, 2);
-    buttonLayout->setSpacing(10);
+    buttonLayout->setSpacing(6);
 
     EyeProtectionManager::Mode curMode = EyeProtectionManager::instance()->mode();
 
     for (int i = 0; i < 4; ++i) {
-        QColor color = EyeProtectionManager::viewportBackgroundColor(
+        QColor color = EyeProtectionManager::pageBackgroundColor(
             static_cast<EyeProtectionManager::Mode>(i));
         auto btn = new RoundColorWidget(color, pWidget);
         btn->setAllClickNotify(true);

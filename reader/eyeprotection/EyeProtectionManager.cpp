@@ -14,11 +14,11 @@ const EyeProtectionManager::ModeColors EyeProtectionManager::s_modeColors[4] = {
     // Off:       页面背景       视口背景       前景色
     { QColor("#FFFFFF"), QColor("#E0E0E0"), QColor("#000000") },
     // Classic:
-    { QColor("#F5F5DC"), QColor("#D6D6B6"), QColor("#333333") },
+    { QColor("#F7F3E8"), QColor("#DEDAD0"), QColor("#333333") },
     // Green:
-    { QColor("#C7EDCC"), QColor("#A8D5AE"), QColor("#333333") },
+    { QColor("#C7EDCC"), QColor("#B3D5B7"), QColor("#333333") },
     // Night:
-    { QColor("#1E1E1E"), QColor("#0A0A0A"), QColor("#E0E0E0") },
+    { QColor("#1E1E1E"), QColor("#252525"), QColor("#E0E0E0") },
 };
 
 EyeProtectionManager *EyeProtectionManager::instance()
