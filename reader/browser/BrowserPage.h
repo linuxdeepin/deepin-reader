@@ -388,6 +388,16 @@ private:
      */
     bool isBigDoc();
 
+    /**
+     * @brief applyNightMode 夜间模式智能反色
+     * 基于 HSL 亮度反转：仅反转 Lightness 通道，保留 Hue 和 Saturation
+     * 效果：白底黑字 → 黑底白字（文字/背景正确反色）
+     *       彩色图片/链接 → 仅变暗，色相不发生 180° 偏移
+     * @param src 源 pixmap
+     * @return 反色后的 pixmap
+     */
+    QPixmap applyNightMode(const QPixmap &src);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
@@ -435,6 +445,9 @@ private:
     int  m_bookmarkState = 0;                               // 当前书签状态 1为on 2为pressed 3为show
 
     QSizeF m_originSizeF;
+
+    QPixmap m_nightPixmap;      // 夜间模式智能反色缓存
+    bool m_nightDirty = true;   // 缓存失效标记，m_renderPixmap 变化时置 true
 };
 
 #endif // BrowserPage_H

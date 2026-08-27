@@ -151,29 +151,33 @@ void BrowserPage::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         renderViewPort();
     }
 
-    painter->drawPixmap(0, 0, m_renderPixmap);  //m_renderPixmap的大小存在系统缩放，可能不等于option->rect()，需要按坐标绘制
-
-    // 护眼模式背景色叠加
     EyeProtectionManager *epMgr = EyeProtectionManager::instance();
-    if (epMgr->mode() != EyeProtectionManager::Off) {
-        QColor pageBg = epMgr->pageBackgroundColor();
 
-        if (epMgr->mode() == EyeProtectionManager::Night) {
-            // 夜间模式：先完整反色（白底黑字 → 黑底白字）
-            // Exclusion(src=白) 结果 = src + dest - 2*src*dest/255
-            //   白(255) → 0(黑)，黑(0) → 255(白)
-            painter->setCompositionMode(QPainter::CompositionMode_Exclusion);
-            painter->fillRect(boundingRect(), QColor(255, 255, 255, 255));
-            painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-            // 再叠加深色半透明层降低整体亮度，保持文字清晰可读
-            QColor dark = pageBg;
-            dark.setAlpha(80);
-            painter->fillRect(boundingRect(), dark);
-        } else {
+    if (epMgr->mode() == EyeProtectionManager::Night) {
+        // 夜间模式：智能反色（HSL 亮度反转）
+        // 仅反转 Lightness 通道，保留 Hue/Saturation，避免图片/链接色相偏移 180°
+        //   白底黑字 → 黑底白字（文字/背景正确反色）
+        //   彩色图片/链接 → 仅变暗，色相保持
+        if (m_nightDirty || m_nightPixmap.isNull()) {
+            m_nightPixmap = applyNightMode(m_renderPixmap);
+            m_nightPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+            m_nightDirty = false;
+        }
+        painter->drawPixmap(0, 0, m_nightPixmap);
+        // 叠加轻微深色半透明层降低整体亮度，保持文字清晰可读
+        QColor dark = epMgr->pageBackgroundColor();
+        dark.setAlpha(60);
+        painter->fillRect(boundingRect(), dark);
+    } else {
+        // 非夜间模式：绘制原图，并按需叠加护眼染色
+        painter->drawPixmap(0, 0, m_renderPixmap);  //m_renderPixmap的大小存在系统缩放，可能不等于option->rect()，需要按坐标绘制
+
+        if (epMgr->mode() != EyeProtectionManager::Off) {
+            QColor pageBg = epMgr->pageBackgroundColor();
             // 经典/绿色护眼：正片叠底(Multiply)染色
             // result = src * dest / 255
             //   白色背景(255)被染为护眼色，黑色文字(0)保持深色不变
-            //   避免使用 SourceAtop 导致黑色文字被覆盖为叠加色
+            //   Multiply 不改变色相，图片/链接仅被染色，色相保持
             painter->setCompositionMode(QPainter::CompositionMode_Multiply);
             painter->fillRect(boundingRect(), pageBg);
             painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -264,6 +268,7 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
                                              static_cast<int>(boundingRect().height() * dApp->devicePixelRatio()));
             m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
         }
+        m_nightDirty = true;  // m_renderPixmap 已更新，夜间模式反色缓存失效
 
         ++m_pixmapId;
 
@@ -412,6 +417,8 @@ void BrowserPage::handleRenderFinished(const int &pixmapId, const QPixmap &pixma
     m_renderPixmap = m_pixmap;
 
     m_renderPixmap.setDevicePixelRatio(dApp->devicePixelRatio());
+
+    m_nightDirty = true;  // 渲染结果已更新，夜间模式反色缓存失效
 
     update();
     // qCDebug(appLog) << "BrowserPage::handleRenderFinished() - Handle render finished completed";
@@ -609,6 +616,8 @@ void BrowserPage::clearPixmap()
     m_pixmap = QPixmap();
 
     m_renderPixmap = m_pixmap;
+
+    m_nightDirty = true;  // pixmap 已清空，夜间模式反色缓存失效
 
     ++m_pixmapId;
 
@@ -1269,4 +1278,43 @@ bool BrowserPage::isBigDoc()
     bool isBig = supportedType && boundingRect().width() > 1000 && boundingRect().height() > 1000;
     qCDebug(appLog) << "Checking if document is big:" << isBig;
     return isBig;
+}
+
+QPixmap BrowserPage::applyNightMode(const QPixmap &src)
+{
+    if (src.isNull())
+        return src;
+
+    QImage img = src.toImage();
+    if (img.isNull())
+        return src;
+
+    // 统一为 ARGB32 便于逐行扫描
+    if (img.format() != QImage::Format_ARGB32 &&
+        img.format() != QImage::Format_ARGB32_Premultiplied &&
+        img.format() != QImage::Format_RGB32) {
+        img = img.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    const int w = img.width();
+    const int h = img.height();
+
+    for (int y = 0; y < h; ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
+        for (int x = 0; x < w; ++x) {
+            QRgb px = line[x];
+            const int alpha = qAlpha(px);
+
+            // HSL 亮度反转：保留色相(H)和饱和度(S)，仅反转亮度(L)
+            // 白(255) → 黑(0)，黑(0) → 白(255)，彩色仅变暗、色相不偏移
+            QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
+            int hue, sat, light, dummy;
+            c.getHsl(&hue, &sat, &light, &dummy);
+            light = 255 - light;
+            c.setHsl(hue, sat, light);
+            line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
+        }
+    }
+
+    return QPixmap::fromImage(img);
 }
