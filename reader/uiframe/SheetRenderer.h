@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -190,6 +190,11 @@ public:
      * @return
      */
     bool save();
+
+    /**
+     * @brief 获取文档内置唯一标识符
+     */
+    QString fileIdentifier() const;
 
     /**
      * @brief saveAs

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -110,6 +110,13 @@ public:
      * @return
      */
     QString label(int index) const;
+
+    /**
+     * @brief 获取 PDF 文档的永久标识符（Trailer /ID 的第一个值）
+     * 此 ID 在文档创建时生成，改名/移动不变，可用于唯一标识同一文档
+     * @return 永久 ID 的十六进制字符串，获取失败返回空串
+     */
+    QString fileIdentifier() const;
 
     /**
      * @brief 保存到当前文件

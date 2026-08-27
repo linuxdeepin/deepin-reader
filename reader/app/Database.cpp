@@ -4,6 +4,7 @@
 
 #include "Database.h"
 #include "DocSheet.h"
+#include "SheetRenderer.h"
 #include "Global.h"
 #include "DocSheet.h"
 #include "ddlog.h"
@@ -18,6 +19,9 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+
+#include <fcntl.h>
+#include <unistd.h>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -89,6 +93,7 @@ bool Database::prepareOperation()
                     ",fileSize INTEGER DEFAULT 0"
                     ",lastModified INTEGER DEFAULT 0"
                     ",contentHash TEXT DEFAULT ''"
+                    ",docId TEXT DEFAULT ''"
                     ")")) {
         qCInfo(appLog) << query.lastError();
         return false;
@@ -132,7 +137,8 @@ bool Database::migrateOperationTable()
         {"expandedSections", "TEXT DEFAULT '[]'"},
         {"fileSize",       "INTEGER DEFAULT 0"},
         {"lastModified",   "INTEGER DEFAULT 0"},
-        {"contentHash",    "TEXT DEFAULT ''"}
+        {"contentHash",    "TEXT DEFAULT ''"},
+        {"docId",          "TEXT DEFAULT ''"}
     };
 
     Transaction transaction(m_database);
@@ -211,15 +217,17 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     QString contentHash = cachedContentHash.isEmpty()
         ? computeContentHash(sheet->filePath())
         : cachedContentHash;
+    // 获取文档内置唯一标识符（如 PDF 的 /ID），用于文件移动/重命名后识别
+    QString docId = sheet->m_renderer ? sheet->m_renderer->fileIdentifier() : QString();
 
     QSqlQuery query(m_database);
     query.prepare("REPLACE INTO "
                   "operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,"
                   "sidebarVisible,sidebarIndex,currentPage,sidebarWidth,sidebarWidthChanged,scrollPosition,expandedSections,"
-                  "fileSize,lastModified,contentHash)"
+                  "fileSize,lastModified,contentHash,docId)"
                   " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,"
                   ":sidebarVisible,:sidebarIndex,:currentPage,:sidebarWidth,:sidebarWidthChanged,:scrollPosition,:expandedSections,"
-                  ":fileSize,:lastModified,:contentHash)");
+                  ":fileSize,:lastModified,:contentHash,:docId)");
     query.bindValue(":filePath", sheet->filePath());
     query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
     query.bindValue(":mouseShape", sheet->m_operation.mouseShape);
@@ -242,6 +250,7 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     query.bindValue(":fileSize", fileSize);
     query.bindValue(":lastModified", lastModified);
     query.bindValue(":contentHash", contentHash);
+    query.bindValue(":docId", docId);
 
     if (!query.exec()) {
         qCInfo(appLog) << query.lastError().text();
@@ -259,73 +268,122 @@ bool Database::matchOperationByContent(const QFileInfo &fileInfo, DocSheet *shee
     qint64 fileSize = fileInfo.size();
     qint64 lastModified = fileInfo.lastModified().toMSecsSinceEpoch();
     QString contentHash = computeContentHash(fileInfo.absoluteFilePath());
+    // 获取文档内置唯一标识符（PDF 的 /ID）
+    QString docId = sheet->m_renderer ? sheet->m_renderer->fileIdentifier() : QString();
 
     qCDebug(appLog) << "Matching by content: size=" << fileSize
-                    << "mtime=" << lastModified << "hash=" << contentHash.left(16) << "...";
+                    << "mtime=" << lastModified << "hash=" << contentHash.left(16) << "..."
+                    << "docId=" << docId.left(16) << "...";
 
     Transaction matchTransaction(m_database);
 
-    QSqlQuery query(m_database);
-    // 匹配条件加入 lastModified，消除前 64KB 内容相同但实际不同的文件间的哈希碰撞
-    query.prepare("SELECT * FROM operation WHERE fileSize = :fileSize "
-                  "AND contentHash = :contentHash AND lastModified = :lastModified");
-    query.bindValue(":fileSize", fileSize);
-    query.bindValue(":contentHash", contentHash);
-    query.bindValue(":lastModified", lastModified);
+    QVariantMap bestRow;
 
-    if (!query.exec()) {
-        qCWarning(appLog) << "Content match query failed:" << query.lastError();
+    // 优先通过 docId 匹配（PDF /ID，改名/移动不变，最可靠）
+    if (!docId.isEmpty()) {
+        QSqlQuery idQuery(m_database);
+        idQuery.prepare("SELECT * FROM operation WHERE docId = :docId AND docId != ''");
+        idQuery.bindValue(":docId", docId);
+        if (idQuery.exec() && idQuery.next()) {
+            for (int i = 0; i < idQuery.record().count(); ++i)
+                bestRow.insert(idQuery.record().fieldName(i), idQuery.value(i));
+            qint64 bestModTime = bestRow.value("lastModified").toLongLong();
+            // docId 相同时选最近修改的记录
+            while (idQuery.next()) {
+                qint64 modTime = idQuery.value("lastModified").toLongLong();
+                if (modTime > bestModTime) {
+                    bestModTime = modTime;
+                    bestRow.clear();
+                    for (int i = 0; i < idQuery.record().count(); ++i)
+                        bestRow.insert(idQuery.record().fieldName(i), idQuery.value(i));
+                }
+            }
+            qCInfo(appLog) << "Matched by docId:" << docId.left(16) << "...";
+        }
+    }
+
+    // docId 未命中时，回退到 fileSize + contentHash 匹配
+    if (bestRow.isEmpty()) {
+        QSqlQuery query(m_database);
+        // 不使用 lastModified：保存注释会修改文件 mtime，导致移动文件后匹配失败
+        query.prepare("SELECT * FROM operation WHERE fileSize = :fileSize "
+                      "AND contentHash = :contentHash");
+        query.bindValue(":fileSize", fileSize);
+        query.bindValue(":contentHash", contentHash);
+
+        if (!query.exec()) {
+            qCWarning(appLog) << "Content match query failed:" << query.lastError();
+            return false;
+        }
+
+        if (query.next()) {
+            for (int i = 0; i < query.record().count(); ++i)
+                bestRow.insert(query.record().fieldName(i), query.value(i));
+            qint64 bestModTime = bestRow.value("lastModified").toLongLong();
+
+            // 如果匹配到多条记录，选择最后修改时间最近的一条
+            while (query.next()) {
+                qint64 modTime = query.value("lastModified").toLongLong();
+                if (modTime > bestModTime) {
+                    bestModTime = modTime;
+                    bestRow.clear();
+                    for (int i = 0; i < query.record().count(); ++i)
+                        bestRow.insert(query.record().fieldName(i), query.value(i));
+                }
+            }
+        }
+    }
+
+    if (bestRow.isEmpty()) {
+        qCDebug(appLog) << "No content match found";
         return false;
     }
 
-    if (query.next()) {
-        if (query.next()) {
-            qCWarning(appLog) << "Multiple content matches found for size=" << fileSize
-                              << ", refusing to update to avoid state overwrite";
-            return false;
+    // 匹配成功，读取状态并更新文件路径
+    QString oldFilePath = bestRow.value("filePath").toString();
+    qCInfo(appLog) << "Content match found: old path=" << oldFilePath << "-> new path=" << fileInfo.absoluteFilePath();
+
+    sheet->m_operation.layoutMode = static_cast<Dr::LayoutMode>(bestRow.value("layoutMode").toInt());
+    sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(bestRow.value("mouseShape").toInt());
+    sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(bestRow.value("scaleMode").toInt());
+    sheet->m_operation.rotation = static_cast<Dr::Rotation>(bestRow.value("rotation").toInt());
+    sheet->m_operation.scaleFactor = qBound(0.1, bestRow.value("scaleFactor").toDouble(), 5.0);
+    sheet->m_operation.sidebarVisible = bestRow.value("sidebarVisible").toInt();
+    sheet->m_operation.sidebarIndex = bestRow.value("sidebarIndex").toInt();
+    sheet->m_operation.currentPage = bestRow.value("currentPage").toInt();
+    sheet->m_operation.sidebarWidth = bestRow.value("sidebarWidth").toInt();
+    sheet->m_operation.sidebarWidthChanged = bestRow.value("sidebarWidthChanged").toInt() != 0;
+    sheet->m_operation.scrollPosition = bestRow.value("scrollPosition").toFloat();
+    // 目录树展开状态
+    QString expandedJson = bestRow.value("expandedSections").toString();
+    QJsonDocument expDoc = QJsonDocument::fromJson(expandedJson.toUtf8());
+    if (expDoc.isArray()) {
+        QJsonArray arr = expDoc.array();
+        for (const QJsonValue &val : arr) {
+            sheet->m_operation.expandedSections.append(val.toString());
         }
-        query.first();
-
-        // 匹配成功，读取状态并更新文件路径
-        QString oldFilePath = query.value("filePath").toString();
-        qCInfo(appLog) << "Content match found: old path=" << oldFilePath << "-> new path=" << fileInfo.absoluteFilePath();
-
-        sheet->m_operation.layoutMode = static_cast<Dr::LayoutMode>(query.value("layoutMode").toInt());
-        sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(query.value("mouseShape").toInt());
-        sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(query.value("scaleMode").toInt());
-        sheet->m_operation.rotation = static_cast<Dr::Rotation>(query.value("rotation").toInt());
-        sheet->m_operation.scaleFactor = qBound(0.1, query.value("scaleFactor").toDouble(), 5.0);
-        sheet->m_operation.sidebarVisible = query.value("sidebarVisible").toInt();
-        sheet->m_operation.sidebarIndex = query.value("sidebarIndex").toInt();
-        sheet->m_operation.currentPage = query.value("currentPage").toInt();
-        sheet->m_operation.sidebarWidth = query.value("sidebarWidth").toInt();
-        sheet->m_operation.sidebarWidthChanged = query.value("sidebarWidthChanged").toInt() != 0;
-        sheet->m_operation.scrollPosition = query.value("scrollPosition").toFloat();
-        // 目录树展开状态
-        QString expandedJson = query.value("expandedSections").toString();
-        QJsonDocument expDoc = QJsonDocument::fromJson(expandedJson.toUtf8());
-        if (expDoc.isArray()) {
-            QJsonArray arr = expDoc.array();
-            for (const QJsonValue &val : arr) {
-                sheet->m_operation.expandedSections.append(val.toString());
-            }
-        }
-
-        // 更新文件路径为新路径（在同一事务中保证原子性）
-        QSqlQuery updateQuery(m_database);
-        updateQuery.prepare("UPDATE operation SET filePath = :newPath WHERE filePath = :oldPath");
-        updateQuery.bindValue(":newPath", fileInfo.absoluteFilePath());
-        updateQuery.bindValue(":oldPath", oldFilePath);
-        if (!updateQuery.exec()) {
-            qCWarning(appLog) << "Failed to update file path after content match:" << updateQuery.lastError();
-        }
-
-        matchTransaction.commit();
-        return true;
     }
 
-    qCDebug(appLog) << "No content match found";
-    return false;
+    // 更新文件路径为新路径（在同一事务中保证原子性）
+    QSqlQuery updateQuery(m_database);
+    updateQuery.prepare("UPDATE operation SET filePath = :newPath WHERE filePath = :oldPath");
+    updateQuery.bindValue(":newPath", fileInfo.absoluteFilePath());
+    updateQuery.bindValue(":oldPath", oldFilePath);
+    if (!updateQuery.exec()) {
+        qCWarning(appLog) << "Failed to update file path after content match:" << updateQuery.lastError();
+    }
+
+    // 同时更新 bookmark 表的文件路径，确保书签数据也能跟随文件迁移
+    QSqlQuery bookmarkUpdate(m_database);
+    bookmarkUpdate.prepare("UPDATE bookmark SET filePath = :newPath WHERE filePath = :oldPath");
+    bookmarkUpdate.bindValue(":newPath", fileInfo.absoluteFilePath());
+    bookmarkUpdate.bindValue(":oldPath", oldFilePath);
+    if (!bookmarkUpdate.exec()) {
+        qCWarning(appLog) << "Failed to update bookmark path after content match:" << bookmarkUpdate.lastError();
+    }
+
+    matchTransaction.commit();
+    return true;
 }
 
 int Database::cleanupOrphanStates()
@@ -345,6 +403,14 @@ int Database::cleanupOrphanStates()
             continue;
         }
         if (!QFile::exists(filePath)) {
+            // 可移动设备路径（U盘等）暂不清理：设备未挂载时 QFile::exists() 返回 false，
+            // 但文件仍在设备上，清理会导致重新挂载后数据丢失。
+            // 通过检查路径是否在 /media、/mnt、/run/media 下判断是否为可移动设备
+            if (filePath.startsWith("/media/") || filePath.startsWith("/mnt/")
+                || filePath.startsWith("/run/media/")) {
+                qCDebug(appLog) << "Skipping removable media path:" << filePath;
+                continue;
+            }
             orphanPaths.append(filePath);
         }
     }
@@ -375,6 +441,30 @@ int Database::cleanupOrphanStates()
     return cleanedCount;
 }
 
+void Database::flushToDisk()
+{
+    if (!m_database.isOpen())
+        return;
+
+    // 1. checkpoint 将 WAL 内容合并到主数据库文件
+    //    TRUNCATE 模式会在合并后截断 WAL 文件，并 fsync 主 DB 文件
+    QSqlQuery query(m_database);
+    if (!query.exec("PRAGMA wal_checkpoint(TRUNCATE)")) {
+        qCWarning(appLog) << "Failed to checkpoint WAL:" << query.lastError();
+    }
+
+    // 2. 对数据库文件本身做 fsync，确保内核页缓存数据写入磁盘
+    //    这是额外的安全措施，防止 checkpoint 的 fsync 未完全生效
+    QString dbPath = m_database.databaseName();
+    if (!dbPath.isEmpty()) {
+        int fd = ::open(dbPath.toUtf8().constData(), O_RDONLY);
+        if (fd >= 0) {
+            ::fsync(fd);
+            ::close(fd);
+        }
+    }
+}
+
 QString Database::computeContentHash(const QString &filePath)
 {
     QFile file(filePath);
@@ -383,9 +473,22 @@ QString Database::computeContentHash(const QString &filePath)
         return QString();
     }
 
-    // 读取前 64KB
-    const qint64 maxBytes = 64 * 1024;
-    QByteArray data = file.read(maxBytes);
+    // 采样头部 64KB + 尾部 64KB，拼接后计算 SHA256
+    // 纯头部 hash 在 WPS 等工具生成的 PDF 中容易碰撞（共享相同模板头）
+    // 尾部包含 xref 表、trailer 等唯一信息，能显著提高区分度
+    const qint64 chunkSize = 64 * 1024;
+    qint64 fileSize = file.size();
+    QByteArray data;
+
+    // 头部
+    data = file.read(chunkSize);
+
+    // 尾部（文件 > 64KB 时追加尾部采样）
+    if (fileSize > chunkSize) {
+        file.seek(fileSize - chunkSize);
+        data.append(file.read(chunkSize));
+    }
+
     file.close();
 
     return QCryptographicHash::hash(data, QCryptographicHash::Sha256).toHex();
@@ -602,11 +705,14 @@ Database::Database(QObject *parent) : QObject(parent)
         qCDebug(appLog) << "Setting database optimization parameters";
         {
             QSqlQuery query(m_database);
-            if (!query.exec("PRAGMA synchronous = OFF")) {
-                qCWarning(appLog) << "Failed to set synchronous mode:" << query.lastError();
-            }
-            if (!query.exec("PRAGMA journal_mode = MEMORY")) {
+            // 使用 WAL 模式：支持并发读取，崩溃后可通过 WAL 文件自动恢复
+            if (!query.exec("PRAGMA journal_mode = WAL")) {
                 qCWarning(appLog) << "Failed to set journal mode:" << query.lastError();
+            }
+            // FULL 模式：WAL 模式下每次 COMMIT 都 fsync WAL 文件，
+            // 确保进程被杀后最新写入的事务不丢失（代价是每次写入慢 ~1ms）
+            if (!query.exec("PRAGMA synchronous = FULL")) {
+                qCWarning(appLog) << "Failed to set synchronous mode:" << query.lastError();
             }
         }
 

@@ -123,6 +123,13 @@ public:
     int cleanupOrphanStates();
 
     /**
+     * @brief flushToDisk
+     * 强制将数据库缓存数据刷写到磁盘，确保进程异常终止后数据不丢失
+     * 在关键数据（书签、阅读进度）保存后调用
+     */
+    void flushToDisk();
+
+    /**
      * @brief computeContentHash
      * 计算文件前64KB内容的SHA256哈希
      * @param filePath 文件路径
