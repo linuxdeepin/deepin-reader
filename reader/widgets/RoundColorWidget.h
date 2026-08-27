@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,9 @@
 
 #include <DWidget>
 #include <QMouseEvent>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QEnterEvent>
+#endif
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,6 +56,24 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
     /**
+     * @brief enterEvent
+     * 鼠标进入事件，触发 hover 灰色边框
+     * @param event
+     */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    void enterEvent(QEvent *event) override;
+#else
+    void enterEvent(QEnterEvent *event) override;
+#endif
+
+    /**
+     * @brief leaveEvent
+     * 鼠标离开事件，取消 hover 灰色边框
+     * @param event
+     */
+    void leaveEvent(QEvent *event) override;
+
+    /**
      * @brief paintEvent
      * 绘制事件
      * @param event
@@ -61,6 +82,7 @@ protected:
 
 private:
     bool m_isSelected = false;
+    bool m_isHovered = false;
     QColor m_color;
     bool m_allnotify = false;
 };
