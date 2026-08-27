@@ -365,22 +365,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
         <source>No eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Sense protecció ocular</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Protecció ocular clàssica</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Protecció ocular verda</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"/>
+        <translation>Protecció ocular nocturna</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
         <source>Eye protection mode</source>
-        <translation type="unfinished"/>
+        <translation>Mode de protecció ocular</translation>
     </message>
 </context>
 <context>
@@ -459,17 +459,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"/>
+        <translation>Restaura a l&apos;última posició de lectura</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"/>
+        <translation>Ves a la primera pàgina</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
         <source>Close</source>
-        <translation type="unfinished"/>
+        <translation>Tanca</translation>
     </message>
 </context>
 <context>
@@ -941,7 +941,7 @@
     <message>
         <location filename="../reader/main.cpp" line="77"/>
         <source>Batch print documents without UI.</source>
-        <translation type="unfinished"/>
+        <translation>Imprimeix documents per lots sense interfície d&apos;usuari.</translation>
     </message>
 </context>
 </TS>
