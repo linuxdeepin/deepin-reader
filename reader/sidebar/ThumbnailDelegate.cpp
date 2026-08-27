@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,6 +17,7 @@
 #include <QAbstractItemView>
 #include <QPainterPath>
 #include <QTransform>
+#include <QImage>
 ThumbnailDelegate::ThumbnailDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
 {
@@ -62,7 +63,42 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             QPainterPath clipPath;
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
-            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
+            // 深色系统主题下，缩略图卡片需与侧边栏深色背景协调：将文档原始白底黑字
+            // 的缩略图反色为黑底白字；浅色主题保持原样。反色仅在绘制时进行，
+            // 不修改 DocSheet 中缓存的真实缩略图(始终为白底)，避免主题切换时双重反色。
+            // 采用与 BrowserPage::applyNightMode 相同的 HSL 亮度反转算法：
+            // 仅反转 Lightness 通道，保留 Hue/Saturation，避免图片色相偏移 180°。
+            //   白底黑字 → 黑底白字（文字/背景正确反色）
+            //   彩色图片/链接 → 仅变暗，色相保持
+            if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
+                QImage img = pixmap.toImage();
+                if (!img.isNull()) {
+                    if (img.format() != QImage::Format_ARGB32)
+                        img = img.convertToFormat(QImage::Format_ARGB32);
+                    const int w = img.width();
+                    const int h = img.height();
+                    for (int y = 0; y < h; ++y) {
+                        QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
+                        for (int x = 0; x < w; ++x) {
+                            const QRgb px = line[x];
+                            const int alpha = qAlpha(px);
+                            QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
+                            int hue, sat, light, dummy;
+                            c.getHsl(&hue, &sat, &light, &dummy);
+                            light = 255 - light;
+                            c.setHsl(hue, sat, light);
+                            line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
+                        }
+                    }
+                    QPixmap invertedPixmap = QPixmap::fromImage(img);
+                    invertedPixmap.setDevicePixelRatio(pixmap.devicePixelRatio());
+                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), invertedPixmap);
+                } else {
+                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
+                }
+            } else {
+                painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
+            }
             painter->restore();
         }
 
