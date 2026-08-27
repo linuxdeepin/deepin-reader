@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -77,6 +77,23 @@ int DocTabBar::indexOfFilePath(const QString &filePath)
     return -1;
 }
 
+void DocTabBar::setPendingActiveFile(const QString &filePath)
+{
+    qCDebug(appLog) << "DocTabBar::setPendingActiveFile - file:" << filePath;
+    if (filePath.isEmpty())
+        return;
+
+    int idx = indexOfFilePath(filePath);
+    if (idx >= 0) {
+        // 覆盖 insertSheet 设置的 m_delayIndex，待延时的 onSetCurrentIndex 触发时生效
+        // 这样可恢复上次激活的标签页，而非总是激活最后一个插入的标签
+        m_delayIndex = idx;
+        qCDebug(appLog) << "Set pending active index to" << idx;
+    } else {
+        qCDebug(appLog) << "File not in tab bar, pending active unchanged";
+    }
+}
+
 void DocTabBar::insertSheet(DocSheet *sheet, int index)
 {
     if (sheet == nullptr) {
@@ -140,19 +157,8 @@ QList<DocSheet *> DocTabBar::getSheets()
             sheets.append(sheet);
     }
 
-    if (sheets.isEmpty())
-        return sheets;
-
-    //需要按倒序排列
-    QList<DocSheet *> orderSheets;
-    QList<DocSheet *> allSheets = DocSheet::getSheets();
-    for (int i = allSheets.count() - 1; i >= 0; --i) {
-        if (sheets.contains(allSheets[i]))
-            orderSheets.append(allSheets[i]);
-    }
-
     qCDebug(appLog) << "DocTabBar::getSheets end";
-    return orderSheets;
+    return sheets;
 }
 
 void DocTabBar::updateTabWidth()

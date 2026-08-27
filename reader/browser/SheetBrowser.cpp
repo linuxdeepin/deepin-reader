@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -222,6 +222,7 @@ void SheetBrowser::init(SheetOperation &operation, const QSet<int> &bookmarks)
     m_hasLoaded = true;
     
     qCInfo(appLog) << "SheetBrowser initialized successfully, initial page:" << m_initPage;
+    qCDebug(appLog) << "init done m_initPage=" << m_initPage << "currentPage=" << operation.currentPage << "hasLoaded=" << m_hasLoaded << "scaleMode=" << operation.scaleMode;
 }
 
 void SheetBrowser::setMouseShape(const Dr::MouseShape &shape)
@@ -693,6 +694,7 @@ void SheetBrowser::onRemoveIconAnnotSelect()
 
 void SheetBrowser::onInit()
 {
+    qCDebug(appLog) << "onInit enter m_initPage=" << m_initPage << "hasLoaded=" << m_hasLoaded;
     qCDebug(appLog) << "SheetBrowser::onInit() - Starting init";
     if (1 != m_initPage) {
         setCurrentPage(m_initPage);
@@ -1086,7 +1088,7 @@ void SheetBrowser::deform(SheetOperation &operation)
     setSceneRect(0, 0, maxWidth, maxHeight);
 
     if (page > 0 && page <= m_items.count()) {
-        qCDebug(appLog) << "SheetBrowser::deform() - Setting scroll bar value for page:" << page;
+        qCDebug(appLog) << "deform set vbar page=" << page << "y=" << m_items[page - 1]->getTopLeftPos().y();
         verticalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().y()));
         horizontalScrollBar()->setValue(static_cast<int>(m_items[page - 1]->getTopLeftPos().x()));
     }
@@ -1113,6 +1115,7 @@ bool SheetBrowser::hasLoaded()
 
 void SheetBrowser::resizeEvent(QResizeEvent *event)
 {
+    qCDebug(appLog) << "resizeEvent hasLoaded=" << m_hasLoaded << "scaleMode=" << (m_sheet ? m_sheet->operation().scaleMode : -1) << "newsize=" << event->size();
     // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Starting resize event";
     if (hasLoaded() && m_sheet->operation().scaleMode != Dr::ScaleFactorMode) {
         // qCDebug(appLog) << "SheetBrowser::resizeEvent() - Has loaded, deforming";
@@ -1725,6 +1728,7 @@ int SheetBrowser::currentScrollValueForPage()
 
 void SheetBrowser::setCurrentPage(int page)
 {
+    qCDebug(appLog) << "setCurrentPage(" << page << ") curPage=" << m_currentPage << "vbar[" << (verticalScrollBar() ? verticalScrollBar()->minimum() : -1) << (verticalScrollBar() ? verticalScrollBar()->maximum() : -1) << (verticalScrollBar() ? verticalScrollBar()->value() : -1) << "]";
     // qCDebug(appLog) << "SheetBrowser::setCurrentPage() - Setting current page to:" << page;
     if (page < 1 || page > allPages()) {
         qCWarning(appLog) << "Invalid page number:" << page << "max pages:" << allPages();
@@ -1897,6 +1901,7 @@ void SheetBrowser::dragEnterEvent(QDragEnterEvent *event)
 
 void SheetBrowser::showEvent(QShowEvent *event)
 {
+    qCDebug(appLog) << "showEvent scheduling onInit +100ms";
     // qCDebug(appLog) << "SheetBrowser::showEvent() - Showing event";
     QTimer::singleShot(100, this, SLOT(onInit()));
 
@@ -2103,6 +2108,7 @@ void SheetBrowser::handleFindFinished(int searchcnt)
 
 void SheetBrowser::curpageChanged(int curpage)
 {
+    qCDebug(appLog) << "curpageChanged(" << curpage << ") prev=" << m_currentPage;
     qCDebug(appLog) << "SheetBrowser::curpageChanged() - Current page changed";
     if (m_currentPage != curpage) {
         m_currentPage = curpage;
@@ -2441,11 +2447,16 @@ float SheetBrowser::getScrollPosition()
 
 void SheetBrowser::restoreScrollPosition(float position)
 {
-    qCDebug(appLog) << "Restoring scroll position:" << position;
     QScrollBar *vBar = verticalScrollBar();
+    int vmin = vBar ? vBar->minimum() : -1;
+    int vmax = vBar ? vBar->maximum() : -1;
+    int vcur = vBar ? vBar->value() : -1;
+    qCDebug(appLog) << "restoreScrollPosition(" << position << ") vbar[" << vmin << vmax << vcur << "]";
     if (!vBar || vBar->maximum() <= vBar->minimum()) {
+        qCDebug(appLog) << "restoreScrollPosition SKIP (range not ready)";
         return;
     }
     int value = vBar->minimum() + static_cast<int>(position * (vBar->maximum() - vBar->minimum()));
     vBar->setValue(value);
+    qCDebug(appLog) << "restoreScrollPosition set value=" << value << "-> after val=" << vBar->value();
 }

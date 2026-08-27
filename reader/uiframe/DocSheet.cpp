@@ -400,7 +400,10 @@ void DocSheet::setBookMark(int index, int state)
 
     m_browser->setBookMark(index, state);
 
-    setBookmarkChanged(true);
+    Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+    Database::instance()->flushToDisk();
+    m_bookmarkChanged = false;
+
     qCDebug(appLog) << "setBookMark end";
 }
 
@@ -423,7 +426,10 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
     if (!state)
         showTips(tr("The bookmark has been removed"));
 
-    setBookmarkChanged(true);
+    Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+    Database::instance()->flushToDisk();
+    m_bookmarkChanged = false;
+
     qCDebug(appLog) << "setBookMarks end";
 }
 
@@ -1268,6 +1274,8 @@ void DocSheet::onSideAniFinished()
 
 void DocSheet::onOpened(deepin_reader::Document::Error error)
 {
+    qCInfo(appLog) << "onOpened enter error=" << error << "restored=" << m_restoredFromState
+                    << "currentPage=" << m_operation.currentPage << "scrollPos=" << m_operation.scrollPosition;
     qCDebug(appLog) << "onOpened";
     if (deepin_reader::Document::NeedPassword == error) {
         qCDebug(appLog) << "onOpened NeedPassword";
@@ -1292,12 +1300,21 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
         }
 
         m_browser->init(m_operation, m_bookmarks);
+        qCInfo(appLog) << "onOpened after init: restored=" << m_restoredFromState
+                        << "currentPage=" << m_operation.currentPage << "scrollPos=" << m_operation.scrollPosition
+                        << "sidebarW=" << m_operation.sidebarWidth << "changed=" << m_operation.sidebarWidthChanged
+                        << "sidebarVisible=" << m_operation.sidebarVisible << "scaleMode=" << m_operation.scaleMode;
 
         // 恢复滚动位置
         if (m_restoredFromState && m_operation.scrollPosition > 0.0f) {
+            qCDebug(appLog) << "onOpened scheduling restoreScrollPosition +" << kRestoreScrollDelayMs << "ms";
             // 延迟恢复滚动位置（等 deform 和布局完成后）
             QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
+                qCDebug(appLog) << "onOpened restore timer FIRE currentPage=" << m_operation.currentPage
+                                 << "scrollPos=" << m_operation.scrollPosition;
                 m_browser->restoreScrollPosition(m_operation.scrollPosition);
+                qCDebug(appLog) << "onOpened after restoreScrollPosition currentPage=" << m_operation.currentPage
+                                 << "browserCurPage=" << m_browser->currentPage();
                 // 显示恢复提示条
                 m_needsRestoreTip = true;
                 emit sigShowRestoreTip(this);
@@ -1474,6 +1491,7 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
 
 void DocSheet::onBrowserPageChanged(int page)
 {
+    qCDebug(appLog) << "onBrowserPageChanged" << page << "prev currentPage=" << m_operation.currentPage;
     qCDebug(appLog) << "onBrowserPageChanged";
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
@@ -1518,6 +1536,14 @@ void DocSheet::onBrowserOperaAnnotation(int type, int index, deepin_reader::Anno
     qCDebug(appLog) << "onBrowserOperaAnnotation";
     m_sidebar->handleAnntationMsg(type, index, anno);
     setDocumentChanged(true);
+
+    // 注释变化后立即触发自动保存（不等待 30 秒），确保尽快落盘
+    // 注意：不在 UI 回调中直接调 renderer->save()，因为 DPdfDoc::save()
+    // 会做整个 PDF 重写 + fsync，大文件会导致明显卡顿
+    // 使用 3 秒短间隔触发，兼顾及时落盘和 UI 流畅度
+    if (m_autoSaveTimer) {
+        m_autoSaveTimer->start(3000);
+    }
 }
 
 void DocSheet::prepareSearch()
@@ -1628,18 +1654,26 @@ void DocSheet::setAlive(bool alive)
 
         if (Database::instance()->readOperation(this)) {
             qCInfo(appLog) << "read from database config";
+            qCInfo(appLog) << "setAlive readOperation HIT currentPage=" << m_operation.currentPage
+                             << "scrollPos=" << m_operation.scrollPosition;
             m_restoredFromState = true;
         } else if (Database::instance()->matchOperationByContent(QFileInfo(m_filePath), this)) {
             // 文件移动/重命名后通过内容特征匹配恢复状态
             qCInfo(appLog) << "read from content match config";
+            qCInfo(appLog) << "setAlive matchByContent HIT currentPage=" << m_operation.currentPage
+                             << "scrollPos=" << m_operation.scrollPosition;
             m_restoredFromState = true;
         } else if (readLastFileOperation()) {
             qCInfo(appLog) << "read from last operation file config";
+            qCInfo(appLog) << "setAlive readLastFileOperation currentPage=" << m_operation.currentPage
+                             << "scrollPos=" << m_operation.scrollPosition;
         } else {
             qCInfo(appLog) << "read from default config";
+            qCInfo(appLog) << "setAlive default currentPage=" << m_operation.currentPage;
         }
 
         Database::instance()->readBookmarks(m_filePath, m_bookmarks);
+        qCInfo(appLog) << "setAlive readBookmarks(" << m_filePath << ") count=" << m_bookmarks.count();
 
     } else {
         qCDebug(appLog) << "setAlive alive";
@@ -1664,9 +1698,25 @@ void DocSheet::setAlive(bool alive)
             m_autoSaveTimer->stop();
         }
 
+        if (m_documentChanged && m_renderer) {
+            if (m_renderer->save()) {
+                m_documentChanged = false;
+                m_sidebar->changeResetModelData();
+            } else {
+                qCWarning(appLog) << "Failed to save document annotations on close for:" << m_filePath;
+            }
+        }
+
         // 关闭时重新计算内容哈希（文件可能已修改）
         m_cachedContentHash = Database::computeContentHash(m_filePath);
         Database::instance()->saveOperation(this, m_cachedContentHash);
+
+        if (m_bookmarkChanged) {
+            Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+            m_bookmarkChanged = false;
+        }
+
+        Database::instance()->flushToDisk();
 
         g_lock.lockForWrite();
 
@@ -2004,6 +2054,48 @@ void DocSheet::onAutoSave()
         m_cachedContentHash = Database::computeContentHash(m_filePath);
     }
     Database::instance()->saveOperation(this, m_cachedContentHash);
+
+    // 兜底保存书签（正常情况 setBookMark 已立即落盘，此处分防其他路径设的脏标记）
+    if (m_bookmarkChanged) {
+        Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+        m_bookmarkChanged = false;
+    }
+
+    // 保存文档注释（高亮、文本标注等），防止异常退出时注释丢失
+    if (m_documentChanged) {
+        if (m_renderer && m_renderer->save()) {
+            m_documentChanged = false;
+            m_sidebar->changeResetModelData();
+        } else {
+            qCWarning(appLog) << "Auto-save: failed to save document annotations for:" << m_filePath;
+        }
+    }
+
+    CentralDocPage *docPage = qobject_cast<CentralDocPage *>(parent());
+    if (docPage && docPage->getCurSheet() == this) {
+        QList<DocSheet *> sheets = docPage->getSheets();
+        if (!sheets.isEmpty()) {
+            MainWindow *mainWnd = qobject_cast<MainWindow *>(docPage->topLevelWidget());
+            int windowIndex = mainWnd ? MainWindow::m_list.indexOf(mainWnd) : -1;
+            if (windowIndex >= 0) {
+                QStringList filePaths;
+                int activeIndex = 0;
+                for (int i = 0; i < sheets.size(); ++i) {
+                    filePaths.append(sheets[i]->filePath());
+                    if (sheets[i] == this)
+                        activeIndex = i;
+                }
+                Database::instance()->saveTabGroup(windowIndex, filePaths, activeIndex);
+            }
+        }
+    }
+
+    Database::instance()->flushToDisk();
+
+    // 保存完成后重置定时器间隔为 30 秒（注释变化时临时设为 3 秒）
+    if (m_autoSaveTimer) {
+        m_autoSaveTimer->setInterval(30000);
+    }
 }
 
 bool DocSheet::needsRestoreTip() const
