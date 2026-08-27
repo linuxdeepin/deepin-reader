@@ -389,7 +389,7 @@
     <name>EyeProtectionAction</name>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
-        <source>Reading mode</source>
+        <source>Eye protection mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

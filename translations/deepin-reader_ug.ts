@@ -389,8 +389,8 @@
     <name>EyeProtectionAction</name>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
-        <source>Reading mode</source>
-        <translation>ئوقۇش ھالىتى</translation>
+        <source>Eye protection mode</source>
+        <translation>كۆز قوغداش ھالىتى</translation>
     </message>
 </context>
 <context>
