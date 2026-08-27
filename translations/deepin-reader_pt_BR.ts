@@ -387,8 +387,8 @@
     <name>EyeProtectionAction</name>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
-        <source>Reading mode</source>
-        <translation>Modo de leitura</translation>
+        <source>Eye protection mode</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
