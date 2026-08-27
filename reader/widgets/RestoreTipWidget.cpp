@@ -65,7 +65,7 @@ void RestoreTipWidget::initUI()
 
     DDciIcon closeIcon(QStringLiteral(":/icons/deepin/builtin/icons/dr_close_16px.dci"));
     m_closeBtn = new DIconButton(closeIcon, this);
-    m_closeBtn->setFixedSize(28, 28);
+    m_closeBtn->setFixedSize(16, 16);
     m_closeBtn->setIconSize(QSize(16, 16));
     m_closeBtn->setFlat(true);
     m_closeBtn->setFocusPolicy(Qt::NoFocus);
@@ -86,7 +86,7 @@ void RestoreTipWidget::adjustSize()
     qreal textHeight = fm.height();
     int h = static_cast<int>(qMax(textHeight + 2 * m_tbMargin, static_cast<qreal>(28 + 2 * m_tbMargin)));
     setFixedHeight(h);
-    setMinimumWidth(300);
+    setMinimumWidth(336);
 }
 
 void RestoreTipWidget::showTip()
@@ -103,10 +103,18 @@ void RestoreTipWidget::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+
+    // 背景
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_backgroundColor);
-    painter.drawRoundedRect(rect(), 8, 8);
+    painter.drawRoundedRect(rect(), 12, 12);
 
+    QColor borderColor(Qt::black);
+    borderColor.setAlphaF(0.1);
+    QPen borderPen(borderColor, 1);
+    painter.setPen(borderPen);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 12, 12);
 }
 
 void RestoreTipWidget::resizeEvent(QResizeEvent *event)
