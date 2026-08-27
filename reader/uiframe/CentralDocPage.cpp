@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -531,6 +531,40 @@ QList<DocSheet *> CentralDocPage::getSheets()
 {
     qCInfo(appLog) << "getSheets";
     return m_tabBar->getSheets();
+}
+
+void CentralDocPage::setActiveTabByFilePath(const QString &filePath)
+{
+    qCInfo(appLog) << "setActiveTabByFilePath - file:" << filePath;
+    if (!m_tabBar || filePath.isEmpty())
+        return;
+
+    // 设置 m_delayIndex，使后续 onSetCurrentIndex 延时定时器激活正确的标签
+    m_tabBar->setPendingActiveFile(filePath);
+
+    int idx = m_tabBar->indexOfFilePath(filePath);
+    if (idx < 0)
+        return;
+
+    if (m_tabBar->currentIndex() != idx) {
+        // 标签栏索引不同，切换会触发 currentChanged → onTabChanged → 内容自动切换
+        m_tabBar->setCurrentIndex(idx);
+    } else {
+        // 标签栏索引已正确，但内容区可能不一致
+        // （addFileAsync 每次都调用 setCurrentWidget，导致内容区停留在最后一个文档）
+        // 此时 setCurrentIndex(idx) 不会触发 currentChanged，需要同步触发当前标签页选中文档的渲染
+        DocSheet *sheet = getSheet(filePath);
+        if (sheet && m_stackedLayout->currentWidget() != sheet) {
+            QPointer<DocSheet> prevSheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
+            if (prevSheet && prevSheet != sheet && prevSheet->opened()) {
+                prevSheet->saveCurrentViewState();
+            }
+            m_stackedLayout->setCurrentWidget(sheet);
+            sheet->restoreSavedViewState();
+            sheet->defaultFocus();
+            emit sigCurSheetChanged(sheet);
+        }
+    }
 }
 
 bool CentralDocPage::saveCurrent()

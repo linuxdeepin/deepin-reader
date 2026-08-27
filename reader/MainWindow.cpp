@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -477,6 +477,14 @@ void MainWindow::resizeFullTitleWidget()
 
     m_FullTitleWidget->resize(QGuiApplication::primaryScreen()->size().width(), fulltitleH);
     qCDebug(appLog) << "MainWindow::resizeFullTitleWidget() - Resize completed";
+}
+
+void MainWindow::setInitialActiveFile(const QString &filePath)
+{
+    qCDebug(appLog) << "MainWindow::setInitialActiveFile - file:" << filePath;
+    if (m_central && !filePath.isEmpty()) {
+        m_central->docPage()->setActiveTabByFilePath(filePath);
+    }
 }
 
 MainWindow *MainWindow::windowContainSheet(DocSheet *sheet)

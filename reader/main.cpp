@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QFontDatabase>
+#include <QSet>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     // 这是第一个实例（没有其他 deepin-reader 在运行），恢复上次的标签页组
     // 不管命令行是否指定了文件，都恢复之前的标签页
     // 注意：当前仅恢复 windowIndex=0 的标签页组（多窗口场景的完整恢复待后续优化）
+    QString initialActiveFile;
     {
         int savedActiveIndex = 0;
         QStringList restoredFiles = Database::instance()->readTabGroup(0, savedActiveIndex);
@@ -132,21 +134,43 @@ int main(int argc, char *argv[])
                     localArguments.append(arg);
             }
 
-            // 合并文件列表：先恢复历史标签页，再把用户指定的文件放到末尾（成为活动标签页）
-            // 如果用户指定的文件已在恢复列表中，先移除再追加到末尾
+            // 合并文件列表：保留历史标签页及其拖拽后的顺序，仅追加新打开的文件
+            // 这样重新打开相同文件时能保持上次的标签顺序；打开新文件时历史不会丢失
             QStringList allFiles = validRestored;
-            int existingCount = 0;
+            QSet<QString> restoredSet(validRestored.begin(), validRestored.end());
+            int newFileCount = 0;
             for (const QString &fp : localArguments) {
-                if (allFiles.removeAll(fp) > 0)
-                    existingCount++;
-                if (QFile::exists(fp))
+                if (QFile::exists(fp) && !restoredSet.contains(fp)) {
                     allFiles.append(fp);
+                    newFileCount++;
+                }
+            }
+            arguments = allFiles;
+
+            // 计算需要激活的标签页：
+            // - 用户指定了文件时，激活用户指定的第一个有效文件（优先响应用户意图）
+            // - 用户未指定文件时，恢复上次激活的标签页（按保存时的路径定位）
+            if (!localArguments.isEmpty()) {
+                for (const QString &fp : localArguments) {
+                    if (QFile::exists(fp) && restoredSet.contains(fp)) {
+                        initialActiveFile = fp;
+                        break;
+                    }
+                }
+                // 指定的文件不在历史中（新追加的），激活最后一个新文件
+                if (initialActiveFile.isEmpty() && newFileCount > 0) {
+                    initialActiveFile = allFiles.last();
+                }
+            } else if (savedActiveIndex >= 0 && savedActiveIndex < restoredFiles.size()) {
+                QString savedActivePath = restoredFiles.at(savedActiveIndex);
+                if (restoredSet.contains(savedActivePath))
+                    initialActiveFile = savedActivePath;
             }
 
-            arguments = allFiles;
-            int newFileCount = localArguments.size() - existingCount;
-            qCInfo(appLog) << "Restoring" << validRestored.size() << "tabs from last session"
-                           << "+" << newFileCount << "new files";
+            int existingCount = allFiles.size() - newFileCount;
+            qCInfo(appLog) << "Restoring" << existingCount << "tabs from last session"
+                           << "+" << newFileCount << "new files"
+                           << "active:" << initialActiveFile;
         }
     }
 
@@ -169,6 +193,12 @@ int main(int argc, char *argv[])
     MainWindow *w = MainWindow::createWindow(arguments);
     w->winId();
     qApp->setAttribute(Qt::AA_ForceRasterWidgets, false);
+
+    // 恢复上次激活的标签页（需在事件循环启动前设置，以覆盖 insertSheet 的延时 setCurrentIndex）
+    if (!initialActiveFile.isEmpty()) {
+        w->setInitialActiveFile(initialActiveFile);
+    }
+
     w->show();
 
     qCDebug(appLog) << __FUNCTION__ << "主窗口已创建并显示";

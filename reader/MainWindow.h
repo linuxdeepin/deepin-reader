@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -69,6 +69,13 @@ public:
      * @brief 调整标题控件大小
      */
     void resizeFullTitleWidget();
+
+    /**
+     * @brief setInitialActiveFile
+     * 设置初始打开后需要激活的文件，用于恢复上次激活的标签页
+     * @param filePath 文件路径
+     */
+    void setInitialActiveFile(const QString &filePath);
 
     /**
      * @brief 更新TAB控件顺序

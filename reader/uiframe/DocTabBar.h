@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,6 +36,16 @@ public:
     int indexOfFilePath(const QString &filePath);
 
     /**
+     * @brief setPendingActiveFile
+     * 设置批量打开文件后需要激活的标签页（按文件路径）。
+     * 利用 insertSheet 已有的延时 setCurrentIndex 机制（m_delayIndex），
+     * 覆盖最后一个插入的位置，使上次激活的标签页得以恢复。
+     * 必须在事件循环启动前调用（即所有 insertSheet 之后）。
+     * @param filePath 需要激活的文件路径
+     */
+    void setPendingActiveFile(const QString &filePath);
+
+    /**
      * @brief insertSheet
      * 插入一个sheet，添加对应的tab
      * @param sheet
@@ -59,7 +69,7 @@ public:
 
     /**
      * @brief getSheets
-     * 获取包含的所有的sheet(会按打开的倒序排列)
+     * 获取包含的所有的sheet(按标签栏的视觉顺序排列)
      * @return
      */
     QList<DocSheet *> getSheets();

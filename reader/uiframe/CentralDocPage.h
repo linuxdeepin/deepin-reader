@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -125,6 +125,13 @@ public:
      * @return
      */
     QList<DocSheet *> getSheets();
+
+    /**
+     * @brief setActiveTabByFilePath
+     * 设置需要激活的标签页（按文件路径），用于批量打开后恢复上次的激活位置
+     * @param filePath 文件路径
+     */
+    void setActiveTabByFilePath(const QString &filePath);
 
     /**
      * @brief getCurSheet
