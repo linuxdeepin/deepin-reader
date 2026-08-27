@@ -11,6 +11,8 @@
 #include "ThumbnailWidget.h"
 #include "ddlog.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QScroller>
 #include <QScrollBar>
 #include <QSet>
@@ -43,6 +45,10 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     connect(verticalScrollBar(), &QScrollBar::sliderPressed, this, &SideBarImageListView::onRemoveThumbnailListSlideGesture);
     connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &SideBarImageListView::onSetThumbnailListSlideGesture);
     qCDebug(appLog) << "Connected scrollbar signals";
+
+    // 主题切换时刷新可见缩略图，使 ThumbnailDelegate 按新主题反色重绘
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+            this, [this]() { this->viewport()->update(); });
 }
 
 
