@@ -7,7 +7,7 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader
   wait: 3.0
 suites:
 - id: suite_main_no_doc_s1
