@@ -361,6 +361,37 @@
     </message>
 </context>
 <context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
+        <source>No eye protection</source>
+        <translation>بدون حماية للعين</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
+        <source>Classic eye protection</source>
+        <translation>حماية كلاسيكية للعين</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
+        <source>Green eye protection</source>
+        <translation>حماية خضراء للعين</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
+        <source>Night eye protection</source>
+        <translation>حماية ليلية للعين</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
+        <source>Eye protection mode</source>
+        <translation>وضع حماية العين</translation>
+    </message>
+</context>
+<context>
     <name>FindWidget</name>
     <message>
         <location filename="../reader/widgets/FindWidget.cpp" line="126"/>
@@ -421,6 +452,24 @@
         <location filename="../reader/app/DBusObject.cpp" line="111"/>
         <source>Document not saved</source>
         <translation>لم يتم حفظ المستند</translation>
+    </message>
+</context>
+<context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation>تمت الاستعادة إلى آخر موضع قراءة</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
+        <source>Jump to first page</source>
+        <translation>الانتقال إلى الصفحة الأولى</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
+        <source>Close</source>
+        <translation>إغلاق</translation>
     </message>
 </context>
 <context>
@@ -736,6 +785,26 @@
         <source>Search</source>
         <translation>بحث</translation>
     </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
+        <source>File</source>
+        <translation>ملف</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
+        <source>Display</source>
+        <translation>عرض</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
+        <source>Tools</source>
+        <translation>أدوات</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
+        <source>Edit</source>
+        <translation>تحرير</translation>
+    </message>
 </context>
 <context>
     <name>SideBarImageListView</name>
@@ -869,6 +938,11 @@
         <location filename="../reader/main.cpp" line="72"/>
         <source>Generate thumbnail.</source>
         <translation>إنشاء صورة مصغرة.</translation>
+    </message>
+    <message>
+        <location filename="../reader/main.cpp" line="77"/>
+        <source>Batch print documents without UI.</source>
+        <translation>طباعة المستندات دفعة واحدة بدون واجهة.</translation>
     </message>
 </context>
 </TS>
