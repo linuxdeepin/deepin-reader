@@ -7,7 +7,7 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
 - id: suite_context_menu_scale_s1
@@ -20,35 +20,35 @@ suites:
       name: Form_CentralDocPage
   - action: dtk_context_menu
     selector:
-      name: Form_scaleEdit_P
+      name: Form_LineEdit
       child_index: 1
       popup: click
     items:
     - 双页显示
   - action: dtk_context_menu
     selector:
-      name: Form_scaleEdit_P
+      name: Form_LineEdit
       child_index: 1
       popup: click
     items:
     - 默认大小
   - action: dtk_context_menu
     selector:
-      name: Form_scaleEdit_P
+      name: Form_LineEdit
       child_index: 1
       popup: click
     items:
     - 适合页面
   - action: dtk_context_menu
     selector:
-      name: Form_scaleEdit_P
+      name: Form_LineEdit
       child_index: 1
       popup: click
     items:
     - 适应高度
   - action: dtk_context_menu
     selector:
-      name: Form_scaleEdit_P
+      name: Form_LineEdit
       child_index: 1
       popup: click
     items:

@@ -7,7 +7,7 @@ fast_fail: false
 env_check: []
 setup:
 - action: session_start
-  command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
   wait: 3.0
 suites:
 - id: suite_context_menu_note_s1
@@ -24,6 +24,7 @@ suites:
       name: Form_CentralDocPage
     items:
     - 添加注释
+    wait: 5.0
   - action: mouse_click
     selector:
       name: Button_annotation
@@ -54,6 +55,7 @@ suites:
       name: Form_CentralDocPage
     items:
     - 添加注释
+    wait: 5.0
   - action: mouse_click
     selector:
       name: Button_annotation
