@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -83,6 +83,19 @@ static void handleRenderThumbnail_stub(int, QPixmap)
 static void handleOpened_stub(deepin_reader::Document::Error, deepin_reader::Document *, QList<deepin_reader::Page *>)
 {
     g_funcName = __FUNCTION__;
+}
+
+// DocSheet::uuid 档:返回固定uuid供任务校验比对
+static QString uuid_stub()
+{
+    return QStringLiteral("ut-sheet-uuid");
+}
+
+// DocSheet::renderer 档:占位渲染器(handleOpened已stub)。堆分配不释放,避免静态对象在 main 返回后析构
+static SheetRenderer *renderer_stub()
+{
+    static SheetRenderer *dummy = new SheetRenderer(nullptr);
+    return dummy;
 }
 
 // Makes DocSheet::existSheet() return true so the onDoc*Finished slots
@@ -309,20 +322,41 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageThumbnailTask_002)
     EXPECT_TRUE(g_funcName == "handleRenderThumbnail_stub");
 }
 
-// Tests onDocOpenTask when sheet exists; forwards to
-// SheetRenderer::handleOpened (stubbed).
+// Tests onDocOpenTask when sheet exists; forwards to SheetRenderer::handleOpened (stubbed).
 TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocOpenTask_002)
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(DocSheet, uuid), uuid_stub);
+    s.set(ADDR(DocSheet, renderer), renderer_stub);
     s.set(ADDR(SheetRenderer, handleOpened), handleOpened_stub);
 
     DocOpenTask task;
-    task.sheet = nullptr;
+    task.sheet = reinterpret_cast<DocSheet *>(0x1);   //成员调用均已被stub
     task.renderer = nullptr;
+    task.uuid = "ut-sheet-uuid";                     //与uuid_stub一致,校验通过
     QList<deepin_reader::Page *> pages;
     m_tester->onDocOpenTask(task, deepin_reader::Document::NoError, nullptr, pages);
     EXPECT_TRUE(g_funcName == "handleOpened_stub");
+}
+
+// Tests onDocOpenTask when uuid mismatch: task must be dropped, document/pages released.
+TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocOpenTask_003)
+{
+    g_funcName.clear();
+    Stub s;
+    s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(DocSheet, uuid), uuid_stub);
+    s.set(ADDR(DocSheet, renderer), renderer_stub);
+    s.set(ADDR(SheetRenderer, handleOpened), handleOpened_stub);
+
+    DocOpenTask task;
+    task.sheet = reinterpret_cast<DocSheet *>(0x1);
+    task.renderer = reinterpret_cast<SheetRenderer *>(0x1);   //悬空,不应被解引用
+    task.uuid = "stale-uuid";                                 //与uuid_stub不一致
+    QList<deepin_reader::Page *> pages;
+    m_tester->onDocOpenTask(task, deepin_reader::Document::NoError, nullptr, pages);
+    EXPECT_TRUE(g_funcName.isEmpty());
 }
 
 //======================================================================

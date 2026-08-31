@@ -11,6 +11,7 @@
 #include <DWidget>
 #include <gtest/gtest.h>
 #include <QMutex>
+#include <QSignalSpy>
 #include <QImage>
 #include <QPointF>
 #include <QRectF>
@@ -270,20 +271,18 @@ TEST_F(TestSheetRenderer, testLoadPageLableDirectly)
 
 TEST_F(TestSheetRenderer, testOpenFileAsync)
 {
-    // Call openFileAsync - it just appends a task to the render thread
+    // Must spin the event loop until the task is fully executed and delivered;
+    // otherwise a queued sigDocOpenTask referencing this renderer outlives the test
+    // and gets delivered to freed memory later.
+    QSignalSpy spy(m_tester, &SheetRenderer::sigOpened);
     m_tester->openFileAsync("test");
-    // Wait briefly for the task to be processed
-    QTest::qWait(100);
+    QTRY_COMPARE_WITH_TIMEOUT(spy.count(), 1, 30000);
     SUCCEED();
 }
 
 TEST_F(TestSheetRenderer, testOpenFileExec)
 {
-    // Schedule sigOpened emission to break the event loop in openFileExec
-    QTimer::singleShot(50, m_tester, [this]() {
-        emit m_tester->sigOpened(deepin_reader::Document::NoError);
-    });
+    // Let openFileExec wait for the REAL sigOpened of the actual open task.
     bool result = m_tester->openFileExec("test");
-    Q_UNUSED(result);
-    SUCCEED();
+    EXPECT_TRUE(result);
 }
