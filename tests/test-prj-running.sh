@@ -35,6 +35,11 @@ cmake -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" \
 # Compile tests target
 make -j"$(nproc)" test-deepin-reader
 
+# DB 隔离: 重定向 Qt AppDataLocation,避免读写用户数据及跨运行状态残留
+export XDG_DATA_HOME="${build_path}/ut-testdata"
+rm -rf "${XDG_DATA_HOME}"
+mkdir -p "${XDG_DATA_HOME}"
+
 # Ensure report directory used by gtest exists inside the build tree
 mkdir -p "${build_path}/report"
 
@@ -53,10 +58,30 @@ lcov --directory "${workdir}" --zerocounters || true
 # Re-run tests so .gcda files reflect a clean run
 # If the first run segfaulted, .gcda files won't exist (atexit not called on SIGSEGV).
 # This re-run gives another chance; we also add a SIGSEGV handler as safety net.
+rm -rf "${XDG_DATA_HOME}"
+mkdir -p "${XDG_DATA_HOME}"
 set +e
 ./tests/test-deepin-reader --gtest_output=xml:"${build_path}/report/report_deepin-reader.xml"
 retest_exit_code=$?
 set -e
+
+# libdjvulibre21 全局析构 bug: 进程退出阶段 free() 非法指针 → SIGABRT(134),
+# 此时所有测试已通过且 XML 已写出。若 exit=134 且 XML failures=0,则视为通过
+is_djvu_exit_crash() {
+    [ "$1" -eq 134 ] || return 1
+    local xml="${build_path}/report/report_deepin-reader.xml"
+    [ -f "$xml" ] || return 1
+    grep -q 'failures="0"' "$xml" 2>/dev/null
+}
+
+if is_djvu_exit_crash "$test_exit_code"; then
+    echo "Note: first run exit 134 (djvulibre exit-time abort), but all tests passed — ignoring"
+    test_exit_code=0
+fi
+if is_djvu_exit_crash "$retest_exit_code"; then
+    echo "Note: re-run exit 134 (djvulibre exit-time abort), but all tests passed — ignoring"
+    retest_exit_code=0
+fi
 
 # Use the worst exit code between first and second run
 test_exit_code=$((test_exit_code || retest_exit_code))

@@ -56,6 +56,9 @@ void SheetRenderer::openFileAsync(const QString &password)
 
     task.renderer = this;
 
+    if (nullptr != m_sheet)
+        task.uuid = m_sheet->uuid();
+
     PageRenderThread::appendTask(task);
     qCDebug(appLog) << "SheetRenderer::openFileAsync end";
 }

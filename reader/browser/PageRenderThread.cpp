@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -873,9 +873,15 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
 void PageRenderThread::onDocOpenTask(DocOpenTask task, deepin_reader::Document::Error error, deepin_reader::Document *document, QList<deepin_reader::Page *> pages)
 {
     // qCDebug(appLog) << "PageRenderThread::onDocOpenTask() - Starting on doc open task";
-    if (DocSheet::existSheet(task.sheet)) {
-        task.renderer->handleOpened(error, document, pages);
+    DocSheet *sheet = task.sheet;
+    if (nullptr == sheet || !DocSheet::existSheet(sheet) || sheet->uuid() != task.uuid) {
+        qCWarning(appLog) << "Sheet no longer alive (or address reused), drop doc open task";
+        qDeleteAll(pages);
+        delete document;
+        return;
     }
+
+    sheet->renderer()->handleOpened(error, document, pages);
     // qCDebug(appLog) << "PageRenderThread::onDocOpenTask() - On doc open task completed";
 }
 

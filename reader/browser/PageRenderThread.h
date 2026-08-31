@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -61,6 +61,7 @@ struct DocOpenTask {//打开文档
     DocSheet *sheet = nullptr;
     QString password;
     SheetRenderer *renderer = nullptr;
+    QString uuid;                //排队时的sheet唯一标识,防止地址复用误判存活
 };
 
 struct DocCloseTask {//关闭文档
