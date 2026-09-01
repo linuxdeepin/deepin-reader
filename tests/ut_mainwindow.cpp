@@ -266,3 +266,10 @@ TEST_F(TestMainWindow, testInitUILambdaSizeMode)
     emit helper->sizeModeChanged(DGuiApplicationHelper::NormalMode);
     SUCCEED();
 }
+
+TEST_F(TestMainWindow, UT_MainWindow_setInitialActiveFile_001)
+{
+    m_tester->setInitialActiveFile(QString());
+    m_tester->setInitialActiveFile("/tmp/ut_not_exist_active_file.pdf");
+    SUCCEED();
+}

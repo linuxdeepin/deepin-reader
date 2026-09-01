@@ -7,6 +7,7 @@
 
 #include <QSignalSpy>
 #include "ut_compat.h"
+#include <QEnterEvent>
 
 #include <gtest/gtest.h>
 
@@ -64,4 +65,13 @@ TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_paintEvent)
     QPaintEvent paint(QRect(m_tester->rect()));
     m_tester->paintEvent(&paint);
     EXPECT_FALSE(m_tester->grab().isNull());
+}
+
+TEST_F(UT_RoundColorWidget, UT_RoundColorWidget_enterLeaveEvent)
+{
+    QEnterEvent enter(QPointF(1, 1), QPointF(1, 1), QPointF(1, 1));
+    m_tester->enterEvent(&enter);
+    QEvent leave(QEvent::Leave);
+    m_tester->leaveEvent(&leave);
+    SUCCEED();
 }

@@ -760,3 +760,9 @@ TEST_F(TestPDFDocument, UT_PDFDocument_loadDocument_001)
     EXPECT_TRUE(m_tester->loadDocument(filePath, password, error) == nullptr);
     EXPECT_TRUE(error == Document::WrongPassword);
 }
+
+TEST_F(TestPDFDocument, UT_PDFDocument_fileIdentifier_001)
+{
+    QString id1 = m_tester->fileIdentifier();
+    EXPECT_TRUE(id1 == m_tester->fileIdentifier());
+}

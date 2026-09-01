@@ -155,3 +155,9 @@ TEST_F(TestDjVuDocument, UT_TestDjVuDocument_searchAllPagesForText)
     }
     EXPECT_GT(searchesRun, 0);
 }
+
+TEST_F(TestDjVuDocument, UT_DjVuDocument_fileIdentifier_001)
+{
+    // 基类 Document::fileIdentifier 默认实现返回空串
+    EXPECT_TRUE(m_tester->fileIdentifier().isEmpty());
+}

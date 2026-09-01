@@ -7,6 +7,7 @@
 #include "TitleMenu.h"
 #include "MainWindow.h"
 #include "CentralDocPage.h"
+#include "RestoreTipWidget.h"
 #include "ShortCutShow.h"
 #include "TitleWidget.h"
 #include "stub.h"
@@ -617,4 +618,24 @@ TEST_F(TestCentral, UT_Central_resizeEvent_001)
     m_tester->resizeEvent(event);
     EXPECT_TRUE(g_funcName == "resizeEvent_stub");
     delete event;
+}
+
+TEST_F(TestCentral, UT_Central_docPage_sigShowRestoreTip_lambda_001)
+{
+    CentralDocPage *docPage = m_tester->docPage();
+    ASSERT_NE(docPage, nullptr);
+    ASSERT_NE(m_tester->m_restoreTipWidget, nullptr);
+    // 无当前 sheet 分支
+    emit docPage->sigShowRestoreTip(nullptr);
+    SUCCEED();
+}
+
+TEST_F(TestCentral, UT_Central_jumpToFirstPage_lambda_001)
+{
+    m_tester->docPage();
+    RestoreTipWidget *tip = m_tester->m_restoreTipWidget;
+    ASSERT_NE(tip, nullptr);
+    // m_docPage 存在但当前无 sheet
+    emit tip->sigJumpToFirstPage();
+    SUCCEED();
 }

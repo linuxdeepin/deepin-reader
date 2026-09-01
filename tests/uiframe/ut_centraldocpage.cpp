@@ -1368,3 +1368,10 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onCentralMoveIn_invoke)
 
 // Note: isFullScreen/openFullScreen require MainWindow in parent hierarchy
 // which is not available in this test fixture - skipping to avoid crash.
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_setActiveTabByFilePath_001)
+{
+    m_tester->setActiveTabByFilePath(QString());
+    m_tester->setActiveTabByFilePath("/tmp/ut_not_exist_active_file.pdf");
+    SUCCEED();
+}

@@ -86,3 +86,13 @@ TEST_F(UT_CatalogWidget, UT_CatalogWidget_pageUp)
     m_tester->pageUp();
     EXPECT_TRUE(m_tester->m_pTree != nullptr);
 }
+
+TEST_F(UT_CatalogWidget, UT_CatalogWidget_expandedSections_001)
+{
+    EXPECT_TRUE(m_tester->m_pTree != nullptr);
+    QStringList sections = m_tester->getExpandedSections();
+    EXPECT_TRUE(sections.isEmpty());
+    m_tester->restoreExpandedSections(QStringList());
+    m_tester->restoreExpandedSections(QStringList() << "Chapter1");
+    SUCCEED();
+}

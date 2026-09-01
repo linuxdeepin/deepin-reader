@@ -287,6 +287,11 @@ void showEncryPage_stub()
     g_funcName = __FUNCTION__;
 }
 
+static bool opened_stub_true()
+{
+    return true;
+}
+
 void wrongPassWordSlot_stub()
 {
     g_funcName = __FUNCTION__;
@@ -1119,6 +1124,84 @@ TEST_F(TestDocSheet, UT_DocSheet_onOpened_001)
     m_tester->onOpened(Document::NoError);
     EXPECT_TRUE(g_funcName == "handleOpenSuccess_stub");
 }
+
+TEST_F(TestDocSheet, UT_DocSheet_onOpened_restoreState_001)
+{
+    Stub s;
+    s.set(ADDR(SheetSidebar, handleOpenSuccess), handleOpenSuccess_stub);
+
+    // 触发 onOpened 中的三个恢复 lambda（滚动位置/目录展开/侧边栏宽度）
+    m_tester->m_password = "test";
+    m_tester->m_restoredFromState = true;
+    m_tester->m_operation.scrollPosition = 0.6f;
+    m_tester->m_operation.expandedSections << "Chapter1" << "Chapter1/Sub";
+    m_tester->m_operation.sidebarWidthChanged = true;
+    m_tester->m_operation.sidebarWidth = 80;
+
+    m_tester->onOpened(Document::NoError);
+    QTest::qWait(300);
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_setSidebarWidth_001)
+{
+    m_tester->setSidebarWidth(250);
+    EXPECT_TRUE(m_tester->operation().sidebarWidth == 250);
+    EXPECT_TRUE(m_tester->operation().sidebarWidthChanged == true);
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_currentScrollPosition_001)
+{
+    EXPECT_GE(m_tester->currentScrollPosition(), 0.0f);
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_onAutoSave_001)
+{
+    m_tester->onAutoSave();
+    m_tester->m_sidebar->setVisible(true);
+    m_tester->onAutoSave();
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_saveCurrentViewState_001)
+{
+    m_tester->m_sidebar->setVisible(true);
+    m_tester->saveCurrentViewState();
+    EXPECT_GE(m_tester->m_operation.sidebarWidth, 0);
+    SUCCEED();
+}
+
+static bool isVisible_stub_true()
+{
+    return true;
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_restoreSavedViewState_001)
+{
+    Stub s;
+    s.set(ADDR(DocSheet, opened), opened_stub_true);
+    // 夹具中窗口链未 show（真实 show 会与后台渲染线程产生跨库干扰），
+    // 通过桩使 isVisible 为真以进入侧边栏宽度恢复分支
+    s.set(ADDR(QWidget, isVisible), isVisible_stub_true);
+
+    // 触发 restoreSavedViewState 中的两个恢复 lambda
+    m_tester->m_operation.sidebarWidthChanged = true;
+    m_tester->m_operation.sidebarWidth = 100;
+    m_tester->m_operation.scrollPosition = 0.5f;
+
+    m_tester->restoreSavedViewState();
+    QTest::qWait(250);
+    SUCCEED();
+}
+
+TEST_F(TestDocSheet, UT_DocSheet_splitterMoved_lambda_001)
+{
+    emit m_tester->splitterMoved(10, 1);     // 侧边栏隐藏分支
+    m_tester->m_sidebar->setVisible(true);
+    emit m_tester->splitterMoved(10, 1);     // 记录宽度分支
+    EXPECT_GE(m_tester->m_operation.sidebarWidth, 0);
+}
+
 
 TEST_F(TestDocSheet, UT_DocSheet_isFullScreen_001)
 {

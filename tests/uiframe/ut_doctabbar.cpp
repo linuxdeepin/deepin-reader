@@ -328,3 +328,19 @@ TEST_F(UT_DocTabBar, UT_DocTabBar_dragEnterEvent_emptyMime)
     m_tester->dragEnterEvent(&event);
     SUCCEED();
 }
+
+TEST_F(UT_DocTabBar, UT_DocTabBar_setPendingActiveFile_001)
+{
+    m_tester->setPendingActiveFile(QString());
+    EXPECT_TRUE(m_tester->m_delayIndex == -1);
+
+    m_tester->setPendingActiveFile("/tmp/ut_not_exist_file.pdf");
+    EXPECT_TRUE(m_tester->m_delayIndex == -1);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet sheet(Dr::FileType::PDF, strPath, nullptr);
+    m_tester->insertSheet(&sheet);
+    m_tester->setPendingActiveFile(strPath);
+    EXPECT_TRUE(m_tester->m_delayIndex == 0);
+}
