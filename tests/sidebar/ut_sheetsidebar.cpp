@@ -559,3 +559,11 @@ TEST_F(UT_SheetSidebar, UT_SheetSidebar_UT_SheetSidebar_sizeModeChanged)
     emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
     EXPECT_TRUE(m_tester->m_sheet != nullptr);
 }
+
+TEST_F(UT_SheetSidebar, UT_SheetSidebar_expandedSections_001)
+{
+    QStringList sections = m_tester->getExpandedSections();
+    EXPECT_TRUE(sections.isEmpty());
+    m_tester->restoreExpandedSections(QStringList() << "Chapter1");
+    SUCCEED();
+}

@@ -15,7 +15,10 @@
 #include <QListView>
 #include <QScroller>
 #include <QSignalSpy>
+#include <DGuiApplicationHelper>
 #include <QMenu>
+
+DGUI_USE_NAMESPACE
 
 class TestSideBarImageListView : public ::testing::Test
 {
@@ -234,4 +237,11 @@ TEST_F(TestSideBarImageListView, testkeyPressEvent)
     QTest::keyPress(m_tester, Qt::Key_PageUp);
     QTest::keyPress(m_tester, Qt::Key_PageDown);
     EXPECT_TRUE(m_tester->m_docSheet != nullptr);
+}
+
+TEST_F(TestSideBarImageListView, testThemeChanged_lambda)
+{
+    // 触发构造函数中注册的主题切换 lambda（刷新缩略图）
+    emit DGuiApplicationHelper::instance()->themeTypeChanged(DGuiApplicationHelper::LightType);
+    SUCCEED();
 }

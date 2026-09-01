@@ -834,3 +834,14 @@ TEST_F(TestBrowserPage, UT_BrowserPage_isBigDoc_001)
     s.set(A_foo, boundingRect_stub2);
     EXPECT_TRUE(m_tester->isBigDoc());
 }
+
+TEST_F(TestBrowserPage, UT_BrowserPage_applyNightMode_001)
+{
+    QPixmap nullPix;
+    EXPECT_TRUE(m_tester->applyNightMode(nullPix).isNull());
+
+    QPixmap src(16, 16);
+    src.fill(Qt::white);
+    QPixmap dst = m_tester->applyNightMode(src);
+    EXPECT_FALSE(dst.isNull());
+}

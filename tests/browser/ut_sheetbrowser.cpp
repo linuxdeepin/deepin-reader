@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SheetBrowser.h"
+#include "EyeProtectionManager.h"
+#include <QScrollBar>
 #include "BrowserPage.h"
 #include "BrowserWord.h"
 #include "BrowserMenu.h"
@@ -2647,4 +2649,22 @@ TEST_F(TestSheetBrowser, testmousePressEvent_lambda)
     delete sheet;
     qDeleteAll(g_QGraphicsItemList);
     g_QGraphicsItemList.clear();
+}
+
+TEST_F(TestSheetBrowser, UT_SheetBrowser_restoreScrollPosition_001)
+{
+    // 滚动范围未就绪分支
+    m_tester->restoreScrollPosition(0.5f);
+    SUCCEED();
+}
+
+TEST_F(TestSheetBrowser, UT_SheetBrowser_eyeProtectionMode_lambda_001)
+{
+    EyeProtectionManager::Mode prev = EyeProtectionManager::instance()->mode();
+    EyeProtectionManager::Mode next = (EyeProtectionManager::Off == prev)
+                                      ? EyeProtectionManager::Classic : EyeProtectionManager::Off;
+    // 触发构造函数中注册的护眼模式变化 lambda
+    EyeProtectionManager::instance()->setMode(next);
+    EyeProtectionManager::instance()->setMode(prev);
+    SUCCEED();
 }

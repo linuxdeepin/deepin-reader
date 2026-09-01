@@ -12,6 +12,7 @@
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QListView>
+#include <QStandardItemModel>
 
 class TestCatalogTreeView : public ::testing::Test
 {
@@ -199,4 +200,27 @@ TEST_F(TestCatalogTreeView, testkeyPressEvent_direct)
     QKeyEvent event(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier);
     m_tester->keyPressEvent(&event);
     EXPECT_FALSE(m_tester->rightnotifypagechanged);
+}
+
+TEST_F(TestCatalogTreeView, testGetAndRestoreExpandedSections)
+{
+    QStandardItemModel *model = new QStandardItemModel(m_tester);
+    QStandardItem *root1 = new QStandardItem("Chapter1");
+    QStandardItem *child1 = new QStandardItem("Section1");
+    root1->appendRow(child1);
+    QStandardItem *root2 = new QStandardItem("Chapter2");
+    model->appendRow(root1);
+    model->appendRow(root2);
+    m_tester->setModel(model);
+
+    m_tester->expand(model->indexFromItem(root1));
+    QStringList sections = m_tester->getExpandedSections();
+    EXPECT_TRUE(sections.contains("Chapter1"));
+
+    // 空列表分支
+    m_tester->restoreExpandedSections(QStringList());
+
+    m_tester->collapseAll();
+    m_tester->restoreExpandedSections(sections);
+    EXPECT_TRUE(m_tester->isExpanded(model->indexFromItem(root1)));
 }
