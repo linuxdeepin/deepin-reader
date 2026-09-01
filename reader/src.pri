@@ -4,6 +4,7 @@ INCLUDEPATH += $$PWD/widgets
 INCLUDEPATH += $$PWD/sidebar
 INCLUDEPATH += $$PWD/browser
 INCLUDEPATH += $$PWD/document
+INCLUDEPATH += $$PWD/eyeprotection
 
 include ($$PWD/app/app.pri)
 include ($$PWD/browser/browser.pri)
@@ -11,6 +12,7 @@ include ($$PWD/sidebar/sidebar.pri)
 include ($$PWD/widgets/widgets.pri)
 include ($$PWD/document/document.pri)
 include ($$PWD/uiframe/uiframe.pri)
+include ($$PWD/eyeprotection/eyeprotection.pri)
 
 SOURCES += \
     $$PWD/Application.cpp \
