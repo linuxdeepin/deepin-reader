@@ -241,7 +241,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="136"/>
+        <location filename="../reader/uiframe/Central.cpp" line="154"/>
         <source>Documents</source>
         <translation>Asiakirjat</translation>
     </message>
@@ -254,44 +254,44 @@
         <translation>Muotoa ei tueta</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
         <source>Open failed</source>
         <translation>Avaaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
         <source>Please check if the file is damaged</source>
         <translation>Tarkista, onko tiedosto vaurioitunut</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="294"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>Muuntaminen epäonnistui. Tarkista, onko tiedosto vaurioitunut</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="538"/>
         <source>Save failed</source>
         <translation>Tallennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="544"/>
         <source>Saved successfully</source>
         <translation>Tallennettu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="564"/>
         <source>Save as</source>
         <translation>Tallenna nimellä</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="574"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="585"/>
         <source>Invalid file name</source>
         <translation>Virheellinen tiedostonimi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="576"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="587"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -318,20 +318,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="380"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="410"/>
         <source>The bookmark has been removed</source>
         <translation>Kirjanmerkki on poistettu</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="679"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="696"/>
         <source>Please select the text</source>
         <translation>Valitse teksti</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="756"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="767"/>
         <source>The annotation has been removed</source>
         <translation>Merkinnät on poistettu</translation>
     </message>
@@ -358,6 +358,37 @@
         <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
         <source>Wrong password</source>
         <translation>Väärä salasana</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="16"/>
+        <source>No eye protection</source>
+        <translation>Ei yövaloa</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="17"/>
+        <source>Classic eye protection</source>
+        <translation>Yövalo klassinen</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="18"/>
+        <source>Green eye protection</source>
+        <translation>Yövalo vihreä</translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="19"/>
+        <source>Night eye protection</source>
+        <translation>Yövalo</translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="52"/>
+        <source>Eye protection mode</source>
+        <translation>Yövalotilat</translation>
     </message>
 </context>
 <context>
@@ -402,7 +433,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="251"/>
         <source>Invalid page number</source>
         <translation>Virheellinen sivunumero</translation>
     </message>
@@ -424,37 +455,55 @@
     </message>
 </context>
 <context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation>Palautettu edelliseen lukuasentoon</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="62"/>
+        <source>Jump to first page</source>
+        <translation>Siirry alkuun</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="78"/>
+        <source>Close</source>
+        <translation>Sulje</translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="31"/>
         <source>Save the changes to &quot;%1&quot;?</source>
         <translation>Tallennetaanko muutokset &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Discard</source>
         <comment>button</comment>
         <translation>Hylkää</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="34"/>
         <source>Save</source>
         <comment>button</comment>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="47"/>
         <source>Cancel</source>
         <translation>Peru</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="48"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -583,12 +632,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="142"/>
         <source>Zoom in</source>
-        <translation>Lähennä</translation>
+        <translation>Lähemmäksi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="143"/>
         <source>Zoom out</source>
-        <translation>Loitonna</translation>
+        <translation>Kauemmaksi</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="130"/>
@@ -759,23 +808,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="278"/>
         <source>Copy</source>
         <translation>Kopioi</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="284"/>
         <source>Remove annotation</source>
         <translation>Poista merkinnät</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="290"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="311"/>
         <source>Remove all</source>
         <translation>Poista kaikki</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="306"/>
         <source>Remove bookmark</source>
         <translation>Poista kirjanmerkki</translation>
     </message>
@@ -804,48 +853,48 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New window</source>
         <translation>Uusi ikkuna</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New tab</source>
         <translation>Uusi välilehti</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="121"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
         <source>Save as</source>
         <translation>Tallenna nimellä</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Display in file manager</source>
         <translation>Näytä tiedostohallinnassa</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Magnifer</source>
         <translation>Suurennuslasi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="42"/>
         <source>Tools</source>
         <translation>Työkalut</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Search</source>
         <translation>Etsi</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="46"/>
         <source>Print</source>
         <translation>Tulosta</translation>
     </message>
@@ -869,25 +918,30 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="63"/>
+        <location filename="../reader/main.cpp" line="64"/>
         <source>Document File Path.</source>
         <translation>Asiakirjan tiedoston polku.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="64"/>
-        <location filename="../reader/main.cpp" line="68"/>
+        <location filename="../reader/main.cpp" line="65"/>
+        <location filename="../reader/main.cpp" line="69"/>
         <source>FilePath</source>
         <translation>Polku</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="68"/>
         <source>ThumbnailPath Path.</source>
         <translation>Esikatselukuvan polku.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="72"/>
+        <location filename="../reader/main.cpp" line="73"/>
         <source>Generate thumbnail.</source>
         <translation>Luo esikatselukuva.</translation>
+    </message>
+    <message>
+        <location filename="../reader/main.cpp" line="77"/>
+        <source>Batch print documents without UI.</source>
+        <translation>Erätulostus ilman käyttöliittymää.</translation>
     </message>
 </context>
 </TS>
