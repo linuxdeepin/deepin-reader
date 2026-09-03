@@ -191,7 +191,7 @@ void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
         DBusObject::instance()->unBlockShutdown();
     }
 
-    if (nullptr == sheet && sheet != getCurSheet())
+    if (nullptr == sheet || sheet != getCurSheet())
         return;
 
     emit sigCurSheetChanged(sheet);
@@ -200,7 +200,7 @@ void CentralDocPage::onSheetFileChanged(DocSheet *sheet)
 void CentralDocPage::onSheetOperationChanged(DocSheet *sheet)
 {
     qCInfo(appLog) << "onSheetOperationChanged";
-    if (nullptr == sheet && sheet != getCurSheet())
+    if (nullptr == sheet || sheet != getCurSheet())
         return;
 
     emit sigCurSheetChanged(sheet);

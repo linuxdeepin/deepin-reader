@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -407,12 +407,17 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_001)
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    // 将 sheet 置为当前标签页，验证当前页变更时信号会发出
+    g_docsheet = sheet;
+    Stub s2;
+    s2.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
     QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
 
     m_tester->onSheetFileChanged(sheet);
 
     EXPECT_TRUE(g_funcName == "blockShutdown_stub");
     EXPECT_TRUE(spy.count() == 1);
+    g_docsheet = nullptr;
     delete sheet;
 }
 
@@ -426,6 +431,10 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_002)
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    // 将 sheet 置为当前标签页，验证当前页变更时信号会发出
+    g_docsheet = sheet;
+    Stub s2;
+    s2.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
     QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
 
     m_tester->onSheetFileChanged(sheet);
@@ -433,6 +442,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_002)
     EXPECT_TRUE(g_funcName == "unBlockShutdown_stub");
     EXPECT_TRUE(spy.count() == 1);
 
+    g_docsheet = nullptr;
     delete sheet;
 }
 
@@ -455,25 +465,82 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_003)
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_001)
 {
-    Stub s;
-    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub);
-
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
     DocSheet *sheet = nullptr;
 
     QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
 
-    m_tester->onSheetFileChanged(sheet);
+    // 空指针不应发出信号
+    m_tester->onSheetOperationChanged(sheet);
     EXPECT_TRUE(spy.count() == 0);
 
+    // 当前标签页的变更应发出信号
     sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
-    m_tester->onSheetFileChanged(sheet);
+    g_docsheet = sheet;
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    m_tester->onSheetOperationChanged(sheet);
     EXPECT_TRUE(spy.count() == 1);
 
-    delete sheet;
-    delete g_docsheet;
     g_docsheet = nullptr;
+    delete sheet;
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_background)
+{
+    // 回归测试：后台标签页(非当前页)的操作变化不应触发 sigCurSheetChanged，
+    // 否则 ScaleWidget/ScaleMenu 会指向后台文档（最后一个打开的标签）
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    DocSheet *curSheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    DocSheet *bgSheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+
+    g_docsheet = curSheet;   // 当前标签页是 curSheet
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
+
+    // 后台标签页操作变化：不应发出信号
+    m_tester->onSheetOperationChanged(bgSheet);
+    EXPECT_TRUE(spy.count() == 0);
+
+    // 当前标签页操作变化：应发出信号
+    m_tester->onSheetOperationChanged(curSheet);
+    EXPECT_TRUE(spy.count() == 1);
+
+    g_docsheet = nullptr;
+    delete bgSheet;
+    delete curSheet;
+}
+
+TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetFileChanged_background)
+{
+    // 回归测试：后台标签页的文件变更不应触发 sigCurSheetChanged
+    Stub s;
+    s.set(ADDR(DocSheet, existFileChanged), existFileChanged_stub_false);
+    s.set(ADDR(DBusObject, blockShutdown), blockShutdown_stub);
+    s.set(ADDR(DBusObject, unBlockShutdown), unBlockShutdown_stub);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    DocSheet *curSheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    DocSheet *bgSheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+
+    g_docsheet = curSheet;
+    Stub s2;
+    s2.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
+
+    m_tester->onSheetFileChanged(bgSheet);
+    EXPECT_TRUE(spy.count() == 0);
+
+    m_tester->onSheetFileChanged(curSheet);
+    EXPECT_TRUE(spy.count() == 1);
+
+    g_docsheet = nullptr;
+    delete bgSheet;
+    delete curSheet;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_addSheet_001)
@@ -1332,22 +1399,27 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_invoke)
     strPath += "/files/normal.pdf";
     DocSheet *sheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
 
+    // 将 sheet 置为当前标签页，验证当前页变更时信号会发出
+    g_docsheet = sheet;
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
     QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
     m_tester->onSheetOperationChanged(sheet);
     EXPECT_TRUE(spy.count() == 1);
 
+    g_docsheet = nullptr;
     delete sheet;
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onSheetOperationChanged_nullptr)
 {
-    // nullptr sheet with no current sheet -> signal still emitted
+    // nullptr sheet -> 不再发出信号
     Stub s;
     s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub_nullptr);
 
     QSignalSpy spy(m_tester, SIGNAL(sigCurSheetChanged(DocSheet *)));
     m_tester->onSheetOperationChanged(nullptr);
-    EXPECT_TRUE(spy.count() == 1);
+    EXPECT_TRUE(spy.count() == 0);
 }
 
 TEST_F(TestCentralDocPage, UT_CentralDocPage_onCentralMoveIn_invoke)
