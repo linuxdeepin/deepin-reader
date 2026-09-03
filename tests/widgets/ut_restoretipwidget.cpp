@@ -83,8 +83,10 @@ TEST_F(UT_RestoreTipWidget, UT_RestoreTipWidget_jumpBtnClicked_001)
 TEST_F(UT_RestoreTipWidget, UT_RestoreTipWidget_closeBtnClicked_001)
 {
     m_tester->showTip();
+    QSignalSpy spy(m_tester, SIGNAL(sigCloseRestoreTip()));
     QAbstractButton *btn = m_tester->findChild<QAbstractButton *>("CloseBtn");
     ASSERT_NE(btn, nullptr);
     btn->click();
+    EXPECT_EQ(spy.count(), 1);
     EXPECT_TRUE(m_tester->isHidden());
 }

@@ -77,6 +77,7 @@ void RestoreTipWidget::initUI()
     connect(m_closeBtn, &DIconButton::clicked, this, [this]() {
         qCDebug(appLog) << "Restore tip: close clicked";
         hide();
+        emit sigCloseRestoreTip();
     });
     layout->addWidget(m_closeBtn);
     setLayout(layout);
