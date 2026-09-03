@@ -1537,12 +1537,8 @@ void DocSheet::onBrowserOperaAnnotation(int type, int index, deepin_reader::Anno
     m_sidebar->handleAnntationMsg(type, index, anno);
     setDocumentChanged(true);
 
-    // 注释变化后立即触发自动保存（不等待 30 秒），确保尽快落盘
-    // 注意：不在 UI 回调中直接调 renderer->save()，因为 DPdfDoc::save()
-    // 会做整个 PDF 重写 + fsync，大文件会导致明显卡顿
-    // 使用 3 秒短间隔触发，兼顾及时落盘和 UI 流畅度
     if (m_autoSaveTimer) {
-        m_autoSaveTimer->start(3000);
+        m_autoSaveTimer->start(0);
     }
 }
 
