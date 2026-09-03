@@ -54,6 +54,18 @@ Central::Central(QWidget *parent)
         }
     });
 
+    // 用户手动关闭提示条时，清除当前 sheet 的恢复标记，避免切换标签页再切回时重复出现。
+    // 本次打开文档期间不再提示；下次打开文档时 DocSheet::onOpened 会重新置位。
+    connect(m_restoreTipWidget, &RestoreTipWidget::sigCloseRestoreTip, this, [this]() {
+        if (m_docPage) {
+            DocSheet *sheet = m_docPage->getCurSheet();
+            if (sheet) {
+                sheet->dismissRestoreTip();
+                m_restoreTipWidget->hide();
+            }
+        }
+    });
+
     connect(DBusObject::instance(), &DBusObject::sigTouchPadEventSignal, this, &Central::onTouchPadEvent);
 
     QList<QKeySequence> keyList;

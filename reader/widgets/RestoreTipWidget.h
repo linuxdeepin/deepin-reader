@@ -48,6 +48,14 @@ signals:
      */
     void sigJumpToFirstPage();
 
+    /**
+     * @brief sigCloseRestoreTip 用户点击"关闭"，请求关闭提示条并清除恢复标记
+     *
+     * 关闭后本次打开文档期间不再显示，切换标签页再切回不会重复出现；
+     * 下次打开文档时 DocSheet::onOpened 会重新置位，仍会提示。
+     */
+    void sigCloseRestoreTip();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;

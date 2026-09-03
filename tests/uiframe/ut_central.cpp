@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -637,5 +637,15 @@ TEST_F(TestCentral, UT_Central_jumpToFirstPage_lambda_001)
     ASSERT_NE(tip, nullptr);
     // m_docPage 存在但当前无 sheet
     emit tip->sigJumpToFirstPage();
+    SUCCEED();
+}
+
+TEST_F(TestCentral, UT_Central_closeRestoreTip_lambda_001)
+{
+    m_tester->docPage();
+    RestoreTipWidget *tip = m_tester->m_restoreTipWidget;
+    ASSERT_NE(tip, nullptr);
+    // m_docPage 存在但当前无 sheet，关闭提示条不应崩溃
+    emit tip->sigCloseRestoreTip();
     SUCCEED();
 }
