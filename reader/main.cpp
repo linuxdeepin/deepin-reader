@@ -140,7 +140,9 @@ int main(int argc, char *argv[])
             // 合并文件列表：保留历史标签页及其拖拽后的顺序，仅追加新打开的文件
             // 这样重新打开相同文件时能保持上次的标签顺序；打开新文件时历史不会丢失
             QStringList allFiles = validRestored;
-            QSet<QString> restoredSet(validRestored.begin(), validRestored.end());
+            QSet<QString> restoredSet;
+            for (const QString &path : validRestored)
+                restoredSet.insert(path);
             int newFileCount = 0;
             for (const QString &fp : localArguments) {
                 if (QFile::exists(fp) && !restoredSet.contains(fp)) {
