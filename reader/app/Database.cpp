@@ -26,6 +26,9 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
+// 网络文档阅读状态的保留时长：超过该天数未打开则视为过期，启动时清理
+static constexpr int kNetworkStateTimeoutDays = 7;
+
 Transaction::Transaction(QSqlDatabase &database)
     : m_committed(false), m_database(database)
 {
@@ -94,6 +97,7 @@ bool Database::prepareOperation()
                     ",lastModified INTEGER DEFAULT 0"
                     ",contentHash TEXT DEFAULT ''"
                     ",docId TEXT DEFAULT ''"
+                    ",lastOpened INTEGER DEFAULT 0"
                     ")")) {
         qCInfo(appLog) << query.lastError();
         return false;
@@ -138,7 +142,8 @@ bool Database::migrateOperationTable()
         {"fileSize",       "INTEGER DEFAULT 0"},
         {"lastModified",   "INTEGER DEFAULT 0"},
         {"contentHash",    "TEXT DEFAULT ''"},
-        {"docId",          "TEXT DEFAULT ''"}
+        {"docId",          "TEXT DEFAULT ''"},
+        {"lastOpened",     "INTEGER DEFAULT 0"}
     };
 
     Transaction transaction(m_database);
@@ -198,6 +203,16 @@ bool Database::readOperation(DocSheet *sheet)
                 sheet->m_operation.expandedSections.append(val.toString());
             }
         }
+        // 网络文档：命中即刷新打开时间，作为 7 天超时清理的时间基准
+        if (Dr::isNetworkPath(sheet->filePath())) {
+            QSqlQuery touchQuery(m_database);
+            touchQuery.prepare("UPDATE operation SET lastOpened = :lastOpened WHERE filePath = :filePath");
+            touchQuery.bindValue(":lastOpened", QDateTime::currentMSecsSinceEpoch());
+            touchQuery.bindValue(":filePath", sheet->filePath());
+            if (!touchQuery.exec()) {
+                qCWarning(appLog) << "Failed to update lastOpened:" << touchQuery.lastError();
+            }
+        }
         return true;
     }
     return false;
@@ -224,10 +239,10 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     query.prepare("REPLACE INTO "
                   "operation(filePath,layoutMode,mouseShape,scaleMode,rotation,scaleFactor,"
                   "sidebarVisible,sidebarIndex,currentPage,sidebarWidth,sidebarWidthChanged,scrollPosition,expandedSections,"
-                  "fileSize,lastModified,contentHash,docId)"
+                  "fileSize,lastModified,contentHash,docId,lastOpened)"
                   " VALUES(:filePath,:layoutMode,:mouseShape,:scaleMode,:rotation,:scaleFactor,"
                   ":sidebarVisible,:sidebarIndex,:currentPage,:sidebarWidth,:sidebarWidthChanged,:scrollPosition,:expandedSections,"
-                  ":fileSize,:lastModified,:contentHash,:docId)");
+                  ":fileSize,:lastModified,:contentHash,:docId,:lastOpened)");
     query.bindValue(":filePath", sheet->filePath());
     query.bindValue(":layoutMode", sheet->m_operation.layoutMode);
     query.bindValue(":mouseShape", sheet->m_operation.mouseShape);
@@ -251,6 +266,7 @@ bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
     query.bindValue(":lastModified", lastModified);
     query.bindValue(":contentHash", contentHash);
     query.bindValue(":docId", docId);
+    query.bindValue(":lastOpened", QDateTime::currentMSecsSinceEpoch());
 
     if (!query.exec()) {
         qCInfo(appLog) << query.lastError().text();
@@ -366,9 +382,10 @@ bool Database::matchOperationByContent(const QFileInfo &fileInfo, DocSheet *shee
 
     // 更新文件路径为新路径（在同一事务中保证原子性）
     QSqlQuery updateQuery(m_database);
-    updateQuery.prepare("UPDATE operation SET filePath = :newPath WHERE filePath = :oldPath");
+    updateQuery.prepare("UPDATE operation SET filePath = :newPath, lastOpened = :lastOpened WHERE filePath = :oldPath");
     updateQuery.bindValue(":newPath", fileInfo.absoluteFilePath());
     updateQuery.bindValue(":oldPath", oldFilePath);
+    updateQuery.bindValue(":lastOpened", QDateTime::currentMSecsSinceEpoch());
     if (!updateQuery.exec()) {
         qCWarning(appLog) << "Failed to update file path after content match:" << updateQuery.lastError();
     }
@@ -390,16 +407,28 @@ int Database::cleanupOrphanStates()
 {
     qCDebug(appLog) << "Starting orphan state cleanup";
     QSqlQuery query(m_database);
-    if (!query.exec("SELECT filePath FROM operation")) {
+    // 同时取出 lastOpened，用于网络文档的 7 天超时判断
+    if (!query.exec("SELECT filePath, lastOpened FROM operation")) {
         qCWarning(appLog) << "Failed to query operations for cleanup:" << query.lastError();
         return 0;
     }
 
+    // 网络文档状态的超时时间（毫秒）
+    const qint64 networkTimeoutMs = qint64(kNetworkStateTimeoutDays) * 24 * 60 * 60 * 1000;
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+
     QStringList orphanPaths;
     while (query.next()) {
         QString filePath = query.value("filePath").toString();
-        // 网络路径暂不清理
         if (Dr::isNetworkPath(filePath)) {
+            // 网络路径：挂载状态不可靠（QFile::exists() 无法判断文件是否仍存在），
+            // 改用超时策略——超过 7 天未打开的网络文档状态记录视为过期，连同书签一起清理
+            const qint64 lastOpened = query.value("lastOpened").toLongLong();
+            if (lastOpened > 0 && now - lastOpened > networkTimeoutMs) {
+                qCInfo(appLog) << "Network document state expired (lastOpened"
+                                << QDateTime::fromMSecsSinceEpoch(lastOpened).toString() << "):" << filePath;
+                orphanPaths.append(filePath);
+            }
             continue;
         }
         if (!QFile::exists(filePath)) {

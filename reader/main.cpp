@@ -108,6 +108,9 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    // 启动时清理失效的状态记录
+    Database::instance()->cleanupOrphanStates();
+
     // 这是第一个实例（没有其他 deepin-reader 在运行），恢复上次的标签页组
     // 不管命令行是否指定了文件，都恢复之前的标签页
     // 注意：当前仅恢复 windowIndex=0 的标签页组（多窗口场景的完整恢复待后续优化）
