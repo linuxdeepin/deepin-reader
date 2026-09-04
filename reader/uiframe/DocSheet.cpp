@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -612,15 +612,26 @@ bool DocSheet::saveData()
     PERF_PRINT_BEGIN("POINT-04", QString("filename=%1,filesize=%2").arg(QFileInfo(this->filePath()).fileName()).arg(QFileInfo(this->filePath()).size()));
 
     //文档改变或者原文档被删除 则进行数据保存
-    if ((m_documentChanged || !QFile(m_filePath).exists()) && !m_renderer->save())
+    const bool fileWasMissing = !QFile(m_filePath).exists();
+    if ((m_documentChanged || fileWasMissing) && !m_renderer->save())
         return false;
 
+    // 保存（或重建文件）会导致文件内容变化
+    const bool contentSaved = m_documentChanged || fileWasMissing;
     m_documentChanged = false;
 
-    if (m_bookmarkChanged && !Database::instance()->saveBookmarks(filePath(), m_bookmarks))
+    // 书签有变化，或保存导致文件内容变化时，都重写书签以刷新内容指纹，
+    // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
+    if ((m_bookmarkChanged || contentSaved) && !Database::instance()->saveBookmarks(filePath(), m_bookmarks))
         return false;
 
     m_bookmarkChanged = false;
+
+    // 保存会改变文件内容，同步刷新缓存哈希，
+    // 避免后续自动保存将过期哈希写入 operation 导致下次打开时误判过期
+    if (contentSaved) {
+        m_cachedContentHash = Database::computeContentHash(m_filePath);
+    }
 
     m_sidebar->changeResetModelData();
 
@@ -1702,6 +1713,9 @@ void DocSheet::setAlive(bool alive)
             if (m_renderer->save()) {
                 m_documentChanged = false;
                 m_sidebar->changeResetModelData();
+                // 注释保存后文件内容已变化，重写书签刷新内容指纹，
+                // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
+                Database::instance()->saveBookmarks(filePath(), m_bookmarks);
             } else {
                 qCWarning(appLog) << "Failed to save document annotations on close for:" << m_filePath;
             }
@@ -2058,23 +2072,33 @@ void DocSheet::onAutoSave()
 {
     qCDebug(appLog) << "Auto-save triggered for:" << m_filePath;
 
-    saveProgressToDb();
-
-    // 兜底保存书签（正常情况 setBookMark 已立即落盘，此处分防其他路径设的脏标记）
-    if (m_bookmarkChanged) {
-        Database::instance()->saveBookmarks(filePath(), m_bookmarks);
-        m_bookmarkChanged = false;
-    }
-
-    // 保存文档注释（高亮、文本标注等），防止异常退出时注释丢失
+    // 先保存文档注释（高亮、文本标注等），防止异常退出时注释丢失；
+    // 保存会改变文件内容，之后的指纹/哈希计算必须基于最新内容
+    bool contentSaved = false;
     if (m_documentChanged) {
         if (m_renderer && m_renderer->save()) {
             m_documentChanged = false;
             m_sidebar->changeResetModelData();
+            contentSaved = true;
         } else {
             qCWarning(appLog) << "Auto-save: failed to save document annotations for:" << m_filePath;
         }
     }
+
+    // 兜底保存书签（正常情况 setBookMark 已立即落盘，此处分防其他路径设的脏标记）；
+    // 注释保存导致内容变化时也重写一次，刷新书签内容指纹，
+    // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
+    if (m_bookmarkChanged || contentSaved) {
+        Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+        m_bookmarkChanged = false;
+    }
+
+    // 注释保存会改变文件内容，此时必须重算哈希，保证 operation 与文件实际内容一致；
+    // 其余情况沿用缓存哈希（无缓存时由 saveProgressToDb 内部计算），避免每30秒读盘计算
+    if (contentSaved) {
+        m_cachedContentHash = Database::computeContentHash(m_filePath);
+    }
+    saveProgressToDb();
 
     CentralDocPage *docPage = qobject_cast<CentralDocPage *>(parent());
     if (docPage && docPage->getCurSheet() == this) {

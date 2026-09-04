@@ -10,6 +10,7 @@
 
 #include <QTest>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QDateTime>
 
 #include <gtest/gtest.h>
@@ -276,4 +277,321 @@ TEST_F(TestDatabase, UT_Database_lastOpened_001)
     // 时间戳在 1 分钟以内视为有效
     EXPECT_GT(lastOpened, now - 60 * 1000);
     EXPECT_LE(lastOpened, now);
+}
+
+TEST_F(TestDatabase, UT_Database_cleanupOrphanStates_004)
+{
+    // 文件不存在（重命名/移动场景）的清理策略：
+    // 带指纹且最近打开 → 保留待内容匹配迁移；带指纹但超 7 天 → 清理；
+    // 无指纹 → 维持原立即清理策略
+    const QString dir = "/tmp/deepin_reader_ut_bookmark";
+    QDir().mkpath(dir);
+    QString src = UTSOURCEDIR;
+    src += "/files/normal.pdf";
+    const QString doc = dir + "/cleanup_keep.pdf";
+    QFile::remove(doc);
+    ASSERT_TRUE(QFile::copy(src, doc));
+    const QString hash = Database::computeContentHash(doc);
+    ASSERT_FALSE(hash.isEmpty());
+
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+    const qint64 days8 = qint64(8) * 24 * 60 * 60 * 1000;
+    // 三条记录的路径都指向不存在的文件
+    const QString ghostRecent = dir + "/ghost_recent.pdf";
+    const QString ghostExpired = dir + "/ghost_expired.pdf";
+    const QString ghostLegacy = dir + "/ghost_legacy.pdf";
+
+    QSqlQuery query(m_tester->m_database);
+    struct Ghost {
+        QString path;
+        QString hash;
+        qint64 lastOpened;
+    };
+    const QList<Ghost> ghosts = {
+        { ghostRecent, hash, now },
+        { ghostExpired, hash, now - days8 },
+        { ghostLegacy, QString(), now },
+    };
+    for (const Ghost &g : ghosts) {
+        // 幂等清理历史残留
+        query.prepare("DELETE FROM operation WHERE filePath = :p");
+        query.bindValue(":p", g.path);
+        ASSERT_TRUE(query.exec());
+        query.prepare("DELETE FROM bookmark WHERE filePath = :p");
+        query.bindValue(":p", g.path);
+        ASSERT_TRUE(query.exec());
+        // 插入 operation + bookmark 记录
+        query.prepare("INSERT INTO operation(filePath, contentHash, lastOpened) VALUES(:p, :h, :t)");
+        query.bindValue(":p", g.path);
+        query.bindValue(":h", g.hash);
+        query.bindValue(":t", g.lastOpened);
+        ASSERT_TRUE(query.exec());
+        query.prepare("INSERT INTO bookmark(filePath, bookmarkIndex, contentHash) VALUES(:p, 0, :h)");
+        query.bindValue(":p", g.path);
+        query.bindValue(":h", g.hash);
+        ASSERT_TRUE(query.exec());
+    }
+
+    m_tester->cleanupOrphanStates();
+
+    // 带指纹 + 最近打开：保留，等待打开新路径时按指纹迁移
+    EXPECT_EQ(ut_operation_count(m_tester, ghostRecent), 1);
+    EXPECT_EQ(ut_bookmark_count(m_tester, ghostRecent), 1);
+    // 带指纹但超 7 天未打开：清理
+    EXPECT_EQ(ut_operation_count(m_tester, ghostExpired), 0);
+    EXPECT_EQ(ut_bookmark_count(m_tester, ghostExpired), 0);
+    // 无指纹旧格式记录：立即清理
+    EXPECT_EQ(ut_operation_count(m_tester, ghostLegacy), 0);
+    EXPECT_EQ(ut_bookmark_count(m_tester, ghostLegacy), 0);
+
+    // 测试库持久共享：清理指向不存在文件的记录，
+    // 避免残留干扰后续用例的内容匹配（match 会选 lastOpened 最新者）
+    for (const Ghost &g : ghosts) {
+        query.prepare("DELETE FROM operation WHERE filePath = :p");
+        query.bindValue(":p", g.path);
+        ASSERT_TRUE(query.exec());
+        query.prepare("DELETE FROM bookmark WHERE filePath = :p");
+        query.bindValue(":p", g.path);
+        ASSERT_TRUE(query.exec());
+    }
+
+    QFile::remove(doc);
+}
+
+TEST_F(TestDatabase, UT_Database_renameBookmarkMigration_001)
+{
+    // 端到端：文件重命名 → 启动清理不再误删旧记录 →
+    // 打开新路径时 matchOperationByContent 迁移阅读状态与书签
+    const QString dir = "/tmp/deepin_reader_ut_bookmark";
+    QDir().mkpath(dir);
+    QString src = UTSOURCEDIR;
+    src += "/files/normal.pdf";
+    const QString doc1 = dir + "/rename_src.pdf";
+    const QString docMoved = dir + "/rename_dst.pdf";
+
+    // 清理历史残留
+    DocSheet sheet(Dr::FileType::PDF, doc1, nullptr);
+    m_tester->saveBookmarks(doc1, QSet<int>());
+    m_tester->saveBookmarks(docMoved, QSet<int>());
+
+    ASSERT_TRUE(QFile::copy(src, doc1));
+
+    // 文档加书签并保存阅读状态（saveOperation 同时写入指纹）
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {0}));
+    sheet.m_operation.currentPage = 5;
+    ASSERT_TRUE(m_tester->saveOperation(&sheet, Database::computeContentHash(doc1)));
+
+    // 用户重命名文件（内容不变）
+    ASSERT_TRUE(QFile::rename(doc1, docMoved));
+
+    // 模拟下次启动的孤立记录清理：旧路径记录应保留（带指纹、最近打开）
+    m_tester->cleanupOrphanStates();
+    EXPECT_EQ(ut_operation_count(m_tester, doc1), 1);
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 1);
+
+    // 打开新路径：内容匹配迁移，书签与阅读状态都跟随
+    EXPECT_TRUE(m_tester->matchOperationByContent(QFileInfo(docMoved), &sheet));
+    EXPECT_EQ(ut_operation_count(m_tester, doc1), 0);
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 0);
+
+    QSet<int> bookmarks;
+    EXPECT_TRUE(m_tester->readBookmarks(docMoved, bookmarks));
+    EXPECT_EQ(bookmarks, QSet<int> {0});
+
+    // 清理迁移后的记录
+    m_tester->saveBookmarks(docMoved, QSet<int>());
+    QSqlQuery clean(m_tester->m_database);
+    clean.prepare("DELETE FROM operation WHERE filePath = :p");
+    clean.bindValue(":p", docMoved);
+    ASSERT_TRUE(clean.exec());
+
+    QFile::remove(docMoved);
+}
+
+// ===== 书签内容指纹校验 =====
+
+// 准备临时目录及两个内容不同的真实文件（computeContentHash 需要读取文件）
+static QString ut_bookmark_prepare_files(QString &doc1, QString &doc2)
+{
+    const QString dir = "/tmp/deepin_reader_ut_bookmark";
+    QDir().mkpath(dir);
+    QString src = UTSOURCEDIR;
+    src += "/files/normal.pdf";
+    doc1 = dir + "/doc.pdf";
+    doc2 = dir + "/doc2.pdf";
+    QFile::remove(doc1);
+    QFile::remove(doc2);
+    EXPECT_TRUE(QFile::copy(src, doc1));
+    EXPECT_TRUE(QFile::copy(src, doc2));
+    // 追加数据使 doc2 与 doc1 内容不同
+    QFile f2(doc2);
+    EXPECT_TRUE(f2.open(QIODevice::Append));
+    f2.write(QByteArray(4096, 'x'));
+    f2.close();
+    return dir;
+}
+
+TEST_F(TestDatabase, UT_Database_bookmarkContentHash_001)
+{
+    // 同名不同内容的文件不应继承旧文件的书签
+    // （bug场景：文档1加书签后删除，文档2改名为文档1，文档2不应显示书签）
+    QString doc1, doc2;
+    ut_bookmark_prepare_files(doc1, doc2);
+    ASSERT_NE(Database::computeContentHash(doc1), Database::computeContentHash(doc2));
+
+    // 文档1 第 1 页添加书签，正常读取
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {0}));
+    QSet<int> read;
+    EXPECT_TRUE(m_tester->readBookmarks(doc1, read));
+    EXPECT_EQ(read, QSet<int> {0});
+
+    // 文档1 被删除，文档2 改名为文档1（同路径、不同内容）
+    QFile::remove(doc1);
+    ASSERT_TRUE(QFile::rename(doc2, doc1));
+
+    // 旧文件的书签不应出现在新文件上，且过期记录已被清除
+    read.clear();
+    EXPECT_TRUE(m_tester->readBookmarks(doc1, read));
+    EXPECT_TRUE(read.isEmpty());
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 0);
+
+    QFile::remove(doc1);
+}
+
+TEST_F(TestDatabase, UT_Database_readOperationContentHash_001)
+{
+    // 同名不同内容的文件不应继承旧文档的阅读状态（与书签同根因）
+    QString doc1, doc2;
+    ut_bookmark_prepare_files(doc1, doc2);
+
+    // 文档1 正常阅读并保存状态（此时文件内容为 H1）
+    {
+        DocSheet sheet1(Dr::FileType::PDF, doc1, nullptr);
+        sheet1.m_operation.currentPage = 42;
+        ASSERT_TRUE(m_tester->saveOperation(&sheet1));
+    }
+    // 注意：sheet1 析构（setAlive(false)）会再次 saveOperation，记录内容不变
+
+    // 文档1 被删除，文档2 改名为文档1（同路径、不同内容）
+    QFile::remove(doc1);
+    ASSERT_TRUE(QFile::rename(doc2, doc1));
+
+    // 打开新文件：过期状态不应被恢复，且过期记录已被清除
+    // （DocSheet 构造即 setAlive(true)，此处 readOperation 已被调用过一次并删除过期记录）
+    {
+        DocSheet sheet2(Dr::FileType::PDF, doc1, nullptr);
+        EXPECT_FALSE(m_tester->readOperation(&sheet2));
+        // currentPage 保持默认值 1，未被旧文档状态（42）污染
+        EXPECT_EQ(sheet2.m_operation.currentPage, 1);
+        EXPECT_EQ(ut_operation_count(m_tester, doc1), 0);
+    }
+
+    QFile::remove(doc1);
+}
+
+TEST_F(TestDatabase, UT_Database_readOperationContentHash_002)
+{
+    // 同一文件状态正常恢复；旧版本记录（无指纹）读取时回填
+    // （使用独立路径，避免其它用例 DocSheet 析构时 saveOperation 写入的记录干扰）
+    const QString dir = "/tmp/deepin_reader_ut_bookmark";
+    QDir().mkpath(dir);
+    QString src = UTSOURCEDIR;
+    src += "/files/normal.pdf";
+    const QString doc = dir + "/legacy_op.pdf";
+    QFile::remove(doc);
+    ASSERT_TRUE(QFile::copy(src, doc));
+
+    // 幂等清理：DocSheet 析构（setAlive(false)）会 saveOperation 写回记录，
+    // 测试数据库持久化，需先清除历史残留避免主键冲突
+    QSqlQuery clean(m_tester->m_database);
+    clean.prepare("DELETE FROM operation WHERE filePath = :p");
+    clean.bindValue(":p", doc);
+    ASSERT_TRUE(clean.exec());
+    qWarning() << "DELETE affected:" << clean.numRowsAffected();
+
+    // 直接插入一条无指纹的旧格式记录（exec 仅执行一次，重复执行会撞主键）
+    QSqlQuery insert(m_tester->m_database);
+    insert.prepare("INSERT INTO operation(filePath, currentPage, contentHash) VALUES(:p, 7, '')");
+    insert.bindValue(":p", doc);
+    const bool inserted = insert.exec();
+    if (!inserted) {
+        qWarning() << "INSERT failed:" << insert.lastError().text();
+    }
+    ASSERT_TRUE(inserted);
+
+    {
+        DocSheet sheet(Dr::FileType::PDF, doc, nullptr);
+        EXPECT_TRUE(m_tester->readOperation(&sheet));
+        EXPECT_EQ(sheet.m_operation.currentPage, 7);
+
+        // 指纹已回填，再次读取仍能恢复
+        QSqlQuery query(m_tester->m_database);
+        query.prepare("SELECT contentHash FROM operation WHERE filePath = :p");
+        query.bindValue(":p", doc);
+        ASSERT_TRUE(query.exec());
+        ASSERT_TRUE(query.next());
+        EXPECT_EQ(query.value(0).toString(), Database::computeContentHash(doc));
+
+        EXPECT_TRUE(m_tester->readOperation(&sheet));
+        EXPECT_EQ(sheet.m_operation.currentPage, 7);
+    }
+    // sheet 已析构，清理其写回的记录
+    ASSERT_TRUE(clean.exec());
+
+    QFile::remove(doc);
+}
+
+TEST_F(TestDatabase, UT_Database_bookmarkContentHash_002)
+{
+    // 同一文件书签读写不受影响；旧版本数据（无指纹）读取时回填
+    QString doc1, doc2;
+    ut_bookmark_prepare_files(doc1, doc2);
+    QFile::remove(doc2);
+
+    // 直接插入一条无指纹的旧格式记录
+    QSqlQuery insert(m_tester->m_database);
+    insert.prepare("INSERT INTO bookmark(filePath, bookmarkIndex, contentHash) VALUES(:p, :i, '')");
+    insert.bindValue(":p", doc1);
+    insert.bindValue(":i", 3);
+    ASSERT_TRUE(insert.exec());
+
+    // 读取时旧书签保留且指纹被回填
+    QSet<int> read;
+    EXPECT_TRUE(m_tester->readBookmarks(doc1, read));
+    EXPECT_EQ(read, QSet<int> {3});
+
+    QSqlQuery query(m_tester->m_database);
+    query.prepare("SELECT contentHash FROM bookmark WHERE filePath = :p");
+    query.bindValue(":p", doc1);
+    ASSERT_TRUE(query.exec());
+    ASSERT_TRUE(query.next());
+    EXPECT_EQ(query.value(0).toString(), Database::computeContentHash(doc1));
+
+    // 同一文件再次读取，书签仍正常
+    read.clear();
+    EXPECT_TRUE(m_tester->readBookmarks(doc1, read));
+    EXPECT_EQ(read, QSet<int> {3});
+
+    QFile::remove(doc1);
+}
+
+TEST_F(TestDatabase, UT_Database_bookmarkContentHash_003)
+{
+    // 文件不可读（无法计算指纹）时跳过校验，按旧行为返回书签且不删除记录
+    QString doc1, doc2;
+    ut_bookmark_prepare_files(doc1, doc2);
+    QFile::remove(doc2);
+
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {2}));
+
+    // 移除读权限，使 computeContentHash 失败（root 下仍可读，不走该分支，但用例仍应通过）
+    QFile::setPermissions(doc1, QFile::Permissions());
+
+    QSet<int> read;
+    EXPECT_TRUE(m_tester->readBookmarks(doc1, read));
+    EXPECT_EQ(read, QSet<int> {2});
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 1);
+
+    QFile::setPermissions(doc1, QFile::ReadOwner | QFile::WriteOwner);
+    QFile::remove(doc1);
 }

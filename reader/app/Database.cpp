@@ -112,6 +112,40 @@ bool Database::prepareOperation()
     return true;
 }
 
+bool Database::migrateBookmarkTable()
+{
+    qCDebug(appLog) << "Checking if bookmark table needs migration";
+    QSqlQuery query(m_database);
+
+    if (!query.exec("PRAGMA table_info(bookmark)")) {
+        qCWarning(appLog) << "Failed to get bookmark table info:" << query.lastError();
+        return false;
+    }
+
+    QSet<QString> existingColumns;
+    while (query.next()) {
+        existingColumns.insert(query.value("name").toString());
+    }
+
+    if (existingColumns.contains("contentHash")) {
+        return true;
+    }
+
+    Transaction transaction(m_database);
+    if (!query.exec("ALTER TABLE bookmark ADD COLUMN contentHash TEXT DEFAULT ''")) {
+        QString errorText = query.lastError().text();
+        if (errorText.contains("duplicate column name", Qt::CaseInsensitive)) {
+            qCDebug(appLog) << "Column already exists, skipping: contentHash";
+        } else {
+            qCWarning(appLog) << "Failed to add contentHash column to bookmark:" << errorText;
+        }
+    } else {
+        qCInfo(appLog) << "Migrating bookmark table: added contentHash column";
+    }
+    transaction.commit();
+    return true;
+}
+
 bool Database::migrateOperationTable()
 {
     qCDebug(appLog) << "Checking if operation table needs migration";
@@ -182,6 +216,19 @@ bool Database::readOperation(DocSheet *sheet)
         qCWarning(appLog) << "Failed to read operation:" << query.lastError();
     }
     if (query.next()) {
+        // 内容指纹校验：同名路径下换了文件（删除重命名、覆盖等）不应继承旧文档的阅读状态。
+        // 校验不过则删除过期记录，让后续的 matchOperationByContent 有机会恢复新文档自己的状态
+        const QString currentHash = computeContentHash(sheet->filePath());
+        const QString recordHash = query.value("contentHash").toString();
+        if (!currentHash.isEmpty() && !recordHash.isEmpty() && recordHash != currentHash) {
+            qCInfo(appLog) << "Stale operation dropped (content mismatch):" << sheet->filePath();
+            QSqlQuery delQuery(m_database);
+            delQuery.prepare("DELETE FROM operation WHERE filePath = :filePath");
+            delQuery.bindValue(":filePath", sheet->filePath());
+            delQuery.exec();
+            return false;
+        }
+
         sheet->m_operation.layoutMode = static_cast<Dr::LayoutMode>(query.value("layoutMode").toInt());
         sheet->m_operation.mouseShape = static_cast<Dr::MouseShape>(query.value("mouseShape").toInt());
         sheet->m_operation.scaleMode = static_cast<Dr::ScaleMode>(query.value("scaleMode").toInt());
@@ -203,6 +250,17 @@ bool Database::readOperation(DocSheet *sheet)
                 sheet->m_operation.expandedSections.append(val.toString());
             }
         }
+        // 旧版本记录（无指纹）读取时回填，后续打开即可校验
+        if (!currentHash.isEmpty() && recordHash.isEmpty()) {
+            QSqlQuery backfill(m_database);
+            backfill.prepare("UPDATE operation SET contentHash = :contentHash WHERE filePath = :filePath");
+            backfill.bindValue(":contentHash", currentHash);
+            backfill.bindValue(":filePath", sheet->filePath());
+            if (!backfill.exec()) {
+                qCWarning(appLog) << "Failed to backfill operation contentHash:" << backfill.lastError();
+            }
+        }
+
         // 网络文档：命中即刷新打开时间，作为 7 天超时清理的时间基准
         if (Dr::isNetworkPath(sheet->filePath())) {
             QSqlQuery touchQuery(m_database);
@@ -407,8 +465,8 @@ int Database::cleanupOrphanStates()
 {
     qCDebug(appLog) << "Starting orphan state cleanup";
     QSqlQuery query(m_database);
-    // 同时取出 lastOpened，用于网络文档的 7 天超时判断
-    if (!query.exec("SELECT filePath, lastOpened FROM operation")) {
+    // 同时取出 lastOpened、contentHash，用于保留判定与超时判断
+    if (!query.exec("SELECT filePath, lastOpened, contentHash FROM operation")) {
         qCWarning(appLog) << "Failed to query operations for cleanup:" << query.lastError();
         return 0;
     }
@@ -440,7 +498,21 @@ int Database::cleanupOrphanStates()
                 qCDebug(appLog) << "Skipping removable media path:" << filePath;
                 continue;
             }
-            orphanPaths.append(filePath);
+            // 文件可能只是被重命名/移动：带内容指纹的记录不立即删除，
+            // 保留供打开新路径时通过 matchOperationByContent 按指纹迁移
+            // （阅读进度与书签随迁移更新路径）；长期未打开则按 7 天超时清理。
+            // 无指纹的旧格式记录无法参与内容匹配，维持原立即清理策略。
+            const qint64 lastOpened = query.value("lastOpened").toLongLong();
+            const QString contentHash = query.value("contentHash").toString();
+            if (contentHash.isEmpty() || lastOpened <= 0
+                || now - lastOpened > networkTimeoutMs) {
+                qCInfo(appLog) << "Orphan document state cleanup (no fingerprint or expired):" << filePath;
+                orphanPaths.append(filePath);
+            } else {
+                qCInfo(appLog) << "Keeping missing-file state for content re-match (lastOpened"
+                                << QDateTime::fromMSecsSinceEpoch(lastOpened).toString() << "):" << filePath;
+            }
+            continue;
         }
     }
 
@@ -629,7 +701,7 @@ bool Database::prepareBookmark()
     Transaction transaction(m_database);
 
     QSqlQuery query(m_database);
-    if (!query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER)")) {
+    if (!query.exec("CREATE TABLE bookmark(filePath TEXT,bookmarkIndex INTEGER,contentHash TEXT DEFAULT '')")) {
         qCWarning(appLog) << "Failed to create bookmark table:" << query.lastError();
         return false;
     }
@@ -659,8 +731,50 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
             return false;
         }
 
+        // 内容指纹校验：同名路径下换了文件（删除重命名、覆盖等）不应继承旧文件的书签。
+        // 保存书签时记录了当时文件的内容哈希，读取时与当前文件哈希比对。
+        const QString currentHash = computeContentHash(filePath);
+        const bool canVerify = !currentHash.isEmpty();
+
+        QStringList staleIndexes;   // 指纹不匹配的过期书签（属于旧文件）
+        bool hasLegacyRows = false; // 旧版本数据（无指纹）
         while (query.next()) {
-            bookmarks.insert(query.value("bookmarkIndex").toInt());
+            const int index = query.value("bookmarkIndex").toInt();
+            const QString rowHash = query.value("contentHash").toString();
+            if (canVerify && !rowHash.isEmpty() && rowHash != currentHash) {
+                qCInfo(appLog) << "Stale bookmark dropped (content mismatch):" << filePath
+                                << "page" << index;
+                staleIndexes << QString::number(index);
+                continue;
+            }
+            bookmarks.insert(index);
+            if (canVerify && rowHash.isEmpty()) {
+                hasLegacyRows = true;
+            }
+        }
+
+        // 旧版本数据（无指纹）：批量回填当前文件指纹，后续打开即可校验
+        // （放在遍历结束后执行，避免在 SELECT 迭代过程中写库）
+        if (hasLegacyRows) {
+            QSqlQuery backfill(m_database);
+            backfill.prepare("UPDATE bookmark SET contentHash = :contentHash "
+                             "WHERE filePath = :filePath AND contentHash = ''");
+            backfill.bindValue(":contentHash", currentHash);
+            backfill.bindValue(":filePath", filePath);
+            if (!backfill.exec()) {
+                qCWarning(appLog) << "Failed to backfill bookmark contentHash:" << backfill.lastError();
+            }
+        }
+
+        // 清除属于旧文件的过期书签，避免残留
+        if (!staleIndexes.isEmpty()) {
+            QSqlQuery delQuery(m_database);
+            delQuery.prepare(QString("DELETE FROM bookmark WHERE filePath = :filePath "
+                                     "AND bookmarkIndex IN (%1)").arg(staleIndexes.join(",")));
+            delQuery.bindValue(":filePath", filePath);
+            if (!delQuery.exec()) {
+                qCWarning(appLog) << "Failed to remove stale bookmarks:" << delQuery.lastError();
+            }
         }
 
         return true;
@@ -688,16 +802,20 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
             return false;
         }
 
+        // 记录当前文件内容指纹，供读取时校验书签是否属于该文件
+        const QString contentHash = computeContentHash(filePath);
+
         foreach (int index, bookmarks) {
             if (!query.prepare(" insert into "
-                               " bookmark(filePath,bookmarkIndex)"
-                               " VALUES(:filePath,:bookmarkIndex)")) {
+                               " bookmark(filePath,bookmarkIndex,contentHash)"
+                               " VALUES(:filePath,:bookmarkIndex,:contentHash)")) {
                 qCInfo(appLog) << query.lastError();
                 return false;
             }
 
             query.bindValue(":filePath", filePath);
             query.bindValue(":bookmarkIndex", index);
+            query.bindValue(":contentHash", contentHash);
 
             if (!query.exec()) {
                 qCInfo(appLog) << query.lastError().text();
@@ -756,6 +874,9 @@ Database::Database(QObject *parent) : QObject(parent)
 
         if (!tables.contains("bookmark")) {
             prepareBookmark();
+        } else {
+            // 旧书签表迁移：增加内容指纹列
+            migrateBookmarkTable();
         }
 
         if (!tables.contains("tabgroup")) {
