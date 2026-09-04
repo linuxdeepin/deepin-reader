@@ -56,7 +56,7 @@ public:
 
     /**
      * @brief readBookmarks
-     * 读取书签
+     * 读取书签（带内容指纹校验：同名但内容不同的文件不会继承旧文件的书签）
      * @param filePath 文件名(唯一标识)
      * @param bookmarks 书签列表
      * @return
@@ -65,7 +65,7 @@ public:
 
     /**
      * @brief saveBookmarks
-     * 保存书签
+     * 保存书签（同时记录当前文件内容指纹，供读取时校验）
      * @param filePath 文件名(唯一标识)
      * @param bookmarks 书签列表
      * @return
@@ -118,6 +118,9 @@ public:
     /**
      * @brief cleanupOrphanStates
      * 清理已不存在的本地文档对应的状态记录；
+     * 带内容指纹的记录不立即删除（文件可能只是被重命名/移动，
+     * 需保留供打开新路径时按指纹迁移），改用与网络文档一致的
+     * 7 天超时策略；无指纹的旧格式记录维持原删除策略；
      * 网络文档按超时清理：超过 7 天未打开的记录（含书签）被清除
      * @return 清理的记录数
      */
@@ -172,6 +175,13 @@ private:
      * @return
      */
     bool migrateOperationTable();
+
+    /**
+     * @brief migrateBookmarkTable
+     * 迁移书签表（增加 contentHash 内容指纹列）
+     * @return
+     */
+    bool migrateBookmarkTable();
 
     QSqlDatabase m_database;
 
