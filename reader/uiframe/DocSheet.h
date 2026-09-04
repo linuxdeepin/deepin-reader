@@ -641,6 +641,13 @@ public:
     void saveCurrentViewState();
 
     /**
+     * @brief 将当前阅读进度立即写入数据库
+     * 更新滚动位置/侧栏状态到 m_operation 并执行 saveOperation。
+     * 供书签等已有即时落盘的操作顺带保存进度，异常退出（如 killall）后进度不丢。
+     */
+    void saveProgressToDb();
+
+    /**
      * @brief needsRestoreTip 该 sheet 是否仍需要显示恢复阅读位置提示条
      */
     bool needsRestoreTip() const;
