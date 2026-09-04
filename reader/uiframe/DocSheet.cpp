@@ -400,6 +400,8 @@ void DocSheet::setBookMark(int index, int state)
 
     m_browser->setBookMark(index, state);
 
+    saveProgressToDb();
+
     Database::instance()->saveBookmarks(filePath(), m_bookmarks);
     Database::instance()->flushToDisk();
     m_bookmarkChanged = false;
@@ -425,6 +427,8 @@ void DocSheet::setBookMarks(const QList<int> &indexlst, int state)
 
     if (!state)
         showTips(tr("The bookmark has been removed"));
+
+    saveProgressToDb();
 
     Database::instance()->saveBookmarks(filePath(), m_bookmarks);
     Database::instance()->flushToDisk();
@@ -2030,10 +2034,8 @@ void DocSheet::LoadingWidget::paintEvent(QPaintEvent *)
     // qCDebug(appLog) << "paintEvent end";
 }
 
-void DocSheet::onAutoSave()
+void DocSheet::saveProgressToDb()
 {
-    qCDebug(appLog) << "Auto-save triggered for:" << m_filePath;
-
     // 更新滚动位置
     if (m_browser) {
         m_operation.scrollPosition = m_browser->getScrollPosition();
@@ -2045,11 +2047,18 @@ void DocSheet::onAutoSave()
         m_operation.expandedSections = m_sidebar->getExpandedSections();
     }
 
-    // 自动保存时使用缓存哈希，避免每30秒读盘计算
+    // 使用缓存哈希，避免读盘计算；无缓存时刷新一次并缓存
     if (m_cachedContentHash.isEmpty()) {
         m_cachedContentHash = Database::computeContentHash(m_filePath);
     }
     Database::instance()->saveOperation(this, m_cachedContentHash);
+}
+
+void DocSheet::onAutoSave()
+{
+    qCDebug(appLog) << "Auto-save triggered for:" << m_filePath;
+
+    saveProgressToDb();
 
     // 兜底保存书签（正常情况 setBookMark 已立即落盘，此处分防其他路径设的脏标记）
     if (m_bookmarkChanged) {
