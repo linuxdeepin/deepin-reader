@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,6 +10,7 @@
 
 #include <QTest>
 #include <QSqlQuery>
+#include <QDateTime>
 
 #include <gtest/gtest.h>
 
@@ -187,4 +188,92 @@ TEST_F(TestDatabase, UT_Database_cleanupOrphanStates_001)
     EXPECT_GE(cleaned, 1);
     // 孤儿记录已被清理，再次执行返回 0
     EXPECT_EQ(m_tester->cleanupOrphanStates(), 0);
+}
+
+// 构造 gvfs 网络路径（isNetworkPath 通过字符串前缀识别，无需真实网络挂载）
+static QString ut_network_path(const QString &name)
+{
+    return QString("/run/user/1000/gvfs/smb-share:server=ut,share=share/%1").arg(name);
+}
+
+static qint64 ut_operation_count(Database *db, const QString &filePath)
+{
+    QSqlQuery query(db->m_database);
+    query.prepare("SELECT COUNT(*) FROM operation WHERE filePath = :p");
+    query.bindValue(":p", filePath);
+    query.exec();
+    query.next();
+    return query.value(0).toLongLong();
+}
+
+static qint64 ut_bookmark_count(Database *db, const QString &filePath)
+{
+    QSqlQuery query(db->m_database);
+    query.prepare("SELECT COUNT(*) FROM bookmark WHERE filePath = :p");
+    query.bindValue(":p", filePath);
+    query.exec();
+    query.next();
+    return query.value(0).toLongLong();
+}
+
+TEST_F(TestDatabase, UT_Database_cleanupOrphanStates_002)
+{
+    // 网络文档超时清理：lastOpened 超过 7 天的记录及书签应被清理
+    QString netPath = ut_network_path("expired.pdf");
+    DocSheet netSheet(Dr::FileType::PDF, netPath, nullptr);
+    ASSERT_TRUE(m_tester->saveOperation(&netSheet));
+    QSet<int> bookmarks {1, 5, 9};
+    ASSERT_TRUE(m_tester->saveBookmarks(netPath, bookmarks));
+
+    // 手动将 lastOpened 设置为 8 天前
+    qint64 oldTime = QDateTime::currentMSecsSinceEpoch() - 8LL * 24 * 60 * 60 * 1000;
+    QSqlQuery update(m_tester->m_database);
+    update.prepare("UPDATE operation SET lastOpened = :t WHERE filePath = :p");
+    update.bindValue(":t", oldTime);
+    update.bindValue(":p", netPath);
+    ASSERT_TRUE(update.exec());
+
+    int cleaned = m_tester->cleanupOrphanStates();
+    EXPECT_GE(cleaned, 1);
+
+    // operation 与 bookmark 记录均已被清理
+    EXPECT_EQ(ut_operation_count(m_tester, netPath), 0);
+    EXPECT_EQ(ut_bookmark_count(m_tester, netPath), 0);
+}
+
+TEST_F(TestDatabase, UT_Database_cleanupOrphanStates_003)
+{
+    // 网络文档未超时：lastOpened 在 7 天内的记录应保留
+    // （测试共用数据库可能存在其他历史孤儿记录，不校验返回值，
+    //   仅验证本记录未被清理）
+    QString netPath = ut_network_path("fresh.pdf");
+    DocSheet netSheet(Dr::FileType::PDF, netPath, nullptr);
+    ASSERT_TRUE(m_tester->saveOperation(&netSheet));
+    QSet<int> bookmarks {2};
+    ASSERT_TRUE(m_tester->saveBookmarks(netPath, bookmarks));
+
+    m_tester->cleanupOrphanStates();
+
+    EXPECT_EQ(ut_operation_count(m_tester, netPath), 1);
+    EXPECT_EQ(ut_bookmark_count(m_tester, netPath), 1);
+}
+
+TEST_F(TestDatabase, UT_Database_lastOpened_001)
+{
+    // saveOperation 应写入 lastOpened 时间戳
+    QString path = "/tmp/deepin_reader_ut_lastopened.pdf";
+    DocSheet sheet(Dr::FileType::PDF, path, nullptr);
+    ASSERT_TRUE(m_tester->saveOperation(&sheet));
+
+    QSqlQuery query(m_tester->m_database);
+    query.prepare("SELECT lastOpened FROM operation WHERE filePath = :p");
+    query.bindValue(":p", path);
+    ASSERT_TRUE(query.exec());
+    ASSERT_TRUE(query.next());
+
+    qint64 lastOpened = query.value(0).toLongLong();
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    // 时间戳在 1 分钟以内视为有效
+    EXPECT_GT(lastOpened, now - 60 * 1000);
+    EXPECT_LE(lastOpened, now);
 }

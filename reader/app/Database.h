@@ -117,7 +117,8 @@ public:
 
     /**
      * @brief cleanupOrphanStates
-     * 清理已不存在的文档对应的状态记录
+     * 清理已不存在的本地文档对应的状态记录；
+     * 网络文档按超时清理：超过 7 天未打开的记录（含书签）被清除
      * @return 清理的记录数
      */
     int cleanupOrphanStates();
