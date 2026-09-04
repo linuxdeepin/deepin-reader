@@ -178,8 +178,6 @@ QList<QStandardItem *> CatalogTreeView::getItemList(const QString &title, const 
     item1->setData(realleft, Qt::UserRole + 2);
     item1->setData(realtop, Qt::UserRole + 3);
     item1->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    QColor color = Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().textTips().color();
-    item1->setForeground(QBrush(color));
 
     qCDebug(appLog) << "CatalogTreeView::getItemList() - Returning item list";
     return QList<QStandardItem *>() << item << item1;
