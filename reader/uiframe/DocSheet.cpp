@@ -1516,6 +1516,12 @@ void DocSheet::onBrowserPageChanged(int page)
         qCInfo(appLog) << "onBrowserPageChanged ignored during restore guard, anchorPage=" << m_restoreAnchorPage;
         return;
     }
+    // 非当前页签（不可见）时用户无法滚动，页码变化必是布局/程序行为，
+    // 回写会污染保存的阅读进度（多文档启动期尤甚）
+    if (m_browser && !m_browser->isVisible()) {
+        qCInfo(appLog) << "onBrowserPageChanged ignored: sheet not visible, page=" << page;
+        return;
+    }
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
         if (m_sidebar)
@@ -1565,7 +1571,7 @@ void DocSheet::onBrowserOperaAnnotation(int type, int index, deepin_reader::Anno
     setDocumentChanged(true);
 
     if (m_autoSaveTimer) {
-        m_autoSaveTimer->start(0);
+        m_autoSaveTimer->start(100);
     }
 }
 
@@ -1903,6 +1909,14 @@ void DocSheet::onLayoutSettled()
 {
     if (!m_restoreGuardActive)
         return;
+
+    // 页签尚不可见（启动期多文档交替恢复）：滚动条范围是陈旧布局的，
+    // 此刻恢复无效且产生中间态，顺延到页签可见后（deform 会重启计时）再恢复
+    if (m_browser && !m_browser->isVisible()) {
+        m_restoreSettleTimer->start(kRestoreSettleMs);
+        return;
+    }
+
     m_restoreGuardActive = false;
 
     if (m_browser && opened() && m_operation.scrollPosition > 0.0f) {
