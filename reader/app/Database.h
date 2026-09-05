@@ -56,8 +56,10 @@ public:
 
     /**
      * @brief readBookmarks
-     * 读取书签（带内容指纹校验：同名但内容不同的文件不会继承旧文件的书签）
-     * @param filePath 文件名(唯一标识)
+     * 读取书签（以 路径+内容指纹 为关联键：同内容文件在不同路径各自独立一套书签，
+     * 互不同步；文件移动/重命名后书签随阅读状态迁移到新路径；
+     * 内容分叉（保存注释）后各版本书签独立保留；同名不同内容的文件不会读到无关书签）
+     * @param filePath 文件名(与指纹共同作为关联键，另用于 legacy 无指纹书签兜底)
      * @param bookmarks 书签列表
      * @return
      */
@@ -65,8 +67,10 @@ public:
 
     /**
      * @brief saveBookmarks
-     * 保存书签（同时记录当前文件内容指纹，供读取时校验）
-     * @param filePath 文件名(唯一标识)
+     * 保存书签（按 路径+指纹 全量替换该书签集合；
+     * 其他路径同内容拷贝的书签不受影响；同路径其它内容指纹的
+     * 历史版本书签保留，不随保存删除）
+     * @param filePath 文件名(与指纹共同作为关联键)
      * @param bookmarks 书签列表
      * @return
      */
@@ -105,8 +109,13 @@ public:
 
     /**
      * @brief matchOperationByContent
-     * 通过文件内容特征（大小+修改时间+内容哈希）匹配已保存的操作记录
-     * 用于文档移动或重命名后仍能恢复阅读状态
+     * 通过文件内容特征（docId 优先，其次 fileSize+内容哈希）匹配已保存的操作记录，
+     * 用于目标路径自身无记录时恢复阅读状态。两种命中方式：
+     * 1. 迁移：源文件已确认不存在（可靠的本地路径经存在性确认），
+     *    视为移动/重命名，记录与书签整体迁移到新路径；
+     * 2. 首开借用：源文件仍存在（复制到U盘等副本场景），仅把源状态
+     *    与匹配指纹的书签复制一份给新路径，源路径记录一行不动 ——
+     *    新路径关闭落盘自己的记录后与源路径各自独立，避免互相覆盖
      * @param fileInfo 文件信息
      * @param sheet 目标sheet，匹配成功后写入其operation
      * @return 是否匹配成功
@@ -121,10 +130,21 @@ public:
      * 带内容指纹的记录不立即删除（文件可能只是被重命名/移动，
      * 需保留供打开新路径时按指纹迁移），改用与网络文档一致的
      * 7 天超时策略；无指纹的旧格式记录维持原删除策略；
-     * 网络文档按超时清理：超过 7 天未打开的记录（含书签）被清除
+     * 网络文档按超时清理：超过 7 天未打开的记录（含书签）被清除。
+     * 书签以内容指纹为关联键后，另追加无主书签清理（见 cleanupOrphanBookmarks）
      * @return 清理的记录数
      */
     int cleanupOrphanStates();
+
+    /**
+     * @brief cleanupOrphanBookmarks
+     * 清理无主书签：同一内容指纹的 operation 记录已全部消失，
+     * 且书签挂载的所有路径文件均已不存在（不含可移动设备/网络等
+     * 存在性不可靠的路径），则该内容的书签一并清理；
+     * 任一挂载路径文件仍存在则保留（待用户打开后按指纹找回）
+     * @return 清理的书签记录数
+     */
+    int cleanupOrphanBookmarks();
 
     /**
      * @brief flushToDisk
@@ -182,6 +202,20 @@ private:
      * @return
      */
     bool migrateBookmarkTable();
+
+    /**
+     * @brief mergeDuplicateRecords
+     * 合并同内容（docId 或 fileSize+contentHash 相同）且源文件已不存在的
+     * 其他路径记录到当前路径，作为文件移动/重命名后状态迁移的收尾
+     * （目标路径已有同内容记录时 matchOperationByContent 不会被调用，
+     * 旧路径残留记录在此清理：阅读状态取 lastOpened 较新者，删除源记录，
+     * 旧路径书签并入当前路径）。
+     * 注意：源文件仍存在的同内容记录不参与合并 —— 同一份内容在多个路径
+     * 同时存在（本地+U盘拷贝、多处复制）时，各路径保持独立阅读状态互不覆盖
+     * @param sheet 当前文档（filePath 为合并目标路径）
+     * @return 是否发生了合并
+     */
+    bool mergeDuplicateRecords(DocSheet *sheet);
 
     QSqlDatabase m_database;
 
