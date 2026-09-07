@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -363,6 +363,11 @@ public:
 
 signals:
     void sigPageChanged(int page);
+
+    /**
+     * @brief 布局重建完成（deform 返回后发出），供阅读位置恢复守卫判断布局稳定时机
+     */
+    void sigDeformed();
 
     void sigNeedPageFirst();
 

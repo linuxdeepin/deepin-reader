@@ -1105,6 +1105,9 @@ void SheetBrowser::deform(SheetOperation &operation)
 
     beginViewportChange();
     qCDebug(appLog) << "SheetBrowser::deform() - Begin viewport change";
+
+    // 布局重建完成，通知外层（阅读位置恢复守卫据此判断布局稳定时机）
+    emit sigDeformed();
 }
 
 bool SheetBrowser::hasLoaded()

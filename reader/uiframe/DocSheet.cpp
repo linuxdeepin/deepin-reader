@@ -94,6 +94,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     m_sidebar->setMinimumWidth(266);
 
     connect(m_browser, SIGNAL(sigPageChanged(int)), this, SLOT(onBrowserPageChanged(int)));
+    connect(m_browser, &SheetBrowser::sigDeformed, this, &DocSheet::onBrowserDeformed);
     connect(m_browser, SIGNAL(sigNeedPagePrev()), this, SLOT(onBrowserPagePrev()));
     connect(m_browser, SIGNAL(sigNeedPageNext()), this, SLOT(onBrowserPageNext()));
     connect(m_browser, SIGNAL(sigNeedPageFirst()), this, SLOT(onBrowserPageFirst()));
@@ -127,6 +128,12 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     m_progressSaveTimer->setInterval(kProgressSaveDebounceMs);
     m_progressSaveTimer->setSingleShot(true);
     connect(m_progressSaveTimer, &QTimer::timeout, this, &DocSheet::saveProgressToDb);
+
+    // 阅读位置恢复稳定计时器：布局连续无变化后执行最终恢复（见 beginRestoreGuard）
+    m_restoreSettleTimer = new QTimer(this);
+    m_restoreSettleTimer->setInterval(kRestoreSettleMs);
+    m_restoreSettleTimer->setSingleShot(true);
+    connect(m_restoreSettleTimer, &QTimer::timeout, this, &DocSheet::onLayoutSettled);
 
     qCDebug(appLog) << "DocSheet created end";
 }
@@ -1327,21 +1334,9 @@ void DocSheet::onOpened(deepin_reader::Document::Error error)
                         << "sidebarW=" << m_operation.sidebarWidth << "changed=" << m_operation.sidebarWidthChanged
                         << "sidebarVisible=" << m_operation.sidebarVisible << "scaleMode=" << m_operation.scaleMode;
 
-        // 恢复滚动位置
+        // 恢复阅读位置：守卫期间以保存页码为锚，布局稳定后执行精细比例恢复并校验页码
         if (m_restoredFromState && m_operation.scrollPosition > 0.0f) {
-            qCDebug(appLog) << "onOpened scheduling restoreScrollPosition +" << kRestoreScrollDelayMs << "ms";
-            // 延迟恢复滚动位置（等 deform 和布局完成后）
-            QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
-                qCDebug(appLog) << "onOpened restore timer FIRE currentPage=" << m_operation.currentPage
-                                 << "scrollPos=" << m_operation.scrollPosition;
-                m_browser->restoreScrollPosition(m_operation.scrollPosition);
-                qCDebug(appLog) << "onOpened after restoreScrollPosition currentPage=" << m_operation.currentPage
-                                 << "browserCurPage=" << m_browser->currentPage();
-                // 显示恢复提示条
-                m_needsRestoreTip = true;
-                emit sigShowRestoreTip(this);
-                emit sigStateRestored(this);
-            });
+            beginRestoreGuard(true);
         }
 
         m_sidebar->handleOpenSuccess();
@@ -1515,6 +1510,12 @@ void DocSheet::onBrowserPageChanged(int page)
 {
     qCDebug(appLog) << "onBrowserPageChanged" << page << "prev currentPage=" << m_operation.currentPage;
     qCDebug(appLog) << "onBrowserPageChanged";
+    // 阅读位置恢复守卫期间（布局未稳定）：页码以保存值为锚，
+    // 不回写操作记录、不触发进度落盘，避免比例恢复跨页污染页码
+    if (m_restoreGuardActive) {
+        qCInfo(appLog) << "onBrowserPageChanged ignored during restore guard, anchorPage=" << m_restoreAnchorPage;
+        return;
+    }
     if (m_operation.currentPage != page) {
         m_operation.currentPage = page;
         if (m_sidebar)
@@ -1725,6 +1726,12 @@ void DocSheet::setAlive(bool alive)
             m_progressSaveTimer->stop();
         }
 
+        // 停止阅读位置恢复守卫（关闭时无需再恢复，页码保持锚点值落盘）
+        if (m_restoreSettleTimer) {
+            m_restoreSettleTimer->stop();
+        }
+        m_restoreGuardActive = false;
+
         if (m_documentChanged && m_renderer) {
             if (m_renderer->save()) {
                 m_documentChanged = false;
@@ -1868,11 +1875,55 @@ void DocSheet::restoreSavedViewState()
         });
     }
 
-    // 恢复滚动位置
+    // 恢复滚动位置（守卫期间若因侧栏宽度恢复等再触发 deform，最终恢复推迟到布局稳定后）
+    // 标签页回切不弹恢复提示条，显隐由 sigCurSheetChanged 按 needsRestoreTip 同步
     if (m_browser && m_operation.scrollPosition > 0.0f) {
-        QTimer::singleShot(kRestoreScrollDelayMs, this, [this]() {
-            m_browser->restoreScrollPosition(m_operation.scrollPosition);
-        });
+        beginRestoreGuard(false);
+    }
+}
+
+void DocSheet::beginRestoreGuard(bool notifyTip)
+{
+    m_restoreGuardActive = true;
+    m_restoreNotifyTip = notifyTip;
+    m_restoreAnchorPage = qBound(1, m_operation.currentPage, qMax(1, pageCount()));
+    m_restoreSettleTimer->start(kRestoreSettleMs);
+    qCInfo(appLog) << "beginRestoreGuard anchorPage=" << m_restoreAnchorPage
+                    << "scrollPos=" << m_operation.scrollPosition << "notifyTip=" << notifyTip;
+}
+
+void DocSheet::onBrowserDeformed()
+{
+    // 守卫期间布局仍在变化（缩放/窗口/侧栏），推迟最终恢复，稳定后再执行
+    if (m_restoreGuardActive)
+        m_restoreSettleTimer->start(kRestoreSettleMs);
+}
+
+void DocSheet::onLayoutSettled()
+{
+    if (!m_restoreGuardActive)
+        return;
+    m_restoreGuardActive = false;
+
+    if (m_browser && opened() && m_operation.scrollPosition > 0.0f) {
+        // 布局稳定后做精细恢复；比例受缩放/视口影响可能跨页，
+        // 恢复出的页码与锚点不一致时以保存页码为准（页级正确性优先）
+        m_browser->restoreScrollPosition(m_operation.scrollPosition);
+        int restoredPage = m_browser->currentPage();
+        if (restoredPage != m_restoreAnchorPage) {
+            qCInfo(appLog) << "onLayoutSettled ratio drifted page=" << restoredPage
+                            << "-> fallback to anchor page" << m_restoreAnchorPage;
+            m_browser->setCurrentPage(m_restoreAnchorPage);
+        }
+        qCInfo(appLog) << "onLayoutSettled final page=" << m_browser->currentPage()
+                        << "scrollPos=" << m_operation.scrollPosition;
+    }
+
+    if (m_restoreNotifyTip) {
+        m_restoreNotifyTip = false;
+        m_needsRestoreTip = true;
+        emit sigShowRestoreTip(this);
+        emit sigStateRestored(this);
     }
 }
 
