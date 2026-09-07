@@ -62,6 +62,45 @@ else()
     unset(XPS_DEPS_CFLAGS_OTHER)
 endif()
 
+# OFD支持选项（根据 rofd C ABI 库检测自动启用）
+option(OFD_SUPPORT "Enable OFD document format support" ON)
+set(ROFD_ROOT "" CACHE PATH "Path to the rofd repository checkout or install prefix")
+
+set(OFD_SUPPORT_RESOLVED ${OFD_SUPPORT})
+
+if (OFD_SUPPORT)
+    set(ROFD_ROOT_HINTS "")
+    if (ROFD_ROOT)
+        list(APPEND ROFD_ROOT_HINTS ${ROFD_ROOT})
+    endif()
+    if (EXISTS "${CMAKE_SOURCE_DIR}/../rofd")
+        list(APPEND ROFD_ROOT_HINTS "${CMAKE_SOURCE_DIR}/../rofd")
+    endif()
+
+    find_path(ROFD_INCLUDE_DIR rofd.h
+        HINTS ${ROFD_ROOT_HINTS}
+        PATH_SUFFIXES crates/rofd-ffi/include include
+    )
+    find_library(ROFD_FFI_LIBRARY NAMES rofd_ffi
+        HINTS ${ROFD_ROOT_HINTS}
+        PATH_SUFFIXES target/release target/debug lib
+    )
+    pkg_check_modules(OFD_CAIRO QUIET cairo)
+
+    if (ROFD_INCLUDE_DIR AND ROFD_FFI_LIBRARY AND OFD_CAIRO_FOUND)
+        message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
+        add_compile_definitions(OFD_SUPPORT_ENABLED)
+        set(OFD_SUPPORT_RESOLVED ON)
+    else()
+        message(WARNING ">>> OFD support disabled: set -DROFD_ROOT to the rofd checkout and build rofd-ffi first (cargo build -p rofd-ffi)")
+        set(OFD_SUPPORT_RESOLVED OFF)
+    endif()
+else()
+    message(STATUS ">>> OFD support disabled by configuration")
+endif()
+
+set(OFD_SUPPORT_ENABLED ${OFD_SUPPORT_RESOLVED})
+
 include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    set(CMAKE_INSTALL_PREFIX /usr)

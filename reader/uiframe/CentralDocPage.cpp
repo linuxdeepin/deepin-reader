@@ -234,21 +234,20 @@ void CentralDocPage::addFileAsync(const QString &filePath)
     }
 
     Dr::FileType fileType = Dr::fileType(filePath);
+    bool supported = Dr::PDF == fileType || Dr::DJVU == fileType || Dr::DOCX == fileType;
 #ifdef XPS_SUPPORT_ENABLED
-    if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType && Dr::XPS != fileType) {
-#else
-    if (Dr::PDF != fileType && Dr::DJVU != fileType && Dr::DOCX != fileType) {
+    supported = supported || Dr::XPS == fileType;
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+    supported = supported || Dr::OFD == fileType;
+#endif
+    if (!supported) {
         if (pathControl(filePath)) {
             qCInfo(appLog) << "没有权限读取该文件";
             return;
         }
         showTips(m_stackedLayout->currentWidget(), tr("The format is not supported"), 1);
-#ifdef XPS_SUPPORT_ENABLED
-        qCWarning(appLog) << "不支持该文件格式!（仅支持PDF、DJVU、DOCX、XPS）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
-#else
-        qCWarning(appLog) << "不支持该文件格式!（仅支持PDF、DJVU、DOCX）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7)";
-#endif
+        qCWarning(appLog) << "不支持该文件格式!（仅支持PDF、DJVU、DOCX、XPS、OFD）文件格式:" << fileType << "(Unknown = 0, PDF = 1, DJVU = 2, DOCX = 3, PS  = 4, DOC = 5, PPTX = 6, XPS = 7, OFD = 8)";
         return;
     }
 
