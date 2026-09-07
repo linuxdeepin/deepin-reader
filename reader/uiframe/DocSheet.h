@@ -21,8 +21,13 @@ class EncryptionPage;
 class QPropertyAnimation;
 class QPrinter;
 
-constexpr int kRestoreScrollDelayMs = 100;
 constexpr int kRestoreCatalogDelayMs = 150;
+
+// 阅读位置恢复的布局稳定窗口（毫秒）：守卫期间以保存页码为锚，deform 每次都回到锚点页；
+// 布局连续该时长无变化后视为稳定，再执行精细比例恢复并校验页码。
+// 启动阶段 fit-width 缩放会随窗口/侧栏宽度变化多次重算，若立即用整篇比例换算绝对位置，
+// 会在中间态布局上跨页，页码被污染后后续 deform 还会滚到错误页顶并落盘（进度"跳回上一页"）
+constexpr int kRestoreSettleMs = 400;
 
 // 阅读进度防抖落盘延时（毫秒）：页面切换后延时写入数据库，连续翻页/滚动时自动合并，
 // 保证异常退出（如 killall）时阅读进度不丢。防抖时间 0.5s
@@ -671,6 +676,17 @@ public:
     void restoreSavedViewState();
 
     /**
+     * @brief 开始阅读位置恢复守卫
+     * 以 m_operation.currentPage 为锚点：守卫期间页码信号不回写操作记录、不触发进度落盘，
+     * deform 重布局时自动回到锚点页；布局连续 kRestoreSettleMs 无变化后
+     * 在 onLayoutSettled 中执行精细比例恢复并校验页码，最后解除守卫。
+     * @param notifyTip 是否在恢复完成后发出恢复提示（仅打开文档的首次恢复为 true；
+     *                  标签页回切不弹条，显隐由 sigCurSheetChanged 按 needsRestoreTip 同步，
+     *                  避免用户已关闭的提示条再次弹出）
+     */
+    void beginRestoreGuard(bool notifyTip);
+
+    /**
      * @brief 获取当前滚动位置（0.0~1.0）
      */
     float currentScrollPosition() const;
@@ -713,6 +729,17 @@ private:
      * @brief 重置sidebar,browser的parent
      */
     void resetChildParent();
+
+    /**
+     * @brief 守卫期间浏览器 deform 后重等布局稳定（见 beginRestoreGuard）
+     */
+    void onBrowserDeformed();
+
+    /**
+     * @brief 布局稳定后的最终恢复：精细比例恢复+页码校验回退锚点，
+     * 解除守卫并发出恢复提示（见 beginRestoreGuard）
+     */
+    void onLayoutSettled();
 
 public slots:
     /**
@@ -944,6 +971,14 @@ private:
     QTimer *m_progressSaveTimer = nullptr;
     // 标记是否从保存状态恢复
     bool m_restoredFromState = false;
+    // 阅读位置恢复守卫：布局未稳定期间页码以保存值为锚，防止比例恢复跨页污染页码
+    bool m_restoreGuardActive = false;
+    // 恢复守卫的锚点页（保存的当前页）
+    int m_restoreAnchorPage = 1;
+    // 本次守卫完成后是否允许发出恢复提示（仅打开文档的首次恢复）
+    bool m_restoreNotifyTip = false;
+    // 布局稳定计时器：连续 kRestoreSettleMs 无 deform 后执行最终恢复
+    QTimer *m_restoreSettleTimer = nullptr;
     // 标记该 sheet 是否仍需要显示恢复阅读位置提示条
     // 用户点击"跳转到首页"后置为 false，切换 tab 时据此决定是否显示提示条
     bool m_needsRestoreTip = false;
