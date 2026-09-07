@@ -121,6 +121,13 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     m_autoSaveTimer->setSingleShot(false);
     connect(m_autoSaveTimer, &QTimer::timeout, this, &DocSheet::onAutoSave);
 
+    // 阅读进度防抖保存：页面切换后短延时写入数据库，
+    // 连续翻页/滚动时自动合并，异常退出（如 killall）时进度不丢
+    m_progressSaveTimer = new QTimer(this);
+    m_progressSaveTimer->setInterval(kProgressSaveDebounceMs);
+    m_progressSaveTimer->setSingleShot(true);
+    connect(m_progressSaveTimer, &QTimer::timeout, this, &DocSheet::saveProgressToDb);
+
     qCDebug(appLog) << "DocSheet created end";
 }
 
@@ -1512,6 +1519,10 @@ void DocSheet::onBrowserPageChanged(int page)
         m_operation.currentPage = page;
         if (m_sidebar)
             m_sidebar->setCurrentPage(page);
+
+        // 页面变化后防抖保存阅读进度，异常退出时进度不丢
+        if (m_progressSaveTimer)
+            m_progressSaveTimer->start();
     }
 }
 
@@ -1707,6 +1718,11 @@ void DocSheet::setAlive(bool alive)
         // 停止定时保存
         if (m_autoSaveTimer) {
             m_autoSaveTimer->stop();
+        }
+
+        // 停止阅读进度防抖保存（此处已立即全量保存）
+        if (m_progressSaveTimer) {
+            m_progressSaveTimer->stop();
         }
 
         if (m_documentChanged && m_renderer) {
