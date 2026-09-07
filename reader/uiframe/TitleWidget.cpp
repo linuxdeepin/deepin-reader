@@ -142,6 +142,9 @@ void TitleWidget::onCurSheetChanged(DocSheet *sheet)
 #ifdef XPS_SUPPORT_ENABLED
             || Dr::XPS == m_curSheet->fileType()
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+            || Dr::OFD == m_curSheet->fileType()
+#endif
         ) {
         if (m_curSheet->opened()) {
             qCDebug(appLog) << "Document opened, enabling controls";

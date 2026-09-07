@@ -1327,6 +1327,9 @@ bool BrowserPage::isBigDoc()
 #ifdef XPS_SUPPORT_ENABLED
     supportedType = supportedType || (Dr::XPS == m_sheet->fileType());
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+    supportedType = supportedType || (Dr::OFD == m_sheet->fileType());
+#endif
     bool isBig = supportedType && boundingRect().width() > 1000 && boundingRect().height() > 1000;
     qCDebug(appLog) << "Checking if document is big:" << isBig;
     return isBig;

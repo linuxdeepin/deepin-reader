@@ -74,6 +74,11 @@ endif()
 
 set(XPS_SUPPORT_ENABLED ${XPS_SUPPORT_RESOLVED})
 
+# OFD 支持（检测结果继承自顶层 CMakeLists.txt 的 OFD_SUPPORT_ENABLED / ROFD_*）
+if (OFD_SUPPORT_ENABLED)
+    pkg_check_modules(OFD_CAIRO REQUIRED cairo)
+endif()
+
 # ====== 收集 reader 源文件 ======
 # 递归收集 reader/ 下所有源文件，排除 main.cpp
 # 新增子模块时无需修改此文件
@@ -126,6 +131,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/gtest
     ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
 )
 
 # DTK 包含目录（Qt5 使用变量，Qt6 使用目标）
@@ -155,6 +162,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -fprofile-arcs -ftest-coverage
     -fstack-protector-strong -D_FORTIFY_SOURCE=1 -fPIC
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_CFLAGS_OTHER}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_CFLAGS_OTHER}>
 )
 
 target_link_options(${PROJECT_NAME} PRIVATE
@@ -210,6 +218,11 @@ endif()
 # XPS 链接
 if (XPS_SUPPORT_ENABLED)
     list(APPEND TEST_LINK_LIBS ${XPS_DEPS_LIBRARIES})
+endif()
+
+# OFD 链接
+if (OFD_SUPPORT_ENABLED)
+    list(APPEND TEST_LINK_LIBS ${ROFD_FFI_LIBRARY} ${OFD_CAIRO_LIBRARIES})
 endif()
 
 # PDFium 链接

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <!-- OFD 文档格式 (GB/T 33190-2016 电子文件存储与交换格式 版式文档) -->
+  <mime-type type="application/ofd">
+    <comment>OFD document</comment>
+    <comment xml:lang="zh_CN">OFD 版式文档</comment>
+    <comment xml:lang="en">OFD Document</comment>
+    <acronym>OFD</acronym>
+    <expanded-acronym>Open Fixed-layout Document</expanded-acronym>
+    <sub-class-of type="application/zip"/>
+    <generic-icon name="x-office-document"/>
+    <glob pattern="*.ofd"/>
+  </mime-type>
+</mime-info>

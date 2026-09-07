@@ -6,6 +6,9 @@
 #ifdef XPS_SUPPORT_ENABLED
 #include "XpsDocumentAdapter.h"
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+#include "OfdModel.h"
+#endif
 #include "PDFModel.h"
 #include "DjVuModel.h"
 #include "dpdfannot.h"
@@ -115,6 +118,11 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     } else if (Dr::XPS == fileType) {
         qCDebug(appLog) << "Handling XPS document";
         document = deepin_reader::XpsDocumentAdapter::loadDocument(filePath, error);
+#endif
+#ifdef OFD_SUPPORT_ENABLED
+    } else if (Dr::OFD == fileType) {
+        qCDebug(appLog) << "Handling OFD document";
+        document = deepin_reader::OfdDocument::loadDocument(filePath, error);
 #endif
     } else if (Dr::DOCX == fileType) {
         qCDebug(appLog) << "Starting DOCX document conversion process";

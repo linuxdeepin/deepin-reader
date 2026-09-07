@@ -12,6 +12,10 @@ if (XPS_SUPPORT_ENABLED)
     pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0 freetype2)
 endif()
 
+if (OFD_SUPPORT_ENABLED)
+    pkg_check_modules(OFD_CAIRO REQUIRED cairo)
+endif()
+
 # 添加位置无关代码编译标志
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIE")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
@@ -91,6 +95,8 @@ target_include_directories(deepin-reader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/eyeprotection
     ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
 )
 
 # 使用DTK变量包含目录
@@ -116,6 +122,10 @@ if (XPS_SUPPORT_ENABLED)
     target_compile_options(deepin-reader PRIVATE ${XPS_DEPS_CFLAGS_OTHER})
 endif()
 
+if (OFD_SUPPORT_ENABLED)
+    target_compile_options(deepin-reader PRIVATE ${OFD_CAIRO_CFLAGS_OTHER})
+endif()
+
 # 添加资源文件
 set(READER_LINK_LIBS
     ${LINK_LIBS}
@@ -125,6 +135,10 @@ set(READER_LINK_LIBS
 
 if (XPS_SUPPORT_ENABLED)
     list(APPEND READER_LINK_LIBS ${XPS_DEPS_LIBRARIES})
+endif()
+
+if (OFD_SUPPORT_ENABLED)
+    list(APPEND READER_LINK_LIBS ${ROFD_FFI_LIBRARY} ${OFD_CAIRO_LIBRARIES})
 endif()
 
 if (QT_VERSION_MAJOR MATCHES 6)
@@ -182,6 +196,14 @@ if (XPS_SUPPORT_ENABLED)
     )
     message(STATUS ">>> XPS MIME type definition will be installed to ${CMAKE_INSTALL_DATADIR}/mime/packages")
     message(STATUS ">>> Note: After installation, please run 'sudo update-mime-database ${CMAKE_INSTALL_DATADIR}/mime' to update MIME database")
+endif()
+
+if (OFD_SUPPORT_ENABLED)
+    install(FILES
+        ${CMAKE_SOURCE_DIR}/assets/mimetype/ofd.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages
+    )
+    message(STATUS ">>> OFD MIME type definition will be installed to ${CMAKE_INSTALL_DATADIR}/mime/packages")
 endif()
 
 # 安装帮助文件
