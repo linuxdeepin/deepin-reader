@@ -24,6 +24,10 @@ class QPrinter;
 constexpr int kRestoreScrollDelayMs = 100;
 constexpr int kRestoreCatalogDelayMs = 150;
 
+// 阅读进度防抖落盘延时（毫秒）：页面切换后延时写入数据库，连续翻页/滚动时自动合并，
+// 保证异常退出（如 killall）时阅读进度不丢。防抖时间 0.5s
+constexpr int kProgressSaveDebounceMs = 500;
+
 class PageSearchThread;
 class QTimer;
 struct SheetOperation {
@@ -644,6 +648,7 @@ public:
      * @brief 将当前阅读进度立即写入数据库
      * 更新滚动位置/侧栏状态到 m_operation 并执行 saveOperation。
      * 供书签等已有即时落盘的操作顺带保存进度，异常退出（如 killall）后进度不丢。
+     * 页面切换时由 m_progressSaveTimer 防抖调用（见 kProgressSaveDebounceMs）。
      */
     void saveProgressToDb();
 
@@ -935,6 +940,8 @@ private:
 
     // 定时自动保存
     QTimer *m_autoSaveTimer = nullptr;
+    // 阅读进度防抖保存定时器：页面切换后延时落盘，连续变化自动合并
+    QTimer *m_progressSaveTimer = nullptr;
     // 标记是否从保存状态恢复
     bool m_restoredFromState = false;
     // 标记该 sheet 是否仍需要显示恢复阅读位置提示条
