@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -275,6 +274,11 @@ void CentralDocPage::onOpened(DocSheet *sheet, deepin_reader::Document::Error er
 void CentralDocPage::onTabChanged(DocSheet *sheet)
 {
     if (nullptr != sheet) {
+        // 关闭前一个 sheet 的搜索框,防止切换标签后搜索串档
+        QPointer<DocSheet> prevSheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
+        if (prevSheet && prevSheet != sheet && prevSheet->opened()) {
+            prevSheet->closeFindWidget();
+        }
         m_stackedLayout->setCurrentWidget(sheet);
 
         sheet->defaultFocus();

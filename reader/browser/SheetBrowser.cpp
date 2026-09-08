@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1732,6 +1731,15 @@ void SheetBrowser::jumpToPrevSearchResult()
                 index = -1;
             }
         }
+    }
+}
+
+void SheetBrowser::hideFindWidget()
+{
+    if (!m_findWidget.isNull()) {
+        m_findWidget->hide();
+        m_findWidget->deleteLater();
+        m_findWidget = nullptr;
     }
 }
 

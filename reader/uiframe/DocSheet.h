@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -575,6 +574,12 @@ public:
      * 跳转上一个搜索结果
      */
     void jumpToPrevSearchResult();
+
+    /**
+     * @brief closeFindWidget
+     * 关闭搜索框并停止搜索,切换标签页时调用
+     */
+    void closeFindWidget();
 
     /**
      * @brief showEncryPage
