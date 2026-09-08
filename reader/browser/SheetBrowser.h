@@ -279,6 +279,12 @@ public:
     void handlePrepareSearch();
 
     /**
+     * @brief hideFindWidget
+     * 隐藏并销毁搜索框,切换标签页时调用,防止搜索串档
+     */
+    void hideFindWidget();
+
+    /**
      * @brief jumpToNextSearchResult
      * 跳到下一个搜索条目中
      */

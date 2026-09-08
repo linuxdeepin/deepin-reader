@@ -2062,6 +2062,16 @@ void SheetBrowser::jumpToPrevSearchResult()
     }
 }
 
+void SheetBrowser::hideFindWidget()
+{
+    qCDebug(appLog) << "hideFindWidget";
+    if (!m_findWidget.isNull()) {
+        m_findWidget->hide();
+        m_findWidget->deleteLater();
+        m_findWidget = nullptr;
+    }
+}
+
 void SheetBrowser::handleSearchStart()
 {
     qCDebug(appLog) << "SheetBrowser::handleSearchStart() - Handling search start";
