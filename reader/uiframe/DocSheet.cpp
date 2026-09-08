@@ -1,5 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1127,6 +1126,13 @@ void DocSheet::jumpToPrevSearchResult()
 {
     //m_sidebar->jumpToPrevSearchResult();  //左侧应该同时跳转，目前无此需求
     m_browser->jumpToPrevSearchResult();
+}
+
+void DocSheet::closeFindWidget()
+{
+    stopSearch();
+    if (m_browser)
+        m_browser->hideFindWidget();
 }
 
 void DocSheet::stopSearch()
