@@ -608,6 +608,12 @@ public:
     void jumpToPrevSearchResult();
 
     /**
+     * @brief closeFindWidget
+     * 关闭搜索框并停止搜索,切换标签页时调用
+     */
+    void closeFindWidget();
+
+    /**
      * @brief showEncryPage
      * 显示解锁页面
      */

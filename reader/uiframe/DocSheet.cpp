@@ -1598,6 +1598,14 @@ void DocSheet::jumpToPrevSearchResult()
     m_browser->jumpToPrevSearchResult();
 }
 
+void DocSheet::closeFindWidget()
+{
+    qCDebug(appLog) << "closeFindWidget";
+    stopSearch();
+    if (m_browser)
+        m_browser->hideFindWidget();
+}
+
 void DocSheet::stopSearch()
 {
     qCDebug(appLog) << "stopSearch";
