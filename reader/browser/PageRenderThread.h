@@ -11,6 +11,7 @@
 
 #include <QThread>
 #include <QMutex>
+#include <atomic>
 #include <QStack>
 #include <QImage>
 
@@ -283,7 +284,8 @@ private:
     QMutex m_closeMutex;
     QList<DocCloseTask> m_closeTasks;
 
-    bool m_quit = false;
+    // 原子量: 主线程 destroyForever 写、渲染线程读, 避免数据竞争
+    std::atomic<bool> m_quit {false};
 
     static bool s_quitForever;
 

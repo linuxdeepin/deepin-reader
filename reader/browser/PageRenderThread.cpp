@@ -314,7 +314,9 @@ void PageRenderThread::appendTask(DocCloseTask task)
 
 void PageRenderThread::run()
 {
-    m_quit = false;
+    // 注意: 不能在这里重置 m_quit。若 destroyForever() 在线程进入 run() 前
+    // 已置 m_quit=true, 此处重置会吞掉退出请求,导致 wait() 永久阻塞。
+    // 实例创建时 m_quit 默认即为 false, 无需重复初始化。
     qCDebug(appLog) << "====开始执行任务====";
 
     while (!m_quit) {
