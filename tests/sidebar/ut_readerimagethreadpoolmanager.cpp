@@ -169,6 +169,8 @@ TEST_F(UT_ReaderImageThreadPoolManager, UT_onTaskFinished)
     param.receiver = new QObject();
     param.slotFun = "dummySlot";
 
+    QObject::connect(sheet, &QObject::destroyed, m_tester, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
+
     QImage img(10, 10, QImage::Format_ARGB32);
     m_tester->onTaskFinished(param, img);
 
@@ -192,6 +194,8 @@ TEST_F(UT_ReaderImageThreadPoolManager, UT_addgetDocImageTask)
     param.sheet = sheet;
     param.receiver = receiver;
     param.slotFun = "dummySlot";
+
+    QObject::connect(sheet, &QObject::destroyed, m_tester, &ReaderImageThreadPoolManager::onDocProxyDestroyed);
 
     m_tester->addgetDocImageTask(param);
 
