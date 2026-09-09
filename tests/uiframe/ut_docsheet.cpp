@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1283,6 +1283,14 @@ TEST_F(TestDocSheet, UT_DocSheet_docBasicInfo_001)
 
 TEST_F(TestDocSheet, UT_DocSheet_onBrowserPageChanged_001)
 {
+    // onBrowserPageChanged 在浏览器不可见时会忽略页码回写（防进度污染守卫）,
+    // 单测环境不 show 窗口, isVisible 恒为 false, 需打桩绕过;
+    // 同时桩掉 sidebar 的 setCurrentPage, 避免触发缩略图渲染任务导致
+    // PageRenderThread 在进程退出阶段 start/wait 竞争挂死
+    Stub s;
+    s.set(ADDR(QWidget, isVisible), isVisible_stub_true);
+    s.set(ADDR(SheetSidebar, setCurrentPage), setCurrentPage_stub);
+
     m_tester->m_operation.currentPage = 2;
     m_tester->onBrowserPageChanged(1);
     EXPECT_TRUE(m_tester->m_operation.currentPage == 1);
