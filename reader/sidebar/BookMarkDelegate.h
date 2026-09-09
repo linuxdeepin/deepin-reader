@@ -1,5 +1,5 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,9 @@
 #define BOOKMARKDELEGATE_H
 
 #include <DStyledItemDelegate>
+
+#include <QCache>
+#include <QPixmap>
 
 DWIDGET_USE_NAMESPACE
 
@@ -31,6 +34,11 @@ protected:
 
 private:
     QAbstractItemView *m_parent = nullptr;
+
+    /**
+     * @brief 深色主题反色结果缓存（键：源图 cacheKey()；paint() 为 const 故 mutable）
+     */
+    mutable QCache<qint64, QPixmap> m_darkPixmapCache;
 };
 
 #endif // BOOKMARKDELEGATE_H
