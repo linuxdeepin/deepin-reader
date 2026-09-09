@@ -1892,7 +1892,11 @@ void DocSheet::restoreSavedViewState()
     // 恢复滚动位置（守卫期间若因侧栏宽度恢复等再触发 deform，最终恢复推迟到布局稳定后）
     // 标签页回切不弹恢复提示条，显隐由 sigCurSheetChanged 按 needsRestoreTip 同步
     if (m_browser && m_operation.scrollPosition > 0.0f) {
-        beginRestoreGuard(false);
+        if (m_restoreGuardActive) {
+            m_restoreSettleTimer->start(kRestoreSettleMs);
+        } else {
+            beginRestoreGuard(false);
+        }
     }
 }
 
