@@ -137,14 +137,48 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         QFile realFile(realFilePath);
         if (!realFile.exists()) {
-            qInfo() <<  "htmltopdf failed! " << realFilePath << " doesn't exist";
-            error = deepin_reader::Document::ConvertFailed;
-            if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
+            // htmltopdf 依赖 QtWebEngine，在部分架构（如 sw_64）上 webengine 内部崩溃会导致 pdf 无法生成。
+            // 兜底使用 libreoffice 直接将 docx 转换为 pdf，绕开 webengine，恢复 DOCX 文档的可用性。
+            qInfo() << "htmltopdf failed!" << realFilePath << "doesn't exist, fallback to libreoffice";
+            QProcess fallback;
+            *pprocess = &fallback;
+            fallback.setWorkingDirectory(convertedFileDir);
+            // 独立的 UserInstallation 避免与已运行的 libreoffice 抢占用户配置
+            QString fallbackCommand =
+                "libreoffice --headless -env:UserInstallation=file://" + convertedFileDir + "/lo_profile"
+                + " --convert-to pdf --outdir " + convertedFileDir + " " + targetDoc;
+            qDebug() << "执行命令: " << fallbackCommand;
+            fallback.start(fallbackCommand);
+            if (!fallback.waitForStarted()) {
+                qInfo() << "start libreoffice fallback failed";
+                error = deepin_reader::Document::ConvertFailed;
                 *pprocess = nullptr;
+                return nullptr;
             }
-            return nullptr;
+            // libreoffice 为重量级套件，每次兜底均使用全新 lo_profile 冷启动，叠加 sw_64 较慢，
+            // 大文档/带图表 docx 转换可能超过 QProcess 默认 30s 超时，此处放宽至 180s 避免误判失败。
+            if (!fallback.waitForFinished(180000)) {
+                qInfo() << "libreoffice fallback failed";
+                error = deepin_reader::Document::ConvertFailed;
+                *pprocess = nullptr;
+                return nullptr;
+            }
+            if (!realFile.exists()) {
+                qInfo() << "libreoffice fallback failed!" << realFilePath << "doesn't exist";
+                error = deepin_reader::Document::ConvertFailed;
+                // 转换过程中关闭应用，docsheet 被释放，对应的 *pprocess 已不存在；
+                // 仅当进程非被 SIGKILL（用户关闭文档）时才置空，避免对已释放内存写入。
+                if (!(QProcess::CrashExit == fallback.exitStatus() && 9 == fallback.exitCode())) {
+                    *pprocess = nullptr;
+                }
+                return nullptr;
+            }
+            // 兜底成功：在 fallback 析构前置空 pprocess，避免悬挂指针。
+            // 此处与下方函数作用域的置空非冗余：此处服务块作用域的 fallback（析构前清空），
+            // 下方服务函数作用域的 converter2（此时仍存活）。
+            *pprocess = nullptr;
         }
-        qDebug() << "html转pdf完成";
+        qDebug() << "docx转pdf完成";
 
         *pprocess = nullptr;
         document = deepin_reader::PDFDocument::loadDocument(realFilePath, password, error);
