@@ -67,6 +67,12 @@ if(contains(DEFINES, CMAKE_COVERAGE_ARG_ON)){
 
 CONFIG += c++11 link_pkgconfig
 
+# OFD支持（qmake CONFIG+=ofd_support），链接系统安装的 librofd-ffi（librofd-ffi-dev）
+ofd_support {
+    message(">>> OFD support enabled (system librofd-ffi)")
+    LIBS += -lrofd_ffi
+}
+
 TARGET = deepin-reader
 
 TEMPLATE = app

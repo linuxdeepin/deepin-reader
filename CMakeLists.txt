@@ -62,13 +62,14 @@ else()
     unset(XPS_DEPS_CFLAGS_OTHER)
 endif()
 
-# OFD支持选项（根据 rofd C ABI 库检测自动启用）
+# OFD支持选项（依赖发行版提供的 rofd C ABI 库，见 debian/control 的 librofd-ffi-dev）
 option(OFD_SUPPORT "Enable OFD document format support" ON)
-set(ROFD_ROOT "" CACHE PATH "Path to the rofd repository checkout or install prefix")
+set(ROFD_ROOT "" CACHE PATH "Path to the rofd repository checkout or install prefix, overrides the system install")
 
 set(OFD_SUPPORT_RESOLVED ${OFD_SUPPORT})
 
 if (OFD_SUPPORT)
+    # 默认走系统路径：librofd-ffi-dev 提供 /usr/include/rofd.h 与 lib/<multiarch>/librofd_ffi.so
     set(ROFD_ROOT_HINTS "")
     if (ROFD_ROOT)
         list(APPEND ROFD_ROOT_HINTS ${ROFD_ROOT})
@@ -77,13 +78,18 @@ if (OFD_SUPPORT)
         list(APPEND ROFD_ROOT_HINTS "${CMAKE_SOURCE_DIR}/../rofd")
     endif()
 
+    set(ROFD_LIB_SUFFIXES target/release target/debug lib)
+    if (CMAKE_LIBRARY_ARCHITECTURE)
+        list(APPEND ROFD_LIB_SUFFIXES "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+    endif()
+
     find_path(ROFD_INCLUDE_DIR rofd.h
         HINTS ${ROFD_ROOT_HINTS}
         PATH_SUFFIXES crates/rofd-ffi/include include
     )
     find_library(ROFD_FFI_LIBRARY NAMES rofd_ffi
         HINTS ${ROFD_ROOT_HINTS}
-        PATH_SUFFIXES target/release target/debug lib
+        PATH_SUFFIXES ${ROFD_LIB_SUFFIXES}
     )
     pkg_check_modules(OFD_CAIRO QUIET cairo)
 
@@ -92,7 +98,7 @@ if (OFD_SUPPORT)
         add_compile_definitions(OFD_SUPPORT_ENABLED)
         set(OFD_SUPPORT_RESOLVED ON)
     else()
-        message(WARNING ">>> OFD support disabled: set -DROFD_ROOT to the rofd checkout and build rofd-ffi first (cargo build -p rofd-ffi)")
+        message(WARNING ">>> OFD support disabled: install librofd-ffi-dev, or pass -DROFD_ROOT=<rofd checkout>")
         set(OFD_SUPPORT_RESOLVED OFF)
     endif()
 else()
