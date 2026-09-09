@@ -68,6 +68,7 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             // 不修改 DocSheet 中缓存的真实缩略图(始终为白底)，避免主题切换时双重反色。
             // 采用与 BrowserPage::applyNightMode 相同的 HSL 亮度反转算法：
             // 仅反转 Lightness 通道，保留 Hue/Saturation，避免图片色相偏移 180°。
+            // 两端收敛：下限钳制 37(#252525)，反转后 ≥192 提亮纯白
             //   白底黑字 → 黑底白字（文字/背景正确反色）
             //   彩色图片/链接 → 仅变暗，色相保持
             if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
@@ -77,6 +78,8 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                         img = img.convertToFormat(QImage::Format_ARGB32);
                     const int w = img.width();
                     const int h = img.height();
+                    const int kMinLightAfterInvert = 37;       // #252525
+                    const int kMaxLightBoostThreshold = 192;   // 0xC0，提亮阈值
                     for (int y = 0; y < h; ++y) {
                         QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
                         for (int x = 0; x < w; ++x) {
@@ -86,6 +89,9 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
                             int hue, sat, light, dummy;
                             c.getHsl(&hue, &sat, &light, &dummy);
                             light = 255 - light;
+                            if (light >= kMaxLightBoostThreshold)
+                                light = 255;
+                            light = qMax(light, kMinLightAfterInvert);
                             c.setHsl(hue, sat, light);
                             line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
                         }
@@ -110,7 +116,13 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color(), 2));
             painter->drawRoundedRect(rect, borderRadius, borderRadius);
         } else {
-            painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color(), 1));
+            // 未选中：深色主题下 frameShadowBorder 与深色背景混色，改用 windowText@0.2α
+            QColor frameColor = DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameShadowBorder().color();
+            if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
+                frameColor = DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color();
+                frameColor.setAlphaF(0.2);
+            }
+            painter->setPen(QPen(frameColor, 1));
             painter->drawRoundedRect(rect, borderRadius, borderRadius);
             painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().windowText().color()));
         }

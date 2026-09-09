@@ -1289,12 +1289,9 @@ QPixmap BrowserPage::applyNightMode(const QPixmap &src)
     if (img.isNull())
         return src;
 
-    // 统一为 ARGB32 便于逐行扫描
-    if (img.format() != QImage::Format_ARGB32 &&
-        img.format() != QImage::Format_ARGB32_Premultiplied &&
-        img.format() != QImage::Format_RGB32) {
+    // 统一转非预乘 ARGB32，避免对 ARGB32_Premultiplied 写入非预乘值导致半透明像素错误
+    if (img.format() != QImage::Format_ARGB32)
         img = img.convertToFormat(QImage::Format_ARGB32);
-    }
 
     const int w = img.width();
     const int h = img.height();
@@ -1306,11 +1303,17 @@ QPixmap BrowserPage::applyNightMode(const QPixmap &src)
             const int alpha = qAlpha(px);
 
             // HSL 亮度反转：保留色相(H)和饱和度(S)，仅反转亮度(L)
-            // 白(255) → 黑(0)，黑(0) → 白(255)，彩色仅变暗、色相不偏移
+            // 白(255) → 黑，黑(0) → 白(255)，彩色仅变暗、色相不偏移
+            // 两端收敛：下限钳制 30(#1E1E1E)，反转后 ≥192 提亮纯白（原图 L≤63 深色文字）
+            const int kMinLightAfterInvert = 30;       // #1E1E1E 的 HSL 亮度值
+            const int kMaxLightBoostThreshold = 192;   // 0xC0，提亮阈值
             QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
             int hue, sat, light, dummy;
             c.getHsl(&hue, &sat, &light, &dummy);
             light = 255 - light;
+            if (light >= kMaxLightBoostThreshold)
+                light = 255;
+            light = qMax(light, kMinLightAfterInvert);
             c.setHsl(hue, sat, light);
             line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
         }
