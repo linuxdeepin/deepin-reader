@@ -7,6 +7,7 @@
 #include "DocSheet.h"
 #include "SideBarImageViewModel.h"
 #include "Application.h"
+#include "EyeProtectionManager.h"
 #include "MsgHeader.h"
 #include "ThumbnailWidget.h"
 #include "ddlog.h"
@@ -46,7 +47,10 @@ SideBarImageListView::SideBarImageListView(DocSheet *sheet, QWidget *parent)
     connect(verticalScrollBar(), &QScrollBar::sliderReleased, this, &SideBarImageListView::onSetThumbnailListSlideGesture);
     qCDebug(appLog) << "Connected scrollbar signals";
 
-    // 主题切换时刷新可见缩略图，使 ThumbnailDelegate 按新主题反色重绘
+    // 护眼模式切换时刷新可见缩略图，使 ThumbnailDelegate 按新的页面外观重绘
+    connect(EyeProtectionManager::instance(), &EyeProtectionManager::modeChanged,
+            this, [this]() { this->viewport()->update(); });
+    // 页面内容跟随护眼模式，边框/文字等界面装饰仍跟随系统主题。
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
             this, [this]() { this->viewport()->update(); });
 }

@@ -5,6 +5,7 @@
 
 #include "SideBarImageListview.h"
 #include "DocSheet.h"
+#include "EyeProtectionManager.h"
 #include "SideBarImageViewModel.h"
 
 #include "stub.h"
@@ -241,7 +242,10 @@ TEST_F(TestSideBarImageListView, testkeyPressEvent)
 
 TEST_F(TestSideBarImageListView, testThemeChanged_lambda)
 {
-    // 触发构造函数中注册的主题切换 lambda（刷新缩略图）
     emit DGuiApplicationHelper::instance()->themeTypeChanged(DGuiApplicationHelper::LightType);
+    const auto previousMode = EyeProtectionManager::instance()->mode();
+    EyeProtectionManager::instance()->setMode(EyeProtectionManager::Night);
+    EyeProtectionManager::instance()->setMode(EyeProtectionManager::Off);
+    EyeProtectionManager::instance()->setMode(previousMode);
     SUCCEED();
 }

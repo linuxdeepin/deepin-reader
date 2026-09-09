@@ -5,6 +5,8 @@
 
 #include "ThumbnailDelegate.h"
 #include "SideBarImageViewModel.h"
+#include "EyeProtectionManager.h"
+#include "NightFilter.h"
 #include "Utils.h"
 #include "Application.h"
 #include "ddlog.h"
@@ -41,7 +43,9 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         transform.rotate(rotate);
 
-        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(transform);
+        const QPixmap &rawPixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
+
+        const QPixmap &pixmap = rawPixmap.transformed(transform);
 
         const int borderRadius = 6;
 
@@ -63,47 +67,33 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             QPainterPath clipPath;
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
-            // 深色系统主题下，缩略图卡片需与侧边栏深色背景协调：将文档原始白底黑字
-            // 的缩略图反色为黑底白字；浅色主题保持原样。反色仅在绘制时进行，
-            // 不修改 DocSheet 中缓存的真实缩略图(始终为白底)，避免主题切换时双重反色。
-            // 采用与 BrowserPage::applyNightMode 相同的 HSL 亮度反转算法：
-            // 仅反转 Lightness 通道，保留 Hue/Saturation，避免图片色相偏移 180°。
-            // 两端收敛：下限钳制 37(#252525)，反转后 ≥192 提亮纯白
-            //   白底黑字 → 黑底白字（文字/背景正确反色）
-            //   彩色图片/链接 → 仅变暗，色相保持
-            if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
-                QImage img = pixmap.toImage();
-                if (!img.isNull()) {
-                    if (img.format() != QImage::Format_ARGB32)
-                        img = img.convertToFormat(QImage::Format_ARGB32);
-                    const int w = img.width();
-                    const int h = img.height();
-                    const int kMinLightAfterInvert = 37;       // #252525
-                    const int kMaxLightBoostThreshold = 192;   // 0xC0，提亮阈值
-                    for (int y = 0; y < h; ++y) {
-                        QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
-                        for (int x = 0; x < w; ++x) {
-                            const QRgb px = line[x];
-                            const int alpha = qAlpha(px);
-                            QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
-                            int hue, sat, light, dummy;
-                            c.getHsl(&hue, &sat, &light, &dummy);
-                            light = 255 - light;
-                            if (light >= kMaxLightBoostThreshold)
-                                light = 255;
-                            light = qMax(light, kMinLightAfterInvert);
-                            c.setHsl(hue, sat, light);
-                            line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
-                        }
-                    }
-                    QPixmap invertedPixmap = QPixmap::fromImage(img);
-                    invertedPixmap.setDevicePixelRatio(pixmap.devicePixelRatio());
-                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), invertedPixmap);
-                } else {
-                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
-                }
-            } else {
-                painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
+            // 缩略图外观必须与主视图(BrowserPage::paint)保持一致，因此跟随护眼模式而非
+            // 系统深浅主题：此前按系统深色主题反色，深色主题 + 无护眼时会出现主视图
+            // 仍是白底、侧边栏缩略图却是黑底的不一致（尤其白底的 OFD/PDF 文档）。
+            // 使用主干的夜间滤镜；缩略图尚无图片对象蒙版，采用其整页回退路径：
+            //   Night           → CIELAB 明度反转 + 深色压暗
+            //   Classic/Green   → 正片叠底(Multiply)染色
+            //   Off             → 原图
+            EyeProtectionManager *epMgr = EyeProtectionManager::instance();
+            const EyeProtectionManager::Mode mode = epMgr->mode();
+
+            // 反色结果按未旋转的原始缩略图缓存，再叠加旋转，避免每次重绘都逐像素反色
+            const QPixmap displayPixmap = (mode == EyeProtectionManager::Night)
+                                          ? nightPixmap(rawPixmap).transformed(transform)
+                                          : pixmap;
+
+            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), displayPixmap);
+
+            if (mode == EyeProtectionManager::Night) {
+                // 与主视图一致：叠加轻微深色半透明层降低整体亮度
+                QColor dark = epMgr->pageBackgroundColor();
+                dark.setAlpha(60);
+                painter->fillRect(rect, dark);
+            } else if (mode != EyeProtectionManager::Off) {
+                // 与主视图一致：经典/绿色护眼用正片叠底染色
+                painter->setCompositionMode(QPainter::CompositionMode_Multiply);
+                painter->fillRect(rect, epMgr->pageBackgroundColor());
+                painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
             }
             painter->restore();
         }
@@ -136,6 +126,21 @@ QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 {
     // qCDebug(appLog) << "Calculating size hint for row:" << index.row();
     return DStyledItemDelegate::sizeHint(option, index);
+}
+
+QPixmap ThumbnailDelegate::nightPixmap(const QPixmap &src) const
+{
+    if (src.isNull())
+        return src;
+
+    // 滚动/选中时同一张缩略图会被反复重绘，缓存反色结果避免逐像素重复计算
+    if (m_nightSourceCache.cacheKey() == src.cacheKey() && !m_nightPixmapCache.isNull())
+        return m_nightPixmapCache;
+
+    m_nightSourceCache = src;
+    m_nightPixmapCache = QPixmap::fromImage(NightFilter::applyPage(src.toImage(), {}));
+    m_nightPixmapCache.setDevicePixelRatio(src.devicePixelRatio());
+    return m_nightPixmapCache;
 }
 
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const
