@@ -7,6 +7,7 @@
 #define IMAGEVIEWDELEGATE_H
 
 #include <DStyledItemDelegate>
+#include <QPixmap>
 
 DWIDGET_USE_NAMESPACE
 /**
@@ -47,8 +48,19 @@ private:
      */
     void drawBookMark(QPainter *painter, const QRect &rect, bool visible) const;
 
+    /**
+     * @brief nightPixmap
+     * 夜间护眼模式下缩略图的智能反色结果（带缓存）
+     * @param src 原始缩略图
+     * @return 反色后的缩略图
+     */
+    QPixmap nightPixmap(const QPixmap &src) const;
+
 private:
     QAbstractItemView *m_parent = nullptr;
+
+    mutable QPixmap m_nightSourceCache;    // 反色缓存的源缩略图
+    mutable QPixmap m_nightPixmapCache;    // 反色后的缩略图
 };
 
 #endif // IMAGEVIEWDELEGATE_H
