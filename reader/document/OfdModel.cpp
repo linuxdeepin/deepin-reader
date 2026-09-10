@@ -104,6 +104,7 @@ OfdDocument::OfdDocument(const QString &filePath, rofd_document_t *document, rof
     }
 
     loadMetadata();
+    warningDetails();
     qCInfo(appLog) << "OFD document loaded, pages:" << m_pageCount << "dpi:" << m_xRes << m_yRes;
 }
 
@@ -129,6 +130,7 @@ Page *OfdDocument::page(int index) const
     rofd_page_t *pageHandle = nullptr;
     rofd_error_t *rofdError = nullptr;
     rofd_status_t status = rofd_document_get_page(m_document, static_cast<size_t>(index), &pageHandle, &rofdError);
+    warningDetails();
     if (status != ROFD_STATUS_OK || nullptr == pageHandle) {
         qCWarning(appLog) << "Failed to load OFD page:" << index
                           << "message:" << (rofdError ? rofd_error_get_message(rofdError) : "unknown");
@@ -169,7 +171,11 @@ bool OfdDocument::saveAs(const QString &filePath) const
 
 Properties OfdDocument::properties() const
 {
-    return m_properties;
+    Properties props = m_properties;
+    // Warnings grow during lazy page/content loading; never cache this snapshot
+    // together with the immutable metadata. Each entry owns Code/Path/Message.
+    props["Warnings"] = warningDetails();
+    return props;
 }
 
 QString OfdDocument::fileIdentifier() const
@@ -234,6 +240,40 @@ void OfdDocument::loadMetadata()
         }
         m_properties["KeyWords"] = keywords.join(QStringLiteral("; "));
     }
+}
+
+QVariantList OfdDocument::warningDetails() const
+{
+    QMutexLocker lock(&m_warningMutex);
+    rofd_warning_list_t *raw = nullptr;
+    rofd_error_t *error = nullptr;
+    const rofd_status_t status = rofd_document_get_warnings(m_document, &raw, &error);
+    const std::unique_ptr<rofd_warning_list_t, decltype(&rofd_warning_list_free)> warnings(raw, rofd_warning_list_free);
+    if (status != ROFD_STATUS_OK || !warnings) {
+        qCWarning(appLog) << "Failed to read OFD warnings:" << status
+                          << (error ? rofd_error_get_message(error) : "unknown");
+        rofd_error_free(error);
+        return {};
+    }
+    rofd_error_free(error);
+
+    QVariantList result;
+    size_t count = 0;
+    if (rofd_warning_list_get_count(raw, &count, nullptr) != ROFD_STATUS_OK)
+        return result;
+    for (size_t i = 0; i < count; ++i) {
+        rofd_warning_t warning = {};
+        warning.struct_size = sizeof(warning);
+        if (rofd_warning_list_get_warning(raw, i, &warning, nullptr) != ROFD_STATUS_OK)
+            continue;
+        const QString path = QString::fromUtf8(warning.path ? warning.path : "");
+        const QString message = QString::fromUtf8(warning.message ? warning.message : "");
+        result.append(QVariantMap{{"Code", warning.code}, {"Path", path}, {"Message", message}});
+        if (i >= m_loggedWarningCount)
+            qCWarning(appLog) << "OFD parse warning:" << warning.code << path << message;
+    }
+    m_loggedWarningCount = count;
+    return result;
 }
 
 QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, const QRect &slice) const
@@ -329,6 +369,7 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
     } else {
         status = rofd_renderer_render_page_cairo(m_renderer, pageHandle, cr, &options, &report, &rofdError);
     }
+    warningDetails();
 
     if (nullptr != report) {
         size_t diagnosticCount = 0;

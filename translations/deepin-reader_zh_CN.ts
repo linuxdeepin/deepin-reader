@@ -86,6 +86,10 @@
         <translation>文件大小</translation>
     </message>
     <message>
+        <source>Warnings</source>
+        <translation>文档警告</translation>
+    </message>
+    <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53" />
         <source>Basic info</source>
         <translation>基本信息</translation>

@@ -13,7 +13,7 @@ cmake --build build/ofd-model -j1
 ctest --test-dir build/ofd-model --output-on-failure
 ```
 
-The library must provide the region and metadata APIs added in rofd
+The library must provide the region, metadata and warning APIs added in rofd
 commits `56da925` and `6db9bac`; the initial 0.3.0 release does not include them.
 Its runtime SONAME (`librofd_ffi.so.0`) must resolve to the same library.
 Qt Widgets, DTK Core, Cairo, Google Test and CMake are required. Fixtures are
@@ -22,4 +22,4 @@ created in temporary directories using `cmake -E tar --format=zip`.
 Coverage includes full and tiled rendering, nonzero physical page origins,
 small tiles on canvases larger than 4 GiB, pre-allocation raster limits,
 real-invoice pixel comparisons, search/selection, metadata/DocID, missing or
-invalid dates.
+invalid dates, and fresh warning snapshots after lazy page and annotation loads.

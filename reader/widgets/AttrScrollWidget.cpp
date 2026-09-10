@@ -6,6 +6,7 @@
 #include "AttrScrollWidget.h"
 #include "Utils.h"
 #include "DocSheet.h"
+#include "SheetRenderer.h"
 #include "WordWrapLabel.h"
 #include "ddlog.h"
 #include <QDebug>
@@ -46,6 +47,19 @@ AttrScrollWidget::AttrScrollWidget(DocSheet *sheet, DWidget *parent)
     QString sPaperSize = QString("%1*%2").arg(fileInfo.width).arg(fileInfo.height);
     createLabel(gridLayout, 12, tr("Page size"), sPaperSize);
     createLabel(gridLayout, 13, tr("File size"), Utils::getInputDataSize(static_cast<qint64>(fileInfo.size)));
+
+    const auto properties = sheet->renderer()->properties();
+    const QVariantList warnings = properties.value("Warnings").toList();
+    if (!warnings.isEmpty()) {
+        QStringList messages;
+        for (const QVariant &value : warnings) {
+            const QVariantMap warning = value.toMap();
+            const QString path = warning.value("Path").toString();
+            const QString message = warning.value("Message").toString();
+            messages.append(path.isEmpty() ? message : path + QStringLiteral(": ") + message);
+        }
+        createLabel(gridLayout, 14, tr("Warnings"), messages.join(QLatin1Char('\n')));
+    }
 
     auto vLayout = new QVBoxLayout;
     vLayout->setContentsMargins(10, 10, 10, 10);

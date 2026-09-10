@@ -11,6 +11,7 @@
 #ifdef OFD_SUPPORT_ENABLED
 
 #include <QImage>
+#include <QMutex>
 #include <QSizeF>
 
 #include <rofd.h>
@@ -45,11 +46,14 @@ public:
 private:
     OfdDocument(const QString &filePath, rofd_document_t *document, rofd_renderer_t *renderer);
     void loadMetadata();
+    QVariantList warningDetails() const;
 
     QString m_filePath;
     rofd_document_t *m_document = nullptr;
     rofd_renderer_t *m_renderer = nullptr;
     Properties m_properties;
+    mutable QMutex m_warningMutex;
+    mutable size_t m_loggedWarningCount = 0;
     int m_pageCount = 0;
     qreal m_xRes = 96.0;
     qreal m_yRes = 96.0;

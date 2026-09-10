@@ -258,6 +258,50 @@ TEST(OfdApi, missingMetadataAndInvalidDate)
     EXPECT_EQ(props.value("CreationDateRaw").toString(), QStringLiteral("not-a-date"));
 }
 
+TEST(OfdApi, warningSnapshotRefreshesAfterLazyPageLoad)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, "<DocID>warnings</DocID>");
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    const QVariantList before = doc->properties().value("Warnings").toList();
+    EXPECT_TRUE(before.isEmpty());
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    const QVariantList after = doc->properties().value("Warnings").toList();
+    ASSERT_EQ(after.size(), 1);
+    EXPECT_EQ(after.first().toMap().value("Code").toUInt(), ROFD_WARNING_PAGE_AREA_FALLBACK);
+    EXPECT_EQ(after.first().toMap().value("Path").toString(), QStringLiteral("Page.xml"));
+    EXPECT_FALSE(after.first().toMap().value("Message").toString().isEmpty());
+    EXPECT_TRUE(before.isEmpty());
+    std::unique_ptr<Page> again(doc->page(0));
+    EXPECT_EQ(doc->properties().value("Warnings").toList(), after);
+}
+
+TEST(OfdApi, warningsRefreshAfterRenderingAnnotations)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, "<DocID>annotation-warning</DocID>",
+        "<Area><PhysicalBox>7 11 210 297</PhysicalBox></Area>",
+        "<Annotations>missing.xml</Annotations>");
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    EXPECT_TRUE(doc->properties().value("Warnings").toList().isEmpty());
+    ASSERT_FALSE(page->render(420, 594, QRect(17, 19, 160, 150)).isNull());
+    const QVariantList warnings = doc->properties().value("Warnings").toList();
+    ASSERT_EQ(warnings.size(), 1);
+    EXPECT_EQ(warnings.first().toMap().value("Code").toUInt(), ROFD_WARNING_ANNOTATION_SKIPPED);
+    EXPECT_EQ(warnings.first().toMap().value("Path").toString(), QStringLiteral("missing.xml"));
+}
+
 TEST_F(TestOfdModel, semanticFullText)
 {
     std::unique_ptr<Page> page(m_doc->page(0));
