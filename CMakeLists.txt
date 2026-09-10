@@ -106,16 +106,20 @@ if (OFD_SUPPORT)
             #include <rofd.h>
             int main(void) {
                 rofd_pixel_rect_t viewport;
+                rofd_metadata_t *metadata = 0;
                 int32_t w = 0, h = 0;
                 rofd_pixel_rect_init(&viewport, sizeof(viewport));
                 rofd_renderer_get_pixel_canvas_size(0, 0, 0, &w, &h, 0);
                 rofd_renderer_render_page_region_cairo(0, 0, 0, 0, &viewport, 0, 0);
+                rofd_document_get_metadata(0, &metadata, 0);
+                rofd_metadata_get_document_id(metadata);
+                rofd_metadata_free(metadata);
                 return 0;
             }
         ]=] ROFD_READER_APIS_AVAILABLE)
         cmake_pop_check_state()
         if (NOT ROFD_READER_APIS_AVAILABLE)
-            message(FATAL_ERROR "rofd headers/library lack the region rendering APIs. Use a matching rofd build containing commit 56da925 (0.3.0 alone is insufficient), and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
+            message(FATAL_ERROR "rofd headers/library lack the region or metadata APIs. Use a matching rofd build containing commits 56da925 and 6db9bac (0.3.0 alone is insufficient), and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
         endif()
         message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
         add_compile_definitions(OFD_SUPPORT_ENABLED)
