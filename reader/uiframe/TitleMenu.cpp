@@ -71,12 +71,8 @@ void TitleMenu::onCurSheetChanged(DocSheet *sheet)
 
     QAction *searchAction = this->findChild<QAction *>("Search");
     if (searchAction) {
-        if (sheet->fileType() == Dr::PDF || sheet->fileType() == Dr::DOCX
-#ifdef XPS_SUPPORT_ENABLED
-            || sheet->fileType() == Dr::XPS
-#endif
-        ) {
-            qCDebug(appLog) << "Enabling search for PDF/DOCX";
+        if (Dr::supportsSearch(sheet->fileType())) {
+            qCDebug(appLog) << "Enabling search for searchable document";
             searchAction->setVisible(true);
         } else {
             qCDebug(appLog) << "Disabling search for other formats";

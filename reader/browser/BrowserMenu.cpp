@@ -92,11 +92,7 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         }
     } else if (type == DOC_MENU_KEY) {
         qCDebug(appLog) << "BrowserMenu::initActions() - Processing DOC_MENU_KEY";
-        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX
-#ifdef XPS_SUPPORT_ENABLED
-            || sheet->fileType() == Dr::FileType::XPS
-#endif
-        ) {
+        if (Dr::supportsSearch(sheet->fileType())) {
             createAction(tr("Search"), "Search");
             this->addSeparator();
         }
@@ -148,12 +144,8 @@ void BrowserMenu::initActions(DocSheet *sheet, int index, SheetMenuType_e type, 
         createAction(tr("Document info"), "DocumentInfo");
     } else {
         qCDebug(appLog) << "BrowserMenu::initActions() - Processing default menu type";
-        if (sheet->fileType() == Dr::FileType::PDF || sheet->fileType() == Dr::FileType::DOCX
-#ifdef XPS_SUPPORT_ENABLED
-            || sheet->fileType() == Dr::FileType::XPS
-#endif
-        ) {
-            qCDebug(appLog) << "BrowserMenu::initActions() - Adding search action for PDF/DOCX/XPS";
+        if (Dr::supportsSearch(sheet->fileType())) {
+            qCDebug(appLog) << "BrowserMenu::initActions() - Adding search action for searchable document";
             createAction(tr("Search"), "Search");
             this->addSeparator();
         }

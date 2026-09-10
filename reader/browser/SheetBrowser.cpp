@@ -1915,13 +1915,8 @@ void SheetBrowser::showEvent(QShowEvent *event)
 void SheetBrowser::handlePrepareSearch()
 {
     qCDebug(appLog) << "Preparing search for file type:" << m_sheet->fileType();
-    
-    //目前只有PDF、DOCX和XPS开放搜索功能
-    if (m_sheet->fileType() != Dr::FileType::PDF && m_sheet->fileType() != Dr::FileType::DOCX
-#ifdef XPS_SUPPORT_ENABLED
-        && m_sheet->fileType() != Dr::FileType::XPS
-#endif
-    ) {
+
+    if (!Dr::supportsSearch(m_sheet->fileType())) {
         qCDebug(appLog) << "Search not supported for current file type";
         return;
     }

@@ -85,3 +85,18 @@ TEST_F(TestGlobal, UT_Global_fileType_006)
 
     EXPECT_TRUE(fileType("1.docx") == DOCX);
 }
+
+TEST_F(TestGlobal, UT_Global_supportsSearch)
+{
+    EXPECT_TRUE(supportsSearch(PDF));
+    EXPECT_TRUE(supportsSearch(DOCX));
+#ifdef XPS_SUPPORT_ENABLED
+    EXPECT_TRUE(supportsSearch(XPS));
+#endif
+#ifdef OFD_SUPPORT_ENABLED
+    EXPECT_TRUE(supportsSearch(OFD));
+#endif
+
+    EXPECT_FALSE(supportsSearch(Unknown));
+    EXPECT_FALSE(supportsSearch(DJVU));
+}
