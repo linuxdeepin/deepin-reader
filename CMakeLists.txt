@@ -94,6 +94,29 @@ if (OFD_SUPPORT)
     pkg_check_modules(OFD_CAIRO QUIET cairo)
 
     if (ROFD_INCLUDE_DIR AND ROFD_FFI_LIBRARY AND OFD_CAIRO_FOUND)
+        # These APIs were added after 0.3.0 without a version bump. Probe both
+        # declarations and linked symbols instead of trusting the package version.
+        include(CheckCSourceCompiles)
+        include(CMakePushCheckState)
+        cmake_push_check_state(RESET)
+        set(CMAKE_REQUIRED_INCLUDES ${ROFD_INCLUDE_DIR} ${OFD_CAIRO_INCLUDE_DIRS})
+        set(CMAKE_REQUIRED_LIBRARIES ${ROFD_FFI_LIBRARY} ${OFD_CAIRO_LIBRARIES})
+        unset(ROFD_READER_APIS_AVAILABLE CACHE)
+        check_c_source_compiles([=[
+            #include <rofd.h>
+            int main(void) {
+                rofd_pixel_rect_t viewport;
+                int32_t w = 0, h = 0;
+                rofd_pixel_rect_init(&viewport, sizeof(viewport));
+                rofd_renderer_get_pixel_canvas_size(0, 0, 0, &w, &h, 0);
+                rofd_renderer_render_page_region_cairo(0, 0, 0, 0, &viewport, 0, 0);
+                return 0;
+            }
+        ]=] ROFD_READER_APIS_AVAILABLE)
+        cmake_pop_check_state()
+        if (NOT ROFD_READER_APIS_AVAILABLE)
+            message(FATAL_ERROR "rofd headers/library lack the region rendering APIs. Use a matching rofd build containing commit 56da925 (0.3.0 alone is insufficient), and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
+        endif()
         message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
         add_compile_definitions(OFD_SUPPORT_ENABLED)
         set(OFD_SUPPORT_RESOLVED ON)
