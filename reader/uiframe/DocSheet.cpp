@@ -2166,9 +2166,14 @@ void DocSheet::onAutoSave()
     qCDebug(appLog) << "Auto-save triggered for:" << m_filePath;
 
     // 先保存文档注释（高亮、文本标注等），防止异常退出时注释丢失；
-    // 保存会改变文件内容，之后的指纹/哈希计算必须基于最新内容
+    // 保存会改变文件内容，之后的指纹/哈希计算必须基于最新内容。
+    // docx 为转换打开格式，注释只能写入临时目录中的转换产物 temp.pdf，
+    // 自动保存无法真正持久化；若此处照常保存并清掉脏标志，关闭时会因
+    // fileChanged() 为假而跳过保存确认框，注释随临时目录删除而静默丢失
+    // （BUG-376501）。故 docx 保持未保存状态，由关闭时的确认框引导
+    // 用户另存为 PDF 完成持久化。
     bool contentSaved = false;
-    if (m_documentChanged) {
+    if (m_documentChanged && Dr::DOCX != fileType()) {
         if (m_renderer && m_renderer->save()) {
             m_documentChanged = false;
             m_sidebar->changeResetModelData();
