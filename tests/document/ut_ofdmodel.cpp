@@ -12,6 +12,7 @@
 
 #include <QFile>
 #include <QImage>
+#include <QProcess>
 #include <QTemporaryDir>
 
 #include <algorithm>
@@ -34,6 +35,35 @@ QString ofdFilePath()
 bool hasOfdFile()
 {
     return QFile(ofdFilePath()).exists();
+}
+
+QString createOfdFixture(const QTemporaryDir &dir, const QByteArray &info,
+                         const QByteArray &pageArea = QByteArray(),
+                         const QByteArray &documentExtras = QByteArray())
+{
+    const QMap<QString, QByteArray> entries = {
+        {"OFD.xml", "<OFD><DocBody><DocInfo>" + info
+            + "</DocInfo><DocRoot>Document.xml</DocRoot></DocBody></OFD>"},
+        {"Document.xml", "<Document><CommonData><PageArea><PhysicalBox>7 11 210 297</PhysicalBox>"
+            "</PageArea></CommonData><Pages><Page ID=\"1\" BaseLoc=\"Page.xml\"/></Pages>"
+            + documentExtras + "</Document>"},
+        {"Page.xml", "<Page>" + pageArea + "<Content><Layer ID=\"2\"><PathObject ID=\"3\" "
+            "Boundary=\"20 30 40 25\" Stroke=\"false\" Fill=\"true\"><FillColor Value=\"255 0 0\"/>"
+            "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
+            "</PathObject></Layer></Content></Page>"}
+    };
+    for (auto it = entries.cbegin(); it != entries.cend(); ++it) {
+        QFile file(dir.filePath(it.key()));
+        if (!file.open(QIODevice::WriteOnly) || file.write(it.value()) != it.value().size())
+            return {};
+    }
+    QProcess archive;
+    archive.setWorkingDirectory(dir.path());
+    archive.start(QStringLiteral("cmake"), {"-E", "tar", "cf", "fixture.ofd", "--format=zip",
+                                           "OFD.xml", "Document.xml", "Page.xml"});
+    if (!archive.waitForFinished() || archive.exitCode() != 0)
+        return {};
+    return dir.filePath("fixture.ofd");
 }
 
 } // namespace
@@ -112,6 +142,76 @@ TEST_F(TestOfdModel, renderInvalidSize)
 
     EXPECT_TRUE(page->render(0, 0).isNull());
     EXPECT_TRUE(page->render(-10, 100).isNull());
+}
+
+TEST_F(TestOfdModel, renderSmallRegionOnHugeCanvas)
+{
+    std::unique_ptr<Page> page(m_doc->page(0));
+    ASSERT_NE(page, nullptr);
+    // A full 42300 x 28000 image exceeds 4 GiB; only a 64 x 48 tile is needed.
+    const QImage tile = page->render(42300, 28000, QRect(97, 42, 64, 48));
+    ASSERT_FALSE(tile.isNull());
+    EXPECT_EQ(tile.size(), QSize(64, 48));
+}
+
+TEST_F(TestOfdModel, rejectInvalidRegions)
+{
+    std::unique_ptr<Page> page(m_doc->page(0));
+    ASSERT_NE(page, nullptr);
+    EXPECT_TRUE(page->render(423, 280, QRect(900, 0, 20, 20)).isNull());
+    EXPECT_TRUE(page->render(423, 280, QRect(-1, 0, 20, 20)).isNull());
+    EXPECT_TRUE(page->render(423, 280, QRect(420, 270, 20, 20)).isNull());
+    EXPECT_TRUE(page->render(423, 280, QRect(1, 1, 0, 20)).isNull());
+    EXPECT_TRUE(page->render(42300, 28000, QRect(0, 0, 16000, 16000)).isNull());
+}
+
+TEST(OfdApi, regionMatchesFullPageWithNonzeroPhysicalOrigin)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, "<DocID>region</DocID>");
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    const QImage full = page->render(420, 594);
+    ASSERT_FALSE(full.isNull());
+    const QRect region(17, 19, 160, 150);
+    const QImage tile = page->render(420, 594, region);
+    ASSERT_FALSE(tile.isNull());
+    EXPECT_EQ(tile, full.copy(region));
+    EXPECT_EQ(tile.pixelColor(40, 40), QColor(Qt::red));
+
+    const QImage largeCanvasTile = page->render(42000, 59400, QRect(4000, 5000, 64, 48));
+    ASSERT_EQ(largeCanvasTile.size(), QSize(64, 48));
+    EXPECT_EQ(largeCanvasTile.pixelColor(32, 24), QColor(Qt::red));
+}
+
+TEST_F(TestOfdModel, realInvoiceRegionMatchesFullPage)
+{
+    std::unique_ptr<Page> page(m_doc->page(0));
+    ASSERT_NE(page, nullptr);
+    const QImage full = page->render(423, 280);
+    const QRect region(97, 42, 129, 71);
+    const QImage tile = page->render(423, 280, region);
+    ASSERT_FALSE(full.isNull());
+    ASSERT_EQ(tile.size(), region.size());
+    int differingChannels = 0;
+    int largestDelta = 0;
+    for (int y = 0; y < tile.height(); ++y) {
+        const uchar *expected = full.constScanLine(region.y() + y) + region.x() * 4;
+        const uchar *actual = tile.constScanLine(y);
+        for (int x = 0; x < tile.width() * 4; ++x) {
+            const int delta = qAbs(int(expected[x]) - int(actual[x]));
+            differingChannels += delta != 0;
+            largestDelta = qMax(largestDelta, delta);
+        }
+    }
+    // Cairo glyph/curve antialiasing may differ slightly with target extents.
+    EXPECT_LE(largestDelta, 3);
+    EXPECT_LE(differingChannels, 100);
 }
 
 TEST_F(TestOfdModel, semanticFullText)

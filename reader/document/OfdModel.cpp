@@ -175,7 +175,8 @@ Properties OfdDocument::properties() const
 
 QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, const QRect &slice) const
 {
-    if (nullptr == pageHandle || width <= 0 || height <= 0) {
+    if (nullptr == pageHandle || width <= 0 || height <= 0
+        || (!slice.isNull() && !slice.isValid())) {
         qCWarning(appLog) << "Invalid OFD render request, handle:" << pageHandle << "size:" << width << height;
         return QImage();
     }
@@ -197,7 +198,11 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
     int32_t pixelWidth = 0;
     int32_t pixelHeight = 0;
     rofd_error_t *rofdError = nullptr;
-    if (ROFD_STATUS_OK != rofd_renderer_get_pixel_size(m_renderer, pageHandle, &options, &pixelWidth, &pixelHeight, &rofdError)
+    // A tile only needs canvas geometry; the full-page query enforces a full
+    // raster budget and would reject high zoom even for a tiny visible region.
+    const auto sizeQuery = slice.isValid() ? rofd_renderer_get_pixel_canvas_size
+                                           : rofd_renderer_get_pixel_size;
+    if (ROFD_STATUS_OK != sizeQuery(m_renderer, pageHandle, &options, &pixelWidth, &pixelHeight, &rofdError)
         || pixelWidth <= 0 || pixelHeight <= 0) {
         qCWarning(appLog) << "Failed to compute OFD pixel size:"
                           << (rofdError ? rofd_error_get_message(rofdError) : "unknown");
@@ -205,17 +210,33 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
         return QImage();
     }
 
-    QImage image(pixelWidth, pixelHeight, QImage::Format_ARGB32_Premultiplied);
+    const QRect canvas(0, 0, pixelWidth, pixelHeight);
+    const QRect target = slice.isValid() ? slice : canvas;
+    // Do not silently clamp: the caller places the result at the requested
+    // origin and expects exactly the requested dimensions.
+    if (!canvas.contains(target)) {
+        qCWarning(appLog) << "OFD render region outside canvas:" << target << canvas;
+        return QImage();
+    }
+    const int argbStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, target.width());
+    const int maskStride = cairo_format_stride_for_width(CAIRO_FORMAT_A8, target.width());
+    if (target.width() > 32767 || target.height() > 32767 || argbStride < 0 || maskStride < 0
+        || (quint64(argbStride) * 2 + quint64(maskStride)) * quint64(target.height()) > options.max_raster_bytes) {
+        qCWarning(appLog) << "OFD render target exceeds raster limits:" << target.size();
+        return QImage();
+    }
+
+    QImage image(target.size(), QImage::Format_ARGB32_Premultiplied);
     if (image.isNull()) {
-        qCWarning(appLog) << "Failed to allocate OFD render image:" << pixelWidth << pixelHeight;
+        qCWarning(appLog) << "Failed to allocate OFD render image:" << target.size();
         return QImage();
     }
     image.fill(Qt::white);
 
     cairo_surface_t *surface = cairo_image_surface_create_for_data(image.bits(),
                                                                    CAIRO_FORMAT_ARGB32,
-                                                                   pixelWidth,
-                                                                   pixelHeight,
+                                                                   image.width(),
+                                                                   image.height(),
                                                                    image.bytesPerLine());
     if (CAIRO_STATUS_SUCCESS != cairo_surface_status(surface)) {
         qCWarning(appLog) << "Failed to create Cairo surface for OFD render";
@@ -232,7 +253,19 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
     }
 
     rofd_render_report_t *report = nullptr;
-    rofd_status_t status = rofd_renderer_render_page_cairo(m_renderer, pageHandle, cr, &options, &report, &rofdError);
+    rofd_status_t status;
+    if (slice.isValid()) {
+        rofd_pixel_rect_t viewport;
+        rofd_pixel_rect_init(&viewport, sizeof(viewport));
+        viewport.x = target.x();
+        viewport.y = target.y();
+        viewport.width = target.width();
+        viewport.height = target.height();
+        status = rofd_renderer_render_page_region_cairo(m_renderer, pageHandle, cr, &options,
+                                                       &viewport, &report, &rofdError);
+    } else {
+        status = rofd_renderer_render_page_cairo(m_renderer, pageHandle, cr, &options, &report, &rofdError);
+    }
 
     if (nullptr != report) {
         size_t diagnosticCount = 0;
@@ -250,6 +283,7 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
         rofd_render_report_free(report);
     }
 
+    cairo_surface_flush(surface);
     cairo_destroy(cr);
     cairo_surface_destroy(surface);
 
@@ -260,14 +294,7 @@ QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, c
         return QImage();
     }
 
-    // rofd 的 clip 只限制绘制范围、不改变坐标映射，切片通过整页渲染后裁剪实现
-    if (slice.isValid()) {
-        const QRect bounded = slice.intersected(image.rect());
-        if (bounded.isValid() && bounded.size() != image.size()) {
-            return image.copy(bounded);
-        }
-    }
-
+    rofd_error_free(rofdError);
     return image;
 }
 
