@@ -63,11 +63,16 @@ public:
     QImage render(int width, int height, const QRect &slice = QRect()) const override;
     QString text(const QRectF &rect) const override;
     QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const override;
+    QList<Word> words() override;
 
 private:
+    rofd_rect_t toMillimetres(const QRectF &rect) const;
+    QRectF toPixels(const rofd_rect_t &rect) const;
+
     const OfdDocument *m_document;
     rofd_page_t *m_page = nullptr;
     int m_pageIndex = -1;
+    rofd_rect_t m_pageRectMm = {0.0, 0.0, 0.0, 0.0};
     QSizeF m_sizePixel;
 };
 

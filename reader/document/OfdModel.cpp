@@ -14,9 +14,39 @@
 #include <QRectF>
 #include <QScreen>
 
+#include <limits>
+
 namespace deepin_reader {
 
 static constexpr qreal kMillimetresPerInch = 25.4;
+
+namespace {
+
+QString takeRofdString(rofd_string_t *text)
+{
+    if (nullptr == text) {
+        return QString();
+    }
+
+    const char *data = rofd_string_get_data(text);
+    const size_t length = rofd_string_get_length(text);
+    QString result;
+    if (nullptr != data && length <= static_cast<size_t>(std::numeric_limits<int>::max())) {
+        result = QString::fromUtf8(data, static_cast<int>(length));
+    }
+    rofd_string_free(text);
+    return result;
+}
+
+void logSemanticError(const char *operation, int pageIndex, rofd_status_t status, rofd_error_t *error)
+{
+    qCWarning(appLog) << operation << "failed for OFD page:" << pageIndex
+                      << "status:" << status
+                      << "message:" << (error ? rofd_error_get_message(error) : "unknown");
+    rofd_error_free(error);
+}
+
+} // namespace
 
 OfdDocument *OfdDocument::loadDocument(const QString &filePath, Document::Error &error)
 {
@@ -246,10 +276,9 @@ OfdPage::OfdPage(const OfdDocument *document, rofd_page_t *pageHandle, int pageI
     , m_page(pageHandle)
     , m_pageIndex(pageIndex)
 {
-    rofd_rect_t pageRect = {0.0, 0.0, 0.0, 0.0};
-    if (ROFD_STATUS_OK == rofd_page_get_size_mm(m_page, &pageRect, nullptr)) {
-        m_sizePixel = QSizeF(pageRect.width_mm * m_document->xRes() / kMillimetresPerInch,
-                             pageRect.height_mm * m_document->yRes() / kMillimetresPerInch);
+    if (ROFD_STATUS_OK == rofd_page_get_size_mm(m_page, &m_pageRectMm, nullptr)) {
+        m_sizePixel = QSizeF(m_pageRectMm.width_mm * m_document->xRes() / kMillimetresPerInch,
+                             m_pageRectMm.height_mm * m_document->yRes() / kMillimetresPerInch);
     } else {
         qCWarning(appLog) << "Failed to query OFD page size, page:" << m_pageIndex;
     }
@@ -275,18 +304,192 @@ QImage OfdPage::render(int width, int height, const QRect &slice) const
 
 QString OfdPage::text(const QRectF &rect) const
 {
-    // rofd C ABI 暂不提供文本提取接口
-    Q_UNUSED(rect)
-    return QString();
+    if (nullptr == m_page) {
+        return QString();
+    }
+
+    rofd_string_t *result = nullptr;
+    rofd_error_t *error = nullptr;
+    rofd_status_t status = ROFD_STATUS_OK;
+    if (rect.isNull()) {
+        status = rofd_page_get_text(m_page, &result, &error);
+    } else {
+        const rofd_rect_t area = toMillimetres(rect.normalized());
+        status = rofd_page_get_text_for_area(m_page, &area, &result, &error);
+    }
+
+    if (ROFD_STATUS_OK != status || nullptr == result) {
+        logSemanticError("Text extraction", m_pageIndex, status, error);
+        rofd_string_free(result);
+        return QString();
+    }
+
+    rofd_error_free(error);
+    return takeRofdString(result).simplified();
 }
 
 QVector<PageSection> OfdPage::search(const QString &text, bool matchCase, bool wholeWords) const
 {
-    // rofd C ABI 暂不提供文本搜索接口
-    Q_UNUSED(text)
-    Q_UNUSED(matchCase)
-    Q_UNUSED(wholeWords)
-    return QVector<PageSection>();
+    QVector<PageSection> sections;
+    if (nullptr == m_page || text.isEmpty()) {
+        return sections;
+    }
+
+    rofd_find_options_t options;
+    rofd_find_options_init(&options, sizeof(options));
+    if (matchCase) {
+        options.flags |= ROFD_FIND_CASE_SENSITIVE;
+    }
+    if (wholeWords) {
+        options.flags |= ROFD_FIND_WHOLE_WORDS;
+    }
+
+    const QByteArray query = text.toUtf8();
+    rofd_text_search_t *searchResult = nullptr;
+    rofd_error_t *error = nullptr;
+    rofd_status_t status = rofd_page_find_text_with_options(m_page,
+                                                            query.constData(),
+                                                            &options,
+                                                            &searchResult,
+                                                            &error);
+    if (ROFD_STATUS_OK != status || nullptr == searchResult) {
+        logSemanticError("Text search", m_pageIndex, status, error);
+        rofd_text_search_free(searchResult);
+        return sections;
+    }
+    rofd_error_free(error);
+
+    size_t matchCount = 0;
+    error = nullptr;
+    status = rofd_text_search_get_count(searchResult, &matchCount, &error);
+    if (ROFD_STATUS_OK != status) {
+        logSemanticError("Search result enumeration", m_pageIndex, status, error);
+        rofd_text_search_free(searchResult);
+        return sections;
+    }
+    rofd_error_free(error);
+
+    sections.reserve(static_cast<int>(qMin(matchCount,
+                                           static_cast<size_t>(std::numeric_limits<int>::max()))));
+    for (size_t index = 0; index < matchCount; ++index) {
+        rofd_text_match_t match;
+        match.struct_size = sizeof(match);
+        error = nullptr;
+        status = rofd_text_search_get_match(searchResult, index, &match, &error);
+        if (ROFD_STATUS_OK != status) {
+            logSemanticError("Search match extraction", m_pageIndex, status, error);
+            continue;
+        }
+        rofd_error_free(error);
+
+        const QRectF matchRect = toPixels(match.rect_mm);
+        if (matchRect.isValid()) {
+            sections.append(PageSection{PageLine{QString(), matchRect}});
+        }
+    }
+
+    rofd_text_search_free(searchResult);
+    return sections;
+}
+
+QList<Word> OfdPage::words()
+{
+    QList<Word> words;
+    if (nullptr == m_page) {
+        return words;
+    }
+
+    rofd_string_t *pageText = nullptr;
+    rofd_error_t *error = nullptr;
+    rofd_status_t status = rofd_page_get_text(m_page, &pageText, &error);
+    if (ROFD_STATUS_OK != status || nullptr == pageText) {
+        logSemanticError("Page text extraction", m_pageIndex, status, error);
+        rofd_string_free(pageText);
+        return words;
+    }
+    rofd_error_free(error);
+
+    rofd_text_layout_t *layout = nullptr;
+    error = nullptr;
+    status = rofd_page_get_text_layout(m_page, &layout, &error);
+    if (ROFD_STATUS_OK != status || nullptr == layout) {
+        logSemanticError("Text layout extraction", m_pageIndex, status, error);
+        rofd_string_free(pageText);
+        rofd_text_layout_free(layout);
+        return words;
+    }
+    rofd_error_free(error);
+
+    size_t characterCount = 0;
+    error = nullptr;
+    status = rofd_text_layout_get_count(layout, &characterCount, &error);
+    if (ROFD_STATUS_OK != status) {
+        logSemanticError("Text layout enumeration", m_pageIndex, status, error);
+        rofd_string_free(pageText);
+        rofd_text_layout_free(layout);
+        return words;
+    }
+    rofd_error_free(error);
+
+    const char *utf8 = rofd_string_get_data(pageText);
+    const size_t utf8Length = rofd_string_get_length(pageText);
+    for (size_t index = 0; index < characterCount; ++index) {
+        rofd_text_char_t character;
+        character.struct_size = sizeof(character);
+        error = nullptr;
+        status = rofd_text_layout_get_char(layout, index, &character, &error);
+        if (ROFD_STATUS_OK != status) {
+            logSemanticError("Text character extraction", m_pageIndex, status, error);
+            continue;
+        }
+        rofd_error_free(error);
+
+        if (character.flags & ROFD_TEXT_CHAR_SYNTHESIZED_SEPARATOR) {
+            continue;
+        }
+        if (nullptr == utf8
+            || 0 == character.utf8_length
+            || character.utf8_offset > utf8Length
+            || character.utf8_length > utf8Length - character.utf8_offset
+            || character.utf8_length > static_cast<size_t>(std::numeric_limits<int>::max())) {
+            qCWarning(appLog) << "Invalid OFD text character span, page:" << m_pageIndex
+                              << "index:" << index;
+            continue;
+        }
+
+        const QRectF boundingBox = toPixels(character.rect_mm);
+        if (!boundingBox.isValid()) {
+            continue;
+        }
+
+        words.append(Word(QString::fromUtf8(utf8 + character.utf8_offset,
+                                            static_cast<int>(character.utf8_length)),
+                          boundingBox));
+    }
+
+    rofd_string_free(pageText);
+    rofd_text_layout_free(layout);
+    return words;
+}
+
+rofd_rect_t OfdPage::toMillimetres(const QRectF &rect) const
+{
+    const qreal xScale = kMillimetresPerInch / m_document->xRes();
+    const qreal yScale = kMillimetresPerInch / m_document->yRes();
+    return rofd_rect_t{m_pageRectMm.x_mm + rect.x() * xScale,
+                       m_pageRectMm.y_mm + rect.y() * yScale,
+                       rect.width() * xScale,
+                       rect.height() * yScale};
+}
+
+QRectF OfdPage::toPixels(const rofd_rect_t &rect) const
+{
+    const qreal xScale = m_document->xRes() / kMillimetresPerInch;
+    const qreal yScale = m_document->yRes() / kMillimetresPerInch;
+    return QRectF((rect.x_mm - m_pageRectMm.x_mm) * xScale,
+                  (rect.y_mm - m_pageRectMm.y_mm) * yScale,
+                  rect.width_mm * xScale,
+                  rect.height_mm * yScale);
 }
 
 } // namespace deepin_reader
