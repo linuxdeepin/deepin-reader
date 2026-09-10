@@ -64,6 +64,24 @@ FileType fileType(const QString &filePath)
     return fileType;
 }
 
+bool supportsSearch(FileType fileType)
+{
+    if (fileType == PDF || fileType == DOCX)
+        return true;
+
+#ifdef XPS_SUPPORT_ENABLED
+    if (fileType == XPS)
+        return true;
+#endif
+
+#ifdef OFD_SUPPORT_ENABLED
+    if (fileType == OFD)
+        return true;
+#endif
+
+    return false;
+}
+
 bool isNetworkPath(const QString &filePath)
 {
     // gvfs（smb/nfs 等用户态挂载）路径特征明确，先按字符串判断。

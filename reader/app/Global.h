@@ -49,6 +49,7 @@ enum FileType {
 #endif
 };
 FileType fileType(const QString &filePath);
+bool supportsSearch(FileType fileType);
 bool isNetworkPath(const QString &filePath);
 
 /**
