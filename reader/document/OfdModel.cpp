@@ -15,6 +15,7 @@
 #include <QScreen>
 
 #include <limits>
+#include <memory>
 
 namespace deepin_reader {
 
@@ -102,6 +103,7 @@ OfdDocument::OfdDocument(const QString &filePath, rofd_document_t *document, rof
         m_yRes = srn->logicalDotsPerInchY();
     }
 
+    loadMetadata();
     qCInfo(appLog) << "OFD document loaded, pages:" << m_pageCount << "dpi:" << m_xRes << m_yRes;
 }
 
@@ -167,10 +169,71 @@ bool OfdDocument::saveAs(const QString &filePath) const
 
 Properties OfdDocument::properties() const
 {
-    Properties props;
-    props["Format"] = QStringLiteral("OFD");
-    props["FilePath"] = m_filePath;
-    return props;
+    return m_properties;
+}
+
+QString OfdDocument::fileIdentifier() const
+{
+    return m_properties.value("DocumentId").toString();
+}
+
+void OfdDocument::loadMetadata()
+{
+    m_properties["Format"] = QStringLiteral("OFD");
+    m_properties["FilePath"] = m_filePath;
+    m_properties["PageCount"] = m_pageCount;
+
+    rofd_metadata_t *raw = nullptr;
+    rofd_error_t *error = nullptr;
+    const rofd_status_t status = rofd_document_get_metadata(m_document, &raw, &error);
+    const std::unique_ptr<rofd_metadata_t, decltype(&rofd_metadata_free)> metadata(raw, rofd_metadata_free);
+    if (status != ROFD_STATUS_OK || !metadata) {
+        qCWarning(appLog) << "Failed to read OFD metadata:" << status
+                          << (error ? rofd_error_get_message(error) : "unknown");
+        rofd_error_free(error);
+        return;
+    }
+    rofd_error_free(error);
+
+    const auto put = [this](const char *key, const char *value) {
+        if (value)
+            m_properties[QLatin1String(key)] = QString::fromUtf8(value);
+    };
+    put("DocumentId", rofd_metadata_get_document_id(raw));
+    put("Title", rofd_metadata_get_title(raw));
+    put("Author", rofd_metadata_get_author(raw));
+    put("Subject", rofd_metadata_get_subject(raw));
+    put("Description", rofd_metadata_get_abstract(raw));
+    put("Creator", rofd_metadata_get_creator(raw));
+    put("CreatorVersion", rofd_metadata_get_creator_version(raw));
+    // OFD identifies its producing application with Creator/CreatorVersion.
+    const QString creator = m_properties.value("Creator").toString();
+    if (!creator.isEmpty()) {
+        const QString version = m_properties.value("CreatorVersion").toString();
+        m_properties["Producer"] = version.isEmpty() ? creator : creator + QLatin1Char(' ') + version;
+    }
+
+    const auto putDate = [this, &put](const char *key, const char *rawKey, const char *value) {
+        put(rawKey, value);
+        if (value) {
+            const QDateTime date = QDateTime::fromString(QString::fromUtf8(value), Qt::ISODate);
+            if (date.isValid())
+                m_properties[QLatin1String(key)] = date;
+        }
+    };
+    putDate("CreationDate", "CreationDateRaw", rofd_metadata_get_creation_date(raw));
+    putDate("ModificationDate", "ModificationDateRaw", rofd_metadata_get_modification_date(raw));
+
+    size_t count = 0;
+    if (rofd_metadata_get_keyword_count(raw, &count, nullptr) == ROFD_STATUS_OK) {
+        QStringList keywords;
+        for (size_t i = 0; i < count; ++i) {
+            const char *keyword = nullptr;
+            if (rofd_metadata_get_keyword(raw, i, &keyword, nullptr) == ROFD_STATUS_OK && keyword)
+                keywords.append(QString::fromUtf8(keyword));
+        }
+        m_properties["KeyWords"] = keywords.join(QStringLiteral("; "));
+    }
 }
 
 QImage OfdDocument::renderPage(rofd_page_t *pageHandle, int width, int height, const QRect &slice) const

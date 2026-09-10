@@ -214,6 +214,50 @@ TEST_F(TestOfdModel, realInvoiceRegionMatchesFullPage)
     EXPECT_LE(differingChannels, 100);
 }
 
+TEST(OfdApi, metadataAndIdentifier)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, QStringLiteral(
+        "<DocID>文档-ID</DocID><Title>标题</Title><Author>作者</Author><Subject>主题</Subject>"
+        "<Abstract>摘要</Abstract><Creator>应用</Creator><CreatorVersion>1.2</CreatorVersion>"
+        "<CreationDate>2026-09-09</CreationDate><ModDate>2026-09-10T12:34:56+08:00</ModDate>"
+        "<Keywords><Keyword>one</Keyword><Keyword>二</Keyword><Keyword>one</Keyword></Keywords>").toUtf8());
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    const Properties props = doc->properties();
+    EXPECT_EQ(doc->fileIdentifier(), QStringLiteral("文档-ID"));
+    EXPECT_EQ(props.value("Title").toString(), QStringLiteral("标题"));
+    EXPECT_EQ(props.value("Author").toString(), QStringLiteral("作者"));
+    EXPECT_EQ(props.value("Subject").toString(), QStringLiteral("主题"));
+    EXPECT_EQ(props.value("Description").toString(), QStringLiteral("摘要"));
+    EXPECT_EQ(props.value("Creator").toString(), QStringLiteral("应用"));
+    EXPECT_EQ(props.value("CreatorVersion").toString(), QStringLiteral("1.2"));
+    EXPECT_EQ(props.value("KeyWords").toString(), QStringLiteral("one; 二; one"));
+    EXPECT_EQ(props.value("CreationDate").toDateTime().date(), QDate(2026, 9, 9));
+    EXPECT_EQ(props.value("ModificationDate").toDateTime().offsetFromUtc(), 8 * 3600);
+    EXPECT_EQ(props.value("PageCount").toInt(), 1);
+    EXPECT_EQ(doc->fileIdentifier(), QStringLiteral("文档-ID"));
+}
+
+TEST(OfdApi, missingMetadataAndInvalidDate)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, "<CreationDate>not-a-date</CreationDate>");
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    const Properties props = doc->properties();
+    EXPECT_TRUE(doc->fileIdentifier().isEmpty());
+    EXPECT_FALSE(props.contains("Title"));
+    EXPECT_FALSE(props.value("CreationDate").toDateTime().isValid());
+    EXPECT_EQ(props.value("CreationDateRaw").toString(), QStringLiteral("not-a-date"));
+}
+
 TEST_F(TestOfdModel, semanticFullText)
 {
     std::unique_ptr<Page> page(m_doc->page(0));

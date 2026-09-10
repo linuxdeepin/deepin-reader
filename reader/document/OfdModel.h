@@ -33,6 +33,7 @@ public:
     bool save() const override;
     bool saveAs(const QString &filePath) const override;
     Properties properties() const override;
+    QString fileIdentifier() const override;
 
     QString filePath() const { return m_filePath; }
     qreal xRes() const { return m_xRes; }
@@ -43,10 +44,12 @@ public:
 
 private:
     OfdDocument(const QString &filePath, rofd_document_t *document, rofd_renderer_t *renderer);
+    void loadMetadata();
 
     QString m_filePath;
     rofd_document_t *m_document = nullptr;
     rofd_renderer_t *m_renderer = nullptr;
+    Properties m_properties;
     int m_pageCount = 0;
     qreal m_xRes = 96.0;
     qreal m_yRes = 96.0;

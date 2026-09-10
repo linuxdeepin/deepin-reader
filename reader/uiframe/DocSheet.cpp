@@ -1492,6 +1492,16 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
 
     const Properties &propertys = m_renderer->properties();
     tFileInfo.format = format();
+#ifdef OFD_SUPPORT_ENABLED
+    if (m_fileType == Dr::OFD) {
+        const QDateTime created = propertys.value("CreationDate").toDateTime();
+        const QDateTime modified = propertys.value("ModificationDate").toDateTime();
+        if (created.isValid())
+            tFileInfo.createTime = created;
+        if (modified.isValid())
+            tFileInfo.changeTime = modified;
+    }
+#endif
     tFileInfo.optimization = propertys.value("Linearized").toBool();
     QString keywords = propertys.value("KeyWords").toString();
     if (keywords.isEmpty()) {
