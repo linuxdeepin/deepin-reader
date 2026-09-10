@@ -649,6 +649,66 @@ int DPdfPage::countChars()
     return FPDFText_CountChars(d_func()->m_textPage);
 }
 
+QVector<QRectF> DPdfPage::imageObjectRects(int width, int height)
+{
+    QVector<QRectF> rects;
+
+    if (nullptr == d_func()->m_doc || width <= 0 || height <= 0)
+        return rects;
+
+    DPdfMutexLocker locker("DPdfPage::imageObjectRects index = " + QString::number(index()));
+
+    // 目标像素尺寸对应的缩放(与 image(width,height) 整页渲染对齐)
+    const QSizeF viewPx = d_func()->sizeF();
+
+    if (viewPx.width() <= 0 || viewPx.height() <= 0)
+        return rects;
+
+    // 对象列表需要解析内容(与 image() 一致用 FPDF_LoadPage);
+    // 取完后立即关闭,不缓存句柄,避免与渲染线程的页面句柄生命周期冲突
+    FPDF_PAGE page = FPDF_LoadPage(d_func()->m_doc, d_func()->m_index);
+
+    if (nullptr == page)
+        return rects;
+
+    CPDF_Page *pPage = CPDFPageFromFPDFPage(page);
+    const int rotation = pPage ? pPage->GetPageRotation() : 0;
+
+    const qreal sx = width / viewPx.width();
+    const qreal sy = height / viewPx.height();
+
+    const int count = FPDFPage_CountObjects(page);
+
+    for (int i = 0; i < count; ++i) {
+        FPDF_PAGEOBJECT obj = FPDFPage_GetObject(page, i);
+
+        if (nullptr == obj || FPDF_PAGEOBJ_IMAGE != FPDFPageObj_GetType(obj))
+            continue;
+
+        float left = 0, bottom = 0, right = 0, top = 0;
+
+        if (!FPDFPageObj_GetBounds(obj, &left, &bottom, &right, &top))
+            continue;
+
+        // 坐标链:PDF 用户空间(y 向上)→ 旋转后视图坐标 → dpi 像素 → 目标像素
+        FS_RECTF fs;
+        fs.left = left;
+        fs.top = top;
+        fs.right = right;
+        fs.bottom = bottom;
+
+        QRectF viewPt = d_func()->transRect(rotation, fs);
+        QRectF px = d_func()->transPointToPixel(viewPt);
+
+        QRectF out(px.x() * sx, px.y() * sy, px.width() * sx, px.height() * sy);
+        rects.append(out.normalized());
+    }
+
+    FPDF_ClosePage(page);
+
+    return rects;
+}
+
 QVector<QRectF> DPdfPage::textRects(int start, int charCount)
 {
     d_func()->loadTextPage();

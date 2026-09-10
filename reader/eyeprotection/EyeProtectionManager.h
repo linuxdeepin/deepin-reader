@@ -30,6 +30,17 @@ public:
     };
     Q_ENUM(Mode)
 
+    /**
+     * @brief NightImagePolicy 夜间模式图片对象处理策略(实验)
+     * 图片对象区域不做反色以免连续色调负片失真,按此策略处理
+     */
+    enum NightImagePolicy {
+        NightImageDim = 0,         // 调暗(默认,系数见 nightImageDimFactor)
+        NightImageInvert = 1,      // 也反色(旧版行为)
+        NightImageOriginal = 2     // 保持原图
+    };
+    Q_ENUM(NightImagePolicy)
+
     static EyeProtectionManager *instance();
 
     /**
@@ -43,6 +54,18 @@ public:
      * @return 当前模式
      */
     Mode mode() const;
+
+    /**
+     * @brief nightImagePolicy 夜间模式图片对象处理策略
+     * 可被环境变量 DEEPIN_READER_NIGHT_IMAGE_POLICY(dim|invert|original)覆盖,便于实验
+     */
+    NightImagePolicy nightImagePolicy() const;
+
+    /**
+     * @brief nightImageDimFactor 图片调暗系数(0..1,默认 1.0 = 保持原亮度)
+     * 可被环境变量 DEEPIN_READER_NIGHT_IMAGE_DIM(如 0.6)覆盖
+     */
+    qreal nightImageDimFactor() const;
 
     /**
      * @brief pageBackgroundColor 获取文档页面背景色（也是圆形控件填充色）
@@ -83,6 +106,11 @@ signals:
      */
     void modeChanged(Mode mode);
 
+    /**
+     * @brief nightImagePolicyChanged 夜间图片策略变化信号
+     */
+    void nightImagePolicyChanged();
+
 private:
     Q_DISABLE_COPY(EyeProtectionManager)
 
@@ -99,6 +127,8 @@ private:
     void saveMode();
 
     Mode m_mode = Off;
+    NightImagePolicy m_nightImagePolicy = NightImageDim;
+    qreal m_nightImageDimFactor = 1.0;   // 与 loadMode 默认一致,避免 loadMode 前读取到旧值
 
     // 各模式颜色映射
     struct ModeColors {

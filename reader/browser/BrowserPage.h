@@ -14,6 +14,7 @@
 #include <QMutex>
 #include <QPointF>
 #include <QRectF>
+#include <QFutureWatcher>
 
 using namespace deepin_reader;
 
@@ -389,14 +390,23 @@ private:
     bool isBigDoc();
 
     /**
-     * @brief applyNightMode 夜间模式智能反色
-     * 基于 HSL 亮度反转：仅反转 Lightness 通道，保留 Hue 和 Saturation
-     * 效果：白底黑字 → 黑底白字（文字/背景正确反色）
-     *       彩色图片/链接 → 仅变暗，色相不发生 180° 偏移
-     * @param src 源 pixmap
-     * @return 反色后的 pixmap
+     * @brief setImageObjectRects 接收渲染线程预取的图片对象 bbox
+     * 随整页渲染任务带回(物理像素坐标),夜间滤镜用它构建对象蒙版,
+     * 避免 UI 线程访问 PDFium 文档锁
+     * @param rects bbox 列表(物理像素,与 pixmapWidth/Height 的渲染输出对齐)
+     * @param pixmapWidth/Height rects 对应的渲染输出尺寸;
+     *        后续缩放后渲染尺寸变化时,paint 过渡帧按比例换算 bbox
      */
-    QPixmap applyNightMode(const QPixmap &src);
+    void setImageObjectRects(const QVector<QRectF> &rects, int pixmapWidth, int pixmapHeight);
+
+    /**
+     * @brief startNightJob 在后台线程生成夜间图(QtConcurrent)
+     * paint 不再同步执行逐像素滤镜,杜绝卡顿;期间绘制旧图/占位层
+     */
+    void startNightJob();
+
+    /** 后台夜间滤镜完成回调:回填 m_nightPixmap 并重绘 */
+    void onNightImageReady();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -448,6 +458,13 @@ private:
 
     QPixmap m_nightPixmap;      // 夜间模式智能反色缓存
     bool m_nightDirty = true;   // 缓存失效标记，m_renderPixmap 变化时置 true
+
+    QVector<QRectF> m_imageRects;   // 图片对象 bbox(物理像素,渲染线程预取)
+    int m_rectsPixmapWidth = 0;     // m_imageRects 对应的渲染输出宽(物理像素,过渡帧换算用)
+    int m_rectsPixmapHeight = 0;    // m_imageRects 对应的渲染输出高
+    bool m_rectsFetched = false;    // m_imageRects 是否已随整页渲染更新
+    bool m_nightJobRunning = false; // 后台夜间滤镜任务在途标记
+    QFutureWatcher<QImage> *m_nightWatcher = nullptr; // 异步任务完成通知
 };
 
 #endif // BrowserPage_H

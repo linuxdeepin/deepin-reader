@@ -89,6 +89,16 @@ QImage SheetRenderer::getImage(int index, int width, int height, const QRect &sl
     return image;
 }
 
+QVector<QRectF> SheetRenderer::getImageObjectRects(int index, int width, int height)
+{
+    if (m_pages.count() <= index || index < 0) {
+        qCWarning(appLog) << "getImageObjectRects invalid page index:" << index;
+        return QVector<QRectF>();
+    }
+
+    return m_pages.value(index)->imageObjectRects(width, height);
+}
+
 deepin_reader::Link SheetRenderer::getLinkAtPoint(int index, const QPointF &point)
 {
     // qCDebug(appLog) << "SheetRenderer::getLinkAtPoint start - index:" << index << "point:" << point;

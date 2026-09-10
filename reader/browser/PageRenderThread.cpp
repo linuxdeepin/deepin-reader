@@ -419,6 +419,12 @@ void PageRenderThread::run()
         if (m_quit)
             break;
 
+        // 预取图片对象 bbox(夜间蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁
+        if (DocSheet::existSheet(task.sheet) && task.sheet->renderer()->opened()) {
+            task.imageRects = task.sheet->renderer()->getImageObjectRects(
+                        task.page->itemIndex(), task.rect.width(), task.rect.height());
+        }
+
         emit sigDocPageBigImageTaskFinished(task, pixmap);
     }
 
@@ -616,6 +622,9 @@ bool PageRenderThread::execNextDocPageNormalImageTask()
         qCWarning(appLog) << "Failed to get image for page:" << task.page->itemIndex();
     } else {
         qCDebug(appLog) << "Image rendered successfully for page:" << task.page->itemIndex();
+        // 预取图片对象 bbox(夜间蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁
+        task.imageRects = task.sheet->renderer()->getImageObjectRects(
+                    task.page->itemIndex(), targetWidth, targetHeight);
         emit sigDocPageNormalImageTaskFinished(task, QPixmap::fromImage(image));
     }
 
@@ -822,6 +831,7 @@ void PageRenderThread::onDocPageNormalImageTaskFinished(DocPageNormalImageTask t
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageNormalImageTaskFinished() - Starting on doc page normal image task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageNormalImageTaskFinished() - On doc page normal image task finished completed";
@@ -840,6 +850,7 @@ void PageRenderThread::onDocPageBigImageTaskFinished(DocPageBigImageTask task, Q
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageBigImageTaskFinished() - Starting on doc page big image task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageBigImageTaskFinished() - On doc page big image task finished completed";
