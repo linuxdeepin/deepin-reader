@@ -50,6 +50,16 @@ EyeProtectionManager::Mode EyeProtectionManager::mode() const
     return m_mode;
 }
 
+EyeProtectionManager::NightImagePolicy EyeProtectionManager::nightImagePolicy() const
+{
+    return m_nightImagePolicy;
+}
+
+qreal EyeProtectionManager::nightImageDimFactor() const
+{
+    return m_nightImageDimFactor;
+}
+
 QColor EyeProtectionManager::pageBackgroundColor() const
 {
     return pageBackgroundColor(m_mode);
@@ -85,6 +95,29 @@ void EyeProtectionManager::loadMode()
     int value = settings.value("EyeProtectionMode", 0).toInt();
     m_mode = (value >= Off && value <= Night) ? static_cast<Mode>(value) : Off;
     qCDebug(appLog) << "Loaded eye protection mode:" << m_mode;
+
+    // 夜间图片策略(实验):默认调暗;环境变量可覆盖便于 A/B 实验
+    int policy = settings.value("EyeProtection/NightImagePolicy", NightImageDim).toInt();
+    m_nightImagePolicy = (policy >= NightImageDim && policy <= NightImageOriginal)
+            ? static_cast<NightImagePolicy>(policy) : NightImageDim;
+
+    const QByteArray envPolicy = qgetenv("DEEPIN_READER_NIGHT_IMAGE_POLICY");
+    if (envPolicy == "invert")
+        m_nightImagePolicy = NightImageInvert;
+    else if (envPolicy == "original")
+        m_nightImagePolicy = NightImageOriginal;
+    else if (envPolicy == "dim")
+        m_nightImagePolicy = NightImageDim;
+
+    m_nightImageDimFactor = settings.value("EyeProtection/NightImageDimFactor", 1.0).toReal();
+    bool dimOk = false;
+    const QByteArray envDim = qgetenv("DEEPIN_READER_NIGHT_IMAGE_DIM");
+    const qreal envDimValue = QString::fromLocal8Bit(envDim).toDouble(&dimOk);
+    if (dimOk && envDimValue > 0.0 && envDimValue <= 1.0)
+        m_nightImageDimFactor = envDimValue;
+    m_nightImageDimFactor = qBound(0.1, m_nightImageDimFactor, 1.0);
+
+    qCDebug(appLog) << "Night image policy:" << m_nightImagePolicy << "dim factor:" << m_nightImageDimFactor;
 }
 
 void EyeProtectionManager::saveMode()

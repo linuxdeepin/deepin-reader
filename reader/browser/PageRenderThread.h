@@ -25,6 +25,7 @@ struct DocPageNormalImageTask {//正常取图
     BrowserPage *page = nullptr;
     int pixmapId = 0;           //任务艾迪
     QRect rect = QRect();       //整个大小
+    QVector<QRectF> imageRects; //图片对象 bbox(物理像素,夜间蒙版用;渲染线程预取)
 };
 
 struct DocPageSliceImageTask {//取切片
@@ -40,6 +41,7 @@ struct DocPageBigImageTask {//取大图
     BrowserPage *page = nullptr;
     int pixmapId = 0;           //任务艾迪
     QRect rect = QRect();       //整个大小
+    QVector<QRectF> imageRects; //图片对象 bbox(物理像素,夜间蒙版用;渲染线程预取)
 };
 
 struct DocPageWordTask {//取页码文字

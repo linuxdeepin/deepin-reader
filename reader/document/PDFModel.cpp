@@ -110,6 +110,13 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
     return result;
 }
 
+QVector<QRectF> PDFPage::imageObjectRects(int width, int height) const
+{
+    LOCK_DOCUMENT
+
+    return m_page->imageObjectRects(width, height);
+}
+
 Link PDFPage::getLinkAtPoint(const QPointF &pos)
 {
     // qCDebug(appLog) << "PDFPage::getLinkAtPoint() - Getting link at point:" << pos;

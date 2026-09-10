@@ -60,6 +60,8 @@ public:
 
     QImage render(int width, int height, const QRect &slice = QRect()) const override;
 
+    QVector<QRectF> imageObjectRects(int width, int height) const override;
+
     Link getLinkAtPoint(const QPointF &point) override;
 
     bool hasWidgetAnnots() const override;

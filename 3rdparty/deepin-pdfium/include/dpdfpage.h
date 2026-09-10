@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -49,6 +49,15 @@ public:
      * @return
      */
     QImage image(int width, int height, QRect slice = QRect());
+
+    /**
+     * @brief 获取页面上图片对象的包围盒(夜间模式对象蒙版用,实验)
+     * 坐标与 image(width, height) 的整页渲染输出像素一一对齐(已处理页面自身旋转)
+     * @param width (in pixel) 目标渲染宽
+     * @param height (in pixel) 目标渲染高
+     * @return 图片对象包围盒列表(像素坐标,Qt 坐标系);无图片对象返回空
+     */
+    QVector<QRectF> imageObjectRects(int width, int height);
 
     /**
      * @brief 字符数
