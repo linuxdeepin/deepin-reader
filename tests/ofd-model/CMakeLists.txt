@@ -24,6 +24,9 @@ endif()
 get_filename_component(READER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
 add_executable(ofd-model-check main.cc
     ../document/ut_ofdmodel.cpp
+    ../document/ut_navigation.cpp
+    ${READER_ROOT}/reader/document/Navigation.cpp
+    ${READER_ROOT}/reader/document/Navigation.h
     ${READER_ROOT}/reader/document/OfdModel.cpp
     ${READER_ROOT}/reader/document/OfdModel.h
     ${READER_ROOT}/reader/document/Model.h)
