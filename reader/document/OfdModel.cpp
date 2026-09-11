@@ -14,6 +14,8 @@
 #include <QRectF>
 #include <QScreen>
 
+#include <algorithm>
+#include <cmath>
 #include <limits>
 #include <memory>
 
@@ -167,6 +169,175 @@ bool OfdDocument::saveAs(const QString &filePath) const
     }
 
     return true;
+}
+
+Outline OfdDocument::outline() const
+{
+    QMutexLocker lock(&m_outlineMutex);
+    if (m_outlineLoaded)
+        return m_outline;
+    // Empty and failed snapshots are cached as well as populated ones.
+    m_outlineLoaded = true;
+    m_outline = [this]() -> Outline {
+        rofd_outline_t *raw = nullptr;
+        rofd_error_t *error = nullptr;
+        const rofd_status_t status = rofd_document_get_outline(m_document, &raw, &error);
+        const std::unique_ptr<rofd_outline_t, decltype(&rofd_outline_free)> snapshot(raw, rofd_outline_free);
+        if (status != ROFD_STATUS_OK || !snapshot) {
+            logSemanticError("Outline loading", -1, status, error);
+            return {};
+        }
+        rofd_error_free(error);
+        size_t count = 0;
+        if (rofd_outline_get_count(raw, &count, nullptr) != ROFD_STATUS_OK
+            || count > static_cast<size_t>(std::numeric_limits<int>::max())) {
+            qCWarning(appLog) << "Invalid OFD outline node count";
+            return {};
+        }
+
+        Outline nodes(static_cast<int>(count));
+        QVector<int> parents(static_cast<int>(count), -1);
+        for (int i = 0; i < nodes.size(); ++i) {
+            rofd_outline_node_t node = {};
+            node.struct_size = sizeof(node);
+            if (rofd_outline_get_node(raw, static_cast<size_t>(i), &node, nullptr) != ROFD_STATUS_OK)
+                continue;
+            Section &section = nodes[i];
+            section.title = QString::fromUtf8(node.title ? node.title : "");
+            section.expanded = node.expanded != 0;
+            // A preorder parent must precede its child. Invalid relations become
+            // inert roots, retaining the node and any valid descendants.
+            if (node.parent != ROFD_NO_INDEX) {
+                if (node.parent >= static_cast<size_t>(i))
+                    continue;
+                parents[i] = static_cast<int>(node.parent);
+            }
+            for (size_t actionIndex = 0; actionIndex < node.action_count; ++actionIndex) {
+                rofd_action_t action = {};
+                action.struct_size = sizeof(action);
+                if (rofd_outline_get_action(raw, static_cast<size_t>(i), actionIndex, &action, nullptr) != ROFD_STATUS_OK)
+                    continue;
+                rofd_destination_t destination = {};
+                destination.struct_size = sizeof(destination);
+                const rofd_destination_t *target = nullptr;
+                if (action.event == ROFD_ACTION_EVENT_CLICK && action.kind == ROFD_ACTION_GOTO
+                    && rofd_outline_get_action_destination(raw, static_cast<size_t>(i), actionIndex,
+                                                           &destination, nullptr) == ROFD_STATUS_OK) {
+                    target = &destination;
+                }
+                section.navigation = navigationTarget(action, target);
+                if (!section.navigation)
+                    continue;
+                if (section.navigation->destination) {
+                    const NavigationDestination &value = *section.navigation->destination;
+                    section.nIndex = value.pageIndex;
+                    section.offsetPointF = QPointF(value.left.value_or(0), value.top.value_or(0));
+                }
+                break;
+            }
+        }
+
+        // Each child is complete before its parent. Reverse each collected group
+        // once to restore the original preorder without recursive traversal or
+        // repeated insertion at the front of a wide sibling list.
+        Outline roots;
+        for (int i = nodes.size(); i-- > 0;) {
+            std::reverse(nodes[i].children.begin(), nodes[i].children.end());
+            if (parents[i] >= 0)
+                nodes[parents[i]].children.append(std::move(nodes[i]));
+            else
+                roots.append(std::move(nodes[i]));
+        }
+        std::reverse(roots.begin(), roots.end());
+        return roots;
+    }();
+    const Outline result = m_outline;
+    lock.unlock();
+    warningDetails();
+    return result;
+}
+
+std::optional<NavigationTarget> OfdDocument::navigationTarget(const rofd_action_t &action,
+                                                            const rofd_destination_t *destination) const
+{
+    if (action.event != ROFD_ACTION_EVENT_CLICK)
+        return std::nullopt;
+    if (action.kind == ROFD_ACTION_URI) {
+        NavigationTarget target;
+        target.uri = resolveNavigationUri(QString::fromUtf8(action.uri ? action.uri : ""),
+                                          QString::fromUtf8(action.uri_base ? action.uri_base : ""));
+        return target.isValid() ? std::make_optional(target) : std::nullopt;
+    }
+    if (action.kind != ROFD_ACTION_GOTO || !destination
+        || !(destination->flags & ROFD_DESTINATION_HAS_PAGE_INDEX)
+        || destination->page_index >= static_cast<size_t>(m_pageCount)
+        || destination->page_index > static_cast<size_t>(std::numeric_limits<int>::max())) {
+        return std::nullopt;
+    }
+
+    NavigationDestination value;
+    value.pageIndex = static_cast<int>(destination->page_index);
+    switch (destination->kind) {
+    case ROFD_DESTINATION_XYZ: value.mode = DestinationMode::XYZ; break;
+    case ROFD_DESTINATION_FIT: value.mode = DestinationMode::Fit; break;
+    case ROFD_DESTINATION_FIT_H: value.mode = DestinationMode::FitH; break;
+    case ROFD_DESTINATION_FIT_V: value.mode = DestinationMode::FitV; break;
+    case ROFD_DESTINATION_FIT_R: value.mode = DestinationMode::FitR; break;
+    default: return std::nullopt;
+    }
+    const auto pageRect = navigationPageRect(value.pageIndex);
+    if (!pageRect)
+        return std::nullopt;
+    if (destination->flags & ROFD_DESTINATION_HAS_LEFT)
+        value.left = (destination->left_mm - pageRect->x_mm) * m_xRes / kMillimetresPerInch;
+    if (destination->flags & ROFD_DESTINATION_HAS_TOP)
+        value.top = (destination->top_mm - pageRect->y_mm) * m_yRes / kMillimetresPerInch;
+    if (destination->flags & ROFD_DESTINATION_HAS_RIGHT)
+        value.right = (destination->right_mm - pageRect->x_mm) * m_xRes / kMillimetresPerInch;
+    if (destination->flags & ROFD_DESTINATION_HAS_BOTTOM)
+        value.bottom = (destination->bottom_mm - pageRect->y_mm) * m_yRes / kMillimetresPerInch;
+    if (destination->flags & ROFD_DESTINATION_HAS_ZOOM)
+        value.zoom = destination->zoom;
+    if (!value.isValid())
+        return std::nullopt;
+    NavigationTarget target;
+    target.destination = value;
+    return target;
+}
+
+std::optional<rofd_rect_t> OfdDocument::navigationPageRect(int pageIndex) const
+{
+    QMutexLocker lock(&m_navigationGeometryMutex);
+    const auto cached = m_navigationPageRects.constFind(pageIndex);
+    if (cached != m_navigationPageRects.cend())
+        return cached.value();
+
+    // Query a temporary rofd page directly: constructing OfdPage here would
+    // couple navigation conversion to page-link loading and risk recursion.
+    rofd_page_t *raw = nullptr;
+    rofd_error_t *error = nullptr;
+    rofd_status_t status = rofd_document_get_page(m_document, static_cast<size_t>(pageIndex), &raw, &error);
+    const std::unique_ptr<rofd_page_t, decltype(&rofd_page_free)> page(raw, rofd_page_free);
+    rofd_rect_t rect = {};
+    if (status == ROFD_STATUS_OK && page) {
+        rofd_error_free(error);
+        error = nullptr;
+        status = rofd_page_get_size_mm(raw, &rect, &error);
+    }
+    std::optional<rofd_rect_t> result;
+    if (status == ROFD_STATUS_OK && page && std::isfinite(rect.x_mm) && std::isfinite(rect.y_mm)
+        && std::isfinite(rect.width_mm) && rect.width_mm > 0
+        && std::isfinite(rect.height_mm) && rect.height_mm > 0) {
+        result = rect;
+        rofd_error_free(error);
+    } else {
+        logSemanticError("Navigation page geometry", pageIndex, status, error);
+    }
+    m_navigationPageRects.insert(pageIndex, result);
+    lock.unlock();
+    // No warning-mutex holder acquires either navigation cache mutex.
+    warningDetails();
+    return result;
 }
 
 Properties OfdDocument::properties() const

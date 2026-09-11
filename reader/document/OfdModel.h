@@ -33,6 +33,7 @@ public:
     QStringList saveFilter() const override;
     bool save() const override;
     bool saveAs(const QString &filePath) const override;
+    Outline outline() const override;
     Properties properties() const override;
     QString fileIdentifier() const override;
 
@@ -44,9 +45,16 @@ public:
     QImage renderPage(rofd_page_t *pageHandle, int width, int height, const QRect &slice) const;
 
 private:
+    friend class OfdPage;
+
     OfdDocument(const QString &filePath, rofd_document_t *document, rofd_renderer_t *renderer);
     void loadMetadata();
     QVariantList warningDetails() const;
+    // Shared by outline and page-link snapshots. All borrowed action strings
+    // are copied; GOTO callers supply their snapshot's destination record.
+    std::optional<NavigationTarget> navigationTarget(const rofd_action_t &action,
+                                                     const rofd_destination_t *destination = nullptr) const;
+    std::optional<rofd_rect_t> navigationPageRect(int pageIndex) const;
 
     QString m_filePath;
     rofd_document_t *m_document = nullptr;
@@ -54,6 +62,11 @@ private:
     Properties m_properties;
     mutable QMutex m_warningMutex;
     mutable size_t m_loggedWarningCount = 0;
+    mutable QMutex m_outlineMutex;
+    mutable bool m_outlineLoaded = false;
+    mutable Outline m_outline;
+    mutable QMutex m_navigationGeometryMutex;
+    mutable QMap<int, std::optional<rofd_rect_t>> m_navigationPageRects;
     int m_pageCount = 0;
     qreal m_xRes = 96.0;
     qreal m_yRes = 96.0;
