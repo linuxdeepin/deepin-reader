@@ -7,6 +7,7 @@
 #define DOCUMENTMODEL_H
 
 #include "Global.h"
+#include "Navigation.h"
 #include "dpdfpage.h"
 
 #include <QList>
@@ -40,6 +41,7 @@ struct Link {
     qreal left = 0;
     qreal top = 0;
     QString urlOrFileName;
+    std::optional<NavigationTarget> navigation;
     Link() : boundary(), page(-1), left(0.0), top(0.0), urlOrFileName() {}
     Link(const QPainterPath &boundary, int page, qreal left = 0.0, qreal top = 0.0) : boundary(boundary), page(page), left(left), top(top), urlOrFileName() {}
     Link(const QRectF &boundingRect, int page, qreal left = 0.0, qreal top = 0.0) : boundary(), page(page), left(left), top(top), urlOrFileName() { boundary.addRect(boundingRect); }
@@ -50,6 +52,8 @@ struct Link {
 
     bool isValid() const
     {
+        if (navigation)
+            return navigation->isValid();
         return page >= 1 || !urlOrFileName.isEmpty();
     }
 };
@@ -67,6 +71,8 @@ struct Section {
     QPointF offsetPointF;
     QString title;
     Outline children;
+    std::optional<NavigationTarget> navigation;
+    std::optional<bool> expanded;
 };
 
 struct Word {
