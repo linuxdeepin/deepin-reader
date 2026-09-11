@@ -49,4 +49,39 @@ objects with the Qt **offscreen** platform: deep catalog/explicit activation,
 selection without navigation, all-collapsed restoration, five modes at four
 rotations and both layouts, omitted coordinates, page-link hover/activation,
 and cancellation of external links. Test URLs are intercepted and never opened.
+It also covers navigation during the mainline reading-state restore guard:
+catalog and page-link activation, timer expiry, tab return, already-visible
+destinations, and preservation of normal restoration for invalid/external targets.
+Actual thumbnail painting is checked in light/dark themes and all four eye modes,
+including rotated, high-DPI source pixmaps. These checks compare content pixels;
+they do not verify border styling or desktop repaint timing.
 These are in-process widget checks, not a visible desktop-window acceptance test.
+
+## Focused thumbnail filter checks
+
+The smaller sidebar project checks the production thumbnail filter/cache without
+linking the reader, PDFium or rofd:
+
+```sh
+cmake -S tests/sidebar-appearance -B build/sidebar-appearance
+cmake --build build/sidebar-appearance -j1
+ctest --test-dir build/sidebar-appearance --output-on-failure
+```
+
+It compares pixels with the mainline `NightFilter`, including transparent input,
+device-pixel ratio, cache invalidation and filter-before-rotation behavior.
+Thumbnail image-object masks are not yet supplied: thumbnails use the mainline
+filter's empty-mask fallback, not the main page's photo-preservation path.
+
+## Rebuilding after the master rebase
+
+Master `9acd6e5a` includes the new `DPdfPage::imageObjectRects(int, int)` API.
+When reusing a locally built shared PDFium wrapper, update that wrapper as well
+as its header; an older shared library will fail to link despite a clean rebase.
+The existing underlying PDFium static library can be reused if its sources and
+build configuration have not changed. Keep `BUILD_TESTS=OFF` and build only the
+`deepin-reader` target with `-j1`; the focused checks above remain independent.
+
+Validation after this rebase on Qt 6/rofd 0.4.0: reader-only build, 59 model tests,
+41 filter/cache checks and 294 real-widget checks passed. The qmake path and
+visible desktop-window acceptance were not part of this validation.
