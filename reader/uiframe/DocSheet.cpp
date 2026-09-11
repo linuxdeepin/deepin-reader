@@ -90,7 +90,7 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
 #endif
 #ifdef OFD_SUPPORT_ENABLED
     else if (Dr::OFD == fileType)
-        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_BOOKMARK);
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK);
 #endif
     else
         m_sidebar = new SheetSidebar(this);
@@ -356,6 +356,11 @@ void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
 {
     qCDebug(appLog) << "jumpToOutline";
     m_browser->jumpToOutline(left, top, index);
+}
+
+bool DocSheet::navigateTo(const deepin_reader::NavigationTarget &target)
+{
+    return m_browser && m_browser->navigateTo(target);
 }
 
 void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)

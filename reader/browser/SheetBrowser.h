@@ -203,6 +203,7 @@ public:
      * @param index 哪一页
      */
     void jumpToOutline(const qreal  &left, const qreal &top, int page);
+    bool navigateTo(const deepin_reader::NavigationTarget &target);
 
     /**
      * @brief jumpToHighLight
