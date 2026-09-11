@@ -18,6 +18,7 @@
 #include <cmath>
 #include <limits>
 #include <memory>
+#include <utility>
 
 namespace deepin_reader {
 
@@ -594,6 +595,102 @@ OfdPage::~OfdPage()
 QSizeF OfdPage::sizeF() const
 {
     return m_sizePixel;
+}
+
+Link OfdPage::getLinkAtPoint(const QPointF &point)
+{
+    if (!m_document || !m_page || !std::isfinite(point.x()) || !std::isfinite(point.y()))
+        return {};
+    QMutexLocker lock(&m_linksMutex);
+    const bool loading = !m_linksLoaded;
+    if (loading) {
+        // The completed cache is Qt-owned and never changed, including empty
+        // and failed snapshots. Mouse movement must not retry failed parsing.
+        m_linksLoaded = true;
+        m_links = [this]() -> QList<Link> {
+            rofd_link_list_t *raw = nullptr;
+            rofd_error_t *error = nullptr;
+            const rofd_status_t status = rofd_page_get_links(m_page, &raw, &error);
+            const std::unique_ptr<rofd_link_list_t, decltype(&rofd_link_list_free)> snapshot(raw, rofd_link_list_free);
+            if (status != ROFD_STATUS_OK || !snapshot) {
+                logSemanticError("Link loading", m_pageIndex, status, error);
+                return {};
+            }
+            rofd_error_free(error);
+            size_t count = 0;
+            if (rofd_link_list_get_count(raw, &count, nullptr) != ROFD_STATUS_OK
+                || count > static_cast<size_t>(std::numeric_limits<int>::max())) {
+                qCWarning(appLog) << "Invalid OFD link count, page:" << m_pageIndex;
+                return {};
+            }
+            QList<Link> links;
+            for (size_t i = 0; i < count; ++i) {
+                size_t actionCount = 0;
+                if (rofd_link_list_get_action_count(raw, i, &actionCount, nullptr) != ROFD_STATUS_OK)
+                    continue;
+                Link link;
+                for (size_t actionIndex = 0; actionIndex < actionCount; ++actionIndex) {
+                    rofd_action_t action = {};
+                    action.struct_size = sizeof(action);
+                    if (rofd_link_list_get_action(raw, i, actionIndex, &action, nullptr) != ROFD_STATUS_OK)
+                        continue;
+                    rofd_destination_t destination = {};
+                    destination.struct_size = sizeof(destination);
+                    const rofd_destination_t *target = nullptr;
+                    if (action.event == ROFD_ACTION_EVENT_CLICK && action.kind == ROFD_ACTION_GOTO
+                        && rofd_link_list_get_action_destination(raw, i, actionIndex, &destination, nullptr) == ROFD_STATUS_OK) {
+                        target = &destination;
+                    }
+                    link.navigation = m_document->navigationTarget(action, target);
+                    if (link.navigation)
+                        break;
+                }
+                if (!link.navigation)
+                    continue;
+                size_t regionCount = 0;
+                if (rofd_link_list_get_region_count(raw, i, &regionCount, nullptr) != ROFD_STATUS_OK)
+                    continue;
+                // addRect uses the same winding for each positive rectangle:
+                // overlapping areas stay clickable, but separated gaps do not.
+                link.boundary.setFillRule(Qt::WindingFill);
+                for (size_t regionIndex = 0; regionIndex < regionCount; ++regionIndex) {
+                    rofd_rect_t region = {};
+                    if (rofd_link_list_get_region(raw, i, regionIndex, &region, nullptr) != ROFD_STATUS_OK)
+                        continue;
+                    const QRectF rect = toPixels(region);
+                    if (std::isfinite(rect.x()) && std::isfinite(rect.y())
+                        && std::isfinite(rect.width()) && rect.width() > 0
+                        && std::isfinite(rect.height()) && rect.height() > 0
+                        && std::isfinite(rect.right()) && std::isfinite(rect.bottom())) {
+                        link.boundary.addRect(rect);
+                    }
+                }
+                if (link.boundary.isEmpty())
+                    continue;
+                if (link.navigation->destination) {
+                    const auto &destination = *link.navigation->destination;
+                    link.page = destination.pageIndex + 1;
+                    link.left = destination.left.value_or(0);
+                    link.top = destination.top.value_or(0);
+                } else {
+                    link.urlOrFileName = link.navigation->uri.toString(QUrl::FullyEncoded);
+                }
+                links.append(std::move(link));
+            }
+            return links;
+        }();
+    }
+    Link result;
+    for (const Link &link : std::as_const(m_links)) {
+        if (link.boundary.contains(point)) {
+            result = link;
+            break;
+        }
+    }
+    lock.unlock();
+    if (loading)
+        m_document->warningDetails();
+    return result;
 }
 
 QImage OfdPage::render(int width, int height, const QRect &slice) const

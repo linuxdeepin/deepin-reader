@@ -109,7 +109,12 @@ if (OFD_SUPPORT)
                 rofd_metadata_t *metadata = 0;
                 rofd_warning_list_t *warnings = 0;
                 rofd_outline_t *outline = 0;
+                rofd_link_list_t *links = 0;
+                rofd_outline_node_t node = {0};
+                rofd_action_t action = {0};
                 rofd_destination_t destination = {0};
+                rofd_rect_t region = {0};
+                size_t count = 0;
                 int32_t w = 0, h = 0;
                 rofd_pixel_rect_init(&viewport, sizeof(viewport));
                 rofd_renderer_get_pixel_canvas_size(0, 0, 0, &w, &h, 0);
@@ -119,19 +124,29 @@ if (OFD_SUPPORT)
                 rofd_metadata_free(metadata);
                 rofd_document_get_warnings(0, &warnings, 0);
                 rofd_warning_list_free(warnings);
-                (void)&rofd_document_get_outline;
-                (void)&rofd_outline_get_action_destination;
-                (void)&rofd_outline_free;
                 rofd_document_get_outline(0, &outline, 0);
+                node.struct_size = sizeof(node);
+                action.struct_size = sizeof(action);
                 destination.struct_size = sizeof(destination);
+                rofd_outline_get_count(outline, &count, 0);
+                rofd_outline_get_node(outline, 0, &node, 0);
+                rofd_outline_get_action(outline, 0, 0, &action, 0);
                 rofd_outline_get_action_destination(outline, 0, 0, &destination, 0);
                 rofd_outline_free(outline);
+                rofd_page_get_links(0, &links, 0);
+                rofd_link_list_get_count(links, &count, 0);
+                rofd_link_list_get_region_count(links, 0, &count, 0);
+                rofd_link_list_get_region(links, 0, 0, &region, 0);
+                rofd_link_list_get_action_count(links, 0, &count, 0);
+                rofd_link_list_get_action(links, 0, 0, &action, 0);
+                rofd_link_list_get_action_destination(links, 0, 0, &destination, 0);
+                rofd_link_list_free(links);
                 return 0;
             }
         ]=] ROFD_READER_APIS_AVAILABLE)
         cmake_pop_check_state()
         if (NOT ROFD_READER_APIS_AVAILABLE)
-            message(FATAL_ERROR "rofd headers/library lack the required region, metadata, warning or outline APIs. Install matching rofd >= 0.4.0 headers and library, and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
+            message(FATAL_ERROR "rofd headers/library lack the required region, metadata, warning, outline or page-link APIs. Install matching rofd >= 0.4.0 headers and library, and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
         endif()
         message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
         add_compile_definitions(OFD_SUPPORT_ENABLED)

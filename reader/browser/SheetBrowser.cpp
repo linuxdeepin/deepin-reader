@@ -2267,6 +2267,9 @@ bool SheetBrowser::jump2Link(QPointF point)
 
     Link link = m_sheet->renderer()->getLinkAtPoint(page->itemIndex(), point);
 
+    if (link.navigation)
+        return navigateTo(*link.navigation);
+
     if (link.page > 0 && link.page <= allPages()) {
         qCDebug(appLog) << "SheetBrowser::jump2Link() - Link page is greater than 0 and less than or equal to all pages";
         jump2PagePos(m_items.at(link.page - 1), link.left, link.top);

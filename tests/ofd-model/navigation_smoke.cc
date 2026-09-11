@@ -69,6 +69,10 @@ int main(int argc, char **argv)
                      "<Actions><Action Event=\"CLICK\"><Goto><Dest Type=\"Fit\" PageID=\"42\"/>"
                      "</Goto></Action></Actions><FillColor Value=\"255 0 0\"/>"
                      "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
+                     "</PathObject><PathObject ID=\"4\" Boundary=\"80 30 40 25\" Fill=\"true\">"
+                     "<Actions><Action Event=\"CLICK\"><URI URI=\"https://example.invalid/page\"/>"
+                     "</Action></Actions><FillColor Value=\"0 0 255\"/>"
+                     "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
                      "</PathObject></Layer></Content></Page>"},
         {"Second.xml", "<Page><Area><PhysicalBox>3 5 100 120</PhysicalBox></Area><Content/></Page>"}
     };
@@ -202,6 +206,51 @@ int main(int argc, char **argv)
     invalid.destination->pageIndex = 999;
     verify(!sheet.navigateTo(invalid) && sheet.operation().scaleFactor == oldScale,
            "out-of-range target has no effects");
+
+    while (sheet.operation().rotation != Dr::RotateBy0)
+        sheet.rotateRight();
+    NavigationTarget firstPage;
+    firstPage.destination = NavigationDestination{};
+    firstPage.destination->pageIndex = 0;
+    firstPage.destination->left = 0;
+    firstPage.destination->top = 0;
+    firstPage.destination->zoom = 1;
+    verify(sheet.navigateTo(firstPage), "prepare page link interaction");
+    const auto hitPoint = [&](qreal xMillimetres) {
+        // Source physical origin is (7,11); fixture hit is at y=35 mm.
+        const QPointF local((xMillimetres - 7) * targetPage->boundingRect().width() / 210,
+                            24 * targetPage->boundingRect().height() / 297);
+        browser->centerOn(targetPage->mapToScene(local));
+        return browser->mapFromScene(targetPage->mapToScene(local));
+    };
+    const auto clickLink = [&](const QPoint &point) {
+        QMouseEvent press(QEvent::MouseButtonPress, QPointF(point), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent release(QEvent::MouseButtonRelease, QPointF(point), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        QCoreApplication::sendEvent(browser->viewport(), &press);
+        QCoreApplication::sendEvent(browser->viewport(), &release);
+    };
+    QPoint hit = hitPoint(25);
+    QMouseEvent hover(QEvent::MouseMove, QPointF(hit), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(browser->viewport(), &hover);
+    verify(browser->cursor().shape() == Qt::PointingHandCursor, "page link hover cursor");
+    NavigationDestination fit;
+    fit.pageIndex = 1;
+    fit.mode = DestinationMode::Fit;
+    const auto expectedFit = navigationView(fit, sheet.renderer()->getPageSize(1),
+        QSizeF(browser->viewport()->size()), {}, sheet.operation().scaleFactor,
+        sheet.maxScaleFactor(), 0, false);
+    verify(expectedFit.has_value(), "page-link fit reference");
+    clickLink(hit);
+    verify(sheet.currentPage() == 2, "page link reaches typed destination");
+    verify(qAbs(sheet.operation().scaleFactor - expectedFit->scale) < .001,
+           "page link preserves Fit destination mode");
+    verify(sheet.navigateTo(firstPage), "return to URI page link");
+    hit = hitPoint(85);
+    const Link uriLink = sheet.renderer()->getLinkAtPoint(0, QPointF(78 * targetPage->boundingRect().width() / 210,
+                                                                  24 * targetPage->boundingRect().height() / 297));
+    verify(uriLink.urlOrFileName == "https://example.invalid/page", "page link hover URL");
+    clickLink(hit);
+    verify(dialogs == 3 && sink.calls == 0, "URI page link confirms once and cancellation blocks opening");
     verify(sink.calls == 0, "no network navigation attempted");
     QDesktopServices::unsetUrlHandler("https");
     qInfo("PASS: %d real-widget navigation checks", checks);

@@ -41,7 +41,8 @@ bool hasOfdFile()
 QString createOfdFixture(const QTemporaryDir &dir, const QByteArray &info,
                          const QByteArray &pageArea = QByteArray(),
                          const QByteArray &documentExtras = QByteArray(),
-                         const QByteArray &secondPage = QByteArray())
+                         const QByteArray &secondPage = QByteArray(),
+                         const QByteArray &extraObjects = QByteArray())
 {
     QMap<QString, QByteArray> entries = {
         {"OFD.xml", "<OFD><DocBody><DocInfo>" + info
@@ -51,7 +52,7 @@ QString createOfdFixture(const QTemporaryDir &dir, const QByteArray &info,
             + (secondPage.isEmpty() ? QByteArray() : QByteArray("<Page ID=\"42\" BaseLoc=\"Second.xml\"/>"))
             + "</Pages>"
             + documentExtras + "</Document>"},
-        {"Page.xml", "<Page>" + pageArea + "<Content><Layer ID=\"2\"><PathObject ID=\"3\" "
+        {"Page.xml", "<Page>" + pageArea + "<Content><Layer ID=\"2\">" + extraObjects + "<PathObject ID=\"3\" "
             "Boundary=\"20 30 40 25\" Stroke=\"false\" Fill=\"true\"><FillColor Value=\"255 0 0\"/>"
             "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
             "</PathObject></Layer></Content></Page>"}
@@ -81,6 +82,23 @@ QByteArray outlineNode(const QByteArray &title, const QByteArray &action)
     return "<OutlineElem Title=\"" + title + "\"><Actions><Action Event=\"CLICK\">"
         + action + "</Action></Actions></OutlineElem>";
 }
+
+QByteArray linkAction(const QByteArray &action, const QByteArray &region = QByteArray(),
+                      const QByteArray &event = "CLICK")
+{
+    return "<Action Event=\"" + event + "\">" + region + action + "</Action>";
+}
+
+QPointF linkPoint(const OfdDocument &doc, qreal xMm, qreal yMm)
+{
+    return QPointF((xMm - 7) * doc.xRes() / 25.4, (yMm - 11) * doc.yRes() / 25.4);
+}
+
+const QByteArray separatedLinkRegions = R"xml(<Region>
+    <Area Start="10 20"><Line Point1="20 20"/><Line Point1="20 30"/><Close/></Area>
+    <Area Start="40 40"><Line Point1="50 40"/><Line Point1="50 50"/><Close/></Area>
+    <Area Start="12 22"><Line Point1="18 22"/><Line Point1="18 28"/><Close/></Area>
+    </Region>)xml";
 
 } // namespace
 
@@ -311,7 +329,9 @@ TEST(OfdApi, outlineConcurrentAndEmptyOrFailedSnapshotsStayStable)
     const QByteArray deepOutline = "<Outlines>" + QByteArray("<OutlineElem Title=\"too deep\">").repeated(66)
         + QByteArray("</OutlineElem>").repeated(66) + "</Outlines>";
     for (const QByteArray &extras : {QByteArray(), deepOutline,
-             QByteArray("<Outlines><OutlineElem Title=\"root\"/></Outlines>")}) {
+             QByteArray("<Outlines><OutlineElem Title=\"root\"/></Outlines>"),
+             QByteArray("<Outlines>") + outlineNode("root", "<Goto><Dest Type=\"Fit\" PageID=\"1\"/></Goto>")
+                 + "</Outlines>"}) {
         QTemporaryDir dir;
         ASSERT_TRUE(dir.isValid());
         const QString path = createOfdFixture(dir, {}, explicitPageArea, extras);
@@ -330,6 +350,221 @@ TEST(OfdApi, outlineConcurrentAndEmptyOrFailedSnapshotsStayStable)
         ASSERT_NE(good, nullptr);
         EXPECT_FALSE(good->render(210, 297).isNull());
     }
+}
+
+TEST(OfdApi, linksKeepSeparateRegionsAndChooseFirstSupportedOverlap)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QByteArray actions = "<Actions>"
+        + linkAction("<URI URI=\"https://ignored.invalid/\"/>", {}, "PO")
+        + linkAction("<GotoA AttachID=\"attachment\"/>", separatedLinkRegions)
+        + linkAction("<Goto><Bookmark Name=\"second\"/></Goto>", separatedLinkRegions)
+        + linkAction("<URI URI=\"https://later.invalid/\"/>", separatedLinkRegions) + "</Actions>";
+    const QString path = createOfdFixture(dir, {}, explicitPageArea + actions,
+        "<Bookmarks><Bookmark Name=\"second\"><Dest Type=\"XYZ\" PageID=\"42\" Left=\"13\" Top=\"25\" Zoom=\"0\"/>"
+        "</Bookmark></Bookmarks>", offsetSecondPage);
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    const Link first = page->getLinkAtPoint(linkPoint(*doc, 11, 21));
+    EXPECT_TRUE(first.isValid()); // The inherited Page stub cannot provide a link.
+    ASSERT_TRUE(first.navigation.has_value());
+    ASSERT_TRUE(first.navigation->destination.has_value());
+    const auto &destination = *first.navigation->destination;
+    EXPECT_EQ(destination.pageIndex, 1);
+    EXPECT_EQ(first.page, 2);
+    ASSERT_TRUE(destination.left.has_value());
+    ASSERT_TRUE(destination.top.has_value());
+    EXPECT_DOUBLE_EQ(*destination.left, 10.0 * doc->xRes() / 25.4);
+    EXPECT_DOUBLE_EQ(*destination.top, 20.0 * doc->yRes() / 25.4);
+    ASSERT_TRUE(destination.zoom.has_value());
+    EXPECT_DOUBLE_EQ(*destination.zoom, 0.0);
+    for (const QPointF point : {linkPoint(*doc, 15, 25), linkPoint(*doc, 45, 45)}) {
+        const Link hit = page->getLinkAtPoint(point);
+        EXPECT_TRUE(hit.isValid());
+        EXPECT_EQ(hit.page, 2);
+        EXPECT_TRUE(hit.boundary.contains(point));
+    }
+    EXPECT_FALSE(page->getLinkAtPoint(linkPoint(*doc, 30, 35)).isValid());
+    EXPECT_FALSE(first.boundary.contains(linkPoint(*doc, 30, 35)));
+    page.reset();
+    doc.reset();
+    EXPECT_EQ(first.navigation->destination->pageIndex, 1);
+    EXPECT_FALSE(first.boundary.isEmpty());
+}
+
+TEST(OfdApi, linksUseAlreadyTransformedRegionsAndBoundaryFallback)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QByteArray explicitRegion = "<Region><Area Start=\"0 0\"><Line Point1=\"1 0\"/>"
+        "<Line Point1=\"1 1\"/><Close/></Area></Region>";
+    const auto object = [](const QByteArray &id, const QByteArray &boundary, const QByteArray &actions) {
+        return "<PathObject ID=\"" + id + "\" Boundary=\"" + boundary + "\" CTM=\"20 0 0 10 0 0\" "
+            "Stroke=\"false\" Fill=\"true\"><AbbreviatedData>M 0 0 L 1 0 L 1 1 C</AbbreviatedData>"
+            "<Actions>" + actions + "</Actions></PathObject>";
+    };
+    const QByteArray objects = object("10", "50 60 20 10",
+        linkAction("<URI URI=\"https://explicit.invalid/\"/>", explicitRegion))
+        + object("11", "100 110 20 10", linkAction("<URI URI=\"https://fallback.invalid/\"/>"));
+    const QString path = createOfdFixture(dir, {}, explicitPageArea, {}, {}, objects);
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    for (const auto &sample : {std::make_pair(QPointF(55, 65), QString("https://explicit.invalid/")),
+                              std::make_pair(QPointF(105, 115), QString("https://fallback.invalid/"))}) {
+        const Link hit = page->getLinkAtPoint(linkPoint(*doc, sample.first.x(), sample.first.y()));
+        ASSERT_TRUE(hit.navigation.has_value());
+        EXPECT_EQ(hit.urlOrFileName, sample.second);
+        EXPECT_EQ(hit.navigation->uri, QUrl(sample.second));
+        EXPECT_NEAR(hit.boundary.boundingRect().width(), 20 * doc->xRes() / 25.4, 1e-6);
+        EXPECT_NEAR(hit.boundary.boundingRect().height(), 10 * doc->yRes() / 25.4, 1e-6);
+    }
+    EXPECT_FALSE(page->getLinkAtPoint(linkPoint(*doc, 80, 90)).isValid());
+    EXPECT_FALSE(page->getLinkAtPoint(linkPoint(*doc, 1000, 1100)).isValid());
+}
+
+TEST(OfdApi, linksResolveSafeBaseAndSkipAllUnsupportedActions)
+{
+    const QList<QByteArray> unsupported = {
+        linkAction("<URI URI=\"https://ignored.invalid/\"/>", {}, "PO"),
+        linkAction("<Goto><Dest Type=\"Fit\" PageID=\"1\"/></Goto>", {}, "DO"),
+        linkAction("<URI URI=\"https://ignored.invalid/\"/>", {}, "CUSTOM"),
+        linkAction("<GotoA AttachID=\"attachment\"/>"), linkAction("<Sound/>"),
+        linkAction("<URI URI=\"file:///tmp/no-open\"/>"),
+        linkAction("<URI URI=\"javascript:alert(1)\"/>"),
+        linkAction("<URI URI=\"relative\"/>"),
+        linkAction("<URI URI=\"relative\" Base=\"file:///tmp/\"/>"),
+        linkAction("<Goto><Dest Type=\"Fit\" PageID=\"999\"/></Goto>"),
+        linkAction("<Goto><Dest Type=\"CUSTOM\" PageID=\"1\"/></Goto>")
+    };
+    QByteArray allUnsupported;
+    for (const QByteArray &action : unsupported)
+        allUnsupported += action;
+    for (bool hasSupported : {false, true}) {
+        QTemporaryDir dir;
+        ASSERT_TRUE(dir.isValid());
+        const QByteArray supported = hasSupported
+            ? linkAction("<URI URI=\"child?q=1&amp;x=2\" Base=\"https://example.invalid/base/\"/>")
+                + linkAction("<URI URI=\"https://later.invalid/\"/>") : QByteArray();
+        const QString path = createOfdFixture(dir, {}, explicitPageArea + "<Actions>"
+            + allUnsupported + supported + "</Actions>");
+        ASSERT_FALSE(path.isEmpty());
+        Document::Error error;
+        std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+        ASSERT_NE(doc, nullptr);
+        std::unique_ptr<Page> page(doc->page(0));
+        ASSERT_NE(page, nullptr);
+        const Link hit = page->getLinkAtPoint(linkPoint(*doc, 15, 25));
+        EXPECT_EQ(hit.isValid(), hasSupported);
+        if (hasSupported) {
+            ASSERT_TRUE(hit.navigation.has_value());
+            EXPECT_EQ(hit.navigation->uri, QUrl("https://example.invalid/base/child?q=1&x=2"));
+            EXPECT_EQ(hit.urlOrFileName, QStringLiteral("https://example.invalid/base/child?q=1&x=2"));
+            EXPECT_EQ(hit.page, -1);
+        }
+    }
+}
+
+TEST(OfdApi, linksRemainIndependentOfFailedOutlines)
+{
+    const QByteArray deepOutline = "<Outlines>" + QByteArray("<OutlineElem Title=\"too deep\">").repeated(66)
+        + QByteArray("</OutlineElem>").repeated(66) + "</Outlines>";
+    for (bool outlineFirst : {false, true}) {
+        QTemporaryDir dir;
+        ASSERT_TRUE(dir.isValid());
+        const QString path = createOfdFixture(dir, {}, explicitPageArea + "<Actions>"
+            + linkAction("<Goto><Bookmark Name=\"second\"/></Goto>") + "</Actions>", deepOutline
+            + "<Bookmarks><Bookmark Name=\"second\"><Dest Type=\"Fit\" PageID=\"42\"/></Bookmark></Bookmarks>",
+            offsetSecondPage);
+        ASSERT_FALSE(path.isEmpty());
+        Document::Error error;
+        std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+        ASSERT_NE(doc, nullptr);
+        if (outlineFirst)
+            EXPECT_TRUE(doc->outline().isEmpty());
+        std::unique_ptr<Page> page(doc->page(0));
+        ASSERT_NE(page, nullptr);
+        const Link hit = page->getLinkAtPoint(linkPoint(*doc, 15, 25));
+        ASSERT_TRUE(hit.navigation.has_value());
+        ASSERT_TRUE(hit.navigation->destination.has_value());
+        EXPECT_EQ(hit.navigation->destination->pageIndex, 1);
+        EXPECT_TRUE(doc->outline().isEmpty());
+        EXPECT_TRUE(page->getLinkAtPoint(linkPoint(*doc, 15, 25)).isValid());
+    }
+}
+
+TEST(OfdApi, linksRefreshLazyWarningsWithoutInventingInvalidRegions)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = createOfdFixture(dir, {}, explicitPageArea + "<Actions>"
+        + linkAction("<URI URI=\"https://bad-region.invalid/\"/>", "<Region><Area Start=\"NaN 0\"/></Region>")
+        + linkAction("<Goto><Dest Type=\"XYZ\" PageID=\"42\" Left=\"17\"/></Goto>", separatedLinkRegions)
+        + "</Actions>", {}, "<Page><Content/></Page>");
+    ASSERT_FALSE(path.isEmpty());
+    Document::Error error;
+    std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+    ASSERT_NE(doc, nullptr);
+    std::unique_ptr<Page> page(doc->page(0));
+    ASSERT_NE(page, nullptr);
+    EXPECT_TRUE(doc->properties().value("Warnings").toList().isEmpty());
+    const Link hit = page->getLinkAtPoint(linkPoint(*doc, 15, 25));
+    ASSERT_TRUE(hit.navigation.has_value());
+    ASSERT_TRUE(hit.navigation->destination.has_value());
+    EXPECT_DOUBLE_EQ(*hit.navigation->destination->left, 10.0 * doc->xRes() / 25.4);
+    const QVariantList warnings = doc->properties().value("Warnings").toList();
+    ASSERT_EQ(warnings.size(), 2);
+    QList<uint> codes;
+    for (const QVariant &warning : warnings)
+        codes.append(warning.toMap().value("Code").toUInt());
+    EXPECT_TRUE(codes.contains(ROFD_WARNING_NAVIGATION_INVALID));
+    EXPECT_TRUE(codes.contains(ROFD_WARNING_PAGE_AREA_FALLBACK));
+    EXPECT_FALSE(page->getLinkAtPoint(linkPoint(*doc, 100, 100)).isValid());
+    EXPECT_EQ(doc->properties().value("Warnings").toList(), warnings);
+    EXPECT_FALSE(page->render(210, 297).isNull());
+}
+
+TEST(OfdApi, linksConcurrentEmptyAndFailedSnapshotsStayStable)
+{
+    // Deferred action XML is allowed to load the page but exceeds rofd's
+    // 100000-node navigation budget when a link snapshot is requested.
+    const QByteArray tooManyNodes = "<Actions>" + QByteArray("<Unknown/>").repeated(100001) + "</Actions>";
+    const QByteArray validGoto = "<Actions>" + linkAction("<Goto><Dest Type=\"Fit\" PageID=\"1\"/></Goto>")
+        + "</Actions>";
+    for (const QByteArray &actions : {QByteArray(), validGoto, tooManyNodes}) {
+        QTemporaryDir dir;
+        ASSERT_TRUE(dir.isValid());
+        const QString path = createOfdFixture(dir, {}, explicitPageArea + actions);
+        ASSERT_FALSE(path.isEmpty());
+        Document::Error error;
+        std::unique_ptr<OfdDocument> doc(OfdDocument::loadDocument(path, error));
+        ASSERT_NE(doc, nullptr);
+        std::unique_ptr<Page> page(doc->page(0));
+        ASSERT_NE(page, nullptr);
+        const QPointF point = linkPoint(*doc, 15, 25);
+        std::vector<std::future<Link>> queries;
+        for (int i = 0; i < 8; ++i)
+            queries.push_back(std::async(std::launch::async, [&page, point] { return page->getLinkAtPoint(point); }));
+        for (auto &query : queries)
+            EXPECT_EQ(query.get().isValid(), actions == validGoto);
+        EXPECT_EQ(page->getLinkAtPoint(point).isValid(), actions == validGoto);
+        EXPECT_FALSE(page->render(210, 297).isNull());
+    }
+}
+
+TEST(OfdApi, linksMissingOwnersAreInert)
+{
+    OfdPage page(nullptr, nullptr, -1);
+    EXPECT_FALSE(page.getLinkAtPoint(QPointF(1, 1)).isValid());
+    EXPECT_FALSE(page.getLinkAtPoint(QPointF(1, 1)).navigation.has_value());
 }
 
 TEST_F(TestOfdModel, loadDocument)
