@@ -18,6 +18,7 @@ Build-Depends:
  libdtk6core-dev [!mipsel !mips64el] | libdtkcore-dev,
  libgxps-dev,
  libcairo2-dev,
+ librofd-ffi-dev (>= 0.4.0),
  libglib2.0-dev,
  libdjvulibre-dev,
  libtiff-dev,

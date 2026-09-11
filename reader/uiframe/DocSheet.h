@@ -233,6 +233,8 @@ public:
      * @return
      */
     deepin_reader::Outline outline();
+    bool navigateTo(const deepin_reader::NavigationTarget &target);
+    bool hasRestoredViewState() const { return m_restoredFromState; }
 
     /**
      * @brief jumpToOutline
@@ -691,6 +693,9 @@ public:
      *                  避免用户已关闭的提示条再次弹出）
      */
     void beginRestoreGuard(bool notifyTip);
+
+    /** 有效的用户导航优先于尚未完成的阅读位置恢复。 */
+    void cancelRestoreGuard();
 
     /**
      * @brief 获取当前滚动位置（0.0~1.0）

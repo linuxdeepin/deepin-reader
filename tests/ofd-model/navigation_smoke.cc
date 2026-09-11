@@ -1,0 +1,376 @@
+// SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+// SPDX-License-Identifier: GPL-3.0-or-later
+#include "Application.h"
+#include "BrowserPage.h"
+#include "CatalogTreeView.h"
+#include "CatalogOutlineModel.h"
+#include "DocSheet.h"
+#include "Navigation.h"
+#include "SecurityDialog.h"
+#include "SheetBrowser.h"
+#include "SheetRenderer.h"
+#include "ThumbnailDelegate.h"
+#include "SideBarImageViewModel.h"
+#include "EyeProtectionManager.h"
+#include "NightFilter.h"
+#include <DGuiApplicationHelper>
+#include <QListView>
+#include <QPainter>
+#include <QStandardItemModel>
+#include <QScopeGuard>
+#include <QDesktopServices>
+#include <QDir>
+#include <QEventLoop>
+#include <QFile>
+#include <QKeyEvent>
+#include <QProcess>
+#include <QScrollBar>
+#include <QTemporaryDir>
+#include <QTimer>
+#include <cmath>
+
+using namespace deepin_reader;
+static int checks = 0;
+static void verify(bool condition, const char *description)
+{
+    if (!condition)
+        qFatal("FAIL: %s", description);
+    ++checks;
+}
+static void settle(int milliseconds = 250)
+{
+    QEventLoop loop;
+    QTimer::singleShot(milliseconds, &loop, &QEventLoop::quit);
+    loop.exec();
+}
+class UrlSink : public QObject {
+    Q_OBJECT
+public:
+    int calls = 0;
+public slots:
+    void capture(const QUrl &) { ++calls; }
+};
+
+static void verifyThumbnailAppearance()
+{
+    auto *eye = EyeProtectionManager::instance();
+    auto *theme = Dtk::Gui::DGuiApplicationHelper::instance();
+    const auto oldMode = eye->mode();
+    const auto oldPalette = theme->paletteType();
+    const auto restore = qScopeGuard([=] { eye->setMode(oldMode); theme->setPaletteType(oldPalette); });
+    QListView view;
+    view.setProperty("adaptScale", 1.0);
+    ThumbnailDelegate delegate(&view);
+    QStandardItemModel model(1, 1);
+    view.setModel(&model);
+    const QModelIndex index = model.index(0, 0);
+    model.setData(index, QSize(210, 297), IMAGE_PAGE_SIZE);
+    QStyleOptionViewItem option;
+    option.rect = QRect(0, 0, 240, 300);
+    for (auto appearance : {Dtk::Gui::DGuiApplicationHelper::LightType,
+                            Dtk::Gui::DGuiApplicationHelper::DarkType}) {
+        theme->setPaletteType(appearance);
+        verify(theme->themeType() == appearance, "thumbnail theme fixture takes effect");
+        for (auto mode : {EyeProtectionManager::Off, EyeProtectionManager::Classic,
+                          EyeProtectionManager::Green, EyeProtectionManager::Night}) {
+            eye->setMode(mode);
+            for (const QColor &color : {QColor(Qt::white), QColor(90, 140, 200)}) {
+                QPixmap source(32, 48);
+                source.setDevicePixelRatio(2);
+                source.fill(color);
+                model.setData(index, source, IMAGE_PIXMAP);
+                QImage expected(1, 1, QImage::Format_ARGB32_Premultiplied);
+                expected.fill(color);
+                if (mode == EyeProtectionManager::Night)
+                    expected = NightFilter::applyPage(expected, {});
+                {
+                    QPainter painter(&expected);
+                    if (mode == EyeProtectionManager::Night) {
+                        QColor overlay = eye->pageBackgroundColor();
+                        overlay.setAlpha(60);
+                        painter.fillRect(expected.rect(), overlay);
+                    } else if (mode != EyeProtectionManager::Off) {
+                        painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+                        painter.fillRect(expected.rect(), eye->pageBackgroundColor());
+                    }
+                }
+                for (int rotation : {0, 90}) {
+                    model.setData(index, rotation, IMAGE_ROTATE);
+                    QImage canvas(240, 300, QImage::Format_ARGB32_Premultiplied);
+                    canvas.fill(Qt::red);
+                    {
+                        QPainter painter(&canvas);
+                        static_cast<const QAbstractItemDelegate &>(delegate).paint(&painter, option, index);
+                    }
+                    verify(canvas.pixelColor(120, 150) == expected.pixelColor(0, 0),
+                           "thumbnail paint follows eye mode independently of system theme");
+                }
+            }
+        }
+    }
+}
+
+int main(int argc, char **argv)
+{
+    Application app(argc, argv);
+    QTimer::singleShot(60000, [] { qFatal("Smoke test timed out"); });
+    QTemporaryDir fixture;
+    verify(fixture.isValid(), "fixture directory");
+    QByteArray nested;
+    for (int i = 0; i < 8; ++i)
+        nested += "<OutlineElem Title=\"Level " + QByteArray::number(i) + "\" Expanded=\"true\">";
+    nested += "<OutlineElem Title=\"Destination\"><Actions><Action Event=\"CLICK\">"
+              "<Goto><Dest Type=\"XYZ\" PageID=\"42\" Left=\"23\" Top=\"35\" Zoom=\"2\"/>"
+              "</Goto></Action></Actions></OutlineElem>";
+    for (int i = 0; i < 8; ++i)
+        nested += "</OutlineElem>";
+    nested += "<OutlineElem Title=\"Website\"><Actions><Action Event=\"CLICK\">"
+              "<URI URI=\"https://example.invalid/navigation\"/></Action></Actions></OutlineElem>";
+    const QMap<QString, QByteArray> entries{
+        {"OFD.xml", "<OFD><DocBody><DocInfo/><DocRoot>Document.xml</DocRoot></DocBody></OFD>"},
+        {"Document.xml", "<Document><CommonData><PageArea><PhysicalBox>7 11 210 297</PhysicalBox>"
+                         "</PageArea></CommonData><Pages><Page ID=\"1\" BaseLoc=\"Page.xml\"/>"
+                         "<Page ID=\"42\" BaseLoc=\"Second.xml\"/></Pages><Outlines>" + nested
+                         + "</Outlines></Document>"},
+        {"Page.xml", "<Page><Area><PhysicalBox>7 11 210 297</PhysicalBox></Area><Content>"
+                     "<Layer ID=\"2\"><PathObject ID=\"3\" Boundary=\"20 30 40 25\" Fill=\"true\">"
+                     "<Actions><Action Event=\"CLICK\"><Goto><Dest Type=\"Fit\" PageID=\"42\"/>"
+                     "</Goto></Action></Actions><FillColor Value=\"255 0 0\"/>"
+                     "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
+                     "</PathObject><PathObject ID=\"4\" Boundary=\"80 30 40 25\" Fill=\"true\">"
+                     "<Actions><Action Event=\"CLICK\"><URI URI=\"https://example.invalid/page\"/>"
+                     "</Action></Actions><FillColor Value=\"0 0 255\"/>"
+                     "<AbbreviatedData>M 0 0 L 40 0 L 40 25 L 0 25 C</AbbreviatedData>"
+                     "</PathObject></Layer></Content></Page>"},
+        {"Second.xml", "<Page><Area><PhysicalBox>3 5 100 120</PhysicalBox></Area><Content/></Page>"}
+    };
+    for (auto it = entries.cbegin(); it != entries.cend(); ++it) {
+        QFile file(fixture.filePath(it.key()));
+        verify(file.open(QIODevice::WriteOnly) && file.write(it.value()) == it.value().size(), "fixture file");
+    }
+    QProcess zip;
+    zip.setWorkingDirectory(fixture.path());
+    zip.start("cmake", QStringList{"-E", "tar", "cf", "smoke.ofd", "--format=zip"} + entries.keys());
+    verify(zip.waitForFinished() && zip.exitCode() == 0, "fixture archive");
+    UrlSink sink;
+    QDesktopServices::setUrlHandler("https", &sink, "capture");
+    DocSheet sheet(Dr::OFD, fixture.filePath("smoke.ofd"));
+    sheet.resize(1100, 800);
+    sheet.show();
+    verify(sheet.openFileExec(QString()), "open OFD in real DocSheet");
+    settle();
+    auto *browser = sheet.getSheetBrowser();
+    auto *catalog = sheet.findChild<CatalogTreeView *>();
+    verify(browser && catalog, "OFD has browser and catalog widgets");
+    catalog->handleOpenSuccess();
+    verify(catalog->model()->rowCount() == 2, "root catalog rows");
+    QModelIndex leaf;
+    for (int i = 0; i < 9; ++i) {
+        leaf = catalog->model()->index(0, 0, leaf);
+        verify(leaf.isValid(), "full catalog depth");
+        if (i < 8)
+            verify(catalog->isExpanded(leaf), "document expansion defaults");
+    }
+    verify(sheet.currentPage() == 1, "population does not navigate");
+    catalog->setCurrentIndex(leaf);
+    verify(sheet.currentPage() == 1, "selection does not navigate");
+    // Opening/restoring a tab must not swallow an explicit catalog activation.
+    sheet.beginRestoreGuard(true);
+    QKeyEvent enter(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+    QCoreApplication::sendEvent(catalog, &enter);
+    verify(sheet.currentPage() == 2 && qAbs(sheet.operation().scaleFactor - 2) < .001,
+           "keyboard activation uses target page and zoom");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 2 && browser->currentPage() == 2 && !sheet.needsRestoreTip(),
+           "explicit catalog navigation supersedes pending restore and its notification");
+    sheet.saveCurrentViewState();
+    verify(sheet.operation().scrollPosition > 0, "nonzero saved position for restore checks");
+    sheet.beginRestoreGuard(true);
+    browser->setCurrentPage(1);
+    verify(browser->currentPage() == 1 && sheet.currentPage() == 2,
+           "restore guard freezes the saved page during a layout page change");
+    NavigationTarget alreadyVisible;
+    alreadyVisible.destination = NavigationDestination{};
+    alreadyVisible.destination->pageIndex = 0;
+    alreadyVisible.destination->zoom = sheet.operation().scaleFactor;
+    verify(sheet.navigateTo(alreadyVisible), "navigate to a page already visible during restoration");
+    verify(sheet.currentPage() == 1 && browser->currentPage() == 1,
+           "explicit navigation synchronizes the saved page even without a browser page change");
+    sheet.jumpToPage(2);
+    sheet.saveCurrentViewState();
+    sheet.beginRestoreGuard(true);
+    NavigationTarget invalidDuringRestore;
+    invalidDuringRestore.destination = NavigationDestination{};
+    invalidDuringRestore.destination->pageIndex = 999;
+    verify(!sheet.navigateTo(invalidDuringRestore), "invalid navigation rejected during restore");
+    browser->setCurrentPage(1);
+    verify(sheet.currentPage() == 2, "invalid target leaves restore guard active");
+    settle(kRestoreSettleMs + 100);
+    verify(browser->currentPage() == 2 && sheet.needsRestoreTip(),
+           "normal saved-page restoration and its notification remain intact");
+    sheet.dismissRestoreTip();
+    catalog->restoreExpandedSections({});
+    verify(catalog->getExpandedSections().isEmpty(), "all-collapsed saved state wins");
+
+    const QModelIndex website = catalog->model()->index(1, 1);
+    int dialogs = 0;
+    QTimer cancel;
+    QObject::connect(&cancel, &QTimer::timeout, [&] {
+        for (QWidget *widget : QApplication::topLevelWidgets()) {
+            if (auto *dialog = qobject_cast<SecurityDialog *>(widget); dialog && dialog->isVisible()) {
+                ++dialogs;
+                dialog->reject();
+            }
+        }
+    });
+    cancel.start(10);
+    catalog->setCurrentIndex(website);
+    settle();
+    verify(dialogs == 0 && sink.calls == 0, "URI selection has no effects");
+    sheet.beginRestoreGuard(true);
+    QCoreApplication::sendEvent(catalog, &enter);
+    verify(dialogs == 1 && sink.calls == 0, "URI keyboard activation confirms once and cancellation blocks opening");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.needsRestoreTip(), "external link cancellation does not cancel page restoration");
+    sheet.dismissRestoreTip();
+    QMetaObject::invokeMethod(catalog, "onItemClicked", Qt::DirectConnection, Q_ARG(QModelIndex, website));
+    verify(dialogs == 2 && sink.calls == 0, "URI click confirms once and cancellation blocks opening");
+
+    for (int rotation = 0; rotation < 4; ++rotation) {
+        if (rotation)
+            sheet.rotateRight();
+        for (Dr::LayoutMode layout : {Dr::SinglePageMode, Dr::TwoPagesMode}) {
+            sheet.setLayoutMode(layout);
+            for (DestinationMode mode : {DestinationMode::XYZ, DestinationMode::Fit, DestinationMode::FitH,
+                                         DestinationMode::FitV, DestinationMode::FitR}) {
+                NavigationDestination destination;
+                destination.pageIndex = 1;
+                destination.mode = mode;
+                destination.left = 20;
+                destination.top = 30;
+                destination.right = 200;
+                destination.bottom = 250;
+                destination.zoom = 1.5;
+                NavigationTarget target;
+                target.destination = destination;
+                verify(sheet.navigateTo(target), "navigate mode/rotation/layout");
+                verify(sheet.currentPage() == 2 && std::isfinite(sheet.operation().scaleFactor), "valid navigation state");
+                BrowserPage *page = nullptr;
+                for (auto *item : browser->scene()->items())
+                    if (auto *candidate = dynamic_cast<BrowserPage *>(item); candidate && candidate->itemIndex() == 1)
+                        page = candidate;
+                verify(page, "target scene item");
+                const auto view = navigationView(destination, sheet.renderer()->getPageSize(1),
+                    QSizeF(browser->viewport()->size()), {}, sheet.operation().scaleFactor,
+                    sheet.maxScaleFactor(), rotation * 90, layout == Dr::TwoPagesMode);
+                verify(view.has_value(), "navigation reference");
+                const qreal scale = sheet.operation().scaleFactor;
+                const QPointF expected = page->mapRectToScene(QRectF(view->focusRect.topLeft() * scale,
+                                                                    view->focusRect.size() * scale)).topLeft();
+                verify(browser->horizontalScrollBar()->value() == qRound(qBound(qreal(browser->horizontalScrollBar()->minimum()), expected.x(), qreal(browser->horizontalScrollBar()->maximum())))
+                    && browser->verticalScrollBar()->value() == qRound(qBound(qreal(browser->verticalScrollBar()->minimum()), expected.y(), qreal(browser->verticalScrollBar()->maximum()))),
+                    "scroll aligns to transformed target");
+            }
+        }
+    }
+    // Capture the old viewport position independently of navigationView. This
+    // exercises omitted-coordinate conversion through a rotated, scrolled page.
+    sheet.setLayoutMode(Dr::SinglePageMode);
+    sheet.setScaleFactor(2);
+    sheet.jumpToPage(2);
+    BrowserPage *sourcePage = nullptr;
+    BrowserPage *targetPage = nullptr;
+    for (auto *item : browser->scene()->items()) {
+        if (auto *page = dynamic_cast<BrowserPage *>(item)) {
+            if (page->itemIndex() == 1)
+                sourcePage = page;
+            if (page->itemIndex() == 0)
+                targetPage = page;
+        }
+    }
+    verify(sourcePage && targetPage, "omitted-axis scene items");
+    browser->horizontalScrollBar()->setValue(browser->horizontalScrollBar()->maximum() / 2);
+    const QPointF priorPosition = sourcePage->mapFromScene(browser->mapToScene(QPoint(0, 0))) / 2;
+    NavigationTarget partial;
+    partial.destination = NavigationDestination{};
+    partial.destination->pageIndex = 0;
+    partial.destination->top = 40;
+    partial.destination->zoom = 0;
+    verify(sheet.navigateTo(partial), "rotated XYZ with omitted left");
+    verify(sheet.operation().scaleFactor == 2, "zero zoom keeps the old scale");
+    const QPointF expectedPartial = targetPage->mapToScene(
+        QPointF(qBound(qreal(0), priorPosition.x(), sheet.renderer()->getPageSize(0).width()), 40) * 2);
+    verify(browser->horizontalScrollBar()->value() == qRound(qBound(qreal(browser->horizontalScrollBar()->minimum()), expectedPartial.x(), qreal(browser->horizontalScrollBar()->maximum())))
+        && browser->verticalScrollBar()->value() == qRound(qBound(qreal(browser->verticalScrollBar()->minimum()), expectedPartial.y(), qreal(browser->verticalScrollBar()->maximum()))),
+        "omitted axis retains captured current-page position");
+    const auto oldScale = sheet.operation().scaleFactor;
+    NavigationTarget invalid;
+    invalid.destination = NavigationDestination{};
+    invalid.destination->pageIndex = 999;
+    verify(!sheet.navigateTo(invalid) && sheet.operation().scaleFactor == oldScale,
+           "out-of-range target has no effects");
+
+    while (sheet.operation().rotation != Dr::RotateBy0)
+        sheet.rotateRight();
+    NavigationTarget firstPage;
+    firstPage.destination = NavigationDestination{};
+    firstPage.destination->pageIndex = 0;
+    firstPage.destination->left = 0;
+    firstPage.destination->top = 0;
+    firstPage.destination->zoom = 1;
+    verify(sheet.navigateTo(firstPage), "prepare page link interaction");
+    const auto hitPoint = [&](qreal xMillimetres) {
+        // Source physical origin is (7,11); fixture hit is at y=35 mm.
+        const QPointF local((xMillimetres - 7) * targetPage->boundingRect().width() / 210,
+                            24 * targetPage->boundingRect().height() / 297);
+        browser->centerOn(targetPage->mapToScene(local));
+        return browser->mapFromScene(targetPage->mapToScene(local));
+    };
+    const auto clickLink = [&](const QPoint &point) {
+        QMouseEvent press(QEvent::MouseButtonPress, QPointF(point), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent release(QEvent::MouseButtonRelease, QPointF(point), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        QCoreApplication::sendEvent(browser->viewport(), &press);
+        QCoreApplication::sendEvent(browser->viewport(), &release);
+    };
+    QPoint hit = hitPoint(25);
+    QMouseEvent hover(QEvent::MouseMove, QPointF(hit), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(browser->viewport(), &hover);
+    verify(browser->cursor().shape() == Qt::PointingHandCursor, "page link hover cursor");
+    NavigationDestination fit;
+    fit.pageIndex = 1;
+    fit.mode = DestinationMode::Fit;
+    const auto expectedFit = navigationView(fit, sheet.renderer()->getPageSize(1),
+        QSizeF(browser->viewport()->size()), {}, sheet.operation().scaleFactor,
+        sheet.maxScaleFactor(), 0, false);
+    verify(expectedFit.has_value(), "page-link fit reference");
+    sheet.saveCurrentViewState();
+    sheet.beginRestoreGuard(true);
+    clickLink(hit);
+    verify(sheet.currentPage() == 2, "page link reaches typed destination");
+    verify(qAbs(sheet.operation().scaleFactor - expectedFit->scale) < .001,
+           "page link preserves Fit destination mode");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 2 && browser->currentPage() == 2 && !sheet.needsRestoreTip(),
+           "page-link navigation is not overwritten by a pending restore");
+    verify(sheet.navigateTo(firstPage), "return to URI page link");
+    hit = hitPoint(85);
+    const Link uriLink = sheet.renderer()->getLinkAtPoint(0, QPointF(78 * targetPage->boundingRect().width() / 210,
+                                                                  24 * targetPage->boundingRect().height() / 297));
+    verify(uriLink.urlOrFileName == "https://example.invalid/page", "page link hover URL");
+    clickLink(hit);
+    verify(dialogs == 3 && sink.calls == 0, "URI page link confirms once and cancellation blocks opening");
+    verify(sink.calls == 0, "no network navigation attempted");
+    sheet.jumpToPage(2);
+    sheet.saveCurrentViewState();
+    verify(sheet.operation().scrollPosition > 0, "tab-return restore has a saved position");
+    sheet.restoreSavedViewState();
+    verify(sheet.navigateTo(firstPage), "explicit navigation immediately after tab return");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 1 && browser->currentPage() == 1 && !sheet.needsRestoreTip(),
+           "tab-return restoration cannot overwrite explicit navigation");
+    QDesktopServices::unsetUrlHandler("https");
+    verifyThumbnailAppearance();
+    qInfo("PASS: %d real-widget navigation/appearance checks", checks);
+    return 0;
+}
+#include "navigation_smoke.moc"

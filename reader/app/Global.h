@@ -42,10 +42,14 @@ enum FileType {
     DOC     = 5,
     PPTX    = 6,
 #ifdef XPS_SUPPORT_ENABLED
-    XPS     = 7
+    XPS     = 7,
+#endif
+#ifdef OFD_SUPPORT_ENABLED
+    OFD     = 8
 #endif
 };
 FileType fileType(const QString &filePath);
+bool supportsSearch(FileType fileType);
 bool isNetworkPath(const QString &filePath);
 
 /**

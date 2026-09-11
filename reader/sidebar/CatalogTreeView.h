@@ -10,6 +10,7 @@
 
 #include <QMouseEvent>
 #include <QStandardItemModel>
+#include <optional>
 
 DWIDGET_USE_NAMESPACE
 namespace deepin_reader {
@@ -138,6 +139,8 @@ private slots:
     void onFontChanged(const QFont &font);
 
 private:
+    std::optional<QStringList> m_pendingExpandedSections;
+    bool m_populating = false;
     /**
      * @brief parseCatalogData
      * 解析文档目录数据

@@ -62,6 +62,105 @@ else()
     unset(XPS_DEPS_CFLAGS_OTHER)
 endif()
 
+# OFD支持选项（依赖发行版提供的 rofd C ABI 库，见 debian/control 的 librofd-ffi-dev）
+option(OFD_SUPPORT "Enable OFD document format support" ON)
+set(ROFD_ROOT "" CACHE PATH "Path to the rofd repository checkout or install prefix, overrides the system install")
+
+set(OFD_SUPPORT_RESOLVED ${OFD_SUPPORT})
+
+if (OFD_SUPPORT)
+    # 默认走系统路径：librofd-ffi-dev 提供 /usr/include/rofd.h 与 lib/<multiarch>/librofd_ffi.so
+    set(ROFD_ROOT_HINTS "")
+    if (ROFD_ROOT)
+        list(APPEND ROFD_ROOT_HINTS ${ROFD_ROOT})
+    endif()
+    if (EXISTS "${CMAKE_SOURCE_DIR}/../rofd")
+        list(APPEND ROFD_ROOT_HINTS "${CMAKE_SOURCE_DIR}/../rofd")
+    endif()
+
+    set(ROFD_LIB_SUFFIXES target/release target/debug lib)
+    if (CMAKE_LIBRARY_ARCHITECTURE)
+        list(APPEND ROFD_LIB_SUFFIXES "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+    endif()
+
+    find_path(ROFD_INCLUDE_DIR rofd.h
+        HINTS ${ROFD_ROOT_HINTS}
+        PATH_SUFFIXES crates/rofd-ffi/include include
+    )
+    find_library(ROFD_FFI_LIBRARY NAMES rofd_ffi
+        HINTS ${ROFD_ROOT_HINTS}
+        PATH_SUFFIXES ${ROFD_LIB_SUFFIXES}
+    )
+    pkg_check_modules(OFD_CAIRO QUIET cairo)
+
+    if (ROFD_INCLUDE_DIR AND ROFD_FFI_LIBRARY AND OFD_CAIRO_FOUND)
+        # Require the reader APIs shipped in 0.4.0. Probe declarations and linked
+        # symbols as well, so mismatched headers and libraries fail at configure.
+        include(CheckCSourceCompiles)
+        include(CMakePushCheckState)
+        cmake_push_check_state(RESET)
+        set(CMAKE_REQUIRED_INCLUDES ${ROFD_INCLUDE_DIR} ${OFD_CAIRO_INCLUDE_DIRS})
+        set(CMAKE_REQUIRED_LIBRARIES ${ROFD_FFI_LIBRARY} ${OFD_CAIRO_LIBRARIES})
+        unset(ROFD_READER_APIS_AVAILABLE CACHE)
+        check_c_source_compiles([=[
+            #include <rofd.h>
+            int main(void) {
+                rofd_pixel_rect_t viewport;
+                rofd_metadata_t *metadata = 0;
+                rofd_warning_list_t *warnings = 0;
+                rofd_outline_t *outline = 0;
+                rofd_link_list_t *links = 0;
+                rofd_outline_node_t node = {0};
+                rofd_action_t action = {0};
+                rofd_destination_t destination = {0};
+                rofd_rect_t region = {0};
+                size_t count = 0;
+                int32_t w = 0, h = 0;
+                rofd_pixel_rect_init(&viewport, sizeof(viewport));
+                rofd_renderer_get_pixel_canvas_size(0, 0, 0, &w, &h, 0);
+                rofd_renderer_render_page_region_cairo(0, 0, 0, 0, &viewport, 0, 0);
+                rofd_document_get_metadata(0, &metadata, 0);
+                rofd_metadata_get_document_id(metadata);
+                rofd_metadata_free(metadata);
+                rofd_document_get_warnings(0, &warnings, 0);
+                rofd_warning_list_free(warnings);
+                rofd_document_get_outline(0, &outline, 0);
+                node.struct_size = sizeof(node);
+                action.struct_size = sizeof(action);
+                destination.struct_size = sizeof(destination);
+                rofd_outline_get_count(outline, &count, 0);
+                rofd_outline_get_node(outline, 0, &node, 0);
+                rofd_outline_get_action(outline, 0, 0, &action, 0);
+                rofd_outline_get_action_destination(outline, 0, 0, &destination, 0);
+                rofd_outline_free(outline);
+                rofd_page_get_links(0, &links, 0);
+                rofd_link_list_get_count(links, &count, 0);
+                rofd_link_list_get_region_count(links, 0, &count, 0);
+                rofd_link_list_get_region(links, 0, 0, &region, 0);
+                rofd_link_list_get_action_count(links, 0, &count, 0);
+                rofd_link_list_get_action(links, 0, 0, &action, 0);
+                rofd_link_list_get_action_destination(links, 0, 0, &destination, 0);
+                rofd_link_list_free(links);
+                return 0;
+            }
+        ]=] ROFD_READER_APIS_AVAILABLE)
+        cmake_pop_check_state()
+        if (NOT ROFD_READER_APIS_AVAILABLE)
+            message(FATAL_ERROR "rofd headers/library lack the required region, metadata, warning, outline or page-link APIs. Install matching rofd >= 0.4.0 headers and library, and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
+        endif()
+        message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
+        add_compile_definitions(OFD_SUPPORT_ENABLED)
+        set(OFD_SUPPORT_RESOLVED ON)
+    else()
+        message(WARNING ">>> OFD support disabled: install librofd-ffi-dev, or pass -DROFD_ROOT=<rofd checkout>")
+        set(OFD_SUPPORT_RESOLVED OFF)
+    endif()
+else()
+    message(STATUS ">>> OFD support disabled by configuration")
+endif()
+
+set(OFD_SUPPORT_ENABLED ${OFD_SUPPORT_RESOLVED})
+
 include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    set(CMAKE_INSTALL_PREFIX /usr)

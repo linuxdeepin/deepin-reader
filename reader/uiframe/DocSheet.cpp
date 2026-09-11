@@ -88,6 +88,10 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     else if (Dr::XPS == fileType)
         m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK);
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+    else if (Dr::OFD == fileType)
+        m_sidebar = new SheetSidebar(this, PREVIEW_THUMBNAIL | PREVIEW_CATALOG | PREVIEW_BOOKMARK);
+#endif
     else
         m_sidebar = new SheetSidebar(this);
 
@@ -352,6 +356,11 @@ void DocSheet::jumpToOutline(const qreal  &left, const qreal &top, int index)
 {
     qCDebug(appLog) << "jumpToOutline";
     m_browser->jumpToOutline(left, top, index);
+}
+
+bool DocSheet::navigateTo(const deepin_reader::NavigationTarget &target)
+{
+    return m_browser && m_browser->navigateTo(target);
 }
 
 void DocSheet::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)
@@ -867,6 +876,10 @@ QString DocSheet::filter()
         return QStringLiteral("XPS Files (*.xps);;Pdf Files (*.pdf)");
     }
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+    else if (Dr::OFD == m_fileType)
+        return "OFD Files (*.ofd)";
+#endif
 
     qCDebug(appLog) << "filter end, return:";
     return "";
@@ -887,6 +900,11 @@ QString DocSheet::format()
         qCDebug(appLog) << "filter end, return:";
         return QString("DJVU");
     }
+#ifdef OFD_SUPPORT_ENABLED
+    else if (Dr::OFD == m_fileType) {
+        return QString("OFD");
+    }
+#endif
     qCDebug(appLog) << "format end, return:";
     return "";
 }
@@ -1479,6 +1497,16 @@ void DocSheet::docBasicInfo(deepin_reader::FileInfo &tFileInfo)
 
     const Properties &propertys = m_renderer->properties();
     tFileInfo.format = format();
+#ifdef OFD_SUPPORT_ENABLED
+    if (m_fileType == Dr::OFD) {
+        const QDateTime created = propertys.value("CreationDate").toDateTime();
+        const QDateTime modified = propertys.value("ModificationDate").toDateTime();
+        if (created.isValid())
+            tFileInfo.createTime = created;
+        if (modified.isValid())
+            tFileInfo.changeTime = modified;
+    }
+#endif
     tFileInfo.optimization = propertys.value("Linearized").toBool();
     QString keywords = propertys.value("KeyWords").toString();
     if (keywords.isEmpty()) {
@@ -1915,6 +1943,22 @@ void DocSheet::onBrowserDeformed()
     // 守卫期间布局仍在变化（缩放/窗口/侧栏），推迟最终恢复，稳定后再执行
     if (m_restoreGuardActive)
         m_restoreSettleTimer->start(kRestoreSettleMs);
+}
+
+void DocSheet::cancelRestoreGuard()
+{
+    if (!m_restoreGuardActive)
+        return;
+
+    m_restoreSettleTimer->stop();
+    m_restoreGuardActive = false;
+    m_restoreNotifyTip = false;
+    dismissRestoreTip();
+
+    // 守卫期间可见页可能已变化，但操作记录仍停留在恢复锚点。
+    // 同页导航不会再发 sigPageChanged，解除守卫时先同步当前可见页。
+    if (m_browser)
+        onBrowserPageChanged(m_browser->currentPage());
 }
 
 void DocSheet::onLayoutSettled()

@@ -36,6 +36,9 @@ Application::Application(int &argc, char **argv)
 #ifdef XPS_SUPPORT_ENABLED
         , QStringLiteral("XPS")
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+        , QStringLiteral("OFD")
+#endif
     };
     setApplicationDescription(tr("Document Viewer is a tool for reading document files, supporting %1.")
                                   .arg(supportedFormats.join(QStringLiteral(", "))));
@@ -130,4 +133,3 @@ bool Application::notify(QObject *object, QEvent *event)
 
     return DApplication::notify(object, event);
 }
-

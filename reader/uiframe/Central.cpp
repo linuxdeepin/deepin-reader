@@ -178,6 +178,9 @@ void Central::addFilesWithDialog()
 #ifdef XPS_SUPPORT_ENABLED
     filters << "*.xps";
 #endif
+#ifdef OFD_SUPPORT_ENABLED
+    filters << "*.ofd";
+#endif
     dialog.setNameFilter(tr("Documents") + QStringLiteral(" (") + filters.join(' ') + QLatin1Char(')'));
     dialog.setDirectory(QDir::homePath());
 
