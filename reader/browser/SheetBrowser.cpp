@@ -771,6 +771,10 @@ bool SheetBrowser::navigateTo(const NavigationTarget &target)
     if (!view)
         return false;
 
+    // 目标校验成功后，主动导航取代旧的恢复任务；否则页码信号会被守卫
+    // 忽略，布局稳定后还会跳回保存的锚点。目录和页面链接共用此路径。
+    m_sheet->cancelRestoreGuard();
+
     {
         QScopedValueRollback<bool> suppressPageChanges(m_bNeedNotifyCurPageChanged, false);
         m_sheet->setScaleFactor(view->scale);

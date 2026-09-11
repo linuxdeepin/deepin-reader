@@ -694,6 +694,9 @@ public:
      */
     void beginRestoreGuard(bool notifyTip);
 
+    /** 有效的用户导航优先于尚未完成的阅读位置恢复。 */
+    void cancelRestoreGuard();
+
     /**
      * @brief 获取当前滚动位置（0.0~1.0）
      */

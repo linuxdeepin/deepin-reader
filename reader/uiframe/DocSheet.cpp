@@ -1945,6 +1945,22 @@ void DocSheet::onBrowserDeformed()
         m_restoreSettleTimer->start(kRestoreSettleMs);
 }
 
+void DocSheet::cancelRestoreGuard()
+{
+    if (!m_restoreGuardActive)
+        return;
+
+    m_restoreSettleTimer->stop();
+    m_restoreGuardActive = false;
+    m_restoreNotifyTip = false;
+    dismissRestoreTip();
+
+    // 守卫期间可见页可能已变化，但操作记录仍停留在恢复锚点。
+    // 同页导航不会再发 sigPageChanged，解除守卫时先同步当前可见页。
+    if (m_browser)
+        onBrowserPageChanged(m_browser->currentPage());
+}
+
 void DocSheet::onLayoutSettled()
 {
     if (!m_restoreGuardActive)
