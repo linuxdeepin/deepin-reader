@@ -9,6 +9,15 @@
 #include "SecurityDialog.h"
 #include "SheetBrowser.h"
 #include "SheetRenderer.h"
+#include "ThumbnailDelegate.h"
+#include "SideBarImageViewModel.h"
+#include "EyeProtectionManager.h"
+#include "NightFilter.h"
+#include <DGuiApplicationHelper>
+#include <QListView>
+#include <QPainter>
+#include <QStandardItemModel>
+#include <QScopeGuard>
 #include <QDesktopServices>
 #include <QDir>
 #include <QEventLoop>
@@ -28,10 +37,10 @@ static void verify(bool condition, const char *description)
         qFatal("FAIL: %s", description);
     ++checks;
 }
-static void settle()
+static void settle(int milliseconds = 250)
 {
     QEventLoop loop;
-    QTimer::singleShot(250, &loop, &QEventLoop::quit);
+    QTimer::singleShot(milliseconds, &loop, &QEventLoop::quit);
     loop.exec();
 }
 class UrlSink : public QObject {
@@ -41,6 +50,65 @@ public:
 public slots:
     void capture(const QUrl &) { ++calls; }
 };
+
+static void verifyThumbnailAppearance()
+{
+    auto *eye = EyeProtectionManager::instance();
+    auto *theme = Dtk::Gui::DGuiApplicationHelper::instance();
+    const auto oldMode = eye->mode();
+    const auto oldPalette = theme->paletteType();
+    const auto restore = qScopeGuard([=] { eye->setMode(oldMode); theme->setPaletteType(oldPalette); });
+    QListView view;
+    view.setProperty("adaptScale", 1.0);
+    ThumbnailDelegate delegate(&view);
+    QStandardItemModel model(1, 1);
+    view.setModel(&model);
+    const QModelIndex index = model.index(0, 0);
+    model.setData(index, QSize(210, 297), IMAGE_PAGE_SIZE);
+    QStyleOptionViewItem option;
+    option.rect = QRect(0, 0, 240, 300);
+    for (auto appearance : {Dtk::Gui::DGuiApplicationHelper::LightType,
+                            Dtk::Gui::DGuiApplicationHelper::DarkType}) {
+        theme->setPaletteType(appearance);
+        verify(theme->themeType() == appearance, "thumbnail theme fixture takes effect");
+        for (auto mode : {EyeProtectionManager::Off, EyeProtectionManager::Classic,
+                          EyeProtectionManager::Green, EyeProtectionManager::Night}) {
+            eye->setMode(mode);
+            for (const QColor &color : {QColor(Qt::white), QColor(90, 140, 200)}) {
+                QPixmap source(32, 48);
+                source.setDevicePixelRatio(2);
+                source.fill(color);
+                model.setData(index, source, IMAGE_PIXMAP);
+                QImage expected(1, 1, QImage::Format_ARGB32_Premultiplied);
+                expected.fill(color);
+                if (mode == EyeProtectionManager::Night)
+                    expected = NightFilter::applyPage(expected, {});
+                {
+                    QPainter painter(&expected);
+                    if (mode == EyeProtectionManager::Night) {
+                        QColor overlay = eye->pageBackgroundColor();
+                        overlay.setAlpha(60);
+                        painter.fillRect(expected.rect(), overlay);
+                    } else if (mode != EyeProtectionManager::Off) {
+                        painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+                        painter.fillRect(expected.rect(), eye->pageBackgroundColor());
+                    }
+                }
+                for (int rotation : {0, 90}) {
+                    model.setData(index, rotation, IMAGE_ROTATE);
+                    QImage canvas(240, 300, QImage::Format_ARGB32_Premultiplied);
+                    canvas.fill(Qt::red);
+                    {
+                        QPainter painter(&canvas);
+                        static_cast<const QAbstractItemDelegate &>(delegate).paint(&painter, option, index);
+                    }
+                    verify(canvas.pixelColor(120, 150) == expected.pixelColor(0, 0),
+                           "thumbnail paint follows eye mode independently of system theme");
+                }
+            }
+        }
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -106,10 +174,41 @@ int main(int argc, char **argv)
     verify(sheet.currentPage() == 1, "population does not navigate");
     catalog->setCurrentIndex(leaf);
     verify(sheet.currentPage() == 1, "selection does not navigate");
+    // Opening/restoring a tab must not swallow an explicit catalog activation.
+    sheet.beginRestoreGuard(true);
     QKeyEvent enter(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
     QCoreApplication::sendEvent(catalog, &enter);
     verify(sheet.currentPage() == 2 && qAbs(sheet.operation().scaleFactor - 2) < .001,
            "keyboard activation uses target page and zoom");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 2 && browser->currentPage() == 2 && !sheet.needsRestoreTip(),
+           "explicit catalog navigation supersedes pending restore and its notification");
+    sheet.saveCurrentViewState();
+    verify(sheet.operation().scrollPosition > 0, "nonzero saved position for restore checks");
+    sheet.beginRestoreGuard(true);
+    browser->setCurrentPage(1);
+    verify(browser->currentPage() == 1 && sheet.currentPage() == 2,
+           "restore guard freezes the saved page during a layout page change");
+    NavigationTarget alreadyVisible;
+    alreadyVisible.destination = NavigationDestination{};
+    alreadyVisible.destination->pageIndex = 0;
+    alreadyVisible.destination->zoom = sheet.operation().scaleFactor;
+    verify(sheet.navigateTo(alreadyVisible), "navigate to a page already visible during restoration");
+    verify(sheet.currentPage() == 1 && browser->currentPage() == 1,
+           "explicit navigation synchronizes the saved page even without a browser page change");
+    sheet.jumpToPage(2);
+    sheet.saveCurrentViewState();
+    sheet.beginRestoreGuard(true);
+    NavigationTarget invalidDuringRestore;
+    invalidDuringRestore.destination = NavigationDestination{};
+    invalidDuringRestore.destination->pageIndex = 999;
+    verify(!sheet.navigateTo(invalidDuringRestore), "invalid navigation rejected during restore");
+    browser->setCurrentPage(1);
+    verify(sheet.currentPage() == 2, "invalid target leaves restore guard active");
+    settle(kRestoreSettleMs + 100);
+    verify(browser->currentPage() == 2 && sheet.needsRestoreTip(),
+           "normal saved-page restoration and its notification remain intact");
+    sheet.dismissRestoreTip();
     catalog->restoreExpandedSections({});
     verify(catalog->getExpandedSections().isEmpty(), "all-collapsed saved state wins");
 
@@ -128,8 +227,12 @@ int main(int argc, char **argv)
     catalog->setCurrentIndex(website);
     settle();
     verify(dialogs == 0 && sink.calls == 0, "URI selection has no effects");
+    sheet.beginRestoreGuard(true);
     QCoreApplication::sendEvent(catalog, &enter);
     verify(dialogs == 1 && sink.calls == 0, "URI keyboard activation confirms once and cancellation blocks opening");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.needsRestoreTip(), "external link cancellation does not cancel page restoration");
+    sheet.dismissRestoreTip();
     QMetaObject::invokeMethod(catalog, "onItemClicked", Qt::DirectConnection, Q_ARG(QModelIndex, website));
     verify(dialogs == 2 && sink.calls == 0, "URI click confirms once and cancellation blocks opening");
 
@@ -240,10 +343,15 @@ int main(int argc, char **argv)
         QSizeF(browser->viewport()->size()), {}, sheet.operation().scaleFactor,
         sheet.maxScaleFactor(), 0, false);
     verify(expectedFit.has_value(), "page-link fit reference");
+    sheet.saveCurrentViewState();
+    sheet.beginRestoreGuard(true);
     clickLink(hit);
     verify(sheet.currentPage() == 2, "page link reaches typed destination");
     verify(qAbs(sheet.operation().scaleFactor - expectedFit->scale) < .001,
            "page link preserves Fit destination mode");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 2 && browser->currentPage() == 2 && !sheet.needsRestoreTip(),
+           "page-link navigation is not overwritten by a pending restore");
     verify(sheet.navigateTo(firstPage), "return to URI page link");
     hit = hitPoint(85);
     const Link uriLink = sheet.renderer()->getLinkAtPoint(0, QPointF(78 * targetPage->boundingRect().width() / 210,
@@ -252,8 +360,17 @@ int main(int argc, char **argv)
     clickLink(hit);
     verify(dialogs == 3 && sink.calls == 0, "URI page link confirms once and cancellation blocks opening");
     verify(sink.calls == 0, "no network navigation attempted");
+    sheet.jumpToPage(2);
+    sheet.saveCurrentViewState();
+    verify(sheet.operation().scrollPosition > 0, "tab-return restore has a saved position");
+    sheet.restoreSavedViewState();
+    verify(sheet.navigateTo(firstPage), "explicit navigation immediately after tab return");
+    settle(kRestoreSettleMs + 100);
+    verify(sheet.currentPage() == 1 && browser->currentPage() == 1 && !sheet.needsRestoreTip(),
+           "tab-return restoration cannot overwrite explicit navigation");
     QDesktopServices::unsetUrlHandler("https");
-    qInfo("PASS: %d real-widget navigation checks", checks);
+    verifyThumbnailAppearance();
+    qInfo("PASS: %d real-widget navigation/appearance checks", checks);
     return 0;
 }
 #include "navigation_smoke.moc"
