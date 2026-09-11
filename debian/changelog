@@ -1,3 +1,17 @@
+deepin-reader (6.5.65) unstable; urgency=medium
+
+  * chore: Update version to 6.5.65
+  * fix(test): adapt night mode tests to async NightFilter refactor
+  * fix(reader): skip docx annotation auto-save so close prompts save-as dialog
+  * feat(reader): night mode object mask keeps images undistorted
+  * fix(reader): adapt sidebar thumbnails and night mode to dark theme
+  * fix(reader): keep restore-tip notify flag on tab switch during startup restore
+  * fix(test): connect sheet destroyed signal to prevent singleton segfault
+  * fix(reader): fix render thread quit race and adapt page-change unit test
+  * fix(reader): close FindWidget on tab switch to prevent cross-document search
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Fri, 11 Sep 2026 11:47:49 +0800
+
 deepin-reader (6.5.64) unstable; urgency=medium
 
   * chore: Update version to 6.5.64
