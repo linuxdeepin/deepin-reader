@@ -65,6 +65,13 @@ static void handleRenderFinished_stub(const int &, const QPixmap &, const QRect 
     g_funcName = __FUNCTION__;
 }
 
+// setImageObjectRects stub: night mode refactoring added this call before
+// handleRenderFinished in onDocPageNormalImageTaskFinished / onDocPageBigImageTaskFinished.
+// Stub prevents null-pointer dereference when task.page is nullptr.
+static void setImageObjectRects_stub(const QVector<QRectF> &, int, int)
+{
+}
+
 static void handleWordLoaded_stub(const QList<deepin_reader::Word> &)
 {
     g_funcName = __FUNCTION__;
@@ -228,6 +235,7 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageNormalImageTaskFinishe
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
     s.set(ADDR(BrowserPage, handleRenderFinished), handleRenderFinished_stub);
+    s.set(ADDR(BrowserPage, setImageObjectRects), setImageObjectRects_stub);
 
     DocPageNormalImageTask task;
     task.sheet = nullptr;   // existSheet is stubbed to return true anyway
@@ -263,6 +271,7 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageBigImageTaskFinished_0
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
     s.set(ADDR(BrowserPage, handleRenderFinished), handleRenderFinished_stub);
+    s.set(ADDR(BrowserPage, setImageObjectRects), setImageObjectRects_stub);
 
     DocPageBigImageTask task;
     task.sheet = nullptr;
