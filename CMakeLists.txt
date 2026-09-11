@@ -94,8 +94,8 @@ if (OFD_SUPPORT)
     pkg_check_modules(OFD_CAIRO QUIET cairo)
 
     if (ROFD_INCLUDE_DIR AND ROFD_FFI_LIBRARY AND OFD_CAIRO_FOUND)
-        # These APIs were added after 0.3.0 without a version bump. Probe both
-        # declarations and linked symbols instead of trusting the package version.
+        # Require the reader APIs shipped in 0.4.0. Probe declarations and linked
+        # symbols as well, so mismatched headers and libraries fail at configure.
         include(CheckCSourceCompiles)
         include(CMakePushCheckState)
         cmake_push_check_state(RESET)
@@ -108,6 +108,8 @@ if (OFD_SUPPORT)
                 rofd_pixel_rect_t viewport;
                 rofd_metadata_t *metadata = 0;
                 rofd_warning_list_t *warnings = 0;
+                rofd_outline_t *outline = 0;
+                rofd_destination_t destination = {0};
                 int32_t w = 0, h = 0;
                 rofd_pixel_rect_init(&viewport, sizeof(viewport));
                 rofd_renderer_get_pixel_canvas_size(0, 0, 0, &w, &h, 0);
@@ -117,12 +119,19 @@ if (OFD_SUPPORT)
                 rofd_metadata_free(metadata);
                 rofd_document_get_warnings(0, &warnings, 0);
                 rofd_warning_list_free(warnings);
+                (void)&rofd_document_get_outline;
+                (void)&rofd_outline_get_action_destination;
+                (void)&rofd_outline_free;
+                rofd_document_get_outline(0, &outline, 0);
+                destination.struct_size = sizeof(destination);
+                rofd_outline_get_action_destination(outline, 0, 0, &destination, 0);
+                rofd_outline_free(outline);
                 return 0;
             }
         ]=] ROFD_READER_APIS_AVAILABLE)
         cmake_pop_check_state()
         if (NOT ROFD_READER_APIS_AVAILABLE)
-            message(FATAL_ERROR "rofd headers/library lack the region, metadata or warning APIs. Use a matching rofd build containing commits 56da925 and 6db9bac (0.3.0 alone is insufficient), and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
+            message(FATAL_ERROR "rofd headers/library lack the required region, metadata, warning or outline APIs. Install matching rofd >= 0.4.0 headers and library, and set ROFD_INCLUDE_DIR/ROFD_FFI_LIBRARY accordingly.")
         endif()
         message(STATUS ">>> OFD support enabled (rofd_ffi: ${ROFD_FFI_LIBRARY})")
         add_compile_definitions(OFD_SUPPORT_ENABLED)
