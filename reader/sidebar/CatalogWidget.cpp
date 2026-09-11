@@ -48,6 +48,7 @@ void CatalogWidget::initWidget()
     titleLayout->addWidget(titleLabel);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
     mainLayout->addLayout(titleLayout);
 
