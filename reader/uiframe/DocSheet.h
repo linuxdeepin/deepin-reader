@@ -233,6 +233,8 @@ public:
      * @return
      */
     deepin_reader::Outline outline();
+    bool navigateTo(const deepin_reader::NavigationTarget &target);
+    bool hasRestoredViewState() const { return m_restoredFromState; }
 
     /**
      * @brief jumpToOutline

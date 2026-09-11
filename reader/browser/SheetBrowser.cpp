@@ -44,6 +44,9 @@
 #include <QProcess>
 #include <QTimerEvent>
 #include <QDesktopServices>
+#include <QScopedValueRollback>
+
+#include <cmath>
 
 DWIDGET_USE_NAMESPACE
 
@@ -733,6 +736,57 @@ void SheetBrowser::jumpToOutline(const qreal &linkLeft, const qreal &linkTop, in
     else
         jump2PagePos(jumpPage, linkLeft, 0);
     qCDebug(appLog) << "SheetBrowser::jumpToOutline() - Jump to outline completed";
+}
+
+bool SheetBrowser::navigateTo(const NavigationTarget &target)
+{
+    if (!m_sheet || !target.isValid())
+        return false;
+
+    if (!target.destination) {
+        const QUrl uri = resolveNavigationUri(target.uri.toString(QUrl::FullyEncoded));
+        if (uri.isEmpty())
+            return false;
+        SecurityDialog dialog(uri.toString(QUrl::FullyEncoded), this);
+        if (dialog.exec() == DDialog::Accepted)
+            QDesktopServices::openUrl(uri);
+        return true;
+    }
+
+    const NavigationDestination &destination = *target.destination;
+    if (destination.pageIndex >= m_items.size() || !m_items.at(destination.pageIndex))
+        return false;
+
+    const SheetOperation &operation = m_sheet->operation();
+    QPointF currentPosition;
+    const int currentIndex = currentPage() - 1;
+    if (operation.scaleFactor > 0 && currentIndex >= 0 && currentIndex < m_items.size())
+        currentPosition = m_items.at(currentIndex)->mapFromScene(mapToScene(QPoint(0, 0)))
+                / operation.scaleFactor;
+
+    const auto view = navigationView(destination, m_sheet->renderer()->getPageSize(destination.pageIndex),
+                                     QSizeF(viewport()->size()), currentPosition, operation.scaleFactor,
+                                     m_sheet->maxScaleFactor(), int(operation.rotation) * 90,
+                                     operation.layoutMode == Dr::TwoPagesMode);
+    if (!view)
+        return false;
+
+    {
+        QScopedValueRollback<bool> suppressPageChanges(m_bNeedNotifyCurPageChanged, false);
+        m_sheet->setScaleFactor(view->scale);
+        const qreal scale = m_sheet->operation().scaleFactor;
+        const QRectF scaledFocus(view->focusRect.topLeft() * scale, view->focusRect.size() * scale);
+        const QPointF scenePoint = m_items.at(destination.pageIndex)->mapRectToScene(scaledFocus).topLeft();
+        if (!std::isfinite(scenePoint.x()) || !std::isfinite(scenePoint.y()))
+            return false;
+        // Bound before converting: document coordinates need not fit in an int.
+        horizontalScrollBar()->setValue(qRound(qBound(qreal(horizontalScrollBar()->minimum()),
+                                                       scenePoint.x(), qreal(horizontalScrollBar()->maximum()))));
+        verticalScrollBar()->setValue(qRound(qBound(qreal(verticalScrollBar()->minimum()),
+                                                     scenePoint.y(), qreal(verticalScrollBar()->maximum()))));
+    }
+    curpageChanged(destination.pageIndex + 1);
+    return true;
 }
 
 void SheetBrowser::jumpToHighLight(deepin_reader::Annotation *annotation, const int index)

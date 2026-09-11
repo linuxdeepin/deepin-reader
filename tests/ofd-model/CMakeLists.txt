@@ -25,6 +25,8 @@ get_filename_component(READER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
 add_executable(ofd-model-check main.cc
     ../document/ut_ofdmodel.cpp
     ../document/ut_navigation.cpp
+    ../document/ut_catalogoutlinemodel.cpp
+    ${READER_ROOT}/reader/sidebar/CatalogOutlineModel.cpp
     ${READER_ROOT}/reader/document/Navigation.cpp
     ${READER_ROOT}/reader/document/Navigation.h
     ${READER_ROOT}/reader/document/OfdModel.cpp
@@ -34,7 +36,7 @@ target_compile_definitions(ofd-model-check PRIVATE
     OFD_SUPPORT_ENABLED UTSOURCEDIR="${READER_ROOT}/tests")
 target_include_directories(ofd-model-check PRIVATE
     ${ROFD_INCLUDE_DIR}
-    ${READER_ROOT}/reader ${READER_ROOT}/reader/document ${READER_ROOT}/reader/app
+    ${READER_ROOT}/reader ${READER_ROOT}/reader/document ${READER_ROOT}/reader/app ${READER_ROOT}/reader/sidebar
     ${READER_ROOT}/tests ${READER_ROOT}/3rdparty/deepin-pdfium/include)
 target_link_libraries(ofd-model-check PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets PkgConfig::CAIRO PkgConfig::DTKCORE
