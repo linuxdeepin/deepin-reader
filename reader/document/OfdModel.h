@@ -84,6 +84,7 @@ public:
     QString text(const QRectF &rect) const override;
     QVector<PageSection> search(const QString &text, bool matchCase, bool wholeWords) const override;
     QList<Word> words() override;
+    Link getLinkAtPoint(const QPointF &point) override;
 
 private:
     rofd_rect_t toMillimetres(const QRectF &rect) const;
@@ -94,6 +95,9 @@ private:
     int m_pageIndex = -1;
     rofd_rect_t m_pageRectMm = {0.0, 0.0, 0.0, 0.0};
     QSizeF m_sizePixel;
+    QMutex m_linksMutex;
+    bool m_linksLoaded = false;
+    QList<Link> m_links;
 };
 
 } // namespace deepin_reader
