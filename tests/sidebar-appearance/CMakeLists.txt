@@ -3,9 +3,14 @@ project(reader-sidebar-appearance-tests LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(DTK REQUIRED IMPORTED_TARGET dtk6widget)
+if (QT_VERSION_MAJOR EQUAL 6)
+    pkg_check_modules(DTK REQUIRED IMPORTED_TARGET dtk6widget)
+else()
+    pkg_check_modules(DTK REQUIRED IMPORTED_TARGET dtkwidget)
+endif()
 
 set(READER_DIR "${CMAKE_CURRENT_LIST_DIR}/../../reader")
 add_executable(test-sidebar-appearance
@@ -17,7 +22,7 @@ add_executable(test-sidebar-appearance
 target_include_directories(test-sidebar-appearance PRIVATE
     ${READER_DIR} ${READER_DIR}/app ${READER_DIR}/sidebar
     ${READER_DIR}/eyeprotection ${READER_DIR}/browser)
-target_link_libraries(test-sidebar-appearance PRIVATE Qt6::Widgets PkgConfig::DTK)
+target_link_libraries(test-sidebar-appearance PRIVATE Qt${QT_VERSION_MAJOR}::Widgets PkgConfig::DTK)
 
 enable_testing()
 add_test(NAME sidebar-appearance COMMAND test-sidebar-appearance)
