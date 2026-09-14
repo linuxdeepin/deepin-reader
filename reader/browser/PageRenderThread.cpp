@@ -362,9 +362,10 @@ void PageRenderThread::run()
             //if has signature,render whole rect
             renderRects.append(task.rect);
         } else {
-            int wCount = task.rect.width() % 1000 == 0 ? (task.rect.width() / 1000) : (task.rect.width() / 1000 + 1);
-            for (int i = 0; i < wCount; ++i) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
-                renderRects.append(QRect(i * 1000, 0, 1000, task.rect.height()));
+            // 末尾分片须截断到页面实际宽度，否则越界请求会被文档模型拒绝，
+            // 页面右侧会因取到空图而残留未绘制区域
+            for (int i = 0; i < task.rect.width(); i += 1000) {//只能以宽度前进(即只能分割宽度)，如果x从0开始，每次都将消耗一定时间
+                renderRects.append(QRect(i, 0, qMin(1000, task.rect.width() - i), task.rect.height()));
             };
         }
 
