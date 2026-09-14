@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # OFD 目录与页面链接接入设计
 
 ## 范围与基线
