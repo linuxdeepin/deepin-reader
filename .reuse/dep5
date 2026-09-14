@@ -86,3 +86,8 @@ License: BSD-3-Clause
 Files: htmltopdf/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
+
+# docs
+Files: docs/*
+Copyright: UnionTech Software Technology Co., Ltd.
+License: GPL-3.0-or-later
