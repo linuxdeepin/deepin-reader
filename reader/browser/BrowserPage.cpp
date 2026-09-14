@@ -564,8 +564,16 @@ QImage BrowserPage::getImagePoint(double scaleFactor, QPoint point)
 
     int ss = static_cast<int>(122 * scaleFactor / m_scaleFactor);
 
-    QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0),
-                       qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss);
+    // 悬停点靠近页面边缘时，请求矩形可能超出整页画布；
+    // 文档模型拒绝越界渲染请求，需先与画布求交集（与 getImage 的取整方式保持一致）
+    const QRect canvas(0, 0, static_cast<int>(m_originSizeF.width() * scaleFactor),
+                              static_cast<int>(m_originSizeF.height() * scaleFactor));
+    const QRect rect = QRect(qRound(point.x() * scaleFactor / m_scaleFactor - ss / 2.0),
+                             qRound(point.y() * scaleFactor / m_scaleFactor - ss / 2.0), ss, ss)
+                           .intersected(canvas);
+
+    if (rect.isEmpty())
+        return QImage();
 
     return m_sheet->renderer()->getImage(itemIndex(),
                                          static_cast<int>(m_originSizeF.width() * scaleFactor),
