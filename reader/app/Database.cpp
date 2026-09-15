@@ -794,8 +794,11 @@ int Database::cleanupOrphanStates()
             cleanedCount++;
             qCDebug(appLog) << "Cleaned orphan state:" << path;
         }
-        // 同步清理书签（在同一事务中保证数据一致性）
+        // 同步清理书签与标签页组（在同一事务中保证数据一致性）
         deleteQuery.prepare("DELETE FROM bookmark WHERE filePath = :filePath");
+        deleteQuery.bindValue(":filePath", path);
+        deleteQuery.exec();
+        deleteQuery.prepare("DELETE FROM tabgroup WHERE filePath = :filePath");
         deleteQuery.bindValue(":filePath", path);
         deleteQuery.exec();
     }
