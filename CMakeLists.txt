@@ -263,6 +263,11 @@ add_subdirectory(htmltopdf)
 
 if (USE_PDFIUM_BUNDLE)
     add_subdirectory(3rdparty/deepin-pdfium)
+    add_subdirectory(batch-print)
+
+    # Install context-menus (batch print)
+    install(FILES src/context-menus/deepin-reader-batchprint.conf
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus)
 endif()
 
 # 单元测试（可选）

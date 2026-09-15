@@ -27,6 +27,7 @@ public:
     ~DjVuPage();
 
     QSizeF sizeF() const override;
+    int resolution() const override;
 
     QImage render(int width, int height, const QRect &slice = QRect())const override;
 
