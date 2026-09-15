@@ -73,13 +73,13 @@ QImage firstThumbnail_stub(const QString &)
     return QImage(100, 100, QImage::Format_ARGB32);
 }
 
-bool openFileExec_stub(const QString &)
+bool openFileExec_stub(const QString &, const QString &, const QString &, const QString &, int, DocSheet *)
 {
     g_funcName = __FUNCTION__;
     return true;
 }
 
-void openFileAsync_stub(const QString &)
+void openFileAsync_stub(const QString &, const QString &, const QString &, const QString &, int, DocSheet *)
 {
     g_funcName = __FUNCTION__;
 }
@@ -1493,7 +1493,7 @@ QSizeF getPageSize_stub2(int)
     return QSizeF(100.0, 200.0);
 }
 
-void openFileAsync_stub2(const QString &)
+void openFileAsync_stub2(const QString &, const QString &, const QString &, const QString &, int, DocSheet *)
 {
     g_funcName = __FUNCTION__;
 }

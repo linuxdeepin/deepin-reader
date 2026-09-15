@@ -983,7 +983,8 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
     if (gesture->state() == Qt::GestureFinished) {
         // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Gesture finished";
         this->setProperty("pinchgetsturing", false);
-        QTimer::singleShot(10, [this]() {
+        // 必须传 receiver=this:否则 browser 在定时器触发前被销毁时,lambda 仍会执行并写已死对象(UAF)
+        QTimer::singleShot(10, this, [this]() {
             //稍微延迟下,不然还是会引起mouse事件触发
             m_startPinch = false;
         });
