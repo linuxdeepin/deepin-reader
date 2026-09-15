@@ -21,7 +21,7 @@
 #include "ut_compat.h"
 #include <gtest/gtest.h>
 
-static void openFileAsync_stub(const QString &)
+static void openFileAsync_stub(const QString &, const QString &, const QString &, const QString &, int, DocSheet *)
 {
     return;
 }

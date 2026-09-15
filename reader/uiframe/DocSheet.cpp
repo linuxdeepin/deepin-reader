@@ -72,8 +72,8 @@ DocSheet::DocSheet(const Dr::FileType &fileType, const QString &filePath,  QWidg
     connect(m_searchTask, &PageSearchThread::finished, this, &DocSheet::onSearchFinished, Qt::QueuedConnection);
     connect(m_searchTask, &PageSearchThread::sigSearchResultNotEmpty, this, &DocSheet::onSearchResultNotEmpty, Qt::QueuedConnection);
 
-    m_renderer = new SheetRenderer(this);
-    connect(m_renderer, &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
+    m_renderer = QSharedPointer<SheetRenderer>::create();
+    connect(m_renderer.data(), &SheetRenderer::sigOpened, this, &DocSheet::onOpened);
 
     m_browser = new SheetBrowser(this);
     m_browser->setMinimumWidth(481);
@@ -153,11 +153,13 @@ DocSheet::~DocSheet()
 
     setAlive(false);
 
+    // 排空引用本 sheet 的所有待处理渲染任务(仅优化,避免为将死文档做无用渲染);
+    // 正确性由任务中捕获的renderer共享引用与uuid校验保证,不再依赖析构与线程间的时序
+    PageRenderThread::clearAllTasksForSheet(this);
+
     delete m_browser;
 
     delete m_sidebar;
-
-    delete m_renderer;
 
     delete m_searchTask;
 
@@ -231,6 +233,17 @@ bool DocSheet::existSheet(DocSheet *sheet)
     return result;
 }
 
+bool DocSheet::existSheetByUuid(const QString &uuid)
+{
+    g_lock.lockForRead();
+
+    bool result = !uuid.isEmpty() && g_uuidList.contains(uuid);
+
+    g_lock.unlock();
+
+    return result;
+}
+
 DocSheet *DocSheet::getSheet(QString uuid)
 {
     qCDebug(appLog) << "getSheet";
@@ -275,7 +288,7 @@ bool DocSheet::openFileExec(const QString &password)
     qCDebug(appLog) << "Executing file open synchronously";
     m_password = password;
 
-    bool result = m_renderer->openFileExec(password);
+    bool result = m_renderer->openFileExec(password, m_filePath, convertedFileDir(), m_uuid, static_cast<int>(m_fileType), this);
     if (!result) {
         qCWarning(appLog) << "Failed to open file synchronously";
     }
@@ -289,7 +302,7 @@ void DocSheet::openFileAsync(const QString &password)
     m_password = password;
 
     qCInfo(appLog) << "添加异步打开任务...";
-    m_renderer->openFileAsync(m_password);
+    m_renderer->openFileAsync(m_password, m_filePath, convertedFileDir(), m_uuid, static_cast<int>(m_fileType), this);
 }
 
 void DocSheet::jumpToPage(int page)
@@ -1852,7 +1865,7 @@ void DocSheet::onExtractPassword(const QString &password)
     qCDebug(appLog) << "Extracted password, attempting to open file";
     m_password = password;
 
-    m_renderer->openFileAsync(m_password);
+    m_renderer->openFileAsync(m_password, m_filePath, convertedFileDir(), m_uuid, static_cast<int>(m_fileType), this);
 }
 
 void DocSheet::saveCurrentViewState()
@@ -1964,7 +1977,7 @@ float DocSheet::currentScrollPosition() const
 SheetRenderer *DocSheet::renderer()
 {
     // qCDebug(appLog) << "renderer";
-    return m_renderer;
+    return m_renderer.data();
 }
 
 void DocSheet::onPopPrintDialog()

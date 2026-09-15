@@ -101,7 +101,7 @@ static QString uuid_stub()
 // DocSheet::renderer 档:占位渲染器(handleOpened已stub)。堆分配不释放,避免静态对象在 main 返回后析构
 static SheetRenderer *renderer_stub()
 {
-    static SheetRenderer *dummy = new SheetRenderer(nullptr);
+    static SheetRenderer *dummy = new SheetRenderer();
     return dummy;
 }
 
@@ -216,7 +216,6 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocOpenTask_001)
 {
     DocOpenTask task;
     task.sheet = nullptr;
-    task.renderer = nullptr;
     QList<deepin_reader::Page *> pages;
     m_tester->onDocOpenTask(task, deepin_reader::Document::NoError, nullptr, pages);
     SUCCEED();
@@ -340,9 +339,12 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocOpenTask_002)
     s.set(ADDR(DocSheet, renderer), renderer_stub);
     s.set(ADDR(SheetRenderer, handleOpened), handleOpened_stub);
 
+    // onDocOpenTask会直接写 sheet->m_process(非函数调用,stub拦截不到),
+    // 因此用足够大的可写静态存储充当假sheet,而非非法地址
+    static unsigned char fake_sheet_storage[8192] = {};
+
     DocOpenTask task;
-    task.sheet = reinterpret_cast<DocSheet *>(0x1);   //成员调用均已被stub
-    task.renderer = nullptr;
+    task.sheet = reinterpret_cast<DocSheet *>(fake_sheet_storage);   //成员调用均已被stub
     task.uuid = "ut-sheet-uuid";                     //与uuid_stub一致,校验通过
     QList<deepin_reader::Page *> pages;
     m_tester->onDocOpenTask(task, deepin_reader::Document::NoError, nullptr, pages);
@@ -361,7 +363,6 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocOpenTask_003)
 
     DocOpenTask task;
     task.sheet = reinterpret_cast<DocSheet *>(0x1);
-    task.renderer = reinterpret_cast<SheetRenderer *>(0x1);   //悬空,不应被解引用
     task.uuid = "stale-uuid";                                 //与uuid_stub不一致
     QList<deepin_reader::Page *> pages;
     m_tester->onDocOpenTask(task, deepin_reader::Document::NoError, nullptr, pages);
@@ -466,7 +467,6 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_appendTask_Open)
 
     DocOpenTask task;
     task.sheet = nullptr;
-    task.renderer = nullptr;
     PageRenderThread::appendTask(task);
     EXPECT_FALSE(m_tester->m_openTasks.isEmpty());
     m_tester->m_openTasks.clear();
