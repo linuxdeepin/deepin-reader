@@ -44,6 +44,15 @@ set(BATCHPRINT_READER_SOURCES
     ${CMAKE_SOURCE_DIR}/reader/document/XpsTextExtractor.cpp
 )
 
+# OFD: Model.cpp gets OFD_SUPPORT_ENABLED from the global add_compile_definitions,
+# so OfdModel.cpp (implements OfdDocument::loadDocument) and rofd/cairo must be linked too.
+if (OFD_SUPPORT_ENABLED)
+    list(APPEND BATCHPRINT_READER_SOURCES
+        ${CMAKE_SOURCE_DIR}/reader/document/OfdModel.cpp
+        ${CMAKE_SOURCE_DIR}/reader/document/Navigation.cpp
+    )
+endif()
+
 add_library(batchprint-convert STATIC
     formatconverter.h formatconverter.cpp
     ${BATCHPRINT_READER_SOURCES}
@@ -61,6 +70,8 @@ target_include_directories(batchprint-convert PUBLIC
     ${CMAKE_SOURCE_DIR}/reader/document
     ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
 )
 
 target_compile_definitions(batchprint-convert PRIVATE
@@ -83,6 +94,8 @@ target_link_libraries(batchprint-convert PUBLIC
     ${LIBJPEG_LIBRARIES}
     ${FREETYPE_LIBRARIES}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_LIBRARIES}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_FFI_LIBRARY}>
+    $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_LIBRARIES}>
 )
 
 # DTK linking
@@ -107,6 +120,10 @@ endif()
 if (XPS_SUPPORT_ENABLED)
     target_compile_definitions(batchprint-convert PUBLIC XPS_SUPPORT_ENABLED)
     target_compile_options(batchprint-convert PUBLIC ${XPS_DEPS_CFLAGS_OTHER})
+endif()
+
+if (OFD_SUPPORT_ENABLED)
+    target_compile_options(batchprint-convert PRIVATE ${OFD_CAIRO_CFLAGS_OTHER})
 endif()
 
 # Executable
