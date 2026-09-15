@@ -538,6 +538,7 @@ TEST_F(TestBrowserPage, UT_BrowserPage_addHighlightAnnotation_001)
     s.set(ADDR(SheetRenderer, getWords), getWords_stub);
     s.set(ADDR(QGraphicsItem, isSelected), isSelected_stub);
     s.set(ADDR(SheetRenderer, addHighlightAnnotation), addHighlightAnnotation_stub);
+    s.set(ADDR(BrowserPage, renderRect), renderRect_stub);
     BrowserWord *w1 = new BrowserWord(nullptr, Word("first", QRectF(0, 0, 20, 10)));
     BrowserWord *w2 = new BrowserWord(nullptr, Word("second", QRectF(20, 0, 40, 10)));
     m_tester->m_words.append(w1);

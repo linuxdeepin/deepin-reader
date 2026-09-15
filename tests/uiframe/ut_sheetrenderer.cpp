@@ -56,7 +56,7 @@ void TestSheetRenderer::SetUp()
     QString strPath = UTSOURCEDIR;
     strPath += "/files/1.pdf";
     m_sheet = new DocSheet(Dr::FileType::PDF, strPath, m_parent);
-    m_tester = m_sheet->m_renderer;
+    m_tester = m_sheet->m_renderer.data();
     ASSERT_NE(m_tester, nullptr);
 }
 
@@ -275,7 +275,7 @@ TEST_F(TestSheetRenderer, testOpenFileAsync)
     // otherwise a queued sigDocOpenTask referencing this renderer outlives the test
     // and gets delivered to freed memory later.
     QSignalSpy spy(m_tester, &SheetRenderer::sigOpened);
-    m_tester->openFileAsync("test");
+    m_tester->openFileAsync("test", UTSOURCEDIR "/files/normal.pdf", QString(), m_sheet->uuid(), static_cast<int>(Dr::PDF), m_sheet);
     QTRY_COMPARE_WITH_TIMEOUT(spy.count(), 1, 30000);
     SUCCEED();
 }
@@ -283,6 +283,6 @@ TEST_F(TestSheetRenderer, testOpenFileAsync)
 TEST_F(TestSheetRenderer, testOpenFileExec)
 {
     // Let openFileExec wait for the REAL sigOpened of the actual open task.
-    bool result = m_tester->openFileExec("test");
+    bool result = m_tester->openFileExec("test", UTSOURCEDIR "/files/normal.pdf", QString(), m_sheet->uuid(), static_cast<int>(Dr::PDF), m_sheet);
     EXPECT_TRUE(result);
 }

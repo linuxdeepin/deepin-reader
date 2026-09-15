@@ -33,10 +33,15 @@
 
 const int ICON_SIZE = 23;
 
+// 主线程专用的存活页注册表:入队时的 page 裸指针仅在回包时由主线程 handler 解引用,
+// handler 必须先经 existPage 校验,避免向已析构页面回包(UAF)
+static QSet<const BrowserPage *> g_alivePages;
+
 BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet) :
     QGraphicsItem(), m_sheet(sheet), m_parent(parent), m_index(index)
 {
     qCDebug(appLog) << "BrowserPage created, index:" << index;
+    g_alivePages.insert(this);
     setAcceptHoverEvents(true);
 
     setFlag(QGraphicsItem::ItemIsPanel);
@@ -48,7 +53,9 @@ BrowserPage::BrowserPage(SheetBrowser *parent, int index, DocSheet *sheet) :
 BrowserPage::~BrowserPage()
 {
     // qCDebug(appLog) << "BrowserPage destroyed, index:" << m_index;
+    g_alivePages.remove(this);
     PageRenderThread::clearImageTasks(m_sheet, this);
+    PageRenderThread::clearAllTasksForPage(this);
 
     // 断开并销毁夜间异步任务 watcher:后台滤镜任务持有的都是副本,安全丢弃
     delete m_nightWatcher;
@@ -60,6 +67,12 @@ BrowserPage::~BrowserPage()
 
     qDeleteAll(m_words);
     // qCDebug(appLog) << "BrowserPage::~BrowserPage() - Destructor completed";
+}
+
+bool BrowserPage::existPage(const BrowserPage *page)
+{
+    // 仅主线程调用:注册表只在主线程增删,无需加锁
+    return g_alivePages.contains(page);
 }
 
 QRectF BrowserPage::boundingRect() const
@@ -329,6 +342,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
 
             task.page = this;
 
+            task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+            task.uuid = m_sheet ? m_sheet->uuid() : QString();
+            task.pageIndex = itemIndex();
+
             task.pixmapId = m_pixmapId;
 
             const qreal deviceRatio = dApp ? dApp->devicePixelRatio() : 1.0;
@@ -344,6 +361,12 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             task.sheet = m_sheet;
 
             task.page = this;
+
+            task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+            task.uuid = m_sheet ? m_sheet->uuid() : QString();
+            task.pageIndex = itemIndex();
+            task.scaleFactor = m_scaleFactor;
+            task.originSize = m_originSizeF;
 
             task.pixmapId = m_pixmapId;
 
@@ -364,6 +387,10 @@ void BrowserPage::render(const double &scaleFactor, const Dr::Rotation &rotation
             task.sheet = m_sheet;
 
             task.page = this;
+
+            task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+            task.uuid = m_sheet ? m_sheet->uuid() : QString();
+            task.pageIndex = itemIndex();
 
             PageRenderThread::appendTask(task);
         }
@@ -393,6 +420,10 @@ void BrowserPage::renderRect(const QRectF &rect)
     task.sheet = m_sheet;
 
     task.page = this;
+
+    task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+    task.uuid = m_sheet ? m_sheet->uuid() : QString();
+    task.pageIndex = itemIndex();
 
     task.pixmapId = m_pixmapId;
 
@@ -650,6 +681,10 @@ void BrowserPage::loadWords()
     task.sheet = m_sheet;
 
     task.page = this;
+
+    task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+    task.uuid = m_sheet ? m_sheet->uuid() : QString();
+    task.pageIndex = itemIndex();
 
     PageRenderThread::appendTask(task);
 

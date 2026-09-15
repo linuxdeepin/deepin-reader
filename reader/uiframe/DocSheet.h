@@ -11,6 +11,7 @@
 #include <DSplitter>
 #include <QSet>
 #include <QReadWriteLock>
+#include <QSharedPointer>
 #include <QThread>
 #include <QSize>
 #include <QRectF>
@@ -108,6 +109,14 @@ public:
      * @return
      */
     static bool existSheet(DocSheet *sheet);
+
+    /**
+     * @brief existSheetByUuid
+     * 进程是否存在该uuid对应的文档(worker线程安全,仅读锁+串查找)
+     * @param uuid
+     * @return
+     */
+    static bool existSheetByUuid(const QString &uuid);
 
     /**
      * @brief getSheet
@@ -704,6 +713,12 @@ public:
      */
     SheetRenderer *renderer();
 
+    /**
+     * @brief rendererPtr
+     * 获取渲染器共享引用(入队时捕获,任务在worker线程使用期间生命周期安全)
+     */
+    QSharedPointer<SheetRenderer> rendererPtr() const { return m_renderer; }
+
     QString uuid() const { return m_uuid; }
 
 public slots:
@@ -955,7 +970,7 @@ private:
 
     SheetSidebar   *m_sidebar  = nullptr;        //操作左侧ui
     SheetBrowser   *m_browser  = nullptr;        //操作右侧ui
-    SheetRenderer  *m_renderer = nullptr;        //数据渲染器
+    QSharedPointer<SheetRenderer> m_renderer;    //数据渲染器(共享所有权:worker持有引用期间不因析构悬空)
 
     QString         m_filePath;
     QString         m_password;

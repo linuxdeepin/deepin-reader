@@ -42,6 +42,15 @@ public:
     ~BrowserPage() override;
 
     /**
+     * @brief existPage
+     * 判断页面是否存活(仅主线程调用)。渲染回包 handler 解引用 task.page
+     * 之前必须校验,避免向已析构页面回包
+     * @param page 待校验页面
+     * @return 存活返回 true
+     */
+    static bool existPage(const BrowserPage *page);
+
+    /**
      * @brief 文档页缩放后的原区域 不受旋转影响
      * @return
      */
