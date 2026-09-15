@@ -18,7 +18,7 @@ class SheetRenderer : public QObject
 {
     Q_OBJECT
 public:
-    explicit SheetRenderer(DocSheet *parent);
+    explicit SheetRenderer();
 
     ~SheetRenderer();
 
@@ -26,16 +26,28 @@ public:
      * @brief openFileExec
      * 阻塞式打开文档
      * @param password
+     * @param filePath 文档路径(入队时快照,worker不再访问DocSheet)
+     * @param convertedFileDir 转换目录(入队时快照)
+     * @param uuid 所属DocSheet唯一标识
+     * @param fileType 文档类型(入队时快照)
+     * @param sheet 所属DocSheet,仅供主线程回调路由使用
      */
-    bool openFileExec(const QString &password);
+    bool openFileExec(const QString &password, const QString &filePath,
+                      const QString &convertedFileDir, const QString &uuid, int fileType, DocSheet *sheet);
 
     /**
      * @brief openFileAsync
      * 异步式打开文档，完成后会发出sigFileOpened
      * @param password 文档密码
+     * @param filePath 文档路径(入队时快照,worker不再访问DocSheet)
+     * @param convertedFileDir 转换目录(入队时快照)
+     * @param uuid 所属DocSheet唯一标识(主线程回调路由用)
+     * @param fileType 文档类型(入队时快照)
+     * @param sheet 所属DocSheet,仅供主线程回调路由使用(worker禁止解引用)
      * @return
      */
-    void openFileAsync(const QString &password);
+    void openFileAsync(const QString &password, const QString &filePath,
+                       const QString &convertedFileDir, const QString &uuid, int fileType, DocSheet *sheet);
 
     /**
      * @brief opened
@@ -222,7 +234,8 @@ signals:
     void sigOpened(deepin_reader::Document::Error error);
 
 private:
-    DocSheet *m_sheet = nullptr;
+    // 注意:无m_sheet反向指针、无QObject父对象;由DocSheet以QSharedPointer持有,
+    // worker线程持有共享引用期间生命周期安全,可跨线程安全使用
     deepin_reader::Document::Error m_error = deepin_reader::Document::NoError;
     bool m_pageLabelLoaded = false;             //是否已经加载page label
     QMap<QString, int> m_lable2Page;            // 文档下标页码

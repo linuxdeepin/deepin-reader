@@ -208,8 +208,10 @@ Qt::MouseEventSource source_stub2()
 static BrowserPage *g_pBrowserPage2 = nullptr;
 BrowserPage *getBrowserPageForPoint_stub(QPointF &)
 {
-    DocSheet sheet(Dr::FileType::PDF, "1.pdf", nullptr);
-    g_pBrowserPage2 = new BrowserPage(nullptr, 0, &sheet);
+    // 用堆上静态sheet而非栈对象:返回的BrowserPage持有其指针,
+    // 若绑定栈对象会在函数返回后悬空(loadWords等路径解引用即崩)
+    static DocSheet *s_stubSheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    g_pBrowserPage2 = new BrowserPage(nullptr, 0, s_stubSheet);
     g_pBrowserPage2->m_index = 3;
     return g_pBrowserPage2;
 }

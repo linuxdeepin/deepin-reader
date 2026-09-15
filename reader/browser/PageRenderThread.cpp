@@ -133,6 +133,79 @@ bool PageRenderThread::clearImageTasks(DocSheet *sheet, BrowserPage *page, int p
     // qCDebug(appLog) << "PageRenderThread::clearImageTasks() - Clear image tasks completed";
     return true;
 }
+void PageRenderThread::clearAllTasksForSheet(DocSheet *sheet)
+{
+    PageRenderThread *inst = instance();
+    if (nullptr == inst)
+        return;
+
+    // 排空所有引用该 sheet 的待处理任务,避免析构后后台线程悬空访问
+    inst->m_pageNormalImageMutex.lock();
+    for (int i = inst->m_pageNormalImageTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageNormalImageTasks[i].sheet == sheet)
+            inst->m_pageNormalImageTasks.removeAt(i);
+    }
+    inst->m_pageNormalImageMutex.unlock();
+
+    inst->m_pageSliceImageMutex.lock();
+    for (int i = inst->m_pageSliceImageTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageSliceImageTasks[i].sheet == sheet)
+            inst->m_pageSliceImageTasks.removeAt(i);
+    }
+    inst->m_pageSliceImageMutex.unlock();
+
+    inst->m_pageBigImageMutex.lock();
+    for (int i = inst->m_pageBigImageTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageBigImageTasks[i].sheet == sheet)
+            inst->m_pageBigImageTasks.removeAt(i);
+    }
+    inst->m_pageBigImageMutex.unlock();
+
+    inst->m_pageWordMutex.lock();
+    for (int i = inst->m_pageWordTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageWordTasks[i].sheet == sheet)
+            inst->m_pageWordTasks.removeAt(i);
+    }
+    inst->m_pageWordMutex.unlock();
+
+    inst->m_pageAnnotationMutex.lock();
+    for (int i = inst->m_pageAnnotationTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageAnnotationTasks[i].sheet == sheet)
+            inst->m_pageAnnotationTasks.removeAt(i);
+    }
+    inst->m_pageAnnotationMutex.unlock();
+
+    inst->m_pageThumbnailMutex.lock();
+    for (int i = inst->m_pageThumbnailTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageThumbnailTasks[i].sheet == sheet)
+            inst->m_pageThumbnailTasks.removeAt(i);
+    }
+    inst->m_pageThumbnailMutex.unlock();
+}
+
+void PageRenderThread::clearAllTasksForPage(const BrowserPage *page)
+{
+    PageRenderThread *inst = instance();
+    if (nullptr == inst || nullptr == page)
+        return;
+
+    // BrowserPage 析构时调用:文字/注释任务不在 clearImageTasks 覆盖范围内,
+    // 若不清除,worker 完成后回包将解引用已析构的 page(主线程 handler 崩溃)
+    inst->m_pageWordMutex.lock();
+    for (int i = inst->m_pageWordTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageWordTasks[i].page == page)
+            inst->m_pageWordTasks.removeAt(i);
+    }
+    inst->m_pageWordMutex.unlock();
+
+    inst->m_pageAnnotationMutex.lock();
+    for (int i = inst->m_pageAnnotationTasks.count() - 1; i >= 0; --i) {
+        if (inst->m_pageAnnotationTasks[i].page == page)
+            inst->m_pageAnnotationTasks.removeAt(i);
+    }
+    inst->m_pageAnnotationMutex.unlock();
+}
+
 
 void PageRenderThread::appendTask(DocPageNormalImageTask task)
 {
@@ -356,9 +429,13 @@ void PageRenderThread::run()
             continue;
         }
 
+        if (task.renderer.isNull()) {
+            continue;
+        }
+
         QList<QRect> renderRects;
 
-        if (task.sheet->renderer()->hasWidgetAnnots(task.page->itemIndex())) {
+        if (task.renderer->hasWidgetAnnots(task.pageIndex)) {
             //if has signature,render whole rect
             renderRects.append(task.rect);
         } else {
@@ -377,12 +454,12 @@ void PageRenderThread::run()
             if (m_quit)
                 break;
 
-            //外部删除了此处不判断会导致崩溃
-            if (!DocSheet::existSheet(task.sheet))
+            //uuid失效说明sheet已销毁(或新文档已接管),仅用于避免为将死文档做无用渲染;
+            //正确性由任务中的renderer共享引用保证,此处解引用不再有UAF风险
+            if (!DocSheet::existSheetByUuid(task.uuid))
                 break;
 
-            //判断page存在之后 使用page之前，也就是此处，如果主线程先一步进入page被删流程，【理论上会导致崩溃】，目前概率非常低，未发现
-            QImage image = task.sheet->getImage(task.page->itemIndex(), task.rect.width(), task.rect.height(),
+            QImage image = task.renderer->getImage(task.pageIndex, task.rect.width(), task.rect.height(),
                                                 QRect(static_cast<int>(rect.x()),
                                                       static_cast<int>(rect.y()),
                                                       static_cast<int>(rect.width()),
@@ -421,9 +498,9 @@ void PageRenderThread::run()
             break;
 
         // 预取图片对象 bbox(夜间蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁
-        if (DocSheet::existSheet(task.sheet) && task.sheet->renderer()->opened()) {
-            task.imageRects = task.sheet->renderer()->getImageObjectRects(
-                        task.page->itemIndex(), task.rect.width(), task.rect.height());
+        if (DocSheet::existSheetByUuid(task.uuid) && task.renderer->opened()) {
+            task.imageRects = task.renderer->getImageObjectRects(
+                        task.pageIndex, task.rect.width(), task.rect.height());
         }
 
         emit sigDocPageBigImageTaskFinished(task, pixmap);
@@ -599,7 +676,7 @@ bool PageRenderThread::execNextDocPageNormalImageTask()
         return false;
     }
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.renderer.isNull() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCWarning(appLog) << "Sheet no longer exists, skip task";
         return true;
     }
@@ -608,24 +685,22 @@ bool PageRenderThread::execNextDocPageNormalImageTask()
     int targetHeight = task.rect.height();
     if (targetWidth <= 0 || targetHeight <= 0) {
         const qreal deviceRatio = dApp ? dApp->devicePixelRatio() : 1.0;
-        const double pageScale = (task.page && task.page->m_scaleFactor > 0.0)
-                ? task.page->m_scaleFactor
-                : (task.sheet ? task.sheet->operation().scaleFactor : 1.0);
-        const QSizeF pageSize = task.page ? task.page->m_originSizeF : QSizeF();
+        const double pageScale = task.scaleFactor > 0.0 ? task.scaleFactor : 1.0;
+        const QSizeF pageSize = task.originSize;
         targetWidth = qMax(1, qRound(pageSize.width() * pageScale * deviceRatio));
         targetHeight = qMax(1, qRound(pageSize.height() * pageScale * deviceRatio));
         task.rect = QRect(0, 0, targetWidth, targetHeight);
     }
 
-    QImage image = task.sheet->getImage(task.page->itemIndex(), targetWidth, targetHeight);
+    QImage image = task.renderer->getImage(task.pageIndex, targetWidth, targetHeight);
 
     if (image.isNull()) {
-        qCWarning(appLog) << "Failed to get image for page:" << task.page->itemIndex();
+        qCWarning(appLog) << "Failed to get image for page:" << task.pageIndex;
     } else {
-        qCDebug(appLog) << "Image rendered successfully for page:" << task.page->itemIndex();
+        qCDebug(appLog) << "Image rendered successfully for page:" << task.pageIndex;
         // 预取图片对象 bbox(夜间蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁
-        task.imageRects = task.sheet->renderer()->getImageObjectRects(
-                    task.page->itemIndex(), targetWidth, targetHeight);
+        task.imageRects = task.renderer->getImageObjectRects(
+                    task.pageIndex, targetWidth, targetHeight);
         emit sigDocPageNormalImageTaskFinished(task, QPixmap::fromImage(image));
     }
 
@@ -648,12 +723,12 @@ bool PageRenderThread::execNextDocPageSliceImageTask()
     }
 
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.renderer.isNull() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCDebug(appLog) << "文档不存在，取切片任务已结束";
         return true;
     }
 
-    QImage image = task.sheet->getImage(task.page->itemIndex(), task.whole.width(), task.whole.height(), task.slice);
+    QImage image = task.renderer->getImage(task.pageIndex, task.whole.width(), task.whole.height(), task.slice);
 
     if (!image.isNull())
         emit sigDocPageSliceImageTaskFinished(task, QPixmap::fromImage(image));
@@ -677,13 +752,13 @@ bool PageRenderThread::execNextDocPageWordTask()
         return false;
     }
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.renderer.isNull() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCDebug(appLog) << "文档不存在，取页码文字任务已结束";
         return true;
     }
 
 
-    const QList<Word> &words = task.sheet->renderer()->getWords(task.page->itemIndex());
+    const QList<Word> &words = task.renderer->getWords(task.pageIndex);
 
     emit sigDocPageWordTaskFinished(task, words);
 
@@ -706,12 +781,12 @@ bool PageRenderThread::execNextDocPageAnnotationTask()
         return false;
     }
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.renderer.isNull() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCDebug(appLog) << "文档不存在，取页码注释任务已结束";
         return true;
     }
 
-    const QList<deepin_reader::Annotation *> annots = task.sheet->renderer()->getAnnotations(task.page->itemIndex());
+    const QList<deepin_reader::Annotation *> annots = task.renderer->getAnnotations(task.pageIndex);
 
     emit sigDocPageAnnotationTaskFinished(task, annots);
 
@@ -734,15 +809,16 @@ bool PageRenderThread::execNextDocPageThumbnailTask()
         return false;
     }
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.renderer.isNull() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCDebug(appLog) << "文档不存在，缩略图任务已结束";
         return true;
     }
 
-    QImage image = task.sheet->getImage(task.index, 174, 174);
+    QImage image = task.renderer->getImage(task.index, 174, 174);
 
-    if (!image.isNull())
+    if (!image.isNull()) {
         emit sigDocPageThumbnailTaskFinished(task, QPixmap::fromImage(image));
+    }
     qCDebug(appLog) << "执行缩略图任务已完成";
     return true;
 }
@@ -762,19 +838,22 @@ bool PageRenderThread::execNextDocOpenTask()
         return false;//false 为不用再继续循环调用
     }
 
-    if (!DocSheet::existSheet(task.sheet)) {
+    if (task.uuid.isEmpty() || !DocSheet::existSheetByUuid(task.uuid)) {
         qCDebug(appLog) << "文档不存在，文档打开任务已结束";
         return true;
     }
 
-    QString filePath = task.sheet->filePath();
+    QString filePath = task.filePath;
 
     PERF_PRINT_BEGIN("POINT-03", QString("filename=%1,filesize=%2").arg(QFileInfo(filePath).fileName()).arg(QFileInfo(filePath).size()));
 
     deepin_reader::Document::Error error = deepin_reader::Document::NoError;
 
-    qCDebug(appLog) << "PageRenderThread::execNextDocOpenTask" <<  task.sheet->convertedFileDir();
-    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.sheet->fileType(), filePath, task.sheet->convertedFileDir(), task.password, &(task.sheet->m_process), error);
+    qCDebug(appLog) << "PageRenderThread::execNextDocOpenTask" << task.convertedFileDir;
+    //getDocument出参改为局部变量,由worker带回、主线程回调写回sheet,避免跨线程写sheet成员
+    QProcess *process = nullptr;
+    deepin_reader::Document *document = deepin_reader::DocumentFactory::getDocument(task.fileType, filePath, task.convertedFileDir, task.password, &process, error);
+    task.process = process;
 
     if (nullptr == document) {
         emit sigDocOpenTask(task, error, nullptr, QList<deepin_reader::Page *>());
@@ -832,6 +911,8 @@ void PageRenderThread::onDocPageNormalImageTaskFinished(DocPageNormalImageTask t
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageNormalImageTaskFinished() - Starting on doc page normal image task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        if (nullptr != task.page && !BrowserPage::existPage(task.page))
+            return;   // 页面已析构,丢弃残留回包(task.page 非空时必须存活才可解引用)
         task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
@@ -842,6 +923,8 @@ void PageRenderThread::onDocPageSliceImageTaskFinished(DocPageSliceImageTask tas
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageSliceImageTaskFinished() - Starting on doc page slice image task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        if (nullptr != task.page && !BrowserPage::existPage(task.page))
+            return;   // 页面已析构,丢弃残留回包
         task.page->handleRenderFinished(task.pixmapId, pixmap, task.slice);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageSliceImageTaskFinished() - On doc page slice image task finished completed";
@@ -851,6 +934,8 @@ void PageRenderThread::onDocPageBigImageTaskFinished(DocPageBigImageTask task, Q
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageBigImageTaskFinished() - Starting on doc page big image task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        if (nullptr != task.page && !BrowserPage::existPage(task.page))
+            return;   // 页面已析构,丢弃残留回包
         task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
@@ -861,6 +946,8 @@ void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<dee
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageWordTaskFinished() - Starting on doc page word task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        if (nullptr != task.page && !BrowserPage::existPage(task.page))
+            return;   // 页面已析构,丢弃残留回包(测试场景中 page 为空且 handler 已被 stub,直接放行)
         task.page->handleWordLoaded(words);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageWordTaskFinished() - On doc page word task finished completed";
@@ -870,6 +957,8 @@ void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask tas
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageAnnotationTaskFinished() - Starting on doc page annotation task finished";
     if (DocSheet::existSheet(task.sheet)) {
+        if (nullptr != task.page && !BrowserPage::existPage(task.page))
+            return;   // 页面已析构,丢弃残留回包
         task.page->handleAnnotationLoaded(annots);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageAnnotationTaskFinished() - On doc page annotation task finished completed";
@@ -894,6 +983,9 @@ void PageRenderThread::onDocOpenTask(DocOpenTask task, deepin_reader::Document::
         delete document;
         return;
     }
+
+    //getDocument在worker线程创建的QProcess,此处(主线程)写回sheet,消除worker对sheet成员的跨线程写
+    sheet->m_process = task.process;
 
     sheet->renderer()->handleOpened(error, document, pages);
     // qCDebug(appLog) << "PageRenderThread::onDocOpenTask() - On doc open task completed";
