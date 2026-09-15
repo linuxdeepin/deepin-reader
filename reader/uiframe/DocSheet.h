@@ -320,11 +320,20 @@ public:
     QPixmap thumbnail(int index);
 
     /**
+     * @brief thumbnailImageRects
+     * 获取缩略图对应的图片对象 bbox(夜间/深色蒙版用,与缩略图像素对齐;需要先设置)
+     * @param index
+     * @return 该页无图片对象时为空
+     */
+    QVector<QRectF> thumbnailImageRects(int index);
+
+    /**
      * @brief setThumbnail
      * @param index
      * @param pixmap
+     * @param imageRects 图片对象 bbox(缩略图渲染坐标系,与 pixmap 对齐),随缩略图一同缓存
      */
-    void setThumbnail(int index, QPixmap pixmap);
+    void setThumbnail(int index, QPixmap pixmap, const QVector<QRectF> &imageRects = QVector<QRectF>());
 
     /**
      * @brief openMagnifier
@@ -978,6 +987,7 @@ private:
     QString         m_uuid;
     QTemporaryDir  *m_tempDir = nullptr;        //存放临时数据
     QMap<int, QPixmap>  m_thumbnailMap;
+    QMap<int, QVector<QRectF>> m_thumbnailImageRects;   //缩略图图片对象 bbox(与 m_thumbnailMap 同生命周期)
 
     bool m_documentChanged = false;
     bool m_bookmarkChanged = false;

@@ -11,6 +11,7 @@
 #include "stub.h"
 
 #include <QDebug>
+#include <QEventLoop>
 #include <QStyleOptionGraphicsItem>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -82,7 +83,7 @@ static void handleAnnotationLoaded_stub(const QList<deepin_reader::Annotation *>
     g_funcName = __FUNCTION__;
 }
 
-static void handleRenderThumbnail_stub(int, QPixmap)
+static void handleRenderThumbnail_stub(int, QPixmap, const QVector<QRectF> &)
 {
     g_funcName = __FUNCTION__;
 }
@@ -483,6 +484,133 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_appendTask_Close)
     PageRenderThread::appendTask(task);
     EXPECT_FALSE(m_tester->m_closeTasks.isEmpty());
     m_tester->m_closeTasks.clear();
+}
+
+/**********execNextDocPageThumbnailTask*************/
+
+// DocSheet::existSheetByUuid 档：任务校验通过
+static bool existSheetByUuid_true_stub(const QString &)
+{
+    return true;
+}
+
+// execNextDocPageThumbnailTask: 预取图片对象 bbox（夜间/深色蒙版用）并随任务转发给模型
+static QVector<QRectF> g_imageRectsResult;   // getImageObjectRects 返回值（输入）
+static QVector<QRectF> g_forwardedRects;     // handleRenderThumbnail 收到的 bbox（输出）
+static QVector<QRectF> getImageObjectRects_stub(int, int, int)
+{
+    return g_imageRectsResult;
+}
+
+static bool opened_true_stub()
+{
+    return true;
+}
+
+static bool opened_false_stub()
+{
+    return false;
+}
+
+// 足够大的可写静态存储充当假 sheet（同 onDocOpenTask_002 做法）
+static unsigned char fake_sheet_storage[8192] = {};
+// 假 model：任务经信号转发到 onDocPageThumbnailTask 时以 existSheet+model 调 handleRenderThumbnail
+static unsigned char fake_model_storage[8192] = {};
+
+// 空删除器：测试结束不删除 renderer，避免 ~SheetRenderer 往任务池塞关闭任务
+// （会 start 真实工作线程，与测试拆解竞态导致堆损坏）
+static void thumbnailRendererNoopDeleter(SheetRenderer *) {}
+
+static QImage getImage_stub(int, int, int, const QRect &)
+{
+    QImage img(174, 174, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::white);
+    return img;
+}
+
+// 成员函数桩：首参占位 this（Itanium ABI 下成员函数≈隐式 this 的自由函数），
+// 否则实参寄存器整体错位，解引用 rects 会读到垃圾内存
+static void handleRenderThumbnail_rects_stub(SideBarImageViewModel *, int, QPixmap, const QVector<QRectF> &rects)
+{
+    g_funcName = "handleRenderThumbnail_rects_stub";
+    g_forwardedRects = rects;
+}
+
+TEST_F(TestPageRenderThread, UT_PageRenderThread_execNextDocPageThumbnailTask_prefetchesImageRects)
+{
+    // renderStub 由 RAII 管理恢复，避免影响后续用例
+    Stub s;
+    const QVector<QRectF> rects { QRectF(1, 2, 3, 4) };
+    g_imageRectsResult = rects;
+    g_funcName.clear();
+
+    s.set(ADDR(DocSheet, existSheetByUuid), existSheetByUuid_true_stub);
+    // 任务经信号转发到 onDocPageThumbnailTask，其中以 existSheet 校验后调 handleRenderThumbnail
+    s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    s.set(ADDR(SheetRenderer, opened), opened_true_stub);
+    s.set(ADDR(SheetRenderer, getImageObjectRects), getImageObjectRects_stub);
+    s.set(ADDR(SideBarImageViewModel, handleRenderThumbnail), handleRenderThumbnail_rects_stub);
+
+    DocPageThumbnailTask task;
+    task.sheet = reinterpret_cast<DocSheet *>(fake_sheet_storage);   // 成员调用均已被桩
+    task.uuid = "ut-sheet-uuid";                      // 与 uuid_stub 一致，校验通过
+    // renderer 为空会提前结束任务；空删除器避免析构竞态（见 thumbnailRendererNoopDeleter）
+    task.renderer = QSharedPointer<SheetRenderer>(renderer_stub(), &thumbnailRendererNoopDeleter);
+    task.model = reinterpret_cast<SideBarImageViewModel *>(fake_model_storage);  // 槽内 model->handleRenderThumbnail 已被桩
+    task.index = 0;
+    m_tester->m_pageThumbnailTasks.append(task);
+
+    EXPECT_TRUE(m_tester->execNextDocPageThumbnailTask());
+    EXPECT_TRUE(m_tester->m_pageThumbnailTasks.isEmpty());
+    // sigDocPageThumbnailTaskFinished 为 QueuedConnection，手动派发队列中的槽调用
+    QEventLoop loop;
+    QMetaObject::invokeMethod(&loop, "quit", Qt::QueuedConnection);
+    loop.exec();
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::MetaCall);
+    // 任务转发到 handleRenderThumbnail，且预取的 bbox 原样传给模型
+    EXPECT_TRUE(g_funcName == "handleRenderThumbnail_rects_stub");
+    EXPECT_TRUE(g_forwardedRects == rects);
+    g_imageRectsResult.clear();
+    g_forwardedRects.clear();
+}
+
+// 渲染器未打开时不预取 bbox，任务照常转发（imageRects 为空）
+TEST_F(TestPageRenderThread, UT_PageRenderThread_execNextDocPageThumbnailTask_skipRectsWhenNotOpened)
+{
+    Stub s;
+    static const QVector<QRectF> kEmpty;
+    g_imageRectsResult = QVector<QRectF>() << QRectF(9, 9, 9, 9);   // 若被误取会带入任务
+    g_funcName.clear();
+
+    s.set(ADDR(DocSheet, existSheetByUuid), existSheetByUuid_true_stub);
+    // 任务经信号转发到 onDocPageThumbnailTask，其中以 existSheet 校验后调 handleRenderThumbnail
+    s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(SheetRenderer, getImage), getImage_stub);
+    s.set(ADDR(SheetRenderer, opened), opened_false_stub);
+    s.set(ADDR(SheetRenderer, getImageObjectRects), getImageObjectRects_stub);
+    s.set(ADDR(SideBarImageViewModel, handleRenderThumbnail), handleRenderThumbnail_rects_stub);
+
+    DocPageThumbnailTask task;
+    task.sheet = reinterpret_cast<DocSheet *>(fake_sheet_storage);
+    task.uuid = "ut-sheet-uuid";
+    // renderer 为空会提前结束任务；空删除器避免析构竞态（见 thumbnailRendererNoopDeleter）
+    task.renderer = QSharedPointer<SheetRenderer>(renderer_stub(), &thumbnailRendererNoopDeleter);
+    task.model = reinterpret_cast<SideBarImageViewModel *>(fake_model_storage);  // 槽内 model->handleRenderThumbnail 已被桩
+    task.index = 0;
+    m_tester->m_pageThumbnailTasks.append(task);
+
+    EXPECT_TRUE(m_tester->execNextDocPageThumbnailTask());
+    // 同上：派发队列中的槽调用后再校验
+    QEventLoop loop2;
+    QMetaObject::invokeMethod(&loop2, "quit", Qt::QueuedConnection);
+    loop2.exec();
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::MetaCall);
+    EXPECT_TRUE(g_funcName == "handleRenderThumbnail_rects_stub");
+    // 未预取：转发给模型的 bbox 应为空
+    EXPECT_TRUE(g_forwardedRects.isEmpty());
+    g_imageRectsResult.clear();
+    g_forwardedRects.clear();
 }
 
 // (NullInstance test removed: modifying s_quitForever corrupts global state

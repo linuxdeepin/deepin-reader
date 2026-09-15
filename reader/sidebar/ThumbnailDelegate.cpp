@@ -5,6 +5,7 @@
 
 #include "ThumbnailDelegate.h"
 #include "SideBarImageViewModel.h"
+#include "NightFilter.h"
 #include "Utils.h"
 #include "Application.h"
 #include "ddlog.h"
@@ -41,7 +42,9 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
         transform.rotate(rotate);
 
-        const QPixmap &pixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>().transformed(transform);
+        const QPixmap &rawPixmap = index.data(ImageinfoType_e::IMAGE_PIXMAP).value<QPixmap>();
+
+        const QPixmap &pixmap = rawPixmap.transformed(transform);
 
         const int borderRadius = 6;
 
@@ -63,48 +66,20 @@ void ThumbnailDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
             QPainterPath clipPath;
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
-            // 深色系统主题下，缩略图卡片需与侧边栏深色背景协调：将文档原始白底黑字
-            // 的缩略图反色为黑底白字；浅色主题保持原样。反色仅在绘制时进行，
-            // 不修改 DocSheet 中缓存的真实缩略图(始终为白底)，避免主题切换时双重反色。
-            // 采用与 BrowserPage::applyNightMode 相同的 HSL 亮度反转算法：
-            // 仅反转 Lightness 通道，保留 Hue/Saturation，避免图片色相偏移 180°。
-            // 两端收敛：下限钳制 37(#252525)，反转后 ≥192 提亮纯白
-            //   白底黑字 → 黑底白字（文字/背景正确反色）
-            //   彩色图片/链接 → 仅变暗，色相保持
-            if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
-                QImage img = pixmap.toImage();
-                if (!img.isNull()) {
-                    if (img.format() != QImage::Format_ARGB32)
-                        img = img.convertToFormat(QImage::Format_ARGB32);
-                    const int w = img.width();
-                    const int h = img.height();
-                    const int kMinLightAfterInvert = 37;       // #252525
-                    const int kMaxLightBoostThreshold = 192;   // 0xC0，提亮阈值
-                    for (int y = 0; y < h; ++y) {
-                        QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
-                        for (int x = 0; x < w; ++x) {
-                            const QRgb px = line[x];
-                            const int alpha = qAlpha(px);
-                            QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
-                            int hue, sat, light, dummy;
-                            c.getHsl(&hue, &sat, &light, &dummy);
-                            light = 255 - light;
-                            if (light >= kMaxLightBoostThreshold)
-                                light = 255;
-                            light = qMax(light, kMinLightAfterInvert);
-                            c.setHsl(hue, sat, light);
-                            line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
-                        }
-                    }
-                    QPixmap invertedPixmap = QPixmap::fromImage(img);
-                    invertedPixmap.setDevicePixelRatio(pixmap.devicePixelRatio());
-                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), invertedPixmap);
-                } else {
-                    painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
-                }
-            } else {
-                painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), pixmap);
-            }
+            // 缩略图反色只跟随系统深色主题：深色主题下白底文档反转为黑底白字
+            // （与书签/注释列表观感一致），浅色主题照常绘制原图。
+            // 反色统一走主干夜间滤镜 NightFilter（CIELAB L* 反转，不再用旧 HSL 方案），
+            // 图片对象区域蒙版随缩略图由渲染线程预取（与主视图同源），照片区域不反色，
+            // 并含扫描页覆盖率特判（超过阈值整页反色，避免回贴/蒙版异常）
+            const bool darkTheme = (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType);
+            const QVector<QRectF> imageRects = index.data(ImageinfoType_e::IMAGE_NIGHT_MASK).value<QVector<QRectF>>();
+
+            // 反色结果按未旋转的原始缩略图缓存，再叠加旋转，避免每次重绘都逐像素反色
+            const QPixmap displayPixmap = darkTheme
+                                          ? nightPixmap(rawPixmap, imageRects).transformed(transform)
+                                          : pixmap;
+
+            painter->drawPixmap(rect.x(), rect.y(), rect.width(), rect.height(), displayPixmap);
             painter->restore();
         }
 
@@ -136,6 +111,22 @@ QSize ThumbnailDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 {
     // qCDebug(appLog) << "Calculating size hint for row:" << index.row();
     return DStyledItemDelegate::sizeHint(option, index);
+}
+
+QPixmap ThumbnailDelegate::nightPixmap(const QPixmap &src, const QVector<QRectF> &imageRects) const
+{
+    if (src.isNull())
+        return src;
+
+    // 滚动/选中时同一张缩略图会被反复重绘，缓存反色结果避免逐像素重复计算；
+    // 缩略图重渲染时 cacheKey 必然变化，无需将蒙版纳入缓存键
+    if (m_nightSourceCache.cacheKey() == src.cacheKey() && !m_nightPixmapCache.isNull())
+        return m_nightPixmapCache;
+
+    m_nightSourceCache = src;
+    m_nightPixmapCache = QPixmap::fromImage(NightFilter::applyPage(src.toImage(), imageRects));
+    m_nightPixmapCache.setDevicePixelRatio(src.devicePixelRatio());
+    return m_nightPixmapCache;
 }
 
 void ThumbnailDelegate::drawBookMark(QPainter *painter, const QRect &rect, bool visible) const

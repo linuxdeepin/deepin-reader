@@ -5,6 +5,7 @@
 
 #include "BookMarkDelegate.h"
 #include "SideBarImageViewModel.h"
+#include "NightFilter.h"
 #include "Application.h"
 #include "ddlog.h"
 
@@ -48,42 +49,33 @@ void BookMarkDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             clipPath.addRoundedRect(rect, borderRadius, borderRadius);
             painter->setClipPath(clipPath);
             // 深色主题下将白底缩略图反色为黑底白字（仅绘制时反色，不改缓存原图）：
-            // HSL 亮度反转，下限钳制 37(#252525)，反转后 ≥192 提亮纯白。
+            // 统一走主干夜间滤镜 NightFilter（CIELAB L* 反转），图片对象区域不反色
+            // （照片零负片，与主视图蒙版行为一致），含扫描页整页反色特判。
             if (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType) {
-                // 按源图 cacheKey() 缓存反色结果，避免每次重绘重复逐像素计算
+                // 图片对象 bbox（与存储缩略图像素对齐，渲染线程预取）
+                const QVector<QRectF> imageRects = index.data(ImageinfoType_e::IMAGE_NIGHT_MASK).value<QVector<QRectF>>();
+                // 按源缩略图 cacheKey() 缓存反色结果，避免每次重绘重复逐像素计算
                 QPixmap invertedPixmap;
                 if (QPixmap *cached = m_darkPixmapCache.object(pixmap.cacheKey())) {
                     invertedPixmap = *cached;
                 } else {
-                    QImage img = scalePix.toImage();
-                    if (!img.isNull()) {
-                        if (img.format() != QImage::Format_ARGB32)
-                            img = img.convertToFormat(QImage::Format_ARGB32);
-                        const int w = img.width();
-                        const int h = img.height();
-                        const int kMinLightAfterInvert = 37;       // #252525
-                        const int kMaxLightBoostThreshold = 192;   // 0xC0，提亮阈值
-                        for (int y = 0; y < h; ++y) {
-                            QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
-                            for (int x = 0; x < w; ++x) {
-                                const QRgb px = line[x];
-                                const int alpha = qAlpha(px);
-                                QColor c = QColor::fromRgb(qRed(px), qGreen(px), qBlue(px));
-                                int hue, sat, light, dummy;
-                                c.getHsl(&hue, &sat, &light, &dummy);
-                                light = 255 - light;
-                                if (light >= kMaxLightBoostThreshold)
-                                    light = 255;
-                                light = qMax(light, kMinLightAfterInvert);
-                                c.setHsl(hue, sat, light);
-                                line[x] = qRgba(c.red(), c.green(), c.blue(), alpha);
-                            }
-                        }
-                        invertedPixmap = QPixmap::fromImage(img);
-                        invertedPixmap.setDevicePixelRatio(scalePix.devicePixelRatio());
+                    // bbox 是存储缩略图（174px）坐标，而 scalePix 是等比缩小后的图，
+                    // 须先映射到 scalePix 坐标，否则覆盖率特判/蒙版区域全错
+                    QVector<QRectF> scaledRects;
+                    scaledRects.reserve(imageRects.size());
+                    const qreal sx = pixmap.isNull() || pixmap.width() == 0
+                                             ? 0.0 : qreal(scalePix.width()) / pixmap.width();
+                    const qreal sy = pixmap.isNull() || pixmap.height() == 0
+                                             ? 0.0 : qreal(scalePix.height()) / pixmap.height();
+                    for (const QRectF &r : imageRects)
+                        scaledRects.append(QRectF(r.x() * sx, r.y() * sy,
+                                                  r.width() * sx, r.height() * sy));
+
+                    invertedPixmap = QPixmap::fromImage(NightFilter::applyPage(scalePix.toImage(), scaledRects));
+                    invertedPixmap.setDevicePixelRatio(scalePix.devicePixelRatio());
+                    if (!invertedPixmap.isNull())
                         m_darkPixmapCache.insert(pixmap.cacheKey(), new QPixmap(invertedPixmap),
-                                                 img.width() * img.height() * 4); // ARGB32 每像素固定 4 字节
-                    }
+                                                 invertedPixmap.width() * invertedPixmap.height() * 4); // ARGB32 每像素固定 4 字节
                 }
                 if (!invertedPixmap.isNull())
                     painter->drawPixmap(rect.x(), rect.y(), invertedPixmap);
