@@ -5,6 +5,7 @@
 
 #include "SearchResDelegate.h"
 #include "SideBarImageViewModel.h"
+#include "NightFilter.h"
 #include "Utils.h"
 #include "Application.h"
 #include "ddlog.h"
@@ -39,7 +40,13 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
 
         if (!pixmap.isNull()) {
-            const QPixmap &scalePix = pixmap.scaled(pageSize);
+            // 深色主题下搜索结果页的页面小图与缩略图侧栏一致走主干夜间滤镜
+            // （CIELAB L* 反转，图片对象区域保持原色，扫描页整页反色特判），
+            // 浅色主题照常绘制原图；先按原始尺寸反色再缩放，蒙版坐标无需换算
+            const bool darkTheme = (DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->themeType() == DTK_NAMESPACE::Gui::DGuiApplicationHelper::DarkType);
+            const QVector<QRectF> imageRects = index.data(ImageinfoType_e::IMAGE_NIGHT_MASK).value<QVector<QRectF>>();
+            const QPixmap &displayPixmap = darkTheme ? nightPixmap(pixmap, imageRects) : pixmap;
+            const QPixmap &scalePix = displayPixmap.scaled(pageSize);
             //clipPath pixmap
             painter->save();
             QPainterPath clipPath;
@@ -122,5 +129,21 @@ QSize SearchResDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
     QSize size = DStyledItemDelegate::sizeHint(option, index);
     qCDebug(appLog) << "Exiting SearchResDelegate::sizeHint(), returning size:" << size;
     return size;
+}
+
+QPixmap SearchResDelegate::nightPixmap(const QPixmap &src, const QVector<QRectF> &imageRects) const
+{
+    if (src.isNull())
+        return src;
+
+    // 搜索结果列表滚动时同一张页面小图会被反复重绘，缓存反色结果避免逐像素重复计算；
+    // 页面重渲染时 cacheKey 必然变化，无需将蒙版纳入缓存键
+    if (m_nightSourceCache.cacheKey() == src.cacheKey() && !m_nightPixmapCache.isNull())
+        return m_nightPixmapCache;
+
+    m_nightSourceCache = src;
+    m_nightPixmapCache = QPixmap::fromImage(NightFilter::applyPage(src.toImage(), imageRects));
+    m_nightPixmapCache.setDevicePixelRatio(src.devicePixelRatio());
+    return m_nightPixmapCache;
 }
 

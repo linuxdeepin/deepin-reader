@@ -10,10 +10,14 @@
 #include <QMap>
 #include <QTimer>
 #include <QSet>
+#include <QVector>
+#include <QRectF>
 
 namespace deepin_reader {
 class Annotation;
 }
+
+Q_DECLARE_METATYPE(QVector<QRectF>)
 
 typedef enum E_SideBar {
     SIDE_THUMBNIL = 0,
@@ -31,6 +35,7 @@ typedef enum ImageinfoType_e {
     IMAGE_CONTENT_TEXT = Qt::UserRole + 4,
     IMAGE_SEARCH_COUNT = Qt::UserRole + 5,
     IMAGE_PAGE_SIZE    = Qt::UserRole + 6,
+    IMAGE_NIGHT_MASK   = Qt::UserRole + 7,   //图片对象 bbox 列表(夜间/深色反色时跳过图片区域,与 IMAGE_PIXMAP 像素对齐)
 } ImageinfoType_e;
 
 typedef struct ImagePageInfo_t {
@@ -157,8 +162,9 @@ public:
      * 处理缩略图
      * @param index
      * @param pixmap
+     * @param imageRects 图片对象 bbox(与 pixmap 像素对齐,夜间/深色反色跳过图片区域用)
      */
-    void handleRenderThumbnail(int index, QPixmap pixmap);
+    void handleRenderThumbnail(int index, QPixmap pixmap, const QVector<QRectF> &imageRects = QVector<QRectF>());
 
 public slots:
     /**

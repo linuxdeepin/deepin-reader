@@ -83,6 +83,7 @@ struct DocPageThumbnailTask {//缩略图
     DocSheet *sheet = nullptr;
     SideBarImageViewModel *model = nullptr;
     int index = -1;
+    QVector<QRectF> imageRects; //图片对象 bbox(夜间/深色蒙版用,与缩略图像素对齐,worker线程预取)
 };
 
 struct DocOpenTask {//打开文档

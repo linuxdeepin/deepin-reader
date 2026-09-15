@@ -728,6 +728,27 @@ TEST_F(TestDocSheet, UT_DocSheet_setThumbnail_001)
     EXPECT_TRUE(m_tester->m_thumbnailMap.size() == 1);
 }
 
+// setThumbnail 带 bbox：thumbnailImageRects 返回同一份蒙版
+TEST_F(TestDocSheet, UT_DocSheet_thumbnailImageRects_001)
+{
+    EXPECT_TRUE(m_tester->thumbnailImageRects(1).isEmpty());
+
+    const QVector<QRectF> rects { QRectF(0, 0, 10, 20), QRectF(1, 1, 2, 2) };
+    m_tester->setThumbnail(1, QPixmap(10, 20), rects);
+    EXPECT_TRUE(m_tester->thumbnailImageRects(1) == rects);
+}
+
+// 不带 bbox 重设缩略图时，旧蒙版需被清空（避免残留旧页面蒙版）
+TEST_F(TestDocSheet, UT_DocSheet_setThumbnailClearsStaleImageRects)
+{
+    const QVector<QRectF> rects { QRectF(0, 0, 10, 20) };
+    m_tester->setThumbnail(2, QPixmap(10, 20), rects);
+    EXPECT_FALSE(m_tester->thumbnailImageRects(2).isEmpty());
+
+    m_tester->setThumbnail(2, QPixmap(10, 20));
+    EXPECT_TRUE(m_tester->thumbnailImageRects(2).isEmpty());
+}
+
 TEST_F(TestDocSheet, UT_DocSheet_setScaleMode_001)
 {
     m_tester->m_operation.scaleMode = Dr::FitToPageWorHMode;

@@ -50,11 +50,14 @@ private:
 
     /**
      * @brief nightPixmap
-     * 夜间护眼模式下缩略图的智能反色结果（带缓存）
+     * 夜间智能滤镜/深色主题下缩略图的反色结果（带缓存）：
+     * 走主干 NightFilter 管线（CIELAB L* 反转 + 图片对象区域跳过 + 扫描页整页反色特判），
+     * 与主视图观感一致
      * @param src 原始缩略图
+     * @param imageRects 图片对象 bbox（与 src 像素对齐，这些区域不反色避免照片负片）
      * @return 反色后的缩略图
      */
-    QPixmap nightPixmap(const QPixmap &src) const;
+    QPixmap nightPixmap(const QPixmap &src, const QVector<QRectF> &imageRects = QVector<QRectF>()) const;
 
 private:
     QAbstractItemView *m_parent = nullptr;
