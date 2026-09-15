@@ -8,6 +8,9 @@
 
 #include <DStyledItemDelegate>
 
+#include <QCache>
+#include <QPixmap>
+
 DWIDGET_USE_NAMESPACE
 /**
  * @brief The NotesDelegate class
@@ -39,6 +42,11 @@ protected:
 
 private:
     QAbstractItemView *m_parent = nullptr;
+
+    /**
+     * @brief 深色主题反色结果缓存（键：源图 cacheKey()；paint() 为 const 故 mutable）
+     */
+    mutable QCache<qint64, QPixmap> m_darkPixmapCache;
 };
 
 #endif // NOTESDELEGATE_H

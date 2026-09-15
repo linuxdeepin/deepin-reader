@@ -159,6 +159,9 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
     } else if (role == ImageinfoType_e::IMAGE_PAGE_SIZE) {
         // qCDebug(appLog) << "Getting page size for index:" << nRow;
         return QVariant::fromValue(m_sheet->pageSizeByIndex(nRow));
+    } else if (role == ImageinfoType_e::IMAGE_NIGHT_MASK) {
+        // 图片对象 bbox:夜间/深色反色时跳过这些区域,与主视图(BrowserPage)蒙版行为一致
+        return QVariant::fromValue(m_sheet->thumbnailImageRects(nRow));
     }
     return QVariant();
 }
@@ -302,11 +305,11 @@ int SideBarImageViewModel::findItemForAnno(deepin_reader::Annotation *annotation
     return -1;
 }
 
-void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap)
+void SideBarImageViewModel::handleRenderThumbnail(int index, QPixmap pixmap, const QVector<QRectF> &imageRects)
 {
-    qCDebug(appLog) << "Handling thumbnail render for page:" << index << "size:" << pixmap.size();
+    qCDebug(appLog) << "Handling thumbnail render for page:" << index << "size:" << pixmap.size() << "imageRects:" << imageRects.size();
     pixmap.setDevicePixelRatio(dApp->devicePixelRatio());
-    m_sheet->setThumbnail(index, pixmap);
+    m_sheet->setThumbnail(index, pixmap, imageRects);
 
     m_pendingUpdatePages.insert(index);
     if (!m_batchUpdateTimer->isActive()) {

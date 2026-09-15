@@ -817,6 +817,11 @@ bool PageRenderThread::execNextDocPageThumbnailTask()
     QImage image = task.renderer->getImage(task.index, 174, 174);
 
     if (!image.isNull()) {
+        // 预取图片对象 bbox(夜间/深色蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁;
+        // 与 getImage 同尺寸(174,174)请求,蒙版与缩略图输出像素一一对齐
+        if (DocSheet::existSheetByUuid(task.uuid) && task.renderer->opened()) {
+            task.imageRects = task.renderer->getImageObjectRects(task.index, 174, 174);
+        }
         emit sigDocPageThumbnailTaskFinished(task, QPixmap::fromImage(image));
     }
     qCDebug(appLog) << "执行缩略图任务已完成";
@@ -968,7 +973,7 @@ void PageRenderThread::onDocPageThumbnailTask(DocPageThumbnailTask task, QPixmap
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageThumbnailTask() - Starting on doc page thumbnail task";
     if (DocSheet::existSheet(task.sheet)) {
-        task.model->handleRenderThumbnail(task.index, pixmap);
+        task.model->handleRenderThumbnail(task.index, pixmap, task.imageRects);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageThumbnailTask() - On doc page thumbnail task completed";
 }
