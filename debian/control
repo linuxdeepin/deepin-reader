@@ -39,7 +39,8 @@ Architecture: any
 Depends: 
     ${shlibs:Depends}, 
     ${misc:Depends}, 
-    pandoc,  
+    pandoc,
+    libcups2,
     libqt6webenginecore6-bin [!mipsel !mips64el] | libqt5core5a,
 Description: a tool for reading document files.
  Document Viewer is a tool for reading document files, supporting PDF, DJVU, DOCX etc.

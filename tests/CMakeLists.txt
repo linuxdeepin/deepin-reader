@@ -107,6 +107,8 @@ file(GLOB_RECURSE TEST_SOURCES
 list(FILTER TEST_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/at/")
 list(FILTER TEST_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/files/")
 list(FILTER TEST_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+# batch-print 测试为独立可执行文件（见 batch-print/CMakeLists.txt），不并入本测试目标
+list(FILTER TEST_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/batch-print/")
 
 # ====== 合并所有源文件 ======
 set(ALL_SOURCES
@@ -150,6 +152,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     UTSOURCEDIR="${CMAKE_CURRENT_SOURCE_DIR}"
     APP_VERSION="${APP_VERSION}"
     INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}"
+    INSTALL_LIBDIR="${CMAKE_INSTALL_LIBDIR}"
 )
 
 if (QT_DESIRED_VERSION MATCHES 6)
@@ -248,3 +251,6 @@ target_sources(${PROJECT_NAME} PRIVATE ${RESOURCES})
 # 启用测试
 enable_testing()
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+
+# 批量打印单元测试（独立 gtest 可执行文件）
+add_subdirectory(batch-print)

@@ -20,36 +20,34 @@ command:
 
 build: |
   # 下载和安装依赖
-  apt -y install --download-only qt6-base-dev qt6-base-dev-tools qt6-tools-dev libdtk6widget-dev libspectre-dev libdjvulibre-dev libtiff-dev libjpeg-dev libicu-dev libpng-dev zlib1g-dev liblcms2-dev libopenjp2-7-dev libfreetype6-dev libgtest-dev libchardet-dev qt6-webengine-dev qt6-5compat-dev libdtk6gui-dev libdtk6core-dev qt6-svg-dev pandoc libgxps-dev libcairo2-dev libglib2.0-dev
-  bash ./install_dep /var/cache/apt/archives "$PREFIX"
+  # libqt6waylandclient6: libdtk6gui 的隐式依赖(未在 deb 声明)，必须随 apt 的 Qt 6.8.0 一起打包，
+  # 否则链接时会拉取 /runtime 中 webengine 运行时的 libQt6WaylandClient，其私有 ABI 与打包的 Qt 不一致导致链接失败
+  apt -y install --download-only qt6-base-dev qt6-base-dev-tools qt6-tools-dev libdtk6widget-dev libspectre-dev libdjvulibre-dev libtiff-dev libjpeg-dev libicu-dev libpng-dev zlib1g-dev liblcms2-dev libopenjp2-7-dev libfreetype6-dev libgtest-dev libchardet-dev qt6-webengine-dev qt6-5compat-dev libdtk6gui-dev libdtk6core-dev qt6-svg-dev pandoc libgxps-dev libcairo2-dev libglib2.0-dev libqt6waylandclient6
+  # 第三个参数强制安装 runtime 已提供的 libqt6waylandclient6，保证其与打包的 Qt 版本一致
+  bash ./install_dep /var/cache/apt/archives "$PREFIX" "libqt6waylandclient6"
 
-  # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
-  sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
-  sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
-  sed -i '2i INCLUDEPATH += $$INCPATHS' reader/reader.pro
-  sed -i 's|/usr/lib/qt6/bin/lrelease|lrelease|g' translate_generation.sh
-
-  # 构建
-  VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
-  mkdir -p  build && cd build
-  qmake -set APP_INSTALL_LIBS ${PREFIX}/lib/${TRIPLET}
-  qmake "VERSION=${VERSION}" \
-    "PREFIX=${PREFIX}" \
-    "LINGLONG_BUILD_ON=1" \
-    "INCPATHS=$(echo "$CFLAGS" | sed 's/-I//g')" \
-    "LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET}" \
-    "INSTALL_ROOT=${PREFIX}" \
-    ../deepin_reader.pro
-  make -j`nproc`
+  # 构建（CMake）
+  rm -rf build && mkdir -p build && cd build
+  cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+    -DCMAKE_INSTALL_LIBDIR=lib/${TRIPLET} \
+    -DCMAKE_PREFIX_PATH=${PREFIX} \
+    -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}" \
+    -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}"
+  make -j$(nproc)
   make install > ../install.log 2>&1
   cd ..
 
   # 项目生成应用名和动态隐式加载的依赖库，ldd无法找到的其他库
   LDD_FILES=(
     deepin-reader
-    ../lib/deepin-reader/htmltopdf
+    deepin-reader-batchprint
+    ../lib/${TRIPLET}/deepin-reader/htmltopdf
     pandoc
     libdeepin-pdfium-reader.so
+    # dtk6gui 的隐式依赖，需打包与本体 Qt 版本一致的 waylandclient，避免运行时混用 /runtime 的 Qt
+    libQt6WaylandClient.so
     # 定制插件不存在
     libzpdcallback.so
   )
@@ -59,7 +57,7 @@ build: |
   bash ./deploy_dep "${LDD_FILES[@]}"
 
   # lib/deepin-reader 文件添加到 install 文件
-  for OTHER in "${PREFIX}"/lib/deepin-reader/*; do
+  for OTHER in "${PREFIX}"/lib/${TRIPLET}/deepin-reader/*; do
       if [[ -f "$OTHER" ]]; then
           echo "$OTHER" >> "${ID_VALUE}.install"
       fi

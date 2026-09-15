@@ -442,6 +442,11 @@ QSizeF DjVuPage::sizeF() const
     return m_size;
 }
 
+int DjVuPage::resolution() const
+{
+    return m_resolution > 0 ? m_resolution : 300;
+}
+
 QImage DjVuPage::render(int width, int height, const QRect &slice)const
 {
     qCDebug(appLog) << "Rendering page" << m_index << "with size" << width << "x" << height << "and slice" << slice;
