@@ -1,12 +1,12 @@
-// Copyright (C) 2019-2026 ~ 2020 UnionTech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SearchResDelegate.h"
-#include "DocSheet.h"
 #include "SideBarImageListview.h"
 #include "SideBarImageViewModel.h"
+#include "DocSheet.h"
 
 #include "stub.h"
 
@@ -14,6 +14,45 @@
 #include <QTest>
 #include <QListView>
 #include <QPainter>
+#include <QImage>
+
+#include <DGuiApplicationHelper>
+#include <dtkgui_global.h>
+
+DGUI_USE_NAMESPACE
+
+namespace {
+
+// 未打开文档时渲染器没有页面尺寸，桩掉以得到稳定的搜索结果卡片区域
+QSizeF pageSizeByIndex_stub(DocSheet *, int)
+{
+    return QSizeF(210, 297);
+}
+
+// 测试期间屏蔽 dtk 主题持久化，避免 setPaletteType 污染用户配置
+class ThemeGuard
+{
+public:
+    explicit ThemeGuard(DGuiApplicationHelper::ColorType type)
+    {
+        DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::DontSaveApplicationTheme, true);
+        m_previous = DGuiApplicationHelper::instance()->themeType();
+        DGuiApplicationHelper::instance()->setPaletteType(type);
+    }
+    ~ThemeGuard()
+    {
+        if (m_previous != DGuiApplicationHelper::UnknownType)
+            DGuiApplicationHelper::instance()->setPaletteType(m_previous);
+        else
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+        DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::DontSaveApplicationTheme, false);
+    }
+
+private:
+    DGuiApplicationHelper::ColorType m_previous = DGuiApplicationHelper::UnknownType;
+};
+
+} // namespace
 
 class UT_SearchResDelegate : public ::testing::Test
 {
@@ -27,6 +66,7 @@ public:
         strPath += "/files/1.pdf";
         m_sheet = new DocSheet(Dr::PDF, strPath, nullptr);
         m_pView = new SideBarImageListView(m_sheet);
+        m_pView->setListType(E_SideBar::SIDE_SEARCH);
         m_tester = new SearchResDelegate(m_pView);
         m_pView->setItemDelegate(m_tester);
         m_tester->disconnect();
@@ -58,6 +98,107 @@ TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_paint)
     m_tester->paint(painter, option, m_pView->getImageModel()->index(0, 0));
     EXPECT_TRUE(m_tester->m_parent == m_pView);
     delete painter;
+}
+
+namespace {
+
+// 绘制到离屏画布：页面 (210,297) 按 62×62 等比缩放后绘制在
+// (option.rect.x()+10, 垂直居中) 处，返回卡片内相对坐标 (rx, ry) 处像素
+QColor paintPixelAt(UT_SearchResDelegate *fixture, const QPixmap &thumb, int rx, int ry)
+{
+    fixture->m_pView->getImageModel()->insertPageIndex(0);
+    fixture->m_sheet->setThumbnail(0, thumb);
+
+    const QModelIndex index = fixture->m_pView->getImageModel()->index(0, 0);
+    if (!index.isValid())
+        return QColor();
+
+    QStyleOptionViewItem option;
+    option.rect = QRect(0, 0, 200, 300);
+
+    QImage canvas(200, 300, QImage::Format_ARGB32_Premultiplied);
+    canvas.fill(Qt::red);   // 红底便于观察是否被绘制覆盖
+    QPainter painter(&canvas);
+    fixture->m_tester->paint(&painter, option, index);
+    painter.end();
+
+    // 搜索结果卡片：宽 43(=62*210/297)、高 62，起点 (10, 150-31)
+    return canvas.pixelColor(10 + rx, 150 - 31 + ry);
+}
+
+} // namespace
+
+// 浅色主题：搜索结果页小图保持文档原始白底
+TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_paintLightThemeKeepsWhitePage)
+{
+    Stub s;
+    typedef QSizeF(*fptr)(DocSheet *, int);
+    fptr pageSizeFunc = (fptr)(&DocSheet::pageSizeByIndex);
+    s.set(pageSizeFunc, pageSizeByIndex_stub);
+
+    ThemeGuard light(DGuiApplicationHelper::LightType);
+
+    QPixmap whiteThumb(174, 246);
+    whiteThumb.fill(Qt::white);
+    const QColor center = paintPixelAt(this, whiteThumb, 20, 31);
+
+    EXPECT_GT(center.lightness(), 239);
+}
+
+// 深色主题：触发搜索后结果页小图同样反转为深色（走 NightFilter 主干滤镜），
+// 不能再显示原始白底
+TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_paintDarkThemeInvertsWhitePage)
+{
+    Stub s;
+    typedef QSizeF(*fptr)(DocSheet *, int);
+    fptr pageSizeFunc = (fptr)(&DocSheet::pageSizeByIndex);
+    s.set(pageSizeFunc, pageSizeByIndex_stub);
+
+    ThemeGuard dark(DGuiApplicationHelper::DarkType);
+
+    QPixmap whiteThumb(174, 246);
+    whiteThumb.fill(Qt::white);
+    const QColor center = paintPixelAt(this, whiteThumb, 20, 31);
+
+    EXPECT_LT(center.lightness(), 32);
+}
+
+// 深色主题 + 图片对象蒙版：搜索结果页小图中照片区域保持原始像素，白底反转为深色
+TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_paintDarkThemeWithNightMaskKeepsPhotoPixels)
+{
+    Stub s;
+    typedef QSizeF(*fptr)(DocSheet *, int);
+    fptr pageSizeFunc = (fptr)(&DocSheet::pageSizeByIndex);
+    s.set(pageSizeFunc, pageSizeByIndex_stub);
+
+    ThemeGuard dark(DGuiApplicationHelper::DarkType);
+
+    // 左半为纯色照片块(70,70,70)，右半白底；蒙版罩住照片（源缩略图 174 像素坐标）
+    QPixmap mixed(174, 246);
+    mixed.fill(Qt::white);
+    QPainter p(&mixed);
+    p.fillRect(0, 0, 87, 246, QColor(70, 70, 70));
+    p.end();
+
+    m_pView->getImageModel()->insertPageIndex(0);
+    m_sheet->setThumbnail(0, mixed, QVector<QRectF>() << QRectF(0, 0, 87, 246));
+
+    const QModelIndex index = m_pView->getImageModel()->index(0, 0);
+    ASSERT_TRUE(index.isValid());
+
+    QStyleOptionViewItem option;
+    option.rect = QRect(0, 0, 200, 300);
+
+    QImage canvas(200, 300, QImage::Format_ARGB32_Premultiplied);
+    canvas.fill(Qt::red);
+    QPainter painter(&canvas);
+    m_tester->paint(&painter, option, index);
+    painter.end();
+
+    // 蒙版区域（照片中心，避开缩放采样边界）像素保持不变
+    EXPECT_EQ(canvas.pixelColor(10 + 10, 150), QColor(70, 70, 70));
+    // 蒙版外白底已反转为深色
+    EXPECT_LT(canvas.pixelColor(10 + 35, 150).lightness(), 32);
 }
 
 TEST_F(UT_SearchResDelegate, UT_SearchResDelegate_sizeHint)
