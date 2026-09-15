@@ -115,6 +115,7 @@ endif()
 # 定义安装前缀
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}"
+    INSTALL_LIBDIR="${CMAKE_INSTALL_LIBDIR}"
     APP_VERSION="${APP_VERSION}"
 )
 

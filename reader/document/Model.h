@@ -188,6 +188,7 @@ public:
     virtual ~Page() {}
 
     virtual QSizeF sizeF() const = 0;
+    virtual int resolution() const { return 72; }
     virtual QImage render(int width, int height, const QRect &slice = QRect()) const = 0;
     /**
      * @brief 图片对象包围盒(与 render(width,height) 整页输出像素对齐)

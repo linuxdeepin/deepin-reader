@@ -59,7 +59,14 @@ static int calculateTimeout(qint64 sizeInMB, int baseTimeout, int perMbTimeout) 
 
 static QString getHtmlToPdfPath() {
 
-    QString path = QString(INSTALL_PREFIX) + "/lib/deepin-reader/htmltopdf";
+    // Check the actual install libdir first (multiarch-aware, e.g. lib/x86_64-linux-gnu)
+    QString path = QString(INSTALL_PREFIX) + "/" + INSTALL_LIBDIR + "/deepin-reader/htmltopdf";
+    if (QFile::exists(path)) {
+        qCDebug(appLog) << "Found htmltopdf in INSTALL_LIBDIR: " << path;
+        return path;
+    }
+
+    path = QString(INSTALL_PREFIX) + "/lib/deepin-reader/htmltopdf";
     if (QFile::exists(path)) {
         qCDebug(appLog) << "Found htmltopdf in INSTALL_PREFIX: " << path;
         return path;
