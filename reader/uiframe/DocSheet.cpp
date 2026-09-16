@@ -982,6 +982,12 @@ QString DocSheet::convertedFileDir()
     qCDebug(appLog) << "convertedFileDir";
     if (m_tempDir == nullptr)
         m_tempDir = new QTemporaryDir;
+    if (!m_tempDir->isValid()) {
+        qCWarning(appLog) << "Failed to create temporary directory:" << m_tempDir->errorString();
+        delete m_tempDir;
+        m_tempDir = nullptr;
+        return QString();
+    }
 
     qCDebug(appLog) << "临时目录: " << m_tempDir->path();
     return m_tempDir->path();

@@ -793,6 +793,10 @@ bool DjVuDocument::save() const
 {
     qCDebug(appLog) << "Saving document to:" << m_filePath;
     QTemporaryDir tempDir;
+    if (!tempDir.isValid()) {
+        qCWarning(appLog) << "Failed to create temporary directory:" << tempDir.errorString();
+        return false;
+    }
 
     QString tempFilePath = tempDir.path() + "/" + QUuid::createUuid().toString();
 
