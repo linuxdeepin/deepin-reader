@@ -700,6 +700,7 @@ void CentralDocPage::openSlide()
 {
     DocSheet *docSheet = getCurSheet();
     if (docSheet && docSheet->opened() && m_slideWidget == nullptr) {
+        docSheet->closeFindWidget();
         m_slideWidget = new SlideWidget(getCurSheet());
     }
 }
