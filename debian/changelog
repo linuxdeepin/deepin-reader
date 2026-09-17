@@ -1,3 +1,43 @@
+deepin-reader (6.6.0) unstable; urgency=medium
+
+  * chore: Update version to 6.6.0
+  * fix(catalog): use default text color for page numbers
+  * fix(sidebar): align catalog scrollbar to far-right edge
+  * fix(icon): add accessibility attributes to svg
+  * fix(icon): resolve dark-theme icon overlap via merged path
+  * fix(icon): remove fill to resolve dark-theme overlap
+  * fix(icon): remove dead defs and invalid xlink:href
+  * fix(icon): simplify import_photo svg structure
+  * fix(batchprint): link OfdModel and rofd into batch print converter
+  * fix(reader): invert sidebar thumbnails only under dark theme
+  * fix(database): synchronize cleanup of bookmarks and tab groups in orphan states
+  * fix(reader): pin render task lifetime to renderer ref and uuid
+  * feat(batch-print): add headless batch print for pdf/docx/djvu/xps
+  * chore(docs): remove non-standard docs/superpowers directory
+  * fix(reader): clamp OFD render slices to page canvas
+  * [skip CI] Translate deepin-reader.ts in fi
+  * docs(ofd): document post-rebase compatibility checks
+  * test(sidebar): detect Qt version in focused appearance checks
+  * fix(reader): preserve explicit navigation during state restoration
+  * docs(ofd): record navigation integration verification
+  * feat(ofd): connect page links to typed navigation
+  * feat(reader): expose full OFD catalogs and typed navigation
+  * feat(ofd): adapt outline trees and navigation destinations
+  * feat(reader): add typed navigation targets and view calculations
+  * docs(ofd): plan navigation and page link integration
+  * docs(ofd): define outline and page link integration
+  * docs(ofd): record semantic text integration design and plan
+  * feat(ofd): surface document parsing warnings
+  * feat(ofd): expose document metadata and identifiers
+  * feat(ofd): render page regions with bounded memory
+  * fix(ofd): expose search in reader UI
+  * feat(ofd): integrate semantic text support
+  * fix(sidebar): align thumbnail appearance with eye protection mode
+  * build: depend on distro librofd-ffi packages for OFD support
+  * feat(reader): add OFD document support via rofd C ABI
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Thu, 17 Sep 2026 19:06:40 +0800
+
 deepin-reader (6.5.65) unstable; urgency=medium
 
   * chore: Update version to 6.5.65
