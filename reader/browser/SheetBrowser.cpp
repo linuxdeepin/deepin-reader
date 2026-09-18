@@ -922,7 +922,7 @@ bool SheetBrowser::event(QEvent *event)
         }
     }
 
-    if (event->type() == QEvent::Gesture) {
+    if (event && event->type() == QEvent::Gesture) {
         // qCDebug(appLog) << "SheetBrowser::event() - Gesture event";
         return gestureEvent(reinterpret_cast<QGestureEvent *>(event));
     }
