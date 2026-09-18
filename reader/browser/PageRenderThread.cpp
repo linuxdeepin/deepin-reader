@@ -916,8 +916,8 @@ void PageRenderThread::onDocPageNormalImageTaskFinished(DocPageNormalImageTask t
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageNormalImageTaskFinished() - Starting on doc page normal image task finished";
     if (DocSheet::existSheet(task.sheet)) {
-        if (nullptr != task.page && !BrowserPage::existPage(task.page))
-            return;   // 页面已析构,丢弃残留回包(task.page 非空时必须存活才可解引用)
+        if (nullptr == task.page || !BrowserPage::existPage(task.page))
+            return;   // 页面为空或已析构,丢弃残留回包
         task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
@@ -928,8 +928,8 @@ void PageRenderThread::onDocPageSliceImageTaskFinished(DocPageSliceImageTask tas
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageSliceImageTaskFinished() - Starting on doc page slice image task finished";
     if (DocSheet::existSheet(task.sheet)) {
-        if (nullptr != task.page && !BrowserPage::existPage(task.page))
-            return;   // 页面已析构,丢弃残留回包
+        if (nullptr == task.page || !BrowserPage::existPage(task.page))
+            return;   // 页面为空或已析构,丢弃残留回包
         task.page->handleRenderFinished(task.pixmapId, pixmap, task.slice);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageSliceImageTaskFinished() - On doc page slice image task finished completed";
@@ -939,8 +939,8 @@ void PageRenderThread::onDocPageBigImageTaskFinished(DocPageBigImageTask task, Q
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageBigImageTaskFinished() - Starting on doc page big image task finished";
     if (DocSheet::existSheet(task.sheet)) {
-        if (nullptr != task.page && !BrowserPage::existPage(task.page))
-            return;   // 页面已析构,丢弃残留回包
+        if (nullptr == task.page || !BrowserPage::existPage(task.page))
+            return;   // 页面为空或已析构,丢弃残留回包
         task.page->setImageObjectRects(task.imageRects, task.rect.width(), task.rect.height());
         task.page->handleRenderFinished(task.pixmapId, pixmap);
     }
@@ -951,8 +951,8 @@ void PageRenderThread::onDocPageWordTaskFinished(DocPageWordTask task, QList<dee
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageWordTaskFinished() - Starting on doc page word task finished";
     if (DocSheet::existSheet(task.sheet)) {
-        if (nullptr != task.page && !BrowserPage::existPage(task.page))
-            return;   // 页面已析构,丢弃残留回包(测试场景中 page 为空且 handler 已被 stub,直接放行)
+        if (nullptr == task.page || !BrowserPage::existPage(task.page))
+            return;   // 页面为空或已析构,丢弃残留回包
         task.page->handleWordLoaded(words);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageWordTaskFinished() - On doc page word task finished completed";
@@ -962,8 +962,8 @@ void PageRenderThread::onDocPageAnnotationTaskFinished(DocPageAnnotationTask tas
 {
     // qCDebug(appLog) << "PageRenderThread::onDocPageAnnotationTaskFinished() - Starting on doc page annotation task finished";
     if (DocSheet::existSheet(task.sheet)) {
-        if (nullptr != task.page && !BrowserPage::existPage(task.page))
-            return;   // 页面已析构,丢弃残留回包
+        if (nullptr == task.page || !BrowserPage::existPage(task.page))
+            return;   // 页面为空或已析构,丢弃残留回包
         task.page->handleAnnotationLoaded(annots);
     }
     // qCDebug(appLog) << "PageRenderThread::onDocPageAnnotationTaskFinished() - On doc page annotation task finished completed";

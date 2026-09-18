@@ -114,6 +114,14 @@ static bool existSheet_true_stub(DocSheet *)
     return true;
 }
 
+// Makes BrowserPage::existPage() return true so the onDoc*Finished guard
+// (nullptr == task.page || !existPage(task.page)) passes with a non-null
+// placeholder page whose handler methods are already stubbed.
+static bool existPage_true_stub(const BrowserPage *)
+{
+    return true;
+}
+
 /*********测试用例**********/
 //TEST_F(TestPageRenderThread, UT_PageRenderThread_clearImageTasks_001)
 //{
@@ -234,12 +242,13 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageNormalImageTaskFinishe
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(BrowserPage, existPage), existPage_true_stub);
     s.set(ADDR(BrowserPage, handleRenderFinished), handleRenderFinished_stub);
     s.set(ADDR(BrowserPage, setImageObjectRects), setImageObjectRects_stub);
 
     DocPageNormalImageTask task;
     task.sheet = nullptr;   // existSheet is stubbed to return true anyway
-    task.page = nullptr;   // stub will be invoked, nullptr this is ignored
+    task.page = reinterpret_cast<BrowserPage *>(0x1);   // non-null placeholder; handler methods are stubbed
     task.pixmapId = 1;
     QPixmap pix;
     m_tester->onDocPageNormalImageTaskFinished(task, pix);
@@ -252,11 +261,12 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageSliceImageTaskFinished
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(BrowserPage, existPage), existPage_true_stub);
     s.set(ADDR(BrowserPage, handleRenderFinished), handleRenderFinished_stub);
 
     DocPageSliceImageTask task;
     task.sheet = nullptr;
-    task.page = nullptr;
+    task.page = reinterpret_cast<BrowserPage *>(0x1);
     task.pixmapId = 2;
     task.slice = QRect(0, 0, 10, 10);
     QPixmap pix;
@@ -270,12 +280,13 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageBigImageTaskFinished_0
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(BrowserPage, existPage), existPage_true_stub);
     s.set(ADDR(BrowserPage, handleRenderFinished), handleRenderFinished_stub);
     s.set(ADDR(BrowserPage, setImageObjectRects), setImageObjectRects_stub);
 
     DocPageBigImageTask task;
     task.sheet = nullptr;
-    task.page = nullptr;
+    task.page = reinterpret_cast<BrowserPage *>(0x1);
     task.pixmapId = 3;
     QPixmap pix;
     m_tester->onDocPageBigImageTaskFinished(task, pix);
@@ -288,11 +299,12 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageWordTaskFinished_002)
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(BrowserPage, existPage), existPage_true_stub);
     s.set(ADDR(BrowserPage, handleWordLoaded), handleWordLoaded_stub);
 
     DocPageWordTask task;
     task.sheet = nullptr;
-    task.page = nullptr;
+    task.page = reinterpret_cast<BrowserPage *>(0x1);
     QList<deepin_reader::Word> words;
     m_tester->onDocPageWordTaskFinished(task, words);
     EXPECT_TRUE(g_funcName == "handleWordLoaded_stub");
@@ -304,11 +316,12 @@ TEST_F(TestPageRenderThread, UT_PageRenderThread_onDocPageAnnotationTaskFinished
 {
     Stub s;
     s.set(ADDR(DocSheet, existSheet), existSheet_true_stub);
+    s.set(ADDR(BrowserPage, existPage), existPage_true_stub);
     s.set(ADDR(BrowserPage, handleAnnotationLoaded), handleAnnotationLoaded_stub);
 
     DocPageAnnotationTask task;
     task.sheet = nullptr;
-    task.page = nullptr;
+    task.page = reinterpret_cast<BrowserPage *>(0x1);
     QList<deepin_reader::Annotation *> annots;
     m_tester->onDocPageAnnotationTaskFinished(task, annots);
     EXPECT_TRUE(g_funcName == "handleAnnotationLoaded_stub");
