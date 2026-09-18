@@ -15,6 +15,11 @@ package:
 base: org.deepin.base/25.2.2
 runtime: org.deepin.runtime.webengine/6.7.0
 
+sources:
+  - kind: git
+    url:  https://github.com/linuxdeepin/rofd.git
+    commit: 96d9f8b8a1075ab57dc496da90d2891731003129
+
 command:
   - deepin-reader
 
@@ -22,9 +27,50 @@ build: |
   # 下载和安装依赖
   # libqt6waylandclient6: libdtk6gui 的隐式依赖(未在 deb 声明)，必须随 apt 的 Qt 6.8.0 一起打包，
   # 否则链接时会拉取 /runtime 中 webengine 运行时的 libQt6WaylandClient，其私有 ABI 与打包的 Qt 不一致导致链接失败
-  apt -y install --download-only qt6-base-dev qt6-base-dev-tools qt6-tools-dev libdtk6widget-dev libspectre-dev libdjvulibre-dev libtiff-dev libjpeg-dev libicu-dev libpng-dev zlib1g-dev liblcms2-dev libopenjp2-7-dev libfreetype6-dev libgtest-dev libchardet-dev qt6-webengine-dev qt6-5compat-dev libdtk6gui-dev libdtk6core-dev qt6-svg-dev pandoc libgxps-dev libcairo2-dev libglib2.0-dev libqt6waylandclient6
-  # 第三个参数强制安装 runtime 已提供的 libqt6waylandclient6，保证其与打包的 Qt 版本一致
-  bash ./install_dep /var/cache/apt/archives "$PREFIX" "libqt6waylandclient6"
+  apt -y install --download-only qt6-base-dev qt6-base-dev-tools qt6-tools-dev libdtk6widget-dev libspectre-dev libdjvulibre-dev libtiff-dev libjpeg-dev libicu-dev libpng-dev zlib1g-dev liblcms2-dev libopenjp2-7-dev libfreetype6-dev libgtest-dev libchardet-dev qt6-webengine-dev qt6-5compat-dev libdtk6gui-dev libdtk6core-dev qt6-svg-dev pandoc libgxps-dev libcairo2-dev libglib2.0-dev libqt6waylandclient6 cargo rustc pkg-config libjbig2dec0-dev
+  # 供 rofd 源码构建使用：cargo/rustc 构建工具链；pkg-config 供 sys crate 探测系统库；
+  # libjbig2dec0-dev 对应 rofd-render 默认开启的 jbig2 特性（cairo/freetype/glib 的 -dev 已在上方列表中）
+  # libjbig2dec0 已被 base 安装，上面的 --download-only 不会下载其 deb，用 --reinstall
+  # 强制下载；注意必须先于下方 install_dep 执行，install_dep 才能在 archives 里找到它
+  apt -y install --download-only --reinstall libjbig2dec0
+  # 第三个参数强制安装 runtime 已提供的 libqt6waylandclient6；libjbig2dec0 是 rofd 的运行时
+  # 依赖（jbig2 特性），base 虽自带，但为不随 base 组成变化而破，强制解压随包分发
+  bash ./install_dep /var/cache/apt/archives "$PREFIX" "libqt6waylandclient6,libjbig2dec0"
+
+  # cargo/rustc 等构建工具由 install_dep 解压到 $PREFIX，加入 PATH 供 rofd 构建调用
+  export PATH="$PREFIX/bin:$PATH"
+
+  # ================= 从源码构建 rofd（OFD 支持库） =================
+  # 源码来自上方 sources 段；crates.io 依赖由 Cargo.lock 固定，构建机需可访问 github 与 crates.io
+  ROFD_SRC=""
+  for d in /project/linglong/sources/rofd /project/sources/rofd /project/rofd /source/rofd; do
+      if [ -f "$d/Cargo.toml" ] && [ -f "$d/crates/rofd-ffi/include/rofd.h" ]; then ROFD_SRC="$d"; break; fi
+  done
+  if [ -z "$ROFD_SRC" ]; then
+      ROFD_SRC=$(find /project -maxdepth 8 -type f -path "*/crates/rofd-ffi/include/rofd.h" 2>/dev/null | head -1 | sed 's|/crates/rofd-ffi/include/rofd.h$||')
+  fi
+  if [ ! -f "$ROFD_SRC/Cargo.toml" ] || [ ! -f "$ROFD_SRC/crates/rofd-ffi/include/rofd.h" ]; then
+      echo "ERROR: 未找到 rofd 源码，sources 拉取失败？检查构建机对 github.com 的访问权限" >&2
+      exit 1
+  fi
+  echo ">>> rofd 源码: $ROFD_SRC (commit: $(git -C $ROFD_SRC rev-parse --short HEAD 2>/dev/null || echo unknown))"
+  # 增量构建会复用容器 /tmp，旧产物指纹可能指向旧源码路径，先清理
+  rm -rf /tmp/rofd-build
+  # 仅构建 OFD 支持所需的 C ABI 库（rofd-ffi），不构建 rofd Qt 应用（无需 QML 相关依赖）
+  # 在子 shell 中 cd 进仓库再执行：cargo 从 cwd 向上查找 .cargo/config.toml（离线 vendor 配置）
+  # 依赖它生效；--manifest-path 不参与配置查找，在 /project 下跑会走 crates.io 导致 CI 无外网时失败。
+  # 必须用子 shell：否则 cwd 停留在 rofd 目录，后续 build/ 与 cmake .. 等相对路径全部错位
+  (cd "$ROFD_SRC" && CARGO_TARGET_DIR=/tmp/rofd-build cargo build --release -p rofd-ffi)
+  # 安装到与 librofd-ffi0/librofd-ffi-dev deb 解包完全相同的布局（soname 由 rofd build.rs 固定为 librofd_ffi.so.0，
+  # deploy_dep 与主工程 CMake 的 find_path/find_library 依赖这些路径）
+  ROFD_FFI_VER=$(sed -n 's/^version = "\(.*\)"/\1/p' "$ROFD_SRC/crates/rofd-ffi/Cargo.toml" | head -1)
+  install -d -m 0755 $PREFIX/lib/${TRIPLET} $PREFIX/include
+  install -m 0755 /tmp/rofd-build/release/librofd_ffi.so $PREFIX/lib/${TRIPLET}/librofd_ffi.so.$ROFD_FFI_VER
+  ln -sf librofd_ffi.so.$ROFD_FFI_VER $PREFIX/lib/${TRIPLET}/librofd_ffi.so.0
+  ln -sf librofd_ffi.so.0            $PREFIX/lib/${TRIPLET}/librofd_ffi.so
+  install -m 0644 "$ROFD_SRC/crates/rofd-ffi/include/rofd.h" $PREFIX/include/rofd.h
+  # 刷新 ld 缓存，保证后续 ldd/deploy_dep 能解析 $PREFIX 下 rofd 的运行时依赖（如 libjbig2dec）
+  if [ -n "$LINGLONG_LD_SO_CACHE" ]; then ldconfig -C "$LINGLONG_LD_SO_CACHE"; fi
 
   # 构建（CMake）
   rm -rf build && mkdir -p build && cd build
@@ -33,6 +79,7 @@ build: |
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_INSTALL_LIBDIR=lib/${TRIPLET} \
     -DCMAKE_PREFIX_PATH=${PREFIX} \
+    -DROFD_ROOT=${PREFIX} \
     -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}" \
     -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}"
   make -j$(nproc)
@@ -50,6 +97,11 @@ build: |
     libQt6WaylandClient.so
     # 定制插件不存在
     libzpdcallback.so
+    # OFD 支持库，sources 方式源码构建（soname 为 librofd_ffi.so.0，deploy_dep 的 .so 通配
+    # 会同时收编 .so/.so.0/.so.<ver>）；libjbig2dec 为 rofd 默认 jbig2 特性的运行时依赖，
+    # runtime(webengine) 不提供，必须随包分发
+    librofd_ffi.so
+    libjbig2dec.so
   )
 
   # 生成.install 文件
