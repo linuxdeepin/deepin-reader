@@ -1,3 +1,12 @@
+deepin-reader (6.5.66) unstable; urgency=medium
+
+  * chore: Update version to 6.5.66
+  * fix(reader): invert sidebar thumbnails only under dark theme
+  * fix(database): synchronize cleanup of bookmarks and tab groups in orphan states
+  * fix(reader): pin render task lifetime to renderer ref and uuid
+
+ -- zhanghongyuan <zhanghongyuan@uniontech.com>  Fri, 18 Sep 2026 11:12:49 +0800
+
 deepin-reader (6.5.65) unstable; urgency=medium
 
   * chore: Update version to 6.5.65
