@@ -1797,7 +1797,9 @@ void DocSheet::setAlive(bool alive)
         if (m_documentChanged && m_renderer) {
             if (m_renderer->save()) {
                 m_documentChanged = false;
-                m_sidebar->changeResetModelData();
+                if (m_sidebar) {
+                    m_sidebar->changeResetModelData();
+                }
                 // 注释保存后文件内容已变化，重写书签刷新内容指纹，
                 // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
                 Database::instance()->saveBookmarks(filePath(), m_bookmarks);
