@@ -115,12 +115,12 @@ void setLibNames(LoadLibNames tmp)
         g_ldnames.chDocumentPr = NULL;
     } else {
         fprintf(stderr, "INFO: Copying library path: %s\n", tmp.chDocumentPr);
-        g_ldnames.chDocumentPr = (char*)malloc(strlen(tmp.chDocumentPr)+1);
+        size_t len = strlen(tmp.chDocumentPr) + 1;
+        g_ldnames.chDocumentPr = (char*)malloc(len);
         if (!g_ldnames.chDocumentPr) {
             fprintf(stderr, "ERROR: Failed to allocate memory for library path\n");
             return;
         }
-        strcpy(g_ldnames.chDocumentPr,tmp.chDocumentPr);
+        memcpy(g_ldnames.chDocumentPr, tmp.chDocumentPr, len);
     }
 }
-
