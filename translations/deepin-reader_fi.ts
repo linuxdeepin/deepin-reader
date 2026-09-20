@@ -955,22 +955,22 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>%1 (tiedostoa) tulostettiin onnistuneesti, (%2) epäonnistui.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n (tiedoston) tulostus epäonnistui.</numerusform><numerusform>%n (tiedoston) tulostus epäonnistui.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"/>
+        <translation>Tulosta asiakirjat eräajona taustalla</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"/>
+        <translation>Tulostettavat tiedostot</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
