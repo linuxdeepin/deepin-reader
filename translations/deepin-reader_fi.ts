@@ -975,12 +975,12 @@
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"/>
+        <translation>Ei annettuja tiedostoja.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>ja %1 (tiedoston) käsittely epäonnistui.</translation>
     </message>
 </context>
 <context>
