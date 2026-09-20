@@ -6,7 +6,10 @@
 #include "errormessages.h"
 
 #include <gtest/gtest.h>
+#include <QDBusArgument>
+#include <QDBusMessage>
 #include <QGuiApplication>
+#include <QVariant>
 
 static int argc = 1;
 static char *argv[] = { const_cast<char *>("ut_notifyclient"), nullptr };
@@ -120,4 +123,48 @@ TEST_F(NotifyClientTest, NotifyErrorDoesNotCrash) {
 TEST_F(NotifyClientTest, NotifyErrorNoDefaultPrinterDoesNotCrash) {
     NotifyClient::notifyError(ErrorMessages::noDefaultPrinter());
     SUCCEED();
+}
+
+// Regression test for the "no error prompt without printer" bug:
+// NotifyClient used to pass a QVariantList to QDBusInterface::call(), which
+// marshalled the whole argument list as ONE 'av' parameter. The deepin
+// notification daemon rejects signature 'av' with UnknownMethod, so every
+// notification silently fell back to invisible stderr. The message must
+// instead carry 8 separate arguments (signature susssasa{sv}i).
+TEST_F(NotifyClientTest, BuildNotifyMessageHasEightSeparateArguments) {
+    QDBusMessage msg = NotifyClient::buildNotifyMessage(
+        QStringLiteral("test body"));
+    QVariantList args = msg.arguments();
+    ASSERT_EQ(args.size(), 8);
+}
+
+TEST_F(NotifyClientTest, BuildNotifyMessageArgumentTypesMatchSpec) {
+    QDBusMessage msg = NotifyClient::buildNotifyMessage(
+        QStringLiteral("test body"));
+    QVariantList args = msg.arguments();
+    ASSERT_EQ(args.size(), 8);
+
+    EXPECT_EQ(args.at(0).metaType().id(), QMetaType::QString);
+    EXPECT_EQ(args.at(1).metaType().id(), QMetaType::UInt);
+    EXPECT_EQ(args.at(2).metaType().id(), QMetaType::QString);
+    EXPECT_EQ(args.at(3).metaType().id(), QMetaType::QString);
+    EXPECT_EQ(args.at(4).metaType().id(), QMetaType::QString);
+    EXPECT_EQ(args.at(5).metaType().id(), QMetaType::QStringList);
+    EXPECT_EQ(args.at(6).metaType().id(), QMetaType::QVariantMap);
+    EXPECT_EQ(args.at(7).metaType().id(), QMetaType::Int);
+    EXPECT_FALSE(args.at(0).toString().isEmpty());
+    EXPECT_EQ(args.at(4).toString(), QStringLiteral("test body"));
+    EXPECT_EQ(args.at(7).toInt(), -1);
+}
+
+TEST_F(NotifyClientTest, BuildNotifyMessageTargetsNotificationService) {
+    QDBusMessage msg = NotifyClient::buildNotifyMessage(
+        QStringLiteral("test body"));
+    EXPECT_EQ(msg.service(),
+              QStringLiteral("org.freedesktop.Notifications"));
+    EXPECT_EQ(msg.path(),
+              QStringLiteral("/org/freedesktop/Notifications"));
+    EXPECT_EQ(msg.interface(),
+              QStringLiteral("org.freedesktop.Notifications"));
+    EXPECT_EQ(msg.member(), QStringLiteral("Notify"));
 }

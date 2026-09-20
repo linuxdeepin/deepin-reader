@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es">
 <context>
     <name>Application</name>
     <message>
@@ -7,7 +9,7 @@
         <translation>Visor de documentos</translation>
     </message>
     <message>
-        <location filename="../reader/Application.cpp" line="40"/>
+        <location filename="../reader/Application.cpp" line="43"/>
         <source>Document Viewer is a tool for reading document files, supporting %1.</source>
         <translation>Visor de documentos de Deepin es una herramienta para leer documentos, soporta %1.</translation>
     </message>
@@ -15,92 +17,97 @@
 <context>
     <name>AttrScrollWidget</name>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="34"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="35"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="35"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="36"/>
         <source>Subject</source>
         <translation>Asunto</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="36"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="37"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="37"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="38"/>
         <source>Keywords</source>
         <translation>Palabras clave</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="38"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="39"/>
         <source>Producer</source>
         <translation>Productor</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="39"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="40"/>
         <source>Creator</source>
         <translation>Creador</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="40"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="41"/>
         <source>Time created</source>
         <translation>Fecha de creación</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="41"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="42"/>
         <source>Time modified</source>
         <translation>Fecha de modificación</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="42"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="43"/>
         <source>Format</source>
         <translation>Formato</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="43"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="44"/>
         <source>Pages</source>
         <translation>Páginas</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="44"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="45"/>
         <source>Optimized</source>
         <translation>Optimizado</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="45"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="46"/>
         <source>Security</source>
         <translation>Seguridad</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="47"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
         <source>Page size</source>
         <translation>Tamaño de página</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="48"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="49"/>
         <source>File size</source>
         <translation>Tamaño de archivo</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="53"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
+        <source>Warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
         <source>Basic info</source>
         <translation>Información básica</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="75"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="89"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="119"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="133"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="119"/>
+        <location filename="../reader/widgets/AttrScrollWidget.cpp" line="133"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -108,12 +115,12 @@
 <context>
     <name>BookMarkWidget</name>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="54"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="55"/>
         <source>Add bookmark</source>
         <translation>Añadir marcador</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="258"/>
+        <location filename="../reader/sidebar/BookMarkWidget.cpp" line="259"/>
         <source>Are you sure you want to delete all bookmarks?</source>
         <translation>¿Está seguro de quitar todos los marcadores?</translation>
     </message>
@@ -121,119 +128,119 @@
 <context>
     <name>BrowserMenu</name>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="30"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="49"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="56"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="31"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="50"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="57"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="35"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
         <source>Remove annotation</source>
         <translation>Borrar anotación</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="36"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="81"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="169"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="37"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="83"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="163"/>
         <source>Add annotation</source>
         <translation>Añadir anotación</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="40"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="86"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="104"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="161"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="41"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="88"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="102"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
         <source>Remove bookmark</source>
         <translation>Quitar marcador</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="43"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="89"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="107"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="164"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="44"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="91"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="105"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="158"/>
         <source>Add bookmark</source>
         <translation>Añadir marcador</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="61"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="62"/>
         <source>Highlight</source>
         <translation>Resaltar</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="74"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="76"/>
         <source>Remove highlight</source>
         <translation>Quitar resaltado</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="98"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="155"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="96"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="149"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="114"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="176"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="112"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="170"/>
         <source>Exit fullscreen</source>
         <translation>Salir de la pantalla completa</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="117"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="179"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="115"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="173"/>
         <source>Fullscreen</source>
         <translation>Pantalla completa</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="120"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="182"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="118"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="176"/>
         <source>Slide show</source>
         <translation>Presentación</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="123"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="185"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="121"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="179"/>
         <source>First page</source>
         <translation>Primera página</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="124"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="186"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="122"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="180"/>
         <source>Previous page</source>
         <translation>Página anterior</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="131"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="193"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="129"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="187"/>
         <source>Next page</source>
         <translation>Siguiente página</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="132"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="194"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="130"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="188"/>
         <source>Last page</source>
         <translation>Última página</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="141"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="203"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="139"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="197"/>
         <source>Rotate left</source>
         <translation>Girar a la izquierda</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="142"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="204"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="140"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="198"/>
         <source>Rotate right</source>
         <translation>Girar a la derecha</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="145"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="207"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="143"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="201"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="146"/>
-        <location filename="../reader/browser/BrowserMenu.cpp" line="208"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="144"/>
+        <location filename="../reader/browser/BrowserMenu.cpp" line="202"/>
         <source>Document info</source>
         <translation>Información del documento</translation>
     </message>
@@ -241,7 +248,7 @@
 <context>
     <name>Central</name>
     <message>
-        <location filename="../reader/uiframe/Central.cpp" line="136"/>
+        <location filename="../reader/uiframe/Central.cpp" line="184"/>
         <source>Documents</source>
         <translation>Documentos</translation>
     </message>
@@ -249,49 +256,49 @@
 <context>
     <name>CentralDocPage</name>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="239"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="249"/>
         <source>The format is not supported</source>
         <translation>El formato no es compatible</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="288"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="296"/>
         <source>Open failed</source>
         <translation>Error al abrir</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="290"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="298"/>
         <source>Please check if the file is damaged</source>
         <translation>Por favor verifique si el archivo esta dañado</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="292"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="300"/>
         <source>Conversion failed, please check if the file is damaged</source>
         <translation>La conversión falló, verifique si el archivo esta dañado</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="533"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="591"/>
         <source>Save failed</source>
         <translation>Error al guardar</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="539"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="597"/>
         <source>Saved successfully</source>
         <translation>Guardado con éxito</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="559"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="617"/>
         <source>Save as</source>
         <translation>Guardar como</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="569"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="580"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="627"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="638"/>
         <source>Invalid file name</source>
         <translation>Nombre de archivo inválido</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="571"/>
-        <location filename="../reader/uiframe/CentralDocPage.cpp" line="582"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="629"/>
+        <location filename="../reader/uiframe/CentralDocPage.cpp" line="640"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Aceptar</translation>
@@ -305,12 +312,12 @@
         <translation>Arrastre los documentos aquí</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="36"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="39"/>
         <source>Format supported: %1</source>
         <translation>Formato admitido: %1</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/CentralNavPage.cpp" line="42"/>
+        <location filename="../reader/uiframe/CentralNavPage.cpp" line="45"/>
         <source>Select File</source>
         <translation>Seleccionar archivo</translation>
     </message>
@@ -318,20 +325,20 @@
 <context>
     <name>DocSheet</name>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="371"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="401"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="430"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="465"/>
         <source>The bookmark has been removed</source>
         <translation>El marcador fue eliminado</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="670"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="687"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="757"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="774"/>
         <source>Please select the text</source>
         <translation>Por favor seleccione el texto</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="747"/>
-        <location filename="../reader/uiframe/DocSheet.cpp" line="758"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="834"/>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="845"/>
         <source>The annotation has been removed</source>
         <translation>La anotación fue borrada</translation>
     </message>
@@ -344,31 +351,62 @@
         <translation>Archivo cifrado, por favor ingrese la contraseña</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="47"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="49"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="52"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="55"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/EncryptionPage.cpp" line="100"/>
+        <location filename="../reader/widgets/EncryptionPage.cpp" line="103"/>
         <source>Wrong password</source>
         <translation>Contraseña incorrecta</translation>
     </message>
 </context>
 <context>
+    <name>EyeProtection</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="20"/>
+        <source>No eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="21"/>
+        <source>Classic eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="22"/>
+        <source>Green eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="23"/>
+        <source>Night eye protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EyeProtectionAction</name>
+    <message>
+        <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="48"/>
+        <source>Eye protection mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FindWidget</name>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="128"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="131"/>
         <source>Previous</source>
         <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/FindWidget.cpp" line="135"/>
+        <location filename="../reader/widgets/FindWidget.cpp" line="139"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
@@ -389,12 +427,12 @@
 <context>
     <name>NotesWidget</name>
     <message>
-        <location filename="../reader/sidebar/NotesWidget.cpp" line="57"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="58"/>
         <source>Add annotation</source>
         <translation>Añadir anotación</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/NotesWidget.cpp" line="228"/>
+        <location filename="../reader/sidebar/NotesWidget.cpp" line="229"/>
         <source>Are you sure you want to delete all annotations?</source>
         <translation>¿Está seguro de borrar todas las anotaciones?</translation>
     </message>
@@ -402,7 +440,7 @@
 <context>
     <name>PagingWidget</name>
     <message>
-        <location filename="../reader/widgets/PagingWidget.cpp" line="222"/>
+        <location filename="../reader/widgets/PagingWidget.cpp" line="251"/>
         <source>Invalid page number</source>
         <translation>Número de página inválido</translation>
     </message>
@@ -424,37 +462,55 @@
     </message>
 </context>
 <context>
+    <name>RestoreTipWidget</name>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
+        <source>Restored to last reading position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="55"/>
+        <source>Jump to first page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/RestoreTipWidget.cpp" line="76"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="23"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="31"/>
         <source>Save the changes to &quot;%1&quot;?</source>
         <translation>¿Desea guardar los cambios a &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="25"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="33"/>
         <source>Discard</source>
         <comment>button</comment>
         <translation>Descartar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="26"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="34"/>
         <source>Save</source>
         <comment>button</comment>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="39"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="47"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SaveDialog.cpp" line="40"/>
+        <location filename="../reader/widgets/SaveDialog.cpp" line="48"/>
         <source>Delete</source>
         <translation>Borrar</translation>
     </message>
@@ -490,12 +546,12 @@
 <context>
     <name>SearchResWidget</name>
     <message>
-        <location filename="../reader/sidebar/SearchResWidget.cpp" line="49"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="50"/>
         <source>No search results</source>
         <translation>No hay resultados de búsqueda</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SearchResWidget.cpp" line="111"/>
+        <location filename="../reader/sidebar/SearchResWidget.cpp" line="112"/>
         <source>%1 items found</source>
         <translation>%1 elementos encontrados</translation>
     </message>
@@ -759,23 +815,23 @@
 <context>
     <name>SideBarImageListView</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="219"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="289"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="225"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="295"/>
         <source>Remove annotation</source>
         <translation>Borrar anotación</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="231"/>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="252"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="301"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="323"/>
         <source>Remove all</source>
         <translation>Borrar todas</translation>
     </message>
     <message>
-        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="247"/>
+        <location filename="../reader/sidebar/SideBarImageListview.cpp" line="318"/>
         <source>Remove bookmark</source>
         <translation>Quitar marcador</translation>
     </message>
@@ -783,7 +839,7 @@
 <context>
     <name>SideBarImageViewModel</name>
     <message>
-        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="147"/>
+        <location filename="../reader/sidebar/SideBarImageViewModel.cpp" line="149"/>
         <source>Page %1</source>
         <translation>Página %1</translation>
     </message>
@@ -791,12 +847,12 @@
 <context>
     <name>SlidePlayWidget</name>
     <message>
-        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="189"/>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
         <source>It is the first page</source>
         <translation>Esta es la primer pagina</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="195"/>
+        <location filename="../reader/widgets/SlidePlayWidget.cpp" line="201"/>
         <source>It is the last page</source>
         <translation>Esta es la ultima pagina</translation>
     </message>
@@ -804,48 +860,48 @@
 <context>
     <name>TitleMenu</name>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New window</source>
         <translation>Nueva ventana</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="16"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="17"/>
         <source>New tab</source>
         <translation>Nueva pestaña</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="116"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="119"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="26"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="27"/>
         <source>Save as</source>
         <translation>Guardar como</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Display in file manager</source>
         <translation>Mostrar en el administrador de archivos</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="31"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="32"/>
         <source>Magnifer</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="37"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="44"/>
         <source>Tools</source>
         <translation>Herramientas</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="48"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../reader/uiframe/TitleMenu.cpp" line="41"/>
+        <location filename="../reader/uiframe/TitleMenu.cpp" line="48"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
@@ -853,7 +909,7 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../reader/uiframe/TitleWidget.cpp" line="22"/>
+        <location filename="../reader/uiframe/TitleWidget.cpp" line="23"/>
         <source>Thumbnails</source>
         <translation>Miniaturas</translation>
     </message>
@@ -867,25 +923,94 @@
     </message>
 </context>
 <context>
+    <name>batchprint</name>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="11"/>
+        <source>CUPS is not available. Please check if the printing service is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="17"/>
+        <source>No default printer found. Please set a default printer first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="23"/>
+        <source>Failed to convert file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="29"/>
+        <source>Failed to print file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="35"/>
+        <source>Batch Print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../batch-print/errormessages.cpp" line="40"/>
+        <source>All %n file(s) printed successfully.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../batch-print/errormessages.cpp" line="46"/>
+        <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../batch-print/errormessages.cpp" line="52"/>
+        <source>All %n file(s) failed to print.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../batch-print/main.cpp" line="33"/>
+        <source>Batch print documents silently</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/main.cpp" line="36"/>
+        <source>Document files to print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/main.cpp" line="43"/>
+        <source>No files specified.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../batch-print/notifyclient.cpp" line="37"/>
+        <source>and %1 more file(s) failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../reader/main.cpp" line="63"/>
+        <location filename="../reader/main.cpp" line="66"/>
         <source>Document File Path.</source>
         <translation>Documento Archivo Ruta.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="64"/>
-        <location filename="../reader/main.cpp" line="68"/>
+        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="71"/>
         <source>FilePath</source>
         <translation>ArchivoRuta</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="67"/>
+        <location filename="../reader/main.cpp" line="70"/>
         <source>ThumbnailPath Path.</source>
         <translation>MiniaturaRuta Ruta.</translation>
     </message>
     <message>
-        <location filename="../reader/main.cpp" line="72"/>
+        <location filename="../reader/main.cpp" line="75"/>
         <source>Generate thumbnail.</source>
         <translation>Generar miniatura.</translation>
     </message>
