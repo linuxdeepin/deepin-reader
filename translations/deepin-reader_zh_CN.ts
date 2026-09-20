@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>Application</name>
     <message>
@@ -89,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation>文档警告</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -372,22 +370,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="20"/>
         <source>No eye protection</source>
-        <translation>无护眼</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="21"/>
         <source>Classic eye protection</source>
-        <translation>经典护眼</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="22"/>
         <source>Green eye protection</source>
-        <translation>绿色护眼</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="23"/>
         <source>Night eye protection</source>
-        <translation>夜间护眼</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -395,7 +393,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="48"/>
         <source>Eye protection mode</source>
-        <translation>护眼模式</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -466,17 +464,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation>已恢复上次阅读位置</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="55"/>
         <source>Jump to first page</source>
-        <translation>跳转到首页</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="76"/>
         <source>Close</source>
-        <translation>关闭</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -632,16 +630,6 @@
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
-        <source>Scroll up one line</source>
-        <translation>上一行</translation>
-    </message>
-    <message>
-        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
-        <source>Scroll down one line</source>
-        <translation>下一行</translation>
-    </message>
-    <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="129"/>
         <source>Open</source>
         <translation>打开</translation>
@@ -720,6 +708,16 @@
         <location filename="../reader/widgets/ShortCutShow.cpp" line="141"/>
         <source>Rotate right</source>
         <translation>右旋转</translation>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
+        <source>Scroll up one line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
+        <source>Scroll down one line</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
@@ -927,66 +925,62 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation>CUPS 不可用，请检查打印服务是否正在运行。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation>未找到默认打印机，请先设置默认打印机。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation>转换文件失败：%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation>打印文件失败：%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation>批量打印</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation>
-            <numerusform>已成功打印全部 %n 个文件。</numerusform>
-        </translation>
+        <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation>%1 个文件打印成功，%2 个文件打印失败。</translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation>
-            <numerusform>全部 %n 个文件打印失败。</numerusform>
-        </translation>
+        <translation type="unfinished"><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation>静默批量打印文档</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation>要打印的文档文件</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation>未指定文件。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation>还有 %1 个文件打印失败。</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
