@@ -960,27 +960,27 @@
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Não foi possível imprimir o arquivo.</numerusform><numerusform>Não foi possível imprimir nenhum dos %n arquivos.</numerusform><numerusform>Não foi possível imprimir nenhum dos %n arquivos.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"/>
+        <translation>Imprimir documentos em lote silenciosamente</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"/>
+        <translation>Arquivos para imprimir</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"/>
+        <translation>Nenhum arquivo especificado.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>e mais %1 arquivo(s) falharam.</translation>
     </message>
 </context>
 <context>
