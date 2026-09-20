@@ -87,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"/>
+        <translation>Avisos</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -925,37 +925,37 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"/>
+        <translation>O CUPS não está disponível. Verifique se o serviço de impressão está em execução.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"/>
+        <translation>Nenhuma impressora padrão encontrada. Defina uma impressora padrão primeiro.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Falha ao converter o arquivo: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Falha ao imprimir o arquivo: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"/>
+        <translation>Impressão em lote</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>O arquivo foi impresso com sucesso.</numerusform><numerusform>Todos os %n arquivos foram impressos com sucesso.</numerusform><numerusform>Todos os %n arquivos foram impressos com sucesso.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>%1 arquivo(s) foram impressos com sucesso, %2 arquivo(s) falharam.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
