@@ -5,6 +5,7 @@
 #ifndef NOTIFYCLIENT_H
 #define NOTIFYCLIENT_H
 
+#include <QDBusMessage>
 #include <QString>
 #include <QStringList>
 
@@ -14,6 +15,10 @@ public:
     static void notifyResult(int total, int succeeded, const QStringList &failedFiles);
     static void notifyError(const QString &body);
     static QString buildBody(int total, int succeeded, const QStringList &failedFiles);
+    static QDBusMessage buildNotifyMessage(const QString &body);
+
+private:
+    static void sendNotification(const QString &body);
 };
 
 #endif // NOTIFYCLIENT_H

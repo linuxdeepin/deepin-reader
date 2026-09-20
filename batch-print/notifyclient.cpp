@@ -5,8 +5,7 @@
 #include "notifyclient.h"
 #include "errormessages.h"
 
-#include <QDBusInterface>
-#include <QDBusReply>
+#include <QDBusConnection>
 #include <QDebug>
 #include <QGuiApplication>
 
@@ -43,18 +42,13 @@ QString NotifyClient::buildBody(int total, int succeeded, const QStringList &fai
     return body;
 }
 
-void NotifyClient::notifyResult(int total, int succeeded, const QStringList &failedFiles)
+QDBusMessage NotifyClient::buildNotifyMessage(const QString &body)
 {
-    QString body = buildBody(total, succeeded, failedFiles);
-
-    QDBusInterface iface(QStringLiteral("org.freedesktop.Notifications"),
-                         QStringLiteral("/org/freedesktop/Notifications"),
-                         QStringLiteral("org.freedesktop.Notifications"));
-
-    if (!iface.isValid()) {
-        fprintf(stderr, "%s\n", body.toUtf8().constData());
-        return;
-    }
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("/org/freedesktop/Notifications"),
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("Notify"));
 
     QVariantList args;
     args << QStringLiteral("deepin-reader");
@@ -65,36 +59,31 @@ void NotifyClient::notifyResult(int total, int succeeded, const QStringList &fai
     args << QStringList();
     args << QVariantMap();
     args << qint32(-1);
+    msg.setArguments(args);
 
-    QDBusMessage reply = iface.call(QStringLiteral("Notify"), args);
+    return msg;
+}
+
+void NotifyClient::sendNotification(const QString &body)
+{
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!bus.isConnected()) {
+        fprintf(stderr, "%s\n", body.toUtf8().constData());
+        return;
+    }
+
+    QDBusMessage reply = bus.call(buildNotifyMessage(body));
     if (reply.type() == QDBusMessage::ErrorMessage) {
         fprintf(stderr, "%s\n", body.toUtf8().constData());
     }
 }
 
+void NotifyClient::notifyResult(int total, int succeeded, const QStringList &failedFiles)
+{
+    sendNotification(buildBody(total, succeeded, failedFiles));
+}
+
 void NotifyClient::notifyError(const QString &body)
 {
-    QDBusInterface iface(QStringLiteral("org.freedesktop.Notifications"),
-                         QStringLiteral("/org/freedesktop/Notifications"),
-                         QStringLiteral("org.freedesktop.Notifications"));
-
-    if (!iface.isValid()) {
-        fprintf(stderr, "%s\n", body.toUtf8().constData());
-        return;
-    }
-
-    QVariantList args;
-    args << QStringLiteral("deepin-reader");
-    args << quint32(0);
-    args << QStringLiteral("deepin-reader");
-    args << ErrorMessages::notifyTitle();
-    args << body;
-    args << QStringList();
-    args << QVariantMap();
-    args << qint32(-1);
-
-    QDBusMessage reply = iface.call(QStringLiteral("Notify"), args);
-    if (reply.type() == QDBusMessage::ErrorMessage) {
-        fprintf(stderr, "%s\n", body.toUtf8().constData());
-    }
+    sendNotification(body);
 }
