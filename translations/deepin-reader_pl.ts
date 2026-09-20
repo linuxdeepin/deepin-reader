@@ -955,7 +955,7 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>Wydrukowano pomyślnie %1 plików, %2 napotkały błąd.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
