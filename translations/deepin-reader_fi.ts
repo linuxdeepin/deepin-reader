@@ -87,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"/>
+        <translation>Varoitukset</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -925,32 +925,32 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"/>
+        <translation>CUPS ei ole saatavilla. Tarkista, onko tulostinpalvelu käynnissä.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"/>
+        <translation>Oletustulostinta ei ole. Määritä ensin oletustulostin.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Tiedoston muuntaminen epäonnistui: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Tulostaminen epäonnistui: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"/>
+        <translation>Erätulostus</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n (tiedostoa) tulostettiin onnistuneesti.</numerusform><numerusform>%n (tiedostoa) tulostettiin onnistuneesti.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
