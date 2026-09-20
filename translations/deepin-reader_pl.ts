@@ -87,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"/>
+        <translation>Ostrzeżenia</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -925,32 +925,32 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"/>
+        <translation>Serwer CUPS jest niedostępny. Sprawdź, czy usługa drukowania jest włączona.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"/>
+        <translation>Nie znaleziono domyślnej drukarki. Proszę ustawić urządzenie domyślne.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie udało się skonwertować: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie udało się wydrukować: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"/>
+        <translation>Drukowanie zbiorowe</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Wydrukowano pomyślnie %1 plik.</numerusform><numerusform>Wydrukowano pomyślnie %n pliki.</numerusform><numerusform>Wydrukowano pomyślnie %n plików.</numerusform><numerusform>Wydrukowano pomyślnie %n plików.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
