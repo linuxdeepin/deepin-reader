@@ -1,3 +1,15 @@
+deepin-reader (6.6.1) unstable; urgency=medium
+
+  * fix(batchprint): send DBus notification with correct argument signature
+  * feat(build): add sources to rofd to support OFD
+  * fix(reader): guard null annotation and event pointers
+  * fix: guard null sidebar pointer in setAlive close path
+  * fix: replace unsafe strcpy with memcpy in setLibNames
+  * fix(reader): correct null-page guard operator in render callback slots
+  * chore: Update version to 6.6.0
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Sun, 20 Sep 2026 13:59:56 +0800
+
 deepin-reader (6.6.0) unstable; urgency=medium
 
   * chore: Update version to 6.6.0
