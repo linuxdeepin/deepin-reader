@@ -970,17 +970,17 @@
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"/>
+        <translation>Fitxers de documents per imprimir</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;ha especificat cap fitxer.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>i %1 fitxer/ més ha/n fallat.</translation>
     </message>
 </context>
 <context>
