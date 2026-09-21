@@ -45,6 +45,7 @@ DWIDGET_USE_NAMESPACE
 
 #define REPEAT_MOVE_DELAY 500
 const qreal deltaManhattanLength = 12.0;
+
 SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(parent)
 {
     setMouseTracking(true);
@@ -93,6 +94,9 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     this->horizontalScrollBar()->setProperty("_d_slider_spaceLeft", 8);
     this->horizontalScrollBar()->setProperty("_d_slider_spaceRight", 8);
     this->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetBrowser::onUpdateTheme);
+    onUpdateTheme();
 }
 
 SheetBrowser::~SheetBrowser()
@@ -2059,4 +2063,23 @@ void SheetBrowser::setIsSearchResultNotEmpty(bool isSearchResultNotEmpty)
 TextEditShadowWidget *SheetBrowser::getNoteEditWidget() const
 {
     return m_noteEditWidget;
+}
+
+void SheetBrowser::onUpdateTheme()
+{
+    DPalette plt = DGuiApplicationHelper::instance()->applicationPalette();
+
+    setPalette(plt);
+    setBackgroundBrush(QBrush(plt.itemBackground().color()));
+
+    // 文档页面恒为浅色，而 DTK ChameleonStyle 依据滚动条 palette(Base) 的明暗
+    // 决定滑块颜色：深色模式下 Base 为深色会绘制白色半透明滑块，在白色页面上
+    // 不可见。此处强制 Base 为浅色，使滑块始终为深色，保证滚动条清晰可见。
+    auto syncScrollBarPalette = [&plt](QScrollBar *bar) {
+        DPalette barPalette = plt;
+        barPalette.setColor(QPalette::Base, Qt::white);
+        bar->setPalette(barPalette);
+    };
+    syncScrollBarPalette(verticalScrollBar());
+    syncScrollBarPalette(horizontalScrollBar());
 }
