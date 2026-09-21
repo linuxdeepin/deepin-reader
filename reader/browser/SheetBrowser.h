@@ -550,6 +550,12 @@ private slots:
      */
     void onRemoveIconAnnotSelect();
 
+    /**
+     * @brief onUpdateTheme
+     * 主题变化时更新调色板，确保深色模式下滚动条颜色正确
+     */
+    void onUpdateTheme();
+
 private:
     /**
      * @brief calcIconAnnotRect
