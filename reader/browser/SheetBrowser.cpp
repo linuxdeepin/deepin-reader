@@ -118,7 +118,11 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     QPalette pal = viewport()->palette();
     pal.setColor(viewport()->backgroundRole(), EyeProtectionManager::instance()->viewportBackgroundColor());
     viewport()->setPalette(pal);
-    
+
+    // 主题切换时同步滚动条调色板，保证深色模式下滑块可见
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SheetBrowser::onUpdateTheme);
+    onUpdateTheme();
+
     qCDebug(appLog) << "SheetBrowser constructor completed";
 }
 
@@ -2473,4 +2477,19 @@ void SheetBrowser::restoreScrollPosition(float position)
     int value = vBar->minimum() + static_cast<int>(position * (vBar->maximum() - vBar->minimum()));
     vBar->setValue(value);
     qCDebug(appLog) << "restoreScrollPosition set value=" << value << "-> after val=" << vBar->value();
+}
+
+void SheetBrowser::onUpdateTheme()
+{
+    // 文档页面与视口背景恒为浅色，而 DTK ChameleonStyle 依据滚动条 palette(Base)
+    // 的明暗决定滑块颜色：深色模式下 Base 为深色会绘制白色半透明滑块，在浅色
+    // 背景上不可见。此处强制 Base 为浅色，使滑块始终为深色，保证滚动条清晰可见。
+    const QPalette appPalette = DGuiApplicationHelper::instance()->applicationPalette();
+    auto syncScrollBarPalette = [&appPalette](QScrollBar *bar) {
+        QPalette barPalette = appPalette;
+        barPalette.setColor(QPalette::Base, Qt::white);
+        bar->setPalette(barPalette);
+    };
+    syncScrollBarPalette(verticalScrollBar());
+    syncScrollBarPalette(horizontalScrollBar());
 }
