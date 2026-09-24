@@ -19,6 +19,7 @@
 #include <QPropertyAnimation>
 #include <QDBusMessage>
 #include <QDBusInterface>
+#include <QKeyEvent>
 
 namespace {
 void ReaderImageThreadPoolManager_addgetDocImageTask_stub(const ReaderImageParam_t &);
@@ -275,11 +276,14 @@ TEST_F(TestSlideWidget, testhandleKeyPressEvent)
     stub.set(ADDR(SlideWidget, onPreBtnClicked), onPreBtnClicked_stub);
     stub.set(ADDR(SlideWidget, onNextBtnClicked), onNextBtnClicked_stub);
 
-    m_tester->handleKeyPressEvent(Dr::key_space);
+    QKeyEvent spaceEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    m_tester->keyPressEvent(&spaceEvent);
     EXPECT_TRUE(g_funcname == "setPlayStatus_stub");
-    m_tester->handleKeyPressEvent(Dr::key_left);
+    QKeyEvent leftEvent(QEvent::KeyPress, Qt::Key_Left, Qt::NoModifier);
+    m_tester->keyPressEvent(&leftEvent);
     EXPECT_TRUE(g_funcname == "onPreBtnClicked_stub");
-    m_tester->handleKeyPressEvent(Dr::key_right);
+    QKeyEvent rightEvent(QEvent::KeyPress, Qt::Key_Right, Qt::NoModifier);
+    m_tester->keyPressEvent(&rightEvent);
     EXPECT_TRUE(g_funcname == "onNextBtnClicked_stub");
 }
 
@@ -300,4 +304,3 @@ TEST_F(TestSlideWidget, testonUpdatePageImage)
     m_tester->onUpdatePageImage(0);
     EXPECT_TRUE(g_funcname == "0");
 }
-
