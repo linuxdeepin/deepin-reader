@@ -9,6 +9,7 @@
 #include "SlidePlayWidget.h"
 #include "Application.h"
 #include "ReaderImageThreadPoolManager.h"
+#include "Utils.h"
 
 #include <DGuiApplicationHelper>
 #include <DApplication>
@@ -26,6 +27,7 @@ SlideWidget::SlideWidget(DocSheet *docsheet)
     initControl();
     initImageControl();
     show();
+    QTimer::singleShot(0, this, [this](){this->setFocus();});
 }
 
 SlideWidget::~SlideWidget()
@@ -343,6 +345,14 @@ void SlideWidget::handleKeyPressEvent(const QString &sKey)
     } else if (sKey == Dr::key_right || sKey == Dr::key_down) {
         onNextBtnClicked();
     }
+}
+
+void SlideWidget::keyPressEvent(QKeyEvent *event)
+{
+    QString key = Utils::getKeyshortcut(event);
+    handleKeyPressEvent(key);
+
+    DWidget::keyPressEvent(event);
 }
 
 void SlideWidget::onFetchImage(int index)

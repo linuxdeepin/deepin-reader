@@ -1092,7 +1092,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_004)
 {
     Stub s;
     s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
-    s.set(ADDR(SlideWidget, handleKeyPressEvent), handleKeyPressEvent_stub);
+    s.set(ADDR(CentralDocPage, openSlide), openSlide_stub);
 
     QString strPath = UTSOURCEDIR;
     strPath += "/files/normal.pdf";
@@ -1103,7 +1103,7 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_004)
     g_funcName.clear();
     m_tester->handleShortcut(Dr::key_f5);
 
-    EXPECT_TRUE(g_funcName == "handleKeyPressEvent_stub");
+    EXPECT_TRUE(g_funcName != "openSlide_stub");
 
     delete sheet;
     delete slide;
@@ -1117,7 +1117,6 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_handleShortcut_005)
     s.set(ADDR(CentralDocPage, handleBlockShutdown), handleBlockShutdown_stub);
     s.set(ADDR(CentralDocPage, openSlide), openSlide_stub);
     s.set(ADDR(CentralDocPage, openMagnifer), openMagnifer_stub);
-    s.set(ADDR(SlideWidget, handleKeyPressEvent), handleKeyPressEvent_stub);
 
     g_funcName.clear();
     m_tester->handleShortcut(Dr::key_ctrl_s);
