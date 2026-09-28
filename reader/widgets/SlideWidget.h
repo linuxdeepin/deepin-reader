@@ -37,13 +37,6 @@ public slots:
     void setWidgetState(bool full);
 
     /**
-     * @brief handleKeyPressEvent
-     * 按键处理事件
-     * @param sKey
-     */
-    void handleKeyPressEvent(const QString &sKey);
-
-    /**
      * @brief onImageAniFinished
      * 单页幻灯片播放结束
      */
@@ -55,6 +48,13 @@ private:
      * 初始化控件
      */
     void initControl();
+
+    /**
+     * @brief handleKeyPressEvent
+     * 按键处理事件
+     * @param sKey
+     */
+    void handleKeyPressEvent(const QString &sKey);
 
     /**
      * @brief initImageControl
@@ -159,6 +159,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
     void wheelEvent(QWheelEvent *event) override;
+
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     int m_curPageIndex = 0;
