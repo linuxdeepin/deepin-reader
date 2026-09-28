@@ -731,7 +731,6 @@ void CentralDocPage::handleShortcut(const QString &s)
     }
 
     if (m_slideWidget) {
-        m_slideWidget->handleKeyPressEvent(s);
         return;
     }
 
