@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ca">
 <context>
     <name>Application</name>
     <message>
@@ -89,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Avisos</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -372,22 +370,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="20"/>
         <source>No eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sense protecció ocular</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="21"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Protecció ocular clàssica</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="22"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Protecció ocular verda</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="23"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Protecció ocular nocturna</translation>
     </message>
 </context>
 <context>
@@ -395,7 +393,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="48"/>
         <source>Eye protection mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de protecció ocular</translation>
     </message>
 </context>
 <context>
@@ -466,17 +464,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaura a l&apos;última posició de lectura</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="55"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Ves a la primera pàgina</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="76"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanca</translation>
     </message>
 </context>
 <context>
@@ -654,22 +652,22 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualització</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
         <source>Tools</source>
-        <translation type="unfinished">Eines</translation>
+        <translation>Eines</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edita</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
@@ -714,12 +712,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation>Desplaceu-vos una línia amunt</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation>Desplaceu-vos una línia avall</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
@@ -927,68 +925,62 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>CUPS no està disponible. Si us plau, comproveu si el servei d&apos;impressió s&apos;executa.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha trobat cap impressora predeterminada. Si us plau, configureu-ne una primer.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat convertir el fitxer: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat imprimir el fitxer: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Impressió per lots</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>S&apos;ha imprès correctament el fitxer.</numerusform><numerusform>S&apos;han imprès correctament tots els %n fitxers.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 fitxer/s imprès/os correctament, %2 fitxer/s ha/n fallat.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Ha fallat imprimir el fitxer.</numerusform><numerusform>Ha fallat imprimir els %n fitxers.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimeix documents per lots de manera silenciosa</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers de documents per imprimir</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha especificat cap fitxer.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>i %1 fitxer/ més ha/n fallat.</translation>
     </message>
 </context>
 <context>
