@@ -14,6 +14,8 @@
 #include <QProcess>
 #include <QDir>
 #include <QtGlobal>
+#include <QStandardPaths>
+#include <QCoreApplication>
 
 #include <gtest/gtest.h>
 using namespace deepin_reader;
@@ -304,4 +306,117 @@ TEST(UT_DocumentBase, UT_Annotation_destructor_001)
     annot->disconnect();
     delete annot;
     delete dAnnot;
+}
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+/* 说明：calculateTimeout / getHtmlToPdfPath 为 Model.cpp 文件内 static 自由函数，
+ * 无法从测试侧直接调用，经公开入口 DocumentFactory::getDocument 的 DOCX 转换管线
+ * 间接驱动（管线内 calculateTimeout×3、getHtmlToPdfPath×1）。
+ */
+
+// PMS: https://pms.uniontech.com/bug-view-332133.html  commit: b1746b32
+TEST(UT_DocumentFactory_getDocument, BUG332133_docxTimeout_dynamicTimeoutNoHang)
+{
+    // 大文件 docx 转换超时修复：动态超时（按 MB 计算）替代固定超时，
+    // 常规文件取基准超时且各阶段失败时优雅返回 ConvertFailed，不得挂起
+    Stub s;
+    s.set(static_cast<bool(QFile::*)(const QString &)>(ADDR(QFile, copy)), copy_stub);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s.set(static_cast<void(QProcess::*)(const QString &, const QStringList &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub_qt6);
+#else
+    s.set(static_cast<void(QProcess::*)(const QString &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub);
+#endif
+    Stub s1;
+    s1.set(ADDR(QProcess, waitForStarted), waitForStarted_true_stub);
+    s1.set(ADDR(QProcess, waitForFinished), waitForFinished_true_stub);
+
+    int fileType = Dr::DOCX;
+    QString filePath = UTSOURCEDIR;
+    filePath += "/files/normal.docx";
+    QString convertedFileDir = QCoreApplication::applicationDirPath();
+    QString password;
+    QProcess p;
+    QProcess *process = &p;
+    Document::Error error = Document::NoError;
+
+    Document *pdocument = DocumentFactory::getDocument(fileType, filePath, convertedFileDir, password, &process, error);
+    EXPECT_EQ(pdocument, nullptr);
+    EXPECT_EQ(error, Document::ConvertFailed);  // word/ 目录未生成（unzip 桩不落盘）
+    EXPECT_EQ(process, nullptr);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-332133.html  commit: b1746b32
+TEST(UT_DocumentFactory_getDocument, BUG332133_docxTimeout_overflowGuard)
+{
+    // 溢出保护：超大文件 sizeInMB 超过安全上限时超时取 MAX_TIMEOUT_MS，
+    // 不得整型溢出/崩溃（300MB 稀疏文件 > 各阶段 maxSafeSize：unzip 285/pandoc 108/htmltopdf 48）
+    QString bigPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/ut_big_sparse.docx";
+    QFile bigFile(bigPath);
+    if (bigFile.exists())
+        bigFile.remove();
+    ASSERT_TRUE(bigFile.open(QIODevice::WriteOnly));
+    ASSERT_TRUE(bigFile.resize(300LL * 1024 * 1024));  // 300MB 稀疏文件，瞬间创建
+    bigFile.close();
+
+    Stub s;
+    s.set(static_cast<bool(QFile::*)(const QString &)>(ADDR(QFile, copy)), copy_stub);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s.set(static_cast<void(QProcess::*)(const QString &, const QStringList &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub_qt6);
+#else
+    s.set(static_cast<void(QProcess::*)(const QString &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub);
+#endif
+    Stub s1;
+    s1.set(ADDR(QProcess, waitForStarted), waitForStarted_true_stub);
+    s1.set(ADDR(QProcess, waitForFinished), waitForFinished_true_stub);
+
+    int fileType = Dr::DOCX;
+    QString convertedFileDir = QCoreApplication::applicationDirPath();
+    QString password;
+    QProcess p;
+    QProcess *process = &p;
+    Document::Error error = Document::NoError;
+
+    Document *pdocument = DocumentFactory::getDocument(fileType, bigPath, convertedFileDir, password, &process, error);
+    EXPECT_EQ(pdocument, nullptr);
+    EXPECT_EQ(error, Document::ConvertFailed);
+    EXPECT_EQ(process, nullptr);
+
+    bigFile.remove();
+}
+
+// PMS: https://pms.uniontech.com/bug-view-304083.html  commit: f260a63f
+TEST(UT_DocumentFactory_getDocument, BUG304083_docxPipeline_gracefulFailNoCrash)
+{
+    // docx 打不开修复（getHtmlToPdfPath 多级路径查找）：完整转换管线（unzip->pandoc->htmltopdf）
+    // 各阶段失败必须优雅返回不崩溃，getHtmlToPdfPath 真实路径查找正常执行
+    Stub s;
+    s.set(static_cast<bool(QFile::*)(const QString &)>(ADDR(QFile, copy)), copy_stub);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    s.set(static_cast<void(QProcess::*)(const QString &, const QStringList &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub_qt6);
+#else
+    s.set(static_cast<void(QProcess::*)(const QString &, QProcess::OpenMode)>(ADDR(QProcess, start)), start_stub);
+#endif
+    Stub s1;
+    s1.set(ADDR(QProcess, waitForStarted), waitForStarted_true_stub);
+    s1.set(ADDR(QProcess, waitForFinished), waitForFinished_true_stub);
+    Stub s2;
+    s2.set(static_cast<bool(QDir::*)()const>(ADDR(QDir, exists)), exists_stub);
+    s2.set(static_cast<bool(QFile::*)()const>(ADDR(QFile, exists)), exists_stub);
+    Stub s3;
+    s3.set(ADDR(PDFDocument, loadDocument), loadpdfDocument_stub);
+
+    int fileType = Dr::DOCX;
+    QString filePath = UTSOURCEDIR;
+    filePath += "/files/normal.docx";
+    QString convertedFileDir = QCoreApplication::applicationDirPath();
+    QString password;
+    QProcess p;
+    QProcess *process = &p;
+    Document::Error error = Document::NoError;
+
+    Document *pdocument = DocumentFactory::getDocument(fileType, filePath, convertedFileDir, password, &process, error);
+    EXPECT_EQ(pdocument, nullptr);
+    EXPECT_EQ(error, Document::FileError);  // 转换产物加载失败（stub FileError）
+    EXPECT_EQ(process, nullptr);
 }

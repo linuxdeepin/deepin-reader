@@ -8,6 +8,7 @@
 #include "stub.h"
 
 #include <QWidget>
+#include <QUrl>
 
 #include <gtest/gtest.h>
 
@@ -164,3 +165,66 @@ TEST_F(TestDBusObject, UT_DBusObject_handleFiles_002)
     delete g_mainWindow;
 }
 
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+// PMS: https://pms.uniontech.com/bug-view-312013.html  commit: c44cc7a0
+static QString g_lastAddFilePath;
+// 成员函数桩经 ut-stub jmp 补丁以成员 ABI (this, path) 被调用，需双参接收
+void addFileCapture_stub(MainWindow *self, const QString &path)
+{
+    Q_UNUSED(self)
+    g_funcName = __FUNCTION__;
+    g_lastAddFilePath = path;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-312013.html  commit: c44cc7a0
+TEST_F(TestDBusObject, BUG312013_handleFiles_urlConvertedToLocal)
+{
+    // 双击 pdf 无法查看修复（DBus 支持 URL 入参）：file:// URL 必须转换为本地路径后打开
+    Stub s;
+    s.set(ADDR(MainWindow, addFile), addFileCapture_stub);
+    s.set(ADDR(QWidget, show), show_stub);
+    s.set(static_cast<MainWindow*(*)(QStringList)>(ADDR(MainWindow, createWindow)), createWindow_stub);
+
+    m_tester->m_isBlockShutdown = true;
+    QString localPath = UTSOURCEDIR;
+    localPath += "/files/normal.pdf";
+    QStringList filePathList = {QUrl::fromLocalFile(localPath).toString()};
+    m_tester->handleFiles(filePathList);
+    EXPECT_EQ(g_lastAddFilePath, localPath);
+    delete g_mainWindow;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-312013.html  commit: c44cc7a0
+TEST_F(TestDBusObject, BUG312013_handleFiles_alreadyOpenNoReadd)
+{
+    // 已打开文件（activateSheetIfExist 命中）不得重复入窗
+    Stub s;
+    s.set(ADDR(MainWindow, addFile), addFileCapture_stub);
+    s.set(ADDR(QWidget, show), show_stub);
+    s.set(static_cast<MainWindow*(*)(QStringList)>(ADDR(MainWindow, createWindow)), createWindow_stub);
+    s.set(ADDR(MainWindow, activateSheetIfExist), registerService_stub);  // 任意返回 true 的 bool(const QString&)
+
+    m_tester->m_isBlockShutdown = true;
+    QString localPath = UTSOURCEDIR;
+    localPath += "/files/normal.pdf";
+    QStringList filePathList = {QUrl::fromLocalFile(localPath).toString()};
+    g_lastAddFilePath.clear();
+    m_tester->handleFiles(filePathList);
+    EXPECT_FALSE(g_funcName == QString("addFileCapture_stub"));
+    delete g_mainWindow;
+}
+
+// PMS: https://pms.uniontech.com/bug-view-312013.html  commit: c44cc7a0
+TEST_F(TestDBusObject, BUG312013_unBlockShutdown_repeatNoCrash)
+{
+    // DBus 入口修复涉及 unBlockShutdown：重复解除关机阻断不得崩溃
+    Stub s;
+    s.set(ADDR(QDBusAbstractInterface, callWithArgumentList), callWithArgumentList_stub);
+    m_tester->blockShutdown();
+    m_tester->unBlockShutdown();
+    EXPECT_FALSE(m_tester->m_isBlockShutdown);
+    m_tester->unBlockShutdown();
+    EXPECT_FALSE(m_tester->m_isBlockShutdown);
+}

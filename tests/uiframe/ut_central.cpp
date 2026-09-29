@@ -649,3 +649,27 @@ TEST_F(TestCentral, UT_Central_closeRestoreTip_lambda_001)
     emit tip->sigCloseRestoreTip();
     SUCCEED();
 }
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+// PMS: https://pms.uniontech.com/bug-view-97761.html  commit: f1be9fc9
+TEST_F(TestCentral, BUG97761_docPage_lazyCreationStable)
+{
+    // wayland 选择界面外菜单点击无效修复涉及 docPage：懒创建必须幂等，
+    // 二次调用返回同实例（不得重复创建导致菜单信号失联）
+    CentralDocPage *first = m_tester->docPage();
+    ASSERT_NE(first, nullptr);
+    EXPECT_EQ(m_tester->docPage(), first);
+    EXPECT_EQ(m_tester->docPage(), first);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-97761.html  commit: f1be9fc9
+TEST_F(TestCentral, BUG97761_docPage_signalsWiredNoCrash)
+{
+    // docPage 创建后信号槽接线完成：发出页数变化信号不得崩溃
+    CentralDocPage *page = m_tester->docPage();
+    ASSERT_NE(page, nullptr);
+    emit page->sigSheetCountChanged(0);
+    emit page->sigSheetCountChanged(1);
+    SUCCEED();
+}

@@ -492,3 +492,31 @@ TEST_F(TestXpsTextExtractor, parseGlyphsMissingOrigin)
     // Position is default-constructed QPointF.
     EXPECT_TRUE(info.position.isNull());
 }
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+// PMS: https://pms.uniontech.com/bug-view-343541.html  commit: a3cb6cff
+TEST_F(TestXpsDocumentAdapter, BUG343541_renderPage_highDpiScaling)
+{
+    // XPS 渲染慢修复（cairo_matrix 高DPI 缩放）：目标尺寸大于逻辑页尺寸时
+    // 按 A4@300dpi 渲染不崩溃且尺寸精确
+    ASSERT_GT(m_doc->pageCount(), 0);
+    QImage img = m_doc->renderPage(0, 2480, 3508, QRect());
+    EXPECT_FALSE(img.isNull());
+    EXPECT_EQ(img.size(), QSize(2480, 3508));
+}
+
+// PMS: https://pms.uniontech.com/bug-view-343541.html  commit: a3cb6cff
+TEST_F(TestXpsDocumentAdapter, BUG343541_renderPage_fixedSizeAndGuard)
+{
+    // 固定尺寸渲染与守卫补充：单维负值/负页码返回空图且不崩溃
+    QImage img = m_doc->renderPage(0, 100, 100, QRect());
+    EXPECT_FALSE(img.isNull());
+    EXPECT_EQ(img.size(), QSize(100, 100));
+
+    // 单维负值（既有用例仅覆盖双负值与零值）
+    EXPECT_TRUE(m_doc->renderPage(0, -1, 100, QRect()).isNull());
+    EXPECT_TRUE(m_doc->renderPage(0, 100, -1, QRect()).isNull());
+    // 负页码（既有用例仅覆盖越界正页码）
+    EXPECT_TRUE(m_doc->renderPage(-1, 100, 100, QRect()).isNull());
+}
