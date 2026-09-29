@@ -1780,3 +1780,74 @@ TEST_F(TestDocSheet, UT_DocSheet_onPrintRequested_singleArg_lambda)
     m_tester->m_fileType = Dr::PDF;
     SUCCEED();
 }
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+// PMS: https://pms.uniontech.com/bug-view-348017.html  commit: da254c72
+TEST_F(TestDocSheet, BUG348017_setAlive_registerUnregisterUuid)
+{
+    // 打印乱码/空白修复涉及 setAlive 状态机：反复激活/注销时 uuid 注册必须一致，
+    // 激活后可查询到 uuid，注销后 uuid 清空，重复切换不崩溃
+    m_tester->setAlive(true);
+    EXPECT_FALSE(DocSheet::getUuid(m_tester).isNull());
+
+    m_tester->setAlive(false);
+    EXPECT_TRUE(DocSheet::getUuid(m_tester).isNull());
+
+    // 重复激活（setAlive(true) 内部先注销旧 uuid 再注册新 uuid）
+    m_tester->setAlive(true);
+    EXPECT_FALSE(DocSheet::getUuid(m_tester).isNull());
+
+    m_tester->setAlive(false);
+    EXPECT_TRUE(DocSheet::getUuid(m_tester).isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-106171.html  commit: 17dbeb2d
+TEST_F(TestDocSheet, BUG106171_scaleFactorList_containsDefaultAscending)
+{
+    // 打印预览空白修复涉及 scaleFactorList：列表非空、升序、含默认 1.0，
+    // 且所有因子不超过文档最大缩放比例
+    QList<qreal> list = m_tester->scaleFactorList();
+    EXPECT_FALSE(list.isEmpty());
+    EXPECT_TRUE(list.contains(1.0));
+    for (int i = 1; i < list.size(); ++i) {
+        EXPECT_TRUE(list.at(i) > list.at(i - 1)) << "factor list must be ascending";
+    }
+    EXPECT_TRUE(list.last() <= m_tester->maxScaleFactor() + 0.0001);
+    EXPECT_TRUE(list.first() > 0);
+}
+
+// PMS: https://pms.uniontech.com/bug-view-164325.html  commit: 894b5c56
+TEST_F(TestDocSheet, BUG164325_setSidebarVisible_notifyToggleNoCrash)
+{
+    // 大量注释 ctrl+s 保存崩溃修复涉及 setSidebarVisible：notify=true 双向显隐切换不得崩溃
+    // （isFullScreen 需 3 级父链，测试环境无完整层级，同 UT_002 桩掉）
+    Stub s;
+    s.set(ADDR(DocSheet, isFullScreen), isFullScreen_stub);
+    m_tester->setSidebarVisible(true, true);
+    m_tester->setSidebarVisible(false, true);
+    m_tester->setSidebarVisible(true, true);
+    m_tester->setSidebarVisible(false, true);
+    SUCCEED();
+}
+
+// PMS: https://pms.uniontech.com/bug-view-164325.html  commit: 894b5c56
+TEST_F(TestDocSheet, BUG164325_setSidebarVisible_animationToggleNoCrash)
+{
+    // notify=false 走 QPropertyAnimation 动画路径：重复触发动画不得崩溃
+    // （Running 且目标一致时直接返回，目标变化时重启动画）
+    Stub s;
+    s.set(ADDR(DocSheet, isFullScreen), isFullScreen_stub);
+    m_tester->setSidebarVisible(true, false);
+    m_tester->setSidebarVisible(false, false);
+    m_tester->setSidebarVisible(false, false);
+    m_tester->setSidebarVisible(true, false);
+    SUCCEED();
+}
+
+// PMS: https://pms.uniontech.com/bug-view-106171.html  commit: 17dbeb2d
+TEST_F(TestDocSheet, BUG106171_removeAllAnnotation_emptySheetSucceeds)
+{
+    // 打印预览空白修复涉及 removeAllAnnotation：无注释文档移除仍返回成功且不崩溃
+    EXPECT_TRUE(m_tester->removeAllAnnotation());
+}

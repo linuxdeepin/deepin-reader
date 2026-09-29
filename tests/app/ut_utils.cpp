@@ -176,3 +176,27 @@ TEST_F(TestUtils, UT_Utils_setCurrentFilePath_001)
     EXPECT_TRUE(Utils::m_currenFilePath == "/test/path/file.pdf");
     Utils::setCurrentFilePath("");
 }
+
+/* ========== PMS 回归用例（sev1/2 bug 补强，批次1） ========== */
+
+// PMS: https://pms.uniontech.com/bug-view-218701.html  commit: bb8f3e92
+TEST_F(TestUtils, BUG218701_roundQPixmap_nullInputGuard)
+{
+    // 复制文本修复涉及 roundQPixmap：空图输入必须返回空图不崩溃
+    QPixmap in;
+    EXPECT_TRUE(Utils::roundQPixmap(in, 10).isNull());
+}
+
+// PMS: https://pms.uniontech.com/bug-view-218701.html  commit: bb8f3e92
+TEST_F(TestUtils, BUG218701_roundQPixmap_validInputKeepsSize)
+{
+    // 有效图输入圆角处理：输出非空且保持原始尺寸，零半径退化场景不崩溃
+    QPixmap in(100, 80);
+    QPixmap out = Utils::roundQPixmap(in, 12);
+    EXPECT_FALSE(out.isNull());
+    EXPECT_EQ(out.size(), in.size());
+
+    QPixmap out0 = Utils::roundQPixmap(in, 0);
+    EXPECT_FALSE(out0.isNull());
+    EXPECT_EQ(out0.size(), in.size());
+}
