@@ -160,6 +160,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         if (!file.copy(targetDoc)) {
             qCritical() << "Failed to copy file from" << filePath << "to" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
+            *pprocess = nullptr;
             return nullptr;
         }
 
