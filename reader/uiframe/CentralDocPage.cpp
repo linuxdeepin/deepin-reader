@@ -891,10 +891,22 @@ void CentralDocPage::prepareSearch()
         docSheet->prepareSearch();
 }
 
+// Walk up the fixed three-level parent chain safely: parentWidget() may
+// return nullptr at any level (embedded or test environments), and calling
+// parentWidget() on a null pointer crashes.
+static MainWindow *parentMainWindow(CentralDocPage *page)
+{
+    QWidget *widget = page;
+    for (int i = 0; i < 3 && widget != nullptr; ++i) {
+        widget = widget->parentWidget();
+    }
+    return widget != nullptr ? dynamic_cast<MainWindow *>(widget) : nullptr;
+}
+
 bool CentralDocPage::isFullScreen()
 {
     // qCInfo(appLog) << "isFullScreen";
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
+    MainWindow *mainWindow = parentMainWindow(this);
 
     if (nullptr == mainWindow)
         return false;
@@ -905,7 +917,7 @@ bool CentralDocPage::isFullScreen()
 void CentralDocPage::openFullScreen()
 {
     qCInfo(appLog) << "openFullScreen";
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
+    MainWindow *mainWindow = parentMainWindow(this);
 
     if (nullptr == mainWindow)
         return;
@@ -925,7 +937,7 @@ void CentralDocPage::openFullScreen()
 bool CentralDocPage::quitFullScreen(bool force)
 {
     qCInfo(appLog) << "quitFullScreen";
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
+    MainWindow *mainWindow = parentMainWindow(this);
 
     if (nullptr == mainWindow)
         return false;
@@ -973,7 +985,7 @@ void CentralDocPage::onSheetCountChanged(int count)
         m_tabBar->setVisible(true);
     }
 
-    MainWindow *mainWindow = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
+    MainWindow *mainWindow = parentMainWindow(this);
 
     if (mainWindow && mainWindow->isFullScreen()) {
         qCInfo(appLog) << "mainWindow && mainWindow->isFullScreen()";
