@@ -10,6 +10,12 @@
 #include "stub.h"
 
 #include <gtest/gtest.h>
+
+#include <QTemporaryDir>
+#include <QThread>
+#include <atomic>
+#include <thread>
+
 using namespace deepin_reader;
 
 /********测试PDFAnnotation***********/
@@ -576,6 +582,11 @@ bool DPdfPage_isValid_stub()
     return true;
 }
 
+bool DPdfPage_isValid_stub_false()
+{
+    return false;
+}
+
 QString label_stub(int)
 {
     return "test";
@@ -765,4 +776,188 @@ TEST_F(TestPDFDocument, UT_PDFDocument_fileIdentifier_001)
 {
     QString id1 = m_tester->fileIdentifier();
     EXPECT_TRUE(id1 == m_tester->fileIdentifier());
+}
+
+// ==================== PMS 批次 2 补强 ====================
+// 真实文件 fixture: normal.pdf / broken.pdf (UTSOURCEDIR/files/)
+// 注意: PDFDocument 析构会 delete m_document, fixture 只 delete m_tester。
+class TestPDFDocumentReal : public ::testing::Test
+{
+public:
+    virtual void SetUp();
+    virtual void TearDown();
+
+protected:
+    PDFDocument *m_tester = nullptr;
+};
+
+void TestPDFDocumentReal::SetUp()
+{
+    m_tester = new PDFDocument(new DPdfDoc(QString(UTSOURCEDIR) + "/files/normal.pdf", ""));
+}
+
+void TestPDFDocumentReal::TearDown()
+{
+    delete m_tester;
+}
+
+// BUG46911 (sev2): 打开损坏的 PDF 文件崩溃。
+// 回归意图: broken.pdf 打开后 pageCount/page/properties 全链路安全降级。
+
+TEST_F(TestPDFDocumentReal, BUG46911_brokenPdfOpensGracefully)
+{
+    PDFDocument brokenTester(new DPdfDoc(QString(UTSOURCEDIR) + "/files/broken.pdf", ""));
+
+    // 损坏文档可打开(部分对象可解析), 取损坏页时安全降级为空, 不崩溃
+    EXPECT_GE(brokenTester.pageCount(), 0);
+    EXPECT_TRUE(brokenTester.page(0) == nullptr);
+}
+
+TEST_F(TestPDFDocumentReal, BUG46911_brokenPdfPropertiesSafe)
+{
+    PDFDocument brokenTester(new DPdfDoc(QString(UTSOURCEDIR) + "/files/broken.pdf", ""));
+
+    // 损坏文档属性/大纲可重复获取且稳定(不崩溃不漂移)
+    Properties first = brokenTester.properties();
+    Properties second = brokenTester.properties();
+    EXPECT_EQ(first.size(), second.size());
+
+    QList<Section> outline = brokenTester.outline();
+    Q_UNUSED(outline);
+    SUCCEED();
+}
+
+// BUG54210 (sev2): 无效页面(isValid=false)未拦截导致下游崩溃。
+// 回归意图: PDFDocument::page 对 isValid=false 的页面返回空并安全释放。
+
+TEST_F(TestPDFDocumentReal, BUG54210_pageInvalidPageReturnsNull)
+{
+    // 真实页面: 有效
+    Page *validPage = m_tester->page(0);
+    EXPECT_TRUE(validPage != nullptr);
+    delete validPage;
+
+    // isValid=false: 守卫生效返回空
+    Stub s;
+    s.set(ADDR(DPdfPage, isValid), DPdfPage_isValid_stub_false);
+
+    Page *invalidPage = m_tester->page(0);
+    EXPECT_TRUE(invalidPage == nullptr);
+}
+
+// BUG68550 (sev2): 选中文字时矩形/文本错乱。
+// 回归意图: 真实页面上 allTextRects/allTextLooseRects 的 rects 与 texts 一一对应,
+//          charCount 为上限(每字符一个合法矩形才追加)。
+
+TEST_F(TestPDFDocumentReal, BUG68550_allTextRectsRectTextAligned)
+{
+    DPdfPage *dp = m_tester->m_document->page(0, 96, 96);
+    ASSERT_TRUE(dp != nullptr);
+    ASSERT_TRUE(dp->isValid());
+
+    int charCount = 0;
+    QStringList texts;
+    QVector<QRectF> rects;
+    dp->allTextRects(charCount, texts, rects);
+
+    // 有文字的真实文档: 每个矩形对应一段文本, 数量严格一致
+    EXPECT_GT(charCount, 0);
+    EXPECT_EQ(rects.count(), texts.count());
+    EXPECT_LE(rects.count(), charCount);
+    // 注: DPdfPage 由 DPdfDoc(m_pages) 持有管理, 不可 delete (qDeleteAll 双重释放)
+}
+
+TEST_F(TestPDFDocumentReal, BUG68550_allTextLooseRectsRectTextAligned)
+{
+    DPdfPage *dp = m_tester->m_document->page(0, 96, 96);
+    ASSERT_TRUE(dp != nullptr);
+
+    int charCount = 0;
+    QStringList texts;
+    QVector<QRectF> rects;
+    dp->allTextLooseRects(charCount, texts, rects);
+
+    EXPECT_GT(charCount, 0);
+    EXPECT_EQ(rects.count(), texts.count());
+    EXPECT_FALSE(texts.join(QString()).isEmpty());
+    // 同上: DPdfPage 生命周期归 DPdfDoc 管理
+}
+
+// BUG304111 (sev2): 获取文件属性时多线程重入死锁。
+// 回归意图: 并发调用 properties() (内部 DPdfMutexLocker) 可在时限内完成。
+
+TEST_F(TestPDFDocumentReal, BUG304111_concurrentPropertiesNoDeadlock)
+{
+    std::atomic<bool> done1(false), done2(false);
+    std::thread t1([this, &done1]() {
+        Properties p = m_tester->properties();
+        Q_UNUSED(p);
+        done1 = true;
+    });
+    std::thread t2([this, &done2]() {
+        Properties p = m_tester->properties();
+        Q_UNUSED(p);
+        done2 = true;
+    });
+
+    // 3 秒时限内必须完成(死锁则超时失败)
+    for (int i = 0; i < 300 && !(done1 && done2); ++i)
+        QThread::msleep(10);
+    EXPECT_TRUE(done1.load());
+    EXPECT_TRUE(done2.load());
+    t1.join();
+    t2.join();
+}
+
+// BUG304471 (sev2): properties 重复调用结果漂移。
+// 回归意图: 缓存机制保证多次获取属性内容一致。
+
+TEST_F(TestPDFDocumentReal, BUG304471_propertiesCachedStable)
+{
+    Properties first = m_tester->properties();
+    Properties second = m_tester->properties();
+
+    EXPECT_EQ(first.size(), second.size());
+    for (auto it = first.begin(); it != first.end(); ++it)
+        EXPECT_TRUE(second.value(it.key()) == it.value());
+}
+
+// BUG351271 (sev2): SMB 等场景保存失败后文件损坏(未回滚)。
+// 回归意图: 底层 save/saveAs 失败时, PDFDocument 包装层必须如实传递失败,
+//          调用方据此不误报保存成功。
+
+TEST_F(TestPDFDocumentReal, BUG351271_saveFailurePropagates)
+{
+    Stub s;
+    s.set(ADDR(DPdfDoc, save), save_stub);
+
+    EXPECT_FALSE(m_tester->save());
+}
+
+TEST_F(TestPDFDocumentReal, BUG351271_saveAsFailurePropagates)
+{
+    Stub s;
+    s.set(ADDR(DPdfDoc, saveAs), saveAs_stub);
+
+    EXPECT_FALSE(m_tester->saveAs("/tmp/ut_351271_out.pdf"));
+}
+
+// BUG353429 (sev2): 另存为输出的 PDF 文件无效/损坏。
+// 回归意图: 真实文档 saveAs 输出存在、非空、以 %PDF 头开始(有效 PDF)。
+
+TEST_F(TestPDFDocumentReal, BUG353429_saveAsOutputIsValidPdf)
+{
+    QTemporaryDir tmpDir;
+    ASSERT_TRUE(tmpDir.isValid());
+    QString outPath = tmpDir.path() + "/saved.pdf";
+
+    EXPECT_TRUE(m_tester->saveAs(outPath));
+
+    QFile outFile(outPath);
+    ASSERT_TRUE(outFile.exists());
+    ASSERT_TRUE(outFile.open(QIODevice::ReadOnly));
+    QByteArray head = outFile.read(5);
+    outFile.close();
+    EXPECT_GT(outFile.size(), QFileInfo(QString(UTSOURCEDIR) + "/files/normal.pdf").size() / 100);
+    EXPECT_TRUE(head.startsWith("%PDF"));
 }

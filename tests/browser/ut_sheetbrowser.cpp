@@ -2670,3 +2670,255 @@ TEST_F(TestSheetBrowser, UT_SheetBrowser_eyeProtectionMode_lambda_001)
     EyeProtectionManager::instance()->setMode(prev);
     SUCCEED();
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// 桩函数（批次 2 专用, 避免与既有全局桩重名）
+static QString g_b2_funcName;
+static void b2_setSelectIconRect_stub(const bool, Annotation *) { g_b2_funcName = "setSelectIconRect"; }
+static void b2_showMenu_stub() { g_b2_funcName = "showMenu"; }
+static void b2_clearSelectIconAnnot_stub() { g_b2_funcName = "clearSelectIconAnnot"; }
+static void b2_setScaleFactor_stub(qreal f) { g_b2_funcName = "setScaleFactor:" + QString::number(f); }
+static void b2_rotateLeft_stub() { g_b2_funcName = "rotateLeft"; }
+static void b2_rotateRight_stub() { g_b2_funcName = "rotateRight"; }
+static Qt::GestureState b2_gestureState = Qt::NoGesture;
+static Qt::GestureState b2_state_stub() { return b2_gestureState; }
+
+// BUG22093 (sev2): 无任何选中内容时点击右键菜单崩溃。
+// 回归意图: showMenu 在无选中(m_selectEndWord/m_iconAnnot 均空)时走基础菜单路径, 不崩溃;
+//          图标注释选中态时菜单操作后必须清理选中(m_clearSelectIconAnnotAfterMenu)。
+
+TEST_F(TestSheetBrowser, BUG22093_showMenuWithoutAnySelection)
+{
+    Stub stub;
+    stub.set(ADDR(SheetBrowser, selectedWordsText), selectedWordsText_stub_empty);
+    stub.set(ADDR(BrowserMenu, initActions), initActions_stub);
+    stub.set((QAction * (QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), exec_stub);
+    stub.set(ADDR(SheetBrowser, clearSelectIconAnnotAfterMenu), clearSelectIconAnnotAfterMenu_stub);
+
+    // 无选中: m_selectEndWord / m_iconAnnot 均为空
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+    m_tester->showMenu();
+
+    delete sheet;
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
+}
+
+TEST_F(TestSheetBrowser, BUG22093_showMenuWithIconAnnotClearsSelection)
+{
+    Stub stub;
+    stub.set(ADDR(SheetBrowser, selectedWordsText), selectedWordsText_stub_empty);
+    stub.set(ADDR(BrowserMenu, initActions), initActions_stub);
+    stub.set((QAction * (QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), exec_stub);
+    g_b2_funcName.clear();
+    stub.set(ADDR(SheetBrowser, clearSelectIconAnnotAfterMenu), b2_clearSelectIconAnnot_stub);
+
+    BrowserWord *word = new BrowserWord(nullptr, Word());
+    m_tester->m_selectEndWord = word;
+    PDFAnnotation *annot = new PDFAnnotation(nullptr);
+    m_tester->m_iconAnnot = annot;
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+    m_tester->showMenu();
+
+    delete word;
+    delete annot;
+    delete sheet;
+    // 图标注释菜单操作后选中态被清理
+    EXPECT_TRUE(g_b2_funcName == "clearSelectIconAnnot");
+    EXPECT_TRUE(m_tester->m_selectIconAnnotation == false);
+}
+
+// BUG43216 (sev2): 添加注释时点击位置越界/页面为空导致崩溃。
+// 回归意图: getClickAnnot 对空页面必须返回空注释且不崩溃;
+//          空白页面无命中时返回 nullptr。
+
+TEST_F(TestSheetBrowser, BUG43216_getClickAnnotNullPageGuard)
+{
+    QPointF pos(10, 10);
+    // 空页面守卫: 返回 nullptr 不崩溃
+    EXPECT_TRUE(m_tester->getClickAnnot(nullptr, pos) == nullptr);
+    SUCCEED();
+}
+
+TEST_F(TestSheetBrowser, BUG43216_getClickAnnotEmptyPageReturnsNull)
+{
+    // fixture 页面无注释/无文字: 任意命中点均应安全返回 nullptr
+    BrowserPage *page = m_tester->m_items.at(0);
+    QPointF pos(10, 10);
+    EXPECT_TRUE(m_tester->getClickAnnot(page, pos) == nullptr);
+}
+
+// BUG44136 (sev2): Tab 键焦点遍历时图标注释选中框未释放。
+// 回归意图: SheetBrowser::event 收到 Key_Tab 必须释放最后选中的图标注释选中框。
+
+TEST_F(TestSheetBrowser, BUG44136_keyTabReleasesIconAnnotSelection)
+{
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+    BrowserPage *page = m_tester->m_items.at(0);
+    m_tester->m_lastSelectIconAnnotPage = page;
+
+    g_b2_funcName.clear();
+    Stub stub;
+    stub.set(ADDR(BrowserPage, setSelectIconRect), b2_setSelectIconRect_stub);
+
+    QKeyEvent tabEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
+    m_tester->event(&tabEvent);
+
+    // Tab 释放图注选中框
+    EXPECT_TRUE(g_b2_funcName == "setSelectIconRect");
+    delete sheet;
+}
+
+// BUG44264 (sev2): Alt+M 快捷键无法唤出右键菜单。
+// 回归意图: SheetBrowser::event 捕获 Alt+M 并调用 showMenu。
+
+TEST_F(TestSheetBrowser, BUG44264_keyAltMShowsContextMenu)
+{
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+
+    g_b2_funcName.clear();
+    Stub stub;
+    stub.set(ADDR(SheetBrowser, showMenu), b2_showMenu_stub);
+
+    QKeyEvent altMEvent(QEvent::KeyPress, Qt::Key_M, Qt::AltModifier);
+    m_tester->event(&altMEvent);
+
+    EXPECT_TRUE(g_b2_funcName == "showMenu");
+    delete sheet;
+}
+
+// BUG44491 (sev2): 双指捏合缩放过于灵敏/难以生效（scale=1.0 步进污染）。
+// 回归意图: 真实 pinchTriggered 路径(完整手势序列 Started→Updated→Finished):
+//   捏合缩放必须到达 setScaleFactor(不丢失), 结束态按总缩放落盘最终值。
+//   注: pinchTriggered 使用函数级 static(tempScalefactor/currentStepScaleFactor)
+//   跨调用累计, 必须从 GestureStarted 起步才能得到确定性的结果。
+
+TEST_F(TestSheetBrowser, BUG44491_pinchScaleFactorReachesDocSheet)
+{
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+    m_tester->m_lastScaleFactor = 1.0;
+
+    g_b2_funcName.clear();
+    Stub stub;
+    stub.set(ADDR(DocSheet, setScaleFactor), b2_setScaleFactor_stub);
+
+    // 手势开始: 重置 static 累计基线
+    b2_gestureState = Qt::GestureStarted;
+    Stub stateStub;
+    stateStub.set(ADDR(QGesture, state), b2_state_stub);
+    QPinchGesture started;
+    started.setChangeFlags(QPinchGesture::ScaleFactorChanged);
+    started.setTotalScaleFactor(1.0);
+    m_tester->pinchTriggered(&started);
+
+    // 捏合中: totalScaleFactor 变为 2.0, 缩放必须同步生效
+    b2_gestureState = Qt::GestureUpdated;
+    QPinchGesture updated;
+    updated.setChangeFlags(QPinchGesture::ScaleFactorChanged);
+    updated.setTotalScaleFactor(2.0);
+    m_tester->pinchTriggered(&updated);
+
+    // 缩放手势生效: 到达文档缩放设置, 且缩放值非初始 1.0 污染
+    EXPECT_TRUE(g_b2_funcName.startsWith("setScaleFactor:"));
+    if (g_b2_funcName.startsWith("setScaleFactor:")) {
+        qreal applied = g_b2_funcName.mid(QString("setScaleFactor:").size()).toDouble();
+        EXPECT_GT(applied, 1.0);
+    }
+    delete sheet;
+}
+
+TEST_F(TestSheetBrowser, BUG44491_pinchFinishedKeepsValidScale)
+{
+    DocSheet *sheet = new DocSheet(Dr::FileType::PDF, "1.pdf", nullptr);
+    m_tester->m_sheet = sheet;
+    m_tester->m_lastScaleFactor = 1.0;
+
+    g_b2_funcName.clear();
+    Stub stub;
+    stub.set(ADDR(DocSheet, setScaleFactor), b2_setScaleFactor_stub);
+
+    // 完整手势序列: 开始→结束(缩小到 0.5)
+    b2_gestureState = Qt::GestureStarted;
+    Stub stateStub;
+    stateStub.set(ADDR(QGesture, state), b2_state_stub);
+    QPinchGesture started;
+    started.setChangeFlags(QPinchGesture::ScaleFactorChanged);
+    started.setTotalScaleFactor(1.0);
+    m_tester->pinchTriggered(&started);
+
+    b2_gestureState = Qt::GestureFinished;
+    QPinchGesture finished;
+    finished.setChangeFlags(QPinchGesture::ScaleFactorChanged);
+    finished.setTotalScaleFactor(0.5);
+    m_tester->pinchTriggered(&finished);
+
+    // 结束态: 缩放值有效(>0), 不会退化为 0/失效
+    EXPECT_TRUE(g_b2_funcName.startsWith("setScaleFactor:"));
+    if (g_b2_funcName.startsWith("setScaleFactor:")) {
+        qreal applied = g_b2_funcName.mid(QString("setScaleFactor:").size()).toDouble();
+        EXPECT_GT(applied, 0.0);
+    }
+    delete sheet;
+}
+
+// BUG41018 (sev2): 大页面文档双页模式 maxWidth 计算错误(未乘页数)导致布局溢出。
+// 回归意图: 同一文档下, 双页模式的适配缩放不得大于单页模式(宽度预算必须按 2 页计算)。
+
+TEST_F(TestSheetBrowser, BUG41018_doublePageScaleNotGreaterThanSingleBigWidth)
+{
+    Stub stub;
+    stub.set(ADDR(BrowserPage, render), render_stub);
+    stub.set(ADDR(SheetBrowser, beginViewportChange), beginViewportChange_stub);
+
+    // 大宽度页面: 双页宽度预算未乘 2 时 scale 会反超单页
+    m_tester->m_items.at(0)->m_originSizeF = QSizeF(2000, 1000);
+    m_tester->m_items.at(1)->m_originSizeF = QSizeF(2000, 1000);
+
+    SheetOperation opSingle;
+    opSingle.scaleMode = Dr::FitToPageWidthMode;
+    opSingle.layoutMode = Dr::SinglePageMode;
+    m_tester->deform(opSingle);
+    double scaleSingle = m_tester->m_lastScaleFactor;
+
+    SheetOperation opDouble;
+    opDouble.scaleMode = Dr::FitToPageWidthMode;
+    opDouble.layoutMode = Dr::TwoPagesMode;
+    m_tester->deform(opDouble);
+    double scaleDouble = m_tester->m_lastScaleFactor;
+
+    EXPECT_GT(scaleSingle, 0.0);
+    EXPECT_GT(scaleDouble, 0.0);
+    // 双页(两页并排)的缩放不得大于单页缩放
+    EXPECT_LE(scaleDouble, scaleSingle + 1e-6);
+}
+
+TEST_F(TestSheetBrowser, BUG41018_doublePageScaleNotGreaterThanSingleBigHeight)
+{
+    Stub stub;
+    stub.set(ADDR(BrowserPage, render), render_stub);
+    stub.set(ADDR(SheetBrowser, beginViewportChange), beginViewportChange_stub);
+
+    // 大高度页面: 约束翻转到高度轴, 双页缩放同样不得反超单页
+    m_tester->m_items.at(0)->m_originSizeF = QSizeF(1000, 4000);
+    m_tester->m_items.at(1)->m_originSizeF = QSizeF(1000, 4000);
+
+    SheetOperation opSingle;
+    opSingle.scaleMode = Dr::FitToPageWidthMode;
+    opSingle.layoutMode = Dr::SinglePageMode;
+    m_tester->deform(opSingle);
+    double scaleSingle = m_tester->m_lastScaleFactor;
+
+    SheetOperation opDouble;
+    opDouble.scaleMode = Dr::FitToPageWidthMode;
+    opDouble.layoutMode = Dr::TwoPagesMode;
+    m_tester->deform(opDouble);
+    double scaleDouble = m_tester->m_lastScaleFactor;
+
+    EXPECT_GT(scaleSingle, 0.0);
+    EXPECT_GT(scaleDouble, 0.0);
+    EXPECT_LE(scaleDouble, scaleSingle + 1e-6);
+}

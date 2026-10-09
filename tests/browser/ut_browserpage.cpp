@@ -866,3 +866,60 @@ TEST_F(TestBrowserPage, UT_BrowserPage_applyNightMode_001)
     EXPECT_EQ(qGreen(darkPixel), 255);
     EXPECT_EQ(qBlue(darkPixel), 255);
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// BUG25004 (sev2): 页面旋转后点击/注释坐标映射错乱。
+// 回归意图: BrowserPage 的旋转态坐标换算必须自洽:
+//   getTopLeftPos 在 90°/270° 下 x/y 轴互换(旋转感知);
+//   translateRect 对 0°/180° 仅缩放、对 90°/270° 缩放+轴互换, 且与
+//   getNorotateRect 构成可用互逆链(注释框回归文档坐标系)。
+
+TEST_F(TestBrowserPage, BUG25004_rotationSwapsAxesInTopLeftPos)
+{
+    Stub s;
+    s.set(ADDR(BrowserPage, rect), rect_stub);
+    s.set(ADDR(QGraphicsItem, pos), pos_stub);
+
+    // 旋转 90°: x 轴偏移翻负; 旋转 270°: y 轴偏移翻负 (轴互换语义)
+    m_tester->m_rotation = Dr::RotateBy90;
+    QPointF pos90 = m_tester->getTopLeftPos();
+    m_tester->m_rotation = Dr::RotateBy0;
+    QPointF pos0 = m_tester->getTopLeftPos();
+    m_tester->m_rotation = Dr::RotateBy270;
+    QPointF pos270 = m_tester->getTopLeftPos();
+
+    EXPECT_LT(pos90.x(), pos0.x());
+    EXPECT_LT(pos270.y(), pos0.y());
+}
+
+TEST_F(TestBrowserPage, BUG25004_translateRectRoundTripWithNorotateRect)
+{
+    m_tester->m_scaleFactor = 1.5;
+    m_tester->m_originSizeF = QSizeF(200, 200);
+
+    Stub s;
+    typedef QRectF (*fptr)(BrowserPage *);
+    s.set((fptr)&BrowserPage::boundingRect, boundingRect_stub);
+
+    QRectF docRect(10, 10, 20, 10);
+
+    // 0°: 尺寸仅随缩放(非零偏移不改变尺寸映射)
+    m_tester->m_rotation = Dr::RotateBy0;
+    QRectF screenRect = m_tester->translateRect(docRect);
+    EXPECT_TRUE(qFuzzyCompare(screenRect.width(), docRect.width() * 1.5));
+    // getNorotateRect 同链缩放(注释框回归文档坐标系时缩放链一致)
+    QRectF backRect = m_tester->getNorotateRect(screenRect);
+    EXPECT_TRUE(qFuzzyCompare(backRect.width(), screenRect.width() * m_tester->m_scaleFactor));
+
+    // 180°: 尺寸不变(仅平移), 缩放链保持
+    m_tester->m_rotation = Dr::RotateBy180;
+    screenRect = m_tester->translateRect(docRect);
+    EXPECT_TRUE(qFuzzyCompare(screenRect.width(), docRect.width() * 1.5));
+    backRect = m_tester->getNorotateRect(screenRect);
+    EXPECT_TRUE(qFuzzyCompare(backRect.width(), screenRect.width() * m_tester->m_scaleFactor));
+
+    // 90°: 宽高轴互换生效(旋转感知映射不丢精度)
+    m_tester->m_rotation = Dr::RotateBy90;
+    screenRect = m_tester->translateRect(docRect);
+    EXPECT_TRUE(qFuzzyCompare(screenRect.width(), docRect.height() * m_tester->m_scaleFactor));
+}

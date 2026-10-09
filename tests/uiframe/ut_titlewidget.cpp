@@ -117,3 +117,43 @@ TEST_F(TestTitleWidget, testSizeModeChangedLambda)
     emit DGuiApplicationHelper::instance()->sizeModeChanged(DGuiApplicationHelper::NormalMode);
     SUCCEED();
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// BUG44136 (sev2): 标题栏控件 Tab 焦点顺序错乱/回车无效。
+// 回归意图: TitleWidget 在构造后焦点策略与 Tab 遍历链可用,
+//          且按键事件处理不崩溃。
+
+TEST_F(TestTitleWidget, BUG44136_titleWidgetFocusChainUsable)
+{
+    // 当前 Tab 顺序机制: 构造时把有序控件链写入父级 orderlist 属性, 并逐个设为 TabFocus
+    QVariant varOrder = m_parent->property("orderlist");
+    EXPECT_TRUE(varOrder.isValid());
+    QList<QWidget *> orderList = varOrder.value<QList<QWidget *>>();
+    // 有序链槽位数: 缩略图/减/缩放框/增/opt/最小/最大/关闭 = 8
+    // (全屏按钮仅在全屏模式下由 DTitlebar 提供, 裸父级 fixture 中为空不追加)
+    ASSERT_EQ(orderList.count(), 8);
+    // 相对顺序约束: 缩略图 → 减 → 增 (缩放框在裸 fixture 下可能尚未实例化)
+    int idxThumbnail = -1, idxDec = -1, idxInc = -1;
+    int nonNullCount = 0;
+    for (int i = 0; i < orderList.count(); ++i) {
+        QWidget *w = orderList.at(i);
+        if (w == nullptr)
+            continue;
+        ++nonNullCount;
+        EXPECT_TRUE(w->focusPolicy() == Qt::TabFocus) << "noTabFocus at idx=" << i;
+        if (w->objectName() == "SP_DecreaseElement")
+            idxDec = i;
+        else if (w->objectName() == "SP_IncreaseElement")
+            idxInc = i;
+        else if (qobject_cast<QAbstractButton *>(w) && w == orderList.first())
+            idxThumbnail = i;
+    }
+    EXPECT_GE(nonNullCount, 3);
+    EXPECT_GE(idxThumbnail, 0);
+    EXPECT_GT(idxDec, idxThumbnail);
+    EXPECT_GT(idxInc, idxDec);
+
+    QKeyEvent tabEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
+    m_tester->keyPressEvent(&tabEvent);
+    SUCCEED();
+}

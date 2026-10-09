@@ -142,3 +142,39 @@ TEST_F(TestBrowserWord, UT_BrowserWord_mouseReleaseEvent_001)
 
     delete e;
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// BUG40946 (sev2): 文字处于可选择状态时, 单击仍触发词项拖拽/移动。
+// 回归意图: setSelectable 打开后:
+//   1) ItemIsSelectable 标志位同步(场景选择机制生效的依据);
+//   2) 单击 press/release 被抑制(不透传给 QGraphicsItem 拖拽链路)。
+
+TEST_F(TestBrowserWord, BUG40946_selectableFlagSyncsWithSetSelectable)
+{
+    m_tester->setSelectable(true);
+    EXPECT_TRUE(m_tester->flags() & QGraphicsItem::ItemIsSelectable);
+
+    m_tester->setSelectable(false);
+    EXPECT_FALSE(m_tester->flags() & QGraphicsItem::ItemIsSelectable);
+}
+
+TEST_F(TestBrowserWord, BUG40946_selectableSuppressesSingleClickDrag)
+{
+    typedef void (*fptr)(QGraphicsItem *, QGraphicsSceneMouseEvent *);
+    fptr A_foo = (fptr)(&QGraphicsItem::mousePressEvent);
+    Stub s;
+    s.set(A_foo, mousePressEvent_stub);
+
+    QGraphicsSceneMouseEvent e;
+
+    // 文本选择模式: 单击不透传(不触发词项拖拽)
+    m_tester->setSelectable(true);
+    g_funcName.clear();
+    m_tester->mousePressEvent(&e);
+    EXPECT_FALSE(g_funcName == "mousePressEvent_stub");
+
+    // 非选择模式: 恢复正常点击链路
+    m_tester->setSelectable(false);
+    m_tester->mousePressEvent(&e);
+    EXPECT_TRUE(g_funcName == "mousePressEvent_stub");
+}
