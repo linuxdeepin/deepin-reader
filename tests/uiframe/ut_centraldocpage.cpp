@@ -1447,3 +1447,68 @@ TEST_F(TestCentralDocPage, UT_CentralDocPage_setActiveTabByFilePath_001)
     m_tester->setActiveTabByFilePath("/tmp/ut_not_exist_active_file.pdf");
     SUCCEED();
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// BUG20978 (sev2): 快捷键链缺失导致部分快捷键功能无效。
+// 历史根因: 快捷键分发链未覆盖部分按键（旧 Ctrl+B 链路已在重构中废除）。
+// 回归意图: CentralDocPage::handleShortcut 必须把文档级快捷键分发到"当前文档"
+//          并实际生效（alt_2 手型 / ctrl_1 适合页面 / ctrl_m 打开侧栏）。
+
+TEST_F(TestCentralDocPage, BUG20978_handleShortcutAlt2DispatchToCurrentSheet)
+{
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    g_docsheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    g_docsheet->m_operation.mouseShape = Dr::MouseShapeNormal;
+
+    m_tester->handleShortcut(Dr::key_alt_2);
+
+    // 分发链生效: 当前文档鼠标形状被切换为手型
+    EXPECT_TRUE(g_docsheet->m_operation.mouseShape == Dr::MouseShapeHand);
+
+    delete g_docsheet;
+    g_docsheet = nullptr;
+}
+
+TEST_F(TestCentralDocPage, BUG20978_handleShortcutCtrl1DispatchToCurrentSheet)
+{
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    g_docsheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+
+    m_tester->handleShortcut(Dr::key_ctrl_1);
+
+    // 分发链生效: 缩放模式切换为"适合页面"
+    EXPECT_TRUE(g_docsheet->m_operation.scaleMode == Dr::FitToPageDefaultMode);
+
+    delete g_docsheet;
+    g_docsheet = nullptr;
+}
+
+TEST_F(TestCentralDocPage, BUG20978_handleShortcutCtrlMOpensSidebar)
+{
+    Stub s;
+    s.set(ADDR(CentralDocPage, getCurSheet), getCurSheet_stub2);
+    s.set(ADDR(ReaderImageThreadPoolManager, addgetDocImageTask), addgetDocImageTask_stub);
+
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/normal.pdf";
+    g_docsheet = new DocSheet(Dr::FileType::PDF, strPath, nullptr);
+    g_docsheet->m_operation.sidebarVisible = false;
+
+    m_tester->handleShortcut(Dr::key_ctrl_m);
+
+    // 分发链生效: 侧栏可见状态被置位
+    EXPECT_TRUE(g_docsheet->m_operation.sidebarVisible == true);
+
+    delete g_docsheet;
+    g_docsheet = nullptr;
+}

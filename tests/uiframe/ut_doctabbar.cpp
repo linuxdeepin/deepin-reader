@@ -344,3 +344,46 @@ TEST_F(UT_DocTabBar, UT_DocTabBar_setPendingActiveFile_001)
     m_tester->setPendingActiveFile(strPath);
     EXPECT_TRUE(m_tester->m_delayIndex == 0);
 }
+
+// ==================== PMS 批次 2 补强 ====================
+// BUG46381 (sev2): 快速连续点击关闭多个标签页导致崩溃。
+// 回归意图: onTabCloseRequested 的 m_intervalTimer 防抖窗口内的重复关闭必须被忽略,
+//          窗口结束后恢复处理。
+
+TEST_F(UT_DocTabBar, BUG46381_rapidCloseRequestsThrottled)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet *sheet = new DocSheet(Dr::PDF, strPath, m_tester);
+    m_tester->insertSheet(sheet, 0);
+
+    int sigCount = 0;
+    QObject::connect(m_tester, &DocTabBar::sigTabClosed, [&sigCount](DocSheet *) {
+        sigCount++;
+    });
+    // 100ms 防抖窗口内连发 3 次关闭: 仅首次生效
+    m_tester->onTabCloseRequested(0);
+    m_tester->onTabCloseRequested(0);
+    m_tester->onTabCloseRequested(0);
+    EXPECT_EQ(sigCount, 1);
+    delete sheet;
+}
+
+TEST_F(UT_DocTabBar, BUG46381_closeAfterThrottleWindowWorksAgain)
+{
+    QString strPath = UTSOURCEDIR;
+    strPath += "/files/1.pdf";
+    DocSheet *sheet = new DocSheet(Dr::PDF, strPath, m_tester);
+    m_tester->insertSheet(sheet, 0);
+
+    int sigCount = 0;
+    QObject::connect(m_tester, &DocTabBar::sigTabClosed, [&sigCount](DocSheet *) {
+        sigCount++;
+    });
+    m_tester->onTabCloseRequested(0);
+    // 等待防抖窗口（100ms）结束后, 再次请求关闭应正常处理
+    QTest::qWait(150);
+    m_tester->onTabCloseRequested(0);
+    EXPECT_EQ(sigCount, 2);
+    delete sheet;
+}
