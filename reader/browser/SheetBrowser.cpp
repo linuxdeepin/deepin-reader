@@ -946,22 +946,22 @@ bool SheetBrowser::gestureEvent(QGestureEvent *event)
 void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
 {
     // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Starting pinch triggered";
-    static bool  canRotate = false;
-    static qreal currentStepScaleFactor = 1.0;
-    static qreal tempScalefactor = 1.0;
 
     if (gesture->state() == Qt::GestureStarted) {
         // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Gesture started";
         m_startPinch = true;
-        canRotate = true;
-        tempScalefactor = m_lastScaleFactor;
+        m_canRotate = true;
+        m_tempScalefactor = m_lastScaleFactor;
+        // Reset the scale baseline so a previously interrupted gesture
+        // cannot pollute this new pinch (too-sensitive scaling, BUG44491).
+        m_currentStepScaleFactor = 1.0;
         this->setProperty("pinchgetsturing", true);
         scene()->setSelectionArea(QPainterPath());
     }
 
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
-        if (canRotate && qAbs(gesture->rotationAngle()) > 35.0) {
+        if (m_canRotate && qAbs(gesture->rotationAngle()) > 35.0) {
             if (gesture->rotationAngle() < 0.0) {
                 // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Rotation angle is less than 0, rotating left";
                 m_sheet->rotateLeft();
@@ -969,18 +969,18 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
                 // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Rotation angle is greater than 0, rotating right";
                 m_sheet->rotateRight();
             }
-            canRotate = false;
+            m_canRotate = false;
             return;
         }
     }
 
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Scale factor changed";
-        currentStepScaleFactor = gesture->totalScaleFactor();
+        m_currentStepScaleFactor = gesture->totalScaleFactor();
     }
 
-    qreal curscalfactor = currentStepScaleFactor * tempScalefactor;
-    if (gesture->state() == Qt::GestureFinished) {
+    qreal curscalfactor = m_currentStepScaleFactor * m_tempScalefactor;
+    if (gesture->state() == Qt::GestureFinished || gesture->state() == Qt::GestureCanceled) {
         // qCDebug(appLog) << "SheetBrowser::pinchTriggered() - Gesture finished";
         this->setProperty("pinchgetsturing", false);
         // 必须传 receiver=this:否则 browser 在定时器触发前被销毁时,lambda 仍会执行并写已死对象(UAF)
@@ -988,9 +988,9 @@ void SheetBrowser::pinchTriggered(QPinchGesture *gesture)
             //稍微延迟下,不然还是会引起mouse事件触发
             m_startPinch = false;
         });
-        canRotate = false;
-        currentStepScaleFactor = 1.0;
-        tempScalefactor = m_lastScaleFactor;
+        m_canRotate = false;
+        m_currentStepScaleFactor = 1.0;
+        m_tempScalefactor = m_lastScaleFactor;
     }
 
     m_sheet->setScaleFactor(curscalfactor);

@@ -752,6 +752,9 @@ private:
 
     QBasicTimer m_repeatTimer;
     bool m_startPinch = false; //开始收缩
+    bool m_canRotate = false;              //捏合手势中是否允许旋转
+    qreal m_currentStepScaleFactor = 1.0;  //当前捏合手势的缩放因子(成员变量避免跨实例/跨手势残留)
+    qreal m_tempScalefactor = 1.0;         //捏合手势起始时的基准缩放因子
     bool m_canTouchScreen = false;
     QScroller *m_scroller = nullptr;
 };
