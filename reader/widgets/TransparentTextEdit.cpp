@@ -55,7 +55,7 @@ void TransparentTextEdit::slotTextEditMaxContantNum()
     qCDebug(appLog) << "Checking text content length, max:" << m_nMaxContantLen;
     QString textContent = this->toPlainText();
 
-    int length = textContent.count();
+    int length = textContent.size();
 
     if (length > m_nMaxContantLen) {
         qCDebug(appLog) << "Text length exceeds limit, trimming content";
