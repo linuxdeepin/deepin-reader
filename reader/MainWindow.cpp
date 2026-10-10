@@ -232,16 +232,22 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 if (m_TitleAnimation->state() != QPropertyAnimation::Running) {
                     // qCDebug(appLog) << "MainWindow::eventFilter() - Starting title animation";
                     m_TitleAnimation->stop();
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+                    // Qt6 中 QHoverEvent::pos() 已废弃,用 position() 替代
+                    const int hoverPosY = mouseEvent->position().toPoint().y();
+#else
+                    const int hoverPosY = mouseEvent->pos().y();
+#endif
                     int duration = 200 * (50 + m_FullTitleWidget->pos().y()) / 50;
                     duration = duration <= 0 ? 200 : duration;
                     m_TitleAnimation->setDuration(duration);
                     m_TitleAnimation->setStartValue(QRect(0, m_FullTitleWidget->pos().y(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
 
-                    if (m_FullTitleWidget->pos().y() >= 0 && mouseEvent->pos().y() > m_FullTitleWidget->height()) {
+                    if (m_FullTitleWidget->pos().y() >= 0 && hoverPosY > m_FullTitleWidget->height()) {
                         // qCDebug(appLog) << "MainWindow::eventFilter() - Hiding title widget";
                         m_TitleAnimation->setEndValue(QRect(0, -m_FullTitleWidget->height(), dApp->primaryScreen()->size().width(), m_FullTitleWidget->height()));
                         m_TitleAnimation->start();
-                    } else if (m_FullTitleWidget->pos().y() < 0 && mouseEvent->pos().y() < 2) {
+                    } else if (m_FullTitleWidget->pos().y() < 0 && hoverPosY < 2) {
                         // qCDebug(appLog) << "MainWindow::eventFilter() - Showing title widget";
                         setTitleBarFocusEnable(true);
                         if (m_docTabWidget && m_FullTitleWidget->height() > titlebar()->height())
@@ -592,7 +598,12 @@ QString MainWindow::libPath(const QString &strlib)
 {
     qCDebug(appLog) << "MainWindow::libPath() - Searching for library:" << strlib;
     QDir dir;
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    // Qt6 中 QLibraryInfo::location() 已废弃,用 path() 替代
+    QString path = QLibraryInfo::path(QLibraryInfo::LibrariesPath);
+#else
     QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+#endif
     dir.setPath(path);
     QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);   //filter name with strlib
 
