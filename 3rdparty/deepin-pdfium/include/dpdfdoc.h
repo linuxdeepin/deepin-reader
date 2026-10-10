@@ -81,7 +81,8 @@ public:
     /**
      * @brief 创建新的page返回
      * @param i
-     * @return
+     * @return 所有权归文档：返回的 DPdfPage 由文档缓存并在析构时释放，
+     *         调用方不得 delete（重复释放将导致 double-free）。
      */
     DPdfPage *page(int i, qreal xRes, qreal yRes);
 
