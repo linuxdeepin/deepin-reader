@@ -14,6 +14,13 @@
 class DPdfAnnot;
 class DPdfPagePrivate;
 class DPdfDocHandler;
+/**
+ * @brief PDF 页面对象
+ *
+ * 所有权契约：DPdfPage 实例由 DPdfDoc::page() 创建并缓存于文档内部，
+ * 生命周期由所属 DPdfDoc 管理（文档析构时统一释放）。
+ * 调用方不得 delete 该指针，否则将与文档析构产生双重释放。
+ */
 class DPdfPage : public QObject
 {
     Q_OBJECT

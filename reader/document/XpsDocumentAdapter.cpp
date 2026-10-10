@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2025 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2025 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QMutexLocker>
 #include <QRectF>
+#include <QTimeZone>
 #include <functional>
 
 #include <algorithm>
@@ -276,7 +277,12 @@ QDateTime fromUnixTime(time_t value)
     if (value <= 0) {
         return QDateTime();
     }
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    // Qt6 中传 Qt::UTC 的重载已废弃,改传 QTimeZone::UTC(行为等价,均为 UTC 时间规范)
+    return QDateTime::fromSecsSinceEpoch(static_cast<qint64>(value), QTimeZone::UTC).toLocalTime();
+#else
     return QDateTime::fromSecsSinceEpoch(static_cast<qint64>(value), Qt::UTC).toLocalTime();
+#endif
 }
 
 void logGError(const QString &prefix, GError *error)

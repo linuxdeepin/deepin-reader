@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -22,7 +22,10 @@ Application::Application(int &argc, char **argv)
     qCDebug(appLog) << "Initializing application";
     loadTranslator();
     qCDebug(appLog) << "Translations loaded";
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // Qt5 下该属性控制 HiDPI 图标渲染；Qt6 中始终启用，属性已废弃无效果
     setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     setApplicationName("deepin-reader");
     setOrganizationName("deepin");
     //setWindowIcon(QIcon::fromTheme("deepin-reader"));     //耗时40ms
@@ -103,7 +106,7 @@ bool Application::notify(QObject *object, QEvent *event)
         QFocusEvent *fe =  dynamic_cast<QFocusEvent *>(event);
         QWidget *widget = qobject_cast<QWidget *>(object);
 
-        if (widget && fe && fe->reason() == Qt::ActiveWindowFocusReason && !widget->isTopLevel()
+        if (widget && fe && fe->reason() == Qt::ActiveWindowFocusReason && !widget->isWindow()
                 && (widget->focusPolicy() & Qt::StrongFocus) != Qt::StrongFocus) {
             // 针对激活窗口所获得的焦点，为了避免被默认给到窗口内部的控件上，此处将焦点还给主窗口
             // 并且只设置一次

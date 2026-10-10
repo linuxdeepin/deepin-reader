@@ -1,4 +1,4 @@
-// Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+// Copyright (C) 2019 ~ 2026 Uniontech Software Technology Co.,Ltd.
 // SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -35,11 +35,11 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
         newstr.resultStr += strText;
     } else {
         qCDebug(appLog) << "Text width is greater than label width";
-        for (int i = 0; i < strText.count(); i++) {
+        for (int i = 0; i < strText.size(); i++) {
             str += strText.at(i);
 
             if (font_label.horizontalAdvance(str) > width) { //根据label宽度调整每行字符数
-                str.remove(str.count() - 1, 1);
+                str.remove(str.size() - 1, 1);
                 newstr.strList.append(str);
                 newstr.resultStr += str + "\n";
                 str.clear();
