@@ -184,7 +184,12 @@ TEST_F(TestBookMarkWidget, BUG10332_onAddBookMarkClickedPersistsBookmark)
     m_tester->onAddBookMarkClicked();
 
     // 书签进入 DocSheet 持久化集合（保存链路的数据源）
-    EXPECT_TRUE(m_tester->m_sheet->m_bookmarks.contains(page));
+    const bool persisted = m_tester->m_sheet->m_bookmarks.contains(page);
+    // 立即移除, 避免真实写入磁盘的书签污染同进程内的后续用例
+    m_tester->m_sheet->setBookMark(page, 0);
+
+    EXPECT_TRUE(persisted);
+    EXPECT_FALSE(m_tester->m_sheet->m_bookmarks.contains(page));
 }
 
 TEST_F(TestBookMarkWidget, BUG10332_onAddBookMarkClickedNullSheetGuard)
@@ -217,19 +222,30 @@ TEST_F(TestBookMarkWidget, BUG12219_deleteItemByKeyInvalidIndexGuard)
 
 TEST_F(TestBookMarkWidget, BUG12219_deleteItemByKeyValidIndexRemovesBookmark)
 {
+    // fixture 中 DocSheet 未打开文档, pageCount() 为 0 会触发 setBookMark 索引守卫;
+    // 桩定页数, 使书签写入链路可验证, 且不依赖外部残留状态。
+    Stub pc;
+    pc.set(ADDR(DocSheet, pageCount), pageCount_bug10332_stub);
+
     int cur = m_tester->m_sheet->currentIndex();
     m_tester->m_sheet->setBookMark(cur, 1);
     EXPECT_TRUE(m_tester->m_sheet->m_bookmarks.contains(cur));
 
-    g_bug12219_setBookMark_called.clear();
-    Stub s;
-    s.set(ADDR(DocSheet, setBookMark), setBookMark_bug12219_stub);
+    {
+        g_bug12219_setBookMark_called.clear();
+        Stub s;
+        s.set(ADDR(DocSheet, setBookMark), setBookMark_bug12219_stub);
 
-    // 通过 handleBookMark 先向列表模型插入书签项, 再选中后 Del 删除
-    m_tester->handleBookMark(cur, 1);
-    EXPECT_TRUE(m_tester->m_pImageListView->count() == 1);
-    m_tester->m_pImageListView->selectionModel()->setCurrentIndex(
-        m_tester->m_pImageListView->model()->index(0, 0), QItemSelectionModel::Select);
-    m_tester->deleteItemByKey();
-    EXPECT_TRUE(g_bug12219_setBookMark_called == "called");
+        // 通过 handleBookMark 先向列表模型插入书签项, 再选中后 Del 删除
+        m_tester->handleBookMark(cur, 1);
+        EXPECT_TRUE(m_tester->m_pImageListView->count() == 1);
+        m_tester->m_pImageListView->selectionModel()->setCurrentIndex(
+            m_tester->m_pImageListView->model()->index(0, 0), QItemSelectionModel::Select);
+        m_tester->deleteItemByKey();
+        EXPECT_TRUE(g_bug12219_setBookMark_called == "called");
+    }
+
+    // 清理真实写入磁盘的书签, 避免污染同进程内后续用例
+    m_tester->m_sheet->setBookMark(cur, 0);
+    EXPECT_FALSE(m_tester->m_sheet->m_bookmarks.contains(cur));
 }

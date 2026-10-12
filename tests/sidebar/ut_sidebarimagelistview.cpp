@@ -75,8 +75,10 @@ TEST_F(TestSideBarImageListView, testhandleOpenSuccess)
     EXPECT_TRUE(m_tester->m_imageModel->m_pagelst.count() == 0);
 
     m_tester->m_listType = E_SideBar::SIDE_BOOKMARK;
+    const int bookmarkCount = m_tester->m_docSheet->getBookMarkList().count();
     m_tester->handleOpenSuccess();
-    EXPECT_TRUE(m_tester->m_imageModel->m_pagelst.count() == 0);
+    // 不假设书签必须为 0, 只校验加载数量与 DocSheet 记录一致
+    EXPECT_TRUE(m_tester->m_imageModel->m_pagelst.count() == bookmarkCount);
 
     m_tester->m_listType = E_SideBar::SIDE_NOTE;
     m_tester->handleOpenSuccess();
