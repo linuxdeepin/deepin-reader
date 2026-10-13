@@ -32,9 +32,7 @@ You can run, close or create a shortcut of Document Viewer as follows.
 
 ### View Shortcut Keys
 
-On Document Viewer interface, press  **Ctrl + Shift+ ?** to view all shortcut keys quickly, which helps you to use them skillfully and improves your working efficiency. 
-
-![1|hotkey](fig/hotkey.png)
+On Document Viewer interface, press  **Ctrl + Shift+ ?** to view all shortcut keys quickly, which helps you to use them skillfully and improves your working efficiency.
 
 
 ## Basic functions
@@ -44,13 +42,24 @@ Document Viewer realizes basic document management such as opening files, saving
 
 ### Open files
 
-Document Viewer supports DOCX, PDF, DJVU, and XPS formats. You can open a file by: 
+Document Viewer supports PDF, DJVU, DOCX, XPS and OFD formats. You can open a file by: 
 
 - Dragging it directly into the interface or onto the icon. 
 - Right-clicking it and selecting **Open with** > **Document Viewer**. After setting Document Viewer as the default program, you can open it by double-clicking it directly.
-
 - Clicking **Select File** and selecting a file on Document Viewer interface.
-- On Document Viewer interface, pressing **Ctrl+O** and selecting the file you want to open. 
+- On Document Viewer interface, pressing **Ctrl + O** and selecting the file you want to open. 
+
+> ![notes](../common/notes.svg)Notes: 
+> - OFD (Open Fixed-layout Document) format supports basic viewing, zooming, page turning, and document info. Annotations, highlights, search, and printing are not supported currently.
+> - XPS format supports viewing, text selection, search, page turning, and printing.
+
+### Restore reading position
+
+Document Viewer automatically remembers your reading state, including the last viewed page, scroll position, zoom ratio, display mode (single/dual page), rotation angle, sidebar status, and tab order.
+
+- When you reopen a previously viewed document, it automatically restores to your last reading position and interface state.
+- Once the document is loaded, a prompt bar appears at the top of the window: "Restored to last reading position, click to jump to first page". Click it to return to the first page quickly.
+- When a document is renamed or moved, Document Viewer will attempt to match and restore the reading progress based on file characteristics. 
 
 ### Save documents
 
@@ -63,12 +72,27 @@ To save the document that has been edited and modified, you can
 
 To print you have to connect and configure a printer. 
 
-1. Open a document in Document Viewer, right-click and select **Print**, or press **Ctrl  + P** to open the preview page.
+#### Regular printing
+
+1. Open a document in Document Viewer, right-click and select **Print**, or press **Ctrl + P** to open the preview page.
 2. In this previewing interface, you can preview and set the printing page. 
 3. In this previewing interface, click **Advanced** to set the page size, print method and other parameters. 
-4. Click **Print**  then the document will be sent to the printer for printing. 
+4. Click **Print** then the document will be sent to the printer for printing. 
 
 ![preview](fig/printer.png)
+
+#### Batch print
+
+You can print multiple documents from File Manager in one click without opening them one by one:
+
+1. In File Manager, select one or more documents to print (supports PDF, DJVU, DOCX, XPS formats).
+2. Right-click and select **Batch print**.
+3. Document Viewer will process and submit them directly to the system print queue (CUPS) using default parameters, without opening the application window or print preview.
+
+> ![notes](../common/notes.svg)Notes: 
+> - **Default print parameters**: System default printer, all pages, A4 paper, 1 copy, single-sided, actual size, original document orientation, color mode (automatically black-and-white if the printer only supports monochrome).
+> - **Independent task processing**: Each document corresponds to an independent print task. Multiple batches are queued in order without interrupting each other.
+> - **System notification feedback**: A system notification banner pops up on the right side of the screen to indicate progress. If conversion takes longer (over 1 minute), additional progress notifications will be sent. Once submitted, you can check task status in system **Print Manager**.
 
 ### Manage tabs
 
@@ -133,8 +157,7 @@ On Document Viewer interface, open a file.
 
    > ![notes](../common/notes.svg)Notes: 
    > + You can move the note icon in the current page.
-   > + You can not add annotations to DJVU files.
-   > + You can not add annotations to XPS files.
+   > + You can not add annotations to DJVU and OFD files.
 
 ## Common operations
 
@@ -158,7 +181,7 @@ This function is only applicable for the current tab.
 
 7. Clear up words in the searching box to clear up all results. 
 
-> ![notes](../common/notes.svg)Notes: You can not search in DJVU files.
+> ![notes](../common/notes.svg)Notes: You can not search in DJVU and OFD files.
 
 
 
@@ -221,8 +244,7 @@ In the scaling drop-down box of tool bar, you can:
 > ![notes](../common/notes.svg)Notes: 
 >
 > - Document Viewer memorizes the color choice of the user, which will be the default color used when the user highlights any text the next time.  
-> - You can not highlight in DJVU files.
-> - You can not highlight in XPS files.
+> - You can not highlight in DJVU and OFD files.
 
 
 
@@ -239,7 +261,7 @@ In the scaling drop-down box of tool bar, you can:
 
 ## Main Menu
 
-In the main menu, you can create new window and new tabs, [save documents](#Save documents), [search](#Search), [print documents](#Print documents) switch themes, view help to know more about Document Viewer. 
+In the main menu, you can create new window and new tabs, [save documents](#Save documents), [search](#Search), [print documents](#Print documents), enable [eye protection mode](#Eye protection mode), switch themes, view help to know more about Document Viewer. 
 
 ### Display in file manager
 
@@ -252,6 +274,19 @@ In the main menu, you can create new window and new tabs, [save documents](#Save
 2. Click![icon_menu](../common/icon_menu.svg) >  **Magnifier**.
 3. Move the cursor to the area you want to view to magnify. 
 4. Press **Esc** or right-click to cancel magnifying. 
+
+### Eye protection mode
+
+When reading for a long time, you can enable eye protection mode to reduce visual glare and eye strain.
+
+1. On Document Viewer interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Eye protection mode**, and choose a preset from the submenu:
+   - **Classic eye protection**: Warm beige background, simulating paper texture and reducing blue light, ideal for prolonged reading.
+   - **Green eye protection**: Light green background, easing visual fatigue, suitable for daily office reading.
+   - **Night eye protection**: Dark background with light text, reducing screen contrast glare in dim environments.
+
+> ![notes](../common/notes.svg)Notes: 
+> - Eye protection mode only adjusts the background rendering of the reading view area. It does not alter the document's original content or affect print output. 
 
 ### Tools
 
