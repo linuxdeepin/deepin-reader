@@ -109,7 +109,7 @@ if(NOT QT_VERSION_MAJOR MATCHES 6)
 endif()
 
 if (NOT APP_VERSION)
-    set(APP_VERSION "1.0.0")
+    set(APP_VERSION "${VERSION}")
 endif()
 
 # 定义安装前缀

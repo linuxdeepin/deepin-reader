@@ -73,6 +73,7 @@ build: |
   # pkg-config 探测的第三方 -dev 库由 buildext.apt.build_depends 安装到 /usr；
   # 显式补充 PKG_CONFIG_PATH，确保 /usr 与 $PREFIX 下的 .pc 无论环境默认值如何均可见。
   export PKG_CONFIG_PATH="${PREFIX}/lib/${TRIPLET}/pkgconfig:/usr/lib/${TRIPLET}/pkgconfig:/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+  VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
   rm -rf build && mkdir -p build && cd build
   cmake .. \
     -DCMAKE_BUILD_TYPE=Release \
@@ -81,7 +82,8 @@ build: |
     -DCMAKE_PREFIX_PATH="${PREFIX};/runtime" \
     -DROFD_ROOT=${PREFIX} \
     -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}:/runtime/lib/${TRIPLET}:/runtime/lib" \
-    -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}:/runtime/lib/${TRIPLET}:/runtime/lib"
+    -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-rpath-link,${PREFIX}/lib/${TRIPLET}:/runtime/lib/${TRIPLET}:/runtime/lib" \
+    -DVERSION=${VERSION}
   make -j$(nproc)
   make install > ../install.log 2>&1
 
