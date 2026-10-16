@@ -77,7 +77,7 @@ target_include_directories(batchprint-convert PUBLIC
 target_compile_definitions(batchprint-convert PRIVATE
     INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}"
     INSTALL_LIBDIR="${CMAKE_INSTALL_LIBDIR}"
-    APP_VERSION="1.0.0"
+    APP_VERSION="${VERSION}"
 )
 
 target_link_libraries(batchprint-convert PUBLIC
