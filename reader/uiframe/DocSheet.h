@@ -12,6 +12,7 @@
 #include <QSet>
 #include <QReadWriteLock>
 #include <QSharedPointer>
+#include <QPointer>
 #include <QThread>
 #include <QSize>
 #include <QRectF>
@@ -57,6 +58,7 @@ struct SheetOperation {
 
 DWIDGET_BEGIN_NAMESPACE
 class DPrinter;
+class DFloatingMessage;
 DWIDGET_END_NAMESPACE
 
 class QTemporaryDir;
@@ -953,6 +955,40 @@ private slots:
 
 private:
     QSize calculatePrintTargetSize(int pageIndex, const QPrinter &printer, const QRectF &pageRect) const;
+
+    /**
+     * @brief showPrintPreviewWithPath
+     * 创建并打开打印预览对话框，printFromPath 非空时按文件路径打印
+     * @param printFromPath 交给打印系统的文件路径(空表示走 paintRequested 光栅打印)
+     */
+    void showPrintPreviewWithPath(const QString &printFromPath);
+
+    /**
+     * @brief startPdfPrintConversion
+     * 异步执行 pdftocairo 把 PDF 转换为嵌入矢量 PDF(不阻塞 UI)
+     */
+    void startPdfPrintConversion();
+
+    /**
+     * @brief finishPdfPrintConversion
+     * 转化结束统一收口：关闭等待提示，成功用转化文件开预览，失败回退原始 PDF 继续打印
+     * @param success 是否转化成功且输出合法
+     */
+    void finishPdfPrintConversion(bool success);
+
+    /**
+     * @brief showPrintWaitTip / closePrintWaitTip
+     * 打印处理期间常驻的轻量提示(复用 DFloatingMessage Tooltip 样式,隐藏关闭按钮)
+     */
+    void showPrintWaitTip();
+    void closePrintWaitTip();
+
+    /**
+     * @brief printTipParent
+     * 获取打印相关轻量提示的承载窗口(主窗口优先)
+     */
+    QWidget *printTipParent() const;
+
     /**
      * @brief setAlive
      * 设置当前sheet是否存活
@@ -1015,6 +1051,16 @@ private:
     bool m_needsRestoreTip = false;
     // 缓存的内容哈希，避免自动保存时反复读盘计算
     QString m_cachedContentHash;
+
+    // 打印转化等待提示（常驻轻量 Tooltip，转化完成/失败后关闭）
+    QPointer<Dtk::Widget::DFloatingMessage> m_printWaitTip;
+    // 后台 pdftocairo 转化进程与超时定时器（懒创建并复用，父对象为本 sheet）
+    QProcess *m_printConvertProcess = nullptr;
+    QTimer   *m_printConvertTimer = nullptr;
+    // 转化输出文件路径（每次打印重新生成，随会话临时目录清理）
+    QString   m_printConvertedPath;
+    // 是否有 PDF 转化正在进行（重入保护）
+    bool      m_printConvertInProgress = false;
 
 public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址

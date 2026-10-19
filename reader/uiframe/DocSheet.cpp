@@ -24,6 +24,9 @@
 #include <DSpinner>
 #include <DPrintPreviewDialog>
 #include <DWidgetUtil>
+#include <DFloatingMessage>
+#include <DMessageManager>
+#include <DDialogCloseButton>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -40,6 +43,8 @@
 #include <QPrinter>
 #include <QtMath>
 #include <QGraphicsDropShadowEffect>
+#include <QIcon>
+#include <QTimer>
 
 #include <signal.h>
 #include <sys/types.h>
@@ -52,6 +57,24 @@ namespace {
 constexpr double kXpsLogicalDpi = 96.0;
 constexpr int kFallbackPrintDpi = 300;
 constexpr int kMaxPrintPixelsPerSide = 10000;
+
+// pdftocairo 转化超时时间：大文件耗时较长，保留 5 分钟预算
+constexpr int kPdfPrintConvertTimeoutMs = 5 * 60 * 1000;
+
+// 校验 pdftocairo 输出 PDF 是否结构完整：pdftocairo 偶发 exit code 为 0
+// 但输出缺少 xref/trailer/%%EOF（如 Typora/Electron 生成的 PDF），
+// 这种文件交给 CUPS 会导致 pdftopdf 报 "unable to find trailer dictionary"
+bool isConvertedPdfValid(const QString &path)
+{
+    QFile outFile(path);
+    if (!outFile.open(QIODevice::ReadOnly))
+        return false;
+
+    outFile.seek(qMax(0LL, outFile.size() - 1024));
+    const QByteArray tail = outFile.readAll();
+    outFile.close();
+    return tail.contains("startxref") && tail.contains("%%EOF");
+}
 }
 
 QReadWriteLock DocSheet::g_lock;
@@ -152,6 +175,14 @@ DocSheet::~DocSheet()
     }
 
     setAlive(false);
+
+    // 关闭打印转化等待提示(其父在主窗口，不会随本 sheet 一起销毁)
+    closePrintWaitTip();
+    m_printConvertInProgress = false;
+    if (m_printConvertTimer)
+        m_printConvertTimer->stop();
+    if (m_printConvertProcess && m_printConvertProcess->state() != QProcess::NotRunning)
+        m_printConvertProcess->kill();
 
     // 排空引用本 sheet 的所有待处理渲染任务(仅优化,避免为将死文档做无用渲染);
     // 正确性由任务中捕获的renderer共享引用与uuid校验保证,不再依赖析构与线程间的时序
@@ -1995,49 +2026,163 @@ void DocSheet::onPopPrintDialog()
         return;
     }
 
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
+    // PDF 需要额外处理：用 pdftocairo 转换为嵌入矢量 PDF，解决打印乱码/模糊。
+    // 注意：不能按 Linearized 判定跳过，否则会回归 bug-348017(复现件为非线化+字体未嵌入)。
+    if (Dr::PDF == fileType()) {
+        if (m_printConvertInProgress) {
+            qCWarning(appLog) << "Print conversion already in progress, ignore repeated request";
+            return;
+        }
+
+        m_printConvertedPath = convertedFileDir() + "/pdftocairoPrint.pdf";
+
+        // 每次打印都重新转化，保证与当前文件内容一致
+        // (文档可能在会话内被保存/加注解改写，复用会产生陈旧内容)
+        m_printConvertInProgress = true;
+        showPrintWaitTip();
+        // 延迟到下一轮事件循环启动耗时处理，保证提示先绘制、在处理开始前可见
+        QTimer::singleShot(0, this, [this]() { startPdfPrintConversion(); });
+        return;
+    }
+
+    if (Dr::DOCX == fileType()) {
+        // DOCX 打开时已生成 temp.pdf，直接按文件路径打印
+        showPrintPreviewWithPath(openedFilePath());
+        return;
+    }
+
+    // 其它类型无需额外处理，保持原流程
+    showPrintPreviewWithPath(QString());
+#else
+    // 旧版 DTK 走图片打印，无额外处理
+    showPrintPreviewWithPath(QString());
+#endif
+    qCDebug(appLog) << "onPopPrintDialog end";
+}
+
+void DocSheet::showPrintPreviewWithPath(const QString &printFromPath)
+{
     DPrintPreviewDialog *preview = new DPrintPreviewDialog(this);
     preview->setAttribute(Qt::WA_DeleteOnClose);
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(5,4,10,0))
-    //文件打印
     preview->setAsynPreview(pageCount());
     preview->setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
-        preview->setPrintFromPath(openedFilePath());
-    }
-
-    //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
-    if (Dr::PDF == fileType()) {
-        QString pdfPath = filePath();
-        // 使用 pdftocairo 转换为嵌入矢量pdf，解决打印乱码和模糊问题
-        QString tmpPdfPath = convertedFileDir() + "/pdftocairoPrint.pdf";
-        QProcess process;
-        process.start("pdftocairo", QStringList() << "-pdf" << pdfPath << tmpPdfPath);
-        bool converted = process.waitForFinished(5 * 60 * 1000) && process.exitCode() == 0;
-        if (converted) {
-            // pdftocairo 有时 exit code 为 0 但输出 PDF 结构不完整，验证关键标记是否存在
-            QFile outFile(tmpPdfPath);
-            if (outFile.open(QIODevice::ReadOnly)) {
-                outFile.seek(qMax(0LL, outFile.size() - 1024));
-                const QByteArray tail = outFile.readAll();
-                outFile.close();
-                if (!tail.contains("startxref") || !tail.contains("%%EOF"))
-                    converted = false;
-            } else {
-                converted = false;
-            }
-        }
-        if (!converted)
-            qCWarning(appLog) << "pdftocairo conversion failed or produced invalid PDF, using original";
-        preview->setPrintFromPath(converted ? tmpPdfPath : pdfPath);
-    }
-    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
+    if (!printFromPath.isEmpty())
+        preview->setPrintFromPath(printFromPath);
+    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
+            this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
 #else
-    //图片打印
-    connect(preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *>::of(&DocSheet::onPrintRequested));
+    Q_UNUSED(printFromPath);
+    connect(preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
+            this, QOverload<DPrinter *>::of(&DocSheet::onPrintRequested));
 #endif
     preview->open();
-    qCDebug(appLog) << "onPopPrintDialog end";
+}
+
+void DocSheet::startPdfPrintConversion()
+{
+    if (!m_printConvertInProgress)
+        return;
+
+    if (!m_printConvertProcess) {
+        m_printConvertProcess = new QProcess(this);
+        connect(m_printConvertProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
+            if (m_printConvertTimer)
+                m_printConvertTimer->stop();
+            const bool success = (exitStatus == QProcess::NormalExit)
+                                 && exitCode == 0
+                                 && isConvertedPdfValid(m_printConvertedPath);
+            finishPdfPrintConversion(success);
+        });
+        connect(m_printConvertProcess, &QProcess::errorOccurred, this, [this](QProcess::ProcessError error) {
+            if (error != QProcess::FailedToStart)
+                return;
+            qCWarning(appLog) << "pdftocairo failed to start:" << m_printConvertProcess->errorString();
+            if (m_printConvertTimer)
+                m_printConvertTimer->stop();
+            finishPdfPrintConversion(false);
+        });
+    }
+
+    if (!m_printConvertTimer) {
+        m_printConvertTimer = new QTimer(this);
+        m_printConvertTimer->setSingleShot(true);
+        connect(m_printConvertTimer, &QTimer::timeout, this, [this]() {
+            qCWarning(appLog) << "pdftocairo conversion timeout, fall back to original PDF";
+            if (m_printConvertProcess && m_printConvertProcess->state() != QProcess::NotRunning)
+                m_printConvertProcess->kill();
+            finishPdfPrintConversion(false);
+        });
+    }
+
+    qCDebug(appLog) << "start pdftocairo conversion:" << filePath() << "->" << m_printConvertedPath;
+    m_printConvertTimer->start(kPdfPrintConvertTimeoutMs);
+    m_printConvertProcess->start("pdftocairo", QStringList() << "-pdf" << filePath() << m_printConvertedPath);
+}
+
+void DocSheet::finishPdfPrintConversion(bool success)
+{
+    if (!m_printConvertInProgress)
+        return;
+
+    m_printConvertInProgress = false;
+    closePrintWaitTip();
+
+    if (success) {
+        qCDebug(appLog) << "pdftocairo conversion succeeded:" << m_printConvertedPath;
+        showPrintPreviewWithPath(m_printConvertedPath);
+    } else {
+        // 降级：pdftocairo 失败或不存在时回退原始 PDF，保证打印仍可用(与改动前行为一致)
+        qCWarning(appLog) << "pdftocairo conversion failed, fall back to original PDF for printing";
+        showPrintPreviewWithPath(filePath());
+    }
+}
+
+QWidget *DocSheet::printTipParent() const
+{
+    QWidget *parent = nullptr;
+    for (QWidget *pwgt : qApp->topLevelWidgets()) {
+        if (QMainWindow *mwd = dynamic_cast<QMainWindow *>(pwgt))
+            parent = mwd;
+    }
+    if (!parent)
+        parent = qApp->activeWindow();
+    if (!parent)
+        parent = const_cast<DocSheet *>(this);
+    return parent;
+}
+
+void DocSheet::showPrintWaitTip()
+{
+    if (m_printWaitTip)
+        return;
+
+    QWidget *parent = printTipParent();
+    if (!parent)
+        return;
+
+    DFloatingMessage *tip = new DFloatingMessage(DFloatingMessage::ResidentType);
+    tip->setAttribute(Qt::WA_DeleteOnClose);
+    tip->setIcon(QIcon::fromTheme(QString("dr_") + "ok"));
+    tip->setMessage(tr("Preparing the content for printing. This may take a while. Please wait…"));
+    // 等待期间不允许用户提前关闭提示(同时满足"不提供取消操作")
+    if (DDialogCloseButton *closeBtn = tip->findChild<DDialogCloseButton *>())
+        closeBtn->hide();
+
+    m_printWaitTip = tip;
+    DMessageManager::instance()->sendMessage(parent, tip);
+    qCDebug(appLog) << "print wait tip shown";
+}
+
+void DocSheet::closePrintWaitTip()
+{
+    if (m_printWaitTip) {
+        m_printWaitTip->close();
+        m_printWaitTip = nullptr;
+    }
 }
 
 void DocSheet::onPopInfoDialog()
