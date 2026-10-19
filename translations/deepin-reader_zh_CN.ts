@@ -336,6 +336,11 @@
         <source>The annotation has been removed</source>
         <translation>已删除注释</translation>
     </message>
+    <message>
+        <location filename="../reader/uiframe/DocSheet.cpp" line="2176" />
+        <source>Preparing the content for printing. This may take a while. Please wait…</source>
+        <translation>正在准备打印内容，可能需要一些时间，请稍候…</translation>
+    </message>
 </context>
 <context>
     <name>EncryptionPage</name>
