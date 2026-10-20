@@ -1,3 +1,20 @@
+deepin-reader (6.6.3) unstable; urgency=medium
+
+  * [skip CI] Translate deepin-reader.ts in ru
+  * fix: replace mechanical-safe Qt6 deprecated API usages
+  * docs: declare DPdfDoc::page ownership contract in headers
+  * fix: replace function-static pinch state with member variables
+  * docs(manual): update user manual for OFD support and new features
+  * test(sidebar): isolate bookmark UT cases from shared test data
+  * test: add tests for deepin-reader batch 2 (20 bugs, 38 cases)
+  * fix: correct batch print context menu text
+  * fix: walk the parent chain safely in CentralDocPage
+  * fix: clear *pprocess when file copy fails in DocumentFactory::getDocument
+  * chore: Update version to 6.6.2
+  * test: add tests for deepin-reader batch 1 (7/7 classes)
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Tue, 20 Oct 2026 16:59:41 +0800
+
 deepin-reader (6.6.2) unstable; urgency=medium
 
   * chore: Update version to 6.6.2
