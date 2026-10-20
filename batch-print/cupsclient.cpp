@@ -10,6 +10,8 @@
 #include <QUrl>
 #include <QDebug>
 
+#include "ddlog.h"
+
 #include <cstdlib>
 
 typedef int (*cupsGetDests_fn)(cups_dest_t **dests);
@@ -55,13 +57,13 @@ bool CupsClient::init()
 {
     m_lib.setFileName(QStringLiteral("cups"));
     if (!m_lib.load()) {
-        qWarning() << "Failed to dlopen libcups:" << m_lib.errorString();
+        qCWarning(batchprintLog) << "Failed to dlopen libcups:" << m_lib.errorString();
         return false;
     }
 
     m_loaded = loadSymbols();
     if (!m_loaded) {
-        qWarning() << "Failed to resolve CUPS symbols";
+        qCWarning(batchprintLog) << "Failed to resolve CUPS symbols";
         return false;
     }
 
@@ -76,7 +78,7 @@ bool CupsClient::checkEnvironment()
     cups_dest_t *dests = nullptr;
     int numDest = ((cupsGetDests_fn)m_cupsGetDests)(&dests);
     if (numDest <= 0) {
-        qWarning() << "No printers found";
+        qCWarning(batchprintLog) << "No printers found";
         return false;
     }
 

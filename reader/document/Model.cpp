@@ -112,7 +112,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
                 QFile::remove(localFilePath);
 
             if (!QFile::copy(filePath, localFilePath)) {
-                qCritical() << "Failed to copy network DJVU file from" << filePath << "to" << localFilePath;
+                qCCritical(appLog) << "Failed to copy network DJVU file from" << filePath << "to" << localFilePath;
                 error = deepin_reader::Document::FileError;
             } else {
                 qCInfo(appLog) << "Copied network DJVU to local:" << localFilePath;
@@ -134,7 +134,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
     } else if (Dr::DOCX == fileType) {
         qCDebug(appLog) << "Starting DOCX document conversion process";
         if (nullptr == pprocess) {
-            qCritical() << "Invalid process pointer for DOCX conversion";
+            qCCritical(appLog) << "Invalid process pointer for DOCX conversion";
             error = deepin_reader::Document::ConvertFailed;
             return nullptr;
         }
@@ -158,7 +158,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         QFile file(filePath);
         if (!file.copy(targetDoc)) {
-            qCritical() << "Failed to copy file from" << filePath << "to" << targetDoc;
+            qCCritical(appLog) << "Failed to copy file from" << filePath << "to" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
@@ -184,19 +184,19 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         qCDebug(appLog) << "执行命令: unzip" << unzipArgs;
         decompressor.start("unzip", unzipArgs);
         if (!decompressor.waitForStarted()) {
-            qCritical() << "Failed to start unzip process for file:" << targetDoc;
+            qCCritical(appLog) << "Failed to start unzip process for file:" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
         if (!decompressor.waitForFinished(unzipTimeout)) {
-            qCritical() << "Unzip process failed for file:" << targetDoc;
+            qCCritical(appLog) << "Unzip process failed for file:" << targetDoc;
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
         if (!QDir(convertedFileDir + "/word").exists()) {
-            qCritical() << "Unzip failed! Directory not found:" << (convertedFileDir + "/word");
+            qCCritical(appLog) << "Unzip failed! Directory not found:" << (convertedFileDir + "/word");
             error = deepin_reader::Document::ConvertFailed;
             if (!(QProcess::CrashExit == decompressor.exitStatus() && 9 == decompressor.exitCode())) {
                 *pprocess = nullptr;
@@ -225,20 +225,20 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         qCDebug(appLog) << "执行命令: pandoc" << pandocArgs;
         converter.start("pandoc", pandocArgs);
         if (!converter.waitForStarted()) {
-            qCritical() << "Failed to start pandoc conversion process";
+            qCCritical(appLog) << "Failed to start pandoc conversion process";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
         if (!converter.waitForFinished(pandocTimeout)) {
-            qCritical() << "Pandoc conversion process failed";
+            qCCritical(appLog) << "Pandoc conversion process failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
         QFile tmpHtmlFile(tmpHtmlFilePath);
         if (!tmpHtmlFile.exists()) {
-            qCritical() << "Pandoc conversion failed! Output file not found:" << tmpHtmlFilePath;
+            qCCritical(appLog) << "Pandoc conversion failed! Output file not found:" << tmpHtmlFilePath;
             error = deepin_reader::Document::ConvertFailed;
             // 转换过程中关闭应用，docsheet被释放，对应的*pprocess已不存在
             if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
@@ -259,13 +259,13 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
         qCDebug(appLog) << "执行命令:" << getHtmlToPdfPath() << htmltopdfArgs;
         converter2.start(getHtmlToPdfPath(), htmltopdfArgs);
         if (!converter2.waitForStarted()) {
-            qCritical() << "Failed to start htmltopdf conversion process";
+            qCCritical(appLog) << "Failed to start htmltopdf conversion process";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
         }
         if (!converter2.waitForFinished(htmlToPdfTimeout)) {
-            qCritical() << "Htmltopdf conversion process failed";
+            qCCritical(appLog) << "Htmltopdf conversion process failed";
             error = deepin_reader::Document::ConvertFailed;
             *pprocess = nullptr;
             return nullptr;
@@ -273,7 +273,7 @@ deepin_reader::Document *deepin_reader::DocumentFactory::getDocument(const int &
 
         QFile realFile(realFilePath);
         if (!realFile.exists()) {
-            qCritical() << "Htmltopdf conversion failed! Output file not found:" << realFilePath;
+            qCCritical(appLog) << "Htmltopdf conversion failed! Output file not found:" << realFilePath;
             error = deepin_reader::Document::ConvertFailed;
             if (!(QProcess::CrashExit == converter.exitStatus() && 9 == converter.exitCode())) {
                 *pprocess = nullptr;

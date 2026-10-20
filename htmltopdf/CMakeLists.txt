@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 UnionTech Software Technology Co., Ltd.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # 定义htmltopdf可执行文件
 add_executable(htmltopdf
     main.cpp
@@ -13,6 +17,9 @@ set_target_properties(htmltopdf PROPERTIES
 )
 
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS WebEngineWidgets)
+
+# 引用 reader/ddlog.h 的日志分类定义
+target_include_directories(htmltopdf PRIVATE ${CMAKE_SOURCE_DIR}/reader)
 
 # 链接Qt模块
 target_link_libraries(htmltopdf PRIVATE

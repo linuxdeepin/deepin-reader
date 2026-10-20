@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -524,7 +524,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     ddjvu_context_t *context = ddjvu_context_create("deepin_reader");
 
     if (context == nullptr) {
-        qCritical() << "Failed to create DjVu context";
+        qCCritical(appLog) << "Failed to create DjVu context";
         error = Document::FileError;
         return nullptr;
     }
@@ -536,7 +536,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
 #endif // DDJVUAPI_VERSION
 
     if (document == nullptr) {
-        qCritical() << "Failed to create DjVu document from file:" << filePath;
+        qCCritical(appLog) << "Failed to create DjVu document from file:" << filePath;
         ddjvu_context_release(context);
 
         error = Document::FileError;
@@ -546,7 +546,7 @@ deepin_reader::DjVuDocument *DjVuDocument::loadDocument(const QString &filePath,
     waitForMessageTag(context, DDJVU_DOCINFO);
 
     if (ddjvu_document_decoding_error(document)) {
-        qCritical() << "Document decoding error occurred";
+        qCCritical(appLog) << "Document decoding error occurred";
         ddjvu_document_release(document);
         ddjvu_context_release(context);
 

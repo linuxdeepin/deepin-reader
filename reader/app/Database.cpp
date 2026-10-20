@@ -1195,7 +1195,7 @@ Database::Database(QObject *parent) : QObject(parent)
     m_database.setDatabaseName(QDir(path).filePath("user.db"));
     qCDebug(appLog) << "Opening database:" << m_database.databaseName();
     if (!m_database.open()) {
-        qCritical() << "Failed to open database:" << m_database.lastError();
+        qCCritical(appLog) << "Failed to open database:" << m_database.lastError();
     }
 
     if (m_database.isOpen()) {

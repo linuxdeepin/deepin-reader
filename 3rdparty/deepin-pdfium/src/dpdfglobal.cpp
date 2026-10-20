@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -6,9 +6,12 @@
 #include <QString>
 #include <QDebug>
 #include "dpdfglobal.h"
+#include "dpdflog.h"
 #include "public/fpdfview.h"
 
 #include <chardet.h>
+
+Q_LOGGING_CATEGORY(dpfLog, "org.deepin.reader.pdfium")
 
 static bool initialized = false;
 
@@ -60,11 +63,11 @@ DPdfMutexLocker::DPdfMutexLocker(const QString &tmpLog): QMutexLocker<QRecursive
 #endif
 {
     m_log = tmpLog;
-    qInfo() << m_log + " begin ";
+    qCInfo(dpfLog) << m_log + " begin ";
     m_timer.start();
 }
 
 DPdfMutexLocker::~DPdfMutexLocker()
 {
-    qInfo() << m_log + " end time = " << m_timer.elapsed();
+    qCInfo(dpfLog) << m_log + " end time = " << m_timer.elapsed();
 }
