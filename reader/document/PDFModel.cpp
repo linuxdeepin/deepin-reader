@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 -2026 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -397,7 +397,7 @@ Annotation *PDFPage::addIconAnnotation(const QRectF &rect, const QString &text)
     qCInfo(appLog) << "Adding icon annotation at rect:" << rect << "with text:" << text;
 
     if (nullptr == m_page) {
-        qCritical() << "Attempt to add icon annotation to null page";
+        qCCritical(appLog) << "Attempt to add icon annotation to null page";
         return nullptr;
     }
 
@@ -409,7 +409,7 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
     qCInfo(appLog) << "Moving icon annotation to rect:" << rect;
 
     if (nullptr == m_page || nullptr == annot) {
-        qCritical() << "Attempt to move icon annotation with null page or annotation";
+        qCCritical(appLog) << "Attempt to move icon annotation with null page or annotation";
         return nullptr;
     }
 
@@ -586,7 +586,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
             error = Document::WrongPassword;
         }
     } else {
-        qCritical() << "Failed to load PDF document, error code:" << document->status();
+        qCCritical(appLog) << "Failed to load PDF document, error code:" << document->status();
         error = Document::FileError;
     }
 

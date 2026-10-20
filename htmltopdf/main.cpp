@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,26 +10,28 @@
 #include <QProcessEnvironment>
 #include <QDebug>
 
+#include "ddlog.h"
+
 bool isWayland();
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Starting html2pdf converter application";
+    qCDebug(htmltopdfLog) << "Starting html2pdf converter application";
 
     QApplication app(argc, argv);
     QApplication::setApplicationName("html2pdf");
     QApplication::setApplicationVersion("v1.0");
 
     bool wayland = isWayland();
-    qDebug() << "Wayland environment detected:" << wayland;
+    qCDebug(htmltopdfLog) << "Wayland environment detected:" << wayland;
     if (wayland) {
-        qDebug() << "Wayland detected, disabling GPU";
+        qCDebug(htmltopdfLog) << "Wayland detected, disabling GPU";
         // 解决klu panguV平台使用QWebEnginePage崩溃的问题，不支持gpu渲染
         qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
     }
     // 解决__sw_64__平台使用QWebEnginePage崩溃的问题
 #ifdef __sw_64__
-    qDebug() << "Running on __sw_64__ platform, --js-flags=--jitless";
+    qCDebug(htmltopdfLog) << "Running on __sw_64__ platform, --js-flags=--jitless";
     qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--js-flags=--jitless");
 #endif
 
@@ -50,28 +52,28 @@ int main(int argc, char *argv[])
 
     const QStringList requiredArguments = parser.positionalArguments();
     if (requiredArguments.size() != 2) {
-        qCritical() << "Invalid number of arguments, expected 2 but got" << requiredArguments.size();
+        qCCritical(htmltopdfLog) << "Invalid number of arguments, expected 2 but got" << requiredArguments.size();
         parser.showHelp(1);
     }
-    qInfo() << "Input file:" << requiredArguments.at(0) << "Output PDF:" << requiredArguments.at(1);
+    qCInfo(htmltopdfLog) << "Input file:" << requiredArguments.at(0) << "Output PDF:" << requiredArguments.at(1);
 
-    qInfo() << "Creating PDF converter instance";
+    qCInfo(htmltopdfLog) << "Creating PDF converter instance";
     HtmltoPdfConverter converter(requiredArguments.at(0), requiredArguments.at(1));
     return converter.run();
 }
 
 bool isWayland()
 {
-    qDebug() << "Checking display environment";
+    qCDebug(htmltopdfLog) << "Checking display environment";
     auto e = QProcessEnvironment::systemEnvironment();
     QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
     QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
-        qDebug() << "Wayland session detected";
+        qCDebug(htmltopdfLog) << "Wayland session detected";
         return true;
     } else {
-        qDebug() << "X11 session detected";
+        qCDebug(htmltopdfLog) << "X11 session detected";
         return false;
     }
 }

@@ -25,6 +25,8 @@ add_library(batchprint-core STATIC
 
 target_include_directories(batchprint-core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    # 引用 reader/ddlog.h 的日志分类定义
+    ${CMAKE_SOURCE_DIR}/reader
 )
 
 target_link_libraries(batchprint-core PUBLIC

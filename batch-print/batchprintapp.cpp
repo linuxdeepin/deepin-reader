@@ -11,6 +11,8 @@
 #include <QFileInfo>
 #include <QDebug>
 
+#include "ddlog.h"
+
 BatchPrintApp::BatchPrintApp(ICupsApi *cupsApi)
 {
     if (cupsApi) {
@@ -33,12 +35,12 @@ int BatchPrintApp::run(const QStringList &fileList)
     CupsClient *cups = dynamic_cast<CupsClient *>(m_cupsApi);
     if (cups) {
         if (!cups->init()) {
-            qWarning() << "CUPS init failed";
+            qCWarning(batchprintLog) << "CUPS init failed";
             NotifyClient::notifyError(ErrorMessages::cupsUnavailable());
             return 2;
         }
         if (!cups->checkEnvironment()) {
-            qWarning() << "CUPS environment check failed";
+            qCWarning(batchprintLog) << "CUPS environment check failed";
             NotifyClient::notifyError(ErrorMessages::noDefaultPrinter());
             return 2;
         }
@@ -64,7 +66,7 @@ int BatchPrintApp::run(const QStringList &fileList)
         QString errorMsg;
         if (!FormatConverter::convertToPdf(filePath, tempDir.path(),
                                            outputPdfPath, errorMsg)) {
-            qWarning() << errorMsg;
+            qCWarning(batchprintLog) << errorMsg;
             failedFiles.append(QFileInfo(filePath).fileName());
             continue;
         }

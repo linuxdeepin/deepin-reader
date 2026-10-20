@@ -90,7 +90,7 @@ void CatalogWidget::handleOpenSuccess()
     qCDebug(appLog) << "Handling document open success, loading catalog";
 
     if (nullptr == m_sheet) {
-        qCritical() << "Cannot load catalog - document sheet is null";
+        qCCritical(appLog) << "Cannot load catalog - document sheet is null";
         return;
     }
     if (bIshandOpenSuccess) {

@@ -186,7 +186,7 @@ void CatalogTreeView::handleOpenSuccess()
         model->clear();
 
         if (nullptr == m_sheet) {
-            qCritical() << "Cannot build catalog tree - document sheet is null";
+            qCCritical(appLog) << "Cannot build catalog tree - document sheet is null";
             return;
         }
 
@@ -295,7 +295,7 @@ void CatalogTreeView::currentChanged(const QModelIndex &current, const QModelInd
         && !current.data(deepin_reader::CatalogNavigationRole).isValid()) {
 
         if (nullptr == m_sheet) {
-            qCritical() << "Cannot navigate - document sheet is null";
+            qCCritical(appLog) << "Cannot navigate - document sheet is null";
             return;
         }
 
@@ -317,7 +317,7 @@ void CatalogTreeView::onItemClicked(const QModelIndex &current)
     qCDebug(appLog) << "Catalog item clicked:" << current.data().toString() << "page:" << current.data(Qt::UserRole + 1).toInt();
 
     if (nullptr == m_sheet) {
-        qCritical() << "Cannot navigate to clicked item - document sheet is null";
+        qCCritical(appLog) << "Cannot navigate to clicked item - document sheet is null";
         return;
     }
     if (m_populating || !current.isValid())

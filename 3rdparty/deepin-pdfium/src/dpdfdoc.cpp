@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dpdfdoc.h"
+#include "dpdflog.h"
 #include "dpdfpage.h"
 
 #include "public/fpdfview.h"
@@ -131,14 +132,14 @@ DPdfDoc::Status DPdfDocPrivate::loadFile(const QString &filePath, const QString 
 
     DPdfMutexLocker locker("DPdfDocPrivate::loadFile");
 
-    qDebug() << "deepin-pdfium正在加载PDF文档... 文档名称: " << filePath;
+    qCDebug(dpfLog) << "deepin-pdfium正在加载PDF文档... 文档名称: " << filePath;
     void *ptr = FPDF_LoadDocument(m_filePath.toUtf8().constData(),
                                   password.toUtf8().constData());
 
     m_docHandler = static_cast<DPdfDocHandler *>(ptr);
 
     m_status = m_docHandler ? DPdfDoc::SUCCESS : parseError(static_cast<int>(FPDF_GetLastError()));
-    qDebug() << "文档（" << filePath << "）文档加载状态: " << m_status;
+    qCDebug(dpfLog) << "文档（" << filePath << "）文档加载状态: " << m_status;
 
     if (m_docHandler) {
         m_pageCount = FPDF_GetPageCount(reinterpret_cast<FPDF_DOCUMENT>(m_docHandler));
@@ -202,7 +203,7 @@ bool DPdfDoc::isLinearized(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly)) {
-        qInfo() << "file open failed when isLinearized" << fileName;
+        qCInfo(dpfLog) << "file open failed when isLinearized" << fileName;
     }
     QByteArray content = file.readAll();
     int len = content.length();
@@ -279,7 +280,7 @@ bool DPdfDoc::save()
     // Rename original file to backup instead of deleting (avoids SMB file handle issues)
     if (targetFile.exists()) {
         if (!targetFile.rename(backupPath)) {
-            qWarning() << "Failed to rename original file to backup:" << targetPath;
+            qCWarning(dpfLog) << "Failed to rename original file to backup:" << targetPath;
             return false;
         }
     }
@@ -287,7 +288,7 @@ bool DPdfDoc::save()
     // Write new file
     QFile newFile(targetPath);
     if (!newFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        qWarning() << "Failed to open file for writing:" << targetPath;
+        qCWarning(dpfLog) << "Failed to open file for writing:" << targetPath;
         // Restore original file on failure
         if (QFile::exists(backupPath)) {
             QFile::rename(backupPath, targetPath);
@@ -296,7 +297,7 @@ bool DPdfDoc::save()
     }
 
     if (array.size() != newFile.write(array)) {
-        qWarning() << "Failed to write data to file:" << targetPath;
+        qCWarning(dpfLog) << "Failed to write data to file:" << targetPath;
         result = false;
         newFile.close();
         newFile.remove();
