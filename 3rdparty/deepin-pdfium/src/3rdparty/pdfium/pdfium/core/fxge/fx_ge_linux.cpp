@@ -114,6 +114,13 @@ void* CFX_LinuxFontInfo::MapFont(int weight,
       break;
     }
     case FX_CHARSET_ChineseSimplified: {
+      // 优先按请求的族名精确匹配，而不是直接落入硬编码回退列表：PDF 常以
+      // 某个已安装 CJK 字体的族名引用它（例如 "FZXiaoBiaoSong-B05S"），
+      // 该名字往往不在下方任何旧回退列表中；若不先做精确匹配，下方列表
+      // 会无条件替换为列表中第一个找到的字体，完全忽略请求的族名。
+      auto exact_it = m_FontList.find(family);
+      if (exact_it != m_FontList.end())
+          return exact_it->second.get();
       for (const char* name : g_LinuxGbFontList) {
         auto it = m_FontList.find(name);
         if (it != m_FontList.end())
@@ -122,6 +129,10 @@ void* CFX_LinuxFontInfo::MapFont(int weight,
       break;
     }
     case FX_CHARSET_ChineseTraditional: {
+      // 参见上方 FX_CHARSET_ChineseSimplified 分支的注释。
+      auto exact_it = m_FontList.find(family);
+      if (exact_it != m_FontList.end())
+          return exact_it->second.get();
       for (const char* name : g_LinuxB5FontList) {
         auto it = m_FontList.find(name);
         if (it != m_FontList.end())
@@ -130,6 +141,10 @@ void* CFX_LinuxFontInfo::MapFont(int weight,
       break;
     }
     case FX_CHARSET_Hangul: {
+      // 参见上方 FX_CHARSET_ChineseSimplified 分支的注释。
+      auto exact_it = m_FontList.find(family);
+      if (exact_it != m_FontList.end())
+          return exact_it->second.get();
       for (const char* name : g_LinuxHGFontList) {
         auto it = m_FontList.find(name);
         if (it != m_FontList.end())

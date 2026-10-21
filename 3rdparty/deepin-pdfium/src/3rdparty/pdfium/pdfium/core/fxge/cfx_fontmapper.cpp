@@ -323,18 +323,26 @@ void CFX_FontMapper::AddInstalledFont(const ByteString& name, int charset) {
     return static_cast<uint8_t>(c) > 0x80;
   });
 
-  if (bLocalized) {
-    void* hFont = m_pFontInfo->GetFont(name.c_str());
-    if (!hFont) {
+  // 字体既可能通过族名（family name）引用，也可能通过 PostScript 名引用；
+  // 而 PDF 的 /BaseFont 条目通常携带的是 PostScript 名（例如族名
+  // "FZXiaoBiaoSong-B05S" 对应的 "FZXBSJW--GB1-0"）。此处为每台已安装
+  // 字体中 PostScript 名与族名不同的字体建立 PostScript 名索引，使
+  // MatchInstalledFonts() 能把 PostScript 名请求解析到已安装的字体族上。
+  // 原先仅对本地化（含非 ASCII 字符）的族名做该索引，导致 ASCII 族名字体
+  // 的 PostScript 名请求永远无法匹配已安装字体，总会被无关的替代字体替换。
+  void* hFont = m_pFontInfo->GetFont(name.c_str());
+  if (!hFont && bLocalized) {
       hFont = m_pFontInfo->MapFont(0, 0, FX_CHARSET_Default, 0, name.c_str());
-      if (!hFont)
-        return;
-    }
-
-    ByteString new_name = GetPSNameFromTT(hFont);
-    if (!new_name.IsEmpty())
-      m_LocalizedTTFonts.push_back(std::make_pair(new_name, name));
-    m_pFontInfo->DeleteFont(hFont);
+  }
+  if (hFont) {
+      ByteString ps_name = GetPSNameFromTT(hFont);
+      if (!ps_name.IsEmpty() &&
+              TT_NormalizeName(ps_name.c_str()) != TT_NormalizeName(name.c_str())) {
+          m_LocalizedTTFonts.push_back(std::make_pair(ps_name, name));
+      }
+      m_pFontInfo->DeleteFont(hFont);
+  } else if (bLocalized) {
+      return;
   }
   m_InstalledTTFonts.push_back(name);
   m_LastFamily = name;
