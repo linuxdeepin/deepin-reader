@@ -281,9 +281,15 @@ public:
 
     /**
      * @brief hideFindWidget
-     * 隐藏并销毁搜索框,切换标签页时调用,防止搜索串档
+     * 隐藏搜索框（不销毁），切换标签页时调用，防止搜索串档
      */
     void hideFindWidget();
+
+    /**
+     * @brief isFindWidgetVisible
+     * 返回搜索框是否可见
+     */
+    bool isFindWidgetVisible() const;
 
     /**
      * @brief jumpToNextSearchResult
