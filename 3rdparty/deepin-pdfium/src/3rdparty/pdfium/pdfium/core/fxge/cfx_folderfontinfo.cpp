@@ -245,6 +245,23 @@ void CFX_FolderFontInfo::ReportFace(const ByteString& path,
 
   auto pInfo =
       std::make_unique<FontFaceInfo>(path, facename, tables, offset, filesize);
+  pInfo->m_Styles = 0;
+  if (style.Contains("Bold"))
+      pInfo->m_Styles |= FXFONT_FORCE_BOLD;
+  if (style.Contains("Italic") || style.Contains("Oblique"))
+      pInfo->m_Styles |= FXFONT_ITALIC;
+  if (facename.Contains("Serif"))
+      pInfo->m_Styles |= FXFONT_SERIF;
+
+  // 必须先把该字体注册进 m_FontList，再通知 mapper：在字体枚举期间，
+  // CFX_FontMapper::AddInstalledFont() 会调用 GetFont(facename) 打开该字体
+  // 以读取其 PostScript 名。若像原先那样在调用之后再注册，枚举期间
+  // GetFont() 必然失败，已安装字体的 PostScript 名永远不会被索引，导致
+  // 后续按 PostScript 名的请求（如 PDF /BaseFont 中的 "FZXBSJW--GB1-0"）
+  // 无法解析到已安装的字族。
+  FontFaceInfo* pFace = pInfo.get();
+  m_FontList[facename] = std::move(pInfo);
+
   ByteString os2 =
       LoadTableFromTT(pFile, tables.raw_str(), nTables, 0x4f532f32, filesize);
   if (os2.GetLength() >= 86) {
@@ -252,36 +269,27 @@ void CFX_FolderFontInfo::ReportFace(const ByteString& path,
     uint32_t codepages = GET_TT_LONG(p);
     if (codepages & (1U << 17)) {
       m_pMapper->AddInstalledFont(facename, FX_CHARSET_ShiftJIS);
-      pInfo->m_Charsets |= CHARSET_FLAG_SHIFTJIS;
+      pFace->m_Charsets |= CHARSET_FLAG_SHIFTJIS;
     }
     if (codepages & (1U << 18)) {
       m_pMapper->AddInstalledFont(facename, FX_CHARSET_ChineseSimplified);
-      pInfo->m_Charsets |= CHARSET_FLAG_GB;
+      pFace->m_Charsets |= CHARSET_FLAG_GB;
     }
     if (codepages & (1U << 20)) {
       m_pMapper->AddInstalledFont(facename, FX_CHARSET_ChineseTraditional);
-      pInfo->m_Charsets |= CHARSET_FLAG_BIG5;
+      pFace->m_Charsets |= CHARSET_FLAG_BIG5;
     }
     if ((codepages & (1U << 19)) || (codepages & (1U << 21))) {
       m_pMapper->AddInstalledFont(facename, FX_CHARSET_Hangul);
-      pInfo->m_Charsets |= CHARSET_FLAG_KOREAN;
+      pFace->m_Charsets |= CHARSET_FLAG_KOREAN;
     }
     if (codepages & (1U << 31)) {
       m_pMapper->AddInstalledFont(facename, FX_CHARSET_Symbol);
-      pInfo->m_Charsets |= CHARSET_FLAG_SYMBOL;
+      pFace->m_Charsets |= CHARSET_FLAG_SYMBOL;
     }
   }
   m_pMapper->AddInstalledFont(facename, FX_CHARSET_ANSI);
-  pInfo->m_Charsets |= CHARSET_FLAG_ANSI;
-  pInfo->m_Styles = 0;
-  if (style.Contains("Bold"))
-    pInfo->m_Styles |= FXFONT_FORCE_BOLD;
-  if (style.Contains("Italic") || style.Contains("Oblique"))
-    pInfo->m_Styles |= FXFONT_ITALIC;
-  if (facename.Contains("Serif"))
-    pInfo->m_Styles |= FXFONT_SERIF;
-
-  m_FontList[facename] = std::move(pInfo);
+  pFace->m_Charsets |= CHARSET_FLAG_ANSI;
 }
 
 void* CFX_FolderFontInfo::GetSubstFont(const ByteString& face) {
