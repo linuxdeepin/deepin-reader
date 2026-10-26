@@ -24,6 +24,7 @@
 #include <DSpinner>
 #include <DPrintPreviewDialog>
 #include <DWidgetUtil>
+#include <DDialog>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -40,6 +41,8 @@
 #include <QPrinter>
 #include <QtMath>
 #include <QGraphicsDropShadowEffect>
+#include <QStandardPaths>
+#include <QTemporaryFile>
 
 #include <signal.h>
 #include <sys/types.h>
@@ -935,6 +938,24 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         return;
     }
 
+    // 检查输出目录写权限，不可写时重定向到临时目录，防止 QPainter 构造时崩溃
+    QString outputPath = printer->outputFileName();
+    if (!outputPath.isEmpty()) {
+        QString dir = QFileInfo(outputPath).absolutePath();
+        QTemporaryFile testFile(dir + "/.dr_print_test_XXXXXX");
+        if (!testFile.open()) {
+            qCWarning(appLog) << "Output directory not writable:" << dir << ", redirecting to temp";
+            DDialog dlg("", tr("The selected directory does not have write permission. The file will be saved to the temporary directory."));
+            dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
+            dlg.addButtons(QStringList() << tr("OK", "button"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+            printer->setOutputFileName(tempDir + "/" + QFileInfo(outputPath).fileName());
+        }
+    }
+
     //后台加载动画
     QWidget *pCurWgt = nullptr;
     for (QWidget *pwgt : qApp->topLevelWidgets()) {
@@ -1033,6 +1054,25 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
     // qCDebug(appLog) << "onPrintRequested";
+
+    // 检查输出目录写权限，不可写时重定向到临时目录，防止 QPainter 构造时崩溃
+    QString outputPath = printer->outputFileName();
+    if (!outputPath.isEmpty()) {
+        QString dir = QFileInfo(outputPath).absolutePath();
+        QTemporaryFile testFile(dir + "/.dr_print_test_XXXXXX");
+        if (!testFile.open()) {
+            qCWarning(appLog) << "Output directory not writable:" << dir << ", redirecting to temp";
+            DDialog dlg("", tr("The selected directory does not have write permission. The file will be saved to the temporary directory."));
+            dlg.setIcon(QIcon::fromTheme(QString("dr_") + "exception-logo"));
+            dlg.addButtons(QStringList() << tr("OK", "button"));
+            QMargins mar(0, 0, 0, 30);
+            dlg.setContentLayoutContentsMargins(mar);
+            dlg.exec();
+            QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+            printer->setOutputFileName(tempDir + "/" + QFileInfo(outputPath).fileName());
+        }
+    }
+
     printer->setDocName(QFileInfo(filePath()).fileName());
 
     QPainter painter(printer);
