@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -94,7 +94,7 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         contentOption.setAlignment(Qt::AlignTop | Qt::AlignLeft);
         contentOption.setWrapMode(QTextOption::WrapAnywhere);
 
-        QSize contentSize(option.rect.right() - textStartX, option.rect.height() - pagetextHeight - 2 * margin);
+        QSize contentSize(option.rect.right() - textStartX - 20, option.rect.height() - pagetextHeight - 2 * margin);
         const QString &elidedContentText = Utils::getElidedText(painter->fontMetrics(), contentSize, contentText, contentOption.alignment());
         painter->drawText(QRect(textStartX, option.rect.y() + margin + pagetextHeight, contentSize.width(), contentSize.height()), elidedContentText, contentOption);
         painter->restore();
@@ -103,7 +103,7 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->save();
         int bottomlineHeight = 1;
         painter->setPen(QPen(DTK_NAMESPACE::Gui::DGuiApplicationHelper::instance()->applicationPalette().frameBorder().color(), bottomlineHeight));
-        painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right(), option.rect.bottom() - bottomlineHeight);
+        painter->drawLine(textStartX, option.rect.bottom() - bottomlineHeight, option.rect.right() - 20, option.rect.bottom() - bottomlineHeight);
         painter->restore();
     }
 }
