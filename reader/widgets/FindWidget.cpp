@@ -140,16 +140,27 @@ void FindWidget::initWidget()
     closeButton->setWindowFlag(Qt::FramelessWindowHint);
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
+    auto setSearchIconSize = [this](int size) {
+        const auto buttons = m_pSearchEdit->findChildren<DIconButton *>();
+        for (auto btn : buttons) {
+            if (btn->accessibleName() == QStringLiteral("DSearchEditIconButton")) {
+                btn->setIconSize(QSize(size, size));
+                break;
+            }
+        }
+    };
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
         m_pSearchEdit->setFixedSize(QSize(270, 36));
         m_findPrevButton->setFixedSize(QSize(36, 36));
         m_findNextButton->setFixedSize(QSize(36, 36));
         setFixedSize(422, 60);
+        setSearchIconSize(20);
     } else {
         m_pSearchEdit->setFixedSize(QSize(270, 24));
         m_findPrevButton->setFixedSize(QSize(24, 24));
         m_findNextButton->setFixedSize(QSize(24, 24));
         setFixedSize(398, 45);
+        setSearchIconSize(14);
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
         if (sizeMode == DGuiApplicationHelper::NormalMode) {
@@ -157,11 +168,13 @@ void FindWidget::initWidget()
             m_findPrevButton->setFixedSize(QSize(36, 36));
             m_findNextButton->setFixedSize(QSize(36, 36));
             setFixedSize(422, 60);
+            setSearchIconSize(20);
         } else {
             m_pSearchEdit->setFixedSize(QSize(270, 24));
             m_findPrevButton->setFixedSize(QSize(24, 24));
             m_findNextButton->setFixedSize(QSize(24, 24));
             setFixedSize(398, 45);
+            setSearchIconSize(14);
         }
     });
 #else
