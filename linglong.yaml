@@ -19,10 +19,6 @@ command:
   - deepin-reader
 
 build: |
-  # 下载和安装依赖
-  apt -y install --download-only qt6-base-dev qt6-base-dev-tools qt6-tools-dev libdtk6widget-dev libspectre-dev libdjvulibre-dev libtiff-dev libjpeg-dev libicu-dev libpng-dev zlib1g-dev liblcms2-dev libopenjp2-7-dev libfreetype6-dev libgtest-dev libchardet-dev qt6-webengine-dev qt6-5compat-dev libdtk6gui-dev libdtk6core-dev qt6-svg-dev pandoc libgxps-dev libcairo2-dev libglib2.0-dev
-  bash ./install_dep /var/cache/apt/archives "$PREFIX"
-
   # 设置INCLUDEPATH为引入的CFLAGS环境变量获取的路径
   sed -i '33i INCLUDEPATH += $$INCPATHS' 3rdparty/deepin-pdfium/src/src.pro
   sed -i '35i INCLUDEPATH += $$INCPATHS' htmltopdf/htmltopdf.pro
@@ -41,46 +37,23 @@ build: |
     "INSTALL_ROOT=${PREFIX}" \
     ../deepin_reader.pro
   make -j`nproc`
-  make install > ../install.log 2>&1
+  make install
   cd ..
-
-  # 项目生成应用名和动态隐式加载的依赖库，ldd无法找到的其他库
-  LDD_FILES=(
-    deepin-reader
-    ../lib/deepin-reader/htmltopdf
-    pandoc
-    libdeepin-pdfium-reader.so
-    # 定制插件不存在
-    libzpdcallback.so
-  )
-
-  # 生成.install 文件
-  ID_VALUE=$(awk -F ': ' '/^  id: / {print $2}' linglong.yaml)
-  bash ./deploy_dep "${LDD_FILES[@]}"
-
-  # lib/deepin-reader 文件添加到 install 文件
-  for OTHER in "${PREFIX}"/lib/deepin-reader/*; do
-      if [[ -f "$OTHER" ]]; then
-          echo "$OTHER" >> "${ID_VALUE}.install"
-      fi
-  done
-
-  EXEC_FILES=(
-    pandoc
-  )
-  # 添加额外依赖进程到 install 文件
-  for EXEFILE in "${PREFIX}/bin"/${EXEC_FILES[@]}*; do
-    echo "$EXEFILE" >> "${ID_VALUE}.install"
-  done
-
-  # pandoc data 文件添加到 install 文件
-  find "${PREFIX}/share/pandoc/" -type f -o -type d >> "${ID_VALUE}.install"
-
-  # 添加帮助手册到 install
-  find $PREFIX/share/deepin-manual/manual-assets/application/deepin-reader >> "${ID_VALUE}.install"
 
 # allow apt download in build and do apt update
 buildext:
   apt:
     build_depends:
-      - libc6
+      - libdjvulibre-dev
+      - libicu-dev
+      - liblcms2-dev
+      - libopenjp2-7-dev
+      - libchardet-dev
+      - libkf6globalaccel-dev
+      - libkf6i18n-dev
+    depends:
+      - pandoc
+      - libdjvulibre21
+      - libchardet1
+      - libkf6globalaccel6
+      - libkf6i18n6
