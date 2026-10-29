@@ -107,7 +107,7 @@ CentralDocPage::CentralDocPage(DWidget *parent)
 
     m_mainLayout->addWidget(m_tabBar);
     m_mainLayout->addItem(m_stackedLayout);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setContentsMargins(0, 10, 0, 0);
     m_mainLayout->setSpacing(0);
 
     this->setLayout(m_mainLayout);
