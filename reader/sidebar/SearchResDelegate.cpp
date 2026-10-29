@@ -90,7 +90,7 @@ void SearchResDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
         painter->setFont(sfont);
         const QString &searchCountText = index.data(ImageinfoType_e::IMAGE_SEARCH_COUNT).toString();
         int searchCountTextWidth = painter->fontMetrics().horizontalAdvance(searchCountText);
-        painter->drawText(option.rect.right() - searchCountTextWidth - 20, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, searchCountText);
+        painter->drawText(option.rect.right() - searchCountTextWidth, option.rect.y() + margin, option.rect.width(), pagetextHeight, Qt::AlignVCenter | Qt::AlignLeft, searchCountText);
         painter->restore();
 
         //drawPageContenttext
