@@ -320,9 +320,9 @@ void CentralDocPage::onTabChanged(DocSheet *sheet)
         // 离开当前 sheet 前，保存其阅读状态
         QPointer<DocSheet> prevSheet = qobject_cast<DocSheet *>(m_stackedLayout->currentWidget());
         if (prevSheet && prevSheet != sheet && prevSheet->opened()) {
-            // 关闭前一个 sheet 的搜索框,防止切换标签后搜索串档
-            prevSheet->closeFindWidget();
+            // 先保存阅读状态（含搜索框可见性），再关闭搜索框,防止切换标签后搜索串档
             prevSheet->saveCurrentViewState();
+            prevSheet->closeFindWidget();
         }
 
         m_stackedLayout->setCurrentWidget(sheet);

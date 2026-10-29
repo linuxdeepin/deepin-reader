@@ -1911,6 +1911,7 @@ void DocSheet::saveCurrentViewState()
     // 保存滚动位置
     if (m_browser) {
         m_operation.scrollPosition = m_browser->getScrollPosition();
+        m_operation.findWidgetVisible = m_browser->isFindWidgetVisible();
     }
     // 保存侧边栏宽度和展开状态
     if (m_sidebar && m_sidebar->isVisible()) {
@@ -1926,6 +1927,11 @@ void DocSheet::restoreSavedViewState()
                     << "sidebarWidth:" << m_operation.sidebarWidth;
     if (!opened())
         return;
+
+    // 恢复搜索框可见性
+    if (m_browser && m_operation.findWidgetVisible) {
+        m_browser->handlePrepareSearch();
+    }
 
     // 恢复侧边栏宽度（仅当用户主动调整过时才恢复）
     if (m_sidebar && m_sidebar->isVisible() && m_operation.sidebarWidthChanged && m_operation.sidebarWidth > 0) {
