@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 
 #include <DWidget>
 #include <DPushButton>
+#include <DSuggestButton>
 #include <DLabel>
 #include <DPasswordEdit>
 
@@ -77,7 +78,7 @@ private slots:
     void onUpdateTheme();
 
 private:
-    DPushButton *m_nextbutton = nullptr;
+    DSuggestButton *m_nextbutton = nullptr;
     DPushButton *m_echoBtn = nullptr;
     DPasswordEdit *m_password = nullptr;
 };
