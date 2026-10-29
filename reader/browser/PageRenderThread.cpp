@@ -814,13 +814,17 @@ bool PageRenderThread::execNextDocPageThumbnailTask()
         return true;
     }
 
-    QImage image = task.renderer->getImage(task.index, 174, 174);
+    // 渲染分辨率需匹配显示侧实际尺寸(174 * pixScale * dpr),避免源图像被
+    // Qt painter 上采样放大导致模糊;pixScale 由 task 从 UI 层传入
+    int renderSize = static_cast<int>(174 * task.pixScale * dApp->devicePixelRatio());
+
+    QImage image = task.renderer->getImage(task.index, renderSize, renderSize);
 
     if (!image.isNull()) {
         // 预取图片对象 bbox(夜间/深色蒙版用):在工作线程取,避免 UI 线程与渲染争文档锁;
-        // 与 getImage 同尺寸(174,174)请求,蒙版与缩略图输出像素一一对齐
+        // 与 getImage 同尺寸请求,蒙版与缩略图输出像素一一对齐
         if (DocSheet::existSheetByUuid(task.uuid) && task.renderer->opened()) {
-            task.imageRects = task.renderer->getImageObjectRects(task.index, 174, 174);
+            task.imageRects = task.renderer->getImageObjectRects(task.index, renderSize, renderSize);
         }
         emit sigDocPageThumbnailTaskFinished(task, QPixmap::fromImage(image));
     }
