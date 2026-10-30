@@ -7,7 +7,7 @@ version: "1"
 package:
   id: org.deepin.reader
   name: "deepin-reader"
-  version: 6.5.67.1
+  version: 6.5.68.1
   kind: app
   description: |
     reader for deepin os.
@@ -29,9 +29,13 @@ build: |
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
   mkdir -p  build && cd build
   qmake -set APP_INSTALL_LIBS ${PREFIX}/lib/${TRIPLET}
+  # pkg-config 输出的是裸 -lQt6Gui，没有 -L/runtime，链接会命中 /usr 的旧
+  # Qt6Gui；runtime 的 libQt6WaylandClient 需要新 Qt 私有符号，必须显式把
+  # runtime 库目录放到链接搜索路径最前。
   qmake "VERSION=${VERSION}" \
     "PREFIX=${PREFIX}" \
     "LINGLONG_BUILD_ON=1" \
+    "QMAKE_LFLAGS+=-L/runtime/lib/${TRIPLET}" \
     "INCPATHS=$(echo "$CFLAGS" | sed 's/-I//g')" \
     "LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET}" \
     "INSTALL_ROOT=${PREFIX}" \

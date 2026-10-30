@@ -1,3 +1,9 @@
+deepin-reader (6.5.68) unstable; urgency=medium
+
+  * fix(build): link against runtime Qt6 libs in linglong build
+
+ -- re2zero <yangwu@uniontech.com>  Fri, 30 Oct 2026 17:43:11 +0800
+
 deepin-reader (6.5.67) unstable; urgency=medium
 
   * docs(document-viewer): add Portuguese help manual
