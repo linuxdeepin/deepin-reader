@@ -51,6 +51,8 @@ struct SheetOperation {
     bool sidebarWidthChanged    = false;
     // 滚动位置（纵向偏移比例 0.0~1.0）
     float scrollPosition        = 0.0f;
+    // 搜索框可见性
+    bool findWidgetVisible      = false;
     // 目录树展开节点标题路径列表（如 ["1.概述", "1.概述/1.1 背景"]）
     QStringList expandedSections;
 };

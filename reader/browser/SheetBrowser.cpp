@@ -2121,9 +2121,12 @@ void SheetBrowser::hideFindWidget()
     qCDebug(appLog) << "hideFindWidget";
     if (!m_findWidget.isNull()) {
         m_findWidget->hide();
-        m_findWidget->deleteLater();
-        m_findWidget = nullptr;
     }
+}
+
+bool SheetBrowser::isFindWidgetVisible() const
+{
+    return !m_findWidget.isNull() && m_findWidget->isVisible();
 }
 
 void SheetBrowser::handleSearchStart()
