@@ -1,3 +1,10 @@
+deepin-reader (6.5.70) unstable; urgency=medium
+
+  * fix: bundle pandoc data files into linglong package
+  * fix: add pandoc to linglong build deps for data copy step
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 09 Nov 2026 16:04:30 +0800
+
 deepin-reader (6.5.69) unstable; urgency=medium
 
   * fix: enable XPS support in linglong package build
