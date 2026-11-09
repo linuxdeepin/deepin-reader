@@ -27,7 +27,9 @@ build: |
 
   # 构建
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
-  mkdir -p  build && cd build
+  # 清掉随源码带入的构建残留（如本机 CMake 产物）：残留的 Makefile 会让
+  # qmake 子目录规则 test -e Makefile 短路跳过 qmake，误走 CMake 构建
+  rm -rf build && mkdir -p  build && cd build
   qmake -set APP_INSTALL_LIBS ${PREFIX}/lib/${TRIPLET}
   # pkg-config 输出的是裸 -lQt6Gui，没有 -L/runtime，链接会命中 /usr 的旧
   # Qt6Gui；runtime 的 libQt6WaylandClient 需要新 Qt 私有符号，必须显式把
