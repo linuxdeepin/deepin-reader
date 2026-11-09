@@ -49,9 +49,9 @@ message("Build on host arch: $$QMAKE_HOST.arch")
 
 # XPS支持配置（默认关闭）
 # 使用方式：qmake CONFIG+=xps_support 来启用XPS支持
+# 宏与链接库在 reader/document/document.pri 中随 xps_support 一并生效
 xps_support {
     message(">>> XPS support enabled")
-    DEFINES += XPS_SUPPORT_ENABLED
 } else {
     message(">>> XPS support disabled")
 }
