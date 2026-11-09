@@ -47,6 +47,12 @@ build: |
   make install
   cd ..
 
+  # buildext 依赖只把 pandoc 可执行文件收进层，share 数据（docx 转换必需的
+  # abbreviations 等）不会进层；pandoc 找不到数据文件会 exit 97 导致 DOCX
+  # 打开失败。手动将数据收进应用目录，与代码 INSTALL_PREFIX/share/pandoc/data 对齐
+  mkdir -p "${PREFIX}/share/pandoc"
+  cp -a /usr/share/pandoc/data "${PREFIX}/share/pandoc/"
+
 # allow apt download in build and do apt update
 buildext:
   apt:
