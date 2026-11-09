@@ -49,7 +49,10 @@ build: |
 
   # buildext 依赖只把 pandoc 可执行文件收进层，share 数据（docx 转换必需的
   # abbreviations 等）不会进层；pandoc 找不到数据文件会 exit 97 导致 DOCX
-  # 打开失败。手动将数据收进应用目录，与代码 INSTALL_PREFIX/share/pandoc/data 对齐
+  # 打开失败。手动将数据收进应用目录，与代码 INSTALL_PREFIX/share/pandoc/data 对齐。
+  # 注意：CI 的 buildext 只在构建环境安装 build_depends（depends 的 pandoc
+  # 由收层阶段处理），因此 pandoc 必须同时声明在 build_depends，否则此处
+  # cp 因 /usr/share/pandoc/data 不存在而失败
   mkdir -p "${PREFIX}/share/pandoc"
   cp -a /usr/share/pandoc/data "${PREFIX}/share/pandoc/"
 
@@ -57,6 +60,7 @@ build: |
 buildext:
   apt:
     build_depends:
+      - pandoc
       - libdjvulibre-dev
       - libicu-dev
       - liblcms2-dev
