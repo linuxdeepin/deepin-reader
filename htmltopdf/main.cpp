@@ -7,12 +7,8 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
-#include <QProcessEnvironment>
-#include <QDebug>
 
 #include "ddlog.h"
-
-bool isWayland();
 
 int main(int argc, char *argv[])
 {
@@ -21,19 +17,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setApplicationName("html2pdf");
     QApplication::setApplicationVersion("v1.0");
-
-    bool wayland = isWayland();
-    qCDebug(htmltopdfLog) << "Wayland environment detected:" << wayland;
-    if (wayland) {
-        qCDebug(htmltopdfLog) << "Wayland detected, disabling GPU";
-        // 解决klu panguV平台使用QWebEnginePage崩溃的问题，不支持gpu渲染
-        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu");
-    }
-    // 解决__sw_64__平台使用QWebEnginePage崩溃的问题
-#ifdef __sw_64__
-    qCDebug(htmltopdfLog) << "Running on __sw_64__ platform, --js-flags=--jitless";
-    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--js-flags=--jitless");
-#endif
 
     //需求文案中不涉及，不做翻译
     QCommandLineParser parser;
@@ -60,20 +43,4 @@ int main(int argc, char *argv[])
     qCInfo(htmltopdfLog) << "Creating PDF converter instance";
     HtmltoPdfConverter converter(requiredArguments.at(0), requiredArguments.at(1));
     return converter.run();
-}
-
-bool isWayland()
-{
-    qCDebug(htmltopdfLog) << "Checking display environment";
-    auto e = QProcessEnvironment::systemEnvironment();
-    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
-    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
-
-    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
-        qCDebug(htmltopdfLog) << "Wayland session detected";
-        return true;
-    } else {
-        qCDebug(htmltopdfLog) << "X11 session detected";
-        return false;
-    }
 }

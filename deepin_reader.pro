@@ -5,7 +5,7 @@ TEMPLATE = subdirs
 
 # 基础 Qt 模块
 versionAtLeast(QT_VERSION, 6.0.0) {
-    QT += core gui widgets network dbus sql svg webchannel webenginewidgets concurrent xml core5compat
+    QT += core gui widgets network dbus sql svg webchannel concurrent xml core5compat
 
     # Qt6 specific configurations
     PKGCONFIG += dtk6widget dtk6gui dtk6core
@@ -18,7 +18,7 @@ versionAtLeast(QT_VERSION, 6.0.0) {
     INCLUDEPATH += $$PREFIX/include/KF6/KI18n
 
 } else {
-    QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
+    QT += core gui widgets network sql dbus svg webchannel concurrent xml
 
     # Qt5 specific configurations
     PKGCONFIG += dtkwidget dtkgui dtkcore
