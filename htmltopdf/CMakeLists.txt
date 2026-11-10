@@ -16,14 +16,14 @@ set_target_properties(htmltopdf PROPERTIES
     AUTOUIC ON
 )
 
-find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS WebEngineWidgets)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS PrintSupport)
 
 # 引用 reader/ddlog.h 的日志分类定义
 target_include_directories(htmltopdf PRIVATE ${CMAKE_SOURCE_DIR}/reader)
 
 # 链接Qt模块
 target_link_libraries(htmltopdf PRIVATE
-    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
+    Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::Core
 )
 
