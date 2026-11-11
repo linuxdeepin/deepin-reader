@@ -157,32 +157,61 @@ public:
         return resource;
     }
 
+    /**
+     * @brief 预加载图片资源：直调虚函数 loadResource，绕过 resource() 的缓存命中
+     * QTextDocument::loadResource 是 protected，外部只能经 resource() 查询，而
+     * resource() 会命中 cachedResources 里未经本类缩放的原图；预加载需要走完整
+     * 加载链（含 300dpi 上限缩放），必须在成员函数内调用。
+     */
+    QVariant loadScaledResource(int type, const QUrl &name)
+    {
+        return loadResource(type, name);
+    }
+
 private:
     qreal m_maxEmbedWidth; // 300dpi 对应的嵌入像素上限
 };
 
 /**
  * @brief 预加载文档中的图片资源到资源缓存
- * QTextDocument::print() 会在内部 clone 的普通 QTextDocument 上完成布局与绘制，
- * 本类的 loadResource（300dpi 上限缩放）在 clone 中不再被调用；提前把图片经本类
- * loadResource 载入并 addResource 进缓存（clone 会复制该缓存），保证嵌入分辨率
- * 上限逻辑在打印流程中同样生效
+ * QTextDocument::print() 会在内部 clone 的普通 QTextDocument 上完成布局与绘制，而
+ * clone() 既不复制 baseUrl，也不携带 cachedResources，子类的 loadResource（300dpi
+ * 上限缩放）在 clone 中不再被调用；若不预加载，print 的渲染只能靠资源加载的
+ * 相对路径 fallback 兜底，与工作目录相关且丢失缩放控制。
+ *
+ * 这里经本类 loadResource 走完整加载链（含 300dpi 上限缩放），并把结果同时写入
+ * “原样资源名”与“baseUrl 解析后”两个 key：原文档上的资源查询用解析后 key 命中，
+ * print 内部 clone（无 baseUrl）用原样名命中，两个渲染路径都能拿到缩放后的图。
  */
 void preloadImageResources(QTextDocument *document)
 {
-    for (QTextBlock block = document->begin(); block.isValid(); block = block.next()) {
+    auto *embeddingDoc = static_cast<EmbeddingTextDocument *>(document);
+    for (QTextBlock block = embeddingDoc->begin(); block.isValid(); block = block.next()) {
         for (QTextBlock::iterator it = block.begin(); !it.atEnd(); ++it) {
             const QTextFragment fragment = it.fragment();
             if (!fragment.isValid() || !fragment.charFormat().isImageFormat())
                 continue;
             const QTextImageFormat imageFormat = fragment.charFormat().toImageFormat();
-            const QVariant resource = document->resource(QTextDocument::ImageResource,
-                                                         QUrl(imageFormat.name()));
-            if (!resource.isNull()) {
-                document->addResource(QTextDocument::ImageResource,
-                                      document->baseUrl().resolved(QUrl(imageFormat.name())),
-                                      resource);
-            }
+            if (imageFormat.name().isEmpty())
+                continue;
+
+            const QUrl name(imageFormat.name());
+            const QUrl resolved = embeddingDoc->baseUrl().isValid()
+                                      ? embeddingDoc->baseUrl().resolved(name)
+                                      : name;
+            // 经本类 loadResource 直调绕过 resource() 的缓存查询：首次布局时基类会把原图
+            // 塞进 cachedResources，缓存命中的返回值未经本类缩放，必须重新走加载链
+            QVariant resource = embeddingDoc->loadScaledResource(QTextDocument::ImageResource, resolved);
+            if (resource.isNull() && name != resolved)
+                resource = embeddingDoc->loadScaledResource(QTextDocument::ImageResource, name);
+            if (resource.isNull())
+                continue;
+
+            const QImage image = resource.value<QImage>();
+            const QVariant variant = image.isNull() ? resource : QVariant::fromValue(image);
+            embeddingDoc->addResource(QTextDocument::ImageResource, resolved, variant);
+            if (name != resolved)
+                embeddingDoc->addResource(QTextDocument::ImageResource, name, variant);
         }
     }
 }
