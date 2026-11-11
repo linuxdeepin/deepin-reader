@@ -18,10 +18,17 @@ DWIDGET_USE_NAMESPACE
 #include <sanitizer/asan_interface.h>
 #endif
 
+// 测试目标固定以 -fprofile-arcs -ftest-coverage 编译；全量测试下第三方库
+// (djvulibre/pdfium/GL) 退出阶段的全局析构会 SIGSEGV/SIGABRT，且 gcov 的
+// atexit 回写排在析构之后随之丢失。测试 XML 落盘后手动 dump 覆盖率并
+// _exit 跳过退出阶段析构，保证 .gcda 数据与退出码稳定
+// 强引用 __gcov_dump：weak 引用不会让链接器从 libgcov.a 拉入成员，
+// 导致 dump 永远为 null；tests 目标固定 -fprofile-arcs，符号必然可解析
+extern "C" void __gcov_dump(void);
+
 int main(int argc, char *argv[])
 {
     qputenv("QT_QPA_PLATFORM", "offscreen");
-
     // 单元测试与业务数据隔离：将 QStandardPaths 重定向到测试目录(~/.qttest)，
     QStandardPaths::setTestModeEnabled(true);
 
@@ -40,9 +47,9 @@ int main(int argc, char *argv[])
 
     int c = RUN_ALL_TESTS();
 
-#if defined(CMAKE_SAFETYTEST_ARG_ON)
-    __sanitizer_set_report_path("asan.log");
-#endif
-
-    return c;
+    if (__gcov_dump)
+        __gcov_dump();
+    fflush(stdout);
+    fflush(stderr);
+    ::_exit(c);
 }
