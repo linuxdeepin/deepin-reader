@@ -89,8 +89,8 @@ test_exit_code=$((test_exit_code || retest_exit_code))
 # Collect coverage data
 lcov -d "${workdir}" -c -o ./coverage.info
 
-# Keep only reader sources, drop tests themselves
-lcov --extract ./coverage.info '*/reader/*' -o ./coverage.info
+# Keep only reader/htmltopdf sources, drop tests themselves
+lcov --extract ./coverage.info '*/reader/*' '*/htmltopdf/*' -o ./coverage.info
 lcov --remove  ./coverage.info '*/tests/*' -o ./coverage.info
 
 # Exclude compiler-generated and unreachable functions (D0Ev, Q_OBJECT tr, env-dependent lambdas)
