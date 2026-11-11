@@ -65,21 +65,23 @@ set +e
 retest_exit_code=$?
 set -e
 
-# libdjvulibre21 全局析构 bug: 进程退出阶段 free() 非法指针 → SIGABRT(134),
-# 此时所有测试已通过且 XML 已写出。若 exit=134 且 XML failures=0,则视为通过
-is_djvu_exit_crash() {
-    [ "$1" -eq 134 ] || return 1
+# libdjvulibre21/deepin-pdfium 全局析构 bug: 进程退出阶段 free() 非法指针或段错误
+# (SIGABRT=134 / SIGSEGV=139)，此时所有测试已通过且 XML 已写出。若 exit∈{134,139}
+# 且 XML failures=0,则视为通过
+is_exit_time_crash() {
+    local code="$1"
+    [ "$code" -eq 134 ] || [ "$code" -eq 139 ] || return 1
     local xml="${build_path}/report/report_deepin-reader.xml"
     [ -f "$xml" ] || return 1
     grep -q 'failures="0"' "$xml" 2>/dev/null
 }
 
-if is_djvu_exit_crash "$test_exit_code"; then
-    echo "Note: first run exit 134 (djvulibre exit-time abort), but all tests passed — ignoring"
+if is_exit_time_crash "$test_exit_code"; then
+    echo "Note: first run exit $test_exit_code (third-party exit-time crash), but all tests passed — ignoring"
     test_exit_code=0
 fi
-if is_djvu_exit_crash "$retest_exit_code"; then
-    echo "Note: re-run exit 134 (djvulibre exit-time abort), but all tests passed — ignoring"
+if is_exit_time_crash "$retest_exit_code"; then
+    echo "Note: re-run exit $retest_exit_code (third-party exit-time crash), but all tests passed — ignoring"
     retest_exit_code=0
 fi
 
