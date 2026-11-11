@@ -27,7 +27,7 @@ message(STATUS ">>> Test building with Qt${QT_DESIRED_VERSION}")
 set(qt_required_components Core Gui Widgets Network Sql Svg Concurrent Xml Test)
 
 if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND qt_required_components Core5Compat)
+    list(APPEND qt_required_components Core5Compat PrintSupport)  # htmltopdf 单元测试需要 PrintSupport
 endif()
 
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
@@ -130,6 +130,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${READER_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/htmltopdf
     ${CMAKE_CURRENT_SOURCE_DIR}/include/gtest
     ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
@@ -156,7 +157,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 if (QT_DESIRED_VERSION MATCHES 6)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE QT_VERSION_6)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE QT_VERSION_6 UT_HTMLTOPDF_ENABLED)
+else()
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+        $<$<BOOL:${Qt5PrintSupport_FOUND}>:UT_HTMLTOPDF_ENABLED>)
 endif()
 
 # ====== 编译选项 ======
@@ -191,7 +195,7 @@ set(TEST_LINK_LIBS
 )
 
 if (QT_DESIRED_VERSION MATCHES 6)
-    list(APPEND TEST_LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+    list(APPEND TEST_LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat Qt${QT_DESIRED_VERSION}::PrintSupport)
 else()
     list(APPEND TEST_LINK_LIBS
         Qt5::DBus
@@ -247,6 +251,60 @@ else()
     qt5_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/files.qrc)
 endif()
 target_sources(${PROJECT_NAME} PRIVATE ${RESOURCES})
+
+# ====== htmltopdf 白盒测试：生成 htmltopdfconverter.moc ======
+# 测试 TU 通过 #include "htmltopdfconverter.cpp" 覆盖匿名命名空间内的辅助类，
+# 其尾部 #include 的 "htmltopdfconverter.moc" 需要与主程序 AUTOMOC 等价的 moc 产物
+set(HTMLTOPDF_MOC_DIR "${CMAKE_CURRENT_BINARY_DIR}/htmltopdf_moc")
+set(HTMLTOPDF_MOC_FILE "${HTMLTOPDF_MOC_DIR}/htmltopdfconverter.moc")
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    set(HTMLTOPDF_MOC_EXE "$<TARGET_FILE:Qt6::moc>")
+else()
+    set(HTMLTOPDF_MOC_EXE "$<TARGET_FILE:Qt5::moc>")
+endif()
+
+file(MAKE_DIRECTORY "${HTMLTOPDF_MOC_DIR}")
+# moc 解析 Q_INTERFACES(QTextObjectInterface) 需要 Qt 头路径（与 AUTOMOC 同源）
+set(HTMLTOPDF_MOC_QT_INCLUDES)
+foreach(_dir ${Qt6Core_INCLUDE_DIRS} ${Qt6Gui_INCLUDE_DIRS} ${Qt6PrintSupport_INCLUDE_DIRS}
+             ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+    list(APPEND HTMLTOPDF_MOC_QT_INCLUDES "-I" "${_dir}")
+endforeach()
+
+add_custom_command(
+    OUTPUT "${HTMLTOPDF_MOC_FILE}"
+    COMMAND ${HTMLTOPDF_MOC_EXE}
+            "${CMAKE_SOURCE_DIR}/htmltopdf/htmltopdfconverter.cpp"
+            -I "${CMAKE_SOURCE_DIR}/htmltopdf"
+            -I "${CMAKE_SOURCE_DIR}/reader"
+            ${HTMLTOPDF_MOC_QT_INCLUDES}
+            -o "${HTMLTOPDF_MOC_FILE}"
+    DEPENDS "${CMAKE_SOURCE_DIR}/htmltopdf/htmltopdfconverter.cpp"
+            "${CMAKE_SOURCE_DIR}/htmltopdf/htmltopdfconverter.h"
+    COMMENT "Generating htmltopdfconverter.moc for unit tests"
+    VERBATIM
+)
+add_custom_target(htmltopdf_ut_moc DEPENDS "${HTMLTOPDF_MOC_FILE}")
+
+# htmltopdfconverter.h 中的 Q_OBJECT 类（HtmltoPdfConverter）的元对象：
+# moc 处理头文件，输出独立编译单元编入测试目标
+set(HTMLTOPDF_H_MOC_FILE "${HTMLTOPDF_MOC_DIR}/moc_htmltopdfconverter.cpp")
+add_custom_command(
+    OUTPUT "${HTMLTOPDF_H_MOC_FILE}"
+    COMMAND ${HTMLTOPDF_MOC_EXE}
+            "${CMAKE_SOURCE_DIR}/htmltopdf/htmltopdfconverter.h"
+            -I "${CMAKE_SOURCE_DIR}/htmltopdf"
+            ${HTMLTOPDF_MOC_QT_INCLUDES}
+            -o "${HTMLTOPDF_H_MOC_FILE}"
+    DEPENDS "${CMAKE_SOURCE_DIR}/htmltopdf/htmltopdfconverter.h"
+    COMMENT "Generating moc for htmltopdfconverter.h"
+    VERBATIM
+)
+set_source_files_properties("${HTMLTOPDF_H_MOC_FILE}" PROPERTIES GENERATED TRUE)
+target_sources(${PROJECT_NAME} PRIVATE "${HTMLTOPDF_H_MOC_FILE}")
+add_dependencies(${PROJECT_NAME} htmltopdf_ut_moc)
+target_include_directories(${PROJECT_NAME} PRIVATE "${HTMLTOPDF_MOC_DIR}")
 
 # 启用测试
 enable_testing()

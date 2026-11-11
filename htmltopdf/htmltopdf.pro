@@ -3,7 +3,7 @@ TEMPLATE = app
 
 TARGET = htmltopdf
 
-QT += webenginewidgets
+QT += core gui printsupport
 
 isEmpty(PREFIX) {
  PREFIX = /usr

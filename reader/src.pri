@@ -35,7 +35,7 @@ LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium-reader -ldl
 
 # 基础 Qt 模块
 equals(QT_MAJOR_VERSION, 6) {
-    QT += core gui widgets network dbus sql svg webchannel webenginewidgets concurrent xml core5compat
+    QT += core gui widgets network dbus sql svg webchannel concurrent xml core5compat
     
     # Qt6 specific configurations
     PKGCONFIG += dtk6widget dtk6gui dtk6core
@@ -44,7 +44,7 @@ equals(QT_MAJOR_VERSION, 6) {
     QMAKE_LRELEASE = /usr/lib/qt6/bin/lrelease
     
 } else {
-    QT += core gui widgets network sql dbus svg webchannel webenginewidgets concurrent xml
+    QT += core gui widgets network sql dbus svg webchannel concurrent xml
     
     # Qt5 specific configurations 
     PKGCONFIG += dtkwidget dtkgui dtkcore
