@@ -955,32 +955,32 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>%1 ficheiro(s) imprimido com sucesso, %2 ficheiro(s) falharam.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"/>
+        <translation>Imprimir documentos em lote silenciosamente</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"/>
+        <translation>Ficheiros de documentos a imprimir</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"/>
+        <translation>Sem ficheiros especificados.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>e mais %1 ficheiro(s) falharam.</translation>
     </message>
 </context>
 <context>
