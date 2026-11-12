@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt">
 <context>
     <name>Application</name>
     <message>
@@ -89,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Avisos</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -372,22 +370,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="20"/>
         <source>No eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sem proteção ocular</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="21"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Proteção ocular clássica</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="22"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Proteção ocular verde</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="23"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Proteção ocular noturna</translation>
     </message>
 </context>
 <context>
@@ -395,7 +393,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="48"/>
         <source>Eye protection mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de proteção da visão</translation>
     </message>
 </context>
 <context>
@@ -466,17 +464,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurado para a última posição de leitura</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="55"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Saltar para a primeira página</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="76"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fechar</translation>
     </message>
 </context>
 <context>
@@ -927,68 +925,62 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>O CUPS não está disponível. Por favor verifique se o serviço de impressão está em execução.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhuma impressora predefinida. Por favor defina uma impressora predefinida primeiro.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao converter ficheiro: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha ao imprimir ficheiro: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Impressão em Lote</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Todos os %n ficheiro(s) imprimidos com sucesso.</numerusform><numerusform>Todos os %n ficheiro(s) imprimidos com sucesso.</numerusform><numerusform>Todos os %n ficheiro(s) imprimidos com sucesso.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ficheiro(s) imprimido com sucesso, %2 ficheiro(s) falharam.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform><numerusform>Todos %n ficheiro(s) falharam ao imprimir.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimir documentos em lote silenciosamente</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"></translation>
+        <translation>Ficheiros de documentos a imprimir</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sem ficheiros especificados.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>e mais %1 ficheiro(s) falharam.</translation>
     </message>
 </context>
 <context>
