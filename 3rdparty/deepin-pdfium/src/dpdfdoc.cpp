@@ -22,6 +22,19 @@
 #include <QTemporaryDir>
 #include <QUuid>
 #include <unistd.h>
+#include <sys/statfs.h>
+#include <linux/magic.h>
+
+static bool isOnNetworkFileSystem(int fd)
+{
+    struct statfs buf;
+    if (fstatfs(fd, &buf) != 0)
+        return false;
+
+    return buf.f_type == SMB_SUPER_MAGIC
+        || buf.f_type == SMB2_SUPER_MAGIC
+        || buf.f_type == 0xFF534D42; // CIFS_MAGIC_NUMBER (not in userspace headers)
+}
 
 /**
  * @brief The PDFIumLoader class for FPDF_FILEACCESS
@@ -309,7 +322,8 @@ bool DPdfDoc::save()
     }
 
     newFile.flush(); // Flush user buffer to kernel buffer
-    fsync(newFile.handle()); // Sync kernel buffer to disk
+    if (!isOnNetworkFileSystem(newFile.handle()))
+        fsync(newFile.handle()); // Sync kernel buffer to disk (skip on network FS)
     newFile.close();
 
     // Remove backup file after successful write
@@ -336,7 +350,8 @@ bool DPdfDoc::saveAs(const QString &filePath)
     locker.unlock();
 
     saveWriter.flush(); // Flush user buffer to kernel buffer
-    fsync(saveWriter.handle()); // Sync kernel buffer to disk
+    if (!isOnNetworkFileSystem(saveWriter.handle()))
+        fsync(saveWriter.handle()); // Sync kernel buffer to disk (skip on network FS)
     saveWriter.close();
 
     return result;
