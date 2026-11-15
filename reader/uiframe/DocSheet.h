@@ -1020,6 +1020,7 @@ private:
     bool m_needsRestoreTip = false;
     // 缓存的内容哈希，避免自动保存时反复读盘计算
     QString m_cachedContentHash;
+    Dtk::Widget::DPrinter *m_printPrinter = nullptr;  //打印预览对话框的打印机指针，用于关闭后检测保存是否成功
 
 public:
     QProcess *m_process = nullptr; //当前调用的命令的进程地址

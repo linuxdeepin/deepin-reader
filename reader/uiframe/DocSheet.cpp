@@ -24,6 +24,7 @@
 #include <DSpinner>
 #include <DPrintPreviewDialog>
 #include <DWidgetUtil>
+#include <DMessageBox>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -1031,6 +1032,7 @@ void DocSheet::showTips(const QString &tips, int iconIndex)
 
 void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange)
 {
+    m_printPrinter = printer;
     qCDebug(appLog) << "Print requested for pages:" << pageRange;
     if (pageRange.isEmpty()) {
         qCWarning(appLog) << "Empty page range for printing";
@@ -1134,6 +1136,7 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
 void DocSheet::onPrintRequested(DPrinter *printer)
 {
+    m_printPrinter = printer;
     // qCDebug(appLog) << "onPrintRequested";
     printer->setDocName(QFileInfo(filePath()).fileName());
 
@@ -2082,6 +2085,17 @@ void DocSheet::onPopPrintDialog()
     //图片打印
     connect(preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *>::of(&DocSheet::onPrintRequested));
 #endif
+    m_printPrinter = nullptr;
+
+    connect(preview, &QDialog::accepted, this, [this]() {
+        if (m_printPrinter && !m_printPrinter->outputFileName().isEmpty()) {
+            QString savePath = m_printPrinter->outputFileName();
+            if (!QFile::exists(savePath)) {
+                DMessageBox::warning(this, tr("打印"), tr("保存失败，目标目录可能没有写入权限。"));
+            }
+        }
+    });
+
     preview->open();
     qCDebug(appLog) << "onPopPrintDialog end";
 }
