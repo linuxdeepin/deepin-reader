@@ -52,7 +52,8 @@ public:
      * @param sheet 哪个文档
      * @return
      */
-    bool saveOperation(DocSheet *sheet, const QString &cachedContentHash = QString());
+    bool saveOperation(DocSheet *sheet, const QString &cachedContentHash = QString(),
+                        qint64 cachedFileSize = -1, qint64 cachedLastModified = -1);
 
     /**
      * @brief readBookmarks
@@ -74,7 +75,7 @@ public:
      * @param bookmarks 书签列表
      * @return
      */
-    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks);
+    bool saveBookmarks(const QString &filePath, const QSet<int> bookmarks, const QString &contentHash = QString());
 
     // ===== 标签页组持久化 =====
 

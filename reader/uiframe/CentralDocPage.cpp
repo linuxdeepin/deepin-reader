@@ -453,6 +453,9 @@ bool CentralDocPage::closeSheet(DocSheet *sheet, bool needToBeSaved)
         getLoadLibsInstance()->m_document_close(sheet->filePath().toLocal8Bit().data());
     }
 #endif
+    // 关闭前将残余文件 I/O（渲染器保存、哈希计算、文件信息获取）移至后台线程，
+    // 避免 ~DocSheet → setAlive(false) 在主线程同步阻塞（SMB 场景 ~3.3s 卡死）
+    sheet->flushSaveBeforeClose();
     delete sheet;
 
     qCDebug(appLog) << "现存 sheet 数量: " <<  DocSheet::g_sheetList.size();

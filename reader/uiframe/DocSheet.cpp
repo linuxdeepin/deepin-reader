@@ -685,22 +685,89 @@ bool DocSheet::saveData()
     const bool contentSaved = m_documentChanged || fileWasMissing;
     m_documentChanged = false;
 
-    // 书签有变化，或保存导致文件内容变化时，都重写书签以刷新内容指纹，
-    // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
-    if ((m_bookmarkChanged || contentSaved) && !Database::instance()->saveBookmarks(filePath(), m_bookmarks))
-        return false;
-
-    m_bookmarkChanged = false;
-
-    // 保存会改变文件内容，同步刷新缓存哈希，
-    // 避免后续自动保存将过期哈希写入 operation 导致下次打开时误判过期
+    // 保存会改变文件内容，先计算一次哈希，
+    // 后续书签保存复用此哈希，避免重复读盘计算（网络盘场景 ~300ms/次）
     if (contentSaved) {
         m_cachedContentHash = Database::computeContentHash(m_filePath);
     }
 
+    // 书签有变化，或保存导致文件内容变化时，都重写书签以刷新内容指纹，
+    // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
+    if ((m_bookmarkChanged || contentSaved) && !Database::instance()->saveBookmarks(filePath(), m_bookmarks, m_cachedContentHash))
+        return false;
+
+    m_bookmarkChanged = false;
+
     m_sidebar->changeResetModelData();
 
     return true;
+}
+void DocSheet::flushSaveBeforeClose()
+{
+    qCDebug(appLog) << "flushSaveBeforeClose for:" << m_filePath;
+
+    m_autoSaveTimer->stop();
+    m_progressSaveTimer->stop();
+    m_restoreSettleTimer->stop();
+
+    // Capture scroll position and sidebar state (mirrors setAlive(false))
+    if (m_browser) {
+        m_operation.scrollPosition = m_browser->getScrollPosition();
+    }
+    if (m_sidebar && m_sidebar->isVisible()) {
+        m_operation.sidebarWidth = m_sidebar->width();
+        m_operation.expandedSections = m_sidebar->getExpandedSections();
+    }
+
+    // Move file I/O to background thread (SMB: save ~600ms, hash ~300ms, stat ~200ms)
+    const QString filePath = m_filePath;
+    const bool docChanged = m_documentChanged;
+    const QSharedPointer<SheetRenderer> renderer = m_renderer;
+    const bool needHashCompute = m_cachedContentHash.isEmpty() || docChanged;
+    bool rendererSaveOk = true;
+    QString hashResult;
+    qint64 fileSize = -1;
+    qint64 lastModified = -1;
+
+    QEventLoop loop;
+    QThread *thread = QThread::create([&]() {
+        if (docChanged && renderer) {
+            rendererSaveOk = renderer->save();
+        }
+        if (needHashCompute) {
+            hashResult = Database::computeContentHash(filePath);
+        }
+        QFileInfo fi(filePath);
+        fileSize = fi.size();
+        lastModified = fi.lastModified().toMSecsSinceEpoch();
+    });
+    QObject::connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+    loop.exec(QEventLoop::ExcludeSocketNotifiers);
+
+    // Back on main thread: DB writes (SQLite local, fast)
+    if (docChanged) {
+        if (rendererSaveOk) {
+            m_documentChanged = false;
+            m_sidebar->changeResetModelData();
+        } else {
+            qCWarning(appLog) << "flushSaveBeforeClose: failed to save document annotations for:" << m_filePath;
+        }
+    }
+
+    if (needHashCompute && !hashResult.isEmpty()) {
+        m_cachedContentHash = hashResult;
+    }
+
+    Database::instance()->saveBookmarks(m_filePath, m_bookmarks, m_cachedContentHash);
+    m_bookmarkChanged = false;
+
+    Database::instance()->saveOperation(this, m_cachedContentHash, fileSize, lastModified);
+    Database::instance()->flushToDisk();
+
+    m_saveFlushed = true;
 }
 bool DocSheet::saveAsData(QString targetFilePath)
 {
@@ -1797,28 +1864,32 @@ void DocSheet::setAlive(bool alive)
         }
         m_restoreGuardActive = false;
 
-        if (m_documentChanged && m_renderer) {
-            if (m_renderer->save()) {
-                m_documentChanged = false;
-                m_sidebar->changeResetModelData();
-                // 注释保存后文件内容已变化，重写书签刷新内容指纹，
-                // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
-                Database::instance()->saveBookmarks(filePath(), m_bookmarks);
-            } else {
-                qCWarning(appLog) << "Failed to save document annotations on close for:" << m_filePath;
+        if (!m_saveFlushed) {
+            if (m_documentChanged && m_renderer) {
+                if (m_renderer->save()) {
+                    m_documentChanged = false;
+                    m_sidebar->changeResetModelData();
+                    // 注释保存后文件内容已变化，重算哈希并传给书签保存，避免重复读盘
+                    m_cachedContentHash = Database::computeContentHash(m_filePath);
+                    Database::instance()->saveBookmarks(filePath(), m_bookmarks, m_cachedContentHash);
+                } else {
+                    qCWarning(appLog) << "Failed to save document annotations on close for:" << m_filePath;
+                }
             }
+
+            // 使用已缓存的哈希避免重复读盘；仅无缓存时才计算
+            if (m_cachedContentHash.isEmpty()) {
+                m_cachedContentHash = Database::computeContentHash(m_filePath);
+            }
+            Database::instance()->saveOperation(this, m_cachedContentHash);
+
+            if (m_bookmarkChanged) {
+                Database::instance()->saveBookmarks(filePath(), m_bookmarks, m_cachedContentHash);
+                m_bookmarkChanged = false;
+            }
+
+            Database::instance()->flushToDisk();
         }
-
-        // 关闭时重新计算内容哈希（文件可能已修改）
-        m_cachedContentHash = Database::computeContentHash(m_filePath);
-        Database::instance()->saveOperation(this, m_cachedContentHash);
-
-        if (m_bookmarkChanged) {
-            Database::instance()->saveBookmarks(filePath(), m_bookmarks);
-            m_bookmarkChanged = false;
-        }
-
-        Database::instance()->flushToDisk();
 
         g_lock.lockForWrite();
 
@@ -2348,18 +2419,18 @@ void DocSheet::onAutoSave()
         }
     }
 
+    // 注释保存会改变文件内容，此时必须重算哈希，保证 operation 与文件实际内容一致；
+    // 先计算哈希，后续书签保存复用此哈希，避免重复读盘计算
+    if (contentSaved) {
+        m_cachedContentHash = Database::computeContentHash(m_filePath);
+    }
+
     // 兜底保存书签（正常情况 setBookMark 已立即落盘，此处分防其他路径设的脏标记）；
     // 注释保存导致内容变化时也重写一次，刷新书签内容指纹，
     // 避免下次打开时书签因指纹不匹配被误判为旧文件遗留
     if (m_bookmarkChanged || contentSaved) {
-        Database::instance()->saveBookmarks(filePath(), m_bookmarks);
+        Database::instance()->saveBookmarks(filePath(), m_bookmarks, m_cachedContentHash);
         m_bookmarkChanged = false;
-    }
-
-    // 注释保存会改变文件内容，此时必须重算哈希，保证 operation 与文件实际内容一致；
-    // 其余情况沿用缓存哈希（无缓存时由 saveProgressToDb 内部计算），避免每30秒读盘计算
-    if (contentSaved) {
-        m_cachedContentHash = Database::computeContentHash(m_filePath);
     }
     saveProgressToDb();
 

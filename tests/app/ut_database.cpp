@@ -1319,3 +1319,41 @@ TEST_F(TestDatabase, UT_Database_bookmarkPathIndependence_001)
     QFile::remove(docLocal);
     QFile::remove(docUsb);
 }
+
+// 验证 saveBookmarks 使用传入的 contentHash 参数，而非重新调用 computeContentHash
+// 修复前：saveBookmarks 总是内部调用 computeContentHash，网络盘场景每次 ~300ms
+// 修复后：调用方可传入预计算哈希，避免重复读盘
+TEST_F(TestDatabase, UT_Database_saveBookmarks_with_contentHash)
+{
+    QString doc1, doc2;
+    ut_bookmark_prepare_files(doc1, doc2);
+    const QString realHash = Database::computeContentHash(doc1);
+
+    // 先清理同指纹历史残留
+    ut_cleanup_content(m_tester, realHash);
+    ut_cleanup_path(m_tester, doc1);
+
+    // 传入预计算的真实哈希，书签应正常写入并关联到该哈希
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {0, 2}, realHash));
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 2);
+    EXPECT_EQ(ut_bookmark_hash_count(m_tester, realHash), 2);
+
+    // 传入与文件实际内容不同的哈希，验证参数确实被使用（而非内部重新计算）
+    const QString fakeHash = QStringLiteral("fake_hash_param_test_999");
+    ut_cleanup_content(m_tester, realHash);
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {1}, fakeHash));
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 1);
+    // DB 中存储的应是传入的 fakeHash，而非 computeContentHash 的结果
+    EXPECT_EQ(ut_bookmark_hash_count(m_tester, fakeHash), 1);
+    EXPECT_EQ(ut_bookmark_hash_count(m_tester, realHash), 0);
+
+    // 不传 contentHash（使用默认空值）时，内部应自行计算哈希，行为与修复前一致
+    ut_cleanup_path(m_tester, doc1);
+    ASSERT_TRUE(m_tester->saveBookmarks(doc1, QSet<int> {3, 5}));
+    EXPECT_EQ(ut_bookmark_count(m_tester, doc1), 2);
+    EXPECT_EQ(ut_bookmark_hash_count(m_tester, realHash), 2);
+
+    ut_cleanup_path(m_tester, doc1);
+    QFile::remove(doc1);
+    QFile::remove(doc2);
+}
