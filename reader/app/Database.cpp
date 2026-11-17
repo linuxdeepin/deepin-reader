@@ -306,16 +306,23 @@ bool Database::readOperation(DocSheet *sheet)
     return false;
 }
 
-bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash)
+bool Database::saveOperation(DocSheet *sheet, const QString &cachedContentHash, qint64 cachedFileSize, qint64 cachedLastModified)
 {
     if (!sheet) {
         return false;
     }
 
-    // 获取文件信息用于内容特征匹配
-    QFileInfo fileInfo(sheet->filePath());
-    qint64 fileSize = fileInfo.size();
-    qint64 lastModified = fileInfo.lastModified().toMSecsSinceEpoch();
+    // 获取文件信息用于内容特征匹配（调用方已预取时直接复用，避免网络盘 stat 阻塞）
+    qint64 fileSize;
+    qint64 lastModified;
+    if (cachedFileSize >= 0 && cachedLastModified >= 0) {
+        fileSize = cachedFileSize;
+        lastModified = cachedLastModified;
+    } else {
+        QFileInfo fileInfo(sheet->filePath());
+        fileSize = fileInfo.size();
+        lastModified = fileInfo.lastModified().toMSecsSinceEpoch();
+    }
     // 如果传入了缓存哈希则直接使用，否则重新计算（避免自动保存时反复读盘）
     QString contentHash = cachedContentHash.isEmpty()
         ? computeContentHash(sheet->filePath())
@@ -1119,7 +1126,7 @@ bool Database::readBookmarks(const QString &filePath, QSet<int> &bookmarks)
     return false;
 }
 
-bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
+bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks, const QString &contentHash)
 {
     if (m_database.isOpen()) {
         QSqlQuery query(m_database);
@@ -1127,9 +1134,10 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
         Transaction transaction(m_database);
 
         // 记录当前文件内容指纹：书签以「路径 + 内容指纹」为关联键（跟路径下的内容走）
-        const QString contentHash = computeContentHash(filePath);
+        // 调用方传入预计算哈希时直接使用，避免重复读盘计算（网络盘场景 ~300ms/次）
+        const QString hash = contentHash.isEmpty() ? computeContentHash(filePath) : contentHash;
 
-        if (!contentHash.isEmpty()) {
+        if (!hash.isEmpty()) {
             // 按 路径+指纹 全量替换：仅删除当前路径当前指纹（及无指纹 legacy 行）的书签。
             // 关键一：其他路径同内容拷贝的书签不受影响（各路径独立，不互相同步）；
             // 关键二：同一路径其它指纹（历史内容版本）的书签保留 ——
@@ -1147,7 +1155,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
             }
         }
 
-        query.bindValue(":contentHash", contentHash);
+        query.bindValue(":contentHash", hash);
         query.bindValue(":filePath", filePath);
 
         if (!query.exec()) {
@@ -1165,7 +1173,7 @@ bool Database::saveBookmarks(const QString &filePath, const QSet<int> bookmarks)
 
             query.bindValue(":filePath", filePath);
             query.bindValue(":bookmarkIndex", index);
-            query.bindValue(":contentHash", contentHash);
+            query.bindValue(":contentHash", hash);
 
             if (!query.exec()) {
                 qCInfo(appLog) << query.lastError().text();

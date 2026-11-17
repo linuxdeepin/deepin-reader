@@ -379,6 +379,14 @@ public:
     bool saveAsData(QString targetFilePath);
 
     /**
+     * @brief flushSaveBeforeClose
+     * 关闭前将文件 I/O（渲染器保存、哈希计算、文件信息获取）移至后台线程执行，
+     * 主线程通过 QEventLoop 保持响应；数据库操作仍在主线程执行（SQLite 本地，快速）。
+     * setAlive(false) 通过 m_saveFlushed 标志跳过已完成的 I/O，避免 ~DocSheet 异步。
+     */
+    void flushSaveBeforeClose();
+
+    /**
      * @brief handlePageModified
      * 处理page修改
      */
@@ -1051,6 +1059,8 @@ private:
     bool m_needsRestoreTip = false;
     // 缓存的内容哈希，避免自动保存时反复读盘计算
     QString m_cachedContentHash;
+    // 标记 flushSaveBeforeClose() 已完成 I/O，setAlive(false) 据此跳过避免重复
+    bool m_saveFlushed = false;
 
     // 打印转化等待提示（常驻轻量 Tooltip，转化完成/失败后关闭）
     QPointer<Dtk::Widget::DFloatingMessage> m_printWaitTip;
