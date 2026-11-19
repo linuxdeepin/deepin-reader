@@ -44,6 +44,17 @@ extern "C" {
 }
 DWIDGET_USE_NAMESPACE
 
+namespace {
+constexpr double kXpsLogicalDpi = 96.0;
+constexpr double kPointLogicalDpi = 72.0; //PDF/DOCX/DjVu 等页面逻辑尺寸为印刷点（1/72 英寸）
+constexpr int kFallbackPrintDpi = 300;
+constexpr int kMaxPrintPixelsPerSide = 10000;
+//DTK 异步打印会一次性持有整个页范围的页面位图，大文档按页数分级限制渲染 DPI，避免内存耗尽
+constexpr int kHugePrintDocPageCount = 200;
+constexpr int kLargePrintDocPageCount = 50;
+constexpr int kHugePrintDocDpiCeiling = 150;
+constexpr int kLargePrintDocDpiCeiling = 200;
+}
 QReadWriteLock DocSheet::g_lock;
 QStringList DocSheet::g_uuidList;
 QList<DocSheet *> DocSheet::g_sheetList;
@@ -440,7 +451,77 @@ void DocSheet::setScaleFactor(qreal scaleFactor)
 QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 {
     return m_renderer->getImage(index, width, height, slice);
-    ;
+}
+
+QSize DocSheet::calculatePrintTargetSize(int pageIndex, const QPrinter &printer, const QRectF &pageRect) const
+{
+    // XPS 页面逻辑尺寸按 96 DPI 计，PDF/DOCX/DjVu 等按印刷点（72 DPI）计
+    double logicalDpi = kPointLogicalDpi;
+#ifdef XPS_SUPPORT_ENABLED
+    if (m_fileType == Dr::XPS) {
+        logicalDpi = kXpsLogicalDpi;
+    }
+#endif
+
+    const QSizeF logicalSize = m_renderer ? m_renderer->getPageSize(pageIndex) : QSizeF();
+    if (logicalSize.isEmpty() || logicalSize.width() <= 0.0 || logicalSize.height() <= 0.0) {
+        qWarning() << "Unable to determine logical page size for high DPI print. index:" << pageIndex;
+        return QSize();
+    }
+
+    int printerDpi = printer.resolution();
+    if (printerDpi <= 0) {
+        qWarning() << "Printer resolution is invalid, fallback to default DPI:" << kFallbackPrintDpi;
+        printerDpi = kFallbackPrintDpi;
+    } else if (printerDpi < kFallbackPrintDpi) {
+        // 打印预览的 DPrinter 为 ScreenResolution(72DPI)，按其取图会导致打印模糊
+        qWarning() << "Printer resolution" << printerDpi << "too low, raise to" << kFallbackPrintDpi;
+        printerDpi = kFallbackPrintDpi;
+    }
+
+    //大文档限制渲染 DPI 上限，防止打印时整册高分辨率位图同时驻留内存
+    const int totalPages = m_renderer ? m_renderer->getPageCount() : 0;
+    int dpiCeiling = kFallbackPrintDpi;
+    if (totalPages > kHugePrintDocPageCount) {
+        dpiCeiling = kHugePrintDocDpiCeiling;
+    } else if (totalPages > kLargePrintDocPageCount) {
+        dpiCeiling = kLargePrintDocDpiCeiling;
+    }
+    if (printerDpi > dpiCeiling) {
+        qWarning() << "Total pages" << totalPages << "exceeds tier, limit print DPI from" << printerDpi << "to" << dpiCeiling;
+        printerDpi = dpiCeiling;
+    }
+
+    double widthPixels = logicalSize.width() / logicalDpi * static_cast<double>(printerDpi);
+    double heightPixels = logicalSize.height() / logicalDpi * static_cast<double>(printerDpi);
+
+    if (widthPixels <= 0.0 || heightPixels <= 0.0) {
+        qWarning() << "Calculated print size is invalid:" << widthPixels << heightPixels;
+        return QSize();
+    }
+
+    if (pageRect.width() > 0.0 && pageRect.height() > 0.0) {
+        const double scale = qMin(pageRect.width() / widthPixels, pageRect.height() / heightPixels);
+        if (scale < 1.0) {
+            widthPixels *= scale;
+            heightPixels *= scale;
+        }
+    }
+
+    const double maxDimension = qMax(widthPixels, heightPixels);
+    if (maxDimension > kMaxPrintPixelsPerSide) {
+        const double clampScale = static_cast<double>(kMaxPrintPixelsPerSide) / maxDimension;
+        widthPixels *= clampScale;
+        heightPixels *= clampScale;
+        qWarning() << "Requested print resolution too large, clamping to" << kMaxPrintPixelsPerSide << "pixels. index:" << pageIndex;
+    }
+
+    const int roundedWidth = qMax(1, qRound(widthPixels));
+    const int roundedHeight = qMax(1, qRound(heightPixels));
+
+    qDebug() << "Calculated print target size for page" << pageIndex << ":" << roundedWidth << "x" << roundedHeight << "@" << printerDpi << "DPI";
+
+    return QSize(roundedWidth, roundedHeight);
 }
 
 bool DocSheet::fileChanged()
@@ -757,23 +838,69 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
 
+    auto targetRectForSize = [&pageRect](const QSize &sourceSize) -> QRect {
+        if (!sourceSize.isValid() || sourceSize.isEmpty()) {
+            return QRect();
+        }
+
+        qreal targetWidth = pageRect.width();
+        qreal targetHeight = targetWidth * static_cast<qreal>(sourceSize.height()) / static_cast<qreal>(sourceSize.width());
+
+        if (targetHeight > pageRect.height()) {
+            targetHeight = pageRect.height();
+            targetWidth = targetHeight * static_cast<qreal>(sourceSize.width()) / static_cast<qreal>(sourceSize.height());
+        }
+
+        const int left = qRound((pageRect.width() - targetWidth) / 2.0);
+        const int top = qRound((pageRect.height() - targetHeight) / 2.0);
+        return QRect(left,
+                     top,
+                     qMax(1, qRound(targetWidth)),
+                     qMax(1, qRound(targetHeight)));
+    };
+
     for (int i = 0; i < pageRange.count(); ++i) {
         if (pageRange[i] > pageCount() || pageRange[i] > m_browser->pages().count())
             continue;
 
-        const QRectF boundingrect = m_browser->pages().at(pageRange[i] - 1)->boundingRect();   //文档页缩放后的原区域不受旋转影响
-        qreal printWidth = pageRect.width();   //适合打印的图片宽度
-        qreal printHeight = printWidth * boundingrect.height() / boundingrect.width();   //适合打印的图片高度
-        if (printHeight > pageRect.height()) {
-            printHeight = pageRect.height();
-            printWidth = printHeight * boundingrect.width() / boundingrect.height();
+        QImage image;
+        QRect targetRect;
+
+        //优先按打印机 DPI 渲染高清晰度位图（并列打印等设置走 paintRequested 路径，需保证打印清晰度）
+        const int zeroBasedIndex = pageRange[i] - 1;
+        const QSize requestedSize = calculatePrintTargetSize(zeroBasedIndex, *printer, pageRect);
+        if (!requestedSize.isValid()) {
+            qWarning() << "Falling back to view-based print size for page" << zeroBasedIndex;
+        } else {
+            image = loading.getImageForPrint(this, zeroBasedIndex, requestedSize);
+            if (!image.isNull())
+                targetRect = targetRectForSize(image.size());
         }
 
-        QImage image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
-        painter.drawImage(QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
-                                (static_cast<int>(pageRect.height()) - image.height()) / 2,
-                                image.width(), image.height()),
-                          image);
+        if (image.isNull()) {
+            const QRectF boundingrect = m_browser->pages().at(pageRange[i] - 1)->boundingRect();   //文档页缩放后的原区域不受旋转影响
+            qreal printWidth = pageRect.width();   //适合打印的图片宽度
+            qreal printHeight = printWidth * boundingrect.height() / boundingrect.width();   //适合打印的图片高度
+            if (printHeight > pageRect.height()) {
+                printHeight = pageRect.height();
+                printWidth = printHeight * boundingrect.width() / boundingrect.height();
+            }
+            image = loading.getImage(this, pageRange[i] - 1, static_cast<int>(printWidth), static_cast<int>(printHeight));
+            targetRect = QRect((static_cast<int>(pageRect.width()) - image.width()) / 2,
+                               (static_cast<int>(pageRect.height()) - image.height()) / 2,
+                               image.width(), image.height());
+        }
+
+        if (image.isNull()) {
+            qWarning() << "Failed to render image for printing page" << pageRange[i];
+            continue;
+        }
+
+        if (!targetRect.isValid()) {
+            targetRect = targetRectForSize(image.size());
+        }
+
+        painter.drawImage(targetRect, image, image.rect());
 
         if (i != pageRange.count() - 1)
             printer->newPage();
@@ -1309,24 +1436,11 @@ void DocSheet::onPopPrintDialog()
     //文件打印
     preview->setAsynPreview(pageCount());
     preview->setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::DOCX == fileType()) {   //旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
-        preview->setPrintFromPath(openedFilePath());
-    }
-
-    //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
-    if (Dr::PDF == fileType()) {
-        QString pdfPath = filePath();
-        // 使用 pdftocairo 转换为嵌入矢量pdf，解决打印乱码和模糊问题
-        QString tmpPdfPath = convertedFileDir() + "/pdftocairoPrint.pdf";
-        QProcess process;
-        process.start("pdftocairo", QStringList() << "-pdf" << pdfPath << tmpPdfPath);
-        process.waitForFinished();
-        if (process.exitCode() != 0) {
-            qWarning() << "pdftocairo failed:" << process.readAllStandardError();
-            return;
-        }
-        preview->setPrintFromPath(tmpPdfPath);
-    }
+    // 不使用 setPrintFromPath：该接口把打印交给打印插件按文件路径输出，DTK 会
+    // 因此禁用并列打印（N-up）以及方向、缩放、边距、水印等设置项。统一走
+    // paintRequested 由本应用渲染页面，并列打印等设置方可生效；原 PDF 经
+    // pdftocairo 转换后按路径打印是为解决模糊/乱码，现由 onPrintRequested
+    // 的高 DPI 位图渲染保证清晰度。
     connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
 #else
     //图片打印
@@ -1391,6 +1505,35 @@ QImage DocSheet::LoadingWidget::getImage(DocSheet *doc, int index, int width, in
 
     loop.exec(QEventLoop::ExcludeSocketNotifiers);
 
+    return image;
+}
+
+QImage DocSheet::LoadingWidget::getImageForPrint(DocSheet *doc, int index, const QSize &targetSize)
+{
+    qDebug() << "getImageForPrint" << targetSize;
+    if (!doc) {
+        qWarning() << "DocSheet pointer is null when requesting print image";
+        return QImage();
+    }
+    if (!targetSize.isValid() || targetSize.width() <= 0 || targetSize.height() <= 0) {
+        qWarning() << "Invalid target size for print image" << targetSize;
+        return QImage();
+    }
+
+    QImage image;
+    QEventLoop loop;
+    const QSize requestSize = targetSize;
+    QThread *thread = QThread::create([=, &image]() {
+        image = doc->getImage(index, requestSize.width(), requestSize.height());
+    });
+    QObject::connect(thread, &QThread::finished, &loop, &QEventLoop::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+
+    loop.exec(QEventLoop::ExcludeSocketNotifiers);
+
+    qDebug() << "getImageForPrint end";
     return image;
 }
 

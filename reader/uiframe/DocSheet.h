@@ -815,6 +815,7 @@ private slots:
     void onExtractPassword(const QString &password);
 
 private:
+    QSize calculatePrintTargetSize(int pageIndex, const QPrinter &printer, const QRectF &pageRect) const;
     /**
      * @brief setAlive
      * 设置当前sheet是否存活
@@ -877,6 +878,11 @@ public:
          * @brief getImage 子线程获取image
          */
         QImage getImage(DocSheet *doc, int index, int width, int height);
+
+        /**
+         * @brief getImageForPrint 打印专用图像获取接口
+         */
+        QImage getImageForPrint(DocSheet *doc, int index, const QSize &targetSize);
 
     protected:
         void paintEvent(QPaintEvent */*event*/) override;
