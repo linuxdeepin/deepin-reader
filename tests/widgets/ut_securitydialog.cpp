@@ -11,6 +11,7 @@
 #include <QTest>
 #include <QSignalSpy>
 #include <QEvent>
+#include <QElapsedTimer>
 #include <QLabel>
 
 class TestSecurityDialog : public ::testing::Test
@@ -97,4 +98,28 @@ TEST(UT_autoCutText, longTextWraps)
     NewStr result = autoCutText("this is some long text that should wrap", &label);
     EXPECT_FALSE(result.resultStr.isEmpty());
     EXPECT_GE(result.strList.size(), 1);
+}
+
+// BUG-383499 / CWE-835: when the label is narrower than a single glyph the
+// wrapping loop used to decrement i, cancel the i++ increment and never exit.
+TEST(UT_autoCutText, singleCharExceedsLabelWidthTerminates)
+{
+    DLabel label;
+    label.setFixedWidth(1);  // narrower than any glyph
+
+    const QString input = QStringLiteral("WideChar-测试-ABC");
+
+    QElapsedTimer timer;
+    timer.start();
+    NewStr result = autoCutText(input, &label);
+    const qint64 elapsedMs = timer.elapsed();
+
+    // Must make progress and terminate instead of spinning forever.
+    EXPECT_LT(elapsedMs, 2000) << "autoCutText did not terminate (CWE-835 regression)";
+
+    // Every character must be preserved while wrapping.
+    QString joined = result.resultStr;
+    joined.remove(QLatin1Char('\n'));
+    EXPECT_EQ(joined, input);
+    EXPECT_FALSE(result.strList.isEmpty());
 }

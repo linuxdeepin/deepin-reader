@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 -2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -40,10 +40,17 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
 
             if (font_label.horizontalAdvance(str) > width) { //根据label宽度调整每行字符数
                 str.remove(str.count() - 1, 1);
-                newstr.strList.append(str);
-                newstr.resultStr += str + "\n";
-                str.clear();
-                --i;
+                if (!str.isEmpty()) {
+                    newstr.strList.append(str);
+                    newstr.resultStr += str + "\n";
+                    str.clear();
+                    --i;
+                } else {
+                    // 单字符宽度即超过label宽度，单独作为一行输出
+                    newstr.strList.append(strText.at(i));
+                    newstr.resultStr += strText.at(i) + QString("\n");
+                    str.clear();
+                }
             }
         }
         newstr.strList.append(str);

@@ -160,6 +160,29 @@ void allTextLooseRects_stub(void *, int &charCount, QStringList &texts, QVector<
     rects.append(QRectF(0, 20, 20, 10));
 }
 
+// BUG-383499 / CWE-125, CWE-129: charCount may be larger than the actual
+// container sizes; words() must never index past texts/rects.
+void allTextLooseRects_oversizedCharCount_stub(void *, int &charCount, QStringList &texts, QVector<QRectF> &rects)
+{
+    charCount = 10;  // deliberately larger than the containers below
+    texts << "a" << "b" << "c";
+    rects << QRectF(0, 0, 10, 10) << QRectF(12, 0, 10, 10) << QRectF(24, 0, 10, 10);
+}
+
+void allTextLooseRects_rectsShorter_stub(void *, int &charCount, QStringList &texts, QVector<QRectF> &rects)
+{
+    charCount = 5;
+    texts << "a" << "b" << "c" << "d";  // texts is longer than rects
+    rects << QRectF(0, 0, 10, 10) << QRectF(12, 0, 10, 10);
+}
+
+void allTextLooseRects_emptyContainers_stub(void *, int &charCount, QStringList &texts, QVector<QRectF> &rects)
+{
+    charCount = 5;  // containers intentionally left empty
+    Q_UNUSED(texts);
+    Q_UNUSED(rects);
+}
+
 QVector<PageSection> search_stub(const QString &, bool, bool)
 {
     PageLine line;
@@ -303,6 +326,49 @@ TEST_F(TestPDFPage, UT_PDFPage_words_001)
     m_tester->m_wordLoaded = false;
     m_tester->words();
     EXPECT_TRUE(m_tester->words().size() == 3);
+}
+
+// BUG-383499 / CWE-125, CWE-129: charCount larger than the containers must be
+// clamped to the real container size, never indexing out of range.
+TEST_F(TestPDFPage, UT_PDFPage_words_oversizedCharCount_002)
+{
+    Stub s;
+    s.set(static_cast<void(DPdfPage::*)(int &, QStringList &, QVector<QRectF> &)>(ADDR(DPdfPage, allTextLooseRects)), allTextLooseRects_oversizedCharCount_stub);
+    m_tester->m_wordLoaded = false;
+
+    const QList<Word> words = m_tester->words();
+
+    // Only the 3 real entries may be read (charCount lied with 10).
+    ASSERT_EQ(words.size(), 3);
+    EXPECT_EQ(words.at(0).text, QStringLiteral("a"));
+    EXPECT_EQ(words.at(1).text, QStringLiteral("b"));
+    EXPECT_EQ(words.at(2).text, QStringLiteral("c"));
+}
+
+// BUG-383499: rects shorter than texts must also be bounded.
+TEST_F(TestPDFPage, UT_PDFPage_words_rectsShorterThanTexts_003)
+{
+    Stub s;
+    s.set(static_cast<void(DPdfPage::*)(int &, QStringList &, QVector<QRectF> &)>(ADDR(DPdfPage, allTextLooseRects)), allTextLooseRects_rectsShorter_stub);
+    m_tester->m_wordLoaded = false;
+
+    const QList<Word> words = m_tester->words();
+
+    // Only the 2 rects have valid geometry; no OOB read of rects[2..3].
+    ASSERT_EQ(words.size(), 2);
+    EXPECT_EQ(words.at(0).text, QStringLiteral("a"));
+    EXPECT_EQ(words.at(1).text, QStringLiteral("b"));
+}
+
+// BUG-383499: non-positive containers with a positive charCount must not crash.
+TEST_F(TestPDFPage, UT_PDFPage_words_emptyContainers_004)
+{
+    Stub s;
+    s.set(static_cast<void(DPdfPage::*)(int &, QStringList &, QVector<QRectF> &)>(ADDR(DPdfPage, allTextLooseRects)), allTextLooseRects_emptyContainers_stub);
+    m_tester->m_wordLoaded = false;
+
+    const QList<Word> words = m_tester->words();
+    EXPECT_TRUE(words.isEmpty());
 }
 
 TEST_F(TestPDFPage, UT_PDFPage_search_001)

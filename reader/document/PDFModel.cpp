@@ -183,7 +183,7 @@ QList<Word> PDFPage::words()
 
     m_wordLoaded = true;
 
-    if (charCount <= 0) {
+    if (charCount <= 0 || texts.isEmpty() || rects.isEmpty()) {
         qCDebug(appLog) << "PDFPage::words() - No characters found, returning empty word list";
         return m_words;
     }
@@ -197,7 +197,7 @@ QList<Word> PDFPage::words()
     QList<Word> rowWords;
 
     while (1) {
-        if (index == charCount) {
+        if (index >= texts.size() || index >= rects.size() || index == charCount) {
             // qCDebug(appLog) << "PDFPage::words() - Processed all characters, appending final row";
             m_words.append(rowWords);
             break;
