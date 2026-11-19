@@ -50,8 +50,14 @@ DWIDGET_USE_NAMESPACE
 
 namespace {
 constexpr double kXpsLogicalDpi = 96.0;
+constexpr double kPointLogicalDpi = 72.0; //PDF/DOCX/DjVu 等页面逻辑尺寸为印刷点（1/72 英寸）
 constexpr int kFallbackPrintDpi = 300;
 constexpr int kMaxPrintPixelsPerSide = 10000;
+//DTK 异步打印会一次性持有整个页范围的页面位图，大文档按页数分级限制渲染 DPI，避免内存耗尽
+constexpr int kHugePrintDocPageCount = 200;
+constexpr int kLargePrintDocPageCount = 50;
+constexpr int kHugePrintDocDpiCeiling = 150;
+constexpr int kLargePrintDocDpiCeiling = 200;
 }
 
 QReadWriteLock DocSheet::g_lock;
@@ -594,9 +600,11 @@ QImage DocSheet::getImage(int index, int width, int height, const QRect &slice)
 
 QSize DocSheet::calculatePrintTargetSize(int pageIndex, const QPrinter &printer, const QRectF &pageRect) const
 {
+    // XPS 页面逻辑尺寸按 96 DPI 计，PDF/DOCX/DjVu 等按印刷点（72 DPI）计
+    double logicalDpi = kPointLogicalDpi;
 #ifdef XPS_SUPPORT_ENABLED
-    if (m_fileType != Dr::XPS) {
-        return QSize();
+    if (m_fileType == Dr::XPS) {
+        logicalDpi = kXpsLogicalDpi;
     }
 #endif
 
@@ -610,10 +618,27 @@ QSize DocSheet::calculatePrintTargetSize(int pageIndex, const QPrinter &printer,
     if (printerDpi <= 0) {
         qCWarning(appLog) << "Printer resolution is invalid, fallback to default DPI:" << kFallbackPrintDpi;
         printerDpi = kFallbackPrintDpi;
+    } else if (printerDpi < kFallbackPrintDpi) {
+        // 打印预览的 DPrinter 为 ScreenResolution(72DPI)，按其取图会导致打印模糊
+        qCWarning(appLog) << "Printer resolution" << printerDpi << "too low, raise to" << kFallbackPrintDpi;
+        printerDpi = kFallbackPrintDpi;
     }
 
-    double widthPixels = logicalSize.width() / kXpsLogicalDpi * static_cast<double>(printerDpi);
-    double heightPixels = logicalSize.height() / kXpsLogicalDpi * static_cast<double>(printerDpi);
+    //大文档限制渲染 DPI 上限，防止打印时整册高分辨率位图同时驻留内存
+    const int totalPages = m_renderer ? m_renderer->getPageCount() : 0;
+    int dpiCeiling = kFallbackPrintDpi;
+    if (totalPages > kHugePrintDocPageCount) {
+        dpiCeiling = kHugePrintDocDpiCeiling;
+    } else if (totalPages > kLargePrintDocPageCount) {
+        dpiCeiling = kLargePrintDocDpiCeiling;
+    }
+    if (printerDpi > dpiCeiling) {
+        qCWarning(appLog) << "Total pages" << totalPages << "exceeds tier, limit print DPI from" << printerDpi << "to" << dpiCeiling;
+        printerDpi = dpiCeiling;
+    }
+
+    double widthPixels = logicalSize.width() / logicalDpi * static_cast<double>(printerDpi);
+    double heightPixels = logicalSize.height() / logicalDpi * static_cast<double>(printerDpi);
 
     if (widthPixels <= 0.0 || heightPixels <= 0.0) {
         qCWarning(appLog) << "Calculated print size is invalid:" << widthPixels << heightPixels;
@@ -1055,11 +1080,6 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
 
     painter.setRenderHints(QPainter::Antialiasing | QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-#ifdef XPS_SUPPORT_ENABLED
-    const bool isXpsDocument = (m_fileType == Dr::XPS);
-#else
-    const bool isXpsDocument = false;
-#endif
     auto targetRectForSize = [&pageRect](const QSize &sourceSize) -> QRect {
         if (!sourceSize.isValid() || sourceSize.isEmpty()) {
             return QRect();
@@ -1088,17 +1108,15 @@ void DocSheet::onPrintRequested(DPrinter *printer, const QVector<int> &pageRange
         QImage image;
         QRect targetRect;
 
-        if (isXpsDocument) {
-            const int zeroBasedIndex = pageRange[i] - 1;
-            const QSize requestedSize = calculatePrintTargetSize(zeroBasedIndex, *printer, pageRect);
-            if (!requestedSize.isValid()) {
-                qCWarning(appLog) << "Falling back to view-based print size for XPS page" << zeroBasedIndex;
-            }
-
-            if (requestedSize.isValid()) {
-                image = loading.getImageForPrint(this, zeroBasedIndex, requestedSize);
+        //优先按打印机 DPI 渲染高清晰度位图（并列打印等设置走 paintRequested 路径，需保证打印清晰度）
+        const int zeroBasedIndex = pageRange[i] - 1;
+        const QSize requestedSize = calculatePrintTargetSize(zeroBasedIndex, *printer, pageRect);
+        if (!requestedSize.isValid()) {
+            qCWarning(appLog) << "Falling back to view-based print size for page" << zeroBasedIndex;
+        } else {
+            image = loading.getImageForPrint(this, zeroBasedIndex, requestedSize);
+            if (!image.isNull())
                 targetRect = targetRectForSize(image.size());
-            }
         }
 
         if (image.isNull()) {
@@ -2048,35 +2066,11 @@ void DocSheet::onPopPrintDialog()
     //文件打印
     preview->setAsynPreview(pageCount());
     preview->setDocName(QFileInfo(filePath()).fileName());
-    if (Dr::DOCX == fileType()) {//旧版本和最新版本使用新接口，PDF文件直接传，解决打印模糊问题
-        preview->setPrintFromPath(openedFilePath());
-    }
-
-    //pdf若是Linearized类型的，需要另存为Normal类型，然后打印
-    if (Dr::PDF == fileType()) {
-        QString pdfPath = filePath();
-        // 使用 pdftocairo 转换为嵌入矢量pdf，解决打印乱码和模糊问题
-        QString tmpPdfPath = convertedFileDir() + "/pdftocairoPrint.pdf";
-        QProcess process;
-        process.start("pdftocairo", QStringList() << "-pdf" << pdfPath << tmpPdfPath);
-        bool converted = process.waitForFinished(5 * 60 * 1000) && process.exitCode() == 0;
-        if (converted) {
-            // pdftocairo 有时 exit code 为 0 但输出 PDF 结构不完整，验证关键标记是否存在
-            QFile outFile(tmpPdfPath);
-            if (outFile.open(QIODevice::ReadOnly)) {
-                outFile.seek(qMax(0LL, outFile.size() - 1024));
-                const QByteArray tail = outFile.readAll();
-                outFile.close();
-                if (!tail.contains("startxref") || !tail.contains("%%EOF"))
-                    converted = false;
-            } else {
-                converted = false;
-            }
-        }
-        if (!converted)
-            qCWarning(appLog) << "pdftocairo conversion failed or produced invalid PDF, using original";
-        preview->setPrintFromPath(converted ? tmpPdfPath : pdfPath);
-    }
+    // 不使用 setPrintFromPath：该接口把打印交给打印插件按文件路径输出，DTK 会
+    // 因此禁用并列打印（N-up）以及方向、缩放、边距、水印等设置项。统一走
+    // paintRequested 由本应用渲染页面，并列打印等设置方可生效；原 PDF 经
+    // pdftocairo 转换后按路径打印是为解决模糊/乱码，现由 onPrintRequested
+    // 的高 DPI 位图渲染保证清晰度。
     connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested), this, QOverload<DPrinter *, const QVector<int> &>::of(&DocSheet::onPrintRequested));
 #else
     //图片打印
