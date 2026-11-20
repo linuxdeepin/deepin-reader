@@ -975,12 +975,12 @@
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation>S’u përcaktuan kartela</translation>
+        <translation>S’u përcaktuan kartela.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"/>
+        <translation>dhe %1 kartelë(a) tjetër dështoi.</translation>
     </message>
 </context>
 <context>
