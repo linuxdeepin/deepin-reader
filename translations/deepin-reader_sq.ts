@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
 <context>
     <name>Application</name>
     <message>
@@ -89,7 +87,7 @@
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="61"/>
         <source>Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinjalizime</translation>
     </message>
     <message>
         <location filename="../reader/widgets/AttrScrollWidget.cpp" line="67"/>
@@ -372,22 +370,22 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="20"/>
         <source>No eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Pa mbrojtje sysh</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="21"/>
         <source>Classic eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbrojtje klasike sysh</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="22"/>
         <source>Green eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbrojtje e gjelbër sysh</translation>
     </message>
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="23"/>
         <source>Night eye protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbrojtje sysh natën</translation>
     </message>
 </context>
 <context>
@@ -395,7 +393,7 @@
     <message>
         <location filename="../reader/eyeprotection/EyeProtectionAction.cpp" line="48"/>
         <source>Eye protection mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mënyrë mbrotjeje sysh</translation>
     </message>
 </context>
 <context>
@@ -466,17 +464,17 @@
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="34"/>
         <source>Restored to last reading position</source>
-        <translation type="unfinished"></translation>
+        <translation>U rikthye te pozicioni i leximit të fundit</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="55"/>
         <source>Jump to first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalo te faqja e parë</translation>
     </message>
     <message>
         <location filename="../reader/widgets/RestoreTipWidget.cpp" line="76"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Mbylle</translation>
     </message>
 </context>
 <context>
@@ -654,22 +652,22 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="70"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartelë</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="73"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekran</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="76"/>
         <source>Tools</source>
-        <translation type="unfinished">Mjete</translation>
+        <translation>Mjete</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="79"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Përpunojeni</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="131"/>
@@ -714,12 +712,12 @@
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="146"/>
         <source>Scroll up one line</source>
-        <translation>Scroll up one line</translation>
+        <translation>Rrëshqit sipër një rresht</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="147"/>
         <source>Scroll down one line</source>
-        <translation>Scroll down one line</translation>
+        <translation>Rrëshqit poshtë një rresht</translation>
     </message>
     <message>
         <location filename="../reader/widgets/ShortCutShow.cpp" line="148"/>
@@ -927,68 +925,62 @@
     <message>
         <location filename="../batch-print/errormessages.cpp" line="11"/>
         <source>CUPS is not available. Please check if the printing service is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>CUPS s’është i passhëm. Ju lutemi, kontrolloni nëse shërbimi i shtypjeve është në punë.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="17"/>
         <source>No default printer found. Please set a default printer first.</source>
-        <translation type="unfinished"></translation>
+        <translation>S’u gjet shtypës parazgjedhje. Ju lutemi, së pari, caktoni një shtypës parazgjedhje.</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="23"/>
         <source>Failed to convert file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S’u arri të shndërrohet kartelë: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="29"/>
         <source>Failed to print file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S’u arrit të shtypet kartelë: %1</translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="35"/>
         <source>Batch Print</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="40"/>
         <source>All %n file(s) printed successfully.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>U shtyp me sukses %n kartelë.</numerusform><numerusform>Krejt %n kartelat u shtypën me sukses.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/errormessages.cpp" line="46"/>
         <source>%1 file(s) printed successfully, %2 file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kartelë(a) u shtyp me sukses, %2 kartelë(a) dështoi.</translation>
     </message>
     <message numerus="yes">
         <location filename="../batch-print/errormessages.cpp" line="52"/>
         <source>All %n file(s) failed to print.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>S’u arrit të shtypej %n kartelë.</numerusform><numerusform>S’u arrit të shtypeshin krejt %n kartelat.</numerusform></translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="33"/>
         <source>Batch print documents silently</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="36"/>
         <source>Document files to print</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartela dokument për shtypje</translation>
     </message>
     <message>
         <location filename="../batch-print/main.cpp" line="43"/>
         <source>No files specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>S’u përcaktuan kartela.</translation>
     </message>
     <message>
         <location filename="../batch-print/notifyclient.cpp" line="37"/>
         <source>and %1 more file(s) failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>dhe %1 kartelë(a) tjetër dështoi.</translation>
     </message>
 </context>
 <context>
