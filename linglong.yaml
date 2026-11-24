@@ -111,14 +111,12 @@ buildext:
       - libglib2.0-dev       # reader: glib-2.0/gobject-2.0 探测
       - libfreetype6-dev     # reader: XPS 的 freetype2 探测
       - libjpeg-dev          # reader: pkg_check_modules(libjpeg)
-      - libchardet-dev       # 3rdparty/deepin-pdfium（vendored）
-      - liblcms2-dev         # 3rdparty/deepin-pdfium（vendored）
-      - libopenjp2-7-dev     # 3rdparty/deepin-pdfium（vendored）
-      - libicu-dev           # 3rdparty/deepin-pdfium：pdfium 源码直接包含 <unicode/uchar.h>，
-                             # 无 pkg-config 探测故须显式声明
+      - libdeepin-pdfium-dev # reader/batch-print: pkg_check_modules(deepin-pdfium)，系统库不再内嵌
     depends:
       # base 与 runtime 均不提供、必须随包分发的运行时依赖
       - pandoc               # 文档转换子进程（libyaml-0-2/liblua5.3-0 等闭包由 apt 自动解析）
       - libdjvulibre21       # reader DT_NEEDED libdjvulibre.so.21
       - libgxps2             # reader DT_NEEDED libgxps.so.2
-      - libchardet1          # 3rdparty/deepin-pdfium DT_NEEDED libchardet.so.1
+      - libdeepin-pdfium     # reader/batchprint DT_NEEDED libdeepin-pdfium.so.1（PDF 引擎，
+                             # base/runtime 包清单均不含，其 libchardet 等闭包由 apt 自动解析）
+      - libchardet1          # libdeepin-pdfium 传递依赖 DT_NEEDED libchardet.so.1

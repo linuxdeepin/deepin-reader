@@ -18,8 +18,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,relro -Wl,-z,now")
 endif()
 
-# Option to use bundled PDFium
-option(USE_PDFIUM_BUNDLE "Use bundled PDFium library instead of system version" ON)
+# PDF 引擎使用系统库 deepin-pdfium（pkg-config: deepin-pdfium），
+# 不再内嵌 3rdparty 源码
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(DEEPIN_PDFIUM REQUIRED deepin-pdfium)
+message(STATUS "Using system deepin-pdfium: ${DEEPIN_PDFIUM_VERSION}")
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
@@ -260,10 +263,6 @@ add_link_options(
 # 添加子项目
 add_subdirectory(reader)
 add_subdirectory(htmltopdf)
-
-if (USE_PDFIUM_BUNDLE)
-    add_subdirectory(3rdparty/deepin-pdfium)
-endif()
 
 add_subdirectory(batch-print)
 

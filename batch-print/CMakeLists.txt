@@ -9,10 +9,8 @@
 pkg_check_modules(FREETYPE REQUIRED freetype2)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus PrintSupport Sql)
 
-# Import the system pdfium target in this scope (reader/ creates it only for its own subtree)
-if (NOT USE_PDFIUM_BUNDLE)
-    pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
-endif()
+# PDF 引擎：系统库 deepin-pdfium（reader/ 创建的目标只作用于其子树）
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
 
 # batchprint-core: CupsClient + NotifyClient + PrintSettings + ErrorMessages (no reader source dependency)
 add_library(batchprint-core STATIC
@@ -70,7 +68,6 @@ target_include_directories(batchprint-convert PUBLIC
     ${CMAKE_SOURCE_DIR}/reader
     ${CMAKE_SOURCE_DIR}/reader/app
     ${CMAKE_SOURCE_DIR}/reader/document
-    ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
@@ -113,11 +110,8 @@ if (QT_VERSION_MAJOR MATCHES 6)
     target_link_libraries(batchprint-convert PUBLIC Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
-if (USE_PDFIUM_BUNDLE)
-    target_link_libraries(batchprint-convert PUBLIC deepin-pdfium-reader)
-else()
-    target_link_libraries(batchprint-convert PUBLIC PkgConfig::Deepin-pdfium)
-endif()
+# PDF 引擎链接：系统库 deepin-pdfium
+target_link_libraries(batchprint-convert PUBLIC PkgConfig::Deepin-pdfium)
 
 if (XPS_SUPPORT_ENABLED)
     target_compile_definitions(batchprint-convert PUBLIC XPS_SUPPORT_ENABLED)
