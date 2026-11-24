@@ -34,7 +34,6 @@ message("APP_VERSION: "$$VERSION)
 #target
 TARGET = test-deepin-reader
 
-QMAKE_RPATHDIR += $$OUT_PWD/../3rdparty/deepin-pdfium/lib
 
 TEMPLATE = app
 

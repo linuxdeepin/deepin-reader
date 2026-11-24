@@ -37,7 +37,7 @@ target_compile_definitions(ofd-model-check PRIVATE
 target_include_directories(ofd-model-check PRIVATE
     ${ROFD_INCLUDE_DIR}
     ${READER_ROOT}/reader ${READER_ROOT}/reader/document ${READER_ROOT}/reader/app ${READER_ROOT}/reader/sidebar
-    ${READER_ROOT}/tests ${READER_ROOT}/3rdparty/deepin-pdfium/include)
+    ${READER_ROOT}/tests)
 target_link_libraries(ofd-model-check PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets PkgConfig::CAIRO PkgConfig::DTKCORE
     GTest::gtest ${ROFD_FFI_LIBRARY})

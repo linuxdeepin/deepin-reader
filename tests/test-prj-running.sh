@@ -28,7 +28,6 @@ cd "${build_path}"
 cmake -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" \
       -DDOTEST=ON \
       -DBUILD_TESTS=ON \
-      -DUSE_PDFIUM_BUNDLE=ON \
       -DCMAKE_BUILD_TYPE=Debug \
       "${projectdir}"
 

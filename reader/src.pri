@@ -29,9 +29,9 @@ HEADERS +=\
 RESOURCES    += $$PWD/../resources/resources.qrc
 
 #link
-#由于自动化构建暂时无法自动下载sub module,目前手动内置第三方库
-INCLUDEPATH += $$PWD/../3rdparty/deepin-pdfium/include
-LIBS += -L$$PWD/../3rdparty/deepin-pdfium/lib -ldeepin-pdfium-reader -ldl
+#PDF 引擎：系统库 deepin-pdfium
+CONFIG += link_pkgconfig
+PKGCONFIG += deepin-pdfium
 
 # 基础 Qt 模块
 equals(QT_MAJOR_VERSION, 6) {

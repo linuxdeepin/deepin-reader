@@ -12,10 +12,8 @@ pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 pkg_check_modules(FREETYPE REQUIRED freetype2)
 
-# Use pdfium in system default
-if (NOT USE_PDFIUM_BUNDLE)
-    pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
-endif()
+# PDF 引擎：系统库 deepin-pdfium
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
 
 # 查找 Qt 版本（优先 Qt6）
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
@@ -132,7 +130,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/htmltopdf
     ${CMAKE_CURRENT_SOURCE_DIR}/include/gtest
-    ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
@@ -232,17 +229,9 @@ if (OFD_SUPPORT_ENABLED)
     list(APPEND TEST_LINK_LIBS ${ROFD_FFI_LIBRARY} ${OFD_CAIRO_LIBRARIES})
 endif()
 
-# PDFium 链接
-if (USE_PDFIUM_BUNDLE)
-    target_include_directories(${PROJECT_NAME} PUBLIC
-        ${CMAKE_SOURCE_DIR}/3rdparty/deepin-pdfium/include
-    )
-    # 需要先构建 deepin-pdfium
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${TEST_LINK_LIBS} deepin-pdfium-reader)
-else()
-    list(APPEND TEST_LINK_LIBS PkgConfig::Deepin-pdfium)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${TEST_LINK_LIBS})
-endif()
+# PDF 引擎链接：系统库 deepin-pdfium
+list(APPEND TEST_LINK_LIBS PkgConfig::Deepin-pdfium)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${TEST_LINK_LIBS})
 
 # ====== 资源文件 =====#
 if (QT_DESIRED_VERSION MATCHES 6)

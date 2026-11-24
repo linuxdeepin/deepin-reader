@@ -3,10 +3,8 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 
-# Use pdfium in system default
-if (NOT USE_PDFIUM_BUNDLE)
-    pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
-endif()
+# PDF 引擎：系统库 deepin-pdfium
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
 
 if (XPS_SUPPORT_ENABLED)
     pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0 freetype2)
@@ -93,7 +91,6 @@ target_include_directories(deepin-reader PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/uiframe
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
     ${CMAKE_CURRENT_SOURCE_DIR}/eyeprotection
-    ${PDFIUM_INCLUDE_DIRS}
     $<$<BOOL:${XPS_SUPPORT_ENABLED}>:${XPS_DEPS_INCLUDE_DIRS}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${ROFD_INCLUDE_DIR}>
     $<$<BOOL:${OFD_SUPPORT_ENABLED}>:${OFD_CAIRO_INCLUDE_DIRS}>
@@ -166,11 +163,8 @@ else()
     )
 endif()
 
-if (USE_PDFIUM_BUNDLE)
-    target_link_libraries(deepin-reader PRIVATE deepin-pdfium-reader)
-else()
-    target_link_libraries(deepin-reader PRIVATE PkgConfig::Deepin-pdfium)
-endif()
+# PDF 引擎：系统库 deepin-pdfium
+target_link_libraries(deepin-reader PRIVATE PkgConfig::Deepin-pdfium)
 
 target_sources(deepin-reader PRIVATE ${reader_RESOURCES})
 
