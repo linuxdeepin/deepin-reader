@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QTemporaryDir>
 #include <QUuid>
+#include <QStorageInfo>
 #include <unistd.h>
 
 /**
@@ -232,6 +233,19 @@ bool DPdfDoc::isLinearized(const QString &fileName)
 
 static QFile saveWriter;
 
+static bool isNetworkFileSystem(const QString &path)
+{
+    if (path.contains(QLatin1String("/gvfs/")))
+        return true;
+
+    QStorageInfo storage(path);
+    QByteArray fsType = storage.fileSystemType();
+    if (fsType.contains("cifs") || fsType.contains("smb") || fsType.contains("fuse.gvfs"))
+        return true;
+
+    return false;
+}
+
 int writeFile(struct FPDF_FILEWRITE_* pThis, const void *pData, unsigned long size)
 {
     Q_UNUSED(pThis)
@@ -309,7 +323,8 @@ bool DPdfDoc::save()
     }
 
     newFile.flush(); // Flush user buffer to kernel buffer
-    fsync(newFile.handle()); // Sync kernel buffer to disk
+    if (!isNetworkFileSystem(targetPath))
+        fsync(newFile.handle()); // Sync kernel buffer to disk (skip on network FS to avoid UI freeze)
     newFile.close();
 
     // Remove backup file after successful write
@@ -336,7 +351,8 @@ bool DPdfDoc::saveAs(const QString &filePath)
     locker.unlock();
 
     saveWriter.flush(); // Flush user buffer to kernel buffer
-    fsync(saveWriter.handle()); // Sync kernel buffer to disk
+    if (!isNetworkFileSystem(filePath))
+        fsync(saveWriter.handle()); // Sync kernel buffer to disk (skip on network FS to avoid UI freeze)
     saveWriter.close();
 
     return result;
