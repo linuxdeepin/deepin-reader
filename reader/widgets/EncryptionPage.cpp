@@ -1,5 +1,5 @@
 // Copyright (C) 2019 - 2026 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,6 +14,7 @@
 
 #include <QBoxLayout>
 #include <DGuiApplicationHelper>
+#include <DSuggestButton>
 
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)
@@ -48,7 +49,7 @@ void EncryptionPage::InitUI()
     edit->setObjectName("passwdEdit");
     edit->setPlaceholderText(tr("Password"));
 
-    m_nextbutton = new DPushButton(this);
+    m_nextbutton = new DSuggestButton(this);
     m_nextbutton->setObjectName("ensureBtn");
     m_nextbutton->setAccessibleName("Nextbutton");
     m_nextbutton->setFixedSize(360, 36);
@@ -73,6 +74,7 @@ void EncryptionPage::InitUI()
     mainlayout->addStretch();
 
     setAutoFillBackground(true);
+    setMinimumHeight(305);
 
     onUpdateTheme();
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
@@ -84,7 +86,7 @@ void EncryptionPage::InitConnection()
 {
     qCDebug(appLog) << "Setting up encryption page signal connections";
     connect(m_password, &DPasswordEdit::textChanged, this, &EncryptionPage::onPasswordChanged);
-    connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
+    connect(m_nextbutton, &DSuggestButton::clicked, this, &EncryptionPage::nextbuttonClicked);
 
     connect(dApp, SIGNAL(sigSetPasswdFocus()), this, SLOT(onSetPasswdFocus()));
 }
