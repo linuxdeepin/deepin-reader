@@ -53,6 +53,8 @@ struct SheetOperation {
     float scrollPosition        = 0.0f;
     // 目录树展开节点标题路径列表（如 ["1.概述", "1.概述/1.1 背景"]）
     QStringList expandedSections;
+    // 搜索框可见性（标签页切换时保存/恢复）
+    bool findWidgetVisible       = false;
 };
 
 DWIDGET_BEGIN_NAMESPACE
