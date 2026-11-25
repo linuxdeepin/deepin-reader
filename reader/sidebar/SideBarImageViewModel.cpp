@@ -131,6 +131,7 @@ QVariant SideBarImageViewModel::data(const QModelIndex &index, int role) const
             task.model = const_cast<SideBarImageViewModel *>(this);
             task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
             task.uuid = m_sheet ? m_sheet->uuid() : QString();
+            task.pixScale = m_parent ? m_parent->property("adaptScale").toDouble() : 1.0;
             PageRenderThread::appendTask(task);
         }
 
@@ -204,6 +205,7 @@ void SideBarImageViewModel::onUpdateImage(int index)
     task.index = index;
     task.model = const_cast<SideBarImageViewModel *>(this);
     task.renderer = m_sheet ? m_sheet->rendererPtr() : nullptr;
+    task.pixScale = m_parent ? m_parent->property("adaptScale").toDouble() : 1.0;
     task.uuid = m_sheet ? m_sheet->uuid() : QString();
     PageRenderThread::appendTask(task);
     qCDebug(appLog) << "Updating image for index:" << index << "end";
