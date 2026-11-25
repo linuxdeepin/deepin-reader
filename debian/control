@@ -7,7 +7,7 @@ Build-Depends:
  cmake,
  debhelper (>= 11),
  pkg-config,
- libdeepin-pdfium-dev (>= 2.0.0),
+ libdeepin-pdfium-dev (>= 1.5.8),
  qt6-5compat-dev [!mipsel !mips64el] | libqt5x11extras5-dev,
  qt6-base-dev [!mipsel !mips64el] | qtbase5-dev,
  qt6-tools-dev-tools [!mipsel !mips64el] | qttools5-dev-tools,

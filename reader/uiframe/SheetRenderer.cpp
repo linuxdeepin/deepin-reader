@@ -103,7 +103,9 @@ QVector<QRectF> SheetRenderer::getImageObjectRects(int index, int width, int hei
         return QVector<QRectF>();
     }
 
-    return m_pages.value(index)->imageObjectRects(width, height);
+    // 文档级接口：PDFDocument 通过 PDFium C API 探测图片对象包围盒，
+    // 其余格式走基类默认实现(返回空,夜间模式回退整页处理)
+    return m_document->imageObjectRects(index, width, height);
 }
 
 deepin_reader::Link SheetRenderer::getLinkAtPoint(int index, const QPointF &point)

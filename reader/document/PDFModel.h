@@ -60,8 +60,6 @@ public:
 
     QImage render(int width, int height, const QRect &slice = QRect()) const override;
 
-    QVector<QRectF> imageObjectRects(int width, int height) const override;
-
     Link getLinkAtPoint(const QPointF &point) override;
 
     bool hasWidgetAnnots() const override;
@@ -100,7 +98,7 @@ class PDFDocument : public Document
 {
     Q_DISABLE_COPY(PDFDocument)
 public:
-    explicit PDFDocument(DPdfDoc *document);
+    explicit PDFDocument(DPdfDoc *document, const QString &password = QString());
 
     virtual ~PDFDocument() override;
 
@@ -122,6 +120,14 @@ public:
 
     QString fileIdentifier() const override;
 
+    /**
+     * @brief imageObjectRects 探测页面上图片对象的包围盒
+     * 通过 libdeepin-pdfium 导出的 PDFium C API 枚举页面对象实现，
+     * 结果与 image(index,width,height) 整页渲染输出像素一一对齐；
+     * 探测失败（加密/损坏等）返回空，夜间模式回退整页反色
+     */
+    QVector<QRectF> imageObjectRects(int index, int width, int height) const;
+
     static PDFDocument *loadDocument(const QString &filePath, const QString &password, deepin_reader::Document::Error &error);
 
 private:
@@ -136,6 +142,12 @@ private:
     qreal m_xRes = 72;
 
     qreal m_yRes = 72;
+
+    QString m_password;             // 文档密码（探测句柄加载加密文档时使用）
+
+    mutable void *m_probeDoc = nullptr;     // PDFium FPDF_DOCUMENT，图片对象探测句柄（懒加载）
+
+    mutable bool m_probeFailed = false;     // 探测句柄加载失败标记，避免反复尝试
 };
 }
 
