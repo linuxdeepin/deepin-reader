@@ -1,3 +1,20 @@
+deepin-reader (6.6.5) unstable; urgency=medium
+
+  * fix: enable N-up printing in preview via paintRequested
+  * feat: switch PDF engine to system libdeepin-pdfium
+  * [skip CI] Translate deepin-reader.ts in sq
+  * [skip CI] Translate deepin-reader.ts in sq
+  * fix(tests): flush gcov coverage data before exit
+  * test(htmltopdf): add unit tests for the webengine-free converter
+  * fix(htmltopdf): preload scaled image resources into the cache
+  * refactor(htmltopdf): remove QtWebEngine dependency
+  * [skip CI] Translate deepin-reader.ts in pt
+  * [skip CI] Translate deepin-reader.ts in pt
+  * chore: update version to 6.6.4
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 25 Nov 2026 09:35:56 +0800
+
+
 deepin-reader (6.6.4) unstable; urgency=medium
 
   * chore: update version to 6.6.3
