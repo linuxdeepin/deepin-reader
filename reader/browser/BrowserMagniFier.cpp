@@ -1,5 +1,5 @@
 // Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,6 +15,8 @@
 #include <QMutexLocker>
 #include <QMetaObject>
 #include <QPainterPath>
+
+#include <DGuiApplicationHelper>
 
 ReadMagnifierManager::ReadMagnifierManager(QWidget *parent) : QThread(parent)
 {
@@ -204,7 +206,7 @@ void BrowserMagniFier::setMagniFierImage(const QImage &image)
         painter.drawImage(0, 0, im.scaled(static_cast<int>(240 * dApp->devicePixelRatio()), static_cast<int>(240 * dApp->devicePixelRatio()), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         // qCDebug(appLog) << "BrowserMagniFier::setMagniFierImage() - Drawing white background for null image";
-        painter.fillRect(this->rect(), Qt::white);
+        painter.fillRect(this->rect(), DGuiApplicationHelper::instance()->applicationPalette().itemBackground().color());
     }
     painter.restore();
 
