@@ -18,7 +18,7 @@ runtime: org.deepin.runtime.dtk/6.7.0
 sources:
   - kind: git
     url:  https://github.com/linuxdeepin/rofd.git
-    commit: 96d9f8b8a1075ab57dc496da90d2891731003129
+    commit: af6d562a649df85487e91b88375894a6049ad4de
 
 command:
   - deepin-reader
