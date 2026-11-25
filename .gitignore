@@ -44,3 +44,4 @@ obj-x86_64-linux-gnu/
 .cache/
 .claude/
 tests/coverage.info
+build-ut/
