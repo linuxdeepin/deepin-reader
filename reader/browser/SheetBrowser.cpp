@@ -62,6 +62,7 @@ SheetBrowser::SheetBrowser(DocSheet *parent) : DGraphicsView(parent), m_sheet(pa
     // qCDebug(appLog) << "Graphics scene created";
 
     setFrameShape(QFrame::NoFrame);
+    setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     scene()->setItemIndexMethod(QGraphicsScene::NoIndex);  // 禁用场景索引（对于静态场景更高效）
 
