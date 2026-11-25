@@ -801,6 +801,25 @@ void TestPDFDocumentReal::TearDown()
     delete m_tester;
 }
 
+// 图片对象探测（PDFium C API）：normal.pdf 第 0 页含 2 个图片对象，返回的
+// 包围盒须非空且落在目标像素范围内（夜间模式对象蒙版的数据源）。
+// 回归意图：imageObjectRects 必须与基类虚函数签名一致(const)构成重写，
+// 否则多态调用走基类空实现，蒙版静默失效退化为整页反色。
+TEST_F(TestPDFDocumentReal, UT_PDFDocument_imageObjectRects_001)
+{
+    const QVector<QRectF> rects = m_tester->imageObjectRects(0, 800, 600);
+    EXPECT_FALSE(rects.isEmpty());
+
+    for (const QRectF &r : rects) {
+        EXPECT_TRUE(r.width() > 0 && r.height() > 0);
+        // 图片对象允许少量出血到页面外(±4px 吸收取整误差)
+        EXPECT_GE(r.left(), -4.0);
+        EXPECT_LE(r.right(), 804.0);
+        EXPECT_GE(r.top(), -4.0);
+        EXPECT_LE(r.bottom(), 604.0);
+    }
+}
+
 // BUG46911 (sev2): 打开损坏的 PDF 文件崩溃。
 // 回归意图: broken.pdf 打开后 pageCount/page/properties 全链路安全降级。
 

@@ -19,6 +19,9 @@ sources:
   - kind: git
     url:  https://github.com/linuxdeepin/rofd.git
     commit: af6d562a649df85487e91b88375894a6049ad4de
+  - kind: git
+    url:  https://github.com/linuxdeepin/deepin-pdfium.git
+    commit: d9e73d2c1440e4a47fc0f76e1b97dc671f9a8adf
 
 command:
   - deepin-reader
@@ -54,6 +57,35 @@ build: |
   ln -sf librofd_ffi.so.$ROFD_FFI_VER $PREFIX/lib/${TRIPLET}/librofd_ffi.so.0
   ln -sf librofd_ffi.so.0            $PREFIX/lib/${TRIPLET}/librofd_ffi.so
   install -m 0644 "$ROFD_SRC/crates/rofd-ffi/include/rofd.h" $PREFIX/include/rofd.h
+
+  # ================= 从源码构建 deepin-pdfium（PDF 引擎，随包分发） =================
+  # 不依赖发行版仓库的 libdeepin-pdfium 版本；安装到 $PREFIX 后，主工程
+  # pkg-config（PREFIX 优先）与运行时均使用包内置引擎。SONAME 仍为 .so.1
+  # （内嵌 pdfium STATIC 链接，导出的 FPDF C 接口供夜间模式图片对象探测使用）
+  DPDF_SRC=""
+  for d in /project/linglong/sources/deepin-pdfium /project/sources/deepin-pdfium /project/deepin-pdfium /source/deepin-pdfium; do
+      if [ -f "$d/CMakeLists.txt" ] && [ -f "$d/include/dpdfdoc.h" ]; then DPDF_SRC="$d"; break; fi
+  done
+  if [ -z "$DPDF_SRC" ]; then
+      DPDF_SRC=$(find /project -maxdepth 8 -type f -path "*/include/dpdfdoc.h" 2>/dev/null | head -1 | sed 's|/include/dpdfdoc.h$||')
+  fi
+  if [ ! -f "$DPDF_SRC/CMakeLists.txt" ]; then
+      echo "ERROR: 未找到 deepin-pdfium 源码，sources 拉取失败？检查构建机对 github.com 的访问权限" >&2
+      exit 1
+  fi
+  echo ">>> deepin-pdfium 源码: $DPDF_SRC (commit: $(git -C $DPDF_SRC rev-parse --short HEAD 2>/dev/null || echo unknown))"
+  # 增量构建会复用容器 /tmp，旧产物指纹可能失效，先清理；
+  # 子 shell 保持主工程 cwd 不变（主工程按相对路径 cd build && cmake ..）
+  rm -rf /tmp/dpdf-build
+  (
+    mkdir -p /tmp/dpdf-build && cd /tmp/dpdf-build
+    cmake "$DPDF_SRC" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=$PREFIX \
+        -DCMAKE_INSTALL_LIBDIR=lib/${TRIPLET}
+    make -j$(nproc)
+    make install
+  )
 
   # ================= pandoc 数据目录 =================
   # reader 以 --data-dir=${prefix}/share/pandoc/data 调用 pandoc；buildext.apt.depends 合并产物
@@ -94,7 +126,9 @@ build: |
 #     libglib2.0-0、libjpeg62-turbo —— 不进 depends（depends 对 base 已有包是无效 no-op）；
 #   - runtime 层提供 Qt/DTK 全套开发包（qt6-*-dev、libdtk6*-dev），经 /runtime 前缀探测，
 #     不重复列入 build_depends；gcc/cmake/make 由 base 镜像自带，pkg-config 由 runtime 提供；
-#   - 旧列表中的 libspectre-dev/libicu-dev/libgtest-dev 工程内无对应探测，属冗余，剔除。
+#   - 旧列表中的 libspectre-dev/libgtest-dev 工程内无对应探测，属冗余，剔除
+#     （libicu-dev 已随 deepin-pdfium 源码编译恢复，见 build_depends；
+#      PDF 引擎改为源码自编译随包分发后，depends 不再依赖 apt 的 libdeepin-pdfium）。
 buildext:
   apt:
     build_depends:
@@ -109,14 +143,20 @@ buildext:
       - libgxps-dev          # reader: XPS(libgxps cairo glib gobject freetype2)
       - libcairo2-dev        # reader: XPS/OFD 的 cairo 探测
       - libglib2.0-dev       # reader: glib-2.0/gobject-2.0 探测
-      - libfreetype6-dev     # reader: XPS 的 freetype2 探测
-      - libjpeg-dev          # reader: pkg_check_modules(libjpeg)
-      - libdeepin-pdfium-dev # reader/batch-print: pkg_check_modules(deepin-pdfium)，系统库不再内嵌
+      - libfreetype6-dev     # reader: XPS 的 freetype2 探测；deepin-pdfium 编译依赖
+      - libjpeg-dev          # reader: pkg_check_modules(libjpeg)；deepin-pdfium 编译依赖
+      - libdeepin-pdfium-dev # 兜底：自建引擎缺失时的降级探测（正常情况下 PREFIX 内置版本优先）
+      # deepin-pdfium 源码编译（见 build 段）：内嵌 pdfium 的系统依赖
+      - libicu-dev           # pdfium 源码直接包含 <unicode/uchar.h>
+      - libpng-dev           # pdfium PNG 图像解码
+      - zlib1g-dev           # pdfium FlateDecode
+      - liblcms2-dev         # pdfium ICC 色彩管理
+      - libopenjp2-7-dev     # pdfium JPEG2000 解码
+      - libchardet-dev       # 文本编码嗅探
     depends:
       # base 与 runtime 均不提供、必须随包分发的运行时依赖
       - pandoc               # 文档转换子进程（libyaml-0-2/liblua5.3-0 等闭包由 apt 自动解析）
       - libdjvulibre21       # reader DT_NEEDED libdjvulibre.so.21
       - libgxps2             # reader DT_NEEDED libgxps.so.2
-      - libdeepin-pdfium     # reader/batchprint DT_NEEDED libdeepin-pdfium.so.1（PDF 引擎，
-                             # base/runtime 包清单均不含，其 libchardet 等闭包由 apt 自动解析）
-      - libchardet1          # libdeepin-pdfium 传递依赖 DT_NEEDED libchardet.so.1
+      - libchardet1          # 内置 libdeepin-pdfium DT_NEEDED libchardet.so.1
+                             # （PDF 引擎已由源码自编译随包分发，不再依赖 apt 版）

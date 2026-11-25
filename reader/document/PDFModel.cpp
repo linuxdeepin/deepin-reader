@@ -10,12 +10,73 @@
 #include "ddlog.h"
 
 #include <QDebug>
+#include <QFile>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QThread>
 
 #include <functional>
 
 #define LOCK_DOCUMENT QMutexLocker docMutexLocker(m_docMutex);
+
+// libdeepin-pdfium 导出的 PDFium C 接口（官方头文件未声明这些 C 符号，但已在
+// libdeepin-pdfium.so 1.5.8 上核实导出，PDFium C API 长期保持稳定）。
+// 仅用于图片对象包围盒探测：夜间模式对象蒙版需要页面上 IMAGE 对象的位置信息，
+// 而 Qt 级封装在 1.5.x 上未提供该能力。
+extern "C" {
+typedef void *FPDF_DOCUMENT;
+typedef void *FPDF_PAGE;
+typedef void *FPDF_PAGEOBJECT;
+
+FPDF_DOCUMENT FPDF_LoadDocument(const char *file_path, const char *password);
+FPDF_PAGE FPDF_LoadPage(FPDF_DOCUMENT document, int page_index);
+void FPDF_ClosePage(FPDF_PAGE page);
+void FPDF_CloseDocument(FPDF_DOCUMENT document);
+int FPDFPage_CountObjects(FPDF_PAGE page);
+FPDF_PAGEOBJECT FPDFPage_GetObject(FPDF_PAGE page, int index);
+int FPDFPageObj_GetType(FPDF_PAGEOBJECT page_object);   // FPDF_PAGEOBJ_IMAGE == 3
+int FPDFPageObj_GetBounds(FPDF_PAGEOBJECT page_object, float *left, float *bottom, float *right, float *top);
+int FPDFPage_GetRotation(FPDF_PAGE page);
+float FPDF_GetPageWidthF(FPDF_PAGE page);
+float FPDF_GetPageHeightF(FPDF_PAGE page);
+}
+
+namespace {
+
+// 系统 libdeepin-pdfium (1.5.x) 未提供 /ID 接口，这里直接解析 PDF 文件中的文档
+// 标识符：trailer 字典或交叉引用流字典的 /ID[值1 值2]，按规范值1 为永久 ID
+// （增量保存、移动/重命名均不变）。两个值各自支持十六进制 <...> 与字面量
+// (...) 两种语法。增量更新会把最新 trailer 追加到文件末尾，故扫描文件尾部
+// 并取最后一次出现。解析失败（加密/损坏/非常规布局）返回空串，调用方回退
+// 到内容指纹匹配。
+QString extractPdfFileIdentifier(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+        return QString();
+
+    file.seek(qMax<qint64>(0, file.size() - 8192));
+    const QString text = QString::fromLatin1(file.read(8192));
+
+    // /ID 数组：[值1 值2]，值可为 <hex> 或 (literal)；字面量内允许 \x 转义
+    static const QRegularExpression re(
+            QLatin1String("/ID\\s*\\[\\s*"
+                          "(?:<([0-9a-fA-F]+)>|\\(((?:\\\\.|[^\\\\)])*)\\))"
+                          "\\s*"
+                          "(?:<[0-9a-fA-F]+>|\\((?:\\\\.|[^\\\\)])*\\))"
+                          "\\s*\\]"));
+    QString id;
+    QRegularExpressionMatchIterator it = re.globalMatch(text);
+    while (it.hasNext()) {                       // 取最后一次出现（最新增量更新的 trailer）
+        const QRegularExpressionMatch m = it.next();
+        // 值1：十六进制时归一化小写；字面量时保持原始字节（同一文件解析结果稳定）
+        const QString hex = m.captured(1);
+        id = hex.isNull() ? m.captured(2) : hex.toLower();
+    }
+    return id;
+}
+
+} // namespace
 
 namespace deepin_reader {
 PDFAnnotation::PDFAnnotation(DPdfAnnot *dannotation) : Annotation(),
@@ -108,13 +169,6 @@ QImage PDFPage::render(int width, int height, const QRect &slice) const
     QImage result = m_page->image(width, height, ratioRect);
     // qCDebug(appLog) << "PDFPage::render() - Render completed";
     return result;
-}
-
-QVector<QRectF> PDFPage::imageObjectRects(int width, int height) const
-{
-    LOCK_DOCUMENT
-
-    return m_page->imageObjectRects(width, height);
 }
 
 Link PDFPage::getLinkAtPoint(const QPointF &pos)
@@ -423,8 +477,9 @@ Annotation *PDFPage::moveIconAnnotation(Annotation *annot, const QRectF &rect)
     return nullptr;
 }
 
-PDFDocument::PDFDocument(DPdfDoc *document) :
+PDFDocument::PDFDocument(DPdfDoc *document, const QString &password) :
     m_document(document)
+    , m_password(password)
 {
     qCInfo(appLog) << "Creating PDF document handler with page count:" << (document ? document->pageCount() : 0);
 
@@ -452,10 +507,106 @@ PDFDocument::~PDFDocument()
 
     m_document = nullptr;
 
+    if (m_probeDoc) {
+        FPDF_CloseDocument(m_probeDoc);
+        m_probeDoc = nullptr;
+    }
+
     m_docMutex->unlock();
 
     delete m_docMutex;
     qCDebug(appLog) << "PDF document resources released";
+}
+
+QVector<QRectF> PDFDocument::imageObjectRects(int index, int width, int height) const
+{
+    QVector<QRectF> rects;
+
+    if (!m_document || width <= 0 || height <= 0)
+        return rects;
+
+    QMutexLocker locker(m_docMutex);
+
+    // 探测句柄懒加载：独立于 m_document 的第二个 FPDF 文档实例（库未暴露内部
+    // 句柄），整个文档生命周期内复用；加载失败记录标记避免反复尝试
+    if (!m_probeDoc && !m_probeFailed) {
+        const QByteArray pwdBytes = m_password.toUtf8();
+        m_probeDoc = FPDF_LoadDocument(m_document->filePath().toUtf8().constData(),
+                                       pwdBytes.isEmpty() ? nullptr : pwdBytes.constData());
+        if (nullptr == m_probeDoc) {
+            m_probeFailed = true;
+            qCWarning(appLog) << "Probe document load failed, image object detection disabled";
+        }
+    }
+
+    if (nullptr == m_probeDoc)
+        return rects;
+
+    // 与老的内嵌实现一致：每次 FPDF_LoadPage 解析内容，取完立即关闭，
+    // 避免与渲染线程的页面句柄生命周期冲突
+    FPDF_PAGE probePage = FPDF_LoadPage(m_probeDoc, index);
+
+    if (nullptr == probePage)
+        return rects;
+
+    const int rotation = FPDFPage_GetRotation(probePage);
+    const float rotatedW = FPDF_GetPageWidthF(probePage);
+    const float rotatedH = FPDF_GetPageHeightF(probePage);
+    // FPDF_GetPageWidthF/HeightF 为应用旋转后的尺寸，transRect 需要
+    // 未旋转的页面点尺寸
+    const qreal width_pt = (rotation % 2 == 1) ? rotatedH : rotatedW;
+    const qreal height_pt = (rotation % 2 == 1) ? rotatedW : rotatedH;
+
+    // 目标像素尺寸对应的缩放（与 image(index,width,height) 整页渲染对齐）：
+    // 视图坐标为页面点尺寸（transRect 输出），整页线性映射到目标像素，
+    // 即 rect × width/width_pt。注意不可再叠加 dpi 因子——老实现中
+    // transPointToPixel(×dpi/72) 与 sizeF(×dpi/72) 上下抵消，净效果
+    // 就是点尺寸直接线性缩放；若分母单独保留 dpi 会导致矩形缩小偏移
+    const qreal sx = qreal(width) / width_pt;
+    const qreal sy = qreal(height) / height_pt;
+
+    const int count = FPDFPage_CountObjects(probePage);
+
+    for (int i = 0; i < count; ++i) {
+        FPDF_PAGEOBJECT obj = FPDFPage_GetObject(probePage, i);
+
+        if (nullptr == obj || 3 != FPDFPageObj_GetType(obj))   // 3 = FPDF_PAGEOBJ_IMAGE
+            continue;
+
+        float left = 0, bottom = 0, right = 0, top = 0;
+
+        if (!FPDFPageObj_GetBounds(obj, &left, &bottom, &right, &top))
+            continue;
+
+        // 坐标链:PDF 用户空间(y 向上)→ 旋转后视图坐标(y 向下)→ 目标像素，
+        // 映射逻辑与老的内嵌实现逐行对齐（transRect(rotation, FS_RECTF)）
+        QRectF viewPt;
+        switch (rotation) {
+        case 1:
+            viewPt = QRectF(qreal(bottom), qreal(left),
+                            qreal(top) - qreal(bottom), qreal(right) - qreal(left));
+            break;
+        case 2:
+            viewPt = QRectF(width_pt - qreal(right), qreal(bottom),
+                            qreal(right) - qreal(left), qreal(top) - qreal(bottom));
+            break;
+        case 3:
+            viewPt = QRectF(height_pt - qreal(top), width_pt - qreal(right),
+                            qreal(top) - qreal(bottom), qreal(right) - qreal(left));
+            break;
+        default:
+            viewPt = QRectF(qreal(left), height_pt - qreal(top),
+                            qreal(right) - qreal(left), qreal(top) - qreal(bottom));
+            break;
+        }
+
+        rects.append(QRectF(viewPt.x() * sx, viewPt.y() * sy,
+                            viewPt.width() * sx, viewPt.height() * sy).normalized());
+    }
+
+    FPDF_ClosePage(probePage);
+
+    return rects;
 }
 
 int PDFDocument::pageCount() const
@@ -507,7 +658,9 @@ QString PDFDocument::fileIdentifier() const
 {
     if (!m_document)
         return QString();
-    return m_document->fileIdentifier();
+    // 系统 libdeepin-pdfium (1.5.x) 未提供 /ID 接口，改为在 reader 侧直接解析
+    // PDF 文件中的文档标识符（见 extractPdfFileIdentifier）
+    return extractPdfFileIdentifier(m_document->filePath());
 }
 
 bool PDFDocument::saveAs(const QString &filePath) const
@@ -575,7 +728,7 @@ PDFDocument *PDFDocument::loadDocument(const QString &filePath, const QString &p
     if (document->status() == DPdfDoc::SUCCESS) {
         qCInfo(appLog) << "PDF document loaded successfully";
         error = Document::NoError;
-        return new PDFDocument(document);
+        return new PDFDocument(document, password);
     } else if (document->status() == DPdfDoc::PASSWORD_ERROR) {
         qCDebug(appLog) << "PDFDocument::loadDocument() - Document status: PASSWORD_ERROR";
         if (password.isEmpty()) {
