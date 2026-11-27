@@ -30,6 +30,7 @@ Build-Depends:
  libopenjp2-7-dev,
  libfreetype6-dev,
  libgtest-dev,
+ libgmock-dev,
  libchardet-dev,
  libxkbcommon-dev,
 Standards-Version: 4.5.0
