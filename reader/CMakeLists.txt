@@ -3,8 +3,8 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 
-# PDF 引擎：系统库 deepin-pdfium
-pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
+# PDF 引擎：系统库 deepin-pdfium（模块名由顶层按 Qt 版本选择，Qt5 走 deepin-pdfium5）
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET ${DEEPIN_PDFIUM_MODULE})
 
 if (XPS_SUPPORT_ENABLED)
     pkg_check_modules(XPS_DEPS REQUIRED libgxps cairo glib-2.0 gobject-2.0 freetype2)

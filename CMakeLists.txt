@@ -18,11 +18,22 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,relro -Wl,-z,now")
 endif()
 
+# 查找Qt版本（需先于 PDF 引擎模块选择：Qt5 构建走 deepin-pdfium5）
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+message(">>> Found Qt version: ${QT_VERSION_MAJOR}")
+set(QT_DESIRED_VERSION ${QT_VERSION_MAJOR})
+
 # PDF 引擎使用系统库 deepin-pdfium（pkg-config: deepin-pdfium），
-# 不再内嵌 3rdparty 源码
+# 不再内嵌 3rdparty 源码。libdeepin-pdfium 与 libdeepin-pdfium5 分别
+# 基于 Qt6/Qt5 构建，C++ ABI 不兼容，必须按 Qt 版本选择对应变体
+if(QT_VERSION_MAJOR MATCHES 6)
+    set(DEEPIN_PDFIUM_MODULE deepin-pdfium)
+else()
+    set(DEEPIN_PDFIUM_MODULE deepin-pdfium5)
+endif()
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(DEEPIN_PDFIUM REQUIRED deepin-pdfium)
-message(STATUS "Using system deepin-pdfium: ${DEEPIN_PDFIUM_VERSION}")
+pkg_check_modules(DEEPIN_PDFIUM REQUIRED ${DEEPIN_PDFIUM_MODULE})
+message(STATUS "Using system deepin-pdfium: ${DEEPIN_PDFIUM_VERSION} (module: ${DEEPIN_PDFIUM_MODULE})")
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
@@ -172,11 +183,6 @@ endif ()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 # 引入翻译生成
 include(translation-generate)
-
-# 查找Qt版本
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-message(">>> Found Qt version: ${QT_VERSION_MAJOR}")
-set(QT_DESIRED_VERSION ${QT_VERSION_MAJOR})
 
 # 设置DTK版本
 if (QT_VERSION_MAJOR MATCHES 6)
