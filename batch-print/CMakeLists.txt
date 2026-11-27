@@ -9,8 +9,8 @@
 pkg_check_modules(FREETYPE REQUIRED freetype2)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus PrintSupport Sql)
 
-# PDF 引擎：系统库 deepin-pdfium（reader/ 创建的目标只作用于其子树）
-pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
+# PDF 引擎：系统库 deepin-pdfium（模块名由顶层按 Qt 版本选择，Qt5 走 deepin-pdfium5）
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET ${DEEPIN_PDFIUM_MODULE})
 
 # batchprint-core: CupsClient + NotifyClient + PrintSettings + ErrorMessages (no reader source dependency)
 add_library(batchprint-core STATIC
@@ -103,6 +103,19 @@ if(DTK_USE_TARGETS)
         Dtk${DTK_VERSION_MAJOR}::Widget
         Dtk${DTK_VERSION_MAJOR}::Gui
         Dtk${DTK_VERSION_MAJOR}::Core
+    )
+else()
+    # Qt5/DTK5 变量模式：老式 find_package 无导入目标，需手动补 DTK
+    # 头文件路径与链接库（与 reader 主目标的做法一致）
+    target_include_directories(batchprint-convert PUBLIC
+        ${DtkWidget_INCLUDE_DIRS}
+        ${DtkGui_INCLUDE_DIRS}
+        ${DtkCore_INCLUDE_DIRS}
+    )
+    target_link_libraries(batchprint-convert PUBLIC
+        ${DtkWidget_LIBRARIES}
+        ${DtkGui_LIBRARIES}
+        ${DtkCore_LIBRARIES}
     )
 endif()
 

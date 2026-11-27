@@ -12,12 +12,18 @@ pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 pkg_check_modules(DDJVU REQUIRED ddjvuapi)
 pkg_check_modules(FREETYPE REQUIRED freetype2)
 
-# PDF 引擎：系统库 deepin-pdfium
-pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET deepin-pdfium)
-
 # 查找 Qt 版本（优先 Qt6）
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 set(QT_DESIRED_VERSION ${QT_VERSION_MAJOR})
+
+# PDF 引擎：系统库 deepin-pdfium（libdeepin-pdfium/libdeepin-pdfium5 分别
+# 基于 Qt6/Qt5 构建，C++ ABI 不兼容，按 Qt 版本选择变体）
+if(QT_VERSION_MAJOR MATCHES 6)
+    set(DEEPIN_PDFIUM_MODULE deepin-pdfium)
+else()
+    set(DEEPIN_PDFIUM_MODULE deepin-pdfium5)
+endif()
+pkg_check_modules(Deepin-pdfium REQUIRED IMPORTED_TARGET ${DEEPIN_PDFIUM_MODULE})
 
 message(STATUS ">>> Test building with Qt${QT_DESIRED_VERSION}")
 
